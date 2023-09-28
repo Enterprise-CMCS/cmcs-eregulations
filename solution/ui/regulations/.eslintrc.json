@@ -15,6 +15,7 @@
     },
     "plugins": ["vue"],
     "rules": {
+        "eqeqeq": "off",
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "vue/order-in-components": "off",
         "vue/no-unsupported-features": [

@@ -1,8 +1,17 @@
 <script setup>
-import { provide, ref } from "vue";
+import { provide, reactive, ref, watch } from "vue";
+import { useRoute } from "vue-router/composables";
+
+import _difference from "lodash/difference";
+import _isArray from "lodash/isArray";
+import _isEmpty from "lodash/isEmpty";
+
+import { getSubjectName, sortSubjects } from "utilities/filters";
+
 import {
     getLastUpdatedDates,
     getPolicyDocList,
+    getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -14,6 +23,9 @@ import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
+import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
+import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
+import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -46,9 +58,14 @@ const props = defineProps({
     },
 });
 
+// Router and Route
+const $route = useRoute();
+
+// provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 
+// partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
     results: {},
     loading: true,
@@ -68,16 +85,20 @@ const getPartsLastUpdated = async () => {
     }
 };
 
+// policyDocList fetch for policy document list
 const policyDocList = ref({
     results: [],
     loading: true,
 });
 
-const getDocList = async () => {
+const getDocList = async (requestParams = "") => {
+    policyDocList.value.loading = true;
+
     try {
         policyDocList.value.results = await getPolicyDocList({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
+            requestParams,
         });
     } catch (error) {
         console.error(error);
@@ -86,8 +107,185 @@ const getDocList = async () => {
     }
 };
 
-getDocList();
+// use "reactive" method to make urlParams reactive when provided/injected
+// selectedParams.paramString is used as the reactive prop
+const selectedParams = reactive({
+    paramString: "",
+    paramsArray: [],
+});
+
+// method to add selected params
+const addSelectedParams = (paramArgs) => {
+    const { id, name, type } = paramArgs;
+
+    // early return if the param is already selected
+    if (selectedParams.paramString.includes(`${type}=${id}`)) return;
+
+    // update paramString that is used as reactive prop for watch
+    if (selectedParams.paramString) {
+        selectedParams.paramString += `&${type}=${id}`;
+    } else {
+        selectedParams.paramString = `?${type}=${id}`;
+    }
+
+    // create new selectedParams key for array of objects for selections
+    selectedParams.paramsArray.push({ id, name, type });
+};
+
+// method to remove selected params
+const removeSelectedParams = (paramArgs) => {
+    const { id, type } = paramArgs;
+
+    // update paramString that is used as reactive prop for watch
+    const paramStringArray = selectedParams.paramString.split("&");
+    const paramString = paramStringArray
+        .filter((param) => !param.includes(`${type}=${id}`))
+        .join("&");
+
+    selectedParams.paramString = paramString;
+
+    // create new selectedParams key for array of objects for selections
+    selectedParams.paramsArray = selectedParams.paramsArray.filter(
+        (param) => param.id != id
+    );
+};
+
+const clearSelectedParams = () => {
+    selectedParams.paramString = "";
+    selectedParams.paramsArray = [];
+};
+
+provide("selectedParams", selectedParams);
+
+// utility method to parse $route.query to return `${key}=${value},${value}` string
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .map(([key, value]) => {
+            const sanitizedVal = _isArray(value)
+                ? value[0]
+                : value
+
+            const valueArray = sanitizedVal
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+
+            return valueArray.map((v) => `${key}=${v}`).join("&");
+        })
+        .join("&");
+
+    return requestParams;
+};
+
+// policyDocSubjects fetch for subject selector
+// fetch here so we have it in context; pass down to selector via props
+const policyDocSubjects = ref({
+    results: [],
+    loading: true,
+});
+
+// called on load
+const getDocSubjects = async () => {
+    try {
+        const subjectsResponse = await getPolicyDocSubjects({
+            apiUrl: props.apiUrl,
+        });
+
+        policyDocSubjects.value.results = subjectsResponse.sort(sortSubjects);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocSubjects.value.loading = false;
+
+        // if there's a $route, call addSelectedParams
+        if (!_isEmpty($route.query)) {
+            const subjects = _isArray($route.query.subjects)
+                ? $route.query.subjects[0]
+                : $route.query.subjects;
+
+            const subjectIds = subjects ? subjects.split(",") : [];
+            const filteredSubjects = policyDocSubjects.value.results.filter(
+                (subject) => subjectIds.includes(subject.id.toString())
+            );
+
+            filteredSubjects.forEach((subject) => {
+                addSelectedParams({
+                    type: "subjects",
+                    id: subject.id,
+                    name: getSubjectName(subject),
+                });
+            });
+
+            getDocList(getRequestParams($route.query));
+        }
+    }
+};
+
+watch(
+    () => $route.query,
+    async (newQueryParams, oldQueryParams) => {
+        // if all params are removed, clear selectedParams and getDocList
+        if (_isEmpty(newQueryParams)) {
+            clearSelectedParams();
+            getDocList();
+            return;
+        }
+
+        // if there are multiple subjects already selected and one needs to be removed
+        if (
+            newQueryParams.subjects &&
+            oldQueryParams.subjects &&
+            newQueryParams.subjects.length < oldQueryParams.subjects.length
+        ) {
+            const oldSubjectIds = oldQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+            const newSubjectIds = newQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+
+            const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
+
+            removeSelectedParams({
+                type: "subjects",
+                id: subjectToRemove[0],
+            });
+
+            const newRequestParams = getRequestParams(newQueryParams);
+            await getDocList(newRequestParams);
+
+            return;
+        }
+
+        if (newQueryParams.subjects) {
+            const subjectIds = newQueryParams.subjects
+                .split(",")
+                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+            const subjects = policyDocSubjects.value.results.filter((subject) =>
+                subjectIds.includes(subject.id.toString())
+            );
+
+            subjects.forEach((subject) => {
+                addSelectedParams({
+                    type: "subjects",
+                    id: subject.id,
+                    name: getSubjectName(subject),
+                });
+            });
+        }
+
+        // parse $route.query to return `${key}=${value}` string
+        const newRequestParams = getRequestParams(newQueryParams);
+        await getDocList(newRequestParams);
+    }
+);
+
+// fetches on page load
 getPartsLastUpdated();
+getDocSubjects();
+
+if (_isEmpty($route.query)) {
+    getDocList();
+}
 </script>
 
 <template>
@@ -116,17 +314,41 @@ getPartsLastUpdated();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="policyRepositoryApp" class="repository-view">
-            <template v-if="policyDocList.loading || partsLastUpdated.loading">
-                <p>Loading...</p>
-            </template>
-            <template v-else>
-                <PolicyResults
-                    :base="homeUrl"
-                    :results="policyDocList.results"
-                    :parts-last-updated="partsLastUpdated.results"
-                />
-            </template>
+        <div id="policyRepositoryApp" class="repository-view ds-l-container">
+            <div class="ds-l-row">
+                <div
+                    class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
+                >
+                    <button class="sidebar-toggle__button">Open/Close</button>
+                    <PolicySidebar>
+                        <template #title>
+                            <h2>Find Policy Documents</h2>
+                        </template>
+                        <template #selections>
+                            <PolicySelections />
+                        </template>
+                        <template #filters>
+                            <SubjectSelector
+                                :policy-doc-subjects="policyDocSubjects"
+                            />
+                        </template>
+                    </PolicySidebar>
+                </div>
+                <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
+                    <template
+                        v-if="policyDocList.loading || partsLastUpdated.loading"
+                    >
+                        <span class="loading__span">Loading...</span>
+                    </template>
+                    <template v-else>
+                        <PolicyResults
+                            :base="homeUrl"
+                            :results="policyDocList.results"
+                            :parts-last-updated="partsLastUpdated.results"
+                        />
+                    </template>
+                </div>
+            </div>
         </div>
     </body>
 </template>

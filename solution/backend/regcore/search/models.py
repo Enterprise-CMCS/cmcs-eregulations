@@ -9,6 +9,7 @@ from django.contrib.postgres.search import (
 from django.db import models
 from django.db.models.expressions import RawSQL
 
+from common.constants import QUOTE_TYPES
 from regcore.models import Part
 
 
@@ -21,8 +22,8 @@ class SearchIndexQuerySet(models.QuerySet):
         return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
 
     def search_configuration(self, query):
-        quote_string = ("'", '"', '“', '”')
-        if query and query.startswith(quote_string) and query.endswith(quote_string):
+
+        if query and query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES):
             self.search_type = "phrase"
             self.cover_density = True
             self.rank_filter = 0.01

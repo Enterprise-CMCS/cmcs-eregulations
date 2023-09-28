@@ -2,19 +2,6 @@ from drf_spectacular.utils import OpenApiTypes, extend_schema_field
 from rest_framework import serializers
 
 
-# Retrieves automatically generated search headlines
-@extend_schema_field(OpenApiTypes.STR)
-class HeadlineField(serializers.Field):
-    def __init__(self, model_name, **kwargs):
-        self.model_name = model_name
-        kwargs["source"] = '*'
-        kwargs["read_only"] = True
-        super().__init__(**kwargs)
-
-    def to_representation(self, obj):
-        return getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
-
-
 # Allows subclasses to be serialized independently
 # Must implement get_serializer_map as map of classes to 2-tuples:
 #    { model_class: ("model_name", serializer_class) }
