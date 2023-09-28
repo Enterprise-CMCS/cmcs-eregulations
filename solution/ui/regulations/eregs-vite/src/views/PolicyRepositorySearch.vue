@@ -54,6 +54,10 @@ const props = defineProps({
     },
 });
 
+// Router and Route
+const $route = useRoute();
+const $router = useRouter();
+
 // partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
     results: {},
@@ -74,7 +78,7 @@ const getPartsLastUpdated = async () => {
     }
 };
 
-const searchQuery = ref("");
+const searchQuery = ref($route.query.q ?? "");
 
 // policyDocList fetch for policy document list
 const policyDocList = ref({
@@ -83,7 +87,6 @@ const policyDocList = ref({
 });
 
 const getDocList = async (requestParams = "") => {
-    console.log("we should be in getDocList");
     policyDocList.value.loading = true;
 
     try {
@@ -99,12 +102,7 @@ const getDocList = async (requestParams = "") => {
     }
 };
 
-// Router and Route
-const $route = useRoute();
-const $router = useRouter();
-
 const executeSearch = (payload) => {
-    console.log("executeSearch", payload);
     $router.push({
         name: "policy-repository-search",
         query: {
@@ -139,13 +137,31 @@ watch(
     () => $route.query,
     async (newQueryParams, oldQueryParams) => {
         if (_isEmpty(newQueryParams)) {
-            policyDocList.value.results = [];
+            searchQuery.value = "";
             return;
         }
 
-        getDocList(getRequestParams($route.query));
+        searchQuery.value = newQueryParams.q ?? "";
     }
 );
+
+watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
+    if (newSearchQuery === oldSearchQuery) {
+        return;
+    }
+
+    if (_isEmpty(newSearchQuery)) {
+        policyDocList.value.results = [];
+        return;
+    }
+
+    getDocList(getRequestParams($route.query));
+});
+
+// searchQuery is populated on load from $route.query.q, fetch docs list
+if (!_isEmpty(searchQuery.value)) {
+    getDocList(getRequestParams($route.query));
+}
 </script>
 
 <template>
@@ -187,7 +203,7 @@ watch(
                     />
                 </template>
             </Banner>
-            <div class="ds-l-container">
+            <div class="results__container ds-l-container">
                 <div class="ds-l-row">
                     <div class="ds-l-col--12">
                         <template v-if="policyDocList.loading">
