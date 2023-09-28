@@ -19,6 +19,7 @@ Click the big green "New Repository Secret" button. Then give your secret a uniq
 ## Creating a Service Account and Providing the remaining arguments for the Jira Ticket Creation
 
 Create JIRA Service account by following the instruction here: https://confluenceent.cms.gov/display/CAT/Requesting+a+Service+Account+for+JIRA
+
 Create GitHub Service account by following the instruction here: https://confluenceent.cms.gov/pages/viewpage.action?spaceKey=MDSO&title=GitHub+Guide
 
 # Current Implementation
