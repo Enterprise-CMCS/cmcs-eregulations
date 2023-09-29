@@ -1,0 +1,13 @@
+service: text-extractor
+
+provider:
+  name: aws
+  ecr:
+    images:
+      appimage:
+        path: ./
+
+functions:
+  text-extractor:
+    image:
+      name: appimage

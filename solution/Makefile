@@ -57,6 +57,11 @@ watch-eregs-main:
 	cd ui/regulations/eregs-component-lib; \
 		(trap 'kill 0' SIGINT; node watch-dist.js);
 
+.PHONY: watch-text-extractor
+watch-text-extractor: ## Watch text extractor lambda for changes
+watch-text-extractor:
+	watchfiles --filter python 'make text-extractor.restart'
+
 .PHONY: watch
 watch: ## watch non-SPA pages for changes
 watch:
@@ -65,7 +70,7 @@ watch:
 .PHONY: watch-all
 watch-all: ## watch everything for changes
 watch-all:
-	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa
+	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor
 
 .PHONY: storybook
 storybook: ## Run storybook for regulations
@@ -192,6 +197,9 @@ python.migrate:
 
 local.seed:
 	docker-compose exec regulations python manage.py populateseeddata
+
+text-extractor.restart:
+	docker-compose stop text-extractor; docker-compose start text-extractor
 
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
