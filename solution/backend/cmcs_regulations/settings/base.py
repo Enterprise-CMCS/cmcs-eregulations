@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'django.contrib.syndication.views',
     'django_jsonform',
-    'file_manager'
+    'file_manager',
+    'file_manager.file_search',
 ]
 
 MIDDLEWARE = [
