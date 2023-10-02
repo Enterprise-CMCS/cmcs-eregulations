@@ -24,6 +24,38 @@ const EventCodes = {
     OpenBlockingModal: "OpenBlockingModal",
 };
 
+const PARAM_VALIDATION_DICT = {
+    subjects: (subject) => !Number.isNaN(parseInt(subject, 10)),
+    q: (query) => query.length > 0,
+};
+
+/*
+ * @param {Object} query - $route.query object
+ * @returns {string} - query string in `${key}=${value},${value}` format
+ * @example
+ * const query = {
+ *    subjects: "1,2,3",
+ *    q: "test",
+ * }
+ * const queryString = getQueryString(query);
+ * console.log(queryString); // subjects=1,2,3&q=test
+ */
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .map(([key, value]) => {
+            const dedupedVal = _isArray(value) ? value[0] : value;
+
+            const valueArray = dedupedVal
+                .split(",")
+                .filter((v) => PARAM_VALIDATION_DICT[key](v));
+
+            return valueArray.map((v) => `${key}=${v}`).join("&");
+        })
+        .join("&");
+
+    return requestParams;
+};
+
 /**
  * Converts the given Map object to an array of values from the map
  */
@@ -835,6 +867,7 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
+    getRequestParams,
     getQueryParam,
     getTagContent,
     highlightText,

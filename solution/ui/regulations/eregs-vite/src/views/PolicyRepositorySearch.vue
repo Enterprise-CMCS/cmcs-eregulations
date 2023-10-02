@@ -11,6 +11,8 @@ import {
     getTitles,
 } from "utilities/api";
 
+import { getRequestParams } from "utilities/utils";
+
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
@@ -120,21 +122,6 @@ const clearSearchQuery = () => {
         name: "policy-repository-search",
         query: {},
     });
-};
-
-// utility method to parse $route.query to return `${key}=${value},${value}` string
-const getRequestParams = (query) => {
-    const requestParams = Object.entries(query)
-        .map(([key, value]) => {
-            const sanitizedVal = _isArray(value) ? value[0] : value;
-
-            const valueArray = sanitizedVal.split(",");
-
-            return valueArray.map((v) => `${key}=${v}`).join("&");
-        })
-        .join("&");
-
-    return requestParams;
 };
 
 watch(
