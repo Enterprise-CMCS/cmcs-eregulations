@@ -209,7 +209,9 @@ if (!_isEmpty(searchQuery.value)) {
             </Banner>
             <div class="results__container ds-l-container">
                 <div class="ds-l-row">
-                    <div class="ds-l-col--12">
+                    <div
+                        class="ds-l-col--10 ds-u-margin-left--auto ds-u-margin-right--auto"
+                    >
                         <template v-if="policyDocList.loading">
                             <span class="loading__span">Loading...</span>
                         </template>
