@@ -30,15 +30,15 @@ const PARAM_VALIDATION_DICT = {
 };
 
 /*
- * @param {Object} query - $route.query object
- * @returns {string} - query string in `${key}=${value},${value}` format
+ * @param {Object} query - $route.query object from Vue Router
+ * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
  * @example
  * const query = {
  *    subjects: "1,2,3",
  *    q: "test",
  * }
- * const queryString = getQueryString(query);
- * console.log(queryString); // subjects=1,2,3&q=test
+ * const queryString = getRequestParams(query);
+ * console.log(queryString); // subjects=1&subjects=2&subjects=3&q=test
  */
 const getRequestParams = (query) => {
     const requestParams = Object.entries(query)
@@ -51,6 +51,7 @@ const getRequestParams = (query) => {
 
             return valueArray.map((v) => `${key}=${v}`).join("&");
         })
+        .filter(([key, value]) => !_isEmpty(value))
         .join("&");
 
     return requestParams;
