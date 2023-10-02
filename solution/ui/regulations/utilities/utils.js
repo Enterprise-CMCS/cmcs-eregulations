@@ -42,6 +42,7 @@ const PARAM_VALIDATION_DICT = {
  */
 const getRequestParams = (query) => {
     const requestParams = Object.entries(query)
+        .filter(([key, value]) => PARAM_VALIDATION_DICT[key])
         .map(([key, value]) => {
             const dedupedVal = _isArray(value) ? value[0] : value;
 

@@ -89,6 +89,13 @@ describe("Utilities.js", () => {
         expect(getRequestParams(query7)).toBe(
             "subjects=1&subjects=2&subjects=3"
         );
+
+        const query8 = {
+            q: "test",
+            page: 1,
+        };
+
+        expect(getRequestParams(query8)).toBe("q=test");
     });
 
     it("romanize properly converts numbers to roman numerals", async () => {
