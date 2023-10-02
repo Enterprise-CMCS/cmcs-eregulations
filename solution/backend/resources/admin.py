@@ -285,7 +285,7 @@ class LocationHistoryWidget(Textarea):
                 removals = self.locations_to_strings(row["removals"])
                 bulk_adds = self.locations_to_strings(row["bulk_adds"])
                 date = parse_datetime(row["date"]).strftime("%Y-%m-%d at %I:%M %p")
-                output.append(f"{i+1}: On {date}, {row['user']} %s%s%s%s%s." % (
+                output.append(f"{i + 1}: On {date}, {row['user']} %s%s%s%s%s." % (
                     f"added {additions}" if additions else "",
                     " and " if additions and removals else "",
                     f"removed {removals}" if removals else "",
