@@ -8,6 +8,7 @@ from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.policy_repository import PolicyRepositoryView
+from regulations.views.policy_repository_search import PolicyRepositorySearchView
 from regulations.views.reader import (
     PartReaderView,
     SectionReaderView,
@@ -49,6 +50,7 @@ urlpatterns = [
     path('statutes/', StatuteView.as_view(), name='statutes'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
     path('policy-repository/', PolicyRepositoryView.as_view(), name='policy-repository'),
+    path('policy-repository/search/', PolicyRepositorySearchView.as_view(), name='policy-repository-search'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({
             "get": "list",

@@ -106,7 +106,7 @@ export default {
     },
 
     methods: {
-        submitForm(e) {
+        submitForm() {
             this.$emit("execute-search", { query: this.searchInputValue });
         },
         clearForm() {
