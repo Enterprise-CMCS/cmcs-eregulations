@@ -38,50 +38,6 @@
                 @content;
             }
 
-            .result {
-                margin-bottom: 24px;
-
-                .category-labels {
-                    margin-bottom: 4px;
-
-                    .category-label {
-                        margin-bottom: 4px;
-                    }
-                }
-
-                &__context {
-                    @include common-context-related-sections;
-                    text-transform: capitalize;
-                    margin-bottom: 8px;
-
-                    &--date {
-                        margin-right: 8px;
-
-                        &--bar {
-                            padding-right: 8px;
-                            border-right: 1px solid $mid_gray;
-                        }
-                    }
-                }
-
-                &__link {
-                    font-size: $font-size-md;
-                    margin-bottom: 8px;
-
-                    a {
-                        text-decoration: none;
-                    }
-                }
-
-                &__snippet {
-                    font-size: $font-size-sm;
-                }
-
-                .search-highlight {
-                    font-weight: bold;
-                }
-            }
-
             .reg-results-content {
                 @include common-results-styles;
 
@@ -98,7 +54,6 @@
 
             .resources-results-content {
                 @include common-results-styles;
-
             }
 
             .search-results-count {
@@ -128,5 +83,49 @@
                 }
             }
         }
+    }
+}
+
+.result {
+    margin-bottom: 24px;
+
+    .category-labels {
+        margin-bottom: 4px;
+
+        .category-label {
+            margin-bottom: 4px;
+        }
+    }
+
+    &__context {
+        @include common-context-related-sections;
+        text-transform: capitalize;
+        margin-bottom: 8px;
+
+        &--date {
+            margin-right: 8px;
+
+            &--bar {
+                padding-right: 8px;
+                border-right: 1px solid $mid_gray;
+            }
+        }
+    }
+
+    &__link {
+        font-size: $font-size-md;
+        margin-bottom: 8px;
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    &__snippet {
+        font-size: $font-size-sm;
+    }
+
+    .search-highlight {
+        font-weight: bold;
     }
 }

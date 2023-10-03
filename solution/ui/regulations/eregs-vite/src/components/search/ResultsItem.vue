@@ -12,6 +12,7 @@
         <div class="result__snippet">
             <slot name="snippet"></slot>
         </div>
+        <slot name="chips"></slot>
         <slot name="sections"></slot>
     </div>
 </template>
