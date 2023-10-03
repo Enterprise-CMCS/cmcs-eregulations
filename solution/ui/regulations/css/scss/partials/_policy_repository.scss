@@ -173,13 +173,7 @@
                 gap: 4px;
 
                 .subject__chip {
-                    font-size: $font-size-sm;
-                    line-height: 22px;
-                    font-weight: 700;
-                    padding: 2px 4px;
-                    border-radius: 8px;
-                    background: $policy_subject_chip_background;
-                    color: $policy_subject_chip_text;
+                    @include common-chip-styles;
                 }
             }
 
