@@ -5,8 +5,7 @@ import { formatDate } from "utilities/filters";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
 import ResultsItem from "@/components/search/ResultsItem.vue";
-
-import SubjectChips from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChips.vue";
+import SubjectChips from "@/components/search/results-item-parts/SubjectChips.vue";
 
 const props = defineProps({
     results: {

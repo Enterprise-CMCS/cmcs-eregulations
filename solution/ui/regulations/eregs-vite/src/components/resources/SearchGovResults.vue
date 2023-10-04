@@ -1,6 +1,7 @@
 <script setup>
 import { formatDate } from "utilities/filters";
 
+import Label from "@/components/search/results-item-parts/Label.vue";
 import RelatedSections from "@/components/search/RelatedSections.vue";
 import ResultsItem from "@/components/search/ResultsItem.vue";
 
@@ -114,21 +115,19 @@ const formatSnippet = (snippet, startChar, stopChar) => {
         <template v-for="(item, idx) in results">
             <ResultsItem :key="item.created_at + idx">
                 <template #labels>
-                    <div class="category-labels">
-                        <div class="result-label category-label">
-                            {{
-                                item.category.parent
-                                    ? item.category.parent.name
-                                    : item.category.name
-                            }}
-                        </div>
-                        <div
-                            v-if="item.category.parent"
-                            class="result-label subcategory-label"
-                        >
-                            {{ item.category.name }}
-                        </div>
-                    </div>
+                    <Label
+                        :name="
+                            item.category.parent
+                                ? item.category.parent.name
+                                : item.category.name
+                        "
+                        type="category"
+                    />
+                    <Label
+                        v-if="item.category.parent"
+                        :name="item.category.name"
+                        type="subcategory"
+                    />
                 </template>
                 <template #context>
                     <span

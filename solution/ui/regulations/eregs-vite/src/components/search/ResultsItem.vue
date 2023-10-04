@@ -1,8 +1,17 @@
-<script setup></script>
+<script setup>
+const props = defineProps({
+    page: {
+        type: String,
+        required: true,
+    },
+});
+</script>
 
 <template>
     <div class="result">
-        <slot name="labels"></slot>
+        <div class="category-labels">
+            <slot name="labels"></slot>
+        </div>
         <div class="result__context">
             <slot name="context"></slot>
         </div>
@@ -12,6 +21,7 @@
         <div class="result__snippet">
             <slot name="snippet"></slot>
         </div>
+        <slot name="resources-content"></slot>
         <slot name="chips"></slot>
         <slot name="sections"></slot>
     </div>
