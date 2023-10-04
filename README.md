@@ -142,3 +142,31 @@ To better support Rapid Prototyping, a VueJS Single Page Application (SPA) has b
 3. edit files in `/regulations/static/prototype` to make changes
 4. changes should be reflected in running prototype via hot reloading
 5. `make prototype:clean` to tear down Docker container
+
+## Setting local to use EUA
+1. Update your Dockerfile with the following environment variables
+```
+ENV OIDC_RP_CLIENT_ID=<your client id>
+ENV OIDC_RP_CLIENT_SECRET=<your client secret>
+ENV OIDC_OP_AUTHORIZATION_ENDPOINT=<authorization endpoint>
+ENV OIDC_OP_TOKEN_ENDPOINT=<token endpoint>
+ENV OIDC_OP_USER_ENDPOINT=<user endpoint>
+ENV OIDC_OP_JWKS_ENDPOINT=<jwks endpoint>
+ENV EUA_FEATUREFLAG=<set to 'true' if you want to see the eua link on admin login page>
+```
+These values can be found on AWS Parameter store.
+
+## Register to test idp idm
+- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the CMS IDP (Identity Provider) portal.
+- Set up Multi-Factor Authentication (MFA) for your account. Follow the provided prompts and instructions to complete the MFA setup process.
+- Once your account has been successfully set up with MFA, please notify the CMS Okta team.
+- Inform the CMS Okta team that you need to be added to the eRegs group.
+
+Please note that the provided URL (https://test.idp.idm.cms.gov/) may require a valid CMS IDP account to access.
+
+## Trouble shooting tips
+- Issue: Setting OIDC_OP_AUTHORIZATION_ENDPOINT not found
+  This error indicates that the environment variables are not properly set.
+- Solution:
+  - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
+  - On dev,val,prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store. 

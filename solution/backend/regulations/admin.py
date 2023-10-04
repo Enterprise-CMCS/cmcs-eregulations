@@ -69,48 +69,43 @@ def roman_to_int(roman):
         result = result - num if 3 * num < result else result + num
     return result
 
-
-class OktaClaim:
-    def __init__(self, email, name, preferred_username, jobcodes):
-        self.email = email
-        self.name = name
-        self.preferred_username = preferred_username
-        self.jobcodes = jobcodes
-
-
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
-    def verify_claims(self, claims: OktaClaim) -> bool:
+    def verify_claims(self, claims) -> bool:
         return (
                 super().verify_claims(claims)
                 and claims.get("email_verified", False)
         )
 
     @transaction.atomic
-    def create_user(self, claims: OktaClaim) -> User:
-        print(f"Creating user {claims.get('email')}")
-        print(f"Jobcodes: {claims.get('jobcodes')}")
-        print(f"Name: {claims.get('name')}")
-        print(f"Preferred username: {claims.get('preferred_username')}")
-        user: User = self.UserModel.objects.create_user(
-            claims.get("email"),
-            None,  # password
-            first_name=claims["given_name"],
-            last_name=claims["family_name"],
+    def create_user(self, claims) -> User:
+        full_name = claims.get("name").split(" ") if claims.get("name") else None
+        first_name = full_name[0] if full_name else None
+        last_name = full_name[1] if full_name and len(full_name) > 1 else None
+
+        user, created = self.UserModel.objects.get_or_create(
+            first_name=first_name,
+            last_name=last_name,
+            email=claims.get("email"),
+            defaults={"username": claims.get("preferred_username")}
         )
+
+        jobcodes = claims.get("jobcodes")
+        if jobcodes:
+            user.is_staff = True
+        else:
+            user.is_staff = False
         user.save()
 
         return user
+
 
     @transaction.atomic
-    def update_user(self, user: User, claims: OktaClaim) -> User:
+    def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
-        user.first_name = claims["given_name"]
-        user.last_name = claims["family_name"]
+        user.first_name = claims.get("name")
         user.save()
 
         return user
-
-
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
     fieldsets = (
