@@ -14,18 +14,13 @@ const props = defineProps({
 
 console.log("name", props.name);
 
-const labelClass = computed(() => {
-    return props.type === "subcategory"
-        ? "subcategory-label"
-        : "category-label";
-});
+const labelClass = computed(() =>
+    props.type === "subcategory" ? "subcategory-label" : "category-label"
+);
 </script>
 
 <template>
-    <div
-        class="result-label"
-        :class="labelClass"
-    >
+    <div class="result-label" :class="labelClass">
         {{ name }}
     </div>
 </template>

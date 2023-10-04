@@ -4,8 +4,10 @@ import { inject } from "vue";
 import { formatDate } from "utilities/filters";
 
 import RelatedSections from "@/components/search/RelatedSections.vue";
-import ResultsItem from "@/components/search/ResultsItem.vue";
-import SubjectChips from "@/components/search/results-item-parts/SubjectChips.vue";
+import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
+
+import Label from "sharedComponents/results-item-parts/Label.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 const props = defineProps({
     results: {
@@ -40,14 +42,11 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             class="doc-list__document"
         >
             <template #labels>
-                <div class="category-labels">
-                    <div
-                        v-if="doc.document_type"
-                        class="result-label category-label"
-                    >
-                        {{ doc.document_type.name }}
-                    </div>
-                </div>
+                <Label
+                    v-if="doc.document_type"
+                    :name="doc.document_type.name"
+                    type="category"
+                />
             </template>
             <template #context>
                 <span

@@ -1,9 +1,10 @@
 <script setup>
 import { formatDate } from "utilities/filters";
 
-import Label from "@/components/search/results-item-parts/Label.vue";
 import RelatedSections from "@/components/search/RelatedSections.vue";
-import ResultsItem from "@/components/search/ResultsItem.vue";
+
+import Label from "sharedComponents/results-item-parts/Label.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 const props = defineProps({
     base: {

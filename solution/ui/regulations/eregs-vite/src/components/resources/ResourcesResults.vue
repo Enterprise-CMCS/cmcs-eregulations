@@ -50,15 +50,18 @@
 </template>
 
 <script>
-import Label from "@/components/search/results-item-parts/Label.vue";
 import RelatedSections from "@/components/search/RelatedSections.vue";
-import ResultsItem from "@/components/search/ResultsItem.vue";
+
+import Label from "sharedComponents/results-item-parts/Label.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
 export default {
     name: "ResourcesResults",
 
     components: {
+        Label,
+        ResultsItem,
         SupplementalContentObject,
     },
 

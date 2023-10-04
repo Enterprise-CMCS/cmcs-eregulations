@@ -1,4 +1,5 @@
 <script>
+import Label from "sharedComponents/results-item-parts/Label.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 
 export default {
@@ -32,18 +33,19 @@ export default {
     <div class="supplemental-content-list">
         <template v-for="(content, index) in limitedContent">
             <div :key="content.category.name + index" class="category-labels">
-                <div class="result-label category-label">
-                    {{ content.category.name }}
-                </div>
+                <Label
+                    :name="content.category.name"
+                    type="category"
+                />
             </div>
-            <supplemental-content-object
+            <SupplementalContentObject
                 :key="index"
                 :name="content.name"
                 :description="content.description"
                 :date="content.date"
                 :url="content.url"
             >
-            </supplemental-content-object>
+            </SupplementalContentObject>
         </template>
     </div>
 </template>

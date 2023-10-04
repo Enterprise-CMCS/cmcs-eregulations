@@ -5,6 +5,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+console.log("props in ResultItem.vue", props);
 </script>
 
 <template>

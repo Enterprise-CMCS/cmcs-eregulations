@@ -3,7 +3,7 @@ import { inject } from "vue";
 
 import { getTagContent, stripQuotes } from "utilities/utils";
 
-import ResultsItem from "@/components/search/ResultsItem.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 defineProps({
     results: {
