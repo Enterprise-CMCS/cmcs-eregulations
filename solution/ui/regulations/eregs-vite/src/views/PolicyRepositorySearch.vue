@@ -217,5 +217,3 @@ if (!_isEmpty(searchQuery.value)) {
         </div>
     </body>
 </template>
-
-<style></style>
