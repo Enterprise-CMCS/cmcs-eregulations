@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
+import RelatedSections from "@/components/RelatedSections.vue";
 
 import Label from "sharedComponents/results-item-parts/Label.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
