@@ -42,9 +42,10 @@ services:
       - ./static-assets/regulations:/usr/share/nginx/html
   text-extractor:
     build:
-      context: ./text-extractor
+      context: .
+      dockerfile: text-extractor/Dockerfile
     ports:
-      - 9000:8080
+      - 8000:8000
     environment:
       - EREGS_USERNAME=${EREGS_USERNAME:-}
       - EREGS_PASSWORD=${EREGS_PASSWORD:-}

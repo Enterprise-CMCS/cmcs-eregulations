@@ -1,14 +1,22 @@
 FROM public.ecr.aws/lambda/python:3.11
 
-# Copy requirements.txt
-COPY requirements.txt ${LAMBDA_TASK_ROOT}
+ENV HOSTNAME="text-extractor"
+ENV EXTERNAL_PORT="8000"
+ENV INTERNAL_PORT="8080"
+ENV STARTUP_CMD="app.text_extractor.handler"
+
+# Copy lambda-proxy
+COPY lambda-proxy /proxy
+
+# Install packages required by lambda-proxy
+RUN pip install -r /proxy/requirements.txt
 
 # Copy function code
 # Will be overridden locally
-COPY . ${LAMBDA_TASK_ROOT}/app
+COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 
-# Install the specified packages
-RUN pip install -r requirements.txt
+# Install the required packages
+RUN pip install -r app/requirements.txt
 
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
-CMD [ "app.text_extractor.handler" ]
+# Set the custom entrypoint to run lambda-proxy on startup
+ENTRYPOINT /proxy/startup.sh

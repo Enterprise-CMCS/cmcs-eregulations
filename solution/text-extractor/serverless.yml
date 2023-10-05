@@ -5,7 +5,8 @@ provider:
   ecr:
     images:
       appimage:
-        path: ./
+        path: ../.
+        file: text-extractor/Dockerfile
 
 functions:
   text-extractor:
