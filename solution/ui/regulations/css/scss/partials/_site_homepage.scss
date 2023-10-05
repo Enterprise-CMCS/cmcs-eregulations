@@ -423,13 +423,13 @@
                     }
 
                     .category-labels {
-                        display: inline-block;
-                        font-size: 11px;
-                        width: fit-content;
-                        margin-right: 5px;
-                        background: #e3eef0;
-                        border-radius: 3px;
-                        padding: 2px 5px 3px;
+                        margin-bottom: 0px;
+
+                        .result-label {
+                            &.category-label {
+                                font-weight: 400;
+                            }
+                        }
                     }
 
                     .recent-rules-descriptive-text {
