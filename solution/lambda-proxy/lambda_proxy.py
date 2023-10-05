@@ -26,6 +26,14 @@ class ApiProxy:
             def do_PATCH(self):
                 self._handle_request("PATCH", requests.patch)
 
+            def _send_response(self, status_code, headers, body):
+                self.send_response(status_code)
+                for key in headers:
+                    self.send_header(key, headers[key])
+                self.end_headers()
+                body = body.encode() if type(body) != bytes else body
+                self.wfile.write(body)
+
             def _handle_request(self, method, requests_func):
                 url = f"http://{hostname}:{internal_port}/2015-03-31/functions/function/invocations"
                 path = urllib.parse.urlparse(self.path)
@@ -61,11 +69,28 @@ class ApiProxy:
 
                 resp = requests.post(url, headers=headers, data=json.dumps(data))
 
-                self.send_response(resp.status_code)
-                for key in resp.headers:
-                    self.send_header(key, resp.headers[key])
-                self.end_headers()
-                self.wfile.write(resp.content)
+                if resp.status_code != 200:
+                    # An error occured downstream, send status code and error message if any
+                    self._send_response(resp.status_code, resp.headers, resp.content)
+                    return
+
+                # Parse response payload from lambda and return it
+                try:
+                    resp = json.loads(resp.content)
+                except TypeError:
+                    self._send_response(500, {}, f"Incorrect response type: \"{resp.content}\" is not valid JSON.")
+                    return
+
+                if type(resp) != dict:
+                    self._send_response(500, {}, f"Incorrect response type: \"{resp}\" is not a dictionary.")
+                    return
+
+                if resp.keys() < {"statusCode", "headers", "body"} or type(resp["headers"]) != dict:
+                    self._send_response(500, {}, f"Malformed response payload: {json.dumps(resp)}. Keys 'statusCode', "
+                                        "'headers', and 'body' are required.")
+                    return
+
+                self._send_response(resp["statusCode"], resp["headers"], resp["body"])
 
         server_address = ('', external_port)
         self.httpd = HTTPServer(server_address, ProxyHTTPRequestHandler)
