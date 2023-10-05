@@ -45,6 +45,7 @@ services:
       context: .
       dockerfile: text-extractor/Dockerfile
     ports:
+      - 9000:8080
       - 8000:8000
     environment:
       - EREGS_USERNAME=${EREGS_USERNAME:-}
