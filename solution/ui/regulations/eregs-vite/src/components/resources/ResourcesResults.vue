@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import RelatedSections from "@/components/search/RelatedSections.vue";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 
 import Label from "sharedComponents/results-item-parts/Label.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
@@ -61,6 +61,7 @@ export default {
 
     components: {
         Label,
+        RelatedSections,
         ResultsItem,
         SupplementalContentObject,
     },

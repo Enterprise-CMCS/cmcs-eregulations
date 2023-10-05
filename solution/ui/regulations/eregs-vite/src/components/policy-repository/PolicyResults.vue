@@ -3,7 +3,7 @@ import { inject } from "vue";
 
 import { formatDate } from "utilities/filters";
 
-import RelatedSections from "@/components/search/RelatedSections.vue";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
 
 import Label from "sharedComponents/results-item-parts/Label.vue";
