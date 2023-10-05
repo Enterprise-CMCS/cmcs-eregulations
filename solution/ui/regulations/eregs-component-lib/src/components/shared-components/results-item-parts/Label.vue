@@ -12,8 +12,6 @@ const props = defineProps({
     },
 });
 
-console.log("name", props.name);
-
 const labelClass = computed(() =>
     props.type === "subcategory" ? "subcategory-label" : "category-label"
 );

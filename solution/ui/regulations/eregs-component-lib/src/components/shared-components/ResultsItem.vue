@@ -1,13 +1,4 @@
-<script setup>
-const props = defineProps({
-    page: {
-        type: String,
-        required: true,
-    },
-});
-
-console.log("props in ResultItem.vue", props);
-</script>
+<script setup></script>
 
 <template>
     <div class="result">
@@ -15,10 +6,14 @@ console.log("props in ResultItem.vue", props);
             <slot name="labels"></slot>
         </div>
         <div class="result__context">
-            <slot name="context"></slot>
+            <slot name="context">
+                <div style="margin-bottom: -8px"></div>
+            </slot>
         </div>
         <div class="result__link">
-            <slot name="link"></slot>
+            <slot name="link">
+                <div style="margin-bottom: -8px"></div>
+            </slot>
         </div>
         <div class="result__snippet">
             <slot name="snippet"></slot>
@@ -28,5 +23,3 @@ console.log("props in ResultItem.vue", props);
         <slot name="sections"></slot>
     </div>
 </template>
-
-<style></style>

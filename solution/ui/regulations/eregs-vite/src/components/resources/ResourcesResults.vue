@@ -18,12 +18,6 @@
                         type="subcategory"
                     />
                 </template>
-                <template #context>
-                    <div style="margin-bottom: -8px"></div>
-                </template>
-                <template #link>
-                    <div style="margin-bottom: -8px"></div>
-                </template>
                 <template #resources-content>
                     <div class="result-content-wrapper">
                         <SupplementalContentObject

@@ -786,6 +786,7 @@ export default {
                 this.apiUrl,
                 titles
             );
+            console.log(this.partsLastUpdated);
         },
         async getCategoryList() {
             const rawCats = await getCategories();
