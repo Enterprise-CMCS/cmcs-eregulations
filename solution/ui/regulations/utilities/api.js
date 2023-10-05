@@ -9,7 +9,7 @@ import _map from "lodash/map";
 
 import localforage from "localforage";
 
-import { delay, getKebabDate, niceDate, parseError } from "./utils";
+import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
 
 const apiPath = `${
     import.meta.env.VITE_ENV === "prod" &&
@@ -390,21 +390,9 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
         titleArr.map((title) => httpApiGet(`title/${title}/parts`))
     );
 
-    const combinedResults = results.flat(1).reduce(
-        (accumulator, current) => ({
-            ...accumulator,
-            [current.name]: current,
-        }),
-        {}
-    );
-
-    // remove artifact added by front end caching
-    delete combinedResults.expiration_date;
-
-    return Object.fromEntries(
-        Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])
-    );
+    return createLastUpdatedDates(results);
 };
+
 /**
  * Gets the three most recent resources of a type.
  * @param {*} apiURL - base url for the api
