@@ -20,10 +20,7 @@ const props = defineProps({
     },
 });
 
-const apiUrl = inject("apiUrl");
 const base = inject("base");
-console.log("apiUrl", apiUrl);
-console.log("base", base);
 
 const filteredLocations = props.item.locations.filter(
     (location) => props.partsLastUpdated[location.part]
