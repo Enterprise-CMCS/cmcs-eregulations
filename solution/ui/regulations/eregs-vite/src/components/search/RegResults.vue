@@ -69,5 +69,3 @@ const createResultLink = (
         </template>
     </div>
 </template>
-
-<style></style>

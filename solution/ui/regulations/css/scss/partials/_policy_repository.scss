@@ -158,14 +158,6 @@
                 }
             }
 
-            .document__type {
-                color: $mid_gray;
-            }
-
-            .document__filename {
-                margin-top: 0.25rem;
-            }
-
             .document__subjects {
                 margin-top: 0.75rem;
                 display: flex;
@@ -175,12 +167,6 @@
                 .subject__chip {
                     @include common-chip-styles;
                 }
-            }
-
-            .related-sections {
-                @include common-context-related-sections;
-
-                margin-bottom: 0px;
             }
         }
     }

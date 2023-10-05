@@ -84,24 +84,6 @@ export default {
 </script>
 
 <style lang="scss">
-.category-labels {
-    margin-bottom: 5px;
-
-    .result-label {
-        display: inline-block;
-        font-size: 11px;
-        width: fit-content;
-        margin-right: 5px;
-        background: #e3eef9;
-        border-radius: 3px;
-        padding: 2px 5px 3px;
-
-        &.category-label {
-            font-weight: 600;
-        }
-    }
-}
-
 .result-content-wrapper {
     margin-bottom: 20px;
 
@@ -114,27 +96,4 @@ export default {
     }
 }
 
-.resources-content-container {
-    .related-sections {
-        margin-bottom: 40px;
-        color: $mid_gray;
-        font-size: $font-size-xs;
-
-        .related-sections-title {
-            font-weight: 600;
-            color: $dark_gray;
-            text-transform: none;
-            font-size: $font-size-xs;
-        }
-
-        .title__span, .section-sign, .related-sections-none {
-            font-size: $font-size-xs;
-        }
-
-        a {
-            text-decoration: none;
-            font-size: $font-size-xs;
-        }
-    }
-}
 </style>
