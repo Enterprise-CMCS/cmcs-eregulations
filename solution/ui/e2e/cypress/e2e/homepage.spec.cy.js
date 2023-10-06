@@ -383,4 +383,22 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("iphone-x");
         cy.get("nav#leftNav").should("have.attr", "class", "open");
     });
+
+    it("takes you to a google doc when you click the 'Contact the Team' link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".contact__column a")
+            .scrollIntoView()
+            .should("have.attr", "href")
+            .and("include", "https://docs.google.com");
+    });
+
+    it("takes you to a google doc when you click the 'Sign up for a session' link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".signup__column a")
+            .scrollIntoView()
+            .should("have.attr", "href")
+            .and("include", "https://docs.google.com");
+    });
 });
