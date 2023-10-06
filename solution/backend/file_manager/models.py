@@ -30,7 +30,7 @@ class Subject(models.Model):
 
 
 class UploadedFile(models.Model):
-    document_id = models.CharField(max_length=512, null=True, blank=True)
+    document_name = models.CharField(max_length=512, null=True, blank=True)
     file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
@@ -54,4 +54,4 @@ class UploadedFile(models.Model):
             raise ValueError("File does not have an extension")
 
     def __str__(self) -> str:
-        return str(self.document_id) + ' ' + str(self.summary)
+        return str(self.document_name) + ' ' + str(self.summary)
