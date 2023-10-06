@@ -91,6 +91,7 @@ def create_search(updated_doc, file=None):
     fi.subjects.set(updated_doc.subjects.all())
     fi.save()
 
+
 def establish_conntent_type(updated_doc):
     if isinstance(updated_doc, UploadedFile):
         return ContentIndex(
@@ -114,6 +115,8 @@ def establish_conntent_type(updated_doc):
             resource_type='external'
         )
     return None
+
+
 def update_search(sender, instance, created, **kwargs):
     try:
         if isinstance(instance, UploadedFile):

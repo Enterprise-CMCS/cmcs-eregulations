@@ -41,6 +41,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                                           "all. Use \"&resource-type=external\"", str, "all"),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
+
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
@@ -65,6 +66,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+
         # If they are not authenticated they csan only get 'external' documents
         if not request.user.is_authenticated or resource_type == 'external':
             query = query.filter(resource_type='external')
