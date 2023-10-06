@@ -20,7 +20,7 @@ class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["document_id"], self.data[id]["document_id"])
+        self.assertEqual(response.data[0]["document_name"], self.data[id]["document_name"])
 
     def login(self) -> None:
         self.client = APIClient()
@@ -43,7 +43,7 @@ class SearchTest(TestCase):
                 file = UploadedFile.objects.create(**data)
                 if i == 0:  # only assign location and subject on item 0
                     file.locations.set([self.location2])
-                    file.subject.set([self.subject2])
+                    file.subjects.set([self.subject2])
                     file.save()
 
     def test_no_query(self):
@@ -63,8 +63,8 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/file-manager/files?q=file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]["document_id"], self.data[0]["document_id"])
-        self.assertEqual(response.data[1]["document_id"], self.data[2]["document_id"])
+        self.assertEqual(response.data[0]["document_name"], self.data[0]["document_name"])
+        self.assertEqual(response.data[1]["document_name"], self.data[2]["document_name"])
 
     def test_search_by_filename_variations(self):
         names = ["123_abc.docx", "123_abc", "123", "abc", "docx"]

@@ -35,7 +35,7 @@ class UploadedFile(models.Model):
     date = VariableDateField(null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
-    subject = models.ManyToManyField(Subject, blank=True, related_name="uploads")
+    subjects = models.ManyToManyField(Subject, blank=True, related_name="uploads")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads", verbose_name="Regulation Locations")
     uid = models.UUIDField(

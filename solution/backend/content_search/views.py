@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from common.api import OpenApiQueryParameter
 from common.mixins import OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
-from resources.models import AbstractLocation
+from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .models import ContentIndex
@@ -27,21 +27,26 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
-                    OpenApiQueryParameter("document_type",
+                    OpenApiQueryParameter("document-type",
                                           "Limit results to only resources found within this category. Use "
-                                          "\"&document_type=X\"", int, False),
+                                          "\"&document-type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
-                                          "Search for text within file metadata. Searches document name, file name, "
+                                          "Search for tsext within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
+                    OpenApiQueryParameter("resource-type",
+                                          "Limit results to only resources found within this resource type.  Internal, External,"
+                                          "all. Use \"&resource-type=external\"", str, "all"),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
+        document_type = self.request.GET.getlist("document-type")
         category = self.request.GET.getlist("category")
+        resource_type = self.request.GET.get("resource-type").lower()
         search_query = self.request.GET.get("q")
 
         query = self.model.objects.all()
@@ -53,17 +58,27 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
             query = query.filter(subject__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
+        if document_type:
+            query = query.filter(document_type__id=document_type)
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
+        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        # If they are not authenticated they csan only get 'external' documents
+        if not request.user.is_authenticated or resource_type == 'external':
+            query = query.filter(resource_type='external')
+        elif resource_type == 'internal':
+            query = query.filter(resource_type='internal')
 
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
-            Prefetch("subject", queryset=subjects_prefetch),
+            Prefetch("subjects", queryset=subjects_prefetch),
+            Prefetch("category", queryset=category_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
-        if query:
+        if search_query:
             query = query.search(search_query)
+
         context = self.get_serializer_context()
         serializer = ContentSearchSerializer(query, many=True, context=context)
         return Response(serializer.data)

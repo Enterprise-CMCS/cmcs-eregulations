@@ -27,16 +27,16 @@ class SubjectSerializer(serializers.Serializer):
 
 
 class UploadedFileSerializer(serializers.Serializer, ):
-    document_id = serializers.CharField()
+    document_name = serializers.CharField()
     file_name = serializers.CharField()
     date = serializers.DateField()
     summary = serializers.CharField()
     locations = serializers.SerializerMethodField()
     document_type = DocumentTypeSerializer(many=False, read_only=True)
-    subject = SubjectSerializer(many=True, read_only=True)
+    subjects = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 
-    document_id_headline = HeadlineField()
+    document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
 
     @extend_schema_field(MetaLocationSerializer.many(True))
