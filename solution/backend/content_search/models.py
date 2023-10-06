@@ -11,7 +11,7 @@ from django.db.models.expressions import RawSQL
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
 from file_manager.models import DocumentType, Subject, UploadedFile
-from resources.models import AbstractCategory, AbstractLocation, SupplementalContent
+from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument, SupplementalContent
 
 
 class ContentIndexQuerySet(models.QuerySet):
@@ -73,6 +73,7 @@ class ContentIndex(models.Model):
     resource_type = models.CharField(max_length=25, null=True, blank=True)
     file = models.ForeignKey(UploadedFile, blank=True, null=True, on_delete=models.CASCADE)
     supplemental_content = models.ForeignKey(SupplementalContent, blank=True, null=True, on_delete=models.CASCADE)
+    fr_doc = models.ForeignKey(FederalRegisterDocument, blank=True, null=True, on_delete=models.CASCADE)
     objects = ContentIndexManager()
 
 
@@ -104,9 +105,8 @@ def establish_conntent_type(updated_doc):
             date_string=updated_doc.date,
             resource_type='internal'
         )
-    if isinstance(updated_doc, SupplementalContent):
-        return ContentIndex(
-            supplemental_content=updated_doc,
+    if isinstance(updated_doc, SupplementalContent) or isinstance(updated_doc, FederalRegisterDocument):
+        ci = ContentIndex(
             category=updated_doc.category,
             url=updated_doc.url,
             doc_name_string=updated_doc.name,
@@ -114,6 +114,12 @@ def establish_conntent_type(updated_doc):
             date_string=updated_doc.date,
             resource_type='external'
         )
+
+        if isinstance(updated_doc, SupplementalContent):
+            ci.supplemental_content = updated_doc
+        else:
+            ci.fr_doc = updated_doc
+        return ci
     return None
 
 
@@ -121,7 +127,7 @@ def update_search(sender, instance, created, **kwargs):
     try:
         if isinstance(instance, UploadedFile):
             file = ContentIndex.objects.get(file=instance)
-        if isinstance(instance, SupplementalContent):
+        if isinstance(instance, SupplementalContent) or isinstance(instance, FederalRegisterDocument):
             file = ContentIndex.objects.get(supplemental_content=instance)
         create_search(instance, file)
         file.delete()

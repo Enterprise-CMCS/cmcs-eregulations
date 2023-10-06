@@ -21,6 +21,7 @@ from .serializers import ContentSearchSerializer
 class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
     serializer_class = ContentSearchSerializer
     model = ContentIndex
+
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[
@@ -41,7 +42,6 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                                           "all. Use \"&resource-type=external\"", str, "all"),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
-
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
