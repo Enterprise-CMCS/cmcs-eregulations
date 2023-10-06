@@ -1,11 +1,11 @@
 import { render } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 
-import Label from "./Label.vue";
+import CategoryLabel from "./CategoryLabel.vue";
 
 describe("Document Type/Category Label", () => {
     it("Renders a Category Label", async () => {
-        const wrapper = render(Label, {
+        const wrapper = render(CategoryLabel, {
             props: {
                 name: "Category Name",
                 type: "category",
@@ -16,7 +16,7 @@ describe("Document Type/Category Label", () => {
     });
 
     it("Renders a Subcategory Label", async () => {
-        const wrapper = render(Label, {
+        const wrapper = render(CategoryLabel, {
             props: {
                 name: "Subcategory Name",
                 type: "subcategory",

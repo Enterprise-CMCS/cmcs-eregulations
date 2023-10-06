@@ -1,5 +1,5 @@
 <script>
-import Label from "sharedComponents/results-item-parts/Label.vue";
+import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 
 export default {
@@ -33,7 +33,7 @@ export default {
     <div class="supplemental-content-list">
         <template v-for="(content, index) in limitedContent">
             <div :key="content.category.name + index" class="category-labels">
-                <Label
+                <CategoryLabel
                     :name="content.category.name"
                     type="category"
                 />

@@ -13,6 +13,7 @@ describe("Related Sections", () => {
     it("Renders a Related Sections component", async () => {
         const wrapper = render(RelatedSections, {
             props: {
+                base: "/",
                 item: resourcesFixture.results[0],
                 partsLastUpdated: createLastUpdatedDates([
                     parts42Fixture,

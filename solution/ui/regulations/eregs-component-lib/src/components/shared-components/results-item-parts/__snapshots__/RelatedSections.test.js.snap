@@ -28,7 +28,7 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
           class="related-section-link"
         >
           <a
-            href="undefined42/447/272#447-272"
+            href="/42/447/272#447-272"
           >
             447.272
           </a>
@@ -63,7 +63,7 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
         class="related-section-link"
       >
         <a
-          href="undefined42/447/272#447-272"
+          href="/42/447/272#447-272"
         >
           447.272
         </a>
