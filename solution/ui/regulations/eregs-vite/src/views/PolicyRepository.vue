@@ -6,14 +6,16 @@ import _difference from "lodash/difference";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import { getSubjectName, sortSubjects } from "utilities/filters";
-
 import {
     getLastUpdatedDates,
     getPolicyDocList,
     getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
+
+import { getSubjectName, sortSubjects } from "utilities/filters";
+
+import { getRequestParams } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -156,25 +158,6 @@ const clearSelectedParams = () => {
 };
 
 provide("selectedParams", selectedParams);
-
-// utility method to parse $route.query to return `${key}=${value},${value}` string
-const getRequestParams = (query) => {
-    const requestParams = Object.entries(query)
-        .map(([key, value]) => {
-            const sanitizedVal = _isArray(value)
-                ? value[0]
-                : value
-
-            const valueArray = sanitizedVal
-                .split(",")
-                .filter((id) => !Number.isNaN(parseInt(id, 10)));
-
-            return valueArray.map((v) => `${key}=${v}`).join("&");
-        })
-        .join("&");
-
-    return requestParams;
-};
 
 // policyDocSubjects fetch for subject selector
 // fetch here so we have it in context; pass down to selector via props

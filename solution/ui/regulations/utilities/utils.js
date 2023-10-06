@@ -24,6 +24,40 @@ const EventCodes = {
     OpenBlockingModal: "OpenBlockingModal",
 };
 
+const PARAM_VALIDATION_DICT = {
+    subjects: (subject) => !Number.isNaN(parseInt(subject, 10)),
+    q: (query) => query.length > 0,
+};
+
+/*
+ * @param {Object} query - $route.query object from Vue Router
+ * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
+ * @example
+ * const query = {
+ *    subjects: "1,2,3",
+ *    q: "test",
+ * }
+ * const queryString = getRequestParams(query);
+ * console.log(queryString); // subjects=1&subjects=2&subjects=3&q=test
+ */
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .filter(([key, value]) => PARAM_VALIDATION_DICT[key])
+        .map(([key, value]) => {
+            const dedupedVal = _isArray(value) ? value[0] : value;
+
+            const valueArray = dedupedVal
+                .split(",")
+                .filter((v) => PARAM_VALIDATION_DICT[key](v));
+
+            return valueArray.map((v) => `${key}=${v}`).join("&");
+        })
+        .filter(([key, value]) => !_isEmpty(value))
+        .join("&");
+
+    return requestParams;
+};
+
 /**
  * Converts the given Map object to an array of values from the map
  */
@@ -835,6 +869,7 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
+    getRequestParams,
     getQueryParam,
     getTagContent,
     highlightText,
