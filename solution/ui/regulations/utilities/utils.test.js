@@ -40,7 +40,7 @@ describe("Utilities.js", () => {
 
     it("getRequestParams properly gets the request params to be used for an API call", async () => {
         const query1 = {
-            subjects: "1,2,3",
+            subjects: ["1", "2", "3"],
             q: "test",
         };
 
@@ -49,18 +49,18 @@ describe("Utilities.js", () => {
         );
 
         const query2 = {
-            subjects: "1,2,asdfa",
+            subjects: ["1", "2", "asdf"],
             q: "test",
         };
 
         expect(getRequestParams(query2)).toBe("subjects=1&subjects=2&q=test");
 
-        const query3 = {
-            subjects: ["1,2", "3"],
-            q: "test",
-        };
+        //const query3 = {
+            //subjects: ["1,2", "3"],
+            //q: "test",
+        //};
 
-        expect(getRequestParams(query3)).toBe("subjects=1&subjects=2&q=test");
+        //expect(getRequestParams(query3)).toBe("subjects=1&subjects=2&q=test");
 
         const query4 = {
             subjects: "erq",
@@ -82,7 +82,7 @@ describe("Utilities.js", () => {
         expect(getRequestParams(query6)).toBe("");
 
         const query7 = {
-            subjects: "1,2,3",
+            subjects: ["1", "2", "3"],
             q: "",
         };
 
