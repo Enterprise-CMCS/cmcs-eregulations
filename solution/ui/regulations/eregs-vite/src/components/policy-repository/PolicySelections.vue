@@ -11,27 +11,18 @@ const selectedParams = inject("selectedParams");
 const FilterTypesDict = inject("FilterTypesDict");
 
 const removeClick = (event) => {
-    const subjects = _isArray($route.query.subjects)
-        ? $route.query.subjects[0]
-        : $route.query.subjects;
+    const { type, id } = event.target.dataset;
 
-    const subjectIds = subjects
-        ? subjects.split(",")
-        : [];
+    const paramsToUpdate = $route.query[type];
 
-    const filteredSubjects = subjectIds.filter(
-        (subject) => subject !== event.target.dataset.id
-    );
-
-    const query = filteredSubjects.length
-        ? {
-              subjects: filteredSubjects.join(","),
-          }
-        : {};
+    const filteredParams = paramsToUpdate.filter((subject) => subject !== id);
 
     $router.push({
         name: "policy-repository",
-        query,
+        query: {
+            ...$route.query,
+            [type]: filteredParams,
+        },
     });
 };
 
@@ -44,6 +35,7 @@ watch(
             .map((param) => ({
                 label: FilterTypesDict[param.type],
                 id: param.id,
+                type: param.type,
                 name: param.name,
             }))
             .sort((a, b) => {
@@ -69,7 +61,10 @@ watch(
                 {{ selection.label }}: {{ selection.name }}
                 <button
                     :data-id="selection.id"
-                    :data-testid="`remove-subject-${selection.id}`"
+                    :data-testid="`remove-${selection.label.toLowerCase()}-${
+                        selection.id
+                    }`"
+                    :data-type="selection.type"
                     @click="removeClick"
                 >
                     <i class="mdi mdi-close"></i>
