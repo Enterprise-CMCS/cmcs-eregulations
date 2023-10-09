@@ -7,11 +7,8 @@ import _isArray from "lodash/isArray";
 const $router = useRouter();
 const $route = useRoute();
 
-const FilterTypesEnum = {
-    subjects: "Subject",
-};
-
 const selectedParams = inject("selectedParams");
+const FilterTypesDict = inject("FilterTypesDict");
 
 const removeClick = (event) => {
     const subjects = _isArray($route.query.subjects)
@@ -45,7 +42,7 @@ watch(
     async () => {
         selections.value = selectedParams.paramsArray
             .map((param) => ({
-                label: FilterTypesEnum[param.type],
+                label: FilterTypesDict[param.type],
                 id: param.id,
                 name: param.name,
             }))

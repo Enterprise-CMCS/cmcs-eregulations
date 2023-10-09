@@ -1,6 +1,6 @@
 <script setup>
 import { provide, reactive, ref, watch } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router/composables";
 
 import _difference from "lodash/difference";
 import _isArray from "lodash/isArray";
@@ -27,6 +27,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
+import SearchInput from "@/components/SearchInput.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 
 const props = defineProps({
@@ -62,10 +63,17 @@ const props = defineProps({
 
 // Router and Route
 const $route = useRoute();
+const $router = useRouter();
+
+const FilterTypesDict = {
+    subjects: "Subject",
+    q: "query",
+};
 
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+provide("FilterTypesDict", FilterTypesDict);
 
 // partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
@@ -203,6 +211,26 @@ const getDocSubjects = async () => {
     }
 };
 
+const executeSearch = (payload) => {
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...$route.query,
+            q: payload.query,
+        },
+    });
+};
+
+const clearSearchQuery = () => {
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...$route.query,
+            q: undefined,
+        },
+    });
+};
+
 watch(
     () => $route.query,
     async (newQueryParams, oldQueryParams) => {
@@ -309,6 +337,16 @@ if (_isEmpty($route.query)) {
                         </template>
                         <template #selections>
                             <PolicySelections />
+                        </template>
+                        <template #search>
+                            <SearchInput
+                                form-class="search-form"
+                                label=""
+                                page="policy-repository"
+                                :search-query="searchQuery"
+                                @execute-search="executeSearch"
+                                @clear-form="clearSearchQuery"
+                            />
                         </template>
                         <template #filters>
                             <SubjectSelector
