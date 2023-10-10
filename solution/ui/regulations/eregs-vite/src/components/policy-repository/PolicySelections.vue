@@ -12,16 +12,27 @@ const FilterTypesDict = inject("FilterTypesDict");
 
 const removeClick = (event) => {
     const { type, id } = event.target.dataset;
+    const routeClone = { ...$route.query };
+    const paramsToUpdate = routeClone[type];
 
-    const paramsToUpdate = $route.query[type];
+    const paramsArray = _isArray(paramsToUpdate)
+        ? paramsToUpdate
+        : [paramsToUpdate];
 
-    const filteredParams = paramsToUpdate.filter((subject) => subject !== id);
+    const filteredParamsArray = paramsArray.filter((paramId) => paramId !== id);
+
+    const paramsToPush =
+        filteredParamsArray.length > 0
+            ? { [type]: filteredParamsArray }
+            : {};
+
+    delete routeClone[type];
 
     $router.push({
         name: "policy-repository",
         query: {
-            ...$route.query,
-            [type]: filteredParams,
+            ...routeClone,
+            ...paramsToPush,
         },
     });
 };

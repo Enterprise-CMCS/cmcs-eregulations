@@ -241,38 +241,39 @@ watch(
             return;
         }
 
-        console.log("newQueryParams", newQueryParams);
-        console.log("oldQueryParams", oldQueryParams);
-
         // if there are multiple subjects already selected and one needs to be removed
-        /*if (*/
-            /*newQueryParams.subjects &&*/
-            /*oldQueryParams.subjects &&*/
-            /*newQueryParams.subjects.length < oldQueryParams.subjects.length*/
-        /*) {*/
-            /*const oldSubjectIds = oldQueryParams.subjects*/
-                /*.split(",")*/
-                /*.filter((id) => !Number.isNaN(parseInt(id, 10)));*/
-            /*const newSubjectIds = newQueryParams.subjects*/
-                /*.split(",")*/
-                /*.filter((id) => !Number.isNaN(parseInt(id, 10)));*/
+        if (
+            newQueryParams.subjects &&
+            oldQueryParams.subjects &&
+            newQueryParams.subjects.length < oldQueryParams.subjects.length
+        ) {
+            const oldSubjectIds = oldQueryParams.subjects.filter(
+                (id) => !Number.isNaN(parseInt(id, 10))
+            );
+            const newSubjectIds = newQueryParams.subjects.filter(
+                (id) => !Number.isNaN(parseInt(id, 10))
+            );
 
-            /*const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);*/
+            const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
 
-            /*removeSelectedParams({*/
-                /*type: "subjects",*/
-                /*id: subjectToRemove[0],*/
-            /*});*/
+            removeSelectedParams({
+                type: "subjects",
+                id: subjectToRemove[0],
+            });
 
-            /*const newRequestParams = getRequestParams(newQueryParams);*/
-            /*await getDocList(newRequestParams);*/
+            const newRequestParams = getRequestParams(newQueryParams);
+            await getDocList(newRequestParams);
 
-            /*return;*/
-        /*}*/
+            return;
+        }
 
         if (newQueryParams.subjects) {
-            const subjectIds = newQueryParams.subjects
-                .filter((id) => !Number.isNaN(parseInt(id, 10)));
+            const subjectsArray = _isArray(newQueryParams.subjects)
+                ? newQueryParams.subjects
+                : [newQueryParams.subjects];
+            const subjectIds = subjectsArray.filter(
+                (id) => !Number.isNaN(parseInt(id, 10))
+            );
             const subjects = policyDocSubjects.value.results.filter((subject) =>
                 subjectIds.includes(subject.id.toString())
             );
@@ -286,10 +287,8 @@ watch(
             });
         }
 
-        console.log("newQueryParams", newQueryParams);
         // parse $route.query to return `${key}=${value}` string
         const newRequestParams = getRequestParams(newQueryParams);
-        console.log("newRequestParams", newRequestParams);
         await getDocList(newRequestParams);
     }
 );
