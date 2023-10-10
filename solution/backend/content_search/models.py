@@ -17,7 +17,7 @@ from resources.models import AbstractCategory, AbstractLocation, FederalRegister
 class ContentIndexQuerySet(models.QuerySet):
     search_type = "plain"
     cover_density = False
-    rank_filter = .2
+    rank_filter = .1
 
     def search_configuration(self, query):
 
@@ -84,7 +84,7 @@ def create_search(updated_doc, file=None):
     else:
         # Trigger lambda here to get the text
         file_content = ''
-    fi = establish_conntent_type(updated_doc)
+    fi = establish_content_type(updated_doc)
 
     fi.content = file_content
     fi.save()
@@ -93,7 +93,7 @@ def create_search(updated_doc, file=None):
     fi.save()
 
 
-def establish_conntent_type(updated_doc):
+def establish_content_type(updated_doc):
     if isinstance(updated_doc, UploadedFile):
         return ContentIndex(
             file=updated_doc,
@@ -127,8 +127,10 @@ def update_search(sender, instance, created, **kwargs):
     try:
         if isinstance(instance, UploadedFile):
             file = ContentIndex.objects.get(file=instance)
-        if isinstance(instance, SupplementalContent) or isinstance(instance, FederalRegisterDocument):
+        elif isinstance(instance, SupplementalContent):
             file = ContentIndex.objects.get(supplemental_content=instance)
+        elif isinstance(instance, FederalRegisterDocument):
+            file = ContentIndex.objects.get(fr_doc=instance)
         create_search(instance, file)
         file.delete()
 

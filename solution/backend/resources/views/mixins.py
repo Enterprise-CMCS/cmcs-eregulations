@@ -72,7 +72,6 @@ class LocationFiltererMixin:
 class LocationExplorerViewSetMixin(OptionalPaginationMixin, LocationFiltererMixin):
     PARAMETERS = LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS
 
-    location_filter_prefix = ""
     location_filter_max_depth = 2
 
     def get_queryset(self):

@@ -21,6 +21,7 @@ from .serializers import ContentSearchSerializer
 class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
     serializer_class = ContentSearchSerializer
     model = ContentIndex
+    location_filter_prefix = "locations__"
 
     @extend_schema(
         description="Retrieve list of uploaded files",
@@ -51,12 +52,11 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         search_query = self.request.GET.get("q")
 
         query = self.model.objects.all()
-
-        if locations:
-            q_obj = self.get_location_filter(locations)
+        q_obj = self.get_location_filter(locations)
+        if q_obj:
             query = query.filter(q_obj)
         if subjects:
-            query = query.filter(subject__id__in=subjects)
+            query = query.filter(subjects__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
         if document_type:
@@ -71,16 +71,18 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         if not request.user.is_authenticated or resource_type == 'external':
             query = query.filter(resource_type='external')
         elif resource_type == 'internal':
+            print('hello')
             query = query.filter(resource_type='internal')
-
+        print(query)
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("category", queryset=category_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
+        print(query)
         if search_query:
             query = query.search(search_query)
-
+        print(query)
         context = self.get_serializer_context()
         serializer = ContentSearchSerializer(query, many=True, context=context)
         return Response(serializer.data)
