@@ -29,6 +29,6 @@ class ContentSearchSerializer(serializers.Serializer, ):
 
     @extend_schema_field(MetaCategorySerializer.many(False))
     def get_category(self, obj):
-        if self.context.get("category_details", True):
+        if self.context['request'].GET.get("category_details") == 'true':
             return AbstractCategoryPolymorphicSerializer(obj.category).data
-        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.category)
+        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj)

@@ -26,6 +26,9 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[
+                    OpenApiQueryParameter("category_details",
+                                          "Specify whether to show details of a category, or just the ID.",
+                                          bool, False),
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
@@ -40,7 +43,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                                           "date, and summary/description.", str, False),
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
-                                          "all. Use \"&resource-type=external\"", str, None),
+                                          "all. Use \"&resource-type=external\"", str, ''),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
     def list(self, request):
@@ -48,9 +51,8 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         subjects = self.request.GET.getlist("subjects")
         document_type = self.request.GET.getlist("document-type")
         category = self.request.GET.getlist("category")
-        resource_type = self.request.GET.get("resource-type").lower()
+        resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
-
         query = self.model.objects.all()
         q_obj = self.get_location_filter(locations)
         if q_obj:
