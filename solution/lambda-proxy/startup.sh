@@ -1,3 +1,3 @@
 #!/bin/sh
-python /proxy/lambda_proxy.py ${HOSTNAME} ${INTERNAL_PORT} ${EXTERNAL_PORT} &
+python /proxy/lambda_proxy.py ${HOSTNAME} ${EXTERNAL_PORT} ${PROXY_PARAMS} &
 exec /lambda-entrypoint.sh ${STARTUP_CMD}

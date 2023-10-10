@@ -4,10 +4,11 @@ import requests
 import signal
 import sys
 import urllib.parse
+import multiprocessing
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class ApiProxy:
-    def start_server(self, hostname, internal_port, external_port):
+    def start_server(self, hostname, internal_port, external_port, enable_async):
         class ProxyHTTPRequestHandler(BaseHTTPRequestHandler):
             protocol_version = "HTTP/1.0"
 
@@ -39,7 +40,7 @@ class ApiProxy:
                 path = urllib.parse.urlparse(self.path)
                 
                 headers = dict(self.headers)
-                body = self.rfile.read(int(self.headers["content-length"])) if "content-length" in headers else None
+                body = self.rfile.read(int(self.headers["Content-Length"])).decode() if "Content-Length" in headers else None
 
                 query_params = urllib.parse.parse_qs(path.query)
                 for i in query_params:
@@ -55,7 +56,7 @@ class ApiProxy:
                     "headers": headers,
                     "cookies": cookies,
                     "queryStringParameters": query_params,
-                    "body": None,  # TODO: handle this
+                    "body": body,  # TODO: handle base64 encoded case
                     "requestContext": {
                         "http": {
                             "method": method,
@@ -66,6 +67,15 @@ class ApiProxy:
                     },
                     "isBase64Encoded": False,  # TODO: handle this
                 }
+
+                if enable_async:
+                    multiprocessing.Process(
+                        target=requests.post,
+                        args=(url,),
+                        kwargs={"headers": headers, "data": json.dumps(data)},
+                    ).start()
+                    self._send_response(200, {}, "")
+                    return
 
                 resp = requests.post(url, headers=headers, data=json.dumps(data))
 
@@ -85,6 +95,10 @@ class ApiProxy:
                     self._send_response(500, {}, f"Incorrect response type: \"{resp}\" is not a dictionary.")
                     return
 
+                if "errorMessage" in resp:
+                    self._send_response(500, {}, resp["errorMessage"])
+                    return
+
                 if resp.keys() < {"statusCode", "headers", "body"} or type(resp["headers"]) != dict:
                     self._send_response(500, {}, f"Malformed response payload: {json.dumps(resp)}. Keys 'statusCode', "
                                         "'headers', and 'body' are required.")
@@ -100,16 +114,18 @@ class ApiProxy:
 def exit_now(signum, frame):
     sys.exit(0)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="lambda-proxy",
-        description="Proxy server to convert standard HTTP requests to Lambda POST requests.",
+        description="Proxy server to convert standard HTTP requests to Lambda POST requests via an API Gateway-like interface.",
     )
     parser.add_argument("hostname", help="Host name where the Lambda is running.")
-    parser.add_argument("internal_port", help="The port that the Lambda is running on.", type=int)
     parser.add_argument("external_port", help="The port to expose the proxy on.", type=int)
+    parser.add_argument("-i", "--internal-port", help="The port that the Lambda is running on.", default=8080, type=int)
+    parser.add_argument("-a", "--enable-async", help="Run requests asynchronously. Causes proxy to return immediately with a "
+                        "200 status code.", action="store_true")
     args = parser.parse_args()
 
     proxy = ApiProxy()
     signal.signal(signal.SIGTERM, exit_now)
-    proxy.start_server(args.hostname, args.internal_port, args.external_port)
+    proxy.start_server(args.hostname, args.internal_port, args.external_port, args.enable_async)
