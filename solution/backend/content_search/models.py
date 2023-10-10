@@ -59,11 +59,11 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 class ContentIndex(models.Model):
     doc_name_string = models.CharField(max_length=512, null=True, blank=True)
-    summary_string = models.CharField(max_length=512, null=True, blank=True)
+    summary_string = models.TextField(null=True, blank=True)
     file_name_string = models.CharField(max_length=512, null=True, blank=True)
     date_string = VariableDateField()
     content = models.TextField()
-    url = models.CharField(max_length=255, blank=True, null=True)
+    url = models.CharField(max_length=512, blank=True, null=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="content", on_delete=models.SET_NULL)
     category = models.ForeignKey(
