@@ -1,6 +1,13 @@
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "cmcs_regulations.settings.test_settings"
 
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "*/tests/*"
+]
+
+
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F", "G", "I", "S", "W", "ASYNC",
@@ -9,12 +16,6 @@ select = ["E", "F", "G", "I", "S", "W", "ASYNC",
           "E271", "E272", "E273", "E274", "E275",
         ]
 ignore = ['S101']
-
-[tool.coverage.run]
-omit = [
-    "*/migrations/*",
-    "*/tests/*"
-    ]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["E", "F", "I", "W",
