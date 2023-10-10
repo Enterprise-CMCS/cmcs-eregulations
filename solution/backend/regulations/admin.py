@@ -69,6 +69,7 @@ def roman_to_int(roman):
         result = result - num if 3 * num < result else result + num
     return result
 
+
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
     def verify_claims(self, claims) -> bool:
         return (
@@ -78,16 +79,17 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
     @transaction.atomic
     def create_user(self, claims) -> User:
-        full_name = claims.get("name").split(" ") if claims.get("name") else None
-        first_name = full_name[0] if full_name else None
-        last_name = full_name[1] if full_name and len(full_name) > 1 else None
-
-        user, created = self.UserModel.objects.get_or_create(
-            first_name=first_name,
-            last_name=last_name,
-            email=claims.get("email"),
-            defaults={"username": claims.get("preferred_username")}
-        )
+        try:
+            # Attempt to get the user by email
+            user = self.UserModel.objects.get(email=claims.get("email"))
+        except User.DoesNotExist:
+            # User does not exist, create a new one
+            user = self.UserModel(
+                first_name=claims.get("firstName"),
+                last_name=claims.get("lastName"),
+                email=claims.get("email"),
+                username=claims.get("email")  # Set username to email
+            )
 
         jobcodes = claims.get("jobcodes")
         if jobcodes:
@@ -98,7 +100,6 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
         return user
 
-
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
@@ -106,6 +107,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         user.save()
 
         return user
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
     fieldsets = (
