@@ -40,7 +40,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                                           "date, and summary/description.", str, False),
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
-                                          "all. Use \"&resource-type=external\"", str, "all"),
+                                          "all. Use \"&resource-type=external\"", str, None),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )
     def list(self, request):
@@ -71,18 +71,14 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         if not request.user.is_authenticated or resource_type == 'external':
             query = query.filter(resource_type='external')
         elif resource_type == 'internal':
-            print('hello')
             query = query.filter(resource_type='internal')
-        print(query)
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("category", queryset=category_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
-        print(query)
         if search_query:
             query = query.search(search_query)
-        print(query)
         context = self.get_serializer_context()
         serializer = ContentSearchSerializer(query, many=True, context=context)
         return Response(serializer.data)

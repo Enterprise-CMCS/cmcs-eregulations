@@ -42,7 +42,6 @@ def test_index_update():
     si.name = 'updated'
     si.save()
     file_index = ContentIndex.objects.get(supplemental_content=si)
-    print(file_index.__dict__)
     assert file_index.doc_name_string == 'updated'
     assert file_index.content == 'content is here'
     si.delete()

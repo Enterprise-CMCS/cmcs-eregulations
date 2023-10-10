@@ -7,7 +7,6 @@ from file_manager.models import UploadedFile
 def test_extension():
     UploadedFile.objects.update_or_create(document_name="valid", file_name="C://valid.xls",)
     good_file = UploadedFile.objects.get(document_name="valid")
-    print(good_file.__dict__)
     assert good_file.extension() == ".xls"
 
 

@@ -90,12 +90,11 @@ class SearchTest(TestCase):
 
     def test_search_by_filename_variations(self):
         self.login()
-        names = ["cheese",]
-        for i in names:
-            response = self.client.get(f"/v3/content-search/?resource-type=internal&q={i}")
-            print(i)
-            print(response.data)
-            self.check_exclusive_response(response, 0)
+        words = ["cheese", "pokemon"]
+        for word in words:
+            response = self.client.get(f"/v3/content-search/?resource-type=internal&q={word}")
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertIn(word, response.data[0]["file_name_string"])
 
     def test_inclusive_location_filter(self):
         self.login()
