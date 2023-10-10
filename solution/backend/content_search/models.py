@@ -78,16 +78,11 @@ class ContentIndex(models.Model):
 
 
 def create_search(updated_doc, file=None):
-    file_content = ''
     if file:
-        file_content = file.content
+        fi = file
     else:
-        # Trigger lambda here to get the text
-        file_content = ''
-    fi = establish_content_type(updated_doc)
-
-    fi.content = file_content
-    fi.save()
+        fi = establish_content_type(updated_doc)
+        fi.save()
     fi.locations.set(updated_doc.locations.all())
     fi.subjects.set(updated_doc.subjects.all())
     fi.save()
@@ -132,7 +127,6 @@ def update_search(sender, instance, created, **kwargs):
         elif isinstance(instance, FederalRegisterDocument):
             file = ContentIndex.objects.get(fr_doc=instance)
         create_search(instance, file)
-        file.delete()
 
     except ContentIndex.DoesNotExist:
         create_search(instance)
