@@ -10,6 +10,12 @@ select = ["E", "F", "G", "I", "S", "W", "ASYNC",
         ]
 ignore = ['S101']
 
+[tool.coverage.run]
+omit = [
+    "*/migrations/*",
+    "*/tests/*"
+    ]
+
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["E", "F", "I", "W",
            "E201", "E202", "E203", "E211", "E231",
