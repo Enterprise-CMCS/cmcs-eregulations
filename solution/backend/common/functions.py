@@ -46,9 +46,9 @@ def loadSeedData():
         ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
         ("file_manager.documenttype.json", DocumentType),
         ("file_manager.subject.json", Subject),
-        ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
-        ("cmcs_regulations/fixtures/auth.permission.json", Permission),
-        ("cmcs_regulations/fixtures/auth.group.json", Group),
+        # ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
+        # ("cmcs_regulations/fixtures/auth.permission.json", Permission),
+        # ("cmcs_regulations/fixtures/auth.group.json", Group),
     ]
 
     for fixture in reversed(fixtures):
