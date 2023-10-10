@@ -38,15 +38,14 @@ class OidcAdminAuthenticationBackendTest(unittest.TestCase):
         user = self.backend.create_user(self.mock_claims)
         self.assertEqual(user.email, "homerjsimpson@example.com")
 
-    def test_is_staff_true_if_user_has_jobcodes(self):
+    def test_user_is_active_if_have_jobcodes(self):
         user = self.backend.create_user(self.mock_claims)
-        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
 
-    def test_is_staff_false_if_user_has_no_jobcodes(self):
+    def test_user_is_not_active_if_no_jobcodes(self):
         self.mock_claims["jobcodes"] = ''
         user = self.backend.create_user(self.mock_claims)
-        self.assertFalse(user.is_staff)
-
+        self.assertFalse(user.is_active)
 
 if __name__ == '__main__':
     unittest.main()

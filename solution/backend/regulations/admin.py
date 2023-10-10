@@ -77,6 +77,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                 and claims.get("email_verified", False)
         )
 
+
     @transaction.atomic
     def create_user(self, claims) -> User:
         try:
@@ -85,25 +86,28 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         except User.DoesNotExist:
             # User does not exist, create a new one
             user = self.UserModel(
-                first_name=claims.get("firstName"),
-                last_name=claims.get("lastName"),
                 email=claims.get("email"),
-                username=claims.get("email")  # Set username to email
+                username=claims.get("email")
             )
 
-        jobcodes = claims.get("jobcodes")
-        if jobcodes:
-            user.is_staff = True
-        else:
-            user.is_staff = False
-        user.save()
-
-        return user
-
+        # Set user fields from claims
+        return self.update_user(user, claims)
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
-        user.first_name = claims.get("name")
+        first_name = claims.get("firstName")
+        if first_name:
+            user.first_name = first_name
+
+        last_name = claims.get("lastName")
+        if last_name:
+            user.last_name = last_name
+
+        jobcodes = claims.get("jobcodes")
+        if jobcodes:
+            user.is_active = True
+        else:
+            user.is_active = False
         user.save()
 
         return user
