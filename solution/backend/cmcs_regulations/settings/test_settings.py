@@ -1,4 +1,6 @@
 from .base import * # noqa
+from .euasettings import * # noqa
+
 import os
 USE_AWS_TOKEN = True
 AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
