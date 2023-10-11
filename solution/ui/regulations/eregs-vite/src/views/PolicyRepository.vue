@@ -166,6 +166,21 @@ const clearSelectedParams = () => {
 
 provide("selectedParams", selectedParams);
 
+const onRouteUpdate = (subjectsListRef) => (param) => {
+    const paramList = !_isArray(param[1]) ? [param[1]] : param[1];
+    paramList.forEach((paramId) => {
+        const subject = subjectsListRef.value.results.filter(
+            (subjectObj) => paramId === subjectObj.id.toString()
+        )[0];
+
+        addSelectedParams({
+            type: param[0],
+            id: paramId,
+            name: getSubjectName(subject),
+        });
+    });
+};
+
 // policyDocSubjects fetch for subject selector
 // fetch here so we have it in context; pass down to selector via props
 const policyDocSubjects = ref({
@@ -188,23 +203,13 @@ const getDocSubjects = async () => {
 
         // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
-            const subjectsArray = _isArray($route.query.subjects)
-                ? $route.query.subjects
-                : [$route.query.subjects];
-            const subjectIds = subjectsArray.filter(
-                (id) => !Number.isNaN(parseInt(id, 10))
-            );
-            const subjects = policyDocSubjects.value.results.filter((subject) =>
-                subjectIds.includes(subject.id.toString())
-            );
+            // wipe everything clean to start
+            clearSelectedParams();
 
-            subjects.forEach((subject) => {
-                addSelectedParams({
-                    type: "subjects",
-                    id: subject.id,
-                    name: getSubjectName(subject),
-                });
-            });
+            // now that everything is cleaned, iterate over new query params
+            Object.entries($route.query).forEach(
+                onRouteUpdate(policyDocSubjects)
+            );
 
             getDocList(getRequestParams($route.query));
         }
@@ -233,7 +238,7 @@ const clearSearchQuery = () => {
 
 watch(
     () => $route.query,
-    async (newQueryParams, oldQueryParams) => {
+    async (newQueryParams) => {
         // if all params are removed, clear selectedParams and getDocList
         if (_isEmpty(newQueryParams)) {
             clearSelectedParams();
@@ -245,19 +250,9 @@ watch(
         clearSelectedParams();
 
         // now that everything is cleaned, iterate over new query params
-        Object.entries(newQueryParams).forEach((param) => {
-            param[1].forEach((paramId) => {
-                const subject = policyDocSubjects.value.results.filter(
-                    (subjectObj) => paramId === subjectObj.id.toString()
-                )[0];
-
-                addSelectedParams({
-                    type: param[0],
-                    id: paramId,
-                    name: getSubjectName(subject),
-                });
-            });
-        });
+        Object.entries(newQueryParams).forEach(
+            onRouteUpdate(policyDocSubjects)
+        );
 
         // parse $route.query to return `${key}=${value}` string
         const newRequestParams = getRequestParams(newQueryParams);
