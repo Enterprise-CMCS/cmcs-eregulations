@@ -1,19 +1,6 @@
 [
 {
     "model": "resources.supplementalcontent",
-    "pk": 1,
-    "fields": {
-        "internal_notes": null,
-        "name": "SHO# 13-005/Affordable Care Act # 27",
-        "description": "RE: Payment Error Rate Measurement (PERM)eligibility reviews, Medicaid Eligibility Quality Control (MEQC) Program, and development of an interim approach for assessing payment error for eligibility",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SHO-13-005.pdf",
-        "name_sort": "sho# 00000013-00000005/affordable care act # 00000027",
-        "description_sort": "re: payment error rate measurement (perm)eligibility reviews, medicaid eligibility quality control (meqc) program, and development of an interim approach for assessing payment error for eligibility",
-        "date": "2013-08-15"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 2,
     "fields": {
         "internal_notes": "Removed extra linebreak in description",
@@ -92,32 +79,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 8,
-    "fields": {
-        "internal_notes": null,
-        "name": "SHO 09-014/CHIPRA #9",
-        "description": "Mental Health Parity and Substance Use Disorder Parity Requirements",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SHO110409.pdf",
-        "name_sort": "sho 00000009-00000014/chipra #00000009",
-        "description_sort": "mental health parity and substance use disorder parity requirements",
-        "date": "2009-11-04"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 9,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Federal public notice and public process requirements for changes to Medicaid payment rates",
-        "url": "https://www.medicaid.gov/sites/default/files/federal-policy-guidance/downloads/cib062416.pdf",
-        "name_sort": null,
-        "description_sort": "federal public notice and public process requirements for changes to medicaid payment rates",
-        "date": "2016-06-24"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 10,
     "fields": {
         "internal_notes": "Removed extra space -BG",
@@ -127,19 +88,6 @@
         "name_sort": null,
         "description_sort": "medicaid program; face-to-face requirements for home health services; policy changes and clarifications related to home health (cms-00002348-f) final rule fact sheet",
         "date": "2020-05-08"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 11,
-    "fields": {
-        "internal_notes": "Updated description based on duplicate -BG",
-        "name": null,
-        "description": "Alternative Benefit Plans (ABPs) - Training Slides",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/abp-state-training-presentation.pdf",
-        "name_sort": null,
-        "description_sort": "alternative benefit plans (abps) - training slides",
-        "date": "2013-07-01"
     }
 },
 {
@@ -183,19 +131,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 15,
-    "fields": {
-        "internal_notes": null,
-        "name": "SHO # 09-007",
-        "description": "Medicaid and CHIP Coverage of HIV Testing and Screening",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SHO062409.pdf",
-        "name_sort": "sho # 00000009-00000007",
-        "description_sort": "medicaid and chip coverage of hiv testing and screening",
-        "date": "2009-06-24"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 16,
     "fields": {
         "internal_notes": null,
@@ -205,97 +140,6 @@
         "name_sort": "smd# 00000021-00000003",
         "description_sort": "re: implementation of american rescue plan act of 00002021 section 00009817: additional support for medicaid home and community-based services during the covid-00000019 emergency",
         "date": "2021-05-13"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 17,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "EPSDT - A Guide for States: Coverage in the Medicaid Benefit for Children and Adolescents",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/epsdt_coverage_guide.pdf",
-        "name_sort": null,
-        "description_sort": "epsdt - a guide for states: coverage in the medicaid benefit for children and adolescents",
-        "date": "2014-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 18,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Opportunities to Improve HIV Prevention and Care Delivery to Medicaid and CHIP Beneficiaries",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib120116.pdf",
-        "name_sort": null,
-        "description_sort": "opportunities to improve hiv prevention and care delivery to medicaid and chip beneficiaries",
-        "date": "2016-12-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 19,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Final Rule - CMS 2249-F – 1915(i) State Plan Home and Community-Based Services, 5-Year Period for Waivers, Provider Payment Reassignment, Setting Requirements for Community First Choice, and CMS 2296-F 1915(c) Home and Community-Based Services Waivers",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-01-10-14.pdf",
-        "name_sort": null,
-        "description_sort": "final rule - cms 00002249-f – 00001915(i) state plan home and community-based services, 00000005-year period for waivers, provider payment reassignment, setting requirements for community first choice, and cms 00002296-f 00001915(c) home and community-bas",
-        "date": "2014-01-10"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 20,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Managed Long Term Services and Supports (MLTSS)—Two New Resources on Medicaid.gov",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-08-06-12.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid managed long term services and supports (mltss)—two new resources on medicaid.gov",
-        "date": "2012-08-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 21,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Children's Health Insurance Program Reauthorization Act (CHIPRA) Anniversary",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/02-04-2010-CHIPRA.pdf",
-        "name_sort": null,
-        "description_sort": "children's health insurance program reauthorization act (chipra) anniversary",
-        "date": "2010-02-04"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 22,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Update on Medicaid/CHIP: Tobacco Cessation Services; Annual Re-determination of Medicare Part D Low-Income Subsidy",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/Info-Bulletin-06-29-11.pdf",
-        "name_sort": null,
-        "description_sort": "update on medicaid/chip: tobacco cessation services; annual re-determination of medicare part d low-income subsidy",
-        "date": "2011-06-29"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 23,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Updates on Medicaid/CHIP: Annual Report on the Quality of Care for Children in Medicaid and CHIP; Innovation Advisors Program for Delivery System Reform; Medicare Accountable Care Organization final rules",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-11-02-11.pdf",
-        "name_sort": null,
-        "description_sort": "updates on medicaid/chip: annual report on the quality of care for children in medicaid and chip; innovation advisors program for delivery system reform; medicare accountable care organization final rules",
-        "date": "2011-11-02"
     }
 },
 {
@@ -326,19 +170,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 26,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Appendix A: State Innovation Model in Model Test States: Colorado",
-        "url": "https://innovation.cms.gov/data-and-reports/2021/sim-rd2-test-final-appendix",
-        "name_sort": null,
-        "description_sort": "appendix a: state innovation model in model test states: colorado",
-        "date": "2014-05"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 27,
     "fields": {
         "internal_notes": null,
@@ -361,32 +192,6 @@
         "name_sort": null,
         "description_sort": "healthy adult opportunity (hao) overview",
         "date": "2020-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 29,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Coverage of Lactation Services",
-        "url": "https://www.medicaid.gov/medicaid/quality-of-care/downloads/lactation_services_issuebrief_01102012.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid coverage of lactation services",
-        "date": "2012-01-10"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 30,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Home and Community-Based Services (HCBS) Taxonomy Category and Subcategory Definitions",
-        "url": "https://wms-mmdl.cms.gov/WMS/help/TaxonomyCategoryDefinitions.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid home and community-based services (hcbs) taxonomy category and subcategory definitions",
-        "date": "2014-02-28"
     }
 },
 {
@@ -417,19 +222,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 33,
-    "fields": {
-        "internal_notes": null,
-        "name": "OEI-07-06-00640",
-        "description": "Duplicate Medicaid and Medicare Home Health Payments: Supplies and Services",
-        "url": "https://oig.hhs.gov/oei/reports/oei-07-06-00640.pdf",
-        "name_sort": "oei-00000007-00000006-00000640",
-        "description_sort": "duplicate medicaid and medicare home health payments: supplies and services",
-        "date": "2008-05"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 34,
     "fields": {
         "internal_notes": null,
@@ -439,71 +231,6 @@
         "name_sort": null,
         "description_sort": "section 00001115 sud demonstration monitoring protocol metrics",
         "date": null
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 35,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Innovative State Practices for Improving the Provision of Medicaid Dental Services: Summary of Eight State Reports",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/8statedentalreview.pdf",
-        "name_sort": null,
-        "description_sort": "innovative state practices for improving the provision of medicaid dental services: summary of eight state reports",
-        "date": "2011-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 36,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Recent Developments in Medicaid and CHIP Policy",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/11-09-2010-Recent-Developments.pdf",
-        "name_sort": null,
-        "description_sort": "recent developments in medicaid and chip policy",
-        "date": "2010-11-09"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 37,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMDL #02-003",
-        "description": "Compliance Extension for Electronic Transaction Rule-Administrative Simplification Compliance Act",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd030702.pdf",
-        "name_sort": "smdl #00000002-00000003",
-        "description_sort": "compliance extension for electronic transaction rule-administrative simplification compliance act",
-        "date": "2002-03-07"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 38,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Child Core Set Dental Sealant Measure Webcast",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/dental-sealant-transcript-nov-12-2015.pdf",
-        "name_sort": null,
-        "description_sort": "child core set dental sealant measure webcast",
-        "date": "2015-11-12"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 39,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Approaches for Identifying, Collecting, and Evaluating Data on Health Care Disparities in Medicaid and CHIP",
-        "url": "https://www.medicaid.gov/medicaid/quality-of-care/downloads/4302b-rtc.pdf",
-        "name_sort": null,
-        "description_sort": "approaches for identifying, collecting, and evaluating data on health care disparities in medicaid and chip",
-        "date": "2011-09"
     }
 },
 {
@@ -534,32 +261,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 42,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid and CHIP Managed Care Final Rule (CMS 2390-F) Information Required on a Public Website",
-        "url": "https://www.medicaid.gov/Medicaid/downloads/information-required-on-public-website.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid and chip managed care final rule (cms 00002390-f) information required on a public website",
-        "date": "2016-08-16"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 43,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Application for Section 1915(b) (4) Waiver Fee-for-Service Selective Contracting Program",
-        "url": "https://www.medicaid.gov/Medicaid/downloads/1915b4-ffs-application.pdf",
-        "name_sort": null,
-        "description_sort": "application for section 00001915(b) (00000004) waiver fee-for-service selective contracting program",
-        "date": "2012-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 44,
     "fields": {
         "internal_notes": "refers only to 45 CFR 95 (no subpart/section) - tag not added",
@@ -586,32 +287,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 46,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Update on CMS Oral Health Initiative and Other Oral Health Related Items",
-        "url": "https://www.medicaid.gov/Federal-Policy-Guidance/Downloads/CIB-07-10-2014.pdf",
-        "name_sort": null,
-        "description_sort": "update on cms oral health initiative and other oral health related items",
-        "date": "2014-07-10"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 47,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Improving Oral Health Care Delivery in Medicaid and CHIP A Toolkit for States",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/oral-health-quality-improvement-toolkit-for-states.pdf",
-        "name_sort": null,
-        "description_sort": "improving oral health care delivery in medicaid and chip a toolkit for states",
-        "date": "2014-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 48,
     "fields": {
         "internal_notes": null,
@@ -621,19 +296,6 @@
         "name_sort": "smd # 00000019-00000001",
         "description_sort": "re: home and community-based settings regulation – heightened scrutiny",
         "date": "2019-03-22"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 49,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "All-State Training: Processing State Plan Amendments (SPAs) for Medicaid Alternative Benefit Plans (ABPs)",
-        "url": "https://wms-mmdl.cms.gov/MMDLDOC/abp/ABPSPAProcess.pdf",
-        "name_sort": null,
-        "description_sort": "all-state training: processing state plan amendments (spas) for medicaid alternative benefit plans (abps)",
-        "date": "2016-08-01"
     }
 },
 {
@@ -690,97 +352,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 54,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Coverage of Prescription Drugs for HIV/AIDS",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd061996.pdf",
-        "name_sort": null,
-        "description_sort": "coverage of prescription drugs for hiv/aids",
-        "date": "1996-06-19"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 55,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Updated Information on ICD-10 Compliance",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-02-16-12.pdf",
-        "name_sort": null,
-        "description_sort": "updated information on icd-00000010 compliance",
-        "date": "2012-02-16"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 56,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Coverage of Blood Lead Testing for Children Enrolled in Medicaid and the Children's Health Insurance Program",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib113016.pdf",
-        "name_sort": null,
-        "description_sort": "coverage of blood lead testing for children enrolled in medicaid and the children's health insurance program",
-        "date": "2016-11-30"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 57,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "FY 2013 CHIPRA Performance Bonuses",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-12-30-2013.pdf",
-        "name_sort": null,
-        "description_sort": "fy 00002013 chipra performance bonuses",
-        "date": "2013-12-30"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 58,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Migration of the Excluded Parties List System (EPLS) to the System for Award Management (SAM)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-08-01-12.pdf",
-        "name_sort": null,
-        "description_sort": "migration of the excluded parties list system (epls) to the system for award management (sam)",
-        "date": "2012-08-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 59,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "CHIPRA Grant Solicitation for State CHIP Programs'",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/02-24-2010-CHIPRA-Grants.pdf",
-        "name_sort": null,
-        "description_sort": "chipra grant solicitation for state chip programs'",
-        "date": "2010-02-24"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 60,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Enforcement Discretion Regarding Compliance with New HIPAA Standards",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-HIPAA-11-17-11.pdf",
-        "name_sort": null,
-        "description_sort": "enforcement discretion regarding compliance with new hipaa standards",
-        "date": "2011-11-17"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 61,
     "fields": {
         "internal_notes": "",
@@ -820,32 +391,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 64,
-    "fields": {
-        "internal_notes": null,
-        "name": "CMS-37 (expired 12/31/2017)",
-        "description": "Medicaid Program Budget Report State Estimate of Quarterly Grant Awards",
-        "url": "https://www.medicaid.gov/medicaid/data-and-systems/downloads/collection-systems/cms-37.pdf",
-        "name_sort": "cms-00000037 (expired 00000012/00000031/00002017)",
-        "description_sort": "medicaid program budget report state estimate of quarterly grant awards",
-        "date": "2016-12-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 66,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "The Feasibility of a Navajo Nation Medicaid Agency",
-        "url": "https://www.medicaid.gov/medicaid-chip-program-information/by-topics/downloads/navajo-nation-medicaid-agency-feasibility-report-to-congress.pdf",
-        "name_sort": null,
-        "description_sort": "the feasibility of a navajo nation medicaid agency",
-        "date": "2014-05"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 67,
     "fields": {
         "internal_notes": null,
@@ -868,19 +413,6 @@
         "name_sort": null,
         "description_sort": "national correct coding initiative technical guidance manual for medicaid services",
         "date": "2021-02-28"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 69,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Tobacco Cessation Benefits in Medicaid: Improving Utilization and Quality",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/tobacco-webinar-july-9.pdf",
-        "name_sort": null,
-        "description_sort": "tobacco cessation benefits in medicaid: improving utilization and quality",
-        "date": "2014-07-09"
     }
 },
 {
@@ -924,45 +456,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 73,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Medicaid Oral Health Performance Improvement Projects: A How-To-Manual for States",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/pip-manual-for-states.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid oral health performance improvement projects: a how-to-manual for states",
-        "date": "2015-07-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 74,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Frequently Asked Questions (FAQs) regarding Medicaid Analytic eXtract (MAX) data",
-        "url": "https://www.cms.gov/files/document/frequently-asked-questions-9",
-        "name_sort": null,
-        "description_sort": "frequently asked questions (faqs) regarding medicaid analytic extract (max) data",
-        "date": "2016-06-03"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 75,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicare Enrollment Database (EDB) Extract Request",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd090600.pdf",
-        "name_sort": null,
-        "description_sort": "medicare enrollment database (edb) extract request",
-        "date": "2000-09-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 76,
     "fields": {
         "internal_notes": null,
@@ -989,19 +482,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 78,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMD# 06-026",
-        "description": "Re: Third Party Liability",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD121506.pdf",
-        "name_sort": "smd# 00000006-00000026",
-        "description_sort": "re: third party liability",
-        "date": "2006-12-15"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 79,
     "fields": {
         "internal_notes": null,
@@ -1015,19 +495,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 80,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Medicaid and CHIP Managed Care Final Rule (CMS 2390-F) Implementation Dates",
-        "url": "https://www.medicaid.gov/Medicaid/downloads/implementation-dates.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid and chip managed care final rule (cms 00002390-f) implementation dates",
-        "date": "2016-04-25"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 81,
     "fields": {
         "internal_notes": "",
@@ -1037,32 +504,6 @@
         "name_sort": "smdl: 00000019-00000003",
         "description_sort": "re: implementation of section 00005052 of the support for patients and communities act – state plan option under section 00001915(l) of the social security act",
         "date": "2019-11-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 82,
-    "fields": {
-        "internal_notes": "Fixed link -BG",
-        "name": "SMDL #03-004",
-        "description": "State Recoupment of Payments for Services To Dual Eligibles",
-        "url": "https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/smd040803_116.pdf",
-        "name_sort": "smdl #00000003-00000004",
-        "description_sort": "state recoupment of payments for services to dual eligibles",
-        "date": "2003-04-08"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 83,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Strategies to Support Dual Eligible Beneficiaries’ Access to Durable Medical Equipment, Prosthetics, Orthotics, and Supplies",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib011317.pdf",
-        "name_sort": null,
-        "description_sort": "strategies to support dual eligible beneficiaries’ access to durable medical equipment, prosthetics, orthotics, and supplies",
-        "date": "2017-01-13"
     }
 },
 {
@@ -1158,71 +599,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 91,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Maternal and Child Health Updates in Medicaid and CHIP",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-2-8-12.pdf",
-        "name_sort": null,
-        "description_sort": "maternal and child health updates in medicaid and chip",
-        "date": "2012-02-08"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 92,
-    "fields": {
-        "internal_notes": "Removed newline in description -BG",
-        "name": null,
-        "description": "Strategies to Enroll American Indian and Alaska Native Families and Children in Medicaid and CHIP",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib112816.pdf",
-        "name_sort": null,
-        "description_sort": "strategies to enroll american indian and alaska native families and children in medicaid and chip",
-        "date": "2016-11-28"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 93,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Proposed Payment Notice: Basic Health Program",
-        "url": "https://www.medicaid.gov/sites/default/files/Federal-Policy-Guidance/Downloads/CIB-12-18-13.pdf",
-        "name_sort": null,
-        "description_sort": "proposed payment notice: basic health program",
-        "date": "2013-12-18"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 94,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Annual Re-determination of Medicare Part D Low-Income Subsidy Deemed Status (Re-deeming)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-07-19-12.pdf",
-        "name_sort": null,
-        "description_sort": "annual re-determination of medicare part d low-income subsidy deemed status (re-deeming)",
-        "date": "2012-07-19"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 95,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Increase in States’ Qualifying Individuals (QI) Allotments for FY 2010",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/01-29-2010-QI.pdf",
-        "name_sort": null,
-        "description_sort": "increase in states’ qualifying individuals (qi) allotments for fy 00002010",
-        "date": "2010-01-29"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 96,
     "fields": {
         "internal_notes": null,
@@ -1258,32 +634,6 @@
         "name_sort": "cms-00000021",
         "description_sort": "quarterly children's health insurance program statement of expenditures for title xxi",
         "date": "2019-09-30"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 99,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Memorandum of Agreement Between the Indian Health Service and the Health Care Financing Administration",
-        "url": "https://www.cms.gov/Outreach-and-Education/American-Indian-Alaska-Native/AIAN/LTSS-TA-Center/pdf/memorandum-of-agreement.pdf",
-        "name_sort": null,
-        "description_sort": "memorandum of agreement between the indian health service and the health care financing administration",
-        "date": "1996-12-19"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 100,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Improving the Identification of Health Care Disparities in Medicaid and CHIP",
-        "url": "https://www.medicaid.gov/medicaid/quality-of-care/downloads/4302b-rtc-2014.pdf",
-        "name_sort": null,
-        "description_sort": "improving the identification of health care disparities in medicaid and chip",
-        "date": "2014-11"
     }
 },
 {
@@ -1366,32 +716,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 107,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Capitated Rate Setting for MLTSS Programs",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/rate-setting-mltss-prgrms.pdf",
-        "name_sort": null,
-        "description_sort": "capitated rate setting for mltss programs",
-        "date": "2017-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 108,
-    "fields": {
-        "internal_notes": null,
-        "name": "GAO-17-28",
-        "description": "Medicaid Personal Care Services: CMS Could Do More to Harmonize Requirements across Programs",
-        "url": "https://www.gao.gov/products/gao-17-28",
-        "name_sort": "gao-00000017-00000028",
-        "description_sort": "medicaid personal care services: cms could do more to harmonize requirements across programs",
-        "date": "2016-12-22"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 109,
     "fields": {
         "internal_notes": null,
@@ -1418,19 +742,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 111,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Technical Guide For the Section 1915(b)(4) Waiver Application - Fee-for-Service (FFS) Selective Contracting Program",
-        "url": "https://www.medicaid.gov/Medicaid/downloads/1915b-4-ffs-tech-guide.pdf",
-        "name_sort": null,
-        "description_sort": "technical guide for the section 00001915(b)(00000004) waiver application - fee-for-service (ffs) selective contracting program",
-        "date": "2012-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 112,
     "fields": {
         "internal_notes": null,
@@ -1440,19 +751,6 @@
         "name_sort": null,
         "description_sort": "00002019 updates to the child and adult core health care quality measurement sets",
         "date": "2018-11-20"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 113,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicare Competitive Bidding Program for Durable Medical Equipment and Coordination of Benefits for Beneficiaries Eligible for Medicare and Medicaid (Dual Eligibles)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-08-02-2013.pdf",
-        "name_sort": null,
-        "description_sort": "medicare competitive bidding program for durable medical equipment and coordination of benefits for beneficiaries eligible for medicare and medicaid (dual eligibles)",
-        "date": "2013-08-02"
     }
 },
 {
@@ -1496,19 +794,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 117,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "State Access to Medicare Data Entitlement and Claims Data",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd062100.pdf",
-        "name_sort": null,
-        "description_sort": "state access to medicare data entitlement and claims data",
-        "date": "2000-06-21"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 118,
     "fields": {
         "internal_notes": null,
@@ -1518,71 +803,6 @@
         "name_sort": null,
         "description_sort": "medicaid eligibility & enrollment toolkit",
         "date": null
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 119,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid/CHIP Provider Screening and Enrollment",
-        "url": "https://www.medicaid.gov/Federal-Policy-Guidance/downloads/CIB-12-23-11.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid/chip provider screening and enrollment",
-        "date": "2011-12-23"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 120,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Third Party Liability (TPL) Tort Claims",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD060997.pdf",
-        "name_sort": null,
-        "description_sort": "third party liability (tpl) tort claims",
-        "date": "1997-06-09"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 121,
-    "fields": {
-        "internal_notes": null,
-        "name": "GAO-13-48",
-        "description": "Medicaid: More Transparency of and Accountability for Supplemental Payments Are Needed",
-        "url": "https://www.gao.gov/products/gao-13-48",
-        "name_sort": "gao-00000013-00000048",
-        "description_sort": "medicaid: more transparency of and accountability for supplemental payments are needed",
-        "date": "2012-12-21"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 122,
-    "fields": {
-        "internal_notes": "Fixed URL -BG",
-        "name": null,
-        "description": "Cost-Avoidance Requirements and Statement of Intent to Claim Medicare Benefits",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd091100.pdf",
-        "name_sort": null,
-        "description_sort": "cost-avoidance requirements and statement of intent to claim medicare benefits",
-        "date": "2000-09-11"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 123,
-    "fields": {
-        "internal_notes": "This does not refer to a specific part, but it's gotta be 45 CFR 95 Subpart E, so I tagged it: \"...in the State’s cost allocation plan submitted to an approved by the Director of the Division of Cost Allocation (after consultation with HCFA) in accordance to Federal regulations at 45 CFR, Subpart E.\" Also refers to 42 CFR 432.50. -BG",
-        "name": null,
-        "description": "Allowable Administrative Costs",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD122094.PDF",
-        "name_sort": null,
-        "description_sort": "allowable administrative costs",
-        "date": "1994-12-20"
     }
 },
 {
@@ -1600,19 +820,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 125,
-    "fields": {
-        "internal_notes": "Added information from duplicate item -BG",
-        "name": "State Release #178",
-        "description": "Medicaid Drug Rebate Program Notice: Defining a \"Prescribed Drug\" and a \"Covered Outpatient Drug\"",
-        "url": "https://www.medicaid.gov/Medicaid-CHIP-Program-Information/By-Topics/Prescription-Drugs/Downloads/Rx-Releases/State-Releases/state-rel-178.pdf",
-        "name_sort": "state release #00000178",
-        "description_sort": "medicaid drug rebate program notice: defining a \"prescribed drug\" and a \"covered outpatient drug\"",
-        "date": "2016-10-05"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 126,
     "fields": {
         "internal_notes": null,
@@ -1622,97 +829,6 @@
         "name_sort": "00000042 cfr § 00000495.00000302",
         "description_sort": "definitions",
         "date": null
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 127,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Management Information System (MMIS) Systems Performance Review (SPR)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd012098b.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid management information system (mmis) systems performance review (spr)",
-        "date": "1998-01-20"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 128,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Promoting Prevention in Medicaid and CHIP: Linking State Medicaid and CHIP Programs with Federal Prevention Initiatives",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/ppmc1-federallinkages.pdf",
-        "name_sort": null,
-        "description_sort": "promoting prevention in medicaid and chip: linking state medicaid and chip programs with federal prevention initiatives",
-        "date": "2013-05-07"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 129,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid and CHIP Application and Eligibility Data",
-        "url": "https://www.medicaid.gov/sites/default/files/Federal-Policy-Guidance/Downloads/CIB-12-03-13.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid and chip application and eligibility data",
-        "date": "2013-12-03"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 130,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Adult Quality Grants: Measuring and Improving the Quality of Care in Medicaid",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-07-16-12.pdf",
-        "name_sort": null,
-        "description_sort": "adult quality grants: measuring and improving the quality of care in medicaid",
-        "date": "2012-07-16"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 131,
-    "fields": {
-        "internal_notes": "Related to 42 CFR part 488",
-        "name": null,
-        "description": "Publication of Proposed Rule \"Civil Money Penalties for Nursing Homes CMS-2435-P\"",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/07-12-2010-CMP.pdf",
-        "name_sort": null,
-        "description_sort": "publication of proposed rule \"civil money penalties for nursing homes cms-00002435-p\"",
-        "date": "2010-07-12"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 132,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "CMS-21 MBES CBES Category of Service Line Definitions",
-        "url": "https://www.medicaid.gov/medicaid-chip-program-information/by-topics/data-and-systems/downloads/collection-systems/cms-21-category-service-definitions.pdf",
-        "name_sort": null,
-        "description_sort": "cms-00000021 mbes cbes category of service line definitions",
-        "date": "2012-03-16"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 133,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid and CHIP Updates",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-1-30-12.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid and chip updates",
-        "date": "2012-01-30"
     }
 },
 {
@@ -1782,19 +898,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 139,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Section 1115 Demonstration Opportunity to Allow Medicaid Coverage to Former Foster Care Youth Who Have Moved to a Different State",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib112116.pdf",
-        "name_sort": null,
-        "description_sort": "section 00001115 demonstration opportunity to allow medicaid coverage to former foster care youth who have moved to a different state",
-        "date": "2016-11-21"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 140,
     "fields": {
         "internal_notes": null,
@@ -1834,32 +937,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 143,
-    "fields": {
-        "internal_notes": null,
-        "name": "GAO-16-568",
-        "description": "Hospital Uncompensated Care: Federal Action Needed to Better Align Payments with Costs",
-        "url": "https://www.gao.gov/products/gao-16-568",
-        "name_sort": "gao-00000016-00000568",
-        "description_sort": "hospital uncompensated care: federal action needed to better align payments with costs",
-        "date": "2016-06-30"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 144,
-    "fields": {
-        "internal_notes": null,
-        "name": "OEI-05-11-00130",
-        "description": "Medicaid Third-Party Liability Savings Increased, But Challenges Remain",
-        "url": "https://oig.hhs.gov/oei/reports/oei-05-11-00130.pdf",
-        "name_sort": "oei-00000005-00000011-00000130",
-        "description_sort": "medicaid third-party liability savings increased, but challenges remain",
-        "date": "2013-01"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 145,
     "fields": {
         "internal_notes": null,
@@ -1869,19 +946,6 @@
         "name_sort": null,
         "description_sort": "advanced planning documents (apd) for system development associated with 00001115 demonstrations",
         "date": "2019-06-13"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 146,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMDL# 10-005/PPACA # 1",
-        "description": "Re: New Option for Coverage of Individuals under Medicaid",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD10005.PDF",
-        "name_sort": "smdl# 00000010-00000005/ppaca # 00000001",
-        "description_sort": "re: new option for coverage of individuals under medicaid",
-        "date": "2010-04-09"
     }
 },
 {
@@ -1912,58 +976,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 149,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Administrative Expenditures Reporting (relating to the provision of the Welfare Reform legislation)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD051497.pdf",
-        "name_sort": null,
-        "description_sort": "administrative expenditures reporting (relating to the provision of the welfare reform legislation)",
-        "date": "1997-05-14"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 150,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMDL #06-019",
-        "description": "Qualified State Long-Term Care (LTC) Insurance Partnership Programs and Estate Recovery",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD072706a.pdf",
-        "name_sort": "smdl #00000006-00000019",
-        "description_sort": "qualified state long-term care (ltc) insurance partnership programs and estate recovery",
-        "date": "2006-07-27"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 151,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Managed Care Federal Financial Participation (FFP) External Review",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD012098e.pdf",
-        "name_sort": null,
-        "description_sort": "managed care federal financial participation (ffp) external review",
-        "date": "1998-01-20"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 152,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMDL # 10-011",
-        "description": "Re: Third Party Liability",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD10011.pdf",
-        "name_sort": "smdl # 00000010-00000011",
-        "description_sort": "re: third party liability",
-        "date": "2010-06-21"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 153,
     "fields": {
         "internal_notes": null,
@@ -1973,19 +985,6 @@
         "name_sort": null,
         "description_sort": "states treating decisions of hhs appeals entity as determinations of eligibility: scenario 00000001",
         "date": null
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 154,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Eligibility Quality Control (MEQC) and Simplification of Application and Enrollment Processes",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd091200.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid eligibility quality control (meqc) and simplification of application and enrollment processes",
-        "date": "2000-09-12"
     }
 },
 {
@@ -2051,97 +1050,6 @@
         "name_sort": null,
         "description_sort": "cms external quality review (eqr) protocols",
         "date": "2019-10"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 160,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Fraud Statutes Website",
-        "url": "https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/SMD050499_23.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid fraud statutes website",
-        "date": "1999-05-04"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 161,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Suggested Approaches for Strengthening and Stabilizing the Medicaid Home Care Workforce",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib080316.pdf",
-        "name_sort": null,
-        "description_sort": "suggested approaches for strengthening and stabilizing the medicaid home care workforce",
-        "date": "2016-08-03"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 162,
-    "fields": {
-        "internal_notes": "",
-        "name": null,
-        "description": "Anticipated Finalization of Affordable Care Act Federal Upper Limits for Multiple Source Drugs",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-11-27-2013-FULs.pdf",
-        "name_sort": null,
-        "description_sort": "anticipated finalization of affordable care act federal upper limits for multiple source drugs",
-        "date": "2013-11-27"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 163,
-    "fields": {
-        "internal_notes": "Removed hidden character in description -BG",
-        "name": null,
-        "description": "Calendar Year (CY) 2012 Oct - Dec Phased-down State Contribution Final Per-Capita Rates",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-07-02-12.pdf",
-        "name_sort": null,
-        "description_sort": "calendar year (cy) 00002012 oct - dec phased-down state contribution final per-capita rates",
-        "date": "2012-07-02"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 164,
-    "fields": {
-        "internal_notes": "",
-        "name": "SMDL# 10-012/ACA# 3",
-        "description": "RE: Extension of the Money Follows the Person Rebalancing Demonstration Program",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD10012.pdf",
-        "name_sort": "smdl# 00000010-00000012/aca# 00000003",
-        "description_sort": "re: extension of the money follows the person rebalancing demonstration program",
-        "date": "2010-06-22"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 165,
-    "fields": {
-        "internal_notes": null,
-        "name": "CPI-B 12-02",
-        "description": "Affordable Care Act Program Integrity Provisions - Guidance to States -- Section 6501 - Termination of Provider Participation under Medicaid if Terminated under Medicare or other State Plan",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-01-20-12.pdf",
-        "name_sort": "cpi-b 00000012-00000002",
-        "description_sort": "affordable care act program integrity provisions - guidance to states -- section 00006501 - termination of provider participation under medicaid if terminated under medicare or other state plan",
-        "date": "2012-01-20"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 166,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMD #: 10-017/ACA#: 7",
-        "description": "Re: National Correct Coding Initiative",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/SMD-10-017.pdf",
-        "name_sort": "smd #: 00000010-00000017/aca#: 00000007",
-        "description_sort": "re: national correct coding initiative",
-        "date": "2010-09-01"
     }
 },
 {
@@ -2237,19 +1145,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 174,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Promoting Prevention in Medicaid and CHIP: Working with Managed Care Organizations to Promote Prevention",
-        "url": "https://www.medicaid.gov/sites/default/files/2019-12/ppmc2-managedcare.pdf",
-        "name_sort": null,
-        "description_sort": "promoting prevention in medicaid and chip: working with managed care organizations to promote prevention",
-        "date": "2013-05-21"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 175,
     "fields": {
         "internal_notes": null,
@@ -2289,19 +1184,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 178,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Moving from FFS to Managed Long Term Services and Supports",
-        "url": "https://www.medicaid.gov/medicaid/home-community-based-services/home-community-based-services-training-series/index.html",
-        "name_sort": null,
-        "description_sort": "moving from ffs to managed long term services and supports",
-        "date": "2017-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 179,
     "fields": {
         "internal_notes": null,
@@ -2315,32 +1197,6 @@
 },
 {
     "model": "resources.supplementalcontent",
-    "pk": 180,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid Managed Care Enrollment and Program Characteristics",
-        "url": "https://www.medicaid.gov/medicaid/managed-care/downloads/enrollment/2017-medicaid-managed-care-enrollment-report.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid managed care enrollment and program characteristics",
-        "date": "2017"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 181,
-    "fields": {
-        "internal_notes": "Add name -BG",
-        "name": "State Release #165",
-        "description": "Coverage of Barbiturates, Benzodiazepines, and All Drugs Used for Smoking Cessation Effective January 1, 2014",
-        "url": "https://www.medicaid.gov/medicaid-chip-program-information/by-topics/prescription-drugs/downloads/rx-releases/state-releases/state-rel-165.pdf",
-        "name_sort": "state release #00000165",
-        "description_sort": "coverage of barbiturates, benzodiazepines, and all drugs used for smoking cessation effective january 00000001, 00002014",
-        "date": "2013-09-12"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
     "pk": 182,
     "fields": {
         "internal_notes": null,
@@ -2350,19 +1206,6 @@
         "name_sort": null,
         "description_sort": "advancing maternal health under medicaid",
         "date": "2021-07-30"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 183,
-    "fields": {
-        "internal_notes": null,
-        "name": "GAO-16-108",
-        "description": "Medicaid: Federal Guidance Needed to Address Concerns About Distribution of Supplemental Payments",
-        "url": "https://www.gao.gov/products/gao-16-108",
-        "name_sort": "gao-00000016-00000108",
-        "description_sort": "medicaid: federal guidance needed to address concerns about distribution of supplemental payments",
-        "date": "2016-03-07"
     }
 },
 {
@@ -2402,19 +1245,6 @@
         "name_sort": null,
         "description_sort": "state guidance for implementation of the treatment for infants with neonatal abstinence syndrome in residential pediatric recovery centers provisions of section 00001007 of pub. l. 00000115-00000271, the substance use-disorder prevention that promotes opi",
         "date": "2019-06-26"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 187,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "State Flexibility to Facilitate Timely Access to Drug Therapy by Expanding the Scope of Pharmacy Practice using Collaborative Practice Agreements, Standing Orders or Other Predetermined Protocols",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib011717.pdf",
-        "name_sort": null,
-        "description_sort": "state flexibility to facilitate timely access to drug therapy by expanding the scope of pharmacy practice using collaborative practice agreements, standing orders or other predetermined protocols",
-        "date": "2017-01-17"
     }
 },
 {
@@ -2467,110 +1297,6 @@
         "name_sort": "00000042 cfr § 00000433.00000034",
         "description_sort": "cost allocation",
         "date": null
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 192,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Grantee Experience with PHR Stakeholder Engagement",
-        "url": "https://www.medicaid.gov/medicaid-chip-program-information/by-topics/delivery-systems/grant-programs/downloads/grantee-exp-phr.pdf",
-        "name_sort": null,
-        "description_sort": "grantee experience with phr stakeholder engagement",
-        "date": "2015-06"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 193,
-    "fields": {
-        "internal_notes": "Removed newline in description -BG",
-        "name": null,
-        "description": "How to Obtain a Consumer’s Authorization before Gaining Access to Personally Identifiable Information (PII)",
-        "url": "https://marketplace.cms.gov/technical-assistance-resources/obtain-consumer-authorization.pdf",
-        "name_sort": null,
-        "description_sort": "how to obtain a consumer’s authorization before gaining access to personally identifiable information (pii)",
-        "date": "2017"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 194,
-    "fields": {
-        "internal_notes": null,
-        "name": "SMDL #03-005",
-        "description": "Temporary FMAP increase under the Jobs and Growth Tax Relief Reconciliation Act of 2003 (TRRA)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd061303.pdf",
-        "name_sort": "smdl #00000003-00000005",
-        "description_sort": "temporary fmap increase under the jobs and growth tax relief reconciliation act of 00002003 (trra)",
-        "date": "2003-06-13"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 195,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Medicaid and CHIP Updates",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-1-17-12.pdf",
-        "name_sort": null,
-        "description_sort": "medicaid and chip updates",
-        "date": "2012-01-17"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 196,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Annual Re-determination of Medicare Part D Low-Income Subsidy Deemed Status (Re-deeming)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib071516.pdf",
-        "name_sort": null,
-        "description_sort": "annual re-determination of medicare part d low-income subsidy deemed status (re-deeming)",
-        "date": "2016-07-15"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 197,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Update on Preventive Services Initiatives",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-11-27-2013-Prevention.pdf",
-        "name_sort": null,
-        "description_sort": "update on preventive services initiatives",
-        "date": "2013-11-27"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 198,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Targeted Lead Screening Plans",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/CIB-06-22-12.pdf",
-        "name_sort": null,
-        "description_sort": "targeted lead screening plans",
-        "date": "2012-06-22"
-    }
-},
-{
-    "model": "resources.supplementalcontent",
-    "pk": 199,
-    "fields": {
-        "internal_notes": null,
-        "name": null,
-        "description": "Notification of National Criminal Background Check Federal Matching Grants Solicitation under Section 6201 of the Affordable Care Act and Initial Conference Call June 17th, 2010 (2:00-4:00 PM EST)",
-        "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/06-10-2010-Criminal-Background-Checks.pdf",
-        "name_sort": null,
-        "description_sort": "notification of national criminal background check federal matching grants solicitation under section 00006201 of the affordable care act and initial conference call june 00000017th, 00002010 (00000002:00000000-00000004:00000000 pm est)",
-        "date": "2010-06-10"
     }
 }
 ]
