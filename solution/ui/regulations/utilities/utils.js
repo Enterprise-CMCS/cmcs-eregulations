@@ -26,7 +26,7 @@ const EventCodes = {
 
 const PARAM_VALIDATION_DICT = {
     subjects: (subject) => !Number.isNaN(parseInt(subject, 10)),
-    q: (query) => query.length > 0,
+    q: (query) => query === undefined || query.length > 0,
 };
 
 /*
