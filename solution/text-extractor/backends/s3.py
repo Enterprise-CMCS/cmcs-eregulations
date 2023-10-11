@@ -1,13 +1,13 @@
 import boto3
 
-from . import FileBackend
+from .backend import FileBackend
 from .exceptions import BackendInitException, BackendException
 
 
 class S3Backend(FileBackend):
     backend = "s3"
 
-    def __init__(self, get_params, post_params):
+    def __init__(self, get_params: dict, post_params: dict):
         try:
             self.aws_access_key_id = post_params["aws_access_key_id"]
             self.aws_secret_acces_key = post_params["aws_secret_access_key"]
@@ -27,7 +27,7 @@ class S3Backend(FileBackend):
     def __del__(self):
         self.client.destroy()
 
-    def get_file(self, uri):
+    def get_file(self, uri: str) -> bytes:
         try:
             return self.client.get_object(Bucket=self.aws_storage_bucket_name, key=uri)
         except Exception as e:

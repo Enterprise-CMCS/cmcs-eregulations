@@ -32,7 +32,7 @@ class ApiProxy:
                 for key in headers:
                     self.send_header(key, headers[key])
                 self.end_headers()
-                body = body.encode() if type(body) != bytes else body
+                body = body.encode() if not isinstance(body, bytes) else body
                 self.wfile.write(body)
 
             def _handle_request(self, method, requests_func):
@@ -91,7 +91,7 @@ class ApiProxy:
                     self._send_response(500, {}, f"Incorrect response type: \"{resp.content}\" is not valid JSON.")
                     return
 
-                if type(resp) != dict:
+                if not isinstance(resp, dict):
                     self._send_response(500, {}, f"Incorrect response type: \"{resp}\" is not a dictionary.")
                     return
 
@@ -99,7 +99,7 @@ class ApiProxy:
                     self._send_response(500, {}, resp["errorMessage"])
                     return
 
-                if resp.keys() < {"statusCode", "headers", "body"} or type(resp["headers"]) != dict:
+                if resp.keys() < {"statusCode", "headers", "body"} or not isinstance(resp["headers"], dict):
                     self._send_response(500, {}, f"Malformed response payload: {json.dumps(resp)}. Keys 'statusCode', "
                                         "'headers', and 'body' are required.")
                     return

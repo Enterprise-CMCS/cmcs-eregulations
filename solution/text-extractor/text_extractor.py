@@ -15,14 +15,14 @@ from .extractors import (
 )
 
 
-def load_post_body(body):
+def load_post_body(body: str) -> dict:
     try:
         json.loads(body)
     except Exception:
         return {}
 
 
-def lambda_response(status_code, message):
+def lambda_response(status_code: int, message: str) -> dict:
     return {
         "statusCode": status_code,
         "headers": {"Content-Type": "application/json"},
@@ -30,7 +30,7 @@ def lambda_response(status_code, message):
     }
 
 
-def handler(event, context):
+def handler(event: dict, context: dict) -> dict:
     get_params = event["queryStringParameters"]
     post_params = load_post_body(event["body"])
 
@@ -50,8 +50,11 @@ def handler(event, context):
         return lambda_response(500, f"Failed to initialize backend: {str(e)}")
     except BackendException as e:
         return lambda_response(500, f"Failed to retrieve file: {str(e)}")
+    except Exception as e:
+        return lambda_response(500, f"Backend unexpectedly failed: {str(e)}")
 
     # Determine the file's MIME type
+    # Magic docs recommend using first 2048 bytes of the file for most accurate type detection
     try:
         file_type = magic.from_buffer(
             file[0:min(len(file), 2048)],
@@ -68,6 +71,8 @@ def handler(event, context):
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
     except ExtractorException as e:
         return lambda_response(500, f"Failed to extract text: {str(e)}")
+    except Exception as e:
+        return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
 
     # Return success code
     return lambda_response(200, "Function exited normally.")

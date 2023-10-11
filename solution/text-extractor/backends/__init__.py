@@ -1,22 +1,9 @@
 from .exceptions import (
-    BackendInitException,
+    BackendInitException as BackendInitException,
+    BackendException as BackendException,
 )
+from .backend import FileBackend as FileBackend
 
-
-class FileBackend:
-    @classmethod
-    def get_backend(cls, backend, get_params, post_params):
-        try:
-            return {subclass.backend: subclass for subclass in cls.__subclasses__()}[backend](get_params, post_params)
-        except KeyError:
-            backends = [subclass.backend for subclass in cls.__subclasses__()]
-            supported = "'" + "', '".join(backends) + "'"
-            raise BackendInitException(f"'{backend}' is not a valid backend. Supported backends are: {supported}.")
-
-    def __init__(self, get_params, post_params):
-        pass
-
-    def get_file(self):
-        raise NotImplementedError
-
-
+# Add your file backends here to initialize them
+from .s3 import S3Backend as S3Backend
+from .web import WebBackend as WebBackend
