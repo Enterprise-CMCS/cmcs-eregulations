@@ -141,24 +141,6 @@ const addSelectedParams = (paramArgs) => {
     selectedParams.paramsArray.push({ id, name, type });
 };
 
-// method to remove selected params
-const removeSelectedParams = (paramArgs) => {
-    const { id, type } = paramArgs;
-
-    // update paramString that is used as reactive prop for watch
-    const paramStringArray = selectedParams.paramString.split("&");
-    const paramString = paramStringArray
-        .filter((param) => !param.includes(`${type}=${id}`))
-        .join("&");
-
-    selectedParams.paramString = paramString;
-
-    // create new selectedParams key for array of objects for selections
-    selectedParams.paramsArray = selectedParams.paramsArray.filter(
-        (param) => param.id != id
-    );
-};
-
 const clearSelectedParams = () => {
     selectedParams.paramString = "";
     selectedParams.paramsArray = [];
@@ -166,19 +148,27 @@ const clearSelectedParams = () => {
 
 provide("selectedParams", selectedParams);
 
-const onRouteUpdate = (subjectsListRef) => (param) => {
-    const paramList = !_isArray(param[1]) ? [param[1]] : param[1];
-    paramList.forEach((paramId) => {
-        const subject = subjectsListRef.value.results.filter(
-            (subjectObj) => paramId === subjectObj.id.toString()
-        )[0];
+const setSelectedParams = (subjectsListRef) => (param) => {
+    const paramType = param[0];
 
-        addSelectedParams({
-            type: param[0],
-            id: paramId,
-            name: getSubjectName(subject),
+    if (paramType !== "q") {
+        const paramList = !_isArray(param[1]) ? [param[1]] : param[1];
+        paramList.forEach((paramId) => {
+            const subject = subjectsListRef.value.results.filter(
+                (subjectObj) => paramId === subjectObj.id.toString()
+            )[0];
+
+            addSelectedParams({
+                type: paramType,
+                id: paramId,
+                name: getSubjectName(subject),
+            });
         });
-    });
+
+        return;
+    }
+
+    console.log("not subjects")
 };
 
 // policyDocSubjects fetch for subject selector
@@ -208,7 +198,7 @@ const getDocSubjects = async () => {
 
             // now that everything is cleaned, iterate over new query params
             Object.entries($route.query).forEach(
-                onRouteUpdate(policyDocSubjects)
+                setSelectedParams(policyDocSubjects)
             );
 
             getDocList(getRequestParams($route.query));
@@ -227,11 +217,11 @@ const executeSearch = (payload) => {
 };
 
 const clearSearchQuery = () => {
+    const { q, ...rest } = $route.query;
     $router.push({
         name: "policy-repository",
         query: {
-            ...$route.query,
-            q: undefined,
+            ...rest,
         },
     });
 };
@@ -251,7 +241,7 @@ watch(
 
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(
-            onRouteUpdate(policyDocSubjects)
+            setSelectedParams(policyDocSubjects)
         );
 
         // parse $route.query to return `${key}=${value}` string
