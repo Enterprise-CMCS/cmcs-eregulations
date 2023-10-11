@@ -59,11 +59,11 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 class ContentIndex(models.Model):
     doc_name_string = models.CharField(max_length=512, null=True, blank=True)
-    summary_string = models.TextField(null=True, blank=True)
+    summary_string = models.CharField(max_length=512, null=True, blank=True)
     file_name_string = models.CharField(max_length=512, null=True, blank=True)
     date_string = VariableDateField()
     content = models.TextField()
-    url = models.CharField(max_length=512, blank=True, null=True)
+    url = models.CharField(max_length=255, blank=True, null=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="content", on_delete=models.SET_NULL)
     category = models.ForeignKey(
@@ -78,10 +78,16 @@ class ContentIndex(models.Model):
 
 
 def create_search(updated_doc, file=None):
+    file_content = ''
     if file:
-        fi = file
+        file_content = file.content
     else:
-        fi = establish_content_type(updated_doc)
+        # Trigger lambda here to get the text
+        file_content = ''
+    fi = establish_content_type(updated_doc)
+
+    fi.content = file_content
+    fi.save()
     fi.locations.set(updated_doc.locations.all())
     fi.subjects.set(updated_doc.subjects.all())
     fi.save()
@@ -108,7 +114,6 @@ def establish_content_type(updated_doc):
             date_string=updated_doc.date,
             resource_type='external'
         )
-        ci.save()
 
         if isinstance(updated_doc, SupplementalContent):
             ci.supplemental_content = updated_doc
@@ -127,6 +132,7 @@ def update_search(sender, instance, created, **kwargs):
         elif isinstance(instance, FederalRegisterDocument):
             file = ContentIndex.objects.get(fr_doc=instance)
         create_search(instance, file)
+        file.delete()
 
     except ContentIndex.DoesNotExist:
         create_search(instance)
