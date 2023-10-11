@@ -9,5 +9,5 @@ class FileSearchConfig(AppConfig):
     def ready(self):
         from .models import update_search
         post_save.connect(update_search, sender="file_manager.UploadedFile")
-        post_save.connect(update_search, sender="resources.SupplementalContent")
-        post_save.connect(update_search, sender="resources.FederalRegisterDocument")
+        # post_save.connect(update_search, sender="resources.SupplementalContent")
+        # post_save.connect(update_search, sender="resources.FederalRegisterDocument")
