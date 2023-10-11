@@ -1,7 +1,4 @@
-import sys
 import json
-import time
-import requests
 
 import magic
 
@@ -14,13 +11,14 @@ from .backends import (
 from .extractors import (
     Extractor,
     ExtractorInitException,
+    ExtractorException,
 )
 
 
 def load_post_body(body):
     try:
         json.loads(body)
-    except:
+    except Exception:
         return {}
 
 
@@ -38,35 +36,38 @@ def handler(event, context):
 
     # Retrieve required arguments
     try:
-        resource_id = get_params["id"]
+        get_params["id"]
         uri = get_params["uri"]
     except KeyError:
         return lambda_response(400, "You must include 'id' and 'uri' in the query parameters.")
 
-    # Initialize the file backend
+    # Retrieve the file
     try:
         backend_type = get_params.get("backend", "web").lower()
         backend = FileBackend.get_backend(backend_type, get_params, post_params)
-    except BackendInitException as e:
-        return lambda_response(400, f"Failed to initialize backend: {str(e)}")
-
-    # Retrieve the file
-    try:
         file = backend.get_file(uri)
+    except BackendInitException as e:
+        return lambda_response(500, f"Failed to initialize backend: {str(e)}")
     except BackendException as e:
         return lambda_response(500, f"Failed to retrieve file: {str(e)}")
 
     # Determine the file's MIME type
-    file_type = magic.from_buffer(
-        file[0:min(len(file), 2048)],
-        mime=True,
-    )
+    try:
+        file_type = magic.from_buffer(
+            file[0:min(len(file), 2048)],
+            mime=True,
+        )
+    except Exception as e:
+        return lambda_response(500, f"Failed to determine file type: {str(e)}")
 
     # Run extractor
     try:
         extractor = Extractor.get_extractor(file_type)
+        extractor.extract(file)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
+    except ExtractorException as e:
+        return lambda_response(500, f"Failed to extract text: {str(e)}")
 
     # Return success code
     return lambda_response(200, "Function exited normally.")

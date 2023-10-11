@@ -1,4 +1,7 @@
-from .exceptions import *
+from .exceptions import (
+    ExtractorInitException,
+)
+
 
 class Extractor:
     @classmethod
@@ -9,7 +12,7 @@ class Extractor:
         except KeyError:
             raise ExtractorInitException(f"'{file_type}' is an unsupported file type.")
 
-    def extract(self):
+    def extract(self, file):
         raise NotImplementedError
 
-from .text import TextExtractor
+
