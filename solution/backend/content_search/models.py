@@ -108,6 +108,7 @@ def establish_content_type(updated_doc):
             date_string=updated_doc.date,
             resource_type='external'
         )
+        ci.save()
 
         if isinstance(updated_doc, SupplementalContent):
             ci.supplemental_content = updated_doc
