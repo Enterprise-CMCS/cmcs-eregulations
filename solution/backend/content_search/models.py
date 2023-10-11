@@ -82,7 +82,6 @@ def create_search(updated_doc, file=None):
         fi = file
     else:
         fi = establish_content_type(updated_doc)
-        fi.save()
     fi.locations.set(updated_doc.locations.all())
     fi.subjects.set(updated_doc.subjects.all())
     fi.save()
