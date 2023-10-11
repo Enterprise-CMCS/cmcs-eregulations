@@ -189,16 +189,17 @@ const getDocSubjects = async () => {
 
         // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
-            const subjects = _isArray($route.query.subjects)
-                ? $route.query.subjects[0]
-                : $route.query.subjects;
-
-            const subjectIds = subjects ? subjects.split(",") : [];
-            const filteredSubjects = policyDocSubjects.value.results.filter(
-                (subject) => subjectIds.includes(subject.id.toString())
+            const subjectsArray = _isArray($route.query.subjects)
+                ? $route.query.subjects
+                : [$route.query.subjects];
+            const subjectIds = subjectsArray.filter(
+                (id) => !Number.isNaN(parseInt(id, 10))
+            );
+            const subjects = policyDocSubjects.value.results.filter((subject) =>
+                subjectIds.includes(subject.id.toString())
             );
 
-            filteredSubjects.forEach((subject) => {
+            subjects.forEach((subject) => {
                 addSelectedParams({
                     type: "subjects",
                     id: subject.id,
@@ -241,50 +242,47 @@ watch(
             return;
         }
 
-        // if there are multiple subjects already selected and one needs to be removed
-        if (
-            newQueryParams.subjects &&
-            oldQueryParams.subjects &&
-            newQueryParams.subjects.length < oldQueryParams.subjects.length
-        ) {
-            const oldSubjectIds = oldQueryParams.subjects.filter(
-                (id) => !Number.isNaN(parseInt(id, 10))
-            );
-            const newSubjectIds = newQueryParams.subjects.filter(
-                (id) => !Number.isNaN(parseInt(id, 10))
-            );
-
-            const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
-
-            removeSelectedParams({
-                type: "subjects",
-                id: subjectToRemove[0],
-            });
-
-            const newRequestParams = getRequestParams(newQueryParams);
-            await getDocList(newRequestParams);
-
-            return;
-        }
-
         if (newQueryParams.subjects) {
+            const oldSubjectsArray = _isArray(oldQueryParams.subjects)
+                ? oldQueryParams.subjects
+                : [oldQueryParams.subjects];
             const subjectsArray = _isArray(newQueryParams.subjects)
                 ? newQueryParams.subjects
                 : [newQueryParams.subjects];
-            const subjectIds = subjectsArray.filter(
-                (id) => !Number.isNaN(parseInt(id, 10))
-            );
-            const subjects = policyDocSubjects.value.results.filter((subject) =>
-                subjectIds.includes(subject.id.toString())
-            );
 
-            subjects.forEach((subject) => {
-                addSelectedParams({
-                    type: "subjects",
-                    id: subject.id,
-                    name: getSubjectName(subject),
+            if (subjectsArray.length < oldSubjectsArray.length) {
+                const removedSubjectId = oldSubjectsArray.filter(
+                    (id) => !subjectsArray.includes(id)
+                )[0];
+
+                const subjects = policyDocSubjects.value.results.filter(
+                    (subject) => removedSubjectId === subject.id.toString()
+                );
+
+                subjects.forEach((subject) => {
+                    removeSelectedParams({
+                        type: "subjects",
+                        id: subject.id,
+                        name: getSubjectName(subject),
+                    });
                 });
-            });
+            } else if (subjectsArray.length > oldSubjectsArray.length) {
+                const addedSubjectId = subjectsArray.filter(
+                    (id) => !oldSubjectsArray.includes(id)
+                )[0];
+
+                const subjects = policyDocSubjects.value.results.filter(
+                    (subject) => addedSubjectId === subject.id.toString()
+                );
+
+                subjects.forEach((subject) => {
+                    addSelectedParams({
+                        type: "subjects",
+                        id: subject.id,
+                        name: getSubjectName(subject),
+                    });
+                });
+            }
         }
 
         // parse $route.query to return `${key}=${value}` string
