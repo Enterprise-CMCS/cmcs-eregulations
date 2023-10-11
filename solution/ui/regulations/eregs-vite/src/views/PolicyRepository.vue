@@ -74,6 +74,32 @@ provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 provide("FilterTypesDict", FilterTypesDict);
 
+// search query refs and methods
+const searchQuery = ref($route.query.q || "");
+const clearSearchQuery = () => {
+    searchQuery.value = "";
+};
+
+const executeSearch = (payload) => {
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...$route.query,
+            q: payload.query,
+        },
+    });
+};
+
+const clearSearchInput = () => {
+    const { q, ...rest } = $route.query;
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...rest,
+        },
+    });
+};
+
 // partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
     results: {},
@@ -149,26 +175,25 @@ const clearSelectedParams = () => {
 provide("selectedParams", selectedParams);
 
 const setSelectedParams = (subjectsListRef) => (param) => {
-    const paramType = param[0];
+    const [paramType, paramValue] = param;
 
-    if (paramType !== "q") {
-        const paramList = !_isArray(param[1]) ? [param[1]] : param[1];
-        paramList.forEach((paramId) => {
-            const subject = subjectsListRef.value.results.filter(
-                (subjectObj) => paramId === subjectObj.id.toString()
-            )[0];
-
-            addSelectedParams({
-                type: paramType,
-                id: paramId,
-                name: getSubjectName(subject),
-            });
-        });
-
+    if (paramType === "q") {
+        searchQuery.value = paramValue;
         return;
     }
 
-    console.log("not subjects")
+    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
+    paramList.forEach((paramId) => {
+        const subject = subjectsListRef.value.results.filter(
+            (subjectObj) => paramId === subjectObj.id.toString()
+        )[0];
+
+        addSelectedParams({
+            type: paramType,
+            id: paramId,
+            name: getSubjectName(subject),
+        });
+    });
 };
 
 // policyDocSubjects fetch for subject selector
@@ -195,35 +220,16 @@ const getDocSubjects = async () => {
         if (!_isEmpty($route.query)) {
             // wipe everything clean to start
             clearSelectedParams();
+            clearSearchQuery();
 
             // now that everything is cleaned, iterate over new query params
-            Object.entries($route.query).forEach(
-                setSelectedParams(policyDocSubjects)
-            );
+            Object.entries($route.query).forEach((param) => {
+                setSelectedParams(policyDocSubjects)(param);
+            });
 
             getDocList(getRequestParams($route.query));
         }
     }
-};
-
-const executeSearch = (payload) => {
-    $router.push({
-        name: "policy-repository",
-        query: {
-            ...$route.query,
-            q: payload.query,
-        },
-    });
-};
-
-const clearSearchQuery = () => {
-    const { q, ...rest } = $route.query;
-    $router.push({
-        name: "policy-repository",
-        query: {
-            ...rest,
-        },
-    });
 };
 
 watch(
@@ -232,12 +238,14 @@ watch(
         // if all params are removed, clear selectedParams and getDocList
         if (_isEmpty(newQueryParams)) {
             clearSelectedParams();
+            clearSearchQuery();
             getDocList();
             return;
         }
 
         // wipe everything clean to start
         clearSelectedParams();
+        clearSearchQuery();
 
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(
@@ -305,7 +313,7 @@ if (_isEmpty($route.query)) {
                                 page="policy-repository"
                                 :search-query="searchQuery"
                                 @execute-search="executeSearch"
-                                @clear-form="clearSearchQuery"
+                                @clear-form="clearSearchInput"
                             />
                         </template>
                         <template #filters>
