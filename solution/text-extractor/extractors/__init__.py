@@ -1,6 +1,8 @@
 from .exceptions import (
-    ExtractorInitException as ExtractorInitException,
     ExtractorException as ExtractorException,
+)
+from .exceptions import (
+    ExtractorInitException as ExtractorInitException,
 )
 from .extractor import Extractor as Extractor
 

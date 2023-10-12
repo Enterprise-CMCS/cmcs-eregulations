@@ -1,11 +1,13 @@
 import argparse
 import json
-import requests
+import multiprocessing
 import signal
 import sys
 import urllib.parse
-import multiprocessing
 from http.server import BaseHTTPRequestHandler, HTTPServer
+
+import requests
+
 
 class ApiProxy:
     def start_server(self, hostname, internal_port, external_port, enable_async):
@@ -38,7 +40,7 @@ class ApiProxy:
             def _handle_request(self, method, requests_func):
                 url = f"http://{hostname}:{internal_port}/2015-03-31/functions/function/invocations"
                 path = urllib.parse.urlparse(self.path)
-                
+
                 headers = dict(self.headers)
                 body = self.rfile.read(int(self.headers["Content-Length"])).decode() if "Content-Length" in headers else None
 
@@ -77,7 +79,7 @@ class ApiProxy:
                     self._send_response(200, {}, "")
                     return
 
-                resp = requests.post(url, headers=headers, data=json.dumps(data))
+                resp = requests.post(url, headers=headers, data=json.dumps(data))  # noqa
 
                 if resp.status_code != 200:
                     # An error occured downstream, send status code and error message if any

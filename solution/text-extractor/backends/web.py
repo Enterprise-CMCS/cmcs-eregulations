@@ -8,7 +8,7 @@ class WebBackend(FileBackend):
     backend = "web"
 
     def get_file(self, uri: str) -> bytes:
-        resp = requests.get(uri)
+        resp = requests.get(uri, timeout=60)
         if resp.status_code != 200:
             raise BackendException(f"GET failed with a {resp.status_code} code: '{resp.content}'")
         return resp.content

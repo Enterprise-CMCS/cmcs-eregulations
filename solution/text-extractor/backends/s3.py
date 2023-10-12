@@ -1,7 +1,7 @@
 import boto3
 
 from .backend import FileBackend
-from .exceptions import BackendInitException, BackendException
+from .exceptions import BackendException, BackendInitException
 
 
 class S3Backend(FileBackend):

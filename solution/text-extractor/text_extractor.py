@@ -3,15 +3,14 @@ import json
 import magic
 
 from .backends import (
-    FileBackend,
-    BackendInitException,
     BackendException,
+    BackendInitException,
+    FileBackend,
 )
-
 from .extractors import (
     Extractor,
-    ExtractorInitException,
     ExtractorException,
+    ExtractorInitException,
 )
 
 
@@ -56,10 +55,7 @@ def handler(event: dict, context: dict) -> dict:
     # Determine the file's MIME type
     # Magic docs recommend using first 2048 bytes of the file for most accurate type detection
     try:
-        file_type = magic.from_buffer(
-            file[0:min(len(file), 2048)],
-            mime=True,
-        )
+        file_type = magic.from_buffer(file[:2048], mime=True)
     except Exception as e:
         return lambda_response(500, f"Failed to determine file type: {str(e)}")
 
