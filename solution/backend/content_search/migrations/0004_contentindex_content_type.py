@@ -8,13 +8,13 @@ def get_type(apps, schema_editor):
     cont_index = ContentIndex.objects.all()
     for ci in cont_index:
         if ci.file:
-            ci.content_type = 'uploaded-file'
+            ci.content_type = 'uploadedfile'
             ci.content_id = ci.file.id
         elif ci.supplemental_content:
-            ci.content_type = 'supplemental-content'
+            ci.content_type = 'supplementalcontent'
             ci.content_id = ci.supplemental_content.id
         elif ci.fr_doc:
-            ci.content_type = 'fr-doc'
+            ci.content_type = 'federalregisterdocument'
             ci.content_id = ci.fr_doc.id
         ci.save()
 
