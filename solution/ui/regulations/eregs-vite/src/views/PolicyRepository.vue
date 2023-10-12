@@ -235,17 +235,15 @@ const getDocSubjects = async () => {
 watch(
     () => $route.query,
     async (newQueryParams) => {
-        // if all params are removed, clear selectedParams and getDocList
-        if (_isEmpty(newQueryParams)) {
-            clearSelectedParams();
-            clearSearchQuery();
-            getDocList();
-            return;
-        }
-
         // wipe everything clean to start
         clearSelectedParams();
         clearSearchQuery();
+
+        // if all params are removed, getDocList with no arguments and return
+        if (_isEmpty(newQueryParams)) {
+            getDocList();
+            return;
+        }
 
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(
@@ -253,6 +251,7 @@ watch(
         );
 
         // parse $route.query to return `${key}=${value}` string
+        // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
         await getDocList(newRequestParams);
     }
