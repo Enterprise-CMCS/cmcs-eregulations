@@ -1,6 +1,7 @@
 import json
 
 import magic
+import requests
 
 from .backends import (
     BackendException,
@@ -30,20 +31,22 @@ def lambda_response(status_code: int, message: str) -> dict:
 
 
 def handler(event: dict, context: dict) -> dict:
-    get_params = event["queryStringParameters"]
     post_params = load_post_body(event["body"])
 
     # Retrieve required arguments
     try:
-        get_params["id"]
-        uri = get_params["uri"]
+        resource_id = post_params["id"]
+        uri = post_params["uri"]
+        post_url = post_params["post_url"]
+        post_username = post_params.get("post_username")
+        post_password = post_params.get("post_password")
     except KeyError:
-        return lambda_response(400, "You must include 'id' and 'uri' in the query parameters.")
+        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the query parameters.")
 
     # Retrieve the file
     try:
-        backend_type = get_params.get("backend", "web").lower()
-        backend = FileBackend.get_backend(backend_type, get_params, post_params)
+        backend_type = post_params.get("backend", "web").lower()
+        backend = FileBackend.get_backend(backend_type, post_params)
         file = backend.get_file(uri)
     except BackendInitException as e:
         return lambda_response(500, f"Failed to initialize backend: {str(e)}")
@@ -62,13 +65,29 @@ def handler(event: dict, context: dict) -> dict:
     # Run extractor
     try:
         extractor = Extractor.get_extractor(file_type)
-        extractor.extract(file)
+        text = extractor.extract(file)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
     except ExtractorException as e:
         return lambda_response(500, f"Failed to extract text: {str(e)}")
     except Exception as e:
         return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
+
+    # Send result to eRegs
+    try:
+        requests.post(
+            post_url,
+            auth=(post_username, post_password) if post_username and post_password else None,
+            data=json.dumps({
+                "id": resource_id,
+                "text": text,
+            }),
+            timeout=60,
+        )
+    except requests.exceptions.RequestException as e:
+        return lambda_response(500, f"Failed to POST results: {str(e)}")
+    except Exception as e:
+        return lambda_response(500, f"POST unexpectedly failed: {str(e)}")
 
     # Return success code
     return lambda_response(200, "Function exited normally.")

@@ -7,7 +7,7 @@ from .exceptions import BackendException, BackendInitException
 class S3Backend(FileBackend):
     backend = "s3"
 
-    def __init__(self, get_params: dict, post_params: dict):
+    def __init__(self, post_params: dict):
         try:
             self.aws_access_key_id = post_params["aws_access_key_id"]
             self.aws_secret_acces_key = post_params["aws_secret_access_key"]
