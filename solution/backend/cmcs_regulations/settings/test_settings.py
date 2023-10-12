@@ -1,6 +1,7 @@
 from .base import * # noqa
-
+import re
 import os
+
 USE_AWS_TOKEN = True
 AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
 AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", 'test')
@@ -13,7 +14,8 @@ AWS_QUERYSTRING_AUTH = False
 MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-## TODO - this should be removed after we merge euasettings.py with base.py in teh future
+# TODO - this should be removed after we merge euasettings.py with base.py in teh future
+
 STAGE_ENV = os.environ.get("STAGE_ENV", "")
 BASE_URL = os.environ.get("BASE_URL", "")
 OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
