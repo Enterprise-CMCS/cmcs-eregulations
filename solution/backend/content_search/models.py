@@ -59,11 +59,11 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 class ContentIndex(models.Model):
     doc_name_string = models.CharField(max_length=512, null=True, blank=True)
-    summary_string = models.CharField(max_length=512, null=True, blank=True)
+    summary_string = models.TextField(blank=True, null=True)
     file_name_string = models.CharField(max_length=512, null=True, blank=True)
     date_string = VariableDateField()
-    content = models.TextField()
-    url = models.CharField(max_length=255, blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
+    url = models.CharField(max_length=512, blank=True, null=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="content", on_delete=models.SET_NULL)
     category = models.ForeignKey(
@@ -71,6 +71,8 @@ class ContentIndex(models.Model):
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="content", verbose_name="Regulation Locations")
     resource_type = models.CharField(max_length=25, null=True, blank=True)
+    content_type = models.CharField(max_length=50, blank=True, null=True)
+    content_id = models.IntegerField(null=True)
     file = models.ForeignKey(UploadedFile, blank=True, null=True, on_delete=models.CASCADE)
     supplemental_content = models.ForeignKey(SupplementalContent, blank=True, null=True, on_delete=models.CASCADE)
     fr_doc = models.ForeignKey(FederalRegisterDocument, blank=True, null=True, on_delete=models.CASCADE)

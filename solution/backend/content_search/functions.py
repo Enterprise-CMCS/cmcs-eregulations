@@ -50,7 +50,9 @@ def add_to_index(content):
             doc_name_string=content.document_name,
             summary_string=content.summary,
             date_string=content.date,
-            resource_type='internal'
+            resource_type='internal',
+            content_type='uploaded-file',
+            content_id=content.id
         )
         content_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
@@ -60,13 +62,17 @@ def add_to_index(content):
             doc_name_string=content.name,
             summary_string=content.description,
             date_string=content.date,
-            resource_type='external'
+            resource_type='external',
         )
 
         if isinstance(content, SupplementalContent):
             content_index.supplemental_content = content
+            content_index.content_type = 'supplementalcontent'
+            content_index.content_id = content.id
         else:
             content_index.fr_doc = content
+            content_index.content_type = 'federalregisterdocument'
+            content_index.content_id = content.id
         content_index.save()
     content_index.locations.set(content.locations.all())
     content_index.subjects.set(content.subjects.all())
