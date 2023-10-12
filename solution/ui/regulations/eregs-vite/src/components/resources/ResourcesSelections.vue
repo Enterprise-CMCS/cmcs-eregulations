@@ -143,11 +143,8 @@ export default {
         }
 
         .v-chip {
-            color: $mid_blue;
-            font-size: 15px;
-            font-weight: 600;
-            background: $lightest_blue;
-            border: 1px solid #c0eaf8;
+            @include common-chip-styles;
+
             margin-right: 10px;
             margin-bottom: 10px;
 

@@ -37,8 +37,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            utilities: path.resolve(__dirname, "../utilities"),
             sharedComponents: path.resolve(__dirname, "./src/components/shared-components"),
+            utilities: path.resolve(__dirname, "../utilities"),
         },
     },
     build: {

@@ -1,11 +1,13 @@
 <script setup>
 import _groupBy from "lodash/groupBy";
 
-import { inject } from "vue";
-
 import { locationLabel, locationUrl } from "utilities/filters";
 
 const props = defineProps({
+    base: {
+        type: String,
+        required: true,
+    },
     item: {
         type: Object,
         required: true,
@@ -19,8 +21,6 @@ const props = defineProps({
         default: () => {},
     },
 });
-
-const base = inject("base");
 
 const filteredLocations = props.item.locations.filter(
     (location) => props.partsLastUpdated[location.part]

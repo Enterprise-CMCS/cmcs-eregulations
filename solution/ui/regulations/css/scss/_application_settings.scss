@@ -129,7 +129,6 @@ $jump_to_submit_disabled: $mid_gray_3;
 $jump_to_submit_active: $mid_blue;
 $jump_to_submit_active_focus: $dark_blue;
 
-$policy_subject_chip_background: $light_blue_2;
 $policy_subject_selected_chip_background: $dark_blue;
 
 // Borders
@@ -145,8 +144,7 @@ $formula_left_border: $light_blue;
 $primary_text_color: $dark_gray;
 $secondary_text_color: $mid_gray;
 $reverse_text_color: $white;
-$policy_subject_chip_text: $mid_blue;
-$policy_subject_selected_chip_text: #FFF;
+$policy_subject_selected_chip_text: #fff;
 
 // Indicators
 
@@ -537,11 +535,16 @@ select {
 // Other Common Settings
 // -------------------------
 
-// Related Sections styles
-// used across Search Results and Policy Repository
-@mixin common-context-related-sections {
-    color: $mid_gray;
-    font-size: $font-size-sm;
-    font-weight: 400;
-    line-height: 22px;
+// Blue chips used for Resources selections and Policy Doc subjects
+@mixin common-chip-styles {
+    display: inline-flex;
+    align-items: center;
+    color: $mid_blue;
+    font-size: 15px;
+    font-weight: 600;
+    background: $lightest_blue;
+    border: 1px solid #c0eaf8;
+    border-radius: 16px;
+    height: 32px;
+    padding: 0 12px;
 }

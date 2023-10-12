@@ -1,9 +1,13 @@
 <script setup>
 import { inject } from "vue";
 
-import RelatedSections from "@/components/search/RelatedSections.vue";
+import { formatDate } from "utilities/filters";
 
-import SubjectChips from "eregsComponentLib/src/components/shared-components/PolicyRepository/SubjectChips.vue";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
+import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
+
+import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 const props = defineProps({
     results: {
@@ -32,43 +36,50 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                 >s</span
             >.
         </div>
-        <div v-for="doc in results" :key="doc.uid" class="doc-list__document">
-            <div class="document__primary-info document__info-block">
-                <div v-if="doc.document_type" class="document__type">
-                    <h3>{{ doc.document_type.name }}</h3>
-                </div>
-                <div class="document__filename">
-                    <h3>
-                        <a
-                            :href="getDownloadUrl(doc.uid)"
-                            class="document__link document__link--filename"
-                            >{{ doc.document_name }}</a
-                        >
-                    </h3>
-                </div>
-            </div>
-            <template v-if="doc.subject.length > 0">
-                <div class="document__info-block">
-                    <SubjectChips
-                        :subjects="doc.subject"
-                    />
+        <ResultsItem
+            v-for="doc in results"
+            :key="doc.uid"
+            class="doc-list__document"
+        >
+            <template #labels>
+                <CategoryLabel
+                    v-if="doc.document_type"
+                    :name="doc.document_type.name"
+                    type="category"
+                />
+            </template>
+            <template #context>
+                <span
+                    v-if="doc.date"
+                    class="result__context--date"
+                    >{{ formatDate(doc.date) }}</span
+                >
+            </template>
+            <template #link>
+                <h3>
+                    <a
+                        :href="getDownloadUrl(doc.uid)"
+                        class="document__link document__link--filename"
+                        >{{ doc.document_name }}</a
+                    >
+                </h3>
+            </template>
+            <template #snippet>
+                <div v-if="doc.summary">{{ doc.summary }}</div>
+            </template>
+            <template #chips>
+                <div v-if="doc.subject.length > 0" class="document__info-block">
+                    <SubjectChips :subjects="doc.subject" />
                 </div>
             </template>
-            <div class="document__info-block">
-                <a
-                    :href="getDownloadUrl(doc.uid)"
-                    class="document__link document__link--view"
-                    >View Document</a
-                >
-            </div>
-            <div class="document__info-block">
+            <template #sections>
                 <RelatedSections
                     :item="doc"
                     :parts-last-updated="partsLastUpdated"
                     label="Related Regulation Citation"
                 />
-            </div>
-        </div>
+            </template>
+        </ResultsItem>
     </div>
 </template>
 
