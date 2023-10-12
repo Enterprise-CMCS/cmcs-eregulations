@@ -1,6 +1,8 @@
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
+
 from ..admin import OidcAdminAuthenticationBackend
 
 User = get_user_model()
