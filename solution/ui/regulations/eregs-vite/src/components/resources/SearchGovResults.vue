@@ -1,14 +1,14 @@
 <script setup>
 import { formatDate } from "utilities/filters";
 
-import RelatedSections from "@/components/search/RelatedSections.vue";
-import ResultsItem from "@/components/search/ResultsItem.vue";
+import { inject } from "vue";
+
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
+
+import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 const props = defineProps({
-    base: {
-        type: String,
-        required: true,
-    },
     results: {
         type: Array,
         default: () => [],
@@ -18,6 +18,8 @@ const props = defineProps({
         default: () => {},
     },
 });
+
+const base = inject("base");
 
 const openChar = ""; // &#xe000;
 const closeChar = ""; // &#xe001;
@@ -114,21 +116,19 @@ const formatSnippet = (snippet, startChar, stopChar) => {
         <template v-for="(item, idx) in results">
             <ResultsItem :key="item.created_at + idx">
                 <template #labels>
-                    <div class="category-labels">
-                        <div class="result-label category-label">
-                            {{
-                                item.category.parent
-                                    ? item.category.parent.name
-                                    : item.category.name
-                            }}
-                        </div>
-                        <div
-                            v-if="item.category.parent"
-                            class="result-label subcategory-label"
-                        >
-                            {{ item.category.name }}
-                        </div>
-                    </div>
+                    <CategoryLabel
+                        :name="
+                            item.category.parent
+                                ? item.category.parent.name
+                                : item.category.name
+                        "
+                        type="category"
+                    />
+                    <CategoryLabel
+                        v-if="item.category.parent"
+                        :name="item.category.name"
+                        type="subcategory"
+                    />
                 </template>
                 <template #context>
                     <span

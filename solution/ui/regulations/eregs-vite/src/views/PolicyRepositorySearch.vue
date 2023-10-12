@@ -149,6 +149,8 @@ watch(searchQuery, async (newSearchQuery, oldSearchQuery) => {
     getDocList(getRequestParams($route.query));
 });
 
+getPartsLastUpdated();
+
 // searchQuery is populated on load from $route.query.q, fetch docs list
 if (!_isEmpty(searchQuery.value)) {
     getDocList(getRequestParams($route.query));
@@ -215,5 +217,3 @@ if (!_isEmpty(searchQuery.value)) {
         </div>
     </body>
 </template>
-
-<style></style>

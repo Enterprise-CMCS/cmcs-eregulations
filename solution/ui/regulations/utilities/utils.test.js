@@ -1,4 +1,5 @@
 import {
+    createLastUpdatedDates,
     getActAbbr,
     getCurrentPageResultsRange,
     getRequestParams,
@@ -8,7 +9,37 @@ import {
 
 import { describe, it, expect } from "vitest";
 
+import parts42Fixture from "cypress/fixtures/parts-42.json";
+import parts45Fixture from "cypress/fixtures/parts-45.json";
+
 describe("Utilities.js", () => {
+    it("createLastUpdatedDates properly creates last updated dates", async () => {
+        const partsArrays = [parts42Fixture, parts45Fixture];
+        const lastUpdatedDates = createLastUpdatedDates(partsArrays);
+
+        expect(lastUpdatedDates).toStrictEqual({
+            95: "2019-11-05",
+            155: "2023-06-18",
+            400: "2023-01-01",
+            430: "2017-01-20",
+            431: "2023-01-01",
+            432: "2020-06-30",
+            433: "2023-08-31",
+            434: "2017-01-01",
+            435: "2023-01-01",
+            436: "2017-01-01",
+            438: "2021-07-01",
+            440: "2020-12-16",
+            441: "2023-08-04",
+            442: "2017-01-01",
+            447: "2023-01-01",
+            455: "2023-01-01",
+            456: "2021-03-01",
+            457: "2023-08-31",
+            460: "2023-08-04",
+        });
+    });
+
     it("getActAbbr returns expected act abbreviation", async () => {
         const actsResults = [
             {

@@ -1,6 +1,4 @@
 <script setup>
-import { computed } from "vue";
-
 import { getSubjectName, sortSubjects } from "utilities/filters";
 
 import SubjectChip from "./SubjectChip.vue";
@@ -12,7 +10,7 @@ const props = defineProps({
     },
 });
 
-const sortedSubjects = props.subjects.sort(sortSubjects);
+const sortedSubjects = props.subjects.toSorted(sortSubjects);
 </script>
 
 <template>
