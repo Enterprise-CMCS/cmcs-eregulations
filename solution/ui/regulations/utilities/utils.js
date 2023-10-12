@@ -844,12 +844,35 @@ const shapeTitlesResponse = ({ actsResults, actTypes }) => {
     return returnObj;
 };
 
+/**
+ * @param {Array.<Array<{id: string, name: string, date: string, last_updated: string, depth: number}>>} resultsArr - array of arrays of title objects
+ *
+ * @returns {Object.<string, string>} - Object with Part numbers as keys and YYYY-MM-DD datestring as values
+ */
+const createLastUpdatedDates = (resultsArr) => {
+    const combinedResults = resultsArr.flat(1).reduce(
+        (accumulator, current) => ({
+            ...accumulator,
+            [current.name]: current,
+        }),
+        {}
+    );
+
+    // remove artifact added by front end caching
+    delete combinedResults.expiration_date;
+
+    return Object.fromEntries(
+        Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])
+    );
+};
+
 export {
     addMarks,
     addQueryParams,
     capitalizeFirstLetter,
     childrenArrayToMap,
     chopRight,
+    createLastUpdatedDates,
     consolidateToMap,
     createOneIndexedArray,
     delay,

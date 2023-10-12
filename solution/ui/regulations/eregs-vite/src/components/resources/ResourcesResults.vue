@@ -2,61 +2,65 @@
     <div class="resources-results">
         <slot name="empty-state"></slot>
         <template v-for="(item, idx) in results">
-            <div :key="item.created_at + idx">
-                <div class="category-labels">
-                    <div class="result-label category-label">
-                        {{
+            <ResultsItem :key="item.created_at + idx">
+                <template #labels>
+                    <CategoryLabel
+                        :name="
                             item.category.parent
                                 ? item.category.parent.name
                                 : item.category.name
-                        }}
-                    </div>
-                    <div
-                        v-if="item.category.parent"
-                        class="result-label subcategory-label"
-                    >
-                        {{ item.category.name }}
-                    </div>
-                </div>
-                <div class="result-content-wrapper">
-                    <SupplementalContentObject
-                        :name="item.name"
-                        :description="
-                            item.descriptionHeadline || item.description
                         "
-                        :date="item.date"
-                        :url="item.url"
+                        type="category"
                     />
-                </div>
-                <RelatedSections
-                    :base="base"
-                    :item="item"
-                    :parts-last-updated="partsLastUpdated"
-                />
-            </div>
+                    <CategoryLabel
+                        v-if="item.category.parent"
+                        :name="item.category.name"
+                        type="subcategory"
+                    />
+                </template>
+                <template #resources-content>
+                    <div class="result-content-wrapper">
+                        <SupplementalContentObject
+                            :name="item.name"
+                            :description="
+                                item.descriptionHeadline || item.description
+                            "
+                            :date="item.date"
+                            :url="item.url"
+                        />
+                    </div>
+                </template>
+                <template #sections>
+                    <RelatedSections
+                        :base="base"
+                        :item="item"
+                        :parts-last-updated="partsLastUpdated"
+                    />
+                </template>
+            </ResultsItem>
         </template>
         <slot name="pagination"></slot>
     </div>
 </template>
 
 <script>
-import { locationLabel, locationUrl } from "utilities/filters";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 
-import RelatedSections from "@/components/search/RelatedSections.vue";
+import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
 import SupplementalContentObject from "eregsComponentLib/src/components/SupplementalContentObject.vue";
 
 export default {
     name: "ResourcesResults",
 
     components: {
+        CategoryLabel,
+        RelatedSections,
+        ResultsItem,
         SupplementalContentObject,
     },
 
     props: {
-        base: {
-            type: String,
-            required: true,
-        },
         results: {
             type: Array,
             default: () => [],
@@ -67,29 +71,11 @@ export default {
         },
     },
 
-    methods: { locationLabel, locationUrl },
+    inject: ["base"],
 };
 </script>
 
 <style lang="scss">
-.category-labels {
-    margin-bottom: 5px;
-
-    .result-label {
-        display: inline-block;
-        font-size: 11px;
-        width: fit-content;
-        margin-right: 5px;
-        background: #e3eef9;
-        border-radius: 3px;
-        padding: 2px 5px 3px;
-
-        &.category-label {
-            font-weight: 600;
-        }
-    }
-}
-
 .result-content-wrapper {
     margin-bottom: 20px;
 
@@ -102,27 +88,4 @@ export default {
     }
 }
 
-.resources-content-container {
-    .related-sections {
-        margin-bottom: 40px;
-        color: $mid_gray;
-        font-size: $font-size-xs;
-
-        .related-sections-title {
-            font-weight: 600;
-            color: $dark_gray;
-            text-transform: none;
-            font-size: $font-size-xs;
-        }
-
-        .title__span, .section-sign, .related-sections-none {
-            font-size: $font-size-xs;
-        }
-
-        a {
-            text-decoration: none;
-            font-size: $font-size-xs;
-        }
-    }
-}
 </style>
