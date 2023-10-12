@@ -98,7 +98,7 @@ class ApiProxy:
                     return
 
                 if "errorMessage" in resp:
-                    self._send_response(500, {}, resp["errorMessage"])
+                    self._send_response(500, {}, json.dumps(resp, indent=4))
                     return
 
                 if resp.keys() < {"statusCode", "headers", "body"} or not isinstance(resp["headers"], dict):

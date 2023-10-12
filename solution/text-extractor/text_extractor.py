@@ -17,7 +17,7 @@ from .extractors import (
 
 def load_post_body(body: str) -> dict:
     try:
-        json.loads(body)
+        return json.loads(body)
     except Exception:
         return {}
 
@@ -41,7 +41,7 @@ def handler(event: dict, context: dict) -> dict:
         post_username = post_params.get("post_username")
         post_password = post_params.get("post_password")
     except KeyError:
-        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the query parameters.")
+        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the JSON POST body.")
 
     # Retrieve the file
     try:
@@ -75,7 +75,7 @@ def handler(event: dict, context: dict) -> dict:
 
     # Send result to eRegs
     try:
-        requests.post(
+        resp = requests.post(
             post_url,
             auth=(post_username, post_password) if post_username and post_password else None,
             data=json.dumps({
@@ -84,6 +84,7 @@ def handler(event: dict, context: dict) -> dict:
             }),
             timeout=60,
         )
+        resp.raise_for_status()
     except requests.exceptions.RequestException as e:
         return lambda_response(500, f"Failed to POST results: {str(e)}")
     except Exception as e:
