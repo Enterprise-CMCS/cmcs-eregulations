@@ -7,6 +7,7 @@ from ..admin import OidcAdminAuthenticationBackend
 
 User = get_user_model()
 
+
 class OidcAdminAuthenticationBackendTest(unittest.TestCase):
     def setUp(self):
         self.backend = OidcAdminAuthenticationBackend()
@@ -40,6 +41,7 @@ class OidcAdminAuthenticationBackendTest(unittest.TestCase):
         self.mock_claims["jobcodes"] = ''  # Simulate no jobcodes
         user = self.backend.create_user(self.mock_claims)
         self.assertIsNone(user)
+
 
 if __name__ == '__main':
     unittest.main()
