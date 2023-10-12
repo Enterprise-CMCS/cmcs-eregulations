@@ -5,6 +5,8 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from content_search.functions import add_to_index
+from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
 from resources.models import FederalRegisterDocument, Section, SupplementalContent
 
@@ -19,13 +21,21 @@ class SearchTest(TestCase):
         self.user = User.objects.create_superuser(username='test_user', password='test')  # noqa: S106
         self.client.force_authenticate(self.user)
 
+    def clean_up(self):
+        SupplementalContent.objects.all().delete()
+        FederalRegisterDocument.objects.all().delete()
+        UploadedFile.objects.all().delete()
+        ContentIndex.objects.all().delete()
+
     def setUp(self):
+        self.clean_up()
         self.internal_docs = []
         self.location1 = Section.objects.create(title="42", part="433", section_id="1")
         self.location2 = Section.objects.create(title="33", part="31", section_id="22")
 
         self.subject1 = Subject.objects.create()
         self.subject2 = Subject.objects.create()
+
         with open("content_search/tests/fixtures/sample_supplemental.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 file = SupplementalContent.objects.create(**data)
@@ -33,6 +43,7 @@ class SearchTest(TestCase):
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.save()
+
         with open("content_search/tests/fixtures/sample_fr_doc.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 file = FederalRegisterDocument.objects.create(**data)
@@ -40,6 +51,7 @@ class SearchTest(TestCase):
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.save()
+
         with open("content_search/tests/fixtures/sample_files.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 self.internal_docs.append(data)
@@ -48,6 +60,13 @@ class SearchTest(TestCase):
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.save()
+
+        for x in SupplementalContent.objects.all():
+            add_to_index(x)
+        for x in FederalRegisterDocument.objects.all():
+            add_to_index(x)
+        for x in UploadedFile.objects.all():
+            add_to_index(x)
 
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search/?resource-type=external")

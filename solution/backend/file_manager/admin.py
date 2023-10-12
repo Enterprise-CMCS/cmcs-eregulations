@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from content_search.functions import add_to_index
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
@@ -50,6 +51,7 @@ class UploadedFileAdmin(BaseAdmin):
               'document_type', 'subjects', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
+        "subjects": lambda: Subject.objects.all()
     }
 
     # Will remove any characters from file names we do not want in it.
@@ -63,6 +65,7 @@ class UploadedFileAdmin(BaseAdmin):
         if path:
             obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
+        add_to_index(form.instance)
         super().save_model(request, obj, form, change)
 
     def upload_file(self, file, obj):

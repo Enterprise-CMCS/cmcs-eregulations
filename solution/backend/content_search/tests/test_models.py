@@ -1,62 +1,71 @@
 import pytest
 
-from content_search.models import ContentIndex, establish_content_type
+from content_search.functions import add_to_index
+from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent
 
 
 def add_supplemental_content():
-    return SupplementalContent.objects.get_or_create(name="valid", url="valid.doc",)
+    sup, _ = SupplementalContent.objects.get_or_create(name="valid", url="valid.doc",)
+    add_to_index(sup)
+    return sup
 
 
 def add_internal_document():
-    return UploadedFile.objects.get_or_create(document_name='test', file_name='test')
+    up, _ = UploadedFile.objects.get_or_create(document_name='test', file_name='test')
+    add_to_index(up)
+    return up
 
 
 def add_fr_doc():
-    return FederalRegisterDocument.objects.get_or_create(name="valid", url="valid.doc",)
+    fr_doc, _ = FederalRegisterDocument.objects.get_or_create(name="valid", url="valid.doc",)
+    add_to_index(fr_doc)
+    return fr_doc
+
+
+def clean_up():
+    SupplementalContent.objects.all().delete()
+    FederalRegisterDocument.objects.all().delete()
+    UploadedFile.objects.all().delete()
+    ContentIndex.objects.all().delete()
 
 
 @pytest.mark.django_db
 def test_index_created():
     total_index = ContentIndex.objects.all()
     assert total_index.count() == 0
-    sc, created = add_supplemental_content()
+    add_supplemental_content()
     assert total_index.count() == 1
-    id, created = add_internal_document()
+    add_internal_document()
     assert total_index.count() == 2
-    fr, created = add_fr_doc()
+    add_fr_doc()
     assert total_index.count() == 3
-    sc.delete()
-    id.delete()
-    fr.delete()
+    clean_up()
 
 
 @pytest.mark.django_db
 def test_index_update():
-    si, created = add_supplemental_content()
+    si = add_supplemental_content()
     file_index = ContentIndex.objects.get(supplemental_content=si)
     assert file_index.content == ''
     file_index.content = 'content is here'
     file_index.save()
     si.name = 'updated'
     si.save()
+    add_to_index(si)
     file_index = ContentIndex.objects.get(supplemental_content=si)
     assert file_index.doc_name_string == 'updated'
     assert file_index.content == 'content is here'
-    si.delete()
+    clean_up()
 
 
 @pytest.mark.django_db
 def test_content_type():
-    sc, created = add_supplemental_content()
-    internal_doc, created = add_internal_document()
-    fr, created = add_fr_doc()
+    sc = add_supplemental_content()
+    internal_doc = add_internal_document()
+    fr = add_fr_doc()
     assert ContentIndex.objects.get(supplemental_content=sc).resource_type == 'external'
     assert ContentIndex.objects.get(fr_doc=fr).resource_type == 'external'
     assert ContentIndex.objects.get(file=internal_doc).resource_type == 'internal'
-    none_type = establish_content_type(int)
-    assert none_type is None
-    sc.delete()
-    fr.delete()
-    internal_doc.delete()
+    clean_up()
