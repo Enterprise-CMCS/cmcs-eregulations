@@ -92,6 +92,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
             # Set user fields from claims
             return self.update_user(user, claims)
+        return None
 
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
