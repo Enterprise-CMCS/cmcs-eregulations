@@ -28,6 +28,7 @@ import PolicySelections from "@/components/policy-repository/PolicySelections.vu
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
+import SubjectTOC from "@/components/policy-repository/SubjectTOC.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -260,10 +261,6 @@ watch(
 // fetches on page load
 getPartsLastUpdated();
 getDocSubjects();
-
-if (_isEmpty($route.query)) {
-    getDocList();
-}
 </script>
 
 <template>
@@ -323,8 +320,14 @@ if (_isEmpty($route.query)) {
                     </PolicySidebar>
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
+                    <SubjectTOC
+                        v-if="_isEmpty($route.query)"
+                        :policy-doc-subjects="policyDocSubjects"
+                    />
                     <template
-                        v-if="policyDocList.loading || partsLastUpdated.loading"
+                        v-else-if="
+                            policyDocList.loading || partsLastUpdated.loading
+                        "
                     >
                         <span class="loading__span">Loading...</span>
                     </template>
