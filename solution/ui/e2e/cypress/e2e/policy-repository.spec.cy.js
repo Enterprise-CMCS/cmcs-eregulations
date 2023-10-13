@@ -99,9 +99,9 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2").as(
-            "subjectFiles"
-        );
+        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository/?subjects=1&subjects=2");
