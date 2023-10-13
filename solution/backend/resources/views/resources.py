@@ -17,7 +17,6 @@ from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-from content_search.functions import add_to_index
 from file_manager.models import Subject
 from resources.models import (
     AbstractCategory,
@@ -257,10 +256,6 @@ class FederalRegisterDocsViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixi
         try:
             if sc.is_valid(raise_exception=True):
                 sc.save()
-                try:
-                    add_to_index(sc)
-                except Exception:
-                    print('Unable to index')
                 response = sc.validated_data
                 return JsonResponse(response)
         except Exception as e:
