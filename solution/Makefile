@@ -203,7 +203,6 @@ file_manager_objects = file_manager.subject file_manager.documenttype
 auth_objects = contenttypes.contenttype auth.permission auth.group
 
 local.dump:
-	docker-compose exec regulations python manage.py cleanseeddata
 	$(foreach object, $(resource_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
 	$(foreach object, $(file_manager_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \

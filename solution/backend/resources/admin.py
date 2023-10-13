@@ -24,6 +24,8 @@ from django.utils.dateparse import parse_datetime
 from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
 
+from content_search.functions import add_to_index
+
 from . import actions
 from .filters import (
     PartFilter,
@@ -212,7 +214,7 @@ class AbstractResourceAdmin(BaseAdmin):
                 "bulk_adds": bulk_locs,
             })
             form.instance.save()
-
+            add_to_index(form.instance)
     # Checks the location for the formats.
     # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1
     # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A

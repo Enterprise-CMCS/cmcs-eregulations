@@ -1,6 +1,7 @@
 node_modules
 .DS_Store
 .serverless
+.coverage
 __pycache__/
 e2e/cypress/videos
 solution/ui/e2e/cypress/videos
