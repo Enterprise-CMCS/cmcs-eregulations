@@ -48,7 +48,7 @@ def test_index_created():
 def test_index_update():
     si = add_supplemental_content()
     file_index = ContentIndex.objects.get(supplemental_content=si)
-    assert file_index.content == ''
+    assert file_index.content is None
     file_index.content = 'content is here'
     file_index.save()
     si.name = 'updated'
