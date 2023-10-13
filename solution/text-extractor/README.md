@@ -91,7 +91,7 @@ _`backends/__init__.py`_:
 
 # Add your file extractors here to initialize them
 .... etc ...
-from .sample import SampleBackend
+from .sample import SampleBackend as SampleBackend  # Note the redundant alias, a recommended way of avoiding linting errors
 .... etc ...
 ```
 
@@ -118,7 +118,7 @@ _`extractors/__init__.py`_:
 
 # Add your file extractors here to initialize them
 .... etc ....
-from .sample import SampleExtractor
+from .sample import SampleExtractor as SampleExtractor  # Note the redundant alias, a recommended way of avoiding linting errors
 .... etc ....
 ```
 
