@@ -26,12 +26,8 @@ def delete_index(sender, instance, *args, **kwargs):
         return
 
 
-
 @receiver(post_save, sender=FederalRegisterDocument)
 @receiver(post_save, sender=SupplementalContent)
 @receiver(post_save, sender=UploadedFile)
 def add_index(sender, instance, created, **kwargs):
     add_to_index(instance)
-
-
-

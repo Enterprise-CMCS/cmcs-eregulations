@@ -56,4 +56,3 @@ def loadSeedData():
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
-
