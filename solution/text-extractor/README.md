@@ -34,16 +34,18 @@ To run the text extractor, send a JSON POST request with the following structure
 
 ```json
 {
-    "id": 1,  # The eRegs database ID of the object to update
-    "uri": "object_uri",  # The web URL or object name to extract text from
-    "post_url": "https://eregulations.cms.gov/v3/.....",  # The API URL to POST the text to
-    "post_username": "xxxxx",  # Optional - include if API requires authentication
-    "post_password": "xxxxx",  # Optional - include if API requires authentication
-    "backend": "s3",  # Optional - defaults to 'web', enter 's3' if object is retrieved from S3
-    # The following are for the S3 backend only, do not include if using 'web'
-    "aws_access_key_id": "xxxxxx",  # The access key for the AWS bucket
-    "aws_secret_access_key": "xxxxxx",  # The AWS secret key
-    "aws_storage_bucket_name": "xxxxxx"  # The name of the bucket to retrieve the object from
+    "id": 1,                                 // The eRegs database ID of the object to update
+    "uri": "object_uri",                     // The web URL or object name to extract text from
+    "post_url": "https://api-url-here/",     // The API URL to POST the text to
+    "post_username": "xxxxx",                // Optional - include if API requires authentication
+    "post_password": "xxxxx",                // Optional - include if API requires authentication
+    "backend": "s3",                         // Optional - defaults to 'web'
+    // Only include if using the S3 backend
+    "s3": {
+        "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
+        "aws_secret_access_key": "xxxxxx",   // The AWS secret key
+        "aws_storage_bucket_name": "xxxxxx"  // The name of the bucket to retrieve the object from
+    }
 }
 ```
 
@@ -55,8 +57,8 @@ When the function completes, it will send the text and ID back to the `post_url`
 
 ```json
 {
-    "id": 1,  # The eRegs database ID specified in the request
-    "text": "xxxxxx"  # The text extracted   
+    "id": 1,          // The eRegs database ID specified in the request
+    "text": "xxxxxx"  // The text extracted   
 }
 ```
 
