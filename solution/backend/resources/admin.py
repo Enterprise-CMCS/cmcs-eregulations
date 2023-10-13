@@ -85,7 +85,6 @@ class LocationAdmin(BaseAdmin):
                                   reverse('admin:{}_{}_change'.format("resources", type(child).__name__.lower()),
                                           args=(child.id,)), str(child))
                                  for child in obj.resources.all()])
-        add_to_index()
         if display_text:
             return mark_safe(display_text)  # noqa: S308
         return "-"
