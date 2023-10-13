@@ -32,7 +32,7 @@ No further action is required, but if you want the code to hot-reload during dev
 
 To run the text extractor, send a JSON POST request with the following structure:
 
-```
+```json
 {
     "id": 1,  # The eRegs database ID of the object to update
     "uri": "object_uri",  # The web URL or object name to extract text from
@@ -53,7 +53,7 @@ It is recommended to run this asynchronously as it could take time to run, up to
 
 When the function completes, it will send the text and ID back to the `post_url` specified in the request as a JSON POST request formatted like:
 
-```
+```json
 {
     "id": 1,  # The eRegs database ID specified in the request
     "text": "xxxxxx"  # The text extracted   
@@ -68,8 +68,8 @@ The text extractor is designed to be easily extensible to add new file backends 
 
 To add a new file backend, create a new file in the `backends` directory and create a class inheriting from the `FileBackend` class. Then add the new backend class to `__init__.py` to register it, like so:
 
-_`backends/sample.py`_
-```
+_`backends/sample.py`_:
+```python
 from .backend import FileBackend
 from .exceptions import BackendException
 
@@ -83,8 +83,8 @@ class SampleBackend(FileBackend):
             raise BackendException(f"Failed to retrieve the file: {str(e)}")
 ```
 
-_`backends/__init__.py`_
-```
+_`backends/__init__.py`_:
+```python
 .... etc ...
 
 # Add your file extractors here to initialize them
@@ -99,8 +99,8 @@ The backend is now registered and will be automatically instantiated when `"back
 
 To add support for a new file type (or group of file types), create a new file in the `extractors` directory and create a class inheriting from the `Extractor` class. Then add the new extractor class to `__init__.py` to register it, like so:
 
-_`extractors/sample.py`_
-```
+_`extractors/sample.py`_:
+```python
 from .extractor import Extractor
 
 class SampleExtractor(Extractor):
@@ -110,8 +110,8 @@ class SampleExtractor(Extractor):
         return ...extract text here...
 ```
 
-_`extractors/__init__.py`_
-```
+_`extractors/__init__.py`_:
+```python
 .... etc ....
 
 # Add your file extractors here to initialize them
