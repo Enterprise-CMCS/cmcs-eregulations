@@ -4,7 +4,6 @@ from unittest.mock import patch
 from django.contrib.auth import get_user_model
 
 from ..admin import OidcAdminAuthenticationBackend
-
 User = get_user_model()
 
 
@@ -38,7 +37,7 @@ class OidcAdminAuthenticationBackendTest(unittest.TestCase):
         self.assertTrue(user.is_active)
 
     def test_user_is_not_created_if_no_jobcodes(self):
-        self.mock_claims["jobcodes"] = ''  # Simulate no jobcodes
+        self.mock_claims["jobcodes"] = ""
         user = self.backend.create_user(self.mock_claims)
         self.assertIsNone(user)
 
