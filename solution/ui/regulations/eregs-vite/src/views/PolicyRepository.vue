@@ -308,7 +308,7 @@ if (_isEmpty($route.query)) {
                         <template #search>
                             <SearchInput
                                 form-class="search-form"
-                                label=""
+                                label="Search for a document"
                                 page="policy-repository"
                                 :search-query="searchQuery"
                                 @execute-search="executeSearch"

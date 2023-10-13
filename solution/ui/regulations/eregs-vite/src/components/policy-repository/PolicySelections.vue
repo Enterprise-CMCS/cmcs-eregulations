@@ -71,6 +71,7 @@ watch(
             >
                 {{ selection.label }}: {{ selection.name }}
                 <button
+                    :aria-label="`Remove ${selection.name} results`"
                     :data-id="selection.id"
                     :data-testid="`remove-${selection.label.toLowerCase()}-${
                         selection.id

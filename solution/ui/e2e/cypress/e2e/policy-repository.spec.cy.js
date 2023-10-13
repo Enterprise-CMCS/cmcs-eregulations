@@ -105,11 +105,15 @@ describe("Policy Repository", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository/?subjects=1&subjects=2");
+
+        cy.injectAxe();
+
         cy.wait("@subjectFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.checkAccessibility();
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
