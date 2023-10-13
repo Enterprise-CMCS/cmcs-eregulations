@@ -51,7 +51,7 @@ def add_to_index(content):
             summary_string=content.summary,
             date_string=content.date,
             resource_type='internal',
-            content_type='uploaded-file',
+            content_type='uploadedfile',
             content_id=content.id
         )
         content_index.save()
