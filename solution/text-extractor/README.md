@@ -32,7 +32,7 @@ No further action is required, but if you want the code to hot-reload during dev
 
 To run the text extractor, send a JSON POST request with the following structure:
 
-```json
+```jsonc
 {
     "id": 1,                                 // The eRegs database ID of the object to update
     "uri": "object_uri",                     // The web URL or object name to extract text from
@@ -55,7 +55,7 @@ It is recommended to run this asynchronously as it could take time to run, up to
 
 When the function completes, it will send the text and ID back to the `post_url` specified in the request as a JSON POST request formatted like:
 
-```json
+```jsonc
 {
     "id": 1,          // The eRegs database ID specified in the request
     "text": "xxxxxx"  // The text extracted   
