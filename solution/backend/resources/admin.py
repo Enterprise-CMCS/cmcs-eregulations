@@ -215,6 +215,7 @@ class AbstractResourceAdmin(BaseAdmin):
             })
             form.instance.save()
             add_to_index(form.instance)
+
     # Checks the location for the formats.
     # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1
     # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A

@@ -19,21 +19,49 @@ def check_index(content):
 
 def update_index(content_index, content):
     if isinstance(content, UploadedFile):
-        content_index.document_type = content.document_type
-        content_index.file_name_string = content.file_name
-        content_index.url = content.uid
-        content_index.doc_name_string = content.document_name
-        content_index.summary_string = content.summary
-        content_index.date_string = content.date
+        new_index = ContentIndex(
+            file=content,
+            document_type=content.document_type,
+            file_name_string=content.file_name,
+            url=content.uid,
+            doc_name_string=content.document_name,
+            summary_string=content.summary,
+            date_string=content.date,
+            resource_type='internal',
+            content_type='uploadedfile',
+            content_id=content.id
+        )
+        new_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
-        content_index.category = content.category
-        content_index.url = content.url
-        content_index.doc_name_string = content.name
-        content_index.summary_string = content.description
-        content_index.date_string = content.date
-    content_index.locations.set(content.locations.all())
-    content_index.subjects.set(content.subjects.all())
-    content_index.save()
+        new_index = ContentIndex(
+            category=content.category,
+            url=content.url,
+            doc_name_string=content.name,
+            summary_string=content.description,
+            date_string=content.date,
+            resource_type='external',
+        )
+        new_index.save()
+        if isinstance(content, SupplementalContent):
+            new_index.supplemental_content = content
+            new_index.content_type = 'supplementalcontent'
+            new_index.content_id = content.id
+        else:
+            new_index.fr_doc = content
+            new_index.content_type = 'federalregisterdocument'
+            new_index.content_id = content.id
+        new_index.save()
+    elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
+        new_index.category = content.category
+        new_index.url = content.url
+        new_index.doc_name_string = content.name
+        new_index.summary_string = content.description
+        new_index.date_string = content.date
+    new_index.content = content_index.content
+    new_index.locations.set(content.locations.all())
+    new_index.subjects.set(content.subjects.all())
+    new_index.save()
+    content_index.delete()
     return
 
 

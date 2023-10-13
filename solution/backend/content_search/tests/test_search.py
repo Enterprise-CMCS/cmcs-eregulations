@@ -66,6 +66,7 @@ class SearchTest(TestCase):
             add_to_index(fr)
         for file in UploadedFile.objects.all():
             add_to_index(file)
+
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search/?resource-type=external")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
