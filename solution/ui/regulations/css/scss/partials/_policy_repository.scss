@@ -6,7 +6,6 @@
 
 #policyRepositoryApp.repository-view,
 #policyRepositorySearchApp.repository-search-view {
-    overflow: auto;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
@@ -60,6 +59,11 @@
 
     .sidebar__filters {
         flex: 1;
+
+        .sticky-container {
+            position: sticky;
+            top: $header_height;
+        }
 
         .selections__container {
             .selections__list {
