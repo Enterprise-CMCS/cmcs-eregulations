@@ -24,6 +24,14 @@ const EventCodes = {
     OpenBlockingModal: "OpenBlockingModal",
 };
 
+/**
+ * Validation dictionary for query params to ensure that only valid values are
+ * passed to the API.
+ * @type {Object}
+ * @property {function} subjects - Validates that the subject is a number
+ * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
+ *
+ */
 const PARAM_VALIDATION_DICT = {
     subjects: (subject) => !Number.isNaN(parseInt(subject, 10)),
     q: (query) => query === undefined || query.length > 0,
