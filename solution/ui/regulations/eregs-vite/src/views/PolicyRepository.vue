@@ -1,8 +1,7 @@
 <script setup>
 import { provide, reactive, ref, watch } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router/composables";
 
-import _difference from "lodash/difference";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
@@ -27,6 +26,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
+import SearchInput from "@/components/SearchInput.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 
 const props = defineProps({
@@ -62,10 +62,43 @@ const props = defineProps({
 
 // Router and Route
 const $route = useRoute();
+const $router = useRouter();
+
+const FilterTypesDict = {
+    subjects: "Subject",
+    q: "query",
+};
 
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+provide("FilterTypesDict", FilterTypesDict);
+
+// search query refs and methods
+const searchQuery = ref($route.query.q || "");
+const clearSearchQuery = () => {
+    searchQuery.value = "";
+};
+
+const executeSearch = (payload) => {
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...$route.query,
+            q: payload.query,
+        },
+    });
+};
+
+const clearSearchInput = () => {
+    const { q, ...rest } = $route.query;
+    $router.push({
+        name: "policy-repository",
+        query: {
+            ...rest,
+        },
+    });
+};
 
 // partsLastUpdated fetch for related regulations citations filtering
 const partsLastUpdated = ref({
@@ -134,30 +167,36 @@ const addSelectedParams = (paramArgs) => {
     selectedParams.paramsArray.push({ id, name, type });
 };
 
-// method to remove selected params
-const removeSelectedParams = (paramArgs) => {
-    const { id, type } = paramArgs;
-
-    // update paramString that is used as reactive prop for watch
-    const paramStringArray = selectedParams.paramString.split("&");
-    const paramString = paramStringArray
-        .filter((param) => !param.includes(`${type}=${id}`))
-        .join("&");
-
-    selectedParams.paramString = paramString;
-
-    // create new selectedParams key for array of objects for selections
-    selectedParams.paramsArray = selectedParams.paramsArray.filter(
-        (param) => param.id != id
-    );
-};
-
 const clearSelectedParams = () => {
     selectedParams.paramString = "";
     selectedParams.paramsArray = [];
 };
 
 provide("selectedParams", selectedParams);
+
+const setSelectedParams = (subjectsListRef) => (param) => {
+    const [paramType, paramValue] = param;
+
+    if (paramType === "q") {
+        searchQuery.value = paramValue;
+        return;
+    }
+
+    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
+    paramList.forEach((paramId) => {
+        const subject = subjectsListRef.value.results.filter(
+            (subjectObj) => paramId === subjectObj.id.toString()
+        )[0];
+
+        if (subject) {
+            addSelectedParams({
+                type: paramType,
+                id: paramId,
+                name: getSubjectName(subject),
+            });
+        }
+    });
+};
 
 // policyDocSubjects fetch for subject selector
 // fetch here so we have it in context; pass down to selector via props
@@ -181,21 +220,13 @@ const getDocSubjects = async () => {
 
         // if there's a $route, call addSelectedParams
         if (!_isEmpty($route.query)) {
-            const subjects = _isArray($route.query.subjects)
-                ? $route.query.subjects[0]
-                : $route.query.subjects;
+            // wipe everything clean to start
+            clearSelectedParams();
+            clearSearchQuery();
 
-            const subjectIds = subjects ? subjects.split(",") : [];
-            const filteredSubjects = policyDocSubjects.value.results.filter(
-                (subject) => subjectIds.includes(subject.id.toString())
-            );
-
-            filteredSubjects.forEach((subject) => {
-                addSelectedParams({
-                    type: "subjects",
-                    id: subject.id,
-                    name: getSubjectName(subject),
-                });
+            // now that everything is cleaned, iterate over new query params
+            Object.entries($route.query).forEach((param) => {
+                setSelectedParams(policyDocSubjects)(param);
             });
 
             getDocList(getRequestParams($route.query));
@@ -205,58 +236,24 @@ const getDocSubjects = async () => {
 
 watch(
     () => $route.query,
-    async (newQueryParams, oldQueryParams) => {
-        // if all params are removed, clear selectedParams and getDocList
+    async (newQueryParams) => {
+        // wipe everything clean to start
+        clearSelectedParams();
+        clearSearchQuery();
+
+        // if all params are removed, getDocList with no arguments and return
         if (_isEmpty(newQueryParams)) {
-            clearSelectedParams();
             getDocList();
             return;
         }
 
-        // if there are multiple subjects already selected and one needs to be removed
-        if (
-            newQueryParams.subjects &&
-            oldQueryParams.subjects &&
-            newQueryParams.subjects.length < oldQueryParams.subjects.length
-        ) {
-            const oldSubjectIds = oldQueryParams.subjects
-                .split(",")
-                .filter((id) => !Number.isNaN(parseInt(id, 10)));
-            const newSubjectIds = newQueryParams.subjects
-                .split(",")
-                .filter((id) => !Number.isNaN(parseInt(id, 10)));
-
-            const subjectToRemove = _difference(oldSubjectIds, newSubjectIds);
-
-            removeSelectedParams({
-                type: "subjects",
-                id: subjectToRemove[0],
-            });
-
-            const newRequestParams = getRequestParams(newQueryParams);
-            await getDocList(newRequestParams);
-
-            return;
-        }
-
-        if (newQueryParams.subjects) {
-            const subjectIds = newQueryParams.subjects
-                .split(",")
-                .filter((id) => !Number.isNaN(parseInt(id, 10)));
-            const subjects = policyDocSubjects.value.results.filter((subject) =>
-                subjectIds.includes(subject.id.toString())
-            );
-
-            subjects.forEach((subject) => {
-                addSelectedParams({
-                    type: "subjects",
-                    id: subject.id,
-                    name: getSubjectName(subject),
-                });
-            });
-        }
+        // now that everything is cleaned, iterate over new query params
+        Object.entries(newQueryParams).forEach(
+            setSelectedParams(policyDocSubjects)
+        );
 
         // parse $route.query to return `${key}=${value}` string
+        // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
         await getDocList(newRequestParams);
     }
@@ -309,6 +306,16 @@ if (_isEmpty($route.query)) {
                         </template>
                         <template #selections>
                             <PolicySelections />
+                        </template>
+                        <template #search>
+                            <SearchInput
+                                form-class="search-form"
+                                label="Search for a document"
+                                page="policy-repository"
+                                :search-query="searchQuery"
+                                @execute-search="executeSearch"
+                                @clear-form="clearSearchInput"
+                            />
                         </template>
                         <template #filters>
                             <SubjectSelector

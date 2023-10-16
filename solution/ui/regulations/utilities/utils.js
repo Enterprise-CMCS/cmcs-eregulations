@@ -24,9 +24,19 @@ const EventCodes = {
     OpenBlockingModal: "OpenBlockingModal",
 };
 
+/**
+ * Validation dictionary for query params to ensure that only valid values are
+ * passed to the API.
+ * @type {Object}
+ * @property {function} subjects - Validates that the subject is a number
+ * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
+ *
+ */
 const PARAM_VALIDATION_DICT = {
-    subjects: (subject) => !Number.isNaN(parseInt(subject, 10)),
-    q: (query) => query.length > 0,
+    subjects: (subject) =>
+        !Number.isNaN(parseInt(subject, 10)) &&
+        !Number.isNaN(Number(subject)),
+    q: (query) => query === undefined || query.length > 0,
 };
 
 /*
@@ -34,7 +44,7 @@ const PARAM_VALIDATION_DICT = {
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
  * @example
  * const query = {
- *    subjects: "1,2,3",
+ *    subjects: ["1", "2", "3"],
  *    q: "test",
  * }
  * const queryString = getRequestParams(query);
@@ -44,13 +54,12 @@ const getRequestParams = (query) => {
     const requestParams = Object.entries(query)
         .filter(([key, value]) => PARAM_VALIDATION_DICT[key])
         .map(([key, value]) => {
-            const dedupedVal = _isArray(value) ? value[0] : value;
+            const valueArray = _isArray(value) ? value : [value];
+            const filteredValues = valueArray.filter((value) =>
+                PARAM_VALIDATION_DICT[key](value)
+            );
 
-            const valueArray = dedupedVal
-                .split(",")
-                .filter((v) => PARAM_VALIDATION_DICT[key](v));
-
-            return valueArray.map((v) => `${key}=${v}`).join("&");
+            return filteredValues.map((v) => `${key}=${v}`).join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))
         .join("&");
