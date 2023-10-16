@@ -1,5 +1,3 @@
-import os
-
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
@@ -56,16 +54,15 @@ def loadSeedData():
     ]
     # The vector column for the search index has issues with using seed data.  As in it takes forever.
     # We remove the column first, then we add it back after fixtures are done.
-    db_name = os.environ.get('STAGE', '')
 
-    cursor = connections[db_name].cursor()
+    cursor = connections['default'].cursor()
     cursor.execute('''ALTER TABLE content_search_contentindex DROP COLUMN "vector_column";''')
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
-    cursor = connections[db_name].cursor()
+    cursor = connections['default'].cursor()
     cursor.execute('''
               ALTER TABLE content_search_contentindex ADD COLUMN vector_column tsvector GENERATED ALWAYS AS (
                 setweight(to_tsvector('english', coalesce(doc_name_string, '')), 'A') ||
