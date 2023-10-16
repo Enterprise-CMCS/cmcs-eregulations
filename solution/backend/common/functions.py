@@ -1,3 +1,4 @@
+import time
 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
@@ -54,7 +55,9 @@ def loadSeedData():
     ]
 
     for fixture in reversed(fixtures):
+        time.sleep(10)
         fixture[1].objects.all().delete()
 
     for fixture in fixtures:
+        time.sleep(10)
         call_command("loaddata", fixture[0])
