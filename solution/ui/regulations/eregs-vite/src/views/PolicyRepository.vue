@@ -188,11 +188,13 @@ const setSelectedParams = (subjectsListRef) => (param) => {
             (subjectObj) => paramId === subjectObj.id.toString()
         )[0];
 
-        addSelectedParams({
-            type: paramType,
-            id: paramId,
-            name: getSubjectName(subject),
-        });
+        if (subject) {
+            addSelectedParams({
+                type: paramType,
+                id: paramId,
+                name: getSubjectName(subject),
+            });
+        }
     });
 };
 
