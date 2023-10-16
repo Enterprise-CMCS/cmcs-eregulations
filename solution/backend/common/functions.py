@@ -1,5 +1,3 @@
-import time
-
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
@@ -71,7 +69,6 @@ def loadSeedData():
     cursor.execute(remove_vector)
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
-
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
