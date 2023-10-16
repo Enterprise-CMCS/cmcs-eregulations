@@ -28,17 +28,6 @@ from resources.models import (
 
 
 def loadSeedData():
-    add_vector = '''
-              ALTER TABLE content_search_contentindex ADD COLUMN vector_column tsvector GENERATED ALWAYS AS (
-                setweight(to_tsvector('english', coalesce(doc_name_string, '')), 'A') ||
-                setweight(to_tsvector('english', coalesce(summary_string,'')), 'A') ||
-                setweight(to_tsvector('english', coalesce(file_name_string,'')), 'C') ||
-                setweight(to_tsvector('english', coalesce(date_string,'')), 'C') ||
-                setweight(to_tsvector('english', coalesce(content,'')), 'D')
-              ) STORED;
-              CREATE INDEX content_search_index_vec ON content_search_contentindex USING GIN (vector_column);
-            '''
-    remove_vector = '''ALTER TABLE content_search_contentindex DROP COLUMN "vector_column";'''
     fixtures = [
         ("regulations.siteconfiguration.json", SiteConfiguration),
         ("resources.abstractcategory.json", AbstractCategory),
@@ -66,11 +55,20 @@ def loadSeedData():
     # The vector column for the search index has issues with using seed data.  As in it takes forever.
     # We remove the column first, then we add it back after fixtures are done.
     cursor = connection.cursor()
-    cursor.execute(remove_vector)
+    cursor.execute('''ALTER TABLE content_search_contentindex DROP COLUMN "vector_column";''')
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
     cursor = connection.cursor()
-    cursor.execute(add_vector)
+    cursor.execute('''
+              ALTER TABLE content_search_contentindex ADD COLUMN vector_column tsvector GENERATED ALWAYS AS (
+                setweight(to_tsvector('english', coalesce(doc_name_string, '')), 'A') ||
+                setweight(to_tsvector('english', coalesce(summary_string,'')), 'A') ||
+                setweight(to_tsvector('english', coalesce(file_name_string,'')), 'C') ||
+                setweight(to_tsvector('english', coalesce(date_string,'')), 'C') ||
+                setweight(to_tsvector('english', coalesce(content,'')), 'D')
+              ) STORED;
+              CREATE INDEX content_search_index_vec ON content_search_contentindex USING GIN (vector_column);
+            ''')
