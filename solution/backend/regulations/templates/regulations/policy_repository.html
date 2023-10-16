@@ -23,7 +23,7 @@
     id="vite-app"
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
-    data-custom-url="{% get_domain request CUSTOM_URL %}"
+    data-custom-url="{% CUSTOM_URL %}"
     data-home-url="{% url 'homepage' %}"
     data-resources-url="{% url 'resources' %}"
     data-search-url="{% url 'search' %}"
