@@ -5,24 +5,20 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
-from common.mixins import OptionalPaginationMixin
+from common.mixins import PAGINATION_PARAMS, ViewSetPagination
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .models import ContentIndex
-from .serializers import ContentSearchSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer
 
 
-@extend_schema(
-    description="Search the regulation text. This endpoint is incomplete and may change. Results are paginated by default.",
-    parameters=[OpenApiQueryParameter("q", "The word or phrase to search for.", str, True)] + OptionalPaginationMixin.PARAMETERS,
-)
-class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
+class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentSearchSerializer
     model = ContentIndex
+    pagination_class = ViewSetPagination
     location_filter_prefix = "locations__"
-
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[
@@ -39,12 +35,12 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
-                                          "Search for tsext within file metadata. Searches document name, file name, "
+                                          "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
                                           "all. Use \"&resource-type=external\"", str, ''),
-                    ] + LocationExplorerViewSetMixin.PARAMETERS
+                    ] + LocationExplorerViewSetMixin.PARAMETERS + PAGINATION_PARAMS
     )
     def list(self, request):
         locations = self.request.GET.getlist("locations")
@@ -53,6 +49,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
         category = self.request.GET.getlist("category")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
+        paginate = self.request.GET.get("paginate", True)
         query = self.model.objects.all()
         q_obj = self.get_location_filter(locations)
         if q_obj:
@@ -81,6 +78,11 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSe
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
+        if paginate != 'false':
+            query = self.paginate_queryset(query)
         context = self.get_serializer_context()
-        serializer = ContentSearchSerializer(query, many=True, context=context)
+        if search_query:
+            serializer = ContentSearchSerializer(query, many=True, context=context)
+        else:
+            serializer = ContentListSerializer(query, many=True, context=context)
         return Response(serializer.data)
