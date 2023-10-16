@@ -45,6 +45,7 @@ provider:
     OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
     DEPLOY_NUMBER: ${env:RUN_ID}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
+    TEXT_EXTRACTOR_URL: ${self:custom.text_extractor_url}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
@@ -77,6 +78,7 @@ custom:
     DB_NAME: ${self:custom.stage}
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
+    text_extractor_url: ${cf:text-extractor-${self:custom.stage}.ServiceEndpoint}/
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:

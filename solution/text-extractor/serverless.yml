@@ -28,7 +28,7 @@ functions:
     timeout: 60
     events:
       - http:
-          method: get
+          method: post
           path: /
           async: true
 
