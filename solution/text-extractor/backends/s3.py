@@ -10,12 +10,12 @@ class S3Backend(FileBackend):
 
     def __init__(self, post_params: dict):
         try:
-            self.aws_access_key_id = post_params["aws_access_key_id"]
-            self.aws_secret_access_key = post_params["aws_secret_access_key"]
-            self.aws_storage_bucket_name = post_params["aws_storage_bucket_name"]
+            self.aws_access_key_id = post_params["s3"]["aws_access_key_id"]
+            self.aws_secret_access_key = post_params["s3"]["aws_secret_access_key"]
+            self.aws_storage_bucket_name = post_params["s3"]["aws_storage_bucket_name"]
         except KeyError:
             raise BackendInitException("The S3 backend requires 'aws_access_key_id', 'aws_secret_access_key', "
-                                       "and 'aws_storage_bucket_name' in the JSON POST body.")
+                                       "and 'aws_storage_bucket_name' in the 's3' key of the JSON POST body.")
         try:
             self.client = boto3.client(
                 "s3",
@@ -24,9 +24,6 @@ class S3Backend(FileBackend):
             )
         except Exception as e:
             raise BackendInitException(f"Failed to initialize AWS client: {str(e)}")
-
-    def __del__(self):
-        self.client.destroy()
 
     def get_file(self, uri: str) -> bytes:
         try:

@@ -1,3 +1,5 @@
 requests
 boto3
 python-magic
+mock
+moto

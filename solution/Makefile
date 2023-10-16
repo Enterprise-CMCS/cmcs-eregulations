@@ -201,6 +201,9 @@ local.seed:
 text-extractor.restart:
 	docker-compose stop text-extractor; docker-compose start text-extractor
 
+text-extractor.test:
+	docker-compose exec text-extractor sh -c 'cd app; python -m unittest'
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
