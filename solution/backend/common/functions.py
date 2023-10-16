@@ -56,7 +56,7 @@ def loadSeedData():
     # We remove the column first, then we add it back after fixtures are done.
 
     cursor = connections['default'].cursor()
-    cursor.execute('''ALTER TABLE content_search_contentindex DROP COLUMN "vector_column";''')
+    cursor.execute('''ALTER TABLE content_search_contentindex DROP COLUMN vector_column;''')
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
 
