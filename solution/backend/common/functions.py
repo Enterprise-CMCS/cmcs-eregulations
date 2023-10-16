@@ -52,16 +52,16 @@ def loadSeedData():
         ("cmcs_regulations/fixtures/auth.permission.json", Permission),
         ("cmcs_regulations/fixtures/auth.group.json", Group),
     ]
-    ContentIndex.objects.all().delete()
+    # ContentIndex.objects.all().delete()
     for fixture in reversed(fixtures):
         fixture[1].objects.all().delete()
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
 
-    for sup in SupplementalContent.objects.all():
-        add_to_index(sup)
-    for fr in FederalRegisterDocument.objects.all():
-        add_to_index(fr)
-    for con in UploadedFile.objects.all():
-        add_to_index(con)
+    # for sup in SupplementalContent.objects.all():
+    #     add_to_index(sup)
+    # for fr in FederalRegisterDocument.objects.all():
+    #     add_to_index(fr)
+    # for con in UploadedFile.objects.all():
+    #     add_to_index(con)
