@@ -1,17 +1,29 @@
 from django.conf import settings
 from django.urls import reverse
 
-
 def google_analytics(request):
     return {
         "GA_ID": settings.GA_ID
     }
 
 
+def is_valid_host(host):
+    allowed_hosts = ['eregulations.cms.gov', 'static.eregulations.cms.gov']
+
+    if host in allowed_hosts:
+        return True
+
+    return False
+
+
 def custom_url(request):
     custom_url = settings.CUSTOM_URL
-    if 'eregulations.cms.gov' in request.get_host():
-        custom_url = 'https://eregulations.cms.gov/'
+    host = request.get_host()
+
+    if is_valid_host(host):
+        custom_url = f'https://{host}/'
+    else:
+        pass
 
     return {'CUSTOM_URL': custom_url}
 
