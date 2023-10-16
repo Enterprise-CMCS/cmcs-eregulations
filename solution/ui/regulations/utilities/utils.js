@@ -25,6 +25,49 @@ const EventCodes = {
 };
 
 /**
+ * Validation dictionary for query params to ensure that only valid values are
+ * passed to the API.
+ * @type {Object}
+ * @property {function} subjects - Validates that the subject is a number
+ * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
+ *
+ */
+const PARAM_VALIDATION_DICT = {
+    subjects: (subject) =>
+        !Number.isNaN(parseInt(subject, 10)) &&
+        !Number.isNaN(Number(subject)),
+    q: (query) => query === undefined || query.length > 0,
+};
+
+/*
+ * @param {Object} query - $route.query object from Vue Router
+ * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
+ * @example
+ * const query = {
+ *    subjects: ["1", "2", "3"],
+ *    q: "test",
+ * }
+ * const queryString = getRequestParams(query);
+ * console.log(queryString); // subjects=1&subjects=2&subjects=3&q=test
+ */
+const getRequestParams = (query) => {
+    const requestParams = Object.entries(query)
+        .filter(([key, value]) => PARAM_VALIDATION_DICT[key])
+        .map(([key, value]) => {
+            const valueArray = _isArray(value) ? value : [value];
+            const filteredValues = valueArray.filter((value) =>
+                PARAM_VALIDATION_DICT[key](value)
+            );
+
+            return filteredValues.map((v) => `${key}=${v}`).join("&");
+        })
+        .filter(([key, value]) => !_isEmpty(value))
+        .join("&");
+
+    return requestParams;
+};
+
+/**
  * Converts the given Map object to an array of values from the map
  */
 function mapToArray(map) {
@@ -810,12 +853,35 @@ const shapeTitlesResponse = ({ actsResults, actTypes }) => {
     return returnObj;
 };
 
+/**
+ * @param {Array.<Array<{id: string, name: string, date: string, last_updated: string, depth: number}>>} resultsArr - array of arrays of title objects
+ *
+ * @returns {Object.<string, string>} - Object with Part numbers as keys and YYYY-MM-DD datestring as values
+ */
+const createLastUpdatedDates = (resultsArr) => {
+    const combinedResults = resultsArr.flat(1).reduce(
+        (accumulator, current) => ({
+            ...accumulator,
+            [current.name]: current,
+        }),
+        {}
+    );
+
+    // remove artifact added by front end caching
+    delete combinedResults.expiration_date;
+
+    return Object.fromEntries(
+        Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])
+    );
+};
+
 export {
     addMarks,
     addQueryParams,
     capitalizeFirstLetter,
     childrenArrayToMap,
     chopRight,
+    createLastUpdatedDates,
     consolidateToMap,
     createOneIndexedArray,
     delay,
@@ -835,6 +901,7 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
+    getRequestParams,
     getQueryParam,
     getTagContent,
     highlightText,

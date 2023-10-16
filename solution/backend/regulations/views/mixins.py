@@ -23,6 +23,8 @@ class CitationContextMixin:
 class IsAuthenticatedMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(reverse('login') + '?next=%s' % request.path)
+
+            redirect_string = '?' + request.GET.urlencode() if request.GET else ''
+            return redirect(reverse('login') + '?next=%s' % request.path + redirect_string)
 
         return super().dispatch(request, *args, **kwargs)

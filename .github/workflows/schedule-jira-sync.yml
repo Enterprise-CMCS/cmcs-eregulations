@@ -36,3 +36,7 @@ jobs:
           aws-severities: CRITICAL, HIGH, MEDIUM
           #assign-jira-ticket-to: VU6Q
           #auto-close: false
+      - name: Alert Slack On Failure
+        if: failure()
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text": "Failure completing Syncing Security Hub and Jira.","blocks":[{"type": "section","text":{"type": "mrkdwn","text": "The nightly scheduled Job: https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/runs/${{ github.run_id  }} to Sync Security Hub and Jira has failed to complete successfully "}}]}' ${{ secrets.DEV_BOTS_SLACK_WEBHOOK }}

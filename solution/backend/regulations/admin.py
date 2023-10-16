@@ -70,42 +70,46 @@ def roman_to_int(roman):
     return result
 
 
-class OktaClaim:
-    def __init__(self, email, name, preferred_username, jobcodes):
-        self.email = email
-        self.name = name
-        self.preferred_username = preferred_username
-        self.jobcodes = jobcodes
-
-
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
-    def verify_claims(self, claims: OktaClaim) -> bool:
+    def verify_claims(self, claims) -> bool:
         return (
                 super().verify_claims(claims)
                 and claims.get("email_verified", False)
         )
 
-    @transaction.atomic
-    def create_user(self, claims: OktaClaim) -> User:
-        print(f"Creating user {claims.get('email')}")
-        print(f"Jobcodes: {claims.get('jobcodes')}")
-        print(f"Name: {claims.get('name')}")
-        print(f"Preferred username: {claims.get('preferred_username')}")
-        user: User = self.UserModel.objects.create_user(
-            claims.get("email"),
-            None,  # password
-            first_name=claims["given_name"],
-            last_name=claims["family_name"],
-        )
-        user.save()
+    def create_user(self, claims) -> User:
+        if claims.get("jobcodes"):
+            with transaction.atomic():
+                try:
+                    # Attempt to get the user by email
+                    user = self.UserModel.objects.get(email=claims.get("email"))
+                except User.DoesNotExist:
+                    # User does not exist, create a new one
+                    user = self.UserModel(
+                        email=claims.get("email"),
+                        username=claims.get("email")
+                    )
 
-        return user
+                # Set user fields from claims
+                return self.update_user(user, claims)
+        return None
 
     @transaction.atomic
-    def update_user(self, user: User, claims: OktaClaim) -> User:
+    def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
-        user.first_name = claims["given_name"]
-        user.last_name = claims["family_name"]
+        first_name = claims.get("firstName")
+        if first_name:
+            user.first_name = first_name
+
+        last_name = claims.get("lastName")
+        if last_name:
+            user.last_name = last_name
+
+        jobcodes = claims.get("jobcodes")
+        if jobcodes:
+            user.is_active = True
+        else:
+            user.is_active = False
         user.save()
 
         return user

@@ -4,190 +4,178 @@
 
 @import "../application_settings";
 
-.policy-repository-page {
-    #policyRepositoryApp.repository-view {
-        overflow: auto;
-        margin-bottom: 1rem;
+#policyRepositoryApp.repository-view,
+#policyRepositorySearchApp.repository-search-view {
+    overflow: auto;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    &.ds-l-container {
+        padding-top: 1.5rem;
+        margin: 0;
+        max-width: 100%;
+    }
+
+    h2 {
+        font-family: "Open Sans", Helvetica, sans-serif;
+        margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
+    }
+
+    h3 {
+        margin: 0;
+        line-height: 24px;
+    }
+
+    .sidebar__container {
+        position: relative;
         display: flex;
-        flex-direction: column;
+        border-right: none;
+        border-bottom: 2px solid $border_color;
 
-        &.ds-l-container {
-            padding-top: 1.5rem;
-            margin: 0;
-            max-width: 100%;
+        @include screen-md {
+            border-right: 2px solid $border_color;
+            border-bottom: none;
         }
 
-        h2 {
-            font-family: "Open Sans", Helvetica, sans-serif;
-            margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
-        }
-
-        h3 {
-            margin: 0;
-            line-height: 24px;
-        }
-
-        .sidebar__container {
-            position: relative;
-            display: flex;
-            border-right: none;
-            border-bottom: 2px solid $border_color;
+        .sidebar-toggle__button {
+            position: absolute;
+            top: 0;
+            right: 16px;
+            display: none; // TODO: revisit this when we have a better idea of how the sidebar will work on mobile
 
             @include screen-md {
-                border-right: 2px solid $border_color;
-                border-bottom: none;
+                display: none;
             }
+        }
 
-            .sidebar-toggle__button {
-                position: absolute;
-                top: 0;
-                right: 16px;
-                display: none; // TODO: revisit this when we have a better idea of how the sidebar will work on mobile
-
-                @include screen-md {
+        .sidebar-filters__container {
+            @include custom-max(($eds-width-md - 1) / 1px) {
+                &--hidden {
                     display: none;
                 }
             }
-
-            .sidebar-filters__container {
-                @include custom-max(($eds-width-md - 1) / 1px) {
-                    &--hidden {
-                        display: none;
-                    }
-                }
-            }
         }
+    }
 
-        .sidebar__filters {
-            flex: 1;
+    .sidebar__filters {
+        flex: 1;
 
-            .selections__container {
-                .selections__list {
-                    list-style: none;
+        .selections__container {
+            .selections__list {
+                list-style: none;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+                margin: 0 0 1rem;
+                padding-left: 0;
+
+                .selections__li {
                     display: flex;
-                    flex-wrap: wrap;
-                    gap: 4px;
-                    margin: 0 0 1rem;
-                    padding-left: 0;
-
-                    .selections__li {
-                        display: flex;
-                        align-items: center;
-                        background-color: $policy_subject_selected_chip_background;
-                        color: $policy_subject_selected_chip_text;
-                        border-radius: 4px;
-                        padding: 4px 8px;
-
-                        button {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: 16px;
-                            height: 16px;
-                            margin-left: 8px;
-                            background-color: $policy_subject_close_background;
-                            color: $policy_subject_selected_chip_background;
-                            border-radius: 4px;
-                            &:hover,
-                            &:focus,
-                            &:active {
-                                background-color: #c0c1c3;
-                            }
-
-                            i {
-                                pointer-events: none;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .subjects__list {
-                height: 300px;
-                overflow: scroll;
-                padding: 0.75rem 1rem;
-                border: 2px solid $border_color;
-                border-radius: 4px;
-
-                .subjects__li {
-                    margin-bottom: 0.75rem;
-
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
+                    align-items: center;
+                    background-color: $policy_subject_selected_chip_background;
+                    color: $policy_subject_selected_chip_text;
+                    border-radius: 4px;
+                    padding: 4px 8px;
 
                     button {
-                        text-align: left;
-                        color: #000;
-                        width: 100%;
-
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 16px;
+                        height: 16px;
+                        margin-left: 8px;
+                        background-color: $policy_subject_close_background;
+                        color: $policy_subject_selected_chip_background;
+                        border-radius: 4px;
                         &:hover,
                         &:focus,
                         &:active {
-                            @include font-bold-keep-width;
+                            background-color: #c0c1c3;
+                        }
 
-                            cursor: pointer;
+                        i {
+                            pointer-events: none;
                         }
                     }
                 }
             }
         }
 
-        .loading__span {
+        .subjects__list {
+            height: 300px;
+            overflow: scroll;
+            padding: 0.75rem 1rem;
+            border: 2px solid $border_color;
+            border-radius: 4px;
+
+            .subjects__li {
+                margin-bottom: 0.75rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                button {
+                    text-align: left;
+                    color: #000;
+                    width: 100%;
+
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        @include font-bold-keep-width;
+
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    .loading__span {
+        padding: 0 1rem;
+    }
+
+    .doc__list {
+        .search-results-count {
             padding: 0 1rem;
         }
 
-        .doc__list {
-            .search-results-count {
-                padding: 0 1rem;
+        .doc-list__document {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid $border_color;
+
+            .document__info-block {
+                margin-bottom: 0.75rem;
             }
 
-            .doc-list__document {
-                padding: 0.75rem 1rem;
-                border-bottom: 1px solid $border_color;
+            .document__link {
+                text-decoration: none;
 
-                .document__info-block {
-                    margin-bottom: 0.75rem;
+                &--view {
+                    font-size: $font-size-sm;
                 }
+            }
 
-                .document__link {
-                    text-decoration: none;
+            .document__subjects {
+                margin-top: 0.75rem;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
 
-                    &--view {
-                        font-size: $font-size-sm;
-                    }
-                }
-
-                .document__type {
-                    color: $mid_gray;
-                }
-
-                .document__filename {
-                    margin-top: 0.25rem;
-                }
-
-                .document__subjects {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 4px;
-
-                    .subject__chip {
-                        font-size: $font-size-sm;
-                        line-height: 22px;
-                        font-weight: 700;
-                        padding: 2px 4px;
-                        border-radius: 8px;
-                        background: $policy_subject_chip_background;
-                        color: $policy_subject_chip_text;
-                    }
-                }
-
-                .related-sections {
-                    @include common-context-related-sections;
-
-                    margin-bottom: 0px;
+                .subject__chip {
+                    @include common-chip-styles;
                 }
             }
         }
+    }
+}
+
+#policyRepositorySearchApp.repository-search-view {
+    .results__container {
+        margin-top: 1rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 }

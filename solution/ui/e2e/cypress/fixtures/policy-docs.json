@@ -1,0 +1,41 @@
+[
+    {
+        "document_id": "[Mock] Cypress Fixture",
+        "file_name": "ff-test-em.pdf",
+        "date": "2023-08-30",
+        "summary": "This is a test of the ABP broadcasting system",
+        "locations": [
+            {
+                "id": 1359,
+                "title": 42,
+                "part": 400,
+                "type": "section",
+                "section_id": 203,
+                "parent": 1356
+            },
+            {
+                "id": 1355,
+                "title": 42,
+                "part": 400,
+                "type": "subpart",
+                "subpart_id": "A"
+            }
+        ],
+        "document_type": {
+            "id": 4,
+            "name": "Informal Guidance",
+            "description": "Useful internal emails and one-pagers"
+        },
+        "subject": [
+            {
+                "id": 2,
+                "full_name": "Alternative Benefit Plan",
+                "short_name": null,
+                "abbreviation": "ABP"
+            }
+        ],
+        "uid": "e641d2f8-7fde-41d5-a025-8388bb51d6ae",
+        "document_id_headline": null,
+        "summary_headline": null
+    }
+]

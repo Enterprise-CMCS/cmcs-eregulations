@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov', 'eregultions.cms.gov']
 
 # Application definition
 
@@ -142,6 +142,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.google_analytics",
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
+                "cmcs_regulations.context_processors.signup_url",
                 "cmcs_regulations.context_processors.deploy_number",
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
@@ -210,6 +211,10 @@ GA_ID = os.environ.get("GA_ID")
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
 SURVEY_URL = os.environ.get(
     "SURVEY_URL",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+)
+SIGNUP_URL = os.environ.get(
+    "SIGNUP_URL",
     "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
 )
 
