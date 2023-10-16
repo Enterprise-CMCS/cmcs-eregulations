@@ -1,5 +1,7 @@
 import unittest
-from django.template import Template, Context
+
+from django.template import Context, Template
+
 
 class CustomTemplateTagUnitTest(unittest.TestCase):
     def test_get_domain_request_match(self):
