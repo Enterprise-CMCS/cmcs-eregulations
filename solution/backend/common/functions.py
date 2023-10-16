@@ -38,7 +38,7 @@ def loadSeedData():
               ) STORED;
               CREATE INDEX content_search_index_vec ON content_search_contentindex USING GIN (vector_column);
             '''
-    remove_vector = '''ALTER TABLE content_search_contentindex DROP COLUMN vector_column;'''
+    remove_vector = '''ALTER TABLE content_search_contentindex DROP COLUMN "vector_column";'''
     fixtures = [
         ("regulations.siteconfiguration.json", SiteConfiguration),
         ("resources.abstractcategory.json", AbstractCategory),
