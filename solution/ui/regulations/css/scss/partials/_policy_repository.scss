@@ -183,6 +183,17 @@
                         }
                     }
                 }
+
+                .subj-toc-li__count {
+                    margin-top: 4px;
+                    font-size: 0.875rem;
+                    line-height: 1.25rem;
+                    color: $secondary_text_color;
+
+                    .subj-doc__count {
+                        font-weight: 700;
+                    }
+                }
             }
         }
     }
