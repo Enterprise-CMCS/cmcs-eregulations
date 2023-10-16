@@ -1,7 +1,7 @@
-import os
-from django.test import TestCase
-from django.http import HttpRequest
 from django.conf import settings
+from django.http import HttpRequest
+from django.test import TestCase
+
 from cmcs_regulations.context_processors import custom_url
 
 
