@@ -86,12 +86,12 @@ describe("Utilities.js", () => {
 
         expect(getRequestParams(query2)).toBe("subjects=1&subjects=2&q=test");
 
-        //const query3 = {
-            //subjects: ["1,2", "3"],
-            //q: "test",
-        //};
+        const query3 = {
+            subjects: ["1,2", "3"],
+            q: "test",
+        };
 
-        //expect(getRequestParams(query3)).toBe("subjects=1&subjects=2&q=test");
+        expect(getRequestParams(query3)).toBe("subjects=3&q=test");
 
         const query4 = {
             subjects: "erq",
