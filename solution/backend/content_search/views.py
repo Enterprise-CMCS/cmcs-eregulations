@@ -19,6 +19,7 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
     model = ContentIndex
     pagination_class = ViewSetPagination
     location_filter_prefix = "locations__"
+
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[

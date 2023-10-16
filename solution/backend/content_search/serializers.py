@@ -34,6 +34,7 @@ class ContentSearchSerializer(serializers.Serializer, ):
             return AbstractCategoryPolymorphicSerializer(obj.category).data
         return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj)
 
+
 class ContentListSerializer(serializers.Serializer, ):
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
