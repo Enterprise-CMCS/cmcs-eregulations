@@ -15,6 +15,7 @@ def custom_url(request):
 
     return {'CUSTOM_URL': custom_url}
 
+
 def survey_url(request):
     return {
         "SURVEY_URL": settings.SURVEY_URL
