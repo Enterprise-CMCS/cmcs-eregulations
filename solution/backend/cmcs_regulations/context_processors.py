@@ -8,23 +8,12 @@ def google_analytics(request):
     }
 
 
-def is_valid_host(host):
-    allowed_hosts = ['eregulations.cms.gov', 'static.eregulations.cms.gov']
-
-    if host in allowed_hosts:
-        return True
-
-    return False
-
-
 def custom_url(request):
     custom_url = settings.CUSTOM_URL
     host = request.get_host()
 
-    if is_valid_host(host):
-        custom_url = f'https://{host}/'
-    else:
-        pass
+    if host == 'eregulations.cms.gov':
+        custom_url = host
 
     return {'CUSTOM_URL': custom_url}
 

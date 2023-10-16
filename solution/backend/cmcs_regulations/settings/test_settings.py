@@ -11,6 +11,7 @@ AWS_S3_CUSTOM_DOMAIN = (
 AWS_QUERYSTRING_AUTH = False
 MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov', 'eregulations.cms.gov']
 
 DATABASES = {
     'default': {
