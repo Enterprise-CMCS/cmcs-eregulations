@@ -198,8 +198,17 @@ python.migrate:
 local.seed:
 	docker-compose exec regulations python manage.py populateseeddata
 
+text-extractor:
+	docker-compose up -d --build text-extractor
+
+text-extractor.stop:
+	docker-compose stop text-extractor
+
+text-extractor.start:
+	docker-compose start text-extractor
+
 text-extractor.restart:
-	docker-compose stop text-extractor; docker-compose start text-extractor
+	make text-extractor.stop; make text-extractor.start
 
 text-extractor.test:
 	docker-compose exec text-extractor sh -c 'cd app; python -m unittest'
