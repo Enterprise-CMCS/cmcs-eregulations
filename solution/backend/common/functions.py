@@ -3,6 +3,7 @@ import time
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
+from django.db import connection
 
 from content_search.models import ContentIndex
 from file_manager.models import DocumentType, Subject
@@ -29,6 +30,17 @@ from resources.models import (
 
 
 def loadSeedData():
+    add_vector = '''
+              ALTER TABLE content_search_contentindex ADD COLUMN vector_column tsvector GENERATED ALWAYS AS (
+                setweight(to_tsvector('english', coalesce(doc_name_string, '')), 'A') ||
+                setweight(to_tsvector('english', coalesce(summary_string,'')), 'A') ||
+                setweight(to_tsvector('english', coalesce(file_name_string,'')), 'C') ||
+                setweight(to_tsvector('english', coalesce(date_string,'')), 'C') ||
+                setweight(to_tsvector('english', coalesce(content,'')), 'D')
+              ) STORED;
+              CREATE INDEX content_search_index_vec ON content_search_contentindex USING GIN (vector_column);
+            '''
+    remove_vector = '''ALTER TABLE content_search_contentindex DROP COLUMN vector_column;'''
     fixtures = [
         ("regulations.siteconfiguration.json", SiteConfiguration),
         ("resources.abstractcategory.json", AbstractCategory),
@@ -53,11 +65,15 @@ def loadSeedData():
         ("cmcs_regulations/fixtures/auth.permission.json", Permission),
         ("cmcs_regulations/fixtures/auth.group.json", Group),
     ]
-
+    # The vector column for the search index has issues with using seed data.  As in it takes forever.
+    # We remove the column first, then we add it back after fixtures are done.
+    cursor = connection.cursor()
+    cursor.execute(remove_vector)
     for fixture in reversed(fixtures):
-        time.sleep(10)
         fixture[1].objects.all().delete()
 
+
     for fixture in fixtures:
-        time.sleep(10)
         call_command("loaddata", fixture[0])
+    cursor = connection.cursor()
+    cursor.execute(add_vector)
