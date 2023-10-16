@@ -207,5 +207,6 @@ local.dump:
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
 	$(foreach object, $(file_manager_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
 	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \
+	docker-compose exec regulations python manage.py dumpdata content_search.contentindex --indent 4 > ./backend/content_search/fixtures/content_search.contentindex.json
 	docker-compose exec regulations python manage.py dumpdata contenttypes.contenttype --indent 4 > ./backend/cmcs_regulations/fixtures/contenttypes.contenttype.json
 	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json 
