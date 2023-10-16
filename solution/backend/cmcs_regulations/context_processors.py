@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.urls import reverse
 
+
 def google_analytics(request):
     return {
         "GA_ID": settings.GA_ID
