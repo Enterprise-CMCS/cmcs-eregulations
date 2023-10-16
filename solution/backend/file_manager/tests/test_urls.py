@@ -13,6 +13,7 @@ auth_headers = {
 
 skip_local_env = settings.CUSTOM_URL is None
 
+
 # this test does not work locally. Will be addressed in EREGCSC-2304
 @unittest.skipIf(skip_local_env, "Skipping this test in local environment")
 class FileUploadTestCase(TestCase):
