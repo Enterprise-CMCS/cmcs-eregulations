@@ -5,7 +5,6 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from content_search.functions import add_to_index
 from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
 from resources.models import FederalRegisterDocument, Section, SupplementalContent
@@ -60,12 +59,7 @@ class SearchTest(TestCase):
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.save()
-        for sup in SupplementalContent.objects.all():
-            add_to_index(sup)
-        for fr in FederalRegisterDocument.objects.all():
-            add_to_index(fr)
-        for file in UploadedFile.objects.all():
-            add_to_index(file)
+
 
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search/?resource-type=external")
