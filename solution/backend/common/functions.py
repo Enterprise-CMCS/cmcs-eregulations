@@ -2,9 +2,8 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 
-from content_search.functions import add_to_index
 from content_search.models import ContentIndex
-from file_manager.models import DocumentType, Subject, UploadedFile
+from file_manager.models import DocumentType, Subject
 from regcore.search.models import Synonym
 from regulations.models import (
     RegulationLinkConfiguration,
@@ -66,11 +65,3 @@ def loadSeedData():
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
 
-    # for sup in SupplementalContent.objects.all():
-    #     add_to_index(sup)
-
-    # for fr_doc in FederalRegisterDocument.objects.all():
-    #     add_to_index(fr_doc)
-
-    # for up_file in UploadedFile.objects.all():
-    #     add_to_index(up_file)
