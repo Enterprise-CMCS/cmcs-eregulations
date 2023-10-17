@@ -1,4 +1,6 @@
+import unittest
 
+from django.conf import settings  # Import the Django settings module
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -9,7 +11,11 @@ auth_headers = {
     'Authorization': 'Api-Key MY_KEY',
 }
 
+skip_local_env = settings.CUSTOM_URL is None
 
+
+# this test does not work locally. Will be addressed in EREGCSC-2304
+@unittest.skipIf(skip_local_env, "Skipping this test in local environment")
 class FileUploadTestCase(TestCase):
     def login(self) -> None:
         self.client = APIClient()
