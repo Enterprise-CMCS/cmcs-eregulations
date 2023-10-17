@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 from content_search.functions import index_group
 from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
-from resources.models import FederalRegisterDocument, Section, SupplementalContent
+from resources.models import FederalRegisterDocument, Section, SupplementalContent, Category
 
 
 class SearchTest(TestCase):
@@ -32,7 +32,7 @@ class SearchTest(TestCase):
         self.internal_docs = []
         self.location1 = Section.objects.create(title="42", part="433", section_id="1")
         self.location2 = Section.objects.create(title="33", part="31", section_id="22")
-
+        category = Category.objects.create(name='test category')
         self.subject1 = Subject.objects.create()
         self.subject2 = Subject.objects.create()
 
@@ -42,6 +42,7 @@ class SearchTest(TestCase):
                 if i == 0:  # only assign location and subject on item 0
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
+                    file.category=category
                     file.save()
 
         with open("content_search/tests/fixtures/sample_fr_doc.json", "r") as f:
@@ -50,6 +51,7 @@ class SearchTest(TestCase):
                 if i == 0:  # only assign location and subject on item 0
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
+                    file.category = category
                     file.save()
 
         with open("content_search/tests/fixtures/sample_files.json", "r") as f:
@@ -81,9 +83,10 @@ class SearchTest(TestCase):
         self.assertEqual(len(response.data), 6)
         response = self.client.get("/v3/content-search/?resource-type=internal")
         self.assertEqual(len(response.data), 3)
-        response = self.client.get("/v3/content-search/?resource-type=all")
+        response = self.client.get("/v3/content-search/?resource-type=all&locations_details=true&category_details=true")
         self.assertEqual(len(response.data), 9)
-
+        response = self.client.get("/v3/content-search/?resource-type=all&locations_details=false&category_details=false")
+        self.assertEqual(len(response.data), 9)
     def test_single_response_queries(self):
         self.login()
         response = self.client.get(r"/v3/content-search/?q=fire&resource-type=external")

@@ -175,7 +175,7 @@ python.unittest:
 ##uncomment the -vvv if there are errors running pytest. 
 test.pytest:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d
-	docker-compose exec regulations pytest -vvv
+	docker-compose exec regulations pytest -v
 	docker-compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 test.pytest.cov:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d

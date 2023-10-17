@@ -1,13 +1,11 @@
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from common.fields import HeadlineField
+from common.serializers import DetailsSerializer
 from file_manager.serializers import DocumentTypeSerializer, SubjectSerializer
-from resources.serializers.categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
-from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 
 
-class ContentSearchSerializer(serializers.Serializer, ):
+class ContentSearchSerializer(DetailsSerializer, serializers.Serializer):
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
     date_string = serializers.DateField()
@@ -22,20 +20,8 @@ class ContentSearchSerializer(serializers.Serializer, ):
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
 
-    @extend_schema_field(MetaLocationSerializer.many(True))
-    def get_locations(self, obj):
-        if self.context['request'].GET.get("location_details") == 'true':
-            return AbstractLocationPolymorphicSerializer(obj.locations.all(), many=True).data
-        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
-    @extend_schema_field(MetaCategorySerializer.many(False))
-    def get_category(self, obj):
-        if self.context['request'].GET.get("category_details") == 'true':
-            return AbstractCategoryPolymorphicSerializer(obj.category).data
-        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj)
-
-
-class ContentListSerializer(serializers.Serializer, ):
+class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
     date_string = serializers.DateField()
@@ -47,15 +33,3 @@ class ContentListSerializer(serializers.Serializer, ):
     url = serializers.CharField()
     content_type = serializers.CharField()
     content_id = serializers.IntegerField()
-
-    @extend_schema_field(MetaLocationSerializer.many(True))
-    def get_locations(self, obj):
-        if self.context['request'].GET.get("location_details") == 'true':
-            return AbstractLocationPolymorphicSerializer(obj.locations.all(), many=True).data
-        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
-
-    @extend_schema_field(MetaCategorySerializer.many(False))
-    def get_category(self, obj):
-        if self.context['request'].GET.get("category_details") == 'true':
-            return AbstractCategoryPolymorphicSerializer(obj.category).data
-        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj)
