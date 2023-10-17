@@ -21,6 +21,7 @@ const props = defineProps({
 });
 
 const apiUrl = inject("apiUrl");
+const base = inject("base");
 
 const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
 </script>
@@ -74,6 +75,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             </template>
             <template #sections>
                 <RelatedSections
+                    :base="base"
                     :item="doc"
                     :parts-last-updated="partsLastUpdated"
                     label="Related Regulation Citation"

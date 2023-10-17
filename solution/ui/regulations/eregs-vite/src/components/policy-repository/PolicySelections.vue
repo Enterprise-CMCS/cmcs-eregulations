@@ -7,34 +7,33 @@ import _isArray from "lodash/isArray";
 const $router = useRouter();
 const $route = useRoute();
 
-const FilterTypesEnum = {
-    subjects: "Subject",
-};
-
 const selectedParams = inject("selectedParams");
+const FilterTypesDict = inject("FilterTypesDict");
 
 const removeClick = (event) => {
-    const subjects = _isArray($route.query.subjects)
-        ? $route.query.subjects[0]
-        : $route.query.subjects;
+    const { type, id } = event.target.dataset;
+    const routeClone = { ...$route.query };
+    const paramsToUpdate = routeClone[type];
 
-    const subjectIds = subjects
-        ? subjects.split(",")
-        : [];
+    const paramsArray = _isArray(paramsToUpdate)
+        ? paramsToUpdate
+        : [paramsToUpdate];
 
-    const filteredSubjects = subjectIds.filter(
-        (subject) => subject !== event.target.dataset.id
-    );
+    const filteredParamsArray = paramsArray.filter((paramId) => paramId !== id);
 
-    const query = filteredSubjects.length
-        ? {
-              subjects: filteredSubjects.join(","),
-          }
-        : {};
+    const paramsToPush =
+        filteredParamsArray.length > 0
+            ? { [type]: filteredParamsArray }
+            : {};
+
+    delete routeClone[type];
 
     $router.push({
         name: "policy-repository",
-        query,
+        query: {
+            ...routeClone,
+            ...paramsToPush,
+        },
     });
 };
 
@@ -45,8 +44,9 @@ watch(
     async () => {
         selections.value = selectedParams.paramsArray
             .map((param) => ({
-                label: FilterTypesEnum[param.type],
+                label: FilterTypesDict[param.type],
                 id: param.id,
+                type: param.type,
                 name: param.name,
             }))
             .sort((a, b) => {
@@ -71,8 +71,12 @@ watch(
             >
                 {{ selection.label }}: {{ selection.name }}
                 <button
+                    :aria-label="`Remove ${selection.name} results`"
                     :data-id="selection.id"
-                    :data-testid="`remove-subject-${selection.id}`"
+                    :data-testid="`remove-${selection.label.toLowerCase()}-${
+                        selection.id
+                    }`"
+                    :data-type="selection.type"
                     @click="removeClick"
                 >
                     <i class="mdi mdi-close"></i>

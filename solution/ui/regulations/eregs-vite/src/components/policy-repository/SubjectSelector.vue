@@ -14,18 +14,16 @@ const $router = useRouter();
 const $route = useRoute();
 
 const subjectClick = (event) => {
-    const subjects = $route.query.subjects
-        ? $route.query.subjects.split(",")
-        : [];
+    const subjects = $route.query.subjects ?? [];
+    const subjectToAdd = event.target.dataset.id;
 
-    if (subjects.includes(event.target.dataset.id)) return;
-
-    subjects.push(event.target.dataset.id);
+    if (subjects.includes(subjectToAdd)) return;
 
     $router.push({
         name: "policy-repository",
         query: {
-            subjects: subjects.join(","),
+            ...$route.query,
+            subjects: [...subjects, event.target.dataset.id],
         },
     });
 };
