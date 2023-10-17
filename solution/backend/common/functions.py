@@ -1,7 +1,6 @@
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
-from django.db import connections
 
 from content_search.models import ContentIndex
 from file_manager.models import DocumentType, Subject
