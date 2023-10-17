@@ -116,6 +116,7 @@ class ApiProxy:
 def exit_now(signum, frame):
     sys.exit(0)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="lambda-proxy",
