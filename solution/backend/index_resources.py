@@ -3,18 +3,16 @@ import os
 
 
 def handler(event, context):
+    '''
+    Indexes resources for environments
+    '''
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     import django
     django.setup()
-    from content_search.functions import add_to_index
+    from content_search.functions import index_group
     from file_manager.models import UploadedFile
     from resources.models import FederalRegisterDocument, SupplementalContent
 
-    for sup in SupplementalContent.objects.all():
-        add_to_index(sup)
-
-    for fr_doc in FederalRegisterDocument.objects.all():
-        add_to_index(fr_doc)
-
-    for up_file in UploadedFile.objects.all():
-        add_to_index(up_file)
+    index_group(SupplementalContent.objects.all())
+    index_group(FederalRegisterDocument.objects.all())
+    index_group(UploadedFile.objects.all())
