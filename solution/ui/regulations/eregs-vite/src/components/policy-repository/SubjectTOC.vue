@@ -33,15 +33,16 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                         }"
                     >
                         <div
-                            v-if="subject.abbreviation"
+                            v-if="subject.abbreviation || subject.short_name"
                             class="subj-toc-li__div subj-toc-li__div--bold subj-toc-li__abbr"
                         >
-                            {{ subject.abbreviation }}
+                            {{ subject.abbreviation || subject.short_name }}
                         </div>
                         <div
                             class="subj-toc-li__div subjects-toc-li__full-name"
                             :class="
                                 !subject.abbreviation &&
+                                !subject.short_name &&
                                 'subj-toc-li__div--bold'
                             "
                         >
@@ -50,7 +51,8 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                     </router-link>
                     <div class="subj-toc-li__count">
                         <span class="subj-doc__count">0</span> formal and
-                        <span class="subj-doc__count">0</span> informal documents
+                        <span class="subj-doc__count">0</span> informal
+                        documents
                     </div>
                 </li>
             </ul>
