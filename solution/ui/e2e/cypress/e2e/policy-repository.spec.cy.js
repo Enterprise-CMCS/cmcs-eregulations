@@ -18,6 +18,10 @@ const _beforeEach = () => {
     cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
         fixture: "parts-45.json",
     }).as("parts45");
+
+    cy.intercept("**/v3/file-manager/subjects", {
+        fixture: "subjects.json",
+    }).as("subjects");
 };
 
 describe("Policy Repository", () => {

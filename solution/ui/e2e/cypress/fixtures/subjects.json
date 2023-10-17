@@ -1,0 +1,470 @@
+[
+    {
+        "id": 1,
+        "full_name": "21st Century Cures Act",
+        "short_name": null,
+        "abbreviation": "Cures Act"
+    },
+    {
+        "id": 2,
+        "full_name": "Alternative Benefit Plan",
+        "short_name": null,
+        "abbreviation": "ABP"
+    },
+    {
+        "id": 3,
+        "full_name": "Access to Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 4,
+        "full_name": "Adult Day Health",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 5,
+        "full_name": "Ambulatory Prenatal Care",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 6,
+        "full_name": "Asthma",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 7,
+        "full_name": "Autism Spectrum Disorder",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 8,
+        "full_name": "Blood Products",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 9,
+        "full_name": "Care Coordination",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 10,
+        "full_name": "Certified Community Behavioral Health Clinics",
+        "short_name": null,
+        "abbreviation": "CCBHCs"
+    },
+    {
+        "id": 11,
+        "full_name": "Certified Nurse Practitioner",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 12,
+        "full_name": "Community First Choice",
+        "short_name": null,
+        "abbreviation": "CFC"
+    },
+    {
+        "id": 13,
+        "full_name": "Clinical Trials and Experimental Policy",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 14,
+        "full_name": "Clinic Services",
+        "short_name": "Clinics",
+        "abbreviation": null
+    },
+    {
+        "id": 15,
+        "full_name": "\"Case Management and Targeted Case Management\"",
+        "short_name": null,
+        "abbreviation": "CM TCM"
+    },
+    {
+        "id": 16,
+        "full_name": "Coding",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 17,
+        "full_name": "Collaborative Care Model",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 18,
+        "full_name": "Collateral Contacts",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 19,
+        "full_name": "Community Health Worker",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 20,
+        "full_name": "Comparability",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 21,
+        "full_name": "Consultations",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 22,
+        "full_name": "Contingency Management",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 23,
+        "full_name": "Comprehensive Outpatient Rehabilitation Facilities",
+        "short_name": null,
+        "abbreviation": "CORF"
+    },
+    {
+        "id": 24,
+        "full_name": "Critical Access Hospital",
+        "short_name": null,
+        "abbreviation": "CAH"
+    },
+    {
+        "id": 25,
+        "full_name": "Dental Services",
+        "short_name": "Dental",
+        "abbreviation": null
+    },
+    {
+        "id": 26,
+        "full_name": "Diabetes Prevention",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 27,
+        "full_name": "Diagnostic Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 28,
+        "full_name": "Digital Therapeutics",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 29,
+        "full_name": "Disease Management",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 30,
+        "full_name": "Donor Milk",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 31,
+        "full_name": "Doula Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 32,
+        "full_name": "Electronic Monitoring",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 33,
+        "full_name": "Eligibility",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 34,
+        "full_name": "Emergency Hospital Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 35,
+        "full_name": "Emergency Services for Aliens",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 36,
+        "full_name": "Early and Periodic Screening, Diagnostic, and Treatment",
+        "short_name": null,
+        "abbreviation": "EPSDT"
+    },
+    {
+        "id": 37,
+        "full_name": "Excluded Practitioners",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 38,
+        "full_name": "Expedited Partner Therapy",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 39,
+        "full_name": "Family Planning Services",
+        "short_name": "Family Planning",
+        "abbreviation": null
+    },
+    {
+        "id": 40,
+        "full_name": "Federally Qualified Health Centers",
+        "short_name": null,
+        "abbreviation": "FQHC"
+    },
+    {
+        "id": 41,
+        "full_name": "Fetal Alcohol Syndrome",
+        "short_name": null,
+        "abbreviation": "FAS"
+    },
+    {
+        "id": 42,
+        "full_name": "Foster Care",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 43,
+        "full_name": "Free Care",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 44,
+        "full_name": "Free Choice of Providers",
+        "short_name": "Freedom of Choice",
+        "abbreviation": null
+    },
+    {
+        "id": 45,
+        "full_name": "Freestanding Birth Centers",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 46,
+        "full_name": "Gender Affirming Care",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 47,
+        "full_name": "Habilitative Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 48,
+        "full_name": "Healthcare Common Procedure Coding System",
+        "short_name": null,
+        "abbreviation": "HCPCS"
+    },
+    {
+        "id": 49,
+        "full_name": "Health Homes for Enrollees with Chronic Conditions",
+        "short_name": "Health Homes",
+        "abbreviation": null
+    },
+    {
+        "id": 50,
+        "full_name": "Home Visiting Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 51,
+        "full_name": "Homelessness Housing",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 52,
+        "full_name": "Hospice",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 53,
+        "full_name": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
+        "short_name": null,
+        "abbreviation": "ICF IID"
+    },
+    {
+        "id": 54,
+        "full_name": "Institutions for Mental Disease",
+        "short_name": null,
+        "abbreviation": "IMD"
+    },
+    {
+        "id": 55,
+        "full_name": "Inmates",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 56,
+        "full_name": "Inpatient Hospital Services",
+        "short_name": "Inpatient Hospital",
+        "abbreviation": null
+    },
+    {
+        "id": 57,
+        "full_name": "Integrated Care Model",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 58,
+        "full_name": "Interpreter-Translation Services",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 59,
+        "full_name": "Laboratory and X-ray Services",
+        "short_name": "Lab & X-Ray",
+        "abbreviation": null
+    },
+    {
+        "id": 60,
+        "full_name": "Lactation Consultant",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 61,
+        "full_name": "Long-Term Services and Supports",
+        "short_name": null,
+        "abbreviation": "LTSS"
+    },
+    {
+        "id": 62,
+        "full_name": "MACPro User Group",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 63,
+        "full_name": "Managed Care",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 64,
+        "full_name": "Maternal Depression",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 65,
+        "full_name": "Medical Marijuana",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 66,
+        "full_name": "Medical Necessity",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 67,
+        "full_name": "Medication Assisted Treatment",
+        "short_name": null,
+        "abbreviation": "MAT"
+    },
+    {
+        "id": 68,
+        "full_name": "Minimum Essential Coverage",
+        "short_name": null,
+        "abbreviation": "MEC"
+    },
+    {
+        "id": 69,
+        "full_name": "Missed Appointments",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 70,
+        "full_name": "Mobile Crisis",
+        "short_name": "Mobile Crisis Services",
+        "abbreviation": null
+    },
+    {
+        "id": 71,
+        "full_name": "Neonatal Abstinence Syndrome",
+        "short_name": null,
+        "abbreviation": "NAS"
+    },
+    {
+        "id": 72,
+        "full_name": "National Correct Coding Initiative",
+        "short_name": null,
+        "abbreviation": "NCCI"
+    },
+    {
+        "id": 73,
+        "full_name": "Non-Discrimination",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 74,
+        "full_name": "Non-Opioid Pain Management",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 75,
+        "full_name": "Notices",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 76,
+        "full_name": "Nurse Advice Lines",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 77,
+        "full_name": "Nutrition",
+        "short_name": null,
+        "abbreviation": null
+    },
+    {
+        "id": 78,
+        "full_name": "Omnibus Budget Reconciliation Act of 1989",
+        "short_name": "OBRA 89",
+        "abbreviation": null
+    }
+]
