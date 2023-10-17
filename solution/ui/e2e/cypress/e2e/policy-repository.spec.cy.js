@@ -113,6 +113,14 @@ describe("Policy Repository", () => {
         });
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.get(".related-sections")
+            .first()
+            .find(".related-section-link")
+            .first()
+            .find("a")
+            .should("have.attr", "href")
+            .and("not.include", "undefined")
+            .and("include", "/42/430/5#430-5");
         cy.checkAccessibility();
     });
 
