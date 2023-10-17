@@ -6,19 +6,20 @@
         "summary": "This is a test of the ABP broadcasting system",
         "locations": [
             {
-                "id": 1359,
+                "id": 959,
                 "title": 42,
-                "part": 400,
+                "part": 430,
                 "type": "section",
-                "section_id": 203,
-                "parent": 1356
+                "section_id": 5,
+                "parent": 955
             },
             {
-                "id": 1355,
+                "id": 850,
                 "title": 42,
-                "part": 400,
-                "type": "subpart",
-                "subpart_id": "A"
+                "part": 430,
+                "type": "section",
+                "section_id": 10,
+                "parent": 960
             }
         ],
         "document_type": {
