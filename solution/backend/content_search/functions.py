@@ -72,8 +72,8 @@ def update_index(content_index, content):
 
 def add_to_index(content):
     '''
-    add_to_index is the main function for adding anything to the index. Identifies if it exist, if not create
-    if it does update the old one
+    add_to_index is the main function for adding anything to the index. Identifies if it exist, if not create.
+    If it does update the old one.
 
     param1 content: The content that was updated.
     '''
