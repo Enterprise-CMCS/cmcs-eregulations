@@ -49,7 +49,7 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                             {{ subject.full_name }}
                         </div>
                     </router-link>
-                    <div class="subj-toc-li__count">
+                    <div class="subj-toc-li__count" style="display: none">
                         <span class="subj-doc__count">0</span> formal and
                         <span class="subj-doc__count">0</span> informal
                         documents
