@@ -196,6 +196,8 @@ python.migrate:
 local.seed:
 	docker-compose exec regulations python manage.py populateseeddata
 
+local.cleanseeddata:
+	docker-compose exec regulations python manage.py cleanseeddata
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
@@ -207,6 +209,5 @@ local.dump:
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
 	$(foreach object, $(file_manager_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
 	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \
-	docker-compose exec regulations python manage.py dumpdata content_search.contentindex --indent 4 > ./backend/content_search/fixtures/content_search.contentindex.json
 	docker-compose exec regulations python manage.py dumpdata contenttypes.contenttype --indent 4 > ./backend/cmcs_regulations/fixtures/contenttypes.contenttype.json
 	docker-compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json 

@@ -20,10 +20,10 @@
         "isActive": true,
         "baseWord": "MMIS",
         "synonyms": [
-            75,
             3,
             4,
-            5
+            5,
+            75
         ]
     }
 },
@@ -35,9 +35,9 @@
         "baseWord": "Medicaid Management Information System",
         "synonyms": [
             2,
-            75,
             4,
-            5
+            5,
+            75
         ]
     }
 },
@@ -50,8 +50,8 @@
         "synonyms": [
             2,
             3,
-            75,
-            5
+            5,
+            75
         ]
     }
 },
@@ -76,8 +76,8 @@
         "isActive": true,
         "baseWord": "APD",
         "synonyms": [
-            53,
-            7
+            7,
+            53
         ]
     }
 },
@@ -100,10 +100,10 @@
         "isActive": true,
         "baseWord": "T-MSIS",
         "synonyms": [
-            56,
             9,
             54,
-            55
+            55,
+            56
         ]
     }
 },
@@ -115,9 +115,9 @@
         "baseWord": "Transformed Medicaid Statistical Information System",
         "synonyms": [
             8,
-            56,
             54,
-            55
+            55,
+            56
         ]
     }
 },
@@ -128,9 +128,9 @@
         "isActive": false,
         "baseWord": "PASRR",
         "synonyms": [
+            11,
             57,
-            67,
-            11
+            67
         ]
     }
 },
@@ -154,10 +154,10 @@
         "isActive": true,
         "baseWord": "ICF/ID",
         "synonyms": [
+            13,
             58,
             59,
-            196,
-            13
+            196
         ]
     }
 },
@@ -182,10 +182,10 @@
         "isActive": false,
         "baseWord": "PE",
         "synonyms": [
+            15,
             16,
             17,
-            62,
-            15
+            62
         ]
     }
 },
@@ -360,8 +360,8 @@
         "isActive": true,
         "baseWord": "NEMT",
         "synonyms": [
-            509,
-            30
+            30,
+            509
         ]
     }
 },
@@ -408,9 +408,9 @@
         "isActive": true,
         "baseWord": "MDR",
         "synonyms": [
-            136,
             34,
-            135
+            135,
+            136
         ]
     }
 },
@@ -422,8 +422,8 @@
         "baseWord": "Medicaid Drug Rebate",
         "synonyms": [
             33,
-            136,
-            135
+            135,
+            136
         ]
     }
 },
@@ -483,8 +483,8 @@
         "baseWord": "EPSDT",
         "synonyms": [
             40,
-            372,
-            61
+            61,
+            372
         ]
     }
 },
@@ -496,8 +496,8 @@
         "baseWord": "Early and Periodic Screening Diagnosis and Treatment",
         "synonyms": [
             39,
-            372,
-            61
+            61,
+            372
         ]
     }
 },
@@ -530,9 +530,9 @@
         "isActive": true,
         "baseWord": "MCE",
         "synonyms": [
-            64,
             44,
-            63
+            63,
+            64
         ]
     }
 },
@@ -656,8 +656,8 @@
         "synonyms": [
             8,
             9,
-            56,
-            55
+            55,
+            56
         ]
     }
 },
@@ -931,10 +931,10 @@
         "isActive": true,
         "baseWord": "Indian",
         "synonyms": [
-            192,
-            193,
             107,
-            109
+            109,
+            192,
+            193
         ]
     }
 },
@@ -968,9 +968,9 @@
         "baseWord": "AI/AN",
         "synonyms": [
             104,
+            109,
             192,
-            193,
-            109
+            193
         ]
     }
 },
@@ -1247,12 +1247,12 @@
         "isActive": true,
         "baseWord": "public health emergency",
         "synonyms": [
+            141,
             531,
             533,
             534,
             535,
-            536,
-            141
+            536
         ]
     }
 },
@@ -1789,10 +1789,10 @@
         "isActive": true,
         "baseWord": "CHIP",
         "synonyms": [
-            197,
             189,
             190,
-            191
+            191,
+            197
         ]
     }
 },
@@ -1804,9 +1804,9 @@
         "baseWord": "SCHIP",
         "synonyms": [
             188,
-            197,
             190,
-            191
+            191,
+            197
         ]
     }
 },
@@ -1819,8 +1819,8 @@
         "synonyms": [
             188,
             189,
-            197,
-            191
+            191,
+            197
         ]
     }
 },
@@ -5084,13 +5084,13 @@
         "isActive": true,
         "baseWord": "COVID-19",
         "synonyms": [
+            511,
+            522,
             531,
             533,
             534,
             535,
-            536,
-            522,
-            511
+            536
         ]
     }
 },
@@ -5220,8 +5220,8 @@
         "baseWord": "Consolidated Appropriations Act of 2023",
         "synonyms": [
             528,
-            536,
-            535
+            535,
+            536
         ]
     }
 },
@@ -5233,8 +5233,8 @@
         "baseWord": "CAA",
         "synonyms": [
             527,
-            536,
-            535
+            535,
+            536
         ]
     }
 },
@@ -5686,10 +5686,10 @@
         "baseWord": "Institution for Mental Diseases exclusion",
         "synonyms": [
             676,
-            681,
-            695,
             678,
-            679
+            679,
+            681,
+            695
         ]
     }
 },
@@ -5702,9 +5702,9 @@
         "synonyms": [
             676,
             677,
+            679,
             681,
-            695,
-            679
+            695
         ]
     }
 },

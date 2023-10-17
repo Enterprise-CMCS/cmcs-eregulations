@@ -47,8 +47,6 @@ class ContentListSerializer(serializers.Serializer, ):
     url = serializers.CharField()
     content_type = serializers.CharField()
     content_id = serializers.IntegerField()
-    document_name_headline = HeadlineField()
-    summary_headline = HeadlineField()
 
     @extend_schema_field(MetaLocationSerializer.many(True))
     def get_locations(self, obj):
