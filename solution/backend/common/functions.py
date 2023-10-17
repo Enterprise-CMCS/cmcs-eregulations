@@ -66,11 +66,11 @@ def loadSeedData():
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
 
-    for sup in SupplementalContent.objects.all():
-        add_to_index(sup)
+    # for sup in SupplementalContent.objects.all():
+    #     add_to_index(sup)
 
-    for fr_doc in FederalRegisterDocument.objects.all():
-        add_to_index(fr_doc)
+    # for fr_doc in FederalRegisterDocument.objects.all():
+    #     add_to_index(fr_doc)
 
-    for up_file in UploadedFile.objects.all():
-        add_to_index(up_file)
+    # for up_file in UploadedFile.objects.all():
+    #     add_to_index(up_file)
