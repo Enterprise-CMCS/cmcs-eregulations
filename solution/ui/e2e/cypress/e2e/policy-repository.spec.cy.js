@@ -39,6 +39,11 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
+        cy.get(".subj-toc__list li:nth-child(1) a")
+            .should("be.visible")
+            .should("have.text", " ABP  Alternative Benefit Plan ")
+            .click({ force: true });
+        cy.url().should("include", "/policy-repository?subjects=2");
     });
 
     it("should make a successful request to the file-manager/files endpoint", () => {
