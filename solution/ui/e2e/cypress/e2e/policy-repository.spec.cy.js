@@ -38,11 +38,12 @@ describe("Policy Repository", () => {
     });
 
     it("should make a successful request to the file-manager/files endpoint", () => {
-        cy.intercept("**/v3/file-manager/files").as("files");
+        cy.intercept("**/v3/file-manager/files?**").as("files");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
+        cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
         cy.wait("@files").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
