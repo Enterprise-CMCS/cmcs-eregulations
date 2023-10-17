@@ -47,6 +47,8 @@ def test_index_created():
 @pytest.mark.django_db
 def test_index_update():
     si = add_supplemental_content()
+    fr = add_fr_doc()
+    up = add_internal_document()
     file_index = ContentIndex.objects.get(supplemental_content=si)
     assert file_index.content is None
     file_index.content = 'content is here'
@@ -55,6 +57,28 @@ def test_index_update():
     si.save()
     add_to_index(si)
     file_index = ContentIndex.objects.get(supplemental_content=si)
+    assert file_index.doc_name_string == 'updated'
+    assert file_index.content == 'content is here'
+
+    file_index = ContentIndex.objects.get(fr_doc=fr)
+    assert file_index.content is None
+    file_index.content = 'content is here'
+    file_index.save()
+    fr.name = 'updated'
+    fr.save()
+    add_to_index(fr)
+    file_index = ContentIndex.objects.get(fr_doc=fr)
+    assert file_index.doc_name_string == 'updated'
+    assert file_index.content == 'content is here'
+
+    file_index = ContentIndex.objects.get(file=up)
+    assert file_index.content is None
+    file_index.content = 'content is here'
+    file_index.save()
+    up.document_name = 'updated'
+    up.save()
+    add_to_index(up)
+    file_index = ContentIndex.objects.get(file=up)
     assert file_index.doc_name_string == 'updated'
     assert file_index.content == 'content is here'
     clean_up()

@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from content_search.functions import add_to_index
+from content_search.functions import index_group
 from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
 from resources.models import FederalRegisterDocument, Section, SupplementalContent
@@ -60,12 +60,10 @@ class SearchTest(TestCase):
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.save()
-        for sup in SupplementalContent.objects.all():
-            add_to_index(sup)
-        for fr in FederalRegisterDocument.objects.all():
-            add_to_index(fr)
-        for file in UploadedFile.objects.all():
-            add_to_index(file)
+
+        index_group(SupplementalContent.objects.all())
+        index_group(FederalRegisterDocument.objects.all())
+        index_group(UploadedFile.objects.all())
 
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search/?resource-type=external")
@@ -88,7 +86,11 @@ class SearchTest(TestCase):
 
     def test_single_response_queries(self):
         self.login()
-        response = self.client.get("/v3/content-search/?q=fire&resource-type=external")
+        response = self.client.get(r"/v3/content-search/?q=fire&resource-type=external")
+        self.assertEqual(len(response.data), 1)
+        response = self.client.get(r"/v3/content-search/?q='end%20fire'&resource-type=external")
+        self.assertEqual(len(response.data), 0)
+        response = self.client.get(r"/v3/content-search/?q='start%20fire'&resource-type=external")
         self.assertEqual(len(response.data), 1)
         response = self.client.get("/v3/content-search/?q=fire&resource-type=all")
         self.assertEqual(len(response.data), 2)
@@ -105,6 +107,8 @@ class SearchTest(TestCase):
         self.assertEqual(len(response.data), 1)
         response = self.client.get("/v3/content-search/?q=fire&resource-type=all")
         self.assertEqual(len(response.data), 2)
+        response = self.client.get("/v3/content-search/?q=fire&resource-type=all&page_size=1&paginate=true")
+        self.assertEqual(len(response.data), 1)
 
     def test_search_by_filename_variations(self):
         self.login()

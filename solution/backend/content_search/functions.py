@@ -4,6 +4,11 @@ from resources.models import FederalRegisterDocument, SupplementalContent
 
 
 def check_index(content):
+    '''
+    Checks to see if the piece of content already has an index
+
+    :param content:  Piece of resource
+    '''
     content_index = None
     try:
         if isinstance(content, UploadedFile):
@@ -18,6 +23,12 @@ def check_index(content):
 
 
 def update_index(content_index, content):
+    '''
+    update_index updates a piece of content if it already exist in the index
+
+    :param content_index:  The existing index
+    :param content: The content that was updated
+    '''
     if isinstance(content, UploadedFile):
         new_index = ContentIndex(
             file=content,
@@ -51,12 +62,6 @@ def update_index(content_index, content):
             new_index.content_type = 'federalregisterdocument'
             new_index.content_id = content.id
         new_index.save()
-    elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
-        new_index.category = content.category
-        new_index.url = content.url
-        new_index.doc_name_string = content.name
-        new_index.summary_string = content.description
-        new_index.date_string = content.date
     new_index.content = content_index.content
     new_index.locations.set(content.locations.all())
     new_index.subjects.set(content.subjects.all())
@@ -66,6 +71,12 @@ def update_index(content_index, content):
 
 
 def add_to_index(content):
+    '''
+    add_to_index is the main function for adding anything to the index. Identifies if it exist, if not create
+    if it does update the old one
+
+    param1 content: The content that was updated.
+    '''
     content_index = check_index(content)
     if content_index:
         return update_index(content_index, content)
@@ -106,3 +117,11 @@ def add_to_index(content):
     content_index.subjects.set(content.subjects.all())
     content_index.save()
     return None
+
+
+def index_group(resources):
+    ''''
+    Adds groups of content to the search index
+    '''
+    for res in resources:
+        add_to_index(res)

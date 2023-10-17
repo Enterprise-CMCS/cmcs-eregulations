@@ -195,9 +195,11 @@ python.migrate:
 
 local.seed:
 	docker-compose exec regulations python manage.py populateseeddata
+	docker-compose exec regulations python manage.py index_resources
 
 local.cleanseeddata:
 	docker-compose exec regulations python manage.py cleanseeddata
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
