@@ -31,22 +31,22 @@ def lambda_response(status_code: int, message: str) -> dict:
 
 
 def handler(event: dict, context: dict) -> dict:
-    post_params = load_post_body(event["body"])
+    config = load_post_body(event["body"])
 
     # Retrieve required arguments
     try:
-        resource_id = post_params["id"]
-        uri = post_params["uri"]
-        post_url = post_params["post_url"]
-        post_username = post_params.get("post_username")
-        post_password = post_params.get("post_password")
+        resource_id = config["id"]
+        uri = config["uri"]
+        post_url = config["post_url"]
+        post_username = config.get("post_username")
+        post_password = config.get("post_password")
     except KeyError:
         return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the JSON POST body.")
 
     # Retrieve the file
     try:
-        backend_type = post_params.get("backend", "web").lower()
-        backend = FileBackend.get_backend(backend_type, post_params)
+        backend_type = config.get("backend", "web").lower()
+        backend = FileBackend.get_backend(backend_type, config)
         file = backend.get_file(uri)
     except BackendInitException as e:
         return lambda_response(500, f"Failed to initialize backend: {str(e)}")
@@ -64,7 +64,7 @@ def handler(event: dict, context: dict) -> dict:
 
     # Run extractor
     try:
-        extractor = Extractor.get_extractor(file_type)
+        extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")

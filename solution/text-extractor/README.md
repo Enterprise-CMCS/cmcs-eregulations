@@ -45,6 +45,12 @@ To run the text extractor, send a JSON POST request with the following structure
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
         "aws_storage_bucket_name": "xxxxxx"  // The name of the bucket to retrieve the object from
+    },
+    // Settings for Textract
+    "textract": {
+        "aws_access_key_id": "xxxxxx",       // AWS access key for Textract
+        "aws_secret_access_key": "xxxxxx",   // AWS secret key for Textract
+        "aws_region": "us-east-1"            // AWS region for Textract
     }
 }
 ```
