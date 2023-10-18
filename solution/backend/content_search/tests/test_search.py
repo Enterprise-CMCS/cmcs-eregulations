@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 from content_search.functions import index_group
 from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
-from resources.models import FederalRegisterDocument, Section, SupplementalContent, Category
+from resources.models import Category, FederalRegisterDocument, Section, SupplementalContent
 
 
 class SearchTest(TestCase):
@@ -42,7 +42,7 @@ class SearchTest(TestCase):
                 if i == 0:  # only assign location and subject on item 0
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
-                    file.category=category
+                    file.category = category
                     file.save()
 
         with open("content_search/tests/fixtures/sample_fr_doc.json", "r") as f:
