@@ -6,7 +6,6 @@
 
 #policyRepositoryApp.repository-view,
 #policyRepositorySearchApp.repository-search-view {
-    overflow: auto;
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
@@ -60,6 +59,11 @@
 
     .sidebar__filters {
         flex: 1;
+
+        .sticky-container {
+            position: sticky;
+            top: $header_height;
+        }
 
         .selections__container {
             .selections__list {
@@ -135,6 +139,67 @@
 
     .loading__span {
         padding: 0 1rem;
+    }
+
+    .subj-toc__container {
+        padding-left: 16px;
+
+        h1 {
+            font-size: 2.25rem;
+            margin-bottom: 0px;
+        }
+
+        ul.subj-toc__list {
+            padding: 0;
+
+            li.subj-toc__li {
+                list-style: none;
+                padding: 1rem 0.25rem;
+                border-bottom: 1px solid $border_color;
+
+                &:last-child {
+                    margin-bottom: 0;
+                    border-bottom: none;
+                }
+
+                a {
+                    text-decoration: none;
+
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        cursor: pointer;
+                    }
+
+                    .subj-toc-li__div {
+                        display: inline-block;
+                        font-size: 1rem;
+                        line-height: 1.25rem;
+
+                        &--bold {
+                            font-weight: 700;
+                        }
+
+                        &.subj-toc-li__abbr {
+                            padding-right: 5px;
+                            margin-right: 5px;
+                            border-right: 1px solid $secondary_text_color;
+                        }
+                    }
+                }
+
+                .subj-toc-li__count {
+                    margin-top: 4px;
+                    font-size: 0.875rem;
+                    line-height: 1.25rem;
+                    color: $secondary_text_color;
+
+                    .subj-doc__count {
+                        font-weight: 700;
+                    }
+                }
+            }
+        }
     }
 
     .doc__list {
