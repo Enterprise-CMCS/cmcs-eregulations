@@ -5,6 +5,8 @@ export const getSearchGovResources = (q, page = 1) => {
         qs: {
             q,
             page,
+            "category_details": "true",
+            "location_details": "true",
         },
     });
 };
