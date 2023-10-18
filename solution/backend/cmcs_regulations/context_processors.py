@@ -9,9 +9,13 @@ def google_analytics(request):
 
 
 def custom_url(request):
-    return {
-        "CUSTOM_URL": settings.CUSTOM_URL
-    }
+    custom_url = settings.CUSTOM_URL
+    host = request.get_host()
+
+    if host == 'eregulations.cms.gov':
+        custom_url = host
+
+    return {'CUSTOM_URL': custom_url}
 
 
 def survey_url(request):

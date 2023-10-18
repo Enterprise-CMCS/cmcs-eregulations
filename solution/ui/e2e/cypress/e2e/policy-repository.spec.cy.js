@@ -18,6 +18,10 @@ const _beforeEach = () => {
     cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
         fixture: "parts-45.json",
     }).as("parts45");
+
+    cy.intercept("**/v3/file-manager/subjects", {
+        fixture: "subjects.json",
+    }).as("subjects");
 };
 
 describe("Policy Repository", () => {
@@ -35,14 +39,20 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
+        cy.get(".subj-toc__list li:nth-child(1) a")
+            .should("be.visible")
+            .should("have.text", " ABP  Alternative Benefit Plan ")
+            .click({ force: true });
+        cy.url().should("include", "/policy-repository?subjects=2");
     });
 
     it("should make a successful request to the file-manager/files endpoint", () => {
-        cy.intercept("**/v3/file-manager/files").as("files");
+        cy.intercept("**/v3/file-manager/files?**").as("files");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
+        cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
         cy.wait("@files").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
@@ -113,6 +123,14 @@ describe("Policy Repository", () => {
         });
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.get(".related-sections")
+            .first()
+            .find(".related-section-link")
+            .first()
+            .find("a")
+            .should("have.attr", "href")
+            .and("not.include", "undefined")
+            .and("include", "/42/430/5#430-5");
         cy.checkAccessibility();
     });
 
