@@ -87,7 +87,7 @@ describe("Synonyms endpoint special character testing", () => {
 // https://ahmed-alsaab.medium.com/cypress-api-schema-validation-with-ajv-ec61348374f7
 describe("Schema validation", () => {
     describe("Search.gov Resources", () => {
-        it("gets successful response and expected schema from v3/resources/search", () => {
+        it("gets successful response and expected schema from v3/resources/search?category_details=true&location_details=true", () => {
             cy.getSearchGovResources(SEARCH_TERM).then((response) => {
                 expect(response.status).to.eq(200);
                 expect(response.isOkStatusCode).to.eq(true);
