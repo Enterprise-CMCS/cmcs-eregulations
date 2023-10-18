@@ -87,6 +87,7 @@ class SearchTest(TestCase):
         self.assertEqual(len(response.data), 9)
         response = self.client.get("/v3/content-search/?resource-type=all&locations_details=false&category_details=false")
         self.assertEqual(len(response.data), 9)
+
     def test_single_response_queries(self):
         self.login()
         response = self.client.get(r"/v3/content-search/?q=fire&resource-type=external")
