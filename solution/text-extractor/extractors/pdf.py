@@ -4,8 +4,8 @@ from pathlib import Path
 from pdf2image import convert_from_bytes
 import boto3
 
-from .extractors import Extractor
-from .exceptions import ExtractorInitException
+from .extractor import Extractor
+from .exceptions import ExtractorInitException, ExtractorException
 
 
 class PdfExtractor(Extractor):
@@ -14,21 +14,24 @@ class PdfExtractor(Extractor):
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
         try:
-            self.aws_access_key_id = config["textract"]["aws_access_key_id"]
-            self.aws_secret_access_key = config["textract"]["aws_secret_access_key"]
-            self.aws_region = config["textract"]["aws_region"]
-        except KeyError:
-            raise ExtractorInitException("to handle PDFs, the POST body must include a 'textract' dict with "
-                                         "'aws_access_key_id', 'aws_secret_access_key', and 'aws_region' keys.")
-        try:
             self.client = boto3.client(
                 "textract",
-                aws_access_key_id=self.aws_access_key_id,
-                aws_secret_access_key=self.aws_secret_access_key,
-                region_name=self.aws_region,
+                **self._get_aws_arguments(config),
             )
         except Exception as e:
-            raise ExtractorInitException(f"failed to initialize AWS client: {str(e)}")
+            raise ExtractorInitException(f"failed to initialize Textract client: {str(e)}") 
+
+    def _get_aws_arguments(self, config: dict) -> dict:
+        try:
+            return {
+                "aws_access_key_id": config["textract"]["aws_access_key_id"],
+                "aws_secret_access_key": config["textract"]["aws_secret_access_key"],
+                "region_name": config["textract"]["aws_region"],
+            }
+        except KeyError:
+            return {
+                "config": boto3.session.Config(signature_version='s3v4',),
+            }
 
     def _convert_to_images(self, file: bytes, temp_dir: str) -> [str]:
         return convert_from_bytes(
@@ -42,7 +45,7 @@ class PdfExtractor(Extractor):
         text = ""
         with TemporaryDirectory() as temp_dir:
             try:
-                pages = _convert_to_images(file, temp_dir)
+                pages = self._convert_to_images(file, temp_dir)
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")
             for page in pages:
@@ -52,13 +55,13 @@ class PdfExtractor(Extractor):
                 except Exception as e:
                     raise ExtractorException(f"failed to read temporary image file: {str(e)}")
                 try:
-                    response = client.detect_document_text(Document={'Bytes': bytes})
+                    response = self.client.detect_document_text(Document={'Bytes': content})
                 except Exception as e:
                     raise ExtractorException(f"AWS Textract client failed: {str(e)}")
                 try:
                     for item in response["Blocks"]:
                         if item["BlockType"] == "LINE":
-                            text += item["Text"]
+                            text += item["Text"] + " "
                 except KeyError:
-                    raise ExtractorException(f"AWS response formatted improperly: {str(e)}"
+                    raise ExtractorException(f"AWS response formatted improperly: {str(e)}")
         return text

@@ -1,2 +1,2 @@
-poppler-utils.x86_64
-file-libs.x86_64
+poppler-utils
+file-libs

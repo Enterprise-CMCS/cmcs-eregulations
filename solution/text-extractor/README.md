@@ -46,7 +46,7 @@ To run the text extractor, send a JSON POST request with the following structure
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
         "aws_storage_bucket_name": "xxxxxx"  // The name of the bucket to retrieve the object from
     },
-    // Settings for Textract
+    // Settings for Textract, leave out when deployed to use the built-in Lambda user
     "textract": {
         "aws_access_key_id": "xxxxxx",       // AWS access key for Textract
         "aws_secret_access_key": "xxxxxx",   // AWS secret key for Textract
