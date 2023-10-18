@@ -7,7 +7,7 @@ ENV PROXY_PARAMS=""
 ENV STARTUP_CMD="app.text_extractor.handler"
 
 # Install binary dependencies
-RUN yum install file-libs.x86_64
+RUN yum install file-libs
 
 # Copy lambda-proxy
 COPY lambda-proxy /proxy
