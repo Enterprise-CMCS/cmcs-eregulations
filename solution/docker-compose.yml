@@ -32,6 +32,7 @@ services:
       - 8000:8000
     links:
       - db
+      - text-extractor
   static-assets:
     image: nginx
     ports:
@@ -39,6 +40,19 @@ services:
     volumes:
       - ./backend/nginx/config/static-assets/nginx_fonts.conf:/etc/nginx/conf.d/default.conf
       - ./static-assets/regulations:/usr/share/nginx/html
+  text-extractor:
+    build:
+      context: .
+      dockerfile: text-extractor/Dockerfile
+    ports:
+      - 9000:8080
+      - 8001:8000
+    environment:
+      - EREGS_USERNAME=${EREGS_USERNAME:-}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_API_URL_V3=${EREGS_API_URL_V3:-}
+    volumes:
+      - ./text-extractor:/var/task/app
 volumes:
   eregs-data:
 
