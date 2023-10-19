@@ -673,7 +673,7 @@ const getPolicyDocList = async ({
         return httpApiGetLegacy(
             `${apiUrl}file-manager/files${
                 requestParams ? `?${requestParams}` : ""
-            }`,
+            }&location_details=true`,
             {},
             cacheResponse
         );
