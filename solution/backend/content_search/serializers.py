@@ -15,8 +15,8 @@ class ContentSearchSerializer(DetailsSerializer, serializers.Serializer):
     subjects = SubjectSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()
     url = serializers.CharField()
-    content_type = serializers.CharField()
-    content_id = serializers.IntegerField()
+    # content_type = serializers.CharField()
+    # content_id = serializers.IntegerField()
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
 
@@ -31,5 +31,5 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     subjects = SubjectSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()
     url = serializers.CharField()
-    content_type = serializers.CharField()
-    content_id = serializers.IntegerField()
+    # content_type = serializers.CharField()
+    # content_id = serializers.IntegerField()
