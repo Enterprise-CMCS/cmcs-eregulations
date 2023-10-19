@@ -31,6 +31,7 @@ class UploadedFileSerializer(DetailsSerializer, serializers.Serializer, ):
     date = serializers.DateField()
     summary = serializers.CharField()
     document_type = DocumentTypeSerializer(many=False, read_only=True)
+    locations = serializers.SerializerMethodField()
     subjects = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 
