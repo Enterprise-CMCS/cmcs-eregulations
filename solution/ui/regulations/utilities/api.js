@@ -405,12 +405,12 @@ const getRecentResources = async (
 ) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
+            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
             {} // params, default
         );
     }
     return httpApiGetLegacy(
-        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
+        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
         {} // params, default
     );
 };
