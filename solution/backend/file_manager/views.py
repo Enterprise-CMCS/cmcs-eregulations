@@ -71,7 +71,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
     def get_search_headlines(self, search_query, search_type):
         return {
-            "document_id_headline": self.make_headline("document_id", search_query, search_type),
+            "document_name_headline": self.make_headline("document_name", search_query, search_type),
             "summary_headline": self.make_headline("summary", search_query, search_type),
         }
 
@@ -88,7 +88,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         if q_obj:
             query = query.filter(q_obj)
         if subjects:
-            query = query.filter(subject__id__in=subjects)
+            query = query.filter(subjects__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
 
@@ -98,7 +98,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
 
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
-            Prefetch("subject", queryset=subjects_prefetch),
+            Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
 
         if search_query:
@@ -107,7 +107,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                 if search_query.startswith(QUOTE_TYPES) and search_query.endswith(QUOTE_TYPES)
                 else ("plain", False)
             )
-            vector = SearchVector("document_id", weight="A", config="english") + \
+            vector = SearchVector("document_name", weight="A", config="english") + \
                 SearchVector("summary", weight="B", config="english") + \
                 SearchVector("date", weight="C", config="english")
             query = query.annotate(
@@ -140,7 +140,7 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
-                                          "Search for text within file metadata. Searches document_id, file name, "
+                                          "Search for text within file metadata. Searches document_name, file name, "
                                           "date, and summary.", str, False),
                     ] + LocationExplorerViewSetMixin.PARAMETERS
     )

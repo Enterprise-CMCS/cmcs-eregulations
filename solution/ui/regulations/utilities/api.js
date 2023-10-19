@@ -574,7 +574,7 @@ const getSupplementalContent = async ({
  * @returns {Promise<{count: number, next: string, previous: string, results: Array<Object>}>} - Promise that contains response object when fulfilled
  */
 const getSearchGovResources = async ({ page = 1, q = "" }) =>
-    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}`);
+    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}&location_details=true&category_details=true`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template

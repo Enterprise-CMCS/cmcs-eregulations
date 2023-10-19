@@ -180,9 +180,12 @@ python.unittest:
 ##uncomment the -vvv if there are errors running pytest. 
 test.pytest:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d
-	docker-compose exec regulations pytest -vvv
+	docker-compose exec regulations pytest -v
 	docker-compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
-
+test.pytest.cov:
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml up -d
+	docker-compose exec regulations pytest --cov
+	docker-compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 python.shell:
 	docker-compose exec regulations python manage.py shell
 
@@ -197,6 +200,10 @@ python.migrate:
 
 local.seed:
 	docker-compose exec regulations python manage.py populateseeddata
+	docker-compose exec regulations python manage.py index_resources
+
+local.cleanseeddata:
+	docker-compose exec regulations python manage.py cleanseeddata
 
 text-extractor:
 	docker-compose up -d --build text-extractor
@@ -220,7 +227,7 @@ file_manager_objects = file_manager.subject file_manager.documenttype
 auth_objects = contenttypes.contenttype auth.permission auth.group
 
 local.dump:
-	$(foreach object, $(objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
+	$(foreach object, $(resource_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
 	$(foreach object, $(reg_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
 	$(foreach object, $(file_manager_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
 	$(foreach object, $(auth_objects), docker-compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \

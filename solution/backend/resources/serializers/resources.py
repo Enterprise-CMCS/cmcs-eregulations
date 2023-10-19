@@ -1,10 +1,10 @@
 import re
 
 from django.db.models import Q
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from common.fields import HeadlineField
+from common.serializers import DetailsSerializer
 from file_manager.serializers import SubjectSerializer
 from resources.models import (
     AbstractCategory,
@@ -17,10 +17,7 @@ from resources.models import (
     SupplementalContent,
 )
 
-from .categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
 from .locations import (
-    AbstractLocationPolymorphicSerializer,
-    MetaLocationSerializer,
     SectionCreateSerializer,
     SectionRangeCreateSerializer,
 )
@@ -36,7 +33,7 @@ class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
         }
 
 
-class AbstractResourceSerializer(serializers.Serializer):
+class AbstractResourceSerializer(DetailsSerializer, serializers.Serializer):
     id = serializers.IntegerField()
     created_at = serializers.CharField()
     updated_at = serializers.CharField()
@@ -47,18 +44,6 @@ class AbstractResourceSerializer(serializers.Serializer):
     subjects = SubjectSerializer(many=True)
 
     type = PolymorphicTypeField()
-
-    @extend_schema_field(MetaCategorySerializer.many(False))
-    def get_category(self, obj):
-        if self.context.get("category_details", True):
-            return AbstractCategoryPolymorphicSerializer(obj.category).data
-        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.category)
-
-    @extend_schema_field(MetaLocationSerializer.many(True))
-    def get_locations(self, obj):
-        if self.context.get("location_details", True):
-            return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
-        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
     def get_snippet(self, obj):
         if hasattr(obj, 'snippet'):

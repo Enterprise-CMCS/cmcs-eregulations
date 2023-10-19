@@ -16,6 +16,7 @@ urlpatterns = [
     path("v3/", include([
         path("resources/", include('resources.urls')),
         path("file-manager/", include('file_manager.urls')),
+        path("content-search/", include('content_search.urls')),
         path("search/", include('regcore.search.urls')),
         path("toc", title.TOCViewSet.as_view({
             "get": "list",

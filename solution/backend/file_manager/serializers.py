@@ -1,8 +1,7 @@
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from common.fields import HeadlineField
-from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
+from common.serializers import DetailsSerializer
 
 from .models import DocumentType, Subject
 
@@ -26,24 +25,17 @@ class SubjectSerializer(serializers.Serializer):
         model = Subject
 
 
-class UploadedFileSerializer(serializers.Serializer, ):
-    document_id = serializers.CharField()
+class UploadedFileSerializer(DetailsSerializer, serializers.Serializer, ):
+    document_name = serializers.CharField()
     file_name = serializers.CharField()
     date = serializers.DateField()
     summary = serializers.CharField()
-    locations = serializers.SerializerMethodField()
     document_type = DocumentTypeSerializer(many=False, read_only=True)
-    subject = SubjectSerializer(many=True, read_only=True)
+    subjects = SubjectSerializer(many=True, read_only=True)
     uid = serializers.CharField()
 
-    document_id_headline = HeadlineField()
+    document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
-
-    @extend_schema_field(MetaLocationSerializer.many(True))
-    def get_locations(self, obj):
-        if self.context.get("location_details", True):
-            return AbstractLocationPolymorphicSerializer(obj.locations, many=True).data
-        return serializers.PrimaryKeyRelatedField(read_only=True, many=True).to_representation(obj.locations.all())
 
 
 class AwsTokenSerializer(serializers.Serializer):
