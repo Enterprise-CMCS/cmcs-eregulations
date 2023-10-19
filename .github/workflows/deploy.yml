@@ -77,13 +77,13 @@ jobs:
           npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
-      - name: deploy text extractor lambda
-        run: |
-          pushd solution/text-extractor
-          npm install serverless -g
-          npm install
-          serverless deploy --stage ${{ matrix.environment }}
-          popd
+      # - name: deploy text extractor lambda
+      #   run: |
+      #     pushd solution/text-extractor
+      #     npm install serverless -g
+      #     npm install
+      #     serverless deploy --stage ${{ matrix.environment }}
+      #     popd
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         env:
