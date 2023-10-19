@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
-from common.mixins import PAGINATION_PARAMS, ViewSetPagination
+from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
@@ -14,10 +14,9 @@ from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer
 
 
-class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentSearchSerializer
     model = ContentIndex
-    pagination_class = ViewSetPagination
     location_filter_prefix = "locations__"
 
     @extend_schema(
@@ -34,14 +33,14 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
                                           "\"&document-type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
-                                          "\"&subjects=X&subjects=Y\" for multiple.", int, False),
+                                          "\"&subjects=X&subjects=Y\" for multiple.", str, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
                                           "all. Use \"&resource-type=external\"", str, ''),
-                    ] + LocationExplorerViewSetMixin.PARAMETERS + PAGINATION_PARAMS
+                    ] + LocationExplorerViewSetMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
     )
     def list(self, request):
         locations = self.request.GET.getlist("locations")
@@ -56,12 +55,14 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
         if q_obj:
             query = query.filter(q_obj)
         if subjects:
-            query = query.filter(subjects__id__in=subjects)
+            if subjects[0] == 'all':
+                query = query.filter(subjects__isnull=False)
+            else:
+                query = query.filter(subjects__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
         if document_type:
             query = query.filter(document_type__id=document_type)
-
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()

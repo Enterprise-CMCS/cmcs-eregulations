@@ -119,7 +119,8 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
                 **self.get_search_headlines(search_query, search_type),
             )
             query = query.filter(Q(rank__gte=0.2) | Q(file_name__icontains=search_query))
-
+        else:
+            query = query.order_by('date', 'document_name')
         return query
 
     def get_serializer_context(self):
