@@ -48,28 +48,46 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                     :name="doc.document_type.name"
                     type="category"
                 />
+                <CategoryLabel
+                    v-else-if="doc.category"
+                    :name="
+                        doc.category.parent
+                            ? doc.category.parent.name
+                            : doc.category.name
+                    "
+                    type="category"
+                />
+                <CategoryLabel
+                    v-if="doc.category?.parent"
+                    :name="doc.category.name"
+                    type="subcategory"
+                />
             </template>
             <template #context>
-                <span
-                    v-if="doc.date"
-                    class="result__context--date"
-                    >{{ formatDate(doc.date) }}</span
-                >
+                <span v-if="doc.date_string" class="result__context--date">{{
+                    formatDate(doc.date_string)
+                }}</span>
             </template>
             <template #link>
                 <h3>
                     <a
                         :href="getDownloadUrl(doc.uid)"
                         class="document__link document__link--filename"
-                        >{{ doc.document_name }}</a
+                        >{{ doc.doc_name_string }}</a
                     >
                 </h3>
             </template>
             <template #snippet>
-                <div v-if="doc.summary">{{ doc.summary }}</div>
+                <div
+                    v-if="doc.summary_headline || doc.summary_string"
+                    v-html="doc.summary_headline || doc.summary_string"
+                />
             </template>
             <template #chips>
-                <div v-if="doc.subjects.length > 0" class="document__info-block">
+                <div
+                    v-if="doc.subjects.length > 0"
+                    class="document__info-block"
+                >
                     <SubjectChips :subjects="doc.subjects" />
                 </div>
             </template>
