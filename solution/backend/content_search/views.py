@@ -20,6 +20,7 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
     paginate_by_default = True
     location_filter_prefix = "locations__"
     pagination_class = OptionalPaginationMixin.pagination_class
+
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[
