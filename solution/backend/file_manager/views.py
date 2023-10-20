@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
 from resources.models import AbstractLocation
-from resources.views.mixins import LocationExplorerViewSetMixin
+from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
@@ -53,11 +53,12 @@ class SubjectViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
+class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin, OptionalPaginationMixin):
     permission_classes = (IsAuthenticated,)
-    serializer_class = UploadedFileSerializer
     model = UploadedFile
+    queryset = model.objects.all()
     location_filter_prefix = "locations__"
+    pagination_class = OptionalPaginationMixin.pagination_class
 
     def make_headline(self, field, search_query, search_type):
         return SearchHeadline(
@@ -80,8 +81,7 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         subjects = self.request.GET.getlist("subjects")
         category = self.request.GET.getlist("category")
         search_query = self.request.GET.get("q")
-
-        query = self.model.objects.all()
+        query = self.queryset
 
         q_obj = self.get_location_filter(locations)
 
@@ -89,6 +89,8 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
             query = query.filter(q_obj)
         if subjects:
             query = query.filter(subjects__id__in=subjects)
+        else:
+            query = query.filter(subjects__isnull=False)
         if category:
             query = query.filter(category__id=category)
 
@@ -143,6 +145,11 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
     def list(self, request):
         queryset = self.get_queryset()
         context = self.get_serializer_context()
+        paginate = self.request.GET.get("paginate") != 'false'
+        if paginate:
+            queryset = self.paginate_queryset(queryset)
+            serializer = UploadedFileSerializer(queryset, many=True, context=context)
+            return self.get_paginated_response(serializer.data)
         serializer = UploadedFileSerializer(queryset, many=True, context=context)
         return Response(serializer.data)
 
