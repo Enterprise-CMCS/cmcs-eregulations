@@ -15,10 +15,11 @@ from .serializers import ContentListSerializer, ContentSearchSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContentSearchSerializer
     model = ContentIndex
+    queryset = ContentIndex.objects.all()
+    paginate_by_default = True
     location_filter_prefix = "locations__"
-
+    pagination_class = OptionalPaginationMixin.pagination_class
     @extend_schema(
         description="Retrieve list of uploaded files",
         parameters=[
@@ -49,8 +50,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
         category = self.request.GET.getlist("category")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
-        paginate = self.request.GET.get("paginate", True)
-        query = self.model.objects.all()
+        paginate = self.request.GET.get("paginate") != 'false'
+        query = self.queryset
         q_obj = self.get_location_filter(locations)
         if q_obj:
             query = query.filter(q_obj)
@@ -80,11 +81,14 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
-        if paginate != 'false':
+        if paginate:
             query = self.paginate_queryset(query)
         context = self.get_serializer_context()
         if search_query:
             serializer = ContentSearchSerializer(query, many=True, context=context)
         else:
             serializer = ContentListSerializer(query, many=True, context=context)
-        return Response(serializer.data)
+        if paginate:
+            return self.get_paginated_response(serializer.data)
+        else:
+            return Response(serializer.data)
