@@ -24,6 +24,8 @@ const apiUrl = inject("apiUrl");
 const base = inject("base");
 
 const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
+
+const needsBar = (item) => item.date_string && item.doc_name_string;
 </script>
 
 <template>
@@ -64,8 +66,14 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                 />
             </template>
             <template #context>
-                <span v-if="doc.date_string" class="result__context--date">{{
-                    formatDate(doc.date_string)
+                <span
+                    v-if="doc.date_string"
+                    class="result__context--date"
+                    :class="needsBar(doc) && 'result__context--date--bar'"
+                    >{{ formatDate(doc.date_string) }}</span
+                >
+                <span v-if="doc.doc_name_string">{{
+                    doc.doc_name_string
                 }}</span>
             </template>
             <template #link>
@@ -73,14 +81,14 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                     <a
                         :href="getDownloadUrl(doc.uid)"
                         class="document__link document__link--filename"
-                        >{{ doc.doc_name_string }}</a
+                        >{{ doc.summary_string }}</a
                     >
                 </h3>
             </template>
             <template #snippet>
                 <div
-                    v-if="doc.summary_headline || doc.summary_string"
-                    v-html="doc.summary_headline || doc.summary_string"
+                    v-if="doc.summary_headline"
+                    v-html="doc.summary_headline"
                 />
             </template>
             <template #chips>
