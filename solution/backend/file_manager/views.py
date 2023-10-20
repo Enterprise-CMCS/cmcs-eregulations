@@ -56,7 +56,6 @@ class SubjectViewset(viewsets.ViewSet):
 class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin, OptionalPaginationMixin):
     permission_classes = (IsAuthenticated,)
     model = UploadedFile
-    queryset = model.objects.all()
     location_filter_prefix = "locations__"
     pagination_class = OptionalPaginationMixin.pagination_class
 
@@ -81,16 +80,13 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         subjects = self.request.GET.getlist("subjects")
         category = self.request.GET.getlist("category")
         search_query = self.request.GET.get("q")
-        query = self.queryset
-
+        query = self.model.objects.all()
         q_obj = self.get_location_filter(locations)
 
         if q_obj:
             query = query.filter(q_obj)
         if subjects:
             query = query.filter(subjects__id__in=subjects)
-        else:
-            query = query.filter(subjects__isnull=False)
         if category:
             query = query.filter(category__id=category)
 

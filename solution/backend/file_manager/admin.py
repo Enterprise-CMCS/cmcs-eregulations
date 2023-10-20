@@ -66,7 +66,7 @@ class UploadedFileAdmin(BaseAdmin):
             obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
         form.instance.save()
-        # add_to_index(form.instance)
+        add_to_index(form.instance)
         super().save_model(request, obj, form, change)
 
     def upload_file(self, file, obj):

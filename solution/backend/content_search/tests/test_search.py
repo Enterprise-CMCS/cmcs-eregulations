@@ -139,7 +139,6 @@ class SearchTest(TestCase):
             response = self.client.get(f"/v3/content-search/?resource-type=internal&q={word}")
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = get_paginated_data(response)
-            print(data)
             self.assertIn(word, data['results'][0]["file_name_string"])
 
     def test_inclusive_location_filter(self):
