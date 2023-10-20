@@ -1,6 +1,8 @@
 <script setup>
 import { inject } from "vue";
 
+import _isEmpty from "lodash/isEmpty";
+
 import { formatDate } from "utilities/filters";
 
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
@@ -50,12 +52,12 @@ const needsBar = (item) =>
         >
             <template #labels>
                 <CategoryLabel
-                    v-if="doc.document_type"
+                    v-if="!_isEmpty(doc.document_type)"
                     :name="doc.document_type.name"
                     type="category"
                 />
                 <CategoryLabel
-                    v-else-if="doc.category"
+                    v-else-if="!_isEmpty(doc.category)"
                     :name="
                         doc.category.parent
                             ? doc.category.parent.name
