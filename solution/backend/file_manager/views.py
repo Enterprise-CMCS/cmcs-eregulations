@@ -53,7 +53,7 @@ class SubjectViewset(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
+class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
     permission_classes = (IsAuthenticated,)
     serializer_class = UploadedFileSerializer
     model = UploadedFile
@@ -122,11 +122,6 @@ class UploadedFileViewset(viewsets.ViewSet, LocationExplorerViewSetMixin):
         else:
             query = query.order_by('date', 'document_name')
         return query
-
-    def get_serializer_context(self):
-        context = {}
-        context["location_details"] = self.request.GET.get("location_details", "true").lower() == "true"
-        return context
 
     @extend_schema(
         description="Retrieve list of uploaded files",
