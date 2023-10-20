@@ -1,11 +1,10 @@
 from tempfile import TemporaryDirectory
-from pathlib import Path
 
-from pdf2image import convert_from_bytes
 import boto3
+from pdf2image import convert_from_bytes
 
+from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
-from .exceptions import ExtractorInitException, ExtractorException
 
 
 class PdfExtractor(Extractor):
@@ -19,7 +18,7 @@ class PdfExtractor(Extractor):
                 **self._get_aws_arguments(config),
             )
         except Exception as e:
-            raise ExtractorInitException(f"failed to initialize Textract client: {str(e)}") 
+            raise ExtractorInitException(f"failed to initialize Textract client: {str(e)}")
 
     def _get_aws_arguments(self, config: dict) -> dict:
         try:
@@ -62,6 +61,6 @@ class PdfExtractor(Extractor):
                     for item in response["Blocks"]:
                         if item["BlockType"] == "LINE":
                             text += item["Text"] + " "
-                except KeyError:
+                except KeyError as e:
                     raise ExtractorException(f"AWS response formatted improperly: {str(e)}")
         return text
