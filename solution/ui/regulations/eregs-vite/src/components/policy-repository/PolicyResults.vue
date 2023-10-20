@@ -23,9 +23,13 @@ const props = defineProps({
 const apiUrl = inject("apiUrl");
 const base = inject("base");
 
-const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
+const getUrl = ({ resource_type: resourceType, url }) =>
+    resourceType === "external" ? url : `${apiUrl}file-manager/files/${url}`;
 
-const needsBar = (item) => item.date_string && item.doc_name_string;
+const needsBar = (item) =>
+    item.resource_type === "external" &&
+    item.date_string &&
+    item.doc_name_string;
 </script>
 
 <template>
@@ -72,17 +76,26 @@ const needsBar = (item) => item.date_string && item.doc_name_string;
                     :class="needsBar(doc) && 'result__context--date--bar'"
                     >{{ formatDate(doc.date_string) }}</span
                 >
-                <span v-if="doc.doc_name_string">{{
-                    doc.doc_name_string
-                }}</span>
+                <span
+                    v-if="
+                        doc.resource_type === 'external' && doc.doc_name_string
+                    "
+                    >{{ doc.doc_name_string }}</span
+                >
             </template>
             <template #link>
                 <h3>
                     <a
-                        :href="getDownloadUrl(doc.uid)"
+                        :href="getUrl(doc)"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         class="document__link document__link--filename"
-                        >{{ doc.summary_string }}</a
-                    >
+                        v-html="
+                            doc.resource_type === 'external'
+                                ? doc.summary_headline
+                                : doc.doc_name_string
+                        "
+                    ></a>
                 </h3>
             </template>
             <template #snippet>

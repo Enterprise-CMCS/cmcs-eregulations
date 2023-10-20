@@ -221,6 +221,10 @@
                 &--view {
                     font-size: $font-size-sm;
                 }
+
+                .search-highlight {
+                    text-decoration: underline;
+                }
             }
 
             .document__subjects {

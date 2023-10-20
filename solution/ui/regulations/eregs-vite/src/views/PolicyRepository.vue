@@ -6,8 +6,8 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
+    getCombinedContent,
     getLastUpdatedDates,
-    getPolicyDocList,
     getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
@@ -131,7 +131,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
 
     try {
-        policyDocList.value.results = await getPolicyDocList({
+        policyDocList.value.results = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
             requestParams,
