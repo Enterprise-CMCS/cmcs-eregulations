@@ -15,13 +15,6 @@ from .extractors import (
 )
 
 
-def load_post_body(body: str) -> dict:
-    try:
-        return json.loads(body)
-    except Exception:
-        return {}
-
-
 def lambda_response(status_code: int, message: str) -> dict:
     return {
         "statusCode": status_code,
@@ -31,7 +24,15 @@ def lambda_response(status_code: int, message: str) -> dict:
 
 
 def handler(event: dict, context: dict) -> dict:
-    config = load_post_body(event["body"])
+    # Retrieve configuration from event dict
+    if "body" not in event:
+        # Assume we are invoked directly
+        config = event
+    else:
+        try:
+            config = json.loads(event["body"])
+        except Exception:
+            return lambda_response(400, "Unable to parse body as JSON.")
 
     # Retrieve required arguments
     try:
@@ -41,7 +42,7 @@ def handler(event: dict, context: dict) -> dict:
         post_username = config.get("post_username")
         post_password = config.get("post_password")
     except KeyError:
-        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the JSON POST body.")
+        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the request body.")
 
     # Retrieve the file
     try:
