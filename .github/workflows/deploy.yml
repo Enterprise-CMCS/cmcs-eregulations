@@ -97,18 +97,6 @@ jobs:
           serverless invoke --function create_su --stage ${{ matrix.environment }}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
-      - name: Populate content for ${{ matrix.environment }}
-        id: condtional-output-for-not-prod
-        if: ${{ matrix.environment  != 'prod' }}
-        env:
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          pushd solution/backend
-          npm install serverless -g
-          npm install
-          serverless invoke --function populate_content --stage ${{ matrix.environment }}
-          echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
-          popd
       # vite needs the .env file in order to know the URL of the api.
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3

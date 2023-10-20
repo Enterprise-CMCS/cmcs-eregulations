@@ -61,7 +61,7 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                     <a
                         :href="getDownloadUrl(doc.uid)"
                         class="document__link document__link--filename"
-                        >{{ doc.document_id }}</a
+                        >{{ doc.document_name }}</a
                     >
                 </h3>
             </template>
@@ -69,8 +69,8 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
                 <div v-if="doc.summary">{{ doc.summary }}</div>
             </template>
             <template #chips>
-                <div v-if="doc.subject.length > 0" class="document__info-block">
-                    <SubjectChips :subjects="doc.subject" />
+                <div v-if="doc.subjects.length > 0" class="document__info-block">
+                    <SubjectChips :subjects="doc.subjects" />
                 </div>
             </template>
             <template #sections>

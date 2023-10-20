@@ -26,3 +26,10 @@ populate_content:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   timeout: 300
+index_resources:
+  environment:
+    SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
+  handler: index_resources.handler
+  layers:
+    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  timeout: 300

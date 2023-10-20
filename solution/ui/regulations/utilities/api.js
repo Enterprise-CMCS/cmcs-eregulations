@@ -405,12 +405,12 @@ const getRecentResources = async (
 ) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true${categories}`,
+            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
             {} // params, default
         );
     }
     return httpApiGetLegacy(
-        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true`,
+        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
         {} // params, default
     );
 };
@@ -574,7 +574,7 @@ const getSupplementalContent = async ({
  * @returns {Promise<{count: number, next: string, previous: string, results: Array<Object>}>} - Promise that contains response object when fulfilled
  */
 const getSearchGovResources = async ({ page = 1, q = "" }) =>
-    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}`);
+    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}&location_details=true&category_details=true`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -672,8 +672,8 @@ const getPolicyDocList = async ({
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/files${
-                requestParams ? `?${requestParams}` : ""
-            }`,
+                requestParams ? `?${requestParams}&` : "?"
+            }location_details=true`,
             {},
             cacheResponse
         );

@@ -1,6 +1,6 @@
 [
     {
-        "document_id": "[Mock] Cypress Fixture",
+        "document_name": "[Mock] Cypress Fixture",
         "file_name": "ff-test-em.pdf",
         "date": "2023-08-30",
         "summary": "This is a test of the ABP broadcasting system",
@@ -27,7 +27,7 @@
             "name": "Informal Guidance",
             "description": "Useful internal emails and one-pagers"
         },
-        "subject": [
+        "subjects": [
             {
                 "id": 2,
                 "full_name": "Alternative Benefit Plan",
@@ -36,7 +36,7 @@
             }
         ],
         "uid": "e641d2f8-7fde-41d5-a025-8388bb51d6ae",
-        "document_id_headline": null,
+        "document_name_headline": null,
         "summary_headline": null
     }
 ]

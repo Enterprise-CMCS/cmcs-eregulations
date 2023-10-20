@@ -24,3 +24,4 @@ defusedxml
 mozilla-django-oidc
 boto3
 django-storages
+pytest-cov

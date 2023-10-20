@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from content_search.functions import add_to_index
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
@@ -41,19 +42,20 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("document_id",)
-    search_fields = ["document_id"]
-    ordering = ("document_id",)
-    filter_horizontal = ("locations", "subject")
+    list_display = ("document_name",)
+    search_fields = ["document_name"]
+    ordering = ("document_name",)
+    filter_horizontal = ("locations", "subjects")
     readonly_fields = ('download_file', 'file_name')
-    fields = ("file_name", "file_path", "document_id", 'date', 'summary',
-              'document_type', 'subject', 'locations', 'internal_notes', 'download_file',)
+    fields = ("file_name", "file_path", "document_name", 'date', 'summary',
+              'document_type', 'subjects', 'locations', 'internal_notes', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
+        "subjects": lambda: Subject.objects.all()
     }
 
     # Will remove any characters from file names we do not want in it.
-    # Commas in file name causes issues in chrome on downloads since we rename the file.
+    # Commas in file names causes issues in chrome on downloads since we rename the file.
     def clean_file_name(self, name):
         name = name.replace(',', '')
         return name
@@ -63,6 +65,8 @@ class UploadedFileAdmin(BaseAdmin):
         if path:
             obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
+        form.instance.save()
+        add_to_index(form.instance)
         super().save_model(request, obj, form, change)
 
     def upload_file(self, file, obj):

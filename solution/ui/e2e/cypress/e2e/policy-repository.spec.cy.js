@@ -59,7 +59,7 @@ describe("Policy Repository", () => {
     });
 
     it("loads the correct subject and search query when the URL is changed", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&q=test").as("qFiles");
+        cy.intercept("**/v3/file-manager/files?subjects=1&q=test**").as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
@@ -109,7 +109,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2", {
+        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2**", {
             fixture: "policy-docs.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
@@ -135,7 +135,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
-        cy.intercept("**/v3/file-manager/files?q=test").as("qFiles");
+        cy.intercept("**/v3/file-manager/files?q=test**").as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository/?q=test");
