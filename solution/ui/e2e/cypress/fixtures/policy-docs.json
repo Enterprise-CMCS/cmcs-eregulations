@@ -27,7 +27,7 @@
             "name": "Informal Guidance",
             "description": "Useful internal emails and one-pagers"
         },
-        "subject": [
+        "subjects": [
             {
                 "id": 2,
                 "full_name": "Alternative Benefit Plan",

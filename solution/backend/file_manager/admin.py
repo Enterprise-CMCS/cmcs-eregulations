@@ -55,7 +55,7 @@ class UploadedFileAdmin(BaseAdmin):
     }
 
     # Will remove any characters from file names we do not want in it.
-    # Commas in file name causes issues in chrome on downloads since we rename the file.
+    # Commas in file names causes issues in chrome on downloads since we rename the file.
     def clean_file_name(self, name):
         name = name.replace(',', '')
         return name
@@ -65,6 +65,7 @@ class UploadedFileAdmin(BaseAdmin):
         if path:
             obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
+        form.instance.save()
         add_to_index(form.instance)
         super().save_model(request, obj, form, change)
 
