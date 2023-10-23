@@ -1,5 +1,6 @@
 <script setup>
 import { inject } from "vue";
+import { useRoute } from "vue-router/composables";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -22,6 +23,8 @@ const props = defineProps({
     },
 });
 
+const $route = useRoute();
+
 const apiUrl = inject("apiUrl");
 const base = inject("base");
 
@@ -32,6 +35,10 @@ const needsBar = (item) =>
     item.resource_type === "external" &&
     item.date_string &&
     item.doc_name_string;
+
+const resultLinkClasses = () => ({
+    "document__link--search": !!$route?.query?.q,
+});
 </script>
 
 <template>
@@ -92,18 +99,20 @@ const needsBar = (item) =>
                         target="_blank"
                         rel="noopener noreferrer"
                         class="document__link document__link--filename"
+                        :class="resultLinkClasses(doc)"
                         v-html="
                             doc.resource_type === 'external'
                                 ? doc.summary_headline
-                                : doc.doc_name_string
+                                : doc.document_name_headline ||
+                                  doc.doc_name_string
                         "
                     ></a>
                 </h3>
             </template>
             <template #snippet>
                 <div
-                    v-if="doc.summary_headline"
-                    v-html="doc.summary_headline"
+                    v-if="doc.summary_headline || doc.summary_string"
+                    v-html="doc.summary_headline || doc.summary_string"
                 />
             </template>
             <template #chips>

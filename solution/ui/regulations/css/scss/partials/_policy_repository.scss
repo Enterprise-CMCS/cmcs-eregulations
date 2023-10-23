@@ -222,8 +222,8 @@
                     font-size: $font-size-sm;
                 }
 
-                .search-highlight {
-                    text-decoration: underline;
+                &--search {
+                    font-weight: 400;
                 }
             }
 
