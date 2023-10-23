@@ -73,6 +73,6 @@ class SubjectTest(TestCase):
         response = self.client.get("/v3/file-manager/subjects")
         data = json.loads(json.dumps(response.data))
         self.assertEqual(data[0]['uploads'], 0)
-        self.assertEqual(data[0]['external_resources'], 6)
+        self.assertEqual(data[0]['external_resources'], 3)
         self.assertEqual(data[1]['uploads'], 3)
-        self.assertEqual(data[1]['external_resources'], 3)
+        self.assertEqual(data[1]['external_resources'], 6)
