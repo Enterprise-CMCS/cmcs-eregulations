@@ -242,9 +242,8 @@ watch(
         clearSelectedParams();
         clearSearchQuery();
 
-        // if all params are removed, getDocList with no arguments and return
+        // if all params are removed, return
         if (_isEmpty(newQueryParams)) {
-            getDocList();
             return;
         }
 
