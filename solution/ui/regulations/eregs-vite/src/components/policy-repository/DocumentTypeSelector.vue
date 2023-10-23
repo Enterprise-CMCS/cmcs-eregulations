@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
 import _isArray from "lodash/isArray";
+import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
 const POSSIBLE_TYPES = ["external", "internal"];
@@ -20,12 +21,18 @@ const typesArray = _isUndefined(typeParams)
 const typesRef = ref(typesArray);
 
 watch(typesRef, (newVal) => {
-    console.log("newVal", newVal);
+    const routeClone = { ...$route.query };
+
+    if (_isEmpty(newVal)) {
+        delete routeClone.type;
+    } else {
+        routeClone.type = newVal;
+    }
+
     $router.push({
         name: "policy-repository",
         query: {
-            ...$route.query,
-            type: _isArray(newVal) ? newVal : [newVal],
+            ...routeClone
         },
     });
 });

@@ -208,6 +208,19 @@ const policyDocSubjects = ref({
     loading: true,
 });
 
+const allDocTypesOnly = (queryParams) => {
+    if (
+        queryParams.type &&
+        queryParams.type.includes("internal") &&
+        queryParams.type.includes("external")
+    ) {
+        const { type, ...rest } = queryParams;
+        return _isEmpty(rest);
+    }
+
+    return false;
+};
+
 // called on load
 const getDocSubjects = async () => {
     try {
@@ -246,6 +259,11 @@ watch(
 
         // if all params are removed, return
         if (_isEmpty(newQueryParams)) {
+            return;
+        }
+
+        // if both internal and external checkboxes are selected and nothing else, return
+        if (allDocTypesOnly($route.query)) {
             return;
         }
 
@@ -325,7 +343,10 @@ getDocSubjects();
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <SubjectTOC
-                        v-if="_isEmpty($route.query)"
+                        v-if="
+                            allDocTypesOnly($route.query) ||
+                            _isEmpty($route.query)
+                        "
                         :policy-doc-subjects="policyDocSubjects"
                     />
                     <template
