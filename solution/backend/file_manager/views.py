@@ -15,7 +15,7 @@ from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
-from resources.models import AbstractLocation
+from resources.models import AbstractLocation, AbstractResource
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import establish_client, get_upload_link
@@ -44,12 +44,18 @@ class UploadCategoryViewset(viewsets.ViewSet):
 @extend_schema(
     description="Retrieve a list of subjects.",
 )
-class SubjectViewset(viewsets.ViewSet):
+class SubjectViewset(viewsets.ReadOnlyModelViewSet):
     model = Subject
 
     def list(self, request):
-        queryset = self.model.objects.all()
-        serializer = SubjectSerializer(queryset, many=True)
+        query = self.model.objects.all()
+        files_prefetch = UploadedFile.objects.all()
+        resources_prefetch = AbstractResource.objects.all()
+        query.prefetch_related(
+            Prefetch("uploads", queryset=files_prefetch),
+            Prefetch('resources', queryset=resources_prefetch))
+        context = self.get_serializer_context()
+        serializer = SubjectSerializer(query, many=True, context=context)
         return Response(serializer.data)
 
 
