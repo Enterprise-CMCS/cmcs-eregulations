@@ -20,14 +20,19 @@ class SubjectSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
-    uploads = serializers.SerializerMethodField()
-    external_resources = serializers.SerializerMethodField()
 
-    def get_uploads(self, obj):
-        return obj.uploads.count()
 
-    def get_external_resources(self, obj):
-        return obj.resources.count()
+class SubjectDetailsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    full_name = serializers.CharField()
+    short_name = serializers.CharField()
+    abbreviation = serializers.CharField()
+    content = serializers.SerializerMethodField()
+    internal_content = serializers.IntegerField()
+    external_content = serializers.IntegerField()
+
+    def get_content(self, obj):
+        return obj.content.count()
 
     class Meta:
         model = Subject
