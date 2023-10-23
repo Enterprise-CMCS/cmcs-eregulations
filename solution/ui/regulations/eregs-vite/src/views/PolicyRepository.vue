@@ -20,6 +20,7 @@ import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 
+import DocumentTypeSelector from "@/components/policy-repository/DocumentTypeSelector.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -314,6 +315,7 @@ getDocSubjects();
                             />
                         </template>
                         <template #filters>
+                            <DocumentTypeSelector />
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
                             />
