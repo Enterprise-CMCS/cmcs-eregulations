@@ -1,32 +1,34 @@
 <script setup>
+import { ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
-import { getSubjectName } from "utilities/filters";
+import _isArray from "lodash/isArray";
+import _isUndefined from "lodash/isUndefined";
 
-const props = defineProps({
-    policyDocSubjects: {
-        type: Object,
-        default: () => ({ results: [], loading: true }),
-    },
-});
+const POSSIBLE_TYPES = ["external", "internal"];
 
-const $router = useRouter();
 const $route = useRoute();
+const $router = useRouter();
 
-const subjectClick = (event) => {
-    const subjects = $route.query.subjects ?? [];
-    const subjectToAdd = event.target.dataset.id;
+const typeParams = $route.query?.type;
+const typesArray = _isUndefined(typeParams)
+    ? [...POSSIBLE_TYPES]
+    : _isArray(typeParams)
+    ? typeParams
+    : [typeParams];
 
-    if (subjects.includes(subjectToAdd)) return;
+const typesRef = ref(typesArray);
 
+watch(typesRef, (newVal) => {
+    console.log("newVal", newVal);
     $router.push({
         name: "policy-repository",
         query: {
             ...$route.query,
-            subjects: [...subjects, event.target.dataset.id],
+            type: _isArray(newVal) ? newVal : [newVal],
         },
     });
-};
+});
 </script>
 
 <template>
@@ -37,11 +39,12 @@ const subjectClick = (event) => {
                 <div>
                     <div class="ds-c-choice-wrapper">
                         <input
-                            class="ds-c-choice ds-c-choice--small"
                             id="choice-list--1__choice--0"
+                            v-model="typesRef"
+                            class="ds-c-choice ds-c-choice--small"
                             name="checkbox_choices"
                             type="checkbox"
-                            value="A"
+                            value="external"
                         /><label class="ds-c-label" for="choice-list--1__choice--0"
                             ><span class="">Formal Guidance</span></label
                         >
@@ -50,11 +53,12 @@ const subjectClick = (event) => {
                 <div>
                     <div class="ds-c-choice-wrapper">
                         <input
-                            class="ds-c-choice ds-c-choice--small"
                             id="choice-list--1__choice--1"
+                            v-model="typesRef"
+                            class="ds-c-choice ds-c-choice--small"
                             name="checkbox_choices"
                             type="checkbox"
-                            value="B"
+                            value="internal"
                         /><label class="ds-c-label" for="choice-list--1__choice--1"
                             ><span class="">Informal Guidance</span
                         >

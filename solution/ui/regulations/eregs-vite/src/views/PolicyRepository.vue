@@ -68,6 +68,7 @@ const $router = useRouter();
 
 const FilterTypesDict = {
     subjects: "Subject",
+    type: "Type",
     q: "query",
 };
 
