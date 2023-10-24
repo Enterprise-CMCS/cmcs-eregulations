@@ -12,7 +12,7 @@ import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
-const props = defineProps({
+defineProps({
     results: {
         type: Array,
         default: () => [],
@@ -102,7 +102,8 @@ const resultLinkClasses = () => ({
                         :class="resultLinkClasses(doc)"
                         v-html="
                             doc.resource_type === 'external'
-                                ? doc.summary_headline
+                                ? doc.summary_headline ||
+                                  doc.summary_string
                                 : doc.document_name_headline ||
                                   doc.doc_name_string
                         "
@@ -111,7 +112,10 @@ const resultLinkClasses = () => ({
             </template>
             <template #snippet>
                 <div
-                    v-if="doc.summary_headline || doc.summary_string"
+                    v-if="
+                        doc.resource_type === 'internal' &&
+                        (doc.summary_headline || doc.summary_string)
+                    "
                     v-html="doc.summary_headline || doc.summary_string"
                 />
             </template>

@@ -53,7 +53,7 @@ watch(typesRef, (newVal) => {
                             type="checkbox"
                             value="external"
                         /><label class="ds-c-label" for="choice-list--1__choice--0"
-                            ><span class="">Formal Guidance</span></label
+                            ><span class="">Public Resources</span></label
                         >
                     </div>
                 </div>
@@ -67,7 +67,7 @@ watch(typesRef, (newVal) => {
                             type="checkbox"
                             value="internal"
                         /><label class="ds-c-label" for="choice-list--1__choice--1"
-                            ><span class="">Informal Guidance</span
+                            ><span class="">Internal Resources</span
                         >
                     </div>
                 </div>
