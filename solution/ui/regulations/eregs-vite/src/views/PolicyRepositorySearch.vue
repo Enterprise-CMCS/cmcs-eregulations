@@ -96,12 +96,12 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
 
     try {
-        const results = await getPolicyDocList({
+        const contentList = await getPolicyDocList({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
             requestParams,
         });
-        policyDocList.value.results = results;
+        policyDocList.value.results = contentList.results;
     } catch (error) {
         console.error(error);
     } finally {
