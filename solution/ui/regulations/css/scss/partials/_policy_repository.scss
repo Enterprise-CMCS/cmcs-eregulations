@@ -131,7 +131,6 @@
                     margin-bottom: 0.75rem;
                 }
             }
-
         }
 
         .subjects__list {
@@ -262,6 +261,11 @@
 
                 .subject__chip {
                     @include common-chip-styles;
+
+                    font-size: 11px;
+                    line-height: 18px;
+                    height: unset;
+                    padding: 2px 8px;
                 }
             }
         }
