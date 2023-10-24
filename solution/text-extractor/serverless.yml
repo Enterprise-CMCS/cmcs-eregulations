@@ -26,11 +26,6 @@ functions:
     image:
       name: appimage
     timeout: 900
-    events:
-      - http:
-          method: post
-          path: /
-          async: true
 
 resources:
   Resources:
@@ -57,6 +52,14 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: TextDetectionPolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action: "textract:DetectDocumentText"
+                  Resource: "*"
+                  Sid: "DetectDocumentText"
           - PolicyName: StorageBucketPolicy
             PolicyDocument:
               Version: '2012-10-17'

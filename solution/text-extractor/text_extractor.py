@@ -15,13 +15,6 @@ from .extractors import (
 )
 
 
-def load_post_body(body: str) -> dict:
-    try:
-        return json.loads(body)
-    except Exception:
-        return {}
-
-
 def lambda_response(status_code: int, message: str) -> dict:
     return {
         "statusCode": status_code,
@@ -31,22 +24,30 @@ def lambda_response(status_code: int, message: str) -> dict:
 
 
 def handler(event: dict, context: dict) -> dict:
-    post_params = load_post_body(event["body"])
+    # Retrieve configuration from event dict
+    if "body" not in event:
+        # Assume we are invoked directly
+        config = event
+    else:
+        try:
+            config = json.loads(event["body"])
+        except Exception:
+            return lambda_response(400, "Unable to parse body as JSON.")
 
     # Retrieve required arguments
     try:
-        resource_id = post_params["id"]
-        uri = post_params["uri"]
-        post_url = post_params["post_url"]
-        post_username = post_params.get("post_username")
-        post_password = post_params.get("post_password")
+        resource_id = config["id"]
+        uri = config["uri"]
+        post_url = config["post_url"]
+        post_username = config.get("post_username")
+        post_password = config.get("post_password")
     except KeyError:
-        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the JSON POST body.")
+        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the request body.")
 
     # Retrieve the file
     try:
-        backend_type = post_params.get("backend", "web").lower()
-        backend = FileBackend.get_backend(backend_type, post_params)
+        backend_type = config.get("backend", "web").lower()
+        backend = FileBackend.get_backend(backend_type, config)
         file = backend.get_file(uri)
     except BackendInitException as e:
         return lambda_response(500, f"Failed to initialize backend: {str(e)}")
@@ -64,7 +65,7 @@ def handler(event: dict, context: dict) -> dict:
 
     # Run extractor
     try:
-        extractor = Extractor.get_extractor(file_type)
+        extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
