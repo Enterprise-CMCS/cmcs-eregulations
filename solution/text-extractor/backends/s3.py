@@ -8,13 +8,13 @@ from .exceptions import BackendException, BackendInitException
 class S3Backend(FileBackend):
     backend = "s3"
 
-    def __init__(self, post_params: dict):
+    def __init__(self, config: dict):
         try:
-            self.aws_access_key_id = post_params["s3"]["aws_access_key_id"]
-            self.aws_secret_access_key = post_params["s3"]["aws_secret_access_key"]
-            self.aws_storage_bucket_name = post_params["s3"]["aws_storage_bucket_name"]
+            self.aws_access_key_id = config["s3"]["aws_access_key_id"]
+            self.aws_secret_access_key = config["s3"]["aws_secret_access_key"]
+            self.aws_storage_bucket_name = config["s3"]["aws_storage_bucket_name"]
         except KeyError:
-            raise BackendInitException("The S3 backend requires 'aws_access_key_id', 'aws_secret_access_key', "
+            raise BackendInitException("the S3 backend requires 'aws_access_key_id', 'aws_secret_access_key', "
                                        "and 'aws_storage_bucket_name' in the 's3' key of the JSON POST body.")
         try:
             self.client = boto3.client(
@@ -23,7 +23,7 @@ class S3Backend(FileBackend):
                 aws_secret_access_key=self.aws_secret_access_key,
             )
         except Exception as e:
-            raise BackendInitException(f"Failed to initialize AWS client: {str(e)}")
+            raise BackendInitException(f"failed to initialize AWS client: {str(e)}")
 
     def get_file(self, uri: str) -> bytes:
         try:
@@ -32,4 +32,4 @@ class S3Backend(FileBackend):
         except botocore.exceptions.ClientError as e:
             raise BackendException(f"S3 client error: {str(e)}")
         except Exception as e:
-            raise BackendException(f"The read operation unexpectedly failed: {str(e)}")
+            raise BackendException(f"the read operation unexpectedly failed: {str(e)}")

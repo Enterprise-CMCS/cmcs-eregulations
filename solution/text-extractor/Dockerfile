@@ -6,9 +6,6 @@ ENV EXTERNAL_PORT="8000"
 ENV PROXY_PARAMS=""
 ENV STARTUP_CMD="app.text_extractor.handler"
 
-# Install binary dependencies
-RUN yum install file-libs
-
 # Copy lambda-proxy
 COPY lambda-proxy /proxy
 
@@ -18,6 +15,9 @@ RUN pip install -r /proxy/requirements.txt
 # Copy function code
 # Will be overridden locally
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
+
+# Install binary dependencies
+RUN xargs yum install -y < app/packages.txt
 
 # Install the required packages
 RUN pip install -r app/requirements.txt
