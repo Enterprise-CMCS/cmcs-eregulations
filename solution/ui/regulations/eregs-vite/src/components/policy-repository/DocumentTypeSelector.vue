@@ -6,14 +6,14 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
-const POSSIBLE_TYPES = ["external", "internal"];
+import { DOCUMENT_TYPES } from "utilities/utils";
 
 const $route = useRoute();
 const $router = useRouter();
 
 const typeParams = $route.query?.type;
 const typesArray = _isUndefined(typeParams)
-    ? [...POSSIBLE_TYPES]
+    ? [...DOCUMENT_TYPES]
     : _isArray(typeParams)
     ? typeParams
     : [typeParams];
