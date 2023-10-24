@@ -42,6 +42,20 @@ class OidcAdminAuthenticationBackendTest(unittest.TestCase):
         user = self.backend.create_user(self.mock_claims)
         self.assertIsNone(user)
 
+    def test_create_user_with_jobcodes(self):
+        jobcodes = ["EREGS_EDITOR", "EREGS_MANAGER", "EREGS_ADMIN"]
+        for jobcode in jobcodes:
+            self.mock_claims["jobcodes"] = jobcode
+            user = self.backend.create_user(self.mock_claims)
+            self.assertIsInstance(user, User)
+            self.assertTrue(user.has_editable_job_code)
+
+    def test_create_user_without_jobcodes(self):
+        self.mock_claims["jobcodes"] = "EREGS_READER"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertIsInstance(user, User)
+        self.assertFalse(user.has_editable_job_code)
+
 
 if __name__ == '__main':
     unittest.main()

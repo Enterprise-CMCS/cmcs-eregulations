@@ -78,7 +78,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         )
 
     def create_user(self, claims) -> User:
-        if claims.get("jobcodes"):
+        jobcodes = claims.get("jobcodes")
+        if jobcodes:
             with transaction.atomic():
                 try:
                     # Attempt to get the user by email
@@ -91,7 +92,14 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                     )
 
                 # Set user fields from claims
-                return self.update_user(user, claims)
+                user = self.update_user(user, claims)
+                user.save()
+                if "EREGS_READER" not in jobcodes:
+                    user.has_editable_job_code = True
+                else:
+                    user.has_editable_job_code = False
+
+                return user
         return None
 
     @transaction.atomic

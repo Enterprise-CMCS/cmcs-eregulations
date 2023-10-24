@@ -77,6 +77,15 @@ const resultLinkLabel = (item) => {
             :key="doc.uid"
             class="doc-list__document"
         >
+            <template #actions>
+                <button
+                    v-if="has_editable_job_code"
+                    class="edit-button"
+                    @click="editDocument(doc)"
+                >
+                    Edit
+                </button>
+            </template>
             <template #labels>
                 <CategoryLabel
                     v-if="!_isEmpty(doc.document_type)"
