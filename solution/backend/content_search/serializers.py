@@ -35,3 +35,8 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     url = serializers.CharField()
     # content_type = serializers.CharField()
     # content_id = serializers.IntegerField()
+
+
+class ContentUpdateSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    content = serializers.CharField()

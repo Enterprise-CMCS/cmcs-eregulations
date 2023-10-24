@@ -11,7 +11,7 @@ from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
@@ -87,3 +87,19 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
         else:
             serializer = ContentListSerializer(query, many=True, context=context)
         return Response(serializer.data)
+
+
+class PostContentTextViewset(viewsets.ViewSet):
+    @extend_schema(
+        description="Retrieve list sof uploaded files",
+        request=ContentUpdateSerializer,
+        responses={200: ContentUpdateSerializer}
+    )
+    def update(self, request, *args, **kwargs):
+        post_data = request.data
+        uid = post_data['uid']
+        data = post_data['content']
+        index = ContentIndex.objects.get(uid=uid)
+        index.content = data
+        index.save()
+        return Response(data='Index was updated')
