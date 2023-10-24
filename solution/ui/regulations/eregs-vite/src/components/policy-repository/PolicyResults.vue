@@ -42,6 +42,15 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             :key="doc.uid"
             class="doc-list__document"
         >
+            <template #actions>
+                <button
+                    v-if="has_editable_job_code"
+                    class="edit-button"
+                    @click="editDocument(doc)"
+                >
+                    Edit
+                </button>
+            </template>
             <template #labels>
                 <CategoryLabel
                     v-if="doc.document_type"
