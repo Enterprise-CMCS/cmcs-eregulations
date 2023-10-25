@@ -214,7 +214,7 @@ class AbstractResourceAdmin(BaseAdmin):
                 "bulk_adds": bulk_locs,
             })
             form.instance.save()
-            add_to_index(form.instance)
+        add_to_index(form.instance)
 
     # Checks the location for the formats.
     # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1

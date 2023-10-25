@@ -8,7 +8,7 @@ The text extractor supports the following file types. File types that are planne
 
 - [x] Plain text
 - [ ] HTML and XML
-- [ ] PDF
+- [x] PDF
 - [ ] Images (png, jpeg, gif, etc.)
 - [ ] Microsoft Word (doc and docx)
 - [ ] Microsoft Excel (xls and xlsx)
@@ -30,7 +30,7 @@ No further action is required, but if you want the code to hot-reload during dev
 
 # Request structure
 
-To run the text extractor, send a JSON POST request with the following structure:
+The following data structure is required:
 
 ```jsonc
 {
@@ -45,11 +45,39 @@ To run the text extractor, send a JSON POST request with the following structure
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
         "aws_storage_bucket_name": "xxxxxx"  // The name of the bucket to retrieve the object from
+    },
+    // Settings for Textract, leave out when deployed to use the built-in Lambda user
+    "textract": {
+        "aws_access_key_id": "xxxxxx",       // AWS access key for Textract
+        "aws_secret_access_key": "xxxxxx",   // AWS secret key for Textract
+        "aws_region": "us-east-1"            // AWS region for Textract
     }
 }
 ```
 
-It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example.
+It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the POST body to a stringified version of the structure above.
+
+If you wish to directly invoke this function, you may do so like this:
+
+```python
+import boto3
+import json
+
+request = {
+    # ...the structure from above goes here...
+}
+
+data = json.dumps(request).encode()  # JSONify the request and convert it to bytes
+
+client = boto3.client("lambda")      # Include access keys/region here if needed
+response = client.invoke(
+    FunctionName="lambda-arn-here",
+    InvocationType="Event",          # Include this if you want to run the lambda async, as recommended
+    Payload=data,                    # You may include raw JSON here
+)
+```
+
+Direct invocation is the easiest way to asynchronously run the text extractor. Otherwise, it will be required to set up a proxy Lambda function that accepts the POST request from API Gateway and asynchronously invokes this one.
 
 # Response structure
 

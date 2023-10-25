@@ -1,4 +1,9 @@
-[
+{
+    "count":1,
+    "next":null,
+    "previous": null,
+    "results":
+    [
     {
         "document_name": "[Mock] Cypress Fixture",
         "file_name": "ff-test-em.pdf",
@@ -40,3 +45,4 @@
         "summary_headline": null
     }
 ]
+}

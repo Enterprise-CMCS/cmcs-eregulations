@@ -47,7 +47,7 @@ provider:
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
-    TEXT_EXTRACTOR_URL: ${self:custom.settings.text_extractor_url}
+    TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
   tracing:
     apiGateway: true
   vpc:
@@ -74,7 +74,7 @@ custom:
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
-    text_extractor_url: ${cf:text-extractor-${self:custom.stage}.ServiceEndpoint}/
+    text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
