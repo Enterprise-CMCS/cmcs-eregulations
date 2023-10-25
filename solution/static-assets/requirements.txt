@@ -1,5 +1,5 @@
 Cryptography==3.4.8
-Werkzeug==0.15.5
+Werkzeug==3.0.1
 zappa-django-utils==0.4.1
 boto3
 django-debug-toolbar
