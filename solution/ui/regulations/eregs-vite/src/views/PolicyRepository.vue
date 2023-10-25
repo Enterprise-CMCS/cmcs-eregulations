@@ -77,6 +77,24 @@ provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 provide("FilterTypesDict", FilterTypesDict);
 
+/**
+* @param {Object} queryParams - $route.query
+* @returns {Boolean} - true if all doc types are selected and nothing else
+*/
+const allDocTypesOnly = (queryParams) => {
+    if (
+        queryParams.type &&
+        ((queryParams.type.includes("internal") &&
+            queryParams.type.includes("external")) ||
+            queryParams.type.includes("all"))
+    ) {
+        const { type, ...rest } = queryParams;
+        return _isEmpty(rest);
+    }
+
+    return false;
+};
+
 // search query refs and methods
 const searchQuery = ref($route.query.q || "");
 const clearSearchQuery = () => {
@@ -223,7 +241,7 @@ const getDocSubjects = async () => {
         policyDocSubjects.value.loading = false;
 
         // if there's a $route, call addSelectedParams
-        if (!_isEmpty($route.query)) {
+        if (!allDocTypesOnly($route.query)) {
             // wipe everything clean to start
             clearSelectedParams();
             clearSearchQuery();
@@ -236,24 +254,6 @@ const getDocSubjects = async () => {
             getDocList(getRequestParams($route.query));
         }
     }
-};
-
-/**
-* @param {Object} queryParams - $route.query
-* @returns {Boolean} - true if all doc types are selected and nothing else
-*/
-const allDocTypesOnly = (queryParams) => {
-    if (
-        queryParams.type &&
-        ((queryParams.type.includes("internal") &&
-            queryParams.type.includes("external")) ||
-            queryParams.type.includes("all"))
-    ) {
-        const { type, ...rest } = queryParams;
-        return _isEmpty(rest);
-    }
-
-    return false;
 };
 
 watch(
