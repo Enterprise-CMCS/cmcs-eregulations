@@ -121,6 +121,11 @@
             fieldset {
                 margin-top: 0;
 
+                .ds-c-choice:checked + label::before {
+                    background-color: $mid_blue;
+                    border-color: $mid_blue;
+                }
+
                 label {
                     margin: 0;
                     font-size: 18px;
