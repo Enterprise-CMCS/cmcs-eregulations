@@ -94,7 +94,7 @@ const executeSearch = (payload) => {
 };
 
 const clearSearchInput = () => {
-    const { q, ...rest } = $route.query;
+    const { q, page, ...rest } = $route.query;
     $router.push({
         name: "policy-repository",
         query: {
