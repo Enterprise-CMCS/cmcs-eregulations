@@ -23,6 +23,7 @@ class ContentSearchSerializer(DetailsSerializer, serializers.Serializer):
 
 
 class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
+    uid = serializers.CharField()
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
     date_string = serializers.DateField()
@@ -38,5 +39,5 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
 
 
 class ContentUpdateSerializer(serializers.Serializer):
-    uid = serializers.CharField()
-    content = serializers.CharField()
+    id = serializers.CharField()
+    text = serializers.CharField()

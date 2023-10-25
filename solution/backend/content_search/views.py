@@ -9,7 +9,10 @@ from common.mixins import PAGINATION_PARAMS, ViewSetPagination
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
+# from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+
+# from common.auth import SettingsAuthentication
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
@@ -90,6 +93,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
 
 
 class PostContentTextViewset(viewsets.ViewSet):
+    # authentication_classes = [SettingsAuthentication]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     @extend_schema(
         description="Retrieve list sof uploaded files",
         request=ContentUpdateSerializer,
@@ -97,9 +102,9 @@ class PostContentTextViewset(viewsets.ViewSet):
     )
     def update(self, request, *args, **kwargs):
         post_data = request.data
-        uid = post_data['uid']
-        data = post_data['content']
-        index = ContentIndex.objects.get(uid=uid)
-        index.content = data
+        id = post_data['id']
+        text = post_data['text']
+        index = ContentIndex.objects.get(uid=id)
+        index.content = text
         index.save()
         return Response(data='Index was updated')
