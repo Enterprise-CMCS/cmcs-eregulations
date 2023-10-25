@@ -14,7 +14,7 @@ import {
 
 import { getSubjectName, sortSubjects } from "utilities/filters";
 
-import { getRequestParams } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
@@ -258,8 +258,12 @@ watch(
         clearSelectedParams();
         clearSearchQuery();
 
+        const sanitizedQueryParams = Object.entries(newQueryParams).filter(
+            ([key]) => PARAM_VALIDATION_DICT[key]
+        );
+
         // if all params are removed, return
-        if (_isEmpty(newQueryParams)) {
+        if (_isEmpty(sanitizedQueryParams)) {
             return;
         }
 
