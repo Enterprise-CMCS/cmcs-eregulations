@@ -27,6 +27,7 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
     date_string = serializers.DateField()
+    content = serializers.CharField()
     summary_string = serializers.CharField()
     locations = serializers.SerializerMethodField()
     document_type = DocumentTypeSerializer(many=False, read_only=True)
