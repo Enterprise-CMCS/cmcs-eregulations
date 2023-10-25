@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
-from common.mixins import PAGINATION_PARAMS, ViewSetPagination
+from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
@@ -14,11 +14,12 @@ from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer
 
 
-class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelViewSet):
-    serializer_class = ContentSearchSerializer
+class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
-    pagination_class = ViewSetPagination
+    queryset = ContentIndex.objects.all()
+    paginate_by_default = True
     location_filter_prefix = "locations__"
+    pagination_class = OptionalPaginationMixin.pagination_class
 
     @extend_schema(
         description="Retrieve list of uploaded files",
@@ -34,14 +35,14 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
                                           "\"&document-type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
-                                          "\"&subjects=X&subjects=Y\" for multiple.", int, False),
+                                          "\"&subjects=X&subjects=Y\" for multiple.", str, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
                                           "all. Use \"&resource-type=external\"", str, ''),
-                    ] + LocationExplorerViewSetMixin.PARAMETERS + PAGINATION_PARAMS
+                    ] + LocationExplorerViewSetMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
     )
     def list(self, request):
         locations = self.request.GET.getlist("locations")
@@ -50,18 +51,20 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
         category = self.request.GET.getlist("category")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
-        paginate = self.request.GET.get("paginate", True)
-        query = self.model.objects.all()
+        paginate = self.request.GET.get("paginate") != 'false'
+        query = self.queryset
         q_obj = self.get_location_filter(locations)
         if q_obj:
             query = query.filter(q_obj)
         if subjects:
-            query = query.filter(subjects__id__in=subjects)
+            if subjects[0] == 'all':
+                query = query.filter(subjects__isnull=False)
+            else:
+                query = query.filter(subjects__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
         if document_type:
             query = query.filter(document_type__id=document_type)
-
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
@@ -79,11 +82,14 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, viewsets.ReadOnlyModelV
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
-        if paginate != 'false':
+        if paginate:
             query = self.paginate_queryset(query)
         context = self.get_serializer_context()
         if search_query:
             serializer = ContentSearchSerializer(query, many=True, context=context)
         else:
             serializer = ContentListSerializer(query, many=True, context=context)
-        return Response(serializer.data)
+        if paginate:
+            return self.get_paginated_response(serializer.data)
+        else:
+            return Response(serializer.data)
