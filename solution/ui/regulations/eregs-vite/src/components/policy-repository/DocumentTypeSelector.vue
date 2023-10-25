@@ -12,8 +12,8 @@ const $route = useRoute();
 const $router = useRouter();
 
 const typeParams = $route.query?.type;
-const typesArray = _isUndefined(typeParams)
-    ? [...DOCUMENT_TYPES]
+const typesArray = _isUndefined(typeParams) || typeParams === "all"
+    ? [ ...DOCUMENT_TYPES ]
     : _isArray(typeParams)
     ? typeParams
     : [typeParams];
@@ -25,6 +25,8 @@ watch(typesRef, (newVal) => {
 
     if (_isEmpty(newVal)) {
         delete routeClone.type;
+    } else if ( newVal.includes("internal") && newVal.includes("external") ) {
+        routeClone.type = "all";
     } else {
         routeClone.type = newVal;
     }

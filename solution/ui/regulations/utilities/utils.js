@@ -44,7 +44,7 @@ const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
         !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
-    type: (type) => DOCUMENT_TYPES.includes(type),
+    type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
 };
 
 /*
