@@ -1,5 +1,5 @@
 
-from django.db.models import Prefetch
+from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -82,6 +82,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
+        else:
+            query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
         if paginate:
             query = self.paginate_queryset(query)
         context = self.get_serializer_context()
