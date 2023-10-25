@@ -25,7 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov', 'eregulations.cms.gov']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),
+                 'localhost',
+                 'regulations-pilot.cms.gov',
+                 'eregulations.cms.gov',
+                 'host.docker.internal'
+                 ]
 
 # Application definition
 

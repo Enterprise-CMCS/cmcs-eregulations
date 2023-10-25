@@ -106,4 +106,4 @@ class PostContentTextViewset(viewsets.ViewSet):
         index = ContentIndex.objects.get(uid=id)
         index.content = text
         index.save()
-        return Response(data='Index was updated')
+        return Response(data=f'Index was updated for {index.doc_name_string}')
