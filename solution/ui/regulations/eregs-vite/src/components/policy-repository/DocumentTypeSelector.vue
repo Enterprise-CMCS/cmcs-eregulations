@@ -33,9 +33,7 @@ watch(typesRef, (newVal) => {
 
     $router.push({
         name: "policy-repository",
-        query: {
-            ...routeClone
-        },
+        query: routeClone,
     });
 });
 </script>

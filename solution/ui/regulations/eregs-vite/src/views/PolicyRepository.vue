@@ -209,20 +209,6 @@ const policyDocSubjects = ref({
     loading: true,
 });
 
-const allDocTypesOnly = (queryParams) => {
-    if (
-        queryParams.type &&
-        ((queryParams.type.includes("internal") &&
-            queryParams.type.includes("external")) ||
-            queryParams.type.includes("all"))
-    ) {
-        const { type, ...rest } = queryParams;
-        return _isEmpty(rest);
-    }
-
-    return false;
-};
-
 // called on load
 const getDocSubjects = async () => {
     try {
@@ -250,6 +236,24 @@ const getDocSubjects = async () => {
             getDocList(getRequestParams($route.query));
         }
     }
+};
+
+/**
+* @param {Object} queryParams - $route.query
+* @returns {Boolean} - true if all doc types are selected and nothing else
+*/
+const allDocTypesOnly = (queryParams) => {
+    if (
+        queryParams.type &&
+        ((queryParams.type.includes("internal") &&
+            queryParams.type.includes("external")) ||
+            queryParams.type.includes("all"))
+    ) {
+        const { type, ...rest } = queryParams;
+        return _isEmpty(rest);
+    }
+
+    return false;
 };
 
 watch(

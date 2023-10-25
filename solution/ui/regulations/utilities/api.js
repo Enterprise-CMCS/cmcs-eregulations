@@ -707,12 +707,11 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
 };
 
 /**
- * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {string} apiUrl - API base url passed in from Django template
  * @param {string} [requestParams] - Query string parameters to pass to API
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
- * @returns {Promise<Array<{}>>} - Promise that contains array of file items when fulfilled
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
-
 const getCombinedContent = async ({
     apiUrl,
     requestParams = "",
