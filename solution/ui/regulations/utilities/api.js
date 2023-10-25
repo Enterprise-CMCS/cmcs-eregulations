@@ -574,7 +574,11 @@ const getSupplementalContent = async ({
  * @returns {Promise<{count: number, next: string, previous: string, results: Array<Object>}>} - Promise that contains response object when fulfilled
  */
 const getSearchGovResources = async ({ page = 1, q = "" }) =>
-    httpApiGet(`resources/search?q=${encodeURIComponent(q)}&page=${page}&location_details=true&category_details=true`);
+    httpApiGet(
+        `resources/search?q=${encodeURIComponent(
+            q
+        )}&page=${page}&location_details=true&category_details=true`
+    );
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
@@ -702,6 +706,25 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
     return httpApiGet("file-manager/subjects", cacheResponse);
 };
 
+/**
+ * @param {string} apiUrl - API base url passed in from Django template
+ * @param {string} [requestParams] - Query string parameters to pass to API
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
+const getCombinedContent = async ({
+    apiUrl,
+    requestParams = "",
+    cacheResponse = true,
+}) =>
+    httpApiGetLegacy(
+        `${apiUrl}content-search/${
+            requestParams ? `?${requestParams}&` : "?"
+        }location_details=true&category_details=true`,
+        {},
+        cacheResponse
+    );
+
 export {
     config,
     configure,
@@ -709,6 +732,7 @@ export {
     getCacheItem,
     getCacheKeys,
     getCategories,
+    getCombinedContent,
     getDecodedIdToken,
     getFormattedPartsList,
     getGovInfoLinks,

@@ -24,6 +24,14 @@ const EventCodes = {
     OpenBlockingModal: "OpenBlockingModal",
 };
 
+const DOCUMENT_TYPES = ["external", "internal"];
+
+const PARAM_MAP = {
+    subjects: "subjects",
+    q: "q",
+    type: "resource-type",
+};
+
 /**
  * Validation dictionary for query params to ensure that only valid values are
  * passed to the API.
@@ -34,9 +42,9 @@ const EventCodes = {
  */
 const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
-        !Number.isNaN(parseInt(subject, 10)) &&
-        !Number.isNaN(Number(subject)),
+        !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
+    type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
 };
 
 /*
@@ -59,7 +67,9 @@ const getRequestParams = (query) => {
                 PARAM_VALIDATION_DICT[key](value)
             );
 
-            return filteredValues.map((v) => `${key}=${v}`).join("&");
+            return filteredValues
+                .map((v) => `${PARAM_MAP[key]}=${v}`)
+                .join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))
         .join("&");
@@ -885,6 +895,7 @@ export {
     consolidateToMap,
     createOneIndexedArray,
     delay,
+    DOCUMENT_TYPES,
     EventCodes,
     flattenObject,
     flattenSubpart,
@@ -910,6 +921,7 @@ export {
     isFloat,
     mapToArray,
     niceDate,
+    PARAM_VALIDATION_DICT,
     parseError,
     removeFragmentParams,
     removeNulls,

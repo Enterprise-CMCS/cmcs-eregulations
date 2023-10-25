@@ -127,6 +127,28 @@ describe("Utilities.js", () => {
         };
 
         expect(getRequestParams(query8)).toBe("q=test");
+
+        const query9 = {
+            q: "test",
+            type: "public",
+        };
+
+        expect(getRequestParams(query9)).toBe("q=test");
+
+        const query10 = {
+            q: "test",
+            type: "internal",
+        };
+
+        expect(getRequestParams(query10)).toBe("q=test&resource-type=internal");
+
+        const query11 = {
+            q: "test",
+            type: "all",
+            page: undefined,
+        };
+
+        expect(getRequestParams(query11)).toBe("q=test&resource-type=all");
     });
 
     it("romanize properly converts numbers to roman numerals", async () => {

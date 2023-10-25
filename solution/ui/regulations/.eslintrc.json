@@ -17,6 +17,7 @@
     "rules": {
         "eqeqeq": "off",
         "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-nested-ternary": "off",
         "vue/order-in-components": "off",
         "vue/no-unsupported-features": [
             "error",
@@ -24,6 +25,7 @@
                 "version": "^2.7.0",
                 "ignores": []
             }
-        ]
+        ],
+        "vue/no-v-html": "off"
     }
 }

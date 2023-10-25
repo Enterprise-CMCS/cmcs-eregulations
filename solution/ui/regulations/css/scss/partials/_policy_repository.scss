@@ -59,6 +59,15 @@
 
     .sidebar__filters {
         flex: 1;
+        margin-bottom: 1rem;
+
+        @mixin filter-container-styles {
+            padding: 0.75rem 1rem;
+            border: 2px solid $border_color;
+            border-radius: 4px;
+            margin-block-start: 1rem;
+            margin-block-end: 1rem;
+        }
 
         .sticky-container {
             position: sticky;
@@ -106,12 +115,34 @@
             }
         }
 
+        .doc-type__toggle {
+            @include filter-container-styles;
+
+            fieldset {
+                margin-top: 0;
+
+                .ds-c-choice:checked + label::before {
+                    background-color: $mid_blue;
+                    border-color: $mid_blue;
+                }
+
+                label {
+                    margin: 0;
+                    font-size: 18px;
+                    line-height: 24px;
+                }
+
+                div:not(:last-child) {
+                    margin-bottom: 0.75rem;
+                }
+            }
+        }
+
         .subjects__list {
             height: 300px;
             overflow: scroll;
-            padding: 0.75rem 1rem;
-            border: 2px solid $border_color;
-            border-radius: 4px;
+
+            @include filter-container-styles;
 
             .subjects__li {
                 margin-bottom: 0.75rem;
@@ -221,6 +252,10 @@
                 &--view {
                     font-size: $font-size-sm;
                 }
+
+                &--search {
+                    font-weight: 400;
+                }
             }
 
             .document__subjects {
@@ -231,6 +266,11 @@
 
                 .subject__chip {
                     @include common-chip-styles;
+
+                    font-size: 11px;
+                    line-height: 18px;
+                    height: unset;
+                    padding: 2px 8px;
                 }
             }
         }

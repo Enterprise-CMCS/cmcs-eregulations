@@ -6,20 +6,21 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
+    getCombinedContent,
     getLastUpdatedDates,
-    getPolicyDocList,
     getPolicyDocSubjects,
     getTitles,
 } from "utilities/api";
 
 import { getSubjectName, sortSubjects } from "utilities/filters";
 
-import { getRequestParams } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 
+import DocumentTypeSelector from "@/components/policy-repository/DocumentTypeSelector.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -67,6 +68,7 @@ const $router = useRouter();
 
 const FilterTypesDict = {
     subjects: "Subject",
+    type: "Type",
     q: "query",
 };
 
@@ -74,6 +76,22 @@ const FilterTypesDict = {
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 provide("FilterTypesDict", FilterTypesDict);
+
+/**
+ * @param {Object} queryParams - $route.query
+ * @returns {Boolean} - true if all doc types are selected and nothing else
+ */
+const allDocTypesOnly = (queryParams) => {
+    const { type, ...rest } = queryParams;
+    if (
+        (type && type.includes("all") && _isEmpty(rest)) ||
+        (!type && _isEmpty(rest))
+    ) {
+        return true;
+    }
+
+    return false;
+};
 
 // search query refs and methods
 const searchQuery = ref($route.query.q || "");
@@ -92,7 +110,7 @@ const executeSearch = (payload) => {
 };
 
 const clearSearchInput = () => {
-    const { q, ...rest } = $route.query;
+    const { q, page, ...rest } = $route.query;
     $router.push({
         name: "policy-repository",
         query: {
@@ -131,7 +149,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
 
     try {
-        const contentList = await getPolicyDocList({
+        const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
             requestParams,
@@ -221,7 +239,7 @@ const getDocSubjects = async () => {
         policyDocSubjects.value.loading = false;
 
         // if there's a $route, call addSelectedParams
-        if (!_isEmpty($route.query)) {
+        if (!allDocTypesOnly($route.query)) {
             // wipe everything clean to start
             clearSelectedParams();
             clearSearchQuery();
@@ -243,9 +261,17 @@ watch(
         clearSelectedParams();
         clearSearchQuery();
 
-        // if all params are removed, getDocList with no arguments and return
-        if (_isEmpty(newQueryParams)) {
-            getDocList();
+        const sanitizedQueryParams = Object.entries(newQueryParams).filter(
+            ([key]) => PARAM_VALIDATION_DICT[key]
+        );
+
+        // if all params are removed, return
+        if (_isEmpty(sanitizedQueryParams)) {
+            return;
+        }
+
+        // if both internal and external checkboxes are selected and nothing else, return
+        if (allDocTypesOnly($route.query)) {
             return;
         }
 
@@ -316,6 +342,7 @@ getDocSubjects();
                             />
                         </template>
                         <template #filters>
+                            <DocumentTypeSelector />
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
                             />
@@ -324,7 +351,10 @@ getDocSubjects();
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <SubjectTOC
-                        v-if="_isEmpty($route.query)"
+                        v-if="
+                            allDocTypesOnly($route.query) ||
+                            _isEmpty($route.query)
+                        "
                         :policy-doc-subjects="policyDocSubjects"
                     />
                     <template
