@@ -211,8 +211,9 @@ const policyDocSubjects = ref({
 const allDocTypesOnly = (queryParams) => {
     if (
         queryParams.type &&
-        queryParams.type.includes("internal") &&
-        queryParams.type.includes("external")
+        ((queryParams.type.includes("internal") &&
+            queryParams.type.includes("external")) ||
+            queryParams.type.includes("all"))
     ) {
         const { type, ...rest } = queryParams;
         return _isEmpty(rest);
