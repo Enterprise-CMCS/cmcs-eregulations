@@ -6,7 +6,7 @@ from django.contrib.postgres.search import (
     SearchRank,
     SearchVector,
 )
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -15,6 +15,7 @@ from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
+from content_search.models import ContentIndex
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
@@ -23,7 +24,7 @@ from .models import DocumentType, Subject, UploadedFile
 from .serializers import (
     AwsTokenSerializer,
     DocumentTypeSerializer,
-    SubjectSerializer,
+    SubjectDetailsSerializer,
     UploadedFileSerializer,
 )
 
@@ -43,13 +44,30 @@ class UploadCategoryViewset(viewsets.ViewSet):
 
 @extend_schema(
     description="Retrieve a list of subjects.",
+    parameters=[
+                OpenApiQueryParameter("q",
+                                      "Search fors text within file metadata. Searches document name, file name, "
+                                      "date, and summary/description.", str, False),]
 )
-class SubjectViewset(viewsets.ViewSet):
+class SubjectViewset(viewsets.ReadOnlyModelViewSet):
     model = Subject
 
     def list(self, request):
-        queryset = self.model.objects.all()
-        serializer = SubjectSerializer(queryset, many=True)
+        search_query = self.request.GET.get("q")
+        query = self.model.objects.all()
+        index_prefetch = ContentIndex.objects.all()
+        if search_query:
+            index_prefetch = index_prefetch.search(search_query)
+        index_prefetch_internal = index_prefetch.filter(resource_type='internal').values_list('id', flat=True)
+        index_prefetch_external = index_prefetch.filter(resource_type='external').values_list('id', flat=True)
+
+        query = query.prefetch_related(
+            Prefetch('content', queryset=index_prefetch))
+        query = query.annotate(internal_content=Count('content', filter=Q(content__id__in=index_prefetch_internal)))
+        query = query.annotate(external_content=Count('content', filter=Q(content__id__in=index_prefetch_external)))
+        query = query.order_by('id')
+        context = self.get_serializer_context()
+        serializer = SubjectDetailsSerializer(query, many=True, context=context)
         return Response(serializer.data)
 
 

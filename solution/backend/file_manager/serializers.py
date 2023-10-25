@@ -21,6 +21,19 @@ class SubjectSerializer(serializers.Serializer):
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
 
+
+class SubjectDetailsSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    full_name = serializers.CharField()
+    short_name = serializers.CharField()
+    abbreviation = serializers.CharField()
+    content = serializers.SerializerMethodField()
+    internal_content = serializers.IntegerField()
+    external_content = serializers.IntegerField()
+
+    def get_content(self, obj):
+        return obj.content.count()
+
     class Meta:
         model = Subject
 
