@@ -11,6 +11,7 @@ def add_supplemental_content():
     add_to_index(sup)
     return sup
 
+
 def add_supplemental_content_unapproved():
     sup, _ = SupplementalContent.objects.get_or_create(name="valid", url="valid.doc", approved=False)
     add_to_index(sup)
