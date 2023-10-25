@@ -78,18 +78,16 @@ provide("base", props.homeUrl);
 provide("FilterTypesDict", FilterTypesDict);
 
 /**
-* @param {Object} queryParams - $route.query
-* @returns {Boolean} - true if all doc types are selected and nothing else
-*/
+ * @param {Object} queryParams - $route.query
+ * @returns {Boolean} - true if all doc types are selected and nothing else
+ */
 const allDocTypesOnly = (queryParams) => {
+    const { type, ...rest } = queryParams;
     if (
-        queryParams.type &&
-        ((queryParams.type.includes("internal") &&
-            queryParams.type.includes("external")) ||
-            queryParams.type.includes("all"))
+        (type && type.includes("all") && _isEmpty(rest)) ||
+        (!type && _isEmpty(rest))
     ) {
-        const { type, ...rest } = queryParams;
-        return _isEmpty(rest);
+        return true;
     }
 
     return false;
