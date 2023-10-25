@@ -36,6 +36,7 @@ def handler(event: dict, context: dict) -> dict:
 
     # Retrieve required arguments
     try:
+        print('hi')
         resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
@@ -73,16 +74,15 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"Failed to extract text: {str(e)}")
     except Exception as e:
         return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
-
     # Send result to eRegs
     try:
         resp = requests.post(
             post_url,
             auth=(post_username, post_password) if post_username and post_password else None,
-            data=json.dumps({
+            json={
                 "id": resource_id,
-                "text": text,
-            }),
+                "text": text
+            },
             timeout=60,
         )
         resp.raise_for_status()

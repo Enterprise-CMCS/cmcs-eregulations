@@ -9,9 +9,8 @@ from common.mixins import PAGINATION_PARAMS, ViewSetPagination
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
+
 # from rest_framework.permissions import IsAuthenticatedOrReadOnly
-
-
 # from common.auth import SettingsAuthentication
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
