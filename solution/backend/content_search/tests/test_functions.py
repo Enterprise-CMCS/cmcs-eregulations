@@ -1,6 +1,6 @@
 import pytest
 
-from content_search.functions import add_to_index
+from content_search.functions import add_to_index, check_index
 from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent
@@ -8,6 +8,11 @@ from resources.models import FederalRegisterDocument, SupplementalContent
 
 def add_supplemental_content():
     sup, _ = SupplementalContent.objects.get_or_create(name="valid", url="valid.doc",)
+    add_to_index(sup)
+    return sup
+
+def add_supplemental_content_unapproved():
+    sup, _ = SupplementalContent.objects.get_or_create(name="valid", url="valid.doc", approved=False)
     add_to_index(sup)
     return sup
 
@@ -81,6 +86,10 @@ def test_index_update():
     file_index = ContentIndex.objects.get(file=up)
     assert file_index.doc_name_string == 'updated'
     assert file_index.content == 'content is here'
+    si.approved = False
+    add_to_index(si)
+    file_index = check_index(si)
+    assert file_index is None
     clean_up()
 
 
