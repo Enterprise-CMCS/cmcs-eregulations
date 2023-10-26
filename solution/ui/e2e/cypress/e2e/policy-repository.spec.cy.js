@@ -39,16 +39,16 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-77] a")
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-77] a")
-            .should("have.text", " Nutrition ")
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", " Managed Care ")
             .click({ force: true });
-        cy.url().should("include", "/policy-repository?subjects=77");
+        cy.url().should("include", "/policy-repository?subjects=63");
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=77&subjects=2");
+        cy.url().should("include", "/policy-repository?subjects=63&subjects=2");
     });
 
     it("should make a successful request to the content-search endpoint", () => {
