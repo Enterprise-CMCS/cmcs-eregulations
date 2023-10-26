@@ -1,4 +1,7 @@
 
+import json
+
+from boto3 import client as boto3_client
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -13,7 +16,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 # from rest_framework.permissions import IsAuthenticatedOrReadOnly
 # from common.auth import SettingsAuthentication
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer, InvokeTextExtractorSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
@@ -115,3 +118,27 @@ class PostContentTextViewset(viewsets.ViewSet):
         index.content = text
         index.save()
         return Response(data=f'Index was updated for {index.doc_name_string}')
+
+
+class InvokeTextExtractorViewset(viewsets.ViewSet):
+    @extend_schema(
+        description="Post to the lambda function",
+        request=InvokeTextExtractorSerializer,
+        responses={200: InvokeTextExtractorSerializer}
+    )
+    def extract(self, request, *args, **kwargs):
+        lambda_client = boto3_client('lambda', region_name="us-east-1",)
+        post_data = request.data
+        uid = post_data['uid']
+        post_url = post_data['post_url']
+        content = ContentIndex.objects.get(uid=uid)
+        backend = 'web'
+        json_object = {
+            'id': content.uid,
+            'uri': content.url,
+            post_url: post_url,
+            backend: 'web'
+        }
+        lambda_client.invoke(FunctionName='arn',
+                             InvocationType='Event',
+                             Payload=json.dumps(json_object))
