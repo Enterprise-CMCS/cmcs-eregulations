@@ -10,6 +10,6 @@ urlpatterns = [
         "post": 'update',
     })),
     path('extract/', InvokeTextExtractorViewset.as_view({
-        "post": 'parse'
+        "post": 'extract'
     }))
 ]
