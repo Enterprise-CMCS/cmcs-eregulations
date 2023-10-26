@@ -6,7 +6,7 @@ from django.contrib.postgres.search import (
     SearchRank,
     SearchVector,
 )
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Prefetch, Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -15,15 +15,16 @@ from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
+from content_search.models import ContentIndex
 from resources.models import AbstractLocation
-from resources.views.mixins import LocationExplorerViewSetMixin
+from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 from .functions import establish_client, get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 from .serializers import (
     AwsTokenSerializer,
     DocumentTypeSerializer,
-    SubjectSerializer,
+    SubjectDetailsSerializer,
     UploadedFileSerializer,
 )
 
@@ -43,21 +44,38 @@ class UploadCategoryViewset(viewsets.ViewSet):
 
 @extend_schema(
     description="Retrieve a list of subjects.",
+    parameters=[
+                OpenApiQueryParameter("q",
+                                      "Search fors text within file metadata. Searches document name, file name, "
+                                      "date, and summary/description.", str, False),]
 )
-class SubjectViewset(viewsets.ViewSet):
+class SubjectViewset(viewsets.ReadOnlyModelViewSet):
     model = Subject
 
     def list(self, request):
-        queryset = self.model.objects.all()
-        serializer = SubjectSerializer(queryset, many=True)
+        search_query = self.request.GET.get("q")
+        query = self.model.objects.all()
+        index_prefetch = ContentIndex.objects.all()
+        if search_query:
+            index_prefetch = index_prefetch.search(search_query)
+        index_prefetch_internal = index_prefetch.filter(resource_type='internal').values_list('id', flat=True)
+        index_prefetch_external = index_prefetch.filter(resource_type='external').values_list('id', flat=True)
+
+        query = query.prefetch_related(
+            Prefetch('content', queryset=index_prefetch))
+        query = query.annotate(internal_content=Count('content', filter=Q(content__id__in=index_prefetch_internal)))
+        query = query.annotate(external_content=Count('content', filter=Q(content__id__in=index_prefetch_external)))
+        query = query.order_by('id')
+        context = self.get_serializer_context()
+        serializer = SubjectDetailsSerializer(query, many=True, context=context)
         return Response(serializer.data)
 
 
-class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin):
+class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin, OptionalPaginationMixin):
     permission_classes = (IsAuthenticated,)
-    serializer_class = UploadedFileSerializer
     model = UploadedFile
     location_filter_prefix = "locations__"
+    pagination_class = OptionalPaginationMixin.pagination_class
 
     def make_headline(self, field, search_query, search_type):
         return SearchHeadline(
@@ -80,9 +98,7 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         subjects = self.request.GET.getlist("subjects")
         category = self.request.GET.getlist("category")
         search_query = self.request.GET.get("q")
-
         query = self.model.objects.all()
-
         q_obj = self.get_location_filter(locations)
 
         if q_obj:
@@ -119,7 +135,8 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
                 **self.get_search_headlines(search_query, search_type),
             )
             query = query.filter(Q(rank__gte=0.2) | Q(file_name__icontains=search_query))
-
+        else:
+            query = query.order_by('date', 'document_name')
         return query
 
     @extend_schema(
@@ -142,6 +159,11 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
     def list(self, request):
         queryset = self.get_queryset()
         context = self.get_serializer_context()
+        paginate = self.request.GET.get("paginate") != 'false'
+        if paginate:
+            queryset = self.paginate_queryset(queryset)
+            serializer = UploadedFileSerializer(queryset, many=True, context=context)
+            return self.get_paginated_response(serializer.data)
         serializer = UploadedFileSerializer(queryset, many=True, context=context)
         return Response(serializer.data)
 

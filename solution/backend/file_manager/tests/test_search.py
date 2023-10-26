@@ -5,6 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from common.test_functions.common_functions import get_paginated_data
 from file_manager.models import Subject, UploadedFile
 from resources.models import Section
 
@@ -18,9 +19,10 @@ class SearchTestNotLoggedIn(TestCase):
 
 class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):
+        data = get_paginated_data(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["document_name"], self.data[id]["document_name"])
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['results'][0]["document_name"], self.data[id]["document_name"])
 
     def login(self) -> None:
         self.client = APIClient()
@@ -49,7 +51,8 @@ class SearchTest(TestCase):
     def test_no_query(self):
         response = self.client.get("/v3/file-manager/files")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), len(self.data))
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], len(self.data))
 
     def test_single_response_queries(self):
         # This tests to ensure files are correctly *excluded* based on search terms
@@ -62,9 +65,10 @@ class SearchTest(TestCase):
         # This tests to ensure files are correctly *included* based on search terms
         response = self.client.get("/v3/file-manager/files?q=file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 2)
-        self.assertEqual(response.data[0]["document_name"], self.data[0]["document_name"])
-        self.assertEqual(response.data[1]["document_name"], self.data[2]["document_name"])
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 2)
+        self.assertEqual(data['results'][0]["document_name"], self.data[0]["document_name"])
+        self.assertEqual(data['results'][1]["document_name"], self.data[2]["document_name"])
 
     def test_search_by_filename_variations(self):
         names = ["123_abc.docx", "123_abc", "123", "abc", "docx"]
@@ -75,7 +79,8 @@ class SearchTest(TestCase):
     def test_inclusive_location_filter(self):
         response = self.client.get("/v3/file-manager/files?q=test&locations=42.433")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 0)
 
         response = self.client.get("/v3/file-manager/files?q=test&locations=42.433&locations=33.31")
         self.check_exclusive_response(response, 0)
@@ -83,7 +88,8 @@ class SearchTest(TestCase):
     def test_inclusive_subject_filter(self):
         response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 0)
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 0)
 
         response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
         self.check_exclusive_response(response, 0)

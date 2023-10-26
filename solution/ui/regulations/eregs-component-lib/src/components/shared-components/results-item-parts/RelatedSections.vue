@@ -22,9 +22,10 @@ const props = defineProps({
     },
 });
 
-const filteredLocations = props.item.locations.filter(
-    (location) => props.partsLastUpdated[location.part]
-);
+const filteredLocations = props.item.locations.filter((location) => {
+    const { part } = location;
+    return props.partsLastUpdated[part];
+});
 
 const locationsCount = filteredLocations.length;
 const groupedLocations = _groupBy(filteredLocations, "title");

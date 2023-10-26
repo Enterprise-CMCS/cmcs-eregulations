@@ -13,6 +13,6 @@ def handler(event, context):
     from file_manager.models import UploadedFile
     from resources.models import FederalRegisterDocument, SupplementalContent
 
-    index_group(SupplementalContent.objects.all())
-    index_group(FederalRegisterDocument.objects.all())
+    index_group(SupplementalContent.objects.filter(approved=True))
+    index_group(FederalRegisterDocument.objects.filter(approved=True))
     index_group(UploadedFile.objects.all())

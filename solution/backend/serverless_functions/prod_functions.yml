@@ -19,3 +19,8 @@ create_su:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   timeout: 300
+index_resources:
+  handler: index_resources.handler
+  timeout: 300
+  layers:
+    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}

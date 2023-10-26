@@ -2,10 +2,10 @@
 import { provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router/composables";
 
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
+    getCombinedContent,
     getLastUpdatedDates,
     getPolicyDocList,
     getTitles,
@@ -96,11 +96,12 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
 
     try {
-        policyDocList.value.results = await getPolicyDocList({
+        const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: !props.isAuthenticated,
             requestParams,
         });
+        policyDocList.value.results = contentList.results;
     } catch (error) {
         console.error(error);
     } finally {
