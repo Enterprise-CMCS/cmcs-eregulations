@@ -25,6 +25,7 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                     v-for="subject in policyDocSubjects.results"
                     :key="subject.id"
                     class="subj-toc__li"
+                    :data-testid="`subject-toc-li-${subject.id}`"
                 >
                     <router-link
                         :to="{
