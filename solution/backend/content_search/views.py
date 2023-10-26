@@ -93,7 +93,10 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             serializer = ContentSearchSerializer(query, many=True, context=context)
         else:
             serializer = ContentListSerializer(query, many=True, context=context)
-        return Response(serializer.data)
+        if paginate:
+            return self.get_paginated_response(serializer.data)
+        else:
+            return Response(serializer.data)
 
 
 class PostContentTextViewset(viewsets.ViewSet):

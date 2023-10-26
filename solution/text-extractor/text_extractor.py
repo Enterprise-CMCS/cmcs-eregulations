@@ -36,7 +36,6 @@ def handler(event: dict, context: dict) -> dict:
 
     # Retrieve required arguments
     try:
-        print('hi')
         resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
@@ -93,5 +92,4 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"POST usnexpectedly failed: {str(e)}")
 
     # Return success code
-    print(resp.__dict__)
     return lambda_response(200, f"Function exited normally.  {resp.content}")
