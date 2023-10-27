@@ -18,8 +18,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("loads the homepage", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.injectAxe();
         cy.contains("Medicaid & CHIP eRegulations");
+        cy.checkLinkRel();
+        cy.injectAxe();
         cy.checkAccessibility();
     });
 
