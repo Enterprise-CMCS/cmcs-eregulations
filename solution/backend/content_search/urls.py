@@ -9,7 +9,7 @@ urlpatterns = [
     path("id/", PostContentTextViewset.as_view({
         "post": 'update',
     })),
-    path('extract/', InvokeTextExtractorViewset.as_view({
+    path('content/', InvokeTextExtractorViewset.as_view({
         "post": 'extract'
     }))
 ]

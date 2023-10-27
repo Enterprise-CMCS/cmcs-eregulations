@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'regcore.search',
     'resources',
     'solo',
-    'django_opensearch_dsl',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
@@ -214,6 +213,13 @@ DEBUG_TOOLBAR_CONFIG = {
 
 GA_ID = os.environ.get("GA_ID")
 
+USE_LOCAL_TEXTRACT = False
+# The first text extractor is if it was created by serverless.  If it wasnt then it will use the
+# text extractor who's arn you provide in the docker file.
+
+TEXTRACT_ARN: os.environ.get("TEXT_EXTRACTOR_ARN", os.environ.get('TEXTRACT_ARN', '')) # noqa
+
+
 CUSTOM_URL = os.environ.get("CUSTOM_URL")
 SURVEY_URL = os.environ.get(
     "SURVEY_URL",
@@ -226,11 +232,6 @@ SIGNUP_URL = os.environ.get(
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 
-OPENSEARCH_DSL = {
-    'default': {
-        'hosts': 'opensearch-node1'
-    },
-}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",

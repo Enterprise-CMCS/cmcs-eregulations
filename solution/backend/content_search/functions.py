@@ -1,3 +1,6 @@
+from boto3 import client as boto3_client
+from django.conf import settings
+
 from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent
@@ -130,3 +133,16 @@ def index_group(resources):
     '''
     for res in resources:
         add_to_index(res)
+
+
+def build_lambda_client():
+    if settings.USE_AWS_TOKEN:
+        # Assumes we are using credentials.  Works for local but an only post to an external URL.
+        return boto3_client('lambda',
+                            region_name="us-east-1",
+                            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+    else:
+        # Assumes there is a lambda function associated with PR
+        return boto3_client('lambda',
+                            region_name="us-east-1",)
