@@ -89,7 +89,7 @@ def handler(event: dict, context: dict) -> dict:
     except requests.exceptions.RequestException as e:
         return lambda_response(500, f"Failed to POST results: {str(e)}")
     except Exception as e:
-        return lambda_response(500, f"POST usnexpectedly failed: {str(e)}")
+        return lambda_response(500, f"POST unexpectedly failed: {str(e)}")
 
     # Return success code
     return lambda_response(200, f"Function exited normally.  {resp.content}")
