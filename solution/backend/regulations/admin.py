@@ -196,7 +196,8 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
                 "usc",
                 "source_url",
             ),
-            "description": 'For a detailed guide on Statute Link Conversions, please <a target="_blank" rel="noopener noreferrer" '
+            "description": 'For a detailed guide on Statute Link Conversions, please <a target="_blank" '
+                           'rel="noopener noreferrer" '
                            'href="https://docs.google.com/document/d/14se_BSANJ2Q7Y8OjOLpMLSAye5MpIEkOBhA9-_1RpJY/edit#">'
                            'click here</a>.',
         }),
