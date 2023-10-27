@@ -16,7 +16,7 @@ from common.patterns import (
 register = template.Library()
 
 
-USCODE_LINK_FORMAT = '<a target="_blank" class="external" href="https://uscode.house.gov/view.xhtml'\
+USCODE_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" class="external" href="https://uscode.house.gov/view.xhtml'\
                      '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
