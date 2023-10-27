@@ -6,11 +6,11 @@ import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
 
-import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
-import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
-
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
+
+import SubjectChips from "./SubjectChips.vue";
 
 defineProps({
     results: {
