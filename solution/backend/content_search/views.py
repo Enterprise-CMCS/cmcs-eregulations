@@ -1,4 +1,7 @@
+import json
 
+import requests
+from django.conf import settings
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -13,8 +16,9 @@ from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
+from .functions import build_lambda_client
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer, InvokeTextExtractorSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
@@ -118,3 +122,55 @@ class PostContentTextViewset(APIView):
         index.content = text
         index.save()
         return Response(data=f'Index was updated for {index.doc_name_string}')
+
+
+class InvokeTextExtractorViewset(APIView):
+    @extend_schema(
+        description="Post to the lambda function",
+        request=InvokeTextExtractorSerializer,
+        responses={200: InvokeTextExtractorSerializer}
+    )
+    def post(self, request, *args, **kwargs):
+        post_data = request.data
+        uid = post_data['uid']
+        post_url = post_data['post_url']
+        index = ContentIndex.objects.get(uid=uid)
+        if not index:
+            return Response({'message': "Index does not exist"})
+        json_object = {
+            'id': uid,
+            'uri': index.url,
+            'post_url': post_url,
+        }
+        if index.file:
+            try:
+                json_object['uri'] = index.file.get_key()
+                json_object['backend'] = 's3'
+                json_object["s3"] = {
+                                        "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
+                                        "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
+                                        "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME
+                                    }
+            except ValueError:
+                json_object['backend'] = 'web'
+
+        if settings.USE_LOCAL_TEXTRACT:
+            json_object['textract'] = {
+                'aws_access_key_id': settings.TEXTRACT_KEY_ID,
+                'aws_secret_access_key': settings.TEXTRACT_SECRET_KEY,
+                'aws_region': 'us-east-1'
+            }
+            # return Response(json_object)
+            docker_url = 'http://host.docker.internal:8001/'
+            resp = requests.post(
+                docker_url,
+                data=json.dumps(json_object),
+                timeout=60,
+            )
+            resp.raise_for_status()
+        else:
+            lambda_client = build_lambda_client()
+            resp = lambda_client.invoke(FunctionName=settings.TEXTRACT_ARN,
+                                        InvocationType='Event',
+                                        Payload=json.dumps(json_object))
+        return Response(data={'response': resp})

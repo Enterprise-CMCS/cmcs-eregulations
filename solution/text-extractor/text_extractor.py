@@ -75,14 +75,15 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
 
     # Send result to eRegs
+    resp = ''
     try:
         resp = requests.post(
             post_url,
             auth=(post_username, post_password) if post_username and post_password else None,
-            data=json.dumps({
+            json={
                 "id": resource_id,
-                "text": text,
-            }),
+                "text": text
+            },
             timeout=60,
         )
         resp.raise_for_status()
@@ -92,4 +93,4 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"POST unexpectedly failed: {str(e)}")
 
     # Return success code
-    return lambda_response(200, "Function exited normally.")
+    return lambda_response(200, f"Function exited normally. {resp.content}")

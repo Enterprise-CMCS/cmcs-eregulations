@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.11-alpine
 
 COPY ["static-assets/requirements.txt", "/app/src/"]
 WORKDIR /app/src/
@@ -25,5 +25,8 @@ ENV OIDC_OP_JWKS_ENDPOINT=''
 ENV FILE_MANAGER_AWS_ACCESS_KEY_ID=""
 ENV FILE_MANAGER_AWS_SECRET_ACCESS_KEY=""
 ENV FILE_MANAGER_AWS_BUCKET_NAME="" 
+ENV TEXTRACT_ARN=''
+ENV TEXTRACT_KEY_ID = ''
+ENV TEXTRACT_SECRET_KEY = ''
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

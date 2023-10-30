@@ -40,3 +40,8 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
 class ContentUpdateSerializer(serializers.Serializer):
     id = serializers.CharField()
     text = serializers.CharField()
+
+
+class InvokeTextExtractorSerializer(serializers.Serializer):
+    uid = serializers.CharField()
+    post_url = serializers.CharField()

@@ -8,7 +8,6 @@ requests
 djangorestframework
 psycopg2-binary
 django-solo
-django-opensearch-dsl
 python-dateutil~=2.8.2
 django-cors-headers
 drf-spectacular==0.24.2
