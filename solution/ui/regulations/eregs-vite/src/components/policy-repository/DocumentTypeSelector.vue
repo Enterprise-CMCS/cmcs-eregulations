@@ -48,6 +48,11 @@ watch(
     () => $route.query,
     async (newQueryParams, oldQueryParams) => {
         const { type: newTypeParams } = newQueryParams;
+
+        // "all" is only set when clicking a subject chip, so it is safe to use here
+        if (!_isUndefined(newTypeParams) && newTypeParams.includes("all")) {
+            checkedBoxes.value = [...DOCUMENT_TYPES];
+        }
     }
 );
 
