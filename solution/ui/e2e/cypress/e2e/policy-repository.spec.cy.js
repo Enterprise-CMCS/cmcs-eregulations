@@ -39,8 +39,9 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .scrollIntoView();
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", " Managed Care ")
             .click({ force: true });
@@ -189,22 +190,22 @@ describe("Policy Repository", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.url().should("include", "/policy-repository?type=internal");
         cy.get(".subj-toc__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.get(".subj-toc__container").should("exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .check({force: true});
+            .check({ force: true });
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .check({force: true});
+            .check({ force: true });
         cy.url().should("include", "/policy-repository?type=all");
     });
 
