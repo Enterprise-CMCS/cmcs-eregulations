@@ -40,7 +40,7 @@ watch(
     () => $route.query,
     async (newQueryParams) => {
         const newTypeParams = newQueryParams?.type;
-        if (_isUndefined(newTypeParams)) {
+        if (_isUndefined(newTypeParams) && !_isEmpty(typesRef.value)) {
             typesRef.value = [ ...DOCUMENT_TYPES ];
         }
     }
