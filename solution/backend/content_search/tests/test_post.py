@@ -1,7 +1,9 @@
+import base64
 import json
 
-from django.test import TestCase
-from rest_framework import status
+from django.conf import settings
+from rest_framework import HTTP_HEADER_ENCODING, status
+from rest_framework.test import APITestCase
 
 from common.test_functions.common_functions import get_paginated_data
 from content_search.functions import index_group
@@ -10,7 +12,7 @@ from file_manager.models import Subject
 from resources.models import Category, Section, SupplementalContent
 
 
-class SearchTest(TestCase):
+class SearchTest(APITestCase):
     def check_exclusive_response(self, response, id):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
@@ -39,16 +41,24 @@ class SearchTest(TestCase):
 
         index_group(SupplementalContent.objects.all())
 
-    def test_no_query_not_logged_in(self):
+    def test_update_content_logged_in(self):
         content = ContentIndex.objects.first()
         print(content.uid)
         json_object = {
             'id': content.uid,
             'text': 'test'
         }
-        print(json.dumps(json_object))
+        username = settings.HTTP_AUTH_USER
+        password = settings.HTTP_AUTH_PASSWORD
+        credentials = f"{username}:{password}"
+        base64_credentials = base64.b64encode(
+            credentials.encode(HTTP_HEADER_ENCODING)
+        ).decode(HTTP_HEADER_ENCODING)
+
         response = self.client.post("/v3/content-search/id/",
-                                    data=json.dumps(json_object), content_type='application/json')
+                                    data=json.dumps(json_object),
+                                    content_type='application/json',
+                                    HTTP_AUTHORIZATION=f"Basic {base64_credentials}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = ContentIndex.objects.first()
         self.assertEqual(content.content, 'test')

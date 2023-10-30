@@ -2,9 +2,12 @@
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from common.api import OpenApiQueryParameter
+from common.auth import SettingsAuthentication
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
@@ -97,13 +100,16 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             return Response(serializer.data)
 
 
-class PostContentTextViewset(viewsets.ViewSet):
+class PostContentTextViewset(APIView):
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     @extend_schema(
         description="Retrieve list sof uploaded files",
         request=ContentUpdateSerializer,
         responses={200: ContentUpdateSerializer}
     )
-    def update(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         post_data = request.data
         print(request.__dict__)
         id = post_data['id']

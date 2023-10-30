@@ -6,7 +6,5 @@ urlpatterns = [
     path("", ContentSearchViewset.as_view({
         "get": "list",
     })),
-    path("id/", PostContentTextViewset.as_view({
-        "post": 'update',
-    })),
+    path("id/", PostContentTextViewset.as_view()),
 ]
