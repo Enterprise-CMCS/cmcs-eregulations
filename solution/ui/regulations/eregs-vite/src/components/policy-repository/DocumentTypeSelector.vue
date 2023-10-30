@@ -36,6 +36,15 @@ watch(typesRef, (newVal) => {
         query: routeClone,
     });
 });
+watch(
+    () => $route.query,
+    async (newQueryParams) => {
+        const newTypeParams = newQueryParams?.type;
+        if (_isUndefined(newTypeParams)) {
+            typesRef.value = [ ...DOCUMENT_TYPES ];
+        }
+    }
+);
 </script>
 
 <template>
