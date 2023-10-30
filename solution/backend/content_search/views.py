@@ -111,7 +111,6 @@ class PostContentTextViewset(APIView):
     )
     def post(self, request, *args, **kwargs):
         post_data = request.data
-        print(request.__dict__)
         id = post_data['id']
         text = post_data['text']
         index = ContentIndex.objects.get(uid=id)
