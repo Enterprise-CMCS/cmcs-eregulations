@@ -13,14 +13,17 @@ const $router = useRouter();
 
 const { type: typeParams } = $route.query;
 
-// v-model to control if the checkbox displays as checked or not
-const checkedBoxes = ref(
-    _isUndefined(typeParams)
+// v-model with a ref to control if the checkbox displays as checked or not
+const boxesArr =
+    _isUndefined(typeParams) ||
+    typeParams === "all" ||
+    typeParams.includes("all")
         ? [...DOCUMENT_TYPES]
         : _isArray(typeParams)
         ? typeParams
-        : [typeParams]
-);
+        : [typeParams];
+
+const checkedBoxes = ref(boxesArr);
 
 // onClick event to set the $route
 const toggleDocumentType = (clickedType) => {
