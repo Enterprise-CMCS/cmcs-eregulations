@@ -23,11 +23,19 @@ const checkedBoxes = ref(
 );
 
 // onClick event to set the $route
-const toggleDocumentType = (type) => {
+const toggleDocumentType = (clickedType) => {
     const { type: queryCloneType, ...queryClone } = $route.query;
+    const refTypesBeforeClick = checkedBoxes.value;
 
-    if (_isUndefined(queryCloneType) || queryCloneType === "all") {
-        queryClone.type = DOCUMENT_TYPES.filter((docType) => docType !== type);
+    if (_isEmpty(refTypesBeforeClick)) {
+        queryClone.type = [clickedType];
+    } else if (refTypesBeforeClick.includes(clickedType)) {
+        const filteredTypes = refTypesBeforeClick.filter(
+            (docType) => docType !== clickedType
+        );
+        if (!_isEmpty(filteredTypes)) {
+            queryClone.type = filteredTypes;
+        }
     }
 
     $router.push({
@@ -40,12 +48,11 @@ watch(
     () => $route.query,
     async (newQueryParams, oldQueryParams) => {
         const { type: newTypeParams } = newQueryParams;
-        console.log("newTypeParams", newTypeParams);
     }
 );
 
-// popstate to update the checkbox on back/forward
-const onPopState = (event) => {
+// popstate to update the checkbox on back/forward click
+const onPopState = () => {
     const { type: queryTypes } = $route.query;
 
     if (_isUndefined(queryTypes) || queryTypes === "all") {
@@ -55,7 +62,7 @@ const onPopState = (event) => {
     } else {
         checkedBoxes.value = [queryTypes];
     }
-}
+};
 
 onMounted(() => {
     window.addEventListener("popstate", onPopState);
