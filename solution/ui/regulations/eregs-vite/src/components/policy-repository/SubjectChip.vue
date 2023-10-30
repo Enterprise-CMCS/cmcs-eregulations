@@ -16,7 +16,10 @@ const props = defineProps({
         class="subject__chip"
         :to="{
             name: 'policy-repository',
-            query: { subjects: [subjectId.toString()] },
+            query: {
+                subjects: [subjectId.toString()],
+                type: 'all',
+            },
         }"
     >
         {{ subjectName }}
