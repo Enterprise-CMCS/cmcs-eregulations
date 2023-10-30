@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
 import _isArray from "lodash/isArray";
@@ -40,8 +40,27 @@ watch(
     () => $route.query,
     async (newQueryParams, oldQueryParams) => {
         const { type: newTypeParams } = newQueryParams;
+        console.log("newTypeParams", newTypeParams);
     }
 );
+
+// popstate to update the checkbox on back/forward
+const onPopState = (event) => {
+    const { type: queryTypes } = $route.query;
+
+    if (_isUndefined(queryTypes) || queryTypes === "all") {
+        checkedBoxes.value = [...DOCUMENT_TYPES];
+    } else if (_isArray(queryTypes)) {
+        checkedBoxes.value = queryTypes;
+    } else {
+        checkedBoxes.value = [queryTypes];
+    }
+}
+
+onMounted(() => {
+    window.addEventListener("popstate", onPopState);
+});
+onUnmounted(() => window.removeEventListener("resize", onPopState));
 </script>
 
 <template>
