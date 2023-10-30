@@ -41,13 +41,17 @@ class SearchTest(APITestCase):
 
         index_group(SupplementalContent.objects.all())
 
-    def test_update_content_logged_in(self):
+    def test_update_content(self):
         content = ContentIndex.objects.first()
         print(content.uid)
         json_object = {
             'id': content.uid,
             'text': 'test'
         }
+        response = self.client.post("/v3/content-search/id/",
+                            data=json.dumps(json_object),
+                            content_type='application/json',)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         username = settings.HTTP_AUTH_USER
         password = settings.HTTP_AUTH_PASSWORD
         credentials = f"{username}:{password}"
