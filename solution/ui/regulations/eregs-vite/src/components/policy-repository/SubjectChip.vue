@@ -18,7 +18,6 @@ const props = defineProps({
             name: 'policy-repository',
             query: {
                 subjects: [subjectId.toString()],
-                type: 'all',
             },
         }"
     >
