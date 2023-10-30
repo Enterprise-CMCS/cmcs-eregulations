@@ -17,7 +17,7 @@ from common.patterns import (
 register = template.Library()
 
 
-REDIRECT_LINK_FORMAT = '<a target="blank" rel="noopener noreferrer" href="{}?{}">{}</a>'
+REDIRECT_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" href="{}?{}">{}</a>'
 
 SECTION_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 CFR_REF_EXTRACT_PATTERN = rf"(\d+)(?:\.({SECTION_PATTERN})((?:{PARAGRAPH_PATTERN})*))?"

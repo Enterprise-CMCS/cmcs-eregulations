@@ -6,7 +6,7 @@
             "cfr_ref_exceptions": {}
         },
         "input": "42 CFR 123",
-        "expected": "42 CFR <a target=\"blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
+        "expected": "42 CFR <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123\">123</a>"
     },
     {
         "testing": "link CFR refs is disabled",
@@ -28,7 +28,7 @@
             }
         },
         "input": "42 CFR 1. 42 CFR 123",
-        "expected": "42 CFR <a target=\"blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1\">1</a>. 42 CFR 123"
+        "expected": "42 CFR <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1\">1</a>. 42 CFR 123"
     },
     {
         "testing": "section level exception",
@@ -41,7 +41,7 @@
             }
         },
         "input": "42 CFR 1.23. 42 CFR 123.456",
-        "expected": "42 CFR <a target=\"blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1&section=23\">1.23</a>. 42 CFR 123.456"
+        "expected": "42 CFR <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1&section=23\">1.23</a>. 42 CFR 123.456"
     },
     {
         "testing": "paragraph level exception",
@@ -54,7 +54,7 @@
             }
         },
         "input": "42 CFR 1.23(a)(1). 42 CFR 123.456(a)(1)",
-        "expected": "42 CFR <a target=\"blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1&section=23&paragraph=a-1\">1.23(a)(1)</a>. 42 CFR 123.456(a)(1)"
+        "expected": "42 CFR <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=1&section=23&paragraph=a-1\">1.23(a)(1)</a>. 42 CFR 123.456(a)(1)"
     },
     {
         "testing": "single ref in 'and' ref exception",
@@ -67,6 +67,6 @@
             }
         },
         "input": "42 CFR parts 123.456(a)(1) and 456.789(b)",
-        "expected": "42 CFR parts 123.456(a)(1) and <a target=\"blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=456&section=789&paragraph=b\">456.789(b)</a>"
+        "expected": "42 CFR parts 123.456(a)(1) and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=456&section=789&paragraph=b\">456.789(b)</a>"
     }
 ]
