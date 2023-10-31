@@ -2,16 +2,19 @@
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from common.api import OpenApiQueryParameter
+from common.auth import SettingsAuthentication
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
@@ -95,3 +98,22 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             return self.get_paginated_response(serializer.data)
         else:
             return Response(serializer.data)
+
+
+class PostContentTextViewset(APIView):
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    @extend_schema(
+        description="Adds text to the content of an index.",
+        request=ContentUpdateSerializer,
+        responses={200: ContentUpdateSerializer}
+    )
+    def post(self, request, *args, **kwargs):
+        post_data = request.data
+        id = post_data['id']
+        text = post_data['text']
+        index = ContentIndex.objects.get(uid=id)
+        index.content = text
+        index.save()
+        return Response(data=f'Index was updated for {index.doc_name_string}')
