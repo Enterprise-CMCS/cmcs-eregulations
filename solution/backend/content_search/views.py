@@ -2,6 +2,7 @@ import json
 
 import requests
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -10,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.api import OpenApiQueryParameter
+from common.functions import get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
@@ -128,6 +130,8 @@ class InvokeTextExtractorViewset(APIView):
         responses={200: InvokeTextExtractorSerializer}
     )
     def post(self, request, *args, **kwargs):
+        us = authenticate(username=settings.SERVER_USER, password=settings.SERVER_PASSWORD)
+        token = get_tokens_for_user(us)['access']
         post_data = request.data
         uid = post_data['uid']
         post_url = post_data['post_url']
@@ -138,8 +142,7 @@ class InvokeTextExtractorViewset(APIView):
             'id': uid,
             'uri': index.url,
             'post_url': post_url,
-            'post_username': settings.HTTP_AUTH_USER,
-            'post_password': settings.HTTP_AUTH_PASSWORD
+            'token': token,
         }
         if index.file:
             try:

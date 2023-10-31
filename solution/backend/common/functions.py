@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from content_search.models import ContentIndex
 from file_manager.models import DocumentType, Subject
@@ -64,3 +65,12 @@ def loadSeedData():
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }

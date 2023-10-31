@@ -20,6 +20,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
 from rest_framework_simplejwt import views as jwt_views
+
 from regulations.rss_feeds import ResourceFeed
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
 
