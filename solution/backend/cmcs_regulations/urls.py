@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
-
+from rest_framework_simplejwt import views as jwt_views
 from regulations.rss_feeds import ResourceFeed
 from regulations.sitemap import PartSitemap, SupplementalContentSitemap
 
@@ -39,6 +39,8 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('latest/feed/', ResourceFeed()),
     path('oidc/', include('mozilla_django_oidc.urls')),
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
 admin.site.site_header = "eRegs"
 admin.site.site_title = 'eRegs Admin Panel'

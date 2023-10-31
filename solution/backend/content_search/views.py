@@ -5,12 +5,11 @@ from django.conf import settings
 from django.db.models import F, Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.api import OpenApiQueryParameter
-from common.auth import SettingsAuthentication
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
@@ -105,8 +104,7 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 
 class PostContentTextViewset(APIView):
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         description="Adds text to the content of an index.",

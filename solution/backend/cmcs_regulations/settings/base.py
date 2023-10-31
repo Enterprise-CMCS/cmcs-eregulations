@@ -81,6 +81,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
+    ],
 }
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -227,6 +231,8 @@ DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 USE_LOCAL_TEXTRACT = False
 # The first text extractor is if it was created by serverless.  If it wasnt then it will use the
 # text extractor who's arn you provide in the docker file.
+SERVER_USER = os.environ.get("SERVER_USER", '')
+SERVER_PASSWORD = os.environ.get("SERVER_PASSWORD", '')
 
 TEXTRACT_ARN: os.environ.get("TEXT_EXTRACTOR_ARN", os.environ.get('TEXTRACT_ARN', '')) # noqa
 

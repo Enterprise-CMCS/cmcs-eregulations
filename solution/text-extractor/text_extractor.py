@@ -39,8 +39,7 @@ def handler(event: dict, context: dict) -> dict:
         resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
-        post_username = config.get("post_username")
-        post_password = config.get("post_password")
+        token = config["token"]
     except KeyError:
         return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the request body.")
 
@@ -76,10 +75,11 @@ def handler(event: dict, context: dict) -> dict:
 
     # Send result to eRegs
     resp = ''
+    header = {'Authorization': f'Bearer {token}'}
     try:
         resp = requests.post(
             post_url,
-            auth=(post_username, post_password) if post_username and post_password else None,
+            headers=header,
             json={
                 "id": resource_id,
                 "text": text
