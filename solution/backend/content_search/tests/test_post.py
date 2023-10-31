@@ -43,7 +43,6 @@ class SearchTest(APITestCase):
 
     def test_update_content(self):
         content = ContentIndex.objects.first()
-        print(content.uid)
         json_object = {
             'id': content.uid,
             'text': 'test'

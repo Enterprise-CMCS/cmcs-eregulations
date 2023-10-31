@@ -105,7 +105,7 @@ class PostContentTextViewset(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     @extend_schema(
-        description="Retrieve list sof uploaded files",
+        description="Adds text to the content of an index.",
         request=ContentUpdateSerializer,
         responses={200: ContentUpdateSerializer}
     )
