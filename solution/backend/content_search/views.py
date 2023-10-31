@@ -140,6 +140,8 @@ class InvokeTextExtractorViewset(APIView):
             'id': uid,
             'uri': index.url,
             'post_url': post_url,
+            'post_username': settings.HTTP_AUTH_USER,
+            'post_password': settings.HTTP_AUTH_PASSWORD
         }
         if index.file:
             try:
