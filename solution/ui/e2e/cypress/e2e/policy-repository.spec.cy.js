@@ -141,6 +141,58 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
 
+    it("should update the URL when a subject chip is clicked", () => {
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("not.be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?type=internal");
+        cy.get(`button[data-testid=add-subject-3]`).click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3"
+        );
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3&q=test"
+        );
+        cy.get(`a[data-testid=add-subject-chip-4]`).click({
+            force: true,
+        });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?subjects=4&type=all");
+        cy.get("input#main-content:empty").should("have.value", "");
+    });
+
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");

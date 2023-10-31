@@ -14,6 +14,7 @@ const props = defineProps({
 <template>
     <router-link
         class="subject__chip"
+        :data-testid="`add-subject-chip-${subjectId}`"
         :to="{
             name: 'policy-repository',
             query: {
