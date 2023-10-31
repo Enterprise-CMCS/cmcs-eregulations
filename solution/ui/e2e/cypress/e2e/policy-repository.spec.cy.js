@@ -39,8 +39,9 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .scrollIntoView();
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", " Managed Care ")
             .click({ force: true });
@@ -140,6 +141,23 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
 
+    it("should display correct subject ID numbers in the URL if one is included in the URL on load and another one is added via the Subject Selector", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/?subjects=77");
+        cy.url().should("include", "/policy-repository/?subjects=77");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.get("button[data-testid=add-subject-63]").click({
+            force: true,
+        });
+        cy.get(`button[data-testid=remove-subject-63]`).should("exist");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.url().should(
+            "include",
+            "/policy-repository?subjects=77&subjects=63"
+        );
+    });
+
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");
@@ -189,22 +207,22 @@ describe("Policy Repository", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.url().should("include", "/policy-repository?type=internal");
         cy.get(".subj-toc__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.get(".subj-toc__container").should("exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .check({force: true});
+            .check({ force: true });
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .check({force: true});
+            .check({ force: true });
         cy.url().should("include", "/policy-repository?type=all");
     });
 
