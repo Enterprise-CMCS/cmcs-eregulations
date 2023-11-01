@@ -39,15 +39,20 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
-        cy.get(".subj-toc__list li:nth-child(1) a")
-            .should("be.visible")
-            .should("have.text", " ABP  Alternative Benefit Plan ")
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", " Managed Care ")
             .click({ force: true });
-        cy.url().should("include", "/policy-repository?subjects=2");
+        cy.url().should("include", "/policy-repository?subjects=63");
+        cy.get(`button[data-testid=add-subject-2]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=63&subjects=2");
     });
 
-    it("should make a successful request to the file-manager/files endpoint", () => {
-        cy.intercept("**/v3/file-manager/files?**").as("files");
+    it("should make a successful request to the content-search endpoint", () => {
+        cy.intercept("**/v3/content-search/?**").as("files");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
@@ -59,7 +64,7 @@ describe("Policy Repository", () => {
     });
 
     it("loads the correct subject and search query when the URL is changed", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&q=test**").as("qFiles");
+        cy.intercept("**/v3/content-search/?subjects=1&q=test**").as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
@@ -109,7 +114,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2**", {
+        cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
             fixture: "policy-docs.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
@@ -130,12 +135,13 @@ describe("Policy Repository", () => {
             .find("a")
             .should("have.attr", "href")
             .and("not.include", "undefined")
-            .and("include", "/42/430/5#430-5");
+            .and("include", "/42/435/116#435-116");
+
         cy.checkAccessibility();
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
-        cy.intercept("**/v3/file-manager/files?q=test**").as("qFiles");
+        cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository/?q=test");
@@ -143,6 +149,74 @@ describe("Policy Repository", () => {
             expect(interception.response.statusCode).to.eq(200);
         });
         cy.get("input#main-content").should("have.value", "test");
+    });
+
+    it("should have a Documents to Show checkbox list", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.get(".doc-type__toggle-container h3").should(
+            "have.text",
+            "Documents to Show"
+        );
+        cy.get(".doc-type__toggle fieldset").should("exist");
+        cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("label")
+            .should("have.text", "Public Resources");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("be.checked")
+            .and("have.value", "external");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("label")
+            .should("have.text", "Internal Resources");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked")
+            .and("have.value", "internal");
+    });
+
+    it("should show only the Table of Contents if both or neither checkboxes are checked", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.get(".subj-toc__container").should("exist");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({force: true});
+        cy.url().should("include", "/policy-repository?type=internal");
+        cy.get(".subj-toc__container").should("not.exist");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .uncheck({force: true});
+        cy.get(".subj-toc__container").should("exist");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .check({force: true});
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .check({force: true});
+        cy.url().should("include", "/policy-repository?type=all");
+    });
+
+    it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
+        cy.intercept("**/v3/content-search/**").as("contentSearch");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.wait(2000);
+        cy.get("@contentSearch.all").then((interception) => {
+            expect(interception).to.have.length(0);
+        });
     });
 
     it("goes to another SPA page from the policy repository page", () => {
@@ -183,8 +257,8 @@ describe("Policy Repository Search", () => {
         cy.get("#loginIndicator").should("be.visible");
     });
 
-    it("should make a successful request to the file-manager/files endpoint", () => {
-        cy.intercept("**/v3/file-manager/files**").as("queriedFiles");
+    it("should make a successful request to the content-search endpoint", () => {
+        cy.intercept("**/v3/content-search/?**").as("queriedFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,

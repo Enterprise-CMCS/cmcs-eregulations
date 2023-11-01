@@ -44,6 +44,9 @@ def update_index(content_index, content):
         )
         new_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
+        if not content.approved:
+            content_index.delete()
+            return
         new_index = ContentIndex(
             category=content.category,
             url=content.url,
@@ -95,6 +98,8 @@ def add_to_index(content):
         )
         content_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
+        if not content.approved:
+            return
         content_index = ContentIndex(
             category=content.category,
             url=content.url,

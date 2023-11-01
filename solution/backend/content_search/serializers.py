@@ -5,7 +5,7 @@ from common.serializers import DetailsSerializer
 from file_manager.serializers import DocumentTypeSerializer, SubjectSerializer
 
 
-class ContentSearchSerializer(DetailsSerializer, serializers.Serializer):
+class ContentSearchSerializer(DetailsSerializer, serializers.Serializer, ):
     doc_name_string = serializers.CharField()
     file_name_string = serializers.CharField()
     date_string = serializers.DateField()
@@ -35,3 +35,8 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     url = serializers.CharField()
     # content_type = serializers.CharField()
     # content_id = serializers.IntegerField()
+
+
+class ContentUpdateSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    text = serializers.CharField()

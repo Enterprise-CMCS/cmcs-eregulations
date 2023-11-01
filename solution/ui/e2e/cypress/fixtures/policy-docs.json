@@ -1,42 +1,148 @@
-[
-    {
-        "document_name": "[Mock] Cypress Fixture",
-        "file_name": "ff-test-em.pdf",
-        "date": "2023-08-30",
-        "summary": "This is a test of the ABP broadcasting system",
-        "locations": [
-            {
-                "id": 959,
-                "title": 42,
-                "part": 430,
-                "type": "section",
-                "section_id": 5,
-                "parent": 955
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "doc_name_string": null,
+            "file_name_string": null,
+            "date_string": "2019-07-26",
+            "summary_string": "State Guidance for the New Limited Exception to the IMD Exclusion for Certain Pregnant and Postpartum Women included in Section 1012 of the Substance Use-Disorder Prevention that Promotes Opioid Recovery and Treatment (SUPPORT) for Patients and Communities Act (Pub. L. 115-271), entitled Help for Moms and Babies",
+            "locations": [
+                {
+                    "id": 242,
+                    "title": 42,
+                    "part": 435,
+                    "type": "section",
+                    "section_id": 116,
+                    "parent": 876
+                },
+                {
+                    "id": 256,
+                    "title": 42,
+                    "part": 435,
+                    "type": "section",
+                    "section_id": 301,
+                    "parent": 877
+                },
+                {
+                    "id": 29,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 140,
+                    "parent": 1124
+                },
+                {
+                    "id": 30,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 160,
+                    "parent": 1124
+                },
+                {
+                    "id": 53,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 210,
+                    "parent": 1125
+                },
+                {
+                    "id": 54,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 220,
+                    "parent": 1125
+                },
+                {
+                    "id": 10,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 250,
+                    "parent": 1125
+                }
+            ],
+            "document_type": null,
+            "resource_type": "external",
+            "subjects": [],
+            "category": {
+                "id": 9,
+                "name": "CMCS Informational Bulletin (CIB)",
+                "description": "",
+                "order": 300,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
             },
-            {
-                "id": 850,
-                "title": 42,
-                "part": 430,
-                "type": "section",
-                "section_id": 10,
-                "parent": 960
-            }
-        ],
-        "document_type": {
-            "id": 4,
-            "name": "Informal Guidance",
-            "description": "Useful internal emails and one-pagers"
+            "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib072619-1012.pdf",
+            "document_name_headline": null,
+            "summary_headline": "SUPPORT) for Patients and Communities Act (Pub. L. 115-271), entitled Help for Moms and <span class=\"search-highlight\">Babies</span>"
         },
-        "subjects": [
-            {
+        {
+            "doc_name_string": "[Mock] Cypress Fixture",
+            "file_name_string": "ff-test-em.pdf",
+            "date_string": "2023-08-30",
+            "summary_string": "This is the summary.  Rubber baby buggy bumper",
+            "locations": [
+                {
+                    "id": 1355,
+                    "title": 42,
+                    "part": 400,
+                    "type": "subpart",
+                    "subpart_id": "A"
+                },
+                {
+                    "id": 2974,
+                    "title": 45,
+                    "part": 75,
+                    "type": "section",
+                    "section_id": 101,
+                    "parent": 3318
+                }
+            ],
+            "document_type": {
                 "id": 2,
-                "full_name": "Alternative Benefit Plan",
-                "short_name": null,
-                "abbreviation": "ABP"
-            }
-        ],
-        "uid": "e641d2f8-7fde-41d5-a025-8388bb51d6ae",
-        "document_name_headline": null,
-        "summary_headline": null
-    }
-]
+                "name": "Curated Formal Guidance",
+                "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
+            },
+            "resource_type": "internal",
+            "subjects": [
+                {
+                    "id": 3,
+                    "full_name": "Access to Services",
+                    "short_name": null,
+                    "abbreviation": null
+                },
+                {
+                    "id": 4,
+                    "full_name": "Adult Day Health",
+                    "short_name": null,
+                    "abbreviation": null
+                },
+                {
+                    "id": 5,
+                    "full_name": "Ambulatory Prenatal Care",
+                    "short_name": null,
+                    "abbreviation": null
+                }
+            ],
+            "category": {},
+            "url": "d89af093-8975-4bcb-a747-abe346ebb274",
+            "document_name_headline": "[Mock] Cypress Fixture",
+            "summary_headline": "This is the summary.  Rubber <span class=\"search-highlight\">baby</span> buggy bumper"
+        }
+    ]
+}

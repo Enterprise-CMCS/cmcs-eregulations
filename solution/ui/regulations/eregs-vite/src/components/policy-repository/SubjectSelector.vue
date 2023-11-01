@@ -14,7 +14,7 @@ const $router = useRouter();
 const $route = useRoute();
 
 const subjectClick = (event) => {
-    const subjects = $route.query.subjects ?? [];
+    const subjects = $route?.query?.subjects ?? [];
     const subjectToAdd = event.target.dataset.id;
 
     if (subjects.includes(subjectToAdd)) return;

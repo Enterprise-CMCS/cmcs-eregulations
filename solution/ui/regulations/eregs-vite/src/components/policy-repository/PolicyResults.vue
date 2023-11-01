@@ -1,5 +1,8 @@
 <script setup>
 import { inject } from "vue";
+import { useRoute } from "vue-router/composables";
+
+import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
 
@@ -9,7 +12,7 @@ import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
-const props = defineProps({
+defineProps({
     results: {
         type: Array,
         default: () => [],
@@ -20,10 +23,22 @@ const props = defineProps({
     },
 });
 
+const $route = useRoute();
+
 const apiUrl = inject("apiUrl");
 const base = inject("base");
 
-const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
+const getUrl = ({ resource_type: resourceType, url }) =>
+    resourceType === "external" ? url : `${apiUrl}file-manager/files/${url}`;
+
+const needsBar = (item) =>
+    item.resource_type === "external" &&
+    item.date_string &&
+    item.doc_name_string;
+
+const resultLinkClasses = () => ({
+    "document__link--search": !!$route?.query?.q,
+});
 </script>
 
 <template>
@@ -53,32 +68,71 @@ const getDownloadUrl = (uid) => `${apiUrl}file-manager/files/${uid}`;
             </template>
             <template #labels>
                 <CategoryLabel
-                    v-if="doc.document_type"
+                    v-if="!_isEmpty(doc.document_type)"
                     :name="doc.document_type.name"
                     type="category"
+                />
+                <CategoryLabel
+                    v-else-if="!_isEmpty(doc.category)"
+                    :name="
+                        doc.category.parent
+                            ? doc.category.parent.name
+                            : doc.category.name
+                    "
+                    type="category"
+                />
+                <CategoryLabel
+                    v-if="doc.category?.parent"
+                    :name="doc.category.name"
+                    type="subcategory"
                 />
             </template>
             <template #context>
                 <span
-                    v-if="doc.date"
+                    v-if="doc.date_string"
                     class="result__context--date"
-                    >{{ formatDate(doc.date) }}</span
+                    :class="needsBar(doc) && 'result__context--date--bar'"
+                    >{{ formatDate(doc.date_string) }}</span
+                >
+                <span
+                    v-if="
+                        doc.resource_type === 'external' && doc.doc_name_string
+                    "
+                    >{{ doc.doc_name_string }}</span
                 >
             </template>
             <template #link>
                 <h3>
                     <a
-                        :href="getDownloadUrl(doc.uid)"
+                        :href="getUrl(doc)"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         class="document__link document__link--filename"
-                        >{{ doc.document_name }}</a
-                    >
+                        :class="resultLinkClasses(doc)"
+                        v-html="
+                            doc.resource_type === 'external'
+                                ? doc.summary_headline ||
+                                  doc.summary_string
+                                : doc.document_name_headline ||
+                                  doc.doc_name_string
+                        "
+                    ></a>
                 </h3>
             </template>
             <template #snippet>
-                <div v-if="doc.summary">{{ doc.summary }}</div>
+                <div
+                    v-if="
+                        doc.resource_type === 'internal' &&
+                        (doc.summary_headline || doc.summary_string)
+                    "
+                    v-html="doc.summary_headline || doc.summary_string"
+                />
             </template>
             <template #chips>
-                <div v-if="doc.subjects.length > 0" class="document__info-block">
+                <div
+                    v-if="doc.subjects.length > 0"
+                    class="document__info-block"
+                >
                     <SubjectChips :subjects="doc.subjects" />
                 </div>
             </template>
