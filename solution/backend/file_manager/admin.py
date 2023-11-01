@@ -1,6 +1,3 @@
-
-
-
 import requests
 from django import forms
 from django.conf import settings
@@ -35,6 +32,7 @@ class SubjectAdmin(BaseAdmin):
 
 class UploadAdminForm(forms.ModelForm):
     file_path = forms.FileField(required=False)
+
     class Meta:
         model = UploadedFile
         fields = '__all__'

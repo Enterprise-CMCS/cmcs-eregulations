@@ -646,6 +646,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             return "Populated"
         else:
             return "Not populated"
+
+
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
     documents = forms.ModelMultipleChoiceField(
         queryset=FederalRegisterDocument.objects.all(),
