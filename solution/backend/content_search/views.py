@@ -2,8 +2,8 @@ import json
 
 import requests
 from django.conf import settings
-from django.contrib.auth import authenticate
 from django.db.models import F, Prefetch
+from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
@@ -19,7 +19,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .functions import build_lambda_client
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer, InvokeTextExtractorSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
@@ -126,15 +126,15 @@ class PostContentTextViewset(APIView):
 class InvokeTextExtractorViewset(APIView):
     @extend_schema(
         description="Post to the lambda function",
-        request=InvokeTextExtractorSerializer,
-        responses={200: InvokeTextExtractorSerializer}
     )
-    def post(self, request, *args, **kwargs):
-        us = authenticate(username=settings.SERVER_USER, password=settings.SERVER_PASSWORD)
-        token = get_tokens_for_user(us)['access']
-        post_data = request.data
-        uid = post_data['uid']
-        post_url = post_data['post_url']
+    def get(self, request, *args, **kwargs):
+        token = get_tokens_for_user(request.user)['access']
+        uid = kwargs.get("content_id")
+
+        if not settings.USE_LOCAL_TEXTRACT:
+            post_url = request.build_absolute_uri(reverse("post-content"))
+        else:
+            post_url = "http://host.docker.internal:8000/" + reverse("post-content")
         index = ContentIndex.objects.get(uid=uid)
         if not index:
             return Response({'message': "Index does not exist"})

@@ -21,10 +21,12 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
 
 from content_search.functions import add_to_index
+from content_search.models import ContentIndex
 
 from . import actions
 from .filters import (
@@ -416,6 +418,7 @@ class CsvImportForm(forms.Form):
 class SupplementalContentAdmin(AbstractResourceAdmin):
     change_list_template = "admin/import_resources_button.html"
     form = SupContentForm
+    readonly_fields = ("get_content", "index_populated")
     list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
@@ -424,7 +427,8 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
         (
             None,
             {
-                "fields": ["approved", "name", "description", "date", "url", "category", "subjects", "locations"],
+                "fields": ["approved", "name", "description", "date", "url", "category", "subjects", "locations",
+                           'index_populated', 'get_content'],
             },
         ),
         (
@@ -455,6 +459,25 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             },
         ),
     ]
+
+    def get_content(self, obj):
+        if obj.id:
+            index = ContentIndex.objects.get(supplemental_content=obj)
+            link = reverse("call-extractor", kwargs={"content_id": index.uid})
+            html = '<a class="button" href="{}">Get content</a>'.format(link)
+        else:
+            return "N/A"
+        return format_html(html)
+
+    def index_populated(self, obj):
+        content = ''
+        if obj and obj.id:
+            index = ContentIndex.objects.get(supplemental_content=obj)
+            content = index.content
+        if content:
+            return "Populated"
+        else:
+            return "Not populated"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -551,6 +574,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
 @admin.register(FederalRegisterDocument)
 class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     form = FederalResourceForm
+    readonly_fields = ('index_populated', 'get_content')
     list_display = ("date", "name", "description", "in_group", "docket_numbers",
                     "document_number", "category", "doc_type", "updated_at", "approved")
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
@@ -562,7 +586,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             None,
             {
                 "fields": ["approved", "docket_numbers", "group", "document_number", "name", "correction", "withdrawal",
-                           "description", "date", "url", "category", "subjects", "doc_type", "locations"],
+                           "description", "date", "url", "category", "subjects", "doc_type", "locations", 'index_populated',
+                           'get_content'],
             },
         ),
         (
@@ -603,7 +628,24 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             Prefetch("group", FederalRegisterDocumentGroup.objects.all()),
         )
 
+    def get_content(self, obj):
+        if obj.id:
+            index = ContentIndex.objects.get(fr_doc=obj)
+            link = reverse("call-extractor", kwargs={"content_id": index.uid})
+            html = '<a class="button" href="{}">Get content</a>'.format(link)
+        else:
+            return "N/A"
+        return format_html(html)
 
+    def index_populated(self, obj):
+        content = ''
+        if obj and obj.id:
+            index = ContentIndex.objects.get(fr_doc=obj)
+            content = index.content
+        if content:
+            return "Populated"
+        else:
+            return "Not populated"
 class FederalRegisterDocumentGroupForm(forms.ModelForm):
     documents = forms.ModelMultipleChoiceField(
         queryset=FederalRegisterDocument.objects.all(),
