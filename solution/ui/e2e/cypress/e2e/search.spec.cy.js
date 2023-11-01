@@ -45,6 +45,7 @@ describe("Search flow", () => {
     it("checks a11y for search page", () => {
         cy.viewport("macbook-15");
         cy.visit("/search/?q=FMAP", { timeout: 60000 });
+        cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();
     });

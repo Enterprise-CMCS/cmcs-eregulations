@@ -11,7 +11,7 @@
                     <a :href="eregsLink">{{ eregs_url_label }}</a>
                 </li>
                 <li>
-                    <a :href="ecfrLink" class="external" target="_blank"
+                    <a :href="ecfrLink" class="external" target="_blank" rel="noopener noreferrer"
                         >eCFR</a
                     >
                 </li>
@@ -20,11 +20,12 @@
                         :href="federalRegisterLink"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                         >Federal Register</a
                     >
                 </li>
                 <li>
-                    <a :href="medicaidGovLink" class="external" target="_blank"
+                    <a :href="medicaidGovLink" class="external" target="_blank" rel="noopener noreferrer"
                         >Medicaid.gov</a
                     >
                 </li>
@@ -33,6 +34,7 @@
                         :href="unitedStatesCodeLink"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                         >United States Code</a
                     >
                 </li>

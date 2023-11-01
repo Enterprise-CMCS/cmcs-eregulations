@@ -40,10 +40,12 @@ import {
 } from "./common-commands/jumpTo";
 import { eregsLogin } from "./common-commands/login";
 import { clickStatuteLink } from "./common-commands/statutes";
+import { checkLinkRel } from "./common-commands/checkLinks";
 import { validateSchema } from "./validate-schema-command";
 
 Cypress.Commands.add("checkBlockingModal", checkBlockingModal);
 Cypress.Commands.add("checkFlashBanner", checkFlashBanner);
+Cypress.Commands.add("checkLinkRel", checkLinkRel);
 Cypress.Commands.add("clickHeaderLink", clickHeaderLink);
 Cypress.Commands.add("clickStatuteLink", clickStatuteLink);
 Cypress.Commands.add("getResources", getResources);
