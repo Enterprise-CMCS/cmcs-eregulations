@@ -1,6 +1,8 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router/composables";
 
+import _isArray from "lodash/isArray";
+
 import { getSubjectName } from "utilities/filters";
 
 const props = defineProps({
@@ -15,15 +17,16 @@ const $route = useRoute();
 
 const subjectClick = (event) => {
     const subjects = $route?.query?.subjects ?? [];
+    const subjectsArray = _isArray(subjects) ? subjects : [subjects];
     const subjectToAdd = event.target.dataset.id;
 
-    if (subjects.includes(subjectToAdd)) return;
+    if (subjectsArray.includes(subjectToAdd)) return;
 
     $router.push({
         name: "policy-repository",
         query: {
             ...$route.query,
-            subjects: [...subjects, event.target.dataset.id],
+            subjects: [...subjectsArray, event.target.dataset.id],
         },
     });
 };
