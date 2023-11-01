@@ -15,7 +15,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "shelljs": "^0.8.5",
-    "vite-plugin-css-injected-by-js": "^3.0.0",
+    "vite-plugin-css-injected-by-js": "^3.3.0",
     "vue": "^2.7.10",
     "vuetify": "^2.7"
   },
