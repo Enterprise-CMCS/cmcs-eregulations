@@ -47,6 +47,7 @@ def handler(event: dict, context: dict) -> dict:
     try:
         backend_type = config.get("backend", "web").lower()
         backend = FileBackend.get_backend(backend_type, config)
+        return lambda_response(200, config)
         file = backend.get_file(uri)
     except BackendInitException as e:
         return lambda_response(500, f"Failed to initialize backend: {str(e)}")
