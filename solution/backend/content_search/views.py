@@ -153,8 +153,8 @@ class InvokeTextExtractorViewset(APIView):
                 json_object['uri'] = index.file.get_key()
                 json_object['backend'] = 's3'
                 json_object["s3"] = {
-                                        "aws_access_key_id": settings.AWS_ACCESS_KEY_ID,
-                                        "aws_secret_access_key": settings.AWS_SECRET_ACCESS_KEY,
+                                        "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
+                                        "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
                                         "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME
                                     }
             except ValueError:
