@@ -151,11 +151,18 @@ class InvokeTextExtractorViewset(APIView):
             try:
                 json_object['uri'] = index.file.get_key()
                 json_object['backend'] = 's3'
-                json_object["s3"] = {
-                                        "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
-                                        "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
-                                        "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME
-                                    }
+                if settings.USE_LOCAL_TEXTRACT:
+                    json_object["s3"] = {
+                                            "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
+                                            "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
+                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+                                            'use_lambda': False,
+                                        }
+                else:
+                    json_object["s3"] = {
+                                            'use_lambda': True,
+                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+                                        }
             except ValueError:
                 json_object['backend'] = 'web'
 
