@@ -12,13 +12,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from common.api import OpenApiQueryParameter
-from common.functions import get_tokens_for_user
+from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
-from .functions import build_lambda_client
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
@@ -175,7 +174,7 @@ class InvokeTextExtractorViewset(APIView):
             )
             resp.raise_for_status()
         else:
-            lambda_client = build_lambda_client()
+            lambda_client = establish_client('lambda')
             resp = lambda_client.invoke(FunctionName=settings.TEXTRACT_ARN,
                                         InvocationType='Event',
                                         Payload=json.dumps(json_object))

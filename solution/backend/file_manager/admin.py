@@ -5,12 +5,13 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.functions import establish_client
 from content_search.functions import add_to_index
 from content_search.models import ContentIndex
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
-from .functions import establish_client, get_upload_link
+from .functions import get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 
 
@@ -76,7 +77,7 @@ class UploadedFileAdmin(BaseAdmin):
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
 
     def del_file(self, obj):
-        s3_client = establish_client()
+        s3_client = establish_client('s3')
         key = obj.get_key()
 
         try:

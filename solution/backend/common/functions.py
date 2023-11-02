@@ -1,3 +1,6 @@
+import boto3
+from boto3 import client as boto3_client
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
@@ -74,3 +77,13 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
+
+
+def establish_client(client_type):
+    if settings.USE_AWS_TOKEN:
+        return boto3.client(client_type,
+                            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
+                            region_name="us-east-1")
+    else:
+        return boto3.client(client_type, config=boto3_client.session.Config(signature_version='s3v4', region_name="us-east-1"))
