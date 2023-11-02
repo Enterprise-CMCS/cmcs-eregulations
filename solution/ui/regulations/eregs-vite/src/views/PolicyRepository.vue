@@ -60,6 +60,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    hasEditableJobCode: {
+      type: Boolean,
+      default: false,
+    }
 });
 
 // Router and Route
@@ -367,6 +371,7 @@ getDocSubjects();
                             :base="homeUrl"
                             :results="policyDocList.results"
                             :parts-last-updated="partsLastUpdated.results"
+                            :has-editable-job-code="hasEditableJobCode"
                         />
                     </template>
                 </div>

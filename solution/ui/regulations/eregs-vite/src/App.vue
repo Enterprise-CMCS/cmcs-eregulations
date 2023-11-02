@@ -41,6 +41,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        hasEditableJobCode: {
+          type: Boolean,
+          default: false,
+        },
     },
 };
 </script>
@@ -57,6 +61,7 @@ export default {
             :statutes-url="statutesUrl"
             :host="host"
             :is-authenticated="isAuthenticated === 'True'"
+            :has-editable-job-code="hasEditableJobCode === 'True'"
         />
     </v-app>
 </template>
