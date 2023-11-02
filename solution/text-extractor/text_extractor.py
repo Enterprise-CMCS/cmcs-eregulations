@@ -38,7 +38,6 @@ def handler(event: dict, context: dict) -> dict:
     try:
         resource_id = config["id"]
         uri = config["uri"]
-        print(uri)
         post_url = config["post_url"]
         token = config["token"]
     except KeyError:
@@ -66,10 +65,7 @@ def handler(event: dict, context: dict) -> dict:
     # Run extractor
     try:
         extractor = Extractor.get_extractor(file_type, config)
-        print(file_type)
-        print('here')
         text = extractor.extract(file)
-        print(text)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
     except ExtractorException as e:

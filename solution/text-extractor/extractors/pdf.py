@@ -42,7 +42,6 @@ class PdfExtractor(Extractor):
 
     def extract(self, file: bytes) -> str:
         text = ""
-        print('money')
         with TemporaryDirectory() as temp_dir:
             try:
                 pages = self._convert_to_images(file, temp_dir)
