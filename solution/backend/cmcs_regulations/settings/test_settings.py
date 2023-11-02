@@ -3,8 +3,8 @@ import re
 import os
 
 USE_AWS_TOKEN = True
-AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
-AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", 'test')
+S3_AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
+S3_AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", 'test')
 AWS_STORAGE_BUCKET_NAME = 'test_bucket'
 AWS_S3_REGION_NAME = "us-east-1"
 AWS_S3_CUSTOM_DOMAIN = (

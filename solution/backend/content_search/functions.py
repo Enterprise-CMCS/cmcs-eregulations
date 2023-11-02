@@ -140,8 +140,8 @@ def build_lambda_client():
         # Assumes we are using credentials.  Works for local but an only post to an external URL.
         return boto3_client('lambda',
                             region_name="us-east-1",
-                            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
+                            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY)
     else:
         # Assumes there is a lambda function associated with PR
         return boto3_client('lambda',
