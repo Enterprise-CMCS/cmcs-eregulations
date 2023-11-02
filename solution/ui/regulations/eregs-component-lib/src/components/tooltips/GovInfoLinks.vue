@@ -12,6 +12,7 @@
                     :href="yearObj.link"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                     >{{ yearObj.year }}</a
                 >
             </div>
@@ -22,6 +23,7 @@
                 href="https://www.govinfo.gov/app/collection/cfr"
                 class="external"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 GovInfo</a
             >
