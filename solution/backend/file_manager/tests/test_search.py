@@ -14,7 +14,7 @@ from resources.models import Section
 class SearchTestNotLoggedIn(TestCase):
     def test_not_logged_in(self):
         response = self.client.get("/v3/file-manager/files?q=test+search")
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class SearchTest(TestCase):
