@@ -61,6 +61,19 @@
 
         a {
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        &--file-type {
+            padding: 0 8px;
+            font-size: 11px;
+            line-height: 16px;
+            font-weight: 600;
+            border: 1px solid;
+            border-radius: 26px;
         }
     }
 
@@ -117,7 +130,9 @@
             font-size: $font-size-xs;
         }
 
-        .title__span, .section-sign, .related-sections-none {
+        .title__span,
+        .section-sign,
+        .related-sections-none {
             font-size: $font-size-xs;
         }
 

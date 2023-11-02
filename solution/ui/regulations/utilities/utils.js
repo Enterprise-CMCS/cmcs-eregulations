@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { conforms } from "lodash";
 import _delay from "lodash/delay";
 import _endsWith from "lodash/endsWith";
 import _filter from "lodash/filter";
@@ -45,6 +46,34 @@ const PARAM_VALIDATION_DICT = {
         !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
     type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
+};
+
+/**
+ * @param {string} fileName - name of the file
+ * @returns {string | null} - null if the file name is not a string, otherwise
+ * the suffix of the file name
+ *
+ * @example
+ * const fileName = "test.docx";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // docx
+ */
+const getFileNameSuffix = (fileName) => {
+    if (
+        typeof fileName !== "string" ||
+        _endsWith(fileName, ".") ||
+        !fileName.includes(".")
+    ) {
+        return null;
+    }
+
+    const suffix = fileName.split(".").pop();
+
+    if (suffix.length > 4 || suffix.length < 2 || suffix.includes("pdf")) {
+        return null;
+    }
+
+    return suffix;
 };
 
 /*
@@ -907,6 +936,7 @@ export {
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
+    getFileNameSuffix,
     getFragmentParam,
     getKebabDate,
     getKebabLabel,
