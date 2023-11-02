@@ -21,6 +21,10 @@ defineProps({
         type: Object,
         default: () => {},
     },
+    hasEditableJobCode: {
+      type: Boolean,
+      default: false,
+    },
 });
 
 const $route = useRoute();
@@ -58,13 +62,13 @@ const resultLinkClasses = () => ({
             class="doc-list__document"
         >
             <template #actions>
-                <button
-                    v-if="has_editable_job_code"
+                <a
+                    v-if="hasEditableJobCode"
                     class="edit-button"
-                    @click="editDocument(doc)"
+                    href="/admin"
                 >
                     Edit
-                </button>
+                </a>
             </template>
             <template #labels>
                 <CategoryLabel

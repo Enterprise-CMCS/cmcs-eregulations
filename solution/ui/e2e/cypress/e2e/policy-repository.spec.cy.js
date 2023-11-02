@@ -140,6 +140,31 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
 
+    it("should display the Edit button based on user's group", () => {
+        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+
+        cy.setUserGroup('EREGS_ADMIN');
+
+        cy.visit("/policy-repository/?subjects=1&subjects=2");
+        cy.injectAxe();
+
+        cy.wait("@subjectFiles").then((interception) => {
+          expect(interception.response.statusCode).to.eq(200);
+        });
+
+        if (Cypress.env('hasEditableJobCode')) {
+          cy.get('.edit-button').should('be.visible');
+        } else {
+          cy.get('.edit-button').should('not.exist');
+        }
+
+        cy.checkAccessibility();
+});
+
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");

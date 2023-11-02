@@ -3,7 +3,7 @@ import re
 import requests
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
@@ -12,6 +12,7 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
+
 
 from .models import (
     RegulationLinkConfiguration,
@@ -78,33 +79,49 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         )
 
     def create_user(self, claims) -> User:
+        email = claims.get("email")
         jobcodes = claims.get("jobcodes")
+
         if jobcodes:
             with transaction.atomic():
                 try:
-                    # Attempt to get the user by email
-                    user = self.UserModel.objects.get(email=claims.get("email"))
+                    user = User.objects.get(email=email)
                 except User.DoesNotExist:
-                    # User does not exist, create a new one
-                    user = self.UserModel(
-                        email=claims.get("email"),
-                        username=claims.get("email")
-                    )
+                    user = User.objects.create_user(email, email)
 
-                # Set user fields from claims
                 user = self.update_user(user, claims)
                 user.save()
-                if "EREGS_READER" not in jobcodes:
-                    user.has_editable_job_code = True
-                else:
-                    user.has_editable_job_code = False
 
                 return user
-        return None
+        else:
+            return None
+
 
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
+        # Determine group membership based on jobcodes and add the user to the groups
+
+        jobcodes = claims.get("jobcodes")
+        print(f"jobcodes are: {jobcodes}")
+
+        jobcodes_list = jobcodes.split(",")  # Split the jobcodes string into a list
+        print(f"jobcodes_list: {jobcodes_list}")
+        # Extract relevant jobcode information
+        relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
+        print(f"relevant_jobcodes: {relevant_jobcodes}")
+        group_mapping = {
+            "EREGS_ADMIN": "e-Regs-Admin",
+            "EREGS_MANAGER": "e-Regs-Manager",
+            "EREGS_EDITOR": "e-Regs-Editor",
+            "EREGS_READER": "e-Regs-Reader",
+        }
+
+        groups_to_add = [group_mapping.get(jobcode) for jobcode in relevant_jobcodes if jobcode in group_mapping]
+
+        # Add the user to the determined groups
+        user.groups.set(Group.objects.filter(name__in=groups_to_add))
+
         first_name = claims.get("firstName")
         if first_name:
             user.first_name = first_name
@@ -113,8 +130,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         if last_name:
             user.last_name = last_name
 
-        jobcodes = claims.get("jobcodes")
-        if jobcodes:
+        # Check if there are any jobcodes
+        if relevant_jobcodes:
             user.is_active = True
         else:
             user.is_active = False

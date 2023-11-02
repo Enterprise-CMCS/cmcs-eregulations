@@ -1,14 +1,16 @@
 import unittest
 from unittest.mock import patch
-
+from django.test import TransactionTestCase
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User, Group  # Import the Group model
+from unittest.mock import Mock
 
 from ..admin import OidcAdminAuthenticationBackend
 
 User = get_user_model()
 
 
-class OidcAdminAuthenticationBackendTest(unittest.TestCase):
+class OidcAdminAuthenticationBackendTest(TransactionTestCase):
     def setUp(self):
         self.backend = OidcAdminAuthenticationBackend()
         self.mock_claims = {
@@ -18,43 +20,55 @@ class OidcAdminAuthenticationBackendTest(unittest.TestCase):
             "firstName": "Homer",
             "email": "homer.simpson@example.com",
             "email_verified": True,
-            "jobcodes": "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,dc=cms,dc=hhs,dc=gov"
+            "jobcodes": "cn=EREGS_ADMIN,cn=EREGS_EDITOR, ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,dc=cms,dc=hhs,dc=gov"
         }
 
-    @patch.object(OidcAdminAuthenticationBackend, 'create_user', return_value=User(email='homer.simpson@example.com'))
+    @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_verify_claims(self, mock_create_user):
-        result = self.backend.verify_claims(self.mock_claims)
-        self.assertTrue(result)
+         result = self.backend.verify_claims(self.mock_claims)
+         self.assertTrue(result)
 
-        invalid_claims = dict(self.mock_claims)
-        invalid_claims["email_verified"] = False
-        result = self.backend.verify_claims(invalid_claims)
-        self.assertFalse(result)
+         invalid_claims = dict(self.mock_claims)
+         invalid_claims["email_verified"] = False
+         result = self.backend.verify_claims(invalid_claims)
+         self.assertFalse(result)
 
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_user_is_active_if_have_jobcodes(self, mock_create_user):
-        mock_create_user.return_value = User(email='homer.simpson@example.com')
-        user = self.backend.create_user(self.mock_claims)
-        self.assertTrue(user.is_active)
+         # Create a user with valid jobcodes
+         user = User(email='homer.simpson@example.com')
+         mock_create_user.return_value = user
+         user = self.backend.create_user(self.mock_claims)
 
-    def test_user_is_not_created_if_no_jobcodes(self):
+         # Assert that the user is active
+         self.assertTrue(user.is_active)
+
+    def test_user_without_jobcodes_return_none(self):
         self.mock_claims["jobcodes"] = ""
         user = self.backend.create_user(self.mock_claims)
-        self.assertIsNone(user)
+        assert user is None
 
-    def test_create_user_with_jobcodes(self):
-        jobcodes = ["EREGS_EDITOR", "EREGS_MANAGER", "EREGS_ADMIN"]
-        for jobcode in jobcodes:
-            self.mock_claims["jobcodes"] = jobcode
-            user = self.backend.create_user(self.mock_claims)
-            self.assertIsInstance(user, User)
-            self.assertTrue(user.has_editable_job_code)
+    def test_update_user(self):
+        self.user = User.objects.create(username='test_user', email='test@example.com')
 
-    def test_create_user_without_jobcodes(self):
-        self.mock_claims["jobcodes"] = "EREGS_READER"
-        user = self.backend.create_user(self.mock_claims)
-        self.assertIsInstance(user, User)
-        self.assertFalse(user.has_editable_job_code)
+        # Create real Group instances
+        group_admin = Group.objects.create(name='e-Regs-Admin')
+        group_editor = Group.objects.create(name='e-Regs-Editor')
+
+        # Create a list of groups to add to the user
+        groups_to_add = [group_admin, group_editor]
+
+        with unittest.mock.patch.object(Group.objects, 'filter', return_value=groups_to_add):
+            updated_user = self.backend.update_user(self.user, self.mock_claims)
+
+        # Ensure the user is updated
+        self.assertEqual(updated_user.first_name, 'Homer')
+        self.assertEqual(updated_user.last_name, 'Simpson')
+        self.assertTrue(updated_user.is_active)
+
+        # Ensure the user is associated with the correct groups
+        self.assertTrue(updated_user.groups.filter(name='e-Regs-Admin').exists())
+        self.assertTrue(updated_user.groups.filter(name='e-Regs-Editor').exists())
 
 
 if __name__ == '__main':
