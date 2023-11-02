@@ -14,5 +14,4 @@ solution/static-assets/regulations/*
 !solution/static-assets/regulations/pdfs/
 solution/ui/regulations/dist
 solution/Dockerfile
-solution/text-extractor/Dockerfile
 solution/ui/regulations/coverage/

@@ -5,8 +5,6 @@ ENV EXTERNAL_PORT="6000"
 #ENV PROXY_PARAMS="--enable-async"
 ENV PROXY_PARAMS=""
 ENV STARTUP_CMD="app.text_extractor.handler"
-ENV HTTP_AUTH_USER=""
-ENV HTTP_AUTH_PASSWORD=""
 # Copy lambda-proxy
 COPY lambda-proxy /proxy
 
