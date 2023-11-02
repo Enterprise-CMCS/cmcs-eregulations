@@ -190,7 +190,7 @@ describe("Policy Repository", () => {
             .find("input")
             .should("be.checked");
         cy.url().should("include", "/policy-repository?subjects=4&type=all");
-        cy.get("input#main-content:empty").should("have.value", "");
+        cy.get("input#main-content").should("have.value", "");
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
