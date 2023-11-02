@@ -51,18 +51,23 @@ const PARAM_VALIDATION_DICT = {
 /**
  * @param {string} fileName - name of the file
  * @returns {string | null} - null if the file name is not a string, otherwise
- * the suffix of the file name
+ * returns the suffix of the file name
  *
  * @example
  * const fileName = "test.docx";
  * const suffix = getFileNameSuffix(fileName);
- * console.log(suffix); // docx
+ * console.log(suffix); // "docx"
+ *
+ * @example
+ * const fileName = "test.pdf";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // null
  */
 const getFileNameSuffix = (fileName) => {
     if (
         typeof fileName !== "string" ||
-        _endsWith(fileName, ".") ||
-        !fileName.includes(".")
+        !fileName.includes(".") ||
+        _endsWith(fileName, ".")
     ) {
         return null;
     }
