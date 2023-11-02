@@ -1,5 +1,4 @@
 import boto3
-from boto3 import client as boto3_client
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
