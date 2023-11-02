@@ -109,6 +109,7 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
 class PostContentTextViewset(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
+
     @extend_schema(
         description="Adds text to the content of an index.",
         request=ContentUpdateSerializer,
@@ -126,6 +127,7 @@ class PostContentTextViewset(APIView):
 
 class InvokeTextExtractorViewset(APIView):
     permission_classes = [IsAuthenticated]
+
     @extend_schema(
         description="Post to the lambda function",
     )
