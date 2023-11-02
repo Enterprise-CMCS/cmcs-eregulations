@@ -21,6 +21,7 @@ from resources.views.mixins import LocationExplorerViewSetMixin
 from .functions import build_lambda_client
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
 
 class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):

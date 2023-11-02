@@ -2,7 +2,7 @@
     {
         "testing": "when link_statute_refs is True",
         "paragraph": "Section 123 of the Social Security Act",
-        "expected": "Section <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim\">123</a> of the Social Security Act",
+        "expected": "Section <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim\">123</a> of the Social Security Act",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
@@ -24,7 +24,7 @@
     {
         "testing": "when link_usc_refs is True",
         "paragraph": "42 U.S.C. 123",
-        "expected": "42 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section123&num=0&edition=prelim\">123</a>",
+        "expected": "42 U.S.C. <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section123&num=0&edition=prelim\">123</a>",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
@@ -46,7 +46,7 @@
     {
         "testing": "U.S.C. ref exception (single)",
         "paragraph": "1 U.S.C. 2 and 42 U.S.C. 123",
-        "expected": "1 U.S.C. <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section2&num=0&edition=prelim\">2</a> and 42 U.S.C. 123",
+        "expected": "1 U.S.C. <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section2&num=0&edition=prelim\">2</a> and 42 U.S.C. 123",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
@@ -78,7 +78,7 @@
     {
         "testing": "U.S.C. ref exception (multiple)",
         "paragraph": "1 U.S.C. 2 and 3",
-        "expected": "1 U.S.C. 2 and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section3&num=0&edition=prelim\">3</a>",
+        "expected": "1 U.S.C. 2 and <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title1-section3&num=0&edition=prelim\">3</a>",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,
@@ -94,7 +94,7 @@
     {
         "testing": "Statute ref exception (multiple)",
         "paragraph": "Sections 123(a)(1) and 123 and 456(b)(2) of the Act",
-        "expected": "Sections 123(a)(1) and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim\">123</a> and <a target=\"_blank\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionxyz&num=0&edition=prelim#substructure-location_b_2\">456(b)(2)</a> of the Act",
+        "expected": "Sections 123(a)(1) and <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim\">123</a> and <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionxyz&num=0&edition=prelim#substructure-location_b_2\">456(b)(2)</a> of the Act",
         "config": {
             "link_statute_refs": true,
             "link_usc_refs": true,

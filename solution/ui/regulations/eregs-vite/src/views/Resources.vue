@@ -33,6 +33,7 @@
                         <a
                             href="https://www.federalregister.gov/agencies/centers-for-medicare-medicaid-services"
                             target="_blank"
+                            rel="noopener noreferrer"
                             class="external"
                             >in the Federal Register</a
                         >
@@ -41,6 +42,7 @@
                         <a
                             href="https://www.medicaid.gov/federal-policy-guidance/index.html"
                             target="_blank"
+                            rel="noopener noreferrer"
                             class="external"
                             >by CMS</a
                         >.

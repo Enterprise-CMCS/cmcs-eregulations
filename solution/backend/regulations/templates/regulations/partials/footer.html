@@ -9,22 +9,22 @@
 
 <div class="flexbox site-footer">
     <div class="footer-left match-sides">
-        <a href="https://www.medicaid.gov/" target="_blank"><img src="{% static 'images/medicaid.png' %}" alt="Medicaid.gov logo with subtitle Keeping America Healthy" /></a>
+        <a href="https://www.medicaid.gov/" target="_blank" rel="noopener noreferrer"><img src="{% static 'images/medicaid.png' %}" alt="Medicaid.gov logo with subtitle Keeping America Healthy" /></a>
         <h5>Centers for Medicare &amp; Medicaid Services</h5>
         <div class="address">7500 Security Boulevard, Baltimore MD 21244</div>
         <div class="social">
-            <a href="https://twitter.com/cmsgov" target="_blank" aria-label="CMSgov Twitter page"><i class="fab fa-twitter fa-2x"></i></a>
-            <a href="http://www.youtube.com/user/CMSHHSgov" target="_blank" aria-label="CMSgov YouTube page"><i class="fab fa-youtube fa-2x"></i></a>
+            <a href="https://twitter.com/cmsgov" target="_blank" rel="noopener noreferrer" aria-label="CMSgov Twitter page"><i class="fab fa-twitter fa-2x"></i></a>
+            <a href="http://www.youtube.com/user/CMSHHSgov" target="_blank" rel="noopener noreferrer" aria-label="CMSgov YouTube page"><i class="fab fa-youtube fa-2x"></i></a>
         </div>
     </div>
     <div class="footer-middle match-middle">
         <h4>Legal Limitations of This Tool</h4>
-        <p>This tool is a compilation of materials published elsewhere that is made available for convenience. Although we have made efforts to ensure that the material presented is accurate, the rulemaking and regulation information presented on this tool is not an official edition of the <a href="https://www.govinfo.gov/app/collection/cfr" target="_blank" class="external">Code of Federal Regulations</a> or the <a href="https://federalregister.gov" target="_blank" class="external" aria-label="link to the Federal Register website">Federal Register</a>, which fully state their own contents. Additional relevant guidance or other interpretive materials may exist.</p><br/>
+        <p>This tool is a compilation of materials published elsewhere that is made available for convenience. Although we have made efforts to ensure that the material presented is accurate, the rulemaking and regulation information presented on this tool is not an official edition of the <a href="https://www.govinfo.gov/app/collection/cfr" target="_blank" rel="noopener noreferrer" class="external">Code of Federal Regulations</a> or the <a href="https://federalregister.gov" target="_blank" rel="noopener noreferrer" class="external" aria-label="link to the Federal Register website">Federal Register</a>, which fully state their own contents. Additional relevant guidance or other interpretive materials may exist.</p><br/>
         <p>Unless authorized by law to be binding, the guidance linked on this tool does not have the force and effect of law and is not meant to bind CMS or the public in any way, unless specifically incorporated into a contract. The guidance is intended only to provide clarity to the public regarding existing requirements under the law. This tool does not bind CMS or the public and creates no rights, obligations, or defenses, substantive or procedural, that are enforceable by any party in any manner.</p>
     </div>
     <div class="footer-right match-sides">
         <h4 class="last-update-footer">
-            Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" class="external">
+            Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" rel="noopener noreferrer" class="external">
                 eCFR
             </a> as of
                 {% if spa_footer %}
@@ -42,7 +42,7 @@
 
 <div class="print-footer">
     <em>
-        Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" class="external">eCFR</a> as of <span class="last-updated-date-print">
+        Regulations up to date from <a href="https://www.ecfr.gov" target="_blank" rel="noopener noreferrer" class="external">eCFR</a> as of <span class="last-updated-date-print">
             <last-parser-success-date api-url={{ API_BASE }} ></last-parser-success-date>
         </span>.
     </em>

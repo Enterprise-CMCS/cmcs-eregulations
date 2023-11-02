@@ -59,6 +59,7 @@ describe("Resources page", () => {
                 "0 results in Resources"
             );
             cy.get(".empty-state-container").should("exist");
+            cy.checkLinkRel();
             cy.checkAccessibility();
         });
     });
