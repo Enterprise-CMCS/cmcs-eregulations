@@ -1,4 +1,3 @@
-
 from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent

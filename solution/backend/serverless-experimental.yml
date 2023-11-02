@@ -183,6 +183,11 @@ resources:
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
                      - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
+                -  Effect: "Allow"
+                   Action:
+                     - "lambda:InvokeFunction"
+                   Resource:
+                     - "${self:custom.settings.text_extractor_arn}"       
 
 plugins:
   - serverless-wsgi

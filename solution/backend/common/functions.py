@@ -86,4 +86,4 @@ def establish_client(client_type):
                             aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
                             region_name="us-east-1")
     else:
-        return boto3.client(client_type, config=boto3_client.session.Config(signature_version='s3v4', region_name="us-east-1"))
+        return boto3.client(client_type, region_name="us-east-1")
