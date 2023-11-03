@@ -1,3 +1,4 @@
+import uuid
 
 from django.contrib.postgres.search import (
     SearchHeadline,
@@ -58,6 +59,11 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 
 class ContentIndex(models.Model):
+    uid = models.CharField(
+        primary_key=False,
+        default=uuid.uuid4,
+        editable=False,
+        max_length=36)
     doc_name_string = models.CharField(max_length=512, null=True, blank=True)
     summary_string = models.TextField(blank=True, null=True)
     file_name_string = models.CharField(max_length=512, null=True, blank=True)

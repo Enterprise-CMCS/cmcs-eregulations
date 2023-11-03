@@ -12,6 +12,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .its("status")
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
+        cy.checkLinkRel();
         cy.injectAxe();
         cy.get(".error-code").invoke("text").should("include", "404");
         cy.get(".error-header")

@@ -9,6 +9,7 @@ describe("Part View", () => {
     it("loads part 433", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
+        cy.checkLinkRel();
 
         cy.injectAxe();
         cy.contains("Part 433 - State Fiscal Administration").should(
@@ -28,6 +29,7 @@ describe("Part View", () => {
             "include",
             Cypress.config().baseUrl + "/42/433/Subpart-B"
         );
+        cy.checkLinkRel();
         cy.get("h2.section-title")
             .contains("433.50 Basis, scope, and applicability.")
             .should("be.visible");
@@ -83,6 +85,7 @@ describe("Part View", () => {
         cy.findByRole("link", { name: "433.1 Purpose." }).click({
             force: true,
         });
+        cy.checkLinkRel();
 
         // goes to first part of the appropriate subpart (this is odd)
         cy.url().should("include", "#433-1");
@@ -165,6 +168,7 @@ describe("Part View", () => {
         cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
             "be.visible"
         );
+        cy.checkLinkRel();
         cy.get(
             "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title"
         ).contains("View § 433.8 Effective In");

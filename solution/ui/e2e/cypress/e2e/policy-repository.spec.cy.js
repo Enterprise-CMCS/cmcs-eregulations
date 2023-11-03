@@ -193,6 +193,23 @@ describe("Policy Repository", () => {
         cy.get("input#main-content").should("have.value", "");
     });
 
+    it("should display correct subject ID numbers in the URL if one is included in the URL on load and another one is added via the Subject Selector", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/?subjects=77");
+        cy.url().should("include", "/policy-repository/?subjects=77");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.get("button[data-testid=add-subject-63]").click({
+            force: true,
+        });
+        cy.get(`button[data-testid=remove-subject-63]`).should("exist");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.url().should(
+            "include",
+            "/policy-repository?subjects=77&subjects=63"
+        );
+    });
+
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");
@@ -258,7 +275,7 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .check({ force: true });
-        cy.url().should("include", "/policy-repository");
+        cy.url().should("include", "/policy-repository?type=all");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
