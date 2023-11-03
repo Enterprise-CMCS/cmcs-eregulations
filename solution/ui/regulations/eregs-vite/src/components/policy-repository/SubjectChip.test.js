@@ -8,6 +8,7 @@ describe("Subject Chip", () => {
         const wrapper = render(SubjectChip, {
             props: {
                 subjectName: "Subject Name",
+                subjectId: 2,
             },
         });
 

@@ -149,6 +149,58 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
 
+    it("should update the URL when a subject chip is clicked", () => {
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("not.be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?type=internal");
+        cy.get(`button[data-testid=add-subject-3]`).click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3"
+        );
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3&q=test"
+        );
+        cy.get(`a[data-testid=add-subject-chip-4]`).click({
+            force: true,
+        });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?subjects=4&type=all");
+        cy.get("input#main-content").should("have.value", "");
+    });
+
     it("should display correct subject ID numbers in the URL if one is included in the URL on load and another one is added via the Subject Selector", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
@@ -231,7 +283,7 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .check({ force: true });
-        cy.url().should("include", "/policy-repository?type=all");
+        cy.url().should("include", "/policy-repository");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
