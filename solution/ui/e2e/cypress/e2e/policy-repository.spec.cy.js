@@ -275,7 +275,7 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .check({ force: true });
-        cy.url().should("include", "/policy-repository?type=all");
+        cy.url().should("include", "/policy-repository");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
