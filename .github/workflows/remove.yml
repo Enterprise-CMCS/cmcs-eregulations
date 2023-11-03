@@ -31,7 +31,6 @@ jobs:
           pushd serverless/regulations
           npm install serverless -g
           npm install
-          sls s3remove
           serverless remove
           popd
       - name: remove static assets
