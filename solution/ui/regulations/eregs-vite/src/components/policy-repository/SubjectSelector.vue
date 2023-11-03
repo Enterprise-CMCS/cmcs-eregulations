@@ -41,40 +41,19 @@ const getFilteredSubjects = (filter) => {
         return;
     }
 
-    state.subjects = props.policyDocSubjects.results
-        .filter((subject) => {
-            const shortNameMatch = subject.short_name
-                ? subject.short_name
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
-                : false;
-            const abbreviationMatch = subject.abbreviation
-                ? subject.abbreviation
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
-                : false;
-            const fullNameMatch = subject.full_name
-                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
-                : false;
+    state.subjects = props.policyDocSubjects.results.reduce((acc, subject) => {
+        const shortNameMatch = subject.short_name
+            ? subject.short_name.toLowerCase().includes(filter.toLowerCase())
+            : false;
+        const abbreviationMatch = subject.abbreviation
+            ? subject.abbreviation.toLowerCase().includes(filter.toLowerCase())
+            : false;
+        const fullNameMatch = subject.full_name
+            ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+            : false;
 
-            return shortNameMatch || abbreviationMatch || fullNameMatch;
-        })
-        .map((subject) => {
-            const shortNameMatch = subject.short_name
-                ? subject.short_name
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
-                : false;
-            const abbreviationMatch = subject.abbreviation
-                ? subject.abbreviation
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
-                : false;
-            const fullNameMatch = subject.full_name
-                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
-                : false;
-
-            return {
+        if (shortNameMatch || abbreviationMatch || fullNameMatch) {
+            const newSubject = {
                 ...subject,
                 short_name: shortNameMatch
                     ? subject.short_name.replace(
@@ -95,7 +74,11 @@ const getFilteredSubjects = (filter) => {
                       )
                     : subject.full_name,
             };
-        });
+            return [...acc, newSubject];
+        }
+
+        return acc;
+    }, []);
 };
 
 const debouncedFilter = _debounce(getFilteredSubjects, 100);
