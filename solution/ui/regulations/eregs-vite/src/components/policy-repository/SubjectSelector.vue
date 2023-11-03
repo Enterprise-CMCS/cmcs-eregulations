@@ -56,7 +56,7 @@ const getFilteredSubjects = (filter) => {
     });
 };
 
-const debouncedFilter = _debounce(getFilteredSubjects, 250);
+const debouncedFilter = _debounce(getFilteredSubjects, 100);
 
 watch(() => state.filter, debouncedFilter);
 
@@ -82,7 +82,7 @@ const subjectClick = (event) => {
         <h3>By Subject</h3>
         <div class="subjects__list-container">
             <label for="subjectReduce">Filter the subject list</label>
-            <input id="subjectReduce" v-model="state.filter" type="search" />
+            <input id="subjectReduce" v-model="state.filter" type="text" />
             <ul tabindex="-1" class="subjects__list">
                 <li
                     v-for="subject in state.subjects"
