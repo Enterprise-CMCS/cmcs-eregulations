@@ -25,6 +25,10 @@ const EventCodes = {
 };
 
 const DOCUMENT_TYPES = ["external", "internal"];
+const DOCUMENT_TYPES_MAP = {
+    external: "Public Resources",
+    internal: "Internal Resources",
+}
 
 const PARAM_MAP = {
     subjects: "subjects",
@@ -929,6 +933,7 @@ export {
     createOneIndexedArray,
     delay,
     DOCUMENT_TYPES,
+    DOCUMENT_TYPES_MAP,
     EventCodes,
     flattenObject,
     flattenSubpart,
