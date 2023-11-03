@@ -70,6 +70,7 @@ package:
 custom:
   environment: 'experimental'
   stage: ${opt:stage, self:provider.stage}
+  storageBucketName: file-repo-eregs-${self:custom.stage}
   wsgi:
     app: handler.application
     packRequirements: false
@@ -88,7 +89,7 @@ custom:
     version: V2
   remover:
     buckets:
-      - file-repo-eregs-${self:custom.stage}
+      - ${self:custom:storageBucketName}
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
