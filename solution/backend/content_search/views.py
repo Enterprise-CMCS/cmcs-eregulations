@@ -151,6 +151,7 @@ class InvokeTextExtractorViewset(APIView):
             try:
                 json_object['uri'] = index.file.get_key()
                 json_object['backend'] = 's3'
+                # The lambda already has permissions to access the S3 bucket.  Only on a local run do we pass the keys.
                 if settings.USE_LOCAL_TEXTRACT:
                     json_object["s3"] = {
                                             "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,

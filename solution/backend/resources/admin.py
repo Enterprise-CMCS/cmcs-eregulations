@@ -475,7 +475,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
             index = ContentIndex.objects.get(supplemental_content=obj)
             content = index.content
         if content:
-            return "Populated"
+            return f"Populated: {content[:100]}"
         else:
             return "Not populated"
 
@@ -643,7 +643,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             index = ContentIndex.objects.get(fr_doc=obj)
             content = index.content
         if content:
-            return "Populated"
+            return f"Populated: {content[:100]}"
         else:
             return "Not populated"
 

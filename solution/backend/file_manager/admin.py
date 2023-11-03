@@ -107,7 +107,7 @@ class UploadedFileAdmin(BaseAdmin):
             index = ContentIndex.objects.get(file=obj)
             content = index.content
         if content:
-            return "Populated"
+            return f"Populated: {content[:100]}"
         else:
             return "Not populated"
 
