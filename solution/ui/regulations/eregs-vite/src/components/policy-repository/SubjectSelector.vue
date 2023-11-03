@@ -41,19 +41,61 @@ const getFilteredSubjects = (filter) => {
         return;
     }
 
-    state.subjects = props.policyDocSubjects.results.filter((subject) => {
-        const shortNameMatch = subject.short_name
-            ? subject.short_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const abbreviationMatch = subject.abbreviation
-            ? subject.abbreviation.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const fullNameMatch = subject.full_name
-            ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
+    state.subjects = props.policyDocSubjects.results
+        .filter((subject) => {
+            const shortNameMatch = subject.short_name
+                ? subject.short_name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const abbreviationMatch = subject.abbreviation
+                ? subject.abbreviation
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const fullNameMatch = subject.full_name
+                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+                : false;
 
-        return shortNameMatch || abbreviationMatch || fullNameMatch;
-    });
+            return shortNameMatch || abbreviationMatch || fullNameMatch;
+        })
+        .map((subject) => {
+            const shortNameMatch = subject.short_name
+                ? subject.short_name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const abbreviationMatch = subject.abbreviation
+                ? subject.abbreviation
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const fullNameMatch = subject.full_name
+                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+                : false;
+
+            return {
+                ...subject,
+                short_name: shortNameMatch
+                    ? subject.short_name.replace(
+                          new RegExp(filter, "gi"),
+                          (match) => `<span class="match">${match}</span>`
+                      )
+                    : subject.short_name,
+                abbreviation: abbreviationMatch
+                    ? subject.abbreviation.replace(
+                          new RegExp(filter, "gi"),
+                          (match) => `<span class="match">${match}</span>`
+                      )
+                    : subject.abbreviation,
+                full_name: fullNameMatch
+                    ? subject.full_name.replace(
+                          new RegExp(filter, "gi"),
+                          (match) => `<span class="match">${match}</span>`
+                      )
+                    : subject.full_name,
+            };
+        });
 };
 
 const debouncedFilter = _debounce(getFilteredSubjects, 100);
@@ -95,9 +137,8 @@ const subjectClick = (event) => {
                         :data-testid="`add-subject-${subject.id}`"
                         :title="subject.full_name"
                         @click="subjectClick"
-                    >
-                        {{ getSubjectName(subject) }}
-                    </button>
+                        v-html="getSubjectName(subject)"
+                    ></button>
                 </li>
             </ul>
         </div>

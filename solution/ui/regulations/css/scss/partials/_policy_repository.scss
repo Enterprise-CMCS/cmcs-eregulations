@@ -181,6 +181,10 @@
                     color: #000;
                     width: 100%;
 
+                    .match {
+                        @include font-bold-keep-width;
+                    }
+
                     &:hover,
                     &:focus,
                     &:active {
