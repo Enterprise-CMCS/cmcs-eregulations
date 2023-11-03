@@ -18,6 +18,7 @@ const sortedSubjects = props.subjects.toSorted(sortSubjects);
         <SubjectChip
             v-for="(subject, i) in sortedSubjects"
             :key="subject.id + 'x' + i"
+            :subject-id="subject.id"
             :subject-name="getSubjectName(subject)"
         />
     </div>
