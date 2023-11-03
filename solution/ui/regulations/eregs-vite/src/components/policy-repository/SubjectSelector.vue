@@ -55,6 +55,7 @@ const getFilteredSubjects = (filter) => {
         if (shortNameMatch || abbreviationMatch || fullNameMatch) {
             const newSubject = {
                 ...subject,
+                title: subject.full_name,
                 short_name: shortNameMatch
                     ? subject.short_name.replace(
                           new RegExp(filter, "gi"),
@@ -118,7 +119,7 @@ const subjectClick = (event) => {
                         :data-name="getSubjectName(subject)"
                         :data-id="subject.id"
                         :data-testid="`add-subject-${subject.id}`"
-                        :title="subject.full_name"
+                        :title="subject.title || subject.full_name"
                         @click="subjectClick"
                         v-html="getSubjectName(subject)"
                     ></button>
