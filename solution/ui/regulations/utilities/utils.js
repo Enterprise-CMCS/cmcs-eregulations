@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { conforms } from "lodash";
 import _delay from "lodash/delay";
 import _endsWith from "lodash/endsWith";
 import _filter from "lodash/filter";
@@ -50,8 +49,8 @@ const PARAM_VALIDATION_DICT = {
 
 /**
  * @param {string} fileName - name of the file
- * @returns {string | null} - null if the file name is not a string, otherwise
- * returns the suffix of the file name
+ * @returns {string | null} - returns null if the file name is not a string or does not pass validation;
+ * otherwise returns the suffix of the file name
  *
  * @example
  * const fileName = "test.docx";
