@@ -86,7 +86,9 @@ custom:
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
-
+  remover:
+    buckets:
+      - file-repo-eregs-${self:custom.stage}
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
@@ -187,3 +189,4 @@ plugins:
   - serverless-wsgi
   - serverless-cloudfront-invalidate
   - serverless-associate-waf
+  - serverless-s3-remover
