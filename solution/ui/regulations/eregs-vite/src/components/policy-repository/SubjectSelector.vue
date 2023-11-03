@@ -35,22 +35,26 @@ const subjectClick = (event) => {
 <template>
     <div class="subjects__select-container">
         <h3>By Subject</h3>
-        <ul tabindex="-1" class="subjects__list">
-            <li
-                v-for="subject in policyDocSubjects.results"
-                :key="subject.id"
-                class="subjects__li sidebar__li"
-            >
-                <button
-                    :data-name="getSubjectName(subject)"
-                    :data-id="subject.id"
-                    :data-testid="`add-subject-${subject.id}`"
-                    :title="subject.full_name"
-                    @click="subjectClick"
+        <div class="subjects__list-container">
+            <label for="subjectReduce">Filter the subject list</label>
+            <input id="subjectReduce" type="search" name="q" />
+            <ul tabindex="-1" class="subjects__list">
+                <li
+                    v-for="subject in policyDocSubjects.results"
+                    :key="subject.id"
+                    class="subjects__li sidebar__li"
                 >
-                    {{ getSubjectName(subject) }}
-                </button>
-            </li>
-        </ul>
+                    <button
+                        :data-name="getSubjectName(subject)"
+                        :data-id="subject.id"
+                        :data-testid="`add-subject-${subject.id}`"
+                        :title="subject.full_name"
+                        @click="subjectClick"
+                    >
+                        {{ getSubjectName(subject) }}
+                    </button>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
