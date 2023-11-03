@@ -1,6 +1,9 @@
 <script setup>
+import { reactive, watch } from "vue";
+
 import { useRouter, useRoute } from "vue-router/composables";
 
+import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";
 
 import { getSubjectName } from "utilities/filters";
@@ -14,6 +17,48 @@ const props = defineProps({
 
 const $router = useRouter();
 const $route = useRoute();
+
+const state = reactive({
+    filter: "",
+    subjects: [],
+});
+
+watch(
+    () => props.policyDocSubjects.loading,
+    (loading) => {
+        if (loading) {
+            state.subjects = [];
+            return;
+        }
+
+        state.subjects = props.policyDocSubjects.results;
+    }
+);
+
+const getFilteredSubjects = (filter) => {
+    if (!filter || filter.length < 3) {
+        state.subjects = props.policyDocSubjects.results;
+        return;
+    }
+
+    state.subjects = props.policyDocSubjects.results.filter((subject) => {
+        const shortNameMatch = subject.short_name
+            ? subject.short_name.toLowerCase().includes(filter.toLowerCase())
+            : false;
+        const abbreviationMatch = subject.abbreviation
+            ? subject.abbreviation.toLowerCase().includes(filter.toLowerCase())
+            : false;
+        const fullNameMatch = subject.full_name
+            ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+            : false;
+
+        return shortNameMatch || abbreviationMatch || fullNameMatch;
+    });
+};
+
+const debouncedFilter = _debounce(getFilteredSubjects, 250);
+
+watch(() => state.filter, debouncedFilter);
 
 const subjectClick = (event) => {
     const subjects = $route?.query?.subjects ?? [];
@@ -37,10 +82,10 @@ const subjectClick = (event) => {
         <h3>By Subject</h3>
         <div class="subjects__list-container">
             <label for="subjectReduce">Filter the subject list</label>
-            <input id="subjectReduce" type="search" name="q" />
+            <input id="subjectReduce" v-model="state.filter" type="search" />
             <ul tabindex="-1" class="subjects__list">
                 <li
-                    v-for="subject in policyDocSubjects.results"
+                    v-for="subject in state.subjects"
                     :key="subject.id"
                     class="subjects__li sidebar__li"
                 >
