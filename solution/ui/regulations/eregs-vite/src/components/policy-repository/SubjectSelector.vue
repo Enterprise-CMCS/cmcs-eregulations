@@ -88,7 +88,7 @@ watch(() => state.filter, debouncedFilter);
 const subjectClick = (event) => {
     const subjects = $route?.query?.subjects ?? [];
     const subjectsArray = _isArray(subjects) ? subjects : [subjects];
-    const subjectToAdd = event.target.dataset.id;
+    const subjectToAdd = event.currentTarget.dataset.id;
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
@@ -96,7 +96,7 @@ const subjectClick = (event) => {
         name: "policy-repository",
         query: {
             ...$route.query,
-            subjects: [...subjectsArray, event.target.dataset.id],
+            subjects: [...subjectsArray, event.currentTarget.dataset.id],
         },
     });
 };
