@@ -89,7 +89,7 @@ custom:
     version: V2
   remover:
     buckets:
-      - ${self:custom:storageBucketName}
+      - file-repo-eregs-${opt:stage, self:provider.stage}
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
