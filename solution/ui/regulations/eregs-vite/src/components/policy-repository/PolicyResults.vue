@@ -45,7 +45,9 @@ const resultLinkLabel = (item) => {
     const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
     const fileTypeButton =
         item.file_name_string && fileTypeSuffix
-            ? `<span class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`
+            ? `<span data-testid="download-chip-${
+                  item.url
+              }" class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`
             : null;
 
     const linkText =
@@ -53,7 +55,9 @@ const resultLinkLabel = (item) => {
             ? item.summary_headline || item.summary_string
             : item.document_name_headline || item.doc_name_string;
 
-    return `<span class='result__link--label'>${linkText}</span>${fileTypeButton ?? ""}`;
+    return `<span class='result__link--label'>${linkText}</span>${
+        fileTypeButton ?? ""
+    }`;
 };
 </script>
 
