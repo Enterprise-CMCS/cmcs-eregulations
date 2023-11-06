@@ -10,9 +10,10 @@ from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
+from django.core.exceptions import SuspiciousOperation
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
-
+from django.http import HttpResponseRedirect
 from .models import (
     RegulationLinkConfiguration,
     SiteConfiguration,
@@ -71,28 +72,60 @@ def roman_to_int(roman):
 
 
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
-    def verify_claims(self, claims) -> bool:
+    # def verify_claims(self, claims) -> bool:
+    #     return (
+    #             super().verify_claims(claims)
+    #             and claims.get("email_verified", False)
+    #    )
+
+    def verify_claims(self, claims ) -> bool:
         return (
                 super().verify_claims(claims)
                 and claims.get("email_verified", False)
+        #       and claims.get("jobcodes") is not ""
+                and False
         )
 
-    def create_user(self, claims) -> User:
-        if claims.get("jobcodes"):
-            with transaction.atomic():
-                try:
-                    # Attempt to get the user by email
-                    user = self.UserModel.objects.get(email=claims.get("email"))
-                except User.DoesNotExist:
-                    # User does not exist, create a new one
-                    user = self.UserModel(
-                        email=claims.get("email"),
-                        username=claims.get("email")
-                    )
+    def get_or_create_user(self, access_token, id_token, payload):
+        user_info = self.get_userinfo(access_token, id_token, payload)
+        claims_verified = self.verify_claims(user_info)
 
-                # Set user fields from claims
-                return self.update_user(user, claims)
-        return None
+        if not claims_verified:
+            # Redirect to the admin login page instead of raising an exception
+            # return HttpResponseRedirect('/admin/login/')
+            msg = "------ in claims verified Claims verification failed"
+            raise SuspiciousOperation(msg)
+            #raise CustomOIDCException("Claims verification failed")
+
+
+        users = self.filter_users_by_claims(user_info)
+        if len(users) == 1:
+            return self.update_user(users[0], user_info)
+        elif len(users) > 1:
+            msg = "Multiple users returned"
+            raise SuspiciousOperation(msg)
+        elif self.get_settings("OIDC_CREATE_USER", True):
+            user = self.create_user(user_info)
+            return user
+        else:
+            LOGGER.debug("Login failed: No user with %s found, and OIDC_CREATE_USER is False",
+                         self.describe_user_by_claims(user_info))
+            return None
+    def create_user(self, claims) -> User:
+        with transaction.atomic():
+            try:
+                raise Exception(f"within create users")
+                # Attempt to get the user by email
+                user = self.UserModel.objects.get(email=claims.get("email"))
+            except User.DoesNotExist:
+                # User does not exist, create a new one
+                user = self.UserModel(
+                    email=claims.get("email"),
+                    username=claims.get("email")
+                )
+
+            # Set user fields from claims
+            return self.update_user(user, claims)
 
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
