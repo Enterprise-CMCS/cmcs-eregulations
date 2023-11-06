@@ -51,6 +51,39 @@ const PARAM_VALIDATION_DICT = {
     type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
 };
 
+/**
+ * @param {string} fileName - name of the file
+ * @returns {string | null} - returns null if the file name is not a string or does not pass validation;
+ * otherwise returns the suffix of the file name
+ *
+ * @example
+ * const fileName = "test.docx";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // "docx"
+ *
+ * @example
+ * const fileName = "test.pdf";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // null
+ */
+const getFileNameSuffix = (fileName) => {
+    if (
+        typeof fileName !== "string" ||
+        !fileName.includes(".") ||
+        _endsWith(fileName, ".")
+    ) {
+        return null;
+    }
+
+    const suffix = fileName.split(".").pop();
+
+    if (suffix.length > 4 || suffix.length < 2 || suffix.includes("pdf")) {
+        return null;
+    }
+
+    return suffix;
+};
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -912,6 +945,7 @@ export {
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
+    getFileNameSuffix,
     getFragmentParam,
     getKebabDate,
     getKebabLabel,
