@@ -21,7 +21,7 @@
     "numeral": "^2.0.6",
     "splitpanes": "^2.4.1",
     "vue": "^2.7.10",
-    "vue-router": "^3.2.0",
+    "vue-router": "^3.6.5",
     "vuetify": "^2.6.10",
     "autoprefixer": "^9.8.6",
     "postcss": "^8.4.31"
