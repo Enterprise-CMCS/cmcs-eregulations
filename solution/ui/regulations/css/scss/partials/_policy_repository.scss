@@ -181,6 +181,14 @@
                     margin: 12px 0;
                     padding: 4px 24px 4px 4px;
                     box-sizing: content-box !important; // thanks, Vuetify
+
+                    &:focus,
+                    &:focus-visible,
+                    &:focus-within,
+                    &:active {
+                        outline: none !important;
+                        border: 2px solid $secondary_border_color !important;
+                    }
                 }
 
                 .subjects__filter-reset {
