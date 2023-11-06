@@ -4,19 +4,21 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
 {
   "baseElement": <body>
     <div>
-      <div
+      <router-link
         class="subject__chip"
+        to="[object Object]"
       >
-        Subject Name
-      </div>
+         Subject Name 
+      </router-link>
     </div>
   </body>,
   "container": <div>
-    <div
+    <router-link
       class="subject__chip"
+      to="[object Object]"
     >
-      Subject Name
-    </div>
+       Subject Name 
+    </router-link>
   </div>,
   "debug": [Function],
   "emitted": [Function],
