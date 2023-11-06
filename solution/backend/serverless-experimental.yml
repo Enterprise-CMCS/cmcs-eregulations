@@ -70,7 +70,6 @@ package:
 custom:
   environment: 'experimental'
   stage: ${opt:stage, self:provider.stage}
-  storageBucketName: file-repo-eregs-${self:custom.stage}
   wsgi:
     app: handler.application
     packRequirements: false
