@@ -4,6 +4,25 @@
 
 @import "../application_settings";
 
+@mixin common-remove-btn-styles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $policy_subject_close_background;
+    color: $policy_subject_selected_chip_background;
+    border-radius: 4px;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: #c0c1c3;
+    }
+
+    i {
+        pointer-events: none;
+    }
+}
+
 #policyRepositoryApp.repository-view,
 #policyRepositorySearchApp.repository-search-view {
     margin-bottom: 1rem;
@@ -86,7 +105,6 @@
                 max-height: calc(100vh - 90px);
                 overflow-y: auto;
             }
-
         }
 
         .selections__container {
@@ -107,24 +125,11 @@
                     padding: 4px 8px;
 
                     button {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
                         width: 16px;
                         height: 16px;
                         margin-left: 8px;
-                        background-color: $policy_subject_close_background;
-                        color: $policy_subject_selected_chip_background;
-                        border-radius: 4px;
-                        &:hover,
-                        &:focus,
-                        &:active {
-                            background-color: #c0c1c3;
-                        }
 
-                        i {
-                            pointer-events: none;
-                        }
+                        @include common-remove-btn-styles;
                     }
                 }
             }
@@ -159,17 +164,39 @@
             display: flex;
             flex-direction: column;
 
-            label[for="subjectReduce"] {
-                font-size: 14px;
-            }
+            form {
+                display: flex;
+                flex-direction: column;
+                position: relative;
 
-            input#subjectReduce {
-                @include filter-borders;
+                label[for="subjectReduce"] {
+                    font-size: 14px;
+                }
 
-                height: 1.5rem;
-                margin: 12px 0;
-                padding: 4px;
-                box-sizing: content-box !important; // thanks, Vuetify
+                input#subjectReduce {
+                    @include filter-borders;
+
+                    flex: 1;
+                    height: 1.5rem;
+                    margin: 12px 0;
+                    padding: 4px 24px 4px 4px;
+                    box-sizing: content-box !important; // thanks, Vuetify
+                }
+
+                .subjects__filter-reset {
+                    @include common-remove-btn-styles;
+
+                    top: 50%;
+                    right: -3px;
+                    transform: translate(-50%);
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+
+                    &--hidden {
+                        display: none;
+                    }
+                }
             }
         }
 

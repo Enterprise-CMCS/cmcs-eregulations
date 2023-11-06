@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 
 import { useRouter, useRoute } from "vue-router/composables";
 
@@ -101,14 +101,34 @@ const subjectClick = (event) => {
         },
     });
 };
+
+const filterResetClasses = computed(() => ({
+    "subjects__filter-reset": true,
+    "subjects__filter-reset--hidden": !state.filter,
+}));
+
+const filterResetClick = () => {
+    state.filter = "";
+};
 </script>
 
 <template>
     <div class="subjects__select-container">
         <h3>By Subject</h3>
         <div class="subjects__list-container">
-            <label for="subjectReduce">Filter the subject list</label>
-            <input id="subjectReduce" v-model="state.filter" type="text" />
+            <form>
+                <label for="subjectReduce">Filter the subject list</label>
+                <input id="subjectReduce" v-model="state.filter" type="text" />
+                <button
+                    aria-label="Clear subject list filter"
+                    data-testid="clear-subject-filter"
+                    type="reset"
+                    :class="filterResetClasses"
+                    class="mdi mdi-close"
+                    @click="filterResetClick"
+                >
+                </button>
+            </form>
             <ul tabindex="-1" class="subjects__list">
                 <li
                     v-for="subject in state.subjects"
