@@ -65,8 +65,8 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          # remove the database if its there. 
-          sls s3remove
+          serverless invoke --config ./serverless-experimental.yml --function empty_bucket --stage dev${PR}
+          # remove the database if its there.
           serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR} $PR "./serverless-experimental.yml"
           popd
