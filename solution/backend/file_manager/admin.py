@@ -42,7 +42,7 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("document_name", 'index_populated')
+    list_display = ("document_name", "index_populated")
     search_fields = ["document_name"]
     ordering = ("document_name",)
     filter_horizontal = ("locations", "subjects")

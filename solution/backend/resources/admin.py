@@ -633,9 +633,8 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
             index = ContentIndex.objects.get(fr_doc=obj)
             link = reverse("call-extractor", kwargs={"content_id": index.uid})
             html = '<a class="button" href="{}">Get content</a>'.format(link)
-        else:
-            return "N/A"
-        return format_html(html)
+            return format_html(html)
+        return "N/A"
 
     def index_populated(self, obj):
         content = ''
