@@ -124,11 +124,6 @@ const filterResetClick = () => {
                     <SimpleSpinner />
                 </div>
             </template>
-            <template v-else-if="state.subjects.length < 1">
-                <div class="subjects__no-results">
-                    <p>No subjects found</p>
-                </div>
-            </template>
             <template v-else>
                 <form>
                     <label for="subjectReduce">Filter the subject list</label>
