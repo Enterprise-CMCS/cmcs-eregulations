@@ -2,6 +2,7 @@ import {
     createLastUpdatedDates,
     getActAbbr,
     getCurrentPageResultsRange,
+    getFileNameSuffix,
     getRequestParams,
     romanize,
     shapeTitlesResponse,
@@ -149,6 +150,21 @@ describe("Utilities.js", () => {
         };
 
         expect(getRequestParams(query11)).toBe("q=test&resource-type=all");
+    });
+
+    it("gets the proper suffix for a filename or returns null", async () => {
+        expect(getFileNameSuffix(null)).toBe(null);
+        expect(getFileNameSuffix(undefined)).toBe(null);
+        expect(getFileNameSuffix(1)).toBe(null);
+        expect(getFileNameSuffix("test")).toBe(null);
+        expect(getFileNameSuffix("test.docx.")).toBe(null);
+        expect(getFileNameSuffix("test.pdf")).toBe(null);
+        expect(getFileNameSuffix("test.msg")).toBe("msg");
+        expect(getFileNameSuffix("test.docx")).toBe("docx");
+        expect(getFileNameSuffix("test.docxmsg")).toBe(null);
+        expect(getFileNameSuffix("test.docx.msg")).toBe("msg");
+        expect(getFileNameSuffix("test.docx.msg.txt")).toBe("txt");
+        expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
     });
 
     it("romanize properly converts numbers to roman numerals", async () => {

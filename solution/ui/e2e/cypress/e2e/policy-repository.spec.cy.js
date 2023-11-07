@@ -40,6 +40,14 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
         cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+        ).scrollIntoView();
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
+        )
+            .should("be.visible")
+            .and("have.text", "0 public and 1 internal resources ");
+        cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
@@ -137,6 +145,15 @@ describe("Policy Repository", () => {
             .should("have.attr", "href")
             .and("not.include", "undefined")
             .and("include", "/42/435/116#435-116");
+        cy.get(".result__link")
+            .eq(0)
+            .find("a")
+            .should("not.include.text", "Download");
+        cy.get(".result__link")
+            .eq(1)
+            .should("include.text", "Download")
+            .find("a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]")
+            .should("include.text", "Download MSG");
 
         cy.checkAccessibility();
     });

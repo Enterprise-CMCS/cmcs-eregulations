@@ -227,6 +227,7 @@ const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getPolicyDocSubjects({
             apiUrl: props.apiUrl,
+            cacheResponse: false,
         });
 
         policyDocSubjects.value.results = subjectsResponse.sort(sortSubjects);
