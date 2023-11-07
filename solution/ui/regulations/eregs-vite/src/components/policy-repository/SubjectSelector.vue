@@ -36,7 +36,7 @@ watch(
 );
 
 const getFilteredSubjects = (filter) => {
-    if (!filter || filter.length < 3) {
+    if (!filter || filter.length < 1) {
         state.subjects = props.policyDocSubjects.results;
         return;
     }
