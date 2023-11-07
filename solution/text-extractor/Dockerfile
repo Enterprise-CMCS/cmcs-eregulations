@@ -1,11 +1,10 @@
 FROM public.ecr.aws/lambda/python:3.11
 
 ENV HOSTNAME="text-extractor"
-ENV EXTERNAL_PORT="8000"
+ENV EXTERNAL_PORT="6000"
 #ENV PROXY_PARAMS="--enable-async"
 ENV PROXY_PARAMS=""
 ENV STARTUP_CMD="app.text_extractor.handler"
-
 # Copy lambda-proxy
 COPY lambda-proxy /proxy
 

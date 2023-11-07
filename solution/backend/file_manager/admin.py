@@ -1,5 +1,3 @@
-
-
 import requests
 from django import forms
 from django.conf import settings
@@ -7,11 +5,13 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.functions import establish_client
 from content_search.functions import add_to_index
+from content_search.models import ContentIndex
 from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
-from .functions import establish_client, get_upload_link
+from .functions import get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 
 
@@ -42,13 +42,13 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("document_name",)
+    list_display = ("document_name", "index_populated")
     search_fields = ["document_name"]
     ordering = ("document_name",)
     filter_horizontal = ("locations", "subjects")
-    readonly_fields = ('download_file', 'file_name')
+    readonly_fields = ('download_file', 'file_name', 'get_content', 'index_populated')
     fields = ("file_name", "file_path", "document_name", 'date', 'summary',
-              'document_type', 'subjects', 'locations', 'internal_notes', 'download_file',)
+              'document_type', 'subjects', 'locations', 'internal_notes', 'index_populated', 'get_content', 'download_file',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
         "subjects": lambda: Subject.objects.all()
@@ -77,7 +77,7 @@ class UploadedFileAdmin(BaseAdmin):
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
 
     def del_file(self, obj):
-        s3_client = establish_client()
+        s3_client = establish_client('s3')
         key = obj.get_key()
 
         try:
@@ -97,6 +97,25 @@ class UploadedFileAdmin(BaseAdmin):
         if obj.id:
             link = reverse("file-download", kwargs={"file_id": obj.uid})
             html = '<input type="button" onclick="location.href=\'{}\'" value="Download File" />'.format(link)
+        else:
+            return "N/A"
+        return format_html(html)
+
+    def index_populated(self, obj):
+        content = ''
+        if obj and obj.id:
+            index = ContentIndex.objects.get(file=obj)
+            content = index.content
+        if content:
+            return f"Populated: {content[:100]}"
+        else:
+            return "Not populated"
+
+    def get_content(self, obj):
+        if obj.id:
+            index = ContentIndex.objects.get(file=obj)
+            link = reverse("call-extractor", kwargs={"content_id": index.uid})
+            html = '<a class="button" href="{}">Get content</a>'.format(link)
         else:
             return "N/A"
         return format_html(html)

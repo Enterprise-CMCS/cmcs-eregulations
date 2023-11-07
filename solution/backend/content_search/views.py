@@ -1,13 +1,18 @@
+import json
 
+import requests
+from django.conf import settings
 from django.db.models import F, Prefetch
+from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from common.api import OpenApiQueryParameter
-from common.auth import SettingsAuthentication
+from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
@@ -101,8 +106,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 
 class PostContentTextViewset(APIView):
-    authentication_classes = [SettingsAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
     @extend_schema(
         description="Adds text to the content of an index.",
@@ -117,3 +122,68 @@ class PostContentTextViewset(APIView):
         index.content = text
         index.save()
         return Response(data=f'Index was updated for {index.doc_name_string}')
+
+
+class InvokeTextExtractorViewset(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        description="Post to the lambda function",
+    )
+    def get(self, request, *args, **kwargs):
+        token = get_tokens_for_user(request.user)['access']
+        uid = kwargs.get("content_id")
+
+        if not settings.USE_LOCAL_TEXTRACT:
+            post_url = request.build_absolute_uri(reverse("post-content"))
+        else:
+            post_url = "http://host.docker.internal:8000" + reverse("post-content")
+        index = ContentIndex.objects.get(uid=uid)
+        if not index:
+            return Response({'message': "Index does not exist"})
+        json_object = {
+            'id': uid,
+            'uri': index.url,
+            'post_url': post_url,
+            'token': token,
+        }
+        if index.file:
+            try:
+                json_object['uri'] = index.file.get_key()
+                json_object['backend'] = 's3'
+                # The lambda already has permissions to access the S3 bucket.  Only on a local run do we pass the keys.
+                if settings.USE_LOCAL_TEXTRACT:
+                    json_object["s3"] = {
+                                            "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
+                                            "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
+                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+                                            'use_lambda': False,
+                                        }
+                else:
+                    json_object["s3"] = {
+                                            'use_lambda': True,
+                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+                                        }
+            except ValueError:
+                json_object['backend'] = 'web'
+
+        if settings.USE_LOCAL_TEXTRACT:
+            json_object['textract'] = {
+                'aws_access_key_id': settings.TEXTRACT_KEY_ID,
+                'aws_secret_access_key': settings.TEXTRACT_SECRET_KEY,
+                'aws_region': 'us-east-1'
+            }
+            # return Response(json_object)
+            docker_url = 'http://host.docker.internal:8001/'
+            resp = requests.post(
+                docker_url,
+                data=json.dumps(json_object),
+                timeout=60,
+            )
+            resp.raise_for_status()
+        else:
+            lambda_client = establish_client('lambda')
+            resp = lambda_client.invoke(FunctionName=settings.TEXTRACT_ARN,
+                                        InvocationType='Event',
+                                        Payload=json.dumps(json_object))
+        return Response(data={'response': resp})

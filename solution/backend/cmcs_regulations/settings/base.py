@@ -25,7 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
 
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost', 'regulations-pilot.cms.gov', 'eregulations.cms.gov']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),
+                 'localhost',
+                 'regulations-pilot.cms.gov',
+                 'eregulations.cms.gov',
+                 'host.docker.internal']
 
 # Application definition
 
@@ -39,12 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'rest_framework',
+    'rest_framework_simplejwt',
     'regulations',
     'regcore',
     'regcore.search',
     'resources',
     'solo',
-    'django_opensearch_dsl',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
@@ -221,11 +225,11 @@ SIGNUP_URL = os.environ.get(
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 
-OPENSEARCH_DSL = {
-    'default': {
-        'hosts': 'opensearch-node1'
-    },
-}
+USE_LOCAL_TEXTRACT = False
+# The first text extractor is if it was created by serverless.  If it wasnt then it will use the
+# text extractor who's arn you provide in the docker file.
+
+TEXTRACT_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", os.environ.get('TEXTRACT_ARN', '')) # noqa
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
