@@ -57,22 +57,28 @@ const getFilteredSubjects = (filter) => {
                 ...subject,
                 title: subject.full_name,
                 short_name: shortNameMatch
-                    ? subject.short_name.replace(
+                    ? "<span class='match__container'>" +
+                      subject.short_name.replace(
                           new RegExp(filter, "gi"),
                           (match) => `<span class="match">${match}</span>`
-                      )
+                      ) +
+                      "</span>"
                     : subject.short_name,
                 abbreviation: abbreviationMatch
-                    ? subject.abbreviation.replace(
+                    ? "<span class='match__container'>" +
+                      subject.abbreviation.replace(
                           new RegExp(filter, "gi"),
                           (match) => `<span class="match">${match}</span>`
-                      )
+                      ) +
+                      "</span>"
                     : subject.abbreviation,
                 full_name: fullNameMatch
-                    ? subject.full_name.replace(
+                    ? "<span class='match__container'>" +
+                      subject.full_name.replace(
                           new RegExp(filter, "gi"),
                           (match) => `<span class="match">${match}</span>`
-                      )
+                      ) +
+                      "</span>"
                     : subject.full_name,
             };
             return [...acc, newSubject];
@@ -126,8 +132,7 @@ const filterResetClick = () => {
                     :class="filterResetClasses"
                     class="mdi mdi-close"
                     @click="filterResetClick"
-                >
-                </button>
+                ></button>
             </form>
             <ul tabindex="-1" class="subjects__list">
                 <li
