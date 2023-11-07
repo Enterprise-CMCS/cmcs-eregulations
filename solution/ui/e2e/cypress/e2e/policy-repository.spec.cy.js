@@ -233,12 +233,18 @@ describe("Policy Repository", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository/");
+
+        cy.injectAxe();
+
         cy.get(`button[data-testid=remove-subject-1]`).should("not.exist");
         cy.get(`button[data-testid=add-subject-1]`).should(
             "include.text",
             "Cures Act"
         );
         cy.get(`button[data-testid=clear-subject-filter]`).should("not.be.visible");
+
+        cy.checkAccessibility();
+
         cy.get("input#subjectReduce")
             .should("exist")
             .should("have.value", "")
@@ -256,6 +262,9 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/policy-repository?subjects=1");
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
+
+        cy.checkAccessibility();
+
         cy.get(`button[data-testid=clear-subject-filter]`).click({
             force: true,
         });
