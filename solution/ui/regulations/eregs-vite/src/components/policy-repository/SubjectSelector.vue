@@ -8,6 +8,8 @@ import _isArray from "lodash/isArray";
 
 import { getSubjectName } from "utilities/filters";
 
+import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
+
 const props = defineProps({
     policyDocSubjects: {
         type: Object,
@@ -117,34 +119,46 @@ const filterResetClick = () => {
     <div class="subjects__select-container">
         <h3>By Subject</h3>
         <div class="subjects__list-container">
-            <form>
-                <label for="subjectReduce">Filter the subject list</label>
-                <input id="subjectReduce" v-model="state.filter" type="text" />
-                <button
-                    aria-label="Clear subject list filter"
-                    data-testid="clear-subject-filter"
-                    type="reset"
-                    :class="filterResetClasses"
-                    class="mdi mdi-close"
-                    @click="filterResetClick"
-                ></button>
-            </form>
-            <ul tabindex="-1" class="subjects__list">
-                <li
-                    v-for="subject in state.subjects"
-                    :key="subject.id"
-                    class="subjects__li sidebar__li"
-                >
+            <template v-if="props.policyDocSubjects.loading">
+                <div class="subjects__loading">
+                    <SimpleSpinner />
+                </div>
+            </template>
+            <template v-else-if="state.subjects.length < 1">
+                <div class="subjects__no-results">
+                    <p>No subjects found</p>
+                </div>
+            </template>
+            <template v-else>
+                <form>
+                    <label for="subjectReduce">Filter the subject list</label>
+                    <input id="subjectReduce" v-model="state.filter" type="text" />
                     <button
-                        :data-name="getSubjectName(subject)"
-                        :data-id="subject.id"
-                        :data-testid="`add-subject-${subject.id}`"
-                        :title="subject.full_name"
-                        @click="subjectClick"
-                        v-html="subject.displayName || getSubjectName(subject)"
+                        aria-label="Clear subject list filter"
+                        data-testid="clear-subject-filter"
+                        type="reset"
+                        :class="filterResetClasses"
+                        class="mdi mdi-close"
+                        @click="filterResetClick"
                     ></button>
-                </li>
-            </ul>
+                </form>
+                <ul tabindex="-1" class="subjects__list">
+                    <li
+                        v-for="subject in state.subjects"
+                        :key="subject.id"
+                        class="subjects__li sidebar__li"
+                    >
+                        <button
+                            :data-name="getSubjectName(subject)"
+                            :data-id="subject.id"
+                            :data-testid="`add-subject-${subject.id}`"
+                            :title="subject.full_name"
+                            @click="subjectClick"
+                            v-html="subject.displayName || getSubjectName(subject)"
+                        ></button>
+                    </li>
+                </ul>
+            </template>
         </div>
     </div>
 </template>
