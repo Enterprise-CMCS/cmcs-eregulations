@@ -188,7 +188,7 @@ resources:
                    Action:
                      - "lambda:InvokeFunction"
                    Resource:
-                     - "${self:custom.settings.text_extractor_arn}"       
+                     - "${ssm:/eregulations/textextractor-arn}"       
 
 plugins:
   - serverless-wsgi
