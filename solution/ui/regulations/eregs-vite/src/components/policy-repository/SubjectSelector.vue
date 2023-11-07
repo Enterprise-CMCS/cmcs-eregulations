@@ -53,34 +53,29 @@ const getFilteredSubjects = (filter) => {
             : false;
 
         if (shortNameMatch || abbreviationMatch || fullNameMatch) {
+            let displayName;
+
+            if (shortNameMatch) {
+                displayName = subject.short_name;
+            } else if (abbreviationMatch) {
+                displayName = subject.abbreviation;
+            } else if (fullNameMatch) {
+                displayName = subject.full_name;
+            }
+
+            displayName =
+                "<span class='match__container'>" +
+                displayName.replace(
+                    new RegExp(filter, "gi"),
+                    (match) => `<span class="match">${match}</span>`
+                ) +
+                "</span>";
+
             const newSubject = {
                 ...subject,
-                title: subject.full_name,
-                short_name: shortNameMatch
-                    ? "<span class='match__container'>" +
-                      subject.short_name.replace(
-                          new RegExp(filter, "gi"),
-                          (match) => `<span class="match">${match}</span>`
-                      ) +
-                      "</span>"
-                    : subject.short_name,
-                abbreviation: abbreviationMatch
-                    ? "<span class='match__container'>" +
-                      subject.abbreviation.replace(
-                          new RegExp(filter, "gi"),
-                          (match) => `<span class="match">${match}</span>`
-                      ) +
-                      "</span>"
-                    : subject.abbreviation,
-                full_name: fullNameMatch
-                    ? "<span class='match__container'>" +
-                      subject.full_name.replace(
-                          new RegExp(filter, "gi"),
-                          (match) => `<span class="match">${match}</span>`
-                      ) +
-                      "</span>"
-                    : subject.full_name,
+                displayName,
             };
+
             return [...acc, newSubject];
         }
 
@@ -144,9 +139,9 @@ const filterResetClick = () => {
                         :data-name="getSubjectName(subject)"
                         :data-id="subject.id"
                         :data-testid="`add-subject-${subject.id}`"
-                        :title="subject.title || subject.full_name"
+                        :title="subject.full_name"
                         @click="subjectClick"
-                        v-html="getSubjectName(subject)"
+                        v-html="subject.displayName || getSubjectName(subject)"
                     ></button>
                 </li>
             </ul>
