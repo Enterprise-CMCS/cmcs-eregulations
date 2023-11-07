@@ -5,12 +5,13 @@ import { useRoute } from "vue-router/composables";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-
-import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
-import SubjectChips from "sharedComponents/results-item-parts/SubjectChips.vue";
+import { getFileNameSuffix } from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
+
+import SubjectChips from "./SubjectChips.vue";
 
 defineProps({
     results: {
@@ -43,6 +44,25 @@ const needsBar = (item) =>
 const resultLinkClasses = () => ({
     "document__link--search": !!$route?.query?.q,
 });
+
+const resultLinkLabel = (item) => {
+    const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
+    const fileTypeButton =
+        item.file_name_string && fileTypeSuffix
+            ? `<span data-testid="download-chip-${
+                  item.url
+              }" class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`
+            : null;
+
+    const linkText =
+        item.resource_type === "external"
+            ? item.summary_headline || item.summary_string
+            : item.document_name_headline || item.doc_name_string;
+
+    return `<span class='result__link--label'>${linkText}</span>${
+        fileTypeButton ?? ""
+    }`;
+};
 </script>
 
 <template>
@@ -113,13 +133,7 @@ const resultLinkClasses = () => ({
                         rel="noopener noreferrer"
                         class="document__link document__link--filename"
                         :class="resultLinkClasses(doc)"
-                        v-html="
-                            doc.resource_type === 'external'
-                                ? doc.summary_headline ||
-                                  doc.summary_string
-                                : doc.document_name_headline ||
-                                  doc.doc_name_string
-                        "
+                        v-html="resultLinkLabel(doc)"
                     ></a>
                 </h3>
             </template>

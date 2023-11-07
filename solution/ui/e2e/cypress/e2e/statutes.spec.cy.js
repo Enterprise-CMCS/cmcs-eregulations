@@ -22,6 +22,8 @@ describe("Statute Table", () => {
         cy.get("h1").contains("Statute Reference");
         cy.get("h2").contains("Look up statute text in online sources");
 
+        cy.checkLinkRel();
+
         cy.get("a[data-testid=ssa-XIX-19]").should(
             "have.class",
             "titles-list__link--active"

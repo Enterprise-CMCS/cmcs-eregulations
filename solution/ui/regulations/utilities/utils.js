@@ -25,6 +25,10 @@ const EventCodes = {
 };
 
 const DOCUMENT_TYPES = ["external", "internal"];
+const DOCUMENT_TYPES_MAP = {
+    external: "Public Resources",
+    internal: "Internal Resources",
+}
 
 const PARAM_MAP = {
     subjects: "subjects",
@@ -45,6 +49,39 @@ const PARAM_VALIDATION_DICT = {
         !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
     type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
+};
+
+/**
+ * @param {string} fileName - name of the file
+ * @returns {string | null} - returns null if the file name is not a string or does not pass validation;
+ * otherwise returns the suffix of the file name
+ *
+ * @example
+ * const fileName = "test.docx";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // "docx"
+ *
+ * @example
+ * const fileName = "test.pdf";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // null
+ */
+const getFileNameSuffix = (fileName) => {
+    if (
+        typeof fileName !== "string" ||
+        !fileName.includes(".") ||
+        _endsWith(fileName, ".")
+    ) {
+        return null;
+    }
+
+    const suffix = fileName.split(".").pop();
+
+    if (suffix.length > 4 || suffix.length < 2 || suffix.includes("pdf")) {
+        return null;
+    }
+
+    return suffix;
 };
 
 /*
@@ -896,6 +933,7 @@ export {
     createOneIndexedArray,
     delay,
     DOCUMENT_TYPES,
+    DOCUMENT_TYPES_MAP,
     EventCodes,
     flattenObject,
     flattenSubpart,
@@ -907,6 +945,7 @@ export {
     getCategoryTree,
     getCurrentPageResultsRange,
     getDisplayName,
+    getFileNameSuffix,
     getFragmentParam,
     getKebabDate,
     getKebabLabel,

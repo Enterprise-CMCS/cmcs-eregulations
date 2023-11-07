@@ -267,10 +267,16 @@
                 .subject__chip {
                     @include common-chip-styles;
 
+                    text-decoration: none;
                     font-size: 11px;
                     line-height: 18px;
                     height: unset;
                     padding: 2px 8px;
+
+                    &:hover,
+                    &:focus {
+                        background-color: #e7f4fa;
+                    }
                 }
             }
         }

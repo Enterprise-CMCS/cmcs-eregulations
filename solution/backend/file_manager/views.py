@@ -15,11 +15,12 @@ from rest_framework.response import Response
 
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
+from common.functions import establish_client
 from content_search.models import ContentIndex
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
-from .functions import establish_client, get_upload_link
+from .functions import get_upload_link
 from .models import DocumentType, Subject, UploadedFile
 from .serializers import (
     AwsTokenSerializer,
@@ -175,7 +176,7 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         return Response(serializer.data)
 
     def generate_download_link(self, obj):
-        s3_client = establish_client()
+        s3_client = establish_client('s3')
         key = obj.get_key()
         params = {'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                   'Key': key,

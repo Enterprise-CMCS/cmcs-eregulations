@@ -50,10 +50,16 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                             {{ subject.full_name }}
                         </div>
                     </router-link>
-                    <div class="subj-toc-li__count" style="display: none">
-                        <span class="subj-doc__count">0</span> formal and
-                        <span class="subj-doc__count">0</span> informal
-                        documents
+                    <div class="subj-toc-li__count">
+                        <span class="subj-doc__count subj-doc__count--public">{{
+                            subject.external_content ?? 0
+                        }}</span>
+                        public and
+                        <span
+                            class="subj-doc__count subj-doc__count--internal"
+                            >{{ subject.internal_content ?? 0 }}</span
+                        >
+                        internal resources
                     </div>
                 </li>
             </ul>

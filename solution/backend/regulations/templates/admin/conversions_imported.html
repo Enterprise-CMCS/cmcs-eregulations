@@ -7,7 +7,7 @@
             <p>The following Statute Link Conversions have been imported:</p>
             <ul>
             {% for c in conversions %}
-                <li><a target="_blank" href="{% url 'admin:regulations_statutelinkconverter_change' c.id %}">Title {{ c.statute_title }} section {{ c.section }} of the {{ c.act }} → {{ c.title }} USC {{ c.usc }}: <i>{{ c.name }}</i></a></li>
+                <li><a target="_blank" rel="noopener noreferrer" href="{% url 'admin:regulations_statutelinkconverter_change' c.id %}">Title {{ c.statute_title }} section {{ c.section }} of the {{ c.act }} → {{ c.title }} USC {{ c.usc }}: <i>{{ c.name }}</i></a></li>
             {% endfor %}
             </ul>
         {% endif %}
@@ -16,7 +16,7 @@
             <p>The following conversions were imported but have no name or title because they were not in the table of contents:</p>
             <ul>
             {% for f in failures %}
-                <li><a target="_blank" href="{% url 'admin:regulations_statutelinkconverter_change' f.id %}">{{ f.act }} section {{ f.section }} → {{ f.title }} USC {{ f.usc }}</a></li>
+                <li><a target="_blank" rel="noopener noreferrer" href="{% url 'admin:regulations_statutelinkconverter_change' f.id %}">{{ f.act }} section {{ f.section }} → {{ f.title }} USC {{ f.usc }}</a></li>
             {% endfor %}
             </ul>
         {% endif %}

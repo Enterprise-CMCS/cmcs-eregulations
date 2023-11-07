@@ -13,7 +13,8 @@ export const eregsLogin = ({
     });
 };
 export const setUserGroup = () => {
-    cy.server();
+    cy.intercept('GET', '**/api/user-group-endpoint').as('getUserGroups');
+
     // Make a request to fetch the user's group membership
     cy.route('GET', '**/api/user-group-endpoint').as('getUserGroups');
 

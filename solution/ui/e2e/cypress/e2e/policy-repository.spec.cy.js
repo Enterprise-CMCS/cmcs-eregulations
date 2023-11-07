@@ -39,8 +39,17 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .scrollIntoView();
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+        ).scrollIntoView();
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
+        )
+            .should("be.visible")
+            .and("have.text", "0 public and 1 internal resources ");
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", " Managed Care ")
             .click({ force: true });
@@ -136,34 +145,87 @@ describe("Policy Repository", () => {
             .should("have.attr", "href")
             .and("not.include", "undefined")
             .and("include", "/42/435/116#435-116");
+        cy.get(".result__link")
+            .eq(0)
+            .find("a")
+            .should("not.include.text", "Download");
+        cy.get(".result__link")
+            .eq(1)
+            .should("include.text", "Download")
+            .find("a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]")
+            .should("include.text", "Download MSG");
 
         cy.checkAccessibility();
     });
 
-    it("should display the Edit button based on user's group", () => {
-        cy.intercept("**/v3/file-manager/files?subjects=1&subjects=2**", {
+    it("should update the URL when a subject chip is clicked", () => {
+        cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
-
-        cy.setUserGroup('EREGS_ADMIN');
-
-        cy.visit("/policy-repository/?subjects=1&subjects=2");
-        cy.injectAxe();
-
-        cy.wait("@subjectFiles").then((interception) => {
-          expect(interception.response.statusCode).to.eq(200);
+        cy.visit("/policy-repository/");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("not.be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?type=internal");
+        cy.get(`button[data-testid=add-subject-3]`).click({
+            force: true,
         });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3"
+        );
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?type=internal&subjects=3&q=test"
+        );
+        cy.get(`a[data-testid=add-subject-chip-4]`).click({
+            force: true,
+        });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("be.checked");
+        cy.url().should("include", "/policy-repository?subjects=4&type=all");
+        cy.get("input#main-content").should("have.value", "");
+    });
 
-        if (Cypress.env('hasEditableJobCode')) {
-          cy.get('.edit-button').should('be.visible');
-        } else {
-          cy.get('.edit-button').should('not.exist');
-        }
-
-        cy.checkAccessibility();
-});
+    it("should display correct subject ID numbers in the URL if one is included in the URL on load and another one is added via the Subject Selector", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/?subjects=77");
+        cy.url().should("include", "/policy-repository/?subjects=77");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.get("button[data-testid=add-subject-63]").click({
+            force: true,
+        });
+        cy.get(`button[data-testid=remove-subject-63]`).should("exist");
+        cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.url().should(
+            "include",
+            "/policy-repository?subjects=77&subjects=63"
+        );
+    });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
@@ -214,23 +276,23 @@ describe("Policy Repository", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.url().should("include", "/policy-repository?type=internal");
         cy.get(".subj-toc__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .uncheck({force: true});
+            .uncheck({ force: true });
         cy.get(".subj-toc__container").should("exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
-            .check({force: true});
+            .check({ force: true });
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
-            .check({force: true});
-        cy.url().should("include", "/policy-repository?type=all");
+            .check({ force: true });
+        cy.url().should("include", "/policy-repository");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {

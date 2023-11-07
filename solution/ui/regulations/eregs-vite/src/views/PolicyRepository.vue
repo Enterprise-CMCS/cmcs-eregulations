@@ -177,9 +177,6 @@ const selectedParams = reactive({
 const addSelectedParams = (paramArgs) => {
     const { id, name, type } = paramArgs;
 
-    // early return if the param is already selected
-    if (selectedParams.paramString.includes(`${type}=${id}`)) return;
-
     // update paramString that is used as reactive prop for watch
     if (selectedParams.paramString) {
         selectedParams.paramString += `&${type}=${id}`;
@@ -234,6 +231,7 @@ const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getPolicyDocSubjects({
             apiUrl: props.apiUrl,
+            cacheResponse: false,
         });
 
         policyDocSubjects.value.results = subjectsResponse.sort(sortSubjects);

@@ -39,8 +39,7 @@ def handler(event: dict, context: dict) -> dict:
         resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
-        post_username = config.get("post_username")
-        post_password = config.get("post_password")
+        token = config["token"]
     except KeyError:
         return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the request body.")
 
@@ -75,14 +74,16 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
 
     # Send result to eRegs
+    resp = ''
+    header = {'Authorization': f'Bearer {token}'}
     try:
         resp = requests.post(
             post_url,
-            auth=(post_username, post_password) if post_username and post_password else None,
-            data=json.dumps({
+            headers=header,
+            json={
                 "id": resource_id,
-                "text": text,
-            }),
+                "text": text
+            },
             timeout=60,
         )
         resp.raise_for_status()
@@ -92,4 +93,4 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"POST unexpectedly failed: {str(e)}")
 
     # Return success code
-    return lambda_response(200, "Function exited normally.")
+    return lambda_response(200, f"Function exited normally. {resp.content}")

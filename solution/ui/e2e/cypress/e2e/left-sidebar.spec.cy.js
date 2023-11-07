@@ -16,6 +16,7 @@ describe("Left sidebar", () => {
     it("opens the section when the left nav subsection is clicked", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
+        cy.checkLinkRel();
         cy.get(`h3#nav-Subpart-A`).click({ force: true })
         cy.get(`h2#subpart-resources-heading`).should(
             "contain.text",
