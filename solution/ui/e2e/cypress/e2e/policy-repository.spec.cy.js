@@ -152,7 +152,9 @@ describe("Policy Repository", () => {
         cy.get(".result__link")
             .eq(1)
             .should("include.text", "Download")
-            .find("a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]")
+            .find(
+                "a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
+            )
             .should("include.text", "Download MSG");
 
         cy.checkAccessibility();
@@ -225,6 +227,39 @@ describe("Policy Repository", () => {
             "include",
             "/policy-repository?subjects=77&subjects=63"
         );
+    });
+
+    it("should filter the subject list when a search term is entered into the subject filter", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository/");
+        cy.get(`button[data-testid=remove-subject-1]`).should("not.exist");
+        cy.get(`button[data-testid=add-subject-1]`).should(
+            "include.text",
+            "Cures Act"
+        );
+        cy.get("input#subjectReduce")
+            .should("exist")
+            .should("have.value", "")
+            .type("21", { force: true });
+        cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
+        cy.get("input#subjectReduce").should("have.value", "21");
+        cy.get(".subjects__list li").should("have.length", 1);
+        cy.get(`button[data-testid=add-subject-1]`).should(
+            "include.text",
+            "21st Century Cures Act"
+        );
+        cy.get(`button[data-testid=add-subject-1]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.get(`button[data-testid=remove-subject-1]`).should("exist");
+        cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
+        cy.get(`button[data-testid=clear-subject-filter]`).click({
+            force: true,
+        });
+        cy.get("input#subjectReduce").should("have.value", "");
+        cy.get(".subjects__list li").should("have.length", 78);
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
