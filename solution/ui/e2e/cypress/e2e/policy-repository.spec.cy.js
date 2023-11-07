@@ -238,6 +238,7 @@ describe("Policy Repository", () => {
             "include.text",
             "Cures Act"
         );
+        cy.get(`button[data-testid=clear-subject-filter]`).should("not.be.visible");
         cy.get("input#subjectReduce")
             .should("exist")
             .should("have.value", "")
