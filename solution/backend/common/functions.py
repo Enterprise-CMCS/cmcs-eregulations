@@ -1,6 +1,9 @@
+import boto3
+from django.conf import settings
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from content_search.models import ContentIndex
 from file_manager.models import DocumentType, Subject
@@ -64,3 +67,22 @@ def loadSeedData():
 
     for fixture in fixtures:
         call_command("loaddata", fixture[0])
+
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
+
+
+def establish_client(client_type):
+    if settings.USE_AWS_TOKEN:
+        return boto3.client(client_type,
+                            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
+                            region_name="us-east-1")
+    else:
+        return boto3.client(client_type, region_name="us-east-1")

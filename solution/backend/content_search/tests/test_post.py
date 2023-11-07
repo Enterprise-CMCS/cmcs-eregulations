@@ -1,10 +1,10 @@
-import base64
 import json
 
-from django.conf import settings
-from rest_framework import HTTP_HEADER_ENCODING, status
+from django.contrib.auth.models import User
+from rest_framework import status
 from rest_framework.test import APITestCase
 
+from common.functions import get_tokens_for_user
 from common.test_functions.common_functions import get_paginated_data
 from content_search.functions import index_group
 from content_search.models import ContentIndex
@@ -20,6 +20,10 @@ class SearchTest(APITestCase):
 
     def clean_up(self):
         SupplementalContent.objects.all().delete()
+
+    def get_token(self):
+        user = User.objects.create_superuser(username='test_user', password='test')  # noqa: S106
+        return get_tokens_for_user(user)['access']
 
     def setUp(self):
         self.clean_up()
@@ -51,17 +55,11 @@ class SearchTest(APITestCase):
                                     data=json.dumps(json_object),
                                     content_type='application/json',)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        username = settings.HTTP_AUTH_USER
-        password = settings.HTTP_AUTH_PASSWORD
-        credentials = f"{username}:{password}"
-        base64_credentials = base64.b64encode(
-            credentials.encode(HTTP_HEADER_ENCODING)
-        ).decode(HTTP_HEADER_ENCODING)
-
+        token = self.get_token()
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         response = self.client.post("/v3/content-search/id/",
                                     data=json.dumps(json_object),
-                                    content_type='application/json',
-                                    HTTP_AUTHORIZATION=f"Basic {base64_credentials}")
+                                    content_type='application/json',)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         content = ContentIndex.objects.first()
         self.assertEqual(content.content, 'test')
