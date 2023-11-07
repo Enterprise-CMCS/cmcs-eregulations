@@ -137,7 +137,7 @@ class InvokeTextExtractorViewset(APIView):
         if not settings.USE_LOCAL_TEXTRACT:
             post_url = request.build_absolute_uri(reverse("post-content"))
         else:
-            post_url = "http://host.docker.internal:8000/" + reverse("post-content")
+            post_url = "http://host.docker.internal:8000" + reverse("post-content")
         index = ContentIndex.objects.get(uid=uid)
         if not index:
             return Response({'message': "Index does not exist"})
