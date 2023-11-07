@@ -18,6 +18,7 @@
         "eqeqeq": "off",
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "no-nested-ternary": "off",
+        "prefer-template": "off",
         "vue/order-in-components": "off",
         "vue/no-unsupported-features": [
             "error",
