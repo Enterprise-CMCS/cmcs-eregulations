@@ -154,7 +154,7 @@ resources:
         BackupSelection:
           SelectionName: SampleBackupSelection
           IamRoleArn: !GetAtt BackupRole.Arn
-          Resources: !GetAtt MyS3Bucket:.Arn
+          Resources: !GetAtt MyS3Bucket.Arn
         BackupPlanId: !Ref BackupPlan
     LambdaFunctionRole:
       Type: AWS::IAM::Role
