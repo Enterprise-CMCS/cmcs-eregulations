@@ -47,3 +47,8 @@ create_su:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   timeout: 300
+empty_bucket:
+  handler: empty_bucket.handler
+  layers:
+    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  timeout: 300

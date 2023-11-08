@@ -88,7 +88,6 @@ custom:
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
-
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
 resources:
@@ -178,11 +177,13 @@ resources:
                      - "s3:PutObject"
                      - "s3:GetObject"
                      - "s3:DeleteObject"
+                     - "s3:ListBucket"
                    Resource:
                      - Fn::Join:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}"
                      - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
                 -  Effect: "Allow"
                    Action:
