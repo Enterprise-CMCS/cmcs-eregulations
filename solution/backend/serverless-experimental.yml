@@ -139,7 +139,7 @@ resources:
       Properties:
         BackupSelection:
           SelectionName: SampleBackupSelection
-          IamRoleArn: arn:aws:iam::910670052382:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup
+          IamRoleArn: "arn:aws:iam::910670052382:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup"
           Resources: !GetAtt MyS3Bucket.Arn
         BackupPlanId: !Ref BackupPlan
     LambdaFunctionRole:
