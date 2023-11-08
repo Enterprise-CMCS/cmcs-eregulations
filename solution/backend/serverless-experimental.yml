@@ -93,21 +93,6 @@ functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)
 
 resources:
   Resources:
-    BackupRole:
-      Type: "AWS::IAM::Role"
-      Properties:
-        RoleName: SampleBackupRole
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal:
-                Service:
-                  - "backup.amazonaws.com"
-              Action:
-                - "sts:AssumeRole"
-        ManagedPolicyArns:
-          - "arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
     BackupVault:
       Type: "AWS::Backup::BackupVault"
       Properties:
@@ -154,7 +139,7 @@ resources:
       Properties:
         BackupSelection:
           SelectionName: SampleBackupSelection
-          IamRoleArn: !GetAtt BackupRole.Arn
+          IamRoleArn: arn:aws:iam::910670052382:role/aws-service-role/backup.amazonaws.com/AWSServiceRoleForBackup
           Resources: !GetAtt MyS3Bucket.Arn
         BackupPlanId: !Ref BackupPlan
     LambdaFunctionRole:
