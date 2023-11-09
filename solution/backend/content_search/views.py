@@ -1,6 +1,7 @@
 import json
 
 import requests
+from django.shortcuts import redirect
 from django.conf import settings
 from django.db.models import F, Prefetch
 from django.urls import reverse
@@ -15,7 +16,7 @@ from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
-from resources.models import AbstractCategory, AbstractLocation
+from resources.models import AbstractCategory, AbstractLocation, SupplementalContent
 from resources.views.mixins import LocationExplorerViewSetMixin
 
 from .models import ContentIndex
@@ -83,6 +84,9 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             query = query.filter(resource_type='external')
         elif resource_type == 'internal':
             query = query.filter(resource_type='internal')
+
+        context = self.get_serializer_context()
+        context['content_id'] = True
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
@@ -187,3 +191,23 @@ class InvokeTextExtractorViewset(APIView):
                                         InvocationType='Event',
                                         Payload=json.dumps(json_object))
         return Response(data={'response': resp})
+
+
+class EditContentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        description="redirects to a resource of an index.",
+    )
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("resource_id")
+        index = ContentIndex.objects.get(id=id)
+        if index.file is not None:
+            return redirect(index.file)
+
+        elif index.supplemental_content is not None:
+            sup = SupplementalContent.objects.get(id=index.supplemental_content.id)
+            return redirect(sup)
+
+        elif index.fr_doc is not None:
+            return redirect(index.fr_doc)
