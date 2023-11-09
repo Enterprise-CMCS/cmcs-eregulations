@@ -82,12 +82,14 @@ const resultLinkLabel = (item) => {
             class="doc-list__document"
         >
             <template #actions>
+                {{ doc }}
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    href="/admin"
+                    :href="'/v3/content-search/resource/' + doc.id "
                 >
                     Edit
+                    <i class="fas fa-edit"></i>
                 </a>
             </template>
             <template #labels>
