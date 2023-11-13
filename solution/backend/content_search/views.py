@@ -1,9 +1,10 @@
 import json
 
 import requests
-from django.shortcuts import redirect
 from django.conf import settings
 from django.db.models import F, Prefetch
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -16,9 +17,8 @@ from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
-from resources.models import AbstractCategory, AbstractLocation, SupplementalContent
+from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
-from django.http import HttpResponseBadRequest
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer

@@ -3,7 +3,7 @@ import re
 import requests
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
@@ -12,7 +12,6 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
-
 
 from .models import (
     RegulationLinkConfiguration,

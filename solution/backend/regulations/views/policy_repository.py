@@ -1,5 +1,7 @@
 from django.views.generic.base import TemplateView
+
 from regulations.views.mixins import IsAuthenticatedMixin
+
 
 class PolicyRepositoryView(IsAuthenticatedMixin, TemplateView):
 
