@@ -95,7 +95,6 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         else:
             return None
 
-
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
