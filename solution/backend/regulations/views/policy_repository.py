@@ -14,7 +14,6 @@ class PolicyRepositoryView(IsAuthenticatedMixin, TemplateView):
         user_groups = [group.name for group in self.request.user.groups.all()]
         has_editable_job_code = user_groups and user_groups != ['e-regs-Reader']
 
-
         c = {
             'host': host,
             'is_authenticated': is_authenticated,
