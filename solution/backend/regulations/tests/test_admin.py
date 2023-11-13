@@ -1,13 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group, User  # Import the Group model
 from django.test import TransactionTestCase
 
 from ..admin import OidcAdminAuthenticationBackend
-
-User = get_user_model()
 
 
 class OidcAdminAuthenticationBackendTest(TransactionTestCase):
@@ -20,28 +17,29 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
             "firstName": "Homer",
             "email": "homer.simpson@example.com",
             "email_verified": True,
-            "jobcodes": "cn=EREGS_ADMIN,cn=EREGS_EDITOR, ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,dc=cms,dc=hhs,dc=gov"
+            "jobcodes": "cn=EREGS_ADMIN,cn=EREGS_EDITOR, ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,"
+                        "dc=cms,dc=hhs,dc=gov "
         }
 
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_verify_claims(self, mock_create_user):
-         result = self.backend.verify_claims(self.mock_claims)
-         self.assertTrue(result)
+        result = self.backend.verify_claims(self.mock_claims)
+        self.assertTrue(result)
 
-         invalid_claims = dict(self.mock_claims)
-         invalid_claims["email_verified"] = False
-         result = self.backend.verify_claims(invalid_claims)
-         self.assertFalse(result)
+        invalid_claims = dict(self.mock_claims)
+        invalid_claims["email_verified"] = False
+        result = self.backend.verify_claims(invalid_claims)
+        self.assertFalse(result)
 
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_user_is_active_if_have_jobcodes(self, mock_create_user):
-         # Create a user with valid jobcodes
-         user = User(email='homer.simpson@example.com')
-         mock_create_user.return_value = user
-         user = self.backend.create_user(self.mock_claims)
+        # Create a user with valid jobcodes
+        user = User(email='homer.simpson@example.com')
+        mock_create_user.return_value = user
+        user = self.backend.create_user(self.mock_claims)
 
-         # Assert that the user is active
-         self.assertTrue(user.is_active)
+        # Assert that the user is active
+        self.assertTrue(user.is_active)
 
     def test_user_without_jobcodes_return_none(self):
         self.mock_claims["jobcodes"] = ""

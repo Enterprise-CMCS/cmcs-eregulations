@@ -31,6 +31,8 @@ OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/admin/'
 LOGOUT_REDIRECT_URL = '/'
 EUA_FEATUREFLAG = bool(os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true')
+TEST_USER = os.environ.get("TEST_USER", "")
+TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "")
 
 if re.match(r'^dev\d*$', STAGE_ENV):
     LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"

@@ -102,13 +102,10 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         # Determine group membership based on jobcodes and add the user to the groups
 
         jobcodes = claims.get("jobcodes")
-        print(f"jobcodes are: {jobcodes}")
-
         jobcodes_list = jobcodes.split(",")  # Split the jobcodes string into a list
-        print(f"jobcodes_list: {jobcodes_list}")
+
         # Extract relevant jobcode information
         relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
-        print(f"relevant_jobcodes: {relevant_jobcodes}")
         group_mapping = {
             "EREGS_ADMIN": "e-Regs-Admin",
             "EREGS_MANAGER": "e-Regs-Manager",
