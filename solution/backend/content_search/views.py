@@ -18,6 +18,7 @@ from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation, SupplementalContent
 from resources.views.mixins import LocationExplorerViewSetMixin
+from django.http import HttpResponseBadRequest
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
@@ -202,12 +203,19 @@ class EditContentView(APIView):
     def get(self, request, *args, **kwargs):
         id = kwargs.get("resource_id")
         index = ContentIndex.objects.get(id=id)
+        obj = None
+
         if index.file is not None:
-            return redirect(index.file)
+            obj = index.file
 
         elif index.supplemental_content is not None:
-            sup = SupplementalContent.objects.get(id=index.supplemental_content.id)
-            return redirect(sup)
+            obj = index.supplemental_content
 
         elif index.fr_doc is not None:
-            return redirect(index.fr_doc)
+            obj = index.fr_doc
+
+        if obj is not None:
+            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[obj.id])
+            return redirect(url)
+        else:
+            return HttpResponseBadRequest("Invalid index - no associated file, supplemental content, or fr_doc.")

@@ -82,7 +82,6 @@ const resultLinkLabel = (item) => {
             class="doc-list__document"
         >
             <template #actions>
-                {{ doc }}
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
