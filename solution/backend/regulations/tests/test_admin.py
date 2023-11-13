@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import patch
-from django.test import TransactionTestCase
+
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User, Group  # Import the Group model
-from unittest.mock import Mock
+from django.contrib.auth.models import Group, User  # Import the Group model
+from django.test import TransactionTestCase
 
 from ..admin import OidcAdminAuthenticationBackend
 

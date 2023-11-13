@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ContentSearchViewset, InvokeTextExtractorViewset, PostContentTextViewset, EditContentView
+from .views import ContentSearchViewset, EditContentView, InvokeTextExtractorViewset, PostContentTextViewset
 
 urlpatterns = [
     path("", ContentSearchViewset.as_view({

@@ -1,11 +1,14 @@
 import unittest
+from unittest.mock import patch
+
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.http import HttpRequest
 from django.test import Client
-from unittest.mock import patch
+from django.urls import reverse
+
 from content_search.models import ContentIndex
 from content_search.views import EditContentView
+
 
 class EditContentViewTest(unittest.TestCase):
     def setUp(self):
