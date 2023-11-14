@@ -74,6 +74,8 @@ class NaturalSortField(models.CharField):
         return string
 
 
+#  Allows you to pass in an array of fields instead of just one.  It checks to see if the other fields are blank
+#  To determine sorting, otherwise will do the same as natural sort field.
 class CombinedNaturalSort(NaturalSortField):
     def pre_save(self, model_instance, add):
         for field in self.for_field:
