@@ -26,6 +26,19 @@ const _beforeEach = () => {
     }).as("subjects");
 };
 
+Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
+    cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
+        fixture: "policy-docs.json",
+    }).as("subjectFiles");
+    cy.viewport("macbook-15");
+    cy.eregsLogin({ username, password });
+    cy.visit("/policy-repository/?subjects=1&subjects=2");
+    cy.injectAxe();
+    cy.wait("@subjectFiles").then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+    });
+});
+
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
 
@@ -125,18 +138,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
-            fixture: "policy-docs.json",
-        }).as("subjectFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/policy-repository/?subjects=1&subjects=2");
-
-        cy.injectAxe();
-
-        cy.wait("@subjectFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
+        cy.getPolicyDocs({ username, password })
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
         cy.get(".related-sections")
@@ -161,37 +163,22 @@ describe("Policy Repository", () => {
     });
 
     it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
-        cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
-            fixture: "policy-docs.json",
-        }).as("subjectFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/policy-repository/?subjects=1&subjects=2");
-
-        cy.injectAxe();
-
-        cy.wait("@subjectFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
+        cy.getPolicyDocs({ username: adminUsername, password: adminPassword })
         cy.get(".edit-button").should("not.exist");
         cy.checkAccessibility();
     });
 
     it("should display edit button for individual uploaded items if signed in and authorized to edit", () => {
-        cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
-            fixture: "policy-docs.json",
-        }).as("subjectFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username: adminUsername, password: adminPassword });
-        cy.visit("/policy-repository/?subjects=1&subjects=2");
-
-        cy.injectAxe();
-
-        cy.wait("@subjectFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
+        cy.getPolicyDocs({ username: adminUsername, password: adminPassword })
         cy.get(".edit-button").should("exist");
         cy.checkAccessibility();
+    });
+    it("should visit the admin page for the document when the edit button is clicked", () => {
+        cy.getPolicyDocs({ username: adminUsername, password: adminPassword })
+        cy.get('.edit-button').first().click({
+            force: true,
+        });
+        cy.url().should("include", "/admin/resources/supplementalcontent/610/change/");
     });
     it("should update the URL when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
