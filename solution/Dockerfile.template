@@ -31,9 +31,5 @@ ENV TEXTRACT_SECRET_KEY = ''
 ENV SERVER_USER=""
 ENV SERVER_PASSWORD=""
 
-# For testing
-ENV TEST_USER=""
-ENV TEST_PASSWORD=""
-
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
