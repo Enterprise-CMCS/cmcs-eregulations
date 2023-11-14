@@ -6,7 +6,7 @@
         "full_name": "21st Century Cures Act",
         "short_name": null,
         "abbreviation": "Cures Act",
-        "combined_sort": "00000021st century cures act"
+        "combined_sort": "cures act"
     }
 },
 {
@@ -16,7 +16,7 @@
         "full_name": "Alternative Benefit Plan",
         "short_name": null,
         "abbreviation": "ABP",
-        "combined_sort": "alternative benefit plan"
+        "combined_sort": "abp"
     }
 },
 {
@@ -96,7 +96,7 @@
         "full_name": "Certified Community Behavioral Health Clinics",
         "short_name": null,
         "abbreviation": "CCBHCs",
-        "combined_sort": "certified community behavioral health clinics"
+        "combined_sort": "ccbhcs"
     }
 },
 {
@@ -116,7 +116,7 @@
         "full_name": "Community First Choice",
         "short_name": null,
         "abbreviation": "CFC",
-        "combined_sort": "community first choice"
+        "combined_sort": "cfc"
     }
 },
 {
@@ -136,7 +136,7 @@
         "full_name": "Clinic Services",
         "short_name": "Clinics",
         "abbreviation": null,
-        "combined_sort": "clinic services"
+        "combined_sort": "clinics"
     }
 },
 {
@@ -146,7 +146,7 @@
         "full_name": "\"Case Management and Targeted Case Management\"",
         "short_name": null,
         "abbreviation": "CM TCM",
-        "combined_sort": "\"case management and targeted case management\""
+        "combined_sort": "cm tcm"
     }
 },
 {
@@ -226,7 +226,7 @@
         "full_name": "Comprehensive Outpatient Rehabilitation Facilities",
         "short_name": null,
         "abbreviation": "CORF",
-        "combined_sort": "comprehensive outpatient rehabilitation facilities"
+        "combined_sort": "corf"
     }
 },
 {
@@ -236,7 +236,7 @@
         "full_name": "Critical Access Hospital",
         "short_name": null,
         "abbreviation": "CAH",
-        "combined_sort": "critical access hospital"
+        "combined_sort": "cah"
     }
 },
 {
@@ -246,7 +246,7 @@
         "full_name": "Dental Services",
         "short_name": "Dental",
         "abbreviation": null,
-        "combined_sort": "dental services"
+        "combined_sort": "dental"
     }
 },
 {
@@ -356,7 +356,7 @@
         "full_name": "Early and Periodic Screening, Diagnostic, and Treatment",
         "short_name": null,
         "abbreviation": "EPSDT",
-        "combined_sort": "early and periodic screening, diagnostic, and treatment"
+        "combined_sort": "epsdt"
     }
 },
 {
@@ -386,7 +386,7 @@
         "full_name": "Family Planning Services",
         "short_name": "Family Planning",
         "abbreviation": null,
-        "combined_sort": "family planning services"
+        "combined_sort": "family planning"
     }
 },
 {
@@ -396,7 +396,7 @@
         "full_name": "Federally Qualified Health Centers",
         "short_name": null,
         "abbreviation": "FQHC",
-        "combined_sort": "federally qualified health centers"
+        "combined_sort": "fqhc"
     }
 },
 {
@@ -406,7 +406,7 @@
         "full_name": "Fetal Alcohol Syndrome",
         "short_name": null,
         "abbreviation": "FAS",
-        "combined_sort": "fetal alcohol syndrome"
+        "combined_sort": "fas"
     }
 },
 {
@@ -436,7 +436,7 @@
         "full_name": "Free Choice of Providers",
         "short_name": "Freedom of Choice",
         "abbreviation": null,
-        "combined_sort": "free choice of providers"
+        "combined_sort": "freedom of choice"
     }
 },
 {
@@ -476,7 +476,7 @@
         "full_name": "Healthcare Common Procedure Coding System",
         "short_name": null,
         "abbreviation": "HCPCS",
-        "combined_sort": "healthcare common procedure coding system"
+        "combined_sort": "hcpcs"
     }
 },
 {
@@ -486,7 +486,7 @@
         "full_name": "Health Homes for Enrollees with Chronic Conditions",
         "short_name": "Health Homes",
         "abbreviation": null,
-        "combined_sort": "health homes for enrollees with chronic conditions"
+        "combined_sort": "health homes"
     }
 },
 {
@@ -526,7 +526,7 @@
         "full_name": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
         "short_name": null,
         "abbreviation": "ICF IID",
-        "combined_sort": "intermediate care facilities for individuals with intellectual disabilities"
+        "combined_sort": "icf iid"
     }
 },
 {
@@ -536,7 +536,7 @@
         "full_name": "Institutions for Mental Disease",
         "short_name": null,
         "abbreviation": "IMD",
-        "combined_sort": "institutions for mental disease"
+        "combined_sort": "imd"
     }
 },
 {
@@ -556,7 +556,7 @@
         "full_name": "Inpatient Hospital Services",
         "short_name": "Inpatient Hospital",
         "abbreviation": null,
-        "combined_sort": "inpatient hospital services"
+        "combined_sort": "inpatient hospital"
     }
 },
 {
@@ -586,7 +586,7 @@
         "full_name": "Laboratory and X-ray Services",
         "short_name": "Lab & X-Ray",
         "abbreviation": null,
-        "combined_sort": "laboratory and x-ray services"
+        "combined_sort": "lab & x-ray"
     }
 },
 {
@@ -606,7 +606,7 @@
         "full_name": "Long-Term Services and Supports",
         "short_name": null,
         "abbreviation": "LTSS",
-        "combined_sort": "long-term services and supports"
+        "combined_sort": "ltss"
     }
 },
 {
@@ -666,7 +666,7 @@
         "full_name": "Medication Assisted Treatment",
         "short_name": null,
         "abbreviation": "MAT",
-        "combined_sort": "medication assisted treatment"
+        "combined_sort": "mat"
     }
 },
 {
@@ -676,7 +676,7 @@
         "full_name": "Minimum Essential Coverage",
         "short_name": null,
         "abbreviation": "MEC",
-        "combined_sort": "minimum essential coverage"
+        "combined_sort": "mec"
     }
 },
 {
@@ -696,7 +696,7 @@
         "full_name": "Mobile Crisis",
         "short_name": "Mobile Crisis Services",
         "abbreviation": null,
-        "combined_sort": "mobile crisis"
+        "combined_sort": "mobile crisis services"
     }
 },
 {
@@ -706,7 +706,7 @@
         "full_name": "Neonatal Abstinence Syndrome",
         "short_name": null,
         "abbreviation": "NAS",
-        "combined_sort": "neonatal abstinence syndrome"
+        "combined_sort": "nas"
     }
 },
 {
@@ -716,7 +716,7 @@
         "full_name": "National Correct Coding Initiative",
         "short_name": null,
         "abbreviation": "NCCI",
-        "combined_sort": "national correct coding initiative"
+        "combined_sort": "ncci"
     }
 },
 {
@@ -776,7 +776,7 @@
         "full_name": "Omnibus Budget Reconciliation Act of 1989",
         "short_name": "OBRA 89",
         "abbreviation": null,
-        "combined_sort": "omnibus budget reconciliation act of 00001989"
+        "combined_sort": "obra 00000089"
     }
 }
 ]
