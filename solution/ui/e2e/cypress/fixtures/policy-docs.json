@@ -4,6 +4,7 @@
     "previous": null,
     "results": [
         {
+            "id": 1,
             "doc_name_string": null,
             "file_name_string": null,
             "date_string": "2019-07-26",
@@ -92,6 +93,7 @@
             "summary_headline": "SUPPORT) for Patients and Communities Act (Pub. L. 115-271), entitled Help for Moms and <span class=\"search-highlight\">Babies</span>"
         },
         {
+            "id": 2,
             "doc_name_string": "[Mock] Cypress Fixture",
             "file_name_string": "ff-test-em.msg",
             "date_string": "2023-08-30",
