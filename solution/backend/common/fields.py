@@ -74,6 +74,14 @@ class NaturalSortField(models.CharField):
         return string
 
 
+class CombinedNaturalSort(NaturalSortField):
+    def pre_save(self, model_instance, add):
+        for field in self.for_field:
+            sort_attribute = getattr(model_instance, field)
+            if sort_attribute:
+                return self.naturalize(sort_attribute)
+
+
 STATUTE_REF_SCHEMA = {
     "type": "list",
     "minItems": 0,
