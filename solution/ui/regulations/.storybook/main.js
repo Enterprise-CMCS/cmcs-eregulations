@@ -5,11 +5,6 @@ module.exports = {
         "../stories/**/*.stories.mdx",
         "../stories/**/*.stories.@(js|jsx|ts|tsx)",
         "../eregs-vite/**/*.stories.@(js|jsx|ts|tsx)",
-        {
-            directory: "../../prototype",
-            titlePrefix: "Prototype",
-            files: "**/*.stories.*",
-        },
     ],
     addons: [
         "@storybook/addon-links",
@@ -33,8 +28,6 @@ module.exports = {
                 "../../../static-assets/regulations"
             ),
             mocks: "../msw/mocks",
-            // handle vue-cli specific @ notation for prototype
-            "@": path.resolve(__dirname, "../../prototype/src"),
         };
 
         config.module.rules.push({
