@@ -79,17 +79,6 @@ storybook: ui/regulations/.storybook
 		npm install; \
 		npm run storybook
 
-.PHONY: prototype
-prototype: ## Run prototype for regulations
-prototype: ui/prototype
-	cd ui/prototype; \
-		npm run start-container
-
-prototype.clean: ## Stop prototype for regulations
-prototype.clean: ui/prototype
-	cd ui/prototype; \
-		npm run stop-container
-
 .PHONY: lint
 lint:
 	flake8;

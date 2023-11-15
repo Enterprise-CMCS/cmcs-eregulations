@@ -162,3 +162,12 @@ class SearchTest(TestCase):
         response = self.client.get(
             f"/v3/content-search/?resource-type=internal&q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
         self.check_exclusive_response(response, 0)
+
+    def test_content_search(self):
+        a = ContentIndex.objects.first()
+        a.content = "dummy dummy dummy"
+        a.save()
+        self.login()
+        response = self.client.get("/v3/content-search/?&q='dummy'")
+        data = get_paginated_data(response)
+        self.assertTrue("dummy" in data['results'][0]['content_headline'])
