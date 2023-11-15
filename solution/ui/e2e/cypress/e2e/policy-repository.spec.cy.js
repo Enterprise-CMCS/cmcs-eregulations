@@ -164,7 +164,7 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
     it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
-        cy.getPolicyDocs({ username: adminUsername, password: adminPassword })
+        cy.getPolicyDocs({ username, password })
         cy.get(".edit-button").should("not.exist");
         cy.checkAccessibility();
     });
