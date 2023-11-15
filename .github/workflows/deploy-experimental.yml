@@ -375,7 +375,7 @@ jobs:
         uses: dkershner6/aws-ssm-getparameters-action@v1
         with:
             parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
-                /eregulations/http/password = CYPRESS_TEST_PASSWORD
+                /eregulations/http/password = CYPRESS_TEST_PASSWORD,
                 /eregulations/http/admin_test_user = CYPRESS_TEST_ADMIN_USERNAME,
                 /eregulations/http/admin_test_password = CYPRESS_TEST_ADMIN_PASSWORD"
             withDecryption: "true" # defaults to true
