@@ -1,6 +1,6 @@
 <template>
     <section class="flush-paragraph-section">
-        <div class="prototype-fp" v-html="node.content"></div>
+        <div class="synthetic-part-fp" v-html="node.content"></div>
     </section>
 </template>
 
