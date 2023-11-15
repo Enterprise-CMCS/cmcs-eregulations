@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["prod-secirty-hub"]
+        environment: ["prod-security-hub"]
       fail-fast: false
     environment:
       name: ${{ matrix.environment }}
