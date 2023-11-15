@@ -105,6 +105,13 @@ const subjectClick = (event) => {
     });
 };
 
+const subjectClasses = (subjectId) => ({
+    "sidebar-li__button": true,
+    "sidebar-li__button--selected": $route.query.subjects?.includes(
+        subjectId.toString()
+    ),
+});
+
 const filterResetClasses = computed(() => ({
     "subjects__filter-reset": true,
     "subjects__filter-reset--hidden": !state.filter,
@@ -127,7 +134,11 @@ const filterResetClick = () => {
             <template v-else>
                 <form>
                     <label for="subjectReduce">Filter the subject list</label>
-                    <input id="subjectReduce" v-model="state.filter" type="text" />
+                    <input
+                        id="subjectReduce"
+                        v-model="state.filter"
+                        type="text"
+                    />
                     <button
                         aria-label="Clear subject list filter"
                         data-testid="clear-subject-filter"
@@ -144,12 +155,15 @@ const filterResetClick = () => {
                         class="subjects__li sidebar__li"
                     >
                         <button
+                            :class="subjectClasses(subject.id)"
                             :data-name="getSubjectName(subject)"
                             :data-id="subject.id"
                             :data-testid="`add-subject-${subject.id}`"
                             :title="subject.full_name"
                             @click="subjectClick"
-                            v-html="subject.displayName || getSubjectName(subject)"
+                            v-html="
+                                subject.displayName || getSubjectName(subject)
+                            "
                         ></button>
                     </li>
                 </ul>
