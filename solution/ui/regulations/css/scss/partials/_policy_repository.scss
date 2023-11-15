@@ -245,7 +245,7 @@
                     &--selected {
                         @include font-bold-keep-width;
 
-                        cursor: default;
+                        pointer-events: none;
                     }
 
                     &:hover,
