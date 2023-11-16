@@ -74,19 +74,6 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 const getSubjectName = (subject) =>
     subject.short_name || subject.abbreviation || subject.full_name;
 
-/**
- * @param subjects {Array} - an array of subjects
- * @returns {Array} - an array of subjects sorted by name
- */
-const sortSubjects = (a, b) => {
-    const aName = getSubjectName(a);
-    const bName = getSubjectName(b);
-
-    if (aName < bName) return -1;
-    if (aName > bName) return 1;
-
-    return 0;
-};
 
 export {
     formatDate,
@@ -94,5 +81,4 @@ export {
     getSubjectName,
     locationLabel,
     locationUrl,
-    sortSubjects,
 };
