@@ -40,7 +40,7 @@ class PdfExtractor(Extractor):
             fmt="jpeg",
         )
 
-    def extract(self, file: bytes, file_path) -> str:
+    def extract(self, file_path: str) -> str:
         text = ""
         with TemporaryDirectory() as temp_dir:
             try:
@@ -48,8 +48,6 @@ class PdfExtractor(Extractor):
                     with open(file_path, 'rb') as pdf_file:
                         pdf = pdf_file.read()
                         pages = self._convert_to_images(pdf, temp_dir)
-                else:
-                    pages = self._convert_to_images(file, temp_dir)
 
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")

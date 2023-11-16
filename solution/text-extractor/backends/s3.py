@@ -1,6 +1,8 @@
+import os
+
 import boto3
 import botocore.exceptions
-import os
+
 from .backend import FileBackend
 from .exceptions import BackendException, BackendInitException
 
@@ -34,7 +36,7 @@ class S3Backend(FileBackend):
             file_path = os.path.join(r'app/temp_file/', uri)
             # obj = self.client.get_object(Bucket=self.aws_storage_bucket_name, Key=uri)
             try:
-                with open (file_path, 'wb') as f:
+                with open(file_path, 'wb') as f:
                     self.client.download_fileobj(self.aws_storage_bucket_name, uri, f)
             except Exception as e:
                 raise BackendException(e)
