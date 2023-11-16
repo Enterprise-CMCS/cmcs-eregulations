@@ -12,7 +12,7 @@ class S3Backend(FileBackend):
 
     def __init__(self, config: dict):
         try:
-            if not config['s3']['use_lambda']:
+            if not config['aws']['use_lambda']:
                 self.aws_access_key_id = config["aws"]["aws_access_key_id"]
                 self.aws_secret_access_key = config["aws"]["aws_secret_access_key"]
             self.aws_storage_bucket_name = config["aws"]["aws_storage_bucket_name"]
