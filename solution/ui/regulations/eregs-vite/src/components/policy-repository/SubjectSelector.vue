@@ -100,7 +100,7 @@ const subjectClick = (event) => {
         name: "policy-repository",
         query: {
             ...$route.query,
-            subjects: [...subjectsArray, event.currentTarget.dataset.id],
+            subjects: [subjectToAdd],
         },
     });
 };
