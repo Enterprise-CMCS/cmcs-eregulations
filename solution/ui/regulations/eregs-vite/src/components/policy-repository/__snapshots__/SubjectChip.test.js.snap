@@ -6,6 +6,7 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
     <div>
       <router-link
         class="subject__chip"
+        data-testid="add-subject-chip-2"
         to="[object Object]"
       >
          Subject Name 
@@ -15,6 +16,7 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
   "container": <div>
     <router-link
       class="subject__chip"
+      data-testid="add-subject-chip-2"
       to="[object Object]"
     >
        Subject Name 

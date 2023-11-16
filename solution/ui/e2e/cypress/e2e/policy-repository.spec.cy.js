@@ -218,9 +218,17 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository/?subjects=77");
         cy.url().should("include", "/policy-repository/?subjects=77");
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
+        cy.get("button[data-testid=add-subject-63]").should(
+            "not.have.class",
+            "sidebar-li__button--selected"
+        );
         cy.get("button[data-testid=add-subject-63]").click({
             force: true,
         });
+        cy.get("button[data-testid=add-subject-63]").should(
+            "have.class",
+            "sidebar-li__button--selected"
+        );
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
         cy.url().should(
@@ -241,7 +249,9 @@ describe("Policy Repository", () => {
             "include.text",
             "Cures Act"
         );
-        cy.get(`button[data-testid=clear-subject-filter]`).should("not.be.visible");
+        cy.get(`button[data-testid=clear-subject-filter]`).should(
+            "not.be.visible"
+        );
 
         cy.checkAccessibility();
 
