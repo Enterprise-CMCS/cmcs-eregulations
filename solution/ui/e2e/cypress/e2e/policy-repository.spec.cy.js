@@ -265,6 +265,11 @@ describe("Policy Repository", () => {
 
         cy.checkAccessibility();
 
+        cy.get("input#subjectReduce")
+            .type("{enter}", { force: true });
+
+        cy.url().should("include", "/policy-repository?subjects=1");
+
         cy.get(`button[data-testid=clear-subject-filter]`).click({
             force: true,
         });
