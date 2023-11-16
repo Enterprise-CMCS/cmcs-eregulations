@@ -63,6 +63,12 @@ const resultLinkLabel = (item) => {
         fileTypeButton ?? ""
     }`;
 };
+
+const editUrl = (doc) => {
+    const customUrl = process.env.CUSTOM_URL || '';
+    const baseUrl = customUrl === 'prod' ? '' : customUrl;
+    return `${baseUrl}/v3/content-search/resource/${doc.id}`;
+};
 </script>
 
 <template>
@@ -85,7 +91,7 @@ const resultLinkLabel = (item) => {
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    :href="'/v3/content-search/resource/' + doc.id "
+                    :href="editUrl(doc)"
                 >
                     Edit
                     <i class="fas fa-edit"></i>
