@@ -3,7 +3,7 @@ import uuid
 
 from django.db import models
 
-from common.fields import VariableDateField
+from common.fields import CombinedNaturalSort, VariableDateField
 from resources.models import AbstractLocation
 
 
@@ -24,6 +24,7 @@ class Subject(models.Model):
     full_name = models.CharField(max_length=512, null=False, blank=False)
     short_name = models.CharField(max_length=50, null=True, blank=True)
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
+    combined_sort = CombinedNaturalSort(['short_name', 'abbreviation', 'full_name'], null=True)
 
     def __str__(self):
         return self.full_name

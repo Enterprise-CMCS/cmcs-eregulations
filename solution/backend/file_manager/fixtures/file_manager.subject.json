@@ -5,7 +5,8 @@
     "fields": {
         "full_name": "21st Century Cures Act",
         "short_name": null,
-        "abbreviation": "Cures Act"
+        "abbreviation": "Cures Act",
+        "combined_sort": "cures act"
     }
 },
 {
@@ -14,7 +15,8 @@
     "fields": {
         "full_name": "Alternative Benefit Plan",
         "short_name": null,
-        "abbreviation": "ABP"
+        "abbreviation": "ABP",
+        "combined_sort": "abp"
     }
 },
 {
@@ -23,7 +25,8 @@
     "fields": {
         "full_name": "Access to Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "access to services"
     }
 },
 {
@@ -32,7 +35,8 @@
     "fields": {
         "full_name": "Adult Day Health",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "adult day health"
     }
 },
 {
@@ -41,7 +45,8 @@
     "fields": {
         "full_name": "Ambulatory Prenatal Care",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "ambulatory prenatal care"
     }
 },
 {
@@ -50,7 +55,8 @@
     "fields": {
         "full_name": "Asthma",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "asthma"
     }
 },
 {
@@ -59,7 +65,8 @@
     "fields": {
         "full_name": "Autism Spectrum Disorder",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "autism spectrum disorder"
     }
 },
 {
@@ -68,7 +75,8 @@
     "fields": {
         "full_name": "Blood Products",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "blood products"
     }
 },
 {
@@ -77,7 +85,8 @@
     "fields": {
         "full_name": "Care Coordination",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "care coordination"
     }
 },
 {
@@ -86,7 +95,8 @@
     "fields": {
         "full_name": "Certified Community Behavioral Health Clinics",
         "short_name": null,
-        "abbreviation": "CCBHCs"
+        "abbreviation": "CCBHCs",
+        "combined_sort": "ccbhcs"
     }
 },
 {
@@ -95,7 +105,8 @@
     "fields": {
         "full_name": "Certified Nurse Practitioner",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "certified nurse practitioner"
     }
 },
 {
@@ -104,7 +115,8 @@
     "fields": {
         "full_name": "Community First Choice",
         "short_name": null,
-        "abbreviation": "CFC"
+        "abbreviation": "CFC",
+        "combined_sort": "cfc"
     }
 },
 {
@@ -113,7 +125,8 @@
     "fields": {
         "full_name": "Clinical Trials and Experimental Policy",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "clinical trials and experimental policy"
     }
 },
 {
@@ -122,7 +135,8 @@
     "fields": {
         "full_name": "Clinic Services",
         "short_name": "Clinics",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "clinics"
     }
 },
 {
@@ -131,7 +145,8 @@
     "fields": {
         "full_name": "\"Case Management and Targeted Case Management\"",
         "short_name": null,
-        "abbreviation": "CM TCM"
+        "abbreviation": "CM TCM",
+        "combined_sort": "cm tcm"
     }
 },
 {
@@ -140,7 +155,8 @@
     "fields": {
         "full_name": "Coding",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "coding"
     }
 },
 {
@@ -149,7 +165,8 @@
     "fields": {
         "full_name": "Collaborative Care Model",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "collaborative care model"
     }
 },
 {
@@ -158,7 +175,8 @@
     "fields": {
         "full_name": "Collateral Contacts",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "collateral contacts"
     }
 },
 {
@@ -167,7 +185,8 @@
     "fields": {
         "full_name": "Community Health Worker",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "community health worker"
     }
 },
 {
@@ -176,7 +195,8 @@
     "fields": {
         "full_name": "Comparability",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "comparability"
     }
 },
 {
@@ -185,7 +205,8 @@
     "fields": {
         "full_name": "Consultations",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "consultations"
     }
 },
 {
@@ -194,7 +215,8 @@
     "fields": {
         "full_name": "Contingency Management",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "contingency management"
     }
 },
 {
@@ -203,7 +225,8 @@
     "fields": {
         "full_name": "Comprehensive Outpatient Rehabilitation Facilities",
         "short_name": null,
-        "abbreviation": "CORF"
+        "abbreviation": "CORF",
+        "combined_sort": "corf"
     }
 },
 {
@@ -212,7 +235,8 @@
     "fields": {
         "full_name": "Critical Access Hospital",
         "short_name": null,
-        "abbreviation": "CAH"
+        "abbreviation": "CAH",
+        "combined_sort": "cah"
     }
 },
 {
@@ -221,7 +245,8 @@
     "fields": {
         "full_name": "Dental Services",
         "short_name": "Dental",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "dental"
     }
 },
 {
@@ -230,7 +255,8 @@
     "fields": {
         "full_name": "Diabetes Prevention",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "diabetes prevention"
     }
 },
 {
@@ -239,7 +265,8 @@
     "fields": {
         "full_name": "Diagnostic Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "diagnostic services"
     }
 },
 {
@@ -248,7 +275,8 @@
     "fields": {
         "full_name": "Digital Therapeutics",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "digital therapeutics"
     }
 },
 {
@@ -257,7 +285,8 @@
     "fields": {
         "full_name": "Disease Management",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "disease management"
     }
 },
 {
@@ -266,7 +295,8 @@
     "fields": {
         "full_name": "Donor Milk",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "donor milk"
     }
 },
 {
@@ -275,7 +305,8 @@
     "fields": {
         "full_name": "Doula Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "doula services"
     }
 },
 {
@@ -284,7 +315,8 @@
     "fields": {
         "full_name": "Electronic Monitoring",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "electronic monitoring"
     }
 },
 {
@@ -293,7 +325,8 @@
     "fields": {
         "full_name": "Eligibility",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "eligibility"
     }
 },
 {
@@ -302,7 +335,8 @@
     "fields": {
         "full_name": "Emergency Hospital Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "emergency hospital services"
     }
 },
 {
@@ -311,7 +345,8 @@
     "fields": {
         "full_name": "Emergency Services for Aliens",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "emergency services for aliens"
     }
 },
 {
@@ -320,7 +355,8 @@
     "fields": {
         "full_name": "Early and Periodic Screening, Diagnostic, and Treatment",
         "short_name": null,
-        "abbreviation": "EPSDT"
+        "abbreviation": "EPSDT",
+        "combined_sort": "epsdt"
     }
 },
 {
@@ -329,7 +365,8 @@
     "fields": {
         "full_name": "Excluded Practitioners",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "excluded practitioners"
     }
 },
 {
@@ -338,7 +375,8 @@
     "fields": {
         "full_name": "Expedited Partner Therapy",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "expedited partner therapy"
     }
 },
 {
@@ -347,7 +385,8 @@
     "fields": {
         "full_name": "Family Planning Services",
         "short_name": "Family Planning",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "family planning"
     }
 },
 {
@@ -356,7 +395,8 @@
     "fields": {
         "full_name": "Federally Qualified Health Centers",
         "short_name": null,
-        "abbreviation": "FQHC"
+        "abbreviation": "FQHC",
+        "combined_sort": "fqhc"
     }
 },
 {
@@ -365,7 +405,8 @@
     "fields": {
         "full_name": "Fetal Alcohol Syndrome",
         "short_name": null,
-        "abbreviation": "FAS"
+        "abbreviation": "FAS",
+        "combined_sort": "fas"
     }
 },
 {
@@ -374,7 +415,8 @@
     "fields": {
         "full_name": "Foster Care",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "foster care"
     }
 },
 {
@@ -383,7 +425,8 @@
     "fields": {
         "full_name": "Free Care",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "free care"
     }
 },
 {
@@ -392,7 +435,8 @@
     "fields": {
         "full_name": "Free Choice of Providers",
         "short_name": "Freedom of Choice",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "freedom of choice"
     }
 },
 {
@@ -401,7 +445,8 @@
     "fields": {
         "full_name": "Freestanding Birth Centers",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "freestanding birth centers"
     }
 },
 {
@@ -410,7 +455,8 @@
     "fields": {
         "full_name": "Gender Affirming Care",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "gender affirming care"
     }
 },
 {
@@ -419,7 +465,8 @@
     "fields": {
         "full_name": "Habilitative Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "habilitative services"
     }
 },
 {
@@ -428,7 +475,8 @@
     "fields": {
         "full_name": "Healthcare Common Procedure Coding System",
         "short_name": null,
-        "abbreviation": "HCPCS"
+        "abbreviation": "HCPCS",
+        "combined_sort": "hcpcs"
     }
 },
 {
@@ -437,7 +485,8 @@
     "fields": {
         "full_name": "Health Homes for Enrollees with Chronic Conditions",
         "short_name": "Health Homes",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "health homes"
     }
 },
 {
@@ -446,7 +495,8 @@
     "fields": {
         "full_name": "Home Visiting Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "home visiting services"
     }
 },
 {
@@ -455,7 +505,8 @@
     "fields": {
         "full_name": "Homelessness Housing",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "homelessness housing"
     }
 },
 {
@@ -464,7 +515,8 @@
     "fields": {
         "full_name": "Hospice",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "hospice"
     }
 },
 {
@@ -473,7 +525,8 @@
     "fields": {
         "full_name": "Intermediate Care Facilities for Individuals with Intellectual Disabilities",
         "short_name": null,
-        "abbreviation": "ICF IID"
+        "abbreviation": "ICF IID",
+        "combined_sort": "icf iid"
     }
 },
 {
@@ -482,7 +535,8 @@
     "fields": {
         "full_name": "Institutions for Mental Disease",
         "short_name": null,
-        "abbreviation": "IMD"
+        "abbreviation": "IMD",
+        "combined_sort": "imd"
     }
 },
 {
@@ -491,7 +545,8 @@
     "fields": {
         "full_name": "Inmates",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "inmates"
     }
 },
 {
@@ -500,7 +555,8 @@
     "fields": {
         "full_name": "Inpatient Hospital Services",
         "short_name": "Inpatient Hospital",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "inpatient hospital"
     }
 },
 {
@@ -509,7 +565,8 @@
     "fields": {
         "full_name": "Integrated Care Model",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "integrated care model"
     }
 },
 {
@@ -518,7 +575,8 @@
     "fields": {
         "full_name": "Interpreter-Translation Services",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "interpreter-translation services"
     }
 },
 {
@@ -527,7 +585,8 @@
     "fields": {
         "full_name": "Laboratory and X-ray Services",
         "short_name": "Lab & X-Ray",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "lab & x-ray"
     }
 },
 {
@@ -536,7 +595,8 @@
     "fields": {
         "full_name": "Lactation Consultant",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "lactation consultant"
     }
 },
 {
@@ -545,7 +605,8 @@
     "fields": {
         "full_name": "Long-Term Services and Supports",
         "short_name": null,
-        "abbreviation": "LTSS"
+        "abbreviation": "LTSS",
+        "combined_sort": "ltss"
     }
 },
 {
@@ -554,7 +615,8 @@
     "fields": {
         "full_name": "MACPro User Group",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "macpro user group"
     }
 },
 {
@@ -563,7 +625,8 @@
     "fields": {
         "full_name": "Managed Care",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "managed care"
     }
 },
 {
@@ -572,7 +635,8 @@
     "fields": {
         "full_name": "Maternal Depression",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "maternal depression"
     }
 },
 {
@@ -581,7 +645,8 @@
     "fields": {
         "full_name": "Medical Marijuana",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "medical marijuana"
     }
 },
 {
@@ -590,7 +655,8 @@
     "fields": {
         "full_name": "Medical Necessity",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "medical necessity"
     }
 },
 {
@@ -599,7 +665,8 @@
     "fields": {
         "full_name": "Medication Assisted Treatment",
         "short_name": null,
-        "abbreviation": "MAT"
+        "abbreviation": "MAT",
+        "combined_sort": "mat"
     }
 },
 {
@@ -608,7 +675,8 @@
     "fields": {
         "full_name": "Minimum Essential Coverage",
         "short_name": null,
-        "abbreviation": "MEC"
+        "abbreviation": "MEC",
+        "combined_sort": "mec"
     }
 },
 {
@@ -617,7 +685,8 @@
     "fields": {
         "full_name": "Missed Appointments",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "missed appointments"
     }
 },
 {
@@ -626,7 +695,8 @@
     "fields": {
         "full_name": "Mobile Crisis",
         "short_name": "Mobile Crisis Services",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "mobile crisis services"
     }
 },
 {
@@ -635,7 +705,8 @@
     "fields": {
         "full_name": "Neonatal Abstinence Syndrome",
         "short_name": null,
-        "abbreviation": "NAS"
+        "abbreviation": "NAS",
+        "combined_sort": "nas"
     }
 },
 {
@@ -644,7 +715,8 @@
     "fields": {
         "full_name": "National Correct Coding Initiative",
         "short_name": null,
-        "abbreviation": "NCCI"
+        "abbreviation": "NCCI",
+        "combined_sort": "ncci"
     }
 },
 {
@@ -653,7 +725,8 @@
     "fields": {
         "full_name": "Non-Discrimination",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "non-discrimination"
     }
 },
 {
@@ -662,7 +735,8 @@
     "fields": {
         "full_name": "Non-Opioid Pain Management",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "non-opioid pain management"
     }
 },
 {
@@ -671,7 +745,8 @@
     "fields": {
         "full_name": "Notices",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "notices"
     }
 },
 {
@@ -680,7 +755,8 @@
     "fields": {
         "full_name": "Nurse Advice Lines",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "nurse advice lines"
     }
 },
 {
@@ -689,7 +765,8 @@
     "fields": {
         "full_name": "Nutrition",
         "short_name": null,
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "nutrition"
     }
 },
 {
@@ -698,7 +775,8 @@
     "fields": {
         "full_name": "Omnibus Budget Reconciliation Act of 1989",
         "short_name": "OBRA 89",
-        "abbreviation": null
+        "abbreviation": null,
+        "combined_sort": "obra 00000089"
     }
 }
 ]
