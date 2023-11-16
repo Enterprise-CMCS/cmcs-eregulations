@@ -21,6 +21,7 @@ class SubjectSerializer(serializers.Serializer):
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
 
+
 class SubjectDetailsSerializer(SubjectSerializer):
     content = serializers.SerializerMethodField()
     internal_content = serializers.IntegerField()
