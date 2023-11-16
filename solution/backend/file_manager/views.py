@@ -66,7 +66,7 @@ class SubjectViewset(viewsets.ReadOnlyModelViewSet):
             Prefetch('content', queryset=index_prefetch))
         query = query.annotate(internal_content=Count('content', filter=Q(content__id__in=index_prefetch_internal)))
         query = query.annotate(external_content=Count('content', filter=Q(content__id__in=index_prefetch_external)))
-        query = query.order_by('id')
+        query = query.order_by('combined_sort')
         context = self.get_serializer_context()
         serializer = SubjectDetailsSerializer(query, many=True, context=context)
         return Response(serializer.data)

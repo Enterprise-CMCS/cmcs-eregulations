@@ -12,7 +12,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName, sortSubjects } from "utilities/filters";
+import { getSubjectName, } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -230,7 +230,7 @@ const getDocSubjects = async () => {
             cacheResponse: false,
         });
 
-        policyDocSubjects.value.results = subjectsResponse.sort(sortSubjects);
+        policyDocSubjects.value.results = subjectsResponse;
     } catch (error) {
         console.error(error);
     } finally {
