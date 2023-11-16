@@ -22,4 +22,3 @@ def handler(self, *args, **options):
                                              os.environ.get('DJANGO_PASSWORD'))
         e_regs_reader_group, _ = Group.objects.get_or_create(name='e-Regs-Reader')
         user.groups.add(e_regs_reader_group)
-
