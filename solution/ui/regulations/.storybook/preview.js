@@ -18,7 +18,6 @@ export const parameters = {
         storySort: {
             order: [
                 "Regulations",
-                "Prototype",
                 "Supplemental Resources",
                 "Components",
             ],

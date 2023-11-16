@@ -133,16 +133,6 @@ pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_s
     - In the make file, either add it to the list of objects, or add a new line for the model.
     - In the emptyseedtables.py add the model to the handler command.
 
-## Running eRegs Prototype
-
-To better support Rapid Prototyping, a VueJS Single Page Application (SPA) has been created using the [Vue CLI](https://cli.vuejs.org/).
-
-1. `make prototype` to spin up Docker container
-2. visit `localhost:8081` to view prototype
-3. edit files in `/regulations/static/prototype` to make changes
-4. changes should be reflected in running prototype via hot reloading
-5. `make prototype:clean` to tear down Docker container
-
 ## Setting local to use EUA
 1. Update your Dockerfile with the following environment variables
 ```
