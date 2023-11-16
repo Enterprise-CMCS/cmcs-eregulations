@@ -4,3 +4,4 @@ python-magic
 mock
 moto
 pdf2image
+textract

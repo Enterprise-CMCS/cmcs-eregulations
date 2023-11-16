@@ -8,7 +8,7 @@ from .extractor import Extractor
 
 
 class PdfExtractor(Extractor):
-    file_types = ("application/pdf",)
+    file_types = ("application/pdf", 'pdf')
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
@@ -40,11 +40,17 @@ class PdfExtractor(Extractor):
             fmt="jpeg",
         )
 
-    def extract(self, file: bytes) -> str:
+    def extract(self, file: bytes, file_path) -> str:
         text = ""
         with TemporaryDirectory() as temp_dir:
             try:
-                pages = self._convert_to_images(file, temp_dir)
+                if file_path:
+                    with open(file_path, 'rb') as pdf_file:
+                        pdf = pdf_file.read()
+                        pages = self._convert_to_images(pdf, temp_dir)
+                else:
+                    pages = self._convert_to_images(file, temp_dir)
+
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")
             for page in pages:

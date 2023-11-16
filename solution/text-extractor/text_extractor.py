@@ -55,17 +55,19 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_response(500, f"Backend unexpectedly failed: {str(e)}")
 
-    # Determine the file's MIME type
-    # Magic docs recommend using first 2048 bytes of the file for most accurate type detection
     try:
-        file_type = magic.from_buffer(file[:2048], mime=True)
+        if config.get('backend').lower() == 'web':
+            file_type = magic.from_buffer(file[:2048], mime=True)
+        else:
+            file_type = uri.split('.')[1]
     except Exception as e:
         return lambda_response(500, f"Failed to determine file type: {str(e)}")
 
     # Run extractor
     try:
         extractor = Extractor.get_extractor(file_type, config)
-        text = extractor.extract(file)
+        file_path = file
+        text = extractor.extract(file, file_path)
     except ExtractorInitException as e:
         return lambda_response(500, f"Failed to initialize text extractor: {str(e)}")
     except ExtractorException as e:
