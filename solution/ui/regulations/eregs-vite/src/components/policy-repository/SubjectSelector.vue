@@ -132,7 +132,7 @@ const filterResetClick = () => {
                 </div>
             </template>
             <template v-else>
-                <form>
+                <form @submit.prevent>
                     <label for="subjectReduce">Filter the subject list</label>
                     <input
                         id="subjectReduce"
