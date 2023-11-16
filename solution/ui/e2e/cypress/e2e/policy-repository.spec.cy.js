@@ -26,18 +26,18 @@ const _beforeEach = () => {
     }).as("subjects");
 };
 
-// Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
-//     cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
-//         fixture: "policy-docs.json",
-//     }).as("subjectFiles");
-//     cy.viewport("macbook-15");
-//     cy.eregsLogin({ username, password });
-//     cy.visit("/policy-repository/?subjects=1&subjects=2");
-//     cy.injectAxe();
-//     cy.wait("@subjectFiles").then((interception) => {
-//         expect(interception.response.statusCode).to.eq(200);
-//     });
-// });
+Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
+    cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
+        fixture: "policy-docs.json",
+    }).as("subjectFiles");
+    cy.viewport("macbook-15");
+    cy.eregsLogin({ username, password });
+    cy.visit("/policy-repository/?subjects=1&subjects=2");
+    cy.injectAxe();
+    cy.wait("@subjectFiles").then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+    });
+});
 
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
@@ -75,99 +75,99 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/policy-repository?subjects=63&subjects=2");
     });
 
-    // it("should make a successful request to the content-search endpoint", () => {
-    //     cy.intercept("**/v3/content-search/?**").as("files");
-    //     cy.viewport("macbook-15");
-    //     cy.eregsLogin({ username, password });
-    //     cy.visit("/policy-repository");
-    //     cy.url().should("include", "/policy-repository/");
-    //     cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
-    //     cy.wait("@files").then((interception) => {
-    //         expect(interception.response.statusCode).to.eq(200);
-    //     });
-    // });
+    it("should make a successful request to the content-search endpoint", () => {
+        cy.intercept("**/v3/content-search/?**").as("files");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.url().should("include", "/policy-repository/");
+        cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
+        cy.wait("@files").then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+        });
+    });
 
-    // it("loads the correct subject and search query when the URL is changed", () => {
-    //     cy.intercept("**/v3/content-search/?subjects=1&q=test**").as("qFiles");
-    //     cy.viewport("macbook-15");
-    //     cy.eregsLogin({ username, password });
-    //     cy.visit("/policy-repository");
-    //     cy.url().should("include", "/policy-repository/");
-    //
-    //     cy.get(`button[data-testid=add-subject-1]`).click({
-    //         force: true,
-    //     });
-    //     cy.url().should("include", "/policy-repository?subjects=1");
-    //     cy.get(`button[data-testid=remove-subject-1]`).should("exist");
-    //
-    //     cy.get(`button[data-testid=add-subject-2]`).click({
-    //         force: true,
-    //     });
-    //     cy.url().should("include", "/policy-repository?subjects=1&subjects=2");
-    //     cy.get(`button[data-testid=remove-subject-2]`).should("exist");
-    //
-    //     cy.get(`button[data-testid=add-subject-3]`).click({
-    //         force: true,
-    //     });
-    //     cy.url().should(
-    //         "include",
-    //         "/policy-repository?subjects=1&subjects=2&subjects=3"
-    //     );
-    //     cy.get(`button[data-testid=remove-subject-3]`).should("exist");
-    //
-    //     cy.go("back");
-    //     cy.url().should("include", "/policy-repository?subjects=1&subjects=2");
-    //     cy.get(`button[data-testid=remove-subject-3]`).should("not.exist");
-    //
-    //     cy.get(`button[data-testid=remove-subject-2]`).click({
-    //         force: true,
-    //     });
-    //     cy.url().should("include", "/policy-repository?subjects=1");
-    //     cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-    //
-    //     cy.get("input#main-content")
-    //         .should("be.visible")
-    //         .type("test", { force: true });
-    //     cy.get(".search-field .v-input__icon--append button").click({
-    //         force: true,
-    //     });
-    //     cy.url().should("include", "/policy-repository?subjects=1&q=test");
-    //     cy.wait("@qFiles").then((interception) => {
-    //         expect(interception.response.statusCode).to.eq(200);
-    //     });
-    // });
+    it("loads the correct subject and search query when the URL is changed", () => {
+        cy.intercept("**/v3/content-search/?subjects=1&q=test**").as("qFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.url().should("include", "/policy-repository/");
 
-    // it("should display and fetch the correct subjects on load if they are included in URL", () => {
-    //     cy.getPolicyDocs({ username, password })
-    //     cy.get(`button[data-testid=remove-subject-1]`).should("exist");
-    //     cy.get(`button[data-testid=remove-subject-2]`).should("exist");
-    //     cy.get(".related-sections")
-    //         .first()
-    //         .find(".related-section-link")
-    //         .first()
-    //         .find("a")
-    //         .should("have.attr", "href")
-    //         .and("not.include", "undefined")
-    //         .and("include", "/42/435/116#435-116");
-    //     cy.get(".result__link")
-    //         .eq(0)
-    //         .find("a")
-    //         .should("not.include.text", "Download");
-    //     cy.get(".result__link")
-    //         .eq(1)
-    //         .should("include.text", "Download")
-    //         .find(
-    //             "a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
-    //         )
-    //         .should("include.text", "Download MSG");
-    //
-    //     cy.checkAccessibility();
-    // });
-    // it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
-    //     cy.getPolicyDocs({ username, password })
-    //     cy.get(".edit-button").should("not.exist");
-    //     cy.checkAccessibility();
-    // });
+        cy.get(`button[data-testid=add-subject-1]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.get(`button[data-testid=remove-subject-1]`).should("exist");
+
+        cy.get(`button[data-testid=add-subject-2]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=1&subjects=2");
+        cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+
+        cy.get(`button[data-testid=add-subject-3]`).click({
+            force: true,
+        });
+        cy.url().should(
+            "include",
+            "/policy-repository?subjects=1&subjects=2&subjects=3"
+        );
+        cy.get(`button[data-testid=remove-subject-3]`).should("exist");
+
+        cy.go("back");
+        cy.url().should("include", "/policy-repository?subjects=1&subjects=2");
+        cy.get(`button[data-testid=remove-subject-3]`).should("not.exist");
+
+        cy.get(`button[data-testid=remove-subject-2]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
+
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.url().should("include", "/policy-repository?subjects=1&q=test");
+        cy.wait("@qFiles").then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+        });
+    });
+
+    it("should display and fetch the correct subjects on load if they are included in URL", () => {
+        cy.getPolicyDocs({ username, password })
+        cy.get(`button[data-testid=remove-subject-1]`).should("exist");
+        cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.get(".related-sections")
+            .first()
+            .find(".related-section-link")
+            .first()
+            .find("a")
+            .should("have.attr", "href")
+            .and("not.include", "undefined")
+            .and("include", "/42/435/116#435-116");
+        cy.get(".result__link")
+            .eq(0)
+            .find("a")
+            .should("not.include.text", "Download");
+        cy.get(".result__link")
+            .eq(1)
+            .should("include.text", "Download")
+            .find(
+                "a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
+            )
+            .should("include.text", "Download MSG");
+
+        cy.checkAccessibility();
+    });
+    it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
+        cy.getPolicyDocs({ username, password })
+        cy.get(".edit-button").should("not.exist");
+        cy.checkAccessibility();
+    });
     it("should display edit button for individual uploaded items if signed in and authorized to edit", () => {
         cy.getPolicyDocs({ username: adminUsername, password: adminPassword })
         cy.get(".edit-button").should("exist");
