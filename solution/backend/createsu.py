@@ -11,5 +11,9 @@ def handler(self, *args, **options):
 
     if not User.objects.filter(username=os.environ.get('DJANGO_ADMIN_USERNAME')).exists():
         User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
-                                      'user@email.com',
+                                      'admin_user@email.com',
                                       os.environ.get('DJANGO_ADMIN_PASSWORD'))
+    if not User.objects.filter(username=os.environ.get('DJANGO_USERNAME')).exists():
+        User.objects.create_superuser(os.environ.get('DJANGO_USERNAME'),
+                                      'user@email.com',
+                                      os.environ.get('DJANGO_PASSWORD'))
