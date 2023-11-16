@@ -23,9 +23,9 @@ class PdfExtractor(Extractor):
     def _get_aws_arguments(self, config: dict) -> dict:
         try:
             return {
-                "aws_access_key_id": config["textract"]["aws_access_key_id"],
-                "aws_secret_access_key": config["textract"]["aws_secret_access_key"],
-                "region_name": config["textract"]["aws_region"],
+                "aws_access_key_id": config["aws"]["aws_access_key_id"],
+                "aws_secret_access_key": config["aws"]["aws_secret_access_key"],
+                "region_name": config["aws"]["aws_region"],
             }
         except KeyError:
             return {

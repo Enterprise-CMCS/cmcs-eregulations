@@ -153,14 +153,15 @@ class InvokeTextExtractorViewset(APIView):
                 json_object['backend'] = 's3'
                 # The lambda already has permissions to access the S3 bucket.  Only on a local run do we pass the keys.
                 if settings.USE_LOCAL_TEXTRACT:
-                    json_object["s3"] = {
+                    json_object["aws"] = {
                                             "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
                                             "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
                                             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
                                             'use_lambda': False,
+                                            'aws_region': 'us-east-1'
                                         }
                 else:
-                    json_object["s3"] = {
+                    json_object["aws"] = {
                                             'use_lambda': True,
                                             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
                                         }
@@ -168,11 +169,6 @@ class InvokeTextExtractorViewset(APIView):
                 json_object['backend'] = 'web'
 
         if settings.USE_LOCAL_TEXTRACT:
-            json_object['textract'] = {
-                'aws_access_key_id': settings.TEXTRACT_KEY_ID,
-                'aws_secret_access_key': settings.TEXTRACT_SECRET_KEY,
-                'aws_region': 'us-east-1'
-            }
             # return Response(json_object)
             docker_url = 'http://host.docker.internal:8001/'
             resp = requests.post(
