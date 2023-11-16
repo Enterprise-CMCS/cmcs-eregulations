@@ -10,10 +10,17 @@ def handler(self, *args, **options):
     from django.contrib.auth.models import User
 
     if not User.objects.filter(username=os.environ.get('DJANGO_ADMIN_USERNAME')).exists():
-        User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
+        admin_user = User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
                                       'admin_user@email.com',
                                       os.environ.get('DJANGO_ADMIN_PASSWORD'))
+        e_regs_admin_group, created = Group.objects.get_or_create(name='e-Regs-Admin')
+        if created:
+            admin_user.groups.add(e_regs_admin_group)
     if not User.objects.filter(username=os.environ.get('DJANGO_USERNAME')).exists():
-        User.objects.create_superuser(os.environ.get('DJANGO_USERNAME'),
+        user = User.objects.create_superuser(os.environ.get('DJANGO_USERNAME'),
                                       'user@email.com',
                                       os.environ.get('DJANGO_PASSWORD'))
+        e_regs_reader_group, created = Group.objects.get_or_create(name='e-Regs-Reader')
+        if created:
+            user.groups.add(e_regs_reader_group)
+
