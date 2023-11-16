@@ -39,7 +39,6 @@ class S3Backend(FileBackend):
                     self.client.download_fileobj(self.aws_storage_bucket_name, uri, f)
             except Exception as e:
                 raise BackendException(e)
-            # return obj["Body"].read()
             return file_path
         except botocore.exceptions.ClientError as e:
             raise BackendException(f"S3 client error: {str(e)}")

@@ -44,10 +44,9 @@ class PdfExtractor(Extractor):
         text = ""
         with TemporaryDirectory() as temp_dir:
             try:
-                if file_path:
-                    with open(file_path, 'rb') as pdf_file:
-                        pdf = pdf_file.read()
-                        pages = self._convert_to_images(pdf, temp_dir)
+                with open(file_path, 'rb') as pdf_file:
+                    pdf = pdf_file.read()
+                    pages = self._convert_to_images(pdf, temp_dir)
 
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")
