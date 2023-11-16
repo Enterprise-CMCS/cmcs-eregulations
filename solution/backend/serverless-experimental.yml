@@ -24,8 +24,10 @@ provider:
     DB_PORT: ${ssm:/eregulations/db/port}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
-    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/admin_test_user}
-    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/admin_test_password}
+    DJANGO_USERNAME: ${ssm:/eregulations/http/admin_test_user}
+    DJANGO_PASSWORD: ${ssm:/eregulations/http/admin_test_password}
+    DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user}
+    DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
     DJANGO_SETTINGS_MODULE: ${ssm:/eregulations/django_settings_module}
     ALLOWED_HOST: '.amazonaws.com'
     BASE_URL: ${ssm:/eregulations/base_url}
