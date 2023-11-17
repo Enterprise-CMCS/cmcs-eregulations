@@ -145,7 +145,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      # Deploy the regulation site to AWS
+      # Deploy the regulation site tos AWS
       - name: deploy regulations site server
         id: deploy-regulations-site-server
         if: success() && steps.findPr.outputs.number
