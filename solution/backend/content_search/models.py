@@ -36,7 +36,7 @@ class ContentIndexQuerySet(models.QuerySet):
             RawSQL("vector_column", [], output_field=SearchVectorField()),
             search_query, cover_density=self.cover_density))\
             .filter(rank__gt=self.rank_filter)\
-            .annotate(summary_headline=SearchHeadline(
+            .annotate(description_headline=SearchHeadline(
                 "summary_string",
                 search_query,
                 start_sel='<span class="search-highlight">',
