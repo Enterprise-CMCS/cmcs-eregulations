@@ -14,15 +14,15 @@ def handler(self, *args, **options):
 
     if not User.objects.filter(username=os.environ.get('DJANGO_ADMIN_USERNAME')).exists():
         admin_user = User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
-                                      'admin_user@email.com',
-                                      os.environ.get('DJANGO_ADMIN_PASSWORD'))
+                                                   'admin_user@email.com',
+                                                   os.environ.get('DJANGO_ADMIN_PASSWORD'))
     else:
         admin_user = User.objects.get(username=os.environ.get('DJANGO_ADMIN_USERNAME'))
 
     if not User.objects.filter(username=os.environ.get('DJANGO_USERNAME')).exists():
         user = User.objects.create_superuser(os.environ.get('DJANGO_USERNAME'),
-                                      'user@email.com',
-                                      os.environ.get('DJANGO_PASSWORD'))
+                                             'user@email.com',
+                                             os.environ.get('DJANGO_PASSWORD'))
     else:
         user = User.objects.get(username=os.environ.get('DJANGO_USERNAME'))
 
