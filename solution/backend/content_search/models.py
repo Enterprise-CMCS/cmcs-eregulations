@@ -41,7 +41,9 @@ class ContentIndexQuerySet(models.QuerySet):
                 search_query,
                 start_sel='<span class="search-highlight">',
                 stop_sel='</span>',
-                config='english'
+                min_words=30,
+                config='english',
+                fragment_delimiter='...'
             ),
             document_name_headline=SearchHeadline(
                 "doc_name_string",
@@ -49,7 +51,18 @@ class ContentIndexQuerySet(models.QuerySet):
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 config='english',
-                highlight_all=True
+                min_words=30,
+                highlight_all=True,
+                fragment_delimiter='...'
+            ),
+            content_headline=SearchHeadline(
+                "content",
+                search_query,
+                start_sel="<span class='search-highlight'>",
+                stop_sel="</span>",
+                config='english',
+                min_words=30,
+                fragment_delimiter='...'
             ),
         ).order_by('-rank')
 

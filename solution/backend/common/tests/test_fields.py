@@ -1,8 +1,10 @@
 import unittest
 
+import pytest
 from django.core.exceptions import ValidationError
 
 from common.fields import VariableDateField
+from file_manager.models import Subject
 
 
 class VariableDateFieldTest(unittest.TestCase):
@@ -43,6 +45,30 @@ class VariableDateFieldTest(unittest.TestCase):
                 value["error_message"],
                 str(context.exception),
             )
+
+
+def clean_up():
+    Subject.objects.all().delete()
+
+
+def set_up_subjects():
+    clean_up()
+    Subject.objects.get_or_create(full_name="3test_subject_full", short_name="2test_subject_short", abbreviation='1abvr')
+
+
+@pytest.mark.django_db
+def test_combined_sort():
+    set_up_subjects()
+    s = Subject.objects.first()
+    assert s.combined_sort == '00000002test_subject_short'
+    s.short_name = ''
+    s.save()
+    s = Subject.objects.first()
+    assert s.combined_sort == '00000001abvr'
+    s.abbreviation = ''
+    s.save()
+    s = Subject.objects.first()
+    assert s.combined_sort == '00000003test_subject_full'
 
 
 if __name__ == '__main__':

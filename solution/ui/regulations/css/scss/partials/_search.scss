@@ -54,6 +54,15 @@
 
             .resources-results-content {
                 @include common-results-styles;
+
+                .result {
+                    &__link {
+                        a {
+                            text-decoration: none;
+                            display: block;
+                        }
+                    }
+                }
             }
 
             .search-results-count {
