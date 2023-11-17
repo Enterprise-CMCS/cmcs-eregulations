@@ -61,8 +61,8 @@ const props = defineProps({
         default: false,
     },
     hasEditableJobCode: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     }
 });
 

@@ -23,8 +23,8 @@ defineProps({
         default: () => {},
     },
     hasEditableJobCode: {
-      type: Boolean,
-      default: false,
+        type: Boolean,
+        default: false,
     },
 });
 

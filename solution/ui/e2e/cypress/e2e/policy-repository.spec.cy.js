@@ -132,7 +132,6 @@ describe("Policy Repository", () => {
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
         cy.getPolicyDocs({ username, password })
-
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
         cy.get(".related-sections")
