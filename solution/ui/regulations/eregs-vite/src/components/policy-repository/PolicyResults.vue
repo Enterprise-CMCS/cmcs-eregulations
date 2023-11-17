@@ -65,8 +65,8 @@ const resultLinkLabel = (item) => {
 };
 
 const editUrl = (doc) => {
-    const customUrl = process.env.CUSTOM_URL || '';
-    const baseUrl = customUrl === 'prod' ? '' : customUrl;
+    const stage_env = process.env.STAGE_ENV	 || '';
+    const baseUrl = stage_env === 'prod' ? '' : stage_env;
     return `${baseUrl}/v3/content-search/resource/${doc.id}`;
 };
 </script>
