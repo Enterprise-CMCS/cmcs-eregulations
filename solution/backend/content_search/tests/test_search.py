@@ -170,4 +170,15 @@ class SearchTest(TestCase):
         self.login()
         response = self.client.get("/v3/content-search/?&q='dummy'")
         data = get_paginated_data(response)
-        self.assertTrue("dummy" in data['results'][0]['content_headline'])
+        # Checks the summary has the content
+        self.assertTrue("dummy" in data['results'][0]['summary_headline']
+                        and '<span ' in data['results'][0]['summary_headline'])
+        response = self.client.get("/v3/content-search/?&q='containing test information'")
+        data = get_paginated_data(response)
+        # Checks that the summary is the headline
+        self.assertTrue("containing" in data['results'][0]['summary_headline']
+                        and "<span" in data['results'][0]['summary_headline'])
+        response = self.client.get("/v3/content-search/?&q='unknown'")
+        data = get_paginated_data(response)
+        # There is no headline that populated, defaults to description
+        self.assertEqual("The cold doesnt bother me anyway", data['results'][0]['summary_headline'])
