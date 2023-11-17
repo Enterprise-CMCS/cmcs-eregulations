@@ -376,8 +376,8 @@ jobs:
         with:
           parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
             /eregulations/http/password = CYPRESS_TEST_PASSWORD,
-            /eregulations/http/admin_test_user = CYPRESS_ADMIN_TEST_USERNAME,
-            /eregulations/http/admin_test_password = CYPRESS_ADMIN_TEST_PASSWORD"
+            /eregulations/http/reader_user = CYPRESS_READER_USERNAME,
+            /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
           withDecryption: "true" # defaults to true
       # Setup node environment
       - name: Setup Node
