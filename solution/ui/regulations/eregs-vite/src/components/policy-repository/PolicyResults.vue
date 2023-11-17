@@ -63,7 +63,6 @@ const resultLinkLabel = (item) => {
         fileTypeButton ?? ""
     }`;
 };
-
 </script>
 
 <template>
@@ -86,7 +85,7 @@ const resultLinkLabel = (item) => {
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    :href="{apiUrl}/v3/content-search/resource/${doc.id}"
+                    :href="apiUrl + 'content-search/resource/' + doc.id "
                 >
                     Edit
                     <i class="fas fa-edit"></i>
