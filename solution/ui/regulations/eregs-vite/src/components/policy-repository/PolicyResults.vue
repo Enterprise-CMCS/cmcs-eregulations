@@ -64,11 +64,6 @@ const resultLinkLabel = (item) => {
     }`;
 };
 
-const editUrl = (doc) => {
-    const stage_env = process.env.STAGE_ENV	 || '';
-    const baseUrl = stage_env === 'prod' ? '' : stage_env;
-    return `${baseUrl}/v3/content-search/resource/${doc.id}`;
-};
 </script>
 
 <template>
@@ -91,7 +86,7 @@ const editUrl = (doc) => {
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    :href="editUrl(doc)"
+                    :href="{apiUrl}/v3/content-search/resource/${doc.id}"
                 >
                     Edit
                     <i class="fas fa-edit"></i>
