@@ -102,7 +102,7 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}*"
 
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
