@@ -106,10 +106,10 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         # Extract relevant jobcode information
         relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
         group_mapping = {
-            "EREGS_ADMIN": "e-Regs-Admin",
-            "EREGS_MANAGER": "e-Regs-Manager",
-            "EREGS_EDITOR": "e-Regs-Editor",
-            "EREGS_READER": "e-Regs-Reader",
+            "EREGS_ADMIN": "EREGS-ADMIN",
+            "EREGS_MANAGER": "EREGS-MANAGER",
+            "EREGS_EDITOR": "EREGS-EDITOR",
+            "EREGS_READER": "EREGS-READER"
         }
 
         groups_to_add = [group_mapping.get(jobcode) for jobcode in relevant_jobcodes if jobcode in group_mapping]

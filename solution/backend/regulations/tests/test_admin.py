@@ -50,8 +50,8 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.user = User.objects.create(username='test_user', email='test@example.com')
 
         # Create real Group instances
-        group_admin = Group.objects.create(name='e-Regs-Admin')
-        group_editor = Group.objects.create(name='e-Regs-Editor')
+        group_admin = Group.objects.create(name='EREGS-ADMIN')
+        group_editor = Group.objects.create(name='EREGS-EDITOR')
 
         # Create a list of groups to add to the user
         groups_to_add = [group_admin, group_editor]
@@ -65,8 +65,8 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(updated_user.is_active)
 
         # Ensure the user is associated with the correct groups
-        self.assertTrue(updated_user.groups.filter(name='e-Regs-Admin').exists())
-        self.assertTrue(updated_user.groups.filter(name='e-Regs-Editor').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS-ADMIN').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS-EDITOR').exists())
 
 
 if __name__ == '__main':
