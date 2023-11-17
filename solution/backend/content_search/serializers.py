@@ -27,7 +27,7 @@ class ContentSearchSerializer(ContentListSerializer, ):
         if check_string in obj.description_headline:
             return obj.description_headline
         elif obj.content and check_string in obj.content_headline:
-            return obj.content_headline
+            return "..." + obj.content_headline + "..."
         else:
             return obj.summary_string
 
