@@ -141,12 +141,15 @@ describe("Policy Repository", () => {
         cy.get(".result__link")
             .eq(0)
             .find("a")
-            .should("not.include.text", "Download");
+            .should("not.include.text", "Download")
+            .and("have.class", "external");
         cy.get(".result__link")
             .eq(1)
             .should("include.text", "Download")
+            .find("a")
+            .should("not.have.class", "external")
             .find(
-                "a span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
+                "span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
             )
             .should("include.text", "Download MSG");
 
