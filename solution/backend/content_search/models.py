@@ -62,7 +62,6 @@ class ContentIndexQuerySet(models.QuerySet):
                 stop_sel="</span>",
                 config='english',
                 min_words=30,
-                highlight_all=True,
                 fragment_delimiter='...'
             ),
         ).order_by('-rank')
