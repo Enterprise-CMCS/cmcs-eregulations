@@ -27,4 +27,7 @@ def handler(self, *args, **options):
         user = User.objects.get(username=os.environ.get('DJANGO_USERNAME'))
 
     admin_user.groups.set([e_regs_admin_group])
+    print(f"Admin user added to group: {e_regs_admin_group.name}")
+
     user.groups.set([e_regs_reader_group])
+    print(f"reader user added to group: {e_regs_admin_group.name}")
