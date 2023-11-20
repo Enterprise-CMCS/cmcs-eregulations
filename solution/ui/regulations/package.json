@@ -1,6 +1,7 @@
 {
   "name": "regulations",
   "description": "",
+  "type": "module",
   "scripts": {
     "test-vue": "vitest --environment jsdom",
     "test-vue-coverage": "vitest --environment jsdom run --coverage",
