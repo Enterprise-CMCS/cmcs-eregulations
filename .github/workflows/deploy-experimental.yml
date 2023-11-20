@@ -106,7 +106,7 @@ jobs:
         run: |
           pushd solution/text-extractor
           npm install serverless -g
-          npm install
+          #npm install
           serverless deploy --stage dev${PR}
           popd
   deploy-django:
