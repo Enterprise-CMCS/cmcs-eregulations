@@ -4,5 +4,6 @@ python-magic
 mock
 moto
 pdf2image
+antiword
 textract
 ruff

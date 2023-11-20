@@ -13,7 +13,20 @@ class WordExractor(Extractor):
                   )
 
     def extract(self, file_path: str) -> str:
-        text = textract.process(file_path)
+        print(file_path)
+        import subprocess
+        import os
+        try:
+            # subprocess.call(['lowriter', '--headless', '--convert-to', 'docx', file_path])
+            catdoc_cmd = ['catdoc', '-w' , file_path]
+            text = ''
+            catdoc_process = subprocess.Popen(catdoc_cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            for line in catdoc_process.stdout:
+                text = text + line
+                print(line)
+        except Exception as e:
+            print(e)
+
         # cleans up weird characters
         line = re.sub(r'(\n)+', ' ', text.decode('utf-8').encode('ascii', 'ignore').decode('utf-8'))
         # replaces multiple spaces with single space
