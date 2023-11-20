@@ -61,7 +61,7 @@
     "vitest": "^0.31.0",
     "webpack": "^5.76.0",
     "whatwg-fetch": "^3.6.2",
-    "vite": "^4.5"
+    "vite": "^5.0"
   },
   "msw": {
     "workerDirectory": "msw"
