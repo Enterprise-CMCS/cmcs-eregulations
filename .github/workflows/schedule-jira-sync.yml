@@ -34,9 +34,11 @@ jobs:
           jira-username: ${{ secrets.JIRA_USERNAME }}
           jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
+          jira-issue-type: Task
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
           aws-severities: CRITICAL, HIGH, MEDIUM
+          is_jira_enterprise: true
           #assign-jira-ticket-to: VU6Q
           #auto-close: false
       - name: Alert Slack On Failure

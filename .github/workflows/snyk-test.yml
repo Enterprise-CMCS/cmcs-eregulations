@@ -48,12 +48,13 @@ jobs:
           uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.4
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
-              jira-token: ${{ secrets.JIRA_TOKEN_AT }}
-              jira-host: ${{ secrets.JIRA_HOST_NAME }}
+              jira-token: ${{ secrets.JIRA_TOKEN }}
+              jira-host: ${{ secrets.JIRA_HOST }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'
               jira-title-prefix: '[EREGCSC] - Snyk :'
+              jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
               is_jira_enterprise: true
               #assign-jira-ticket-to: ''
               scan-output-path: 'snyk_output.txt'
