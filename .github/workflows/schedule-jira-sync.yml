@@ -1,10 +1,8 @@
 name: Sync Security Hub findings and Jira issues
 on:
   workflow_dispatch: # for testing and manual runs
-  push:
-    branches: [ security-hub-update ]
-  # schedule:
-  #   - cron: "25 1 * * *" # daily at 6:25 am EST
+  schedule:
+    - cron: "25 1 * * *" # daily at 6:25 am EST
 permissions:
   id-token: write
 jobs:
@@ -18,7 +16,6 @@ jobs:
       name: ${{ matrix.environment }}
     name: Run sync
     runs-on: ubuntu-20.04
-    if: github.event_name == 'push'
     steps:
       - name: Check out repo
         uses: actions/checkout@v3
