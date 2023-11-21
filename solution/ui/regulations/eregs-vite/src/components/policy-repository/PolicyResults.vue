@@ -41,7 +41,8 @@ const needsBar = (item) =>
     item.date_string &&
     item.doc_name_string;
 
-const resultLinkClasses = () => ({
+const resultLinkClasses = (doc) => ({
+    "external": doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
 

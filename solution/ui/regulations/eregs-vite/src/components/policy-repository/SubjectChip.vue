@@ -8,12 +8,17 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    title: {
+        type: String,
+        required: true,
+    },
 });
 </script>
 
 <template>
     <router-link
         class="subject__chip"
+        :title="title"
         :data-testid="`add-subject-chip-${subjectId}`"
         :to="{
             name: 'policy-repository',
