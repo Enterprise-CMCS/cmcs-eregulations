@@ -12,7 +12,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName, } from "utilities/filters";
+import { getSubjectName } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -63,7 +63,7 @@ const props = defineProps({
     hasEditableJobCode: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 // Router and Route

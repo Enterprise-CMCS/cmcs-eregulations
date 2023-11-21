@@ -42,7 +42,7 @@ const needsBar = (item) =>
     item.doc_name_string;
 
 const resultLinkClasses = (doc) => ({
-    "external": doc.resource_type === "external",
+    external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -86,7 +86,7 @@ const resultLinkLabel = (item) => {
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    :href="apiUrl + 'content-search/resource/' + doc.id "
+                    :href="apiUrl + 'content-search/resource/' + doc.id"
                 >
                     Edit
                     <i class="fas fa-edit"></i>

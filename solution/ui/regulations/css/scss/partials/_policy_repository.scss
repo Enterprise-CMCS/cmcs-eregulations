@@ -335,7 +335,9 @@
             border-bottom: 1px solid $border_color;
             position: relative;
             a.edit-button {
-                position: absolute; top: 0; right: 0;
+                position: absolute;
+                top: 0;
+                right: 0;
                 text-decoration: none;
             }
             .document__info-block {
