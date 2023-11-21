@@ -54,7 +54,7 @@ jobs:
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'
               jira-title-prefix: '[EREGCSC] - Snyk :'
-              jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
+              jira-custom-field-key-value: '{ "customfield_10100": "EREGCSC-1989" }'
               is_jira_enterprise: true
               #assign-jira-ticket-to: ''
               scan-output-path: 'snyk_output.txt'
