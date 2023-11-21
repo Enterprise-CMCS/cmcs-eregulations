@@ -49,7 +49,7 @@ jobs:
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
               jira-token: ${{ secrets.JIRA_TOKEN }}
-              jira-host: ${{ secrets.JIRA_HOST }}
+              jira-host: https://jiraent.cms.gov
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'
