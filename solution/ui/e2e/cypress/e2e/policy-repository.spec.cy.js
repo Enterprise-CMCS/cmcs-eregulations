@@ -190,6 +190,9 @@ describe("Policy Repository", () => {
             "include",
             "/policy-repository?type=internal&subjects=3&q=test"
         );
+        cy.get(`a[data-testid=add-subject-chip-4]`)
+            .should("have.attr", "title")
+            .and("include", "Adult Day Health");
         cy.get(`a[data-testid=add-subject-chip-4]`).click({
             force: true,
         });

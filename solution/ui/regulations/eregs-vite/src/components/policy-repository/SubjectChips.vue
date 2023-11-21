@@ -19,6 +19,7 @@ const props = defineProps({
             :key="subject.id + 'x' + i"
             :subject-id="subject.id"
             :subject-name="getSubjectName(subject)"
+            :title="subject.full_name"
         />
     </div>
 </template>
