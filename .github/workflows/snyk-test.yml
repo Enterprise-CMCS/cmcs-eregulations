@@ -49,7 +49,7 @@ jobs:
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
               jira-token: ${{ secrets.JIRA_TOKEN }}
-              jira-host: jiraent.cms.gov
+              jira-host: 'jiraent.cms.gov'
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'
@@ -60,8 +60,8 @@ jobs:
               scan-output-path: 'snyk_output.txt'
               scan-type: 'snyk'
               
-        - name: Alert Slack On Failure
-          if: failure()
-          run: |
-            curl -X POST -H 'Content-type: application/json' --data '{"text": "Failure completing scheduled Snyk Scan.","blocks":[{"type": "section","text":{"type": "mrkdwn","text": "The nightly scheduled Snyk Scan for Job: https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/runs/${{ github.run_id  }} has failed to complete successfully "}}]}' ${{ secrets.DEV_BOTS_SLACK_WEBHOOK }}
+        # - name: Alert Slack On Failure
+        #   if: failure()
+        #   run: |
+        #     curl -X POST -H 'Content-type: application/json' --data '{"text": "Failure completing scheduled Snyk Scan.","blocks":[{"type": "section","text":{"type": "mrkdwn","text": "The nightly scheduled Snyk Scan for Job: https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/runs/${{ github.run_id  }} has failed to complete successfully "}}]}' ${{ secrets.DEV_BOTS_SLACK_WEBHOOK }}
     
