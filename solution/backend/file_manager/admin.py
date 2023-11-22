@@ -75,6 +75,22 @@ class UploadedFileAdmin(BaseAdmin):
         key = obj.get_key()
         result = get_upload_link(key)
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
+        result = get_upload_link(key + 'x')
+        from tempfile import TemporaryDirectory
+        import os
+        print('bl')
+        with TemporaryDirectory() as temp_dir:
+            f_p = os.path.join(temp_dir, str(obj.uid)+'.doc')
+            with open(f_p, 'wb') as f:
+                f.write(file.file.getvalue())
+                f.close()
+            a = ContentIndex.objects.get(file=obj)
+            # f = open(f_p.split('.')[0] + '.txt')
+            # a.content = f.readlines()
+            import textract
+            a.content= textract.process(f_p)
+            a.save()
+
 
     def del_file(self, obj):
         s3_client = establish_client('s3')

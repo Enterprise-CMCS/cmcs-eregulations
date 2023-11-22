@@ -13,17 +13,9 @@ class WordExractor(Extractor):
                   )
 
     def extract(self, file_path: str) -> str:
-        print(file_path)
-        import subprocess
-        import os
+
         try:
-            # subprocess.call(['lowriter', '--headless', '--convert-to', 'docx', file_path])
-            catdoc_cmd = ['catdoc', '-w' , file_path]
-            text = ''
-            catdoc_process = subprocess.Popen(catdoc_cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-            for line in catdoc_process.stdout:
-                text = text + line
-                print(line)
+            text = textract.process(file_path)
         except Exception as e:
             print(e)
 
