@@ -1,6 +1,6 @@
 <script setup>
 import { provide, reactive, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router";
 
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";

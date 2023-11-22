@@ -1,7 +1,7 @@
 import path from "path";
 import fg from "fast-glob";
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue2";
+import vue from "@vitejs/plugin-vue";
 import { VuetifyResolver } from "unplugin-vue-components/resolvers";
 import Components from "unplugin-vue-components/vite";
 import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
