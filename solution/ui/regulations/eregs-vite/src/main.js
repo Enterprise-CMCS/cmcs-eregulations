@@ -20,7 +20,7 @@ let { isAuthenticated } = mountEl.dataset;
 isAuthenticated = isAuthenticated === "True";
 
 const app = createApp(App, { ...mountEl.dataset });
-const vuetifyApp = Vuetify.createVuetify({
+const vuetifyApp = createVuetify({
     theme: {
         themes: {
             light: {
