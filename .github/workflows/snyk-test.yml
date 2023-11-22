@@ -44,21 +44,24 @@ jobs:
           env:
             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-        - name: use the custom github  action to parse Snyk output
-          uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.1.4
-          with:
-              jira-username: ${{ secrets.JIRA_USERNAME }}
-              jira-token: ${{ secrets.JIRA_TOKEN }}
-              jira-host: 'jiraent.cms.gov'
-              jira-project-key: 'EREGCSC'
-              jira-issue-type: 'Bug'
-              jira-labels: 'eRegs,snyk'
-              jira-title-prefix: '[EREGCSC] - Snyk :'
-              is_jira_enterprise: true
-              jira-custom-field-key-value: '{ "customfield_10100": "EREGCSC-1989" }'
-              assign-jira-ticket-to: 'TTHO'
-              scan-output-path: 'snyk_output.txt'
-              scan-type: 'snyk'
+         - name: cat
+          run: cat snyk_output.txt
+        
+        # - name: use the custom github  action to parse Snyk output
+        #   uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.1.4
+        #   with:
+        #       jira-username: ${{ secrets.JIRA_USERNAME }}
+        #       jira-token: ${{ secrets.JIRA_TOKEN }}
+        #       jira-host: 'jiraent.cms.gov'
+        #       jira-project-key: 'EREGCSC'
+        #       jira-issue-type: 'Bug'
+        #       jira-labels: 'eRegs,snyk'
+        #       jira-title-prefix: '[EREGCSC] - Snyk :'
+        #       is_jira_enterprise: true
+        #       jira-custom-field-key-value: '{ "customfield_10100": "EREGCSC-1989" }'
+        #       assign-jira-ticket-to: 'TTHO'
+        #       scan-output-path: 'snyk_output.txt'
+        #       scan-type: 'snyk'
               
         # - name: Alert Slack On Failure
         #   if: failure()
