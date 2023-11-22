@@ -17,7 +17,7 @@ const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
 
 const app = createApp(App, { ...mountEl.dataset });
-const vuetifyApp = Vuetify.createVuetify({
+const vuetifyApp = createVuetify({
     theme: {
         themes: {
             light: {
