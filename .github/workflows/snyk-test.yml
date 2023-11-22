@@ -44,11 +44,8 @@ jobs:
           env:
             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-        - name: list
-          run: cat snyk_output.txt
-          
         - name: use the custom github  action to parse Snyk output
-          uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.9
+          uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.0
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
               jira-token: ${{ secrets.JIRA_TOKEN }}
