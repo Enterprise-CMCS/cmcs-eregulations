@@ -20,8 +20,16 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
 
 class ContentSearchSerializer(ContentListSerializer, ):
     document_name_headline = HeadlineField()
-    summary_headline = HeadlineField()
-    content_headline = HeadlineField()
+    summary_headline = serializers.SerializerMethodField()
+
+    def get_summary_headline(self, obj):
+        check_string = "search-highlight"
+        if check_string in obj.description_headline:
+            return obj.description_headline
+        elif obj.content and check_string in obj.content_headline:
+            return "..." + obj.content_headline + "..."
+        else:
+            return obj.summary_string
 
 
 class ContentUpdateSerializer(serializers.Serializer):

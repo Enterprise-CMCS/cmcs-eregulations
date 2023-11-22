@@ -2,6 +2,7 @@
   "name": "eregs-vite",
   "private": true,
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build --emptyOutDir",
@@ -11,15 +12,15 @@
   "dependencies": {
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
-    "vue": "^2.7.14",
+    "vue": "^2.7.15",
     "vue-router": "^3.6.5",
-    "vue-template-compiler": "^2.7.14",
+    "vue-template-compiler": "^2.7.15",
     "vuetify": "^2.7.1"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue2": "^2.2.0",
+    "@vitejs/plugin-vue2": "^2.3.1",
     "sass": "~1.32",
     "unplugin-vue-components": "^0.25.0",
-    "vite": "^4.5"
+    "vite": "^5.0"
   }
 }

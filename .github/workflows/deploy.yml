@@ -81,7 +81,6 @@ jobs:
         run: |
           pushd solution/text-extractor
           npm install serverless -g
-          npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
       - name: deploy regulations site server
