@@ -5,6 +5,7 @@
     },
     "extends": [
         "plugin:vue/recommended",
+        "plugin:vuetify/base",
         "airbnb-base",
         "prettier",
         "plugin:storybook/recommended"
@@ -13,10 +14,21 @@
         "ecmaVersion": 11,
         "sourceType": "module"
     },
-    "plugins": ["vue"],
+    "plugins": [
+        "vue",
+        "vuetify"
+    ],
     "rules": {
         "eqeqeq": "off",
-        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "no-console": [
+            "error",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
         "no-nested-ternary": "off",
         "prefer-template": "off",
         "vue/order-in-components": "off",

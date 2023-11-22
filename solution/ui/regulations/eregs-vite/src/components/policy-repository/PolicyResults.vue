@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 import _isEmpty from "lodash/isEmpty";
 

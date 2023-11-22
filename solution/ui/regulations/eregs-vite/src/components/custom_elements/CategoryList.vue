@@ -1,8 +1,7 @@
 <template>
     <v-list class="category-list">
-        <template v-for="item in listItems">
+        <template v-for="item in listItems" :key="item.id">
             <v-list-item
-                :key="item.id"
                 :data-value="item.name"
                 class="category-list-item"
                 @click="clickMethod"

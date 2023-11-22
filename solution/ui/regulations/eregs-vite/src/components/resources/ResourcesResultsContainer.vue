@@ -25,9 +25,9 @@
                         <v-list class="sort-options-list">
                             <template
                                 v-for="(sortOption, index) in sortOptions"
+                                :key="sortOption.value + index"
                             >
                                 <v-list-item
-                                    :key="sortOption.value + index"
                                     :data-value="sortOption.value"
                                     :disabled="sortOption.disabled"
                                     :inactive="sortOption.disabled"
@@ -202,7 +202,7 @@ export default {
             return getCurrentPageResultsRange({
                 count: this.count,
                 page: this.page,
-                pageSize: this.pageSize
+                pageSize: this.pageSize,
             });
         },
         regulationsSearchUrl() {

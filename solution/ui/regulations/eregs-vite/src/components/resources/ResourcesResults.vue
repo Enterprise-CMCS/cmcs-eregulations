@@ -1,8 +1,8 @@
 <template>
     <div class="resources-results">
         <slot name="empty-state"></slot>
-        <template v-for="(item, idx) in results">
-            <ResultsItem :key="item.created_at + idx">
+        <template v-for="(item, idx) in results" :key="item.created_at + idx">
+            <ResultsItem>
                 <template #labels>
                     <CategoryLabel
                         :name="
@@ -87,5 +87,4 @@ export default {
         }
     }
 }
-
 </style>
