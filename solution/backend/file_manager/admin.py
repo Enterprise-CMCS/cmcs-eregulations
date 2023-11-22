@@ -92,7 +92,7 @@ class UploadedFileAdmin(BaseAdmin):
                 a.content= textract.process(f_p)
                 a.save()
             except Exception as e:
-            from rest_framework.response import Response
+                from rest_framework.response import Response
                 return Response({'msg': e})
 
 
