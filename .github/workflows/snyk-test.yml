@@ -45,7 +45,7 @@ jobs:
             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         
         - name: use the custom github  action to parse Snyk output
-          uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.4
+          uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.4.1
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
               jira-token: ${{ secrets.JIRA_TOKEN }}
@@ -56,7 +56,7 @@ jobs:
               jira-title-prefix: '[EREGCSC] - Snyk :'
               is_jira_enterprise: 'true'
               jira-custom-field-key-value: '{ "customfield_10100": "EREGCSC-1989" }'
-              assign-jira-ticket-to: 'TTHO'
+              assign-jira-ticket-to: ''
               scan-output-path: 'snyk_output.txt'
               scan-type: 'snyk'
               
