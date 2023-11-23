@@ -48,7 +48,7 @@ jobs:
           uses: Enterprise-CMCS/macfc-security-scan-report@v2.8.4
           with:
               jira-username: ${{ secrets.JIRA_USERNAME }}
-              jira-token: ${{ secrets.JIRA_TOKEN }}
+              jira-token: ${{ secrets.JIRA_TOKEN_FOR_SNYK }}
               jira-host: 'jiraent.cms.gov'
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
