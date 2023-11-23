@@ -52,7 +52,7 @@ jobs:
               jira-host: 'jiraent.cms.gov'
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
-              jira-labels: 'eRegs,snyk'
+              jira-labels: [ 'eRegs', 'snyk' ]
               jira-title-prefix: '[EREGCSC] - Snyk :'
               is_jira_enterprise: 'true'
               jira-custom-field-key-value: '{ "customfield_10100": "EREGCSC-1989" }'
