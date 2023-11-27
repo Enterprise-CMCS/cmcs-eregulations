@@ -95,18 +95,6 @@
             margin-block-end: 1rem;
         }
 
-        .sticky-container {
-            padding-left: 1rem;
-            padding-right: 1rem;
-
-            @include screen-md {
-                position: sticky;
-                top: $header_height;
-                max-height: calc(100vh - 90px);
-                overflow-y: auto;
-            }
-        }
-
         .selections__container {
             .selections__list {
                 list-style: none;
