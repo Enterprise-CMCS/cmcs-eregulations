@@ -7,7 +7,7 @@ from .extractor import Extractor
 
 class BinaryExtractor(Extractor):
     file_types = (
-                  'doc'
+                  'doc',
                   )
 
     def extract(self, file_path: str) -> str:
@@ -23,7 +23,6 @@ class BinaryExtractor(Extractor):
                                r'\u1d79-\u1d9a,\u1e00-\u1eff,\u2090-\u2094,\u2184-\u2184,\u2488-\u2490,\u271d-\u271d,' +
                                r'\u2c60-\u2c7c,\u2c7e-\u2c7f,\ua722-\ua76f,\ua771-\ua787,\ua78b-\ua78c,\ua7fb-\ua7ff,' +
                                r'\ufb00-\ufb06,\x20-\x7E]', r'*', data))
-                print(data)
                 p = re.compile(r'\*{300,433}((?:[^*]|\*(?!\*{14}))+?)\*{15,}')
                 result = (re.findall(p, data))
                 result = result[0].replace('*', '')
