@@ -54,6 +54,7 @@
         padding-right: 0px;
 
         @include screen-md {
+            padding-right: 1rem;
             border-right: 2px solid $border_color;
             border-bottom: none;
         }
@@ -81,6 +82,7 @@
     .sidebar__filters {
         flex: 1;
         margin-bottom: 1rem;
+        width: 100%;
 
         @mixin filter-borders {
             border: 2px solid $border_color;
