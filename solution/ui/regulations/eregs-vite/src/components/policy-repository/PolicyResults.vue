@@ -22,6 +22,10 @@ defineProps({
         type: Object,
         default: () => {},
     },
+    hasEditableJobCode: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const $route = useRoute();
@@ -38,7 +42,7 @@ const needsBar = (item) =>
     item.doc_name_string;
 
 const resultLinkClasses = (doc) => ({
-    "external": doc.resource_type === "external",
+    external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -78,6 +82,16 @@ const resultLinkLabel = (item) => {
             :key="doc.uid"
             class="doc-list__document"
         >
+            <template #actions>
+                <a
+                    v-if="hasEditableJobCode"
+                    class="edit-button"
+                    :href="apiUrl + 'content-search/resource/' + doc.id"
+                >
+                    Edit
+                    <i class="fas fa-edit"></i>
+                </a>
+            </template>
             <template #labels>
                 <CategoryLabel
                     v-if="!_isEmpty(doc.document_type)"
