@@ -9,7 +9,6 @@ class WordExractor(Extractor):
     file_types = (
                   'docx',
                   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                  'doc'
                   )
 
     def extract(self, file_path: str) -> str:

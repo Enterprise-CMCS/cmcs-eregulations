@@ -6,3 +6,4 @@ from .extractor import Extractor as Extractor
 from .pdf import PdfExtractor as PdfExtractor
 from .text import TextExtractor as TextExtractor
 from .word import WordExractor as WordExractor
+from .binary import BinaryExtractor as BinaryExtractor
