@@ -172,6 +172,7 @@ describe("Policy Repository", () => {
         cy.get('.edit-button').first().click({
             force: true,
         });
+        cy.wait(2000);
         cy.url().should("include", "/admin/resources/supplementalcontent/610/change/");
     });
     it("should update the URL when a subject chip is clicked", () => {
