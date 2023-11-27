@@ -5,9 +5,14 @@ import { useRoute } from "vue-router/composables";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-import { getFileNameSuffix } from "utilities/utils";
+import {
+    getFileNameSuffix,
+    DOCUMENT_TYPES,
+    DOCUMENT_TYPES_MAP,
+} from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
@@ -38,7 +43,7 @@ const needsBar = (item) =>
     item.doc_name_string;
 
 const resultLinkClasses = (doc) => ({
-    "external": doc.resource_type === "external",
+    external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -79,6 +84,11 @@ const resultLinkLabel = (item) => {
             class="doc-list__document"
         >
             <template #labels>
+                <DocTypeLabel
+                    v-if="!_isEmpty(doc.resource_type)"
+                    :icon-type="doc.resource_type"
+                    :doc-type="DOCUMENT_TYPES_MAP[doc.resource_type]"
+                />
                 <CategoryLabel
                     v-if="!_isEmpty(doc.document_type)"
                     :name="doc.document_type.name"

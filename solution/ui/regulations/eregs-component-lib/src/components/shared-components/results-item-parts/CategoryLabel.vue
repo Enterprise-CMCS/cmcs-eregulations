@@ -22,5 +22,3 @@ const labelClass = computed(() =>
         {{ name }}
     </div>
 </template>
-
-<style></style>
