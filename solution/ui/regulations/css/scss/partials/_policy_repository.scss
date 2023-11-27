@@ -177,15 +177,6 @@
                 flex-direction: column;
                 position: relative;
 
-                label[for="subjectReduce"] {
-                    position: absolute;
-                    left: 0.5rem;
-                    right: auto;
-                    color: #0009;
-                    font-size: 14px;
-                    top: calc(50% - 0.625rem);
-                }
-
                 input#subjectReduce {
                     @include filter-borders;
 
