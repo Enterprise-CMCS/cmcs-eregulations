@@ -75,7 +75,6 @@ class UploadedFileAdmin(BaseAdmin):
         key = obj.get_key()
         result = get_upload_link(key)
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
-        result = get_upload_link(key + 'x')
 
     def del_file(self, obj):
         s3_client = establish_client('s3')
