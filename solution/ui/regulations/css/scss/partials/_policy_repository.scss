@@ -178,7 +178,12 @@
                 position: relative;
 
                 label[for="subjectReduce"] {
+                    position: absolute;
+                    left: 0.5rem;
+                    right: auto;
+                    color: #0009;
                     font-size: 14px;
+                    top: calc(50% - 0.625rem);
                 }
 
                 input#subjectReduce {
@@ -202,7 +207,7 @@
                 .subjects__filter-reset {
                     @include common-remove-btn-styles;
 
-                    top: 50%;
+                    top: calc(50% - 0.625rem);
                     right: -3px;
                     transform: translate(-50%);
                     position: absolute;
