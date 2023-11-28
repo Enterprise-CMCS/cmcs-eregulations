@@ -31,7 +31,7 @@ class S3Backend(FileBackend):
         except Exception as e:
             raise BackendInitException(f"failed to initialize AWS client: {str(e)}")
 
-    def get_file(self, temp_directory: str, uri: str) -> bytes:
+    def get_file(self, temp_directory: str, uri: str) -> str:
         try:
             file_path = os.path.join(temp_directory, uri.split('/')[-1])
             try:
