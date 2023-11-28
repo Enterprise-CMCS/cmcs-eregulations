@@ -12,8 +12,6 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
-import logging
-logger = logging.getLogger(__name__)
 
 from .models import (
     RegulationLinkConfiguration,
