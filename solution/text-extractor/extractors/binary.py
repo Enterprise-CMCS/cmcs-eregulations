@@ -23,10 +23,6 @@ class BinaryExtractor(Extractor):
                             r'\u2c60-\u2c7c,\u2c7e-\u2c7f,\ua722-\ua76f,\ua771-\ua787,\ua78b-\ua78c,\ua7fb-\ua7ff,' +
                             r'\ufb00-\ufb06,\x20-\x7E]', r'*', data))
             p = re.compile(r'\*{300,433}((?:[^*]|\*(?!\*{14}))+?)\*{15,}')
-            print(data)
             result = (re.findall(p, data))
-            print(result)
             result = result[0].replace('*', '')
-            print(result)
-
-        return result
+            return str(result)
