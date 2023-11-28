@@ -16,5 +16,5 @@ class FileBackend:
     def __init__(self, config: dict):
         pass
 
-    def get_file(self, uri: str) -> bytes:
+    def get_file(self, temp_directory: str, uri: str) -> str:
         raise NotImplementedError("get_file function not implemented")

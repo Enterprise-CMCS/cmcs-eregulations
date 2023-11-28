@@ -8,7 +8,7 @@ from .extractor import Extractor
 
 
 class PdfExtractor(Extractor):
-    file_types = ("application/pdf",)
+    file_types = ("application/pdf", 'pdf')
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
@@ -23,9 +23,9 @@ class PdfExtractor(Extractor):
     def _get_aws_arguments(self, config: dict) -> dict:
         try:
             return {
-                "aws_access_key_id": config["textract"]["aws_access_key_id"],
-                "aws_secret_access_key": config["textract"]["aws_secret_access_key"],
-                "region_name": config["textract"]["aws_region"],
+                "aws_access_key_id": config["aws"]["aws_access_key_id"],
+                "aws_secret_access_key": config["aws"]["aws_secret_access_key"],
+                "region_name": config["aws"]["aws_region"],
             }
         except KeyError:
             return {
@@ -40,11 +40,14 @@ class PdfExtractor(Extractor):
             fmt="jpeg",
         )
 
-    def extract(self, file: bytes) -> str:
+    def extract(self, file_path: str) -> str:
         text = ""
         with TemporaryDirectory() as temp_dir:
             try:
-                pages = self._convert_to_images(file, temp_dir)
+                with open(file_path, 'rb') as pdf_file:
+                    pdf = pdf_file.read()
+                    pages = self._convert_to_images(pdf, temp_dir)
+
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")
             for page in pages:

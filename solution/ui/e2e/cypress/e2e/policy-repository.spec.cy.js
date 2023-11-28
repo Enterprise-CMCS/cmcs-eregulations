@@ -154,6 +154,16 @@ describe("Policy Repository", () => {
                 "span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
             )
             .should("include.text", "Download MSG");
+        cy.get(".doc-type__label")
+            .eq(0)
+            .should("include.text", " Public ")
+            .find("i")
+            .should("have.class", "fa-users");
+        cy.get(".doc-type__label")
+            .eq(1)
+            .should("include.text", " Internal ")
+            .find("i")
+            .should("have.class", "fa-key");
 
         cy.checkAccessibility();
     });
@@ -290,8 +300,7 @@ describe("Policy Repository", () => {
 
         cy.checkAccessibility();
 
-        cy.get("input#subjectReduce")
-            .type("{enter}", { force: true });
+        cy.get("input#subjectReduce").type("{enter}", { force: true });
 
         cy.url().should("include", "/policy-repository?subjects=1");
 
@@ -439,5 +448,37 @@ describe("Policy Repository Search", () => {
         cy.wait("@queriedFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
+    });
+
+    it("should have the correct public/internal label", () => {
+        cy.intercept("**/v3/content-search/?q=test**", {
+            fixture: "policy-docs.json",
+        }).as("queriedFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/policy-repository/search",
+        });
+        cy.visit("/policy-repository/search");
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.wait("@queriedFiles").then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+        });
+        cy.get(".doc-type__label")
+            .eq(0)
+            .should("include.text", " Public ")
+            .find("i")
+            .should("have.class", "fa-users");
+        cy.get(".doc-type__label")
+            .eq(1)
+            .should("include.text", " Internal ")
+            .find("i")
+            .should("have.class", "fa-key");
     });
 });
