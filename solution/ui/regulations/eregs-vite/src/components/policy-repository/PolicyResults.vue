@@ -7,7 +7,6 @@ import _isEmpty from "lodash/isEmpty";
 import { formatDate } from "utilities/filters";
 import {
     getFileNameSuffix,
-    DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
