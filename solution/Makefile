@@ -84,9 +84,10 @@ lint:
 	flake8;
 ruff:
 	docker-compose exec regulations ruff check .
+	docker-compose exec text-extractor ruff check .
 ruff-fix:
 	docker-compose exec regulations ruff --fix .
-
+	docker-compose exec text-extractor ruff --fix .
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000

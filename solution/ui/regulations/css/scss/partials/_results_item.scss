@@ -11,17 +11,30 @@
     line-height: 22px;
 }
 
+@mixin common-label-styles {
+    display: inline-block;
+    font-size: 11px;
+    width: fit-content;
+    border-radius: 3px;
+    padding: 2px 5px 3px;
+}
+
 .category-labels {
-    margin-bottom: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    .doc-type__label {
+        @include common-label-styles;
+
+        color: #FFF;
+        background: $mid_gray;
+    }
 
     .result-label {
-        display: inline-block;
-        font-size: 11px;
-        width: fit-content;
-        margin-right: 5px;
+        @include common-label-styles;
+
         background: #e3eef9;
-        border-radius: 3px;
-        padding: 2px 5px 3px;
 
         &.category-label {
             font-weight: 600;
@@ -33,11 +46,7 @@
     margin-bottom: 24px;
 
     .category-labels {
-        margin-bottom: 4px;
-
-        .category-label {
-            margin-bottom: 4px;
-        }
+        margin-bottom: 8px;
     }
 
     &__context {
@@ -118,6 +127,10 @@
 
 // resources page has different styles
 .resources-content-container {
+    .result .category-labels {
+        margin-bottom: 12px;
+    }
+
     .related-sections {
         margin-bottom: 40px;
         color: $mid_gray;

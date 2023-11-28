@@ -26,8 +26,8 @@ const EventCodes = {
 
 const DOCUMENT_TYPES = ["external", "internal"];
 const DOCUMENT_TYPES_MAP = {
-    external: "Public Resources",
-    internal: "Internal Resources",
+    external: "Public",
+    internal: "Internal",
 }
 
 const PARAM_MAP = {
