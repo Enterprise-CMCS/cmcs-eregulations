@@ -167,10 +167,6 @@
                 flex-direction: column;
                 position: relative;
 
-                label[for="subjectReduce"] {
-                    font-size: 14px;
-                }
-
                 input#subjectReduce {
                     @include filter-borders;
 
@@ -192,7 +188,7 @@
                 .subjects__filter-reset {
                     @include common-remove-btn-styles;
 
-                    top: 50%;
+                    top: calc(50% - 0.625rem);
                     right: -3px;
                     transform: translate(-50%);
                     position: absolute;
