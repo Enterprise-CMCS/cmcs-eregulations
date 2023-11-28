@@ -99,9 +99,9 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
 
-        # Determine group membership based on jobcodes and add the user to the groups
         jobcodes = claims.get("jobcodes")
         jobcodes_list = jobcodes.split(",")  # Split the jobcodes string into a list
+
         # Extract relevant jobcode information
         relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
 
@@ -109,6 +109,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         base_group_names = ["EREGS-ADMIN", "EREGS-MANAGER", "EREGS-EDITOR", "EREGS-READER"]
 
         # Replace underscores with hyphens and strip "-V" or "-P" suffix in relevant jobcodes for comparison
+        # ( Jobcodes on VAL will have an _V and on prod will have _P )
         relevant_jobcodes_with_hyphens = [re.sub(r'[-_](V|P)$', '', jobcode.replace("_", "-")) for jobcode in
                                           relevant_jobcodes]
 
@@ -127,6 +128,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         # Update user's first and last names
         user.first_name = claims.get("firstName", user.first_name)
         user.last_name = claims.get("lastName", user.last_name)
+
         # Check if there are any relevant jobcodes
         user.is_active = bool(relevant_jobcodes)
 
