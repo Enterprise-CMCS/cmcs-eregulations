@@ -17,6 +17,7 @@ class WebBackend(FileBackend):
             file_path = os.path.join(temp_directory, uri.split(r'/')[-1])
             file = open(file_path, 'wb')
             file.write(resp.content)
+            file.close()
             return file_path
         except requests.exceptions.RequestException as e:
             raise BackendException(f"GET request failed: {str(e)}")
