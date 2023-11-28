@@ -128,16 +128,14 @@ const resultLinkLabel = (item) => {
                 >
             </template>
             <template #link>
-                <h3>
-                    <a
-                        :href="getUrl(doc)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="document__link document__link--filename"
-                        :class="resultLinkClasses(doc)"
-                        v-html="resultLinkLabel(doc)"
-                    ></a>
-                </h3>
+                <a
+                    :href="getUrl(doc)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="document__link document__link--filename"
+                    :class="resultLinkClasses(doc)"
+                    v-html="resultLinkLabel(doc)"
+                ></a>
             </template>
             <template #snippet>
                 <div

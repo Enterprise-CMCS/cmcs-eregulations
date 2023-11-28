@@ -349,12 +349,12 @@
                     display: block;
                 }
 
-                &--view {
-                    font-size: $font-size-sm;
-                }
-
                 &--search {
                     font-weight: 400;
+                }
+
+                &--view {
+                    font-size: $font-size-sm;
                 }
             }
 
