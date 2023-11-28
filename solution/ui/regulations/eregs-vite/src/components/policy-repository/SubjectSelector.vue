@@ -133,10 +133,11 @@ const filterResetClick = () => {
             </template>
             <template v-else>
                 <form @submit.prevent>
-                    <label for="subjectReduce">Filter the subject list</label>
                     <input
                         id="subjectReduce"
                         v-model="state.filter"
+                        aria-label="Filter the subject list"
+                        placeholder="Filter the subject list"
                         type="text"
                     />
                     <button
