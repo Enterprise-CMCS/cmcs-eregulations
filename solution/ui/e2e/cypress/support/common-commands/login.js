@@ -12,3 +12,4 @@ export const eregsLogin = ({
         cy.get("#login-form").submit();
     });
 };
+

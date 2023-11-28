@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block body %}
+
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"
@@ -29,5 +30,6 @@
     data-statutes-url="{% url 'statutes' %}"
     data-host="{{ host }}"
     data-is-authenticated="{{ is_authenticated }}"
+    data-has-editable-job-code="{{ has_editable_job_code }}"
 ></div>
 {% endblock %}

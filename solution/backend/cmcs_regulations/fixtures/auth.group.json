@@ -3,7 +3,7 @@
     "model": "auth.group",
     "pk": 34,
     "fields": {
-        "name": "e-Regs-Admin",
+        "name": "EREGS-ADMIN",
         "permissions": [
             1,
             2,
@@ -176,7 +176,7 @@
     "model": "auth.group",
     "pk": 35,
     "fields": {
-        "name": "e-Regs-Manager",
+        "name": "EREGS-MANAGER",
         "permissions": [
             4,
             12,
@@ -259,7 +259,7 @@
     "model": "auth.group",
     "pk": 36,
     "fields": {
-        "name": "e-regs-Reader",
+        "name": "EREGS-READER",
         "permissions": []
     }
 }

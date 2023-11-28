@@ -158,8 +158,8 @@ jobs:
           serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
-          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
+          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function index_resources --stage dev${PR}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
           popd
@@ -373,9 +373,11 @@ jobs:
       - name: Get test user credentials
         uses: dkershner6/aws-ssm-getparameters-action@v1
         with:
-            parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
-                /eregulations/http/password = CYPRESS_TEST_PASSWORD"
-            withDecryption: "true" # defaults to true
+          parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
+            /eregulations/http/password = CYPRESS_TEST_PASSWORD,
+            /eregulations/http/reader_user = CYPRESS_READER_USERNAME,
+            /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
+          withDecryption: "true" # defaults to true
       # Setup node environment
       - name: Setup Node
         uses: actions/setup-node@v3
