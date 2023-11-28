@@ -12,7 +12,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName, } from "utilities/filters";
+import { getSubjectName } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -57,6 +57,10 @@ const props = defineProps({
         default: "/statutes/",
     },
     isAuthenticated: {
+        type: Boolean,
+        default: false,
+    },
+    hasEditableJobCode: {
         type: Boolean,
         default: false,
     },
@@ -367,6 +371,7 @@ getDocSubjects();
                             :base="homeUrl"
                             :results="policyDocList.results"
                             :parts-last-updated="partsLastUpdated.results"
+                            :has-editable-job-code="hasEditableJobCode"
                         />
                     </template>
                 </div>

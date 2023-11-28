@@ -26,6 +26,10 @@ defineProps({
         type: Object,
         default: () => {},
     },
+    hasEditableJobCode: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const $route = useRoute();
@@ -82,6 +86,16 @@ const resultLinkLabel = (item) => {
             :key="doc.uid"
             class="doc-list__document"
         >
+            <template #actions>
+                <a
+                    v-if="hasEditableJobCode"
+                    class="edit-button"
+                    :href="apiUrl + 'content-search/resource/' + doc.id"
+                >
+                    Edit
+                    <i class="fas fa-edit"></i>
+                </a>
+            </template>
             <template #labels>
                 <DocTypeLabel
                     v-if="!_isEmpty(doc.resource_type)"

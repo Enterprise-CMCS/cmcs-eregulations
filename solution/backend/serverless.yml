@@ -26,6 +26,8 @@ provider:
     GA_ID: ${ssm:/eregulations/http/google_analytics}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
+    DJANGO_USERNAME: ${ssm:/eregulations/http/reader_user}
+    DJANGO_PASSWORD: ${ssm:/eregulations/http/reader_password}
     DJANGO_ADMIN_USERNAME: ${ssm:/eregulations/http/user}
     DJANGO_ADMIN_PASSWORD: ${ssm:/eregulations/http/password}
     DJANGO_SETTINGS_MODULE: ${ssm:/eregulations/django_settings_module}

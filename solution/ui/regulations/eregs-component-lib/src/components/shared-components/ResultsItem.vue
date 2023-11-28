@@ -2,6 +2,7 @@
 
 <template>
     <div class="result">
+        <slot name="actions"></slot>
         <div class="category-labels">
             <slot name="labels"></slot>
         </div>

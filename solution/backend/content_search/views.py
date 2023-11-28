@@ -3,6 +3,8 @@ import json
 import requests
 from django.conf import settings
 from django.db.models import F, Prefetch
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -83,6 +85,9 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             query = query.filter(resource_type='external')
         elif resource_type == 'internal':
             query = query.filter(resource_type='internal')
+
+        context = self.get_serializer_context()
+        context['content_id'] = True
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
@@ -187,3 +192,30 @@ class InvokeTextExtractorViewset(APIView):
                                         InvocationType='Event',
                                         Payload=json.dumps(json_object))
         return Response(data={'response': resp})
+
+
+class EditContentView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        description="redirects to a resource of an index.",
+    )
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("resource_id")
+        index = ContentIndex.objects.get(id=id)
+        obj = None
+
+        if index.file is not None:
+            obj = index.file
+
+        elif index.supplemental_content is not None:
+            obj = index.supplemental_content
+
+        elif index.fr_doc is not None:
+            obj = index.fr_doc
+
+        if obj is not None:
+            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[obj.id])
+            return redirect(url)
+        else:
+            return HttpResponseBadRequest("Invalid index - no associated file, supplemental content, or fr_doc.")

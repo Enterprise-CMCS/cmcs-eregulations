@@ -7,9 +7,24 @@ def handler(self, *args, **options):
     import django
     django.setup()
 
-    from django.contrib.auth.models import User
+    from django.contrib.auth.models import Group, User
+
+    e_regs_admin_group, _ = Group.objects.get_or_create(name='EREGS-ADMIN')
+    e_regs_reader_group, _ = Group.objects.get_or_create(name='EREGS-READER')
 
     if not User.objects.filter(username=os.environ.get('DJANGO_ADMIN_USERNAME')).exists():
-        User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
-                                      'user@email.com',
-                                      os.environ.get('DJANGO_ADMIN_PASSWORD'))
+        admin_user = User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
+                                                   'admin_user@email.com',
+                                                   os.environ.get('DJANGO_ADMIN_PASSWORD'))
+    else:
+        admin_user = User.objects.get(username=os.environ.get('DJANGO_ADMIN_USERNAME'))
+
+    if not User.objects.filter(username=os.environ.get('DJANGO_USERNAME')).exists():
+        user = User.objects.create_superuser(os.environ.get('DJANGO_USERNAME'),
+                                             'user@email.com',
+                                             os.environ.get('DJANGO_PASSWORD'))
+    else:
+        user = User.objects.get(username=os.environ.get('DJANGO_USERNAME'))
+
+    admin_user.groups.set([e_regs_admin_group])
+    user.groups.set([e_regs_reader_group])

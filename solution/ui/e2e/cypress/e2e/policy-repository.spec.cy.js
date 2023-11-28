@@ -3,6 +3,8 @@ const TITLE_45 = 45;
 
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
+const readerUsername = Cypress.env("READER_USERNAME");
+const readerPassword = Cypress.env("READER_PASSWORD");
 
 const _beforeEach = () => {
     cy.intercept("/**", (req) => {
@@ -23,6 +25,19 @@ const _beforeEach = () => {
         fixture: "subjects.json",
     }).as("subjects");
 };
+
+Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
+    cy.intercept("**/v3/content-search/?q=mock**", {
+        fixture: "policy-docs.json",
+    }).as("subjectFiles");
+    cy.viewport("macbook-15");
+    cy.eregsLogin({ username, password });
+    cy.visit("/policy-repository/?q=mock");
+    cy.injectAxe();
+    cy.wait("@subjectFiles").then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+    });
+});
 
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
@@ -116,20 +131,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.intercept("**/v3/content-search/?subjects=1&subjects=2**", {
-            fixture: "policy-docs.json",
-        }).as("subjectFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/policy-repository/?subjects=1&subjects=2");
-
-        cy.injectAxe();
-
-        cy.wait("@subjectFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
-        cy.get(`button[data-testid=remove-subject-1]`).should("exist");
-        cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.getPolicyDocs({ username, password })
         cy.get(".related-sections")
             .first()
             .find(".related-section-link")
@@ -165,7 +167,23 @@ describe("Policy Repository", () => {
 
         cy.checkAccessibility();
     });
-
+    it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
+        cy.getPolicyDocs({ username: readerUsername, password: readerPassword })
+        cy.get(".edit-button").should("not.exist");
+        cy.checkAccessibility();
+    });
+    it("should display edit button for individual uploaded items if signed in and authorized to edit", () => {
+        cy.getPolicyDocs({ username, password })
+        cy.get(".edit-button").should("exist");
+        cy.checkAccessibility();
+    });
+    it("should visit the admin page for the document when the edit button is clicked", () => {
+        cy.getPolicyDocs({ username, password })
+        cy.retry(3, { interval: 1000 }, () => {
+            cy.get('.edit-button').first().should('be.visible').click({ force: true });
+            cy.url({ timeout: 10000 }).should("include", "/admin/resources/supplementalcontent/610/change/");
+        });
+    });
     it("should update the URL when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs.json",

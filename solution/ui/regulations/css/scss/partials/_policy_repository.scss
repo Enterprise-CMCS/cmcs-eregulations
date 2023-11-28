@@ -333,6 +333,14 @@
         .doc-list__document {
             padding: 0.75rem 1rem;
             border-bottom: 1px solid $border_color;
+            position: relative;
+
+            a.edit-button {
+                position: absolute;
+                top: 14px;
+                right: 16px;
+                text-decoration: none;
+            }
 
             .document__info-block {
                 margin-bottom: 0.75rem;
