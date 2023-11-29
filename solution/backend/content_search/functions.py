@@ -39,8 +39,10 @@ def update_index(content_index, content):
             summary_string=content.summary,
             date_string=content.date,
             resource_type='internal',
-            # content_type='uploadedfile',
-            # content_id=content.id
+            rank_a_string=str(content.document_name),
+            rank_b_string=str(content.summary),
+            rank_c_string=str(content.date) + ' ' + str(content.file_name)
+
         )
         new_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
@@ -54,24 +56,28 @@ def update_index(content_index, content):
             summary_string=content.description,
             date_string=content.date,
             resource_type='external',
+            rank_a_string=str(content.name) + ' ' + str(content.description),
+            rank_b_string='',
+            rank_c_string=str(content.date)
         )
         new_index.save()
         if isinstance(content, SupplementalContent):
             new_index.supplemental_content = content
-            # new_index.content_type = 'supplementalcontent'
-            # new_index.content_id = content.id
         else:
             new_index.fr_doc = content
-            # new_index.content_type = 'federalregisterdocument'
-            # new_index.content_id = content.id
         new_index.save()
     new_index.content = content_index.content
     new_index.locations.set(content.locations.all())
     new_index.subjects.set(content.subjects.all())
+    new_index.rank_d_string = get_subject_string(content.subjects.all()) + ' ' + str(content.content)
     new_index.save()
     content_index.delete()
     return
 
+def get_subject_string(subjects):
+    return ' '.join([f'{subject.full_name} '
+            f'{subject.short_name if subject.short_name else ""} '
+            f'{subject.abbreviation if subject.abbreviation else ""}' for subject in subjects])
 
 def add_to_index(content):
     '''
@@ -93,8 +99,9 @@ def add_to_index(content):
             summary_string=content.summary,
             date_string=content.date,
             resource_type='internal',
-            # content_type='uploadedfile',
-            # content_id=content.id
+            rank_a_string=str(content.document_name),
+            rank_b_string=str(content.summary),
+            rank_c_string=str(content.date) + ' ' + str(content.file_name)
         )
         content_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
@@ -107,17 +114,17 @@ def add_to_index(content):
             summary_string=content.description,
             date_string=content.date,
             resource_type='external',
+            rank_a_string=str(content.name) + ' ' + str(content.description),
+            rank_b_string='',
+            rank_c_string=str(content.date)
         )
 
         if isinstance(content, SupplementalContent):
             content_index.supplemental_content = content
-            # content_index.content_type = 'supplementalcontent'
-            # content_index.content_id = content.id
         else:
             content_index.fr_doc = content
-            # content_index.content_type = 'federalregisterdocument'
-            # content_index.content_id = content.id
         content_index.save()
+    content_index.rank_d_string = get_subject_string(content.subjects.all()) + ' ' + str(content.content)
     content_index.locations.set(content.locations.all())
     content_index.subjects.set(content.subjects.all())
     content_index.save()
