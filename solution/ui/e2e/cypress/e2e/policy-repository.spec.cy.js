@@ -169,9 +169,10 @@ describe("Policy Repository", () => {
     });
     it("should visit the admin page for the document when the edit button is clicked", () => {
         cy.getPolicyDocs({ username, password })
-        cy.retry(3, { interval: 2000 }, () => {
+        cy.retry(3, { interval: 1000 }, () => {
             cy.get('.edit-button').first().should('be.visible').click({ force: true });
-            cy.url({ timeout: 20000 }).should("include", "/admin/resources/supplementalcontent/610/change/");
+            cy.wait(2000);
+            cy.url({ timeout: 10000 }).should("include", "/admin/resources/supplementalcontent/610/change/");
         });
     });
     it("should update the URL when a subject chip is clicked", () => {
