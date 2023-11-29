@@ -50,9 +50,8 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.user = User.objects.create(username='test_user', email='test@example.com')
 
         # Create real Group instances
-        group_admin = Group.objects.create(name='EREGS-ADMIN')
-        group_editor = Group.objects.create(name='EREGS-EDITOR')
-
+        group_admin = Group.objects.create(name='EREGS_ADMIN')
+        group_editor = Group.objects.create(name='EREGS_EDITOR')
         # Create a list of groups to add to the user
         groups_to_add = [group_admin, group_editor]
 
@@ -65,12 +64,11 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(updated_user.is_active)
 
         # Ensure the user is associated with the correct groups
-        self.assertTrue(updated_user.groups.filter(name='EREGS-ADMIN').exists())
-        self.assertTrue(updated_user.groups.filter(name='EREGS-EDITOR').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS_ADMIN').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS_EDITOR').exists())
 
         # Ensure the user is not associated with the incorrect groups
-        self.assertFalse(updated_user.groups.filter(name='EREGS-READER').exists())
-        self.assertFalse(updated_user.groups.filter(name='EREGS-REVIEWER').exists())
+        self.assertFalse(updated_user.groups.filter(name='EREGS_READER').exists())
 
     # Ensure user with EREGS_ADMIN jobcode is staff, active and superuser
     def test_user_with_admin_jobcode(self):

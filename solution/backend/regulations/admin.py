@@ -106,21 +106,21 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
 
         # Define the base group names
-        base_group_names = ["EREGS-ADMIN", "EREGS-MANAGER", "EREGS-EDITOR", "EREGS-READER"]
+        base_group_names = ["EREGS_ADMIN", "EREGS_MANAGER", "EREGS_EDITOR", "EREGS_READER"]
 
         # Replace underscores with hyphens and strip "-V" or "-P" suffix in relevant jobcodes for comparison
         # ( Jobcodes on VAL will have an _V and on prod will have _P )
-        relevant_jobcodes_with_hyphens = [re.sub(r'[-_](V|P)$', '', jobcode.replace("_", "-")) for jobcode in
-                                          relevant_jobcodes]
+        relevant_jobcodes_with_underscores = [re.sub(r'[_](V|P)$', '', jobcode) for jobcode in relevant_jobcodes]
+
 
         # Filter relevant jobcodes based on the base group names
-        groups_to_add = [jobcode for jobcode in relevant_jobcodes_with_hyphens if
+        groups_to_add = [jobcode for jobcode in relevant_jobcodes_with_underscores if
                          any(jobcode.startswith(base_group) for base_group in base_group_names)]
 
         # Update user attributes based on group membership
-        user.is_active = any(group.startswith("EREGS-") for group in groups_to_add)
-        user.is_staff = any(group.startswith("EREGS-") for group in groups_to_add if group != "EREGS-READER")
-        user.is_superuser = "EREGS-ADMIN" in groups_to_add
+        user.is_active = any(group.startswith("EREGS_") for group in groups_to_add)
+        user.is_staff = any(group.startswith("EREGS_") for group in groups_to_add if group != "EREGS_READER")
+        user.is_superuser = "EREGS_ADMIN" in groups_to_add
 
         # Add the user to the determined groups
         user.groups.set(Group.objects.filter(name__in=groups_to_add))
