@@ -108,7 +108,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         # Define the base group names
         base_group_names = ["EREGS_ADMIN", "EREGS_MANAGER", "EREGS_EDITOR", "EREGS_READER"]
 
-        # Replace underscores with hyphens and strip "-V" or "-P" suffix in relevant jobcodes for comparison
+        # Strip "-V" or "-P" suffix in relevant jobcodes for comparison
         # ( Jobcodes on VAL will have an _V and on prod will have _P )
         relevant_jobcodes_with_underscores = [re.sub(r'[_](V|P)$', '', jobcode) for jobcode in relevant_jobcodes]
 
