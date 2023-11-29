@@ -102,6 +102,31 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_superuser)
 
+    # Ensure user with EREGS_READER jobcode that got upgraded to EREGS_ADMIN jobcode is updated
+    def test_user_with_reader_jobcode_upgraded_to_admin(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+
+    def test_user_with_admin_jobcode_downgraded_to_admin(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
     # Ensure user with EREGS_READER_V jobcode is not staff, active and not superuser
     def test_user_with_reader_v_jobcode(self):
         self.mock_claims["jobcodes"] = "cn=EREGS_READER_V,ou=Groups,dc=cms,dc=hhs,dc=gov"
