@@ -86,6 +86,14 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_superuser)
 
+    # Ensure user with EREGS_MANAGER jobcode is staff, active and not superuser
+    def test_user_with_editor_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_MANAGER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
     # Ensure user with EREGS_READER jobcode is not staff, active and not superuser
     def test_user_with_reader_jobcode(self):
         self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
