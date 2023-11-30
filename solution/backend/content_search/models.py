@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.contrib.postgres.search import (
     SearchHeadline,
     SearchQuery,
@@ -18,14 +19,14 @@ from resources.models import AbstractCategory, AbstractLocation, FederalRegister
 class ContentIndexQuerySet(models.QuerySet):
     search_type = "plain"
     cover_density = False
-    rank_filter = .1
+    rank_filter = float(settings.BASIC_SEARCH_FILTER)
 
     def search_configuration(self, query):
 
         if query and query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES):
             self.search_type = "phrase"
             self.cover_density = True
-            self.rank_filter = 0.01
+            self.rank_filter = float(settings.QUOTED_SEARCH_FILTER)
 
     def search(self, search_query):
         self.search_configuration(search_query)
