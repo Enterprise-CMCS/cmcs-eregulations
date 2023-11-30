@@ -2,8 +2,8 @@
 import unittest
 
 from extractors import (
-    Extractor,
     BinaryExtractor,
+    Extractor,
 )
 
 
