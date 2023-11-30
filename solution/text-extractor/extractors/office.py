@@ -14,7 +14,7 @@ class OfficeExtractor(Extractor):
     )
 
     def extract(self, file_path: str) -> str:
-        text = textract.process(file_path)    
+        text = textract.process(file_path)
 
         # cleans up weird characters
         line = re.sub(r'(\n)+', ' ', text.decode('utf-8').encode('ascii', 'ignore').decode('utf-8'))

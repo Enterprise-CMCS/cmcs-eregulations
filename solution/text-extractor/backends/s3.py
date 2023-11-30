@@ -17,8 +17,8 @@ class S3Backend(FileBackend):
                 self.aws_secret_access_key = config["aws"]["aws_secret_access_key"]
             self.aws_storage_bucket_name = config["aws"]["aws_storage_bucket_name"]
         except KeyError:
-            raise BackendInitException("the S3 backend requires 'aws_access_key_id', 'aws_secret_access_key', "
-                                       "and 'aws_storage_bucket_name' in the 's3' key of the JSON POST body.")
+            raise BackendInitException("the S3 backend requires 'use_lambda', 'aws_access_key_id', 'aws_secret_access_key', "
+                                       "and 'aws_storage_bucket_name' in the 'aws' key of the JSON POST body.")
         try:
             if config['aws']['use_lambda']:
                 self.client = boto3.client('s3', region_name="us-east-1")

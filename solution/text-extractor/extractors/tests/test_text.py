@@ -1,6 +1,6 @@
+import os
 import unittest
 from tempfile import TemporaryDirectory
-import os
 
 import extractors
 

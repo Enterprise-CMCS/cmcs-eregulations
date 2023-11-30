@@ -2,12 +2,11 @@ import unittest
 
 from extractors import (
     Extractor,
-    ExtractorException,
     OfficeExtractor,
 )
 
 
-class TestOfficeExtractor(unittest.TestCase): 
+class TestOfficeExtractor(unittest.TestCase):
     def _test_file_type(self, file_type):
         extractor = Extractor.get_extractor(file_type)
         output = extractor.extract(f"extractors/tests/fixtures/{file_type}_sample.{file_type}")

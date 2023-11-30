@@ -1,7 +1,7 @@
-import unittest
-from unittest.mock import patch
-from tempfile import TemporaryDirectory
 import os
+import unittest
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 import botocore
 import magic
