@@ -314,16 +314,16 @@
     .doc__list {
         .search-results-count {
             padding: 0 1rem;
+            margin-bottom: 2rem;
         }
 
         .doc-list__document {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid $border_color;
+            padding: 0 1rem;
             position: relative;
 
             a.edit-button {
                 position: absolute;
-                top: 14px;
+                top: 0;
                 right: 16px;
                 text-decoration: none;
             }
@@ -339,12 +339,12 @@
                     display: block;
                 }
 
-                &--view {
-                    font-size: $font-size-sm;
-                }
-
                 &--search {
                     font-weight: 400;
+                }
+
+                &--view {
+                    font-size: $font-size-sm;
                 }
             }
 
