@@ -1,3 +1,4 @@
+from common.functions import check_string_value
 from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent
@@ -24,9 +25,7 @@ def check_index(content):
 
 def get_subject_string(subjects):
     if subjects:
-        return ' '.join([f'{subject.full_name} '
-                         f'{subject.short_name if subject.short_name else ""} '
-                         f'{subject.abbreviation if subject.abbreviation else ""}' for subject in subjects])
+        return ' '.join([str(subject) for subject in subjects])
     return ''
 
 
@@ -40,9 +39,9 @@ def upload_file_index(content):
         summary_string=content.summary,
         date_string=content.date,
         resource_type='internal',
-        rank_a_string=f"{content.document_name if content.document_name else ''}",
-        rank_b_string=f"{content.summary if content.summary else ''}",
-        rank_c_string=f"{content.date if content.date else ''} {content.file_name if content.file_name else ''}"
+        rank_a_string=f"{check_string_value(content.document_name)}",
+        rank_b_string=f"{check_string_value(content.summary)}",
+        rank_c_string=f"{check_string_value(content.date)} {check_string_value(content.file_name)}"
     )
     index.save()
     return index
@@ -56,9 +55,9 @@ def external_content_index(content):
         summary_string=content.description,
         date_string=content.date,
         resource_type='external',
-        rank_a_string=f"{content.name if content.name else ''} {content.description if content.description else ''}",
+        rank_a_string=f"{check_string_value(content.name)} {check_string_value(content.description)}",
         rank_b_string='',
-        rank_c_string=f"{content.date if content.date else ''}"
+        rank_c_string=f"{check_string_value(content.date)}"
     )
     index.save()
     return index

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from common.functions import loadSeedData
+from regcore.functions import loadSeedData
 
 
 class Command(BaseCommand):

@@ -4,6 +4,7 @@ import uuid
 from django.db import models
 
 from common.fields import CombinedNaturalSort, VariableDateField
+from common.functions import check_string_value
 from resources.models import AbstractLocation
 
 
@@ -27,7 +28,7 @@ class Subject(models.Model):
     combined_sort = CombinedNaturalSort(['short_name', 'abbreviation', 'full_name'], null=True)
 
     def __str__(self):
-        return self.full_name
+        return f"{self.full_name} {check_string_value(self.short_name)} {check_string_value(self.abbreviation)}"
 
 
 class UploadedFile(models.Model):
