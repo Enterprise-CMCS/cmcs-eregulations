@@ -40,9 +40,9 @@ def upload_file_index(content):
         summary_string=content.summary,
         date_string=content.date,
         resource_type='internal',
-        rank_a_string=str(content.document_name),
-        rank_b_string=str(content.summary),
-        rank_c_string=str(content.date) + ' ' + str(content.file_name)
+        rank_a_string=f"{content.document_name if content.document_name else ''}",
+        rank_b_string=f"{content.summary if content.summary else ''}",
+        rank_c_string=f"{content.date if content.date else ''} {content.file_name if content.file_name else ''}"
     )
     index.save()
     return index
