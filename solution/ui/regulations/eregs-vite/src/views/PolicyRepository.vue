@@ -268,6 +268,8 @@ const setSelectedSubjectParts = () => {
             )[0];
             selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
         }
+    } else {
+        selectedSubjectParts.value = [];
     }
 };
 
@@ -281,11 +283,9 @@ watch(
 );
 
 watch(
-    () => selectedParams.paramsArray,
-    async (newParamsArray) => {
-        if (newParamsArray.length) {
-            setSelectedSubjectParts();
-        }
+    () => selectedParams.paramString,
+    async () => {
+        setSelectedSubjectParts();
     }
 );
 
@@ -400,7 +400,7 @@ getDocSubjects();
                         <span class="loading__span">Loading...</span>
                     </template>
                     <template v-else>
-                        <div v-if="selectedParams.paramString">
+                        <template v-if="selectedSubjectParts">
                             <template
                                 v-for="(part, index) in selectedSubjectParts"
                             >
@@ -418,7 +418,7 @@ getDocSubjects();
                                     {{ part[0] }}
                                 </div>
                             </template>
-                        </div>
+                        </template>
                         <PolicyResults
                             :base="homeUrl"
                             :results="policyDocList.results"
