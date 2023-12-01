@@ -9,13 +9,16 @@ const props = defineProps({
 
 <template>
     <h1>
-        <div
+        <span
             v-for="(part, index) in props.selectedSubjectParts"
             v-if="part[0]"
             :key="part[0]"
-            :class="{ bold: part[1] }"
+            class="subj-heading__span"
+            :class="{
+                'subj-heading__span--border': index === 0,
+                'subj-heading__span--bold': part[1],
+            }"
+            >{{ part[0] }}</span
         >
-            {{ part[0] }}
-        </div>
     </h1>
 </template>

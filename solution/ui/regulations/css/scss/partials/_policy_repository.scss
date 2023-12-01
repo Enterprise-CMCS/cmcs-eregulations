@@ -311,6 +311,32 @@
         }
     }
 
+    .subject__heading {
+        padding: 0 1rem 1rem;
+
+        h1 {
+            display: flex;
+            flex-wrap: wrap;
+            font-weight: 400;
+            margin: 0;
+
+            span:first-of-type {
+                margin-right: 0.5ch;
+            }
+
+            .subj-heading__span {
+                &--border {
+                    padding-right: 0.5ch;
+                    border-right: 1px solid $secondary_text_color;
+                }
+
+                &--bold {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
     .doc__list {
         .search-results-count {
             padding: 0 1rem;

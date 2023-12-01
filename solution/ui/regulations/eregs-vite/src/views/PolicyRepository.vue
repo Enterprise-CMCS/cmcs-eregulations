@@ -401,7 +401,7 @@ getDocSubjects();
                         <span class="loading__span">Loading...</span>
                     </template>
                     <template v-else>
-                        <div v-if="selectedSubjectParts.length">
+                        <div v-if="selectedSubjectParts.length" class="subject__heading">
                             <SelectedSubjectHeading
                                 :selected-subject-parts="selectedSubjectParts"
                             />
