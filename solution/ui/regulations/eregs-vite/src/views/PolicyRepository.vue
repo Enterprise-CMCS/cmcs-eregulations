@@ -28,6 +28,7 @@ import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import SelectedSubjectHeading from "@/components/policy-repository/SelectedSubjectHeading.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 import SubjectTOC from "@/components/policy-repository/SubjectTOC.vue";
 
@@ -400,25 +401,11 @@ getDocSubjects();
                         <span class="loading__span">Loading...</span>
                     </template>
                     <template v-else>
-                        <template v-if="selectedSubjectParts">
-                            <template
-                                v-for="(part, index) in selectedSubjectParts"
-                            >
-                                <div
-                                    v-if="part[0]"
-                                    :key="part[0]"
-                                    class="subj-toc-li__div"
-                                    :class="{
-                                        'subj-toc-li__abbr': index === 0,
-                                        'subjects-toc-li__full-name':
-                                            index !== 0,
-                                        'subj-toc-li__div--bold': part[1],
-                                    }"
-                                >
-                                    {{ part[0] }}
-                                </div>
-                            </template>
-                        </template>
+                        <div v-if="selectedSubjectParts.length">
+                            <SelectedSubjectHeading
+                                :selected-subject-parts="selectedSubjectParts"
+                            />
+                        </div>
                         <PolicyResults
                             :base="homeUrl"
                             :results="policyDocList.results"
