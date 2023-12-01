@@ -189,6 +189,14 @@ $policy_subject_close_background_hover: $mid_gray_3;
         format("truetype");
 }
 
+@font-face {
+    font-family: "Merriweather";
+    font-style: normal;
+    font-weight: 400;
+    src: url("#{$additional-font-path}/Merriweather-Regular.ttf")
+        format("truetype");
+}
+
 $primary_site_font: $font-sans; // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xxs: 10px;
