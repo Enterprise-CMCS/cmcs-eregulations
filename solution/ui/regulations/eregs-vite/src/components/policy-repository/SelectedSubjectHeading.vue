@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
     <h1>
         <span
-            v-for="(part, index) in props.selectedSubjectParts"
+            v-for="(part, index) in selectedSubjectParts"
             v-if="part[0]"
             :key="part[0]"
             class="subj-heading__span"
