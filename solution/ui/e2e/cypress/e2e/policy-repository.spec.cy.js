@@ -281,8 +281,8 @@ describe("Policy Repository", () => {
 
         cy.get("input#subjectReduce")
             .should("exist")
-            .should("have.value", "")
-            .should("have.attr", "placeholder", "Filter the subject list")
+            .and("have.value", "")
+            .and("have.attr", "placeholder", "Filter the subject list")
             .type("21", { force: true });
         cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
         cy.get("input#subjectReduce").should("have.value", "21");

@@ -54,6 +54,7 @@
         padding-right: 0px;
 
         @include screen-md {
+            padding-right: 1rem;
             border-right: 2px solid $border_color;
             border-bottom: none;
         }
@@ -81,6 +82,7 @@
     .sidebar__filters {
         flex: 1;
         margin-bottom: 1rem;
+        width: 100%;
 
         @mixin filter-borders {
             border: 2px solid $border_color;
@@ -93,18 +95,6 @@
             padding: 0.75rem 1rem;
             margin-block-start: 1rem;
             margin-block-end: 1rem;
-        }
-
-        .sticky-container {
-            padding-left: 1rem;
-            padding-right: 1rem;
-
-            @include screen-md {
-                position: sticky;
-                top: $header_height;
-                max-height: calc(100vh - 90px);
-                overflow-y: auto;
-            }
         }
 
         .selections__container {
@@ -324,16 +314,16 @@
     .doc__list {
         .search-results-count {
             padding: 0 1rem;
+            margin-bottom: 2rem;
         }
 
         .doc-list__document {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid $border_color;
+            padding: 0 1rem;
             position: relative;
 
             a.edit-button {
                 position: absolute;
-                top: 14px;
+                top: 0;
                 right: 16px;
                 text-decoration: none;
             }
@@ -349,12 +339,12 @@
                     display: block;
                 }
 
-                &--view {
-                    font-size: $font-size-sm;
-                }
-
                 &--search {
                     font-weight: 400;
+                }
+
+                &--view {
+                    font-size: $font-size-sm;
                 }
             }
 
