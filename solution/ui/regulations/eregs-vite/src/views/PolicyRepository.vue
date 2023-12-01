@@ -12,7 +12,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName } from "utilities/filters";
+import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -256,20 +256,35 @@ const getDocSubjects = async () => {
     }
 };
 
-const formattedSelectedSubject = ref("");
+const selectedSubjectParts = ref([]);
+
+const setSelectedSubjectParts = () => {
+    if (selectedParams.paramsArray.length) {
+        if (selectedParams.paramsArray[0].id) {
+            const selectedSubject = policyDocSubjects.value.results.filter(
+                (subjectObj) =>
+                    subjectObj.id.toString() ===
+                    selectedParams.paramsArray[0].id
+            )[0];
+            selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
+        }
+    }
+};
 
 watch(
     () => policyDocSubjects.value.loading,
     async (newLoading) => {
-        if (!newLoading && selectedParams.paramsArray.length) {
-            if (selectedParams.paramsArray[0].id) {
-                const selectedSubject = policyDocSubjects.value.results.filter(
-                    (subjectObj) =>
-                        subjectObj.id.toString() ===
-                        selectedParams.paramsArray[0].id
-                )[0];
-                console.log("selectedSubject", selectedSubject);
-            }
+        if (!newLoading) {
+            setSelectedSubjectParts();
+        }
+    }
+);
+
+watch(
+    () => selectedParams.paramsArray,
+    async (newParamsArray) => {
+        if (newParamsArray.length) {
+            setSelectedSubjectParts();
         }
     }
 );
@@ -385,6 +400,25 @@ getDocSubjects();
                         <span class="loading__span">Loading...</span>
                     </template>
                     <template v-else>
+                        <div v-if="selectedParams.paramString">
+                            <template
+                                v-for="(part, index) in selectedSubjectParts"
+                            >
+                                <div
+                                    v-if="part[0]"
+                                    :key="part[0]"
+                                    class="subj-toc-li__div"
+                                    :class="{
+                                        'subj-toc-li__abbr': index === 0,
+                                        'subjects-toc-li__full-name':
+                                            index !== 0,
+                                        'subj-toc-li__div--bold': part[1],
+                                    }"
+                                >
+                                    {{ part[0] }}
+                                </div>
+                            </template>
+                        </div>
                         <PolicyResults
                             :base="homeUrl"
                             :results="policyDocList.results"
