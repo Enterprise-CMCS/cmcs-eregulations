@@ -64,9 +64,9 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 
 /**
  * @param subject {Object} - a subject
- * @param subject.short_name {?string} - the short name of the subject
- * @param subject.abbreviation {?string} - the abbreviation of the subject
- * @param subject.full_name {?string} - the full name of the subject
+ * @param subject.short_name {string | null} - the short name of the subject
+ * @param subject.abbreviation {string | null} - the abbreviation of the subject
+ * @param subject.full_name {string} - the full name of the subject
  * @returns {string} - a properly formatted subject name
  * @example
  * getSubjectName({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // "Federal Regulations"
@@ -74,11 +74,33 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 const getSubjectName = (subject) =>
     subject.short_name || subject.abbreviation || subject.full_name;
 
+/**
+ * @param subject {Object} - a subject
+ * @param subject.short_name {string | null} - the short name of the subject
+ * @param subject.abbreviation {string | null} - the abbreviation of the subject
+ * @param subject.full_name {string} - the full name of the subject
+ * @returns {Array} - an array of arrays, each containing a name (string or null) and a boolean indicating whether it should be bolded or not
+ * @example
+ * getSubjectNameParts({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["CFR", true], ["Code of Federal Regulations", false]]
+ * getSubjectNameParts({ short_name: null, abbreviation: null, full_name: "Code of Federal Regulations" }) // [[null, false], ["Code of Federal Regulations", true]]
+ */
+const getSubjectNameParts = (subject) => {
+    const returnArray = [];
+
+    const hasShortOrAbbr = subject.short_name || subject.abbreviation;
+
+    returnArray[0] = [hasShortOrAbbr, Boolean(hasShortOrAbbr)];
+    returnArray[1] = [subject.full_name, !hasShortOrAbbr];
+
+    return returnArray;
+};
+
 
 export {
     formatDate,
     getDescriptionOnly,
     getSubjectName,
+    getSubjectNameParts,
     locationLabel,
     locationUrl,
 };

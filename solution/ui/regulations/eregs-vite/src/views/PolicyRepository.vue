@@ -256,6 +256,24 @@ const getDocSubjects = async () => {
     }
 };
 
+const formattedSelectedSubject = ref("");
+
+watch(
+    () => policyDocSubjects.value.loading,
+    async (newLoading) => {
+        if (!newLoading && selectedParams.paramsArray.length) {
+            if (selectedParams.paramsArray[0].id) {
+                const selectedSubject = policyDocSubjects.value.results.filter(
+                    (subjectObj) =>
+                        subjectObj.id.toString() ===
+                        selectedParams.paramsArray[0].id
+                )[0];
+                console.log("selectedSubject", selectedSubject);
+            }
+        }
+    }
+);
+
 watch(
     () => $route.query,
     async (newQueryParams) => {
