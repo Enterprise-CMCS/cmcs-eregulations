@@ -11,6 +11,7 @@ class OfficeExtractor(Extractor):
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'xls',
         'xlsx',
+        'pptx',
     )
 
     def extract(self, file_path: str) -> str:
