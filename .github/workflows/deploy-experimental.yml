@@ -99,7 +99,7 @@ jobs:
       # Deploy the text extractor lambda to AWS
       - name: Deploy text extractor lambda
         id: deploy-text-extractor
-        i#f: success() && steps.findPr.outputs.number
+        if: success() && steps.findPr.outputs.number
         env:
           PR: $#{{ steps.findPr.outputs.pr }}
           RUN_ID: $#{{ github.run_id }}
