@@ -1,6 +1,7 @@
 name: Sync Security Hub findings and Jira issues
 on:
   workflow_dispatch: # for testing and manual runs
+  push:  # just for testing
   schedule:
     - cron: "25 1 * * *" # daily at 6:25 am EST
 permissions:
@@ -10,7 +11,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["prod-security-hub"]
+        environment: ["dev"]
       fail-fast: false
     environment:
       name: ${{ matrix.environment }}
