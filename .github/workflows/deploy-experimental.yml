@@ -80,7 +80,7 @@ jobs:
       deployextractor: false
     runs-on: ubuntu-20.04
     # Change to true if you want to create text extractor for your experimental deploy.
-    if: false
+    if: true
     steps:
       # Checkout the code
       - name: Checkout
