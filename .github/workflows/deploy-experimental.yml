@@ -4,6 +4,9 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  DEPLOY_TEXT_EXTRACTOR: true
+
 permissions:
   id-token: write
   contents: read
@@ -80,7 +83,7 @@ jobs:
       deployextractor: false
     runs-on: ubuntu-20.04
     # Change to true if you want to create text extractor for your experimental deploy.
-    if: true
+    if: $DEPLOY_TEXT_EXTRACTOR
     steps:
       # Checkout the code
       - name: Checkout
