@@ -82,7 +82,8 @@ const getSubjectName = (subject) =>
  * @typedef {[string, boolean]} NamePartTuple - an array containing a name (string or null) at index 0 and a boolean indicating whether it should be bolded at index 1
  * @returns {Array<NamePartTuple>} - an array of NamePartTuples
  * @example
- * getSubjectNameParts({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["CFR", true], ["Code of Federal Regulations", false]]
+ * getSubjectNameParts({ short_name: null, abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["CFR", true], ["Code of Federal Regulations", false]]
+ * getSubjectNameParts({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["Federal Regulations", true], ["Code of Federal Regulations", false]]
  * getSubjectNameParts({ short_name: null, abbreviation: null, full_name: "Code of Federal Regulations" }) // [[null, false], ["Code of Federal Regulations", true]]
  */
 const getSubjectNameParts = (subject) => {
