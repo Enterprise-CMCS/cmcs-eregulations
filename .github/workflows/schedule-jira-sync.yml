@@ -28,7 +28,7 @@ jobs:
       - name: Sync Security Hub and Jira
         uses: Enterprise-CMCS/security-hub-visibility@v1.0.5
         with:
-          jira-token: ${{ secrets.JIRA_TOKEN }}
+          jira-token: abc123test
           jira-username: abc123test
           jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
