@@ -72,8 +72,8 @@ jobs:
           popd
       - name: remove text-extractor lambda
         env:
-          PR: $#{{ github.event.number }}
-          RUN_ID: $#{{ github.run_id }}
+          PR: ${{ github.event.number }}
+          RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/text-extractor
           npm install serverless -g
