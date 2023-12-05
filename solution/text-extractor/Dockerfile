@@ -15,6 +15,9 @@ RUN pip install -r /proxy/requirements.txt
 # Will be overridden locally
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 
+# Install findutils which provides xargs
+RUN yum install -y findutils
+
 # Install binary dependencies
 RUN xargs yum install -y < app/packages.txt
 
