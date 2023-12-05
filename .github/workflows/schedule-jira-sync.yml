@@ -29,7 +29,7 @@ jobs:
         uses: Enterprise-CMCS/security-hub-visibility@v1.0.5
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
-          jira-username: ${{ secrets.JIRA_FAKE }}
+          jira-username: ${{ secrets.JIRA_USERNAME }}
           jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
           jira-ignore-statuses: Done, Closed, Canceled
