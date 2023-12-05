@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/python:3.10
 
 ENV HOSTNAME="text-extractor"
 ENV EXTERNAL_PORT="6000"
@@ -14,9 +14,6 @@ RUN pip install -r /proxy/requirements.txt
 # Copy function code
 # Will be overridden locally
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
-
-# Install findutils which provides xargs
-RUN yum install -y findutils
 
 # Install binary dependencies
 RUN xargs yum install -y < app/packages.txt
