@@ -109,8 +109,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         base_group_names = ["EREGS_ADMIN", "EREGS_MANAGER", "EREGS_EDITOR", "EREGS_READER"]
 
         # Strip "-V" or "-P" suffix in relevant jobcodes for comparison
-        # ( Jobcodes on VAL will have an _V and on prod will have _P )
-        relevant_jobcodes_with_underscores = [re.sub(r'[_](V|P)$', '', jobcode) for jobcode in relevant_jobcodes]
+        # ( Jobcodes on VAL will have an _VAL and on prod will have _PRD )
+        relevant_jobcodes_with_underscores = [re.sub(r'[_](VAL|PRD)$', '', jobcode) for jobcode in relevant_jobcodes]
 
         # Filter relevant jobcodes based on the base group names
         groups_to_add = [jobcode for jobcode in relevant_jobcodes_with_underscores if

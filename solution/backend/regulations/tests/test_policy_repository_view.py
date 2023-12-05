@@ -36,7 +36,7 @@ class PolicyRepositoryViewTest(TestCase):
         # Check if has_editable_job_code is False
         self.assertTrue(response.context['has_editable_job_code'])
 
-    def test_has_editable_job_code_true_when_user_in_reader_and_admin_group(self):
+    def test_has_editable_job_code_true_when_user_in_reader_and_manager_group(self):
         # Log in the user
         self.client.login(username='testuser', password='testpass')
         self.user.groups.add(self.manager_group)
@@ -47,7 +47,6 @@ class PolicyRepositoryViewTest(TestCase):
 
         # Check if has_editable_job_code is False
         self.assertTrue(response.context['has_editable_job_code'])
-
 
     def test_has_editable_job_code_false_when_user_in_reader_group(self):
         # Log in the user
