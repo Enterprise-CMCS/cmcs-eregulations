@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.10
+FROM public.ecr.aws/lambda/python:3.11
 
 ENV HOSTNAME="text-extractor"
 ENV EXTERNAL_PORT="6000"
