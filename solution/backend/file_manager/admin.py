@@ -59,7 +59,7 @@ class UploadedFileAdmin(BaseAdmin):
         path = form.cleaned_data.get("file_path")
         if path:
             file_name, extension = path._name.split('.')
-            obj.file_name = f"{slugify(file_name).replace('-', ' ')}.{extension}"
+            obj.file_name = f"{slugify(file_name)}.{extension}"
             self.upload_file(path, obj)
         super().save_model(request, obj, form, change)
 
