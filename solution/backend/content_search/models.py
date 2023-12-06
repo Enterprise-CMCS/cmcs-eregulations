@@ -73,6 +73,9 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
     pass
 
 
+# The index is supposed to be an all encompassing index allowing different models to share an index
+# Instead of recalculating the vector column each time a change in weights are done the values will be stored
+# in the field values of for the rank_{}_string.  This will allow simpler updates in the future.
 class ContentIndex(models.Model):
     uid = models.CharField(
         primary_key=False,
