@@ -64,6 +64,7 @@ jobs:
         run: |
           pushd solution/backend
           npm install serverless -g
+          npm install
           serverless invoke --config ./serverless-experimental.yml --function empty_bucket --stage dev${PR}
           # remove the database if its there.
           serverless invoke --config ./serverless-experimental.yml --function drop_database --stage dev${PR}
