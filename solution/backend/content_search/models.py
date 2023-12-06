@@ -43,7 +43,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 start_sel='<span class="search-highlight">',
                 stop_sel='</span>',
                 min_words=50,
-                max_words=400,
+                max_words=51,
                 config='english',
                 fragment_delimiter='...'
             ),
@@ -63,7 +63,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 stop_sel="</span>",
                 config='english',
                 min_words=50,
-                max_words=400,
+                max_words=51,
                 fragment_delimiter='...'
             ),
         ).order_by('-rank')
