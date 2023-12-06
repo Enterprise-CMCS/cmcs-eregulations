@@ -50,9 +50,8 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.user = User.objects.create(username='test_user', email='test@example.com')
 
         # Create real Group instances
-        group_admin = Group.objects.create(name='EREGS-ADMIN')
-        group_editor = Group.objects.create(name='EREGS-EDITOR')
-
+        group_admin = Group.objects.create(name='EREGS_ADMIN')
+        group_editor = Group.objects.create(name='EREGS_EDITOR')
         # Create a list of groups to add to the user
         groups_to_add = [group_admin, group_editor]
 
@@ -65,8 +64,108 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(updated_user.is_active)
 
         # Ensure the user is associated with the correct groups
-        self.assertTrue(updated_user.groups.filter(name='EREGS-ADMIN').exists())
-        self.assertTrue(updated_user.groups.filter(name='EREGS-EDITOR').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS_ADMIN').exists())
+        self.assertTrue(updated_user.groups.filter(name='EREGS_EDITOR').exists())
+
+        # Ensure the user is not associated with the incorrect groups
+        self.assertFalse(updated_user.groups.filter(name='EREGS_READER').exists())
+
+    # Ensure user with EREGS_ADMIN jobcode is staff, active and superuser
+    def test_user_with_admin_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+
+    # Ensure user with EREGS_EDITOR jobcode is staff, active and not superuser
+    def test_user_with_editor_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_EDITOR,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_MANAGER jobcode is staff, active and not superuser
+    def test_user_with_manager_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_MANAGER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_READER jobcode is not staff, active and not superuser
+    def test_user_with_reader_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_READER jobcode that got upgraded to EREGS_ADMIN jobcode is updated
+    def test_user_with_reader_jobcode_upgraded_to_admin(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+
+    def test_user_with_admin_jobcode_downgraded_to_admin(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_READER_VAL jobcode is not staff, active and not superuser
+    def test_user_with_reader_v_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER_VAL,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_READER_PRD jobcode is not staff, active and not superuser
+    def test_user_with_reader_p_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_READER_PRD,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertFalse(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertFalse(user.is_superuser)
+
+    # Ensure user with EREGS_ADMIN and EREGS_EDITOR jobcodes is staff, active and superuser
+    def test_user_with_admin_and_editor_jobcodes(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,cn=EREGS_EDITOR,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+
+    # Ensure user with jobcode EREGS_ADMIN_VAL is staff, active and superuser
+    def test_user_with_admin_v_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN_VAL,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
+
+    # Ensure user with jobcode EREGS_ADMIN_PRD is staff, active and superuser
+    def test_user_with_admin_p_jobcode(self):
+        self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN_PRD,ou=Groups,dc=cms,dc=hhs,dc=gov"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertTrue(user.is_staff)
+        self.assertTrue(user.is_active)
+        self.assertTrue(user.is_superuser)
 
 
 if __name__ == '__main':

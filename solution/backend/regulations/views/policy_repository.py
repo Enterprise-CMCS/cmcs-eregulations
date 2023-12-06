@@ -12,7 +12,7 @@ class PolicyRepositoryView(IsAuthenticatedMixin, TemplateView):
         host = self.request.get_host()
         is_authenticated = self.request.user.is_authenticated
         user_groups = [group.name for group in self.request.user.groups.all()]
-        has_editable_job_code = user_groups and user_groups != ['EREGS-READER']
+        has_editable_job_code = any(group in ['EREGS_ADMIN', 'EREGS_MANAGER', 'EREGS_EDITOR'] for group in user_groups)
 
         c = {
             'host': host,
