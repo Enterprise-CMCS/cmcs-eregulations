@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import { getSubjectName, getSubjectNameParts } from "./filters";
+import { getSubjectName, getSubjectNameParts, sortSubjects } from "./filters";
 
 describe("getSubjectName", () => {
     it("should return the short name if it exists", () => {
@@ -63,6 +63,46 @@ describe("getSubjectNameParts", () => {
         ).toStrictEqual([
             [null, false],
             ["Code of Federal Regulations", true],
+        ]);
+    });
+});
+
+describe("sortSubjects", () => {
+    it("should sort subjects by name", () => {
+        const subjects = [
+            {
+                short_name: "Federal Regulations",
+                abbreviation: null,
+                full_name: "Code of Federal Regulations",
+            },
+            {
+                short_name: null,
+                abbreviation: "CFR",
+                full_name: "Code of Federal Regulations",
+            },
+            {
+                short_name: null,
+                abbreviation: null,
+                full_name: "Code of Federal Regulations",
+            },
+        ];
+
+        expect(subjects.sort(sortSubjects)).toStrictEqual([
+            {
+                short_name: null,
+                abbreviation: "CFR",
+                full_name: "Code of Federal Regulations",
+            },
+            {
+                short_name: null,
+                abbreviation: null,
+                full_name: "Code of Federal Regulations",
+            },
+            {
+                short_name: "Federal Regulations",
+                abbreviation: null,
+                full_name: "Code of Federal Regulations",
+            },
         ]);
     });
 });

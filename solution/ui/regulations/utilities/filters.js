@@ -98,6 +98,20 @@ const getSubjectNameParts = (subject) => {
     return returnArray;
 };
 
+/**
+ * @param subjects {Array} - an array of subjects
+ * @returns {Array} - an array of subjects sorted by name
+ */
+const sortSubjects = (a, b) => {
+    const aName = getSubjectName(a).toLowerCase();
+    const bName = getSubjectName(b).toLowerCase();
+
+    if (aName < bName) return -1;
+    if (aName > bName) return 1;
+
+    return 0;
+};
+
 export {
     formatDate,
     getDescriptionOnly,
@@ -105,4 +119,5 @@ export {
     getSubjectNameParts,
     locationLabel,
     locationUrl,
+    sortSubjects,
 };
