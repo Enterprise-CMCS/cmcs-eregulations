@@ -1,14 +1,16 @@
-from django.contrib.auth.models import Group, User
-from django.test import TestCase, Client
-from django.urls import reverse
-import random
+import secrets
 import string
+
+from django.contrib.auth.models import Group, User
+from django.test import Client, TestCase
+from django.urls import reverse
+
 
 class PolicyRepositoryViewTest(TestCase):
 
     def setUp(self):
         # Create a test user and assign it to a group
-        self.password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        self.password = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(8))
         self.user = User.objects.create_user(username='testuser', password=self.password)
         self.reader_group = Group.objects.create(name='EREGS_READER')
         self.admin_group = Group.objects.create(name='EREGS_ADMIN')
