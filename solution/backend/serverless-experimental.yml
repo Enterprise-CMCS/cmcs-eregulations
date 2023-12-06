@@ -47,8 +47,9 @@ provider:
     OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
     DEPLOY_NUMBER: ${env:RUN_ID}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
-    # Used for when you want to deploy your own
+    # This text extractor is for an experimental deploy if one is made.
     TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
+    # This text extractor is the "main dev" extractor.  Used if one is not created in experimental.
     TEXTRACT_ARN: ${ssm:/eregulations/textextractor-arn}
   vpc:
     securityGroupIds:
