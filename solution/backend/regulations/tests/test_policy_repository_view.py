@@ -75,7 +75,7 @@ class PolicyRepositoryViewTest(TestCase):
         # Check if has_editable_job_code is False
         self.assertFalse(response.context['has_editable_job_code'])
 
-    def test_has_editable_job_code_fale_when_user_in_unkown_new_group(self):
+    def test_has_editable_job_code_false_when_user_in_unkown_new_group(self):
         # Create a new group
         self.new_group = Group.objects.create(name='NEW_GROUP')
         self.user.groups.add(self.new_group)
