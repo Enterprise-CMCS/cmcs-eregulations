@@ -310,3 +310,6 @@ CSP_CONNECT_SRC = [
     "http://*.analytics.google.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+
+BASIC_SEARCH_FILTER = os.environ.get("BASIC_SEARCH_FILTER", .1)
+QUOTED_SEARCH_FILTER = os.environ.get("QUOTED_SEARCH_FILTER", .01)

@@ -71,17 +71,18 @@ jobs:
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-site-dev${PR} $PR "./serverless-experimental.yml"
           popd
       - name: remove text-extractor lambda
+        if: success() || failure()
         env:
           PR: ${{ github.event.number }}
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/text-extractor
           npm install serverless -g
-          npm install
           serverless remove --stage dev${PR}
           popd
       # Remove the static assets
       - name: remove static assets
+        if: success() || failure()
         env:
           PR: ${{ github.event.number }}
           RUN_ID: ${{ github.run_id }}

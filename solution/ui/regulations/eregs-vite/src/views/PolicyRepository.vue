@@ -12,7 +12,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName } from "utilities/filters";
+import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -28,6 +28,7 @@ import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
 import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
 import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import SelectedSubjectHeading from "@/components/policy-repository/SelectedSubjectHeading.vue";
 import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
 import SubjectTOC from "@/components/policy-repository/SubjectTOC.vue";
 
@@ -256,6 +257,39 @@ const getDocSubjects = async () => {
     }
 };
 
+const selectedSubjectParts = ref([]);
+
+const setSelectedSubjectParts = () => {
+    if (selectedParams.paramsArray.length) {
+        if (selectedParams.paramsArray[0].id) {
+            const selectedSubject = policyDocSubjects.value.results.filter(
+                (subjectObj) =>
+                    subjectObj.id.toString() ===
+                    selectedParams.paramsArray[0].id
+            )[0];
+            selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
+        }
+    } else {
+        selectedSubjectParts.value = [];
+    }
+};
+
+watch(
+    () => policyDocSubjects.value.loading,
+    async (newLoading) => {
+        if (!newLoading) {
+            setSelectedSubjectParts();
+        }
+    }
+);
+
+watch(
+    () => selectedParams.paramString,
+    async () => {
+        setSelectedSubjectParts();
+    }
+);
+
 watch(
     () => $route.query,
     async (newQueryParams) => {
@@ -359,20 +393,31 @@ getDocSubjects();
                         "
                         :policy-doc-subjects="policyDocSubjects"
                     />
-                    <template
-                        v-else-if="
-                            policyDocList.loading || partsLastUpdated.loading
-                        "
-                    >
-                        <span class="loading__span">Loading...</span>
-                    </template>
                     <template v-else>
-                        <PolicyResults
-                            :base="homeUrl"
-                            :results="policyDocList.results"
-                            :parts-last-updated="partsLastUpdated.results"
-                            :has-editable-job-code="hasEditableJobCode"
-                        />
+                        <div
+                            v-if="selectedSubjectParts.length"
+                            class="subject__heading"
+                        >
+                            <SelectedSubjectHeading
+                                :selected-subject-parts="selectedSubjectParts"
+                            />
+                        </div>
+                        <template
+                            v-if="
+                                policyDocList.loading ||
+                                partsLastUpdated.loading
+                            "
+                        >
+                            <span class="loading__span">Loading...</span>
+                        </template>
+                        <template v-else>
+                            <PolicyResults
+                                :base="homeUrl"
+                                :results="policyDocList.results"
+                                :parts-last-updated="partsLastUpdated.results"
+                                :has-editable-job-code="hasEditableJobCode"
+                            />
+                        </template>
                     </template>
                 </div>
             </div>
