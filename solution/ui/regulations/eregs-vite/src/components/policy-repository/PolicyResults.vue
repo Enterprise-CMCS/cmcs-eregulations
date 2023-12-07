@@ -5,10 +5,7 @@ import { useRoute } from "vue-router/composables";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-import {
-    getFileNameSuffix,
-    DOCUMENT_TYPES_MAP,
-} from "utilities/utils";
+import { getFileNameSuffix, DOCUMENT_TYPES_MAP } from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
@@ -50,23 +47,28 @@ const resultLinkClasses = (doc) => ({
     "document__link--search": !!$route?.query?.q,
 });
 
-const resultLinkLabel = (item) => {
+const getResultLinkText = (item) => {
+    let linkText;
+    if (item.resource_type === "external") {
+        linkText = item.summary_headline || item.summary_string;
+    } else {
+        linkText = item.document_name_headline || item.doc_name_string;
+    }
+
+    return `<span class='result__link--label'>${linkText}</span>`;
+};
+
+const getFileTypeButton = (item) => {
     const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
-    const fileTypeButton =
-        item.file_name_string && fileTypeSuffix
-            ? `<span data-testid="download-chip-${
-                  item.url
-              }" class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`
-            : null;
 
-    const linkText =
-        item.resource_type === "external"
-            ? item.summary_headline || item.summary_string
-            : item.document_name_headline || item.doc_name_string;
+    let fileTypeButton;
+    if (item.file_name_string && fileTypeSuffix) {
+        fileTypeButton = `<span data-testid="download-chip-${
+            item.url
+        }" class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`;
+    }
 
-    return `<span class='result__link--label'>${linkText}</span>${
-        fileTypeButton ?? ""
-    }`;
+    return `${fileTypeButton ?? ""}`;
 };
 </script>
 
@@ -102,25 +104,29 @@ const resultLinkLabel = (item) => {
                     :icon-type="doc.resource_type"
                     :doc-type="DOCUMENT_TYPES_MAP[doc.resource_type]"
                 />
-                <CategoryLabel
-                    v-if="!_isEmpty(doc.document_type)"
-                    :name="doc.document_type.name"
-                    type="category"
-                />
-                <CategoryLabel
-                    v-else-if="!_isEmpty(doc.category)"
-                    :name="
-                        doc.category.parent
-                            ? doc.category.parent.name
-                            : doc.category.name
-                    "
-                    type="category"
-                />
-                <CategoryLabel
-                    v-if="doc.category?.parent"
-                    :name="doc.category.name"
-                    type="subcategory"
-                />
+                <template v-if="doc.resource_type === 'internal'">
+                    <CategoryLabel
+                        v-if="!_isEmpty(doc.document_type)"
+                        :name="doc.document_type.name"
+                        type="category"
+                    />
+                </template>
+                <template v-else>
+                    <CategoryLabel
+                        v-if="!_isEmpty(doc.category)"
+                        :name="
+                            doc.category.parent
+                                ? doc.category.parent.name
+                                : doc.category.name
+                        "
+                        type="category"
+                    />
+                    <CategoryLabel
+                        v-if="doc.category?.parent"
+                        :name="doc.category.name"
+                        type="subcategory"
+                    />
+                </template>
             </template>
             <template #context>
                 <span
@@ -131,7 +137,8 @@ const resultLinkLabel = (item) => {
                 >
                 <span
                     v-if="
-                        doc.resource_type === 'external' && doc.doc_name_string
+                        doc.resource_type === 'external' &&
+                        doc.doc_name_string
                     "
                     >{{ doc.doc_name_string }}</span
                 >
@@ -143,7 +150,7 @@ const resultLinkLabel = (item) => {
                     rel="noopener noreferrer"
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
-                    v-html="resultLinkLabel(doc)"
+                    v-html="getResultLinkText(doc) + getFileTypeButton(doc)"
                 ></a>
             </template>
             <template #snippet>
@@ -171,7 +178,7 @@ const resultLinkLabel = (item) => {
                     label="Related Regulation Citation"
                 />
             </template>
-        </ResultsItem>
+        </template>
     </div>
 </template>
 
