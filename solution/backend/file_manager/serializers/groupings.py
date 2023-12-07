@@ -38,7 +38,7 @@ class AbstractRepositoryCategoryPolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
             RepositoryCategory: ("category", RepositoryCategorySerializer),
-            RepositorySubCategory: ("subcategory", RepositorySubCategorySerializer),
+            RepositorySubCategory: ("repositorysubcategory", RepositorySubCategorySerializer),
         }
 
 

@@ -40,7 +40,7 @@ class RepositoryCategory(AbstractRepoCategory):
         verbose_name_plural = "Repository Categories"
 
 
-class RepositorySubCategory(RepositoryCategory):
+class RepositorySubCategory(AbstractRepoCategory):
     parent = models.ForeignKey(RepositoryCategory, on_delete=models.CASCADE, related_name="sub_categories")
 
     class Meta:
