@@ -1,7 +1,7 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from common.mixins import PolymorphicSerializer, PolymorphicTypeField
+from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
 from common.utils import ProxySerializerWrapper
 from file_manager.models import DocumentType, RepositoryCategory, RepositorySubCategory, Subject
 
@@ -32,6 +32,8 @@ class SubjectDetailsSerializer(SubjectSerializer):
 
     class Meta:
         model = Subject
+
+
 class AbstractRepositoryCategoryPolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {

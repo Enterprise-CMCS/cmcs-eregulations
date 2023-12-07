@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from common.fields import HeadlineField
-from common.serializers import DetailsSerializer
+from common.serializers.mix import DetailsSerializer
 
 from .groupings import DocumentTypeSerializer, SubjectSerializer
 

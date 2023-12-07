@@ -4,8 +4,8 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from common.fields import HeadlineField
-from common.mixins import PolymorphicSerializer, PolymorphicTypeField
-from common.serializers import DetailsSerializer
+from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
+from common.serializers.mix import DetailsSerializer
 from common.utils import ProxySerializerWrapper
 from file_manager.serializers.groupings import SubjectSerializer
 from resources.models import (

@@ -64,7 +64,8 @@ class UploadedFileAdmin(BaseAdmin):
     filter_horizontal = ("locations", "subjects")
     readonly_fields = ('download_file', 'file_name', 'get_content', 'index_populated')
     fields = ("file_name", "file_path", "document_name", 'date', 'summary',
-              'document_type', 'subjects', 'locations', 'internal_notes', 'index_populated', 'get_content', 'download_file', 'category',)
+              'document_type', 'subjects', 'locations', 'internal_notes',
+              'index_populated', 'get_content', 'download_file', 'category',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
         "subjects": lambda: Subject.objects.all()
