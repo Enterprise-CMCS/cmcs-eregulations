@@ -19,4 +19,4 @@ class TestFileBackend(unittest.TestCase):
     def test_no_get_file_function(self):
         backend = FileBackend.get_backend("test")
         with self.assertRaises(NotImplementedError):
-            backend.get_file("some_uri")
+            backend.get_file("fake_dir", "some_uri")

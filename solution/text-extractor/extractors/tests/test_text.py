@@ -1,4 +1,6 @@
+import os
 import unittest
+from tempfile import TemporaryDirectory
 
 import extractors
 
@@ -10,5 +12,9 @@ class TestTextExtractor(unittest.TestCase):
 
     def test_extract(self):
         extractor = extractors.Extractor.get_extractor("text/plain")
-        output = extractor.extract(b"This is plain text")
-        self.assertEqual(output, "This is plain text")
+        with TemporaryDirectory() as temp_dir:
+            path = os.path.join(temp_dir, "sample.txt")
+            with open(path, "w") as f:
+                f.write("This is plain text")
+            output = extractor.extract(path)
+            self.assertEqual(output, "This is plain text")
