@@ -34,6 +34,7 @@ def upload_file_index(content):
         file=content,
         document_type=content.document_type,
         file_name_string=content.file_name,
+        upload_category=content.category,
         url=content.uid,
         doc_name_string=content.document_name,
         summary_string=content.summary,

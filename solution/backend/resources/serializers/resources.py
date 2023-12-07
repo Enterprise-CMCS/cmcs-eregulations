@@ -4,8 +4,10 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from common.fields import HeadlineField
+from common.mixins import PolymorphicSerializer, PolymorphicTypeField
 from common.serializers import DetailsSerializer
-from file_manager.serializers import SubjectSerializer
+from common.utils import ProxySerializerWrapper
+from file_manager.serializers.groupings import SubjectSerializer
 from resources.models import (
     AbstractCategory,
     AbstractLocation,
@@ -21,8 +23,6 @@ from .locations import (
     SectionCreateSerializer,
     SectionRangeCreateSerializer,
 )
-from .mixins import PolymorphicSerializer, PolymorphicTypeField
-from .utils import ProxySerializerWrapper
 
 
 class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):

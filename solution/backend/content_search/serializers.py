@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from common.fields import HeadlineField
 from common.serializers import DetailsSerializer
-from file_manager.serializers import DocumentTypeSerializer, SubjectSerializer
+from file_manager.serializers.groupings import DocumentTypeSerializer, SubjectSerializer
 
 
 class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
@@ -16,7 +16,6 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     subjects = SubjectSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()
     url = serializers.CharField()
-    # content_type = serializers.CharField()
     id = serializers.IntegerField()
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()

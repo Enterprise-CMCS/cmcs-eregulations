@@ -12,6 +12,7 @@ from common.fields import (
     UscRefField,
     VariableDateField,
 )
+from common.mixins import DisplayNameFieldMixin
 
 
 # Field mixins
@@ -32,12 +33,6 @@ class TypicalResourceFieldsMixin(InternalNotesFieldMixin):
 
     class Meta:
         abstract = True
-
-
-class DisplayNameFieldMixin:
-    @property
-    def display_name(self):
-        return str(self)
 
 
 # Category types

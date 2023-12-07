@@ -17,17 +17,19 @@ from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
 from common.functions import establish_client
 from content_search.models import ContentIndex
+from file_manager.serializers.files import (
+    AwsTokenSerializer,
+    UploadedFileSerializer,
+)
+from file_manager.serializers.groupings import (
+    DocumentTypeSerializer,
+    SubjectDetailsSerializer,
+)
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
 from .models import DocumentType, Subject, UploadedFile
-from .serializers import (
-    AwsTokenSerializer,
-    DocumentTypeSerializer,
-    SubjectDetailsSerializer,
-    UploadedFileSerializer,
-)
 
 
 @extend_schema(
