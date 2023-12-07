@@ -27,3 +27,6 @@ class TestOfficeExtractor(unittest.TestCase):
 
     def test_docx(self):
         self._test_file_type("docx")
+
+    def test_pptx(self):
+        self._test_file_type("pptx")
