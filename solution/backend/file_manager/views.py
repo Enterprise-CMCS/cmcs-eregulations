@@ -231,7 +231,7 @@ class RepoCategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet
 
 @extend_schema(
     description="Retrieve a top-down representation of repository categories, "
-                 "with each category containing zero or more sub-categories. "
+                "with each category containing zero or more sub-categories. "
                 "Pagination is disabled by default.",
     parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
 )
