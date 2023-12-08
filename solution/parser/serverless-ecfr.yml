@@ -3,7 +3,7 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: go1.x
+  runtime: provided.al2
   region: us-east-1
   iam:
     role: LambdaFunctionRole
@@ -25,7 +25,7 @@ custom:
 
 functions:
   ecfr_parser:
-    handler: .
+    handler: bootstrap
     timeout: 900
     events:
       - schedule: cron(0 0 * * ? *)
