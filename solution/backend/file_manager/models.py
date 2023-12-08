@@ -7,7 +7,7 @@ from common.fields import CombinedNaturalSort, VariableDateField
 from common.functions import check_string_value
 from common.mixins import DisplayNameFieldMixin
 from resources.models import AbstractLocation
-
+from model_utils.managers import InheritanceManager
 
 class DocumentType(models.Model):
     class Meta:
@@ -25,6 +25,8 @@ class AbstractRepoCategory(models.Model, DisplayNameFieldMixin):
     description = models.TextField(null=True, blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
+
+    objects = InheritanceManager()
 
     def __str__(self):
         return f"{self.name} ({self._meta.verbose_name})"

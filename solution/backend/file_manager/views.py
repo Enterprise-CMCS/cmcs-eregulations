@@ -219,8 +219,8 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
 class RepoCategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     serializer_class = AbstractRepositoryCategoryPolymorphicSerializer
-    queryset = AbstractRepoCategory.objects.all().prefetch_related(
-        Prefetch("subcategory__parent", RepositorySubCategory.objects.all().order_by("order")),
+    queryset = AbstractRepoCategory.objects.all().select_subclasses().prefetch_related(
+        Prefetch("repositorysubcategory__parent", RepositorySubCategory.objects.all().order_by("order")),
     ).order_by("order")
 
     def get_serializer_context(self):
@@ -237,7 +237,7 @@ class RepoCategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet
 )
 class RepositoryCategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
-    queryset = RepositoryCategory.objects.all().prefetch_related(
+    queryset = RepositoryCategory.objects.all().select_subclasses().prefetch_related(
         Prefetch("sub_categories", RepositorySubCategory.objects.all().order_by("order")),
     ).order_by("order")
     serializer_class = RepositoryCategoryTreeSerializer

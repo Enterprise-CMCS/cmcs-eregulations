@@ -37,7 +37,7 @@ class SubjectDetailsSerializer(SubjectSerializer):
 class AbstractRepositoryCategoryPolymorphicSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            RepositoryCategory: ("category", RepositoryCategorySerializer),
+            RepositoryCategory: ("repositorycategory", RepositoryCategorySerializer),
             RepositorySubCategory: ("repositorysubcategory", RepositorySubCategorySerializer),
         }
 
