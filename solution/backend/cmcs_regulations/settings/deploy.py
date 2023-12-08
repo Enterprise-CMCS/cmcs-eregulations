@@ -32,15 +32,17 @@ MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 USE_AWS_TOKEN = False
 
-OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
-
 AUTHENTICATION_BACKENDS = (
     'regulations.admin.OidcAdminAuthenticationBackend',
     'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
+STAGE_ENV = os.environ.get("STAGE_ENV", "")
+BASE_URL = os.environ.get("BASE_URL", "")
+
 # EUA settings
+OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
 OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
 OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
