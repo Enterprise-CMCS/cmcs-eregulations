@@ -1,5 +1,7 @@
 <script setup>
-import { getSubjectName } from "utilities/filters";
+import { computed } from "vue";
+
+import { getSubjectName, sortSubjects } from "utilities/filters";
 
 import SubjectChip from "./SubjectChip.vue";
 
@@ -10,12 +12,15 @@ const props = defineProps({
     },
 });
 
+const sortedSubjects = computed(() =>
+    (props.subjects || []).sort(sortSubjects)
+);
 </script>
 
 <template>
     <div class="document__subjects">
         <SubjectChip
-            v-for="(subject, i) in subjects"
+            v-for="(subject, i) in sortedSubjects"
             :key="subject.id + 'x' + i"
             :subject-id="subject.id"
             :subject-name="getSubjectName(subject)"

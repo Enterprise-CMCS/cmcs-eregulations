@@ -41,7 +41,8 @@ def handler(event: dict, context: dict) -> dict:
         post_url = config["post_url"]
         token = config["token"]
     except KeyError:
-        return lambda_response(400, "You must include 'id', 'uri', and 'post_url' in the request body.")
+        return lambda_response(400, "You must include 'id', 'uri', 'token', and 'post_url' in the request body.")
+
     with TemporaryDirectory() as temp_dir:
         # Retrieve the file
         try:
@@ -56,7 +57,7 @@ def handler(event: dict, context: dict) -> dict:
             return lambda_response(500, f"Backend unexpectedly failed: {str(e)}")
 
         try:
-            file_type = uri.split('.')[-1]
+            file_type = uri.lower().split('.')[-1]
         except Exception as e:
             return lambda_response(500, f"Failed to determine file type: {str(e)}")
 
@@ -80,7 +81,7 @@ def handler(event: dict, context: dict) -> dict:
                 headers=header,
                 json={
                     "id": resource_id,
-                    "text": text
+                    "text": text,
                 },
                 timeout=60,
             )
