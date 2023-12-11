@@ -70,6 +70,32 @@ const getFileTypeButton = (item) => {
 
     return `${fileTypeButton ?? ""}`;
 };
+
+const showResultSnippet = (item) => {
+    if (
+        item.resource_type === "internal" &&
+        (item.summary_headline || item.summary_string || item.content_headline)
+    )
+        return true;
+
+    if (item.resource_type === "external" && item.content_headline) return true;
+
+    return false;
+};
+
+const getResultSnippet = (item) => {
+    let snippet;
+    if (item.resource_type === "internal") {
+        snippet =
+            item.summary_headline ||
+            item.summary_string ||
+            item.content_headline;
+    } else {
+        snippet = item.content_headline || item.content_string;
+    }
+
+    return snippet;
+};
 </script>
 
 <template>
@@ -137,8 +163,7 @@ const getFileTypeButton = (item) => {
                 >
                 <span
                     v-if="
-                        doc.resource_type === 'external' &&
-                        doc.doc_name_string
+                        doc.resource_type === 'external' && doc.doc_name_string
                     "
                     >{{ doc.doc_name_string }}</span
                 >
@@ -155,11 +180,8 @@ const getFileTypeButton = (item) => {
             </template>
             <template #snippet>
                 <div
-                    v-if="
-                        doc.resource_type === 'internal' &&
-                        (doc.summary_headline || doc.summary_string)
-                    "
-                    v-html="doc.summary_headline || doc.summary_string"
+                    v-if="showResultSnippet(doc)"
+                    v-html="getResultSnippet(doc)"
                 />
             </template>
             <template #chips>
@@ -178,7 +200,7 @@ const getFileTypeButton = (item) => {
                     label="Related Regulation Citation"
                 />
             </template>
-        </template>
+        </ResultsItem>
     </div>
 </template>
 
