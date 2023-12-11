@@ -94,7 +94,7 @@ const getResultSnippet = (item) => {
         snippet = item.content_headline || item.content_string;
     }
 
-    return snippet;
+    return `...${snippet}...`;
 };
 </script>
 
