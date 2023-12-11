@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue";
 
+import { getSubjectNameParts } from "utilities/filters";
+
 const props = defineProps({
     policyDocSubjects: {
         type: Object,
@@ -33,22 +35,24 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                             query: { subjects: [subject.id.toString()] },
                         }"
                     >
-                        <div
-                            v-if="subject.abbreviation || subject.short_name"
-                            class="subj-toc-li__div subj-toc-li__div--bold subj-toc-li__abbr"
+                        <template
+                            v-for="(part, index) in getSubjectNameParts(
+                                subject
+                            )"
                         >
-                            {{ subject.abbreviation || subject.short_name }}
-                        </div>
-                        <div
-                            class="subj-toc-li__div subjects-toc-li__full-name"
-                            :class="
-                                !subject.abbreviation &&
-                                !subject.short_name &&
-                                'subj-toc-li__div--bold'
-                            "
-                        >
-                            {{ subject.full_name }}
-                        </div>
+                            <div
+                                v-if="part[0]"
+                                :key="part[0]"
+                                class="subj-toc-li__div"
+                                :class="{
+                                    'subj-toc-li__abbr': index === 0,
+                                    'subjects-toc-li__full-name': index !== 0,
+                                    'subj-toc-li__div--bold': part[1],
+                                }"
+                            >
+                                {{ part[0] }}
+                            </div>
+                        </template>
                     </router-link>
                     <div class="subj-toc-li__count">
                         <span class="subj-doc__count subj-doc__count--public">{{

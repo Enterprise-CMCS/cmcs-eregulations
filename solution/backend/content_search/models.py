@@ -1,5 +1,6 @@
 import uuid
 
+from django.conf import settings
 from django.contrib.postgres.search import (
     SearchHeadline,
     SearchQuery,
@@ -18,14 +19,14 @@ from resources.models import AbstractCategory, AbstractLocation, FederalRegister
 class ContentIndexQuerySet(models.QuerySet):
     search_type = "plain"
     cover_density = False
-    rank_filter = .1
+    rank_filter = float(settings.BASIC_SEARCH_FILTER)
 
     def search_configuration(self, query):
 
         if query and query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES):
             self.search_type = "phrase"
             self.cover_density = True
-            self.rank_filter = 0.01
+            self.rank_filter = float(settings.QUOTED_SEARCH_FILTER)
 
     def search(self, search_query):
         self.search_configuration(search_query)
@@ -42,7 +43,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 start_sel='<span class="search-highlight">',
                 stop_sel='</span>',
                 min_words=50,
-                max_words=400,
+                max_words=51,
                 config='english',
                 fragment_delimiter='...'
             ),
@@ -62,7 +63,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 stop_sel="</span>",
                 config='english',
                 min_words=50,
-                max_words=400,
+                max_words=51,
                 fragment_delimiter='...'
             ),
         ).order_by('-rank')
@@ -72,6 +73,9 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
     pass
 
 
+# The index is supposed to be an all encompassing index allowing different models to share an index
+# Instead of recalculating the vector column each time a change in weights are done the values will be stored
+# in the field values of for the rank_{}_string.  This will allow simpler updates in the future.
 class ContentIndex(models.Model):
     uid = models.CharField(
         primary_key=False,
@@ -91,8 +95,10 @@ class ContentIndex(models.Model):
     )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="content", verbose_name="Regulation Locations")
     resource_type = models.CharField(max_length=25, null=True, blank=True)
-    # content_type = models.CharField(max_length=50, blank=True, null=True)
-    # content_id = models.IntegerField(null=True)
+    rank_a_string = models.TextField(blank=True, null=True)
+    rank_b_string = models.TextField(blank=True, null=True)
+    rank_c_string = models.TextField(blank=True, null=True)
+    rank_d_string = models.TextField(blank=True, null=True)
     file = models.ForeignKey(UploadedFile, blank=True, null=True, on_delete=models.CASCADE)
     supplemental_content = models.ForeignKey(SupplementalContent, blank=True, null=True, on_delete=models.CASCADE)
     fr_doc = models.ForeignKey(FederalRegisterDocument, blank=True, null=True, on_delete=models.CASCADE)

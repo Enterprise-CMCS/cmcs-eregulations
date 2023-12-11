@@ -98,7 +98,7 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
-                            <span class="">{{ DOCUMENT_TYPES_MAP[type] }}</span>
+                            <span class="">{{ DOCUMENT_TYPES_MAP[type] }} Resources</span>
                         </label>
                     </div>
                 </div>

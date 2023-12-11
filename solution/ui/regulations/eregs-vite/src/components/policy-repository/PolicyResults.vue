@@ -5,9 +5,13 @@ import { useRoute } from "vue-router/composables";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-import { getFileNameSuffix } from "utilities/utils";
+import {
+    getFileNameSuffix,
+    DOCUMENT_TYPES_MAP,
+} from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
@@ -93,6 +97,11 @@ const resultLinkLabel = (item) => {
                 </a>
             </template>
             <template #labels>
+                <DocTypeLabel
+                    v-if="!_isEmpty(doc.resource_type)"
+                    :icon-type="doc.resource_type"
+                    :doc-type="DOCUMENT_TYPES_MAP[doc.resource_type]"
+                />
                 <CategoryLabel
                     v-if="!_isEmpty(doc.document_type)"
                     :name="doc.document_type.name"
@@ -128,16 +137,14 @@ const resultLinkLabel = (item) => {
                 >
             </template>
             <template #link>
-                <h3>
-                    <a
-                        :href="getUrl(doc)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="document__link document__link--filename"
-                        :class="resultLinkClasses(doc)"
-                        v-html="resultLinkLabel(doc)"
-                    ></a>
-                </h3>
+                <a
+                    :href="getUrl(doc)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="document__link document__link--filename"
+                    :class="resultLinkClasses(doc)"
+                    v-html="resultLinkLabel(doc)"
+                ></a>
             </template>
             <template #snippet>
                 <div

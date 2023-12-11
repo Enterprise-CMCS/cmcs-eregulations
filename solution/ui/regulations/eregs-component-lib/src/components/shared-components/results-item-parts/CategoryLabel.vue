@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
     name: {
@@ -22,5 +22,3 @@ const labelClass = computed(() =>
         {{ name }}
     </div>
 </template>
-
-<style></style>
