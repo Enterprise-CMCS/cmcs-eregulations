@@ -1,6 +1,6 @@
 import json
-from tempfile import TemporaryDirectory
 import re
+from tempfile import TemporaryDirectory
 
 import requests
 

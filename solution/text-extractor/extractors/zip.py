@@ -1,12 +1,12 @@
+import os
 import zipfile
 from tempfile import TemporaryDirectory
-import os
 
-from .extractor import Extractor
 from .exceptions import (
-    ExtractorInitException,
     ExtractorException,
+    ExtractorInitException,
 )
+from .extractor import Extractor
 
 
 class ZipExtractor(Extractor):

@@ -1,9 +1,11 @@
 from tempfile import NamedTemporaryFile
-import os
 
 import extract_msg
 
-from .exceptions import ExtractorException
+from .exceptions import (
+    ExtractorException,
+    ExtractorInitException,
+)
 from .extractor import Extractor
 
 
@@ -15,7 +17,7 @@ class OutlookExtractor(Extractor):
             msg = extract_msg.openMsg(file_path)
         except Exception as e:
             raise ExtractorException(f"msg file failed to extract: {str(e)}")
-        
+
         body = msg.body
         for attachment in msg.attachments:
             file_name = attachment.longFilename
