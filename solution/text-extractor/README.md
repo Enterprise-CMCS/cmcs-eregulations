@@ -13,7 +13,7 @@ The text extractor supports the following file types. File types that are planne
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [ ] Microsoft Outlook (msg)
-- [x] Microsoft PowerPoint (ppt and pptx)
+- [ ] Microsoft PowerPoint (ppt and pptx)
 
 # Running locally
 
