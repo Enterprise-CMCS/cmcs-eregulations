@@ -10,10 +10,6 @@ from .extractor import Extractor
 class OutlookExtractor(Extractor):
     file_types = ("msg",)
 
-    def __init__(self, file_type: str, config: dict):
-        super().__init__(file_type, config)
-        self.config = config
-
     def extract(self, file_path: str) -> str:
         try:
             msg = extract_msg.openMsg(file_path)

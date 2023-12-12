@@ -8,3 +8,4 @@ from .extractor import Extractor as Extractor
 from .office import OfficeExtractor as OfficeExtractor
 from .binary import BinaryExtractor as BinaryExtractor
 from .outlook import OutlookExtractor as OutlookExtractor
+from .zip import ZipExtractor as ZipExtractor
