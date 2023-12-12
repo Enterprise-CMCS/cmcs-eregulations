@@ -1,5 +1,6 @@
 import json
 from tempfile import TemporaryDirectory
+import re
 
 import requests
 
@@ -71,6 +72,9 @@ def handler(event: dict, context: dict) -> dict:
             return lambda_response(500, f"Failed to extract text: {str(e)}")
         except Exception as e:
             return lambda_response(500, f"Extractor unexpectedly failed: {str(e)}")
+
+        # Strip unneeded data out of the extracted text
+        text = re.sub(r'[\n\s]+', ' ', text).strip()
 
         # Send result to eRegs
         resp = ''

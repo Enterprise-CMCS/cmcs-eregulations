@@ -6,3 +6,4 @@ moto
 pdf2image
 textract
 ruff
+extract-msg
