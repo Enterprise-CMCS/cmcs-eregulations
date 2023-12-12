@@ -161,3 +161,9 @@ Please note that the provided URL (https://test.idp.idm.cms.gov/) may require a 
 - Solution:
   - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
   - On dev,val,prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store. 
+
+## Serverless set up.
+We use serverless in conjunction with github actions to deploy our application to our various environments.
+
+### Functions
+To allow us to deploy our application to various environments and prohibit certain lambda functions to be deployed to different environments we split our lambda functions out into a specific folder.  In backend/serverless_functions there is a different YMl file for each environment.  When you want to add a lambda function to each environment just add the function the corresponding environments folder.
