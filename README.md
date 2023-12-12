@@ -116,6 +116,7 @@ In order to update your local data with the most recent version of production yo
 If adding a new model to this process please refer to the adding a new model process below.
 
 1.  Connect to the VPN and run the following command below for postgresql in the command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should populate in the directory the command is run in.
+  - Django bases the tables off of ApplicationName_model.  So whenever resources_* will pul in all resourcces tables from postgres.  If you need to add a new model just follow the naming convention.
 ```
 pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' -t 'regulations_*' -t 'file_manager_subject' -t 'file_manager_documenttype' -t 'auth_g*' -t 'auth_permission' -t 'django_content_type' --data-only --column-inserts eregs
 ```
