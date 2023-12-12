@@ -1,4 +1,4 @@
-<script setup>
+<script>
 import { inject } from "vue";
 import { useRoute } from "vue-router/composables";
 
@@ -14,6 +14,65 @@ import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 import SubjectChips from "./SubjectChips.vue";
 
+const getResultLinkText = (item) => {
+    let linkText;
+    if (item.resource_type === "internal") {
+        linkText = item.document_name_headline || item.doc_name_string;
+    } else {
+        linkText = item.summary_headline || item.summary_string;
+    }
+
+    return `<span class='result__link--label'>${linkText}</span>`;
+};
+
+const getFileTypeButton = (item) => {
+    const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
+
+    let fileTypeButton;
+    if (item.file_name_string && fileTypeSuffix) {
+        fileTypeButton = `<span data-testid='download-chip-${
+            item.url
+        }' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+    }
+
+    return `${fileTypeButton ?? ""}`;
+};
+
+const showResultSnippet = (item) => {
+    if (
+        item.resource_type === "internal" &&
+        (item.summary_headline || item.summary_string || item.content_headline)
+    )
+        return true;
+
+    if (item.resource_type === "external" && item.content_headline) return true;
+
+    return false;
+};
+
+const getResultSnippet = (item) => {
+    let snippet;
+    if (item.resource_type === "internal") {
+        snippet =
+            item.summary_headline ||
+            item.summary_string ||
+            item.content_headline;
+    } else {
+        snippet = item.content_headline || item.content_string;
+    }
+
+    return `...${snippet}...`;
+};
+
+export default {
+    getFileTypeButton,
+    getResultLinkText,
+    getResultSnippet,
+    showResultSnippet,
+}
+</script>
+
+<script setup>
 defineProps({
     results: {
         type: Array,
@@ -47,55 +106,6 @@ const resultLinkClasses = (doc) => ({
     "document__link--search": !!$route?.query?.q,
 });
 
-const getResultLinkText = (item) => {
-    let linkText;
-    if (item.resource_type === "external") {
-        linkText = item.summary_headline || item.summary_string;
-    } else {
-        linkText = item.document_name_headline || item.doc_name_string;
-    }
-
-    return `<span class='result__link--label'>${linkText}</span>`;
-};
-
-const getFileTypeButton = (item) => {
-    const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
-
-    let fileTypeButton;
-    if (item.file_name_string && fileTypeSuffix) {
-        fileTypeButton = `<span data-testid="download-chip-${
-            item.url
-        }" class="result__link--file-type">Download ${fileTypeSuffix.toUpperCase()}</span>`;
-    }
-
-    return `${fileTypeButton ?? ""}`;
-};
-
-const showResultSnippet = (item) => {
-    if (
-        item.resource_type === "internal" &&
-        (item.summary_headline || item.summary_string || item.content_headline)
-    )
-        return true;
-
-    if (item.resource_type === "external" && item.content_headline) return true;
-
-    return false;
-};
-
-const getResultSnippet = (item) => {
-    let snippet;
-    if (item.resource_type === "internal") {
-        snippet =
-            item.summary_headline ||
-            item.summary_string ||
-            item.content_headline;
-    } else {
-        snippet = item.content_headline || item.content_string;
-    }
-
-    return `...${snippet}...`;
-};
 </script>
 
 <template>
