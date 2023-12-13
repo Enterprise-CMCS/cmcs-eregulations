@@ -42,7 +42,7 @@ class EmailExtractor(Extractor):
                 raise ExtractorException(f"failed to extract text for attachment \"{file_name}\": {str(e)}")
             except Exception as e:
                 raise ExtractorException(f"extracting text for attachment \"{file_name}\" failed unexpectedly: {str(e)}")
-            
+
             return f" {file_name} {text}"
 
     def extract(self, file_path: str) -> str:
