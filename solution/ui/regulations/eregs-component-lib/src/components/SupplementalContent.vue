@@ -20,6 +20,7 @@
                 >Search These Resources</a
             >
         </div>
+        <slot name="public-label"></slot>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"

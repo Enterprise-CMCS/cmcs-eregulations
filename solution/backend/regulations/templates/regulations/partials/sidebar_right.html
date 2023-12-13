@@ -21,6 +21,13 @@
         <template #login-banner>
             {% include "regulations/partials/login_sidebar_banner.html" %}
         </template>
+        {% if user.is_authenticated %}
+            <template #public-label>
+                <div class="label--container">
+                    <doc-type-label icon-type="external" doc-type="Public" />
+                </div>
+            </template>
+        {% endif %}
     </supplemental-content>
     {% endif %}
 

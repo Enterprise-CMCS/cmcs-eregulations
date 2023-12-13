@@ -43,6 +43,11 @@ aside.right-sidebar {
         margin: 1rem 0;
     }
 
+    .label--container {
+        display: flex;
+        margin-top: 1rem;
+    }
+
     #view-button {
         box-sizing: border-box;
         font-size: $base-font-size;
