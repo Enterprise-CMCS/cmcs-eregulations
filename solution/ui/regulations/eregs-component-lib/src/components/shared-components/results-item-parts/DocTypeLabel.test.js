@@ -7,8 +7,8 @@ describe("Public/Private label", () => {
     it("Renders a Public Label", async () => {
         const wrapper = render(DocTypeLabel, {
             props: {
-                iconType: "users",
-                docType: "External",
+                iconType: "external",
+                docType: "Public",
             },
         });
 
@@ -18,7 +18,7 @@ describe("Public/Private label", () => {
     it("Renders a Private Label", async () => {
         const wrapper = render(DocTypeLabel, {
             props: {
-                iconType: "key",
+                iconType: "internal",
                 docType: "Internal",
             },
         });
