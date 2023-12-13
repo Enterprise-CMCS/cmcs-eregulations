@@ -79,8 +79,6 @@ class UploadedFileAdmin(BaseAdmin):
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
         add_to_index(form.instance)
-    # Will remove any characters from file names we do not want in it.
-    # Commas in file names causes issues in chrome on downloads since we rename the file.
 
     def upload_file(self, file, obj):
         key = obj.get_key()
