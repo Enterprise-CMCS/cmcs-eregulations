@@ -10,7 +10,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["prod-security-hub"]
+        environment: ["prod"]
       fail-fast: false
     environment:
       name: ${{ matrix.environment }}
@@ -28,12 +28,12 @@ jobs:
         uses: Enterprise-CMCS/security-hub-visibility@v1.0.5
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
-          jira-username: ${{ secrets.JIRA_USERNAME }}
+          jira-username: noVal # required variable for package but not for Enterprise Jira
           jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
-          aws-severities: CRITICAL, HIGH, MEDIUM
+          aws-severities: CRITICAL, HIGH, MEDIUM, LOW
           #assign-jira-ticket-to: VU6Q
           #auto-close: false
       - name: Alert Slack On Failure
