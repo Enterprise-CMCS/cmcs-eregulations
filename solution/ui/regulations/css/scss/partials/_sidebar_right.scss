@@ -35,6 +35,14 @@ aside.right-sidebar {
         margin-bottom: 0px !important;
     }
 
+    .div__login-sidebar {
+        background-color: $secondary_background_color;
+        border: 1px solid $border_color;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        margin: 1rem 0;
+    }
+
     #view-button {
         box-sizing: border-box;
         font-size: $base-font-size;

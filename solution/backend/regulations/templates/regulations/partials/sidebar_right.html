@@ -17,7 +17,11 @@
         :resource-display=true
         :sections="{{ node_list.sections }}"
         :subparts="{{ node_list.subparts }}"
-    ></supplemental-content>
+    >
+        <template #login-banner>
+            {% include "regulations/partials/login_sidebar_banner.html" %}
+        </template>
+    </supplemental-content>
     {% endif %}
 
 </section>

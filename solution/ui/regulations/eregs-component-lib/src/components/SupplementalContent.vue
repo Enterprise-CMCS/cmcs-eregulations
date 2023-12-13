@@ -12,6 +12,7 @@
             ({{ resourceCount }})
         </a>
         <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
+        <slot name="login-banner"></slot>
         <div v-if="resourceDisplay" class="resource_btn_container">
             <a
                 :href="resourceLink"

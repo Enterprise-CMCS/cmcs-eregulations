@@ -1,0 +1,11 @@
+<div class="div__login-sidebar">
+    {% if user.is_authenticated %} 
+        Resources you can access include policy documents internal to CMCS. 
+    {% else %} 
+        CMCS staff can
+        <a id="loginSidebar" href="{% url 'login' %}?next={{ request.path }}"
+            >sign in with CMS EUA</a
+        >
+        to access additional internal documents. 
+    {% endif %}
+</div>
