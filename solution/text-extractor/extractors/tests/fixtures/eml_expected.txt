@@ -1,4 +1,6 @@
-   This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2   [Insert state letter head]		MES SMC
+   Contents of email. I've attached a public memo in PDF and a public Word doc=
+ument.
+   IN-21-0009 - Sufficiency Memo.pdf This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2 This is line 1 This is line 2   SMC Certification Request Letter Template.docx [Insert state letter head]		MES SMC
 
 
 
@@ -70,4 +72,4 @@ Attachments:  [Attachment name]
 
 
 
-	CC: 	[Names, titles] 
+	CC: 	[Names, titles]
