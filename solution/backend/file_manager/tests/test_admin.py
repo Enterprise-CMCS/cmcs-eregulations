@@ -12,4 +12,3 @@ def test_extension():
     file_name = "random:;/!? .xls"
     clean_name = admin.clean_file_name('', file_name)
     assert clean_name == 'random.xls'
-

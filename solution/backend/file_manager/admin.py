@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.text import slugify
 
 from common.functions import establish_client
 from content_search.functions import add_to_index
