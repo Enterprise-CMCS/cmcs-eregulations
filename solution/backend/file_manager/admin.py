@@ -1,10 +1,11 @@
+import re
+
 import requests
 from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
-from django.utils.text import slugify
 
 from common.functions import establish_client
 from content_search.functions import add_to_index
@@ -71,11 +72,23 @@ class UploadedFileAdmin(BaseAdmin):
         "subjects": lambda: Subject.objects.all()
     }
 
+    # Will remove any characters from file namess we do not want in it.
+    # Commas in file names causes issues in chrsome on downloads since we rename the file.
+    def clean_file_name(self, name):
+        bad_char = [";", "!", "?", "*", ":", ",", '"', '“', "'", r'/', '\\', '-',]
+        temp = ''
+        split_name = name.split('.')
+        extension = split_name.pop()
+        file_name = '.'.join(split_name)
+        for i in bad_char:
+            temp = temp + i
+        clean_name = re.sub(rf'[{temp}]', '', file_name).strip()
+        return f'{clean_name}.{extension}'
+
     def save_model(self, request, obj, form, change):
         path = form.cleaned_data.get("file_path")
         if path:
-            file_name, extension = path._name.split('.')
-            obj.file_name = f"{slugify(file_name)}.{extension}"
+            obj.file_name = self.clean_file_name(path._name)
             self.upload_file(path, obj)
         super().save_model(request, obj, form, change)
 
