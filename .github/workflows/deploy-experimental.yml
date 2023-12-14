@@ -78,7 +78,7 @@ jobs:
     environment:
       name: "dev"
     env:
-      deployextractor: false
+      deployextractor: true
     runs-on: ubuntu-20.04
     # Change to true if you want to create text extractor for your experimental deploy.
     if: true
