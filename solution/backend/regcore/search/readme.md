@@ -1,5 +1,5 @@
 # Regulations Search
-Regulations search uses djangos integration with Postgres search to allow full text search on a sequential database.  The recommended database version for this is Postgres 15 since its capabilities are much higher for this than previous versions.
+Regulations search uses Django's integration with Postgres search to allow full text search on a sequential database.  The recommended database version for this is Postgres 15 since its capabilities are much higher for this than previous versions.
 
 For our use for full text search we created an index model based off of the Part model and its pieces within it.
 
