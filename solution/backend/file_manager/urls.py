@@ -1,9 +1,12 @@
 from django.urls import path
 
-from .views import SubjectViewset, UploadCategoryViewset, UploadedFileViewset
+from .views import RepoCategoryViewSet, RepositoryCategoryTreeViewSet, SubjectViewset, UploadedFileViewset
 
 urlpatterns = [
-    path("upload-categories", UploadCategoryViewset.as_view({
+    path("categories", RepoCategoryViewSet.as_view({
+        "get": "list",
+    })),
+    path("categories/tree", RepositoryCategoryTreeViewSet.as_view({
         "get": "list",
     })),
     path("subjects", SubjectViewset.as_view({

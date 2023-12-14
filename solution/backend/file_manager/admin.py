@@ -13,7 +13,7 @@ from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
 from .functions import get_upload_link
-from .models import DocumentType, Subject, UploadedFile
+from .models import DocumentType, RepositoryCategory, RepositorySubCategory, Subject, UploadedFile
 
 
 @admin.register(DocumentType)
@@ -30,6 +30,21 @@ class SubjectAdmin(BaseAdmin):
     search_fields = ["full_name", "short_name"]
     ordering = ("full_name", "short_name", "abbreviation")
     fields = ("full_name", "short_name", "abbreviation")
+
+
+@admin.register(RepositoryCategory)
+class CategoryAdmin(BaseAdmin):
+    admin_priority = 10
+    list_display = ("name", "description", "order", "show_if_empty")
+    search_fields = ["name", "description"]
+    ordering = ("name", "description", "order")
+
+
+@admin.register(RepositorySubCategory)
+class SubCategoryAdmin(CategoryAdmin):
+    admin_priority = 20
+    list_display = ("name", "description", "order", "show_if_empty", "parent")
+    ordering = ("name", "description", "order", "parent")
 
 
 class UploadAdminForm(forms.ModelForm):
@@ -49,7 +64,8 @@ class UploadedFileAdmin(BaseAdmin):
     filter_horizontal = ("locations", "subjects")
     readonly_fields = ('download_file', 'file_name', 'get_content', 'index_populated')
     fields = ("file_name", "file_path", "document_name", 'date', 'summary',
-              'document_type', 'subjects', 'locations', 'internal_notes', 'index_populated', 'get_content', 'download_file',)
+              'document_type', 'subjects', 'locations', 'internal_notes',
+              'index_populated', 'get_content', 'download_file', 'category',)
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
         "subjects": lambda: Subject.objects.all()

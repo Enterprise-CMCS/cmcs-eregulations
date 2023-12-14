@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_jsonform',
     'file_manager',
     'content_search',
+    'mozilla_django_oidc',
 ]
 
 MIDDLEWARE = [

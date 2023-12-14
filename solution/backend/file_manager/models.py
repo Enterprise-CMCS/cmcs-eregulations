@@ -2,9 +2,11 @@ import os
 import uuid
 
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from common.fields import CombinedNaturalSort, VariableDateField
 from common.functions import check_string_value
+from common.mixins import DisplayNameFieldMixin
 from resources.models import AbstractLocation
 
 
@@ -17,6 +19,36 @@ class DocumentType(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+
+class AbstractRepoCategory(models.Model, DisplayNameFieldMixin):
+    name = models.CharField(max_length=512, unique=True)
+    description = models.TextField(null=True, blank=True)
+    order = models.IntegerField(default=0, blank=True)
+    show_if_empty = models.BooleanField(default=False)
+
+    objects = InheritanceManager()
+
+    def __str__(self):
+        return f"{self.name} ({self._meta.verbose_name})"
+
+    class Meta:
+        ordering = ["order", "name"]
+
+
+class RepositoryCategory(AbstractRepoCategory):
+
+    class Meta:
+        verbose_name = "Repository Category"
+        verbose_name_plural = "Repository Categories"
+
+
+class RepositorySubCategory(AbstractRepoCategory):
+    parent = models.ForeignKey(RepositoryCategory, on_delete=models.CASCADE, related_name="sub_categories")
+
+    class Meta:
+        verbose_name = "Repository Sub-category"
+        verbose_name_plural = "Repository Sub-categories"
 
 
 class Subject(models.Model):
@@ -39,6 +71,9 @@ class UploadedFile(models.Model):
     internal_notes = models.TextField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="uploads")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        AbstractRepoCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="uploads"
+    )
     locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="uploads", verbose_name="Regulation Locations")
     uid = models.UUIDField(
          primary_key=False,
