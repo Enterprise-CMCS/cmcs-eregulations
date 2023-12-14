@@ -16,31 +16,23 @@ from rest_framework.response import Response
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
 from common.functions import establish_client
+from common.mixins import PAGINATION_PARAMS
 from content_search.models import ContentIndex
+from file_manager.serializers.files import (
+    AwsTokenSerializer,
+    UploadedFileSerializer,
+)
+from file_manager.serializers.groupings import (
+    AbstractRepositoryCategoryPolymorphicSerializer,
+    MetaRepositoryCategorySerializer,
+    RepositoryCategoryTreeSerializer,
+    SubjectDetailsSerializer,
+)
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
-from .models import DocumentType, Subject, UploadedFile
-from .serializers import (
-    AwsTokenSerializer,
-    DocumentTypeSerializer,
-    SubjectDetailsSerializer,
-    UploadedFileSerializer,
-)
-
-
-@extend_schema(
-    description="Retrieve a list of Upload Categories",
-)
-class UploadCategoryViewset(viewsets.ViewSet):
-    permission_classes = (IsAuthenticated,)
-    model = DocumentType
-
-    def list(self, request):
-        queryset = self.model.objects.all()
-        serializer = DocumentTypeSerializer(queryset, many=True)
-        return Response(serializer.data)
+from .models import AbstractRepoCategory, DocumentType, RepositoryCategory, RepositorySubCategory, Subject, UploadedFile
 
 
 @extend_schema(
@@ -214,3 +206,38 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         url = self.generate_download_link(file)
         response = HttpResponseRedirect(url)
         return response
+
+
+@extend_schema(
+    description="Retrieve a flat list of all categories. Pagination is disabled by default.",
+    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS + [
+        OpenApiQueryParameter("parent_details", "Show details about each sub-category's parent, rather "
+                              "than just the ID.", bool, False),
+    ],
+    responses=MetaRepositoryCategorySerializer.many(True),
+)
+class RepoCategoryViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
+    serializer_class = AbstractRepositoryCategoryPolymorphicSerializer
+    queryset = AbstractRepoCategory.objects.all().select_subclasses().prefetch_related(
+        Prefetch("repositorysubcategory__parent", RepositorySubCategory.objects.all().order_by("order")),
+    ).order_by("order")
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["parent_details"] = self.request.GET.get("parent_details", "true").lower() == "true"
+        return context
+
+
+@extend_schema(
+    description="Retrieve a top-down representation of repository categories, "
+                "with each category containing zero or more sub-categories. "
+                "Pagination is disabled by default.",
+    parameters=OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS,
+)
+class RepositoryCategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
+    queryset = RepositoryCategory.objects.all().select_subclasses().prefetch_related(
+        Prefetch("sub_categories", RepositorySubCategory.objects.all().order_by("order")),
+    ).order_by("order")
+    serializer_class = RepositoryCategoryTreeSerializer

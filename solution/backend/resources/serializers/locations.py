@@ -1,10 +1,9 @@
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
+from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
+from common.utils import ProxySerializerWrapper
 from resources.models import Section, Subpart
-
-from .mixins import PolymorphicSerializer, PolymorphicTypeField
-from .utils import ProxySerializerWrapper
 
 
 class AbstractLocationPolymorphicSerializer(PolymorphicSerializer):
