@@ -10,8 +10,8 @@ The text extractor supports the following file types. File types that are planne
 - [ ] HTML and XML
 - [x] PDF
 - [ ] Images (png, jpeg, gif, etc.)
-- [ ] Microsoft Word (doc and docx)
-- [ ] Microsoft Excel (xls and xlsx)
+- [x] Microsoft Word (doc and docx)
+- [x] Microsoft Excel (xls and xlsx)
 - [ ] Microsoft Outlook (msg)
 - [ ] Microsoft PowerPoint (ppt and pptx)
 
@@ -37,21 +37,16 @@ The following data structure is required:
     "id": 1,                                 // The eRegs database ID of the object to update
     "uri": "object_uri",                     // The web URL or object name to extract text from
     "post_url": "https://api-url-here/",     // The API URL to POST the text to
-    "post_username": "xxxxx",                // Optional - include if API requires authentication
-    "post_password": "xxxxx",                // Optional - include if API requires authentication
+    "token": "xxxxxx",                       //  If the return point uses a jwt token for authentication
     "backend": "s3",                         // Optional - defaults to 'web'
     // Only include if using the S3 backend
-    "s3": {
+    "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
-        "aws_storage_bucket_name": "xxxxxx"  // The name of the bucket to retrieve the object from
-    },
-    // Settings for Textract, leave out when deployed to use the built-in Lambda user
-    "textract": {
-        "aws_access_key_id": "xxxxxx",       // AWS access key for Textract
-        "aws_secret_access_key": "xxxxxx",   // AWS secret key for Textract
+        "aws_storage_bucket_name": "xxxxxx",  // The name of the bucket to retrieve the object from
+        "use_lambda": true,                  //  If you are using a local text extractor or a deployed text extractor(pertains to local development)
         "aws_region": "us-east-1"            // AWS region for Textract
-    }
+    },
 }
 ```
 
