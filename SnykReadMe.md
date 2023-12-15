@@ -101,7 +101,7 @@ snyk_nightly_run:
           uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.4
           with:
               jira-token: ${{ secrets.JIRA_TOKEN }}
-              jira-host: ${{ secrets.JIRA_HOST_NAME }}
+              jira-host: ${{ secrets.JIRA_HOST }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'
