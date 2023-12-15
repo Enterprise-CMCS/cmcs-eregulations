@@ -1,6 +1,8 @@
 name: Snyk Scan and Report
 
 on:
+  push:
+    branches: [ secretCleanupTest ]
   pull_request:
     branches: [ main ]
   schedule:
@@ -13,7 +15,7 @@ jobs:
   snyk_run:
     name: Snyk Run (for PR)
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'push'
     
     steps:
       - name: Check out repository
@@ -30,7 +32,7 @@ jobs:
   snyk_nightly_run:  
       name: Snyk Nightly Run (for nightly cron with JIRA)
       runs-on: ubuntu-latest
-      if: github.event_name == 'schedule'
+      if: github.event_name == 'push'
       steps:
         - name: Check out repository
           uses: actions/checkout@v3
@@ -45,7 +47,7 @@ jobs:
         - name: use the custom github  action to parse Snyk output
           uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.4
           with:
-              jira-token: ${{ secrets.JIRA_TOKEN_FOR_SNYK}}
+              jira-token: ${{ secrets.JIRA_TOKEN}}
               jira-host: ${{ secrets.JIRA_HOST }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
