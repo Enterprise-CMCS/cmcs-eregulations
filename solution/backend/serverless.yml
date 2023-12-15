@@ -298,5 +298,5 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
-  - serverless-cloudfront-invalidate
+  - severless-cf-infalidate-proxy
   - serverless-associate-waf
