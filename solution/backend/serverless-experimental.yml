@@ -200,5 +200,5 @@ resources:
 
 plugins:
   - serverless-wsgi
-  - serverless-cloudfront-invalidate
+  - severless-cf-infalidate-proxy
   - serverless-associate-waf
