@@ -1,8 +1,6 @@
 name: Snyk Scan and Report
 
 on:
-  push:
-    branches: [ secretCleanupTest ]
   pull_request:
     branches: [ main ]
   schedule:
@@ -15,7 +13,7 @@ jobs:
   snyk_run:
     name: Snyk Run (for PR)
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.event_name == 'pull_request'
     
     steps:
       - name: Check out repository
@@ -32,7 +30,7 @@ jobs:
   snyk_nightly_run:  
       name: Snyk Nightly Run (for nightly cron with JIRA)
       runs-on: ubuntu-latest
-      if: github.event_name == 'push'
+      if: github.event_name == 'schedule'
       steps:
         - name: Check out repository
           uses: actions/checkout@v3
