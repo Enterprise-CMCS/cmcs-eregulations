@@ -46,7 +46,7 @@ class OutlookExtractor(Extractor):
             if attachment.type == "data":
                 body += self._handle_data(attachment)
             elif attachment.type == "msg":
-                body += self._handle_msg(attachment.data)
+                body += self._handle_message(attachment.data)
         return body
 
     def extract(self, file_path: str) -> str:
