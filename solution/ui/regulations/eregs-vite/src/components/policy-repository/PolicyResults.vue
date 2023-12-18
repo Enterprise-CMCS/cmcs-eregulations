@@ -52,16 +52,26 @@ const showResultSnippet = (item) => {
 
 const getResultSnippet = (item) => {
     let snippet;
+
     if (item.resource_type === "internal") {
-        snippet =
-            item.summary_headline ||
-            item.summary_string ||
-            item.content_headline;
-    } else {
-        snippet = item.content_headline || item.content_string;
+        if (item.summary_headline || item.summary_string) {
+            snippet = item.summary_headline || item.summary_string;
+        } else if (item.content_headline) {
+            snippet = `...${item.content_headline}...`;
+        }
+
+        return snippet;
     }
 
-    return `...${snippet}...`;
+    if (item.resource_type === "external") {
+        if (item.content_headline) {
+            snippet = `...${item.content_headline}...`;
+        } else if (item.content_string) {
+            snippet = item.content_string;
+        }
+    }
+
+    return snippet;
 };
 
 export default {
@@ -69,7 +79,7 @@ export default {
     getResultLinkText,
     getResultSnippet,
     showResultSnippet,
-}
+};
 </script>
 
 <script setup>
@@ -105,7 +115,6 @@ const resultLinkClasses = (doc) => ({
     external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
-
 </script>
 
 <template>
