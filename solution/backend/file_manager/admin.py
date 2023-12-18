@@ -4,6 +4,9 @@ import requests
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.db.models import (
+    Prefetch,
+)
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -14,7 +17,7 @@ from resources.admin import BaseAdmin
 from resources.models import AbstractLocation
 
 from .functions import get_upload_link
-from .models import DocumentType, RepositoryCategory, RepositorySubCategory, Subject, UploadedFile
+from .models import AbstractRepoCategory, DocumentType, RepositoryCategory, RepositorySubCategory, Subject, UploadedFile
 
 
 @admin.register(DocumentType)
@@ -71,6 +74,14 @@ class UploadedFileAdmin(BaseAdmin):
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
         "subjects": lambda: Subject.objects.all()
     }
+    foreignkey_lookups = {
+        "category": lambda: AbstractRepoCategory.objects.all().select_subclasses(),
+    }
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related(
+            Prefetch("category", AbstractRepoCategory.objects.all().select_subclasses()),
+        )
 
     # Will remove any characters from file namess we do not want in it.
     # Commas in file names causes issues in chrsome on downloads since we rename the file.
