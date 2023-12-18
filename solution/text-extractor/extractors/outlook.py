@@ -40,7 +40,7 @@ class OutlookExtractor(Extractor):
 
             return body
 
-    def _handle_msg(self, message: extract_msg.message.Message) -> str:
+    def _handle_message(self, message: extract_msg.message.Message) -> str:
         body = message.body
         for attachment in message.attachments:
             if attachment.type == "data":
