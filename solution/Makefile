@@ -147,7 +147,7 @@ local.collectstatic: ## Create static assets.
 local.opensearch: ## Run a local opensearch environment
 	docker-compose -f docker-compose.opensearch.yml up -d
 
-test.cypress: ## run the cypress e2e ssuite
+test.cypress: ## run the cypress e2e suite
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker-compose -f docker-compose.yml  -f docker-compose.e2e.yml up e2e
 	docker-compose -f docker-compose.yml up -d ## resets the django_settings_module to the default
 test.cypress.local: ## run cypress tests locally without docker
