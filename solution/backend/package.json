@@ -10,6 +10,6 @@
     "serverless-wsgi": "^1.7.8"
   },
   "dependencies": {
-    "severless-cf-infalidate-proxy": "^1.12.2"
+    "serverless-cf-invalidate-proxy": "^1.0.0"
   }
 }
