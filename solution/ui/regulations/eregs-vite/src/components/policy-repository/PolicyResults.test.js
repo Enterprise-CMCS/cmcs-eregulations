@@ -1,4 +1,3 @@
-import { render } from "@testing-library/vue";
 import { describe, it, expect } from "vitest";
 
 import PolicyResults from "./PolicyResults.vue";
@@ -60,6 +59,17 @@ const MOCK_RESULTS = [
         file_name_string: "index_five.docx",
         url: "url",
     },
+    {
+        resource_type: "internal",
+        doc_name_string: "this is a document name string",
+        document_name_headline: "this is a document name headline",
+        summary_string: "this is a summary string",
+        summary_headline: null,
+        file_name_string: "index_six.docx",
+        content_string: "this is a content string",
+        content_headline: "this is a content headline",
+        url: "url",
+    },
 ];
 
 describe("getFileTypeButton", () => {
@@ -100,7 +110,12 @@ describe("getResultLinkText", () => {
 describe("getResultSnippet", () => {
     it("is internal and has a summary_headline", async () => {
         expect(PolicyResults.getResultSnippet(MOCK_RESULTS[1])).toBe(
-            "this is a summary headline"
+            "...this is a summary headline..."
+        );
+    });
+    it("is internal and has a summary_string but NOT a summary_headline", async () => {
+        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[6])).toBe(
+            "this is a summary string"
         );
     });
     it("is internal and does NOT have a summary_headline or _string, but has a content_headline", async () => {
