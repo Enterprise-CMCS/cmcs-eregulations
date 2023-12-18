@@ -12,8 +12,11 @@ The text extractor supports the following file types. File types that are planne
 - [ ] Images (png, jpeg, gif, etc.)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
-- [ ] Microsoft Outlook (msg)
-- [ ] Microsoft PowerPoint (ppt and pptx)
+- [x] Microsoft Outlook (msg)
+- [x] Generic Email (eml)
+- [x] ZIP Archives
+- [x] Microsoft PowerPoint 2007+ (pptx)
+- [ ] Microsoft PowerPoint 97-2003 (ppt)
 
 # Running locally
 

@@ -1,4 +1,3 @@
-import re
 
 import textract
 
@@ -22,7 +21,6 @@ class OfficeExtractor(Extractor):
         text = textract.process(file_path, extension=self.file_type)
 
         # cleans up weird characters
-        line = re.sub(r'(\n)+', ' ', text.decode('utf-8').encode('ascii', 'ignore').decode('utf-8'))
-        # replaces multiple spaces with single space, and removes surrounding spaces
-        line = re.sub(r'\s+', ' ', line).strip()
-        return line
+        text = text.decode('utf-8').encode('ascii', 'ignore').decode('utf-8')
+
+        return text

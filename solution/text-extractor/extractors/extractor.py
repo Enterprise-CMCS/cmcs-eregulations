@@ -14,6 +14,7 @@ class Extractor:
 
     def __init__(self, file_type: str, config: dict):
         self.file_type = file_type
+        self.config = config
 
     def extract(self, file_path: str) -> str:
         raise NotImplementedError(f"extract function not implemented for '{self.file_type}'")
