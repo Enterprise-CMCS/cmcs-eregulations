@@ -14,6 +14,14 @@ import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 import SubjectChips from "./SubjectChips.vue";
 
+const addSurroundingEllipses = (str) => {
+    if (!str) return "";
+
+    if (str.includes("search-highlight")) return `...${str}...`;
+
+    return str;
+};
+
 const getResultLinkText = (item) => {
     let linkText;
     if (item.resource_type === "internal") {
@@ -55,11 +63,11 @@ const getResultSnippet = (item) => {
 
     if (item.resource_type === "internal") {
         if (item.summary_headline) {
-            snippet = `...${item.summary_headline}...`;
+            snippet = addSurroundingEllipses(item.summary_headline);
         } else if (item.summary_string) {
             snippet = item.summary_string;
         } else if (item.content_headline) {
-            snippet = `...${item.content_headline}...`;
+            snippet = addSurroundingEllipses(item.content_headline);
         }
 
         return snippet;
@@ -67,7 +75,7 @@ const getResultSnippet = (item) => {
 
     if (item.resource_type === "external") {
         if (item.content_headline) {
-            snippet = `...${item.content_headline}...`;
+            snippet = addSurroundingEllipses(item.content_headline);
         } else if (item.content_string) {
             snippet = item.content_string;
         }
@@ -77,6 +85,7 @@ const getResultSnippet = (item) => {
 };
 
 export default {
+    addSurroundingEllipses,
     getFileTypeButton,
     getResultLinkText,
     getResultSnippet,
