@@ -76,4 +76,3 @@ class TestEmailExtractor(unittest.TestCase, FileComparisonMixin):
             with open("extractors/tests/fixtures/eml_pdf_expected.txt", "rb") as f:
                 expected = f.read().decode()
             self.assertEqual(output, expected)
-

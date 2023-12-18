@@ -30,10 +30,11 @@ class OutlookExtractor(Extractor):
                 file.write(attachment.data)
                 file.close()
 
+                body += f" {file_name} "
+
                 try:
                     extractor = Extractor.get_extractor(file_type, self.config)
-                    text = extractor.extract(file.name)
-                    body += f" {file_name} {text}"
+                    body += extractor.extract(file.name)
                 except ExtractorInitException as e:
                     logger.log(logging.ERROR, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
                 except ExtractorException as e:
