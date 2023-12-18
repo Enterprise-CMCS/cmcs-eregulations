@@ -7,7 +7,6 @@ import magic
 from extractors import (
     EmailExtractor,
     Extractor,
-    ExtractorException,
 )
 
 from . import FileComparisonMixin
@@ -72,5 +71,9 @@ class TestEmailExtractor(unittest.TestCase, FileComparisonMixin):
 
     def test_extract_failure(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
-            with self.assertRaises(ExtractorException):
-                self._test_file_type("eml", self.CONFIG)
+            extractor = Extractor.get_extractor("eml", self.CONFIG)
+            output = extractor.extract("extractors/tests/fixtures/eml_sample.eml")
+            with open("extractors/tests/fixtures/eml_pdf_expected.txt", "rb") as f:
+                expected = f.read().decode()
+            self.assertEqual(output, expected)
+

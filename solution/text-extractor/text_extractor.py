@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from tempfile import TemporaryDirectory
 
@@ -15,8 +16,11 @@ from .extractors import (
     ExtractorInitException,
 )
 
+logger = logging.getLogger(__name__)
 
-def lambda_response(status_code: int, message: str) -> dict:
+
+def lambda_response(status_code: int, message: str, loglevel: int) -> dict:
+    logging.log(loglevel, message)
     return {
         "statusCode": status_code,
         "headers": {"Content-Type": "application/json"},

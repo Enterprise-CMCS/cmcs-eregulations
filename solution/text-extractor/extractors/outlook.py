@@ -1,3 +1,4 @@
+import logging
 from tempfile import NamedTemporaryFile
 
 import extract_msg
@@ -7,6 +8,8 @@ from .exceptions import (
     ExtractorInitException,
 )
 from .extractor import Extractor
+
+logger = logging.getLogger(__name__)
 
 
 class OutlookExtractor(Extractor):
@@ -32,10 +35,10 @@ class OutlookExtractor(Extractor):
                     text = extractor.extract(file.name)
                     body += f" {file_name} {text}"
                 except ExtractorInitException as e:
-                    raise ExtractorException(f"failed to initialize extractor for attachment \"{file_name}\": {str(e)}")
+                    logger.log(logging.ERROR, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
                 except ExtractorException as e:
-                    raise ExtractorException(f"failed to extract text for attachment \"{file_name}\": {str(e)}")
+                    logger.log(logging.ERROR, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
                 except Exception as e:
-                    raise ExtractorException(f"extracting text for attachment \"{file_name}\" failed unexpectedly: {str(e)}")
+                    logger.log(logging.ERROR, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
 
         return body

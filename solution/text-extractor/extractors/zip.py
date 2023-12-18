@@ -1,3 +1,4 @@
+import logging
 import os
 import zipfile
 from tempfile import TemporaryDirectory
@@ -7,6 +8,8 @@ from .exceptions import (
     ExtractorInitException,
 )
 from .extractor import Extractor
+
+logger = logging.getLogger(__name__)
 
 
 class ZipExtractor(Extractor):
@@ -29,10 +32,15 @@ class ZipExtractor(Extractor):
                         text = extractor.extract(file_path)
                         full_text += f" {file_name} {text}"
                     except ExtractorInitException as e:
-                        raise ExtractorException(f"failed to initialize extractor for attachment \"{file_name}\": {str(e)}")
+                        logger.log(logging.ERROR, "Failed to initialize extractor for zipped file \"%s\": %s", file_name, str(e))
                     except ExtractorException as e:
-                        raise ExtractorException(f"failed to extract text for attachment \"{file_name}\": {str(e)}")
+                        logger.log(logging.ERROR, "Failed to extract text for zipped file \"%s\": %s", file_name, str(e))
                     except Exception as e:
-                        raise ExtractorException(f"extracting text for attachment \"{file_name}\" failed unexpectedly: {str(e)}")
+                        logger.log(
+                            logging.ERROR,
+                            "Extracting text for zipped file \"%s\" failed unexpectedly: %s",
+                            file_name,
+                            str(e),
+                        )
 
         return full_text
