@@ -42,11 +42,11 @@ class EmailExtractor(Extractor):
                 extractor = Extractor.get_extractor(file_type, self.config)
                 text = extractor.extract(file.name)
             except ExtractorInitException as e:
-                logger.log(logging.ERROR, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
+                logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
             except ExtractorException as e:
-                logger.log(logging.ERROR, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
+                logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
             except Exception as e:
-                logger.log(logging.ERROR, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
+                logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
 
             return f" {file_name} {text}"
 

@@ -32,12 +32,12 @@ class ZipExtractor(Extractor):
                         text = extractor.extract(file_path)
                         full_text += f" {file_name} {text}"
                     except ExtractorInitException as e:
-                        logger.log(logging.ERROR, "Failed to initialize extractor for zipped file \"%s\": %s", file_name, str(e))
+                        logger.log(logging.WARN, "Failed to initialize extractor for zipped file \"%s\": %s", file_name, str(e))
                     except ExtractorException as e:
-                        logger.log(logging.ERROR, "Failed to extract text for zipped file \"%s\": %s", file_name, str(e))
+                        logger.log(logging.WARN, "Failed to extract text for zipped file \"%s\": %s", file_name, str(e))
                     except Exception as e:
                         logger.log(
-                            logging.ERROR,
+                            logging.WARN,
                             "Extracting text for zipped file \"%s\" failed unexpectedly: %s",
                             file_name,
                             str(e),
