@@ -14,6 +14,14 @@ import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 import SubjectChips from "./SubjectChips.vue";
 
+const addSurroundingEllipses = (str) => {
+    if (!str) return "";
+
+    if (str.includes("search-highlight")) return `...${str}...`;
+
+    return str;
+};
+
 const getResultLinkText = (item) => {
     let linkText;
     if (item.resource_type === "internal") {
@@ -52,24 +60,37 @@ const showResultSnippet = (item) => {
 
 const getResultSnippet = (item) => {
     let snippet;
+
     if (item.resource_type === "internal") {
-        snippet =
-            item.summary_headline ||
-            item.summary_string ||
-            item.content_headline;
-    } else {
-        snippet = item.content_headline || item.content_string;
+        if (item.summary_headline) {
+            snippet = addSurroundingEllipses(item.summary_headline);
+        } else if (item.summary_string) {
+            snippet = item.summary_string;
+        } else if (item.content_headline) {
+            snippet = addSurroundingEllipses(item.content_headline);
+        }
+
+        return snippet;
     }
 
-    return `...${snippet}...`;
+    if (item.resource_type === "external") {
+        if (item.content_headline) {
+            snippet = addSurroundingEllipses(item.content_headline);
+        } else if (item.content_string) {
+            snippet = item.content_string;
+        }
+    }
+
+    return snippet;
 };
 
 export default {
+    addSurroundingEllipses,
     getFileTypeButton,
     getResultLinkText,
     getResultSnippet,
     showResultSnippet,
-}
+};
 </script>
 
 <script setup>
@@ -105,7 +126,6 @@ const resultLinkClasses = (doc) => ({
     external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
-
 </script>
 
 <template>
