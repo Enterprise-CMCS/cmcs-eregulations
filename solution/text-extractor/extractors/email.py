@@ -1,4 +1,5 @@
 import email
+import logging
 from tempfile import NamedTemporaryFile
 
 from .exceptions import (
@@ -6,6 +7,8 @@ from .exceptions import (
     ExtractorInitException,
 )
 from .extractor import Extractor
+
+logger = logging.getLogger(__name__)
 
 
 class EmailExtractor(Extractor):
@@ -33,15 +36,17 @@ class EmailExtractor(Extractor):
             file.write(message.get_payload(decode=True))
             file.close()
 
+            text = ""
+
             try:
                 extractor = Extractor.get_extractor(file_type, self.config)
                 text = extractor.extract(file.name)
             except ExtractorInitException as e:
-                raise ExtractorException(f"failed to initialize extractor for attachment \"{file_name}\": {str(e)}")
+                logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
             except ExtractorException as e:
-                raise ExtractorException(f"failed to extract text for attachment \"{file_name}\": {str(e)}")
+                logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
             except Exception as e:
-                raise ExtractorException(f"extracting text for attachment \"{file_name}\" failed unexpectedly: {str(e)}")
+                logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
 
             return f" {file_name} {text}"
 
