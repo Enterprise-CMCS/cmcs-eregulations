@@ -7,6 +7,7 @@ from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
+from regulations.views.logout import LogoutView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.policy_repository_search import PolicyRepositorySearchView
 from regulations.views.reader import (
@@ -21,7 +22,7 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
 from regulations.views.supplemental_content import SupplementalContentView
-from regulations.views.logout import LogoutView
+
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
 register_converter(converters.VersionConverter, 'version')

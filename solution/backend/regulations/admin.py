@@ -7,12 +7,11 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
-from django.conf import settings
 
 from .models import (
     RegulationLinkConfiguration,
@@ -20,6 +19,7 @@ from .models import (
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
+
 admin.site.logout_template = 'admin/logged_out.html'
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
