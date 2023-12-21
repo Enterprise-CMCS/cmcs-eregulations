@@ -21,7 +21,7 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
 from regulations.views.supplemental_content import SupplementalContentView
-
+from regulations.views.logout import LogoutView
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
 register_converter(converters.VersionConverter, 'version')
@@ -60,4 +60,6 @@ urlpatterns = [
         })),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('oidc/logout/', LogoutView.as_view(), name='oidc_logout'),
+
 ]

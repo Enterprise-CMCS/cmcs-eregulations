@@ -2,11 +2,14 @@
 <div id="loginIndicator">
     <span class="span__login-lamp span__login-lamp--success"></span>
     <span class="span__login-greeting">Hello, <b>{{ user.username }}</b>!</span>
-    <a id="logout" href="{% url 'logout' %}?next={{ request.path }}">Log Out</a>
+    <form action="{% url 'oidc_logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Log Out</button>
+    </form>
 {% else %}
 <div id="loginIndicator" class="display-none">
     <span class="span__login-lamp span__login-lamp--error"></span>
     <span class="span__login-greeting">Hello, <b>Guest</b>!</span>
-    <a id="login" href="{% url 'login' %}?next={{ request.path }}">Log In</a>
+    <a id="login" href="{% url 'oidc_authentication_init' %}">Log In</a>
 {% endif %}
 </div>
