@@ -1,3 +1,4 @@
+from common.functions import check_string_value
 from content_search.models import ContentIndex
 from file_manager.models import UploadedFile
 from resources.models import FederalRegisterDocument, SupplementalContent
@@ -22,55 +23,45 @@ def check_index(content):
         return None
 
 
-def update_index(content_index, content):
-    '''
-    update_index updates a piece of content if it already exist in the index
+def get_subject_string(subjects):
+    if subjects:
+        return ' '.join([str(subject) for subject in subjects])
+    return ''
 
-    :param content_index:  The existing index
-    :param content: The content that was updated
-    '''
-    if isinstance(content, UploadedFile):
-        new_index = ContentIndex(
-            file=content,
-            document_type=content.document_type,
-            file_name_string=content.file_name,
-            url=content.uid,
-            doc_name_string=content.document_name,
-            summary_string=content.summary,
-            date_string=content.date,
-            resource_type='internal',
-            # content_type='uploadedfile',
-            # content_id=content.id
-        )
-        new_index.save()
-    elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
-        if not content.approved:
-            content_index.delete()
-            return
-        new_index = ContentIndex(
-            category=content.category,
-            url=content.url,
-            doc_name_string=content.name,
-            summary_string=content.description,
-            date_string=content.date,
-            resource_type='external',
-        )
-        new_index.save()
-        if isinstance(content, SupplementalContent):
-            new_index.supplemental_content = content
-            # new_index.content_type = 'supplementalcontent'
-            # new_index.content_id = content.id
-        else:
-            new_index.fr_doc = content
-            # new_index.content_type = 'federalregisterdocument'
-            # new_index.content_id = content.id
-        new_index.save()
-    new_index.content = content_index.content
-    new_index.locations.set(content.locations.all())
-    new_index.subjects.set(content.subjects.all())
-    new_index.save()
-    content_index.delete()
-    return
+
+def upload_file_index(content):
+    index = ContentIndex(
+        file=content,
+        document_type=content.document_type,
+        file_name_string=content.file_name,
+        upload_category=content.category,
+        url=content.uid,
+        doc_name_string=content.document_name,
+        summary_string=content.summary,
+        date_string=content.date,
+        resource_type='internal',
+        rank_a_string=f"{check_string_value(content.document_name)}",
+        rank_b_string=f"{check_string_value(content.summary)}",
+        rank_c_string=f"{check_string_value(content.date)} {check_string_value(content.file_name)}"
+    )
+    index.save()
+    return index
+
+
+def external_content_index(content):
+    index = ContentIndex(
+        category=content.category,
+        url=content.url,
+        doc_name_string=content.name,
+        summary_string=content.description,
+        date_string=content.date,
+        resource_type='external',
+        rank_a_string=f"{check_string_value(content.name)} {check_string_value(content.description)}",
+        rank_b_string='',
+        rank_c_string=f"{check_string_value(content.date)}"
+    )
+    index.save()
+    return index
 
 
 def add_to_index(content):
@@ -80,46 +71,29 @@ def add_to_index(content):
 
     param1 content: The content that was updated.
     '''
-    content_index = check_index(content)
-    if content_index:
-        return update_index(content_index, content)
+    old_index = check_index(content)
+
     if isinstance(content, UploadedFile):
-        content_index = ContentIndex(
-            file=content,
-            document_type=content.document_type,
-            file_name_string=content.file_name,
-            url=content.uid,
-            doc_name_string=content.document_name,
-            summary_string=content.summary,
-            date_string=content.date,
-            resource_type='internal',
-            # content_type='uploadedfile',
-            # content_id=content.id
-        )
+        content_index = upload_file_index(content)
         content_index.save()
     elif isinstance(content, SupplementalContent) or isinstance(content, FederalRegisterDocument):
         if not content.approved:
+            if old_index:
+                old_index.delete()
             return
-        content_index = ContentIndex(
-            category=content.category,
-            url=content.url,
-            doc_name_string=content.name,
-            summary_string=content.description,
-            date_string=content.date,
-            resource_type='external',
-        )
-
+        content_index = external_content_index(content)
+        content_index.save()
         if isinstance(content, SupplementalContent):
             content_index.supplemental_content = content
-            # content_index.content_type = 'supplementalcontent'
-            # content_index.content_id = content.id
         else:
             content_index.fr_doc = content
-            # content_index.content_type = 'federalregisterdocument'
-            # content_index.content_id = content.id
         content_index.save()
+    content_index.rank_d_string = get_subject_string(content.subjects.all())
     content_index.locations.set(content.locations.all())
     content_index.subjects.set(content.subjects.all())
+    if old_index:
+        content_index.content = old_index.content
+        old_index.delete()
     content_index.save()
     return None
 

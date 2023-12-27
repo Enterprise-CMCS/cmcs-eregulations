@@ -183,8 +183,12 @@ class InvokeTextExtractorViewset(APIView):
             )
             resp.raise_for_status()
         else:
+            if settings.TEXT_EXTRACTOR_ARN:
+                textract_arn = settings.TEXT_EXTRACTOR_ARN
+            else:
+                textract_arn = settings.TEXTRACT_ARN
             lambda_client = establish_client('lambda')
-            resp = lambda_client.invoke(FunctionName=settings.TEXTRACT_ARN,
+            resp = lambda_client.invoke(FunctionName=textract_arn,
                                         InvocationType='Event',
                                         Payload=json.dumps(json_object))
         return Response(data={'response': resp})

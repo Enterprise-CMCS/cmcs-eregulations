@@ -2,13 +2,13 @@ import unittest
 
 import extractors
 
+from . import FileComparisonMixin
 
-class TestTextExtractor(unittest.TestCase):
+
+class TestTextExtractor(unittest.TestCase, FileComparisonMixin):
     def test_create(self):
-        extractor = extractors.Extractor.get_extractor("text/plain")
+        extractor = extractors.Extractor.get_extractor("txt")
         self.assertIsInstance(extractor, extractors.TextExtractor)
 
     def test_extract(self):
-        extractor = extractors.Extractor.get_extractor("text/plain")
-        output = extractor.extract(b"This is plain text")
-        self.assertEqual(output, "This is plain text")
+        self._test_file_type("txt")

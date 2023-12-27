@@ -98,38 +98,39 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
     @transaction.atomic
     def update_user(self, user: User, claims) -> User:
         """Update existing user with new claims, if necessary save, and return user"""
-        # Determine group membership based on jobcodes and add the user to the groups
 
         jobcodes = claims.get("jobcodes")
         jobcodes_list = jobcodes.split(",")  # Split the jobcodes string into a list
 
         # Extract relevant jobcode information
         relevant_jobcodes = [jobcode.replace("cn=", "") for jobcode in jobcodes_list if jobcode.startswith("cn=EREGS_")]
-        group_mapping = {
-            "EREGS_ADMIN": "EREGS-ADMIN",
-            "EREGS_MANAGER": "EREGS-MANAGER",
-            "EREGS_EDITOR": "EREGS-EDITOR",
-            "EREGS_READER": "EREGS-READER"
-        }
 
-        groups_to_add = [group_mapping.get(jobcode) for jobcode in relevant_jobcodes if jobcode in group_mapping]
+        # Define the base group names
+        base_group_names = ["EREGS_ADMIN", "EREGS_MANAGER", "EREGS_EDITOR", "EREGS_READER"]
+
+        # Strip "-V" or "-P" suffix in relevant jobcodes for comparison
+        # ( Jobcodes on VAL will have an _VAL and on prod will have _PRD )
+        relevant_jobcodes_with_underscores = [re.sub(r'[_](VAL|PRD)$', '', jobcode) for jobcode in relevant_jobcodes]
+
+        # Filter relevant jobcodes based on the base group names
+        groups_to_add = [jobcode for jobcode in relevant_jobcodes_with_underscores if
+                         any(jobcode.startswith(base_group) for base_group in base_group_names)]
+
+        # Update user attributes based on group membership
+        user.is_active = any(group.startswith("EREGS_") for group in groups_to_add)
+        user.is_staff = any(group.startswith("EREGS_") for group in groups_to_add if group != "EREGS_READER")
+        user.is_superuser = "EREGS_ADMIN" in groups_to_add
 
         # Add the user to the determined groups
         user.groups.set(Group.objects.filter(name__in=groups_to_add))
 
-        first_name = claims.get("firstName")
-        if first_name:
-            user.first_name = first_name
+        # Update user's first and last names
+        user.first_name = claims.get("firstName", user.first_name)
+        user.last_name = claims.get("lastName", user.last_name)
 
-        last_name = claims.get("lastName")
-        if last_name:
-            user.last_name = last_name
+        # Check if there are any relevant jobcodes
+        user.is_active = bool(relevant_jobcodes)
 
-        # Check if there are any jobcodes
-        if relevant_jobcodes:
-            user.is_active = True
-        else:
-            user.is_active = False
         user.save()
 
         return user

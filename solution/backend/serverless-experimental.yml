@@ -47,8 +47,11 @@ provider:
     OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
     DEPLOY_NUMBER: ${env:RUN_ID}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
-    # Used for when you want to deploy your own
-    # TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
+    BASIC_SEARCH_FILTER: ${ssm:/eregulations/basic_search_filter}
+    QUOTED_SEARCH_FILTER: ${ssm:/eregulations/quoted_search_filter}
+    # This text extractor is for an experimental deploy if one is made.
+    TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
+    # This text extractor is the "main dev" extractor.  Used if one is not created in experimental.
     TEXTRACT_ARN: ${ssm:/eregulations/textextractor-arn}
   vpc:
     securityGroupIds:
@@ -82,7 +85,8 @@ custom:
     DB_NAME: ${self:custom.stage}
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
-    # text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
+    text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
+    #text_extractor_arn: ''
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
@@ -192,7 +196,7 @@ resources:
                      - "lambda:InvokeFunction"
                    Resource:
                      - "${ssm:/eregulations/textextractor-arn}"
-                    #  - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
+                     - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
 
 
 plugins:

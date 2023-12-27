@@ -1,4 +1,5 @@
 import unittest
+from tempfile import TemporaryDirectory
 
 import mock
 import requests
@@ -21,9 +22,12 @@ class TestWebBackend(unittest.TestCase):
             mock_response.status_code = 200
             mock_response.content = b"This is some content"
 
-            backend = FileBackend.get_backend("web")
-            file = backend.get_file("some_url")
-            self.assertEqual(file, b"This is some content")
+            with TemporaryDirectory() as temp_dir:
+                backend = FileBackend.get_backend("web")
+                path = backend.get_file(temp_dir, "some_url")
+                with open(path, "r") as f:
+                    data = f.read()
+                self.assertEqual(data, "This is some content")
 
     def test_bad_url(self):
         with mock.patch.object(requests, "get") as get_mock:
@@ -31,9 +35,10 @@ class TestWebBackend(unittest.TestCase):
             mock_response.status_code = 404
             mock_response.content = b"File not found!"
 
-            backend = FileBackend.get_backend("web")
-            with self.assertRaises(BackendException):
-                backend.get_file("some_url")
+            with TemporaryDirectory() as temp_dir:
+                backend = FileBackend.get_backend("web")
+                with self.assertRaises(BackendException):
+                    backend.get_file(temp_dir, "some_url")
 
     def test_request_exception(self):
         with mock.patch.object(requests, "get") as get_mock:
@@ -42,6 +47,7 @@ class TestWebBackend(unittest.TestCase):
             mock_response.status_code = 200
             mock_response.content = b"This is some content"
 
-            backend = FileBackend.get_backend("web")
-            with self.assertRaises(BackendException):
-                backend.get_file("some_url")
+            with TemporaryDirectory() as temp_dir:
+                backend = FileBackend.get_backend("web")
+                with self.assertRaises(BackendException):
+                    backend.get_file(temp_dir, "some_url")

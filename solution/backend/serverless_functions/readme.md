@@ -1,0 +1,1 @@
+To add a lambda function to the environment add the function to which ever envrionment needed.  Experimental is for exerimental deploys, dev is for our dev environment, val is for val, and prod is for production.

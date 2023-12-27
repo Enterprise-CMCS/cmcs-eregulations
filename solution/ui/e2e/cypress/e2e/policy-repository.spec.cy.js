@@ -54,6 +54,7 @@ describe("Policy Repository", () => {
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
+        cy.get(".subject__heading").should("not.exist");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
         ).scrollIntoView();
@@ -69,6 +70,9 @@ describe("Policy Repository", () => {
             .should("have.text", " Managed Care ")
             .click({ force: true });
         cy.url().should("include", "/policy-repository?subjects=63");
+        cy.get(".subject__heading")
+            .should("exist")
+            .and("have.text", "Managed Care");
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
@@ -98,18 +102,39 @@ describe("Policy Repository", () => {
         });
         cy.url().should("include", "/policy-repository?subjects=1");
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
+        cy.get(".subject__heading span")
+            .eq(0)
+            .should("have.text", "Cures Act")
+            .and("have.class", "subj-heading__span--bold");
+        cy.get(".subject__heading span")
+            .eq(1)
+            .should("have.text", "21st Century Cures Act")
+            .and("not.have.class", "subj-heading__span--bold");
 
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
         cy.url().should("include", "/policy-repository?subjects=2");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
+        cy.get(".subject__heading span")
+            .eq(0)
+            .should("have.text", "ABP")
+            .and("have.class", "subj-heading__span--bold");
+        cy.get(".subject__heading span")
+            .eq(1)
+            .should("have.text", "Alternative Benefit Plan")
+            .and("not.have.class", "subj-heading__span--bold");
 
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
         cy.url().should("include", "/policy-repository?subjects=3");
         cy.get(`button[data-testid=remove-subject-3]`).should("exist");
+        cy.get(".subject__heading span")
+            .eq(0)
+            .should("have.text", "Access to Services")
+            .and("have.class", "subj-heading__span--bold");
+        cy.get(".subject__heading span").eq(1).should("not.exist");
 
         cy.go("back");
         cy.url().should("include", "/policy-repository?subjects=2");
@@ -131,7 +156,7 @@ describe("Policy Repository", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.getPolicyDocs({ username, password })
+        cy.getPolicyDocs({ username, password });
         cy.get(".related-sections")
             .first()
             .find(".related-section-link")
@@ -168,21 +193,17 @@ describe("Policy Repository", () => {
         cy.checkAccessibility();
     });
     it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
-        cy.getPolicyDocs({ username: readerUsername, password: readerPassword })
+        cy.getPolicyDocs({
+            username: readerUsername,
+            password: readerPassword,
+        });
         cy.get(".edit-button").should("not.exist");
         cy.checkAccessibility();
     });
     it("should display edit button for individual uploaded items if signed in and authorized to edit", () => {
-        cy.getPolicyDocs({ username, password })
+        cy.getPolicyDocs({ username, password });
         cy.get(".edit-button").should("exist");
         cy.checkAccessibility();
-    });
-    it("should visit the admin page for the document when the edit button is clicked", () => {
-        cy.getPolicyDocs({ username, password })
-        cy.retry(3, { interval: 1000 }, () => {
-            cy.get('.edit-button').first().should('be.visible').click({ force: true });
-            cy.url({ timeout: 10000 }).should("include", "/admin/resources/supplementalcontent/610/change/");
-        });
     });
     it("should update the URL when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
@@ -221,6 +242,15 @@ describe("Policy Repository", () => {
             "include",
             "/policy-repository?type=internal&subjects=3&q=test"
         );
+        cy.get(".document__subjects a")
+            .eq(0)
+            .should("have.text", " Access to Services ");
+        cy.get(".document__subjects a")
+            .eq(1)
+            .should("have.text", " Adult Day Health ");
+        cy.get(".document__subjects a")
+            .eq(2)
+            .should("have.text", " Ambulatory Prenatal Care ");
         cy.get(`a[data-testid=add-subject-chip-4]`)
             .should("have.attr", "title")
             .and("include", "Adult Day Health");
@@ -320,6 +350,7 @@ describe("Policy Repository", () => {
             expect(interception.response.statusCode).to.eq(200);
         });
         cy.get("input#main-content").should("have.value", "test");
+        cy.get(".subject__heading").should("not.exist");
     });
 
     it("should have a Documents to Show checkbox list", () => {

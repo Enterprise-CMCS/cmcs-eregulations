@@ -4,6 +4,10 @@ provider:
   name: aws
   iam:
     role: LambdaFunctionRole
+  logs:
+    restApi:
+      level: INFO
+      roleManagedExternally: true
   vpc:
     securityGroupIds:
       - !Ref ServerlessSecurityGroup

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django_jsonform',
     'file_manager',
     'content_search',
+    'mozilla_django_oidc',
 ]
 
 MIDDLEWARE = [
@@ -229,7 +230,8 @@ USE_LOCAL_TEXTRACT = False
 # The first text extractor is if it was created by serverless.  If it wasnt then it will use the
 # text extractor who's arn you provide in the docker file.
 
-TEXTRACT_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", os.environ.get('TEXTRACT_ARN', '')) # noqa
+TEXT_EXTRACTOR_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", '')
+TEXTRACT_ARN = os.environ.get('TEXTRACT_ARN', '')
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",
@@ -310,3 +312,6 @@ CSP_CONNECT_SRC = [
     "http://*.analytics.google.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+
+BASIC_SEARCH_FILTER = os.environ.get("BASIC_SEARCH_FILTER", .1)
+QUOTED_SEARCH_FILTER = os.environ.get("QUOTED_SEARCH_FILTER", .01)
