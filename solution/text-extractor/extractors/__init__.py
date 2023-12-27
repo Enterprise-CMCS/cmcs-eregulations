@@ -10,3 +10,4 @@ from .office import OfficeExtractor as OfficeExtractor
 from .outlook import OutlookExtractor as OutlookExtractor
 from .binary import BinaryExtractor as BinaryExtractor
 from .email import EmailExtractor as EmailExtractor
+from .markup import MarkupExtractor as MarkupExtractor
