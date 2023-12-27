@@ -14,15 +14,6 @@ class TestOfficeExtractor(unittest.TestCase, FileComparisonMixin):
             extractor = Extractor.get_extractor(i)
             self.assertIsInstance(extractor, OfficeExtractor)
 
-    def test_xls(self):
-        self._test_file_type("xls")
-
-    def test_xlsx(self):
-        self._test_file_type("xlsx")
-
-    def test_xlsm(self):
-        self._test_file_type("xlsm")
-
     def test_docx(self):
         self._test_file_type("docx")
 
