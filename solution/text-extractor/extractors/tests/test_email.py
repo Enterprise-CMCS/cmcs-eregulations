@@ -67,7 +67,7 @@ class TestEmailExtractor(unittest.TestCase, FileComparisonMixin):
 
     def test_extract(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("eml", self.CONFIG)
+            self._test_file_type("eml", config=self.CONFIG)
 
     def test_extract_failure(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
