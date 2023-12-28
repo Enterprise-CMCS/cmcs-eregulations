@@ -2,17 +2,17 @@ import unittest
 
 from extractors import (
     Extractor,
-    OfficeExtractor,
+    PowerPointExtractor,
 )
 
 from . import FileComparisonMixin
 
 
-class TestOfficeExtractor(unittest.TestCase, FileComparisonMixin):
+class TestPowerPointExtractor(unittest.TestCase, FileComparisonMixin):
     def test_create(self):
-        for i in OfficeExtractor.file_types:
+        for i in PowerPointExtractor.file_types:
             extractor = Extractor.get_extractor(i)
-            self.assertIsInstance(extractor, OfficeExtractor)
+            self.assertIsInstance(extractor, PowerPointExtractor)
 
     def test_pptx(self):
         self._test_file_type("pptx")
