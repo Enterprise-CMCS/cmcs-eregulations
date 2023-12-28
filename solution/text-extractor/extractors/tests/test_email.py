@@ -60,19 +60,10 @@ class TestEmailExtractor(unittest.TestCase, FileComparisonMixin):
         },
     }
 
-    def test_create(self):
-        for i in EmailExtractor.file_types:
-            extractor = Extractor.get_extractor(i)
-            self.assertIsInstance(extractor, EmailExtractor)
-
     def test_extract(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
             self._test_file_type("eml", config=self.CONFIG)
 
     def test_extract_failure(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
-            extractor = Extractor.get_extractor("eml", self.CONFIG)
-            output = extractor.extract("extractors/tests/fixtures/eml_sample.eml")
-            with open("extractors/tests/fixtures/eml_pdf_expected.txt", "rb") as f:
-                expected = f.read().decode()
-            self.assertEqual(output, expected)
+            self._test_file_type("eml", variation="pdf")

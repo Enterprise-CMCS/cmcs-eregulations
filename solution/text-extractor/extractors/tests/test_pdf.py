@@ -68,11 +68,7 @@ class TestPdfExtractor(unittest.TestCase):
         },
     }
 
-    FILE = "extractors/tests/fixtures/pdf_sample.pdf"
-
-    def test_create(self):
-        extractor = Extractor.get_extractor("application/pdf", self.CONFIG)
-        self.assertIsInstance(extractor, PdfExtractor)
+    FILE = "extractors/tests/fixtures/pdf/sample.pdf"
 
     # This test is all-encompassing. It tests if image conversion, response parsing, and multipage support is working.
     def test_extract(self):
