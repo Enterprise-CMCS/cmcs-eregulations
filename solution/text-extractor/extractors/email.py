@@ -3,7 +3,6 @@ import logging
 
 from .exceptions import (
     ExtractorException,
-    ExtractorInitException,
 )
 from .extractor import Extractor
 
@@ -29,19 +28,10 @@ class EmailExtractor(Extractor):
             return ""
 
         file_name = message.get_filename()
-        file_type = file_name.lower().split('.')[-1]
-        text = ""
-
-        try:
-            extractor = Extractor.get_extractor(file_type, self.config)
-            text = extractor.extract(message.get_payload(decode=True))
-        except ExtractorInitException as e:
-            logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
-        except ExtractorException as e:
-            logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
-        except Exception as e:
-            logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
-
+        text = self._extract_embedded(
+            message.get_filename(),
+            message.get_payload(decode=True),
+        )
         return f" {file_name} {text}"
 
     def extract(self, file: bytes) -> str:

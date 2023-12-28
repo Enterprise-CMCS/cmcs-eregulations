@@ -4,7 +4,6 @@ import extract_msg
 
 from .exceptions import (
     ExtractorException,
-    ExtractorInitException,
 )
 from .extractor import Extractor
 
@@ -19,21 +18,7 @@ class OutlookExtractor(Extractor):
         if not file_name:
             logger.log(logging.WARN, "A data attachment failed to extract because it has no filename.")
             return ""
-
-        file_type = file_name.lower().split('.')[-1]
-        body = f" {file_name} "
-
-        try:
-            extractor = Extractor.get_extractor(file_type, self.config)
-            body += extractor.extract(attachment.data)
-        except ExtractorInitException as e:
-            logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
-        except ExtractorException as e:
-            logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
-        except Exception as e:
-            logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
-
-        return body
+        return f" {file_name} {self._extract_embedded(file_name, attachment.data)}"
 
     def _handle_message(self, message: extract_msg.message.Message) -> str:
         body = message.body

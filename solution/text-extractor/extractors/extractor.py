@@ -1,6 +1,12 @@
+import logging
 from tempfile import NamedTemporaryFile
 
-from .exceptions import ExtractorInitException
+from .exceptions import (
+    ExtractorException,
+    ExtractorInitException,
+)
+
+logger = logging.getLogger(__name__)
 
 
 # Base class for text extraction
@@ -23,6 +29,19 @@ class Extractor:
         file.write(data)
         file.close()
         return file.name
+
+    def _extract_embedded(self, file_name: str, file: bytes) -> str:
+        file_type = file_name.lower().split(".")[-1]
+        try:
+            extractor = Extractor.get_extractor(file_type, self.config)
+            return extractor.extract(file)
+        except ExtractorInitException as e:
+            logger.log(logging.WARN, "Failed to initialize extractor for embedded file \"%s\": %s", file_name, str(e))
+        except ExtractorException as e:
+            logger.log(logging.WARN, "Failed to extract text for embedded file \"%s\": %s", file_name, str(e))
+        except Exception as e:
+            logger.log(logging.WARN, "Extracting text for embedded file \"%s\" failed unexpectedly: %s", file_name, str(e))
+        return ""
 
     def extract(self, file: bytes) -> str:
         raise NotImplementedError(f"extract function not implemented for '{self.file_type}'")

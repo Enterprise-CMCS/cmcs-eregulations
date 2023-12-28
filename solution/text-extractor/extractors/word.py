@@ -4,10 +4,6 @@ from tempfile import TemporaryDirectory
 
 import docx2txt
 
-from .exceptions import (
-    ExtractorException,
-    ExtractorInitException,
-)
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
@@ -25,14 +21,5 @@ class WordExtractor(Extractor):
                 # Run extractor for embedded files
                 with open(full_path, "rb") as f:
                     data = f.read()
-                file_type = file.lower().split('.')[-1]
-                try:
-                    extractor = Extractor.get_extractor(file_type, self.config)
-                    text += f" {extractor.extract(data)}"
-                except ExtractorInitException as e:
-                    logger.log(logging.WARN, "Failed to initialize extractor for embedded file \"%s\": %s", file, str(e))
-                except ExtractorException as e:
-                    logger.log(logging.WARN, "Failed to extract text for embedded file \"%s\": %s", file, str(e))
-                except Exception as e:
-                    logger.log(logging.WARN, "Extracting text for embedded file \"%s\" failed unexpectedly: %s", file, str(e))
+                text += f" {self._extract_embedded(file, data)}"
         return text

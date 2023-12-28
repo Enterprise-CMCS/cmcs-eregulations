@@ -2,10 +2,6 @@ import logging
 
 from pptx import Presentation
 
-from .exceptions import (
-    ExtractorException,
-    ExtractorInitException,
-)
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
@@ -16,8 +12,8 @@ class PowerPointExtractor(Extractor):
 
     def extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
-        text = ""
         presentation = Presentation(file_path)
+        text = ""
 
         for slide in presentation.slides:
             for shape in slide.shapes:
@@ -26,32 +22,6 @@ class PowerPointExtractor(Extractor):
                 if hasattr(shape, "image"):
                     image = shape.image
                     if hasattr(image, "ext"):
-                        file_type = image.ext
-
-                        # Run extractor for embedded file
-                        try:
-                            extractor = Extractor.get_extractor(file_type, self.config)
-                            text += f" {extractor.extract(image.blob)}"
-                        except ExtractorInitException as e:
-                            logger.log(
-                                logging.WARN,
-                                "Failed to initialize extractor for embedded %s file: %s",
-                                file_type,
-                                str(e),
-                            )
-                        except ExtractorException as e:
-                            logger.log(
-                                logging.WARN,
-                                "Failed to extract text for embedded %s file: %s",
-                                file_type,
-                                str(e),
-                            )
-                        except Exception as e:
-                            logger.log(
-                                logging.WARN,
-                                "Extracting text for embedded %s file failed unexpectedly: %s",
-                                file_type,
-                                str(e),
-                            )
-
+                        file_name = f"image.{image.ext}"
+                        text += f" {self._extract_embedded(file_name, image.blob)}"
         return text
