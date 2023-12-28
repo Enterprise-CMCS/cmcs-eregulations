@@ -6,7 +6,6 @@ from .extractor import Extractor
 
 class OfficeExtractor(Extractor):
     file_types = (
-        'docx',
         'pptx',
     )
 
