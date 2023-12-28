@@ -1,3 +1,5 @@
+from tempfile import NamedTemporaryFile
+
 from .exceptions import ExtractorInitException
 
 
@@ -16,5 +18,11 @@ class Extractor:
         self.file_type = file_type
         self.config = config
 
-    def extract(self, file_path: str) -> str:
+    def _write_file(self, data: bytes) -> str:
+        file = NamedTemporaryFile(delete=False)
+        file.write(data)
+        file.close()
+        return file.name
+
+    def extract(self, file: bytes) -> str:
         raise NotImplementedError(f"extract function not implemented for '{self.file_type}'")

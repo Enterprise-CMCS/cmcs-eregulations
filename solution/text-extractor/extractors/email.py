@@ -1,6 +1,5 @@
 import email
 import logging
-from tempfile import NamedTemporaryFile
 
 from .exceptions import (
     ExtractorException,
@@ -31,29 +30,23 @@ class EmailExtractor(Extractor):
 
         file_name = message.get_filename()
         file_type = file_name.lower().split('.')[-1]
+        text = ""
 
-        with NamedTemporaryFile(delete=False) as file:
-            file.write(message.get_payload(decode=True))
-            file.close()
-
-            text = ""
-
-            try:
-                extractor = Extractor.get_extractor(file_type, self.config)
-                text = extractor.extract(file.name)
-            except ExtractorInitException as e:
-                logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
-            except ExtractorException as e:
-                logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
-            except Exception as e:
-                logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
-
-            return f" {file_name} {text}"
-
-    def extract(self, file_path: str) -> str:
         try:
-            with open(file_path, "r") as f:
-                msg = email.message_from_file(f)
+            extractor = Extractor.get_extractor(file_type, self.config)
+            text = extractor.extract(message.get_payload(decode=True))
+        except ExtractorInitException as e:
+            logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
+        except ExtractorException as e:
+            logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
+        except Exception as e:
+            logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
+
+        return f" {file_name} {text}"
+
+    def extract(self, file: bytes) -> str:
+        try:
+            msg = email.message_from_bytes(file)
         except Exception as e:
             raise ExtractorException(f"eml file failed to extract: {str(e)}")
 

@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 class ZipExtractor(Extractor):
     file_types = ("zip",)
 
-    def extract(self, file_path: str) -> str:
+    def extract(self, file: bytes) -> str:
+        file_path = self._write_file(file)
         full_text = ""
 
         with TemporaryDirectory() as temp_dir:
@@ -27,9 +28,12 @@ class ZipExtractor(Extractor):
                     file_type = file_name.lower().split('.')[-1]
                     file_path = os.path.abspath(os.path.join(root, file_name))
 
+                    with open(file_path, "rb") as f:
+                        data = f.read()
+
                     try:
                         extractor = Extractor.get_extractor(file_type, self.config)
-                        text = extractor.extract(file_path)
+                        text = extractor.extract(data)
                         full_text += f" {file_name} {text}"
                     except ExtractorInitException as e:
                         logger.log(logging.WARN, "Failed to initialize extractor for zipped file \"%s\": %s", file_name, str(e))

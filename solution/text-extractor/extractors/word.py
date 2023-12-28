@@ -16,15 +16,19 @@ logger = logging.getLogger(__name__)
 class WordExtractor(Extractor):
     file_types = ("docx",)
 
-    def extract(self, file_path: str) -> str:
+    def extract(self, file: bytes) -> str:
+        file_path = self._write_file(file)
         with TemporaryDirectory() as temp_dir:
             text = docx2txt.process(file_path, temp_dir)
             for file in os.listdir(temp_dir):
+                full_path = os.path.join(temp_dir, file)
                 # Run extractor for embedded files
+                with open(full_path, "rb") as f:
+                    data = f.read()
                 file_type = file.lower().split('.')[-1]
                 try:
                     extractor = Extractor.get_extractor(file_type, self.config)
-                    text += f" {extractor.extract(os.path.join(temp_dir, file))}"
+                    text += f" {extractor.extract(data)}"
                 except ExtractorInitException as e:
                     logger.log(logging.WARN, "Failed to initialize extractor for embedded file \"%s\": %s", file, str(e))
                 except ExtractorException as e:

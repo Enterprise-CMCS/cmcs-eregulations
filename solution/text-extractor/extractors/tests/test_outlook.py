@@ -1,10 +1,5 @@
 import unittest
 
-from extractors import (
-    Extractor,
-    OutlookExtractor,
-)
-
 from . import FileComparisonMixin
 
 

@@ -4,11 +4,6 @@ from unittest.mock import patch
 import botocore
 import magic
 
-from extractors import (
-    EmailExtractor,
-    Extractor,
-)
-
 from . import FileComparisonMixin
 
 # Original botocore _make_api_call function

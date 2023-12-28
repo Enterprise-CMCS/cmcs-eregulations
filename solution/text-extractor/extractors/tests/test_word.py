@@ -1,10 +1,5 @@
 import unittest
 
-from extractors import (
-    Extractor,
-    WordExtractor,
-)
-
 from . import FileComparisonMixin
 
 

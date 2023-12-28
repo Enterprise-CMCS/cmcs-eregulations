@@ -1,10 +1,5 @@
 import unittest
 
-from extractors import (
-    ExcelExtractor,
-    Extractor,
-)
-
 from . import FileComparisonMixin
 
 

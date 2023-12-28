@@ -1,7 +1,5 @@
 import unittest
 
-import extractors
-
 from . import FileComparisonMixin
 
 

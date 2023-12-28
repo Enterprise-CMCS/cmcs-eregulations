@@ -40,16 +40,14 @@ class PdfExtractor(Extractor):
             fmt="jpeg",
         )
 
-    def extract(self, file_path: str) -> str:
-        text = ""
+    def extract(self, file: bytes) -> str:
         with TemporaryDirectory() as temp_dir:
             try:
-                with open(file_path, 'rb') as pdf_file:
-                    pdf = pdf_file.read()
-                    pages = self._convert_to_images(pdf, temp_dir)
-
+                pages = self._convert_to_images(file, temp_dir)
             except Exception as e:
                 raise ExtractorException(f"failed to convert PDF to images: {str(e)}")
+
+            text = ""
             for page in pages:
                 try:
                     with open(page, "rb") as f:
@@ -66,4 +64,5 @@ class PdfExtractor(Extractor):
                             text += item["Text"] + " "
                 except KeyError as e:
                     raise ExtractorException(f"AWS response formatted improperly: {str(e)}")
+
         return text

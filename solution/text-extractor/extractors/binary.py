@@ -6,14 +6,12 @@ from .extractor import Extractor
 
 
 class BinaryExtractor(Extractor):
-    file_types = (
-                  'doc',
-                  )
+    file_types = ('doc',)
 
-    def extract(self, file_path: str) -> str:
-
+    def extract(self, file: bytes) -> str:
         #  Solution taken from here https://stackoverflow.com/questions/64397811/reading-a-doc-file-in-memory.  Doc files
         #  This is used for binary types.  So far just .doc but might include .xls.  We shall see.
+        file_path = self._write_file(file)
         with open(file_path, 'rb') as file:
             f = ofio(file)
             data = f.openstream('WordDocument').read()

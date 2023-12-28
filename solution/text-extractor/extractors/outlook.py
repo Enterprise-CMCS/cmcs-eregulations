@@ -1,5 +1,4 @@
 import logging
-from tempfile import NamedTemporaryFile
 
 import extract_msg
 
@@ -20,25 +19,21 @@ class OutlookExtractor(Extractor):
         if not file_name:
             logger.log(logging.WARN, "A data attachment failed to extract because it has no filename.")
             return ""
+
         file_type = file_name.lower().split('.')[-1]
+        body = f" {file_name} "
 
-        with NamedTemporaryFile(delete=False) as file:
-            file.write(attachment.data)
-            file.close()
+        try:
+            extractor = Extractor.get_extractor(file_type, self.config)
+            body += extractor.extract(attachment.data)
+        except ExtractorInitException as e:
+            logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
+        except ExtractorException as e:
+            logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
+        except Exception as e:
+            logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
 
-            body = f" {file_name} "
-
-            try:
-                extractor = Extractor.get_extractor(file_type, self.config)
-                body += extractor.extract(file.name)
-            except ExtractorInitException as e:
-                logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
-            except ExtractorException as e:
-                logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
-            except Exception as e:
-                logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
-
-            return body
+        return body
 
     def _handle_message(self, message: extract_msg.message.Message) -> str:
         body = message.body
@@ -49,9 +44,9 @@ class OutlookExtractor(Extractor):
                 body += self._handle_message(attachment.data)
         return body
 
-    def extract(self, file_path: str) -> str:
+    def extract(self, file: bytes) -> str:
         try:
-            msg = extract_msg.openMsg(file_path)
+            msg = extract_msg.openMsg(file)
         except Exception as e:
             raise ExtractorException(f"msg file failed to extract: {str(e)}")
 

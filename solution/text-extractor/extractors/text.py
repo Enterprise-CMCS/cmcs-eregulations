@@ -6,8 +6,6 @@ from .extractor import Extractor
 class TextExtractor(Extractor):
     file_types = ("txt",)
 
-    def extract(self, file_path: str) -> str:
-        with open(file_path, "rb") as f:
-            data = f.read()
-        extractor = UnicodeDammit(data)
+    def extract(self, file: bytes) -> str:
+        extractor = UnicodeDammit(file)
         return extractor.unicode_markup

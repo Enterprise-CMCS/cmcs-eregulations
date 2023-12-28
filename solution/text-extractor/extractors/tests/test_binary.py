@@ -1,11 +1,6 @@
 
 import unittest
 
-from extractors import (
-    BinaryExtractor,
-    Extractor,
-)
-
 from . import FileComparisonMixin
 
 

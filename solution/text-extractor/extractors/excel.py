@@ -6,7 +6,8 @@ from .extractor import Extractor
 class ExcelExtractor(Extractor):
     file_types = ("xls", "xlsx", "xlsm")
 
-    def extract(self, file_path: str) -> str:
+    def extract(self, file: bytes) -> str:
+        file_path = self._write_file(file)
         workbook = xlrd.open_workbook(file_path)
         sheets = workbook.sheet_names()
 
