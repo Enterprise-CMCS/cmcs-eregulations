@@ -25,7 +25,7 @@ class Extractor:
         self.config = config
 
     def _write_file(self, data: bytes) -> str:
-        file = NamedTemporaryFile(delete=False)
+        file = NamedTemporaryFile(delete=False, suffix=f".{self.file_type}")
         file.write(data)
         file.close()
         return file.name

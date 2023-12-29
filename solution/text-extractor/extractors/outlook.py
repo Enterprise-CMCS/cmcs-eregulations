@@ -13,14 +13,14 @@ logger = logging.getLogger(__name__)
 class OutlookExtractor(Extractor):
     file_types = ("msg",)
 
-    def _handle_data(self, attachment: extract_msg.attachment.Attachment) -> str:
+    def _handle_data(self, attachment: extract_msg.Attachment) -> str:
         file_name = attachment.longFilename
         if not file_name:
             logger.log(logging.WARN, "A data attachment failed to extract because it has no filename.")
             return ""
         return f" {file_name} {self._extract_embedded(file_name, attachment.data)}"
 
-    def _handle_message(self, message: extract_msg.message.Message) -> str:
+    def _handle_message(self, message: extract_msg.Message) -> str:
         body = message.body
         for attachment in message.attachments:
             if attachment.type == "data":

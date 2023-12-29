@@ -4,9 +4,6 @@ from . import FileComparisonMixin
 
 
 class TestExcelExtractor(unittest.TestCase, FileComparisonMixin):
-    def test_xls(self):
-        self._test_file_type("xls")
-
     def test_xlsx(self):
         self._test_file_type("xlsx")
 

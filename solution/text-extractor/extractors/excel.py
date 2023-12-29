@@ -1,21 +1,32 @@
-import xlrd
+from openpyxl import load_workbook
 
 from .extractor import Extractor
 
 
 class ExcelExtractor(Extractor):
-    file_types = ("xls", "xlsx", "xlsm")
+    file_types = ("xlsx", "xlsm")
+
+    _valid_cell_types = ["s", "n", "b", "inlineStr", "str"]
 
     def extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
-        workbook = xlrd.open_workbook(file_path)
-        sheets = workbook.sheet_names()
-
         output = ""
-        for sheet in sheets:
-            worksheet = workbook.sheet_by_name(sheet)
-            for i in range(worksheet.nrows):
-                for j in range(worksheet.ncols):
-                    value = worksheet.cell_value(i, j)
-                    output += f" {str(value)}" if value else ""
+
+        # Open workbook read-only to avoid massive slowdown while iterating through cells
+        workbook = load_workbook(file_path, read_only=True)
+        for sheet in workbook:
+            for row in sheet:
+                for cell in row:
+                    if cell.value and cell.data_type in self._valid_cell_types:
+                        output += f" {str(cell.value)}"
+        workbook.close()
+
+        # Reopen workbook read-write so that the "_images" attribute is available
+        workbook = load_workbook(file_path)
+        for sheet in workbook:
+            for i, image in enumerate(sheet._images):
+                file_name = f"{sheet.title}_image{i}.{image.format}"
+                output += f" {self._extract_embedded(file_name, image._data())}"
+        workbook.close()
+
         return output
