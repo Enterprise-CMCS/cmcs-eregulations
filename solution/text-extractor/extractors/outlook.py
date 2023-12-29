@@ -23,9 +23,9 @@ class OutlookExtractor(Extractor):
     def _handle_message(self, message: extract_msg.Message) -> str:
         body = message.body
         for attachment in message.attachments:
-            if attachment.type == "data":
+            if attachment.type == extract_msg.enums.AttachmentType.DATA:
                 body += self._handle_data(attachment)
-            elif attachment.type == "msg":
+            elif attachment.type == extract_msg.enums.AttachmentType.MSG:
                 body += self._handle_message(attachment.data)
         return body
 

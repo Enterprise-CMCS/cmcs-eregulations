@@ -1,8 +1,6 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestPowerPointExtractor(unittest.TestCase, FileComparisonMixin):
+class TestPowerPointExtractor(FixtureTestCase):
     def test_pptx(self):
         self._test_file_type("pptx")

@@ -1,9 +1,7 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestRichTextExtractor(unittest.TestCase, FileComparisonMixin):
+class TestRichTextExtractor(FixtureTestCase):
     def test_extract_rtf(self):
         self._test_file_type("rtf")
 

@@ -1,9 +1,6 @@
-
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestOfficeExtractor(unittest.TestCase, FileComparisonMixin):
+class TestBinaryExtractor(FixtureTestCase):
     def test_extract(self):
         self._test_file_type("doc")

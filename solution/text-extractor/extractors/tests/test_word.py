@@ -1,8 +1,6 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestWordExtractor(unittest.TestCase, FileComparisonMixin):
+class TestWordExtractor(FixtureTestCase):
     def test_docx(self):
         self._test_file_type("docx")

@@ -1,7 +1,14 @@
+import unittest
+from unittest.mock import patch
+
 from extractors import Extractor
 
 
-class FileComparisonMixin:
+def mock_extract_embedded(self, file_name: str, file: bytes) -> str:
+    return f"Embedded file {file_name}"
+
+
+class FixtureTestCase(unittest.TestCase):
     BASE_PATH = "extractors/tests/fixtures/"
     
     def _test_file_type(self, file_type, **kwargs):
@@ -14,6 +21,12 @@ class FileComparisonMixin:
         with open(f"{self.BASE_PATH}{file_type}/{variation}expected.txt", "rb") as f:
             expected = f.read().decode()
 
-        extractor = Extractor.get_extractor(file_type, config)
-        output = extractor.extract(sample)
+        with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
+            extractor = Extractor.get_extractor(file_type, config)
+            output = extractor.extract(sample)
+
+        # Uncomment these 2 lines to re-export fixture files the next time tests are run.
+        # with open(f"{self.BASE_PATH}{file_type}/{variation}expected.txt", "w") as f:
+        #     f.write(output)
+
         self.assertEqual(output, expected)

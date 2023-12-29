@@ -1,9 +1,7 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestMarkupExtractor(unittest.TestCase, FileComparisonMixin):
+class TestMarkupExtractor(FixtureTestCase):
     def test_extract_html(self):
         self._test_file_type("html")
 

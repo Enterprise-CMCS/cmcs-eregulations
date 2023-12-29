@@ -31,8 +31,8 @@ class Extractor:
         return file.name
 
     def _extract_embedded(self, file_name: str, file: bytes) -> str:
-        file_type = file_name.lower().split(".")[-1]
         try:
+            file_type = file_name.lower().split(".")[-1]
             extractor = Extractor.get_extractor(file_type, self.config)
             return extractor.extract(file)
         except ExtractorInitException as e:

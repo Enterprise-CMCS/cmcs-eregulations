@@ -15,13 +15,13 @@ class PowerPointExtractor(Extractor):
         presentation = Presentation(file_path)
         text = ""
 
-        for slide in presentation.slides:
-            for shape in slide.shapes:
+        for i, slide in enumerate(presentation.slides):
+            for j, shape in enumerate(slide.shapes):
                 if hasattr(shape, "text"):
                     text += f" {shape.text}"
                 if hasattr(shape, "image"):
                     image = shape.image
                     if hasattr(image, "ext"):
-                        file_name = f"image.{image.ext}"
+                        file_name = f"slide{i}_image{j}.{image.ext}"
                         text += f" {self._extract_embedded(file_name, image.blob)}"
         return text

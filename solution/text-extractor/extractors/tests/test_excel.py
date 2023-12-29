@@ -1,9 +1,7 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestExcelExtractor(unittest.TestCase, FileComparisonMixin):
+class TestExcelExtractor(FixtureTestCase):
     def test_xlsx(self):
         self._test_file_type("xlsx")
 

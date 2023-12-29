@@ -1,8 +1,6 @@
-import unittest
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestTextExtractor(unittest.TestCase, FileComparisonMixin):
+class TestZipExtractor(FixtureTestCase):
     def test_extract(self):
         self._test_file_type("zip")
