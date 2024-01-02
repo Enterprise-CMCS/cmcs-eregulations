@@ -2,6 +2,8 @@ from .base import * # noqa
 import os
 import re
 
+DEBUG = True
+
 default_database_values = {
     'ENGINE': 'django.db.backends.postgresql',
     'USER': os.environ.get('DB_USER', 'eregs'),
