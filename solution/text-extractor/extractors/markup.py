@@ -10,4 +10,6 @@ class MarkupExtractor(Extractor):
         with open(file_path, "rb") as f:
             data = f.read()
         extractor = BeautifulSoup(data, "html.parser")  # Use html.parser to avoid lxml dependency (has M1 issues)
+        for i in extractor(["script", "style"]):
+            i.decompose()  # Remove <script> and <style> inline tags
         return extractor.get_text(" ")
