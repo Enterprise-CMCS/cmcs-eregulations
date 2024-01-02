@@ -1,3 +1,4 @@
+import logging
 
 import boto3
 import botocore.exceptions
@@ -5,13 +6,17 @@ import botocore.exceptions
 from .backend import FileBackend
 from .exceptions import BackendException, BackendInitException
 
+logger = logging.getLogger(__name__)
+
 
 class S3Backend(FileBackend):
     backend = "s3"
 
     def __init__(self, config: dict):
+        logger.info("Initializing S3 backend.")
         try:
             if not config['aws']['use_lambda']:
+                logger.info("'use_lambda' set to false, retrieving keys from config.")
                 self.aws_access_key_id = config["aws"]["aws_access_key_id"]
                 self.aws_secret_access_key = config["aws"]["aws_secret_access_key"]
             self.aws_storage_bucket_name = config["aws"]["aws_storage_bucket_name"]
@@ -31,6 +36,7 @@ class S3Backend(FileBackend):
             raise BackendInitException(f"failed to initialize AWS client: {str(e)}")
 
     def get_file(self, uri: str) -> bytes:
+        logger.info("Retrieving file \"%s\" from bucket \"%s\".", uri, self.aws_storage_bucket_name)
         try:
             obj = self.client.get_object(Bucket=self.aws_storage_bucket_name, Key=uri)
             return obj["Body"].read()

@@ -1,14 +1,17 @@
-
+import logging
 import requests
 
 from .backend import FileBackend
 from .exceptions import BackendException
+
+logger = logging.getLogger(__name__)
 
 
 class WebBackend(FileBackend):
     backend = "web"
 
     def get_file(self, uri: str) -> bytes:
+        logger.info("Retrieving file \"%s\" using 'web' backend.", uri)
         try:
             resp = requests.get(uri, timeout=60)
             if resp.status_code != 200:

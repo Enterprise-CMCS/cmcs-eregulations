@@ -16,7 +16,7 @@ class OutlookExtractor(Extractor):
     def _handle_data(self, attachment: extract_msg.Attachment) -> str:
         file_name = attachment.longFilename
         if not file_name:
-            logger.log(logging.WARN, "A data attachment failed to extract because it has no filename.")
+            logger.warning("A data attachment failed to extract because it has no filename.")
             return ""
         return f" {file_name} {self._extract_embedded(file_name, attachment.data)}"
 
