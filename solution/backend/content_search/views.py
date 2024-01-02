@@ -16,7 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-from file_manager.models import DocumentType, Subject
+from file_manager.models import AbstractRepoCategory, DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin
 
@@ -79,6 +79,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
+                                                     .select_related("repositorysubcategory__parent")
 
         # If they are not authenticated they csan only get 'external' documents
         if not request.user.is_authenticated or resource_type == 'external':
@@ -92,7 +94,8 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("category", queryset=category_prefetch),
-            Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
+            Prefetch("document_type", queryset=doc_type_prefetch),
+            Prefetch("upload_category", queryset=repo_category_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
         else:

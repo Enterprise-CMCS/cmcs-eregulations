@@ -57,7 +57,7 @@ class RepositorySubCategorySerializer(RepositoryCategorySerializer):
     @extend_schema_field(RepositoryCategorySerializer)
     def get_parent(self, obj):
         if self.context.get("parent_details", True):
-            return RepositoryCategorySerializer(obj.parent).data
+            return RepositoryCategorySerializer().to_representation(obj.parent)
         return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.parent)
 
 
