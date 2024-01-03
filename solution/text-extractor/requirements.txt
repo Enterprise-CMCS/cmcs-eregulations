@@ -11,3 +11,4 @@ beautifulsoup4
 striprtf
 xlrd
 docx2txt
+python-pptx
