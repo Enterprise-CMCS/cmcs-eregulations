@@ -55,9 +55,9 @@ OIDC_END_EUA_SESSION = os.environ.get("OIDC_END_EUA_SESSION", None)
 OIDC_OP_LOGOUT_URL_METHOD = 'regulations.logout.eua_logout'
 OIDC_STORE_ID_TOKEN = True
 LOGIN_REDIRECT_URL = '/admin/'
-LOGOUT_REDIRECT_URL = 'localhost:8000/logout'
+LOGOUT_REDIRECT_URL = 'localhost:8000/admin'
 EUA_FEATUREFLAG = os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true'
 
 if re.match(r'^dev\d*$', STAGE_ENV) or STAGE_ENV == 'dev' or STAGE_ENV == 'val':
     LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
-    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/logout"
+    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/admin"

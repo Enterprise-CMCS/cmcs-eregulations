@@ -179,6 +179,16 @@ footer {
             background-color: $mid_gray_3;
         }
     }
+
+    form#oidc_logout input[type="submit"] {
+        background-color: transparent !important;
+        text-decoration: none;
+        color: #046791;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }
 
 .invisible {
