@@ -45,7 +45,7 @@ jobs:
         - name: use the custom github  action to parse Snyk output
           uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.4
           with:
-              jira-token: ${{ secrets.JIRA_TOKEN_FOR_SNYK}}
+              jira-token: ${{ secrets.JIRA_TOKEN}}
               jira-host: ${{ secrets.JIRA_HOST }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'

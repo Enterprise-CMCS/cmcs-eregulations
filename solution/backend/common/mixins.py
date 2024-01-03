@@ -32,3 +32,9 @@ class OptionalPaginationMixin:
             "true" if self.paginate_by_default else "false"
         ).lower() == "true"
         return ViewSetPagination if paginate else None
+
+
+class DisplayNameFieldMixin:
+    @property
+    def display_name(self):
+        return str(self)

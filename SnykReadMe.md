@@ -24,14 +24,13 @@ Create JIRA Service account by following the instruction here: https://confluenc
 
 GitHub Service account by following the instruction here: https://confluenceent.cms.gov/pages/viewpage.action?spaceKey=MDSO&title=GitHub+Guide
 
-Once the jira service account is created, you will be provided the Username and Password. Then login to jira with that account, go to the upper right where the account icon is and click it. Then click "Profile" and the profile page should load up. Then on the left, there is a navigation bar where you click "Personal Access Tokens". On the left side, there is a blue "Create token" button that you click. Then provide a unique token name and also decide if you want auto expiry or never expires. Then you can also choose how long before the token expires. Then click "create". Then a page loads with the secret value that you should copy and then hit next. Now you have the authentication token and username.
+Once the jira service account is created, you will be provided the Username and Password. Then login to jira with that account, go to the upper right where the account icon is and click it. Then click "Profile" and the profile page should load up. Then on the left, there is a navigation bar where you click "Personal Access Tokens". On the left side, there is a blue "Create token" button that you click. Then provide a unique token name and also decide if you want auto expiry or never expires. Then you can also choose how long before the token expires. Then click "create". Then a page loads with the secret value that you should copy and then hit next. Now you have the authentication token.
 
-Go back to github and go to the secrets page and create secrets to store the Jira Username, Personal Access Token, and Jira Host name. The Username is the service account ID, the PAT is the token just created in the last step, and the Host name is the first part of the jira url up to ".gov" without the "https://". For example, the homepage URL for eRegs Jira is "https://jiraent.cms.gov/projects/EREGCSC/summary". However, the host name is just "jiraent.cms.gov". Below is the variables and their descriptions:
+Go back to github and go to the secrets page and create secrets to store the Personal Access Token and Jira Host name. The PAT is the token just created in the last step, and the Host name is the first part of the jira url up to ".gov" without the "https://". For example, the homepage URL for eRegs Jira is "https://jiraent.cms.gov/projects/EREGCSC/summary". However, the host name is just "jiraent.cms.gov". Below is the variables and their descriptions:
 
 ```
-    jira-username: This secret needs to hold the email address of the Jira Service Account.
-    jira-token: This secret needs to hold the PAT value of the Jira Service Account.
-    jira-host: The Jira Domain- EX. "jirarent.cms.gov".
+    JIRA_TOKEN: This secret needs to hold the PAT value of the Jira Service Account.
+    JIRA_HOST: The Jira Domain- EX. "jirarent.cms.gov".
 ```
 
 # Current Implementation
@@ -76,7 +75,7 @@ snyk_run:
 
 The last section is for the cron job. This is activated at the time specified above and then runs the snyk scan again. If there are still findings, there is a bug created in jira as shown with the action call at the end. This allows there to be bugs in a pull request and allows the day to get them fixed. If there is no fix made, then the bug is created to notify the user of the issue. 
 The variables for ticket creation that can be modified are as follows: 
--	Username, token, host, project-key, and is_jira_enterprise should NOT be touched. They are static for this project.
+-	Token, host, project-key, and is_jira_enterprise should NOT be touched. They are static for this project.
 -	Jira-issue-type: this is set to bug since most of the issues found will fall under that. However, this can be changed to any type of work item be it a user story, task, etc.
 -	Jira-labels: This can be anything you want. It was set to eRegs and snyk to denote all of these bugs as  belonging to the eRegs project and from the snyk scan.
 -	Jira-title-prefix: This is the prefix given to the ticket name so that it is also easily identifiable as a snyk bug. This can also be changed to anything.
@@ -99,11 +98,10 @@ snyk_nightly_run:
             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
         - name: use the custom github  action to parse Snyk output
-          uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.0
+          uses: Enterprise-CMCS/macfc-security-scan-report@v2.7.4
           with:
-              jira-username: ${{ secrets.JIRA_USERNAME }}
-              jira-token: ${{ secrets.JIRA_TOKEN_AT }}
-              jira-host: ${{ secrets.JIRA_HOST_NAME }}
+              jira-token: ${{ secrets.JIRA_TOKEN }}
+              jira-host: ${{ secrets.JIRA_HOST }}
               jira-project-key: 'EREGCSC'
               jira-issue-type: 'Bug'
               jira-labels: 'eRegs,snyk'

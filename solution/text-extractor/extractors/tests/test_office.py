@@ -5,15 +5,10 @@ from extractors import (
     OfficeExtractor,
 )
 
+from . import FileComparisonMixin
 
-class TestOfficeExtractor(unittest.TestCase):
-    def _test_file_type(self, file_type):
-        extractor = Extractor.get_extractor(file_type)
-        output = extractor.extract(f"extractors/tests/fixtures/{file_type}_sample.{file_type}")
-        with open(f"extractors/tests/fixtures/{file_type}_expected.txt", "r") as f:
-            expected = f.read()
-        self.assertEqual(output, expected)
 
+class TestOfficeExtractor(unittest.TestCase, FileComparisonMixin):
     def test_create(self):
         for i in OfficeExtractor.file_types:
             extractor = Extractor.get_extractor(i)
