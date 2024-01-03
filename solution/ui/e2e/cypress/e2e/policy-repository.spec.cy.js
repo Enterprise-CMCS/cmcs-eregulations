@@ -434,7 +434,8 @@ describe("Policy Repository", () => {
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
-        cy.get("#login-form").should("be.visible");
+        cy.wait(2000);
+        cy.url().should("include", "/admin/login");
     });
 });
 
