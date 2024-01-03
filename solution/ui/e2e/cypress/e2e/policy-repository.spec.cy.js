@@ -429,12 +429,12 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/resources");
     });
 
-    it("returns you to the admin login page when you log out", () => {
+    it("returns you to the admin logout page when you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
-        cy.get("#login-form").should("be.visible");
+        cy.get('h1').should('have.text', 'Logged out');
     });
 });
 
