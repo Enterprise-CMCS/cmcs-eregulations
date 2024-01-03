@@ -6,8 +6,8 @@ This Lambda function is run to extract text from a variety of file types and POS
 
 The text extractor supports the following file types. File types that are planned but not yet implemented are not checked.
 
-- [x] Plain text
-- [ ] HTML and XML
+- [x] Plain text (txt, multiple encodings supported)
+- [x] HTML and XML (html, htm, xhtml, xml)
 - [x] PDF
 - [ ] Images (png, jpeg, gif, etc.)
 - [x] Microsoft Word (doc and docx)
@@ -17,6 +17,7 @@ The text extractor supports the following file types. File types that are planne
 - [x] ZIP Archives
 - [x] Microsoft PowerPoint 2007+ (pptx)
 - [ ] Microsoft PowerPoint 97-2003 (ppt)
+- [x] Rich Text Format (rtf)
 
 # Running locally
 
