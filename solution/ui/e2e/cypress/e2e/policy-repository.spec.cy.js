@@ -433,7 +433,7 @@ describe("Policy Repository", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
-        cy.get("#logout").click();
+        cy.get('#oidc_logout').submit();
         cy.wait(2000);
         cy.url().should("include", "/admin/login");
     });
