@@ -16,11 +16,13 @@ class ZipExtractor(Extractor):
         text = ""
 
         with TemporaryDirectory() as temp_dir:
+            logger.debug("Extracting zip file contents to temporary directory.")
             with zipfile.ZipFile(file_path, "r") as zip_file:
                 zip_file.extractall(temp_dir)
 
             for root, directories, files in os.walk(temp_dir):
                 for file_name in files:
+                    logger.debug("Extracting text from file \"%s\".", file_name)
                     file_name.lower().split('.')[-1]
                     file_path = os.path.abspath(os.path.join(root, file_name))
                     with open(file_path, "rb") as f:

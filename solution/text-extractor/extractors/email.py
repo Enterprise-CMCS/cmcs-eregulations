@@ -16,20 +16,24 @@ class EmailExtractor(Extractor):
         payload = message.get_payload()
 
         if isinstance(payload, list):
+            logger.debug("Encountered embedded payload group, extracting.")
             text = ""
             for i in payload:
                 text += f" {self._extract_payload(i)}"
             return text
 
         if not message.get_filename() and message.get_content_type() == "text/plain":
+            logger.debug("Encountered message plain text, extracting.")
             return f" {payload}"
 
         if not message.get_filename():
+            logger.debug("Encountered unsupported payload, skipping.")
             return ""
 
         file_name = message.get_filename()
+        logger.debug("Assuming payload \"%s\" is embedded file, extracting.", file_name)
         text = self._extract_embedded(
-            message.get_filename(),
+            file_name,
             message.get_payload(decode=True),
         )
         return f" {file_name} {text}"

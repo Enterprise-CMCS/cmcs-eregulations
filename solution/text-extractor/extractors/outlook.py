@@ -21,11 +21,14 @@ class OutlookExtractor(Extractor):
         return f" {file_name} {self._extract_embedded(file_name, attachment.data)}"
 
     def _handle_message(self, message: extract_msg.Message) -> str:
+        logger.debug("Handling embedded message object.")
         body = message.body
         for attachment in message.attachments:
             if attachment.type == extract_msg.enums.AttachmentType.DATA:
+                logger.debug("Attachment is data, extracting.")
                 body += self._handle_data(attachment)
             elif attachment.type == extract_msg.enums.AttachmentType.MSG:
+                logger.debug("Attachment is another message object, extracting.")
                 body += self._handle_message(attachment.data)
         return body
 
