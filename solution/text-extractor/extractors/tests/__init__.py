@@ -1,7 +1,11 @@
+import logging
 import unittest
 from unittest.mock import patch
 
 from extractors import Extractor
+
+
+logging.disable(logging.CRITICAL)
 
 
 def mock_extract_embedded(self, file_name: str, file: bytes) -> str:

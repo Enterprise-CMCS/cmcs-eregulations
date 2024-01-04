@@ -1,6 +1,10 @@
 import unittest
 
-from extractors import Extractor, ExtractorInitException
+from extractors import (
+    Extractor,
+    ExtractorException,
+    ExtractorInitException,
+)
 
 
 class TestExtractor(Extractor):
@@ -15,6 +19,27 @@ class WriteFileExtractor(Extractor):
         with open(file_path, "rb") as f:
             data = f.read()
         return data.decode()
+
+
+class EmbeddedFileExtractor(Extractor):
+    file_types = ("type4",)
+
+    def extract(self, file: bytes) -> str:
+        return file.decode()
+
+
+class EmbeddedFileExtractorExpectedFailure(Extractor):
+    file_types = ("type5",)
+
+    def extract(self, file: bytes) -> str:
+        raise ExtractorException("Failed to extract")
+
+
+class EmbeddedFileExtractorUnexpectedFailure(Extractor):
+    file_types = ("type6",)
+
+    def extract(self, file: bytes) -> str:
+        raise TypeError()
 
 
 class ExtractorTest(unittest.TestCase):
@@ -40,3 +65,31 @@ class ExtractorTest(unittest.TestCase):
         extractor = Extractor.get_extractor("type3")
         text = extractor.extract(file)
         self.assertEqual(text, file.decode())
+
+    def test_extract_embedded_success(self):
+        file = b"This is a file"
+        file_name = "file.type4"
+        extractor = Extractor.get_extractor("type1")
+        output = extractor._extract_embedded(file_name, file)
+        self.assertEqual(output, file.decode())
+
+    def test_extract_embedded_invalid_type(self):
+        file = b"This is a file"
+        file_name = "file.type1000"
+        extractor = Extractor.get_extractor("type1")
+        output = extractor._extract_embedded(file_name, file)
+        self.assertEqual(output, "")
+
+    def test_extract_embedded_extract_failure(self):
+        file = b"This is a file"
+        file_name = "file.type5"
+        extractor = Extractor.get_extractor("type1")
+        output = extractor._extract_embedded(file_name, file)
+        self.assertEqual(output, "")
+
+    def test_extract_embedded_unexpected_failure(self):
+        file = b"This is a file"
+        file_name = "file.type6"
+        extractor = Extractor.get_extractor("type1")
+        output = extractor._extract_embedded(file_name, file)
+        self.assertEqual(output, "")
