@@ -9,7 +9,7 @@
             <input type="submit" value="Log Out">
         </form>
     {% else %}
-        <a href="{% url 'logout' %}?next={{ request.path }}">Log Out</a>
+        <a id="logout" href="{% url 'logout' %}?next={{ request.path }}">Log Out</a>
     {% endif %}
 {% else %}
 <div id="loginIndicator" class="display-none">
