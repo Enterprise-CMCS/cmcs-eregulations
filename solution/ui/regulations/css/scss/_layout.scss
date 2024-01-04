@@ -180,13 +180,11 @@ footer {
         }
     }
 
-    form#oidc_logout input[type="submit"] {
-        background-color: transparent !important;
-        text-decoration: none;
-        color: #046791;
-        text-decoration: none;
-        &:hover {
-            text-decoration: underline;
+    form#oidc_logout {
+        dislay: inline-block;
+        input[type="submit"] {
+            background-color: transparent !important;
+            color: #046791;
         }
     }
 }
