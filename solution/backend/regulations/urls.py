@@ -7,7 +7,6 @@ from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
-from regulations.views.logout import LogoutView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.policy_repository_search import PolicyRepositorySearchView
 from regulations.views.reader import (
@@ -61,6 +60,5 @@ urlpatterns = [
         })),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('oidc/logout/', LogoutView.as_view(), name='oidc_logout'),
 
 ]
