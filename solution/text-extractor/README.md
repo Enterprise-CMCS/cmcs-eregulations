@@ -133,7 +133,7 @@ _`extractors/sample.py`_:
 from .extractor import Extractor
 
 class SampleExtractor(Extractor):
-    file_types = ("sample/mimetype1", "sample/mimetype2", ...)
+    file_types = ("filetype1", "filetype2", ...)
 
     def extract(self, file: bytes) -> str:
         return ...extract text here...
@@ -150,3 +150,67 @@ from .sample import SampleExtractor as SampleExtractor  # Note the redundant ali
 ```
 
 The extractor is now registered and will be automatically instantiated when a file has one of the MIME types listed in `file_types`.
+
+## Extracting embedded files
+
+Many types of files contain other files within them. For example, an email has attachments. You can use the `_extract_embedded` method of the `Extractor` class to do so. For example:
+
+```python
+class SampleExtractor(Extractor):
+    file_types = ("filetype1", "filetype2", ...)
+
+    def extract(self, file: bytes) -> str:
+        text = get_the_text(file)
+        attachments = get_the_attachments(file)
+        for i in attachments:
+            file_name = i.name
+            file_data = i.data
+            text += self._extract_embedded(file_name, file_data)
+```
+
+In this example, lines 5 and 6 are pseudocode and we suppose that an Attachment object contains 2 attributes: `name` representing the file name with a valid extension, and `data` containing a byte array of the file's contents. Customize to your unique needs. File name is _not_ important and can be made up as long as the extension is valid.
+
+## Writing the file to disk
+
+When writing an extractor, it is sometimes necessary to save the file's byte array to a temporary file on disk. This could be because the file is too large, or possibly because a library you're using only accepts files from disk and not byte arrays. In either case, you can easily do this with the `_write_file` method of the `Extractor` class, like so:
+
+```python
+class SampleExtractor(Extractor):
+    file_types = ("filetype1", "filetype2", ...)
+
+    def extract(self, file: bytes) -> str:
+        file_path = self._write_file(file)
+        return extract_text_by_path(file_path)
+```
+
+This method returns a path to a temporary file stored on disk. You may access it using standard Python techniques.
+
+## Unit testing your new extractor
+
+In most cases, testing an extractor is done by providing one or more sample (fixture) files, and a text file containing expected output. I recommend at least one fixture showing a successful output. In some cases, you may wish to use additional (variation) files to capture edge cases. A test case like this can be accomplished by extending the `FixtureTestCase` class, like so:
+
+_`extractors/tests/test_sample.py`_:
+```python
+from . import FixtureTestCase
+
+
+class TestSampleExtractor(FixtureTestCase):
+    def test_extract(self):
+        # Save your fixture as "extractors/tests/fixtures/filetype1/sample.filetype1"
+        # Save your expected output as "extractors/tests/fixtures/filetype1/expected.txt"
+        self._test_file_type("filetype1")
+
+    def test_extract_corrupt_variation(self):
+        # Save your fixture as "extractors/tests/fixtures/filetype1/corrupt_sample.filetype1"
+        # Save your expected output as "extractors/tests/fixtures/filetype1/corrupt_expected.txt"
+        self._test_file_type("filetype1", variation="corrupt")
+
+    def test_extract_with_config(self):
+        self._test_file_type("filetype1", config={"some": "config"})
+```
+
+## Generating new fixture files
+
+You can also easily use the existing unit test suite to generate new fixture files, instead of doing it manually. Just edit the file `extractors/tests/__init__.py` and uncomment the 2 lines near the bottom of the file, below the comment that says `Uncomment these 2 lines to re-export fixture files the next time tests are run.`.
+
+Be sure to re-comment these 2 lines when you're done, or fixture files will be re-created every time you run unit tests, which may produce undesired behavior.
