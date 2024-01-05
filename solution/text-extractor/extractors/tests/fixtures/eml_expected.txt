@@ -30,7 +30,7 @@ The [MMIS/E&E/HIE/EVV/PDMP] module(s) generates up-to-date and accurate Transfor
 
 The [MMIS/E&E/HIE/EVV/PDMP] module(s) exercises appropriate security and privacy controls over the system in accordance with 45 CFR Part 164, P.L. 104-191, HIPAA of 1996, and 1902(a)(7) of the Social Security Act as further interpreted in regulations at 42 CFR 431.300 to 307.
 
-The system is ready for CMS certification, based on the systems performance in demonstrating achievement of outcomes. 
+The system is ready for CMS certification, based on the system’s performance in demonstrating achievement of outcomes. 
 
 
 
