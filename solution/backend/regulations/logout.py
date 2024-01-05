@@ -7,7 +7,7 @@ def eua_logout(request):
     logout_redirect_url = request.build_absolute_uri('/') + settings.STAGE_ENV + '/logout'
 
     # In the local environment where there is no STAGE_ENV, handle the possibility of //logout
-    logout_redirect_url = logout_redirect_url.replace('//logout', '/logout')
+    logout_redirect_url = logout_redirect_url.replace('//logout', '/logout').replace('/prod', '')
 
     if id_token is not None:
         # Use the id_token as needed in the logout request...
