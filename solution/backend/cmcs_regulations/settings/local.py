@@ -63,9 +63,13 @@ OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", None)
 OIDC_REDIRECT_URL = "/admin/oidc/callback/"
 OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/admin/'
-LOGOUT_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = 'http://localhost:8000/admin'
 EUA_FEATUREFLAG = os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true'
+OIDC_END_EUA_SESSION = os.environ.get("OIDC_END_EUA_SESSION", None)
+OIDC_OP_LOGOUT_URL_METHOD = 'regulations.logout.eua_logout'
+OIDC_STORE_ID_TOKEN = True
 
 if re.match(r'^dev\d*$', STAGE_ENV) or STAGE_ENV == 'dev' or STAGE_ENV == 'val':
     LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
-    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/"
+    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/admin/"

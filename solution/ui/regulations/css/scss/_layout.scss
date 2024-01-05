@@ -179,6 +179,15 @@ footer {
             background-color: $mid_gray_3;
         }
     }
+
+    form#oidc_logout {
+        display: inline-block;
+        input[type="submit"] {
+            background-color: transparent !important;
+            text-decoration: underline;
+            color: #046791;
+        }
+    }
 }
 
 .invisible {
