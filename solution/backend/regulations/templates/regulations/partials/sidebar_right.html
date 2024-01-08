@@ -8,27 +8,34 @@
     <hr />
 
     {% if node_list %}
-
-    <supplemental-content
-        api-url="{{ API_BASE }}"
-        title="{{ title }}"
-        part="{{ reg_part }}"
-        resources-url="{% url 'resources' %}"
-        :resource-display=true
-        :sections="{{ node_list.sections }}"
-        :subparts="{{ node_list.subparts }}"
-    >
-        <template #login-banner>
-            {% include "regulations/partials/login_sidebar_banner.html" %}
-        </template>
-        {% if user.is_authenticated %}
-            <template #public-label>
-                <div class="label--container">
-                    <doc-type-label icon-type="external" doc-type="Public" />
-                </div>
+        <supplemental-content
+            api-url="{{ API_BASE }}"
+            title="{{ title }}"
+            part="{{ reg_part }}"
+            resources-url="{% url 'resources' %}"
+            :resource-display=true
+            :sections="{{ node_list.sections }}"
+            :subparts="{{ node_list.subparts }}"
+        >
+            <template #login-banner>
+                {% include "regulations/partials/login_sidebar_banner.html" %}
             </template>
+            {% if user.is_authenticated %}
+                <template #public-label>
+                    <div class="label--container">
+                        <doc-type-label icon-type="external" doc-type="Public" />
+                    </div>
+                </template>
+            {% endif %}
+        </supplemental-content>
+        {% if user.is_authenticated %}
+            <div class="label--container">
+                <doc-type-label icon-type="internal" doc-type="Internal" />
+            </div>
+
+            <internal-docs-container></internal-docs-container>
+            <div class="login--spacer"></div>
         {% endif %}
-    </supplemental-content>
     {% endif %}
 
 </section>
