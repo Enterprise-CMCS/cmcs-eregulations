@@ -4,10 +4,10 @@ from django.conf import settings
 def eua_logout(request):
     id_token = request.session.get('oidc_id_token')
     # get the domain url from the request and add /login to the end
-    logout_redirect_url = request.build_absolute_uri('/') + settings.STAGE_ENV + '/logout'
+    logout_redirect_url = request.build_absolute_uri('/') + settings.STAGE_ENV + '/admin'
 
     # In the local environment where there is no STAGE_ENV, handle the possibility of //logout
-    logout_redirect_url = logout_redirect_url.replace('//logout', '/logout').replace('/prod', '')
+    logout_redirect_url = logout_redirect_url.replace('//admin', '/admin').replace('/prod', '')
 
     if id_token is not None:
         # Use the id_token as needed in the logout request...
