@@ -1,4 +1,5 @@
 import logging
+import warnings
 
 from openpyxl import load_workbook
 
@@ -27,9 +28,11 @@ class ExcelExtractor(Extractor):
                         output += f" {str(cell.value)}"
         workbook.close()
 
-        logger.debug("Opening workbook read-write to extract images.")
         # Reopen workbook read-write so that the "_images" attribute is available
+        logger.debug("Opening workbook read-write to extract images.")
+        warnings.filterwarnings("ignore", category=UserWarning)  # Hide unnecessary warning about the data validation extension
         workbook = load_workbook(file_path)
+        warnings.resetwarnings()
         for sheet in workbook:
             logger.debug("Extracting images from worksheet \"%s\".", sheet.title)
             for i, image in enumerate(sheet._images):

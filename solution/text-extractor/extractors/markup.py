@@ -9,8 +9,9 @@ class MarkupExtractor(Extractor):
     file_types = ("html", "htm", "xhtml", "xml")
 
     def extract(self, file: bytes) -> str:
-        warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
+        warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)  # Hide unnecessary warning about parsing XML
         extractor = BeautifulSoup(file, "html.parser")  # Use html.parser to avoid lxml dependency (has M1 issues)
+        warnings.resetwarnings()
         for i in extractor(["script", "style"]):
             i.decompose()  # Remove <script> and <style> inline tags
         return extractor.get_text(" ")
