@@ -15,7 +15,8 @@ from .extractors import (
     ExtractorInitException,
 )
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
