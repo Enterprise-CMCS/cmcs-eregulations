@@ -43,7 +43,7 @@ aside.right-sidebar {
         margin: 1rem 0;
     }
 
-    .label--container {
+    .label__container {
         display: flex;
         margin-top: 1rem;
     }
@@ -230,6 +230,6 @@ button.collapsible-title {
     font-weight: 600;
 }
 
-.login--spacer {
+.login__spacer {
     margin-bottom: $spacer-7;
 }

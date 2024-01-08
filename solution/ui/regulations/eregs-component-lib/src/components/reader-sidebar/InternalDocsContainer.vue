@@ -1,13 +1,21 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 
+import { getPolicyDocCategories } from "utilities/api";
+
+import SimpleSpinner from "../SimpleSpinner.vue";
+
 const props = defineProps({
-    prop1: {
+    apiUrl: {
         type: String,
         required: true,
     },
-    prop2: {
-        type: Object,
+    title: {
+        type: String,
+        required: true,
+    },
+    part: {
+        type: String,
         required: true,
     },
 });
@@ -16,13 +24,21 @@ const props = defineProps({
 // 1. Get the data from the API (categories and documents based on the section or subpart)
 // 2. Display the data in a tree structure using existing components
 
+const getCategories = async () => {
+    const categories = await getPolicyDocCategories({
+        apiUrl: props.apiUrl,
+        cacheResponse: false,
+    });
+    console.log(categories);
+};
 
-
+getCategories();
 </script>
 
 <template>
-    <div class="skeleton">This is the internal docs container.</div>
+    <div class="internal-docs__container">
+        <SimpleSpinner />
+    </div>
 </template>
 
 <style></style>
-

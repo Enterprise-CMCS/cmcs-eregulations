@@ -22,19 +22,26 @@
             </template>
             {% if user.is_authenticated %}
                 <template #public-label>
-                    <div class="label--container">
+                    <div class="label__container">
                         <doc-type-label icon-type="external" doc-type="Public" />
                     </div>
                 </template>
             {% endif %}
         </supplemental-content>
         {% if user.is_authenticated %}
-            <div class="label--container">
-                <doc-type-label icon-type="internal" doc-type="Internal" />
-            </div>
+            <div class="authed__container">
+                <hr />
+                <div class="label__container label__container--internal">
+                    <doc-type-label icon-type="internal" doc-type="Internal" />
+                </div>
 
-            <internal-docs-container></internal-docs-container>
-            <div class="login--spacer"></div>
+                <internal-docs-container
+                    api-url="{{ API_BASE }}"
+                    title="{{ title }}"
+                    part="{{ reg_part }}"
+                ></internal-docs-container>
+            </div>
+            <div class="login__spacer"></div>
         {% endif %}
     {% endif %}
 
