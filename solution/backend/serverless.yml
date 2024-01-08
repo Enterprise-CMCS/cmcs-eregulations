@@ -46,6 +46,7 @@ provider:
     OIDC_OP_TOKEN_ENDPOINT: ${ssm:/eregulations/oidc/token_endpoint}
     OIDC_OP_JWKS_ENDPOINT: ${ssm:/eregulations/oidc/jwks_endpoint}
     OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
+    OIDC_END_EUA_SESSION: ${ssm:/eregulations/oidc/end_eua_session}
     BASIC_SEARCH_FILTER: ${ssm:/eregulations/basic_search_filter}
     QUOTED_SEARCH_FILTER: ${ssm:/eregulations/quoted_search_filter}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
