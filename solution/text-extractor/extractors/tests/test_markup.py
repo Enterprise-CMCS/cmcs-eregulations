@@ -1,16 +1,7 @@
-import unittest
-
-import extractors
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestMarkupExtractor(unittest.TestCase, FileComparisonMixin):
-    def test_create(self):
-        for i in extractors.MarkupExtractor.file_types:
-            extractor = extractors.Extractor.get_extractor(i)
-            self.assertIsInstance(extractor, extractors.MarkupExtractor)
-
+class TestMarkupExtractor(FixtureTestCase):
     def test_extract_html(self):
         self._test_file_type("html")
 

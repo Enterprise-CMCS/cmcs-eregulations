@@ -11,6 +11,7 @@ from .binary import BinaryExtractor as BinaryExtractor
 from .email import EmailExtractor as EmailExtractor
 from .markup import MarkupExtractor as MarkupExtractor
 from .rtf import RichTextExtractor as RichTextExtractor
-from .excel import ExcelExtractor as ExcelExtractor
+from .old_excel import OldExcelExtractor as OldExcelExtractor
 from .word import WordExtractor as WordExtractor
 from .powerpoint import PowerPointExtractor as PowerPointExtractor
+from .excel import ExcelExtractor as ExcelExtractor

@@ -1,12 +1,7 @@
 import logging
-from tempfile import NamedTemporaryFile
 
 from pptx import Presentation
 
-from .exceptions import (
-    ExtractorException,
-    ExtractorInitException,
-)
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
@@ -15,44 +10,20 @@ logger = logging.getLogger(__name__)
 class PowerPointExtractor(Extractor):
     file_types = ("pptx",)
 
-    def extract(self, file_path: str) -> str:
-        text = ""
+    def extract(self, file: bytes) -> str:
+        file_path = self._write_file(file)
         presentation = Presentation(file_path)
-        for slide in presentation.slides:
-            for shape in slide.shapes:
+        text = ""
+
+        for i, slide in enumerate(presentation.slides):
+            logger.debug("Processing slide %i.", i)
+            for j, shape in enumerate(slide.shapes):
                 if hasattr(shape, "text"):
                     text += f" {shape.text}"
                 if hasattr(shape, "image"):
                     image = shape.image
                     if hasattr(image, "ext"):
-                        file_type = image.ext
-                        with NamedTemporaryFile(delete=False) as file:
-                            file.write(image.blob)
-                            file.close()
-
-                            # Run extractor for embedded file
-                            try:
-                                extractor = Extractor.get_extractor(file_type, self.config)
-                                text += f" {extractor.extract(file.name)}"
-                            except ExtractorInitException as e:
-                                logger.log(
-                                    logging.WARN,
-                                    "Failed to initialize extractor for embedded %s file: %s",
-                                    file_type,
-                                    str(e),
-                                )
-                            except ExtractorException as e:
-                                logger.log(
-                                    logging.WARN,
-                                    "Failed to extract text for embedded %s file: %s",
-                                    file_type,
-                                    str(e),
-                                )
-                            except Exception as e:
-                                logger.log(
-                                    logging.WARN,
-                                    "Extracting text for embedded %s file failed unexpectedly: %s",
-                                    file_type,
-                                    str(e),
-                                )
+                        logger.debug("Found an embedded %s image, extracting.", image.ext)
+                        file_name = f"slide{i}_image{j}.{image.ext}"
+                        text += f" {self._extract_embedded(file_name, image.blob)}"
         return text

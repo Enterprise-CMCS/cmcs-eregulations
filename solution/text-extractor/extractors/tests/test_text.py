@@ -1,15 +1,7 @@
-import unittest
-
-import extractors
-
-from . import FileComparisonMixin
+from . import FixtureTestCase
 
 
-class TestTextExtractor(unittest.TestCase, FileComparisonMixin):
-    def test_create(self):
-        extractor = extractors.Extractor.get_extractor("txt")
-        self.assertIsInstance(extractor, extractors.TextExtractor)
-
+class TestTextExtractor(FixtureTestCase):
     def test_extract_utf8(self):
         self._test_file_type("txt", variation="utf8")
 

@@ -21,6 +21,8 @@ provider:
       appimage:
         path: ../.
         file: text-extractor/Dockerfile
+  environment:
+    LOG_LEVEL: ${ssm:/eregulations/text_extractor/log_level}
 
 custom:
   stage: ${opt:stage, self:provider.stage}
