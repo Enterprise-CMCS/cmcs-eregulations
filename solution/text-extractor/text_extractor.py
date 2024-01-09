@@ -16,7 +16,13 @@ from .extractors import (
     ExtractorInitException,
 )
 
+
+# Initialize the root logger. All other loggers will automatically inherit from this one.
 logger = logging.getLogger()
+ch = logging.StreamHandler()
+formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
@@ -38,10 +44,14 @@ def lambda_failure(status_code: int, message: str) -> dict:
 
 
 def handler(event: dict, context: dict) -> dict:
+    logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
+
     # Retrieve configuration from event dict
+    logger.info("Retrieving Lambda event dictionary.")
     if "body" not in event:
         # Assume we are invoked directly
         config = event
+        logger.debug("No 'body' key present in event, assuming direct invocation.")
     else:
         try:
             config = json.loads(event["body"])
@@ -49,6 +59,7 @@ def handler(event: dict, context: dict) -> dict:
             return lambda_failure(400, "Unable to parse body as JSON.")
 
     # Retrieve required arguments
+    logger.info("Retrieving required parameters from event.")
     try:
         resource_id = config["id"]
         uri = config["uri"]
@@ -58,6 +69,7 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_failure(400, "You must include 'id', 'uri', 'token', and 'post_url' in the request body.")
 
     # Retrieve the file
+    logger.info("Starting file retrieval.")
     try:
         backend_type = config.get("backend", "web").lower()
         backend = FileBackend.get_backend(backend_type, config)
@@ -75,6 +87,7 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_failure(500, f"Failed to determine file type: {str(e)}")
 
     # Run extractor
+    logger.info("Starting text extraction.")
     try:
         extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
@@ -89,6 +102,7 @@ def handler(event: dict, context: dict) -> dict:
     text = re.sub(r'[\n\s]+', ' ', text).strip()
 
     # Send result to eRegs
+    logger.info("Sending extracted text to POST URL.")
     resp = ''
     header = {'Authorization': f'Bearer {token}'}
     try:
