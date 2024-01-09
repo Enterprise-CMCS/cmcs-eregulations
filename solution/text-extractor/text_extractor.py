@@ -16,9 +16,9 @@ from .extractors import (
     ExtractorInitException,
 )
 
-
 # Initialize the root logger. All other loggers will automatically inherit from this one.
 logger = logging.getLogger()
+logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
 ch = logging.StreamHandler()
 formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
 ch.setFormatter(formatter)
