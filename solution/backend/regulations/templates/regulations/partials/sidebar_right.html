@@ -1,6 +1,7 @@
 {% load string_formatters %}
 
 {{ categories|json_script:"categories" }}
+{{ node_list|json_script:"node_list" }}
 
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}

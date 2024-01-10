@@ -658,6 +658,9 @@ const formatResourceCategories = (resources) => {
     return categories;
 };
 
+//const formatInternalDocCategories = (docs) => {
+//};
+
 function flattenSubpart(subpart) {
     const result = JSON.parse(JSON.stringify(subpart));
     const subjectGroupSections = subpart.children
@@ -922,6 +925,12 @@ const createLastUpdatedDates = (resultsArr) => {
     );
 };
 
+const getCurrentSectionFromHash = (windowHash) => {
+    const hash = windowHash.substring(1);
+    const citations = hash.split("-");
+    return citations.slice(0, 2).join("-");
+}
+
 export {
     addMarks,
     addQueryParams,
@@ -944,6 +953,7 @@ export {
     getActAbbr,
     getCategoryTree,
     getCurrentPageResultsRange,
+    getCurrentSectionFromHash,
     getDisplayName,
     getFileNameSuffix,
     getFragmentParam,
