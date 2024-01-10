@@ -1,7 +1,6 @@
 from .base import * # noqa
 import os
 import socket
-import re
 
 DEBUG = os.environ.get("DEBUG", False)
 
