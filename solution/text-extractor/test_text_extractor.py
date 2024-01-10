@@ -1,5 +1,5 @@
-import unittest
 import json
+import unittest
 
 from text_extractor import clean_output, get_config
 
@@ -32,7 +32,7 @@ class TextExtractorTestCase(unittest.TestCase):
 
     def test_get_config_json_failure(self):
         event = {
-            "body": "{this: is, invalid: json,\}",
+            "body": "{this: is, invalid: json,}",
             "something": "else",
         }
 

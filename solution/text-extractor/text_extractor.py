@@ -50,7 +50,7 @@ def get_config(event: dict) -> dict:
     if "body" not in event:
         # Assume we are invoked directly
         logger.debug("No 'body' key present in event, assuming direct invocation.")
-        return event        
+        return event
     else:
         try:
             return json.loads(event["body"])
@@ -113,7 +113,7 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_failure(500, f"Extractor unexpectedly failed: {str(e)}")
 
     # Strip control characters and unneeded data out of the extracted text
-    text = strip_output(text)
+    text = clean_output(text)
 
     # Send result to eRegs
     logger.info("Sending extracted text to POST URL.")
