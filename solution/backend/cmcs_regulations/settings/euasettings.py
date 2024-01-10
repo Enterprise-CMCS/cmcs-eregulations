@@ -1,7 +1,6 @@
 import os
 import re
 
-
 # EUA settings
 AUTHENTICATION_BACKENDS = (
     'regulations.admin.OidcAdminAuthenticationBackend',
