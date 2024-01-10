@@ -1,10 +1,19 @@
 import json
+import logging
 import unittest
 
-from text_extractor import clean_output, get_config
+from utils import (
+    clean_output,
+    get_config,
+    lambda_failure,
+    lambda_response,
+    lambda_success,
+)
+
+logging.disable(logging.CRITICAL)
 
 
-class TextExtractorTestCase(unittest.TestCase):
+class UtilsTestCase(unittest.TestCase):
     def test_clean_output(self):
         text = "Hello   \n  \n\n world \0 \t\r \x00"
         expected = "Hello world"
@@ -47,3 +56,19 @@ class TextExtractorTestCase(unittest.TestCase):
 
         output = get_config(event)
         self.assertEqual(output, event)
+
+    def test_lambda_response(self):
+        output = lambda_response(100, logging.ERROR, "Hello world")
+        self.assertEqual(output, {
+            "statusCode": 100,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"message": "Hello world"}),
+        })
+
+    def test_lambda_success(self):
+        output = lambda_success("Hello world")
+        self.assertEqual(output["statusCode"], 200)
+
+    def test_lambda_failure(self):
+        output = lambda_failure(400, "Hello world")
+        self.assertEqual(output["statusCode"], 400)
