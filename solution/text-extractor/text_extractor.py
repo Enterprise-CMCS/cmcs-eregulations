@@ -2,15 +2,16 @@ import json
 import logging
 import os
 import re
+import unicodedata
 
 import requests
 
-from .backends import (
+from backends import (
     BackendException,
     BackendInitException,
     FileBackend,
 )
-from .extractors import (
+from extractors import (
     Extractor,
     ExtractorException,
     ExtractorInitException,
@@ -18,7 +19,8 @@ from .extractors import (
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
 logger = logging.getLogger()
-logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
+if logger.handlers:
+    logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
 ch = logging.StreamHandler()
 formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
 ch.setFormatter(formatter)
@@ -43,20 +45,32 @@ def lambda_failure(status_code: int, message: str) -> dict:
     return lambda_response(status_code, logging.ERROR, message)
 
 
+def get_config(event: dict) -> dict:
+    logger.info("Retrieving Lambda event dictionary.")
+    if "body" not in event:
+        # Assume we are invoked directly
+        logger.debug("No 'body' key present in event, assuming direct invocation.")
+        return event        
+    else:
+        try:
+            return json.loads(event["body"])
+        except Exception as e:
+            raise Exception(f"unable to parse body as JSON: {str(e)}")
+
+
+def clean_output(text: str) -> str:
+    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def handler(event: dict, context: dict) -> dict:
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
     # Retrieve configuration from event dict
-    logger.info("Retrieving Lambda event dictionary.")
-    if "body" not in event:
-        # Assume we are invoked directly
-        config = event
-        logger.debug("No 'body' key present in event, assuming direct invocation.")
-    else:
-        try:
-            config = json.loads(event["body"])
-        except Exception:
-            return lambda_failure(400, "Unable to parse body as JSON.")
+    try:
+        config = get_config(event)
+    except Exception as e:
+        return lambda_failure(400, f"Failed to get Lambda configuration: {str(e)}")
 
     # Retrieve required arguments
     logger.info("Retrieving required parameters from event.")
@@ -98,8 +112,8 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_failure(500, f"Extractor unexpectedly failed: {str(e)}")
 
-    # Strip unneeded data out of the extracted text
-    text = re.sub(r'[\n\s]+', ' ', text).strip()
+    # Strip control characters and unneeded data out of the extracted text
+    text = strip_output(text)
 
     # Send result to eRegs
     logger.info("Sending extracted text to POST URL.")
