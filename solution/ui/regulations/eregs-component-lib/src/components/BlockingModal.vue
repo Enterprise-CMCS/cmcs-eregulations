@@ -64,7 +64,9 @@ export default {
 
     updated() {},
 
-    beforeDestroy() {},
+    beforeDestroy() {
+        eventbus.off(EventCodes.OpenBlockingModal);
+    },
 
     destroyed() {},
 

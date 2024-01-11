@@ -189,6 +189,9 @@ export default {
         });
         this.categories = getDefaultCategories();
     },
+    beforeDestroy() {
+        eventbus.off(EventCodes.SetSection);
+    },
     destroyed() {
         window.removeEventListener("hashchange", this.handleHashChange);
     },

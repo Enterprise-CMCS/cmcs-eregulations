@@ -73,6 +73,10 @@ export default {
         eventbus.on("collapse-toggle", this.toggle);
     },
 
+    beforeDestroy() {
+        eventbus.off("collapse-toggle", this.toggle);
+    },
+
     methods: {
         click(event) {
             eventbus.emit("collapse-toggle", this.dataName);

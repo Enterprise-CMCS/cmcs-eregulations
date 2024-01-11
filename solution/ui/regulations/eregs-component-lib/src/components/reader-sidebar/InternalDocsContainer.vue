@@ -8,6 +8,8 @@ import { EventCodes, getCurrentSectionFromHash } from "utilities/utils";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
+import eventbus from "../../eventbus";
+
 const props = defineProps({
     apiUrl: {
         type: String,
@@ -97,17 +99,23 @@ const handleHashChange = () => {
     selectedSection.value = getSectionNumber(window.location.hash);
 };
 
+const eventHandler = (args) => {
+    selectedSection.value = args.section;
+};
+
 onMounted(() => {
-    /*this.$root.$on(EventCodes.SetSection, (args) => {*/
-        /*selectedSection.value = args.section;*/
-    /*});*/
     window.addEventListener("hashchange", handleHashChange);
+
+    eventbus.on(EventCodes.SetSection, eventHandler);
 
     getCategories();
     getDocuments({ section: selectedSection.value });
 });
 
-onUnmounted(() => window.removeEventListener("hashchange", handleHashChange));
+onUnmounted(() => {
+    window.removeEventListener("hashchange", handleHashChange);
+    eventbus.off(EventCodes.SetSection, eventHandler);
+});
 
 watch(selectedSection, (newValue) => {
     getDocuments({ section: newValue });
