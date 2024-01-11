@@ -43,8 +43,11 @@
 <script>
 import { getSupplementalContent, getSubpartTOC } from "utilities/api";
 import { EventCodes, formatResourceCategories } from "utilities/utils";
+
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
+
+import eventbus from "../eventbus";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -181,7 +184,7 @@ export default {
         window.addEventListener("hashchange", this.handleHashChange);
     },
     mounted() {
-        this.$root.$on(EventCodes.SetSection, (args) => {
+        eventbus.on(EventCodes.SetSection, (args) => {
             this.selectedPart = args.section;
         });
         this.categories = getDefaultCategories();

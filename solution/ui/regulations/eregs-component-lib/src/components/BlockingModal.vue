@@ -38,6 +38,7 @@
 
 <script>
 import { EventCodes, trapFocus } from "utilities/utils";
+import eventbus from "../eventbus";
 
 export default {
     name: "BlockingModal",
@@ -53,7 +54,7 @@ export default {
     beforeMount() {},
 
     mounted() {
-        this.$root.$on(EventCodes.OpenBlockingModal, (payload) => {
+        eventbus.on(EventCodes.OpenBlockingModal, (payload) => {
             this.active = true;
             this.modalTitle = payload.title;
         });

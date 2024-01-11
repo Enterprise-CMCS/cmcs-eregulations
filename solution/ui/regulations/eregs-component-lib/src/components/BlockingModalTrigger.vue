@@ -6,6 +6,7 @@
 
 <script>
 import { EventCodes } from "utilities/utils";
+import eventbus from "../eventbus";
 
 export default {
     name: "BlockingModalTrigger",
@@ -41,7 +42,7 @@ export default {
 
     methods: {
         openModal() {
-            this.$root.$emit(EventCodes.OpenBlockingModal, {
+            eventbus.emit(EventCodes.OpenBlockingModal, {
                 title: this.modalTitle,
             });
         },
