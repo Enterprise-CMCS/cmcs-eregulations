@@ -45,6 +45,8 @@ const internalDocCategories = ref({
 });
 
 const getCategories = async () => {
+    internalDocCategories.value.loading = true;
+
     try {
         const categories = await getPolicyDocCategories({
             apiUrl: props.apiUrl,
@@ -64,6 +66,8 @@ const internalDocuments = ref({
 });
 
 const getDocuments = async ({ section }) => {
+    internalDocuments.value.loading = true;
+
     const rawNodeList = JSON.parse(
         document.getElementById("node_list").textContent
     );
@@ -100,7 +104,8 @@ const handleHashChange = () => {
 };
 
 const eventHandler = (args) => {
-    selectedSection.value = args.section;
+    const sectionNumber = args.section.split(" ")[1].split(".")[1];
+    selectedSection.value = sectionNumber;
 };
 
 onMounted(() => {

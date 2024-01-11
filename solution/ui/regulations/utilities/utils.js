@@ -28,7 +28,7 @@ const DOCUMENT_TYPES = ["external", "internal"];
 const DOCUMENT_TYPES_MAP = {
     external: "Public",
     internal: "Internal",
-}
+};
 
 const PARAM_MAP = {
     subjects: "subjects",
@@ -929,7 +929,7 @@ const getCurrentSectionFromHash = (windowHash) => {
     const hash = windowHash.substring(1);
     const citations = hash.split("-");
     return citations.slice(0, 2).join("-");
-}
+};
 
 export {
     addMarks,
