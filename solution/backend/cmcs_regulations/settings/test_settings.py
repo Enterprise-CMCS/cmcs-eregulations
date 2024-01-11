@@ -18,7 +18,6 @@ SERVER_USER = os.environ.get("SERVER_USER", '')
 SERVER_PASSWORD = os.environ.get("SERVER_PASSWORD", '')
 # TODO - this should be removed after we merge euasettings.py with base.py in teh future
 
-STAGE_ENV = os.environ.get("STAGE_ENV", "")
 BASE_URL = os.environ.get("BASE_URL", "")
 from .euasettings import * # noqa
 
@@ -27,12 +26,6 @@ OIDC_REDIRECT_URL = "/admin/oidc/callback/"
 OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/admin/'
 LOGOUT_REDIRECT_URL = '/logout'
-
-EUA_FEATUREFLAG = bool(os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true')
-
-if re.match(r'^dev\d*$', STAGE_ENV) or STAGE_ENV == 'dev' or STAGE_ENV == 'val':
-    LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
-    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/logout"
 
 DATABASES = {
     'default': {
