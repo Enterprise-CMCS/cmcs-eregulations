@@ -1,5 +1,4 @@
 from .base import * # noqa
-import re
 import os
 
 USE_AWS_TOKEN = True
