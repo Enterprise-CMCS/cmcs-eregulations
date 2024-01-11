@@ -1,7 +1,6 @@
 import os
 import re
 
-OIDC_RP_IDP_SIGN_KEY = os.environ.get("OIDC_RP_IDP_SIGN_KEY", None)
 # EUA settings
 AUTHENTICATION_BACKENDS = (
     'regulations.admin.OidcAdminAuthenticationBackend',
