@@ -20,11 +20,8 @@ SERVER_PASSWORD = os.environ.get("SERVER_PASSWORD", '')
 
 STAGE_ENV = os.environ.get("STAGE_ENV", "")
 BASE_URL = os.environ.get("BASE_URL", "")
-OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
-OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
-OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
-OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
-OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
+from .euasettings import * # noqa
+
 OIDC_OP_JWKS_ENDPOINT = "/example/jwks/endpoint/"
 OIDC_REDIRECT_URL = "/admin/oidc/callback/"
 OIDC_RP_SIGN_ALGO = 'RS256'
