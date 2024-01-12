@@ -1,4 +1,3 @@
-import re
 
 import requests
 from django import forms
@@ -83,23 +82,10 @@ class UploadedFileAdmin(BaseAdmin):
             Prefetch("category", AbstractRepoCategory.objects.all().select_subclasses()),
         )
 
-    # Will remove any characters from file namess we do not want in it.
-    # Commas in file names causes issues in chrsome on downloads since we rename the file.
-    def clean_file_name(self, name):
-        bad_char = [";", "!", "?", "*", ":", ",", '"', '“', "'", r'/', '\\', '-',]
-        temp = ''
-        split_name = name.split('.')
-        extension = split_name.pop()
-        file_name = '.'.join(split_name)
-        for i in bad_char:
-            temp = temp + i
-        clean_name = re.sub(rf'[{temp}]', '', file_name).strip()
-        return f'{clean_name}.{extension}'
-
     def save_model(self, request, obj, form, change):
         path = form.cleaned_data.get("file_path")
         if path:
-            obj.file_name = self.clean_file_name(path._name)
+            obj.file_name = path._name
             self.upload_file(path, obj)
         super().save_model(request, obj, form, change)
 
