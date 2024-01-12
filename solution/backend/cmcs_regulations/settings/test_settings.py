@@ -1,5 +1,4 @@
 from .base import * # noqa
-import re
 import os
 
 USE_AWS_TOKEN = True
@@ -18,24 +17,14 @@ SERVER_USER = os.environ.get("SERVER_USER", '')
 SERVER_PASSWORD = os.environ.get("SERVER_PASSWORD", '')
 # TODO - this should be removed after we merge euasettings.py with base.py in teh future
 
-STAGE_ENV = os.environ.get("STAGE_ENV", "")
 BASE_URL = os.environ.get("BASE_URL", "")
-OIDC_RP_CLIENT_ID = os.environ.get("OIDC_RP_CLIENT_ID", None)
-OIDC_RP_CLIENT_SECRET = os.environ.get("OIDC_RP_CLIENT_SECRET", None)
-OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT", None)
-OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
-OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
+from .euasettings import * # noqa
+
 OIDC_OP_JWKS_ENDPOINT = "/example/jwks/endpoint/"
 OIDC_REDIRECT_URL = "/admin/oidc/callback/"
 OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/admin/'
 LOGOUT_REDIRECT_URL = '/logout'
-
-EUA_FEATUREFLAG = bool(os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true')
-
-if re.match(r'^dev\d*$', STAGE_ENV) or STAGE_ENV == 'dev' or STAGE_ENV == 'val':
-    LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/admin/"
-    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/logout"
 
 DATABASES = {
     'default': {
