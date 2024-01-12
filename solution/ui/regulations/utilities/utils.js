@@ -658,8 +658,68 @@ const formatResourceCategories = (resources) => {
     return categories;
 };
 
-//const formatInternalDocCategories = (docs) => {
-//};
+const formatInternalDocCategories = ({ categories = [], docs = [] }) => {
+    const categoriesClone = [...categories];
+
+    docs.filter((doc) => doc.category.type === "repositorycategory").forEach(
+        (doc) => {
+            const existingCategory = categoriesClone.find(
+                (category) => category.name === doc.category.name
+            );
+
+            if (existingCategory) {
+                if (!existingCategory.supplemental_content) {
+                    existingCategory.supplemental_content = [];
+                }
+                existingCategory.supplemental_content.push(doc);
+            } else {
+                const newCategory = doc.category;
+                newCategory.supplemental_content = [doc];
+                newCategory.sub_categories = [];
+                categoriesClone.push(newCategory);
+            }
+        }
+    );
+
+    const subCategories = [];
+
+    docs.filter((doc) => doc.category.type === "repositorysubcategory").forEach(
+        (doc) => {
+            const existingSubCategory = subCategories.find(
+                (category) => category.name === doc.category.name
+            );
+
+            if (existingSubCategory) {
+                if (!existingSubCategory.supplemental_content) {
+                    existingSubCategory.supplemental_content = [];
+                }
+                existingSubCategory.supplemental_content.push(doc);
+            } else {
+                const newSubCategory = JSON.parse(JSON.stringify(doc.category));
+                newSubCategory.supplemental_content = [doc];
+                subCategories.push(newSubCategory);
+            }
+        }
+    );
+
+    const formattedCategories = categoriesClone.map((c) => {
+        const category = JSON.parse(JSON.stringify(c));
+        category.sub_categories = subCategories.filter(
+            (subcategory) => subcategory.parent?.id === category?.id
+        );
+
+        return category;
+    });
+
+    formattedCategories.sort((a, b) => a.order - b.order);
+    formattedCategories.forEach((category) => {
+        category.sub_categories.sort((a, b) => a.order - b.order);
+    });
+
+    return formattedCategories.filter(
+        (category) => category.type !== "repositorysubcategory"
+    );
+};
 
 function flattenSubpart(subpart) {
     const result = JSON.parse(JSON.stringify(subpart));
@@ -948,6 +1008,7 @@ export {
     flattenSubpart,
     formatAmount,
     formatDate,
+    formatInternalDocCategories,
     formatResourceCategories,
     generateId,
     getActAbbr,

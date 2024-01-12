@@ -3,7 +3,11 @@ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 
 import { getCombinedContent, getPolicyDocCategories } from "utilities/api";
 
-import { EventCodes, getCurrentSectionFromHash } from "utilities/utils";
+import {
+    EventCodes,
+    formatInternalDocCategories,
+    getCurrentSectionFromHash,
+} from "utilities/utils";
 
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
@@ -28,9 +32,11 @@ const props = defineProps({
 // What do I want to do?
 // 1. Get the data from the API (categories and documents based on the section or subpart)
 //   a. Get the categories ✔
-//   b. Get the documents
-// 2. Format categories to include data (emulate existing formatResourceCategories function)
-// 3. Display the data in a tree structure using existing components
+//   b. Get the documents ✔
+// 3. Display a spinner while the data is loading ✔
+// 4. Change selected section on hashchange and on eventbus event ✔
+// 5. Format categories to include data (emulate existing formatResourceCategories function)
+// 6. Display the data in a tree structure using existing components
 
 const getSectionNumber = (hash) => {
     const section = getCurrentSectionFromHash(hash);
@@ -39,25 +45,19 @@ const getSectionNumber = (hash) => {
 
 const selectedSection = ref(getSectionNumber(window.location.hash));
 
-const internalDocCategories = ref({
-    results: [],
-    loading: true,
-});
-
 const getCategories = async () => {
-    internalDocCategories.value.loading = true;
+    let categories = [];
 
     try {
-        const categories = await getPolicyDocCategories({
+        categories = await getPolicyDocCategories({
             apiUrl: props.apiUrl,
             cacheResponse: false,
         });
-        internalDocCategories.value.results = categories;
     } catch (error) {
         console.error(error);
-    } finally {
-        internalDocCategories.value.loading = false;
     }
+
+    return categories;
 };
 
 const internalDocuments = ref({
@@ -86,14 +86,24 @@ const getDocuments = async ({ section }) => {
     }
 
     try {
-        const documents = await getCombinedContent({
-            apiUrl: props.apiUrl,
-            cacheResponse: false,
-            requestParams: `resource-type=internal&${locationString}`,
+        Promise.all([
+            getCategories(),
+            getCombinedContent({
+                apiUrl: props.apiUrl,
+                cacheResponse: false,
+                requestParams: `resource-type=internal&${locationString}`,
+            }),
+        ]).then((values) => {
+            const categories = values[0];
+            const documents = values[1];
+            internalDocuments.value.results = formatInternalDocCategories({
+                categories,
+                docs: documents.results,
+            });
         });
-        internalDocuments.value.results = documents;
     } catch (error) {
         console.error(error);
+        internalDocuments.value.results = [];
     } finally {
         internalDocuments.value.loading = false;
     }
@@ -129,15 +139,21 @@ watch(selectedSection, (newValue) => {
 
 <template>
     <div class="internal-docs__container">
-        <SimpleSpinner
-            v-if="internalDocCategories.loading || internalDocuments.loading"
-        />
+        <SimpleSpinner v-if="internalDocuments.loading" />
         <template v-else>
-            Selected Section: {{ selectedSection }}
-            {{ internalDocuments.results }}
-            <template v-for="category in internalDocCategories.results">
-                {{ category.parent }}
-            </template>
+            <supplemental-content-category
+                v-for="category in internalDocuments.results"
+                :key="category.name"
+                :name="category.name"
+                subcategory="false"
+                :description="category.description"
+                :supplemental_content="category.supplemental_content"
+                :sub_categories="category.sub_categories"
+                is-fetching="false"
+                is-fr-doc-category="false"
+                :show-if-empty="category.show_if_empty"
+            >
+            </supplemental-content-category>
         </template>
     </div>
 </template>

@@ -5,9 +5,9 @@
         >
             <supplemental-content-object
                 :key="index"
-                :name="content.name"
+                :name="content.name || content.doc_name_string"
                 :description="content.description"
-                :date="content.date"
+                :date="content.date || content.date_string"
                 :url="content.url"
             >
             </supplemental-content-object>
@@ -40,9 +40,9 @@
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"
                 :key="index"
-                :name="content.name"
+                :name="content.name || content.doc_name_string"
                 :description="content.description"
-                :date="content.date"
+                :date="content.date || content.date_string"
                 :url="content.url"
             >
             </supplemental-content-object>
