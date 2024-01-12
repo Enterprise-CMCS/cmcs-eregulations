@@ -22,7 +22,7 @@ class OutlookExtractor(Extractor):
 
     def _handle_message(self, message: extract_msg.Message) -> str:
         logger.debug("Handling embedded message object.")
-        body = message.body
+        body = message.body if message.body else ""  # Handles cases where an embedded message's body is empty
         for attachment in message.attachments:
             if attachment.type == extract_msg.enums.AttachmentType.DATA:
                 logger.debug("Attachment is data, extracting.")
