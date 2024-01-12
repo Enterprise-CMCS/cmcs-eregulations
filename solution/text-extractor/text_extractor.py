@@ -1,7 +1,5 @@
-import json
 import logging
 import os
-import re
 
 import requests
 
@@ -15,10 +13,17 @@ from .extractors import (
     ExtractorException,
     ExtractorInitException,
 )
+from .utils import (
+    clean_output,
+    get_config,
+    lambda_failure,
+    lambda_success,
+)
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
 logger = logging.getLogger()
-logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
+if logger.handlers:
+    logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
 ch = logging.StreamHandler()
 formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
 ch.setFormatter(formatter)
@@ -26,37 +31,14 @@ logger.addHandler(ch)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
-def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
-    logging.log(loglevel, message)
-    return {
-        "statusCode": status_code,
-        "headers": {"Content-Type": "application/json"},
-        "body": json.dumps({"message": message}),
-    }
-
-
-def lambda_success(message: str) -> dict:
-    return lambda_response(200, logging.INFO, message)
-
-
-def lambda_failure(status_code: int, message: str) -> dict:
-    return lambda_response(status_code, logging.ERROR, message)
-
-
 def handler(event: dict, context: dict) -> dict:
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
     # Retrieve configuration from event dict
-    logger.info("Retrieving Lambda event dictionary.")
-    if "body" not in event:
-        # Assume we are invoked directly
-        config = event
-        logger.debug("No 'body' key present in event, assuming direct invocation.")
-    else:
-        try:
-            config = json.loads(event["body"])
-        except Exception:
-            return lambda_failure(400, "Unable to parse body as JSON.")
+    try:
+        config = get_config(event)
+    except Exception as e:
+        return lambda_failure(400, f"Failed to get Lambda configuration: {str(e)}")
 
     # Retrieve required arguments
     logger.info("Retrieving required parameters from event.")
@@ -98,8 +80,8 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_failure(500, f"Extractor unexpectedly failed: {str(e)}")
 
-    # Strip unneeded data out of the extracted text
-    text = re.sub(r'[\n\s]+', ' ', text).strip()
+    # Strip control characters and unneeded data out of the extracted text
+    text = clean_output(text)
 
     # Send result to eRegs
     logger.info("Sending extracted text to POST URL.")
