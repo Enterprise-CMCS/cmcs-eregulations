@@ -658,7 +658,7 @@ const formatResourceCategories = (resources) => {
     return categories;
 };
 
-const formatInternalDocCategories = ({ categories = [], docs = [] }) => {
+const formatInternalDocCategories = ({ categories = [], docs = [], apiUrl }) => {
     const categoriesClone = [...categories];
 
     docs.filter((doc) => doc.category.type === "repositorycategory").forEach(
@@ -685,6 +685,7 @@ const formatInternalDocCategories = ({ categories = [], docs = [] }) => {
 
     docs.filter((doc) => doc.category.type === "repositorysubcategory").forEach(
         (doc) => {
+            doc.url = `${apiUrl}file-manager/files/${doc.url}`;
             const existingSubCategory = subCategories.find(
                 (category) => category.name === doc.category.name
             );

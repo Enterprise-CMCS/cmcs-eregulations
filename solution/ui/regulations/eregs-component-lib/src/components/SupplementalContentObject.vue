@@ -1,67 +1,99 @@
 <template>
-  <div class="supplemental-content">
-    <a class="supplemental-content-link" :href="url" target="_blank" rel="noopener noreferrer">
-      <span class="supplemental-content-date" v-bind:class="{ 'supplemental-content-mid-bar': !isBlank(name) }" v-if="date">{{ date|formatDate }}</span>
-      <span class="supplemental-content-title" v-bind:class="{ 'supplemental-content-external-link': isBlank(description) }" v-if="!isBlank(name)">{{ name }}</span>
-      <div
-          v-if="!isBlank(description)"
-          class="supplemental-content-description supplemental-content-external-link"
+    <div class="supplemental-content">
+        <a
+            class="supplemental-content-link"
+            :href="url"
+            target="_blank"
+            rel="noopener noreferrer"
         >
-          <span v-html="description"/>
-        </div>
-    </a>
-  </div>
+            <span
+                v-if="date"
+                class="supplemental-content-date"
+                :class="{
+                    'supplemental-content-mid-bar': !isBlank(name),
+                }"
+                >{{ date | formatDate }}</span
+            >
+            <span
+                v-if="!isBlank(name)"
+                class="supplemental-content-title"
+                :class="{
+                    'supplemental-content-external-link':
+                        docType !== 'internal' && isBlank(description),
+                }"
+                >{{ name }}</span
+            >
+            <div
+                v-if="!isBlank(description)"
+                class="supplemental-content-description"
+                :class="{
+                    'supplemental-content-external-link':
+                        docType !== 'internal',
+                }"
+            >
+                <span v-html="description" />
+            </div>
+        </a>
+    </div>
 </template>
 
 <script>
-
 export default {
-  name: 'supplemental-content-object',
+    name: "SupplementalContentObject",
 
-  props: {
-    name: {
-      type: String,
-      required: false,
+    props: {
+        name: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
+        description: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
+        date: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
+        url: {
+            type: String,
+            default: undefined,
+        },
+        docType: {
+            type: String,
+            required: false,
+            default: "external",
+        },
     },
-    description: {
-        type: String,
-        required: false,
-    },
-    date: {
-        type: String,
-        required: false,
-    },
-    url: {
-      type: String,
-    },
-  },
 
-  filters: {
-    formatDate: function(value) {
-      const date = new Date(value);
-      let options = { year: 'numeric', timeZone: 'UTC' };
-      const raw_date = value.split('-');
-      if(raw_date.length > 1) {
-        options.month = 'long';
-      }
-      if(raw_date.length > 2) {
-        options.day = 'numeric';
-      }
-      const format = new Intl.DateTimeFormat("en-US", options);
-      return format.format(date);
-    }
-  },
-
-  methods: {
-    isBlank: function(str) {
-      return (!str || /^\s*$/.test(str));
+    filters: {
+        formatDate(value) {
+            const date = new Date(value);
+            const options = { year: "numeric", timeZone: "UTC" };
+            const rawDate = value.split("-");
+            if (rawDate.length > 1) {
+                options.month = "long";
+            }
+            if (rawDate.length > 2) {
+                options.day = "numeric";
+            }
+            const format = new Intl.DateTimeFormat("en-US", options);
+            return format.format(date);
+        },
     },
-  },
+
+    methods: {
+        isBlank(str) {
+            return !str || /^\s*$/.test(str);
+        },
+    },
 };
 </script>
 
 <style>
-.search-highlight{
+.search-highlight {
     font-weight: bold;
 }
 </style>

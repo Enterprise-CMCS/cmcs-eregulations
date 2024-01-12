@@ -99,6 +99,7 @@ const getDocuments = async ({ section }) => {
             internalDocuments.value.results = formatInternalDocCategories({
                 categories,
                 docs: documents.results,
+                apiUrl: props.apiUrl,
             });
         });
     } catch (error) {

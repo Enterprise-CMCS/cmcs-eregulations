@@ -1,14 +1,13 @@
 <template>
     <div class="supplemental-content-list" v-if="!has_sub_categories">
-        <template
-            v-for="(content, index) in limitedContent"
-        >
+        <template v-for="(content, index) in limitedContent">
             <supplemental-content-object
                 :key="index"
-                :name="content.name || content.doc_name_string"
-                :description="content.description"
+                :name="content.name"
+                :description="content.description || content.doc_name_string"
                 :date="content.date || content.date_string"
                 :url="content.url"
+                :doc-type="content.resource_type ?? 'external'"
             >
             </supplemental-content-object>
         </template>
@@ -40,10 +39,11 @@
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"
                 :key="index"
-                :name="content.name || content.doc_name_string"
-                :description="content.description"
+                :name="content.name"
+                :description="content.description || content.doc_name_string"
                 :date="content.date || content.date_string"
                 :url="content.url"
+                :doc-type="content.resource_type ?? 'external'"
             >
             </supplemental-content-object>
             <collapse-button
