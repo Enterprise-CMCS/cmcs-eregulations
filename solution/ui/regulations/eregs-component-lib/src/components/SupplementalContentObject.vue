@@ -31,7 +31,6 @@
                         docType !== 'internal',
                 }"
             >
-                Name: {{ name }}
                 <span
                     v-html="
                         description +

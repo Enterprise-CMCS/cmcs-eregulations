@@ -86,21 +86,22 @@ const getDocuments = async ({ section }) => {
     }
 
     try {
-        Promise.all([
+        const results = await Promise.all([
             getCategories(),
             getCombinedContent({
                 apiUrl: props.apiUrl,
                 cacheResponse: false,
                 requestParams: `resource-type=internal&${locationString}`,
             }),
-        ]).then((values) => {
-            const categories = values[0];
-            const documents = values[1];
-            internalDocuments.value.results = formatInternalDocCategories({
-                categories,
-                docs: documents.results,
-                apiUrl: props.apiUrl,
-            });
+        ]);
+
+        const categories = results[0];
+        const documents = results[1];
+
+        internalDocuments.value.results = formatInternalDocCategories({
+            categories,
+            docs: documents.results,
+            apiUrl: props.apiUrl,
         });
     } catch (error) {
         console.error(error);
