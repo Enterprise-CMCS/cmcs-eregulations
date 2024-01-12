@@ -3,6 +3,7 @@ import {
     getActAbbr,
     getCurrentPageResultsRange,
     getFileNameSuffix,
+    getFileTypeButton,
     getRequestParams,
     romanize,
     shapeTitlesResponse,
@@ -165,6 +166,18 @@ describe("Utilities.js", () => {
         expect(getFileNameSuffix("test.docx.msg")).toBe("msg");
         expect(getFileNameSuffix("test.docx.msg.txt")).toBe("txt");
         expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
+    });
+
+    describe("getFileTypeButton", () => {
+        it("is a DOCX file", async () => {
+            expect(getFileTypeButton({fileName: "index_zero.docx", url: "url"})).toBe(
+                "<span data-testid='download-chip-url' class='result__link--file-type'>Download DOCX</span>"
+            );
+        });
+
+        it("is a PDF file", async () => {
+            expect(getFileTypeButton({fileName: "index_four.pdf", url: "url"})).toBe("");
+        });
     });
 
     it("romanize properly converts numbers to roman numerals", async () => {

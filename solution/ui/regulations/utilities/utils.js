@@ -37,6 +37,20 @@ const PARAM_MAP = {
 };
 
 /**
+ * An object representing a policy document
+ * @typedef {Object} PolicyDoc
+ * @property {("external"|"internal")} resource_type - The type of document
+ * @property {string} doc_name_string - The name of the document
+ * @property {string} document_name_headline - The name of the document with search terms highlighted
+ * @property {string} summary_string - The summary of the document
+ * @property {string} summary_headline - The summary of the document with search terms highlighted
+ * @property {string} file_name_string - The name of the file
+ * @property {string} content_string - The parsed content of the document
+ * @property {string} content_headline - The parsed content of the document with search terms highlighted
+ * @property {string} url - The url of the document
+ */
+
+/**
  * Validation dictionary for query params to ensure that only valid values are
  * passed to the API.
  * @type {Object}
@@ -82,6 +96,23 @@ const getFileNameSuffix = (fileName) => {
     }
 
     return suffix;
+};
+
+/**
+ * @property {string} file_name_string - The name of the file
+ * @property {string} url - The url of the document
+ *
+ * @returns {string} - HTML string for the file type button
+ */
+const getFileTypeButton = ({ fileName, url }) => {
+    const fileTypeSuffix = getFileNameSuffix(fileName);
+
+    let fileTypeButton;
+    if (fileName && fileTypeSuffix) {
+        fileTypeButton = `<span data-testid='download-chip-${url}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+    }
+
+    return `${fileTypeButton ?? ""}`;
 };
 
 /*
@@ -658,7 +689,11 @@ const formatResourceCategories = (resources) => {
     return categories;
 };
 
-const formatInternalDocCategories = ({ categories = [], docs = [], apiUrl }) => {
+const formatInternalDocCategories = ({
+    categories = [],
+    docs = [],
+    apiUrl,
+}) => {
     const categoriesClone = [...categories];
 
     docs.filter((doc) => doc.category.type === "repositorycategory").forEach(
@@ -1018,6 +1053,7 @@ export {
     getCurrentSectionFromHash,
     getDisplayName,
     getFileNameSuffix,
+    getFileTypeButton,
     getFragmentParam,
     getKebabDate,
     getKebabLabel,

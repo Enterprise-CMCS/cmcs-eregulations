@@ -31,13 +31,25 @@
                         docType !== 'internal',
                 }"
             >
-                <span v-html="description" />
+                Name: {{ name }}
+                <span
+                    v-html="
+                        description +
+                        addFileTypeButton({
+                            fileName,
+                            url,
+                            docType,
+                        })
+                    "
+                />
             </div>
         </a>
     </div>
 </template>
 
 <script>
+import { getFileTypeButton } from "utilities/utils";
+
 export default {
     name: "SupplementalContentObject",
 
@@ -66,6 +78,11 @@ export default {
             required: false,
             default: "external",
         },
+        fileName: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
     },
 
     filters: {
@@ -87,6 +104,16 @@ export default {
     methods: {
         isBlank(str) {
             return !str || /^\s*$/.test(str);
+        },
+        addFileTypeButton({ fileName, url, docType }) {
+            if (docType !== "internal") {
+                return "";
+            }
+
+            return getFileTypeButton({
+                fileName,
+                url,
+            });
         },
     },
 };

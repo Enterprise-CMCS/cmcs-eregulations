@@ -8,6 +8,7 @@
                 :date="content.date || content.date_string"
                 :url="content.url"
                 :doc-type="content.resource_type ?? 'external'"
+                :file-name="content.file_name_string"
             >
             </supplemental-content-object>
         </template>
