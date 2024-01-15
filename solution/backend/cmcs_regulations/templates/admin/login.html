@@ -15,24 +15,13 @@
                 margin-top: 15px;
                 display: flex;
                 justify-content: center;
-
-                form#eua_login_form input {
-                    background-color: transparent !important;
-                    text-decoration: underline;
-                    color: #046791;
-                    padding: initial;
-                }
             }
         </style>
     {% endblock %}
    {{ block.super }}
    {% if EUA_FEATUREFLAG %}
       <div class="okta_login_container">
-        Or Login With &nbsp;
-        <form id="eua_login_form" method="get" action="{% url 'oidc_authentication_init' %}">
-          <input type="hidden" name="next" value="{{ next }}" />
-          <input type="submit" value="EUA">
-        </form>
+        Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}?next={{ next }}">EUA</a>
       </div>
    {% endif %}
    {% if form.errors %}
