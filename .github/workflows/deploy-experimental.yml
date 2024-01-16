@@ -81,7 +81,7 @@ jobs:
       deployextractor: false
     runs-on: ubuntu-20.04
     # Change to true if you want to create text extractor for your experimental deploy.
-    if: true
+    if: false
     steps:
       # Checkout the code
       - name: Checkout
@@ -119,7 +119,7 @@ jobs:
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
-    needs: [deploy-static, deploy-text-extractor]
+    needs: [deploy-static]  #[deploy-static, deploy-text-extractor]
     steps:
       # Checkout the code
       - name: Checkout
