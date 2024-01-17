@@ -147,12 +147,9 @@ watch(selectedSection, (newValue) => {
                 v-for="category in internalDocuments.results"
                 :key="category.name"
                 :name="category.name"
-                subcategory="false"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :sub_categories="category.sub_categories"
-                is-fetching="false"
-                is-fr-doc-category="false"
                 :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>

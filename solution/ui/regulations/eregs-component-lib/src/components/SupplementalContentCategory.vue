@@ -50,7 +50,9 @@
                     :isFetching="isFetching"
                 >
                 </supplemental-content-category>
-                <template v-if="isFrDocCategory">
+                <template
+                    v-if="isFrDocCategory"
+                >
                     <related-rule-list
                         v-if="supplemental_content"
                         :rules="supplemental_content"
@@ -58,9 +60,9 @@
                 </template>
                 <template v-else>
                     <supplemental-content-list
+                        v-if="supplemental_content"
                         :supplemental_content="supplemental_content"
                         :has_sub_categories="has_sub_categories"
-                        v-if="supplemental_content"
                     />
                 </template>
             </collapsible>
