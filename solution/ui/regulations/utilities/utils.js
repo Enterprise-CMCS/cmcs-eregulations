@@ -622,15 +622,24 @@ const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
     return [firstInRange, lastInRange];
 };
 
-const formatResourceCategories = (resources) => {
-    const rawCategories = JSON.parse(
-        document.getElementById("categories").textContent
-    );
+const formatResourceCategories = ({
+    resources = [],
+    categories = [],
+    apiUrl,
+}) => {
+    const categoriesClone = [...categories];
 
     resources
-        .filter((resource) => resource.category.type === "category")
+        .filter(
+            (resource) =>
+                resource.category.type === "category" ||
+                resource.category.type === "repositorycategory"
+        )
         .forEach((resource) => {
-            const existingCategory = rawCategories.find(
+            if (resource.category.type === "repositorycategory") {
+                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+            }
+            const existingCategory = categoriesClone.find(
                 (category) => category.name === resource.category.name
             );
 
@@ -645,15 +654,22 @@ const formatResourceCategories = (resources) => {
                 );
                 newCategory.supplemental_content = [resource];
                 newCategory.sub_categories = [];
-                rawCategories.push(newCategory);
+                categoriesClone.push(newCategory);
             }
         });
 
     const subCategories = [];
 
     resources
-        .filter((resource) => resource.category.type === "subcategory")
+        .filter(
+            (resource) =>
+                resource.category.type === "subcategory" ||
+                resource.category.type === "repositorysubcategory"
+        )
         .forEach((resource) => {
+            if (resource.category.type === "repositorysubcategory") {
+                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+            }
             const existingSubCategory = subCategories.find(
                 (category) => category.name === resource.category.name
             );
@@ -671,72 +687,6 @@ const formatResourceCategories = (resources) => {
                 subCategories.push(newSubCategory);
             }
         });
-
-    const categories = rawCategories.map((c) => {
-        const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = subCategories.filter(
-            (subcategory) => subcategory.parent?.id === category?.id
-        );
-
-        return category;
-    });
-
-    categories.sort((a, b) => a.order - b.order);
-    categories.forEach((category) => {
-        category.sub_categories.sort((a, b) => a.order - b.order);
-    });
-
-    return categories;
-};
-
-const formatInternalDocCategories = ({
-    categories = [],
-    docs = [],
-    apiUrl,
-}) => {
-    const categoriesClone = [...categories];
-
-    docs.filter((doc) => doc.category.type === "repositorycategory").forEach(
-        (doc) => {
-            const existingCategory = categoriesClone.find(
-                (category) => category.name === doc.category.name
-            );
-
-            if (existingCategory) {
-                if (!existingCategory.supplemental_content) {
-                    existingCategory.supplemental_content = [];
-                }
-                existingCategory.supplemental_content.push(doc);
-            } else {
-                const newCategory = doc.category;
-                newCategory.supplemental_content = [doc];
-                newCategory.sub_categories = [];
-                categoriesClone.push(newCategory);
-            }
-        }
-    );
-
-    const subCategories = [];
-
-    docs.filter((doc) => doc.category.type === "repositorysubcategory").forEach(
-        (doc) => {
-            doc.url = `${apiUrl}file-manager/files/${doc.url}`;
-            const existingSubCategory = subCategories.find(
-                (category) => category.name === doc.category.name
-            );
-
-            if (existingSubCategory) {
-                if (!existingSubCategory.supplemental_content) {
-                    existingSubCategory.supplemental_content = [];
-                }
-                existingSubCategory.supplemental_content.push(doc);
-            } else {
-                const newSubCategory = JSON.parse(JSON.stringify(doc.category));
-                newSubCategory.supplemental_content = [doc];
-                subCategories.push(newSubCategory);
-            }
-        }
-    );
 
     const formattedCategories = categoriesClone.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
@@ -1044,7 +994,6 @@ export {
     flattenSubpart,
     formatAmount,
     formatDate,
-    formatInternalDocCategories,
     formatResourceCategories,
     generateId,
     getActAbbr,

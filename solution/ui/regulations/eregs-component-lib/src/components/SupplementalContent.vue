@@ -246,14 +246,22 @@ export default {
 
                 this.resourceCount = subpartResponse.count;
 
+                const rawCategories = JSON.parse(
+                    document.getElementById("categories").textContent
+                );
+
                 if (response !== "") {
-                    this.categories = formatResourceCategories(
-                        response.results
-                    );
+                    this.categories = formatResourceCategories({
+                        apiUrl: this.apiUrl,
+                        categories: rawCategories,
+                        resources: response.results
+                    });
                 } else {
-                    this.categories = formatResourceCategories(
-                        subpartResponse.results
-                    );
+                    this.categories = formatResourceCategories({
+                        apiUrl: this.apiUrl,
+                        categories: rawCategories,
+                        resources: subpartResponse.results
+                    });
                 }
             } catch (error) {
                 console.error(error);

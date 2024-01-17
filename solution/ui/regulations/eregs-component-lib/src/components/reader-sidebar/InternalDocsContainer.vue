@@ -5,7 +5,7 @@ import { getCombinedContent, getPolicyDocCategories } from "utilities/api";
 
 import {
     EventCodes,
-    formatInternalDocCategories,
+    formatResourceCategories,
     getCurrentSectionFromHash,
 } from "utilities/utils";
 
@@ -98,9 +98,9 @@ const getDocuments = async ({ section }) => {
         const categories = results[0];
         const documents = results[1];
 
-        internalDocuments.value.results = formatInternalDocCategories({
+        internalDocuments.value.results = formatResourceCategories({
             categories,
-            docs: documents.results,
+            resources: documents.results,
             apiUrl: props.apiUrl,
         });
     } catch (error) {
