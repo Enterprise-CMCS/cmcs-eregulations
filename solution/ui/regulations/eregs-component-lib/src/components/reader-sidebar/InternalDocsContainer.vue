@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 
 import { getCombinedContent, getPolicyDocCategories } from "utilities/api";
 
@@ -144,6 +144,7 @@ watch(selectedSection, (newValue) => {
             <supplemental-content-category
                 v-for="category in internalDocuments.results"
                 :key="category.name"
+                :is-fetching="internalDocuments.loading"
                 :name="category.name"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
