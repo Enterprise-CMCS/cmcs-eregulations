@@ -24,8 +24,10 @@ const SPECIAL_CHARACTERS = [
 
 const API_ENDPOINTS_V3 = [
     `/v3/acts`,
+    `/v3/content-search`,
     `/v3/ecfr_parser_result/${TITLE}`,
-    `v3/file-manager/subjects`,
+    `/v3/file-manager/categories`,
+    `/v3/file-manager/subjects`,
     `/v3/parser_config`,
     `/v3/resources/`,
     `/v3/resources/categories`,
