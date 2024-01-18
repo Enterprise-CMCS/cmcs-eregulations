@@ -106,15 +106,20 @@ const handleHashChange = () => {
     selectedSection.value = getSectionNumber(window.location.hash);
 };
 
-const eventHandler = (args) => {
+const sectionChangeHandler = (args) => {
     const sectionNumber = args.section.split(" ")[1].split(".")[1];
     selectedSection.value = sectionNumber;
+};
+
+const clearSectionsHandler = () => {
+    selectedSection.value = undefined;
 };
 
 onMounted(() => {
     window.addEventListener("hashchange", handleHashChange);
 
-    eventbus.on(EventCodes.SetSection, eventHandler);
+    eventbus.on(EventCodes.SetSection, sectionChangeHandler);
+    eventbus.on(EventCodes.ClearSections, clearSectionsHandler);
 
     getCategories();
     getDocuments({ section: selectedSection.value });
@@ -122,7 +127,8 @@ onMounted(() => {
 
 onUnmounted(() => {
     window.removeEventListener("hashchange", handleHashChange);
-    eventbus.off(EventCodes.SetSection, eventHandler);
+    eventbus.off(EventCodes.SetSection, sectionChangeHandler);
+    eventbus.off(EventCodes.ClearSections, clearSectionsHandler);
 });
 
 watch(selectedSection, (newValue) => {

@@ -22,6 +22,7 @@ import _transform from "lodash/transform";
 const EventCodes = {
     SetSection: "SetSection",
     OpenBlockingModal: "OpenBlockingModal",
+    ClearSections: "ClearSections",
 };
 
 const DOCUMENT_TYPES = ["external", "internal"];

@@ -286,6 +286,7 @@ export default {
         clearSection() {
             this.selectedPart = undefined;
             this.location = undefined;
+            eventbus.emit(EventCodes.ClearSections);
         },
     },
 };
