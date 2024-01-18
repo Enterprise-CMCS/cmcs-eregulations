@@ -119,7 +119,7 @@ jobs:
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-20.04
-    needs: [deploy-static] #[deploy-static, deploy-text-extractor]
+    needs: [deploy-static]  #[deploy-static, deploy-text-extractor]
     steps:
       # Checkout the code
       - name: Checkout
@@ -212,7 +212,7 @@ jobs:
       - name: Run Python unit tests
         working-directory: ./solution/backend
         run: |
-          pytest -vv
+          DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" pytest -vv
   build-and-deploy-vue:
     environment:
       name: "dev"

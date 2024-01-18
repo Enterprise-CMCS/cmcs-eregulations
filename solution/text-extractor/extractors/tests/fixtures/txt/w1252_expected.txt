@@ -1,0 +1,1 @@
+This is a Windows-1252 text file containing this character: ¯

@@ -1,11 +1,9 @@
 import logging
-from tempfile import NamedTemporaryFile
 
 import extract_msg
 
 from .exceptions import (
     ExtractorException,
-    ExtractorInitException,
 )
 from .extractor import Extractor
 
@@ -15,43 +13,28 @@ logger = logging.getLogger(__name__)
 class OutlookExtractor(Extractor):
     file_types = ("msg",)
 
-    def _handle_data(self, attachment: extract_msg.attachment.Attachment) -> str:
+    def _handle_data(self, attachment: extract_msg.Attachment) -> str:
         file_name = attachment.longFilename
         if not file_name:
-            logger.log(logging.WARN, "A data attachment failed to extract because it has no filename.")
+            logger.warning("A data attachment failed to extract because it has no filename.")
             return ""
-        file_type = file_name.lower().split('.')[-1]
+        return f" {file_name} {self._extract_embedded(file_name, attachment.data)}"
 
-        with NamedTemporaryFile(delete=False) as file:
-            file.write(attachment.data)
-            file.close()
-
-            body = f" {file_name} "
-
-            try:
-                extractor = Extractor.get_extractor(file_type, self.config)
-                body += extractor.extract(file.name)
-            except ExtractorInitException as e:
-                logger.log(logging.WARN, "Failed to initialize extractor for attachment \"%s\": %s", file_name, str(e))
-            except ExtractorException as e:
-                logger.log(logging.WARN, "Failed to extract text for attachment \"%s\": %s", file_name, str(e))
-            except Exception as e:
-                logger.log(logging.WARN, "Extracting text for attachment \"%s\" failed unexpectedly: %s", file_name, str(e))
-
-            return body
-
-    def _handle_message(self, message: extract_msg.message.Message) -> str:
-        body = message.body
+    def _handle_message(self, message: extract_msg.Message) -> str:
+        logger.debug("Handling embedded message object.")
+        body = message.body if message.body else ""  # Handles cases where an embedded message's body is empty
         for attachment in message.attachments:
-            if attachment.type == "data":
+            if attachment.type == extract_msg.enums.AttachmentType.DATA:
+                logger.debug("Attachment is data, extracting.")
                 body += self._handle_data(attachment)
-            elif attachment.type == "msg":
+            elif attachment.type == extract_msg.enums.AttachmentType.MSG:
+                logger.debug("Attachment is another message object, extracting.")
                 body += self._handle_message(attachment.data)
         return body
 
-    def extract(self, file_path: str) -> str:
+    def extract(self, file: bytes) -> str:
         try:
-            msg = extract_msg.openMsg(file_path)
+            msg = extract_msg.openMsg(file)
         except Exception as e:
             raise ExtractorException(f"msg file failed to extract: {str(e)}")
 

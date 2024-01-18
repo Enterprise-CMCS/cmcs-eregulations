@@ -1,5 +1,4 @@
 import unittest
-from tempfile import TemporaryDirectory
 
 import boto3
 import mock
@@ -16,7 +15,7 @@ from backends import (
 class TestS3Backend(unittest.TestCase):
     BUCKET_NAME = "some_bucket"
     FILE_NAME = "some_file"
-    FILE_BODY = "This is some content"
+    FILE_BODY = b"This is some content"
 
     POST_PARAMS = {
         "aws": {
@@ -57,15 +56,11 @@ class TestS3Backend(unittest.TestCase):
                 S3Backend(self.POST_PARAMS)
 
     def test_get_file(self):
-        with TemporaryDirectory() as temp_dir:
-            backend = S3Backend(self.POST_PARAMS)
-            path = backend.get_file(temp_dir, self.FILE_NAME)
-            with open(path, "r") as f:
-                data = f.read()
-            self.assertEqual(data, self.FILE_BODY)
+        backend = S3Backend(self.POST_PARAMS)
+        data = backend.get_file(self.FILE_NAME)
+        self.assertEqual(data, self.FILE_BODY)
 
     def test_bad_key(self):
-        with TemporaryDirectory() as temp_dir:
-            backend = S3Backend(self.POST_PARAMS)
-            with self.assertRaises(BackendException):
-                backend.get_file(temp_dir, "invalid_key")
+        backend = S3Backend(self.POST_PARAMS)
+        with self.assertRaises(BackendException):
+            backend.get_file("invalid_key")

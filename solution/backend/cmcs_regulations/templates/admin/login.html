@@ -21,7 +21,7 @@
    {{ block.super }}
    {% if EUA_FEATUREFLAG %}
       <div class="okta_login_container">
-        Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}">EUA</a>
+        Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}?next={{ next }}">EUA</a>
       </div>
    {% endif %}
    {% if form.errors %}

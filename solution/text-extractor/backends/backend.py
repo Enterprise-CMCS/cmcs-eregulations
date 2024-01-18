@@ -1,4 +1,8 @@
+import logging
+
 from .exceptions import BackendInitException
+
+logger = logging.getLogger(__name__)
 
 
 # Base class for file backends
@@ -7,7 +11,12 @@ class FileBackend:
     @classmethod
     def get_backend(cls, backend: str, config: dict = {}) -> "FileBackend":
         try:
-            return {subclass.backend: subclass for subclass in cls.__subclasses__()}[backend](config)
+            logger.info("Requested file backend is \"%s\".", backend)
+            backend_class = {subclass.backend: subclass for subclass in cls.__subclasses__()}[backend]
+            logger.info("Found matching file backend class \"%s\".", str(backend_class))
+            backend = backend_class(config)
+            logger.info("Backend initialized successfully.")
+            return backend
         except KeyError:
             backends = [subclass.backend for subclass in cls.__subclasses__()]
             supported = "'" + "', '".join(backends) + "'"
@@ -16,5 +25,5 @@ class FileBackend:
     def __init__(self, config: dict):
         pass
 
-    def get_file(self, temp_directory: str, uri: str) -> str:
+    def get_file(self, uri: str) -> bytes:
         raise NotImplementedError("get_file function not implemented")
