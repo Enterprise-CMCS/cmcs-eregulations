@@ -127,6 +127,7 @@ onMounted(() => {
 
 onUnmounted(() => {
     window.removeEventListener("hashchange", handleHashChange);
+
     eventbus.off(EventCodes.SetSection, sectionChangeHandler);
     eventbus.off(EventCodes.ClearSections, clearSectionsHandler);
 });
