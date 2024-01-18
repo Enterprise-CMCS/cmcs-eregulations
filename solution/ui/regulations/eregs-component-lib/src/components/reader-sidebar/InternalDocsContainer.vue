@@ -29,15 +29,6 @@ const props = defineProps({
     },
 });
 
-// What do I want to do?
-// 1. Get the data from the API (categories and documents based on the section or subpart)
-//   a. Get the categories ✔
-//   b. Get the documents ✔
-// 3. Display a spinner while the data is loading ✔
-// 4. Change selected section on hashchange and on eventbus event ✔
-// 5. Format categories to include data (emulate existing formatResourceCategories function)
-// 6. Display the data in a tree structure using existing components
-
 const getSectionNumber = (hash) => {
     const section = getCurrentSectionFromHash(hash);
     return section ? section.split("-")[1] : undefined;

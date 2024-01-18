@@ -1,5 +1,6 @@
 import {
     createLastUpdatedDates,
+    formatResourceCategories,
     getActAbbr,
     getCurrentPageResultsRange,
     getFileNameSuffix,
