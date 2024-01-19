@@ -215,23 +215,36 @@ Most extractor unit tests will be one input, one output; that is, for every fixt
 
 _`extractors/tests/test_sample_collection.py`_:
 ```python
+from unittest.mock import patch
+
 from . import FixtureTestCase
+
+
+def mock_external_api_extractor(file):
+    if file.type not in ["filetype1", "filetype2", "filetype3"]:
+        raise Exception("Invalid type")
+    return "Fake data indicating the API call succeeded"
 
 
 # For all of these tests, save your expected output as "extractors/tests/fixtures/group1/expected.txt"
 class TestSampleExtractor(FixtureTestCase):
     def test_filetype1(self):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype1"
-        self._test_file_type("filetype1", collection="group1")
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype1", collection="group1")
 
     def test_filetype2(self):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
-        self._test_file_type("filetype2", collection="group1")
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype2", collection="group1")
 
     def test_filetype3(self):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
-        self._test_file_type("filetype3", collection="group1")
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype3", collection="group1")
 ```
+
+In this example, the "expected.txt" file should contain the text "Fake data indicating the API call succeeded" based on line 9.
 
 Also note that this parameter can be used in conjunction with `variation`, and files are prefixed with the variation in the same way as shown in the previous section.
 
