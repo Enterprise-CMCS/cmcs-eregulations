@@ -633,11 +633,11 @@ const formatResourceCategories = ({
     resources
         .filter(
             (resource) =>
-                resource.category.type === "category" ||
-                resource.category.type === "repositorycategory"
+                resource.category?.type === "category" ||
+                resource.category?.type === "repositorycategory"
         )
         .forEach((resource) => {
-            if (resource.category.type === "repositorycategory") {
+            if (resource.category?.type === "repositorycategory") {
                 resource.url = `${apiUrl}file-manager/files/${resource.url}`;
             }
             const existingCategory = categoriesClone.find(
@@ -664,11 +664,11 @@ const formatResourceCategories = ({
     resources
         .filter(
             (resource) =>
-                resource.category.type === "subcategory" ||
-                resource.category.type === "repositorysubcategory"
+                resource.category?.type === "subcategory" ||
+                resource.category?.type === "repositorysubcategory"
         )
         .forEach((resource) => {
-            if (resource.category.type === "repositorysubcategory") {
+            if (resource.category?.type === "repositorysubcategory") {
                 resource.url = `${apiUrl}file-manager/files/${resource.url}`;
             }
             const existingSubCategory = subCategories.find(
