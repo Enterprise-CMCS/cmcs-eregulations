@@ -75,24 +75,24 @@ class TestTextractExtractor(FixtureTestCase):
 
     def test_extract_jpg(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)
+            self._test_file_type("jpg", collection="textract", config=self.CONFIG)
 
     def test_extract_jpeg(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("jpeg", subdirectory="images", config=self.CONFIG)
+            self._test_file_type("jpeg", collection="textract", config=self.CONFIG)
 
     def test_extract_png(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("png", subdirectory="images", config=self.CONFIG)
+            self._test_file_type("png", collection="textract", config=self.CONFIG)
 
     def test_extract_tiff(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("tiff", subdirectory="images", config=self.CONFIG)
+            self._test_file_type("tiff", collection="textract", config=self.CONFIG)
 
     def test_extract_failure(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
             with self.assertRaises(ExtractorException):
-                self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)
+                self._test_file_type("jpg", collection="textract", config=self.CONFIG)
 
     def test_bad_file(self):
         extractor = Extractor.get_extractor("jpg", self.CONFIG)
@@ -104,4 +104,4 @@ class TestTextractExtractor(FixtureTestCase):
     def test_bad_response(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_bad_response):
             with self.assertRaises(ExtractorException):
-                self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)
+                self._test_file_type("jpg", collection="textract", config=self.CONFIG)
