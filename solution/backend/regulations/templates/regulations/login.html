@@ -1,0 +1,34 @@
+{% extends "regulations/base.html" %}
+{% load static %}
+
+{% block spa_styles %}
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
+{% endblock %}
+
+{% block title %}Single sign-on to CMCS | Medicaid & CHIP eRegulations{% endblock %}
+
+{% block header %}
+    {% include "regulations/partials/header.html" %}
+{% endblock %}
+
+{% block body %}
+<div class="login-container">
+        <div class="nav-container">
+            <div class="content">
+                <h1>Single sign-on to CMCS</h1>
+                <h2>Authenticate your account by signing into CMC's single sign-on provider</h2>
+            </div>
+        </div>
+        <div>
+            <main class="login">
+                If this is your first time signing in to eRegulations, make sure you have the correct job codes for the tasks you need to complete.
+
+                <form action="{% url 'oidc_authentication_init' %}" method="get">
+                    <input type="hidden" name="next" value="{{ next }}">
+                    <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
+                </form>  {# Show the error message if needed #}
+            </main>
+        </div>
+</div>
+{% endblock %}

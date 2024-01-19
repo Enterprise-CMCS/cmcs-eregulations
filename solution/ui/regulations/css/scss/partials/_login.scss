@@ -1,31 +1,18 @@
 //-----------------------------
-// About
+// Login
 //-----------------------------
 
 @import "../application_settings";
 
-main.about {
+main.login {
     display: block;
     margin: $spacer-3 auto $spacer-7;
     max-width: $text-max-width;
-
-    section {
-        margin-top: $spacer-5;
-        clear: both;
-    }
-
+    max-height: 100%;
     button.action-btn.default-btn {
         margin-top:16px;
         color: #fff;
         font-weight: bold;
-    }
-
-    .ds-l-container {
-        padding: 0;
-
-        img {
-            margin-top: $spacer-2;
-        }
     }
 
     h2 {
@@ -42,21 +29,4 @@ main.about {
         padding-left: 40px;
     }
 
-    .ecfr-graphic {
-        border: 1px solid $border_color;
-    }
-
-    .subtitle {
-        font-weight: 600;
-    }
-
-    .note {
-        font-style: italic;
-    }
-
-    :target::before {
-        // Removes accomodation for the sticky header - delete if this page gets a sticky header
-        margin-top: 0;
-        height: auto;
-    }
 }
