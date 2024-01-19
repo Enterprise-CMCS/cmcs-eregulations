@@ -100,8 +100,9 @@ const getFileNameSuffix = (fileName) => {
 };
 
 /**
- * @property {string} file_name_string - The name of the file
- * @property {string} url - The url of the document
+ * @param {Object} args - Arguments object
+ * @param {string} args.file_name_string - The name of the file
+ * @param {string} args.url - The url of the document
  *
  * @returns {string} - HTML string for the file type button
  */
@@ -623,6 +624,12 @@ const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
     return [firstInRange, lastInRange];
 };
 
+/**
+ * @param {Object} args - Arguments object
+ * @param {number} args.resources - array of resource objects
+ * @param {number} args.categories - array of category objects
+ * @param {string} args.apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ */
 const formatResourceCategories = ({
     resources = [],
     categories = [],
