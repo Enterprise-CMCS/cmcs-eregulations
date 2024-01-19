@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import patch
 
 import botocore
@@ -9,17 +8,25 @@ from extractors import (
     ExtractorException,
 )
 
+from . import FixtureTestCase
+
 # Original botocore _make_api_call function
 orig = botocore.client.BaseClient._make_api_call
 
 
 # Mocked botocore _make_api_call function
 def mock_make_api_call(self, operation_name, kwarg):
+    accepted_types = [
+        "image/jpeg",
+        "image/tiff",
+        "image/png",
+    ]
+
     if operation_name == 'DetectDocumentText':
         doc = kwarg["Document"]["Bytes"]
         file_type = magic.from_buffer(doc[:2048], mime=True)
-        if file_type != "image/jpeg":
-            raise Exception("Did not convert to JPEG!")
+        if file_type not in accepted_types:
+            raise Exception("Received an invalid type!")
         return {
             "Blocks": [
                 {
@@ -43,20 +50,21 @@ def mock_make_api_call(self, operation_name, kwarg):
     return orig(self, operation_name, kwarg)
 
 
+# Mocked botocore _make_api_call function that fails every time
 def mock_make_api_call_failure(self, operation_name, kwarg):
     if operation_name == "DetectDocumentText":
         raise Exception("The Textract client failed!")
     return orig(self, operation_name, kwarg)
 
 
-# Mocked botocore _make_api_call function
+# Mocked botocore _make_api_call function that returns an invalid response
 def mock_make_api_call_bad_response(self, operation_name, kwarg):
     if operation_name == 'DetectDocumentText':
         return {"badkey": ["array", "array"]}
     return orig(self, operation_name, kwarg)
 
 
-class TestPdfExtractor(unittest.TestCase):
+class TestTextractExtractor(FixtureTestCase):
     CONFIG = {
         "aws": {
             "aws_access_key_id": "xxxxxx",
@@ -65,41 +73,35 @@ class TestPdfExtractor(unittest.TestCase):
         },
     }
 
-    # This test is all-encompassing. It tests if image conversion, response parsing, and multipage support is working.
-    def test_extract(self):
-        with open("extractors/tests/fixtures/pdf/sample.pdf", "rb") as f:
-            data = f.read()
-        extractor = Extractor.get_extractor("application/pdf", self.CONFIG)
-        # patch textract call and run extractor
+    def test_extract_jpg(self):
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            output = extractor.extract(data)
-            # since we can't test PDF extraction directly, we can instead ensure that multipage support is working by
-            # counting the number of "This is line 1 This is line 2 "'s we have in our output. There should be one per page.
-            # since the sample PDF has two pages, multiply the expected string by two.
-            self.assertEqual(output, "This is line 1 This is line 2 " * 2)
+            self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)
 
-    # Tests if the Textract client exception is caught
+    def test_extract_jpeg(self):
+        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
+            self._test_file_type("jpeg", subdirectory="images", config=self.CONFIG)
+
+    def test_extract_png(self):
+        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
+            self._test_file_type("png", subdirectory="images", config=self.CONFIG)
+
+    def test_extract_tiff(self):
+        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
+            self._test_file_type("tiff", subdirectory="images", config=self.CONFIG)
+
     def test_extract_failure(self):
-        with open("extractors/tests/fixtures/pdf/sample.pdf", "rb") as f:
-            data = f.read()
-        extractor = Extractor.get_extractor("application/pdf", self.CONFIG)
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
             with self.assertRaises(ExtractorException):
-                extractor.extract(data)
+                self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)
 
-    # Tests if sending a bad PDF is caught
     def test_bad_file(self):
-        extractor = Extractor.get_extractor("application/pdf", self.CONFIG)
-        data = b"This is a valid string but not a valid PDF"
+        extractor = Extractor.get_extractor("jpg", self.CONFIG)
+        data = b"This is a valid string but not a valid type for Textract"
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
             with self.assertRaises(ExtractorException):
                 extractor.extract(data)
 
-    # Test if improper AWS response is caught
     def test_bad_response(self):
-        with open("extractors/tests/fixtures/pdf/sample.pdf", "rb") as f:
-            data = f.read()
-        extractor = Extractor.get_extractor("application/pdf", self.CONFIG)
         with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_bad_response):
             with self.assertRaises(ExtractorException):
-                extractor.extract(data)
+                self._test_file_type("jpg", subdirectory="images", config=self.CONFIG)

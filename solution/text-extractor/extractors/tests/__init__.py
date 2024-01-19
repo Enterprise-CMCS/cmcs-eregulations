@@ -19,10 +19,12 @@ class FixtureTestCase(unittest.TestCase):
         variation = kwargs.get("variation", None)
         variation = f"{variation}_" if variation else ""
         config = kwargs.get("config", {})
+        subdirectory = kwargs.get("subdirectory", "")
+        subdirectory = f"{subdirectory}/" if subdirectory else ""
 
-        with open(f"{self.BASE_PATH}{file_type}/{variation}sample.{file_type}", "rb") as f:
+        with open(f"{self.BASE_PATH}{subdirectory}{file_type}/{variation}sample.{file_type}", "rb") as f:
             sample = f.read()
-        with open(f"{self.BASE_PATH}{file_type}/{variation}expected.txt", "rb") as f:
+        with open(f"{self.BASE_PATH}{subdirectory}{file_type}/{variation}expected.txt", "rb") as f:
             expected = f.read().decode()
 
         with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
@@ -30,7 +32,7 @@ class FixtureTestCase(unittest.TestCase):
             output = extractor.extract(sample)
 
         # Uncomment these 2 lines to re-export fixture files the next time tests are run.
-        # with open(f"{self.BASE_PATH}{file_type}/{variation}expected.txt", "w") as f:
+        # with open(f"{self.BASE_PATH}{subdirectory}{file_type}/{variation}expected.txt", "w") as f:
         #     f.write(output)
 
         self.assertEqual(output, expected)
