@@ -9,7 +9,7 @@ The text extractor supports the following file types. File types that are planne
 - [x] Plain text (txt, multiple encodings supported)
 - [x] HTML and XML (html, htm, xhtml, xml)
 - [x] PDF
-- [ ] Images (png, jpeg, gif, etc.)
+- [x] Images (png, jpeg, gif, tiff, jpeg2000, bmp, tga, webp)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [x] Microsoft Outlook (msg)
