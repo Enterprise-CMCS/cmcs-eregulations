@@ -209,6 +209,32 @@ class TestSampleExtractor(FixtureTestCase):
         self._test_file_type("filetype1", config={"some": "config"})
 ```
 
+## Storing fixture files in a "collection"
+
+Most extractor unit tests will be one input, one output; that is, for every fixture file there is exactly one "expected.txt" file. However, in some cases there may be a group of files that have the same expected output text. For example, unit testing an external service that supports multiple file types. In this scenario, the API call to the external service must be mocked and so the true output cannot be used as "expected.txt", but instead "expected.txt" will contain some fake data to verify that the API call is working. You may handle cases like this like so:
+
+_`extractors/tests/test_sample_collection.py`_:
+```python
+from . import FixtureTestCase
+
+
+# For all of these tests, save your expected output as "extractors/tests/fixtures/group1/expected.txt"
+class TestSampleExtractor(FixtureTestCase):
+    def test_filetype1(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype1"
+        self._test_file_type("filetype1", collection="group1")
+
+    def test_filetype2(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
+        self._test_file_type("filetype2", collection="group1")
+
+    def test_filetype3(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
+        self._test_file_type("filetype3", collection="group1")
+```
+
+Also note that this parameter can be used in conjunction with `variation`, and files are prefixed with the variation in the same way as shown in the previous section.
+
 ## Generating new fixture files
 
 You can also easily use the existing unit test suite to generate new fixture files, instead of doing it manually. Just edit the file `extractors/tests/__init__.py` and uncomment the 2 lines near the bottom of the file, below the comment that says `Uncomment these 2 lines to re-export fixture files the next time tests are run.`.
