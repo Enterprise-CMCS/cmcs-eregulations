@@ -41,7 +41,7 @@ class PdfExtractor(Extractor):
                 except Exception as e:
                     raise ExtractorException(f"failed to read temporary image file: {str(e)}")
                 try:
-                    text += self.extractor.extract(content)
+                    text += " " + self.extractor.extract(content)
                 except ExtractorException as e:
                     logger.warning("Page %i failed to extract: %s", i, str(e))
                 except Exception as e:
