@@ -1,3 +1,6 @@
+const username = Cypress.env("TEST_USERNAME");
+const password = Cypress.env("TEST_PASSWORD");
+
 describe("Part View", () => {
     beforeEach(() => {
         cy.clearIndexedDB();
@@ -60,6 +63,83 @@ describe("Part View", () => {
                 "background-color",
                 "rgb(238, 250, 254)"
             );
+        });
+    });
+
+    it("has a login call to action in the right sidebar of a subpart view", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/51");
+
+        cy.get(".div__login-sidebar").contains(
+            "CMCS staff participating in the Policy Repository pilot can sign in to see internal resources."
+        );
+
+        cy.get("a#loginSidebar")
+            .should("have.attr", "href")
+            .and("include", "/admin/login/?next=/42/433/Subpart-B/");
+    });
+
+    it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
+        cy.intercept("**/v3/resources/?&locations=42.431.A**").as("resources");
+        cy.intercept("**/v3/file-manager/categories", {
+            fixture: "categories-internal.json",
+        }).as("internal-categories");
+        cy.intercept(
+            "**/v3/content-search/?resource-type=internal&locations=42.431.A**",
+            {
+                fixture: "42.431.internal.json",
+            }
+        ).as("internal431");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/42/431/10");
+
+        cy.get(".div__login-sidebar").contains(
+            "Resources you can access include policy documents internal to CMCS."
+        );
+        cy.get("#loginIndicator").should("be.visible");
+        cy.get("a#loginSidebar").should("not.exist");
+
+        cy.wait("@resources").then(() => {
+            cy.get(".right-sidebar").scrollTo("bottom");
+            cy.get(".internal-docs__container div[data-test=TestCat]").should(
+                "not.be.visible"
+            );
+            cy.get(`button[data-test=TestCat]`).click({
+                force: true,
+            });
+            cy.wait(250);
+            cy.get(".right-sidebar").scrollTo("bottom");
+            cy.get(".internal-docs__container div[data-test=TestCat]").should(
+                "be.visible"
+            );
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat]"
+            ).should("not.be.visible");
+            cy.get(`button[data-test=TestSubCat]`).click({
+                force: true,
+            });
+            cy.wait(250);
+            cy.get(".right-sidebar").scrollTo("bottom");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat]"
+            ).should("be.visible");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            )
+                .first()
+                .get(".supplemental-content-date")
+                .contains("August 30, 2023");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            )
+                .first()
+                .get(".supplemental-content-description")
+                .contains("42 431 test");
+            cy.get(".show-more-button")
+                .contains("+ Show More (6)")
+                .click({ force: true })
+                .contains("- Show Less (6)");
         });
     });
 
@@ -176,7 +256,7 @@ describe("Part View", () => {
         // it recently broke because the latest year changed from 2021 to 2022
         // so I'm commenting it out for now until we can figure out a better way
         //cy.get(
-            //"#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
+        //"#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
         //).contains("2021");
         cy.get(
             "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"

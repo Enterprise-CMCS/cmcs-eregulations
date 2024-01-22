@@ -56,7 +56,7 @@
                     "name": "TestCat",
                     "description": "This is a test category.  It may have child subcategories.",
                     "order": 2,
-                    "show_if_empty": false,
+                    "show_if_empty": true,
                     "type": ""
                 }
             },
