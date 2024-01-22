@@ -4,10 +4,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
 from regulations.views.about import AboutView
-from regulations.views.login import LoginView
 from regulations.views.cache import CacheView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
+from regulations.views.login import LoginView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.policy_repository_search import PolicyRepositorySearchView
 from regulations.views.reader import (
