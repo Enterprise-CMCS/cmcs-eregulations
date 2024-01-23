@@ -1,6 +1,5 @@
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.conf import settings
 
 
 def build_citation(context):
@@ -24,13 +23,8 @@ class CitationContextMixin:
 class IsAuthenticatedMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            # Determine the STAGE_ENV to use in the login URL
-            stage_env = '' if settings.STAGE_ENV == 'prod' else settings.STAGE_ENV
-
-            # Construct the login URL with the correct STAGE_ENV
-            login_url = reverse('login', kwargs={'stage_env': stage_env})
 
             redirect_string = '?' + request.GET.urlencode() if request.GET else ''
-            return redirect(login_url + '?next=%s' % request.path + redirect_string)
+            return redirect(reverse('login') + '?next=%s' % request.path + redirect_string)
 
         return super().dispatch(request, *args, **kwargs)
