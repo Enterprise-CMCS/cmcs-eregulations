@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import eventbus from "../eventbus";
+
 export default {
     name: "CollapseButton",
 
@@ -68,12 +70,16 @@ export default {
 
     created() {
         this.visible = this.state === "expanded";
-        this.$root.$on("collapse-toggle", this.toggle);
+        eventbus.on("collapse-toggle", this.toggle);
+    },
+
+    beforeDestroy() {
+        eventbus.off("collapse-toggle", this.toggle);
     },
 
     methods: {
         click(event) {
-            this.$root.$emit("collapse-toggle", this.dataName);
+            eventbus.emit("collapse-toggle", this.dataName);
         },
         toggle(target) {
             if (this.dataName === target) {

@@ -707,6 +707,35 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
 };
 
 /**
+ * An object representing a policy document category
+ * @typedef {Object} PolicyDocCategory
+ * @property {number} id - Category id
+ * @property {string} name - Category name
+ * @property {string} description - Category description
+ * @property {number} order - Category order
+ * @property {boolean} show_if_empty - Whether to show category if empty
+ * @property {string} type - Category type
+ * @property {PolicyDocCategory|undefined} parent - Parent category
+ */
+
+/**
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<Array<PolicyDocCategory>>} - Promise that contains array of categories when fulfilled
+ */
+const getPolicyDocCategories = async ({ apiUrl, cacheResponse = true }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}file-manager/categories`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("file-manager/categories", cacheResponse);
+};
+
+/**
  * @param {string} apiUrl - API base url passed in from Django template
  * @param {string} [requestParams] - Query string parameters to pass to API
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
@@ -739,6 +768,7 @@ export {
     getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,
+    getPolicyDocCategories,
     getPolicyDocList,
     getPolicyDocSubjects,
     getRecentResources,

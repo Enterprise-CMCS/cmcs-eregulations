@@ -1,6 +1,7 @@
 {% load string_formatters %}
 
 {{ categories|json_script:"categories" }}
+{{ node_list|json_script:"node_list" }}
 
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
     {% include "regulations/partials/view-button.html" %}
@@ -8,16 +9,41 @@
     <hr />
 
     {% if node_list %}
+        <supplemental-content
+            api-url="{{ API_BASE }}"
+            title="{{ title }}"
+            part="{{ reg_part }}"
+            resources-url="{% url 'resources' %}"
+            :resource-display=true
+            :sections="{{ node_list.sections }}"
+            :subparts="{{ node_list.subparts }}"
+        >
+            <template #login-banner>
+                {% include "regulations/partials/login_sidebar_banner.html" %}
+            </template>
+            {% if user.is_authenticated %}
+                <template #public-label>
+                    <div class="label__container">
+                        <doc-type-label icon-type="external" doc-type="Public" />
+                    </div>
+                </template>
+            {% endif %}
+        </supplemental-content>
+        {% if user.is_authenticated %}
+            <div class="authed__container">
+                <hr />
+                <div class="label__container label__container--internal">
+                    <doc-type-label icon-type="internal" doc-type="Internal" />
+                </div>
 
-    <supplemental-content
-        api-url="{{ API_BASE }}"
-        title="{{ title }}"
-        part="{{ reg_part }}"
-        resources-url="{% url 'resources' %}"
-        :resource-display=true
-        :sections="{{ node_list.sections }}"
-        :subparts="{{ node_list.subparts }}"
-    ></supplemental-content>
+                <internal-docs-container
+                    api-url="{{ API_BASE }}"
+                    title="{{ title }}"
+                    part="{{ reg_part }}"
+                ></internal-docs-container>
+            </div>
+            <div class="login__spacer"></div>
+        {% endif %}
     {% endif %}
 
 </section>
