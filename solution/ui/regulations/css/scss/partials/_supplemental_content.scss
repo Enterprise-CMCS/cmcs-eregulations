@@ -138,13 +138,6 @@
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
-
-        > span {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
     }
 
     .supplemental-content-external-link {
