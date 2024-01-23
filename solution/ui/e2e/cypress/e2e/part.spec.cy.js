@@ -76,7 +76,8 @@ describe("Part View", () => {
 
         cy.get("a#loginSidebar")
             .should("have.attr", "href")
-            .and("include", "/admin/login/?next=/42/433/Subpart-B/");
+            .and("include", "/admin/login/?next=")
+            .and("include", "/42/433/Subpart-B/");
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
