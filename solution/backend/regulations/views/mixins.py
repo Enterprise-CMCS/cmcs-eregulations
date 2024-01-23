@@ -25,8 +25,6 @@ class IsAuthenticatedMixin:
         if not request.user.is_authenticated:
 
             redirect_string = '?' + request.GET.urlencode() if request.GET else ''
-            print(f"redirect_string admin: {reverse('login')}")
-            print(f"redirect_string login: {reverse('custom_login')}")
             return redirect(reverse('custom_login') + '?next=%s' % request.path + redirect_string)
 
         return super().dispatch(request, *args, **kwargs)

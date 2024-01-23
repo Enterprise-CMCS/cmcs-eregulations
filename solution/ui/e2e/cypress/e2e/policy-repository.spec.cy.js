@@ -42,10 +42,10 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
 
-    it("shows the login screen when you visit /policy-repository/ without logging in", () => {
+    it("shows the custom eua login screen when you visit /policy-repository/ without logging in", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/");
-        cy.url().should("include", "/admin/login");
+        cy.url().should("include", "/login");
     });
 
     it("show the policy repository page when logged in", () => {
@@ -429,22 +429,22 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/resources");
     });
 
-    it("returns you to the admin login page when you log out", () => {
+    it("returns you to the custom eua login page when you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
-        cy.get("#login-form").should("be.visible");
+        cy.url().should("include", "/login");
     });
 });
 
 describe("Policy Repository Search", () => {
     beforeEach(_beforeEach);
 
-    it("shows the login screen when you visit /policy-repository/search without logging in", () => {
+    it("shows the custom eua login screen when you visit /policy-repository/search without logging in", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/search/");
-        cy.url().should("include", "/admin/login");
+        cy.url().should("include", "/login");
     });
 
     it("show the policy repository search page when logged in", () => {
