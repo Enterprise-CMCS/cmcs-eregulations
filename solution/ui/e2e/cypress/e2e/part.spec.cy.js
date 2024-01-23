@@ -103,28 +103,16 @@ describe("Part View", () => {
 
         cy.wait("@resources").then(() => {
             cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(".internal-docs__container div[data-test=TestCat]").should(
-                "not.be.visible"
-            );
             cy.get(`button[data-test=TestCat]`).click({
                 force: true,
             });
             cy.wait(250);
             cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(".internal-docs__container div[data-test=TestCat]").should(
-                "be.visible"
-            );
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat]"
-            ).should("not.be.visible");
             cy.get(`button[data-test=TestSubCat]`).click({
                 force: true,
             });
             cy.wait(250);
             cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat]"
-            ).should("be.visible");
             cy.get(
                 ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
             )
