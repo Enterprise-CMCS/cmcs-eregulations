@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 def eua_logout(request):
     id_token = request.session.get('oidc_id_token')
     # get the domain url from the request and add /login to the end
