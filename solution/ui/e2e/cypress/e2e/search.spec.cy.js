@@ -60,7 +60,7 @@ describe("Search flow", () => {
             force: true,
         });
         cy.url().should("include", "/search?q=test%20search");
-        cy.get(".search-form .form-helper-text .search-suggestion").should("exist");
+        cy.get(".search-form .form-helper-text .search-suggestion").should("not.exist");
     });
 
     it("should be able to clear the searchbox", () => {

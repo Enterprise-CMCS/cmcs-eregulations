@@ -77,22 +77,11 @@
                             @click:clear="clearSearchQuery"
                         />
                         <div
-                            v-if="synonyms.length > 0 || multiWordQuery"
+                            v-if="synonyms.length > 0"
                             class="search-suggestion"
                         >
-                            <div v-if="multiWordQuery">
-                                Didn't find what you were looking for? Try
-                                searching for
-                                <a
-                                    tabindex="0"
-                                    @click="doQuoteSearch"
-                                    @keydown.enter.space.prevent="doQuoteSearch"
-                                    >"{{ searchQuery }}"</a
-                                >
-                            </div>
-                            <div v-if="synonyms.length > 0" class="synonyms">
-                                <span v-if="multiWordQuery">Or s</span
-                                ><span v-else>S</span>earch for similar terms:
+                            <div class="synonyms">
+                                Search for similar terms:
                                 <span v-for="a in synonyms" :key="a">
                                     <a
                                         tabindex="0"
@@ -205,7 +194,7 @@ export default {
     props: {
         apiUrl: {
             type: String,
-            default: ""
+            default: "",
         },
         aboutUrl: {
             type: String,
@@ -300,15 +289,6 @@ export default {
                 this.searchInputValue = value;
             },
         },
-        multiWordQuery() {
-            if (this.searchQuery === undefined) return false;
-
-            return (
-                this.searchQuery.split(" ").length > 1 &&
-                this.searchQuery[0] !== '"' &&
-                this.searchQuery[this.searchQuery.length - 1] !== '"'
-            );
-        },
         filterParams() {
             return {
                 title: this.queryParams.title,
@@ -350,7 +330,9 @@ export default {
         },
         clearSelections() {
             this.partDict = {};
-            const titleParam = this.queryParams.title ? { title: this.queryParams.title } : {};
+            const titleParam = this.queryParams.title
+                ? { title: this.queryParams.title }
+                : {};
 
             this.$router.push({
                 name: "resources",
@@ -543,7 +525,8 @@ export default {
             );
 
             if (partExist && scope === "section") {
-                const title = this.queryParams.title ?? this.filters.title.listItems[0];
+                const title =
+                    this.queryParams.title ?? this.filters.title.listItems[0];
                 const sectionList = await getSectionsForPart(title, payload[0]);
                 return sectionList.find(
                     (section) => section.identifier[1] === payload[1]
@@ -610,7 +593,9 @@ export default {
 
             parts.forEach((part) => {
                 newPartDict[part] = {
-                    title: this.queryParams.title ?? this.filters.title.listItems[0],
+                    title:
+                        this.queryParams.title ??
+                        this.filters.title.listItems[0],
                     sections: [],
                     subparts: [],
                 };
@@ -670,7 +655,9 @@ export default {
                         page: this.page,
                         pageSize: this.pageSize,
                         partDict: "all", // titles
-                        title: dataQueryParams.title ?? this.filters.title.listItems[0],
+                        title:
+                            dataQueryParams.title ??
+                            this.filters.title.listItems[0],
                         categories: this.categories, // subcategories
                         q: searchQuery,
                         frGrouping: false,
@@ -757,7 +744,8 @@ export default {
             const rawSections = await Promise.all(
                 Object.keys(this.partDict).map(async (part) =>
                     getSectionsForPart(
-                        this.queryParams.title ?? this.filters.title.listItems[0],
+                        this.queryParams.title ??
+                            this.filters.title.listItems[0],
                         part
                     )
                 )
@@ -920,7 +908,8 @@ export default {
                     if (_isEmpty(oldParams.part) && newParams.part) {
                         this.getFormattedSubpartsList(
                             this.queryParams.part,
-                            this.queryParams.title ?? this.filters.title.listItems[0]
+                            this.queryParams.title ??
+                                this.filters.title.listItems[0]
                         );
                         this.getFormattedSectionsList();
                     } else if (
@@ -931,7 +920,8 @@ export default {
                     } else {
                         this.getFormattedSubpartsList(
                             this.queryParams.part,
-                            this.queryParams.title ?? this.filters.title.listItems[0]
+                            this.queryParams.title ??
+                                this.filters.title.listItems[0]
                         );
                         this.getFormattedSectionsList();
                     }
