@@ -99,18 +99,6 @@ describe("addSurroundingEllipses", () => {
     });
 });
 
-describe("getFileTypeButton", () => {
-    it("is a DOCX file", async () => {
-        expect(PolicyResults.getFileTypeButton(MOCK_RESULTS[0])).toBe(
-            "<span data-testid='download-chip-url' class='result__link--file-type'>Download DOCX</span>"
-        );
-    });
-
-    it("is a PDF file", async () => {
-        expect(PolicyResults.getFileTypeButton(MOCK_RESULTS[4])).toBe("");
-    });
-});
-
 describe("getResultLinkText", () => {
     it("is internal and has a document_name_headline", async () => {
         expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(

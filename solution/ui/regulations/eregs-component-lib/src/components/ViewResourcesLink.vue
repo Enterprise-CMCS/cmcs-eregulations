@@ -19,6 +19,7 @@
 
 <script>
 import { EventCodes } from "utilities/utils";
+import eventbus from "../eventbus";
 
 export default {
     name: "ViewResourcesLink",
@@ -40,7 +41,7 @@ export default {
     },
     methods: {
         clickHandler() {
-            this.$root.$emit(EventCodes.SetSection, {
+            eventbus.emit(EventCodes.SetSection, {
                 section: this.section,
                 count: this.count,
             });

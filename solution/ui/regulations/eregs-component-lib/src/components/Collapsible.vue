@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import eventbus from "../eventbus";
+
 export default {
     name: "collapsible",
 
@@ -20,7 +22,7 @@ export default {
                 this.$refs.target?.classList?.add("display-none");
             }
         });
-        this.$root.$on("collapse-toggle", this.toggle);
+        eventbus.on("collapse-toggle", this.toggle);
     },
 
     mounted: function () {

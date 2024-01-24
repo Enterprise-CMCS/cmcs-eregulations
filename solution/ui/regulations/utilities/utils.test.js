@@ -1,8 +1,12 @@
+import _isEqual from "lodash/isEqual";
+
 import {
     createLastUpdatedDates,
+    formatResourceCategories,
     getActAbbr,
     getCurrentPageResultsRange,
     getFileNameSuffix,
+    getFileTypeButton,
     getRequestParams,
     romanize,
     shapeTitlesResponse,
@@ -10,8 +14,76 @@ import {
 
 import { describe, it, expect } from "vitest";
 
+import internalDocsFixture from "cypress/fixtures/42.431.internal.json";
+import formattedInternalDocsFixture from "cypress/fixtures/42.431.internal-formatted";
+import publicDocsFixture from "cypress/fixtures/42.433.10.public.json";
+import formattedPublicDocsFixture from "cypress/fixtures/42.433.10.public-formatted";
 import parts42Fixture from "cypress/fixtures/parts-42.json";
 import parts45Fixture from "cypress/fixtures/parts-45.json";
+import categoriesFixture from "cypress/fixtures/categories.json";
+import categoriesInternalFixture from "cypress/fixtures/categories-internal.json";
+
+describe("formatResourceCategories", () => {
+    it("formats public resources", async () => {
+        const formattedResources = formatResourceCategories({
+            resources: publicDocsFixture.results,
+            categories: categoriesFixture,
+        });
+        expect(formattedResources[11].name).toBe("Subregulatory Guidance");
+        expect(formattedResources[11].name).toEqual(
+            formattedPublicDocsFixture[11].name
+        );
+        expect(formattedResources[11].description).toBe(
+            "SMDLs, SHOs, CIBs, FAQs, SMM"
+        );
+        expect(formattedResources[11].description).toEqual(
+            formattedPublicDocsFixture[11].description
+        );
+        expect(
+            formattedResources[11].sub_categories[0].supplemental_content[0]
+                .name
+        ).toBe("SHO # 21-008");
+        expect(
+            formattedResources[11].sub_categories[0].supplemental_content[0]
+                .name
+        ).toEqual(
+            formattedPublicDocsFixture[11].sub_categories[0]
+                .supplemental_content[0].name
+        );
+    });
+
+    it("formats internal docs", async () => {
+        const formattedInternalResources = formatResourceCategories({
+            resources: internalDocsFixture.results,
+            categories: categoriesInternalFixture,
+        });
+
+        expect(
+            formattedInternalResources[0].supplemental_content[0]
+                .file_name_string
+        ).toEqual("RE Draft PT Services Reply.rtf");
+        expect(
+            formattedInternalResources[0].supplemental_content[0]
+                .file_name_string
+        ).toEqual(
+            formattedInternalDocsFixture[0].supplemental_content[0]
+                .file_name_string
+        );
+        expect(
+            _isEqual(
+                formattedInternalResources[0].supplemental_content[0].locations,
+                formattedInternalDocsFixture[0].supplemental_content[0]
+                    .locations
+            )
+        ).toBe(true);
+        expect(
+            _isEqual(
+                formattedInternalResources[0].supplemental_content[0].category,
+                formattedInternalDocsFixture[0].supplemental_content[0].category
+            )
+        ).toBe(true);
+    });
+});
 
 describe("Utilities.js", () => {
     it("createLastUpdatedDates properly creates last updated dates", async () => {
@@ -165,6 +237,22 @@ describe("Utilities.js", () => {
         expect(getFileNameSuffix("test.docx.msg")).toBe("msg");
         expect(getFileNameSuffix("test.docx.msg.txt")).toBe("txt");
         expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
+    });
+
+    describe("getFileTypeButton", () => {
+        it("is a DOCX file", async () => {
+            expect(
+                getFileTypeButton({ fileName: "index_zero.docx", url: "url" })
+            ).toBe(
+                "<span data-testid='download-chip-url' class='result__link--file-type'>Download DOCX</span>"
+            );
+        });
+
+        it("is a PDF file", async () => {
+            expect(
+                getFileTypeButton({ fileName: "index_four.pdf", url: "url" })
+            ).toBe("");
+        });
     });
 
     it("romanize properly converts numbers to roman numerals", async () => {

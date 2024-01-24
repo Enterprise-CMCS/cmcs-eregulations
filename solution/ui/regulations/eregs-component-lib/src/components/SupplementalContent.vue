@@ -12,6 +12,7 @@
             ({{ resourceCount }})
         </a>
         <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
+        <slot name="login-banner"></slot>
         <div v-if="resourceDisplay" class="resource_btn_container">
             <a
                 :href="resourceLink"
@@ -19,6 +20,7 @@
                 >Search These Resources</a
             >
         </div>
+        <slot name="public-label"></slot>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -41,8 +43,11 @@
 <script>
 import { getSupplementalContent, getSubpartTOC } from "utilities/api";
 import { EventCodes, formatResourceCategories } from "utilities/utils";
+
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
+
+import eventbus from "../eventbus";
 
 function getDefaultCategories() {
     if (!document.getElementById("categories")) return [];
@@ -179,10 +184,13 @@ export default {
         window.addEventListener("hashchange", this.handleHashChange);
     },
     mounted() {
-        this.$root.$on(EventCodes.SetSection, (args) => {
+        eventbus.on(EventCodes.SetSection, (args) => {
             this.selectedPart = args.section;
         });
         this.categories = getDefaultCategories();
+    },
+    beforeDestroy() {
+        eventbus.off(EventCodes.SetSection);
     },
     destroyed() {
         window.removeEventListener("hashchange", this.handleHashChange);
@@ -238,14 +246,22 @@ export default {
 
                 this.resourceCount = subpartResponse.count;
 
+                const rawCategories = JSON.parse(
+                    document.getElementById("categories").textContent
+                );
+
                 if (response !== "") {
-                    this.categories = formatResourceCategories(
-                        response.results
-                    );
+                    this.categories = formatResourceCategories({
+                        apiUrl: this.apiUrl,
+                        categories: rawCategories,
+                        resources: response.results
+                    });
                 } else {
-                    this.categories = formatResourceCategories(
-                        subpartResponse.results
-                    );
+                    this.categories = formatResourceCategories({
+                        apiUrl: this.apiUrl,
+                        categories: rawCategories,
+                        resources: subpartResponse.results
+                    });
                 }
             } catch (error) {
                 console.error(error);
@@ -270,6 +286,7 @@ export default {
         clearSection() {
             this.selectedPart = undefined;
             this.location = undefined;
+            eventbus.emit(EventCodes.ClearSections);
         },
     },
 };

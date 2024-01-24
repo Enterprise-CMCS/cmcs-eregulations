@@ -5,7 +5,7 @@ import { useRoute } from "vue-router/composables";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-import { getFileNameSuffix, DOCUMENT_TYPES_MAP } from "utilities/utils";
+import { getFileTypeButton, DOCUMENT_TYPES_MAP } from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
@@ -31,19 +31,6 @@ const getResultLinkText = (item) => {
     }
 
     return `<span class='result__link--label'>${linkText}</span>`;
-};
-
-const getFileTypeButton = (item) => {
-    const fileTypeSuffix = getFileNameSuffix(item.file_name_string);
-
-    let fileTypeButton;
-    if (item.file_name_string && fileTypeSuffix) {
-        fileTypeButton = `<span data-testid='download-chip-${
-            item.url
-        }' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
-    }
-
-    return `${fileTypeButton ?? ""}`;
 };
 
 const showResultSnippet = (item) => {
@@ -86,7 +73,6 @@ const getResultSnippet = (item) => {
 
 export default {
     addSurroundingEllipses,
-    getFileTypeButton,
     getResultLinkText,
     getResultSnippet,
     showResultSnippet,
@@ -205,7 +191,13 @@ const resultLinkClasses = (doc) => ({
                     rel="noopener noreferrer"
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
-                    v-html="getResultLinkText(doc) + getFileTypeButton(doc)"
+                    v-html="
+                        getResultLinkText(doc) +
+                        getFileTypeButton({
+                            fileName: doc.file_name_string,
+                            url: doc.url,
+                        })
+                    "
                 ></a>
             </template>
             <template #snippet>

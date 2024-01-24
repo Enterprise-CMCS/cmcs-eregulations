@@ -1,0 +1,514 @@
+export default [
+    {
+        "id": 3,
+        "name": "test childless cat",
+        "description": "this category is childless.",
+        "order": 1,
+        "show_if_empty": true,
+        "type": "repositorycategory",
+        "supplemental_content": [
+            {
+                "doc_name_string": "Childless cat doc test",
+                "file_name_string": "RE Draft PT Services Reply.rtf",
+                "date_string": null,
+                "summary_string": "",
+                "locations": [
+                    {
+                        "id": 6,
+                        "title": 42,
+                        "part": 431,
+                        "type": "section",
+                        "section_id": 10,
+                        "parent": 851
+                    }
+                ],
+                "document_type": null,
+                "resource_type": "internal",
+                "subjects": [],
+                "category": {
+                    "id": 3,
+                    "name": "test childless cat",
+                    "description": "this category is childless.",
+                    "order": 1,
+                    "show_if_empty": true,
+                    "type": "repositorycategory"
+                },
+                "url": "/v3/file-manager/files/62f929f4-e65f-4acb-b5a7-87ae5164b79b",
+                "id": 1685,
+                "document_name_headline": null,
+                "summary_headline": null
+            }
+        ],
+        "sub_categories": []
+    },
+    {
+        "id": 1,
+        "name": "TestCat",
+        "description": "This is a test category.  It may have child subcategories.",
+        "order": 2,
+        "show_if_empty": false,
+        "type": "repositorycategory",
+        "supplemental_content": [
+            {
+                "doc_name_string": "What happens if I add a doc to a cat with a subcat?",
+                "file_name_string": "CON.txt",
+                "date_string": "2023-08-30",
+                "summary_string": "",
+                "locations": [
+                    {
+                        "id": 6,
+                        "title": 42,
+                        "part": 431,
+                        "type": "section",
+                        "section_id": 10,
+                        "parent": 851
+                    }
+                ],
+                "document_type": null,
+                "resource_type": "internal",
+                "subjects": [],
+                "category": {
+                    "id": 1,
+                    "name": "TestCat",
+                    "description": "This is a test category.  It may have child subcategories.",
+                    "order": 2,
+                    "show_if_empty": false,
+                    "type": "repositorycategory"
+                },
+                "url": "/v3/file-manager/files/33dfcd4c-1505-44ab-90ad-f5008b41b407",
+                "id": 1688,
+                "document_name_headline": null,
+                "summary_headline": null
+            },
+            {
+                "doc_name_string": "and more",
+                "file_name_string": "less_than (1) (1).txt",
+                "date_string": null,
+                "summary_string": "",
+                "locations": [
+                    {
+                        "id": 7,
+                        "title": 42,
+                        "part": 431,
+                        "type": "section",
+                        "section_id": 11,
+                        "parent": 851
+                    }
+                ],
+                "document_type": null,
+                "resource_type": "internal",
+                "subjects": [],
+                "category": {
+                    "id": 1,
+                    "name": "TestCat",
+                    "description": "This is a test category.  It may have child subcategories.",
+                    "order": 2,
+                    "show_if_empty": false,
+                    "type": "repositorycategory"
+                },
+                "url": "/v3/file-manager/files/e9cf05e6-0af9-44f9-b99f-d0bf7397b6f3",
+                "id": 1695,
+                "document_name_headline": null,
+                "summary_headline": null
+            }
+        ],
+        "sub_categories": [
+            {
+                "id": 2,
+                "name": "TestSubCat",
+                "description": "",
+                "order": 1,
+                "show_if_empty": false,
+                "type": "repositorysubcategory",
+                "parent": {
+                    "id": 1,
+                    "name": "TestCat",
+                    "description": "This is a test category.  It may have child subcategories.",
+                    "order": 2,
+                    "show_if_empty": false,
+                    "type": ""
+                },
+                "supplemental_content": [
+                    {
+                        "doc_name_string": "42 431 test",
+                        "file_name_string": "fftestem.pdf",
+                        "date_string": "2023-08-30",
+                        "summary_string": "Testing the ability to add a reg section to an uploaded file.",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": {
+                            "id": 2,
+                            "name": "Curated Formal Guidance",
+                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
+                        },
+                        "resource_type": "internal",
+                        "subjects": [
+                            {
+                                "id": 2,
+                                "full_name": "Alternative Benefit Plan",
+                                "short_name": null,
+                                "abbreviation": "ABP"
+                            },
+                            {
+                                "id": 3,
+                                "full_name": "Access to Services",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 4,
+                                "full_name": "Adult Day Health",
+                                "short_name": null,
+                                "abbreviation": null
+                            }
+                        ],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/b3fd8a45-d938-43c4-b653-e7e493dc4cb0",
+                        "id": 1677,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    },
+                    {
+                        "doc_name_string": "Space Jam ya'll",
+                        "file_name_string": "Space Jam (1).html",
+                        "date_string": "2023-08-30",
+                        "summary_string": "",
+                        "locations": [
+                            {
+                                "id": 7,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 11,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": null,
+                        "resource_type": "internal",
+                        "subjects": [],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/5a3672c1-58b2-487a-b9bb-4bed40f81d45",
+                        "id": 1681,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    },
+                    {
+                        "doc_name_string": "TXT Test",
+                        "file_name_string": "less_than.txt",
+                        "date_string": "2023-08-30",
+                        "summary_string": "This is a summary.",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": {
+                            "id": 2,
+                            "name": "Curated Formal Guidance",
+                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
+                        },
+                        "resource_type": "internal",
+                        "subjects": [
+                            {
+                                "id": 6,
+                                "full_name": "Asthma",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 7,
+                                "full_name": "Autism Spectrum Disorder",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 8,
+                                "full_name": "Blood Products",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 9,
+                                "full_name": "Care Coordination",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 10,
+                                "full_name": "Certified Community Behavioral Health Clinics",
+                                "short_name": null,
+                                "abbreviation": "CCBHCs"
+                            }
+                        ],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/419edd9a-482a-445e-a1dc-0b21a80ac36d",
+                        "id": 1687,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    },
+                    {
+                        "doc_name_string": "and even more than more",
+                        "file_name_string": "less_than (1) (1).txt",
+                        "date_string": null,
+                        "summary_string": "",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": null,
+                        "resource_type": "internal",
+                        "subjects": [],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/b0b3b731-5ab6-4c89-8fce-1d0b047abcb0",
+                        "id": 1692,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    },
+                    {
+                        "doc_name_string": "even more",
+                        "file_name_string": "less_than (1).txt",
+                        "date_string": null,
+                        "summary_string": "",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": null,
+                        "resource_type": "internal",
+                        "subjects": [],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/ff0356df-6b35-4efb-b926-50df05b3a887",
+                        "id": 1690,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    },
+                    {
+                        "doc_name_string": "more",
+                        "file_name_string": "less_than.txt",
+                        "date_string": null,
+                        "summary_string": "",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": null,
+                        "resource_type": "internal",
+                        "subjects": [],
+                        "category": {
+                            "id": 2,
+                            "name": "TestSubCat",
+                            "description": "",
+                            "order": 1,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/f207924c-0924-4779-946b-3f1f8ae1dfd5",
+                        "id": 1689,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "TestSubCat 2",
+                "description": "",
+                "order": 2,
+                "show_if_empty": false,
+                "type": "repositorysubcategory",
+                "parent": {
+                    "id": 1,
+                    "name": "TestCat",
+                    "description": "This is a test category.  It may have child subcategories.",
+                    "order": 2,
+                    "show_if_empty": false,
+                    "type": ""
+                },
+                "supplemental_content": [
+                    {
+                        "doc_name_string": "another subcat",
+                        "file_name_string": "less_than (1).txt",
+                        "date_string": null,
+                        "summary_string": "",
+                        "locations": [
+                            {
+                                "id": 6,
+                                "title": 42,
+                                "part": 431,
+                                "type": "section",
+                                "section_id": 10,
+                                "parent": 851
+                            }
+                        ],
+                        "document_type": {
+                            "id": 2,
+                            "name": "Curated Formal Guidance",
+                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
+                        },
+                        "resource_type": "internal",
+                        "subjects": [
+                            {
+                                "id": 8,
+                                "full_name": "Blood Products",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 9,
+                                "full_name": "Care Coordination",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 6,
+                                "full_name": "Asthma",
+                                "short_name": null,
+                                "abbreviation": null
+                            },
+                            {
+                                "id": 7,
+                                "full_name": "Autism Spectrum Disorder",
+                                "short_name": null,
+                                "abbreviation": null
+                            }
+                        ],
+                        "category": {
+                            "id": 4,
+                            "name": "TestSubCat 2",
+                            "description": "",
+                            "order": 2,
+                            "show_if_empty": false,
+                            "type": "repositorysubcategory",
+                            "parent": {
+                                "id": 1,
+                                "name": "TestCat",
+                                "description": "This is a test category.  It may have child subcategories.",
+                                "order": 2,
+                                "show_if_empty": false,
+                                "type": ""
+                            }
+                        },
+                        "url": "/v3/file-manager/files/8064ce75-2806-4eaf-890b-681363d7f22c",
+                        "id": 1686,
+                        "document_name_headline": null,
+                        "summary_headline": null
+                    }
+                ]
+            }
+        ]
+    }
+]
