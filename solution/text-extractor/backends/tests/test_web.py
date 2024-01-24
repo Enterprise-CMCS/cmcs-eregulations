@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
+from urllib import robotparser
 
 import requests
 
@@ -89,3 +90,24 @@ class TestWebBackend(unittest.TestCase):
     ])
     def test_too_many_requests(self, *args):
         self._test_get_success(*args)
+
+    @patch.object(requests, "head", return_value=Mock(status_code=200))
+    @patch.object(robotparser.RobotFileParser, "read", return_value=None)
+    def test_get_robots_txt_200(self, *args):
+        backend = FileBackend.get_backend("web")
+        backend._get_robots_txt("https://example/robots.txt")
+        self.assertEqual(backend._ignore_robots, False)
+
+    @patch.object(requests, "head", return_value=Mock(status_code=404))
+    @patch.object(robotparser.RobotFileParser, "read", return_value=None)
+    def test_get_robots_txt_404(self, *args):
+        backend = FileBackend.get_backend("web")
+        backend._get_robots_txt("https://example/robots.txt")
+        self.assertEqual(backend._ignore_robots, True)
+
+    @patch.object(requests, "head", return_value=Mock(status_code=123))
+    @patch.object(robotparser.RobotFileParser, "read", return_value=None)
+    def test_get_robots_txt_other_error(self, *args):
+        backend = FileBackend.get_backend("web")
+        with self.assertRaises(BackendException):
+            backend._get_robots_txt("https://example/robots.txt")

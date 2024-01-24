@@ -15,16 +15,27 @@ class WebBackend(FileBackend):
     backend = "web"
     retry_timeout = 30
 
+    _ignore_robots = False
+
     def __init__(self, config: dict):
         self._user_agent = requests.utils.default_headers()["User-Agent"]
+        self._parser = robotparser.RobotFileParser()
 
     def _get_robots_txt(self, url: str):
         logger.debug("Fetching robots.txt from \"%s\".", url)
-        self._parser = robotparser.RobotFileParser(url=url)
+        resp = requests.head(url, timeout=60)
+        if resp.status_code == requests.codes.NOT_FOUND:
+            # Robots.txt doesn't exist for this site
+            self._ignore_robots = True
+            return
+        elif resp.status_code != requests.codes.OK:
+            # Received a different error code, assume we aren't allowed to crawl
+            raise BackendException(f"got {resp.status_code} while trying to fetch robots.txt")
+        self._parser.set_url(url)
         self._parser.read()
 
     def _can_fetch(self, url: str) -> bool:
-        return self._parser.can_fetch(self._user_agent, url)
+        return self._ignore_robots or self._parser.can_fetch(self._user_agent, url)
 
     def get_file(self, uri: str) -> bytes:
         logger.info("Retrieving file \"%s\" using 'web' backend.", uri)
@@ -36,7 +47,7 @@ class WebBackend(FileBackend):
             path = f"{scheme}{path.netloc}/robots.txt"
             self._get_robots_txt(path)
         except Exception as e:
-            raise BackendException(f"failed to fetch robots.txt: {str(e)}")
+            raise BackendException(f"failed to parse robots.txt, must assume we are not allowed to look at the URL: {str(e)}")
 
         # Figure out of robots.txt allows us to crawl the URL
         logger.debug("Determining if \"%s\" can crawl the path.")
