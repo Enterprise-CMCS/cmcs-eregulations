@@ -373,6 +373,7 @@ getDocSubjects();
                                 label="Search for a document"
                                 page="policy-repository"
                                 :search-query="searchQuery"
+                                :show-suggestions=false
                                 @execute-search="executeSearch"
                                 @clear-form="clearSearchInput"
                             />

@@ -19,7 +19,7 @@
             @click:clear="clearForm"
         />
         <div class="form-helper-text">
-            <template v-if="multiWordQuery">
+            <template v-if="showSuggestions && multiWordQuery">
                 <div class="search-suggestion">
                     Didn't find what you were looking for? Try searching for
                     <a
@@ -31,7 +31,7 @@
                     >
                 </div>
             </template>
-            <template v-if="synonyms.length > 0">
+            <template v-if="showSuggestions && synonyms.length > 0">
                 <div class="search-suggestion">
                     <span v-if="multiWordQuery"> Or search </span>
                     <span v-else> Search </span>
@@ -81,6 +81,10 @@ export default {
         synonyms: {
             type: Array,
             default: () => [],
+        },
+        showSuggestions: {
+            type: Boolean,
+            default: true,
         },
     },
 
