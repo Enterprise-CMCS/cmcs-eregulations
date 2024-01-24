@@ -234,14 +234,15 @@ describe("Policy Repository", () => {
         );
         cy.get("input#main-content")
             .should("be.visible")
-            .type("test", { force: true });
+            .type("test search", { force: true });
         cy.get(".search-field .v-input__icon--append button").click({
             force: true,
         });
         cy.url().should(
             "include",
-            "/policy-repository?type=internal&subjects=3&q=test"
+            "/policy-repository?type=internal&subjects=3&q=test%20search"
         );
+        cy.get(".search-form .form-helper-text .search-suggestion").should("not.exist");
         cy.get(".document__subjects a")
             .eq(0)
             .should("have.text", " Access to Services ");
@@ -471,11 +472,12 @@ describe("Policy Repository Search", () => {
         cy.url().should("include", "/policy-repository/search/");
         cy.get("input#main-content")
             .should("be.visible")
-            .type("test", { force: true });
+            .type("test search", { force: true });
         cy.get(".search-field .v-input__icon--append button").click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository/search?q=test");
+        cy.url().should("include", "/policy-repository/search?q=test%20search");
+        cy.get(".search-form .form-helper-text .search-suggestion").should("not.exist");
         cy.wait("@queriedFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
