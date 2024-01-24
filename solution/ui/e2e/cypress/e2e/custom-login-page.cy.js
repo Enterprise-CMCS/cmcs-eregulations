@@ -19,13 +19,13 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
         cy.checkBlockingModal();
     });
 
-    it("error-page - jumps to a regulation Part using the jump-to select", () => {
+    it("custom-login-page - jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
-    it("error-page - jumps to a regulation Part section using the section number text input", () => {
+    it("custom-login-page - jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
         cy.jumpToRegulationPartSection({
