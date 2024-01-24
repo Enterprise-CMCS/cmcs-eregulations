@@ -26,30 +26,30 @@ def mock_get_extractor(file_type: str, config: dict = {}) -> Extractor:
 
 
 class TestImageExtractor(FixtureTestCase):
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_gif(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("gif", collection="images")
+        self._test_file_type("gif", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_j2k(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("j2k", collection="images")
+        self._test_file_type("j2k", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_jp2(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("jp2", collection="images")
+        self._test_file_type("jp2", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_jpx(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("jpx", collection="images")
+        self._test_file_type("jpx", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_bmp(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("bmp", collection="images")
+        self._test_file_type("bmp", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_tga(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("tga", collection="images")
+        self._test_file_type("tga", collection="images")
 
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_webp(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("webp", collection="images")
+        self._test_file_type("webp", collection="images")

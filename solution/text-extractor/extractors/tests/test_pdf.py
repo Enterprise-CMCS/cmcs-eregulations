@@ -27,6 +27,6 @@ def mock_get_extractor(file_type: str, config: dict = {}) -> Extractor:
 
 # This simple test verifies that multipage support is working and that it is converting PDF pages to jpeg images.
 class TestPdfExtractor(FixtureTestCase):
+    @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_pdf(self):
-        with patch("extractors.Extractor.get_extractor", new=mock_get_extractor):
-            self._test_file_type("pdf")
+        self._test_file_type("pdf")

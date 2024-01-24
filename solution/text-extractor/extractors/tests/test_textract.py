@@ -73,35 +73,35 @@ class TestTextractExtractor(FixtureTestCase):
         },
     }
 
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
     def test_extract_jpg(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
+        self._test_file_type("jpg", collection="textract", config=self.CONFIG)
+
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
+    def test_extract_jpeg(self):
+        self._test_file_type("jpeg", collection="textract", config=self.CONFIG)
+
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
+    def test_extract_png(self):
+        self._test_file_type("png", collection="textract", config=self.CONFIG)
+
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
+    def test_extract_tiff(self):
+        self._test_file_type("tiff", collection="textract", config=self.CONFIG)
+
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call_failure)
+    def test_extract_failure(self):
+        with self.assertRaises(ExtractorException):
             self._test_file_type("jpg", collection="textract", config=self.CONFIG)
 
-    def test_extract_jpeg(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("jpeg", collection="textract", config=self.CONFIG)
-
-    def test_extract_png(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("png", collection="textract", config=self.CONFIG)
-
-    def test_extract_tiff(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            self._test_file_type("tiff", collection="textract", config=self.CONFIG)
-
-    def test_extract_failure(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_failure):
-            with self.assertRaises(ExtractorException):
-                self._test_file_type("jpg", collection="textract", config=self.CONFIG)
-
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
     def test_bad_file(self):
         extractor = Extractor.get_extractor("jpg", self.CONFIG)
         data = b"This is a valid string but not a valid type for Textract"
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call):
-            with self.assertRaises(ExtractorException):
-                extractor.extract(data)
+        with self.assertRaises(ExtractorException):
+            extractor.extract(data)
 
+    @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call_bad_response)
     def test_bad_response(self):
-        with patch('botocore.client.BaseClient._make_api_call', new=mock_make_api_call_bad_response):
-            with self.assertRaises(ExtractorException):
-                self._test_file_type("jpg", collection="textract", config=self.CONFIG)
+        with self.assertRaises(ExtractorException):
+            self._test_file_type("jpg", collection="textract", config=self.CONFIG)
