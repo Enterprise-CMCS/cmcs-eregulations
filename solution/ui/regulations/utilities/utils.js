@@ -22,19 +22,34 @@ import _transform from "lodash/transform";
 const EventCodes = {
     SetSection: "SetSection",
     OpenBlockingModal: "OpenBlockingModal",
+    ClearSections: "ClearSections",
 };
 
 const DOCUMENT_TYPES = ["external", "internal"];
 const DOCUMENT_TYPES_MAP = {
     external: "Public",
     internal: "Internal",
-}
+};
 
 const PARAM_MAP = {
     subjects: "subjects",
     q: "q",
     type: "resource-type",
 };
+
+/**
+ * An object representing a policy document
+ * @typedef {Object} PolicyDoc
+ * @property {("external"|"internal")} resource_type - The type of document
+ * @property {string} doc_name_string - The name of the document
+ * @property {string} document_name_headline - The name of the document with search terms highlighted
+ * @property {string} summary_string - The summary of the document
+ * @property {string} summary_headline - The summary of the document with search terms highlighted
+ * @property {string} file_name_string - The name of the file
+ * @property {string} content_string - The parsed content of the document
+ * @property {string} content_headline - The parsed content of the document with search terms highlighted
+ * @property {string} url - The url of the document
+ */
 
 /**
  * Validation dictionary for query params to ensure that only valid values are
@@ -82,6 +97,24 @@ const getFileNameSuffix = (fileName) => {
     }
 
     return suffix;
+};
+
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.file_name_string - The name of the file
+ * @param {string} args.url - The url of the document
+ *
+ * @returns {string} - HTML string for the file type button
+ */
+const getFileTypeButton = ({ fileName, url }) => {
+    const fileTypeSuffix = getFileNameSuffix(fileName);
+
+    let fileTypeButton;
+    if (fileName && fileTypeSuffix) {
+        fileTypeButton = `<span data-testid='download-chip-${url}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+    }
+
+    return `${fileTypeButton ?? ""}`;
 };
 
 /*
@@ -591,15 +624,30 @@ const getCurrentPageResultsRange = ({ count, page = 1, pageSize }) => {
     return [firstInRange, lastInRange];
 };
 
-const formatResourceCategories = (resources) => {
-    const rawCategories = JSON.parse(
-        document.getElementById("categories").textContent
-    );
+/**
+ * @param {Object} args - Arguments object
+ * @param {number} args.resources - array of resource objects
+ * @param {number} args.categories - array of category objects
+ * @param {string} args.apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ */
+const formatResourceCategories = ({
+    resources = [],
+    categories = [],
+    apiUrl,
+}) => {
+    const categoriesClone = [...categories];
 
     resources
-        .filter((resource) => resource.category.type === "category")
+        .filter(
+            (resource) =>
+                resource.category?.type === "category" ||
+                resource.category?.type === "repositorycategory"
+        )
         .forEach((resource) => {
-            const existingCategory = rawCategories.find(
+            if (resource.category?.type === "repositorycategory") {
+                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+            }
+            const existingCategory = categoriesClone.find(
                 (category) => category.name === resource.category.name
             );
 
@@ -614,15 +662,22 @@ const formatResourceCategories = (resources) => {
                 );
                 newCategory.supplemental_content = [resource];
                 newCategory.sub_categories = [];
-                rawCategories.push(newCategory);
+                categoriesClone.push(newCategory);
             }
         });
 
     const subCategories = [];
 
     resources
-        .filter((resource) => resource.category.type === "subcategory")
+        .filter(
+            (resource) =>
+                resource.category?.type === "subcategory" ||
+                resource.category?.type === "repositorysubcategory"
+        )
         .forEach((resource) => {
+            if (resource.category?.type === "repositorysubcategory") {
+                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+            }
             const existingSubCategory = subCategories.find(
                 (category) => category.name === resource.category.name
             );
@@ -641,7 +696,7 @@ const formatResourceCategories = (resources) => {
             }
         });
 
-    const categories = rawCategories.map((c) => {
+    const formattedCategories = categoriesClone.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
         category.sub_categories = subCategories.filter(
             (subcategory) => subcategory.parent?.id === category?.id
@@ -650,12 +705,14 @@ const formatResourceCategories = (resources) => {
         return category;
     });
 
-    categories.sort((a, b) => a.order - b.order);
-    categories.forEach((category) => {
+    formattedCategories.sort((a, b) => a.order - b.order);
+    formattedCategories.forEach((category) => {
         category.sub_categories.sort((a, b) => a.order - b.order);
     });
 
-    return categories;
+    return formattedCategories.filter(
+        (category) => category.type !== "repositorysubcategory"
+    );
 };
 
 function flattenSubpart(subpart) {
@@ -922,6 +979,12 @@ const createLastUpdatedDates = (resultsArr) => {
     );
 };
 
+const getCurrentSectionFromHash = (windowHash) => {
+    const hash = windowHash.substring(1);
+    const citations = hash.split("-");
+    return citations.slice(0, 2).join("-");
+};
+
 export {
     addMarks,
     addQueryParams,
@@ -944,8 +1007,10 @@ export {
     getActAbbr,
     getCategoryTree,
     getCurrentPageResultsRange,
+    getCurrentSectionFromHash,
     getDisplayName,
     getFileNameSuffix,
+    getFileTypeButton,
     getFragmentParam,
     getKebabDate,
     getKebabLabel,

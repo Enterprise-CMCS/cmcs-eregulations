@@ -58,9 +58,9 @@
                 </template>
                 <template v-else>
                     <supplemental-content-list
+                        v-if="supplemental_content"
                         :supplemental_content="supplemental_content"
                         :has_sub_categories="has_sub_categories"
-                        v-if="supplemental_content"
                     />
                 </template>
             </collapsible>
@@ -131,7 +131,7 @@ export default {
             return this?.sub_categories?.length ?? 0;
         },
         has_children() {
-            return (
+            return !!(
                 this.sub_categories?.length || this.supplemental_content?.length
             );
         },

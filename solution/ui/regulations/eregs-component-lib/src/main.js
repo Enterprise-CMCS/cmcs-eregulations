@@ -8,6 +8,7 @@ import {
     CollapseButton,
     Collapsible,
     CopyCitation,
+    DocTypeLabel,
     Dropdown,
     DropdownContent,
     DropdownHeader,
@@ -18,6 +19,7 @@ import {
     HeaderLinks,
     HeaderSearch,
     IFrameContainer,
+    InternalDocsContainer,
     JumpTo,
     CategoryLabel,
     LastParserSuccessDate,
@@ -46,7 +48,12 @@ import {
 } from "../dist/eregs-components.es";
 
 import { goToVersion } from "./go-to-version";
-import { highlightText, getQueryParam, scrollToElement } from "utilities/utils";
+import {
+    highlightText,
+    getCurrentSectionFromHash,
+    getQueryParam,
+    scrollToElement,
+} from "utilities/utils";
 
 import Clickaway from "../../eregs-vite/src/directives/clickaway";
 
@@ -117,15 +124,9 @@ function deactivateAllTOCLinks() {
     });
 }
 
-function getCurrentSectionFromHash() {
-    const hash = window.location.hash.substring(1);
-    const citations = hash.split("-");
-    return citations.slice(0, 2).join("-");
-}
-
 function activateTOCLink() {
     deactivateAllTOCLinks();
-    const section = getCurrentSectionFromHash();
+    const section = getCurrentSectionFromHash(window.location.hash);
 
     const el = document.querySelector(`[data-section-id='${section}']`);
     if (!el) return;
@@ -201,6 +202,7 @@ function main() {
             CollapseButton,
             Collapsible,
             CopyCitation,
+            DocTypeLabel,
             Dropdown,
             DropdownContent,
             DropdownHeader,
@@ -211,6 +213,7 @@ function main() {
             HeaderLinks,
             HeaderSearch,
             IFrameContainer,
+            InternalDocsContainer,
             JumpTo,
             CategoryLabel,
             LastParserSuccessDate,

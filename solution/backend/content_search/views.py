@@ -18,13 +18,13 @@ from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
-from resources.views.mixins import LocationExplorerViewSetMixin
+from resources.views.mixins import LocationFiltererMixin
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
 
 
-class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     queryset = ContentIndex.objects.all()
     paginate_by_default = True
@@ -52,7 +52,7 @@ class ContentSearchViewset(LocationExplorerViewSetMixin, OptionalPaginationMixin
                     OpenApiQueryParameter("resource-type",
                                           "Limit results to only resources found within this resource type.  Internal, External,"
                                           "all. Use \"&resource-type=external\"", str, ''),
-                    ] + LocationExplorerViewSetMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
+                    ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
     )
     def list(self, request):
         locations = self.request.GET.getlist("locations")

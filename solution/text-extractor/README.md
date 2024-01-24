@@ -9,7 +9,7 @@ The text extractor supports the following file types. File types that are planne
 - [x] Plain text (txt, multiple encodings supported)
 - [x] HTML and XML (html, htm, xhtml, xml)
 - [x] PDF
-- [ ] Images (png, jpeg, gif, etc.)
+- [x] Images (png, jpeg, gif, tiff, jpeg2000, bmp, tga, webp)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [x] Microsoft Outlook (msg)
@@ -208,6 +208,45 @@ class TestSampleExtractor(FixtureTestCase):
     def test_extract_with_config(self):
         self._test_file_type("filetype1", config={"some": "config"})
 ```
+
+## Storing fixture files in a "collection"
+
+Most extractor unit tests will be one input, one output; that is, for every fixture file there is exactly one "expected.txt" file. However, in some cases there may be a group of files that have the same expected output text. For example, unit testing an external service that supports multiple file types. In this scenario, the API call to the external service must be mocked and so the true output cannot be used as "expected.txt", but instead "expected.txt" will contain some fake data to verify that the API call is working. You may handle cases like this like so:
+
+_`extractors/tests/test_sample_collection.py`_:
+```python
+from unittest.mock import patch
+
+from . import FixtureTestCase
+
+
+def mock_external_api_extractor(file):
+    if file.type not in ["filetype1", "filetype2", "filetype3"]:
+        raise Exception("Invalid type")
+    return "Fake data indicating the API call succeeded"
+
+
+# For all of these tests, save your expected output as "extractors/tests/fixtures/group1/expected.txt"
+class TestSampleExtractor(FixtureTestCase):
+    def test_filetype1(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype1"
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype1", collection="group1")
+
+    def test_filetype2(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype2", collection="group1")
+
+    def test_filetype3(self):
+        # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
+        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
+            self._test_file_type("filetype3", collection="group1")
+```
+
+In this example, the "expected.txt" file should contain the text "Fake data indicating the API call succeeded" based on line 9.
+
+Also note that this parameter can be used in conjunction with `variation`, and files are prefixed with the variation in the same way as shown in the previous section.
 
 ## Generating new fixture files
 
