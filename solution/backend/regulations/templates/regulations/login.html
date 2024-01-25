@@ -21,8 +21,6 @@
         </div>
         <div>
             <main class="login">
-                If this is your first time signing in to eRegulations, make sure you have the correct job codes for the tasks you need to complete.
-
                 <form action="{% url 'oidc_authentication_init' %}" method="get">
                     <input type="hidden" name="next" value="{{ next }}">
                     <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
