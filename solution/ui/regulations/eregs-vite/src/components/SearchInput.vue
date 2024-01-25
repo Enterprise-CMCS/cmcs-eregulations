@@ -84,7 +84,7 @@ export default {
         },
         showSuggestions: {
             type: Boolean,
-            default: true,
+            default: false,
         },
     },
 

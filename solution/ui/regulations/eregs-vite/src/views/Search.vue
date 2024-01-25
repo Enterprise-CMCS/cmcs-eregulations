@@ -32,7 +32,6 @@
                         label="Search Regulations"
                         page="search"
                         :search-query="searchQuery"
-                        :show-suggestions=false
                         :synonyms="synonyms"
                         @execute-search="executeSearch"
                         @clear-form="clearSearchQuery"

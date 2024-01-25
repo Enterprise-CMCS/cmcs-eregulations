@@ -192,7 +192,6 @@ if (!_isEmpty(searchQuery.value)) {
                         label="Search Unpublished Documents"
                         page="policy-repository-search"
                         :search-query="searchQuery"
-                        :show-suggestions=false
                         @execute-search="executeSearch"
                         @clear-form="clearSearchQuery"
                     />
