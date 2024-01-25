@@ -16,8 +16,7 @@
 <div class="login-container">
         <div class="nav-container">
             <div class="content">
-                <h1>Single sign-on to CMCS</h1>
-                <h2>Authenticate your account by signing into CMC's single sign-on provider</h2>
+                <h1>Sign in with your CMS account</h1>
             </div>
         </div>
         <div>
@@ -27,7 +26,9 @@
                 <form action="{% url 'oidc_authentication_init' %}" method="get">
                     <input type="hidden" name="next" value="{{ next }}">
                     <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
-                </form>  {# Show the error message if needed #}
+                </form>
+                <p>Requires an eRegulations job code, available to Policy Repository pilot participants.</p>
+                <p>For help, contact stephanie.boyd@cms.hhs.gov or julian.rodriguez@a1msolutions.com.</p>
             </main>
         </div>
 </div>
