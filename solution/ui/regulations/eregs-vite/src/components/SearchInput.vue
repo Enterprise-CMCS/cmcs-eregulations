@@ -33,7 +33,7 @@
             </template>
             <template v-if="synonyms.length > 0">
                 <div class="search-suggestion">
-                    <span v-if="multiWordQuery"> Or search </span>
+                    <span v-if="showSuggestions && multiWordQuery"> Or search </span>
                     <span v-else> Search </span>
                     for similar terms:
                     <template v-for="(syn, i) in synonyms">
