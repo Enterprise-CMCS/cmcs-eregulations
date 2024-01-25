@@ -123,9 +123,9 @@ describe("getResultLinkText", () => {
 });
 
 describe("getResultSnippet", () => {
-    it("is internal and has a summary_headline with a search result", async () => {
+    it("is internal and has a content_headline and summary_headline with a search result", async () => {
         expect(PolicyResults.getResultSnippet(MOCK_RESULTS[1])).toBe(
-            "...this <span class='search-highlight'>is</span> a summary headline..."
+            "...this <span class='search-highlight'>is</span> a content headline..."
         );
     });
     it("is internal and has a summary_headline WITHOUT a search result", async () => {
@@ -133,9 +133,9 @@ describe("getResultSnippet", () => {
             "this is a summary headline"
         );
     });
-    it("is internal and has a summary_string but NOT a summary_headline", async () => {
+    it("is internal and has a content_headline and a summary_string but NOT a summary_headline", async () => {
         expect(PolicyResults.getResultSnippet(MOCK_RESULTS[6])).toBe(
-            "this is a summary string"
+            "...this <span class='search-highlight'>is</span> a content headline..."
         );
     });
     it("is internal and does NOT have a summary_headline or _string, but has a content_headline with a search result", async () => {
