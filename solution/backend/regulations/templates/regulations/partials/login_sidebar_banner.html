@@ -3,7 +3,7 @@
         Resources you can access include policy documents internal to CMCS.
     {% else %}
         CMCS staff participating in the Policy Repository pilot can
-        <a id="loginSidebar" href="{% url 'login' %}?next={{ request.path }}"
+        <a id="loginSidebar" href="{% url 'custom_login' %}?next={{ request.path }}"
             >sign in</a
         >
         to see internal resources.

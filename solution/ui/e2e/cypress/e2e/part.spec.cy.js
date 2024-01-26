@@ -76,7 +76,7 @@ describe("Part View", () => {
 
         cy.get("a#loginSidebar")
             .should("have.attr", "href")
-            .and("include", "/admin/login/?next=")
+            .and("include", "/login/?next=")
             .and("include", "/42/433/Subpart-B/");
     });
 
