@@ -395,7 +395,7 @@ getDocSubjects();
                     />
                     <template v-else>
                         <div
-                            v-if="selectedSubjectParts.length"
+                            v-if="selectedSubjectParts.length && !searchQuery"
                             class="subject__heading"
                         >
                             <SelectedSubjectHeading
@@ -416,6 +416,8 @@ getDocSubjects();
                                 :results="policyDocList.results"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
+                                :search-query="searchQuery"
+                                :selected-subject-parts="selectedSubjectParts"
                             />
                         </template>
                     </template>

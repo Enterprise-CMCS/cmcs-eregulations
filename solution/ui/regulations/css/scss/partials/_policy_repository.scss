@@ -346,6 +346,10 @@
         .search-results-count {
             padding: 0 1rem;
             margin-bottom: 2rem;
+
+            .search-query__span {
+                font-weight: 700;
+            }
         }
 
         .doc-list__document {
