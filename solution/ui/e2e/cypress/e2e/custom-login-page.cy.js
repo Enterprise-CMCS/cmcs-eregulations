@@ -9,6 +9,9 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
     it("has a flash banner at the top with a link to a feedback survey", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
+        cy.checkLinkRel();
+        cy.injectAxe();
+        cy.checkAccessibility();
         cy.checkFlashBanner();
     });
 

@@ -14,20 +14,20 @@
 
 {% block body %}
 <div class="login-container">
-        <div class="nav-container">
-            <div class="content">
-                <h1>Sign in with your CMS account</h1>
-            </div>
+    <div class="nav-container">
+        <div class="content">
+            <h1>Sign in with your CMS account</h1>
         </div>
-        <div>
-            <main class="login">
-                <form action="{% url 'oidc_authentication_init' %}" method="get">
-                    <input type="hidden" name="next" value="{{ next }}">
-                    <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
-                </form>
-                <p>Requires an eRegulations job code, available to Policy Repository pilot participants.</p>
-                <p>For help, contact stephanie.boyd@cms.hhs.gov or julian.rodriguez@a1msolutions.com.</p>
-            </main>
-        </div>
+    </div>
+    <div>
+        <main class="login">
+            <form action="{% url 'oidc_authentication_init' %}" method="get">
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
+            </form>
+            <p>Requires an eRegulations job code, available to Policy Repository pilot participants.</p>
+            <p>For help, contact <a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a> or <a href="mailto:julian.rodriguez@a1msolutions.com">julian.rodriguez@a1msolutions.com</a>.</p>
+        </main>
+    </div>
 </div>
 {% endblock %}
