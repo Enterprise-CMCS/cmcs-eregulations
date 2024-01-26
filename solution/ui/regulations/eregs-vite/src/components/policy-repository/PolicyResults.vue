@@ -116,6 +116,7 @@ const resultLinkClasses = (doc) => ({
 
 <template>
     <div class="doc__list">
+        <h2>Search Results</h2>
         <div class="search-results-count">
             <span v-if="results.length > 0">
                 Showing 1 -

@@ -35,11 +35,6 @@
         max-width: 100%;
     }
 
-    h2 {
-        font-family: "Open Sans", Helvetica, sans-serif;
-        margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
-    }
-
     h3 {
         margin: 0;
         line-height: 24px;
@@ -57,6 +52,11 @@
             padding-right: 1rem;
             border-right: 2px solid $border_color;
             border-bottom: none;
+        }
+
+        h2 {
+            margin: 0 0 1rem !important; // !important to override the default h2 margin due to vuetify defaults
+            font-family: "Open Sans", Helvetica, sans-serif;
         }
 
         .sidebar-toggle__button {
@@ -338,6 +338,11 @@
     }
 
     .doc__list {
+        h2 {
+            padding: 0 1rem;
+            margin: 0 0 0.75rem !important;
+        }
+
         .search-results-count {
             padding: 0 1rem;
             margin-bottom: 2rem;
