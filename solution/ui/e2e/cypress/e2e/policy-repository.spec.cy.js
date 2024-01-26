@@ -48,7 +48,7 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/admin/login");
     });
 
-    it("show the policy repository page when logged in", () => {
+    it("should show the policy repository page when logged in", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/policy-repository");
@@ -77,6 +77,63 @@ describe("Policy Repository", () => {
             force: true,
         });
         cy.url().should("include", "/policy-repository?subjects=2");
+    });
+
+    it("should display the appropriate results column header whether viewing keyword search results or viewing the items within a subject.", () => {
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/policy-repository");
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
+            .should("have.text", " Access to Services ")
+            .click({ force: true });
+        cy.url().should("include", "/policy-repository?subjects=3");
+        cy.get(".subject__heading")
+            .should("exist")
+            .and("have.text", "Access to Services");
+        cy.get("search-results__heading").should("not.exist");
+        cy.get(".search-results-count").should(
+            "have.text",
+            "Showing 1 - 2 of 2 documents."
+        );
+        cy.get("input#main-content").type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.get(".subject__heading").should("not.exist");
+        cy.get(".search-results__heading")
+            .should("exist")
+            .and("have.text", " Search Results ");
+        cy.get(".search-results-count").should(
+            "have.text",
+            "Showing 1 - 2 of 2 results for test within Access to Services."
+        );
+        cy.get(`button[data-testid=remove-subject-3]`).click({
+            force: true,
+        });
+        cy.get(".search-results-count").should(
+            "have.text",
+            "Showing 1 - 2 of 2 results for test."
+        );
+        cy.get("input#main-content").clear();
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get("search-results__heading").should("not.exist");
+        cy.get(".subject__heading").should("not.exist");
+        cy.get(".search-results-count").should(
+            "have.text",
+            "Showing 1 - 2 of 2 documents."
+        );
     });
 
     it("should make a successful request to the content-search endpoint", () => {
@@ -192,6 +249,7 @@ describe("Policy Repository", () => {
 
         cy.checkAccessibility();
     });
+
     it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
         cy.getPolicyDocs({
             username: readerUsername,
@@ -200,11 +258,13 @@ describe("Policy Repository", () => {
         cy.get(".edit-button").should("not.exist");
         cy.checkAccessibility();
     });
+
     it("should display edit button for individual uploaded items if signed in and authorized to edit", () => {
         cy.getPolicyDocs({ username, password });
         cy.get(".edit-button").should("exist");
         cy.checkAccessibility();
     });
+
     it("should update the URL when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs.json",

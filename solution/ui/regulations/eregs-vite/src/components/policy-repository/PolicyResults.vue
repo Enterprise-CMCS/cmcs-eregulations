@@ -127,12 +127,13 @@ const resultLinkClasses = (doc) => ({
 
 <template>
     <div class="doc__list">
-        <h2 v-if="searchQuery">Search Results</h2>
+        <h2 v-if="searchQuery" class="search-results__heading">
+            Search Results
+        </h2>
         <div class="search-results-count">
-            <span v-if="results.length > 0">
-                Showing 1 -
-                {{ results.length }} of
-            </span>
+            <span v-if="results.length > 0"
+                >Showing 1 - {{ results.length }} of</span
+            >
             {{ results.length }} <span v-if="searchQuery">result</span
             ><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
