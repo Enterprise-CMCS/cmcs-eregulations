@@ -36,7 +36,7 @@ const getResultLinkText = (item) => {
 const showResultSnippet = (item) => {
     if (
         item.resource_type === "internal" &&
-        (item.summary_headline || item.summary_string || item.content_headline)
+        (item.content_headline || item.summary_headline || item.summary_string)
     )
         return true;
 
@@ -49,12 +49,15 @@ const getResultSnippet = (item) => {
     let snippet;
 
     if (item.resource_type === "internal") {
-        if (item.summary_headline) {
+        if (
+            item.content_headline &&
+            item.content_headline.includes("search-highlight")
+        ) {
+            snippet = addSurroundingEllipses(item.content_headline);
+        } else if (item.summary_headline) {
             snippet = addSurroundingEllipses(item.summary_headline);
         } else if (item.summary_string) {
             snippet = item.summary_string;
-        } else if (item.content_headline) {
-            snippet = addSurroundingEllipses(item.content_headline);
         }
 
         return snippet;
