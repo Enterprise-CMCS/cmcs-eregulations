@@ -4,16 +4,6 @@ provider:
   name: aws
   iam:
     role: LambdaFunctionRole
-  # logs:
-  #   restApi:
-  #     level: INFO
-  #     roleManagedExternally: true
-  # vpc:
-  #   securityGroupIds:
-  #     - !Ref ServerlessSecurityGroup
-  #   subnetIds:
-  #     - ${ssm:/account_vars/vpc/subnets/private/a/id}
-  #     - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
     blockPublicAccess: true
   ecr:
