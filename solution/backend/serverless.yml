@@ -81,7 +81,7 @@ custom:
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
   scripts:
-    postDeploy: ./invalidate-cloudfront.sh
+    postDeploy: ./scripts/invalidate-cloudfront.sh
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
@@ -297,5 +297,4 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
-  - serverless-cloudfront-invalidate
   - serverless-associate-waf
