@@ -131,9 +131,7 @@ const resultLinkClasses = (doc) => ({
             Search Results
         </h2>
         <div class="search-results-count">
-            <span v-if="results.length > 0"
-                >Showing 1 - {{ results.length }} of</span
-            >
+            <span v-if="results.length > 0">1 - {{ results.length }} of</span>
             {{ results.length }} <span v-if="searchQuery">result</span
             ><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
@@ -144,7 +142,6 @@ const resultLinkClasses = (doc) => ({
             <span v-if="searchQuery && selectedSubjectParts[0]">
                 within {{ selectedSubjectParts[1][0] }}</span
             >
-            <span>.</span>
         </div>
         <ResultsItem
             v-for="doc in results"
