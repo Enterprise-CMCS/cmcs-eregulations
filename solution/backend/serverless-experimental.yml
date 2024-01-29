@@ -89,7 +89,7 @@ custom:
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
     #text_extractor_arn: ''
   scripts:
-    postDeploy: ./scripts/invalidate-cloudfront.sh
+    postDeploy: ./scripts/invalidate-cloudfront.sh  | tee deployment.log
 
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
