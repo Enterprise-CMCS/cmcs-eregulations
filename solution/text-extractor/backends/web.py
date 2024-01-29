@@ -50,7 +50,7 @@ class WebBackend(FileBackend):
             raise BackendException(f"failed to parse robots.txt, must assume we are not allowed to look at the URL: {str(e)}")
 
         # Figure out of robots.txt allows us to crawl the URL
-        logger.debug("Determining if \"%s\" can crawl the path.")
+        logger.debug("Determining if \"%s\" can crawl the path.", self._user_agent)
         if not self._can_fetch(uri):
             raise BackendException(f"robots.txt has disallowed crawling of \"{uri}\"")
 
