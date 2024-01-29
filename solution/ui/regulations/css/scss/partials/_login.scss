@@ -1,0 +1,31 @@
+//-----------------------------
+// Login
+//-----------------------------
+
+@import "../application_settings";
+
+main.login {
+    display: block;
+    margin: $spacer-3 auto $spacer-7;
+    max-width: $text-max-width;
+    max-height: 100%;
+    button.action-btn.default-btn {
+        margin-top: 16px;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    h2 {
+        color: $primary_color;
+    }
+
+    h3 {
+        margin: 1em 0 1em 0 !important;
+        margin-block-start: 1em !important;
+        margin-block-end: 1em !important;
+    }
+
+    ul {
+        padding-left: 40px;
+    }
+}

@@ -250,7 +250,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Medicaid and CHIP regulation content and associated supplemental content (such as subregulatory guidance)'
 }
 
-LOGIN_URL = "/admin"
+LOGIN_URL = "/login/"
 
 # Settings for CSP headers
 CSP_IMG_SRC = [

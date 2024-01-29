@@ -31,7 +31,7 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
         fixture: "policy-docs.json",
     }).as("subjectFiles");
     cy.viewport("macbook-15");
-    cy.eregsLogin({ username, password });
+    cy.eregsLogin({ username, password, landingPage: "/policy-repository/"});
     cy.visit("/policy-repository/?q=mock");
     cy.injectAxe();
     cy.wait("@subjectFiles").then((interception) => {
@@ -42,15 +42,15 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
 
-    it("shows the login screen when you visit /policy-repository/ without logging in", () => {
+    it("shows the custom eua login screen when you visit /policy-repository/ without logging in", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/");
-        cy.url().should("include", "/admin/login");
+        cy.url().should("include", "/login");
     });
 
     it("should show the policy repository page when logged in", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get("#loginIndicator").should("be.visible");
@@ -139,7 +139,7 @@ describe("Policy Repository", () => {
     it("should make a successful request to the content-search endpoint", () => {
         cy.intercept("**/v3/content-search/?**").as("files");
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
         cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
@@ -150,7 +150,8 @@ describe("Policy Repository", () => {
 
     it("loads the correct subject and search query when the URL is changed", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
+
         cy.visit("/policy-repository");
         cy.url().should("include", "/policy-repository/");
 
@@ -270,7 +271,8 @@ describe("Policy Repository", () => {
             fixture: "policy-docs.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
+
         cy.visit("/policy-repository/");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
@@ -331,7 +333,7 @@ describe("Policy Repository", () => {
 
     it("should display correct subject ID number in the URL if one is included in the URL on load and different one is selected via the Subject Selector", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository/?subjects=77");
         cy.url().should("include", "/policy-repository/?subjects=77");
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
@@ -353,7 +355,7 @@ describe("Policy Repository", () => {
 
     it("should filter the subject list when a search term is entered into the subject filter", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository/");
 
         cy.injectAxe();
@@ -404,7 +406,7 @@ describe("Policy Repository", () => {
     it("should display and fetch the correct search query on load if it is included in URL", () => {
         cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository/?q=test");
         cy.wait("@qFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
@@ -415,7 +417,7 @@ describe("Policy Repository", () => {
 
     it("should have a Documents to Show checkbox list", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.get(".doc-type__toggle-container h3").should(
             "have.text",
@@ -445,7 +447,7 @@ describe("Policy Repository", () => {
 
     it("should show only the Table of Contents if both or neither checkboxes are checked", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.get(".subj-toc__container").should("exist");
         cy.get(".doc-type__toggle fieldset > div")
@@ -473,7 +475,7 @@ describe("Policy Repository", () => {
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
         cy.intercept("**/v3/content-search/**").as("contentSearch");
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.wait(2000);
         cy.get("@contentSearch.all").then((interception) => {
@@ -483,28 +485,28 @@ describe("Policy Repository", () => {
 
     it("goes to another SPA page from the policy repository page", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.clickHeaderLink({ page: "Resources", screen: "wide" });
         cy.url().should("include", "/resources");
     });
 
-    it("returns you to the admin login page when you log out", () => {
+    it("returns you to the custom eua login page when you log out", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
+        cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
-        cy.get("#login-form").should("be.visible");
+        cy.url().should("include", "/login");
     });
 });
 
 describe("Policy Repository Search", () => {
     beforeEach(_beforeEach);
 
-    it("shows the login screen when you visit /policy-repository/search without logging in", () => {
+    it("shows the custom eua login screen when you visit /policy-repository/search without logging in", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/search/");
-        cy.url().should("include", "/admin/login");
+        cy.url().should("include", "/login");
     });
 
     it("show the policy repository search page when logged in", () => {
