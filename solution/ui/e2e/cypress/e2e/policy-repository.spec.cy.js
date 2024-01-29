@@ -99,7 +99,7 @@ describe("Policy Repository", () => {
         cy.get("search-results__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
-            "Showing 1 - 2 of 2 documents."
+            "1 - 2 of 2 documents"
         );
         cy.get("input#main-content").type("test", { force: true });
         cy.get(".search-field .v-input__icon--append button").click({
@@ -111,14 +111,14 @@ describe("Policy Repository", () => {
             .and("have.text", " Search Results ");
         cy.get(".search-results-count").should(
             "have.text",
-            "Showing 1 - 2 of 2 results for test within Access to Services."
+            "1 - 2 of 2 results for test within Access to Services"
         );
         cy.get(`button[data-testid=remove-subject-3]`).click({
             force: true,
         });
         cy.get(".search-results-count").should(
             "have.text",
-            "Showing 1 - 2 of 2 results for test."
+            "1 - 2 of 2 results for test"
         );
         cy.get("input#main-content").clear();
         cy.get(".search-field .v-input__icon--append button").click({
@@ -132,7 +132,7 @@ describe("Policy Repository", () => {
         cy.get(".subject__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
-            "Showing 1 - 2 of 2 documents."
+            "1 - 2 of 2 documents"
         );
     });
 
