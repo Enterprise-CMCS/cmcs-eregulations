@@ -23,8 +23,7 @@ provider:
 custom:
   stage: ${opt:stage, self:provider.stage}
   settings:
-    #eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v3/
-    eregs_url: "https://godwin.io"
+    eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v3/
 
 functions:
   fr_parser:
