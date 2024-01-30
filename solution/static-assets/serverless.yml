@@ -166,6 +166,7 @@ resources:
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
             CloudFrontDefaultCertificate: true
+          DefaultRootObject: index.html
 
   Outputs:
     CloudFrontDistributionId:
