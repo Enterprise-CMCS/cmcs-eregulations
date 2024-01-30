@@ -189,12 +189,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             });
         cy.get(".resources__container")
             .contains("View More Guidance")
-            .click({ force: true });
-        cy.url().should(
-            "eq",
-            Cypress.config().baseUrl +
-                "/resources/?resourceCategory=State%20Medicaid%20Director%20Letter%20%28SMDL%29,State%20Health%20Official%20%28SHO%29%20Letter,CMCS%20Informational%20Bulletin%20%28CIB%29,Frequently%20Asked%20Questions%20%28FAQs%29,Associate%20Regional%20Administrator%20%28ARA%29%20Memo,State%20Medicaid%20Manual%20%28SMM%29&sort=newest"
-        );
+            .should("not.exist");
     });
 
     it("has grouped FR docs in Related Rules tab", () => {
@@ -233,12 +228,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
 
         cy.get(".resources__container")
             .contains("View More Changes")
-            .click({ force: true });
-        cy.url().should(
-            "eq",
-            Cypress.config().baseUrl +
-                `/resources/?resourceCategory=Proposed%20and%20Final%20Rules`
-        );
+            .should("not.exist");
     });
 
     it("Sets the label as Final, when correction and withdraw are both set to false", () => {
