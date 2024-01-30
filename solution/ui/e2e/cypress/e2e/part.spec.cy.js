@@ -49,6 +49,7 @@ describe("Part View", () => {
         cy.get("#433-51-title").should("be.visible");
         cy.get(".latest-version").should("exist");
         cy.get("#subpart-resources-heading").contains("433.51 Resources");
+        cy.get(".resources_btn_container").should("not.exist");
 
         cy.get(".right-sidebar").should("be.visible", "display", "none");
 

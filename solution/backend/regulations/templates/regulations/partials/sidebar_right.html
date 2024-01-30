@@ -13,9 +13,6 @@
             api-url="{{ API_BASE }}"
             title="{{ title }}"
             part="{{ reg_part }}"
-            resources-url="{% url 'resources' %}"
-            :resource-display=true
-            :sections="{{ node_list.sections }}"
             :subparts="{{ node_list.subparts }}"
         >
             <template #login-banner>

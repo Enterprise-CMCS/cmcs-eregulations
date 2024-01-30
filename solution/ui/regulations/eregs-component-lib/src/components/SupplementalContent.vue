@@ -13,13 +13,6 @@
         </a>
         <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
         <slot name="login-banner"></slot>
-        <div v-if="resourceDisplay" class="resource_btn_container">
-            <a
-                :href="resourceLink"
-                class="default-btn action-btn search_resource_btn"
-                >Search These Resources</a
-            >
-        </div>
         <slot name="public-label"></slot>
         <div class="supplemental-content-container">
             <supplemental-content-category
@@ -75,11 +68,6 @@ export default {
             required: false,
             default: "",
         },
-        resourcesUrl: {
-            type: String,
-            required: false,
-            default: "",
-        },
         title: {
             type: String,
             required: true,
@@ -88,22 +76,12 @@ export default {
             type: String,
             required: true,
         },
-        sections: {
-            type: Array,
-            required: false,
-            default: () => [],
-        },
         subparts: {
             type: Array,
             required: false,
             default() {
                 return [];
             },
-        },
-        resourceDisplay: {
-            type: Boolean,
-            required: false,
-            default: false,
         },
     },
 
@@ -118,41 +96,15 @@ export default {
     },
 
     computed: {
-        params_array() {
-            return [
-                ["sections", this.sections],
-                ["subparts", this.subparts],
-            ];
-        },
-
         activePart() {
             if (this.selectedPart !== undefined) {
                 return this.selectedPart;
             }
             return `Subpart ${this.subparts[0]}`;
         },
-
-        resourceLink() {
-            let qString = `${this.resourcesUrl}?title=${this.title}&part=${this.part}`;
-
-            if (this.activePart.includes("Subpart")) {
-                qString = `${qString}&subpart=${this.part}-${this.params_array[1][1]}`;
-                const sections = `${this.part}-${this.sections.join(
-                    `,${this.part}-`
-                )}`;
-                return `${qString}&section=${sections}`;
-            }
-            const selection = this.activePart.split(" ")[1].replace(".", "-");
-            return `${qString}&section=${selection}`;
-        },
     },
 
     watch: {
-        sections() {
-            this.categories = [];
-            this.isFetching = true;
-            this.fetchContent();
-        },
         subparts() {
             this.categories = [];
             this.isFetching = true;
@@ -293,10 +245,6 @@ export default {
 </script>
 
 <style lang="scss">
-.resource_btn_container {
-    padding: 5px 12px 5px 0px;
-}
-
 .search_resource_btn {
     width: fit-content;
     line-height: 18px;
