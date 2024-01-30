@@ -55,11 +55,12 @@ describe("Search flow", () => {
         cy.visit(`/search`, { timeout: 60000 });
         cy.get("input#main-content")
             .should("be.visible")
-            .type("test", { force: true });
+            .type("test search", { force: true });
         cy.get(".search-field .v-input__icon--append button").click({
             force: true,
         });
-        cy.url().should("include", "/search?q=test");
+        cy.url().should("include", "/search?q=test%20search");
+        cy.get(".search-form .form-helper-text .search-suggestion").should("not.exist");
     });
 
     it("should be able to clear the searchbox", () => {
