@@ -11,14 +11,6 @@ export default {
             type: String,
             required: true,
         },
-        resourceLink: {
-            type: String,
-            required: true,
-        },
-        frDocLink: {
-            type: String,
-            required: true,
-        },
     },
 
     async created() {
@@ -46,12 +38,6 @@ export default {
         };
     },
 
-    computed: {
-        moreGuidanceLink() {
-            return `${this.resourceLink}?resourceCategory=${this.categoryNames}&sort=newest`;
-        },
-    },
-
     components: {
         RecentChangesContainer,
     },
@@ -74,9 +60,6 @@ export default {
                     :categories="categories"
                     type="supplemental"
                 ></RecentChangesContainer>
-                <a :href="moreGuidanceLink" class="action-btn default-btn link-btn"
-                    >View More Guidance</a
-                >
             </v-tab-item>
             <v-tab-item>
                 <p class="recent-rules-descriptive-text">
@@ -86,9 +69,6 @@ export default {
                     :api-url="apiUrl"
                     type="rules"
                 ></RecentChangesContainer>
-                <a :href="frDocLink" class="action-btn default-btn link-btn"
-                    >View More Changes</a
-                >
             </v-tab-item>
         </v-tabs-items>
     </div>
