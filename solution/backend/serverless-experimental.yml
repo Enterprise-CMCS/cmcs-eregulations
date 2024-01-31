@@ -87,7 +87,6 @@ custom:
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
-    #text_extractor_arn: ''
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
       items:
