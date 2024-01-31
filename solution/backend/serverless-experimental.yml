@@ -92,7 +92,6 @@ custom:
       commands:
         - aws cloudfront create-invalidation --distribution-id ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId} --paths "/*"
 
-
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
