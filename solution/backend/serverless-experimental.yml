@@ -88,12 +88,10 @@ custom:
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
     #text_extractor_arn: ''
-  name: Deploy and run script
-  run: |
-    pushd solution/backend
-    npm install serverless -g
-    npm install
-    bash ./scripts/invalidate-cloudfront.sh | tee deployment.log
+    invalidateCloudfront:
+      commands:
+        - aws cloudfront create-invalidation --distribution-id ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId} --paths "/*"
+
 
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
