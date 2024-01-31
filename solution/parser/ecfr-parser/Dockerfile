@@ -6,7 +6,7 @@ RUN go env -w GOPROXY=direct
 
 # build parser
 COPY . .
-WORKDIR fr-parser
+WORKDIR ecfr-parser
 RUN go mod download
 RUN go build -tags lambda.norpc -o /main
 
