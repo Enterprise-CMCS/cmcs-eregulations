@@ -88,9 +88,11 @@ custom:
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
     #text_extractor_arn: ''
-  scripts:
-    hooks:
-      'deploy:finalize': aws cloudfront create-invalidation --distribution-id ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId} --paths "/*"
+  cloudfrontInvalidate:
+    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
+      items:
+        - "/*"
+
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
@@ -201,4 +203,5 @@ resources:
 
 plugins:
   - serverless-wsgi
+  - serverless-cloudfront-invalidate
   - serverless-associate-waf
