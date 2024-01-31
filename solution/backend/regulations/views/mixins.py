@@ -28,4 +28,3 @@ class IsAuthenticatedMixin:
             return redirect(reverse('custom_login') + '?next=%s' % request.path + redirect_string)
 
         return super().dispatch(request, *args, **kwargs)
-

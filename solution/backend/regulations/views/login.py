@@ -9,4 +9,3 @@ class LoginView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['next'] = self.request.GET.get('next', '')
         return context
-
