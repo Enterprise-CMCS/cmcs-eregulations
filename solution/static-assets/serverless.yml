@@ -165,7 +165,7 @@ resources:
             TargetOriginId: S3Origin
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
-            AcmCertificateArn: ${ssm:/eregulations/acm-cert-arn}
+            AcmCertificateArn: arn:aws:acm:us-east-1:910670052382:certificate/b7045ab5-2598-4a59-be48-bad4c925162b
             SslSupportMethod: sni-only
             MinimumProtocolVersion: TLSv1.2
             CloudFrontDefaultCertificate: true
