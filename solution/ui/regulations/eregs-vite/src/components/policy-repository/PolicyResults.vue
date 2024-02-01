@@ -166,9 +166,18 @@ const resultLinkClasses = (doc) => ({
                 />
                 <template v-if="doc.resource_type === 'internal'">
                     <CategoryLabel
-                        v-if="!_isEmpty(doc.document_type)"
-                        :name="doc.document_type.name"
+                        v-if="!_isEmpty(doc.category)"
+                        :name="
+                            doc.category.parent
+                                ? doc.category.parent.name
+                                : doc.category.name
+                        "
                         type="category"
+                    />
+                    <CategoryLabel
+                        v-if="doc.category.parent"
+                        :name="doc.category.name"
+                        type="subcategory"
                     />
                 </template>
                 <template v-else>
