@@ -1,0 +1,11 @@
+title = "Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "global allow list"
+paths = [
+    "solution/text-extractor/extractors/tests/fixtures/eml/sample.eml",
+]
+
