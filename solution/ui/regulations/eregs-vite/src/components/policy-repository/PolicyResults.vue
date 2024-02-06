@@ -168,15 +168,15 @@ const resultLinkClasses = (doc) => ({
                     <CategoryLabel
                         v-if="!_isEmpty(doc.category)"
                         :name="
-                            doc.category.parent
-                                ? doc.category.parent.name
-                                : doc.category.name
+                            doc.category?.parent
+                                ? doc.category?.parent?.name
+                                : doc.category?.name
                         "
                         type="category"
                     />
                     <CategoryLabel
-                        v-if="doc.category.parent"
-                        :name="doc.category.name"
+                        v-if="doc.category?.parent"
+                        :name="doc.category?.name"
                         type="subcategory"
                     />
                 </template>
@@ -184,15 +184,15 @@ const resultLinkClasses = (doc) => ({
                     <CategoryLabel
                         v-if="!_isEmpty(doc.category)"
                         :name="
-                            doc.category.parent
-                                ? doc.category.parent.name
-                                : doc.category.name
+                            doc.category?.parent
+                                ? doc.category?.parent?.name
+                                : doc.category?.name
                         "
                         type="category"
                     />
                     <CategoryLabel
                         v-if="doc.category?.parent"
-                        :name="doc.category.name"
+                        :name="doc.category?.name"
                         type="subcategory"
                     />
                 </template>
