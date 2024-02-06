@@ -78,6 +78,16 @@ response = client.invoke(
 
 Direct invocation is the easiest way to asynchronously run the text extractor. Otherwise, it will be required to set up a proxy Lambda function that accepts the POST request from API Gateway and asynchronously invokes this one.
 
+## Currently supported backends
+
+The text extractor currently supports downloading files from Amazon S3 (`s3`) and the web (`web`).
+
+If you're using the S3 backend, you must include the `aws` dictionary in the example request above, with all listed keys specified. Then, set the `uri` to the key of the object stored in S3 that you wish to extract text from.
+
+If you're using web, no further configuration is required. Set the `uri` to the URL to download, including the scheme (http or https). Note that the web backend has built-in retries in the event of a timeout or a `429 TOO MANY REQUESTS` response. By default, the extractor will wait 30 seconds between retries, or if a `Retry-After` header is specified, it will wait for the number of seconds specified there.
+
+The extractor will continue retrying until the content downloads, a fatal error occurs, or the Lambda timeout occurs. Please note that if the Lambda timeout is increased, so too will the maximum amount of retries.
+
 # Response structure
 
 When the function completes, it will send the text and ID back to the `post_url` specified in the request as a JSON POST request formatted like:

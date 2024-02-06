@@ -3,7 +3,6 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: go1.x
   region: us-east-1
   iam:
     role: LambdaFunctionRole
@@ -15,25 +14,27 @@ provider:
     EREGS_API_URL_V3: ${self:custom.settings.eregs_url}
   deploymentBucket:
     blockPublicAccess: true
+  ecr:
+    images:
+      appimage:
+        path: .
+        file: ecfr-parser/Dockerfile
 
 custom:
   stage: ${opt:stage, self:provider.stage}
   settings:
     eregs_url: ${cf:cmcs-eregs-site-${self:custom.stage}.ServiceEndpoint}/v3/
-  go:
-    baseDir: ecfr-parser/
 
 functions:
   ecfr_parser:
-    handler: .
+    image:
+      name: appimage
     timeout: 900
     events:
       - schedule: cron(0 0 * * ? *)
 
 resources:
-
   Resources:
-
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -91,6 +92,3 @@ resources:
         Tags:
           - Key: "Name"
             Value: "ServerlessSecurityGroup"
-
-plugins:
-  - serverless-go-plugin
