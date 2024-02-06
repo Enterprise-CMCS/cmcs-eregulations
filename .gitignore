@@ -15,4 +15,4 @@ solution/static-assets/regulations/*
 solution/ui/regulations/dist
 solution/Dockerfile
 solution/ui/regulations/coverage/
-solution/default.env/template
+solution/default.env.template
