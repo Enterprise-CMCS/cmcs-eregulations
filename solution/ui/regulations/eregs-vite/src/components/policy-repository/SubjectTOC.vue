@@ -1,7 +1,9 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, inject } from "vue";
 
 import { getSubjectNameParts } from "utilities/filters";
+
+const isAuthenticated = inject("isAuthenticated");
 
 const props = defineProps({
     policyDocSubjects: {
@@ -58,12 +60,15 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                         <span class="subj-doc__count subj-doc__count--public">{{
                             subject.external_content ?? 0
                         }}</span>
-                        public and
-                        <span
-                            class="subj-doc__count subj-doc__count--internal"
-                            >{{ subject.internal_content ?? 0 }}</span
-                        >
-                        internal resources
+                        public
+                        <span v-if="isAuthenticated"
+                            >and
+                            <span
+                                class="subj-doc__count subj-doc__count--internal"
+                                >{{ subject.internal_content ?? 0 }}</span
+                            >
+                            internal </span
+                        >resources
                     </div>
                 </li>
             </ul>
