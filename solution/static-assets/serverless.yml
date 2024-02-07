@@ -8,6 +8,10 @@ provider:
     blockPublicAccess: true
 
 custom:
+  environment: ${env:ENVIRONMENT}
+  localstack:
+    stages:
+      - local
   stage: ${opt:stage, self:provider.stage}
   s3Sync:
     - bucketName: eregs-${self:custom.stage}-site-assets
@@ -32,10 +36,13 @@ package:
     - nginx/**
 
 plugins:
-  - serverless-s3-sync
   - serverless-python-requirements
-
+  - serverless-localstack
+  - serverless-s3-sync
 resources:
+  Conditions:
+    IsNotLocal: !Not [!Equals ["local", "${self:custom.environment}"]]
+
   Resources:
     AssetsBucket:
       Type: AWS::S3::Bucket
@@ -105,6 +112,7 @@ resources:
         Bucket: !Ref AssetsBucket
     CloudFrontWebACL:
       Type: AWS::WAFv2::WebACL
+      Condition: IsNotLocal
       Properties:
         Name: eregs-${self:custom.stage}-cloudfront-ACL
         DefaultAction: 
@@ -138,7 +146,7 @@ resources:
       Properties:
         DistributionConfig:
           Comment: CloudFront Distro for the static website hosted in S3
-          WebACLId: !GetAtt CloudFrontWebACL.Arn
+          #WebACLId: !GetAtt CloudFrontWebACL.Arn
           Aliases:
             - Ref: AWS::NoValue
           Origins:

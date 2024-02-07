@@ -1,0 +1,112 @@
+#!/bin/bash
+
+echo ""
+
+create_var()
+{
+    echo -n Creating parameter $1...
+    VALUE="$3"
+    if [ "$VALUE" = "" ]; then VALUE=" "; fi
+    awslocal ssm put-parameter \
+        --name "$1" \
+        --type $2 \
+        --value "$VALUE" \
+        --overwrite > /dev/null
+    if [ $? -eq 0 ]; then echo " done."; fi
+}
+
+# Prompt for username/password
+echo Please choose a local username and password.
+echo These credentials will be used throughout your local deploy, including for Django Admin and the database.
+echo If you lose them, you can retrieve them through any of the local SSM username/password variables with \"awslocal\".
+read -p "Username: " LOCAL_USERNAME
+read -sp "Password: " LOCAL_PASSWORD
+echo ""
+if [ "$LOCAL_USERNAME" = "" ]; then echo "Username cannot be blank!"; exit 1; fi
+if [ "$LOCAL_PASSWORD" = "" ]; then echo "Password cannot be blank!"; exit 1; fi
+
+# Prompt for search.gov info
+read -p "Enter your search.gov key (or press enter to leave blank): " SEARCHGOV_KEY
+read -p "Enter your search.gov site name (or press enter to leave blank): " SEARCHGOV_SITE
+
+# Prompt for EUA configuration
+read -p "Configure EUA authentication? (y/n): " CONFIGURE_EUA
+if [ "$CONFIGURE_EUA" = "y" ]; then
+    read -p "Enter OIDC OP JWKS Endpoint: " OIDC_OP_JWKS_ENDPOINT
+    read -p "Enter OIDC RP Client ID: " OIDC_RP_CLIENT_ID
+    read -sp "Enter OIDC RP Client Secret: " OIDC_RP_CLIENT_SECRET
+    echo ""
+    read -p "Enter OIDC OP Authorization Endpoint: " OIDC_OP_AUTHORIZATION_ENDPOINT
+    read -p "Enter OIDC OP Token Endpoint: " OIDC_OP_TOKEN_ENDPOINT
+    read -p "Enter OIDC OP User Endpoint: " OIDC_OP_USER_ENDPOINT
+    read -p "Enter OIDC End EUA Session: " OIDC_END_EUA_SESSION
+    EUA_FEATUREFLAG="true"
+elif [ "$CONFIGURE_EUA" = "n" ]; then
+    echo EUA configuration skipped.
+    OIDC_OP_JWKS_ENDPOINT=""
+    OIDC_RP_CLIENT_ID=""
+    OIDC_RP_CLIENT_SECRET=""
+    OIDC_OP_AUTHORIZATION_ENDPOINT=""
+    OIDC_OP_TOKEN_ENDPOINT=""
+    OIDC_OP_USER_ENDPOINT=""
+    OIDC_END_EUA_SESSION=""
+    EUA_FEATUREFLAG="false"
+else
+    echo Invalid option \"$CONFIGURE_EUA\". Must be one of \"y\" or \"n\".
+    exit 1
+fi
+
+# Create SSM variables
+create_var "/eregulations/db/password" "SecureString" "$LOCAL_PASSWORD"
+create_var "/eregulations/db/host" "String" ""
+create_var "/eregulations/db/port" "String" "3306"
+create_var "/eregulations/http/user" "SecureString" "$LOCAL_USERNAME"
+create_var "/eregulations/http/password" "SecureString" "$LOCAL_PASSWORD"
+create_var "/eregulations/http/reader_user" "SecureString" "$LOCAL_USERNAME"
+create_var "/eregulations/http/reader_password" "SecureString" "$LOCAL_PASSWORD"
+create_var "/eregulations/django_settings_module" "String" "cmcs_regulations.settings.local"
+create_var "/eregulations/base_url" "String" ""
+create_var "/eregulations/survey_url" "String" "#"
+create_var "/eregulations/signup_url" "String" "#"
+create_var "/eregulations/searchgov/key" "String" "$SEARCHGOV_KEY"
+create_var "/eregulations/searchgov/site_name" "String" "$SEARCHGOV_SITE"
+create_var "/eregulations/oidc/jwks_endpoint" "String" "$OIDC_OP_JWKS_ENDPOINT"
+create_var "/eregulations/oidc/client_id" "SecureString" "$OIDC_RP_CLIENT_ID"
+create_var "/eregulations/oidc/client_secret" "SecureString" "$OIDC_RP_CLIENT_SECRET"
+create_var "/eregulations/oidc/authorization_endpoint" "String" "$OIDC_OP_AUTHORIZATION_ENDPOINT"
+create_var "/eregulations/oidc/token_endpoint" "String" "$OIDC_OP_TOKEN_ENDPOINT"
+create_var "/eregulations/oidc/user_endpoint" "String" "$OIDC_OP_USER_ENDPOINT"
+create_var "/eregulations/oidc/end_eua_session" "String" "$OIDC_END_EUA_SESSION"
+create_var "/eregulations/eua/featureflag" "String" "$EUA_FEATUREFLAG"
+create_var "/eregulations/basic_search_filter" "String" ".05"
+create_var "/eregulations/quoted_search_filter" "String" ".05"
+create_var "/eregulations/http/google_analytics" "String" "NONE"
+create_var "/eregulations/aws/securitygroupid" "String" ""
+
+# Create IAM policy
+echo Creating developer boundary policy...
+awslocal iam create-policy --policy-name "/cms-cloud-admin/developer-boundary-policy" --policy-document file://localstack/boundary_policy.json &> /dev/null
+create_var "/account_vars/iam/path" "SecureString" "/delegatedadmin/developer/"
+create_var "/account_vars/iam/permissions_boundary_policy" "SecureString" "/cms-cloud-admin/developer-boundary-policy"
+
+# Configure VPC
+echo Configuring the VPC...
+VPC_ID=$(awslocal ec2 create-vpc --cidr-block 10.148.94.0/23 --query Vpc.VpcId --output text)
+echo Created VPC $VPC_ID.
+PRIVATE_SUBNET_A=$(awslocal ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.148.94.0/25 --availability-zone us-east-1a --query Subnet.SubnetId --output text)
+echo Created private subnet $PRIVATE_SUBNET_A.
+PRIVATE_SUBNET_B=$(awslocal ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.148.94.128/25 --availability-zone us-east-1b --query Subnet.SubnetId --output text)
+echo Created private subnet $PRIVATE_SUBNET_B.
+PUBLIC_SUBNET_A=$(awslocal ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.148.95.128/27 --availability-zone us-east-1a --query Subnet.SubnetId --output text)
+echo Created public subnet $PUBLIC_SUBNET_A.
+PUBLIC_SUBNET_B=$(awslocal ec2 create-subnet --vpc-id $VPC_ID --cidr-block 10.148.95.160/27 --availability-zone us-east-1b --query Subnet.SubnetId --output text)
+echo Created public subnet $PUBLIC_SUBNET_B.
+
+# Create VPC variables
+create_var "/account_vars/vpc/id" "SecureString" "$VPC_ID"
+create_var "/account_vars/vpc/subnets/private/a/id" "SecureString" "$PRIVATE_SUBNET_A"
+create_var "/account_vars/vpc/subnets/private/b/id" "SecureString" "$PRIVATE_SUBNET_B"
+create_var "/account_vars/vpc/subnets/public/a/id" "SecureString" "$PUBLIC_SUBNET_A"
+create_var "/account_vars/vpc/subnets/public/b/id" "SecureString" "$PUBLIC_SUBNET_B"
+
+echo Local SSM variables have been created.
