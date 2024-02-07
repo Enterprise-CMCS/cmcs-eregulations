@@ -68,7 +68,12 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                                 >{{ subject.internal_content ?? 0 }}</span
                             >
                             internal </span
-                        >resources
+                        >resource<span
+                            v-if="
+                                isAuthenticated || subject.external_content != 1
+                            "
+                            >s</span
+                        >
                     </div>
                 </li>
             </ul>
