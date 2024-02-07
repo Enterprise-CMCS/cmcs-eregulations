@@ -81,6 +81,8 @@ const FilterTypesDict = {
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
 provide("FilterTypesDict", FilterTypesDict);
+provide("isAuthenticated", props.isAuthenticated);
+
 
 /**
  * @param {Object} queryParams - $route.query
