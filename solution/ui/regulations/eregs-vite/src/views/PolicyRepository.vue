@@ -158,7 +158,7 @@ const getDocList = async (requestParams = "") => {
     try {
         const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
-            cacheResponse: !props.isAuthenticated,
+            cacheResponse: false,
             requestParams,
         });
         policyDocList.value.results = contentList.results;
