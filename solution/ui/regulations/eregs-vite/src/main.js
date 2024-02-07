@@ -21,7 +21,7 @@ Vue.directive("clickaway", Clickaway);
 const router = vueRouter({ customUrl, host });
 
 router.beforeEach((to, from, next) => {
-    if (!isAuthenticated && to.query?.type) {
+    if (!isAuthenticated && to.name === "policy-repository" && to.query?.type) {
         const { type, ...query } = to.query;
         next({ ...to, query });
     } else {
