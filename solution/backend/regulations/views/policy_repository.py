@@ -3,7 +3,7 @@ from django.views.generic.base import TemplateView
 from regulations.views.mixins import IsAuthenticatedMixin
 
 
-class PolicyRepositoryView(IsAuthenticatedMixin, TemplateView):
+class PolicyRepositoryView(TemplateView):
 
     template_name = 'regulations/policy_repository.html'
 
