@@ -13,9 +13,21 @@ const mountEl = document.querySelector("#vite-app");
 Vue.config.devtools = true;
 const { customUrl, host } = mountEl.dataset;
 
+let { isAuthenticated } = mountEl.dataset;
+isAuthenticated = isAuthenticated === "True";
+
 Vue.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
+
+router.beforeEach((to, from, next) => {
+    if (!isAuthenticated && to.query?.type) {
+        const { type, ...query } = to.query;
+        next({ ...to, query });
+    } else {
+        next();
+    }
+});
 
 // Silence duplicate navigation errors
 // see:
