@@ -84,11 +84,14 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                                                      .select_related("repositorysubcategory__parent")
 
         # If they are not authenticated and the resource type is internal, raise an error
-        if not request.user.is_authenticated and resource_type == 'internal':
-            raise NotAuthenticated()
+        if not request.user.is_authenticated:
+            if resource_type == 'internal':
+                raise NotAuthenticated()
+            else:
+                query = query.filter(resource_type='external')
         elif resource_type == 'internal':
             query = query.filter(resource_type='internal')
-        else:
+        elif resource_type == 'external':
             query = query.filter(resource_type='external')
 
         context = self.get_serializer_context()
