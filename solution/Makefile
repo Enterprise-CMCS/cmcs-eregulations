@@ -56,3 +56,37 @@ local.deploy: local.check
 local.data: ## Seed the database with initial values.
 local.data: local.check
 	@echo Data seeded.
+
+.PHONY: static-assets
+static-assets: ## Build the static assets for eRegs.
+static-assets: local.check ui/regulations/node_modules static-assets/regulations/css/main.css ui/regulations/eregs-component-lib/node_modules static-assets/regulations/js/eregs-main.iife.js ui/regulations/eregs-vite/node_modules build-spa
+
+ui/regulations/node_modules: ui/regulations/package.json
+	cd ui/regulations; \
+		npm install;
+
+ui/regulations/eregs-vite/node_modules: ui/regulations/eregs-vite/package.json
+	cd ui/regulations/eregs-vite; \
+		npm install;
+
+ui/regulations/eregs-component-lib/node_modules: ui/regulations/eregs-component-lib/package.json
+	cd ui/regulations/eregs-component-lib; \
+		npm install;
+
+static-assets/regulations/css/main.css: ui/regulations/css/**/*.scss
+	cd ui/regulations; \
+		npm run css; \
+		mkdir ../../static-assets/regulations/css/admin/; \
+		cp css/admin/*.css ../../static-assets/regulations/css/admin/;
+
+static-assets/regulations/js/eregs-main.iife.js: ui/regulations/eregs-component-lib/src/main.js ui/regulations/eregs-component-lib/src/components/*.vue
+	cd ui/regulations/eregs-component-lib; \
+		npm run build;
+
+.PHONY: build-spa
+build-spa: ## Build vite assets
+build-spa:
+	cd ui/regulations/eregs-vite; \
+		npm run build;
+
+
