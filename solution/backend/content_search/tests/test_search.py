@@ -70,14 +70,16 @@ class SearchTest(TestCase):
         index_group(UploadedFile.objects.all())
 
     def test_no_query_not_logged_in(self):
+        response = self.client.get("/v3/content-search/?resource-type=internal")
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         response = self.client.get("/v3/content-search/?resource-type=external")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 6)
-        response = self.client.get("/v3/content-search/?resource-type=internal")
+        response = self.client.get("/v3/content-search/?resource-type=all")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 6)
-        response = self.client.get("/v3/content-search/?resource-type=all")
+        response = self.client.get("/v3/content-search/")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 6)
 
