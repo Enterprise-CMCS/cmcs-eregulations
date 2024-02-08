@@ -62,7 +62,7 @@ describe("Policy Repository", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
         )
             .should("be.visible")
-            .and("have.text", "0 public and 1 internal resources ");
+            .and("have.text", "0 public and 1 internal resources");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
