@@ -1,0 +1,26 @@
+diff --git a/node_modules/serverless-s3-sync/index.js b/node_modules/serverless-s3-sync/index.js
+index 3e36652..bf6c062 100644
+--- a/node_modules/serverless-s3-sync/index.js
++++ b/node_modules/serverless-s3-sync/index.js
+@@ -69,6 +69,10 @@ class ServerlessS3Sync {
+       return this.serverless.service.custom.s3Sync.hasOwnProperty('endpoint') ? this.serverless.service.custom.s3Sync.endpoint : null;
+   }
+ 
++  isLocalStack() {
++    return String(this.serverless.service.custom.s3Sync.localstack).toUpperCase() === 'TRUE';
++  }
++
+   client() {
+     const provider = this.serverless.getProvider('aws');
+ 	let awsCredentials, region;
+@@ -92,6 +96,10 @@ class ServerlessS3Sync {
+     region: region,
+     credentials: awsCredentials
+   };
++  if(this.isLocalStack()) {
++    // Force signatureVersion to 'v2' to fix "Error: Non-file stream objects are not supported with SigV4"
++    s3Options.signatureVersion = "v2";
++  }
+   if(this.getEndpoint() && this.isOffline()) {
+     s3Options.endpoint = new provider.sdk.Endpoint(this.serverless.service.custom.s3Sync.endpoint);
+     s3Options.s3ForcePathStyle = true;

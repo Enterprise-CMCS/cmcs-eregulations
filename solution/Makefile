@@ -88,5 +88,3 @@ build-spa: ## Build vite assets
 build-spa:
 	cd ui/regulations/eregs-vite; \
 		npm run build;
-
-

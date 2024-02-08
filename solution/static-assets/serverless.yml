@@ -14,9 +14,11 @@ custom:
       - local
   stage: ${opt:stage, self:provider.stage}
   s3Sync:
-    - bucketName: eregs-${self:custom.stage}-site-assets
-      localDir: ./regulations
-      deleteRemoved: false
+    localstack: true
+    buckets:
+      - bucketName: eregs-${self:custom.stage}-site-assets
+        localDir: ./regulations
+        deleteRemoved: false
   pythonRequirements:
     layer:
       name: python-django
@@ -39,6 +41,7 @@ plugins:
   - serverless-python-requirements
   - serverless-localstack
   - serverless-s3-sync
+
 resources:
   Conditions:
     IsNotLocal: !Not [!Equals ["local", "${self:custom.environment}"]]
@@ -173,9 +176,10 @@ resources:
             TargetOriginId: S3Origin
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
-            AcmCertificateArn: ${ssm:/eregulations/acm-cert-arn}
-            SslSupportMethod: sni-only
-            MinimumProtocolVersion: TLSv1.2_2021
+            CloudFrontDefaultCertificate: true
+            # AcmCertificateArn: ${ssm:/eregulations/acm-cert-arn}
+            # SslSupportMethod: sni-only
+            # MinimumProtocolVersion: TLSv1.2_2021
           DefaultRootObject: index.html
 
   Outputs:

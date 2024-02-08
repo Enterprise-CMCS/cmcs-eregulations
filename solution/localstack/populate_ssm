@@ -109,4 +109,9 @@ create_var "/account_vars/vpc/subnets/private/b/id" "SecureString" "$PRIVATE_SUB
 create_var "/account_vars/vpc/subnets/public/a/id" "SecureString" "$PUBLIC_SUBNET_A"
 create_var "/account_vars/vpc/subnets/public/b/id" "SecureString" "$PUBLIC_SUBNET_B"
 
+# Create SSL certificate
+echo Creating SSL certificate for CloudFront...
+CERTIFICATE_ARN=$(awslocal acm request-certificate --domain-name example.com --validation-method DNS --idempotency-token 1234 --output text)
+create_var "/eregulations/acm-cert-arn" "String" "$CERTIFICATE_ARN"
+
 echo Local SSM variables have been created.
