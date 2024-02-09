@@ -52,6 +52,9 @@ describe("Policy Repository", () => {
     it("should show only public items when logged out", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository/");
+
+        cy.injectAxe();
+
         cy.get("#loginIndicator").should("not.be.visible");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
@@ -63,6 +66,9 @@ describe("Policy Repository", () => {
             .find("input")
             .should("not.be.checked")
             .and("be.disabled");
+
+        cy.checkAccessibility();
+
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
         ).scrollIntoView();
