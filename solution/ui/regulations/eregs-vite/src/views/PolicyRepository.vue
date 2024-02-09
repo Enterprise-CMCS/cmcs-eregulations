@@ -41,9 +41,21 @@ const props = defineProps({
         type: String,
         default: "/v3/",
     },
+    customLoginUrl: {
+        type: String,
+        default: "/login",
+    },
+    hasEditableJobCode: {
+        type: Boolean,
+        default: false,
+    },
     homeUrl: {
         type: String,
         default: "/",
+    },
+    isAuthenticated: {
+        type: Boolean,
+        default: false,
     },
     resourcesUrl: {
         type: String,
@@ -56,14 +68,6 @@ const props = defineProps({
     statutesUrl: {
         type: String,
         default: "/statutes/",
-    },
-    isAuthenticated: {
-        type: Boolean,
-        default: false,
-    },
-    hasEditableJobCode: {
-        type: Boolean,
-        default: false,
     },
 });
 
@@ -80,9 +84,10 @@ const FilterTypesDict = {
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
+provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
-
 
 /**
  * @param {Object} queryParams - $route.query

@@ -13,6 +13,10 @@ export default {
             type: String,
             default: "/about/",
         },
+        customLoginUrl: {
+            type: String,
+            default: "",
+        },
         customUrl: {
             type: String,
             default: "",
@@ -54,6 +58,7 @@ export default {
         <router-view
             :api-url="apiUrl"
             :about-url="aboutUrl"
+            :custom-login-url="customLoginUrl"
             :custom-url="customUrl"
             :home-url="homeUrl"
             :resources-url="resourcesUrl"

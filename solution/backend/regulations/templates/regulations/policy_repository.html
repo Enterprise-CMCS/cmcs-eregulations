@@ -18,11 +18,11 @@
 {% endblock %}
 
 {% block body %}
-
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
+    data-custom-login-url="{% url 'custom_login' %}"
     data-custom-url="{{ CUSTOM_URL }}"
     data-home-url="{% url 'homepage' %}"
     data-resources-url="{% url 'resources' %}"
