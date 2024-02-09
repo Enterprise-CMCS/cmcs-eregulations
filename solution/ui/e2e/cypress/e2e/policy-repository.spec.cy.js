@@ -581,7 +581,7 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/resources");
     });
 
-    it("returns you to the custom eua login page when you log out", () => {
+    it("returns you to the policy repo logged out view when you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -590,7 +590,18 @@ describe("Policy Repository", () => {
         });
         cy.visit("/policy-repository");
         cy.get("#logout").click();
-        cy.url().should("include", "/login");
+        cy.url().should("include", "/policy-repository");
+        cy.get("#loginIndicator").should("not.be.visible");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .should("be.checked")
+            .and("be.disabled");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("not.be.checked")
+            .and("be.disabled");
     });
 });
 
