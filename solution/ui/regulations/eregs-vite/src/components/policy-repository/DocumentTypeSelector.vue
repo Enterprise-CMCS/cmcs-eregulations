@@ -15,7 +15,7 @@ const { type: typeParams } = $route.query;
 
 const isAuthenticated = inject("isAuthenticated");
 
-// v-model with a ref to control if the checkbox displays as checked or not
+// v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
 
 if (!isAuthenticated) {
