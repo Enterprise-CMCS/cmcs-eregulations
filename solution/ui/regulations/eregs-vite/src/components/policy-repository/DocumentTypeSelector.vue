@@ -16,16 +16,21 @@ const { type: typeParams } = $route.query;
 const isAuthenticated = inject("isAuthenticated");
 
 // v-model with a ref to control if the checkbox displays as checked or not
-// refactor this ugly monster into let boxesArr and if/else blocks
-const boxesArr = !isAuthenticated
-    ? ["external"]
-    : _isUndefined(typeParams) ||
-      typeParams === "all" ||
-      typeParams.includes("all")
-    ? [...DOCUMENT_TYPES]
-    : _isArray(typeParams)
-    ? typeParams
-    : [typeParams];
+let boxesArr;
+
+if (!isAuthenticated) {
+    boxesArr = ["external"];
+} else if (
+    _isUndefined(typeParams) ||
+    typeParams === "all" ||
+    typeParams.includes("all")
+) {
+    boxesArr = [...DOCUMENT_TYPES];
+} else if (_isArray(typeParams)) {
+    boxesArr = typeParams;
+} else {
+    boxesArr = [typeParams];
+}
 
 const checkedBoxes = ref(boxesArr);
 
