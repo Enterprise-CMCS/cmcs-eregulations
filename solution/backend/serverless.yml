@@ -263,6 +263,10 @@ resources:
           search_path: '"$user",public'
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
+          pgaudit.log_level: "LOG"
+          pgaudit.log_parameter: 1
+          pgaudit.log_statement_once: 0
+
 
     RDSResource15:
       Type: AWS::RDS::DBCluster
