@@ -266,7 +266,7 @@ resources:
           pgaudit.log_level: "LOG"
           pgaudit.log_parameter: 1
           pgaudit.log_statement_once: 0
-
+          pgaudit.log_catalog: 1
 
     RDSResource15:
       Type: AWS::RDS::DBCluster
