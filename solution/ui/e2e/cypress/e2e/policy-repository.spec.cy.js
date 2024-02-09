@@ -88,7 +88,12 @@ describe("Policy Repository", () => {
             .should("exist")
             .and("have.text", "Managed Care");
         cy.url().should("include", "/policy-repository?subjects=63");
+    })
 
+    it("should strip document-type query parameter from URL when not logged in", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/policy-repository/?type=internal");
+        cy.url().should("not.include", "type");
     })
 
     it("should show public and internal items when logged in", () => {
