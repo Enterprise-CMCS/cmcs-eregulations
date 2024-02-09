@@ -9,12 +9,16 @@ provider:
 
 custom:
   environment: ${env:ENVIRONMENT}
+  isLocalStack:
+    local: true
+    experimental: false
+    deploy: false
   localstack:
     stages:
       - local
   stage: ${opt:stage, self:provider.stage}
   s3Sync:
-    localstack: true
+    localstack: ${self:custom.isLocalStack.${self:custom.environment}}
     buckets:
       - bucketName: eregs-${self:custom.stage}-site-assets
         localDir: ./regulations
@@ -176,10 +180,9 @@ resources:
             TargetOriginId: S3Origin
             ViewerProtocolPolicy: redirect-to-https
           ViewerCertificate:
-            CloudFrontDefaultCertificate: true
-            # AcmCertificateArn: ${ssm:/eregulations/acm-cert-arn}
-            # SslSupportMethod: sni-only
-            # MinimumProtocolVersion: TLSv1.2_2021
+            AcmCertificateArn: ${ssm:/eregulations/acm-cert-arn}
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
           DefaultRootObject: index.html
 
   Outputs:
