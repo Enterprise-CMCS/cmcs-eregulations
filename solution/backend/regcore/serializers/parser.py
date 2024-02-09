@@ -79,21 +79,21 @@ class PartUploadSerializer(serializers.Serializer):
             from resources.models import Section, Subpart  # can throw ImportError, this is fine
 
             for section in validated_data.get("sections", []):
-                new_orphan_section, created = Section.objects.get_or_create(
+                Section.objects.get_or_create(
                     title=section["title"],
                     part=section["part"],
                     section_id=section["section"],
                 )
 
             for subpart in validated_data.get("subparts", []):
-                new_subpart, created = Subpart.objects.get_or_create(
+                new_subpart, _ = Subpart.objects.get_or_create(
                     title=subpart["title"],
                     part=subpart["part"],
                     subpart_id=subpart["subpart"],
                 )
 
                 for section in subpart["sections"]:
-                    new_section, created = Section.objects.update_or_create(
+                    Section.objects.update_or_create(
                         title=section["title"],
                         part=section["part"],
                         section_id=section["section"],

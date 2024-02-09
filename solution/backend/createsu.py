@@ -11,8 +11,9 @@ def handler(self, *args, **options):
 
     e_regs_admin_group, _ = Group.objects.get_or_create(name='EREGS_ADMIN')
     e_regs_reader_group, _ = Group.objects.get_or_create(name='EREGS_READER')
-    e_regs_editor_group, _ = Group.objects.get_or_create(name='EREGS_EDITOR')
-    e_regs_manager_group, _ = Group.objects.get_or_create(name='EREGS_MANAGER')
+    # TBD - will be used in the future
+    # e_regs_editor_group, _ = Group.objects.get_or_create(name='EREGS_EDITOR')
+    # e_regs_manager_group, _ = Group.objects.get_or_create(name='EREGS_MANAGER')
 
     if not User.objects.filter(username=os.environ.get('DJANGO_ADMIN_USERNAME')).exists():
         admin_user = User.objects.create_superuser(os.environ.get('DJANGO_ADMIN_USERNAME'),
