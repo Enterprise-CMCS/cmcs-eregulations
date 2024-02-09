@@ -586,7 +586,61 @@ describe("Policy Repository", () => {
         cy.url().should("include", "/resources");
     });
 
-    it("returns you to the policy repo logged out view when you log out", () => {
+    it("should have the correct labels for public and internal documents", () => {
+        cy.intercept("**/v3/content-search/?q=test**", {
+            fixture: "policy-docs.json",
+        }).as("queriedFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/policy-repository/",
+        });
+        cy.visit("/policy-repository/");
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+        cy.wait("@queriedFiles").then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+        });
+
+        // Public doc
+        cy.get(".category-labels")
+            .eq(0)
+            .find(".doc-type__label")
+            .should("include.text", " Public ")
+            .find("i")
+            .should("have.class", "fa-users");
+        cy.get(".category-labels")
+            .eq(0)
+            .find(".category-label")
+            .should("include.text", " Subregulatory Guidance ");
+        cy.get(".category-labels")
+            .eq(0)
+            .find(".subcategory-label")
+            .should("include.text", "CMCS Informational Bulletin (CIB)");
+
+        // Internal doc
+        cy.get(".category-labels")
+            .eq(1)
+            .find(".doc-type__label")
+            .should("include.text", " Internal ")
+            .find("i")
+            .should("have.class", "fa-key");
+        cy.get(".category-labels")
+            .eq(1)
+            .find(".category-label")
+            .should("include.text", "TestCat");
+        cy.get(".category-labels")
+            .eq(1)
+            .find(".subcategory-label")
+            .should("include.text", "TestSubCat");
+    });
+
+    it("returns you to the custom eua login page when you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -656,7 +710,7 @@ describe("Policy Repository Search", () => {
         });
     });
 
-    it("should have the correct public/internal label", () => {
+    it("should have the correct labels for public and internal documents", () => {
         cy.intercept("**/v3/content-search/?q=test**", {
             fixture: "policy-docs.json",
         }).as("queriedFiles");
@@ -676,15 +730,37 @@ describe("Policy Repository Search", () => {
         cy.wait("@queriedFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
-        cy.get(".doc-type__label")
+
+        // Public doc
+        cy.get(".category-labels")
             .eq(0)
+            .find(".doc-type__label")
             .should("include.text", " Public ")
             .find("i")
             .should("have.class", "fa-users");
-        cy.get(".doc-type__label")
+        cy.get(".category-labels")
+            .eq(0)
+            .find(".category-label")
+            .should("include.text", " Subregulatory Guidance ");
+        cy.get(".category-labels")
+            .eq(0)
+            .find(".subcategory-label")
+            .should("include.text", "CMCS Informational Bulletin (CIB)");
+
+        // Internal doc
+        cy.get(".category-labels")
             .eq(1)
+            .find(".doc-type__label")
             .should("include.text", " Internal ")
             .find("i")
             .should("have.class", "fa-key");
+        cy.get(".category-labels")
+            .eq(1)
+            .find(".category-label")
+            .should("include.text", "TestCat");
+        cy.get(".category-labels")
+            .eq(1)
+            .find(".subcategory-label")
+            .should("include.text", "TestSubCat");
     });
 });
