@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, inject, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router/composables";
 
 import _isArray from "lodash/isArray";
@@ -13,20 +13,33 @@ const $router = useRouter();
 
 const { type: typeParams } = $route.query;
 
-// v-model with a ref to control if the checkbox displays as checked or not
-const boxesArr =
+const isAuthenticated = inject("isAuthenticated");
+
+// v-model with a ref to control if the checkbox is displayed as checked or not
+let boxesArr;
+
+if (!isAuthenticated) {
+    boxesArr = ["external"];
+} else if (
     _isUndefined(typeParams) ||
     typeParams === "all" ||
     typeParams.includes("all")
-        ? [...DOCUMENT_TYPES]
-        : _isArray(typeParams)
-        ? typeParams
-        : [typeParams];
+) {
+    boxesArr = [...DOCUMENT_TYPES];
+} else if (_isArray(typeParams)) {
+    boxesArr = typeParams;
+} else {
+    boxesArr = [typeParams];
+}
 
 const checkedBoxes = ref(boxesArr);
 
 // onClick event to set the $route
 const toggleDocumentType = (clickedType) => {
+    if (!isAuthenticated) {
+        return;
+    }
+
     const { type: queryCloneType, ...queryClone } = $route.query;
     const refTypesBeforeClick = checkedBoxes.value;
 
@@ -49,7 +62,11 @@ const toggleDocumentType = (clickedType) => {
 
 watch(
     () => $route.query,
-    async (newQueryParams, oldQueryParams) => {
+    async (newQueryParams) => {
+        if (!isAuthenticated) {
+            return;
+        }
+
         const { type: newTypeParams } = newQueryParams;
 
         // "all" is only set when clicking a subject chip, so it is safe to use here
@@ -61,6 +78,10 @@ watch(
 
 // popstate to update the checkbox on back/forward click
 const onPopState = () => {
+    if (!isAuthenticated) {
+        return;
+    }
+
     const { type: queryTypes } = $route.query;
 
     if (_isUndefined(queryTypes) || queryTypes === "all") {
@@ -92,13 +113,16 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
                             name="checkbox_choices"
                             type="checkbox"
                             :value="type"
+                            :disabled="!isAuthenticated"
                             @click="toggleDocumentType(type)"
                         />
                         <label
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
-                            <span class="">{{ DOCUMENT_TYPES_MAP[type] }} Resources</span>
+                            <span class=""
+                                >{{ DOCUMENT_TYPES_MAP[type] }} Resources</span
+                            >
                         </label>
                     </div>
                 </div>

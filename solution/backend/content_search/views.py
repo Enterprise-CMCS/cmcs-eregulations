@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -82,11 +83,16 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
                                                      .select_related("repositorysubcategory__parent")
 
-        # If they are not authenticated they csan only get 'external' documents
-        if not request.user.is_authenticated or resource_type == 'external':
-            query = query.filter(resource_type='external')
+        # If they are not authenticated and the resource type is internal, raise an error
+        if not request.user.is_authenticated:
+            if resource_type == 'internal':
+                raise NotAuthenticated()
+            else:
+                query = query.filter(resource_type='external')
         elif resource_type == 'internal':
             query = query.filter(resource_type='internal')
+        elif resource_type == 'external':
+            query = query.filter(resource_type='external')
 
         context = self.get_serializer_context()
         context['content_id'] = True
