@@ -16,7 +16,7 @@ const routes = [
         component: CacheExplorer,
     },
     {
-        path: "/policy-repository",
+        path: "/subjects",
         name: "policy-repository",
         component: PolicyRepository,
     },
