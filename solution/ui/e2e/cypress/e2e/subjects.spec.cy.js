@@ -46,7 +46,7 @@ describe("Policy Repository", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository?subjects=2&q=test");
         cy.url().should("not.include", "/policy-repository");
-        cy.url().should("include", "/subjects/?subjects=2&q=test");
+        cy.url().should("include", "/subjects/?q=test&subjects=2");
     });
 
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
