@@ -20,7 +20,7 @@ OIDC_REDIRECT_URL = "/admin/oidc/callback/"
 OIDC_RP_SIGN_ALGO = 'RS256'
 LOGIN_REDIRECT_URL = '/login/'
 
-LOGOUT_REDIRECT_URL = 'http://localhost:8000/login'
+LOGOUT_REDIRECT_URL = '/login'
 EUA_FEATUREFLAG = os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true'
 OIDC_END_EUA_SESSION = os.environ.get("OIDC_END_EUA_SESSION", None)
 OIDC_OP_LOGOUT_URL_METHOD = 'regulations.logout.eua_logout'
