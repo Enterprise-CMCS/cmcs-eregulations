@@ -22,7 +22,7 @@ import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 
 import Banner from "@/components/Banner.vue";
-import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
+import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 const props = defineProps({

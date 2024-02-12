@@ -55,7 +55,7 @@ const toggleDocumentType = (clickedType) => {
     }
 
     $router.push({
-        name: "policy-repository",
+        name: "subjects",
         query: queryClone,
     });
 };

@@ -97,7 +97,7 @@ const subjectClick = (event) => {
     if (subjectsArray.includes(subjectToAdd)) return;
 
     $router.push({
-        name: "policy-repository",
+        name: "subjects",
         query: {
             ...$route.query,
             subjects: [subjectToAdd],

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import CacheExplorer from "../views/CacheExplorer.vue";
-import PolicyRepository from "../views/PolicyRepository.vue";
+import Subjects from "../views/Subjects.vue";
 import PolicyRepositorySearch from "../views/PolicyRepositorySearch.vue";
 import Resources from "../views/Resources.vue";
 import Search from "../views/Search.vue";
@@ -17,8 +17,8 @@ const routes = [
     },
     {
         path: "/subjects",
-        name: "policy-repository",
-        component: PolicyRepository,
+        name: "subjects",
+        component: Subjects,
     },
     {
         path: "/policy-repository/search",
