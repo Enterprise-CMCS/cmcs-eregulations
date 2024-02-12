@@ -24,7 +24,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.user.groups.add(self.admin_group)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is True
         self.assertTrue(response.context['has_editable_job_code'])
@@ -35,7 +35,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.user.groups.add(self.manager_group)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
         self.assertTrue(response.context['has_editable_job_code'])
@@ -47,7 +47,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.user.groups.add(self.reader_group)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
         self.assertTrue(response.context['has_editable_job_code'])
@@ -57,7 +57,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.client.force_login(self.user)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
         self.assertFalse(response.context['has_editable_job_code'])
@@ -70,7 +70,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.client.force_login(self.user)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
         self.assertFalse(response.context['has_editable_job_code'])
@@ -84,7 +84,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.client.force_login(self.user)
 
         # Access the PolicyRepositoryView
-        response = self.client.get(reverse('policy-repository'))
+        response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
         self.assertFalse(response.context['has_editable_job_code'])
