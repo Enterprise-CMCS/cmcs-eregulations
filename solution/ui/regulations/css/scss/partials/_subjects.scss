@@ -23,8 +23,7 @@
     }
 }
 
-#subjectsApp.repository-view,
-#policyRepositorySearchApp.repository-search-view {
+#subjectsApp.repository-view {
     margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
@@ -405,13 +404,5 @@
                 }
             }
         }
-    }
-}
-
-#policyRepositorySearchApp.repository-search-view {
-    .results__container {
-        margin-top: 1rem;
-        width: 100%;
-        box-sizing: border-box;
     }
 }
