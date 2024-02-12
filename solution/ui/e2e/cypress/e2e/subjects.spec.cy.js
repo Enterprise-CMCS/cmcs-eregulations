@@ -42,6 +42,13 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
 describe("Policy Repository", () => {
     beforeEach(_beforeEach);
 
+    it("redirects /policy-repository to /subjects", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/policy-repository?subjects=2&q=test");
+        cy.url().should("not.include", "/policy-repository");
+        cy.url().should("include", "/subjects/?subjects=2&q=test");
+    });
+
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects/");
