@@ -39,7 +39,7 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
     });
 });
 
-describe("Policy Repository", () => {
+describe("Browse by Subjects", () => {
     beforeEach(_beforeEach);
 
     it("redirects /policy-repository to /subjects", () => {
