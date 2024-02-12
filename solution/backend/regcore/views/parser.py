@@ -66,7 +66,7 @@ class PartUploadViewSet(viewsets.ModelViewSet):
             "depth_stack": [],
             "depth": -1,
         }
-        part, created = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
+        part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
         data["id"] = part.pk
         sc = self.get_serializer(part, data=data)
         if sc.is_valid(raise_exception=True):
