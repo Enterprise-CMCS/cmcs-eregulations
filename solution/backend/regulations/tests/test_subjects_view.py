@@ -6,7 +6,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 
-class PolicyRepositoryViewTest(TestCase):
+class SubjectsViewTest(TestCase):
 
     def setUp(self):
         # Create a test user and assign it to a group
@@ -23,7 +23,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.client.force_login(self.user)
         self.user.groups.add(self.admin_group)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is True
@@ -34,7 +34,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.client.force_login(self.user)
         self.user.groups.add(self.manager_group)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
@@ -46,7 +46,7 @@ class PolicyRepositoryViewTest(TestCase):
         self.user.groups.add(self.manager_group)
         self.user.groups.add(self.reader_group)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
@@ -56,7 +56,7 @@ class PolicyRepositoryViewTest(TestCase):
         # Log in the user
         self.client.force_login(self.user)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
@@ -69,7 +69,7 @@ class PolicyRepositoryViewTest(TestCase):
         # Log in the user
         self.client.force_login(self.user)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
@@ -83,7 +83,7 @@ class PolicyRepositoryViewTest(TestCase):
         # Log in the user
         self.client.force_login(self.user)
 
-        # Access the PolicyRepositoryView
+        # Access the SubjectsView
         response = self.client.get(reverse('subjects'))
 
         # Check if has_editable_job_code is False
