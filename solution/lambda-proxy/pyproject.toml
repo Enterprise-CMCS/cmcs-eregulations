@@ -1,4 +1,5 @@
 [tool.ruff]
+[lint]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F", "G", "I", "S", "W", "ASYNC",
           "E111", "E112", "E113", "E114", "E115", "E116", "E117", "E201", "E202", "E203", "E211", "E222", "E222", "E223",

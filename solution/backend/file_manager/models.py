@@ -81,7 +81,7 @@ class UploadedFile(models.Model):
          editable=False)
 
     def extension(self):
-        name, extension = os.path.splitext(self.file_name)
+        _, extension = os.path.splitext(self.file_name)
         return extension
 
     def get_key(self):
