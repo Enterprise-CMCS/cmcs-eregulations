@@ -11,19 +11,21 @@ const $route = useRoute();
 const loginUrl = ref(customLoginUrl);
 
 const setLoginUrl = () => {
+    const redirectUrl = `${customLoginUrl}?next=${homeUrl}subjects/`;
+
     if (!$route.fullPath.includes("?")) {
-        loginUrl.value = customLoginUrl;
+        loginUrl.value = redirectUrl;
         return;
     }
 
     const pathQuery = $route.fullPath.split("?")[1];
 
     if (pathQuery.length == 0) {
-        loginUrl.value = customLoginUrl;
+        loginUrl.value = redirectUrl;
         return;
     }
 
-    loginUrl.value = `${customLoginUrl}?next=${homeUrl}subjects/?${pathQuery}`;
+    loginUrl.value = `${redirectUrl}?${pathQuery}`;
 };
 
 watch(
