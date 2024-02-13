@@ -33,7 +33,7 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                 >
                     <router-link
                         :to="{
-                            name: 'policy-repository',
+                            name: 'subjects',
                             query: { subjects: [subject.id.toString()] },
                         }"
                     >

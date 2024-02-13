@@ -9,7 +9,6 @@ from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.login import LoginView
 from regulations.views.policy_repository import PolicyRepositoryView
-from regulations.views.policy_repository_search import PolicyRepositorySearchView
 from regulations.views.reader import (
     PartReaderView,
     SectionReaderView,
@@ -21,6 +20,7 @@ from regulations.views.resources import ResourcesView
 from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
+from regulations.views.subjects import SubjectsView
 from regulations.views.supplemental_content import SupplementalContentView
 
 register_converter(converters.NumericConverter, 'numeric')
@@ -51,8 +51,8 @@ urlpatterns = [
     path('resources/', ResourcesView.as_view(), name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
-    path('policy-repository/', PolicyRepositoryView.as_view(), name='policy-repository'),
-    path('policy-repository/search/', PolicyRepositorySearchView.as_view(), name='policy-repository-search'),
+    path('policy-repository/', PolicyRepositoryView, name='policy-repository'),
+    path('subjects/', SubjectsView.as_view(), name='subjects'),
     path("v3/", include([
         path("statutes", StatuteLinkConverterViewSet.as_view({
             "get": "list",

@@ -29,7 +29,7 @@ const removeClick = (event) => {
     delete routeClone[type];
 
     $router.push({
-        name: "policy-repository",
+        name: "subjects",
         query: {
             ...routeClone,
             ...paramsToPush,

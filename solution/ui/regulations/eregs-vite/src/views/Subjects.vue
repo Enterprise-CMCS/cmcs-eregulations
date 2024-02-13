@@ -20,17 +20,17 @@ import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 
-import DocumentTypeSelector from "@/components/policy-repository/DocumentTypeSelector.vue";
+import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
-import PolicyResults from "@/components/policy-repository/PolicyResults.vue";
-import PolicySelections from "@/components/policy-repository/PolicySelections.vue";
-import PolicySidebar from "@/components/policy-repository/PolicySidebar.vue";
+import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import PolicySelections from "@/components/subjects/PolicySelections.vue";
+import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import SelectedSubjectHeading from "@/components/policy-repository/SelectedSubjectHeading.vue";
-import SubjectSelector from "@/components/policy-repository/SubjectSelector.vue";
-import SubjectTOC from "@/components/policy-repository/SubjectTOC.vue";
+import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
+import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
+import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -113,7 +113,7 @@ const clearSearchQuery = () => {
 
 const executeSearch = (payload) => {
     $router.push({
-        name: "policy-repository",
+        name: "subjects",
         query: {
             ...$route.query,
             q: payload.query,
@@ -124,7 +124,7 @@ const executeSearch = (payload) => {
 const clearSearchInput = () => {
     const { q, page, ...rest } = $route.query;
     $router.push({
-        name: "policy-repository",
+        name: "subjects",
         query: {
             ...rest,
         },
@@ -336,7 +336,7 @@ getDocSubjects();
 </script>
 
 <template>
-    <body class="ds-base policy-repository-page">
+    <body class="ds-base subjects-page">
         <BlockingModal>
             <IFrameContainer
                 src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
@@ -361,7 +361,7 @@ getDocSubjects();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="policyRepositoryApp" class="repository-view ds-l-container">
+        <div id="subjectsApp" class="repository-view ds-l-container">
             <div class="ds-l-row">
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
@@ -378,7 +378,7 @@ getDocSubjects();
                             <SearchInput
                                 form-class="search-form"
                                 label="Search for a document"
-                                page="policy-repository"
+                                page="subjects"
                                 :search-query="searchQuery"
                                 @execute-search="executeSearch"
                                 @clear-form="clearSearchInput"

@@ -23,7 +23,7 @@ const setLoginUrl = () => {
         return;
     }
 
-    loginUrl.value = `${customLoginUrl}?next=${homeUrl}policy-repository/?${pathQuery}`;
+    loginUrl.value = `${customLoginUrl}?next=${homeUrl}subjects/?${pathQuery}`;
 };
 
 watch(

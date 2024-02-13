@@ -31,27 +31,34 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
         fixture: "policy-docs.json",
     }).as("subjectFiles");
     cy.viewport("macbook-15");
-    cy.eregsLogin({ username, password, landingPage: "/policy-repository/" });
-    cy.visit("/policy-repository/?q=mock");
+    cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+    cy.visit("/subjects/?q=mock");
     cy.injectAxe();
     cy.wait("@subjectFiles").then((interception) => {
         expect(interception.response.statusCode).to.eq(200);
     });
 });
 
-describe("Policy Repository", () => {
+describe("Find by Subjects", () => {
     beforeEach(_beforeEach);
 
-    it("shows the custom eua login screen when you visit /policy-repository/ and click 'sign in'", () => {
+    it("redirects /policy-repository to /subjects", () => {
         cy.viewport("macbook-15");
-        cy.visit("/policy-repository/");
+        cy.visit("/policy-repository?subjects=2&q=test");
+        cy.url().should("not.include", "/policy-repository");
+        cy.url().should("include", "/subjects/?q=test&subjects=2");
+    });
+
+    it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects/");
         cy.get(".div__login-sidebar a").click();
         cy.url().should("include", "/login");
     });
 
     it("should show only public items when logged out", () => {
         cy.viewport("macbook-15");
-        cy.visit("/policy-repository/");
+        cy.visit("/subjects/");
 
         cy.injectAxe();
 
@@ -83,16 +90,16 @@ describe("Policy Repository", () => {
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", " Managed Care ")
             .click({ force: true });
-        cy.url().should("include", "/policy-repository?subjects=63");
+        cy.url().should("include", "/subjects?subjects=63");
         cy.get(".subject__heading")
             .should("exist")
             .and("have.text", "Managed Care");
-        cy.url().should("include", "/policy-repository?subjects=63");
+        cy.url().should("include", "/subjects?subjects=63");
     })
 
     it("should strip document-type query parameter from URL when not logged in", () => {
         cy.viewport("macbook-15");
-        cy.visit("/policy-repository/?type=internal");
+        cy.visit("/subjects/?type=internal");
         cy.url().should("not.include", "type");
     })
 
@@ -101,10 +108,10 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
-        cy.url().should("include", "/policy-repository/");
+        cy.visit("/subjects");
+        cy.url().should("include", "/subjects/");
         cy.get("#loginIndicator").should("be.visible");
         cy.get(".subject__heading").should("not.exist");
         cy.get(
@@ -121,14 +128,14 @@ describe("Policy Repository", () => {
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", " Managed Care ")
             .click({ force: true });
-        cy.url().should("include", "/policy-repository?subjects=63");
+        cy.url().should("include", "/subjects?subjects=63");
         cy.get(".subject__heading")
             .should("exist")
             .and("have.text", "Managed Care");
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=2");
+        cy.url().should("include", "/subjects?subjects=2");
     });
 
     it("should display the appropriate results column header whether viewing keyword search results or viewing the items within a subject.", () => {
@@ -137,14 +144,14 @@ describe("Policy Repository", () => {
         }).as("subjectFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
             .should("have.text", " Access to Services ")
             .click({ force: true });
-        cy.url().should("include", "/policy-repository?subjects=3");
+        cy.url().should("include", "/subjects?subjects=3");
         cy.get(".subject__heading")
             .should("exist")
             .and("have.text", "Access to Services");
@@ -194,10 +201,10 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
-        cy.url().should("include", "/policy-repository/");
+        cy.visit("/subjects");
+        cy.url().should("include", "/subjects/");
         cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
         cy.wait("@files").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
@@ -209,16 +216,16 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
 
-        cy.visit("/policy-repository");
-        cy.url().should("include", "/policy-repository/");
+        cy.visit("/subjects");
+        cy.url().should("include", "/subjects/");
 
         cy.get(`button[data-testid=add-subject-1]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.url().should("include", "/subjects?subjects=1");
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(".subject__heading span")
             .eq(0)
@@ -232,7 +239,7 @@ describe("Policy Repository", () => {
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=2");
+        cy.url().should("include", "/subjects?subjects=2");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
         cy.get(".subject__heading span")
             .eq(0)
@@ -246,7 +253,7 @@ describe("Policy Repository", () => {
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=3");
+        cy.url().should("include", "/subjects?subjects=3");
         cy.get(`button[data-testid=remove-subject-3]`).should("exist");
         cy.get(".subject__heading span")
             .eq(0)
@@ -255,7 +262,7 @@ describe("Policy Repository", () => {
         cy.get(".subject__heading span").eq(1).should("not.exist");
 
         cy.go("back");
-        cy.url().should("include", "/policy-repository?subjects=2");
+        cy.url().should("include", "/subjects?subjects=2");
         cy.get(`button[data-testid=remove-subject-3]`).should("not.exist");
 
         cy.get("input#main-content")
@@ -264,13 +271,13 @@ describe("Policy Repository", () => {
         cy.get(".search-field .v-input__icon--append button").click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=2&q=test");
+        cy.url().should("include", "/subjects?subjects=2&q=test");
 
         cy.get(`button[data-testid=remove-subject-2]`).click({
             force: true,
         });
         cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-        cy.url().should("include", "/policy-repository?q=test");
+        cy.url().should("include", "/subjects?q=test");
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
@@ -334,10 +341,10 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
 
-        cy.visit("/policy-repository/");
+        cy.visit("/subjects/");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
@@ -350,13 +357,13 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .should("be.checked");
-        cy.url().should("include", "/policy-repository?type=internal");
+        cy.url().should("include", "/subjects?type=internal");
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
         cy.url().should(
             "include",
-            "/policy-repository?type=internal&subjects=3"
+            "/subjects?type=internal&subjects=3"
         );
         cy.get("input#main-content")
             .should("be.visible")
@@ -366,7 +373,7 @@ describe("Policy Repository", () => {
         });
         cy.url().should(
             "include",
-            "/policy-repository?type=internal&subjects=3&q=test%20search"
+            "/subjects?type=internal&subjects=3&q=test%20search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
@@ -394,7 +401,7 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .should("be.checked");
-        cy.url().should("include", "/policy-repository?subjects=4&type=all");
+        cy.url().should("include", "/subjects?subjects=4&type=all");
         cy.get("input#main-content").should("have.value", "");
     });
 
@@ -403,10 +410,10 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository/?subjects=77");
-        cy.url().should("include", "/policy-repository/?subjects=77");
+        cy.visit("/subjects/?subjects=77");
+        cy.url().should("include", "/subjects/?subjects=77");
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
         cy.get("button[data-testid=add-subject-63]").should(
             "not.have.class",
@@ -421,7 +428,7 @@ describe("Policy Repository", () => {
         );
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("not.exist");
-        cy.url().should("include", "/policy-repository?subjects=63");
+        cy.url().should("include", "/subjects?subjects=63");
     });
 
     it("should filter the subject list when a search term is entered into the subject filter", () => {
@@ -429,9 +436,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository/");
+        cy.visit("/subjects/");
 
         cy.injectAxe();
 
@@ -461,7 +468,7 @@ describe("Policy Repository", () => {
         cy.get(`button[data-testid=add-subject-1]`).click({
             force: true,
         });
-        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.url().should("include", "/subjects?subjects=1");
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
         cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
 
@@ -469,7 +476,7 @@ describe("Policy Repository", () => {
 
         cy.get("input#subjectReduce").type("{enter}", { force: true });
 
-        cy.url().should("include", "/policy-repository?subjects=1");
+        cy.url().should("include", "/subjects?subjects=1");
 
         cy.get(`button[data-testid=clear-subject-filter]`).click({
             force: true,
@@ -484,9 +491,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository/?q=test");
+        cy.visit("/subjects/?q=test");
         cy.wait("@qFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
@@ -499,9 +506,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.get(".doc-type__toggle-container h3").should(
             "have.text",
             "Documents to Show"
@@ -533,15 +540,15 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.get(".subj-toc__container").should("exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
             .uncheck({ force: true });
-        cy.url().should("include", "/policy-repository?type=internal");
+        cy.url().should("include", "/subjects?type=internal");
         cy.get(".subj-toc__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
@@ -556,7 +563,7 @@ describe("Policy Repository", () => {
             .eq(1)
             .find("input")
             .check({ force: true });
-        cy.url().should("include", "/policy-repository");
+        cy.url().should("include", "/subjects");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
@@ -565,9 +572,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.wait(2000);
         cy.get("@contentSearch.all").then((interception) => {
             expect(interception).to.have.length(0);
@@ -579,9 +586,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.clickHeaderLink({ page: "Resources", screen: "wide" });
         cy.url().should("include", "/resources");
     });
@@ -594,9 +601,9 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository/");
+        cy.visit("/subjects/");
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
@@ -645,11 +652,11 @@ describe("Policy Repository", () => {
         cy.eregsLogin({
             username,
             password,
-            landingPage: "/policy-repository/",
+            landingPage: "/subjects/",
         });
-        cy.visit("/policy-repository");
+        cy.visit("/subjects");
         cy.get("#logout").click();
-        cy.url().should("include", "/policy-repository");
+        cy.url().should("include", "/subjects");
         cy.get("#loginIndicator").should("not.be.visible");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
@@ -661,106 +668,5 @@ describe("Policy Repository", () => {
             .find("input")
             .should("not.be.checked")
             .and("be.disabled");
-    });
-});
-
-describe("Policy Repository Search", () => {
-    beforeEach(_beforeEach);
-
-    it("shows the custom eua login screen when you visit /policy-repository/search without logging in", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/policy-repository/search/");
-        cy.url().should("include", "/login");
-    });
-
-    it("show the policy repository search page when logged in", () => {
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/policy-repository/search",
-        });
-        cy.visit("/policy-repository/search");
-        cy.url().should("include", "/policy-repository/search/");
-        cy.get("#loginIndicator").should("be.visible");
-    });
-
-    it("should make a successful request to the content-search endpoint", () => {
-        cy.intercept("**/v3/content-search/?**").as("queriedFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/policy-repository/search",
-        });
-        cy.visit("/policy-repository/search");
-        cy.url().should("include", "/policy-repository/search/");
-        cy.get("input#main-content")
-            .should("be.visible")
-            .type("test search", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
-            force: true,
-        });
-        cy.url().should("include", "/policy-repository/search?q=test%20search");
-        cy.get(".search-form .form-helper-text .search-suggestion").should(
-            "not.exist"
-        );
-        cy.wait("@queriedFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
-    });
-
-    it("should have the correct labels for public and internal documents", () => {
-        cy.intercept("**/v3/content-search/?q=test**", {
-            fixture: "policy-docs.json",
-        }).as("queriedFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/policy-repository/search",
-        });
-        cy.visit("/policy-repository/search");
-        cy.get("input#main-content")
-            .should("be.visible")
-            .type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
-            force: true,
-        });
-        cy.wait("@queriedFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
-
-        // Public doc
-        cy.get(".category-labels")
-            .eq(0)
-            .find(".doc-type__label")
-            .should("include.text", " Public ")
-            .find("i")
-            .should("have.class", "fa-users");
-        cy.get(".category-labels")
-            .eq(0)
-            .find(".category-label")
-            .should("include.text", " Subregulatory Guidance ");
-        cy.get(".category-labels")
-            .eq(0)
-            .find(".subcategory-label")
-            .should("include.text", "CMCS Informational Bulletin (CIB)");
-
-        // Internal doc
-        cy.get(".category-labels")
-            .eq(1)
-            .find(".doc-type__label")
-            .should("include.text", " Internal ")
-            .find("i")
-            .should("have.class", "fa-key");
-        cy.get(".category-labels")
-            .eq(1)
-            .find(".category-label")
-            .should("include.text", "TestCat");
-        cy.get(".category-labels")
-            .eq(1)
-            .find(".subcategory-label")
-            .should("include.text", "TestSubCat");
     });
 });

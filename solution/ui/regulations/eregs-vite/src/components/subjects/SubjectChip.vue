@@ -21,7 +21,7 @@ const props = defineProps({
         :title="title"
         :data-testid="`add-subject-chip-${subjectId}`"
         :to="{
-            name: 'policy-repository',
+            name: 'subjects',
             query: {
                 subjects: [subjectId.toString()],
                 type: ['all'],
