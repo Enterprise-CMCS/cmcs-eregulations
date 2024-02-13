@@ -46,14 +46,21 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository?subjects=2&q=test");
         cy.url().should("not.include", "/policy-repository");
-        cy.url().should("include", "/subjects/?q=test&subjects=2");
+        cy.url().should("include", "/subjects/?subjects=2&q=test");
+        cy.get(".div__login-sidebar a")
+            .should("have.attr", "href")
+            .and("include", "/?next=/subjects/?subjects=2&q=test");
     });
 
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects/");
-        cy.get(".div__login-sidebar a").click();
-        cy.url().should("include", "/login");
+        cy.get(".div__login-sidebar a")
+            .should("have.attr", "href")
+            .and("include", "/?next=/subjects/");
+        cy.get(".div__login-sidebar a")
+            .click();
+        cy.url().should("include", "/?next=/subjects/");
     });
 
     it("should show only public items when logged out", () => {
@@ -95,13 +102,13 @@ describe("Find by Subjects", () => {
             .should("exist")
             .and("have.text", "Managed Care");
         cy.url().should("include", "/subjects?subjects=63");
-    })
+    });
 
     it("should strip document-type query parameter from URL when not logged in", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects/?type=internal");
         cy.url().should("not.include", "type");
-    })
+    });
 
     it("should show public and internal items when logged in", () => {
         cy.viewport("macbook-15");
@@ -361,10 +368,7 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
-        cy.url().should(
-            "include",
-            "/subjects?type=internal&subjects=3"
-        );
+        cy.url().should("include", "/subjects?type=internal&subjects=3");
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
