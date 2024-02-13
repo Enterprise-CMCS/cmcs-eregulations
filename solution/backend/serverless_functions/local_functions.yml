@@ -4,30 +4,30 @@ reg_site:
     WORKING_DIR: /var/task
   handler: wsgi_handler.handler
   layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+    - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}
   events:
     - http: ANY /
     - http: ANY {proxy+}
   timeout: 10
-reg_core_migrate:
-  handler: migrate.handler
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  timeout: 300
-create_su:
-  handler: createsu.handler
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  timeout: 300
-populate_content:
-  environment:
-    SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
-  handler: populate_content.handler
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  timeout: 300
-index_resources:
-  handler: index_resources.handler
-  timeout: 300
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+# reg_core_migrate:
+#   handler: migrate.handler
+#   layers:
+#     - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}
+#   timeout: 300
+# create_su:
+#   handler: createsu.handler
+#   layers:
+#     - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}
+#   timeout: 300
+# populate_content:
+#   environment:
+#     SUPPLEMENTAL_CONTENT_PATH: /var/task/guidance
+#   handler: populate_content.handler
+#   layers:
+#     - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}
+#   timeout: 300
+# index_resources:
+#   handler: index_resources.handler
+#   timeout: 300
+#   layers:
+#     - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}

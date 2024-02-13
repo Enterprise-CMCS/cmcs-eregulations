@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Action": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            },
+            "Resource": [
+                "arn:aws:s3:::file-repo-eregs-local/*"
+            ]
+        }
+    ]
+}

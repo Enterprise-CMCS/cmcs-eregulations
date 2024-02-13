@@ -8,19 +8,29 @@ provider:
     blockPublicAccess: true
 
 custom:
-  environment: ${env:ENVIRONMENT}
-  isLocalStack:
-    local: true
-    experimental: false
-    deploy: false
+  stage: ${opt:stage, self:provider.stage}
+  settings:
+    deploy: ${env:DEPLOY, ""} # Deploy number for experimental, typically PR number
+    stage_id: ${self:custom.stage}${self:custom.settings.deploy}
+    isLocalStack:
+      local: true
+      exp: false
+      dev: false
+      val: false
+      prod: false
+    webacl_id:
+      local: ""
+      exp: !GetAtt CloudFrontWebACL.Arn
+      dev: !GetAtt CloudFrontWebACL.Arn
+      val: !GetAtt CloudFrontWebACL.Arn
+      prod: !GetAtt CloudFrontWebACL.Arn
   localstack:
     stages:
       - local
-  stage: ${opt:stage, self:provider.stage}
   s3Sync:
-    localstack: ${self:custom.isLocalStack.${self:custom.environment}}
+    localstack: ${self:custom.settings.isLocalStack.${self:custom.stage}}
     buckets:
-      - bucketName: eregs-${self:custom.stage}-site-assets
+      - bucketName: eregs-${self:custom.settings.stage_id}-site-assets
         localDir: ./regulations
         deleteRemoved: false
   pythonRequirements:
@@ -31,11 +41,6 @@ custom:
         - python3.9
 
 package:
-  #patterns:
-  #  - '!node_modules/**'
-  #  - '!nginx/**'
-  #  - '!package.json'
-  #  - '!package-lock.json'
   individually: false
   exclude:
     - node_modules/**
@@ -48,13 +53,13 @@ plugins:
 
 resources:
   Conditions:
-    IsNotLocal: !Not [!Equals ["local", "${self:custom.environment}"]]
+    IsNotLocal: !Not [!Equals ["local", "${self:custom.stage}"]]
 
   Resources:
     AssetsBucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: eregs-${self:custom.stage}-site-assets
+        BucketName: eregs-${self:custom.settings.stage_id}-site-assets
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -117,18 +122,19 @@ resources:
                 Bool:
                   aws:SecureTransport: false
         Bucket: !Ref AssetsBucket
+
     CloudFrontWebACL:
       Type: AWS::WAFv2::WebACL
       Condition: IsNotLocal
       Properties:
-        Name: eregs-${self:custom.stage}-cloudfront-ACL
+        Name: eregs-${self:custom.settings.stage_id}-cloudfront-ACL
         DefaultAction: 
           Allow: {}
         Scope: CLOUDFRONT
         VisibilityConfig:
           SampledRequestsEnabled: true
           CloudWatchMetricsEnabled: true
-          MetricName: eregs-${self:custom.stage}-cloudfront-metric
+          MetricName: eregs-${self:custom.settings.stage_id}-cloudfront-metric
         Rules:
           - Name: eregs-allow-usa-plus-territories-rule-cf
             Priority: 0
@@ -148,12 +154,13 @@ resources:
               SampledRequestsEnabled: true
               CloudWatchMetricsEnabled: true
               MetricName: eregs-allow-usa-plus-territories-metric-CLOUDFRONT
+
     CloudFrontDistribution:
       Type: AWS::CloudFront::Distribution
       Properties:
         DistributionConfig:
           Comment: CloudFront Distro for the static website hosted in S3
-          #WebACLId: !GetAtt CloudFrontWebACL.Arn
+          WebACLId: ${self:custom.settings.webacl_id.${self:custom.stage}}
           Aliases:
             - Ref: AWS::NoValue
           Origins:

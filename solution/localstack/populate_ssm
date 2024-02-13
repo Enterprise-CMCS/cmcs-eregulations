@@ -30,7 +30,7 @@ read -p "Enter your search.gov key (or press enter to leave blank): " SEARCHGOV_
 read -p "Enter your search.gov site name (or press enter to leave blank): " SEARCHGOV_SITE
 
 # Prompt for EUA configuration
-read -p "Configure EUA authentication? (y/n): " CONFIGURE_EUA
+read -p "Configure EUA authentication? (y/n, default no): " CONFIGURE_EUA
 if [ "$CONFIGURE_EUA" = "y" ]; then
     read -p "Enter OIDC OP JWKS Endpoint: " OIDC_OP_JWKS_ENDPOINT
     read -p "Enter OIDC RP Client ID: " OIDC_RP_CLIENT_ID
@@ -41,7 +41,7 @@ if [ "$CONFIGURE_EUA" = "y" ]; then
     read -p "Enter OIDC OP User Endpoint: " OIDC_OP_USER_ENDPOINT
     read -p "Enter OIDC End EUA Session: " OIDC_END_EUA_SESSION
     EUA_FEATUREFLAG="true"
-elif [ "$CONFIGURE_EUA" = "n" ]; then
+elif [[ "$CONFIGURE_EUA" = "n" || "$CONFIGURE_EUA" = "" ]]; then
     echo EUA configuration skipped.
     OIDC_OP_JWKS_ENDPOINT=""
     OIDC_RP_CLIENT_ID=""

@@ -20,17 +20,17 @@ provider:
     apiGateway: true
   vpc:
     securityGroupIds:
-      - ${self:custom.settings.security_group_ids.${self:custom.environment}}
+      - ${self:custom.settings.security_group_ids.${self:custom.stage}}
     subnetIds:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
       blockPublicAccess: true
   environment:
-    DB_NAME: ${self:custom.settings.db_name.${self:custom.environment}}
+    DB_NAME: ${self:custom.settings.db_name.${self:custom.stage}}
     DB_USER: ${self:custom.settings.db_user}
     DB_PASSWORD: ${ssm:/eregulations/db/password}
-    DB_HOST: ${self:custom.settings.db_host.${self:custom.environment}}
+    DB_HOST: ${self:custom.settings.db_host.${self:custom.stage}}
     DB_PORT: ${ssm:/eregulations/db/port}
     HTTP_AUTH_USER: ${ssm:/eregulations/http/user}
     HTTP_AUTH_PASSWORD: ${ssm:/eregulations/http/password}
@@ -48,7 +48,7 @@ provider:
     STAGE_ENV: ${self:custom.stage}
     SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
     SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
-    AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
+    AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.settings.stage_id}
     OIDC_OP_JWKS_ENDPOINT: ${ssm:/eregulations/oidc/jwks_endpoint}
     OIDC_RP_CLIENT_ID: ${ssm:/eregulations/oidc/client_id}
     OIDC_RP_CLIENT_SECRET: ${ssm:/eregulations/oidc/client_secret}
@@ -56,7 +56,7 @@ provider:
     OIDC_OP_TOKEN_ENDPOINT: ${ssm:/eregulations/oidc/token_endpoint}
     OIDC_OP_USER_ENDPOINT: ${ssm:/eregulations/oidc/user_endpoint}
     OIDC_END_EUA_SESSION: ${ssm:/eregulations/oidc/end_eua_session}
-    DEPLOY_NUMBER: ${self:custom.settings.deploy_number.${self:custom.environment}}
+    DEPLOY_NUMBER: ${self:custom.settings.deploy_number.${self:custom.stage}}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     BASIC_SEARCH_FILTER: ${ssm:/eregulations/basic_search_filter}
     QUOTED_SEARCH_FILTER: ${ssm:/eregulations/quoted_search_filter}
@@ -70,57 +70,73 @@ package:
     - nginx/**
 
 custom:
-  environment: ${env:ENVIRONMENT}
+  stage: ${opt:stage, self:provider.stage}
   localstack:
     stages:
       - local
-  stage: ${opt:stage, self:provider.stage}
   wsgi:
     app: handler.application
     packRequirements: false
   settings:
+    deploy: ${env:DEPLOY, ""} # Deploy number for experimental, typically PR number
+    stage_id: ${self:custom.stage}${self:custom.settings.deploy}
     db_name:
       local: eregs
-      experimental: ${self:custom.stage}
-      deploy: eregs
+      exp: ${self:custom.settings.stage_id}
+      dev: eregs
+      val: eregs
+      prod: eregs
     db_user: eregsuser
-    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.StaticURL}/
-    #text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
+    static_url: ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.StaticURL}/
+    #text_extractor_arn: ${cf:text-extractor-${self:custom.settings.stage_id}.TextDashextractorLambdaFunctionQualifiedArn}
     text_extractor_arn: ""
     deploy_number:
       local: ${sls:instanceId}
-      experimental: ${env:RUN_ID, ""}
-      deploy: ${env:RUN_ID, ""}
+      exp: ${env:RUN_ID, ""}
+      dev: ${env:RUN_ID, ""}
+      val: ${env:RUN_ID, ""}
+      prod: ${env:RUN_ID, ""}
     allowed_host: ".amazonaws.com"
     security_group_ids:
       local: !Ref ServerlessSecurityGroup
-      experimental: ${ssm:/eregulations/aws/securitygroupid}
-      deploy: !Ref ServerlessSecurityGroup
+      exp: ${ssm:/eregulations/aws/securitygroupid}
+      dev: !Ref ServerlessSecurityGroup
+      val: !Ref ServerlessSecurityGroup
+      prod: !Ref ServerlessSecurityGroup
     db_host:
       local:
         Fn::GetAtt: [ RDSResource15, Endpoint.Address ]
-      experimental: ${ssm:/eregulations/db/host}
-      deploy: ${ssm:/eregulations/db/host}
+      exp: ${ssm:/eregulations/db/host}
+      dev: ${ssm:/eregulations/db/host}
+      val: ${ssm:/eregulations/db/host}
+      prod: ${ssm:/eregulations/db/host}
+    associate_waf:
+      local: ""
+      exp: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
+      dev: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
+      val: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
+      prod: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
   cloudfrontInvalidate:
-    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
+    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.CloudFrontDistributionId}
       items:
         - "/*"
   associateWaf:
-    name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
+    name: ${self:custom.settings.associate_waf.${self:custom.stage}}
     version: V2
 
 ## CAN FUNCTIONS BE SIMPLIFIED?
-functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
+functions: ${file(serverless_functions/${self:custom.stage}_functions.yml)}
 
 resources:
   Conditions:
-    IsDeploy: !Equals ["deploy", "${self:custom.environment}"]
+    IsNotExperimental: !Not [!Equals ["exp", "${self:custom.stage}"]]
+    IsNotLocal: !Not [!Equals ["local", "${self:custom.stage}"]]
 
   Resources:
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: file-repo-eregs-${self:custom.stage}
+        BucketName: file-repo-eregs-${self:custom.settings.stage_id}
         BucketEncryption:
           ServerSideEncryptionConfiguration:
             - ServerSideEncryptionByDefault:
@@ -142,7 +158,38 @@ resources:
                 - HEAD
               MaxAge: 3000
 
-    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
+    WAFRegionalWebACL:
+      Type: "AWS::WAFv2::WebACL"
+      Condition: IsNotLocal
+      Properties:
+        Name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
+        Scope: REGIONAL
+        Description: WAF Regional Web ACL
+        DefaultAction:
+          Block: {}
+        VisibilityConfig:
+          SampledRequestsEnabled: true
+          CloudWatchMetricsEnabled: true
+          MetricName: ApiGateway-eregs-allow-usa-plus-territories
+        Rules:
+          - Name: eregs-allow-usa-plus-territories-rule
+            Priority: 0
+            Statement:
+              GeoMatchStatement:
+                CountryCodes:
+                  - GU
+                  - PR
+                  - US
+                  - UM
+                  - VI
+                  - MP
+                  - AS
+            Action:
+              Allow: {}
+            VisibilityConfig:
+              SampledRequestsEnabled: true
+              CloudWatchMetricsEnabled: true
+              MetricName: eregs-allow-usa-plus-territories-metric
 
     LambdaFunctionRole:
       Type: AWS::IAM::Role
@@ -175,13 +222,13 @@ resources:
                   Action: "*"
                   Condition:
                     Bool:
-                      "aws:SecureTransport": false
+                      "aws:SecureTransport": "false"
                   Resource:
                     - Fn::Join:
                       - ""
                       - - "arn:aws:s3:::"
                         - "Ref" : "ServerlessDeploymentBucket"
-                    - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
+                    - "arn:aws:s3:::file-repo-eregs-${self:custom.settings.stage_id}/*"
           - PolicyName: LambdaPolicy
             PolicyDocument:
               Version: '2012-10-17'
@@ -210,17 +257,17 @@ resources:
                        - ""
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
-                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}"
-                     - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
-                -  Effect: "Allow"
-                   Action:
-                     - "lambda:InvokeFunction"
-                   Resource:
-                     - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.settings.stage_id}"
+                     - "arn:aws:s3:::file-repo-eregs-${self:custom.settings.stage_id}/*"
+                # -  Effect: "Allow"
+                #    Action:
+                #      - "lambda:InvokeFunction"
+                #    Resource:
+                #      - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
 
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         GroupDescription: SecurityGroup for Serverless Functions
         VpcId: ${ssm:/account_vars/vpc/id}
@@ -230,7 +277,7 @@ resources:
 
     DBSecurityGroup:
       Type: AWS::EC2::SecurityGroup
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         GroupDescription: SecurityGroup for Database
         VpcId: ${ssm:/account_vars/vpc/id}
@@ -240,7 +287,7 @@ resources:
 
     DBSecurityGroupIngress:
       Type: AWS::EC2::SecurityGroupIngress
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
@@ -250,7 +297,7 @@ resources:
 
     DBSubnetGroup:
       Type: AWS::RDS::DBSubnetGroup
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         DBSubnetGroupDescription: "RDS Subnet Group"
         SubnetIds:
@@ -262,7 +309,7 @@ resources:
 
     AuroraRDSClusterParameter15:
       Type: AWS::RDS::DBClusterParameterGroup
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
         Family: aurora-postgresql15
@@ -271,7 +318,7 @@ resources:
 
     AuroraRDSInstanceParameter15:
       Type: AWS::RDS::DBParameterGroup
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       Properties:
         Description: Parameter group for the Serverless Aurora RDS DB.
         Family: aurora-postgresql15
@@ -297,7 +344,7 @@ resources:
 
     RDSResource15:
       Type: AWS::RDS::DBCluster
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       DeletionPolicy: Retain
       Properties:
         MasterUsername: ${self:custom.settings.db_user}
@@ -316,7 +363,7 @@ resources:
 
     AuroraRDSInstance15:
       Type: AWS::RDS::DBInstance
-      Condition: IsDeploy
+      Condition: IsNotExperimental
       DeletionPolicy: Retain
       Properties:
         DBInstanceClass: db.r6g.large
