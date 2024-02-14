@@ -68,7 +68,9 @@ describe("Find by Subjects", () => {
 
         cy.get(".div__login-sidebar a")
             .click();
-        cy.url().should("include", "/?next=/subjects/");
+        cy.url().should("include", "/?next=")
+            .and("include", "subjects/")
+            .and("not.include", "q=");
     });
 
     it("should show only public items when logged out", () => {
