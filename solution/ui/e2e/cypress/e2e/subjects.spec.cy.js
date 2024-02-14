@@ -49,7 +49,8 @@ describe("Find by Subjects", () => {
         cy.url().should("include", "/subjects/?subjects=2&q=test");
         cy.get(".div__login-sidebar a")
             .should("have.attr", "href")
-            .and("include", "/?next=/subjects/?subjects=2&q=test");
+            .and("include", "next")
+            .and("include", "subjects/?q=test&subjects=2");
     });
 
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
@@ -57,7 +58,10 @@ describe("Find by Subjects", () => {
         cy.visit("/subjects/");
         cy.get(".div__login-sidebar a")
             .should("have.attr", "href")
-            .and("include", "/?next=/subjects/");
+            .and("include", "next")
+            .and("include", "subjects/")
+            .and("not.include", "q=");
+
         cy.get(".div__login-sidebar a")
             .click();
         cy.url().should("include", "/?next=/subjects/");
