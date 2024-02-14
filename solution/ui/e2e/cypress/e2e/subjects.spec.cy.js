@@ -50,7 +50,7 @@ describe("Find by Subjects", () => {
         cy.get(".div__login-sidebar a")
             .should("have.attr", "href")
             .and("include", "next")
-            .and("include", "subjects/?q=test&subjects=2");
+            .and("include", "subjects/?subjects=2&q=test");
     });
 
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
