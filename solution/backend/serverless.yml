@@ -251,6 +251,7 @@ resources:
           log_disconnections: 1
           log_lock_waits: 1
           log_min_duration_statement: 5000
+          log_file_mod: 0600
           auto_explain.log_min_duration: 5000
           auto_explain.log_verbose: 1
           log_rotation_age: 1440
@@ -259,8 +260,10 @@ resources:
           random_page_cost: 1
           track_activity_query_size: 16384
           idle_in_transaction_session_timeout: 7200000
-          statement_timeout: 7200000
+          statement_timeout: 10000
           search_path: '"$user",public'
+          log_hostname: 1
+
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
           pgaudit.log_level: "LOG"
