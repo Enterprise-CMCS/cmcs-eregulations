@@ -25,7 +25,7 @@ provider:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
   deploymentBucket:
-      blockPublicAccess: true
+      serverSideEncryption: AES256
   environment:
     DB_NAME: ${self:custom.settings.db_name.${self:custom.stage}}
     DB_USER: ${self:custom.settings.db_user}
@@ -74,6 +74,8 @@ custom:
   localstack:
     stages:
       - local
+    # lambda:
+    #   mountCode: true
   wsgi:
     app: handler.application
     packRequirements: false
@@ -116,6 +118,12 @@ custom:
       dev: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
       val: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
       prod: APIGateway-eregs-allow-usa-plus-territories-${self:custom.settings.stage_id}
+    db_port:
+      local: 3306
+      exp: ${ssm:/eregulations/db/port}
+      dev: ${ssm:/eregulations/db/port}
+      val: ${ssm:/eregulations/db/port}
+      prod: ${ssm:/eregulations/db/port}
   cloudfrontInvalidate:
     - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.CloudFrontDistributionId}
       items:
@@ -291,8 +299,8 @@ resources:
       Properties:
         GroupId: !Ref 'DBSecurityGroup'
         IpProtocol: tcp
-        FromPort: ${ssm:/eregulations/db/port}
-        ToPort: ${ssm:/eregulations/db/port}
+        FromPort: ${self:custom.settings.db_port.${self:custom.stage}}
+        ToPort: ${self:custom.settings.db_port.${self:custom.stage}}
         SourceSecurityGroupId: !Ref 'ServerlessSecurityGroup'
 
     DBSubnetGroup:

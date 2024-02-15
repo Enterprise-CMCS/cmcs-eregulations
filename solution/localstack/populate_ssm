@@ -20,9 +20,9 @@ echo Please choose a local username and password.
 echo These credentials will be used throughout your local deploy, including for Django Admin and the database.
 echo If you lose them, you can retrieve them through any of the local SSM username/password variables with \"awslocal\".
 read -p "Username: " LOCAL_USERNAME
+if [ "$LOCAL_USERNAME" = "" ]; then echo "Username cannot be blank!"; exit 1; fi
 read -sp "Password: " LOCAL_PASSWORD
 echo ""
-if [ "$LOCAL_USERNAME" = "" ]; then echo "Username cannot be blank!"; exit 1; fi
 if [ "$LOCAL_PASSWORD" = "" ]; then echo "Password cannot be blank!"; exit 1; fi
 
 # Prompt for search.gov info
@@ -59,7 +59,7 @@ fi
 # Create SSM variables
 create_var "/eregulations/db/password" "SecureString" "$LOCAL_PASSWORD"
 create_var "/eregulations/db/host" "String" ""
-create_var "/eregulations/db/port" "String" "3306"
+create_var "/eregulations/db/port" "String" ""
 create_var "/eregulations/http/user" "SecureString" "$LOCAL_USERNAME"
 create_var "/eregulations/http/password" "SecureString" "$LOCAL_PASSWORD"
 create_var "/eregulations/http/reader_user" "SecureString" "$LOCAL_USERNAME"

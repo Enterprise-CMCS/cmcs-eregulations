@@ -9,6 +9,10 @@ reg_site:
     - http: ANY /
     - http: ANY {proxy+}
   timeout: 10
+test_function:
+  handler: testfunc.handler
+  layers:
+    - ${cf:cmcs-eregs-static-assets-${self:custom.settings.stage_id}.PythonRequirementsLambdaLayerQualifiedArn}
 # reg_core_migrate:
 #   handler: migrate.handler
 #   layers:

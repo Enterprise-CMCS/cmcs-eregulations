@@ -5,6 +5,7 @@
   "private": true,
   "devDependencies": {
     "serverless-associate-waf": "^1.2.1",
+    "serverless-deployment-bucket": "^1.6.0",
     "serverless-go-plugin": "^2.0.1",
     "serverless-localstack": "^1.2.0",
     "serverless-python-requirements": "^5.1.1",
