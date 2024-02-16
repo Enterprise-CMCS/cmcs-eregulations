@@ -344,7 +344,7 @@ export default {
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
-            const requestParams = `q=${query}&resource-type=external&page=${
+            const requestParams = `q=${query}&page=${
                 page ?? 1
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
