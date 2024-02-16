@@ -1,5 +1,3 @@
-import { getSearchGovResourcesSchema } from "../schemas/get-search-gov-resources-schema";
-
 const TITLE = 42;
 const SUBPART = "A";
 const PART = 430;
@@ -81,21 +79,6 @@ describe("Synonyms endpoint special character testing", () => {
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);
-            });
-        });
-    });
-});
-
-// https://ahmed-alsaab.medium.com/cypress-api-schema-validation-with-ajv-ec61348374f7
-describe("Schema validation", () => {
-    describe("Search.gov Resources", () => {
-        it("gets successful response and expected schema from v3/resources/search", () => {
-            cy.getSearchGovResources(SEARCH_TERM).then((response) => {
-                expect(response.status).to.eq(200);
-                expect(response.isOkStatusCode).to.eq(true);
-                expect(response.statusText).to.eq("OK");
-
-                cy.validateSchema(getSearchGovResourcesSchema, response.body);
             });
         });
     });

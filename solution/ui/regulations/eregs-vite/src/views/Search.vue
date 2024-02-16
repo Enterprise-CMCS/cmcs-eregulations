@@ -111,28 +111,6 @@
                                 </template>
                             </template>
                         </PolicyResults>
-                        <!--SearchGovResults
-                            :count="resourcesResults.length"
-                            :results="resourcesResults"
-                            :query="searchQuery"
-                            :parts-last-updated="partsLastUpdated"
-                            view="search"
-                        >
-                            <template #empty-state>
-                                <template
-                                    v-if="
-                                        resourcesResults.length == 0 &&
-                                        combinedPageCount > 0 &&
-                                        !isLoading
-                                    "
-                                >
-                                    <SearchEmptyState
-                                        :query="searchQuery"
-                                        :show-internal-link="false"
-                                    />
-                                </template>
-                            </template>
-                        </SearchGovResults -->
                     </template>
                 </div>
             </div>
@@ -173,7 +151,6 @@ import {
     getCombinedContent,
     getLastUpdatedDates,
     getRegSearchResults,
-    getSearchGovResources,
     getSupplementalContent,
     getSynonyms,
     getTitles,
@@ -191,7 +168,6 @@ import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import RegResults from "@/components/search/RegResults.vue";
-import SearchGovResults from "@/components/resources/SearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
@@ -213,7 +189,6 @@ export default {
         PolicyResults,
         RegResults,
         SearchEmptyState,
-        SearchGovResults,
         SearchInput,
     },
 

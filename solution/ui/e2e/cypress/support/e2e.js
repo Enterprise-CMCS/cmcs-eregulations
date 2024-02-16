@@ -27,7 +27,7 @@ import "@testing-library/cypress/add-commands";
 import "cypress-axe";
 import "cypress-plugin-tab";
 
-import { getResources, getSearchGovResources } from "./api-request-commands";
+import { getResources } from "./api-request-commands";
 import {
     checkBlockingModal,
     checkFlashBanner,
@@ -49,7 +49,6 @@ Cypress.Commands.add("checkLinkRel", checkLinkRel);
 Cypress.Commands.add("clickHeaderLink", clickHeaderLink);
 Cypress.Commands.add("clickStatuteLink", clickStatuteLink);
 Cypress.Commands.add("getResources", getResources);
-Cypress.Commands.add("getSearchGovResources", getSearchGovResources);
 Cypress.Commands.add("goHome", goHome);
 Cypress.Commands.add("jumpToRegulationPart", jumpToRegulationPart);
 Cypress.Commands.add(
