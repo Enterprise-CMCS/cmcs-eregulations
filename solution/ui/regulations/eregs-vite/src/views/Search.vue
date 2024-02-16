@@ -95,7 +95,22 @@
                             :results="resourcesResults"
                             :search-query="searchQuery"
                             view="search"
-                        />
+                        >
+                            <template #empty-state>
+                                <template
+                                    v-if="
+                                        resourcesResults.length == 0 &&
+                                        combinedPageCount > 0 &&
+                                        !isLoading
+                                    "
+                                >
+                                    <SearchEmptyState
+                                        :query="searchQuery"
+                                        :show-internal-link="false"
+                                    />
+                                </template>
+                            </template>
+                        </PolicyResults>
                         <!--SearchGovResults
                             :count="resourcesResults.length"
                             :results="resourcesResults"
@@ -373,6 +388,8 @@ export default {
                     "Error retrieving regulation search results: ",
                     error
                 );
+                this.resourcesResults = [];
+                this.totalResourcesResultsCount = 0;
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {

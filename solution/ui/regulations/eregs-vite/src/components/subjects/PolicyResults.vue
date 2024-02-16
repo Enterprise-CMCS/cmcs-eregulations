@@ -149,6 +149,7 @@ const resultLinkClasses = (doc) => ({
                 >
             </div>
         </template>
+        <slot name="empty-state"></slot>
         <ResultsItem
             v-for="doc in results"
             :key="doc.uid"
