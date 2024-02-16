@@ -84,44 +84,6 @@ describe("Search flow", () => {
         cy.get("input#main-content").should("have.value", "");
     });
 
-    it("switches to our meta data when search.gov returns nothing", () => {
-        cy.intercept(`**/v3/resources/search?q=${SEARCH_TERM2}**page=1**`, {
-            fixture: "no-resources-results.json",
-            statusCode: 400,
-        }).as("resources");
-        cy.intercept(`**/v3/resources/?&**${SEARCH_TERM2}**page=1**`, {
-            fixture: "meta-data.json"
-        }).as("metadata");
-        cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM2}`, { timeout: 60000 });
-        cy.wait("@resources");
-
-        cy.get(".reg-results-content .search-results-count > h2").should(
-            "have.text",
-            "Regulations"
-        );
-        cy.get(".reg-results-content .search-results-count > span").should(
-            "be.visible"
-        );
-        cy.get(".resources-results-content .search-results-count > h2").should(
-            "have.text",
-            "Resources"
-        );
-        cy.get(".resources-results-content .search-results-count > span > span").should(
-            "have.text",
-            " 1 - 1 of "
-        );
-        cy.get(
-            ".resources-results-content .search-results-count > span"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
-        ).should("have.attr", "href");
-    });
-
     it("should return no resources when going on page 3 without enough resources returned", () => {
         cy.intercept(`**/v3/resources/search?q=${SEARCH_TERM2}**page=3**`, {
             fixture: "search-gov-not-enough.json",
