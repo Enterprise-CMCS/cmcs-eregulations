@@ -104,6 +104,10 @@ defineProps({
         type: Array,
         default: () => [],
     },
+    view: {
+        type: String,
+        default: undefined,
+    },
 });
 
 const $route = useRoute();
@@ -127,22 +131,24 @@ const resultLinkClasses = (doc) => ({
 
 <template>
     <div class="doc__list">
-        <h2 v-if="searchQuery" class="search-results__heading">
-            Search Results
-        </h2>
-        <div class="search-results-count">
-            <span v-if="results.length > 0">1 - {{ results.length }} of</span>
-            {{ results.length }} <span v-if="searchQuery">result</span
-            ><span v-else>document</span>
-            <span v-if="results.length != 1">s</span>
-            <span v-if="searchQuery">
-                for
-                <span class="search-query__span">{{ searchQuery }}</span></span
-            >
-            <span v-if="searchQuery && selectedSubjectParts[0]">
-                within {{ selectedSubjectParts[1][0] }}</span
-            >
-        </div>
+        <template v-if="view !== 'search'">
+            <h2 v-if="searchQuery" class="search-results__heading">
+                Search Results
+            </h2>
+            <div class="search-results-count">
+                <span v-if="results.length > 0">1 - {{ results.length }} of</span>
+                {{ results.length }} <span v-if="searchQuery">result</span
+                ><span v-else>document</span>
+                <span v-if="results.length != 1">s</span>
+                <span v-if="searchQuery">
+                    for
+                    <span class="search-query__span">{{ searchQuery }}</span></span
+                >
+                <span v-if="searchQuery && selectedSubjectParts[0]">
+                    within {{ selectedSubjectParts[1][0] }}</span
+                >
+            </div>
+        </template>
         <ResultsItem
             v-for="doc in results"
             :key="doc.uid"
