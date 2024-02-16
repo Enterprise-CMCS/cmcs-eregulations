@@ -63,6 +63,10 @@
                     &__link {
                         a {
                             text-decoration: none;
+
+                            &.external {
+                                display: block;
+                            }
                         }
                     }
                 }
