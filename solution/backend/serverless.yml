@@ -262,7 +262,6 @@ resources:
           statement_timeout: 10000
           search_path: '"$user",public'
           log_hostname: 1
-
           pgaudit.role: "rds_pgaudit"
           pgaudit.log: "ALL"
           pgaudit.log_level: "LOG"
