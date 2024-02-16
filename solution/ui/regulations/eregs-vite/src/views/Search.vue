@@ -93,7 +93,6 @@
                             :base="homeUrl"
                             :parts-last-updated="partsLastUpdated"
                             :results="resourcesResults"
-                            :search-query="searchQuery"
                             view="search"
                         >
                             <template #empty-state>
