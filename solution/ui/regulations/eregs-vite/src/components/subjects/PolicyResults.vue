@@ -136,13 +136,17 @@ const resultLinkClasses = (doc) => ({
                 Search Results
             </h2>
             <div class="search-results-count">
-                <span v-if="results.length > 0">1 - {{ results.length }} of</span>
+                <span v-if="results.length > 0"
+                    >1 - {{ results.length }} of</span
+                >
                 {{ results.length }} <span v-if="searchQuery">result</span
                 ><span v-else>document</span>
                 <span v-if="results.length != 1">s</span>
                 <span v-if="searchQuery">
                     for
-                    <span class="search-query__span">{{ searchQuery }}</span></span
+                    <span class="search-query__span">{{
+                        searchQuery
+                    }}</span></span
                 >
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
@@ -242,7 +246,7 @@ const resultLinkClasses = (doc) => ({
             </template>
             <template #chips>
                 <div
-                    v-if="doc.subjects.length > 0"
+                    v-if="view !== 'search' && doc.subjects.length > 0"
                     class="document__info-block"
                 >
                     <SubjectChips :subjects="doc.subjects" />
