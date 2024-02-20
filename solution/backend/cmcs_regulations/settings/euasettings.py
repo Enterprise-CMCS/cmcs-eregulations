@@ -1,5 +1,4 @@
 import os
-import re
 
 # EUA settings
 AUTHENTICATION_BACKENDS = (
@@ -16,16 +15,11 @@ OIDC_OP_AUTHORIZATION_ENDPOINT = os.environ.get("OIDC_OP_AUTHORIZATION_ENDPOINT"
 OIDC_OP_TOKEN_ENDPOINT = os.environ.get("OIDC_OP_TOKEN_ENDPOINT", None)
 OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT", None)
 OIDC_OP_JWKS_ENDPOINT = os.environ.get("OIDC_OP_JWKS_ENDPOINT", None)
-OIDC_REDIRECT_URL = "/admin/oidc/callback/"
+OIDC_REDIRECT_URL = '/admin/oidc/callback/'
 OIDC_RP_SIGN_ALGO = 'RS256'
-LOGIN_REDIRECT_URL = '/login/'
-
-LOGOUT_REDIRECT_URL = 'http://localhost:8000/login'
+LOGIN_REDIRECT_URL = 'custom_login'
+LOGOUT_REDIRECT_URL = 'logout'
 EUA_FEATUREFLAG = os.getenv('EUA_FEATUREFLAG', 'False').lower() == 'true'
 OIDC_END_EUA_SESSION = os.environ.get("OIDC_END_EUA_SESSION", None)
 OIDC_OP_LOGOUT_URL_METHOD = 'regulations.logout.eua_logout'
 OIDC_STORE_ID_TOKEN = True
-
-if re.match(r'^dev\d*$', STAGE_ENV) or STAGE_ENV == 'dev' or STAGE_ENV == 'val':
-    LOGIN_REDIRECT_URL = f"/{STAGE_ENV}/login/"
-    LOGOUT_REDIRECT_URL = f"/{STAGE_ENV}/login/"
