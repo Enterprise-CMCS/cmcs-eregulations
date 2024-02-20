@@ -1,5 +1,8 @@
 const SEARCH_TERM = "FMAP";
-const SEARCH_TERM2 = "medicaid";
+
+const username = Cypress.env("TEST_USERNAME");
+const password = Cypress.env("TEST_PASSWORD");
+
 describe("Search flow", () => {
     beforeEach(() => {
         cy.intercept("/**", (req) => {
@@ -60,7 +63,9 @@ describe("Search flow", () => {
             force: true,
         });
         cy.url().should("include", "/search?q=test%20search");
-        cy.get(".search-form .form-helper-text .search-suggestion").should("not.exist");
+        cy.get(".search-form .form-helper-text .search-suggestion").should(
+            "not.exist"
+        );
     });
 
     it("should be able to clear the searchbox", () => {
@@ -84,43 +89,12 @@ describe("Search flow", () => {
         cy.get("input#main-content").should("have.value", "");
     });
 
-    it("should return no resources when going on page 3 without enough resources returned", () => {
-        cy.intercept(`**/v3/resources/search?q=${SEARCH_TERM2}**page=3**`, {
-            fixture: "search-gov-not-enough.json",
-            statusCode: 400,
-        }).as("resources");
-        // this call is never executed since the conditional in js will not call it.
-        cy.intercept(`**/v3/resources/?&**${SEARCH_TERM2}**page=3**`, {
-            fixture: "meta-data.json"
-        }).as("metadata");
-        cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM2}&page=3`, { timeout: 60000 });
-        cy.wait("@resources");
-
-        cy.get(".reg-results-content .search-results-count > h2").should(
-            "have.text",
-            "Regulations"
-        );
-        cy.get(".reg-results-content .search-results-count > span").should(
-            "be.visible"
-        );
-        cy.get(".resources-results-content .search-results-count > h2").should(
-            "have.text",
-            "Resources"
-        );
-        cy.get(".resources-results-content .search-results-count > span").should(
-            "have.text",
-            " 0 results"
-        );
-        cy.get(
-            ".resources-results-content .search-results-count > span"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
-        ).should("have.attr", "href");
+    it("should have the correct labels for public and internal documents", () => {
+        cy.checkPolicyDocs({
+            username,
+            password,
+            landingPage: "/search/",
+        });
     });
 
     it("displays results of the search and highlights search term in regulation text", () => {
@@ -149,10 +123,7 @@ describe("Search flow", () => {
         cy.get(
             ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
         ).click({ force: true });
-        cy.url().should(
-            "include",
-            `${SEARCH_TERM}#`
-        );
+        cy.url().should("include", `${SEARCH_TERM}#`);
         cy.focused().then(($el) => {
             cy.get($el).within(($focusedEl) => {
                 cy.get("mark.highlight")
