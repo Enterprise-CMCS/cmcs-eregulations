@@ -21,8 +21,8 @@
                     'supplemental-content-external-link':
                         docType !== 'internal' && isBlank(description),
                 }"
-                >{{ name }}</span
-            >
+                v-html="name"
+            />
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"

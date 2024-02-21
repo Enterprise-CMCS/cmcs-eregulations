@@ -208,8 +208,8 @@ const resultLinkClasses = (doc) => ({
                     v-if="
                         doc.resource_type === 'external' && doc.doc_name_string
                     "
-                    >{{ doc.doc_name_string }}</span
-                >
+                    v-html="doc.doc_name_string"
+                />
             </template>
             <template #link>
                 <a

@@ -17,13 +17,18 @@
                     publication_date | formatPubDate
                 }}</span>
                 |
-                <span class="recent-fr-citation" :class="citationClasses">{{
-                    citation
-                }}</span>
+                <span
+                    class="recent-fr-citation"
+                    :class="citationClasses"
+                    v-html="citation"
+                />
             </span>
-            <div v-if="!grouped" class="recent-title" :class="recentTitleClass">
-                {{ title }}
-            </div>
+            <div
+                v-if="!grouped"
+                class="recent-title"
+                :class="recentTitleClass"
+                v-html="title"
+            />
         </a>
     </div>
 </template>
@@ -35,7 +40,7 @@ export default {
     name: "RelatedRule",
 
     inject: {
-        itemTitleLineLimit: { default: 9, },
+        itemTitleLineLimit: { default: 9 },
     },
 
     filters: {
@@ -88,7 +93,7 @@ export default {
             };
         },
         indicatorClasses() {
-            if( this.type === "WD") {
+            if (this.type === "WD") {
                 return {
                     "tertiary-indicator": this.type === "WD",
                 };
