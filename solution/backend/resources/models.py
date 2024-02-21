@@ -1,7 +1,10 @@
+from html import unescape
+
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.html import escape
 from django_jsonform.models.fields import ArrayField
 from model_utils.managers import InheritanceManager, InheritanceQuerySet
 from solo.models import SingletonModel
@@ -30,6 +33,17 @@ class TypicalResourceFieldsMixin(InternalNotesFieldMixin):
     name_sort = NaturalSortField('name', null=True)
     description_sort = NaturalSortField('description', null=True)
     date = VariableDateField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        # for loop through fields and escape fields that are CharFields or TextFields
+        for field in self._meta.fields:
+            if isinstance(field, (models.CharField, models.TextField)):
+                value = getattr(self, field.name)
+                if value:
+                    value = unescape(value)
+                    setattr(self, field.name, escape(value))
+
+        super(TypicalResourceFieldsMixin, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
