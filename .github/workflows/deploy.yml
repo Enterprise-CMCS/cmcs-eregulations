@@ -18,7 +18,8 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev", "val", "prod"]
+        #environment: ["dev", "val", "prod"]
+        environment: ["dev"]
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
