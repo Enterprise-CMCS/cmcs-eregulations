@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class WordExtractor(Extractor):
-    file_types = ("docx",)
+    file_types = ("application/vnd.openxmlformats-officedocument.wordprocessingml.document",)
 
     def extract(self, file: bytes) -> str:
         file_path = self._write_file(file)

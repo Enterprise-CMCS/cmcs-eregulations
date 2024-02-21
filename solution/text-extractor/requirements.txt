@@ -1,6 +1,7 @@
 requests
 boto3
 python-magic
+filetype
 moto
 pdf2image
 ruff

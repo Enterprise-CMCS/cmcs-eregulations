@@ -1,8 +1,8 @@
 import unittest
+from unittest.mock import patch
 
 import boto3
-import mock
-from moto import mock_s3
+from moto import mock_aws
 
 from backends import (
     BackendException,
@@ -27,8 +27,8 @@ class TestS3Backend(unittest.TestCase):
     }
 
     def setUp(self):
-        self.mock_s3 = mock_s3()
-        self.mock_s3.start()
+        self.mock = mock_aws()
+        self.mock.start()
 
         conn = boto3.resource("s3", region_name="us-east-1")
         conn.create_bucket(Bucket=self.BUCKET_NAME)
@@ -49,11 +49,10 @@ class TestS3Backend(unittest.TestCase):
             with self.assertRaises(BackendInitException):
                 S3Backend(params)
 
-    def test_client_create_exception(self):
-        with mock.patch.object(boto3, "client") as client_mock:
-            client_mock.side_effect = Exception("Something happened")
-            with self.assertRaises(BackendInitException):
-                S3Backend(self.POST_PARAMS)
+    @patch.object(boto3, "client", side_effect=Exception("Something happened"))
+    def test_client_create_exception(self, *args):
+        with self.assertRaises(BackendInitException):
+            S3Backend(self.POST_PARAMS)
 
     def test_get_file(self):
         backend = S3Backend(self.POST_PARAMS)

@@ -4,6 +4,9 @@ from unittest.mock import patch
 
 from extractors import Extractor
 
+import magic
+import filetype
+
 
 logging.disable(logging.CRITICAL)
 
@@ -26,8 +29,16 @@ class FixtureTestCase(unittest.TestCase):
         with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "rb") as f:
             expected = f.read().decode()
 
+        # Determine the file's MIME type
+        try:
+            mime_type = filetype.guess_mime(sample)
+            if mime_type is None or mime_type == "application/octet-stream":
+                raise Exception
+        except Exception:
+            mime_type = magic.from_buffer(sample, mime=True)
+
         with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
-            extractor = Extractor.get_extractor(file_type, config)
+            extractor = Extractor.get_extractor(mime_type, config)
             output = extractor.extract(sample)
 
         # Uncomment these 2 lines to re-export fixture files the next time tests are run.

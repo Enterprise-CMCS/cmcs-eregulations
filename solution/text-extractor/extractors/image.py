@@ -9,11 +9,19 @@ logger = logging.getLogger(__name__)
 
 
 class ImageExtractor(Extractor):
-    file_types = ("gif", "j2k", "jp2", "jpx", "bmp", "tga", "webp")
+    file_types = (
+        "image/gif",
+        "image/jp2",
+        "image/jpx",
+        "image/bmp",
+        "image/x-ms-bmp",
+        "image/x-tga",
+        "image/webp",
+    )
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
-        self.extractor = Extractor.get_extractor("jpeg", config)
+        self.extractor = Extractor.get_extractor("image/jpeg", config)
 
     def extract(self, file: bytes) -> str:
         image = Image.open(io.BytesIO(file))

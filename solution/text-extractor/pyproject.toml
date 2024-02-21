@@ -1,4 +1,8 @@
 [tool.ruff]
+
+# Same as Black.
+line-length = 130
+
 [lint]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F", "G", "I", "S", "W", "ASYNC",
@@ -40,9 +44,6 @@ exclude = [
     "migrations",
     "__init__.py",
 ]
-
-# Same as Black.
-line-length = 130
 
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"

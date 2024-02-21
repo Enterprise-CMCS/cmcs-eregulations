@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class PdfExtractor(Extractor):
-    file_types = ("pdf",)
+    file_types = ("application/pdf",)
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
