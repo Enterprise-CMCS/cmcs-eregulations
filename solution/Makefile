@@ -12,25 +12,29 @@ local.check: ## Verify local dependencies are installed.
 local.check:
 ifeq (,$(wildcard ${HOME}/.localstack/default.env))
 	@mkdir -p ~/.localstack
-	@cp default.env.template ~/.localstack/default.env
+	@cp localstack/default.env.template ~/.localstack/default.env
 	@echo New installation detected. The default LocalStack profile has been copied to ~/.localstack/default.env.
 	@echo Edit this file and replace LOCALSTACK_AUTH_TOKEN with your unique token. Do not commit this token to Git.
 	@exit 1
 else ifeq (,$(shell which localstack))
 	@echo Failed to find LocalStack!
 	@echo Be sure LocalStack is installed and \"which localstack\" returns a valid path.
+	@echo View installation instructions here: https://docs.localstack.cloud/getting-started/installation/
 	@exit 1
 else ifeq (,$(shell which aws))
 	@echo Failed to find the AWS CLI!
 	@echo Be sure the official AWS CLI is installed and \"which aws\" returns a valid path.
+	@echo View installation instructions here: https://aws.amazon.com/cli/
 	@exit 1
 else ifeq (,$(shell which awslocal))
 	@echo Failed to find awslocal!
 	@echo Be sure awslocal is installed and \"which awslocal\" returns a valid path!
+	@echo View installation instructions here: https://github.com/localstack/awscli-local
 	@exit 1
 else ifeq (,$(shell which serverless))
 	@echo Failed to find serverless!
 	@echo Be sure serverless is installed and \"which serverless\" returns a valid path.
+	@echo View installation instructions here: https://www.serverless.com/framework/docs/getting-started
 	@exit 1
 endif
 
