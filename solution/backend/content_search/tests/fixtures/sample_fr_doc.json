@@ -16,5 +16,11 @@
         "url": "Cantbeclever.com",
         "date": "2020-02-29",
         "description": "Making it up as i go along"
+    },
+    {
+        "name": "Escape example <img />",
+        "url": "escaping.com",
+        "date": "2023-02-29",
+        "description": "Description containing test information with <img /> tag"
     }
 ]

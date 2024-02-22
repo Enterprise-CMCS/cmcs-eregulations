@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from common.test_functions.common_functions import get_paginated_data
+from common.test_functions.common_functions import get_paginated_data, is_escaped
 from content_search.functions import index_group
 from content_search.models import ContentIndex
 from file_manager.models import Subject, UploadedFile
@@ -75,29 +75,29 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?resource-type=external")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 6)
+        self.assertEqual(data['count'], 7)
         response = self.client.get("/v3/content-search/?resource-type=all")
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 6)
+        self.assertEqual(data['count'], 7)
         response = self.client.get("/v3/content-search/")
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 6)
+        self.assertEqual(data['count'], 7)
 
     def test_no_query_logged_in(self):
         self.login()
         response = self.client.get("/v3/content-search/?resource-type=external")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 6)
+        self.assertEqual(data['count'], 7)
         response = self.client.get("/v3/content-search/?resource-type=internal")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 3)
         response = self.client.get("/v3/content-search/?resource-type=all&locations_details=true&category_details=true")
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 9)
+        self.assertEqual(data['count'], 10)
         response = self.client.get("/v3/content-search/?resource-type=all&locations_details=false&category_details=false")
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 9)
+        self.assertEqual(data['count'], 10)
 
     def test_single_response_queries(self):
         self.login()
@@ -173,3 +173,10 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?&q='dummy'")
         data = get_paginated_data(response)
         self.assertTrue("dummy" in data['results'][0]['content_headline'])
+
+    def test_escaped_field_values(self):
+        response = self.client.get("/v3/content-search/?q=img")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 1)
+        self.assertTrue(is_escaped(data['results'][0]["doc_name_string"]))
+        self.assertTrue(is_escaped(data['results'][0]["summary_string"]))
