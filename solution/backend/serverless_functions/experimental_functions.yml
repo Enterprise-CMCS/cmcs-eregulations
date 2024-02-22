@@ -60,3 +60,6 @@ redirectFunction:
   environment:
     STATIC_URL: ${self:custom.settings.static_url}
     WORKING_DIR: /var/task
+    events:
+      - http: ANY /redirect # Adjust the path as needed
+      - http: ANY /{proxy+}
