@@ -1,7 +1,6 @@
 from html import unescape
 
 from django.db.models import CharField, TextField
-from django.utils.html import escape
 from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter
