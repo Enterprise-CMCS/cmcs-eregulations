@@ -1,7 +1,6 @@
 from django.contrib.postgres.search import SearchHeadline, SearchQuery, SearchRank, SearchVector
 from django.core.exceptions import BadRequest
 from django.db.models import F, OuterRef, Prefetch, Q, Subquery
-from django.utils.html import escape
 
 from common.api import OpenApiQueryParameter
 from common.mixins import OptionalPaginationMixin
