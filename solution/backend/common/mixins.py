@@ -46,12 +46,11 @@ class DisplayNameFieldMixin:
 
 class EscapeOnSaveMixin:
     def save(self, *args, **kwargs):
-        # for loop through fields and escape fields that are CharFields or TextFields
         for field in self._meta.fields:
             if isinstance(field, (CharField, TextField)):
                 value = getattr(self, field.name)
                 if value:
                     value = unescape(value)
-                    setattr(self, field.name, escape(value))
+                    setattr(self, field.name, value.replace("<", "&lt;").replace(">", "&gt;"))
 
         super().save(*args, **kwargs)

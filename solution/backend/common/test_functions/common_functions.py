@@ -7,9 +7,9 @@ def get_paginated_data(response):
 
 
 def is_escaped(string):
-    commonly_escaped = ['<', '>', '"', "'"]
+    angle_brackets = ['<', '>']
     clean = True
-    for i in commonly_escaped:
+    for i in angle_brackets:
         if i in string:
             clean = False
             break
