@@ -10,16 +10,13 @@ reg_site:
     - http: ANY /
     - http: ANY /{proxy+}
 redirectFunction:
-  environment:
-    STATIC_URL: ${self:custom.settings.static_url}-redirect_url
-    WORKING_DIR: /var/task
   handler: redirect_lambda.handler
   timeout: 30
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   events:
     - http: ANY /redirect
     - http: ANY /redirect/{proxy+}
+  apiGateway:
+    restApiName: RedirectApi
 reg_core_migrate:
   environment:
     STAGE: ${self:custom.stage}
