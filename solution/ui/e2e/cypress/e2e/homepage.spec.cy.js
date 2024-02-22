@@ -58,6 +58,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.checkFlashBanner();
     });
 
+    // keep skipped
     it.skip("hides the flash banner when scrolling down", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
@@ -203,7 +204,24 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
             expect($els).to.have.length(3);
-            cy.wrap($els[0]).find(".recent-title").should("exist");
+            cy.wrap($els[0])
+                .find(".recent-fr-citation")
+                .should("exist")
+                .then(($citation) => {
+                    expect($citation).to.have.text(
+                        "87 FR 29675 <img />;"
+                    );
+                    expect($citation).to.not.contain("&lt;");
+                });
+            cy.wrap($els[0])
+                .find(".recent-title")
+                .should("exist")
+                .then(($title) => {
+                    expect($title).to.have.text(
+                        "Medicaid Program; Reassignment of Medicaid Provider Claims <img />"
+                    );
+                    expect($title).to.not.contain("&lt;");
+                });
             cy.wrap($els[0])
                 .find(".recent-flag")
                 .then(($flag) => {
