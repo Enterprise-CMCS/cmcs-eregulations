@@ -11,7 +11,7 @@ reg_site:
     - http: ANY /{proxy+}
 redirectFunction:
   environment:
-    STATIC_URL: ${self:custom.settings.static_url}
+    STATIC_URL: ${self:custom.settings.static_url}-redirect_url
     WORKING_DIR: /var/task
   handler: redirect_lambda.handler
   timeout: 30
