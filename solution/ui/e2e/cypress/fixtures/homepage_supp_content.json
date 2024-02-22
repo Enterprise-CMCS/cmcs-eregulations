@@ -1,0 +1,78 @@
+{
+    "count": 198,
+    "next": "http://localhost:8000/v3/resources/supplemental_content?categories=7&categories=6&categories=9&categories=10&categories=138&categories=8&category_details=true&page=2&page_size=3&paginate=true",
+    "previous": null,
+    "results": [
+        {
+            "id": 2925,
+            "created_at": "2024-02-21 13:56:34.146427",
+            "updated_at": "2024-02-22 15:15:44.797693",
+            "approved": true,
+            "snippet": null,
+            "category": {
+                "id": 10,
+                "name": "Frequently Asked Questions (FAQs)",
+                "description": "",
+                "order": 400,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
+            },
+            "locations": [
+                3210,
+                1462
+            ],
+            "subjects": [],
+            "type": "",
+            "date": "2024-02-02",
+            "name": "[Mock] loop test &lt;img /&gt;",
+            "description": "This is a test for &lt;img /&gt; &lt;img src='2' /&gt; &lt;span&gt;test span&lt;/span&gt;",
+            "url": "https://www.geeksforgeeks.org/lodash-_-unescape-method/",
+            "name_headline": null,
+            "description_headline": null
+        },
+        {
+            "id": 2924,
+            "created_at": "2024-02-21 11:05:44.643953",
+            "updated_at": "2024-02-22 15:43:45.376207",
+            "approved": true,
+            "snippet": null,
+            "category": {
+                "id": 10,
+                "name": "Frequently Asked Questions (FAQs)",
+                "description": "",
+                "order": 400,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
+            },
+            "locations": [],
+            "subjects": [],
+            "type": "",
+            "date": "2024-01-01",
+            "name": "[Mock] IMG Take Two &lt;img /&gt;",
+            "description": "This is a description once again.\r\n\r\n&lt;img src=&quot;me.jpg&quot; /&gt;",
+            "url": "https://www.fullstackpython.com/django-utils-html-escape-examples.html",
+            "name_headline": null,
+            "description_headline": null
+        }
+    ]
+}

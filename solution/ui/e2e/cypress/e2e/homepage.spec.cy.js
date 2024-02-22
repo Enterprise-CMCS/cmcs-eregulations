@@ -11,8 +11,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         }).as("categories");
         cy.intercept(
             "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true**",
-            { fixture: "frdocs.json" }
+            { fixture: "homepage_frdocs.json" }
         ).as("frdocs");
+        cy.intercept(
+            "**/v3/resources/supplemental_content?page=1&page_size=3&paginate=true**",
+            { fixture: "homepage_supp_content.json" }
+        ).as("suppContent");
     });
 
     it("loads the homepage", () => {
@@ -181,6 +185,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".resources__container").should("exist");
         cy.wait("@categories");
+        cy.wait("@suppContent");
         cy.get(".recent-rules-descriptive-text")
             .first()
             .should(($el) => {
@@ -191,11 +196,35 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container")
             .contains("View More Guidance")
             .should("not.exist");
+        cy.get(".supplemental-content-list .supplemental-content").then(
+            ($els) => {
+                expect($els).to.have.length(2);
+                cy.wrap($els[0])
+                    .find(".supplemental-content-description")
+                    .should("exist")
+                    .then(($citation) => {
+                        expect($citation).to.have.text(
+                            "This is a test for <img /> <img src='2' /> <span>test span</span>"
+                        );
+                        expect($citation).to.not.contain("&lt;");
+                    });
+                cy.wrap($els[0])
+                    .find(".supplemental-content-title")
+                    .should("exist")
+                    .then(($title) => {
+                        expect($title).to.have.text(
+                            "[Mock] loop test <img />"
+                        );
+                        expect($title).to.not.contain("&lt;");
+                    });
+            }
+        );
     });
 
     it("has grouped FR docs in Related Rules tab", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.wait("@frdocs")
         cy.get(".resources__container").should("exist");
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
@@ -208,9 +237,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 .find(".recent-fr-citation")
                 .should("exist")
                 .then(($citation) => {
-                    expect($citation).to.have.text(
-                        "87 FR 29675 <img />"
-                    );
+                    expect($citation).to.have.text("87 FR 29675 <img />");
                     expect($citation).to.not.contain("&lt;");
                 });
             cy.wrap($els[0])
