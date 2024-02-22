@@ -1,3 +1,7 @@
+from html import unescape
+
+from django.db.models import CharField, TextField
+from django.utils.html import escape
 from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter
@@ -38,3 +42,16 @@ class DisplayNameFieldMixin:
     @property
     def display_name(self):
         return str(self)
+
+
+class EscapeOnSaveMixin:
+    def save(self, *args, **kwargs):
+        # for loop through fields and escape fields that are CharFields or TextFields
+        for field in self._meta.fields:
+            if isinstance(field, (CharField, TextField)):
+                value = getattr(self, field.name)
+                if value:
+                    value = unescape(value)
+                    setattr(self, field.name, escape(value))
+
+        super().save(*args, **kwargs)

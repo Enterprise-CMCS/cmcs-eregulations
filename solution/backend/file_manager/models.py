@@ -6,7 +6,7 @@ from model_utils.managers import InheritanceManager
 
 from common.fields import CombinedNaturalSort, VariableDateField
 from common.functions import check_string_value
-from common.mixins import DisplayNameFieldMixin
+from common.mixins import DisplayNameFieldMixin, EscapeOnSaveMixin
 from resources.models import AbstractLocation
 
 
@@ -63,7 +63,7 @@ class Subject(models.Model):
         return f"{self.full_name} {check_string_value(self.short_name)} {check_string_value(self.abbreviation)}"
 
 
-class UploadedFile(models.Model):
+class UploadedFile(EscapeOnSaveMixin, models.Model):
     document_name = models.CharField(max_length=512, null=True, blank=True)
     file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)
