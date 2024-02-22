@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from common.test_functions.common_functions import get_paginated_data
+from common.test_functions.common_functions import get_paginated_data, is_escaped
 from file_manager.models import Subject, UploadedFile
 from resources.models import Section
 
@@ -18,10 +18,10 @@ class SearchTestNotLoggedIn(TestCase):
 
 
 class SearchTest(TestCase):
-    def check_exclusive_response(self, response, id):
+    def check_exclusive_response(self, response, id, expected_count=1):
         data = get_paginated_data(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['count'], expected_count)
         self.assertEqual(data['results'][0]["document_name"], self.data[id]["document_name"])
 
     def login(self) -> None:
@@ -56,10 +56,11 @@ class SearchTest(TestCase):
 
     def test_single_response_queries(self):
         # This tests to ensure files are correctly *excluded* based on search terms
-        tests = [("test", 0), ("internal+notes", 1), ("policy+hello", 2)]
+        # (search string, id, expected_count)
+        tests = [("test", 0, 2), ("internal+notes", 1, 1), ("policy+hello", 2, 1)]
         for i in tests:
             response = self.client.get(f"/v3/file-manager/files?q={i[0]}")
-            self.check_exclusive_response(response, i[1])
+            self.check_exclusive_response(response, i[1], i[2])
 
     def test_multi_response_query(self):
         # This tests to ensure files are correctly *included* based on search terms
@@ -93,3 +94,10 @@ class SearchTest(TestCase):
 
         response = self.client.get(f"/v3/file-manager/files?q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
         self.check_exclusive_response(response, 0)
+
+    def test_escaped_field_values(self):
+        response = self.client.get("/v3/file-manager/files?q=img")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 1)
+        self.assertTrue(is_escaped(data['results'][0]["document_name"]))
+        self.assertTrue(is_escaped(data['results'][0]["summary"]))
