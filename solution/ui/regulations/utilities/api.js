@@ -568,19 +568,6 @@ const getSupplementalContent = async ({
 };
 
 /**
- * @param {string} [page=1] - page number of paginated results to return.
- * @param {string} [q=""] - search querystring
- *
- * @returns {Promise<{count: number, next: string, previous: string, results: Array<Object>}>} - Promise that contains response object when fulfilled
- */
-const getSearchGovResources = async ({ page = 1, q = "" }) =>
-    httpApiGet(
-        `resources/search?q=${encodeURIComponent(
-            q
-        )}&page=${page}&location_details=true&category_details=true`
-    );
-
-/**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
  *
  * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
@@ -773,7 +760,6 @@ export {
     getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
-    getSearchGovResources,
     getSectionsForPart,
     getStatutes,
     getStatutesActs,

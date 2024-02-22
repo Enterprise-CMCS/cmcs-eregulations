@@ -55,10 +55,7 @@
                         </span>
                     </div>
                     <template v-if="!regsLoading">
-                        <RegResults
-                            :results="regResults"
-                            :query="searchQuery"
-                        >
+                        <RegResults :results="regResults" :query="searchQuery">
                             <template #empty-state>
                                 <template
                                     v-if="
@@ -92,11 +89,10 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <SearchGovResults
-                            :count="resourcesResults.length"
-                            :results="resourcesResults"
-                            :query="searchQuery"
+                        <PolicyResults
+                            :base="homeUrl"
                             :parts-last-updated="partsLastUpdated"
+                            :results="resourcesResults"
                             view="search"
                         >
                             <template #empty-state>
@@ -113,7 +109,7 @@
                                     />
                                 </template>
                             </template>
-                        </SearchGovResults>
+                        </PolicyResults>
                     </template>
                 </div>
             </div>
@@ -149,6 +145,16 @@
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
+import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
+import {
+    getCombinedContent,
+    getLastUpdatedDates,
+    getRegSearchResults,
+    getSupplementalContent,
+    getSynonyms,
+    getTitles,
+} from "utilities/api";
+
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
 import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
 import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
@@ -159,20 +165,10 @@ import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
+import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import RegResults from "@/components/search/RegResults.vue";
-import SearchGovResults from "@/components/resources/SearchGovResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchInput from "@/components/SearchInput.vue";
-
-import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
-import {
-    getLastUpdatedDates,
-    getRegSearchResults,
-    getSearchGovResources,
-    getSupplementalContent,
-    getSynonyms,
-    getTitles,
-} from "utilities/api";
 
 const DEFAULT_TITLE = "42";
 
@@ -189,9 +185,9 @@ export default {
         IFrameContainer,
         JumpTo,
         PaginationController,
+        PolicyResults,
         RegResults,
         SearchEmptyState,
-        SearchGovResults,
         SearchInput,
     },
 
@@ -233,7 +229,10 @@ export default {
     async created() {
         if (this.searchQuery) {
             this.titles = await getTitles();
-            this.partsLastUpdated = await getLastUpdatedDates(this.apiUrl, this.titles);
+            this.partsLastUpdated = await getLastUpdatedDates(
+                this.apiUrl,
+                this.titles
+            );
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,
@@ -345,13 +344,16 @@ export default {
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
-            const commonParams = {
-                    q: query,
-                    page,
-                };
-            let response = ""
+            const requestParams = `q=${query}&page=${
+                page ?? 1
+            }&page_size=${pageSize}&paginate=true`;
+            let response = "";
             try {
-                response = await getSearchGovResources(commonParams);
+                response = await getCombinedContent({
+                    apiUrl: this.apiUrl,
+                    cacheResponse: false,
+                    requestParams,
+                });
 
                 this.resourcesResults = response?.results ?? [];
                 this.totalResourcesResultsCount = response?.count ?? 0;
@@ -360,17 +362,8 @@ export default {
                     "Error retrieving regulation search results: ",
                     error
                 );
-                if (error.detail !== "Search.gov out of bounds") {
-                    const djangoParams = {
-                        ...commonParams,
-                        partDict: "all",
-                        page_size: pageSize,
-                        frGrouping: false,
-                    };
-                    response = await getSupplementalContent(djangoParams);
-                }
-                this.resourcesResults = response?.results ?? [];
-                this.totalResourcesResultsCount = response?.count ?? 0;
+                this.resourcesResults = [];
+                this.totalResourcesResultsCount = 0;
             }
         },
         async retrieveAllResults({ query, page, pageSize }) {
