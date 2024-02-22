@@ -41,3 +41,4 @@ redirectFunction:
         method: any
         integration: lambda
         cors: true
+  timeout: 300

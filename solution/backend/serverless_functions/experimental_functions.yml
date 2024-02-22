@@ -52,3 +52,12 @@ empty_bucket:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   timeout: 300
+redirectFunction:
+  handler: redirect_lambda.handler
+  events:
+    - http:
+        path: /redirect
+        method: any
+        integration: lambda
+        cors: true
+  timeout: 300
