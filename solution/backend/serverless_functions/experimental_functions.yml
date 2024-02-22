@@ -18,8 +18,8 @@ redirectFunction:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   events:
-    - http: ANY /
-    - http: ANY /{proxy+}
+    - http: ANY /redirect
+    - http: ANY /redirect/{proxy+}
 reg_core_migrate:
   environment:
     STAGE: ${self:custom.stage}
