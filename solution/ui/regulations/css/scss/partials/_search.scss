@@ -63,7 +63,10 @@
                     &__link {
                         a {
                             text-decoration: none;
-                            display: block;
+
+                            &.external {
+                                display: block;
+                            }
                         }
                     }
                 }

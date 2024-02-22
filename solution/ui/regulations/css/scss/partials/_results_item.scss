@@ -22,7 +22,7 @@
 .doc-type__label {
     @include common-label-styles;
 
-    color: #FFF;
+    color: #fff;
     background: $mid_gray;
 }
 
@@ -40,6 +40,10 @@
             font-weight: 600;
         }
     }
+}
+
+.reg-results-container .result .category-labels {
+    margin-bottom: 0;
 }
 
 .result {

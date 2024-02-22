@@ -1,3 +1,5 @@
+// EXAMPLE SCHEMA
+
 const itemCategoryDefaultSchema = {
     type: "object",
     properties: {
