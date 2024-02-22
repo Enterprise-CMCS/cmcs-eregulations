@@ -57,3 +57,6 @@ redirectFunction:
   timeout: 300
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  environment:
+    STATIC_URL: ${self:custom.settings.static_url}
+    WORKING_DIR: /var/task
