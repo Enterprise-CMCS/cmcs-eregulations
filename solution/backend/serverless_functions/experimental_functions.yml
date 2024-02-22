@@ -9,6 +9,17 @@ reg_site:
   events:
     - http: ANY /
     - http: ANY /{proxy+}
+redirectFunction:
+  environment:
+    STATIC_URL: ${self:custom.settings.static_url}
+    WORKING_DIR: /var/task
+  handler: redirect_lambda.handler
+  timeout: 30
+  layers:
+    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
+  events:
+    - http: ANY /
+    - http: ANY /{proxy+}
 reg_core_migrate:
   environment:
     STAGE: ${self:custom.stage}
@@ -52,14 +63,3 @@ empty_bucket:
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
   timeout: 300
-redirectFunction:
-  handler: redirect_lambda.handler
-  timeout: 300
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  environment:
-    STATIC_URL: ${self:custom.settings.static_url}
-    WORKING_DIR: /var/task
-  events:
-    - http: ANY /redirect
-    - http: ANY /{proxy+}
