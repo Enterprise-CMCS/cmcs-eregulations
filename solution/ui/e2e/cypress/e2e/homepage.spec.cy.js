@@ -209,7 +209,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 .should("exist")
                 .then(($citation) => {
                     expect($citation).to.have.text(
-                        "87 FR 29675 <img />;"
+                        "87 FR 29675 <img />"
                     );
                     expect($citation).to.not.contain("&lt;");
                 });
