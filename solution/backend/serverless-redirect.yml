@@ -1,0 +1,20 @@
+service: redirect-api
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: us-east-1
+
+redirectFunction:
+  handler: redirect_lambda.handler
+  timeout: 30
+  events:
+    - http: ANY /redirect
+    - http: ANY /redirect/{proxy+}
+custom:
+  wsgi:
+    app: handler.application
+    packRequirements: false
+
+plugins:
+  - serverless-wsgi

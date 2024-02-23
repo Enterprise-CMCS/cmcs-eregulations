@@ -95,17 +95,6 @@ custom:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
-redirectFunction:
-  handler: redirect_lambda.handler
-  events:
-    - http:
-        path: /redirect
-        method: ANY
-        restApiId: <redirect_api_gateway_id>
-    - http:
-        path: /redirect/{proxy+}
-        method: ANY
-        restApiId: <redirect_api_gateway_id>
 
 
 resources:
