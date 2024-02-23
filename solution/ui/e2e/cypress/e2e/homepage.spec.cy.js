@@ -185,7 +185,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".resources__container").should("exist");
         cy.wait("@categories");
-        cy.wait("@suppContent");
         cy.get(".recent-rules-descriptive-text")
             .first()
             .should(($el) => {
@@ -224,7 +223,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("has grouped FR docs in Related Rules tab", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@frdocs")
         cy.get(".resources__container").should("exist");
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
