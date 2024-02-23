@@ -190,6 +190,27 @@ describe("Part View", () => {
         cy.get(".latest-version").should("exist");
     });
 
+    it("renders Related Statutes category correctly in sidebar", () => {
+        cy.intercept("**/v3/resources/?&locations=42.433.10**", {
+            fixture: "42.433.10.resources.json",
+        }).as("resources43310");
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("433.10").click({ force: true });
+        cy.url().should("include", "#433-10");
+        cy.wait("@resources43310").then(() => {
+            cy.get(`button[data-test="Related Statutes"]`).click({ force: true });
+            cy.get(`div[data-test="Related Statutes"] .supplemental-content`)
+                .eq(0)
+                .find(".supplemental-content-description")
+                .should(
+                    "contain",
+                    "Incentives for States to Offer Home and Community-based Services as a Long-term Care Alternative to Nursing Homes <img />"
+                )
+                .and("not.contain", "&lt;");
+        });
+    });
+
     it("renders FR Doc category correctly in sidebar", () => {
         cy.intercept("**/v3/resources/?&locations=42.433.10**", {
             fixture: "42.433.10.resources.json",
