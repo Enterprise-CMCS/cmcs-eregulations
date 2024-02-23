@@ -1,4 +1,4 @@
-export const checkPolicyDocs = ({ username, password, landingPage }) => {
+const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.intercept("**/v3/content-search/?q=test**", {
         fixture: "policy-docs.json",
     }).as("queriedFiles");
@@ -48,7 +48,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .should("include.text", "TestSubCat");
 };
 
-export const getPolicyDocs = ({
+const getPolicyDocs = ({
     username,
     password,
     query = "mock",
@@ -65,3 +65,30 @@ export const getPolicyDocs = ({
         expect(interception.response.statusCode).to.eq(200);
     });
 };
+
+const checkPolicyDocAngleBrackets = ({
+    username,
+    password,
+    query = "img",
+    fixture = "policy-docs-brackets.json",
+}) => {
+    cy.getPolicyDocs({
+        username,
+        password,
+        query,
+        fixture,
+    });
+
+    cy.get(".result__link--label")
+        .eq(0)
+        .should(
+            "contain",
+            'This is a description once again. <img src="me.jpg" />'
+        )
+        .and("not.contain", "&lt;")
+        .find("span")
+        .should("have.attr", "class")
+        .and("include", "search-highlight");
+};
+
+export { checkPolicyDocAngleBrackets, checkPolicyDocs, getPolicyDocs };

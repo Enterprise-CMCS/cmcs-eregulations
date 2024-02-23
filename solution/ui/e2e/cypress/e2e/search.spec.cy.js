@@ -97,6 +97,15 @@ describe("Search flow", () => {
         });
     });
 
+    it("should display angle brackets without interfering with search highlighting", () => {
+        cy.checkPolicyDocAngleBrackets({
+            username,
+            password,
+            query: "img",
+            fixture: "policy-docs-brackets.json",
+        });
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });

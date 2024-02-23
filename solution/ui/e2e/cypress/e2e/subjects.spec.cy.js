@@ -604,23 +604,12 @@ describe("Find by Subjects", () => {
     });
 
     it("should display angle brackets without interfering with search highlighting", () => {
-        cy.getPolicyDocs({
+        cy.checkPolicyDocAngleBrackets({
             username,
             password,
             query: "img",
             fixture: "policy-docs-brackets.json",
         });
-
-        cy.get(".result__link--label")
-            .eq(0)
-            .should(
-                "contain",
-                'This is a description once again. <img src="me.jpg" />'
-            )
-            .and("not.contain", "&lt;")
-            .find("span")
-            .should("have.attr", "class")
-            .and("include", "search-highlight");
     });
 
     it("returns you to the custom eua login page when you log out", () => {

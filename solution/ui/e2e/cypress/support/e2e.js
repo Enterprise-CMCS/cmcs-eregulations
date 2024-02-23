@@ -41,9 +41,14 @@ import {
 import { eregsLogin } from "./common-commands/login";
 import { clickStatuteLink } from "./common-commands/statutes";
 import { checkLinkRel } from "./common-commands/checkLinks";
-import { checkPolicyDocs, getPolicyDocs } from "./common-commands/policyDocs";
+import {
+    checkPolicyDocAngleBrackets,
+    checkPolicyDocs,
+    getPolicyDocs,
+} from "./common-commands/policyDocs";
 import { validateSchema } from "./validate-schema-command";
 
+Cypress.Commands.add("checkPolicyDocAngleBrackets", checkPolicyDocAngleBrackets);
 Cypress.Commands.add("checkBlockingModal", checkBlockingModal);
 Cypress.Commands.add("checkFlashBanner", checkFlashBanner);
 Cypress.Commands.add("checkLinkRel", checkLinkRel);
