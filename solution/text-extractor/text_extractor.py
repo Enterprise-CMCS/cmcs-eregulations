@@ -71,7 +71,7 @@ def handler(event: dict, context: dict) -> dict:
     # Magic docs recommend using the first 2048 bytes of the file, but this isn't always accurate.
     try:
         file_type = filetype.guess_mime(file)
-        if file_type is None or file_type == "application/octet-stream":
+        if not file_type or file_type == "application/octet-stream":
             raise Exception
     except Exception:
         try:

@@ -32,7 +32,7 @@ class FixtureTestCase(unittest.TestCase):
         # Determine the file's MIME type
         try:
             mime_type = filetype.guess_mime(sample)
-            if mime_type is None or mime_type == "application/octet-stream":
+            if not mime_type or mime_type == "application/octet-stream":
                 raise Exception
         except Exception:
             mime_type = magic.from_buffer(sample, mime=True)

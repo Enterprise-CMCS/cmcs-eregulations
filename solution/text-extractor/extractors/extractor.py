@@ -44,7 +44,7 @@ class Extractor:
     def _get_mime_type(self, file: bytes) -> str:
         try:
             file_type = filetype.guess_mime(file)
-            if file_type is None or file_type == "application/octet-stream":
+            if not file_type or file_type == "application/octet-stream":
                 raise Exception
         except Exception:
             file_type = magic.from_buffer(file, mime=True)
