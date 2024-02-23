@@ -49,7 +49,8 @@ class EscapeOnSaveMixin:
             if isinstance(field, (CharField, TextField)):
                 value = getattr(self, field.name)
                 if value:
-                    value = unescape(value)
+                    # TODO: sanitize HTML here before replacing angle brackets w/ HTML entities
+                    # using library like nh3
                     setattr(self, field.name, value.replace("<", "&lt;").replace(">", "&gt;"))
 
         super().save(*args, **kwargs)
