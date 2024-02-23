@@ -1,0 +1,82 @@
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "doc_name_string": "[Mock] IMG Take Two &lt;img /&gt;",
+            "file_name_string": null,
+            "date_string": "2024-01-01",
+            "summary_string": "This is a description once again. &lt;img src=\"me.jpg\" /&gt;",
+            "locations": [],
+            "document_type": null,
+            "resource_type": "external",
+            "subjects": [],
+            "category": {
+                "id": 10,
+                "name": "Frequently Asked Questions (FAQs)",
+                "description": "",
+                "order": 400,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 5,
+                    "name": "Subregulatory Guidance",
+                    "description": "SMDLs, SHOs, CIBs, FAQs, SMM",
+                    "order": 400,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
+            },
+            "url": "https://www.fullstackpython.com/django-utils-html-escape-examples.html",
+            "id": 3410,
+            "document_name_headline": "[Mock] <span class='search-highlight'>IMG</span> Take Two &lt;<span class='search-highlight'>img</span> /&gt;",
+            "summary_headline": "This is a description once again. &lt;<span class=\"search-highlight\">img</span> src=\"me.jpg\" /&gt;",
+            "content_headline": null
+        },
+        {
+            "doc_name_string": "[Mock] loop test &lt;img /&gt;",
+            "file_name_string": null,
+            "date_string": "2023-08-30",
+            "summary_string": "Description &lt;img /&gt; \"Hello, this is a quote.\"  Here's an apostrophe.",
+            "locations": [
+                {
+                    "id": 1462,
+                    "title": 42,
+                    "part": 460,
+                    "type": "section",
+                    "section_id": 121,
+                    "parent": 1455
+                }
+            ],
+            "document_type": null,
+            "resource_type": "external",
+            "subjects": [],
+            "category": {
+                "id": 139,
+                "name": "Topic Briefs and Reports",
+                "description": "",
+                "order": 0,
+                "show_if_empty": false,
+                "is_fr_doc_category": false,
+                "type": "subcategory",
+                "parent": {
+                    "id": 19,
+                    "name": "Reports and Evaluations",
+                    "description": "HHS, CMS, and ASPE policy analysis and research reports",
+                    "order": 550,
+                    "show_if_empty": true,
+                    "is_fr_doc_category": false,
+                    "type": ""
+                }
+            },
+            "url": "https://docs.djangoproject.com/en/5.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin.fieldsets",
+            "id": 3408,
+            "document_name_headline": "[Mock] loop test &lt;<span class='search-highlight'>img</span> /&gt;",
+            "summary_headline": "Description &lt;<span class=\"search-highlight\">img</span> /&gt; \"Hello, this is a quote.\"  Here's an apostrophe.",
+            "content_headline": null
+        }
+    ]
+}
