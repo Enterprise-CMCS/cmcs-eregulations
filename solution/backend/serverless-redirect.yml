@@ -4,6 +4,27 @@ provider:
   name: aws
   runtime: python3.6
   region: us-east-1
+  iam:
+    role: LambdaFunctionRole
+  apiGateway:
+    binaryMediaTypes:
+      - 'multipart/form-data'
+      - 'application/pdf'
+  logs:
+    restApi:
+      level: INFO
+      roleManagedExternally: true
+  lambdaHashingVersion: '20201221'
+  vpc:
+    securityGroupIds:
+      - ${ssm:/eregulations/aws/securitygroupid}
+    subnetIds:
+      - ${ssm:/account_vars/vpc/subnets/private/a/id}
+      - ${ssm:/account_vars/vpc/subnets/private/b/id}
+  deploymentBucket:
+      blockPublicAccess: true
+  tracing:
+    apiGateway: true
 
 functions:
   redirectFunction:
