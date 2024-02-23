@@ -26,18 +26,21 @@ const _beforeEach = () => {
     }).as("subjects");
 };
 
-Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
-    cy.intercept("**/v3/content-search/?q=mock**", {
-        fixture: "policy-docs.json",
-    }).as("subjectFiles");
-    cy.viewport("macbook-15");
-    cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-    cy.visit("/subjects/?q=mock");
-    cy.injectAxe();
-    cy.wait("@subjectFiles").then((interception) => {
-        expect(interception.response.statusCode).to.eq(200);
-    });
-});
+Cypress.Commands.add(
+    "getPolicyDocs",
+    ({ username, password, query = "mock", fixture = "policy-docs.json" }) => {
+        cy.intercept(`**/v3/content-search/?q=${query}**`, {
+            fixture,
+        }).as("subjectFiles");
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit(`/subjects/?q=${query}`);
+        cy.injectAxe();
+        cy.wait("@subjectFiles").then((interception) => {
+            expect(interception.response.statusCode).to.eq(200);
+        });
+    }
+);
 
 describe("Find by Subjects", () => {
     beforeEach(_beforeEach);
@@ -46,7 +49,8 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository?subjects=2&q=test");
         cy.url().should("not.include", "/policy-repository");
-        cy.url().should("include", "/subjects/")
+        cy.url()
+            .should("include", "/subjects/")
             .and("include", "subjects=2")
             .and("include", "q=test");
         cy.get(".div__login-sidebar a")
@@ -66,9 +70,9 @@ describe("Find by Subjects", () => {
             .and("include", "subjects/")
             .and("not.include", "q=");
 
-        cy.get(".div__login-sidebar a")
-            .click();
-        cy.url().should("include", "/?next=")
+        cy.get(".div__login-sidebar a").click();
+        cy.url()
+            .should("include", "/?next=")
             .and("include", "subjects/")
             .and("not.include", "q=");
     });
@@ -613,6 +617,26 @@ describe("Find by Subjects", () => {
             password,
             landingPage: "/subjects/",
         });
+    });
+
+    it("should display angle brackets without interfering with search highlighting", () => {
+        cy.getPolicyDocs({
+            username,
+            password,
+            query: "img",
+            fixture: "policy-docs-brackets.json",
+        });
+
+        cy.get(".result__link--label")
+            .eq(0)
+            .should(
+                "contain",
+                'This is a description once again. <img src="me.jpg" />'
+            )
+            .and("not.contain", "&lt;")
+            .find("span")
+            .should("have.attr", "class")
+            .and("include", "search-highlight");
     });
 
     it("returns you to the custom eua login page when you log out", () => {
