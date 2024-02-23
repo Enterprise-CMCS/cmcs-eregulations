@@ -96,6 +96,14 @@ custom:
     version: V2
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
+functions:
+  redirectFunction:
+    handler: redirect_lambda.handler
+    timeout: 30
+    events:
+      - http: ANY /redirect
+      - http: ANY /redirect/{proxy+}
+
 resources:
   Resources:
     MyS3Bucket:
