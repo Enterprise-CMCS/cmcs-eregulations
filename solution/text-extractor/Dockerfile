@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/provided:al2023
+FROM public.ecr.aws/lambda/python:3.12
 
 ENV HOSTNAME="text-extractor"
 ENV EXTERNAL_PORT="6000"
@@ -14,7 +14,7 @@ COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 RUN ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 
 # Install binary dependencies
-RUN dnf install -y poppler-utils file-libs python3 python3-pip
+RUN dnf install -y poppler-utils file-libs
 
 # Install the required packages
 RUN pip install -r app/requirements.txt

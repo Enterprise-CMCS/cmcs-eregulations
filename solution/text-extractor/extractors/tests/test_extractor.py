@@ -1,10 +1,14 @@
 import unittest
+from unittest.mock import patch
 
 from extractors import (
     Extractor,
     ExtractorException,
     ExtractorInitException,
 )
+
+import magic
+import filetype
 
 
 class TestExtractor(Extractor):
@@ -66,30 +70,66 @@ class ExtractorTest(unittest.TestCase):
         text = extractor.extract(file)
         self.assertEqual(text, file.decode())
 
-    def test_extract_embedded_success(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type4")
+    def test_extract_embedded_success(self, *args):
         file = b"This is a file"
         file_name = "file.type4"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, file.decode())
 
-    def test_extract_embedded_invalid_type(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type1000")
+    def test_extract_embedded_invalid_type(self, *args):
         file = b"This is a file"
         file_name = "file.type1000"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
 
-    def test_extract_embedded_extract_failure(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type5")
+    def test_extract_embedded_extract_failure(self, *args):
         file = b"This is a file"
         file_name = "file.type5"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
 
-    def test_extract_embedded_unexpected_failure(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type6")
+    def test_extract_embedded_unexpected_failure(self, *args):
         file = b"This is a file"
         file_name = "file.type6"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
+
+    @patch.object(filetype, "guess_mime", return_value="type1")
+    @patch.object(magic, "from_buffer", return_value="type2")
+    def test_get_mime_type_filetype_return(self, *args):
+        extractor = Extractor.get_extractor("type1")
+        file = b"This is a file"
+        mime = extractor._get_mime_type(file)
+        self.assertEqual(mime, "type1")
+
+    @patch.object(filetype, "guess_mime", return_value=None)
+    @patch.object(magic, "from_buffer", return_value="type2")
+    def test_get_mime_type_filetype_fails(self, *args):
+        extractor = Extractor.get_extractor("type1")
+        file = b"This is a file"
+        mime = extractor._get_mime_type(file)
+        self.assertEqual(mime, "type2")
+
+    @patch.object(filetype, "guess_mime", side_effect=Exception("Failure happened"))
+    @patch.object(magic, "from_buffer", return_value="type2")
+    def test_get_mime_type_filetype_raises(self, *args):
+        extractor = Extractor.get_extractor("type1")
+        file = b"This is a file"
+        mime = extractor._get_mime_type(file)
+        self.assertEqual(mime, "type2")
+
+    @patch.object(filetype, "guess_mime", side_effect=Exception("Failure happened"))
+    @patch.object(magic, "from_buffer", side_effect=Exception("Couldn't detect file type"))
+    def test_get_mime_type_both_fail(self, *args):
+        extractor = Extractor.get_extractor("type1")
+        file = b"This is a file"
+        with self.assertRaises(Exception):
+            extractor._get_mime_type(file)

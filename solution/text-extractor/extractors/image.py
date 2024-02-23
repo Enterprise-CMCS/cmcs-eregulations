@@ -17,6 +17,7 @@ class ImageExtractor(Extractor):
         "image/x-ms-bmp",
         "image/x-tga",
         "image/webp",
+        "application/octet-stream",
     )
 
     def __init__(self, file_type: str, config: dict):
