@@ -47,3 +47,21 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .find(".subcategory-label")
         .should("include.text", "TestSubCat");
 };
+
+export const getPolicyDocs = ({
+    username,
+    password,
+    query = "mock",
+    fixture = "policy-docs.json",
+}) => {
+    cy.intercept(`**/v3/content-search/?q=${query}**`, {
+        fixture,
+    }).as("subjectFiles");
+    cy.viewport("macbook-15");
+    cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+    cy.visit(`/subjects/?q=${query}`);
+    cy.injectAxe();
+    cy.wait("@subjectFiles").then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+    });
+};
