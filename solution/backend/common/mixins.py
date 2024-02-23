@@ -1,5 +1,3 @@
-from html import unescape
-
 from django.db.models import CharField, TextField
 from rest_framework.pagination import PageNumberPagination
 
