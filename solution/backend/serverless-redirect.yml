@@ -2,7 +2,7 @@ service: redirect-api
 
 provider:
   name: aws
-  runtime: python3.6
+  runtime: python3.9
   region: us-east-1
   iam:
     role: LambdaFunctionRole
