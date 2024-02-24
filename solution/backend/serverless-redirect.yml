@@ -35,7 +35,6 @@ functions:
       - http: ANY /redirect/{proxy+}
 resources:
   Resources:
-    WAFRegionalWebACL: ${file(aws_resources/waf.yml):WAFRegionalWebACL}
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
