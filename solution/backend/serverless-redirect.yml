@@ -21,8 +21,6 @@ provider:
     subnetIds:
       - ${ssm:/account_vars/vpc/subnets/private/a/id}
       - ${ssm:/account_vars/vpc/subnets/private/b/id}
-  deploymentBucket:
-      blockPublicAccess: true
   tracing:
     apiGateway: true
 
