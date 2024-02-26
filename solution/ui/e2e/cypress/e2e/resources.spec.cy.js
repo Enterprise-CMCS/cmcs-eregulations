@@ -10,24 +10,14 @@ describe("Resources page", () => {
             });
         });
 
-        it("goes to resources page from homepage", () => {
-            cy.viewport("macbook-15");
-            cy.visit("/");
-            cy.clickHeaderLink({ page: "Resources", screen: "wide" });
-            cy.url().should("include", "/resources");
-        });
-
-        it("resources link nested in a dropdown menu on narrow screen widths", () => {
-            cy.viewport("iphone-x");
-            cy.visit("/");
-            cy.clickHeaderLink({ page: "Resources", screen: "narrow" });
-            cy.url().should("include", "/resources");
-        });
-
         it("goes to another SPA page from the resources page", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
-            cy.clickHeaderLink({ page: "Statutes", screen: "wide" });
+            cy.clickHeaderLink({
+                page: "statutes",
+                label: "Statutes",
+                screen: "wide",
+            });
             cy.url().should("include", "/statutes");
         });
     });
@@ -82,10 +72,10 @@ describe("Resources page", () => {
         it("does not filter locations on the search", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
-            cy.wait("@resources").then( (interception) => {
-              expect(interception.request.url).to.not.contain( 'location=')
+            cy.wait("@resources").then((interception) => {
+                expect(interception.request.url).to.not.contain("location=");
             });
-        })
+        });
 
         it("renders correctly", () => {
             cy.viewport("macbook-15");
@@ -156,7 +146,10 @@ describe("Resources page", () => {
             cy.viewport("macbook-15");
             cy.visit("/resources");
             cy.injectAxe();
-            cy.get("button#select-resource-categories").should("not.have.attr", "disabled");
+            cy.get("button#select-resource-categories").should(
+                "not.have.attr",
+                "disabled"
+            );
             cy.get("#select-resource-categories").click({
                 force: true,
             });

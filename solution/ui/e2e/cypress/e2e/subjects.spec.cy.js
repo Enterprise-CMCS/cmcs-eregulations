@@ -603,8 +603,8 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.clickHeaderLink({ page: "Resources", screen: "wide" });
-        cy.url().should("include", "/resources");
+        cy.clickHeaderLink({ page: "statutes", label: "Statutes", screen: "wide" });
+        cy.url().should("include", "/statutes");
     });
 
     it("should have the correct labels for public and internal documents", () => {
