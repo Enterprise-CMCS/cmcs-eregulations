@@ -96,7 +96,6 @@ custom:
     version: V2
 functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)}
 
-
 resources:
   Resources:
     MyS3Bucket:

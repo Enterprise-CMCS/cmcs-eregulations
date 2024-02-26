@@ -156,15 +156,14 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
+          serverless deploy --config ./serverless-redirect.yml --stage redirect${PR} | tee output.log
           serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function populate_content --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function index_resources --stage dev${PR}
-          serverless invoke --config ./serverless-experimental.yml --function index_resources --stage dev${PR}
           echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
-          serverless deploy --config ./serverless-redirect.yml --stage redirect${PR} | tee output.log
           popd
   test-python:
     needs: [deploy-django]
