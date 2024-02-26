@@ -14,9 +14,8 @@
                 </template>
                 <template #links>
                     <HeaderLinks
-                        :about-url="aboutUrl"
-                        :resources-url="resourcesUrl"
                         :statutes-url="statutesUrl"
+                        :subjects-url="subjectsUrl"
                     />
                 </template>
                 <template #search>
@@ -204,10 +203,6 @@ export default {
             type: String,
             default: "/",
         },
-        resourcesUrl: {
-            type: String,
-            default: "/resources/",
-        },
         searchUrl: {
             type: String,
             default: "/search/",
@@ -215,6 +210,10 @@ export default {
         statutesUrl: {
             type: String,
             default: "/statutes/",
+        },
+        subjectsUrl: {
+            type: String,
+            default: "/subjects/",
         },
     },
 
