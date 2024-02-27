@@ -2,6 +2,7 @@ import logging
 import os
 
 import requests
+from magika import Magika
 
 from .backends import (
     BackendException,
@@ -63,8 +64,9 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_failure(500, f"Backend unexpectedly failed: {str(e)}")
 
+    # Determine the file's MIME type using Google's Magika ML algorithm
     try:
-        file_type = uri.lower().split('.')[-1]
+        file_type = Magika().identify_bytes(file).output.mime_type
     except Exception as e:
         return lambda_failure(500, f"Failed to determine file type: {str(e)}")
 

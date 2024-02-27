@@ -6,6 +6,8 @@ from .exceptions import (
     ExtractorInitException,
 )
 
+from magika import Magika
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,17 +31,22 @@ class Extractor:
         self.file_type = file_type
         self.config = config
 
-    def _write_file(self, data: bytes) -> str:
-        file = NamedTemporaryFile(delete=False, suffix=f".{self.file_type}")
+    def _write_file(self, data: bytes, **kwargs) -> str:
+        extension = kwargs.get("extension")
+        extension = f".{extension}" if extension else ""
+        file = NamedTemporaryFile(delete=False, suffix=extension)
         file.write(data)
         file.close()
         logger.debug("Wrote file contents to temporary file \"%s\".", file.name)
         return file.name
 
+    def _get_mime_type(self, file: bytes) -> str:
+        return Magika().identify_bytes(file).output.mime_type
+
     def _extract_embedded(self, file_name: str, file: bytes) -> str:
         logger.info("Extracting embedded file \"%s\".", file_name)
         try:
-            file_type = file_name.lower().split(".")[-1]
+            file_type = self._get_mime_type(file)
             extractor = Extractor.get_extractor(file_type, self.config)
             return extractor.extract(file)
         except ExtractorInitException as e:

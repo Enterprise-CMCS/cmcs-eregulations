@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from extractors import (
     Extractor,
@@ -66,28 +67,32 @@ class ExtractorTest(unittest.TestCase):
         text = extractor.extract(file)
         self.assertEqual(text, file.decode())
 
-    def test_extract_embedded_success(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type4")
+    def test_extract_embedded_success(self, *args):
         file = b"This is a file"
         file_name = "file.type4"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, file.decode())
 
-    def test_extract_embedded_invalid_type(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type1000")
+    def test_extract_embedded_invalid_type(self, *args):
         file = b"This is a file"
         file_name = "file.type1000"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
 
-    def test_extract_embedded_extract_failure(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type5")
+    def test_extract_embedded_extract_failure(self, *args):
         file = b"This is a file"
         file_name = "file.type5"
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
 
-    def test_extract_embedded_unexpected_failure(self):
+    @patch.object(Extractor, "_get_mime_type", return_value="type6")
+    def test_extract_embedded_unexpected_failure(self, *args):
         file = b"This is a file"
         file_name = "file.type6"
         extractor = Extractor.get_extractor("type1")

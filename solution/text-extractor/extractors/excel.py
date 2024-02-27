@@ -9,12 +9,13 @@ logger = logging.getLogger(__name__)
 
 
 class ExcelExtractor(Extractor):
-    file_types = ("xlsx", "xlsm")
+    file_types = ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",)
+    extension = "xlsx"
 
     _valid_cell_types = ["s", "n", "b", "inlineStr", "str"]
 
     def extract(self, file: bytes) -> str:
-        file_path = self._write_file(file)
+        file_path = self._write_file(file, extension="xlsx")
         output = ""
 
         # Open workbook read-only to avoid massive slowdown while iterating through cells
