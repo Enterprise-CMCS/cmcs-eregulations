@@ -11,13 +11,14 @@ logger = logging.getLogger(__name__)
 class ImageExtractor(Extractor):
     file_types = (
         "image/gif",
-        "image/jp2",
-        "image/jpx",
         "image/bmp",
         "image/x-ms-bmp",
         "image/x-tga",
         "image/webp",
-        "application/octet-stream",
+        # TODO: Uncomment these types if Magika adds JPEG 2000 support, or remove if they don't.
+        # These are not urgently needed file types.
+        # "image/jp2",
+        # "image/jpx",
     )
 
     def __init__(self, file_type: str, config: dict):

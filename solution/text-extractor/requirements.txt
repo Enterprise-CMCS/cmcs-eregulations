@@ -1,7 +1,5 @@
 requests
 boto3
-python-magic
-filetype
 moto
 pdf2image
 ruff
@@ -13,3 +11,4 @@ xlrd
 docx2txt
 openpyxl
 python-pptx
+magika

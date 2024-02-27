@@ -7,9 +7,6 @@ from extractors import (
     ExtractorInitException,
 )
 
-import magic
-import filetype
-
 
 class TestExtractor(Extractor):
     file_types = ("type1", "type2")
@@ -101,35 +98,3 @@ class ExtractorTest(unittest.TestCase):
         extractor = Extractor.get_extractor("type1")
         output = extractor._extract_embedded(file_name, file)
         self.assertEqual(output, "")
-
-    @patch.object(filetype, "guess_mime", return_value="type1")
-    @patch.object(magic, "from_buffer", return_value="type2")
-    def test_get_mime_type_filetype_return(self, *args):
-        extractor = Extractor.get_extractor("type1")
-        file = b"This is a file"
-        mime = extractor._get_mime_type(file)
-        self.assertEqual(mime, "type1")
-
-    @patch.object(filetype, "guess_mime", return_value=None)
-    @patch.object(magic, "from_buffer", return_value="type2")
-    def test_get_mime_type_filetype_fails(self, *args):
-        extractor = Extractor.get_extractor("type1")
-        file = b"This is a file"
-        mime = extractor._get_mime_type(file)
-        self.assertEqual(mime, "type2")
-
-    @patch.object(filetype, "guess_mime", side_effect=Exception("Failure happened"))
-    @patch.object(magic, "from_buffer", return_value="type2")
-    def test_get_mime_type_filetype_raises(self, *args):
-        extractor = Extractor.get_extractor("type1")
-        file = b"This is a file"
-        mime = extractor._get_mime_type(file)
-        self.assertEqual(mime, "type2")
-
-    @patch.object(filetype, "guess_mime", side_effect=Exception("Failure happened"))
-    @patch.object(magic, "from_buffer", side_effect=Exception("Couldn't detect file type"))
-    def test_get_mime_type_both_fail(self, *args):
-        extractor = Extractor.get_extractor("type1")
-        file = b"This is a file"
-        with self.assertRaises(Exception):
-            extractor._get_mime_type(file)

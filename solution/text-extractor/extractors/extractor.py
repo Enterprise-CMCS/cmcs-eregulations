@@ -6,8 +6,7 @@ from .exceptions import (
     ExtractorInitException,
 )
 
-import magic
-import filetype
+from magika import Magika
 
 logger = logging.getLogger(__name__)
 
@@ -42,13 +41,7 @@ class Extractor:
         return file.name
 
     def _get_mime_type(self, file: bytes) -> str:
-        try:
-            file_type = filetype.guess_mime(file)
-            if not file_type or file_type == "application/octet-stream":
-                raise Exception
-        except Exception:
-            file_type = magic.from_buffer(file, mime=True)
-        return file_type
+        return Magika().identify_bytes(file).output.mime_type
 
     def _extract_embedded(self, file_name: str, file: bytes) -> str:
         logger.info("Extracting embedded file \"%s\".", file_name)

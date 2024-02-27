@@ -4,8 +4,7 @@ from unittest.mock import patch
 
 from extractors import Extractor
 
-import magic
-import filetype
+from magika import Magika
 
 
 logging.disable(logging.CRITICAL)
@@ -30,12 +29,7 @@ class FixtureTestCase(unittest.TestCase):
             expected = f.read().decode()
 
         # Determine the file's MIME type
-        try:
-            mime_type = filetype.guess_mime(sample)
-            if not mime_type or mime_type == "application/octet-stream":
-                raise Exception
-        except Exception:
-            mime_type = magic.from_buffer(sample, mime=True)
+        mime_type = Magika().identify_bytes(sample).output.mime_type
 
         with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
             extractor = Extractor.get_extractor(mime_type, config)

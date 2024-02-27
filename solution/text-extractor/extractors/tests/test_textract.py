@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 import botocore
-import magic
+from magika import Magika
 
 from extractors import (
     Extractor,
@@ -24,7 +24,7 @@ def mock_make_api_call(self, operation_name, kwarg):
 
     if operation_name == 'DetectDocumentText':
         doc = kwarg["Document"]["Bytes"]
-        file_type = magic.from_buffer(doc, mime=True)
+        file_type = Magika().identify_bytes(doc).output.mime_type
         if file_type not in accepted_types:
             raise Exception("Received an invalid type!")
         return {

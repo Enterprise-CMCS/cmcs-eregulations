@@ -2,8 +2,7 @@ import logging
 import os
 
 import requests
-import magic
-import filetype
+from magika import Magika
 
 from .backends import (
     BackendException,
@@ -65,19 +64,11 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_failure(500, f"Backend unexpectedly failed: {str(e)}")
 
-    # Determine the file's MIME type.
-    # Uses a 2-stage approach: filetype first, then magic if filetype fails.
-    # Filetype is more accurate in general, but magic supports more files types.
-    # Magic docs recommend using the first 2048 bytes of the file, but this isn't always accurate.
+    # Determine the file's MIME type using Google's Magika ML algorithm
     try:
-        file_type = filetype.guess_mime(file)
-        if not file_type or file_type == "application/octet-stream":
-            raise Exception
-    except Exception:
-        try:
-            file_type = magic.from_buffer(file, mime=True)
-        except Exception as e:
-            return lambda_failure(500, f"Failed to determine file type: {str(e)}")
+        file_type = Magika().identify_bytes(file).output.mime_type
+    except Exception as e:
+        return lambda_failure(500, f"Failed to determine file type: {str(e)}")
 
     # Run extractor
     logger.info("Starting text extraction.")

@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-import magic
+from magika import Magika
 
 from extractors import (
     Extractor,
@@ -14,7 +14,7 @@ orig = Extractor.get_extractor
 
 class MockJpegExtractor:
     def extract(self, file: bytes) -> str:
-        if magic.from_buffer(file[:2048], mime=True) != "image/jpeg":
+        if Magika().identify_bytes(file).output.mime_type != "image/jpeg":
             raise ExtractorException("Extractor did not convert page to jpeg.")
         return "Sample output"  # Expected file will contain 2 copies of this as there are 2 pages in the PDF
 

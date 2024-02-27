@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.12
+FROM public.ecr.aws/lambda/python:3.11
 
 ENV HOSTNAME="text-extractor"
 ENV EXTERNAL_PORT="6000"
@@ -10,11 +10,8 @@ ENV STARTUP_CMD="app.text_extractor.handler"
 # Will be overridden locally
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 
-# Fix timezone bug in al2023 distro
-RUN ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
-
 # Install binary dependencies
-RUN dnf install -y poppler-utils file-libs
+RUN yum install -y poppler-utils
 
 # Install the required packages
 RUN pip install -r app/requirements.txt
