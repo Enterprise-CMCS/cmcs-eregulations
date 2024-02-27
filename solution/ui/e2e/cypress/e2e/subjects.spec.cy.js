@@ -595,7 +595,7 @@ describe("Find by Subjects", () => {
         });
     });
 
-    it("goes to another SPA page from the policy repository page", () => {
+    it("goes to another SPA page from the subjects page", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,

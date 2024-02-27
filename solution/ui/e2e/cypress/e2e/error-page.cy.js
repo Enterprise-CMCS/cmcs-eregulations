@@ -65,6 +65,17 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("error-page - goes to the Subjects page using header link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/about/");
+        cy.clickHeaderLink({
+            page: "subjects",
+            label: "Find by Subject",
+            screen: "wide",
+        });
+        cy.url().should("include", "/subjects");
+    });
+
     it("allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
         cy.request({ url: "/404", failOnStatusCode: false })
