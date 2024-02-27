@@ -119,7 +119,7 @@ class ExtractorTest(unittest.TestCase):
         file = b"0" * size
         extractor = Extractor.get_extractor("type7")
         with self.assertRaises(ExtractorException):
-           extractor.extract(file)
+            extractor.extract(file)
 
     def test_extract_max_size_override(self):
         config = {
