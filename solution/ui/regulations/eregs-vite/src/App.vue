@@ -63,7 +63,7 @@ export default {
             :home-url="homeUrl"
             :search-url="searchUrl"
             :statutes-url="statutesUrl"
-            :subject-url="subjectsUrl"
+            :subjects-url="subjectsUrl"
             :host="host"
             :is-authenticated="isAuthenticated === 'True'"
             :has-editable-job-code="hasEditableJobCode === 'True'"
