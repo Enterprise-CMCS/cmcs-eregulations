@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 class PdfExtractor(Extractor):
     file_types = ("application/pdf",)
+    max_size = 20
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
@@ -25,7 +26,7 @@ class PdfExtractor(Extractor):
             fmt="jpeg",
         )
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         with TemporaryDirectory() as temp_dir:
             try:
                 pages = self._convert_to_images(file, temp_dir)

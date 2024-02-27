@@ -12,7 +12,7 @@ class MarkupExtractor(Extractor):
         "application/xml",
     )
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)  # Hide unnecessary warning about parsing XML
         extractor = BeautifulSoup(file, "html.parser")  # Use html.parser to avoid lxml dependency (has M1 issues)
         warnings.resetwarnings()

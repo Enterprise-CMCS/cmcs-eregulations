@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 class WordExtractor(Extractor):
     file_types = ("application/vnd.openxmlformats-officedocument.wordprocessingml.document",)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
         with TemporaryDirectory() as temp_dir:
             logger.debug("Extracting text. Embedded images stored in temporary directory.")

@@ -1,5 +1,6 @@
 import logging
 from tempfile import NamedTemporaryFile
+import sys
 
 from .exceptions import (
     ExtractorException,
@@ -9,11 +10,19 @@ from .exceptions import (
 from magika import Magika
 
 logger = logging.getLogger(__name__)
+magika = Magika()
 
 
 # Base class for text extraction
 # Child classes are automatically registered when added to __init__.py
 class Extractor:
+    max_size = -1  # Set this to a value in megabytes to limit the maximum size of the file to extract text from
+
+    @classmethod
+    def get_file_type(cls, file: bytes) -> str:
+        # Determine the file's MIME type using Google's Magika ML algorithm
+        return magika.identify_bytes(file).output.mime_type
+
     @classmethod
     def get_extractor(cls, file_type: str, config: dict = {}) -> "Extractor":
         logger.info("Attempting to initialize extractor for file type \"%s\".", file_type)
@@ -40,13 +49,10 @@ class Extractor:
         logger.debug("Wrote file contents to temporary file \"%s\".", file.name)
         return file.name
 
-    def _get_mime_type(self, file: bytes) -> str:
-        return Magika().identify_bytes(file).output.mime_type
-
     def _extract_embedded(self, file_name: str, file: bytes) -> str:
         logger.info("Extracting embedded file \"%s\".", file_name)
         try:
-            file_type = self._get_mime_type(file)
+            file_type = Extractor.get_file_type(file)
             extractor = Extractor.get_extractor(file_type, self.config)
             return extractor.extract(file)
         except ExtractorInitException as e:
@@ -58,4 +64,11 @@ class Extractor:
         return ""
 
     def extract(self, file: bytes) -> str:
+        file_size = sys.getsizeof(file) / 1024
+        if self.max_size >= 0 and file_size > self.max_size and not self.config.get("ignore_max_size", False):
+            raise ExtractorException(f"file size is too large: {file_size} > {self.max_size}. "
+                                      "You may override this with 'ignore_max_size = True'.")
+        return self._extract(file)
+
+    def _extract(self, file: bytes) -> str:
         raise NotImplementedError(f"extract function not implemented for '{self.file_type}'")

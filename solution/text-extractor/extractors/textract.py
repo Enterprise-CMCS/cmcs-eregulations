@@ -38,7 +38,7 @@ class TextractExtractor(Extractor):
                 "config": boto3.session.Config(signature_version='s3v4',),
             }
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         try:
             logger.debug("Sending image bytes to AWS Textract.")
             response = self.client.detect_document_text(Document={'Bytes': file})

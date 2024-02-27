@@ -25,7 +25,7 @@ class ImageExtractor(Extractor):
         super().__init__(file_type, config)
         self.extractor = Extractor.get_extractor("image/jpeg", config)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         image = Image.open(io.BytesIO(file))
         if not image.mode == "RGB":
             image = image.convert("RGB")

@@ -14,7 +14,7 @@ class ExcelExtractor(Extractor):
 
     _valid_cell_types = ["s", "n", "b", "inlineStr", "str"]
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file, extension="xlsx")
         output = ""
 
