@@ -6,10 +6,10 @@ This Lambda function is run to extract text from a variety of file types and POS
 
 The text extractor supports the following file types. File types that are planned but not yet implemented are not checked.
 
-- [x] Plain text (txt, multiple encodings supported)
+- [x] Plain text (txt, multiple encodings supported, currently excluding UTF-16)
 - [x] HTML and XML (html, htm, xhtml, xml)
 - [x] PDF
-- [x] Images (png, jpeg, gif, tiff, jpeg2000, bmp, tga, webp)
+- [x] Images (png, jpeg, gif, tiff, bmp, tga, webp)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [x] Microsoft Outlook (msg)
@@ -41,8 +41,9 @@ The following data structure is required:
     "id": 1,                                 // The eRegs database ID of the object to update
     "uri": "object_uri",                     // The web URL or object name to extract text from
     "post_url": "https://api-url-here/",     // The API URL to POST the text to
-    "token": "xxxxxx",                       //  If the return point uses a jwt token for authentication
+    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
     "backend": "s3",                         // Optional - defaults to 'web'
+    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
     // Only include if using the S3 backend
     "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
@@ -194,6 +195,23 @@ class SampleExtractor(Extractor):
 ```
 
 This method returns a path to a temporary file stored on disk. You may access it using standard Python techniques.
+
+## Setting a file size limit for file extraction
+
+In some cases, it is necessary to limit the maximum file size that an extractor will attempt to process by default. This may be required for particularly slow extractors that are at risk of exceeding the 15 minute AWS Lambda timeout, or to reduce AWS costs associated with text extraction, among other possible reasons.
+
+This behavior is built into the `Extractor` class but disabled by default. To enable it, set `max_size = N` in your custom extractor, like so:
+
+```python
+class SampleExtractor(Extractor):
+    file_types = ("filetype1", "filetype2", ...)
+    max_size = 5
+
+    def extract(self, file: bytes) -> str:
+        ...
+```
+
+In this example, `max_size` is set to 5 megabytes. This means that if the file size is greater than 5MB, the extractor will raise an exception and refuse to process the file. To override the limit, include `ignore_max_size: true` in your JSON request to the Lambda.
 
 ## Unit testing your new extractor
 
