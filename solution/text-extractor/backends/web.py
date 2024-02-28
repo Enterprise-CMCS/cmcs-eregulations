@@ -13,13 +13,15 @@ logger = logging.getLogger(__name__)
 
 class WebBackend(FileBackend):
     backend = "web"
-    retry_timeout = 30
 
+    _retry_timeout = 30
     _ignore_robots = False
+    _user_agent = "CMSeRegsTextExtractorBot/1.0"
 
     def __init__(self, config: dict):
-        self._user_agent = requests.utils.default_headers()["User-Agent"]
         self._parser = robotparser.RobotFileParser()
+        self._headers = requests.utils.default_headers()
+        self._headers["User-Agent"] = self._user_agent
 
     def _get_robots_txt(self, url: str):
         logger.debug("Fetching robots.txt from \"%s\".", url)
@@ -56,7 +58,7 @@ class WebBackend(FileBackend):
 
         while True:  # Loop until the lambda times out, max of 15 mins
             try:
-                resp = requests.get(uri, timeout=60)
+                resp = requests.get(uri, timeout=60, headers=self._headers)
             except requests.exceptions.Timeout:
                 logger.warning("GET request timed out. Retrying in %i seconds.", self.retry_timeout)
                 time.sleep(self.retry_timeout)
