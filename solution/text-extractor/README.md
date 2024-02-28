@@ -44,12 +44,12 @@ The following data structure is required:
     "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
     "backend": "s3",                         // Optional - defaults to 'web'
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
-    // Only include if using the S3 backend
+    // Only necessary to include if using the S3 backend
     "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
-        "aws_storage_bucket_name": "xxxxxx",  // The name of the bucket to retrieve the object from
-        "use_lambda": true,                  //  If you are using a local text extractor or a deployed text extractor(pertains to local development)
+        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from
+        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development)
         "aws_region": "us-east-1"            // AWS region for Textract
     },
 }
