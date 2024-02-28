@@ -46,7 +46,11 @@ export const goHome = () => {
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
 
-export const clickHeaderLink = ({ page = "Resources", screen = "wide" }) => {
+export const clickHeaderLink = ({
+    page = "statutes",
+    label = "Statutes",
+    screen = "wide",
+}) => {
     const listLocation =
         screen === "wide"
             ? "header .header--links .links--container"
@@ -68,7 +72,7 @@ export const clickHeaderLink = ({ page = "Resources", screen = "wide" }) => {
             `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
         )
             .should("be.visible")
-            .should("have.text", page)
+            .should("have.text", label)
             .click({ force: true });
 
         // styled as selected
@@ -76,7 +80,7 @@ export const clickHeaderLink = ({ page = "Resources", screen = "wide" }) => {
             `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
         )
             .should("be.visible")
-            .should("have.text", page)
+            .should("have.text", label)
             .should("have.attr", "class")
             .and("match", /active/);
     } else {
@@ -90,9 +94,11 @@ export const clickHeaderLink = ({ page = "Resources", screen = "wide" }) => {
 
         cy.get(".more--dropdown-menu").should("be.visible");
 
-        cy.get(`${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`)
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
             .should("be.visible")
-            .should("have.text", page)
+            .should("have.text", label)
             .click({ force: true });
     }
 };

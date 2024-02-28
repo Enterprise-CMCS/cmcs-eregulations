@@ -57,10 +57,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    resourcesUrl: {
-        type: String,
-        default: "/resources/",
-    },
     searchUrl: {
         type: String,
         default: "/search/",
@@ -68,6 +64,10 @@ const props = defineProps({
     statutesUrl: {
         type: String,
         default: "/statutes/",
+    },
+    subjectsUrl: {
+        type: String,
+        default: "/subjects/",
     },
 });
 
@@ -351,8 +351,6 @@ getDocSubjects();
                 </template>
                 <template #links>
                     <HeaderLinks
-                        :about-url="aboutUrl"
-                        :resources-url="resourcesUrl"
                         :statutes-url="statutesUrl"
                     />
                 </template>

@@ -25,15 +25,15 @@ export default {
             type: String,
             default: "",
         },
-        resourcesUrl: {
-            type: String,
-            default: "",
-        },
         searchUrl: {
             type: String,
             default: "",
         },
         statutesUrl: {
+            type: String,
+            default: "",
+        },
+        subjectsUrl: {
             type: String,
             default: "",
         },
@@ -61,9 +61,9 @@ export default {
             :custom-login-url="customLoginUrl"
             :custom-url="customUrl"
             :home-url="homeUrl"
-            :resources-url="resourcesUrl"
             :search-url="searchUrl"
             :statutes-url="statutesUrl"
+            :subjects-url="subjectsUrl"
             :host="host"
             :is-authenticated="isAuthenticated === 'True'"
             :has-editable-job-code="hasEditableJobCode === 'True'"

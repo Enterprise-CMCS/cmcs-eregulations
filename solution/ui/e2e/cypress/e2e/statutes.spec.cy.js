@@ -16,7 +16,11 @@ describe("Statute Table", () => {
     it("goes to statutes page from homepage and has SSA Title 19 selected by default", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.clickHeaderLink({ page: "Statutes", screen: "wide" });
+        cy.clickHeaderLink({
+            page: "statutes",
+            label: "Statutes",
+            screen: "wide",
+        });
         cy.url().should("include", "/statutes/");
 
         cy.get("h1").contains("Statute Reference");
@@ -55,7 +59,11 @@ describe("Statute Table", () => {
     it("statutes link nested in a dropdown menu on mobile screen widths", () => {
         cy.viewport("iphone-x");
         cy.visit("/");
-        cy.clickHeaderLink({ page: "Statutes", screen: "narrow" });
+        cy.clickHeaderLink({
+            page: "statutes",
+            label: "Statutes",
+            screen: "narrow",
+        });
         cy.url().should("include", "/statutes/");
     });
 
@@ -73,7 +81,11 @@ describe("Statute Table", () => {
     it("goes to another SPA page from the statutes page", () => {
         cy.viewport("macbook-15");
         cy.visit("/statutes");
-        cy.clickHeaderLink({ page: "Resources", screen: "wide" });
-        cy.url().should("include", "/resources");
+        cy.clickHeaderLink({
+            page: "subjects",
+            label: "Find by Subject",
+            screen: "wide",
+        });
+        cy.url().should("include", "/subjects");
     });
 });

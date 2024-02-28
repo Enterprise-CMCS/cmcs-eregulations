@@ -5,15 +5,11 @@ import HeaderChevronUp from "../svgs/header-chevron-up.vue";
 import HeaderChevronDown from "../svgs/header-chevron-down.vue";
 
 const props = defineProps({
-    aboutUrl: {
-        type: String,
-        required: true,
-    },
-    resourcesUrl: {
-        type: String,
-        required: true,
-    },
     statutesUrl: {
+        type: String,
+        required: true,
+    },
+    subjectsUrl: {
         type: String,
         required: true,
     },
@@ -27,16 +23,10 @@ const links = [
         href: props.statutesUrl,
     },
     {
-        name: "resources",
-        label: "Resources",
-        active: window.location.pathname.includes("resources"),
-        href: props.resourcesUrl,
-    },
-    {
-        name: "about",
-        label: "About",
-        active: window.location.pathname.includes("about"),
-        href: props.aboutUrl,
+        name: "subjects",
+        label: "Find by Subject",
+        active: window.location.pathname.includes("subjects"),
+        href: props.subjectsUrl,
     },
 ];
 

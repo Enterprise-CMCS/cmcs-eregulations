@@ -595,7 +595,7 @@ describe("Find by Subjects", () => {
         });
     });
 
-    it("goes to another SPA page from the policy repository page", () => {
+    it("goes to another SPA page from the subjects page", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -603,8 +603,8 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.clickHeaderLink({ page: "Resources", screen: "wide" });
-        cy.url().should("include", "/resources");
+        cy.clickHeaderLink({ page: "statutes", label: "Statutes", screen: "wide" });
+        cy.url().should("include", "/statutes");
     });
 
     it("should have the correct labels for public and internal documents", () => {
