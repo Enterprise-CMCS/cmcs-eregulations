@@ -16,7 +16,7 @@ class WebBackend(FileBackend):
 
     _retry_timeout = 30
     _ignore_robots = False
-    _user_agent = "CMSeRegsTextExtractorBot/1.0"
+    _user_agent = "CMCSeRegsTextExtractorBot/1.0"
 
     def __init__(self, config: dict):
         self._parser = robotparser.RobotFileParser()
