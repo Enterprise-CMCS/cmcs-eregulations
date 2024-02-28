@@ -1,3 +1,21 @@
+# Contents
+
+1. [About](#about)
+2. [Supported file types](#supported-file-types)
+3. [Running locally](#running-locally)
+4. [Request structure](#request-structure)
+    1. [Currently supported backends](#currently-supported-backends)
+5. [Response structure](#response-structure)
+6. [Creating a new file backend](#creating-a-new-file-backend)
+7. [Creating a new text extractor](#creating-a-new-text-extractor)
+    1. [Extracting embedded files](#extracting-embedded-files)
+    2. [Writing the file to disk](#writing-the-file-to-disk)
+    3. [Setting a file size limit for file extraction](#setting-a-file-size-limit-for-file-extraction)
+    4. [Unit testing your new extractor](#unit-testing-your-new-extractor)
+    5. [Storing fixture files in a "collection"](#storing-fixture-files-in-a-collection)
+    6. [Generating new fixture files](#generating-new-fixture-files)
+    7. [Fixing misdetected or unsupported MIME types](#fixing-misdetected-or-unsupported-mime-types)
+
 # About
 
 This Lambda function is run to extract text from a variety of file types and POST it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
