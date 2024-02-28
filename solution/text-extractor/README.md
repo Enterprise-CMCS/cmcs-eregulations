@@ -256,20 +256,20 @@ def mock_external_api_extractor(file):
 
 # For all of these tests, save your expected output as "extractors/tests/fixtures/group1/expected.txt"
 class TestSampleExtractor(FixtureTestCase):
-    def test_filetype1(self):
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
+    def test_filetype1(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype1"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype1", collection="group1")
+        self._test_file_type("filetype1", collection="group1")
 
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
     def test_filetype2(self):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype2", collection="group1")
+        self._test_file_type("filetype2", collection="group1")
 
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
     def test_filetype3(self):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype3", collection="group1")
+        self._test_file_type("filetype3", collection="group1")
 ```
 
 In this example, the "expected.txt" file should contain the text "Fake data indicating the API call succeeded" based on line 9.
