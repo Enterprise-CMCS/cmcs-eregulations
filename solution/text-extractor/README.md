@@ -281,3 +281,23 @@ Also note that this parameter can be used in conjunction with `variation`, and f
 You can also easily use the existing unit test suite to generate new fixture files, instead of doing it manually. Just edit the file `extractors/tests/__init__.py` and uncomment the 2 lines near the bottom of the file, below the comment that says `Uncomment these 2 lines to re-export fixture files the next time tests are run.`.
 
 Be sure to re-comment these 2 lines when you're done, or fixture files will be re-created every time you run unit tests, which may produce undesired behavior.
+
+## Fixing misdetected or unsupported MIME types
+
+The text extractor uses [Google's Magika library](https://github.com/google/magika) for MIME type detection, which uses a machine learning algorithm that promises greater than 99% accuracy when detecting known file types. However, not all file types are supported and their model has to be trained to support them.
+
+You can [open an issue](https://github.com/google/magika/issues) on their repository to report a misdetection or missing file type. To do so, install Magika on your machine so that you can generate a report, like so:
+
+```shell
+$ pip install magika
+$ magika -i unknown_type.xyz
+unknown_type.xyz: application/octet-stream
+$ magika --generate-report unknown_type.xyz
+unknown_type.xyz: Unknown binary data (unknown)
+########################################
+###              REPORT              ###
+########################################
+....... etc .......
+```
+
+Copy the `REPORT` section into the description of your GitHub issue to give the Magika team the information they need to fix the issue.
