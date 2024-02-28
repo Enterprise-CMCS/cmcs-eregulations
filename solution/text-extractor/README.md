@@ -164,7 +164,7 @@ from .extractor import Extractor
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         return ...extract text here...
 ```
 
@@ -180,6 +180,8 @@ from .sample import SampleExtractor as SampleExtractor  # Note the redundant ali
 
 The extractor is now registered and will be automatically instantiated when a file has one of the MIME types listed in `file_types`.
 
+Note the underscore in front of the `_extract()` method definition. Be sure to override this instead of `extract()` because the latter performs pre-extraction checks, then calls `_extract()`.
+
 ## Extracting embedded files
 
 Many types of files contain other files within them. For example, an email has attachments. You can use the `_extract_embedded` method of the `Extractor` class to do so. For example:
@@ -188,7 +190,7 @@ Many types of files contain other files within them. For example, an email has a
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         text = get_the_text(file)
         attachments = get_the_attachments(file)
         for i in attachments:
@@ -207,7 +209,7 @@ When writing an extractor, it is sometimes necessary to save the file's byte arr
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
         return extract_text_by_path(file_path)
 ```
@@ -225,7 +227,7 @@ class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
     max_size = 5
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         ...
 ```
 
@@ -280,12 +282,12 @@ class TestSampleExtractor(FixtureTestCase):
         self._test_file_type("filetype1", collection="group1")
 
     @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
-    def test_filetype2(self):
+    def test_filetype2(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
         self._test_file_type("filetype2", collection="group1")
 
     @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
-    def test_filetype3(self):
+    def test_filetype3(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
         self._test_file_type("filetype3", collection="group1")
 ```
