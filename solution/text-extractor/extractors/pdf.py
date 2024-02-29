@@ -15,7 +15,7 @@ class PdfExtractor(Extractor):
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
-        self.extractor = Extractor.get_extractor("jpeg", config)
+        self.extractor = Extractor.get_extractor("image/jpeg", config)
 
     def _convert_to_images(self, file: bytes, temp_dir: str) -> [str]:
         logger.debug("Converting PDF file to images stored in a temporary directory.")

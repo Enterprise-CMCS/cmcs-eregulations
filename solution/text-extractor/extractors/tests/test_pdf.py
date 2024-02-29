@@ -20,7 +20,7 @@ class MockJpegExtractor:
 
 
 def mock_get_extractor(file_type: str, config: dict = {}) -> Extractor:
-    if file_type == "jpeg":
+    if file_type == "image/jpeg":
         return MockJpegExtractor()
     return orig(file_type, config)
 
