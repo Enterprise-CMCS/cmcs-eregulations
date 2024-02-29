@@ -4,7 +4,6 @@ from unittest.mock import patch
 
 from extractors import Extractor
 
-from magika import Magika
 
 
 logging.disable(logging.CRITICAL)
@@ -29,7 +28,7 @@ class FixtureTestCase(unittest.TestCase):
             expected = f.read().decode()
 
         # Determine the file's MIME type
-        mime_type = Magika().identify_bytes(sample).output.mime_type
+        mime_type = Extractor.get_file_type(sample)
 
         with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
             extractor = Extractor.get_extractor(mime_type, config)

@@ -6,7 +6,7 @@ from .extractor import Extractor
 class OldExcelExtractor(Extractor):
     file_types = ("application/vnd.ms-excel",)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
         workbook = xlrd.open_workbook(file_path)
         sheets = workbook.sheet_names()

@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class ZipExtractor(Extractor):
     file_types = ("application/zip",)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
         text = ""
 

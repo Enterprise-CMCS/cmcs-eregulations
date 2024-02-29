@@ -8,7 +8,7 @@ from .extractor import Extractor
 class BinaryExtractor(Extractor):
     file_types = ("application/msword",)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         #  Solution taken from here https://stackoverflow.com/questions/64397811/reading-a-doc-file-in-memory.  Doc files
         #  This is used for binary types.  So far just .doc but might include .xls.  We shall see.
         file_path = self._write_file(file)

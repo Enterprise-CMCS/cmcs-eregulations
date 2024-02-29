@@ -9,5 +9,5 @@ class RichTextExtractor(Extractor):
         "application/rtf",
     )
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         return rtf_to_text(file.decode(), errors="replace")

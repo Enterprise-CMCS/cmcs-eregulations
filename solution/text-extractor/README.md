@@ -1,3 +1,21 @@
+# Contents
+
+1. [About](#about)
+2. [Supported file types](#supported-file-types)
+3. [Running locally](#running-locally)
+4. [Request structure](#request-structure)
+    1. [Currently supported backends](#currently-supported-backends)
+5. [Response structure](#response-structure)
+6. [Creating a new file backend](#creating-a-new-file-backend)
+7. [Creating a new text extractor](#creating-a-new-text-extractor)
+    1. [Extracting embedded files](#extracting-embedded-files)
+    2. [Writing the file to disk](#writing-the-file-to-disk)
+    3. [Setting a file size limit for file extraction](#setting-a-file-size-limit-for-file-extraction)
+    4. [Unit testing your new extractor](#unit-testing-your-new-extractor)
+    5. [Storing fixture files in a "collection"](#storing-fixture-files-in-a-collection)
+    6. [Generating new fixture files](#generating-new-fixture-files)
+    7. [Fixing misdetected or unsupported MIME types](#fixing-misdetected-or-unsupported-mime-types)
+
 # About
 
 This Lambda function is run to extract text from a variety of file types and POST it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
@@ -6,10 +24,10 @@ This Lambda function is run to extract text from a variety of file types and POS
 
 The text extractor supports the following file types. File types that are planned but not yet implemented are not checked.
 
-- [x] Plain text (txt, multiple encodings supported)
+- [x] Plain text (txt, multiple encodings supported, currently excluding UTF-16)
 - [x] HTML and XML (html, htm, xhtml, xml)
 - [x] PDF
-- [x] Images (png, jpeg, gif, tiff, jpeg2000, bmp, tga, webp)
+- [x] Images (png, jpeg, gif, tiff, bmp, tga, webp)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [x] Microsoft Outlook (msg)
@@ -41,14 +59,15 @@ The following data structure is required:
     "id": 1,                                 // The eRegs database ID of the object to update
     "uri": "object_uri",                     // The web URL or object name to extract text from
     "post_url": "https://api-url-here/",     // The API URL to POST the text to
-    "token": "xxxxxx",                       //  If the return point uses a jwt token for authentication
+    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
     "backend": "s3",                         // Optional - defaults to 'web'
-    // Only include if using the S3 backend
+    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
+    // Only necessary to include if using the S3 backend
     "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key
-        "aws_storage_bucket_name": "xxxxxx",  // The name of the bucket to retrieve the object from
-        "use_lambda": true,                  //  If you are using a local text extractor or a deployed text extractor(pertains to local development)
+        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from
+        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development)
         "aws_region": "us-east-1"            // AWS region for Textract
     },
 }
@@ -145,7 +164,7 @@ from .extractor import Extractor
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         return ...extract text here...
 ```
 
@@ -161,6 +180,8 @@ from .sample import SampleExtractor as SampleExtractor  # Note the redundant ali
 
 The extractor is now registered and will be automatically instantiated when a file has one of the MIME types listed in `file_types`.
 
+Note the underscore in front of the `_extract()` method definition. Be sure to override this instead of `extract()` because the latter performs pre-extraction checks, then calls `_extract()`.
+
 ## Extracting embedded files
 
 Many types of files contain other files within them. For example, an email has attachments. You can use the `_extract_embedded` method of the `Extractor` class to do so. For example:
@@ -169,7 +190,7 @@ Many types of files contain other files within them. For example, an email has a
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         text = get_the_text(file)
         attachments = get_the_attachments(file)
         for i in attachments:
@@ -188,12 +209,29 @@ When writing an extractor, it is sometimes necessary to save the file's byte arr
 class SampleExtractor(Extractor):
     file_types = ("filetype1", "filetype2", ...)
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)
         return extract_text_by_path(file_path)
 ```
 
 This method returns a path to a temporary file stored on disk. You may access it using standard Python techniques.
+
+## Setting a file size limit for file extraction
+
+In some cases, it is necessary to limit the maximum file size that an extractor will attempt to process by default. This may be required for particularly slow extractors that are at risk of exceeding the 15 minute AWS Lambda timeout, or to reduce AWS costs associated with text extraction, among other possible reasons.
+
+This behavior is built into the `Extractor` class but disabled by default. To enable it, set `max_size = N` in your custom extractor, like so:
+
+```python
+class SampleExtractor(Extractor):
+    file_types = ("filetype1", "filetype2", ...)
+    max_size = 5
+
+    def _extract(self, file: bytes) -> str:
+        ...
+```
+
+In this example, `max_size` is set to 5 megabytes. This means that if the file size is greater than 5MB, the extractor will raise an exception and refuse to process the file. To override the limit, include `ignore_max_size: true` in your JSON request to the Lambda.
 
 ## Unit testing your new extractor
 
@@ -238,20 +276,20 @@ def mock_external_api_extractor(file):
 
 # For all of these tests, save your expected output as "extractors/tests/fixtures/group1/expected.txt"
 class TestSampleExtractor(FixtureTestCase):
-    def test_filetype1(self):
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
+    def test_filetype1(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype1"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype1", collection="group1")
+        self._test_file_type("filetype1", collection="group1")
 
-    def test_filetype2(self):
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
+    def test_filetype2(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype2"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype2", collection="group1")
+        self._test_file_type("filetype2", collection="group1")
 
-    def test_filetype3(self):
+    @patch.object(some_module, "call_api_extractor", mock_external_api_extractor)
+    def test_filetype3(self, *args):
         # Save your fixture as "extractors/tests/fixtures/group1/sample.filetype3"
-        with patch("some_module.call_api_extractor", new=mock_external_api_extractor):
-            self._test_file_type("filetype3", collection="group1")
+        self._test_file_type("filetype3", collection="group1")
 ```
 
 In this example, the "expected.txt" file should contain the text "Fake data indicating the API call succeeded" based on line 9.
@@ -263,3 +301,23 @@ Also note that this parameter can be used in conjunction with `variation`, and f
 You can also easily use the existing unit test suite to generate new fixture files, instead of doing it manually. Just edit the file `extractors/tests/__init__.py` and uncomment the 2 lines near the bottom of the file, below the comment that says `Uncomment these 2 lines to re-export fixture files the next time tests are run.`.
 
 Be sure to re-comment these 2 lines when you're done, or fixture files will be re-created every time you run unit tests, which may produce undesired behavior.
+
+## Fixing misdetected or unsupported MIME types
+
+The text extractor uses [Google's Magika library](https://github.com/google/magika) for MIME type detection, which uses a machine learning algorithm that promises greater than 99% accuracy when detecting known file types. However, not all file types are supported and their model has to be trained to support them.
+
+You can [open an issue](https://github.com/google/magika/issues) on their repository to report a misdetection or missing file type. To do so, install Magika on your machine so that you can generate a report, like so:
+
+```shell
+$ pip install magika
+$ magika -i unknown_type.xyz
+unknown_type.xyz: application/octet-stream
+$ magika --generate-report unknown_type.xyz
+unknown_type.xyz: Unknown binary data (unknown)
+########################################
+###              REPORT              ###
+########################################
+....... etc .......
+```
+
+Copy the `REPORT` section into the description of your GitHub issue to give the Magika team the information they need to fix the issue.

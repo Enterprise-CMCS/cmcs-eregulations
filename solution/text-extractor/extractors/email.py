@@ -38,7 +38,7 @@ class EmailExtractor(Extractor):
         )
         return f" {file_name} {text}"
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         try:
             msg = email.message_from_bytes(file)
         except Exception as e:

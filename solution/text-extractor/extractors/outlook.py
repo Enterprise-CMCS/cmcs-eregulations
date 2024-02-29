@@ -32,7 +32,7 @@ class OutlookExtractor(Extractor):
                 body += self._handle_message(attachment.data)
         return body
 
-    def extract(self, file: bytes) -> str:
+    def _extract(self, file: bytes) -> str:
         try:
             msg = extract_msg.openMsg(file)
         except Exception as e:
