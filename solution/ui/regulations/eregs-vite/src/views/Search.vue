@@ -149,7 +149,6 @@ import {
     getCombinedContent,
     getLastUpdatedDates,
     getRegSearchResults,
-    getSupplementalContent,
     getSynonyms,
     getTitles,
 } from "utilities/api";
