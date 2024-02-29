@@ -64,9 +64,9 @@ class Extractor:
         return ""
 
     def extract(self, file: bytes) -> str:
-        file_size = sys.getsizeof(file) / 1024
+        file_size = sys.getsizeof(file) / 1024 / 1024  # Convert file size to megabytes
         if self.max_size >= 0 and file_size > self.max_size and not self.config.get("ignore_max_size", False):
-            raise ExtractorException(f"file size is too large: {file_size} > {self.max_size}. "
+            raise ExtractorException(f"file size is too large: {int(file_size)}MB > {self.max_size}MB. "
                                      "You may override this with 'ignore_max_size = True'.")
         return self._extract(file)
 
