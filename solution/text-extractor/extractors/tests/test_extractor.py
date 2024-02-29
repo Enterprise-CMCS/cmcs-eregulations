@@ -108,14 +108,14 @@ class ExtractorTest(unittest.TestCase):
         self.assertEqual(output, "")
 
     def test_extract_under_max_size(self):
-        size = 1 * 1024
+        size = 1 * 1024 * 1024
         file = b"0" * size
         extractor = Extractor.get_extractor("type7")
         output = extractor.extract(file)
         self.assertEqual(output, "All good")
 
     def test_extract_over_max_size(self):
-        size = 6 * 1024
+        size = 6 * 1024 * 1024
         file = b"0" * size
         extractor = Extractor.get_extractor("type7")
         with self.assertRaises(ExtractorException):
@@ -125,7 +125,7 @@ class ExtractorTest(unittest.TestCase):
         config = {
             "ignore_max_size": True
         }
-        size = 6 * 1024
+        size = 6 * 1024 * 1024
         file = b"0" * size
         extractor = Extractor.get_extractor("type7", config)
         output = extractor.extract(file)
