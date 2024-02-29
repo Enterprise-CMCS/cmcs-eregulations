@@ -8,6 +8,7 @@ from .groupings import DocumentTypeSerializer, SubjectSerializer
 
 
 class UploadedFileSerializer(DetailsSerializer, serializers.Serializer, ):
+    updated_at = serializers.CharField()
     document_name = serializers.CharField()
     file_name = serializers.CharField()
     date = serializers.DateField()
