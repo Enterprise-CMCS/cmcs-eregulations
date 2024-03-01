@@ -61,6 +61,13 @@ resources:
                 - GET
                 - HEAD
               MaxAge: 3000
+    CloudFrontLogsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: eregs-${self:custom.stage}-cloudfront-logs
+        AccessControl: LogDeliveryWrite
+        VersioningConfiguration:
+          Status: Enabled
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -153,6 +160,10 @@ resources:
                   - ''
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+          Logging:
+            IncludeCookies: false
+            Bucket: eregs-${self:custom.stage}-cloudfront-logs
+            Prefix: cf-logs/
           Enabled: true
           HttpVersion: 'http2'
           DefaultCacheBehavior:
