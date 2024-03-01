@@ -1,6 +1,13 @@
 from django.urls import path
 
-from .views import RepoCategoryViewSet, RepositoryCategoryTreeViewSet, SubjectViewset, UploadedFileViewset
+from .views import (
+    RepoCategoryViewSet,
+    RepositoryCategoryTreeViewSet,
+    SubjectViewset,
+    UploadedFileViewset,
+    GroupViewset,
+    DivisionViewset,
+)
 
 urlpatterns = [
     path("categories", RepoCategoryViewSet.as_view({
@@ -10,6 +17,12 @@ urlpatterns = [
         "get": "list",
     })),
     path("subjects", SubjectViewset.as_view({
+        "get": "list",
+    })),
+    path("groups", GroupViewset.as_view({
+        "get": "list",
+    })),
+    path("divisions", DivisionViewset.as_view({
         "get": "list",
     })),
     path("files", UploadedFileViewset.as_view({
