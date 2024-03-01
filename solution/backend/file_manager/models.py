@@ -71,6 +71,7 @@ class UploadedFile(models.Model):
     internal_notes = models.TextField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="uploads")
     document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
+    updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(
         AbstractRepoCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="uploads"
     )
