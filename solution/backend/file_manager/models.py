@@ -64,14 +64,20 @@ class Subject(models.Model):
 
 
 class Group(models.Model):
-    name = models.CharField(max_length=512, null=False, blank=False)
+    name = models.CharField(max_length=512, null=False, blank=False, unique=True)
     abbreviation = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.abbreviation})"
 
 
 class Division(models.Model):
     group = models.ForeignKey(Group, blank=True, null=True, related_name="divisions", on_delete=models.SET_NULL)
-    name = models.CharField(max_length=512, null=False, blank=False)
+    name = models.CharField(max_length=512, null=False, blank=False, unique=True)
     abbreviation = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.abbreviation})"
 
 
 class UploadedFile(models.Model):
