@@ -18,12 +18,12 @@ from resources.models import AbstractLocation
 from .functions import get_upload_link
 from .models import (
     AbstractRepoCategory,
+    Division,
     DocumentType,
+    Group,
     RepositoryCategory,
     RepositorySubCategory,
     Subject,
-    Group,
-    Division,
     UploadedFile,
 )
 

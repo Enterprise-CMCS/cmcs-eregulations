@@ -29,7 +29,6 @@ from file_manager.serializers.groupings import (
     SubjectDetailsSerializer,
 )
 from file_manager.serializers.groups import (
-    GroupSerializer,
     DivisionWithGroupSerializer,
     GroupWithDivisionSerializer,
 )
@@ -39,12 +38,12 @@ from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginat
 from .functions import get_upload_link
 from .models import (
     AbstractRepoCategory,
+    Division,
     DocumentType,
+    Group,
     RepositoryCategory,
     RepositorySubCategory,
     Subject,
-    Group,
-    Division,
     UploadedFile,
 )
 

@@ -1,12 +1,12 @@
 from django.urls import path
 
 from .views import (
+    DivisionViewset,
+    GroupViewset,
     RepoCategoryViewSet,
     RepositoryCategoryTreeViewSet,
     SubjectViewset,
     UploadedFileViewset,
-    GroupViewset,
-    DivisionViewset,
 )
 
 urlpatterns = [
