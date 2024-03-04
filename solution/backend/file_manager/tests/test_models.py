@@ -1,9 +1,9 @@
 import pytest
 
 from file_manager.models import (
-    UploadedFile,
-    Group,
     Division,
+    Group,
+    UploadedFile,
 )
 
 
@@ -23,6 +23,7 @@ def test_key():
     bad_file = UploadedFile.objects.get(document_name="no-extension")
     with pytest.raises(ValueError):
         bad_file.get_key()
+
 
 @pytest.mark.django_db
 def test_group_division():
