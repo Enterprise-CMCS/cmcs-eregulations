@@ -419,7 +419,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
     change_list_template = "admin/import_resources_button.html"
     form = SupContentForm
     readonly_fields = ("get_content", "index_populated")
-    list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort")
+    list_display = ("date", "name", "description", "category", "updated_at", "approved", "name_sort", "index_populated")
     list_display_links = ("date", "name", "description", "category", "updated_at")
     search_fields = ["date", "name", "description"]
 
@@ -576,7 +576,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     form = FederalResourceForm
     readonly_fields = ('index_populated', 'get_content')
     list_display = ("date", "name", "description", "in_group", "docket_numbers",
-                    "document_number", "category", "doc_type", "updated_at", "approved")
+                    "document_number", "category", "doc_type", "updated_at", "approved", "index_populated")
     list_display_links = ("date", "name", "description", "in_group", "docket_numbers",
                           "document_number", "category", "doc_type", "updated_at")
     search_fields = ["date", "name", "description", "docket_numbers", "document_number"]

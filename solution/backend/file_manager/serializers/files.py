@@ -9,6 +9,7 @@ from .groups import DivisionWithGroupSerializer
 
 
 class UploadedFileSerializer(DetailsSerializer, serializers.Serializer):
+    updated_at = serializers.CharField()
     document_name = serializers.CharField()
     file_name = serializers.CharField()
     date = serializers.DateField()

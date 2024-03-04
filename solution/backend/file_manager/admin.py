@@ -86,14 +86,15 @@ class UploadAdminForm(forms.ModelForm):
 @admin.register(UploadedFile)
 class UploadedFileAdmin(BaseAdmin):
     form = UploadAdminForm
-    list_display = ("document_name", "index_populated")
+    list_display = ("date", "document_name", "category", "updated_at", "index_populated")
     search_fields = ["document_name"]
-    ordering = ("document_name",)
+    ordering = ("date", "document_name", "category", "updated_at",)
     filter_horizontal = ("locations", "subjects")
-    readonly_fields = ('download_file', 'file_name', 'get_content', 'index_populated')
-    fields = ("file_name", "file_path", "document_name", 'date', 'summary',
-              'document_type', 'division', 'subjects', 'locations', 'internal_notes',
-              'index_populated', 'get_content', 'download_file', 'category',)
+    readonly_fields = ("download_file", "file_name", "get_content", "updated_at", "index_populated")
+    fields = ("file_name", "file_path", "document_name", "date", "summary",
+              "updated_at", "document_type", "subjects", "locations", "internal_notes",
+              "index_populated", "get_content", "download_file", "category",)
+
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
         "subjects": lambda: Subject.objects.all()
