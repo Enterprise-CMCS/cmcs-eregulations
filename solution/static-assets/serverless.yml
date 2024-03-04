@@ -67,6 +67,7 @@ resources:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
         VersioningConfiguration:
           Status: Enabled
+          AccessControl: LogDeliveryWrite  # This line enables ACL access
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
