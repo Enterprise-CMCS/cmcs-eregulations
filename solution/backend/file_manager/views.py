@@ -77,6 +77,7 @@ class SubjectViewset(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(description="Retrive a list of divisions and their associated groups.")
 class DivisionViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = DivisionWithGroupSerializer
 
@@ -84,6 +85,7 @@ class DivisionViewset(viewsets.ReadOnlyModelViewSet):
         return Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
 
 
+@extend_schema(description="Retrieve a list of groups and their associated divisions.")
 class GroupViewset(viewsets.ReadOnlyModelViewSet):
     serializer_class = GroupWithDivisionSerializer
 
