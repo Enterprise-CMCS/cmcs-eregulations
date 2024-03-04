@@ -161,7 +161,7 @@ resources:
                     - Ref: CloudFrontOriginAccessIdentity
           Logging:
             IncludeCookies: false
-            Bucket: eregs-${self:custom.stage}-cloudfront-logs
+            Bucket: eregs-${self:custom.stage}-cloudfront-logs.s3.amazonaws.com
             Prefix: cf-logs/
           Enabled: true
           HttpVersion: 'http2'
