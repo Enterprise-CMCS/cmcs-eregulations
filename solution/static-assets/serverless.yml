@@ -65,7 +65,6 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
-        AccessControl: LogDeliveryWrite
         VersioningConfiguration:
           Status: Enabled
 
