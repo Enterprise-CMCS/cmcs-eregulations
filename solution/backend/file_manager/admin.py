@@ -91,8 +91,8 @@ class UploadedFileAdmin(BaseAdmin):
     ordering = ("date", "document_name", "category", "updated_at",)
     filter_horizontal = ("locations", "subjects")
     readonly_fields = ("download_file", "file_name", "get_content", "updated_at", "index_populated")
-    fields = ("file_name", "file_path", "document_name", "date", "summary",
-              "updated_at", "document_type", "subjects", "locations", "internal_notes",
+    fields = ("file_name", "file_path", "document_name", "date", "summary", "updated_at",
+              "division", "document_type", "subjects", "locations", "internal_notes",
               "index_populated", "get_content", "download_file", "category",)
 
     manytomany_lookups = {
