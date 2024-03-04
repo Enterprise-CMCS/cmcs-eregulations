@@ -65,8 +65,12 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerPreferred
         VersioningConfiguration:
           Status: Enabled
+        AccessControl: LogDeliveryWrite
     CloudFrontLogsBucketPolicy:
       Type: "AWS::S3::BucketPolicy"
       Properties:
