@@ -1,6 +1,10 @@
 import pytest
 
-from file_manager.models import UploadedFile
+from file_manager.models import (
+    UploadedFile,
+    Group,
+    Division,
+)
 
 
 @pytest.mark.django_db
@@ -19,3 +23,11 @@ def test_key():
     bad_file = UploadedFile.objects.get(document_name="no-extension")
     with pytest.raises(ValueError):
         bad_file.get_key()
+
+@pytest.mark.django_db
+def test_group_division():
+    group = Group.objects.create(name="A Group", abbreviation="AG")
+    division = Division.objects.create(name="A Division", abbreviation="AD", group=group)
+    file = UploadedFile.objects.create(document_name="valid", file_name="valid.doc", division=division)
+    assert file.division == division
+    assert file.division.group == group
