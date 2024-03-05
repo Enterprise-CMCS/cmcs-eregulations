@@ -219,6 +219,7 @@ export default {
 
     provide() {
         return {
+            apiUrl: this.apiUrl,
             base: this.homeUrl,
         };
     },
