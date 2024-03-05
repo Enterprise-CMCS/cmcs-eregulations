@@ -15,12 +15,6 @@ provider:
       level: INFO
       roleManagedExternally: true
   lambdaHashingVersion: '20201221'
-  vpc:
-    securityGroupIds:
-      - ${ssm:/eregulations/aws/securitygroupid}
-    subnetIds:
-      - ${ssm:/account_vars/vpc/subnets/private/a/id}
-      - ${ssm:/account_vars/vpc/subnets/private/b/id}
   tracing:
     apiGateway: true
 
