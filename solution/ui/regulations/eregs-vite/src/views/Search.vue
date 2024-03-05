@@ -350,7 +350,6 @@ export default {
             try {
                 response = await getCombinedContent({
                     apiUrl: this.apiUrl,
-                    cacheResponse: false,
                     requestParams,
                 });
 

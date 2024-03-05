@@ -81,7 +81,6 @@ const getDocuments = async ({ section }) => {
             getCategories(),
             getCombinedContent({
                 apiUrl: props.apiUrl,
-                cacheResponse: false,
                 requestParams: `resource-type=internal&${locationString}`,
             }),
         ]);
