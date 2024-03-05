@@ -28,7 +28,7 @@ type FRDoc struct {
 	DocketNumbers  []string `json:"docket_ids"`
 	DocumentNumber string   `json:"document_number"`
 	FullTextURL    string   `json:"full_text_xml_url"`
-	RawTextURL	   string	`json:"raw_text_url"`
+	RawTextURL     string   `json:"raw_text_url"`
 }
 
 // FRDocPage represents a page containing many documents. NextPageURL is optional and points to the next page of docs, if one exists

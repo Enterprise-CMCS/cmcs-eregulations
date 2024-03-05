@@ -43,7 +43,7 @@ type FRDoc struct {
 	DocumentNumber string           `json:"document_number"`
 	Sections       []*Section       `json:"sections"`
 	SectionRanges  []*SectionRanges `json:"section_ranges"`
-	RawTextURL	   string			`json:"raw_text_url"`
+	RawTextURL     string           `json:"raw_text_url"`
 }
 
 // SendDocument attempts to PUT the given FRDoc to eRegs BaseURL+DocumentURL

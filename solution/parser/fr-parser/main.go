@@ -145,7 +145,7 @@ func processDocument(ctx context.Context, title int, part string, content *fedre
 		Date:           content.Date,
 		DocketNumbers:  content.DocketNumbers,
 		DocumentNumber: content.DocumentNumber,
-		RawTextURL:		content.RawTextURL,
+		RawTextURL:     content.RawTextURL,
 	}
 
 	if content.FullTextURL != "" {
