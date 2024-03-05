@@ -58,6 +58,7 @@ class WebBackend(FileBackend):
 
         while True:  # Loop until the lambda times out, max of 15 mins
             try:
+                logger.debug("Sending GET request to %s with headers: %s", uri, str(self._headers))
                 resp = requests.get(uri, timeout=60, headers=self._headers)
             except requests.exceptions.Timeout:
                 logger.warning("GET request timed out. Retrying in %i seconds.", self.retry_timeout)
