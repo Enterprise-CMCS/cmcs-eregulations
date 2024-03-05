@@ -62,6 +62,7 @@ The following data structure is required:
     "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
     "backend": "s3",                         // Optional - defaults to 'web'
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
+    "ignore_robots_txt": true,               // Optional - include to ignore robots.txt
     // Only necessary to include if using the S3 backend
     "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
