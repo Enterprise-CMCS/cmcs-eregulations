@@ -25,16 +25,11 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from solo.admin import SingletonModelAdmin
 
+from common.filters import IndexPopulatedFilter
 from content_search.functions import add_to_index
 from content_search.models import ContentIndex
 
 from . import actions
-from .filters import (
-    PartFilter,
-    SectionFilter,
-    SubpartFilter,
-    TitleFilter,
-)
 from .models import (
     AbstractCategory,
     AbstractLocation,
@@ -147,10 +142,7 @@ class AbstractResourceAdmin(BaseAdmin):
 
     list_filter = [
         "approved",
-        TitleFilter,
-        PartFilter,
-        SectionFilter,
-        SubpartFilter,
+        IndexPopulatedFilter,
     ]
 
     foreignkey_lookups = {

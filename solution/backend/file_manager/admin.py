@@ -9,6 +9,7 @@ from django.db.models import (
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.filters import IndexPopulatedFilter
 from common.functions import establish_client
 from content_search.functions import add_to_index
 from content_search.models import ContentIndex
@@ -69,6 +70,7 @@ class UploadedFileAdmin(BaseAdmin):
     fields = ("file_name", "file_path", "document_name", "date", "summary",
               "updated_at", "document_type", "subjects", "locations", "internal_notes",
               "index_populated", "get_content", "download_file", "category",)
+    list_filter = [IndexPopulatedFilter]
 
     manytomany_lookups = {
         "locations": lambda: AbstractLocation.objects.all().select_subclasses(),
