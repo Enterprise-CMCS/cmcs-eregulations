@@ -614,7 +614,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         (
             None,
             {
-                "fields": ["internal_notes", "location_history"],
+                "fields": ["internal_notes", "location_history", "raw_text_url"],
             },
         ),
     ]
