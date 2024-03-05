@@ -147,7 +147,6 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         section_ranges = validated_data.get("section_ranges", []) or []
         name = validated_data.get('name', instance.name)
         description = validated_data.get('description', instance.description)
-        raw_text_url = validated_data.get("raw_text_url", "")
 
         # set basic fields and group if instance is new
         if created:
@@ -163,6 +162,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             instance.doc_type = validated_data.get('doc_type', instance.doc_type)
             instance.category = self.get_category()
             self.set_group(instance)
+
+        instance.raw_text_url = validated_data.get("raw_text_url", "")
 
         # set the locations on the instance
         self.set_locations(instance, sections, section_ranges)
