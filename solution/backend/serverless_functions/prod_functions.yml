@@ -8,7 +8,7 @@ reg_site:
   events:
     - http: ANY /
     - http: ANY {proxy+}
-  timeout: 10
+  timeout: 20
 reg_core_migrate:
   handler: migrate.handler
   layers:
