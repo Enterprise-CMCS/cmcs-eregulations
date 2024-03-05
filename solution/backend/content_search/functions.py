@@ -87,8 +87,9 @@ def add_to_index(content):
             content_index.supplemental_content = content
         else:
             content_index.fr_doc = content
-        if isinstance(content, FederalRegisterDocument):
+        if isinstance(content, FederalRegisterDocument) and hasattr(content, "raw_text_url") and content.raw_text_url:
             content_index.url = content.raw_text_url
+            content_index.ignore_robots_txt = True
         content_index.save()
     content_index.rank_d_string = get_subject_string(content.subjects.all())
     content_index.locations.set(content.locations.all())
