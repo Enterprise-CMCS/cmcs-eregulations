@@ -7,6 +7,7 @@ const readerUsername = Cypress.env("READER_USERNAME");
 const readerPassword = Cypress.env("READER_PASSWORD");
 
 const _beforeEach = () => {
+    cy.clearIndexedDB();
     cy.intercept("/**", (req) => {
         req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
     });
