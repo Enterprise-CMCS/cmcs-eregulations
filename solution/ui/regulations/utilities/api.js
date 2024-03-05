@@ -266,9 +266,6 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getPartTOC = async (title, part) =>
-    httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
-
 const getCategories = async (apiUrl) => {
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}resources/categories`);
@@ -520,33 +517,6 @@ const getStatutes = async ({
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {string} [requestParams] - Query string parameters to pass to API
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
- * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of file items when fulfilled
- */
-const getPolicyDocList = async ({
-    apiUrl,
-    requestParams = "",
-    cacheResponse = true,
-}) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}file-manager/files${
-                requestParams ? `?${requestParams}&` : "?"
-            }location_details=true`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet(
-        `file-manager/files${requestParams ? `?${requestParams}` : ""}`,
-        cacheResponse
-    );
-};
-
-/**
- * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
@@ -624,7 +594,6 @@ export {
     getLastUpdatedDates,
     getParts,
     getPolicyDocCategories,
-    getPolicyDocList,
     getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
@@ -635,7 +604,6 @@ export {
     getSynonyms,
     getTOC,
     getTitles,
-    getPartTOC,
     removeCacheItem,
     setCacheItem,
     setIdToken,

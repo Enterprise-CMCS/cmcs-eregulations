@@ -17,18 +17,6 @@ const formatDate = (dateString) => {
 };
 
 /**
- * @param identifierAndDescription {string} - a string with a part/subpart identifier and a description of the contents of that part/subpart, separated by a dash or an em dash
- * @returns {string} - a string containing only the description
- */
-const getDescriptionOnly = (identifierAndDescription) => {
-    const splitIndex = identifierAndDescription.includes("-")
-        ? identifierAndDescription.indexOf("-")
-        : identifierAndDescription.indexOf("—");
-
-    return identifierAndDescription.substring(splitIndex + 1);
-};
-
-/**
  * @param location {Object} - a Subpart or Section of the Regs
  * @param location.title {string} - the title number of the location (ex: 42)
  * @param location.type {string} - the type of location (ex: Subpart, Section)
@@ -114,7 +102,6 @@ const sortSubjects = (a, b) => {
 
 export {
     formatDate,
-    getDescriptionOnly,
     getSubjectName,
     getSubjectNameParts,
     locationLabel,
