@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import botocore
-from magika import Magika
 
 from extractors import (
     Extractor,
@@ -17,14 +16,14 @@ orig = botocore.client.BaseClient._make_api_call
 # Mocked botocore _make_api_call function
 def mock_make_api_call(self, operation_name, kwarg):
     accepted_types = [
-        "image/jpeg",
-        "image/tiff",
-        "image/png",
+        "jpeg",
+        "tiff",
+        "png",
     ]
 
     if operation_name == 'DetectDocumentText':
         doc = kwarg["Document"]["Bytes"]
-        file_type = Magika().identify_bytes(doc).output.mime_type
+        file_type = Extractor.get_file_type(doc)
         if file_type not in accepted_types:
             raise Exception("Received an invalid type!")
         return {
@@ -96,7 +95,7 @@ class TestTextractExtractor(FixtureTestCase):
 
     @patch.object(botocore.client.BaseClient, "_make_api_call", mock_make_api_call)
     def test_bad_file(self):
-        extractor = Extractor.get_extractor("image/jpeg", self.CONFIG)
+        extractor = Extractor.get_extractor("jpeg", self.CONFIG)
         data = b"This is a valid string but not a valid type for Textract"
         with self.assertRaises(ExtractorException):
             extractor.extract(data)

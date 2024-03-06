@@ -6,7 +6,7 @@ from .extractor import Extractor
 
 
 class BinaryExtractor(Extractor):
-    file_types = ("application/msword",)
+    file_types = ("doc",)
 
     def _extract(self, file: bytes) -> str:
         #  Solution taken from here https://stackoverflow.com/questions/64397811/reading-a-doc-file-in-memory.  Doc files

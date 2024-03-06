@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class ExcelExtractor(Extractor):
-    file_types = ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",)
-    extension = "xlsx"
+    file_types = ("xlsx",)
 
     _valid_cell_types = ["s", "n", "b", "inlineStr", "str"]
 
