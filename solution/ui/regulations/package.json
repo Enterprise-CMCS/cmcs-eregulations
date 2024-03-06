@@ -21,7 +21,6 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@vitejs/plugin-vue2": "^2.3.1",
     "@vue/test-utils": "^1.3.5",
-    "export-from-json": "^1.7.4",
     "flush-promises": "^1.0.2",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
@@ -59,10 +58,10 @@
     "prettier": "2.2.1",
     "sass-loader": "^13.0.2",
     "storybook-addon-sass-postcss": "^0.1.3",
+    "vite": "^5.0",
     "vitest": "^0.31.0",
     "webpack": "^5.76.0",
-    "whatwg-fetch": "^3.6.2",
-    "vite": "^5.0"
+    "whatwg-fetch": "^3.6.2"
   },
   "msw": {
     "workerDirectory": "msw"
