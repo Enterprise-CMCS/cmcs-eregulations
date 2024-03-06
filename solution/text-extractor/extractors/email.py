@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class EmailExtractor(Extractor):
-    file_types = ("message/rfc822",)
+    file_types = ("eml",)
 
     def _extract_payload(self, message):
         payload = message.get_payload()

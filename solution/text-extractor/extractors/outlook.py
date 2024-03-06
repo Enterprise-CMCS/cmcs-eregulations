@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class OutlookExtractor(Extractor):
-    file_types = ("application/vnd.ms-outlook",)
+    file_types = ("outlook",)
 
     def _handle_data(self, attachment: extract_msg.Attachment) -> str:
         file_name = attachment.longFilename

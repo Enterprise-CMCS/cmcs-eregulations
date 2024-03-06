@@ -7,10 +7,10 @@ from .exceptions import (
     ExtractorInitException,
 )
 
-from magika import Magika
+from magika import Magika, PredictionMode
 
 logger = logging.getLogger(__name__)
-magika = Magika()
+magika = Magika(prediction_mode=PredictionMode.MEDIUM_CONFIDENCE)
 
 
 # Base class for text extraction
@@ -20,8 +20,8 @@ class Extractor:
 
     @classmethod
     def get_file_type(cls, file: bytes) -> str:
-        # Determine the file's MIME type using Google's Magika ML algorithm
-        return magika.identify_bytes(file).output.mime_type
+        # Determine the file's content type using Google's Magika ML algorithm
+        return magika.identify_bytes(file).output.ct_label
 
     @classmethod
     def get_extractor(cls, file_type: str, config: dict = {}) -> "Extractor":

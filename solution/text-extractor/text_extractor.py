@@ -63,7 +63,7 @@ def handler(event: dict, context: dict) -> dict:
     except Exception as e:
         return lambda_failure(500, f"Backend unexpectedly failed: {str(e)}")
 
-    # Determine the file's MIME type
+    # Determine the file's content type
     try:
         file_type = Extractor.get_file_type(file)
     except Exception as e:

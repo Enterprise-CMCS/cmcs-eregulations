@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-from magika import Magika
 
 from extractors import (
     Extractor,
@@ -14,13 +13,13 @@ orig = Extractor.get_extractor
 
 class MockJpegExtractor:
     def extract(self, file: bytes) -> str:
-        if Magika().identify_bytes(file).output.mime_type != "image/jpeg":
+        if Extractor.get_file_type(file) != "jpeg":
             raise ExtractorException("Extractor did not convert to jpeg.")
         return "Sample output"
 
 
 def mock_get_extractor(file_type: str, config: dict = {}) -> Extractor:
-    if file_type == "image/jpeg":
+    if file_type == "jpeg":
         return MockJpegExtractor()
     return orig(file_type, config)
 
@@ -29,22 +28,6 @@ class TestImageExtractor(FixtureTestCase):
     @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_gif(self):
         self._test_file_type("gif", collection="images")
-
-    # TODO: Re-enable these tests if/when Magika is updated to support JPEG 2000 files.
-    # Or remove them if they are never supported.
-    # These are not urgently needed file types.
-
-    # @patch.object(Extractor, "get_extractor", mock_get_extractor)
-    # def test_extract_j2k(self):
-    #     self._test_file_type("j2k", collection="images")
-
-    # @patch.object(Extractor, "get_extractor", mock_get_extractor)
-    # def test_extract_jp2(self):
-    #     self._test_file_type("jp2", collection="images")
-
-    # @patch.object(Extractor, "get_extractor", mock_get_extractor)
-    # def test_extract_jpx(self):
-    #     self._test_file_type("jpx", collection="images")
 
     @patch.object(Extractor, "get_extractor", mock_get_extractor)
     def test_extract_bmp(self):
