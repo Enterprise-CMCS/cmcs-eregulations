@@ -20,6 +20,7 @@ from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, DocumentType, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationFiltererMixin
+from file_manager.models import Group, Division
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
@@ -82,6 +83,7 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
         repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
                                                      .select_related("repositorysubcategory__parent")
+        division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
 
         # If they are not authenticated and the resource type is internal, raise an error
         if not request.user.is_authenticated:
@@ -101,7 +103,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("category", queryset=category_prefetch),
             Prefetch("document_type", queryset=doc_type_prefetch),
-            Prefetch("upload_category", queryset=repo_category_prefetch)).distinct()
+            Prefetch("upload_category", queryset=repo_category_prefetch),
+            Prefetch("division", queryset=division_prefetch)).distinct()
         if search_query:
             query = query.search(search_query)
         else:
