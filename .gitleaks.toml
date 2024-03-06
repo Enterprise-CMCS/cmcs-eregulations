@@ -6,6 +6,6 @@ useDefault = true
 [allowlist]
 description = "global allow list"
 paths = [
-    "solution/text-extractor/extractors/tests/fixtures/eml/sample.eml",
+    "solution/text-extractor/extractors/tests/fixtures",
 ]
 
