@@ -17,10 +17,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-from file_manager.models import AbstractRepoCategory, DocumentType, Subject
+from file_manager.models import AbstractRepoCategory, Division, DocumentType, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation
 from resources.views.mixins import LocationFiltererMixin
-from file_manager.models import Group, Division
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer

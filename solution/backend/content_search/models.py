@@ -12,7 +12,7 @@ from django.db.models.expressions import RawSQL
 
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
-from file_manager.models import AbstractRepoCategory, DocumentType, Subject, UploadedFile, Division
+from file_manager.models import AbstractRepoCategory, Division, DocumentType, Subject, UploadedFile
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument, SupplementalContent
 
 
