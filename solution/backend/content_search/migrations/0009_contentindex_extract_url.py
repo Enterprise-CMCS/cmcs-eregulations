@@ -13,7 +13,7 @@ def populate_extract_url(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content_search', '0007_contentindex_ignore_robots_txt'),
+        ('content_search', '0008_contentindex_ignore_robots_txt'),
     ]
 
     operations = [

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content_search', '0006_contentindex_upload_category'),
+        ('content_search', '0007_contentindex_division'),
     ]
 
     operations = [
