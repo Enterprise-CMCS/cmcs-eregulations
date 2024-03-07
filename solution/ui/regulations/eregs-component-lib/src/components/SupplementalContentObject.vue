@@ -10,10 +10,14 @@
                 v-if="date"
                 class="supplemental-content-date"
                 :class="{
-                    'supplemental-content-mid-bar': !isBlank(name),
+                    'supplemental-content-mid-bar': !isBlank(name) || division,
                 }"
                 >{{ date | formatDate }}</span
             >
+            <DivisionLabel
+                v-if="docType === 'internal' && division"
+                :division="division"
+            />
             <span
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
@@ -49,8 +53,14 @@
 <script>
 import { getFileTypeButton } from "utilities/utils";
 
+import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
+
 export default {
     name: "SupplementalContentObject",
+
+    components: {
+        DivisionLabel,
+    },
 
     props: {
         name: {
@@ -67,6 +77,11 @@ export default {
             type: String,
             required: false,
             default: undefined,
+        },
+        division: {
+            type: Object,
+            required: false,
+            default: null,
         },
         url: {
             type: String,

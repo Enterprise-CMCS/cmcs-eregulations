@@ -124,6 +124,18 @@
         font-size: $font-size-sm;
     }
 
+    .result__context--division {
+        text-transform: none;
+        color: $primary_link_color;
+        font-size: $font-size-sm;
+        font-weight: bold;
+
+        &--bar {
+            padding-left: 0;
+            border-left: none;
+        }
+    }
+
     .supplemental-content-mid-bar {
         border-right: 1px solid black;
     }
