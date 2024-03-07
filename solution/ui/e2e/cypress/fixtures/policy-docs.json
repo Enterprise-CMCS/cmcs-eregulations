@@ -159,7 +159,17 @@
             },
             "url": "d89af093-8975-4bcb-a747-abe346ebb274",
             "document_name_headline": "[Mock] Cypress Fixture",
-            "summary_headline": "This is the summary.  Rubber <span class=\"search-highlight\">baby</span> buggy bumper"
+            "summary_headline": "This is the summary.  Rubber <span class=\"search-highlight\">baby</span> buggy bumper",
+            "division": {
+                "id": 1,
+                "name": "Mock Division 1",
+                "abbreviation": "MD1",
+                "group": {
+                    "id": 1,
+                    "name": "Mock Group 1",
+                    "abbreviation": "MG1"
+                }
+            }
         }
     ]
 }
