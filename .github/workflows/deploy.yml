@@ -91,7 +91,7 @@ jobs:
           pushd solution/backend
           npm install serverless -g
           npm install
-          serverless deploy --config ./serverless-redirect.yml --stage redirect | tee output.log
+          serverless deploy --config ./serverless-redirect.yml --stage ${{ matrix.environment }} | tee output.log
           serverless deploy --stage ${{ matrix.environment }} | tee output.log
           serverless invoke --function reg_core_migrate --stage ${{ matrix.environment }}
           serverless invoke --function create_su --stage ${{ matrix.environment }}
