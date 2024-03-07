@@ -36,6 +36,7 @@ def upload_file_index(content):
         file_name_string=content.file_name,
         upload_category=content.category,
         url=content.uid,
+        extract_url=content.uid,
         doc_name_string=content.document_name,
         summary_string=content.summary,
         date_string=content.date,
@@ -52,6 +53,7 @@ def external_content_index(content):
     index = ContentIndex(
         category=content.category,
         url=content.url,
+        extract_url=content.url,
         doc_name_string=content.name,
         summary_string=content.description,
         date_string=content.date,
@@ -88,7 +90,7 @@ def add_to_index(content):
         else:
             content_index.fr_doc = content
         if isinstance(content, FederalRegisterDocument) and hasattr(content, "raw_text_url") and content.raw_text_url:
-            content_index.url = content.raw_text_url
+            content_index.extract_url = content.raw_text_url
             content_index.ignore_robots_txt = True
         content_index.save()
     content_index.rank_d_string = get_subject_string(content.subjects.all())

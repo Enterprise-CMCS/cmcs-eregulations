@@ -157,7 +157,7 @@ class InvokeTextExtractorViewset(APIView):
             return Response({'message': "Index does not exist"})
         json_object = {
             'id': uid,
-            'uri': index.url,
+            'uri': index.extract_url,
             'post_url': post_url,
             'token': token,
         }
