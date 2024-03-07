@@ -55,6 +55,8 @@ const API_ENDPOINTS_V3 = [
     `/v3/title/${TITLE}/toc`,
     `/v3/titles`,
     `/v3/toc`,
+    `/v3/file-manager/groups`,
+    `/v3/file-manager/divisions`,
 ];
 
 describe("API testing", () => {

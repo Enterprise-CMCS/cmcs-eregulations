@@ -42,7 +42,8 @@ def upload_file_index(content):
         resource_type='internal',
         rank_a_string=f"{check_string_value(content.document_name)}",
         rank_b_string=f"{check_string_value(content.summary)}",
-        rank_c_string=f"{check_string_value(content.date)} {check_string_value(content.file_name)}"
+        rank_c_string=f"{check_string_value(content.date)} {check_string_value(content.file_name)}",
+        division=content.division,
     )
     index.save()
     return index

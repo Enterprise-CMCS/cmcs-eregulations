@@ -63,7 +63,25 @@ class Subject(models.Model):
         return f"{self.full_name} {check_string_value(self.short_name)} {check_string_value(self.abbreviation)}"
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=512, null=False, blank=False, unique=True)
+    abbreviation = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.abbreviation})"
+
+
+class Division(models.Model):
+    group = models.ForeignKey(Group, blank=True, null=True, related_name="divisions", on_delete=models.SET_NULL)
+    name = models.CharField(max_length=512, null=False, blank=False, unique=True)
+    abbreviation = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.abbreviation})"
+
+
 class UploadedFile(models.Model):
+    division = models.ForeignKey(Division, blank=True, null=True, related_name="files", on_delete=models.SET_NULL)
     document_name = models.CharField(max_length=512, null=True, blank=True)
     file_name = models.CharField(max_length=512, null=True, blank=True)
     date = VariableDateField(null=True, blank=True)

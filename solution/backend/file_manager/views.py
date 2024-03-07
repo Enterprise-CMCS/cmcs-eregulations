@@ -28,11 +28,24 @@ from file_manager.serializers.groupings import (
     RepositoryCategoryTreeSerializer,
     SubjectDetailsSerializer,
 )
+from file_manager.serializers.groups import (
+    DivisionWithGroupSerializer,
+    GroupWithDivisionSerializer,
+)
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
-from .models import AbstractRepoCategory, DocumentType, RepositoryCategory, RepositorySubCategory, Subject, UploadedFile
+from .models import (
+    AbstractRepoCategory,
+    Division,
+    DocumentType,
+    Group,
+    RepositoryCategory,
+    RepositorySubCategory,
+    Subject,
+    UploadedFile,
+)
 
 
 @extend_schema(
@@ -62,6 +75,22 @@ class SubjectViewset(viewsets.ReadOnlyModelViewSet):
         context = self.get_serializer_context()
         serializer = SubjectDetailsSerializer(query, many=True, context=context)
         return Response(serializer.data)
+
+
+@extend_schema(description="Retrive a list of divisions and their associated groups.")
+class DivisionViewset(viewsets.ReadOnlyModelViewSet):
+    serializer_class = DivisionWithGroupSerializer
+
+    def get_queryset(self):
+        return Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
+
+
+@extend_schema(description="Retrieve a list of groups and their associated divisions.")
+class GroupViewset(viewsets.ReadOnlyModelViewSet):
+    serializer_class = GroupWithDivisionSerializer
+
+    def get_queryset(self):
+        return Group.objects.all().prefetch_related(Prefetch("divisions", queryset=Division.objects.all()))
 
 
 class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSetMixin, OptionalPaginationMixin):
@@ -104,11 +133,13 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
+        division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
 
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
-            Prefetch("document_type", queryset=doc_type_prefetch)).distinct()
+            Prefetch("document_type", queryset=doc_type_prefetch),
+            Prefetch("division", queryset=division_prefetch)).distinct()
 
         if search_query:
             (search_type, cover_density) = (
