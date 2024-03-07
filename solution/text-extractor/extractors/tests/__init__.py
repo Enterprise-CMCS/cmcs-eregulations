@@ -24,18 +24,19 @@ class FixtureTestCase(unittest.TestCase):
 
         with open(f"{self.BASE_PATH}{collection}/{variation}sample.{file_type}", "rb") as f:
             sample = f.read()
-        with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "rb") as f:
-            expected = f.read().decode()
 
-        # Determine the file's MIME type
-        mime_type = Extractor.get_file_type(sample)
+        # Determine the file's content type
+        file_type = Extractor.get_file_type(sample)
 
         with patch("extractors.Extractor._extract_embedded", new=mock_extract_embedded):
-            extractor = Extractor.get_extractor(mime_type, config)
+            extractor = Extractor.get_extractor(file_type, config)
             output = extractor.extract(sample)
 
         # Uncomment these 2 lines to re-export fixture files the next time tests are run.
         # with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "w") as f:
         #     f.write(output)
+
+        with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "rb") as f:
+            expected = f.read().decode()
 
         self.assertEqual(output, expected)

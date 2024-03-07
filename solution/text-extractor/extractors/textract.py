@@ -9,11 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class TextractExtractor(Extractor):
-    file_types = (
-        "image/tiff",
-        "image/jpeg",
-        "image/png",
-    )
+    file_types = ("tiff", "jpeg", "png")
 
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)

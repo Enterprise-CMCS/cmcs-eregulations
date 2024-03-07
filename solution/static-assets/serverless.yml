@@ -61,6 +61,28 @@ resources:
                 - GET
                 - HEAD
               MaxAge: 3000
+    CloudFrontLogsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: eregs-${self:custom.stage}-cloudfront-logs
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerPreferred
+        VersioningConfiguration:
+          Status: Enabled
+        AccessControl: LogDeliveryWrite
+    CloudFrontLogsBucketPolicy:
+      Type: "AWS::S3::BucketPolicy"
+      Properties:
+        Bucket: !Ref CloudFrontLogsBucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: "delivery.logs.amazonaws.com"
+              Action: "s3:PutObject"
+              Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -153,6 +175,10 @@ resources:
                   - ''
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+          Logging:
+            IncludeCookies: false
+            Bucket: eregs-${self:custom.stage}-cloudfront-logs.s3.amazonaws.com
+            Prefix: cf-logs/
           Enabled: true
           HttpVersion: 'http2'
           DefaultCacheBehavior:

@@ -14,7 +14,7 @@
     4. [Unit testing your new extractor](#unit-testing-your-new-extractor)
     5. [Storing fixture files in a "collection"](#storing-fixture-files-in-a-collection)
     6. [Generating new fixture files](#generating-new-fixture-files)
-    7. [Fixing misdetected or unsupported MIME types](#fixing-misdetected-or-unsupported-mime-types)
+    7. [Determining file types and fixing misdetected ones](#determining-file-types-and-fixing-misdetected-ones)
 
 # About
 
@@ -179,7 +179,7 @@ from .sample import SampleExtractor as SampleExtractor  # Note the redundant ali
 .... etc ....
 ```
 
-The extractor is now registered and will be automatically instantiated when a file has one of the MIME types listed in `file_types`.
+The extractor is now registered and will be automatically instantiated when a file has one of the content types listed in `file_types`. See [Determining file types and fixing misdetected ones](#determining-file-types-and-fixing-misdetected-ones) for instructions on determine a file's content type.
 
 Note the underscore in front of the `_extract()` method definition. Be sure to override this instead of `extract()` because the latter performs pre-extraction checks, then calls `_extract()`.
 
@@ -303,18 +303,18 @@ You can also easily use the existing unit test suite to generate new fixture fil
 
 Be sure to re-comment these 2 lines when you're done, or fixture files will be re-created every time you run unit tests, which may produce undesired behavior.
 
-## Fixing misdetected or unsupported MIME types
+## Determining file types and fixing misdetected ones
 
-The text extractor uses [Google's Magika library](https://github.com/google/magika) for MIME type detection, which uses a machine learning algorithm that promises greater than 99% accuracy when detecting known file types. However, not all file types are supported and their model has to be trained to support them.
+The text extractor uses [Google's Magika library](https://github.com/google/magika) for content type detection, which uses a machine learning algorithm that promises greater than 99% accuracy when detecting known file types. However, not all file types are supported and their model has to be trained to support them.
 
 You can [open an issue](https://github.com/google/magika/issues) on their repository to report a misdetection or missing file type. To do so, install Magika on your machine so that you can generate a report, like so:
 
 ```shell
 $ pip install magika
-$ magika -i unknown_type.xyz
-unknown_type.xyz: application/octet-stream
-$ magika --generate-report unknown_type.xyz
-unknown_type.xyz: Unknown binary data (unknown)
+$ magika --label --prediction-mode medium-confidence your-file.xyz
+your-file.xyz: unknown
+$ magika --generate-report your-file.xyz
+your-file.xyz: Unknown binary data (unknown)
 ########################################
 ###              REPORT              ###
 ########################################

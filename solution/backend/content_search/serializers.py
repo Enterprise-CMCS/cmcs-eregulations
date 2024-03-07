@@ -3,6 +3,7 @@ from rest_framework import serializers
 from common.fields import HeadlineField
 from common.serializers.mix import DetailsSerializer
 from file_manager.serializers.groupings import DocumentTypeSerializer, SubjectSerializer
+from file_manager.serializers.groups import DivisionWithGroupSerializer
 
 
 class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
@@ -19,6 +20,7 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     id = serializers.IntegerField()
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
+    division = DivisionWithGroupSerializer()
 
 
 class ContentSearchSerializer(ContentListSerializer, ):

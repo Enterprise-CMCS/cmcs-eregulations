@@ -6,11 +6,7 @@ from .extractor import Extractor
 
 
 class MarkupExtractor(Extractor):
-    file_types = (
-        "text/html",
-        "text/xml",
-        "application/xml",
-    )
+    file_types = ("html", "xml")
 
     def _extract(self, file: bytes) -> str:
         warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)  # Hide unnecessary warning about parsing XML

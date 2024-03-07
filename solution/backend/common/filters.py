@@ -28,21 +28,19 @@ class ParameterFilter(InputFilter):
             return queryset.filter(**filter).distinct()
 
 
-class TitleFilter(ParameterFilter):
-    parameter_name = "locations__title"
-    title = "Title"
+class IndexPopulatedFilter(SimpleListFilter):
+    title = "index populated"
+    parameter_name = "populated"
 
+    def lookups(self, request, model_admin):
+        return [
+            ("yes", "Yes"),
+            ("no", "No"),
+        ]
 
-class PartFilter(ParameterFilter):
-    parameter_name = "locations__part"
-    title = "Part"
-
-
-class SectionFilter(ParameterFilter):
-    parameter_name = "locations__section__section_id"
-    title = "Section"
-
-
-class SubpartFilter(ParameterFilter):
-    parameter_name = "locations__subpart__subpart_id"
-    title = "Subpart"
+    def queryset(self, request, queryset):
+        if self.value() == "yes":
+            return queryset.filter(contentindex__content__isnull=False)
+        if self.value() == "no":
+            return queryset.filter(contentindex__content__isnull=True)
+        return queryset

@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class PowerPointExtractor(Extractor):
-    file_types = ("application/vnd.openxmlformats-officedocument.presentationml.presentation",)
+    file_types = ("pptx",)
 
     def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)

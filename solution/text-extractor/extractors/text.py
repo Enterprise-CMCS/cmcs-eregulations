@@ -4,7 +4,7 @@ from .extractor import Extractor
 
 
 class TextExtractor(Extractor):
-    file_types = ("text/plain",)
+    file_types = ("txt",)
 
     def _extract(self, file: bytes) -> str:
         extractor = UnicodeDammit(file)

@@ -4,7 +4,7 @@ from .extractor import Extractor
 
 
 class OldExcelExtractor(Extractor):
-    file_types = ("application/vnd.ms-excel",)
+    file_types = ("xls",)
 
     def _extract(self, file: bytes) -> str:
         file_path = self._write_file(file)

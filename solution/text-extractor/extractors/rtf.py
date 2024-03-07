@@ -4,10 +4,7 @@ from .extractor import Extractor
 
 
 class RichTextExtractor(Extractor):
-    file_types = (
-        "text/rtf",
-        "application/rtf",
-    )
+    file_types = ("rtf",)
 
     def _extract(self, file: bytes) -> str:
         return rtf_to_text(file.decode(), errors="replace")
