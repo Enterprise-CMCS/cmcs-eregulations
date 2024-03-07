@@ -63,7 +63,17 @@
             "url": "b3fd8a45-d938-43c4-b653-e7e493dc4cb0",
             "id": 1677,
             "document_name_headline": null,
-            "summary_headline": null
+            "summary_headline": null,
+            "division": {
+                "id": 1,
+                "name": "Mock Division 1",
+                "abbreviation": "MD1",
+                "group": {
+                    "id": 1,
+                    "name": "Mock Group 1",
+                    "abbreviation": "MG1"
+                }
+            }
         },
         {
             "doc_name_string": "Space Jam ya'll",
