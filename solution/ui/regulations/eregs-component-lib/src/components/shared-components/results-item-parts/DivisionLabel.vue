@@ -1,7 +1,5 @@
 <script setup>
-import { computed } from "vue";
-
-const props = defineProps({
+defineProps({
     division: {
         type: Object,
         required: true,
@@ -11,7 +9,7 @@ const props = defineProps({
 
 <template>
     <span
-        class="result__context--date--bar result__context--division"
+        class="result__context--division result__context--division--bar"
         :title="`${division.group.name} — ${division.name}`"
         >Uploaded by {{ division.group.abbreviation }} —
         {{ division.abbreviation }}</span
