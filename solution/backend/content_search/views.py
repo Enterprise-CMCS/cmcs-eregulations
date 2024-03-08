@@ -160,6 +160,7 @@ class InvokeTextExtractorViewset(APIView):
         json_object = {
             'id': uid,
             'uri': index.extract_url,
+            'ignore_robots_txt': index.ignore_robots_txt,
             'post_url': post_url,
             'token': token,
         }
