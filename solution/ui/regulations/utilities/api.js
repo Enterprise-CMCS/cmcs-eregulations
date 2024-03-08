@@ -210,14 +210,6 @@ function fetchJson({
 
 // ---------- helper functions ---------------
 
-function httpApiMock(verb, urlPath, { data, params, response } = {}) {
-    console.log(`Performing an HTTP ${verb} to ${config.apiPath}/${urlPath}`);
-    data && console.log("DATA: ", data);
-    params && console.log("PARAMS: ", params);
-    response && console.log("RESPONSE: ", response);
-    return response;
-}
-
 function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
@@ -243,31 +235,6 @@ function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = true) {
     });
 }
 
-async function httpApiGetWithPagination(
-    urlPath,
-    { params } = {},
-    cacheResponse = true
-) {
-    let results = [];
-    let url = `${config.apiPath}/${urlPath}`;
-    while (url) {
-        /* eslint-disable no-await-in-loop */
-        const response = await fetchJson({
-            url,
-            options: {
-                method: "GET",
-                headers: authHeader(token),
-                params,
-            },
-            cacheResponse,
-        });
-        results = results.concat(response.results ?? []);
-        url = response.next;
-        /* eslint-enable no-await-in-loop */
-    }
-    return results;
-}
-
 function httpApiPost(
     urlPath,
     { data = {}, params } = {},
@@ -285,33 +252,6 @@ function httpApiPost(
     });
 }
 
-// eslint-disable-next-line no-unused-vars
-function httpApiPut(urlPath, { data, params } = {}, cacheResponse = true) {
-    return fetchJson({
-        url: `${config.apiPath}/${urlPath}`,
-        options: {
-            method: "PUT",
-            headers: authHeader(token),
-            params,
-            body: JSON.stringify(data),
-        },
-        cacheResponse,
-    });
-}
-
-// eslint-disable-next-line no-unused-vars
-function httpApiDelete(urlPath, { data, params } = {}, cacheResponse = true) {
-    return fetchJson({
-        url: `${config.apiPath}/${urlPath}`,
-        options: {
-            method: "DELETE",
-            headers: authHeader(token),
-            params,
-            body: JSON.stringify(data),
-        },
-        cacheResponse,
-    });
-}
 // ---------- cache helpers -----------
 
 const getCacheKeys = async () => localforage.keys();
@@ -326,9 +266,6 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getPartTOC = async (title, part) =>
-    httpApiGet(`title/${title}/part/${part}/version/latest/toc`);
-
 const getCategories = async (apiUrl) => {
     if (apiUrl) {
         return httpApiGetLegacy(`${apiUrl}resources/categories`);
@@ -368,9 +305,6 @@ const getTOC = async ({ title, apiUrl }) => {
 
     return httpApiGet(title ? `title/${title}/toc` : `toc`);
 };
-
-const getSectionsForPart = async (title, part) =>
-    httpApiGet(`title/${title}/part/${part}/version/latest/sections`);
 
 const getSubpartTOC = async (apiURL, title, part, subPart) =>
     httpApiGetLegacy(
@@ -415,74 +349,6 @@ const getRecentResources = async (
     );
 };
 
-/**
- *
- * Fetches and formats list of parts to be used as dictionary
- * to create links to reg text in "related sections" part of
- * resources result item
- *
- * @returns {Array<{label: string, identifier: string, section: <Object>}>}
- */
-const getFormattedPartsList = async (title = "42") => {
-    const TOC = await getTOC({ title });
-    const partsList = TOC.children[0].children
-        .map((subChapter) =>
-            subChapter.children.map((part) => ({
-                label: part.label,
-                name: part.identifier[0],
-            }))
-        )
-        .flat(1);
-
-    const formattedPartsList = await Promise.all(
-        partsList.map(async (part) => {
-            const newPart = JSON.parse(JSON.stringify(part));
-            const PartToc = await getPartTOC(title, part.name);
-            const sections = {};
-            PartToc.children
-                .filter((TOCpart) => TOCpart.type === "subpart")
-                .forEach((subpart) => {
-                    subpart.children
-                        .filter((section) => section.type === "section")
-                        .forEach((c) => {
-                            sections[c.identifier[c.identifier.length - 1]] =
-                                c.parent[0];
-                        });
-                });
-            newPart.sections = sections;
-            return newPart;
-        })
-    );
-
-    return formattedPartsList;
-};
-
-/**
- *
- * Fetches all_parts and returns a list of objects for the subparts in that part
- * Each object has a label and an identifier
- * @param {string} - the name of a part in title 42
- * @returns {Object<{label:string, identifier:string}>}
- */
-const getSubPartsForPart = async (partParam, title = "42") => {
-    // if part is string of multiple parts, use final part
-    const selectedParts = partParam.split(",");
-    const partTocs = await Promise.all(
-        selectedParts.map(async (part) => getPartTOC(title, part))
-    );
-    return partTocs
-        .map((partToc) =>
-            partToc.children
-                .filter((sp) => sp.type === "subpart")
-                .map((subpart) => ({
-                    label: subpart.label,
-                    range: subpart.descendant_range,
-                    part: subpart.parent[0],
-                    identifier: subpart.identifier[0],
-                }))
-        )
-        .flat(1);
-};
 
 /**
  *
@@ -651,33 +517,6 @@ const getStatutes = async ({
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {string} [requestParams] - Query string parameters to pass to API
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
- * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of file items when fulfilled
- */
-const getPolicyDocList = async ({
-    apiUrl,
-    requestParams = "",
-    cacheResponse = true,
-}) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}file-manager/files${
-                requestParams ? `?${requestParams}&` : "?"
-            }location_details=true`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet(
-        `file-manager/files${requestParams ? `?${requestParams}` : ""}`,
-        cacheResponse
-    );
-};
-
-/**
- * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
@@ -750,26 +589,21 @@ export {
     getCategories,
     getCombinedContent,
     getDecodedIdToken,
-    getFormattedPartsList,
     getGovInfoLinks,
     getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,
     getPolicyDocCategories,
-    getPolicyDocList,
     getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
-    getSectionsForPart,
     getStatutes,
     getStatutesActs,
-    getSubPartsForPart,
     getSubpartTOC,
     getSupplementalContent,
     getSynonyms,
     getTOC,
     getTitles,
-    getPartTOC,
     removeCacheItem,
     setCacheItem,
     setIdToken,
