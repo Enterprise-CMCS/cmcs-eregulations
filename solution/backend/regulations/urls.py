@@ -48,7 +48,7 @@ urlpatterns = [
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
-    path('resources/', ResourcesView.as_view(), name='resources'),
+    path('resources/', ResourcesView, name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
     path('policy-repository/', PolicyRepositoryView, name='policy-repository'),

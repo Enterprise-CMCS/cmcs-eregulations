@@ -46,7 +46,8 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository?subjects=2&q=test");
         cy.url().should("not.include", "/policy-repository");
-        cy.url().should("include", "/subjects/")
+        cy.url()
+            .should("include", "/subjects/")
             .and("include", "subjects=2")
             .and("include", "q=test");
         cy.get(".div__login-sidebar a")
@@ -55,6 +56,19 @@ describe("Find by Subjects", () => {
             .and("include", "subjects/")
             .and("include", "q=test")
             .and("include", "subjects=2");
+    });
+
+    it("redirects /resources to /subjects", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/resources?q=test");
+        cy.url().should("not.include", "/resources");
+        cy.url().should("include", "/subjects/")
+            .and("not.include", "q=test");
+        cy.get(".div__login-sidebar a")
+            .should("have.attr", "href")
+            .and("include", "next")
+            .and("include", "subjects/")
+            .and("not.include", "q=test");
     });
 
     it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
@@ -66,9 +80,9 @@ describe("Find by Subjects", () => {
             .and("include", "subjects/")
             .and("not.include", "q=");
 
-        cy.get(".div__login-sidebar a")
-            .click();
-        cy.url().should("include", "/?next=")
+        cy.get(".div__login-sidebar a").click();
+        cy.url()
+            .should("include", "/?next=")
             .and("include", "subjects/")
             .and("not.include", "q=");
     });
@@ -603,7 +617,11 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.clickHeaderLink({ page: "statutes", label: "Statutes", screen: "wide" });
+        cy.clickHeaderLink({
+            page: "statutes",
+            label: "Statutes",
+            screen: "wide",
+        });
         cy.url().should("include", "/statutes");
     });
 
