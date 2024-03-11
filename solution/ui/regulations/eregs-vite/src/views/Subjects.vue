@@ -282,6 +282,21 @@ const setSelectedSubjectParts = () => {
 };
 
 watch(
+    () => selectedSubjectParts.value,
+    async (newSubjectParts) => {
+        if (_isEmpty(newSubjectParts)) {
+            // set standard title
+            document.title =
+                "Find by Subject | Medicaid & CHIP eRegulations";
+        } else {
+            document.title = `${
+                newSubjectParts[0][0] ?? newSubjectParts[1][0]
+            } | Find by Subject | Medicaid & CHIP eRegulations`;
+        }
+    }
+);
+
+watch(
     () => policyDocSubjects.value.loading,
     async (newLoading) => {
         if (!newLoading) {
