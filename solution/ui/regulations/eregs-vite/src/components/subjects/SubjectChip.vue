@@ -25,7 +25,7 @@ defineProps({
         v-if="currentRouteName !== 'subjects'"
         class="subject__chip"
         :title="title"
-        :data-testid="`subject-chip-${subjectId}`"
+        :data-testid="`add-subject-chip-${subjectId}`"
         :href="`${base}subjects/?subjects=${subjectId}`"
     >
         {{ subjectName }}
