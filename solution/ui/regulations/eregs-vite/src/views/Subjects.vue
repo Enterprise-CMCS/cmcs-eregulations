@@ -365,9 +365,7 @@ getDocSubjects();
                     <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks
-                        :statutes-url="statutesUrl"
-                    />
+                    <HeaderLinks :statutes-url="statutesUrl" />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />

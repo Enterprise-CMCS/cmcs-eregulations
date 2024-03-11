@@ -20,7 +20,7 @@ Vue.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
     if (!isAuthenticated && to.name === "subjects" && to.query?.type) {
         const { type, ...query } = to.query;
         next({ ...to, query });
