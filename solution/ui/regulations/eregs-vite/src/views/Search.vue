@@ -220,6 +220,7 @@ export default {
         return {
             apiUrl: this.apiUrl,
             base: this.homeUrl,
+            currentRouteName: this.$route.name,
         };
     },
 

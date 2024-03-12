@@ -246,7 +246,7 @@ const resultLinkClasses = (doc) => ({
             </template>
             <template #chips>
                 <div
-                    v-if="view !== 'search' && doc.subjects.length > 0"
+                    v-if="doc.subjects.length > 0"
                     class="document__info-block"
                 >
                     <SubjectChips :subjects="doc.subjects" />
