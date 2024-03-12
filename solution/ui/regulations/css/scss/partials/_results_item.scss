@@ -66,6 +66,16 @@
                 border-right: 1px solid $mid_gray;
             }
         }
+
+        &--division {
+            text-transform: none;
+
+            &--bar {
+                padding-left: 8px;
+                border-left: 1px solid $mid_gray;
+
+            }
+        }
     }
 
     &__link {

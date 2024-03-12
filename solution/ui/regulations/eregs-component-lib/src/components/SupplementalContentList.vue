@@ -6,6 +6,7 @@
                 :name="content.name"
                 :description="content.description || content.doc_name_string"
                 :date="content.date || content.date_string"
+                :division="content.division"
                 :url="content.url"
                 :doc-type="content.resource_type ?? 'external'"
                 :file-name="content.file_name_string"

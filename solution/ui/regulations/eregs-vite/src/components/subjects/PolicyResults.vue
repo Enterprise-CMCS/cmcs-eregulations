@@ -8,6 +8,7 @@ import { formatDate } from "utilities/filters";
 import { getFileTypeButton, DOCUMENT_TYPES_MAP } from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
@@ -215,6 +216,10 @@ const resultLinkClasses = (doc) => ({
                     :class="needsBar(doc) && 'result__context--date--bar'"
                     >{{ formatDate(doc.date_string) }}</span
                 >
+                <DivisionLabel
+                    v-if="doc.resource_type === 'internal' && doc.division"
+                    :division="doc.division"
+                />
                 <span
                     v-if="
                         doc.resource_type === 'external' && doc.doc_name_string

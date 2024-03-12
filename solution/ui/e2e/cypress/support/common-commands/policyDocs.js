@@ -46,4 +46,9 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .eq(1)
         .find(".subcategory-label")
         .should("include.text", "TestSubCat");
+    cy.get(".result__context")
+        .eq(1)
+        .find(".result__context--division")
+        .should("include.text", "Uploaded by MG1 — MD1")
+        .and("have.attr", "title", "Mock Group 1 — Mock Division 1");
 };
