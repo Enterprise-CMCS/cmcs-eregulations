@@ -21,12 +21,23 @@ Vue.directive("clickaway", Clickaway);
 const router = vueRouter({ customUrl, host });
 
 router.beforeEach((to, _from, next) => {
-    if (!isAuthenticated && to.name === "subjects" && to.query?.type) {
-        const { type, ...query } = to.query;
-        next({ ...to, query });
-    } else {
-        next();
+    const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
+
+    if (to.name === "subjects") {
+        if (to.params?.subjectName) {
+            // set document title here with available information
+            document.title = `${to.params.subjectName} | ${pageTitle}`;
+        } else {
+            document.title = pageTitle;
+        }
+
+        if (!isAuthenticated && to.query?.type) {
+            const { type, ...query } = to.query;
+            next({ ...to, query });
+        }
     }
+
+    next();
 });
 
 // Silence duplicate navigation errors
