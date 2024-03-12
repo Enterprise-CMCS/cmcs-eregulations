@@ -168,8 +168,8 @@ class InvokeTextExtractorViewset(APIView):
                 extract_url = content["raw_text_url"]
                 doc.raw_text_url = extract_url
                 doc.save()
-            except Exception as e:
-                return Response({"message": f"Failed to fetch the raw text URL."})
+            except Exception:
+                return Response({"message": "Failed to fetch the raw text URL."})
 
         if not settings.USE_LOCAL_TEXTRACT:
             post_url = request.build_absolute_uri(reverse("post-content"))
