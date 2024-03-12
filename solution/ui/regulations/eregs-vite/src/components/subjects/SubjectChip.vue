@@ -1,5 +1,10 @@
 <script setup>
-const props = defineProps({
+import { inject } from "vue";
+
+const base = inject("base") ?? "/";
+const currentRouteName = inject("currentRouteName") ?? "subjects";
+
+defineProps({
     subjectId: {
         type: Number,
         required: true,
@@ -16,7 +21,17 @@ const props = defineProps({
 </script>
 
 <template>
+    <a
+        v-if="currentRouteName !== 'subjects'"
+        class="subject__chip"
+        :title="title"
+        :data-testid="`add-subject-chip-${subjectId}`"
+        :href="`${base}subjects/?subjects=${subjectId}`"
+    >
+        {{ subjectName }}
+    </a>
     <router-link
+        v-else
         class="subject__chip"
         :title="title"
         :data-testid="`add-subject-chip-${subjectId}`"

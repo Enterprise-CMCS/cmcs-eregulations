@@ -97,6 +97,40 @@ describe("Search flow", () => {
         });
     });
 
+    it("should go to the Subjects page with a selected subject when a subject chip is clicked", () => {
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+
+        cy.intercept("**/v3/file-manager/subjects", {
+            fixture: "subjects.json",
+        }).as("subjects");
+
+        cy.viewport("macbook-15");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get(".search-field .v-input__icon--append button").click({
+            force: true,
+        });
+
+        cy.get(`a[data-testid=add-subject-chip-3]`).click({
+            force: true,
+        });
+
+        cy.url().should("include", "/subjects/?subjects=3");
+        cy.get(".subject__heading")
+            .should("exist")
+            .and("have.text", "Access to Services");
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });

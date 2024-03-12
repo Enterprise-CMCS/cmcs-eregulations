@@ -88,6 +88,7 @@ provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
+provide("currentRouteName", $route.name);
 
 /**
  * @param {Object} queryParams - $route.query
