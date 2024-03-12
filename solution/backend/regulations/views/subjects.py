@@ -16,7 +16,7 @@ class SubjectsView(TemplateView):
             subject_abbreviation = subject.abbreviation
             subject_fullname = subject.full_name
             subject_name = subject_abbreviation if subject_abbreviation else subject_fullname
-        except Subject.DoesNotExist:
+        except (ValueError, Subject.DoesNotExist):
             subject_name = None
 
         host = self.request.get_host()
