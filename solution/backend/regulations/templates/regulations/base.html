@@ -26,7 +26,8 @@ CSS/Javascript etc., should inherit from this template.
         {% if not allow_indexing %}<meta name="robots" content="noindex" />{% endif %}
         <title>
             {% block title %}
-                {{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | Medicaid &amp; CHIP eRegulations
+                {% block subtitle %}{{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | {% endblock %}
+                Medicaid &amp; CHIP eRegulations
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
