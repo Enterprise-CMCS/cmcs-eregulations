@@ -606,7 +606,7 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
         (
             None,
             {
-                "fields": ["internal_notes", "location_history"],
+                "fields": ["internal_notes", "location_history", "raw_text_url"],
             },
         ),
     ]
@@ -623,7 +623,10 @@ class FederalRegisterDocumentAdmin(AbstractResourceAdmin):
     def get_content(self, obj):
         if obj.id:
             index = ContentIndex.objects.get(fr_doc=obj)
-            link = reverse("call-extractor", kwargs={"content_id": index.uid})
+            link = reverse("call-extractor", kwargs={
+                "content_id": index.uid,
+                "fr_doc_id": obj.id,
+            })
             html = '<a class="button" href="{}">Get content</a>'.format(link)
             return format_html(html)
         return "N/A"

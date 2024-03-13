@@ -18,7 +18,7 @@ from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, Division, DocumentType, Group, Subject
-from resources.models import AbstractCategory, AbstractLocation
+from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
 from resources.views.mixins import LocationFiltererMixin
 
 from .models import ContentIndex
@@ -149,17 +149,40 @@ class InvokeTextExtractorViewset(APIView):
     def get(self, request, *args, **kwargs):
         token = get_tokens_for_user(request.user)['access']
         uid = kwargs.get("content_id")
+        fr_doc_id = kwargs.get("fr_doc_id")
+
+        index = ContentIndex.objects.get(uid=uid)
+        if not index:
+            return Response({'message': "Index does not exist"})
+        extract_url = index.extract_url
+
+        if fr_doc_id:
+            try:
+                doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
+                response = requests.get(
+                    f"https://www.federalregister.gov/api/v1/documents/{doc.document_number}.json",
+                    timeout=20,
+                )
+                response.raise_for_status()
+                content = json.loads(response.content)
+                extract_url = content["raw_text_url"]
+                doc.raw_text_url = extract_url
+                doc.save()
+                index.extract_url = extract_url
+                index.ignore_robots_txt = True
+                index.save()
+            except Exception:
+                return Response({"message": "Failed to fetch the raw text URL."})
 
         if not settings.USE_LOCAL_TEXTRACT:
             post_url = request.build_absolute_uri(reverse("post-content"))
         else:
             post_url = "http://host.docker.internal:8000" + reverse("post-content")
-        index = ContentIndex.objects.get(uid=uid)
-        if not index:
-            return Response({'message': "Index does not exist"})
+
         json_object = {
             'id': uid,
-            'uri': index.url,
+            'uri': index.extract_url,
+            'ignore_robots_txt': index.ignore_robots_txt,
             'post_url': post_url,
             'token': token,
         }

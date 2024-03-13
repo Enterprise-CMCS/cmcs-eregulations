@@ -88,6 +88,8 @@ class ContentIndex(models.Model):
     date_string = VariableDateField()
     content = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=512, blank=True, null=True)
+    extract_url = models.CharField(max_length=512, blank=True, null=True)
+    ignore_robots_txt = models.BooleanField(default=False)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
     division = models.ForeignKey(Division, null=True, blank=True, on_delete=models.SET_NULL)
     # Document type will be removed after manual migration in place of upload_category

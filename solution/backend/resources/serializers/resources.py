@@ -120,6 +120,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
     approved = serializers.BooleanField(required=False, default=True)
     id = serializers.CharField(required=False)
     doc_type = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    raw_text_url = serializers.CharField(allow_blank=True, allow_null=True)
 
     def get_category(self):
         config = ResourcesConfiguration.objects.first()
@@ -161,6 +162,8 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             instance.doc_type = validated_data.get('doc_type', instance.doc_type)
             instance.category = self.get_category()
             self.set_group(instance)
+
+        instance.raw_text_url = validated_data.get("raw_text_url", "")
 
         # set the locations on the instance
         self.set_locations(instance, sections, section_ranges)

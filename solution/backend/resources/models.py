@@ -196,6 +196,7 @@ class FederalRegisterDocument(AbstractResource, TypicalResourceFieldsMixin):
     document_number = models.CharField(max_length=255, blank=True, null=True)
     correction = models.BooleanField(default=False)
     withdrawal = models.BooleanField(default=False)
+    raw_text_url = models.CharField(max_length=512, blank=True, null=True)
 
     doc_type = models.CharField(
         blank=True,

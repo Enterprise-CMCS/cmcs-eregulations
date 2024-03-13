@@ -257,7 +257,7 @@ class FederalRegisterDocsViewSet(FRDocGroupingMixin, ResourceExplorerViewSetMixi
         try:
             if sc.is_valid(raise_exception=True):
                 sc.save()
-                add_to_index(sc)
+                add_to_index(frdoc)
                 response = sc.validated_data
                 return JsonResponse(response)
         except Exception as e:

@@ -15,15 +15,18 @@ class WebBackend(FileBackend):
     backend = "web"
 
     _retry_timeout = 30
-    _ignore_robots = False
     _user_agent = "CMCSeRegsTextExtractorBot/1.0"
 
     def __init__(self, config: dict):
+        self._ignore_robots = config.get("ignore_robots_txt", False)
         self._parser = robotparser.RobotFileParser()
         self._headers = requests.utils.default_headers()
         self._headers["User-Agent"] = self._user_agent
 
     def _get_robots_txt(self, url: str):
+        if self._ignore_robots:
+            logger.info("Ignoring robots.txt")
+            return
         logger.debug("Fetching robots.txt from \"%s\".", url)
         resp = requests.head(url, timeout=60)
         if resp.status_code == requests.codes.NOT_FOUND:
