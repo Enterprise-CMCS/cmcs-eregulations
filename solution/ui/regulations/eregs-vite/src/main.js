@@ -24,7 +24,9 @@ router.beforeEach((to, _from, next) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     if (to.name === "subjects") {
-        if (_from.name) {
+        if ( window.event?.type === "popstate" ) {
+            document.title = pageTitle;
+        } else if (_from.name) {
             if (to.params?.subjectName) {
                 // set document title here with available information
                 document.title = `${to.params.subjectName} | ${pageTitle}`;
