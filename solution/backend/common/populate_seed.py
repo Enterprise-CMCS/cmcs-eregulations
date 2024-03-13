@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management import call_command
 
 from content_search.models import ContentIndex
-from file_manager.models import DocumentType, Subject
+from file_manager.models import Subject
 from regcore.search.models import Synonym
 from regulations.models import (
     RegulationLinkConfiguration,
@@ -44,7 +44,6 @@ def loadSeedData():
         ("regulations.regulationlinkconfiguration.json", RegulationLinkConfiguration),
         ("regulations.statutelinkconverter.json", StatuteLinkConverter),
         ("regulations.statutelinkconfiguration.json", StatuteLinkConfiguration),
-        ("file_manager.documenttype.json", DocumentType),
         ("file_manager.subject.json", Subject),
         ("cmcs_regulations/fixtures/contenttypes.contenttype.json", ContentType),
         ("cmcs_regulations/fixtures/auth.permission.json", Permission),

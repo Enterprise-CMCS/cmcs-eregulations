@@ -210,7 +210,7 @@ text-extractor.test:
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
-file_manager_objects = file_manager.subject file_manager.documenttype
+file_manager_objects = file_manager.subject
 auth_objects = contenttypes.contenttype auth.permission auth.group
 
 local.dump:

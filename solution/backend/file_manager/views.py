@@ -39,7 +39,6 @@ from .functions import get_upload_link
 from .models import (
     AbstractRepoCategory,
     Division,
-    DocumentType,
     Group,
     RepositoryCategory,
     RepositorySubCategory,
@@ -131,14 +130,12 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
             query = query.filter(category__id=category)
 
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
         division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
 
         query = query.prefetch_related(
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
-            Prefetch("document_type", queryset=doc_type_prefetch),
             Prefetch("division", queryset=division_prefetch)).distinct()
 
         if search_query:
@@ -169,9 +166,6 @@ class UploadedFileViewset(viewsets.ReadOnlyModelViewSet, LocationExplorerViewSet
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
-                    OpenApiQueryParameter("document_type",
-                                          "Limit results to only resources found within this category. Use "
-                                          "\"&document_type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", int, False),

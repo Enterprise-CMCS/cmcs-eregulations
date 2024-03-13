@@ -12,7 +12,7 @@ from django.db.models.expressions import RawSQL
 
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
-from file_manager.models import AbstractRepoCategory, Division, DocumentType, Subject, UploadedFile
+from file_manager.models import AbstractRepoCategory, Division, Subject, UploadedFile
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument, SupplementalContent
 
 
@@ -92,8 +92,6 @@ class ContentIndex(models.Model):
     ignore_robots_txt = models.BooleanField(default=False)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
     division = models.ForeignKey(Division, null=True, blank=True, on_delete=models.SET_NULL)
-    # Document type will be removed after manual migration in place of upload_category
-    document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="content", on_delete=models.SET_NULL)
     upload_category = models.ForeignKey(
         AbstractRepoCategory, related_name="content", blank=True, null=True, on_delete=models.CASCADE)
     category = models.ForeignKey(
