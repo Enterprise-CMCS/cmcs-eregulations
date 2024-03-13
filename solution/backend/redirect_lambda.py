@@ -1,4 +1,4 @@
-def lambda_handler(event, context):
+def handler(event, context):
     original_path = event['path']
     new_domain = 'https://eregulations.cms.gov'
     new_url = f'{new_domain}{original_path}'
