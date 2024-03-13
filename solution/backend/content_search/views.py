@@ -168,6 +168,8 @@ class InvokeTextExtractorViewset(APIView):
                 extract_url = content["raw_text_url"]
                 doc.raw_text_url = extract_url
                 doc.save()
+                index.extract_url = extract_url
+                index.save()
             except Exception:
                 return Response({"message": "Failed to fetch the raw text URL."})
 
@@ -178,7 +180,7 @@ class InvokeTextExtractorViewset(APIView):
 
         json_object = {
             'id': uid,
-            'uri': index.extract_url,
+            'uri': extract_url,
             'ignore_robots_txt': index.ignore_robots_txt,
             'post_url': post_url,
             'token': token,
