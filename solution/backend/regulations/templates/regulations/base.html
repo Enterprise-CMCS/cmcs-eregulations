@@ -26,7 +26,7 @@ CSS/Javascript etc., should inherit from this template.
         {% if not allow_indexing %}<meta name="robots" content="noindex" />{% endif %}
         <title>
             {% block title %}
-                {% block subtitle %}{{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | {% endblock %}
+                {% block title_prefix %}{{title}} CFR {{reg_part}} {% if subpart %} Subpart {{subpart}} {% endif %} | {% endblock %}
                 Medicaid &amp; CHIP eRegulations
             {% endblock %}
         </title>
