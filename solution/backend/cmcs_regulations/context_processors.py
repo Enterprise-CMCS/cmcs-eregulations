@@ -8,6 +8,12 @@ def google_analytics(request):
     }
 
 
+def is_admin_user(request):
+    return {
+        "IS_ADMIN_USER": request.user.groups.filter(name='EREGS_ADMIN').exists()
+    }
+
+
 def custom_url(request):
     custom_url = settings.CUSTOM_URL
     host = request.get_host()
