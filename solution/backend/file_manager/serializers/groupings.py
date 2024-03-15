@@ -20,6 +20,7 @@ class SubjectSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
+    updated_at = serializers.CharField()
 
 
 class SubjectDetailsSerializer(SubjectSerializer):

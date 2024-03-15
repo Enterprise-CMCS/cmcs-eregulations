@@ -58,6 +58,7 @@ class Subject(models.Model):
     short_name = models.CharField(max_length=50, null=True, blank=True)
     abbreviation = models.CharField(max_length=10, null=True, blank=True)
     combined_sort = CombinedNaturalSort(['short_name', 'abbreviation', 'full_name'], null=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.full_name} {check_string_value(self.short_name)} {check_string_value(self.abbreviation)}"

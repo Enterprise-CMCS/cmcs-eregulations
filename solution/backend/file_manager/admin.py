@@ -39,10 +39,11 @@ class DocumentTypeAdmin(BaseAdmin):
 
 @admin.register(Subject)
 class SubjectAdmin(BaseAdmin):
-    list_display = ("full_name",)
+    exclude = ('updated_at',)
+    list_display = ("full_name", "updated_at")
     search_fields = ["full_name", "short_name"]
-    ordering = ("full_name", "short_name", "abbreviation")
-    fields = ("full_name", "short_name", "abbreviation")
+    ordering = ("full_name", "short_name", "abbreviation", "updated_at")
+    fields = ("full_name", "short_name", "abbreviation", "updated_at")
 
 
 @admin.register(RepositoryCategory)
