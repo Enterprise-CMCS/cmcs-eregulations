@@ -3,6 +3,7 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
+  memorySize: 4096
   runtime: python3.10
   region: us-east-1
   iam:
