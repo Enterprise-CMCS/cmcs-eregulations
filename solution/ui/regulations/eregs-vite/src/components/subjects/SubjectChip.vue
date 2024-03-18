@@ -41,6 +41,7 @@ defineProps({
                 subjects: [subjectId.toString()],
                 type: ['all'],
             },
+            params: { subjectName },
         }"
     >
         {{ subjectName }}

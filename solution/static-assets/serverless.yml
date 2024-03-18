@@ -2,7 +2,7 @@ service: cmcs-eregs-static-assets
 
 provider:
   name: aws
-  runtime: python3.9
+  runtime: python3.10
   region: us-east-1
   deploymentBucket:
     blockPublicAccess: true
@@ -18,7 +18,7 @@ custom:
       name: python-django
       description: "Layer which contains django requirements"
       compatibleRuntimes:
-        - python3.9
+        - python3.10
 
 package:
   #patterns:

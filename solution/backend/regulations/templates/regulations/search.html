@@ -2,7 +2,7 @@
 {% load static %}
 {% load string_formatters %}
 
-{% block title %}Search {% if q %}for {{ q }} {% endif %}| Medicaid & CHIP eRegulations{% endblock %}
+{% block title_prefix %}Search {% if q %}for {{ q }} {% endif %}| {% endblock %}
 
 {% block spa_styles %}
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">

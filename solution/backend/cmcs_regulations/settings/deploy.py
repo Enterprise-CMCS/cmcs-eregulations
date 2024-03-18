@@ -13,6 +13,9 @@ DATABASES = {
     'default': {
         **default_database_values,
         'NAME': os.environ.get('DB_NAME', 'eregs'),
+        'OPTIONS': {
+            'connect_timeout': 20,
+        },
     },
     'postgres': {
         **default_database_values,

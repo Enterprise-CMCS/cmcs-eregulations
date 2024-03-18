@@ -27,6 +27,7 @@ const routes = [
         path: "/subjects",
         name: "subjects",
         component: Subjects,
+        props: true,
     },
 ];
 

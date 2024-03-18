@@ -3,7 +3,8 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: python3.9
+  memorySize: 4096
+  runtime: python3.10
   region: us-east-1
   iam:
     role: LambdaFunctionRole
@@ -259,7 +260,7 @@ resources:
           random_page_cost: 1
           track_activity_query_size: 16384
           idle_in_transaction_session_timeout: 7200000
-          statement_timeout: 10000
+          statement_timeout: 20000
           search_path: '"$user",public'
           log_hostname: 1
           pgaudit.role: "rds_pgaudit"
