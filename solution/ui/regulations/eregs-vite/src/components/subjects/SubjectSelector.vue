@@ -96,12 +96,17 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
+    const subject = props.policyDocSubjects.results.find(
+        (s) => s.id === parseInt(subjectToAdd, 10)
+    );
+
     $router.push({
         name: "subjects",
         query: {
             ...$route.query,
             subjects: [subjectToAdd],
         },
+        params: { subjectName: getSubjectName(subject) },
     });
 };
 
