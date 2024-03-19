@@ -22,7 +22,6 @@ export default [
                         "parent": 851
                     }
                 ],
-                "document_type": null,
                 "resource_type": "internal",
                 "subjects": [],
                 "category": {
@@ -64,7 +63,6 @@ export default [
                         "parent": 851
                     }
                 ],
-                "document_type": null,
                 "resource_type": "internal",
                 "subjects": [],
                 "category": {
@@ -95,7 +93,6 @@ export default [
                         "parent": 851
                     }
                 ],
-                "document_type": null,
                 "resource_type": "internal",
                 "subjects": [],
                 "category": {
@@ -144,11 +141,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": {
-                            "id": 2,
-                            "name": "Curated Formal Guidance",
-                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
-                        },
                         "resource_type": "internal",
                         "subjects": [
                             {
@@ -206,7 +198,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": null,
                         "resource_type": "internal",
                         "subjects": [],
                         "category": {
@@ -245,11 +236,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": {
-                            "id": 2,
-                            "name": "Curated Formal Guidance",
-                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
-                        },
                         "resource_type": "internal",
                         "subjects": [
                             {
@@ -319,7 +305,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": null,
                         "resource_type": "internal",
                         "subjects": [],
                         "category": {
@@ -358,7 +343,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": null,
                         "resource_type": "internal",
                         "subjects": [],
                         "category": {
@@ -397,7 +381,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": null,
                         "resource_type": "internal",
                         "subjects": [],
                         "category": {
@@ -454,11 +437,6 @@ export default [
                                 "parent": 851
                             }
                         ],
-                        "document_type": {
-                            "id": 2,
-                            "name": "Curated Formal Guidance",
-                            "description": "Collections of references and excerpts from public materials, such as State Medicaid Manual"
-                        },
                         "resource_type": "internal",
                         "subjects": [
                             {

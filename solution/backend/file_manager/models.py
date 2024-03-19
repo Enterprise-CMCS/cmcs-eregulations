@@ -10,17 +10,6 @@ from common.mixins import DisplayNameFieldMixin
 from resources.models import AbstractLocation
 
 
-class DocumentType(models.Model):
-    class Meta:
-        verbose_name_plural = "Document Types"
-    name = models.CharField(max_length=512, null=False, blank=False)
-    description = models.CharField(max_length=512, null=False, blank=False)
-    order = models.IntegerField()
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class AbstractRepoCategory(models.Model, DisplayNameFieldMixin):
     name = models.CharField(max_length=512, unique=True)
     description = models.TextField(null=True, blank=True)
@@ -88,7 +77,6 @@ class UploadedFile(models.Model):
     summary = models.TextField(null=True, blank=True)
     internal_notes = models.TextField(null=True, blank=True)
     subjects = models.ManyToManyField(Subject, blank=True, related_name="uploads")
-    document_type = models.ForeignKey(DocumentType, blank=True, null=True, related_name="uploads", on_delete=models.SET_NULL)
     updated_at = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(
         AbstractRepoCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="uploads"

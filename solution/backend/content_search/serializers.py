@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from common.fields import HeadlineField
 from common.serializers.mix import DetailsSerializer
-from file_manager.serializers.groupings import DocumentTypeSerializer, SubjectSerializer
+from file_manager.serializers.groupings import SubjectSerializer
 from file_manager.serializers.groups import DivisionWithGroupSerializer
 
 
@@ -12,7 +12,6 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
     date_string = serializers.DateField()
     summary_string = serializers.CharField()
     locations = serializers.SerializerMethodField()
-    document_type = DocumentTypeSerializer(many=False, read_only=True)
     resource_type = serializers.CharField()
     subjects = SubjectSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()

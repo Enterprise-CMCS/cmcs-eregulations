@@ -20,21 +20,12 @@ from .functions import get_upload_link
 from .models import (
     AbstractRepoCategory,
     Division,
-    DocumentType,
     Group,
     RepositoryCategory,
     RepositorySubCategory,
     Subject,
     UploadedFile,
 )
-
-
-@admin.register(DocumentType)
-class DocumentTypeAdmin(BaseAdmin):
-    list_display = ("name", "order",)
-    search_fields = ["name",]
-    ordering = ("order", "name",)
-    fields = ("order", "name", "description",)
 
 
 @admin.register(Subject)
@@ -93,7 +84,7 @@ class UploadedFileAdmin(BaseAdmin):
     filter_horizontal = ("locations", "subjects")
     readonly_fields = ("download_file", "file_name", "get_content", "updated_at", "index_populated")
     fields = ("file_name", "file_path", "document_name", "date", "summary", "updated_at",
-              "division", "document_type", "subjects", "locations", "internal_notes",
+              "division", "subjects", "locations", "internal_notes",
               "index_populated", "get_content", "download_file", "category",)
     list_filter = [IndexPopulatedFilter]
 

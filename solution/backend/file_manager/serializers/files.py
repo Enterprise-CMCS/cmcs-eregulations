@@ -4,7 +4,7 @@ from rest_framework import serializers
 from common.fields import HeadlineField
 from common.serializers.mix import DetailsSerializer
 
-from .groupings import DocumentTypeSerializer, SubjectSerializer
+from .groupings import SubjectSerializer
 from .groups import DivisionWithGroupSerializer
 
 
@@ -14,7 +14,6 @@ class UploadedFileSerializer(DetailsSerializer, serializers.Serializer):
     file_name = serializers.CharField()
     date = serializers.DateField()
     summary = serializers.CharField()
-    document_type = DocumentTypeSerializer(many=False, read_only=True)
     locations = serializers.SerializerMethodField()
     subjects = SubjectSerializer(many=True, read_only=True)
     division = DivisionWithGroupSerializer()

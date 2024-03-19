@@ -1618,41 +1618,5 @@
         "content_type": 170,
         "codename": "view_subject"
     }
-},
-{
-    "model": "auth.permission",
-    "pk": 252,
-    "fields": {
-        "name": "Can add document type",
-        "content_type": 171,
-        "codename": "add_documenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 253,
-    "fields": {
-        "name": "Can change document type",
-        "content_type": 171,
-        "codename": "change_documenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 254,
-    "fields": {
-        "name": "Can delete document type",
-        "content_type": 171,
-        "codename": "delete_documenttype"
-    }
-},
-{
-    "model": "auth.permission",
-    "pk": 255,
-    "fields": {
-        "name": "Can view document type",
-        "content_type": 171,
-        "codename": "view_documenttype"
-    }
 }
 ]

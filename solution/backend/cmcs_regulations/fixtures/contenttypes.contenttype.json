@@ -358,13 +358,5 @@
         "app_label": "file_manager",
         "model": "subject"
     }
-},
-{
-    "model": "contenttypes.contenttype",
-    "pk": 171,
-    "fields": {
-        "app_label": "file_manager",
-        "model": "documenttype"
-    }
 }
 ]

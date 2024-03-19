@@ -3,16 +3,7 @@ from rest_framework import serializers
 
 from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
 from common.utils import ProxySerializerWrapper
-from file_manager.models import DocumentType, RepositoryCategory, RepositorySubCategory, Subject
-
-
-class DocumentTypeSerializer(serializers.Serializer):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    description = serializers.CharField()
-
-    class Meta:
-        model = DocumentType
+from file_manager.models import RepositoryCategory, RepositorySubCategory, Subject
 
 
 class SubjectSerializer(serializers.Serializer):
