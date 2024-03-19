@@ -17,7 +17,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from common.api import OpenApiQueryParameter
 from common.functions import establish_client, get_tokens_for_user
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-from file_manager.models import AbstractRepoCategory, Division, DocumentType, Group, Subject
+from file_manager.models import AbstractRepoCategory, Division, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
 from resources.views.mixins import LocationFiltererMixin
 
@@ -41,9 +41,6 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                     OpenApiQueryParameter("location_details",
                                           "Specify whether to show details of a location, or just the ID.",
                                           bool, False),
-                    OpenApiQueryParameter("document-type",
-                                          "Limit results to only resources found within this category. Use "
-                                          "\"&document-type=X\"", int, False),
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", str, False),
@@ -58,7 +55,6 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
-        document_type = self.request.GET.getlist("document-type")
         category = self.request.GET.getlist("category")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
@@ -74,10 +70,7 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                 query = query.filter(subjects__id__in=subjects)
         if category:
             query = query.filter(category__id=category)
-        if document_type:
-            query = query.filter(document_type__id=document_type)
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        doc_type_prefetch = DocumentType.objects.all()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
         repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
@@ -101,7 +94,6 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             Prefetch("locations", queryset=locations_prefetch),
             Prefetch("subjects", queryset=subjects_prefetch),
             Prefetch("category", queryset=category_prefetch),
-            Prefetch("document_type", queryset=doc_type_prefetch),
             Prefetch("upload_category", queryset=repo_category_prefetch),
             Prefetch("division", queryset=division_prefetch)).distinct()
         if search_query:
