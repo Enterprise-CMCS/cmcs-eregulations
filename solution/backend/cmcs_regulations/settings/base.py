@@ -192,8 +192,6 @@ TIME_ZONE = 'US/Eastern'
 
 USE_I18N = True
 
-USE_L10N = False
-
 USE_TZ = False
 
 # Default primary key field type
