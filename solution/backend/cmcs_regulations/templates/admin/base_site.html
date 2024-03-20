@@ -26,13 +26,17 @@
   <div id="user-tools">
     {% if user.is_active and user.is_staff %}
       <a href="/">View site</a> /
-      {% if request.session.oidc_id_token %}
-      <form id="oidc_logout" action="{% url 'oidc_logout' %}" method="post">
-      {% else %}
-      <form id="oidc_logout" method="post" action="{% url 'logout' %}?next=/">
-      {% endif %}
+      <form
+        id="oidc_logout"
+        method="post"
+        {% if request.session.oidc_id_token %}
+          action="{% url 'oidc_logout' %}"
+        {% else %}
+          action="{% url 'logout' %}?next={% url 'admin:index' %}"
+        {% endif %}
+      >
         {% csrf_token %}
-        <input type="submit" value="LOGOUT">
+        <input type="submit" value="LOGOUT" />
       </form>
     {% else %}
       <a href="{% url 'oidc_authentication_init' %}?next={{ request.path }}">Log in</a>
