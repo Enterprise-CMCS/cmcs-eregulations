@@ -146,6 +146,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.request",
                 "cmcs_regulations.context_processors.google_analytics",
+                "cmcs_regulations.context_processors.is_admin_user",
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
                 "cmcs_regulations.context_processors.signup_url",
