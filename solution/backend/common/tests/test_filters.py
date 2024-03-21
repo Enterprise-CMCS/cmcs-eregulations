@@ -18,11 +18,11 @@ def test_index_populated_filter():
     assert b in results
 
     # Test when populated filter is set to "yes"
-    results = IndexPopulatedFilter(None, {"populated": "yes"}, None, None).queryset(None, UploadedFile.objects.all())
+    results = IndexPopulatedFilter(None, {"populated": ["yes"]}, None, None).queryset(None, UploadedFile.objects.all())
     assert a in results
     assert b not in results
 
     # Test when populated filter is set to "no"
-    results = IndexPopulatedFilter(None, {"populated": "no"}, None, None).queryset(None, UploadedFile.objects.all())
+    results = IndexPopulatedFilter(None, {"populated": ["no"]}, None, None).queryset(None, UploadedFile.objects.all())
     assert a not in results
     assert b in results
