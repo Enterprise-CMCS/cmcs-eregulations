@@ -27,8 +27,8 @@
     "react": "16.x",
     "react-dom": "16.x",
     "sass": "^1.69.3",
-    "vue": "^3.3.8",
-    "vuetify": "^3.4.3",
+    "vue": "^3.4.21",
+    "vuetify": "^3.5.11",
     "vue-clickaway": "^2.2.2",
     "vue-loader": "^16.0.0",
     "vue-template-compiler": "^2.7.0"
