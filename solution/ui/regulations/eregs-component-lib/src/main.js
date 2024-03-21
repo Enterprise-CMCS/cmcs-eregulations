@@ -1,5 +1,4 @@
 import Vue from "vue";
-import vuetify from "./plugins/vuetify";
 
 import {
     ActionBtn,
@@ -23,11 +22,11 @@ import {
     JumpTo,
     CategoryLabel,
     LastParserSuccessDate,
-    LeftNavCollapse,
+    //LeftNavCollapse,
     PartButton,
     PrintBtn,
     RecentChangesContainer,
-    RecentResources,
+    //RecentResources,
     RelatedRule,
     RelatedRuleList,
     RelatedRules,
@@ -39,7 +38,7 @@ import {
     SupplementalContentObject,
     TableComponent,
     Toc,
-    TocContainer,
+    //TocContainer,
     TocPart,
     TocSubchapter,
     TocTitle,
@@ -54,8 +53,6 @@ import {
     getQueryParam,
     scrollToElement,
 } from "utilities/utils";
-
-import Clickaway from "../../eregs-vite/src/directives/clickaway";
 
 Vue.config.devtools = true;
 
@@ -191,10 +188,7 @@ function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
 
-    Vue.directive("clickaway", Clickaway);
-
     new Vue({
-        vuetify,
         components: {
             ActionBtn,
             BlockingModal,
@@ -217,11 +211,11 @@ function main() {
             JumpTo,
             CategoryLabel,
             LastParserSuccessDate,
-            LeftNavCollapse,
+            //LeftNavCollapse,
             PartButton,
             PrintBtn,
             RecentChangesContainer,
-            RecentResources,
+            //RecentResources,
             RelatedRule,
             RelatedRuleList,
             RelatedRules,
@@ -233,7 +227,7 @@ function main() {
             SupplementalContentObject,
             TableComponent,
             Toc,
-            TocContainer,
+            //TocContainer,
             TocPart,
             TocSubchapter,
             TocTitle,
