@@ -1,6 +1,6 @@
 <script setup>
 import { inject, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
@@ -30,7 +30,7 @@ const setLoginUrl = () => {
 
 watch(
     () => $route.query,
-    async (newQueryParams) => {
+    async () => {
         setLoginUrl();
     }
 );

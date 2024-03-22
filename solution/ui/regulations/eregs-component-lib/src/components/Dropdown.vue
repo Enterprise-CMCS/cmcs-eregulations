@@ -2,7 +2,6 @@
   <div>
     <slot name="toggler" v-bind:toggle="toggle">
       <button
-        v-on-clickaway="away"
         class="dropdown-button ds-c-field"
         @click="toggle"
       >
@@ -14,11 +13,8 @@
 </template>
 
 <script>
-import { mixin as clickaway } from 'vue-clickaway';
-
 export default {
   name: 'Dropdown',
-  mixins: [clickaway],
   props: {
     initialActive: {
       type: Boolean,

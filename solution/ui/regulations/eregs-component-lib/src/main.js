@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { createApp } from "vue";
 
 import {
     ActionBtn,
@@ -53,8 +53,6 @@ import {
     getQueryParam,
     scrollToElement,
 } from "utilities/utils";
-
-Vue.config.devtools = true;
 
 function isElementInViewport(el) {
     const rect = el.getBoundingClientRect();
@@ -188,7 +186,7 @@ function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
 
-    new Vue({
+    const app = createApp({
         components: {
             ActionBtn,
             BlockingModal,
@@ -234,7 +232,9 @@ function main() {
             TooltipContainer,
             ViewResourcesLink,
         },
-    }).$mount("#vue-app");
+    });
+
+    app.mount("#vue-app");
 
     const statefulElements = document.querySelectorAll("[data-state]");
     statefulElements.forEach((el) => {

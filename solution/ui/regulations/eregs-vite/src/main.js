@@ -31,7 +31,7 @@ const vuetifyApp = createVuetify({
 });
 app.use(vuetifyApp);
 
-//Vue.directive("clickaway", Clickaway);
+app.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
