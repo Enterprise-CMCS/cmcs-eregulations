@@ -54,6 +54,18 @@ import {
     scrollToElement,
 } from "utilities/utils";
 
+const customElementTags = [
+    "su",
+    "fp",
+    "fp-1",
+    "fp1-2",
+    "fp-2",
+    "fp-3",
+    "fp-4",
+    "fp-5",
+    "fp-6",
+];
+
 function isElementInViewport(el) {
     const rect = el.getBoundingClientRect();
 
@@ -233,6 +245,9 @@ function main() {
             ViewResourcesLink,
         },
     });
+
+    app.config.compilerOptions.isCustomElement = (tag) =>
+        customElementTags.includes(tag);
 
     app.mount("#vue-app");
 

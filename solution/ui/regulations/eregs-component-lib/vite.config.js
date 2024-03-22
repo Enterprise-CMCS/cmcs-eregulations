@@ -37,7 +37,10 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            sharedComponents: path.resolve(__dirname, "./src/components/shared-components"),
+            sharedComponents: path.resolve(
+                __dirname,
+                "./src/components/shared-components"
+            ),
             utilities: path.resolve(__dirname, "../utilities"),
         },
     },
