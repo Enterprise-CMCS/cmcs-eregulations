@@ -106,7 +106,5 @@ export default {
             return `line-clamp-${this.itemTitleLineLimit}`;
         },
     },
-
-    methods: {},
 };
 </script>

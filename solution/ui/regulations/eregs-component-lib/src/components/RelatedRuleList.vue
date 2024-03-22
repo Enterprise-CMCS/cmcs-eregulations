@@ -181,7 +181,5 @@ export default {
             return rule.publication_date || rule.date;
         },
     },
-
-    filters: {},
 };
 </script>
