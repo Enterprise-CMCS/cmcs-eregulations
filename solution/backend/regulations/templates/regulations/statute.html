@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
 {% endblock %}
 
+{% block outside_vue %}
+    {{ site_config|json_script:"site_config" }}
+{% endblock %}
+
 {% block blocking_modal %}{% endblock %}
 
 {% block flash_banner %}{% endblock %}
@@ -18,7 +22,6 @@
 {% endblock %}
 
 {% block body %}
-{{ site_config|json_script:"site_config" }}
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"
