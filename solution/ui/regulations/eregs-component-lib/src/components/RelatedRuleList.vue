@@ -1,58 +1,7 @@
 <template>
     <div v-if="rules.length" class="related-rule-list">
-        <related-rule
-            v-for="(rule, i) in limitedRules"
-            :key="i"
-            :title="ruleTitle(rule)"
-            :type="type(rule)"
-            :citation="citation(rule)"
-            :publication_date="publication_date(rule)"
-            :document_number="rule.document_number"
-            :html_url="html_url(rule)"
-            :action="rule.action"
-        />
-        <template v-if="rule.related_docs && rule.related_docs.length > 0">
+        <div v-for="(rule, i) in limitedRules" :key="i">
             <related-rule
-                v-for="(related_doc, ii) in rule.related_docs"
-                :key="ii + 'grouped' + related_doc.document_number"
-                :title="ruleTitle(related_doc)"
-                :type="type(related_doc)"
-                :citation="citation(related_doc)"
-                :publication_date="publication_date(related_doc)"
-                :document_number="related_doc.document_number"
-                :html_url="html_url(related_doc)"
-                :action="related_doc.action"
-                grouped
-            />
-        </template>
-        <collapse-button
-            v-if="showMoreNeeded"
-            :name="innerName"
-            state="collapsed"
-            class="category-title"
-        >
-            <template #expanded>
-                <show-more-button
-                    button-text="- Show Less"
-                    :count="rules.length"
-                ></show-more-button>
-            </template>
-            <template #collapsed>
-                <show-more-button
-                    button-text="+ Show More"
-                    :count="rules.length"
-                ></show-more-button>
-            </template>
-        </collapse-button>
-        <collapsible
-            :name="innerName"
-            state="collapsed"
-            class="category-content additional-rules"
-            overflow
-        >
-            <related-rule
-                v-for="(rule, i) in additionalRules"
-                :key="i"
                 :title="ruleTitle(rule)"
                 :type="type(rule)"
                 :citation="citation(rule)"
@@ -60,8 +9,7 @@
                 :document_number="rule.document_number"
                 :html_url="html_url(rule)"
                 :action="rule.action"
-            >
-            </related-rule>
+            />
             <template v-if="rule.related_docs && rule.related_docs.length > 0">
                 <related-rule
                     v-for="(related_doc, ii) in rule.related_docs"
@@ -77,7 +25,7 @@
                 />
             </template>
             <collapse-button
-                v-if="showMoreNeeded && rulesCount > 10"
+                v-if="showMoreNeeded"
                 :name="innerName"
                 state="collapsed"
                 class="category-title"
@@ -95,7 +43,61 @@
                     ></show-more-button>
                 </template>
             </collapse-button>
-        </collapsible>
+            <collapsible
+                :name="innerName"
+                state="collapsed"
+                class="category-content additional-rules"
+                overflow
+            >
+                <related-rule
+                    v-for="(rule, i) in additionalRules"
+                    :key="i"
+                    :title="ruleTitle(rule)"
+                    :type="type(rule)"
+                    :citation="citation(rule)"
+                    :publication_date="publication_date(rule)"
+                    :document_number="rule.document_number"
+                    :html_url="html_url(rule)"
+                    :action="rule.action"
+                >
+                </related-rule>
+                <template
+                    v-if="rule.related_docs && rule.related_docs.length > 0"
+                >
+                    <related-rule
+                        v-for="(related_doc, ii) in rule.related_docs"
+                        :key="ii + 'grouped' + related_doc.document_number"
+                        :title="ruleTitle(related_doc)"
+                        :type="type(related_doc)"
+                        :citation="citation(related_doc)"
+                        :publication_date="publication_date(related_doc)"
+                        :document_number="related_doc.document_number"
+                        :html_url="html_url(related_doc)"
+                        :action="related_doc.action"
+                        grouped
+                    />
+                </template>
+                <collapse-button
+                    v-if="showMoreNeeded && rulesCount > 10"
+                    :name="innerName"
+                    state="collapsed"
+                    class="category-title"
+                >
+                    <template #expanded>
+                        <show-more-button
+                            button-text="- Show Less"
+                            :count="rules.length"
+                        ></show-more-button>
+                    </template>
+                    <template #collapsed>
+                        <show-more-button
+                            button-text="+ Show More"
+                            :count="rules.length"
+                        ></show-more-button>
+                    </template>
+                </collapse-button>
+            </collapsible>
+        </div>
     </div>
     <div v-else class="show-more-inactive">
         No {{ title }} found in the Federal Register from 1994 to present.
