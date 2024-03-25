@@ -31,7 +31,14 @@ AWS_S3_CUSTOM_DOMAIN = (
 )
 AWS_QUERYSTRING_AUTH = False
 MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 USE_AWS_TOKEN = False
 BASE_URL = os.environ.get("BASE_URL", "")
 
