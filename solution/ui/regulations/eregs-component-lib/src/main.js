@@ -54,6 +54,8 @@ import {
     scrollToElement,
 } from "utilities/utils";
 
+import Clickaway from "directives/clickaway";
+
 const customElementTags = [
     "su",
     "fp",
@@ -248,6 +250,8 @@ function main() {
 
     app.config.compilerOptions.isCustomElement = (tag) =>
         customElementTags.includes(tag);
+
+    app.directive("clickaway", Clickaway);
 
     app.mount("#vue-app");
 

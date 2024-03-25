@@ -9,7 +9,7 @@ import * as directives from 'vuetify/lib/directives/index.mjs'
 import App from "./App.vue";
 import vueRouter from "./router";
 
-import Clickaway from "./directives/clickaway";
+import Clickaway from "directives/clickaway";
 
 
 

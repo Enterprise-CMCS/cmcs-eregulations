@@ -21,17 +21,18 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            utilities: path.resolve(__dirname, "../utilities"),
+            "@": path.resolve(__dirname, "src"),
+            directives: path.resolve(__dirname, "../directives"),
+            eregsComponentLib: path.resolve(
+                __dirname,
+                "../eregs-component-lib"
+            ),
             legacy: path.resolve(__dirname, "../../regulations"),
             sharedComponents: path.resolve(
                 __dirname,
                 "../eregs-component-lib/src/components/shared-components"
             ),
-            eregsComponentLib: path.resolve(
-                __dirname,
-                "../eregs-component-lib"
-            ),
-            "@": path.resolve(__dirname, "src"),
+            utilities: path.resolve(__dirname, "../utilities"),
         },
     },
     build: {
