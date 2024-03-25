@@ -4,7 +4,7 @@ variablesResolutionMode: 20210326
 provider:
   name: aws
   memorySize: 4096
-  runtime: python3.10
+  runtime: python3.12
   region: us-east-1
   iam:
     role: LambdaFunctionRole
