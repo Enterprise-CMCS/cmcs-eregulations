@@ -26,5 +26,8 @@
     "fast-glob": "^3.2.12",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^5.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
   }
 }
