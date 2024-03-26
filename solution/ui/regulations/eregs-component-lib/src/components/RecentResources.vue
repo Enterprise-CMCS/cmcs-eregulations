@@ -45,7 +45,7 @@ export default {
 </script>
 
 <template>
-    <v-card>
+    <div>
         <v-tabs v-model="tab">
             <v-tab class="content-tabs"> Recent Subregulatory Guidance </v-tab>
             <v-tab class="content-tabs"> Recent Rules </v-tab>
@@ -72,5 +72,5 @@ export default {
                 ></RecentChangesContainer>
             </v-window-item>
         </v-window>
-    </v-card>
+    </div>
 </template>

@@ -56,20 +56,18 @@ getTitlesArray();
 
 <template>
     <div class="toc__container">
-        <v-card>
-            <v-tabs v-model="selectedTitle" slider-size="5">
-                <v-tab v-for="(title, i) in titles" :key="i">
-                    {{ title }}
-                </v-tab>
-            </v-tabs>
-            <v-window v-model="selectedTitle" dark>
-                <v-window-item v-for="(title, i) in titles" :key="i">
-                    <template v-if="TOCs[i]">
-                        <Toc :structure="TOCs[i]" />
-                    </template>
-                </v-window-item>
-            </v-window>
-        </v-card>
+        <v-tabs v-model="selectedTitle" slider-size="5">
+            <v-tab v-for="(title, i) in titles" :key="i">
+                {{ title }}
+            </v-tab>
+        </v-tabs>
+        <v-window v-model="selectedTitle" dark>
+            <v-window-item v-for="(title, i) in titles" :key="i">
+                <template v-if="TOCs[i]">
+                    <Toc :structure="TOCs[i]" />
+                </template>
+            </v-window-item>
+        </v-window>
     </div>
 </template>
 
