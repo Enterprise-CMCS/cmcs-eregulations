@@ -102,11 +102,10 @@ const btnAriaLabel = computed(() =>
             class="nav-toggle__button"
             :class="btnClasses"
             :ripple="false"
-            :x-small="!navOpen"
+            :size="navOpen ? medium : x-small"
             :icon="navOpen"
             :aria-label="btnAriaLabel"
-            outlined
-            plain
+            variant="plain"
             @click="toggleClick"
             @mouseenter="hoverOn"
             @mouseleave="hoverOff"

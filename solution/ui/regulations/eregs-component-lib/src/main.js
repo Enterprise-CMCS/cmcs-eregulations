@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import vuetify from "./plugins/vuetify";
 
 import {
     ActionBtn,
@@ -22,11 +23,11 @@ import {
     JumpTo,
     CategoryLabel,
     LastParserSuccessDate,
-    //LeftNavCollapse,
+    LeftNavCollapse,
     PartButton,
     PrintBtn,
     RecentChangesContainer,
-    //RecentResources,
+    RecentResources,
     RelatedRule,
     RelatedRuleList,
     RelatedRules,
@@ -38,7 +39,7 @@ import {
     SupplementalContentObject,
     TableComponent,
     Toc,
-    //TocContainer,
+    TocContainer,
     TocPart,
     TocSubchapter,
     TocTitle,
@@ -223,11 +224,11 @@ function main() {
             JumpTo,
             CategoryLabel,
             LastParserSuccessDate,
-            //LeftNavCollapse,
+            LeftNavCollapse,
             PartButton,
             PrintBtn,
             RecentChangesContainer,
-            //RecentResources,
+            RecentResources,
             RelatedRule,
             RelatedRuleList,
             RelatedRules,
@@ -239,7 +240,7 @@ function main() {
             SupplementalContentObject,
             TableComponent,
             Toc,
-            //TocContainer,
+            TocContainer,
             TocPart,
             TocSubchapter,
             TocTitle,
@@ -250,6 +251,8 @@ function main() {
 
     app.config.compilerOptions.isCustomElement = (tag) =>
         customElementTags.includes(tag);
+
+    app.use(vuetify);
 
     app.directive("clickaway", Clickaway);
 
