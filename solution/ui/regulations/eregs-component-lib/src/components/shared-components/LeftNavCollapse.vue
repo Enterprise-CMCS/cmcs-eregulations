@@ -89,6 +89,8 @@ const btnClasses = computed(() => ({
     "icon-only": navOpen.value === false,
 }));
 
+const btnSize = computed(() => (navOpen.value ? "medium" : "x-small"));
+
 const btnAriaLabel = computed(() =>
     navOpen.value
         ? `Close ${props.contentsDescription}`
@@ -98,11 +100,12 @@ const btnAriaLabel = computed(() =>
 
 <template>
     <nav id="leftNav" ref="$rootNav" :class="navClasses">
+        <v-btn> Button </v-btn>
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
             :ripple="false"
-            :size="navOpen ? medium : x-small"
+            :size="btnSize"
             :icon="navOpen"
             :aria-label="btnAriaLabel"
             variant="plain"

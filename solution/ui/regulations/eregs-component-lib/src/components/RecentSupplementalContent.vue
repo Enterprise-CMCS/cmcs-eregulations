@@ -6,6 +6,7 @@ export default {
     name: "RecentSupplementalContent",
 
     components: {
+        CategoryLabel,
         SupplementalContentObject,
     },
 
@@ -31,20 +32,20 @@ export default {
 
 <template>
     <div class="supplemental-content-list">
-        <div
+        <template
             v-for="(content, index) in limitedContent"
             :key="content.category.name + index"
-            class="category-labels"
         >
-            <CategoryLabel :name="content.category.name" type="category" />
-        </div>
-        <SupplementalContentObject
-            :key="index"
-            :name="content.name"
-            :description="content.description"
-            :date="content.date"
-            :url="content.url"
-        >
-        </SupplementalContentObject>
+            <div class="category-labels">
+                <CategoryLabel :name="content.category.name" type="category" />
+            </div>
+            <SupplementalContentObject
+                :name="content.name"
+                :description="content.description"
+                :date="content.date"
+                :url="content.url"
+            >
+            </SupplementalContentObject>
+        </template>
     </div>
 </template>
