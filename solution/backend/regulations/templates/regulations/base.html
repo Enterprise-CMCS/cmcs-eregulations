@@ -33,7 +33,13 @@ CSS/Javascript etc., should inherit from this template.
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
-        {% block spa_styles %}{% endblock %}
+        {% block spa_styles %}
+            <link rel="stylesheet" href="{% static '/js/style.css' %}?{{ DEPLOY_NUMBER }}" />
+        {% endblock %}
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+        />
         <link rel="stylesheet" href="{% static '/css/main.css' %}?{{ DEPLOY_NUMBER }}" />
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">

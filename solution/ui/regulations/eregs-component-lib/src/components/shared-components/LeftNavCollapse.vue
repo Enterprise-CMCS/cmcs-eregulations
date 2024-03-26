@@ -100,7 +100,6 @@ const btnAriaLabel = computed(() =>
 
 <template>
     <nav id="leftNav" ref="$rootNav" :class="navClasses">
-        <v-btn> Button </v-btn>
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
