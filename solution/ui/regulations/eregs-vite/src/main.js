@@ -1,10 +1,6 @@
 import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from 'vue-router'
-//import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/lib/styles/main.sass'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/lib/components/index.mjs'
-import * as directives from 'vuetify/lib/directives/index.mjs'
+import vuetify from "plugins/vuetify";
 
 import App from "./App.vue";
 import vueRouter from "./router";
@@ -20,16 +16,7 @@ let { isAuthenticated } = mountEl.dataset;
 isAuthenticated = isAuthenticated === "True";
 
 const app = createApp(App, { ...mountEl.dataset });
-const vuetifyApp = createVuetify({
-    theme: {
-        themes: {
-            light: {
-                primary: "#046791",
-            },
-        },
-    },
-});
-app.use(vuetifyApp);
+app.use(vuetify);
 
 app.directive("clickaway", Clickaway);
 

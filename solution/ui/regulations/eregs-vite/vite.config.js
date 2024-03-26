@@ -1,16 +1,13 @@
 import path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import { Vuetify3Resolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
+import vuetify from 'vite-plugin-vuetify';
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
-        Components({
-            resolvers: [Vuetify3Resolver()],
-        }),
+        vuetify({ autoImport: true }),
     ],
     css: {
         preprocessorOptions: {
@@ -28,6 +25,7 @@ export default defineConfig({
                 "../eregs-component-lib"
             ),
             legacy: path.resolve(__dirname, "../../regulations"),
+            plugins: path.resolve(__dirname, "../plugins"),
             sharedComponents: path.resolve(
                 __dirname,
                 "../eregs-component-lib/src/components/shared-components"
