@@ -514,18 +514,18 @@ describe("Find by Subjects", () => {
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
-        cy.intercept("**/v3/content-search/?q=test**").as("qFiles");
+        cy.intercept("**/v3/content-search/?q=streamlined%20modular%20certification**").as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
             password,
             landingPage: "/subjects/",
         });
-        cy.visit("/subjects/?q=test");
+        cy.visit("/subjects/?q=streamlined%20modular%20certification");
         cy.wait("@qFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
-        cy.get("input#main-content").should("have.value", "test");
+        cy.get("input#main-content").should("have.value", "streamlined modular certification");
         cy.get(".subject__heading").should("not.exist");
     });
 
