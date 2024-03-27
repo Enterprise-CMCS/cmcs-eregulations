@@ -1,11 +1,11 @@
 import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from 'vue-router'
-import vuetify from "plugins/vuetify";
+import vuetify from "./plugins/vuetify";
+
+import Clickaway from "directives/clickaway";
 
 import App from "./App.vue";
 import vueRouter from "./router";
-
-import Clickaway from "directives/clickaway";
 
 
 

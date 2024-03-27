@@ -25,7 +25,6 @@ export default defineConfig({
                 "../eregs-component-lib"
             ),
             legacy: path.resolve(__dirname, "../../regulations"),
-            plugins: path.resolve(__dirname, "../plugins"),
             sharedComponents: path.resolve(
                 __dirname,
                 "../eregs-component-lib/src/components/shared-components"
