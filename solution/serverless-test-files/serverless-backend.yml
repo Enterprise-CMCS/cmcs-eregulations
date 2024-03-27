@@ -4,7 +4,7 @@ variablesResolutionMode: 20210326
 #change the db password and teh username/name to whatever you would like.  You can change other fields if you would like as well but be wary it might not work with your changes.
 provider:
   name: aws
-  runtime: python3.10
+  runtime: python3.12
   region: us-east-1
   iam:
     role: LambdaFunctionRole
