@@ -1,7 +1,7 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 
-{% block spa_styles %}
+{% block custom_styles %}
     <link rel="stylesheet" href="{% static '/vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
 {% endblock %}
 

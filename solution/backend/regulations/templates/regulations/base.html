@@ -33,7 +33,7 @@ CSS/Javascript etc., should inherit from this template.
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
-        {% block spa_styles %}
+        {% block custom_styles %}
             <link rel="stylesheet" href="{% static '/js/style.css' %}?{{ DEPLOY_NUMBER }}" />
         {% endblock %}
         <link
