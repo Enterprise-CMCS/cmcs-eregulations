@@ -55,7 +55,6 @@ export default {
                 <p class="recent-rules-descriptive-text">
                     Includes 42 CFR 400, 430-460, 600, and 45 CFR 95
                 </p>
-                This is a test in the recent changes tab
                 <RecentChangesContainer
                     :api-url="apiUrl"
                     :categories="categories"
