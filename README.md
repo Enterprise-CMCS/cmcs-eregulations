@@ -121,7 +121,7 @@ In order to update your local data with the most recent version of production, y
 
 2. Next, run the script `/solution/backend/scripts/backup.sql`. You'll be prompted to provide the credentials for the production database.
 
-3. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: <name of your db>_<date>.sql.
+3. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: `<name of your db>_<date>.sql`.
 
 4. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
 
