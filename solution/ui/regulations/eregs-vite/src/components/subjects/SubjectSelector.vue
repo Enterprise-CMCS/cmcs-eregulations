@@ -1,7 +1,7 @@
 <script setup>
 import { computed, reactive, watch } from "vue";
 
-import { useRouter, useRoute } from "vue-router/composables";
+import { useRouter, useRoute } from "vue-router";
 
 import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";

@@ -1,22 +1,24 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-
-const { isNavigationFailure, NavigationFailureType } = VueRouter;
-
+import { createApp } from "vue";
+import { isNavigationFailure, NavigationFailureType } from 'vue-router'
 import vuetify from "./plugins/vuetify";
+
+import Clickaway from "directives/clickaway";
+
 import App from "./App.vue";
 import vueRouter from "./router";
 
-import Clickaway from "./directives/clickaway";
+
 
 const mountEl = document.querySelector("#vite-app");
-Vue.config.devtools = true;
 const { customUrl, host } = mountEl.dataset;
 
 let { isAuthenticated } = mountEl.dataset;
 isAuthenticated = isAuthenticated === "True";
 
-Vue.directive("clickaway", Clickaway);
+const app = createApp(App, { ...mountEl.dataset });
+app.use(vuetify);
+
+app.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
@@ -63,8 +65,5 @@ router.push = function push(location, onResolve, onReject) {
     });
 };
 
-new Vue({
-    vuetify,
-    router,
-    render: (h) => h(App, { props: { ...mountEl.dataset } }),
-}).$mount("#vite-app");
+app.use(router);
+app.mount("#vite-app");

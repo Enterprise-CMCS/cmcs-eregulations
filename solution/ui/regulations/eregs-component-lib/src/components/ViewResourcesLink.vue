@@ -26,11 +26,11 @@ export default {
 
     props: {
         section: {
-            type: Array,
+            type: String,
             required: true,
         },
         count: {
-            type: Number,
+            type: String,
             required: true,
         },
         type: {

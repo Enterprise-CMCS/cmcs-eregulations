@@ -1,8 +1,7 @@
 <template>
     <div v-if="rules.length" class="related-rule-list">
-        <template v-for="(rule, i) in limitedRules">
+        <template v-for="(rule, i) in limitedRules" :key="i">
             <related-rule
-                :key="i"
                 :title="ruleTitle(rule)"
                 :type="type(rule)"
                 :citation="citation(rule)"
@@ -51,9 +50,8 @@
             class="category-content additional-rules"
             overflow
         >
-            <template v-for="(rule, i) in additionalRules">
+            <template v-for="(rule, i) in additionalRules" :key="i">
                 <related-rule
-                    :key="i"
                     :title="ruleTitle(rule)"
                     :type="type(rule)"
                     :citation="citation(rule)"
@@ -168,10 +166,10 @@ export default {
         },
         type(rule) {
             if (rule.withdrawal) {
-                return "WD"
+                return "WD";
             }
             if (rule.correction) {
-                return "CORR"
+                return "CORR";
             }
             return rule.doc_type || rule.category?.name || rule.type;
         },
@@ -185,7 +183,5 @@ export default {
             return rule.publication_date || rule.date;
         },
     },
-
-    filters: {},
 };
 </script>

@@ -11,8 +11,6 @@ import eventbus from "../eventbus";
 export default {
     name: "BlockingModalTrigger",
 
-    components: {},
-
     props: {
         triggerLabel: {
             type: String,
@@ -23,22 +21,6 @@ export default {
             default: "Modal dialog",
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
 
     methods: {
         openModal() {

@@ -36,9 +36,8 @@
                     <span v-if="showSuggestions && multiWordQuery"> Or search </span>
                     <span v-else> Search </span>
                     for similar terms:
-                    <template v-for="(syn, i) in synonyms">
+                    <template v-for="(syn, i) in synonyms" :key="i">
                         <a
-                            :key="i"
                             tabindex="0"
                             @click="synonymLink(syn)"
                             @keydown.enter.space.prevent="synonymLink(syn)"

@@ -1,6 +1,6 @@
 <script setup>
 import { inject, ref, watch } from "vue";
-import { useRouter, useRoute } from "vue-router/composables";
+import { useRouter, useRoute } from "vue-router";
 
 import _isArray from "lodash/isArray";
 

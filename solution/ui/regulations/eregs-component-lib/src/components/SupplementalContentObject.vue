@@ -12,7 +12,7 @@
                 :class="{
                     'supplemental-content-mid-bar': !isBlank(name) || division,
                 }"
-                >{{ date | formatDate }}</span
+                >{{ formatDate(date) }}</span
             >
             <DivisionLabel
                 v-if="docType === 'internal' && division"
@@ -99,22 +99,6 @@ export default {
         },
     },
 
-    filters: {
-        formatDate(value) {
-            const date = new Date(value);
-            const options = { year: "numeric", timeZone: "UTC" };
-            const rawDate = value.split("-");
-            if (rawDate.length > 1) {
-                options.month = "long";
-            }
-            if (rawDate.length > 2) {
-                options.day = "numeric";
-            }
-            const format = new Intl.DateTimeFormat("en-US", options);
-            return format.format(date);
-        },
-    },
-
     methods: {
         isBlank(str) {
             return !str || /^\s*$/.test(str);
@@ -128,6 +112,19 @@ export default {
                 fileName,
                 url,
             });
+        },
+        formatDate(value) {
+            const date = new Date(value);
+            const options = { year: "numeric", timeZone: "UTC" };
+            const rawDate = value.split("-");
+            if (rawDate.length > 1) {
+                options.month = "long";
+            }
+            if (rawDate.length > 2) {
+                options.day = "numeric";
+            }
+            const format = new Intl.DateTimeFormat("en-US", options);
+            return format.format(date);
         },
     },
 };

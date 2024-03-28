@@ -1,6 +1,6 @@
 <script setup>
 import { ref, inject, onMounted, onUnmounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router/composables";
+import { useRouter, useRoute } from "vue-router";
 
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";

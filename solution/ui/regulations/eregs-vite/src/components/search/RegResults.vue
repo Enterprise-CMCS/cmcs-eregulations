@@ -28,7 +28,7 @@ const createResultLink = (
 ) => {
     // get highlight content from headline
     const highlightedTermsArray = getTagContent(headline, "search-highlight");
-    const rawQuery = query.replace("%", "%25")
+    const rawQuery = query.replace("%", "%25");
     const uniqTermsArray = Array.from(
         new Set([rawQuery, ...highlightedTermsArray])
     );
@@ -36,12 +36,12 @@ const createResultLink = (
     const highlightParams =
         uniqTermsArray.length > 0 ? `?q=${uniqTermsArray.join(",")}` : "";
 
-    let section = section_number
-    let location = `${part_number}-${section_number}`
+    let section = section_number;
+    let location = `${part_number}-${section_number}`;
 
-    if (section_title.includes("Appendix")){
-        section = `Subpart-${section}`
-        location = `${section_title.split('-')[0].trim().replace(/\s/g,"-")}`
+    if (section_title.includes("Appendix")) {
+        section = `Subpart-${section}`;
+        location = `${section_title.split("-")[0].trim().replace(/\s/g, "-")}`;
     }
 
     return `${baseUrl}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
@@ -51,10 +51,11 @@ const createResultLink = (
 <template>
     <div class="reg-results-container">
         <slot name="empty-state"></slot>
-        <template v-for="(result, i) in results">
-            <ResultsItem :key="i">
+        <template v-for="(result, i) in results" :key="i">
+            <ResultsItem>
                 <template #context>
-                    {{result.title}} CFR {{ partDocumentTitleLabel(result.part_title) }}
+                    {{ result.title }} CFR
+                    {{ partDocumentTitleLabel(result.part_title) }}
                 </template>
                 <template #link>
                     <a

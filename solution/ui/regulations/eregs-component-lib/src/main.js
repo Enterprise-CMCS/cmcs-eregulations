@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import vuetify from "./plugins/vuetify";
 
 import {
@@ -55,9 +55,19 @@ import {
     scrollToElement,
 } from "utilities/utils";
 
-import Clickaway from "../../eregs-vite/src/directives/clickaway";
+import Clickaway from "directives/clickaway";
 
-Vue.config.devtools = true;
+const customElementTags = [
+    "su",
+    "fp",
+    "fp-1",
+    "fp1-2",
+    "fp-2",
+    "fp-3",
+    "fp-4",
+    "fp-5",
+    "fp-6",
+];
 
 function isElementInViewport(el) {
     const rect = el.getBoundingClientRect();
@@ -191,10 +201,7 @@ function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
 
-    Vue.directive("clickaway", Clickaway);
-
-    new Vue({
-        vuetify,
+    const app = createApp({
         components: {
             ActionBtn,
             BlockingModal,
@@ -240,7 +247,16 @@ function main() {
             TooltipContainer,
             ViewResourcesLink,
         },
-    }).$mount("#vue-app");
+    });
+
+    app.config.compilerOptions.isCustomElement = (tag) =>
+        customElementTags.includes(tag);
+
+    app.use(vuetify);
+
+    app.directive("clickaway", Clickaway);
+
+    app.mount("#vue-app");
 
     const statefulElements = document.querySelectorAll("[data-state]");
     statefulElements.forEach((el) => {

@@ -43,16 +43,6 @@ import eventbus from "../eventbus";
 export default {
     name: "BlockingModal",
 
-    components: {},
-
-    props: {},
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
     mounted() {
         eventbus.on(EventCodes.OpenBlockingModal, (payload) => {
             this.active = true;
@@ -60,15 +50,9 @@ export default {
         });
     },
 
-    beforeUpdate() {},
-
-    updated() {},
-
     beforeDestroy() {
         eventbus.off(EventCodes.OpenBlockingModal);
     },
-
-    destroyed() {},
 
     data() {
         return {

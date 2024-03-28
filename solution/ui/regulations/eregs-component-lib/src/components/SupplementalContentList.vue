@@ -1,18 +1,17 @@
 <template>
     <div class="supplemental-content-list" v-if="!has_sub_categories">
-        <template v-for="(content, index) in limitedContent">
-            <supplemental-content-object
-                :key="index"
-                :name="content.name"
-                :description="content.description || content.doc_name_string"
-                :date="content.date || content.date_string"
-                :division="content.division"
-                :url="content.url"
-                :doc-type="content.resource_type ?? 'external'"
-                :file-name="content.file_name_string"
-            >
-            </supplemental-content-object>
-        </template>
+        <supplemental-content-object
+            v-for="(content, index) in limitedContent"
+            :key="index"
+            :name="content.name"
+            :description="content.description || content.doc_name_string"
+            :date="content.date || content.date_string"
+            :division="content.division"
+            :url="content.url"
+            :doc-type="content.resource_type ?? 'external'"
+            :file-name="content.file_name_string"
+        >
+        </supplemental-content-object>
         <collapse-button
             v-if="showMoreNeeded"
             :class="{ subcategory: subcategory }"

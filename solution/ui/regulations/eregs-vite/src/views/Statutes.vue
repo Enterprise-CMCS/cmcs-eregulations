@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
 import { getStatutes, getStatutesActs } from "utilities/api";

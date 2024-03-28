@@ -4,6 +4,11 @@
 {% load url_formatters %}
 {% load string_formatters %}
 
+{% block outside_vue %}
+    {{ categories|json_script:"categories" }}
+    {{ node_list|json_script:"node_list" }}
+{% endblock %}
+
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
 {% endblock %}
