@@ -118,7 +118,8 @@ In order to update your local data with the most recent version of production, y
 1. Begin by creating a backup of the database you intend to restore using pg_dump. Execute the following command:
 
 `pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME`
-2. Next, run the script /solution/backend/scripts/backup.sql. You'll be prompted to provide the credentials for the production database.
+
+2. Next, run the script `/solution/backend/scripts/backup.sql`. You'll be prompted to provide the credentials for the production database.
 
 3. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: <name of your db>_<date>.sql.
 
