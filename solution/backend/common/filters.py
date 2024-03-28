@@ -1,4 +1,5 @@
 from django.contrib.admin import SimpleListFilter
+from django.db.models import Q
 
 
 class InputFilter(SimpleListFilter):
@@ -40,7 +41,7 @@ class IndexPopulatedFilter(SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "yes":
-            return queryset.filter(contentindex__content__isnull=False)
+            return queryset.filter(Q(contentindex__content__isnull=False) & ~Q(contentindex__content__exact=""))
         if self.value() == "no":
-            return queryset.filter(contentindex__content__isnull=True)
+            return queryset.filter(Q(contentindex__content__isnull=True) | Q(contentindex__content__exact=""))
         return queryset
