@@ -1,8 +1,27 @@
 #!/bin/bash
+set -e
 # This script deletes the database and then restores it from backup.
 # Before running this script make a backup of the data you want to restore with pg_dump.
 # This script does make a backup of the data it's restoring but its recommended to backup that data as well.
 # you can also use backup_db.sh to do the backup. Once you have the backup file run this script
+
+# Function to display error messages and exit
+error_exit() {
+    echo "Error: $1"
+    exit 1
+}
+
+# Function to display warning message and get user confirmation
+confirm_action() {
+    read -p "$1 This action will blow away the '$DB_NAME' database. Do you wish to continue? (yes/no): " answer
+    case $answer in
+        [Yy]* ) echo "Proceeding with the operation..." ;;
+        [Nn]* ) echo "Operation canceled."; exit 0 ;;
+        * ) echo "Please answer yes or no."; confirm_action "$1";;
+    esac
+}
+
+confirm_action "Warning: This script will delete the postgres database in order to restore it."
 
 # Prompt for user input
 read -p "Enter the database user: " DB_USER
@@ -11,6 +30,7 @@ read -p "Enter the database port: " DB_PORT
 read -p "Enter the database name: " DB_NAME
 read -p "Enter the path to the backup file: " BACKUP_FILE
 read -sp "Enter the database password: " DB_PASSWORD
+
 
 # Backup the database that we are restoring.
 echo "Starting database backup for $DB_NAME ..."
