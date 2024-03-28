@@ -13,7 +13,7 @@ error_exit() {
 
 # Function to display warning message and get user confirmation
 confirm_action() {
-    read -p "$1 This action will blow away the '$DB_NAME' database. Do you wish to continue? (yes/no): " answer
+    read -p "$1 Do you wish to continue? (yes/no): " answer
     case $answer in
         [Yy]* ) echo "Proceeding with the operation..." ;;
         [Nn]* ) echo "Operation canceled."; exit 0 ;;
