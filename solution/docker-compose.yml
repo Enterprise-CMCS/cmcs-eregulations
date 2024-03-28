@@ -7,7 +7,7 @@ services:
   db:
     image: postgres:15.2
     environment:
-      POSTGRES_USER: eregs
+      POSTGRES_USER: eregsuser
       POSTGRES_PASSWORD: sgere
       POSTGRES_DB: eregs
     ports:

@@ -3,7 +3,7 @@ import os
 
 default_database_values = {
     'ENGINE': 'django.db.backends.postgresql',
-    'USER': os.environ.get('DB_USER', 'eregs'),
+    'USER': os.environ.get('DB_USER', 'eregsuser'),
     'PORT': os.environ.get('DB_PORT', '5432'),
     'HOST': os.environ.get('DB_HOST', 'db'),
     'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
