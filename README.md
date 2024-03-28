@@ -115,20 +115,22 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
-1. Begin by creating a backup of the database you intend to restore using pg_dump. Execute the following command:
+1. Connect to the VPN. 
 
-`pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME`
+2. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
 
-2. Next, run the script `/solution/backend/scripts/backup.sql`. You'll be prompted to provide the credentials for the production database.
+`pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > $BACKUP_FILENAME`
 
-3. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: `<name of your db>_<date>.sql`.
+3. Next, run the script `/solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database.
 
-4. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
+4. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: `<name of your db>_<date>.sql`.
 
-5. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+5. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
 
-6. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
-7. Visit the local website and ensure that the data has been copied. 
+6. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+
+7. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+8. Visit the local website and ensure that the data has been copied. 
 
 
 ### Adding a new model
