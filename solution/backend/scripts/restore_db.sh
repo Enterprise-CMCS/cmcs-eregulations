@@ -38,7 +38,7 @@ DB_HOST="localhost"
 echo "Starting database backup for $DB_NAME ..."
 
 CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
-BACKUP_FILENAME="${DB_NAME}_${CURRENT_DATE}.sql"
+BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
 PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME
 echo "Database backed up successfully to {$BACKUP_FILENAME}"
 
