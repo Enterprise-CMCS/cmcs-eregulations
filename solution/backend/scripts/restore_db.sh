@@ -25,12 +25,14 @@ confirm_action "Warning: This script will delete the postgres database in order 
 
 # Prompt for user input
 read -p "Enter the database user: " DB_USER
-read -p "Enter the database host: " DB_HOST
 read -p "Enter the database port: " DB_PORT
 read -p "Enter the database name: " DB_NAME
 read -p "Enter the path to the backup file: " BACKUP_FILE
 read -sp "Enter the database password: " DB_PASSWORD
 
+# If you want the script to restore dev or val, change the DB_HOST.
+# Warning! Setting your DB_HOST to prod will wipe out the prod database.
+DB_HOST="localhost"
 
 # Backup the database that we are restoring.
 echo "Starting database backup for $DB_NAME ..."
