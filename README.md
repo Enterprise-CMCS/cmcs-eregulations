@@ -115,20 +115,20 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
-If adding a new model to this process please refer to the adding a new model process below.
+1. Begin by creating a backup of the database you intend to restore using pg_dump. Execute the following command:
 
-1.  Connect to the VPN and run the following command below for PostgreSQL in the command line.  Replace db_address and port_number with the database address and port number respectively.  A file called `backup.sql` should populate in the directory the command is run in.
-  - Django bases the tables off of appname_model.  So whenever resources_* will pull in all resources tables from Postgres.  If you need to add a new model just follow the naming convention.
-```
-pg_dump -h <db_address> -p <port_number> -U eregsuser -f backup.sql -t 'search_sy*' -t 'resources_*' -t 'regulations_*' -t 'file_manager_subject' -t 'auth_g*' -t 'auth_permission' -t 'django_content_type' --data-only --column-inserts eregs
-```
-2. Run the command `make python.emptyseedtables`.  This will clear out many of our resources tables and the synonym table for population of the database.
-3. Run the Postgres script `backup.sql` produced in step 2 on your local database.  This will update your database with up-to-date production data. 
-    - Make sure you are running this on  your local database and not production.
-    - There will be a couple errors for field not found towards the end of the sql script.  This is because of some fields added by pg_audit.  You can ignore it.
-4.  Go into admin and verify the values were updated.  You should see things like supplemental content, federal register documents, sections, subparts, categories, fr_grouping, and synonyms are populated.
-5.  Run the make command `make local.dump`.  This will overwrite the fixture files in the solution with the data now uploaded onto your machine. 
-6.  Push the PR.  Your dev branch should be now using the proper fixture data.
+`pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME`
+2. Next, run the script /solution/backend/scripts/backup.sql. You'll be prompted to provide the credentials for the production database.
+
+3. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: <name of your db>_<date>.sql.
+
+4. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
+
+5. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+
+6. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+7. Visit the local website and ensure that the data has been copied. 
+
 
 ### Adding a new model
 
