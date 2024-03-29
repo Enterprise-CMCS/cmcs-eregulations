@@ -21,18 +21,32 @@ confirm_action() {
     esac
 }
 
+looks_like_prod_database() {
+    echo "the host is ${host}"
+    local host=$1
+    if [[ $host == "localhost" || $host == *dev* || $host == *val* ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
 confirm_action "Warning: This script will delete the postgres database in order to restore it."
 
 # Prompt for user input
+read -p "Enter the database hostname: " DB_HOST
+if ! looks_like_prod_database "$DB_HOST"; then
+    echo "It looks like you're trying to restore a non-production environment. Proceeding with the operation..."
+else
+    echo "It looks like you're trying to restore prod. This script is not intended for prod. Exiting."
+    exit 0
+fi
+
 read -p "Enter the database user: " DB_USER
 read -p "Enter the database port: " DB_PORT
 read -p "Enter the database name: " DB_NAME
 read -p "Enter the path to the backup file: " BACKUP_FILE
 read -sp "Enter the database password: " DB_PASSWORD
-
-# If you want the script to restore dev or val, change the DB_HOST.
-# Warning! Setting your DB_HOST to prod will wipe out the prod database.
-DB_HOST="localhost"
 
 # Backup the database that we are restoring.
 echo "Starting database backup for $DB_NAME ..."
