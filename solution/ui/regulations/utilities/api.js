@@ -349,7 +349,6 @@ const getRecentResources = async (
     );
 };
 
-
 /**
  *
  */
@@ -580,6 +579,11 @@ const getCombinedContent = async ({
         cacheResponse
     );
 
+const getCombinedContentError = async () =>
+    new Promise((resolve, reject) => {
+        setTimeout(() => reject(new Error("fail")), 2000);
+    });
+
 export {
     config,
     configure,
@@ -588,6 +592,7 @@ export {
     getCacheKeys,
     getCategories,
     getCombinedContent,
+    getCombinedContentError,
     getDecodedIdToken,
     getGovInfoLinks,
     getLastParserSuccessDate,

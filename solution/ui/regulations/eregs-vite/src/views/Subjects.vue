@@ -7,6 +7,7 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
+    getCombinedContentError,
     getLastUpdatedDates,
     getPolicyDocSubjects,
     getTitles,
@@ -156,13 +157,15 @@ const getPartsLastUpdated = async () => {
 const policyDocList = ref({
     results: [],
     loading: true,
+    error: false,
 });
 
 const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
+    policyDocList.value.error = false;
 
     try {
-        const contentList = await getCombinedContent({
+        const contentList = await getCombinedContentError({
             apiUrl: props.apiUrl,
             cacheResponse: false,
             requestParams,
@@ -170,6 +173,8 @@ const getDocList = async (requestParams = "") => {
         policyDocList.value.results = contentList.results;
     } catch (error) {
         console.error(error);
+        policyDocList.value.results = [];
+        policyDocList.value.error = true;
     } finally {
         policyDocList.value.loading = false;
     }
@@ -413,6 +418,9 @@ getDocSubjects();
                             "
                         >
                             <span class="loading__span">Loading...</span>
+                        </template>
+                        <template v-else-if="policyDocList.error">
+                            Error message here
                         </template>
                         <template v-else>
                             <PolicyResults
