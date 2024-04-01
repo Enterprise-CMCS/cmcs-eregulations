@@ -358,7 +358,8 @@ export default {
         async retrieveRegResults({ query, page, pageSize }) {
             this.regsError = false;
             try {
-                const response = await getRegSearchResults({
+                /* const response = await getRegSearchResults({ */
+                const response = await throwGenericError({
                     q: query,
                     page,
                     page_size: pageSize,
