@@ -579,9 +579,9 @@ const getCombinedContent = async ({
         cacheResponse
     );
 
-const getCombinedContentError = async () =>
-    new Promise((resolve, reject) => {
-        setTimeout(() => reject(new Error("fail")), 2000);
+const throwGenericError = async () =>
+    new Promise((_resolve, reject) => {
+        setTimeout(() => reject(new Error("Contrived error")), 2000);
     });
 
 export {
@@ -592,7 +592,6 @@ export {
     getCacheKeys,
     getCategories,
     getCombinedContent,
-    getCombinedContentError,
     getDecodedIdToken,
     getGovInfoLinks,
     getLastParserSuccessDate,
@@ -612,4 +611,5 @@ export {
     removeCacheItem,
     setCacheItem,
     setIdToken,
+    throwGenericError,
 };

@@ -386,6 +386,10 @@
 }
 
 .doc__list {
+    .error-msg__container {
+        padding: 0 1rem;
+    }
+
     .doc-list__document {
         .document__subjects {
             margin-top: 0.75rem;

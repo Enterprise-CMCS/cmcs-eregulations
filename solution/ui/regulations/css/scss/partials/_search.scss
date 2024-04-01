@@ -4,6 +4,16 @@
 
 @import "../application_settings";
 
+.error-msg__container {
+    .error__msg {
+        .error-msg__common {
+            &--first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
 .search-page {
     #searchApp.search-view {
         display: flex;

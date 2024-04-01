@@ -1,0 +1,31 @@
+<script setup>
+import { computed, ref } from "vue";
+
+const props = defineProps({
+    searchQuery: {
+        type: String,
+        default: "",
+    },
+});
+</script>
+
+<template>
+    <div class="error-msg__container">
+        <span class="error__msg"
+            >Sorry,
+            <span class="error__msg--query" v-if="searchQuery"
+                >we’re unable to display results for {{ searchQuery }} right
+                now.
+            </span>
+            <span class="error-msg__common"
+                ><span
+                    :class="{ 'error-msg__common--first-letter': searchQuery }"
+                    >t</span
+                >he server is taking too long to respond. Please try a different
+                query, try again later, or let us know.</span
+            ></span
+        >
+    </div>
+</template>
+
+<style></style>

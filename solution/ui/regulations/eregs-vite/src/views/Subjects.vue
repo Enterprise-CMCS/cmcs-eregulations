@@ -7,10 +7,10 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
-    getCombinedContentError,
     getLastUpdatedDates,
     getPolicyDocSubjects,
     getTitles,
+    throwGenericError,
 } from "utilities/api";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
@@ -28,6 +28,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
+import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
@@ -165,7 +166,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.error = false;
 
     try {
-        const contentList = await getCombinedContentError({
+        const contentList = await throwGenericError({
             apiUrl: props.apiUrl,
             cacheResponse: false,
             requestParams,
@@ -420,7 +421,12 @@ getDocSubjects();
                             <span class="loading__span">Loading...</span>
                         </template>
                         <template v-else-if="policyDocList.error">
-                            Error message here
+                            <div class="doc__list">
+                                <h2 class="search-results__heading">
+                                    Search Results
+                                </h2>
+                                <SearchErrorMsg :search-query="searchQuery"/>
+                            </div>
                         </template>
                         <template v-else>
                             <PolicyResults
