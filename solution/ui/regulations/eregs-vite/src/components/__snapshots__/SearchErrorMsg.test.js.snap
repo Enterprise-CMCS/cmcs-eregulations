@@ -14,7 +14,11 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
           <span
             class="error__msg--query"
           >
-            we’re unable to display results for Search Query right now. 
+            we’re unable to display results for 
+            <strong>
+              Search Query
+            </strong>
+             right now. 
           </span>
           <span
             class="error-msg__common"
@@ -50,7 +54,11 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
         <span
           class="error__msg--query"
         >
-          we’re unable to display results for Search Query right now. 
+          we’re unable to display results for 
+          <strong>
+            Search Query
+          </strong>
+           right now. 
         </span>
         <span
           class="error-msg__common"
