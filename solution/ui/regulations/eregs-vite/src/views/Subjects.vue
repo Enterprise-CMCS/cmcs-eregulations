@@ -428,7 +428,7 @@ getDocSubjects();
                         <template v-else-if="policyDocList.error">
                             <div class="doc__list">
                                 <h2
-                                    v-if="searchQuery"
+                                    v-if="!selectedSubjectParts.length || searchQuery"
                                     class="search-results__heading"
                                 >
                                     Search Results
