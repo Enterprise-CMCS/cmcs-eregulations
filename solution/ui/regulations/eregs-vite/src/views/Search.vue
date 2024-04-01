@@ -42,6 +42,10 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
+                        <span v-else-if="regsError"
+                            >We’re unable to display results for this query
+                            right now</span
+                        >
                         <span v-else>
                             <span v-if="totalRegResultsCount > 0">
                                 {{ currentPageRegResultsRange[0] }} -
@@ -54,7 +58,15 @@
                         </span>
                     </div>
                     <template v-if="!regsLoading">
-                        <RegResults :results="regResults" :query="searchQuery">
+                        <SearchErrorMsg
+                            v-if="regsError"
+                            :survey-url="surveyUrl"
+                        />
+                        <RegResults
+                            v-else
+                            :results="regResults"
+                            :query="searchQuery"
+                        >
                             <template #empty-state>
                                 <template
                                     v-if="
@@ -76,6 +88,10 @@
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
+                        <span v-else-if="resourcesError"
+                            >We’re unable to display results for this query
+                            right now</span
+                        >
                         <span v-else>
                             <span v-if="totalResourcesResultsCount > 0">
                                 {{ currentPageResourcesResultsRange[0] }} -
@@ -88,7 +104,12 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
+                        <SearchErrorMsg
+                            v-if="resourcesError"
+                            :survey-url="surveyUrl"
+                        />
                         <PolicyResults
+                            v-else
                             :base="homeUrl"
                             :parts-last-updated="partsLastUpdated"
                             :results="resourcesResults"
@@ -151,6 +172,7 @@ import {
     getRegSearchResults,
     getSynonyms,
     getTitles,
+    throwGenericError,
 } from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
@@ -166,6 +188,7 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import RegResults from "@/components/search/RegResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 
 const DEFAULT_TITLE = "42";
@@ -186,6 +209,7 @@ export default {
         PolicyResults,
         RegResults,
         SearchEmptyState,
+        SearchErrorMsg,
         SearchInput,
     },
 
@@ -213,6 +237,10 @@ export default {
         subjectsUrl: {
             type: String,
             default: "/subjects/",
+        },
+        surveyUrl: {
+            type: String,
+            default: "",
         },
     },
 
@@ -252,8 +280,10 @@ export default {
             resourcesLoading: true,
             partsLastUpdated: {},
             queryParams: this.$route.query,
+            regsError: false,
             regResults: [],
             totalRegResultsCount: 0,
+            resourcesError: false,
             resourcesResults: [],
             totalResourcesResultsCount: 0,
             searchInputValue: undefined,
@@ -326,6 +356,7 @@ export default {
             document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
         },
         async retrieveRegResults({ query, page, pageSize }) {
+            this.regsError = false;
             try {
                 const response = await getRegSearchResults({
                     q: query,
@@ -339,17 +370,20 @@ export default {
                     "Error retrieving regulation search results: ",
                     error
                 );
+                this.regsError = true;
                 this.regResults = [];
                 this.totalRegResultsCount = 0;
             }
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
+            this.resourcesError = false;
             const requestParams = `q=${query}&page=${
                 page ?? 1
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
             try {
-                response = await getCombinedContent({
+                /* response = await getCombinedContent({ */
+                response = await throwGenericError({
                     apiUrl: this.apiUrl,
                     cacheResponse: false,
                     requestParams,
@@ -362,6 +396,7 @@ export default {
                     "Error retrieving regulation search results: ",
                     error
                 );
+                this.resourcesError = true;
                 this.resourcesResults = [];
                 this.totalResourcesResultsCount = 0;
             }

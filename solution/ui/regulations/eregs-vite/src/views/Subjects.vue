@@ -71,6 +71,10 @@ const props = defineProps({
         type: String,
         default: "/subjects/",
     },
+    surveyUrl: {
+        type: String,
+        default: "",
+    },
 });
 
 // Router and Route
@@ -86,11 +90,11 @@ const FilterTypesDict = {
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+provide("currentRouteName", $route.name);
 provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
-provide("currentRouteName", $route.name);
 
 /**
  * @param {Object} queryParams - $route.query
@@ -166,6 +170,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.error = false;
 
     try {
+        /* const contentList = await getCombinedContent({ */
         const contentList = await throwGenericError({
             apiUrl: props.apiUrl,
             cacheResponse: false,
@@ -425,7 +430,10 @@ getDocSubjects();
                                 <h2 class="search-results__heading">
                                     Search Results
                                 </h2>
-                                <SearchErrorMsg :search-query="searchQuery"/>
+                                <SearchErrorMsg
+                                    :search-query="searchQuery"
+                                    :survey-url="surveyUrl"
+                                />
                             </div>
                         </template>
                         <template v-else>

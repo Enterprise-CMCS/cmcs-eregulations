@@ -6,6 +6,10 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    surveyUrl: {
+        type: String,
+        default: "",
+    },
 });
 </script>
 
@@ -22,7 +26,10 @@ const props = defineProps({
                     :class="{ 'error-msg__common--first-letter': searchQuery }"
                     >t</span
                 >he server is taking too long to respond. Please try a different
-                query, try again later, or let us know.</span
+                query, try again later, or
+                <a :href="surveyUrl" target="_blank" rel="noopener noreferrer"
+                    >let us know</a
+                >.</span
             ></span
         >
     </div>
