@@ -18,8 +18,8 @@ const props = defineProps({
         <span class="error__msg"
             >Sorry,
             <span class="error__msg--query" v-if="searchQuery"
-                >we’re unable to display results for {{ searchQuery }} right
-                now.
+                >we’re unable to display results for
+                <strong>{{ searchQuery }}</strong> right now.
             </span>
             <span class="error-msg__common"
                 ><span
