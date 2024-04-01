@@ -23,6 +23,7 @@ const props = defineProps({
             </span>
             <span class="error-msg__common"
                 ><span
+                    data-testid="error-msg__common--first-letter"
                     :class="{ 'error-msg__common--first-letter': searchQuery }"
                     >t</span
                 >he server is taking too long to respond. Please try a different
