@@ -10,5 +10,4 @@ read -sp "Enter the database password: " DB_PASSWORD
 CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
 BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
 
-echo "${DB_PASSWORD} pg_dump -U ${DB_USER} -h ${DB_HOST} -p ${DB_PORT} ${DB_NAME} > ${BACKUP_FILENAME}"
 PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME

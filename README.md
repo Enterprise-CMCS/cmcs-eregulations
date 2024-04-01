@@ -131,7 +131,7 @@ In order to update your local data with the most recent version of production, y
 
 7. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
 8. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
-9. Visit the local website and ensure that the data has been copied. 
+a. Visit the local website and ensure that the data has been copied. 
 
 
 ### Adding a new model

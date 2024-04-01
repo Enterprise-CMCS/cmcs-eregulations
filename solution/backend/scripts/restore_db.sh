@@ -25,9 +25,9 @@ looks_like_prod_database() {
     echo "the host is ${host}"
     local host=$1
     if [[ $host == "localhost" || $host == *dev* || $host == *val* ]]; then
-        return 1
-    else
         return 0
+    else
+        return 1
     fi
 }
 
@@ -35,11 +35,11 @@ confirm_action "Warning: This script will delete the postgres database in order 
 
 # Prompt for user input
 read -p "Enter the database hostname: " DB_HOST
-if ! looks_like_prod_database "$DB_HOST"; then
-    echo "It looks like you're trying to restore a non-production environment. Proceeding with the operation..."
-else
+if looks_like_prod_database "$DB_HOST"; then
     echo "It looks like you're trying to restore prod. This script is not intended for prod. Exiting."
     exit 0
+else
+    echo "It looks like you're trying to restore a non-production environment. Proceeding with the operation..."
 fi
 
 read -p "Enter the database user: " DB_USER
@@ -59,14 +59,14 @@ echo "Database backed up successfully to {$BACKUP_FILENAME}"
 echo "Dropping database postgres"
 # Drop existing database
 # we use postgres as the database name as the given database is in use.
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d postgres -c "DROP DATABASE IF EXISTS eregs WITH ( FORCE );"
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d postgres -c "DROP DATABASE IF EXISTS ${DB_NAME} WITH ( FORCE );"
 
 echo "Creating new database..."
 # Create new database
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d postgres -c "CREATE DATABASE eregs;"
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d postgres -c "CREATE DATABASE ${DB_NAME}"
 
 echo "Restoring data from backup file ${BACKUP_FILE}"
 # Restore data from a backup file. (this is a different file than existing db backup file)
 # restore the data with an existing backup file.
-PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d eregs < $BACKUP_FILE
+PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d ${DB_NAME} < $BACKUP_FILE
 echo "Database restore completed successfully."
