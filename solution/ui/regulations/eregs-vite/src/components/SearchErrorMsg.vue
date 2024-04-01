@@ -1,6 +1,4 @@
 <script setup>
-import { computed, ref } from "vue";
-
 const props = defineProps({
     searchQuery: {
         type: String,
@@ -35,5 +33,3 @@ const props = defineProps({
         >
     </div>
 </template>
-
-<style></style>
