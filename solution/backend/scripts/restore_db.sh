@@ -24,8 +24,10 @@ confirm_action() {
 looks_like_prod_database() {
     local host=$1
     if [[ $host == "localhost" || $host == *dev* || $host == *val* ]]; then
+        # 1 is false
         return 1
     else
+        # 0 is true
         return 0
     fi
 }
@@ -34,11 +36,11 @@ confirm_action "Warning: This script will delete the postgres database in order 
 
 # Prompt for user input
 read -p "Enter the database hostname: " DB_HOST
-if ! looks_like_prod_database "$DB_HOST"; then
-    echo "It looks like you're trying to restore a non-production environment. Proceeding with the operation..."
-else
+if looks_like_prod_database "$DB_HOST"; then
     echo "It looks like you're trying to restore prod. This script is not intended for prod. Exiting."
     exit 0
+else
+    echo "It looks like you're trying to restore a non-production environment. Proceeding with the operation..."
 fi
 
 read -p "Enter the database user: " DB_USER

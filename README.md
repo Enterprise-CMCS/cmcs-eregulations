@@ -115,11 +115,15 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
+You must also have postgres version 15. 
+
 1. Connect to the VPN. 
 
 2. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
 
-`pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > $BACKUP_FILENAME`
+`pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
+
+(Note: pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
 
 3. Next, run the script `/solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database.
 
