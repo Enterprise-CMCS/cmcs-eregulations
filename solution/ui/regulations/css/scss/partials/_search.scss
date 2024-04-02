@@ -6,14 +6,6 @@
 
 .error-msg__container {
     font-size: $font-size-lg;
-
-    .error__msg {
-        .error-msg__common {
-            &--first-letter {
-                text-transform: uppercase;
-            }
-        }
-    }
 }
 
 .search-page {
