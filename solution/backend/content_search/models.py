@@ -9,6 +9,7 @@ from django.contrib.postgres.search import (
 )
 from django.db import models
 from django.db.models.expressions import RawSQL
+from django.db.models.functions import Substr
 
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
@@ -20,6 +21,10 @@ class ContentIndexQuerySet(models.QuerySet):
     search_type = "plain"
     cover_density = False
     rank_filter = float(settings.BASIC_SEARCH_FILTER)
+    text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
+    min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
+    max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
+    max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS)
 
     def search_configuration(self, query):
 
@@ -37,36 +42,45 @@ class ContentIndexQuerySet(models.QuerySet):
             RawSQL("vector_column", [], output_field=SearchVectorField()),
             search_query, cover_density=self.cover_density))\
             .filter(rank__gt=self.rank_filter)\
-            .annotate(summary_headline=SearchHeadline(
+            .order_by('-rank')
+
+    def generate_headlines(self, search_query):
+        return self.annotate(content_short=Substr("content", 1, self.text_max)).annotate(
+            summary_headline=SearchHeadline(
                 "summary_string",
                 search_query,
                 start_sel='<span class="search-highlight">',
                 stop_sel='</span>',
-                min_words=50,
-                max_words=51,
+                min_words=self.min_words,
+                max_words=self.max_words,
                 config='english',
-                fragment_delimiter='...'
+                fragment_delimiter='...',
+                max_fragments=self.max_fragments,
             ),
             document_name_headline=SearchHeadline(
                 "doc_name_string",
                 search_query,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
+                min_words=self.min_words,
+                max_words=self.max_words,
                 config='english',
                 highlight_all=True,
-                fragment_delimiter='...'
+                fragment_delimiter='...',
+                max_fragments=self.max_fragments,
             ),
             content_headline=SearchHeadline(
-                "content",
+                "content_short",
                 search_query,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 config='english',
-                min_words=50,
-                max_words=51,
-                fragment_delimiter='...'
+                min_words=self.min_words,
+                max_words=self.max_words,
+                fragment_delimiter='...',
+                max_fragments=self.max_fragments,
             ),
-        ).order_by('-rank')
+        )
 
 
 class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
