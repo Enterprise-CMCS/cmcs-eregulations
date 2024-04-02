@@ -24,7 +24,7 @@ class ContentIndexQuerySet(models.QuerySet):
     text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
     min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
     max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
-    max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS)
+    max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
 
     def search_configuration(self, query):
 
