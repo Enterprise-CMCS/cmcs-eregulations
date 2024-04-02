@@ -27,9 +27,9 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
               class="error-msg__common--first-letter"
               data-testid="error-msg__common--first-letter"
             >
-              t
+              p
             </span>
-            he server is taking too long to respond. Please try a different query, try again later, or 
+            lease try a different query, try again later, or 
             <a
               href="Survey URL"
               rel="noopener noreferrer"
@@ -67,9 +67,9 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
             class="error-msg__common--first-letter"
             data-testid="error-msg__common--first-letter"
           >
-            t
+            p
           </span>
-          he server is taking too long to respond. Please try a different query, try again later, or 
+          lease try a different query, try again later, or 
           <a
             href="Survey URL"
             rel="noopener noreferrer"
@@ -158,9 +158,9 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
               class=""
               data-testid="error-msg__common--first-letter"
             >
-              t
+              p
             </span>
-            he server is taking too long to respond. Please try a different query, try again later, or 
+            lease try a different query, try again later, or 
             <a
               href="Survey URL"
               rel="noopener noreferrer"
@@ -190,9 +190,9 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
             class=""
             data-testid="error-msg__common--first-letter"
           >
-            t
+            p
           </span>
-          he server is taking too long to respond. Please try a different query, try again later, or 
+          lease try a different query, try again later, or 
           <a
             href="Survey URL"
             rel="noopener noreferrer"

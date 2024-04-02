@@ -20,7 +20,7 @@ describe("Search Error Message", () => {
         );
 
         expect(errorTextEl.textContent).toBe(
-            "Sorry, we’re unable to display results for Search Query right now. the server is taking too long to respond. Please try a different query, try again later, or let us know."
+            "Sorry, we’re unable to display results for Search Query right now. please try a different query, try again later, or let us know."
         );
 
         const letterToCapitalize = screen.getByTestId(
@@ -51,7 +51,7 @@ describe("Search Error Message", () => {
         );
 
         expect(errorTextEl.textContent).toBe(
-            "Sorry, the server is taking too long to respond. Please try a different query, try again later, or let us know."
+            "Sorry, please try a different query, try again later, or let us know."
         );
 
         const letterToCapitalize = screen.getByTestId(
