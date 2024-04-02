@@ -10,7 +10,6 @@ import {
     getLastUpdatedDates,
     getPolicyDocSubjects,
     getTitles,
-    throwGenericError,
 } from "utilities/api";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
@@ -170,8 +169,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.error = false;
 
     try {
-        /* const contentList = await getCombinedContent({ */
-        const contentList = await throwGenericError({
+         const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: false,
             requestParams,

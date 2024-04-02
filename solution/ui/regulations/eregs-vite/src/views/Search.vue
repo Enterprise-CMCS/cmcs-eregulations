@@ -172,7 +172,6 @@ import {
     getRegSearchResults,
     getSynonyms,
     getTitles,
-    throwGenericError,
 } from "utilities/api";
 
 import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
@@ -358,8 +357,7 @@ export default {
         async retrieveRegResults({ query, page, pageSize }) {
             this.regsError = false;
             try {
-                /* const response = await getRegSearchResults({ */
-                const response = await throwGenericError({
+                 const response = await getRegSearchResults({
                     q: query,
                     page,
                     page_size: pageSize,
@@ -383,8 +381,7 @@ export default {
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
             try {
-                /* response = await getCombinedContent({ */
-                response = await throwGenericError({
+                 response = await getCombinedContent({
                     apiUrl: this.apiUrl,
                     cacheResponse: false,
                     requestParams,
