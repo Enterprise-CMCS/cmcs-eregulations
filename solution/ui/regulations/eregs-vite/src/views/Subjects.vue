@@ -435,6 +435,7 @@ getDocSubjects();
                                 </h2>
                                 <SearchErrorMsg
                                     :search-query="searchQuery"
+                                    show-apology
                                     :survey-url="surveyUrl"
                                 />
                             </div>

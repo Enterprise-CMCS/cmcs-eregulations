@@ -9,34 +9,47 @@ describe("Search Error Message", () => {
         const wrapper = render(SearchErrorMsg, {
             props: {
                 searchQuery: "Search Query",
+                showApology: true,
                 surveyUrl: "Survey URL",
             },
         });
 
         await flushPromises();
 
-        const errorTextEl = screen.getByText((content, element) =>
-            content.startsWith("Sorry")
+        const errorTextEl = screen.getByTestId(
+            "error__msg"
         );
 
         expect(errorTextEl.textContent).toBe(
-            "Sorry, we’re unable to display results for Search Query right now. please try a different query, try again later, or let us know."
+            "Sorry, we’re unable to display results for Search Query right now. Please try a different query, try again later, or let us know."
         );
-
-        const letterToCapitalize = screen.getByTestId(
-            "error-msg__common--first-letter"
-        );
-
-        expect(
-            letterToCapitalize.classList.contains(
-                "error-msg__common--first-letter"
-            )
-        ).toBe(true);
 
         expect(wrapper).toMatchSnapshot();
     });
 
     it("Renders a message without a search query", async () => {
+        const wrapper = render(SearchErrorMsg, {
+            props: {
+                searchQuery: "",
+                showApology: true,
+                surveyUrl: "Survey URL",
+            },
+        });
+
+        await flushPromises();
+
+        const errorTextEl = screen.getByTestId(
+            "error__msg"
+        );
+
+        expect(errorTextEl.textContent).toBe(
+            "Sorry, we’re unable to display results right now. Please try a different query, try again later, or let us know."
+        );
+
+        expect(wrapper).toMatchSnapshot();
+    });
+
+    it("Renders a message without an apology", async () => {
         const wrapper = render(SearchErrorMsg, {
             props: {
                 searchQuery: "",
@@ -46,24 +59,13 @@ describe("Search Error Message", () => {
 
         await flushPromises();
 
-        const errorTextEl = screen.getByText((content, element) =>
-            content.startsWith("Sorry")
+        const errorTextEl = screen.getByTestId(
+            "error__msg"
         );
 
         expect(errorTextEl.textContent).toBe(
-            "Sorry, please try a different query, try again later, or let us know."
+            "Please try a different query, try again later, or let us know."
         );
-
-        const letterToCapitalize = screen.getByTestId(
-            "error-msg__common--first-letter"
-        );
-
-        expect(
-            letterToCapitalize.classList.contains(
-                "error-msg__common--first-letter"
-            )
-        ).toBe(false);
-
 
         expect(wrapper).toMatchSnapshot();
     });
