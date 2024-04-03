@@ -1,0 +1,372 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Search Error Message > Renders a message with a search query 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <div
+        class="error-msg__container"
+      >
+        <span
+          class="error__msg"
+          data-testid="error__msg"
+        >
+          <span
+            class="error__msg--apology"
+          >
+            Sorry, we’re unable to display results
+            <span
+              class="error__msg--query"
+            >
+               for 
+              <strong>
+                Search Query
+              </strong>
+            </span>
+             right now. 
+          </span>
+          <span
+            class="error-msg__common"
+          >
+            Please try a different query, try again later, or 
+            <a
+              href="Survey URL"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              let us know
+            </a>
+            .
+          </span>
+        </span>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="error-msg__container"
+    >
+      <span
+        class="error__msg"
+        data-testid="error__msg"
+      >
+        <span
+          class="error__msg--apology"
+        >
+          Sorry, we’re unable to display results
+          <span
+            class="error__msg--query"
+          >
+             for 
+            <strong>
+              Search Query
+            </strong>
+          </span>
+           right now. 
+        </span>
+        <span
+          class="error-msg__common"
+        >
+          Please try a different query, try again later, or 
+          <a
+            href="Survey URL"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            let us know
+          </a>
+          .
+        </span>
+      </span>
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Search Error Message > Renders a message without a search query 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <div
+        class="error-msg__container"
+      >
+        <span
+          class="error__msg"
+          data-testid="error__msg"
+        >
+          <span
+            class="error__msg--apology"
+          >
+            Sorry, we’re unable to display results
+            <!---->
+             right now. 
+          </span>
+          <span
+            class="error-msg__common"
+          >
+            Please try a different query, try again later, or 
+            <a
+              href="Survey URL"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              let us know
+            </a>
+            .
+          </span>
+        </span>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="error-msg__container"
+    >
+      <span
+        class="error__msg"
+        data-testid="error__msg"
+      >
+        <span
+          class="error__msg--apology"
+        >
+          Sorry, we’re unable to display results
+          <!---->
+           right now. 
+        </span>
+        <span
+          class="error-msg__common"
+        >
+          Please try a different query, try again later, or 
+          <a
+            href="Survey URL"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            let us know
+          </a>
+          .
+        </span>
+      </span>
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;
+
+exports[`Search Error Message > Renders a message without an apology 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <div
+        class="error-msg__container"
+      >
+        <span
+          class="error__msg"
+          data-testid="error__msg"
+        >
+          <!---->
+          <span
+            class="error-msg__common"
+          >
+            Please try a different query, try again later, or 
+            <a
+              href="Survey URL"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              let us know
+            </a>
+            .
+          </span>
+        </span>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="error-msg__container"
+    >
+      <span
+        class="error__msg"
+        data-testid="error__msg"
+      >
+        <!---->
+        <span
+          class="error-msg__common"
+        >
+          Please try a different query, try again later, or 
+          <a
+            href="Survey URL"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            let us know
+          </a>
+          .
+        </span>
+      </span>
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "isUnmounted": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "unmount": [Function],
+  "updateProps": [Function],
+}
+`;

@@ -27,6 +27,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
+import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
@@ -69,6 +70,10 @@ const props = defineProps({
         type: String,
         default: "/subjects/",
     },
+    surveyUrl: {
+        type: String,
+        default: "",
+    },
 });
 
 // Router and Route
@@ -84,11 +89,11 @@ const FilterTypesDict = {
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
+provide("currentRouteName", $route.name);
 provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
-provide("currentRouteName", $route.name);
 
 /**
  * @param {Object} queryParams - $route.query
@@ -156,13 +161,15 @@ const getPartsLastUpdated = async () => {
 const policyDocList = ref({
     results: [],
     loading: true,
+    error: false,
 });
 
 const getDocList = async (requestParams = "") => {
     policyDocList.value.loading = true;
+    policyDocList.value.error = false;
 
     try {
-        const contentList = await getCombinedContent({
+         const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: false,
             requestParams,
@@ -170,6 +177,8 @@ const getDocList = async (requestParams = "") => {
         policyDocList.value.results = contentList.results;
     } catch (error) {
         console.error(error);
+        policyDocList.value.results = [];
+        policyDocList.value.error = true;
     } finally {
         policyDocList.value.loading = false;
     }
@@ -413,6 +422,21 @@ getDocSubjects();
                             "
                         >
                             <span class="loading__span">Loading...</span>
+                        </template>
+                        <template v-else-if="policyDocList.error">
+                            <div class="doc__list">
+                                <h2
+                                    v-if="!selectedSubjectParts.length || searchQuery"
+                                    class="search-results__heading"
+                                >
+                                    Search Results
+                                </h2>
+                                <SearchErrorMsg
+                                    :search-query="searchQuery"
+                                    show-apology
+                                    :survey-url="surveyUrl"
+                                />
+                            </div>
                         </template>
                         <template v-else>
                             <PolicyResults

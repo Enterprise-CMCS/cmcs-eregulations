@@ -349,7 +349,6 @@ const getRecentResources = async (
     );
 };
 
-
 /**
  *
  */
@@ -580,6 +579,11 @@ const getCombinedContent = async ({
         cacheResponse
     );
 
+const throwGenericError = async () =>
+    new Promise((_resolve, reject) => {
+        setTimeout(() => reject(new Error("Contrived error")), 2000);
+    });
+
 export {
     config,
     configure,
@@ -607,4 +611,5 @@ export {
     removeCacheItem,
     setCacheItem,
     setIdToken,
+    throwGenericError,
 };
