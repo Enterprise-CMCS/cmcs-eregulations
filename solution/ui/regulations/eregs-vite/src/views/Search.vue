@@ -58,10 +58,17 @@
                         </span>
                     </div>
                     <template v-if="!regsLoading">
-                        <SearchErrorMsg
-                            v-if="regsError"
-                            :survey-url="surveyUrl"
-                        />
+                        <template v-if="regsError">
+                            <SearchErrorMsg :survey-url="surveyUrl" />
+                            <template
+                                v-if="!isLoading && resourcesResults.length > 0"
+                            >
+                                <SearchEmptyState
+                                    :query="searchQuery"
+                                    :show-internal-link="false"
+                                />
+                            </template>
+                        </template>
                         <RegResults
                             v-else
                             :results="regResults"
@@ -104,10 +111,17 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <SearchErrorMsg
-                            v-if="resourcesError"
-                            :survey-url="surveyUrl"
-                        />
+                        <template v-if="resourcesError">
+                            <SearchErrorMsg :survey-url="surveyUrl" />
+                            <template
+                                v-if="!isLoading && regResults.length > 0"
+                            >
+                                <SearchEmptyState
+                                    :query="searchQuery"
+                                    :show-internal-link="false"
+                                />
+                            </template>
+                        </template>
                         <PolicyResults
                             v-else
                             :base="homeUrl"
@@ -357,7 +371,7 @@ export default {
         async retrieveRegResults({ query, page, pageSize }) {
             this.regsError = false;
             try {
-                 const response = await getRegSearchResults({
+                const response = await getRegSearchResults({
                     q: query,
                     page,
                     page_size: pageSize,
@@ -381,7 +395,7 @@ export default {
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
             try {
-                 response = await getCombinedContent({
+                response = await getCombinedContent({
                     apiUrl: this.apiUrl,
                     cacheResponse: false,
                     requestParams,
