@@ -90,7 +90,10 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
 
         if search_query:
             query = query.search(search_query)
-            results = list(query.values_list("pk", flat=True))
+            if paginate:
+                results = [i.pk for i in self.paginate_queryset(query)]
+            else:
+                results = list(query.values_list("pk", flat=True))
             query = ContentIndex.objects.filter(pk__in=results).generate_headlines(search_query)
         else:
             query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
@@ -103,8 +106,10 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             Prefetch("category", queryset=category_prefetch),
             Prefetch("upload_category", queryset=repo_category_prefetch),
             Prefetch("division", queryset=division_prefetch)).distinct()
-        if paginate:
+
+        if paginate and not search_query:
             query = self.paginate_queryset(query)
+
         context = self.get_serializer_context()
         if search_query:
             serializer = ContentSearchSerializer(query, many=True, context=context)
