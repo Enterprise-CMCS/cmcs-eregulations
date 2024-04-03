@@ -4,6 +4,10 @@
 
 @import "../application_settings";
 
+.error-msg__container {
+    font-size: $font-size-lg;
+}
+
 .search-page {
     #searchApp.search-view {
         display: flex;

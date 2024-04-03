@@ -51,6 +51,10 @@ provider:
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     BASIC_SEARCH_FILTER: ${ssm:/eregulations/basic_search_filter}
     QUOTED_SEARCH_FILTER: ${ssm:/eregulations/quoted_search_filter}
+    SEARCH_HEADLINE_TEXT_MAX: ${ssm:/eregulations/search_headline_text_max}
+    SEARCH_HEADLINE_MIN_WORDS: ${ssm:/eregulations/search_headline_min_words}
+    SEARCH_HEADLINE_MAX_WORDS: ${ssm:/eregulations/search_headline_max_words}
+    SEARCH_HEADLINE_MAX_FRAGMENTS: ${ssm:/eregulations/search_headline_max_fragments}
     # This text extractor is for an experimental deploy if one is made.
     TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
     # This text extractor is the "main dev" extractor.  Used if one is not created in experimental.

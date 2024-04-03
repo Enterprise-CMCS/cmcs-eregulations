@@ -37,6 +37,10 @@ export default {
             type: String,
             default: "",
         },
+        surveyUrl: {
+            type: String,
+            default: "",
+        },
         host: {
             type: String,
             default: "",
@@ -64,6 +68,7 @@ export default {
             :search-url="searchUrl"
             :statutes-url="statutesUrl"
             :subjects-url="subjectsUrl"
+            :survey-url="surveyUrl"
             :host="host"
             :is-authenticated="isAuthenticated === 'True'"
             :has-editable-job-code="hasEditableJobCode === 'True'"
