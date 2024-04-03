@@ -65,6 +65,21 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref CloudFrontLogsBucket
+                    - '/*'
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
         OwnershipControls:
           Rules:
             - ObjectOwnership: BucketOwnerPreferred
@@ -78,6 +93,18 @@ resources:
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
+            - Effect: Deny
+              Action: 's3:*'
+              Resource:
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref CloudFrontLogsBucket
+                    - '/*'
+              Principal: '*'
+              Condition:
+                Bool:
+                  aws:SecureTransport: false
             - Effect: Allow
               Principal:
                 Service: "delivery.logs.amazonaws.com"
@@ -116,10 +143,6 @@ resources:
                   - - 'arn:aws:s3:::'
                     - !Ref AssetsBucket
                     - /*
-                - !Join
-                  - ''
-                  - - 'arn:aws:s3:::'
-                    - !Ref AssetsBucket
               Principal: '*'
               Condition:
                 Bool:
