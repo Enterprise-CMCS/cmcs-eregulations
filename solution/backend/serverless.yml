@@ -50,6 +50,10 @@ provider:
     OIDC_END_EUA_SESSION: ${ssm:/eregulations/oidc/end_eua_session}
     BASIC_SEARCH_FILTER: ${ssm:/eregulations/basic_search_filter}
     QUOTED_SEARCH_FILTER: ${ssm:/eregulations/quoted_search_filter}
+    SEARCH_HEADLINE_TEXT_MAX: ${ssm:/eregulations/search_headline_text_max}
+    SEARCH_HEADLINE_MIN_WORDS: ${ssm:/eregulations/search_headline_min_words}
+    SEARCH_HEADLINE_MAX_WORDS: ${ssm:/eregulations/search_headline_max_words}
+    SEARCH_HEADLINE_MAX_FRAGMENTS: ${ssm:/eregulations/search_headline_max_fragments}
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}

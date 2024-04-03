@@ -88,6 +88,13 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         elif resource_type == 'external':
             query = query.filter(resource_type='external')
 
+        if search_query:
+            query = query.search(search_query)
+            results = list(query.values_list("pk", flat=True))
+            query = ContentIndex.objects.filter(pk__in=results).generate_headlines(search_query)
+        else:
+            query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
+
         context = self.get_serializer_context()
         context['content_id'] = True
         query = query.prefetch_related(
@@ -96,10 +103,6 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             Prefetch("category", queryset=category_prefetch),
             Prefetch("upload_category", queryset=repo_category_prefetch),
             Prefetch("division", queryset=division_prefetch)).distinct()
-        if search_query:
-            query = query.search(search_query)
-        else:
-            query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
         if paginate:
             query = self.paginate_queryset(query)
         context = self.get_serializer_context()

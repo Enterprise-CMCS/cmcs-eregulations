@@ -523,7 +523,7 @@ class SupplementalContentAdmin(AbstractResourceAdmin):
                         content.locations.add(location.abstractlocation_ptr)
                     content.save()
 
-                resource["category"] = category if category else f"Invalid category: { row[3] }"
+                resource["category"] = category if category else f"Invalid category: {row[3]}"
                 added_resources.append(resource)
             elif not created:
                 failed_resources.append({"row": row, "line_number": reader.line_num})
