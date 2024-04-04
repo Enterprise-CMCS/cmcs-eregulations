@@ -56,7 +56,7 @@ getTitlesArray();
 
 <template>
     <div class="toc__container">
-        <v-tabs v-model="selectedTitle" slider-size="5">
+        <v-tabs v-model="selectedTitle">
             <v-tab v-for="(title, i) in titles" :key="i">
                 {{ title }}
             </v-tab>

@@ -195,12 +195,13 @@
                 padding-right: 25px;
                 margin-bottom: 16px;
 
-                .v-tabs-bar {
+                .v-slide-group__container {
                     border-bottom: 1px solid $mid_blue;
 
                     .v-tab {
                         @include hover-background--dark;
 
+                        box-sizing: border-box;
                         padding: 0;
                         min-width: 50px;
                         margin-right: 15px;
@@ -211,15 +212,22 @@
                         color: white;
                         font-weight: 400;
 
-                        &--active {
+                        &--selected {
                             @include hover-background--dark;
 
                             font-weight: 700;
                         }
-                    }
 
-                    .v-tabs-slider {
-                        background-color: $light_blue_2;
+                        .v-btn__content {
+                            margin-top: -1px;
+                            margin-left: -1px;
+                        }
+
+                        .v-tab__slider {
+                            height: 5px;
+                            background-color: $light_blue_2;
+                            bottom: 1px;
+                        }
                     }
                 }
             }
@@ -406,17 +414,23 @@
                     flex: 2;
 
                     .v-tabs {
-                        .v-tabs-bar {
+                        .v-slide-group__container {
                             .v-tab {
                                 border-bottom: 1px solid $light_gray;
                                 font-weight: 700;
 
-                                &--active {
+                                &--selected {
                                     border-bottom: 1px solid $dark_blue;
                                 }
                             }
 
-                            .v-tabs-slider {
+                            .v-btn__content {
+                                margin-top: -1px;
+                                margin-left: -1px;
+                            }
+
+                            .v-tab__slider {
+                                height: 3px;
                                 background-color: $dark_blue;
                             }
                         }

@@ -46,7 +46,7 @@ export default {
 
 <template>
     <div>
-        <v-tabs v-model="tab">
+        <v-tabs grow v-model="tab">
             <v-tab class="content-tabs"> Recent Subregulatory Guidance </v-tab>
             <v-tab class="content-tabs"> Recent Rules </v-tab>
         </v-tabs>
