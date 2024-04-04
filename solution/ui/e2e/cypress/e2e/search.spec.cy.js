@@ -11,6 +11,7 @@ describe("Search flow", () => {
     });
 
     it("has a working search box on the homepage on desktop", () => {
+        cy.clearIndexedDB();
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".header--search > form > input")
@@ -35,14 +36,6 @@ describe("Search flow", () => {
         cy.get(".header--search > form").submit();
 
         cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
-    });
-
-    it("should have a valid link to medicaid.gov", () => {
-        cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".options-list li:nth-child(3) a")
-            .should("have.attr", "href")
-            .and("include", "search-gsc");
     });
 
     it("checks a11y for search page", () => {
@@ -169,5 +162,88 @@ describe("Search flow", () => {
                     );
             });
         });
+    });
+
+    it("should have a valid link to medicaid.gov", () => {
+        cy.clearIndexedDB();
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".options-list li:nth-child(3) a")
+            .should("have.attr", "href")
+            .and("include", "search-gsc");
+    });
+
+    it("should have the correct error message when the the resources column throws an error", () => {
+        cy.clearIndexedDB();
+
+        cy.intercept("**/v3/content-search/**", {
+            statusCode: 500,
+        }).as("resourcesError");
+
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(
+            ".resources-results-content .resources-count__span--error"
+        ).should(
+            "have.text",
+            "We're unable to display results for this query right now"
+        );
+
+        cy.get(".reg-results-content .error__msg").should(
+            "not.exist"
+        );
+
+        cy.get(
+            ".resources-results-content .error__msg"
+        ).should(
+            "have.text",
+            "Please try a different query, try again later, or let us know."
+        );
+
+        cy.get(".reg-results-content .options-list li:nth-child(3) a").should(
+            "not.exist"
+        );
+
+        cy.get(".resources-results-content .options-list li:nth-child(3) a")
+            .should("have.attr", "href")
+            .and("include", "search-gsc");
+    });
+
+    it("should have the correct error message when the the regulations column throws an error", () => {
+        cy.clearIndexedDB();
+
+        cy.intercept("**/v3/search/**", {
+            statusCode: 500,
+        }).as("resourcesError");
+
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs.json",
+        }).as("subjectFiles");
+
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(".reg-results-content .regs-count__span--error").should(
+            "have.text",
+            "We're unable to display results for this query right now"
+        );
+
+        cy.get(".resources-results-content .error__msg").should(
+            "not.exist"
+        );
+
+        cy.get(
+            ".reg-results-content .error__msg"
+        ).should(
+            "have.text",
+            "Please try a different query, try again later, or let us know."
+        );
+
+        cy.get(
+            ".resources-results-content .options-list li:nth-child(3) a"
+        ).should("not.exist");
+
+        cy.get(".reg-results-content .options-list li:nth-child(3) a")
+            .should("have.attr", "href")
+            .and("include", "search-gsc");
     });
 });
