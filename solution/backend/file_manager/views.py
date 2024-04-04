@@ -47,22 +47,17 @@ from .models import (
 )
 
 
-@extend_schema(
-    description="Retrieve a list of subjects.",
-    parameters=[
-                OpenApiQueryParameter("q",
-                                      "Search fors text within file metadata. Searches document name, file name, "
-                                      "date, and summary/description.", str, False),]
-)
+@extend_schema(description="Retrieve a list of subjects.")
 class SubjectViewset(viewsets.ReadOnlyModelViewSet):
     model = Subject
 
     def list(self, request):
-        search_query = self.request.GET.get("q")
         query = self.model.objects.all()
+
+        # Only load "resource_type" and "id" to avoid loading the entire database's store of extracted text into memory at once.
+        # Needed to prevent slow response times and massive memory spikes.
         index_prefetch = ContentIndex.objects.all().only("resource_type", "id")
-        if search_query:
-            index_prefetch = index_prefetch.search(search_query)
+
         index_prefetch_internal = index_prefetch.filter(resource_type='internal').values_list('id', flat=True)
         index_prefetch_external = index_prefetch.filter(resource_type='external').values_list('id', flat=True)
 
