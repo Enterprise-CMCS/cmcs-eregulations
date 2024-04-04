@@ -42,8 +42,10 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
-                        <span v-else-if="regsError"
-                            >We’re unable to display results for this query
+                        <span
+                            v-else-if="regsError"
+                            class="regs-count__span--error"
+                            >We're unable to display results for this query
                             right now</span
                         >
                         <span v-else>
@@ -95,8 +97,10 @@
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
-                        <span v-else-if="resourcesError"
-                            >We’re unable to display results for this query
+                        <span
+                            v-else-if="resourcesError"
+                            class="resources-count__span--error"
+                            >We're unable to display results for this query
                             right now</span
                         >
                         <span v-else>
