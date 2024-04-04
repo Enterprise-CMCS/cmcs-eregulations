@@ -60,7 +60,7 @@ class SubjectViewset(viewsets.ReadOnlyModelViewSet):
     def list(self, request):
         search_query = self.request.GET.get("q")
         query = self.model.objects.all()
-        index_prefetch = ContentIndex.objects.all()
+        index_prefetch = ContentIndex.objects.all().only("resource_type", "id")
         if search_query:
             index_prefetch = index_prefetch.search(search_query)
         index_prefetch_internal = index_prefetch.filter(resource_type='internal').values_list('id', flat=True)
