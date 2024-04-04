@@ -65,6 +65,7 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
+        DeletionPolicy: Retain
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
