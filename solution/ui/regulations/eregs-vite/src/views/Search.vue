@@ -42,8 +42,10 @@
                     <div class="search-results-count">
                         <h2>Regulations</h2>
                         <span v-if="regsLoading">Loading...</span>
-                        <span v-else-if="regsError"
-                            >We’re unable to display results for this query
+                        <span
+                            v-else-if="regsError"
+                            class="regs-count__span--error"
+                            >We're unable to display results for this query
                             right now</span
                         >
                         <span v-else>
@@ -58,10 +60,17 @@
                         </span>
                     </div>
                     <template v-if="!regsLoading">
-                        <SearchErrorMsg
-                            v-if="regsError"
-                            :survey-url="surveyUrl"
-                        />
+                        <template v-if="regsError">
+                            <SearchErrorMsg :survey-url="surveyUrl" />
+                            <template
+                                v-if="!isLoading && resourcesResults.length > 0"
+                            >
+                                <SearchEmptyState
+                                    :query="searchQuery"
+                                    :show-internal-link="false"
+                                />
+                            </template>
+                        </template>
                         <RegResults
                             v-else
                             :results="regResults"
@@ -88,8 +97,10 @@
                     <div class="search-results-count">
                         <h2>Resources</h2>
                         <span v-if="resourcesLoading">Loading...</span>
-                        <span v-else-if="resourcesError"
-                            >We’re unable to display results for this query
+                        <span
+                            v-else-if="resourcesError"
+                            class="resources-count__span--error"
+                            >We're unable to display results for this query
                             right now</span
                         >
                         <span v-else>
@@ -104,10 +115,17 @@
                         </span>
                     </div>
                     <template v-if="!resourcesLoading">
-                        <SearchErrorMsg
-                            v-if="resourcesError"
-                            :survey-url="surveyUrl"
-                        />
+                        <template v-if="resourcesError">
+                            <SearchErrorMsg :survey-url="surveyUrl" />
+                            <template
+                                v-if="!isLoading && regResults.length > 0"
+                            >
+                                <SearchEmptyState
+                                    :query="searchQuery"
+                                    :show-internal-link="false"
+                                />
+                            </template>
+                        </template>
                         <PolicyResults
                             v-else
                             :base="homeUrl"
@@ -357,7 +375,7 @@ export default {
         async retrieveRegResults({ query, page, pageSize }) {
             this.regsError = false;
             try {
-                 const response = await getRegSearchResults({
+                const response = await getRegSearchResults({
                     q: query,
                     page,
                     page_size: pageSize,
@@ -381,7 +399,7 @@ export default {
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
             try {
-                 response = await getCombinedContent({
+                response = await getCombinedContent({
                     apiUrl: this.apiUrl,
                     cacheResponse: false,
                     requestParams,
