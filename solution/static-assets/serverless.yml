@@ -81,37 +81,17 @@ resources:
               Condition:
                 Bool:
                   aws:SecureTransport: false
+            - Effect: Allow
+              Principal:
+                Service: "delivery.logs.amazonaws.com"
+              Action: "s3:PutObject"
+              Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
         OwnershipControls:
           Rules:
             - ObjectOwnership: BucketOwnerPreferred
         VersioningConfiguration:
           Status: Enabled
         AccessControl: LogDeliveryWrite
-    CloudFrontLogsBucketPolicy:
-      Type: "AWS::S3::BucketPolicy"
-      Properties:
-        Bucket: !Ref CloudFrontLogsBucket
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Deny
-              Action: 's3:*'
-              Resource:
-                - !Join
-                  - ''
-                  - - 'arn:aws:s3:::'
-                    - !Ref CloudFrontLogsBucket
-                    - '/*'
-              Principal: '*'
-              Condition:
-                Bool:
-                  aws:SecureTransport: false
-            - Effect: Allow
-              Principal:
-                Service: "delivery.logs.amazonaws.com"
-              Action: "s3:PutObject"
-              Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
-
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
