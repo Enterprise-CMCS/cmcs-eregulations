@@ -65,33 +65,25 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: eregs-${self:custom.stage}-cloudfront-logs
-        DeletionPolicy: Retain
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-            - Effect: Deny
-              Action: 's3:*'
-              Resource:
-                - !Join
-                  - ''
-                  - - 'arn:aws:s3:::'
-                    - !Ref CloudFrontLogsBucket
-                    - '/*'
-              Principal: '*'
-              Condition:
-                Bool:
-                  aws:SecureTransport: false
-            - Effect: Allow
-              Principal:
-                Service: "delivery.logs.amazonaws.com"
-              Action: "s3:PutObject"
-              Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
         OwnershipControls:
           Rules:
             - ObjectOwnership: BucketOwnerPreferred
         VersioningConfiguration:
           Status: Enabled
         AccessControl: LogDeliveryWrite
+    CloudFrontLogsBucketPolicy:
+      Type: "AWS::S3::BucketPolicy"
+      Properties:
+        Bucket: !Ref CloudFrontLogsBucket
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: "delivery.logs.amazonaws.com"
+              Action: "s3:PutObject"
+              Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
+
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
@@ -124,6 +116,10 @@ resources:
                   - - 'arn:aws:s3:::'
                     - !Ref AssetsBucket
                     - /*
+                - !Join
+                  - ''
+                  - - 'arn:aws:s3:::'
+                    - !Ref AssetsBucket
               Principal: '*'
               Condition:
                 Bool:
@@ -133,7 +129,7 @@ resources:
       Type: AWS::WAFv2::WebACL
       Properties:
         Name: eregs-${self:custom.stage}-cloudfront-ACL
-        DefaultAction: 
+        DefaultAction:
           Allow: {}
         Scope: CLOUDFRONT
         VisibilityConfig:
