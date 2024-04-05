@@ -59,18 +59,29 @@
 
         @mixin hover-background {
             &:hover,
-            &:focus {
+            &:focus,
+            &:focus-visible {
                 background-color: $mid_blue;
+                outline: 0;
+                border: none;
+
+                &:before,
+                &:after {
+                    border: none;
+                    opacity: 0;
+                }
             }
         }
 
         @mixin hover-background--dark {
             &:hover,
-            &:focus {
+            &:focus,
+            &:focus-visible {
                 background-color: $darkest_blue;
                 outline: 0;
 
-                &:before {
+                &:before,
+                &:after {
                     opacity: 0;
                 }
             }
@@ -200,6 +211,10 @@
 
                     .v-tab {
                         @include hover-background--dark;
+
+                        &.v-btn:focus-visible > .v-btn__overlay {
+                            opacity: 0;
+                        }
 
                         box-sizing: border-box;
                         padding: 0;
@@ -418,6 +433,14 @@
                             .v-tab {
                                 border-bottom: 1px solid $light_gray;
                                 font-weight: 700;
+
+                                &:focus-visible {
+                                    &:before,
+                                    &:after {
+                                        border: none;
+                                        opacity: 0;
+                                    }
+                                }
 
                                 &--selected {
                                     border-bottom: 1px solid $dark_blue;
