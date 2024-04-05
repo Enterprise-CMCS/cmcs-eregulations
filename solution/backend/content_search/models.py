@@ -27,28 +27,29 @@ class ContentIndexQuerySet(models.QuerySet):
     max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
 
     def search_configuration(self, query):
-
         if query and query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES):
             self.search_type = "phrase"
             self.cover_density = True
             self.rank_filter = float(settings.QUOTED_SEARCH_FILTER)
 
+    def get_search_query_object(self, search_query):
+        return SearchQuery(search_query, search_type=self.search_type, config='english')
+
     def search(self, search_query):
         self.search_configuration(search_query)
-
-        search_query = SearchQuery(search_query, search_type=self.search_type, config='english')
-
         return self.annotate(rank=SearchRank(
             RawSQL("vector_column", [], output_field=SearchVectorField()),
-            search_query, cover_density=self.cover_density))\
+            self.get_search_query_object(search_query), cover_density=self.cover_density))\
             .filter(rank__gt=self.rank_filter)\
             .order_by('-rank')
 
     def generate_headlines(self, search_query):
+        self.search_configuration(search_query)
+        query_object = self.get_search_query_object(search_query)
         return self.annotate(content_short=Substr("content", 1, self.text_max)).annotate(
             summary_headline=SearchHeadline(
                 "summary_string",
-                search_query,
+                query_object,
                 start_sel='<span class="search-highlight">',
                 stop_sel='</span>',
                 min_words=self.min_words,
@@ -59,7 +60,7 @@ class ContentIndexQuerySet(models.QuerySet):
             ),
             document_name_headline=SearchHeadline(
                 "doc_name_string",
-                search_query,
+                query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 min_words=self.min_words,
@@ -71,7 +72,7 @@ class ContentIndexQuerySet(models.QuerySet):
             ),
             content_headline=SearchHeadline(
                 "content_short",
-                search_query,
+                query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 config='english',
