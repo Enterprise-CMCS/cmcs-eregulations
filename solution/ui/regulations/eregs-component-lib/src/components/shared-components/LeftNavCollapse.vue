@@ -89,8 +89,6 @@ const btnClasses = computed(() => ({
     "icon-only": navOpen.value === false,
 }));
 
-const btnSize = computed(() => (navOpen.value ? "medium" : "x-small"));
-
 const btnAriaLabel = computed(() =>
     navOpen.value
         ? `Close ${props.contentsDescription}`
@@ -104,10 +102,9 @@ const btnAriaLabel = computed(() =>
             class="nav-toggle__button"
             :class="btnClasses"
             :ripple="false"
-            :size="btnSize"
             :icon="navOpen"
             :aria-label="btnAriaLabel"
-            variant="plain"
+            variant="text"
             @click="toggleClick"
             @mouseenter="hoverOn"
             @mouseleave="hoverOff"

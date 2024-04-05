@@ -141,6 +141,8 @@
 
             &.icon-only {
                 background-color: $dark_blue;
+                height: 18px;
+                width: 18px;
 
                 @media (max-width: $eds-xs-max) {
                     position: absolute;
@@ -171,6 +173,8 @@
                 @include hover-background;
 
                 background-color: $mid_blue_2;
+                height: 36px;
+                width: 36px;
             }
 
             .v-btn__content {

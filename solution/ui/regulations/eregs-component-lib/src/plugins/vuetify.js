@@ -14,4 +14,11 @@ export default createVuetify({
             mdi,
         },
     },
+    theme: {
+        themes: {
+            light: {
+                primary: "#046791",
+            },
+        },
+    },
 });
