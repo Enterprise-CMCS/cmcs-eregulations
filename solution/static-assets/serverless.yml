@@ -79,16 +79,16 @@ resources:
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
-            - Sid: "EnforceSSLOnly"
-              Effect: "Deny"
-              Principal: "*"
+            - Sid: "AllowSSLRequestsOnly"
               Action: "s3:*"
+              Effect: "Deny"
               Resource:
                 - !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
                 - !Sub "arn:aws:s3:::${CloudFrontLogsBucket}"
               Condition:
                 Bool:
                   "aws:SecureTransport": "false"
+              Principal: "*"
             - Sid: "AllowCloudFrontLogsDelivery"
               Effect: "Allow"
               Principal:
