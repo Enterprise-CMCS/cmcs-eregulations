@@ -57,7 +57,7 @@ getTitlesArray();
 <template>
     <div class="toc__container">
         <v-tabs v-model="selectedTitle">
-            <v-tab v-for="(title, i) in titles" :key="i">
+            <v-tab v-for="(title, i) in titles" :key="i" tabindex="0">
                 {{ title }}
             </v-tab>
         </v-tabs>

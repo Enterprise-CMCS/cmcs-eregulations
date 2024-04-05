@@ -47,8 +47,10 @@ export default {
 <template>
     <div>
         <v-tabs grow v-model="tab">
-            <v-tab class="content-tabs"> Recent Subregulatory Guidance </v-tab>
-            <v-tab class="content-tabs"> Recent Rules </v-tab>
+            <v-tab class="content-tabs" tabindex="0">
+                Recent Subregulatory Guidance
+            </v-tab>
+            <v-tab class="content-tabs" tabindex="0"> Recent Rules </v-tab>
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item>
