@@ -85,7 +85,7 @@ jobs:
         run: |
           aws s3 rm s3://eregs-${{ env.STAGE }}-cloudfront-logs --recursive
         env:
-          STAGE: your-stage-variable
+          STAGE: dev${PR}
       - name: remove static assets
         if: success() || failure()
         env:
