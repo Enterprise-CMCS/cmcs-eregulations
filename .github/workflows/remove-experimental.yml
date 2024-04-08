@@ -81,6 +81,11 @@ jobs:
           serverless remove --stage dev${PR}
           popd
       # Remove the static assets
+      - name: Empty S3 Bucket
+        run: |
+          aws s3 rm s3://eregs-${{ env.STAGE }}-cloudfront-logs --recursive
+        env:
+          STAGE: your-stage-variable
       - name: remove static assets
         if: success() || failure()
         env:
