@@ -71,6 +71,7 @@ resources:
         VersioningConfiguration:
           Status: Enabled
         AccessControl: LogDeliveryWrite
+      DeletionPolicy: Delete
     CloudFrontLogsBucketPolicy:
       Type: "AWS::S3::BucketPolicy"
       Properties:
