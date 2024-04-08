@@ -1,23 +1,35 @@
 <template>
-    <form :class="formClass" @submit.prevent="submitForm">
+    <form ref="formRef" :class="formClass" @submit.prevent="submitForm">
         <v-text-field
             id="main-content"
             v-model="searchInputValue"
-            outlined
-            flat
-            solo
             clearable
-            :label="label"
+            variant="outlined"
+            density="compact"
+            :placeholder="label"
             :aria-label="label"
-            type="text"
+            type="input"
             class="search-field"
-            append-icon="mdi-magnify"
+            clear-icon="mdi-close"
             hide-details
-            dense
-            @input="updateSearchValue"
-            @click:append="submitForm"
-            @click:clear="clearForm"
-        />
+            single-line
+            @update:modelValue="updateSearchValue"
+        >
+            <template v-slot:clear>
+                <v-icon
+                    icon="mdi-close"
+                    @click="clearForm"
+                    tabindex="-1"
+                />
+            </template>
+            <template v-slot:append-inner>
+                <v-icon
+                    icon="mdi-magnify"
+                    @click="submitForm"
+                    @keydown.enter.space.prevent="submitForm"
+                />
+            </template>
+        </v-text-field>
         <div class="form-helper-text">
             <template v-if="showSuggestions && multiWordQuery">
                 <div class="search-suggestion">
@@ -33,7 +45,9 @@
             </template>
             <template v-if="synonyms.length > 0">
                 <div class="search-suggestion">
-                    <span v-if="showSuggestions && multiWordQuery"> Or search </span>
+                    <span v-if="showSuggestions && multiWordQuery">
+                        Or search
+                    </span>
                     <span v-else> Search </span>
                     for similar terms:
                     <template v-for="(syn, i) in synonyms" :key="i">
@@ -113,6 +127,7 @@ export default {
             this.$emit("execute-search", { query: this.searchInputValue });
         },
         clearForm() {
+            this.searchInputValue = undefined;
             this.$emit("clear-form");
         },
         updateSearchValue(value) {
@@ -149,33 +164,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-.search-field {
-    height: 40px;
-    border-radius: 3px;
-
-    .v-input__icon.v-input__icon--append button,
-    .v-input__icon.v-input__icon--clear button {
-        color: $mid_blue;
-    }
-
-    .v-input__icon.v-input__icon--clear button {
-        padding-right: 2px;
-        border-right: 1px solid $light_gray;
-    }
-
-    fieldset {
-        border-radius: 3px;
-        border: 1px solid $light_gray;
-    }
-
-    .v-input__control .v-input__slot {
-        max-width: calc(100% - 24px);
-    }
-}
-
-.form-helper-text {
-    margin-top: 10px;
-}
-</style>

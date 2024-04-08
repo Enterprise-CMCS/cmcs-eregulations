@@ -9,6 +9,34 @@
     margin-bottom: 1em;
 }
 
+.search-field {
+    background-color: #FFF;
+
+    .v-field__append-inner i,
+    .v-field__clearable i {
+        opacity: 1;
+        color: $mid_blue;
+    }
+
+    .v-field__clearable i {
+        padding-right: 2px;
+        border-right: 1px solid $light_gray;
+    }
+
+    //fieldset {
+    //border-radius: 3px;
+    //border: 1px solid $light_gray;
+    //}
+
+    //.v-input__control .v-input__slot {
+    //max-width: calc(100% - 24px);
+    //}
+}
+
+.form-helper-text {
+    margin-top: 10px;
+}
+
 .search-page {
     #searchApp.search-view {
         display: flex;
