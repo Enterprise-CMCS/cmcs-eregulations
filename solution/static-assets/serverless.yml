@@ -78,11 +78,25 @@ resources:
         PolicyDocument:
           Version: '2012-10-17'
           Statement:
-            - Effect: Allow
+            - Sid: "AllowSSLRequestsOnly"
+              Action: "s3:*"
+              Effect: "Deny"
+              Resource:
+                - !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
+                - !Sub "arn:aws:s3:::${CloudFrontLogsBucket}"
+              Condition:
+                Bool:
+                  "aws:SecureTransport": "false"
+              Principal: "*"
+            - Sid: "AllowCloudFrontLogsDelivery"
+              Effect: "Allow"
               Principal:
                 Service: "delivery.logs.amazonaws.com"
               Action: "s3:PutObject"
               Resource: !Sub "arn:aws:s3:::${CloudFrontLogsBucket}/*"
+              Condition:
+                StringEquals:
+                  "s3:x-amz-acl": "bucket-owner-full-control"
 
     CloudFrontOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -129,7 +143,7 @@ resources:
       Type: AWS::WAFv2::WebACL
       Properties:
         Name: eregs-${self:custom.stage}-cloudfront-ACL
-        DefaultAction: 
+        DefaultAction:
           Allow: {}
         Scope: CLOUDFRONT
         VisibilityConfig:
