@@ -135,7 +135,8 @@ describe("Part View", () => {
                 .contains("42 431 test");
             cy.get(".show-more-button")
                 .contains("+ Show More (6)")
-                .click({ force: true })
+                .click({ force: true });
+            cy.get(".show-more-button")
                 .contains("- Show Less (6)");
         });
     });
@@ -209,7 +210,8 @@ describe("Part View", () => {
             cy.get(".is-fr-doc-btn").click({ force: true });
             cy.get(".show-more-button")
                 .contains("+ Show More (9)")
-                .click({ force: true })
+                .click({ force: true });
+            cy.get(".show-more-button")
                 .contains("- Show Less (9)");
         });
     });
