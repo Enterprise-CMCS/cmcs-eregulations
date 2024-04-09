@@ -11,9 +11,9 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.get("input#main-content")
         .should("be.visible")
         .type("test", { force: true });
-    cy.get(".search-field .v-input__icon--append button").click({
-        force: true,
-    });
+        cy.get('[data-cy="search-form-submit"]').click({
+            force: true,
+        });
 
     // Public doc
     cy.get(".category-labels")

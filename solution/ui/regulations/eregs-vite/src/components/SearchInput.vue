@@ -20,6 +20,8 @@
                     icon="mdi-close"
                     @click="clearForm"
                     tabindex="-1"
+                    aria-label="Clear search form"
+                    data-cy="clear-search-form"
                 />
             </template>
             <template v-slot:append-inner>
@@ -27,6 +29,8 @@
                     icon="mdi-magnify"
                     @click="submitForm"
                     @keydown.enter.space.prevent="submitForm"
+                    :aria-label="`Search for ${searchInputValue}`"
+                    data-cy="search-form-submit"
                 />
             </template>
         </v-text-field>
