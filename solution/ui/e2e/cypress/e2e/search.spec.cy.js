@@ -110,7 +110,7 @@ describe("Search flow", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-cy="search-form-submit"]').click({
             force: true,
         });
 
