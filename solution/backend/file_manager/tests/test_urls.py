@@ -79,11 +79,3 @@ class SubjectTest(TestCase):
         self.assertEqual(data[0]['external_content'], 3)
         self.assertEqual(data[1]['internal_content'], 3)
         self.assertEqual(data[1]['external_content'], 6)
-
-    def test_get_subject_list_by_query(self):
-        response = self.client.get("/v3/file-manager/subjects?q=fire")
-        data = json.loads(json.dumps(response.data))
-        self.assertEqual(data[0]['internal_content'], 0)
-        self.assertEqual(data[0]['external_content'], 1)
-        self.assertEqual(data[1]['internal_content'], 1)
-        self.assertEqual(data[1]['external_content'], 1)

@@ -173,3 +173,28 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?&q='dummy'")
         data = get_paginated_data(response)
         self.assertTrue("dummy" in data['results'][0]['content_headline'])
+
+    # This test ensures that highlighting for multiple words in a document is working properly.
+    # For example a search for "affordable care act" on a document should highlight the entire phrase, not just one word of it.
+    def test_multiword_highlighting(self):
+        a = ContentIndex.objects.first()
+        a.doc_name_string = "abc affordable xyz care 123 act"
+        a.summary_string = "this is an affordable care act document"
+        a.content = "this is an affordable document about the Affordable Care Act blah blah blah etc etc etc Care act"
+        a.save()
+        self.login()
+        response = self.client.get("/v3/content-search/?q=affordable care act")
+        data = get_paginated_data(response)
+
+        expected = "this is an <span class='search-highlight'>affordable</span> document about the <span class='search-highlight"\
+                   "'>Affordable</span> <span class='search-highlight'>Care</span> <span class='search-highlight'>Act</span> bla"\
+                   "h blah blah etc etc etc <span class='search-highlight'>Care</span> <span class='search-highlight'>act</span>"
+        self.assertEqual(expected, data["results"][0]["content_headline"])
+
+        expected = "abc <span class='search-highlight'>affordable</span> xyz <span class='search-highlight'>care</span> 123 <spa"\
+                   "n class='search-highlight'>act</span>"
+        self.assertEqual(expected, data["results"][0]["document_name_headline"])
+
+        expected = 'this is an <span class="search-highlight">affordable</span> <span class="search-highlight">care</span> <span'\
+                   ' class="search-highlight">act</span> document'
+        self.assertEqual(expected, data["results"][0]["summary_headline"])
