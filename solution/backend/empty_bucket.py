@@ -19,7 +19,7 @@ def empty_bucket(bucket_name):
 
 def handler(event, context):
     # Retrieve the stage/environment variable
-    stage = os.environ.get("STAGE")
+    stage = os.environ.get("STAGE_ENV")
 
     storage_bucket_name = os.environ.get("AWS_STORAGE_BUCKET_NAME", None)
 
