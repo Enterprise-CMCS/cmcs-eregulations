@@ -81,25 +81,6 @@ jobs:
           serverless remove --stage dev${PR}
           popd
       # Remove the static assets
-      - name: Empty S3 Bucket Including Versions
-        run: |
-          BUCKET="eregs-dev${{ github.event.number }}-cloudfront-logs"
-          # Ensure the command accounts for the dynamic naming of the bucket based on PR number
-          echo "Deleting all versions from $BUCKET"
-
-          # List and delete all versions
-          aws s3api list-object-versions --bucket "$BUCKET" | jq -r '.Versions[] | select(.Key != null) | .VersionId + " " + .Key' | while read -r version key; do
-            aws s3api delete-object --bucket "$BUCKET" --key "$key" --version-id "$version";
-            echo "Deleted $key version $version"
-          done
-
-          # List and delete all delete markers
-          aws s3api list-object-versions --bucket "$BUCKET" | jq -r '.DeleteMarkers[] | select(.Key != null) | .VersionId + " " + .Key' | while read -r version key; do
-            aws s3api delete-object --bucket "$BUCKET" --key "$key" --version-id "$version";
-            echo "Deleted delete marker for $key version $version"
-          done
-        env:
-          AWS_REGION: us-east-1
       - name: remove static assets
         if: success() || failure()
         env:
