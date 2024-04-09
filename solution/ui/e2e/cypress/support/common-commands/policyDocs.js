@@ -15,40 +15,44 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
             force: true,
         });
 
+    cy.wait("@queriedFiles");
+
     // Public doc
-    cy.get(".category-labels")
-        .eq(0)
-        .find(".doc-type__label")
-        .should("include.text", " Public ")
-        .find("i")
+    cy.get('[data-cy="results-item-categories"] .doc-type__label')
+        .first()
+        .should("include.text", " Public");
+
+    cy.get('[data-cy="results-item-categories"] i')
+        .first()
         .should("have.class", "fa-users");
-    cy.get(".category-labels")
-        .eq(0)
-        .find(".category-label")
-        .should("include.text", " Subregulatory Guidance ");
-    cy.get(".category-labels")
-        .eq(0)
-        .find(".subcategory-label")
+
+    cy.get('[data-cy="results-item-categories"] .category-label')
+        .first()
+        .should("include.text", "Subregulatory Guidance");
+
+    cy.get('[data-cy="results-item-categories"] .subcategory-label')
+        .first()
         .should("include.text", "CMCS Informational Bulletin (CIB)");
 
     // Internal doc
-    cy.get(".category-labels")
+    cy.get('[data-cy="results-item-categories"] .doc-type__label')
         .eq(1)
-        .find(".doc-type__label")
-        .should("include.text", " Internal ")
-        .find("i")
+        .should("include.text", " Internal")
+
+    cy.get('[data-cy="results-item-categories"] i')
+        .eq(1)
         .should("have.class", "fa-key");
-    cy.get(".category-labels")
+
+    cy.get('[data-cy="results-item-categories"] .category-label')
         .eq(1)
-        .find(".category-label")
         .should("include.text", "TestCat");
-    cy.get(".category-labels")
+
+    cy.get('[data-cy="results-item-categories"] .subcategory-label')
         .eq(1)
-        .find(".subcategory-label")
         .should("include.text", "TestSubCat");
-    cy.get(".result__context")
-        .eq(1)
-        .find(".result__context--division")
+
+    cy.get('[data-cy="division-label"]')
+        .first()
         .should("include.text", "Uploaded by MG1 — MD1")
         .and("have.attr", "title", "Mock Group 1 — Mock Division 1");
 };
