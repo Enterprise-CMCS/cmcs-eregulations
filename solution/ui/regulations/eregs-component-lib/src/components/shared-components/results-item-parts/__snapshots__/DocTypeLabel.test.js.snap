@@ -10,7 +10,7 @@ exports[`Public/Private label > Renders a Private Label 1`] = `
         <i
           class="fa fa-key"
         />
-         Internal 
+         Internal
       </div>
     </div>
   </body>,
@@ -21,7 +21,7 @@ exports[`Public/Private label > Renders a Private Label 1`] = `
       <i
         class="fa fa-key"
       />
-       Internal 
+       Internal
     </div>
   </div>,
   "debug": [Function],
@@ -59,7 +59,6 @@ exports[`Public/Private label > Renders a Private Label 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -76,8 +75,8 @@ exports[`Public/Private label > Renders a Private Label 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -91,7 +90,7 @@ exports[`Public/Private label > Renders a Public Label 1`] = `
         <i
           class="fa fa-users"
         />
-         Public 
+         Public
       </div>
     </div>
   </body>,
@@ -102,7 +101,7 @@ exports[`Public/Private label > Renders a Public Label 1`] = `
       <i
         class="fa fa-users"
       />
-       Public 
+       Public
     </div>
   </div>,
   "debug": [Function],
@@ -140,7 +139,6 @@ exports[`Public/Private label > Renders a Public Label 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -157,7 +155,7 @@ exports[`Public/Private label > Renders a Public Label 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

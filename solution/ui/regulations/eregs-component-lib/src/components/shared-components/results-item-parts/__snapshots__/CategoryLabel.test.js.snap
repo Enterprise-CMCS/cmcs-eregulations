@@ -7,7 +7,7 @@ exports[`Document Type/Category Label > Renders a Category Label 1`] = `
       <div
         class="result-label category-label"
       >
-         Category Name 
+        Category Name
       </div>
     </div>
   </body>,
@@ -15,7 +15,7 @@ exports[`Document Type/Category Label > Renders a Category Label 1`] = `
     <div
       class="result-label category-label"
     >
-       Category Name 
+      Category Name
     </div>
   </div>,
   "debug": [Function],
@@ -53,7 +53,6 @@ exports[`Document Type/Category Label > Renders a Category Label 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -70,8 +69,8 @@ exports[`Document Type/Category Label > Renders a Category Label 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -82,7 +81,7 @@ exports[`Document Type/Category Label > Renders a Subcategory Label 1`] = `
       <div
         class="result-label subcategory-label"
       >
-         Subcategory Name 
+        Subcategory Name
       </div>
     </div>
   </body>,
@@ -90,7 +89,7 @@ exports[`Document Type/Category Label > Renders a Subcategory Label 1`] = `
     <div
       class="result-label subcategory-label"
     >
-       Subcategory Name 
+      Subcategory Name
     </div>
   </div>,
   "debug": [Function],
@@ -128,7 +127,6 @@ exports[`Document Type/Category Label > Renders a Subcategory Label 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -145,7 +143,7 @@ exports[`Document Type/Category Label > Renders a Subcategory Label 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

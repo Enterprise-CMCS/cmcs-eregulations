@@ -10,10 +10,12 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
         <span
           class="related-sections-title"
         >
-           Related Section
-          <!---->
+          Related Section
+          <!--v-if-->
           : 
         </span>
+        
+        
         <span
           class="title__span"
         >
@@ -24,6 +26,7 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
         >
           § 
         </span>
+        
         <span
           class="related-section-link"
         >
@@ -32,9 +35,12 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
           >
             447.272
           </a>
-          <!---->
+          <!--v-if-->
         </span>
-        <!---->
+        
+        <!--v-if-->
+        
+        
       </div>
     </div>
   </body>,
@@ -45,10 +51,12 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
       <span
         class="related-sections-title"
       >
-         Related Section
-        <!---->
+        Related Section
+        <!--v-if-->
         : 
       </span>
+      
+      
       <span
         class="title__span"
       >
@@ -59,6 +67,7 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
       >
         § 
       </span>
+      
       <span
         class="related-section-link"
       >
@@ -67,9 +76,12 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
         >
           447.272
         </a>
-        <!---->
+        <!--v-if-->
       </span>
-      <!---->
+      
+      <!--v-if-->
+      
+      
     </div>
   </div>,
   "debug": [Function],
@@ -107,7 +119,6 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -124,7 +135,7 @@ exports[`Related Sections > Renders a Related Sections component 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
