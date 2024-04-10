@@ -342,7 +342,7 @@ describe("Find by Subjects", () => {
             .should("have.class", "fa-users");
         cy.get(".doc-type__label")
             .eq(1)
-            .should("include.text", " Internal ")
+            .should("include.text", " Internal")
             .find("i")
             .should("have.class", "fa-key");
 
@@ -401,7 +401,7 @@ describe("Find by Subjects", () => {
         });
         cy.url().should(
             "include",
-            "/subjects?type=internal&subjects=3&q=test%20search"
+            "/subjects?type=internal&subjects=3&q=test+search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
