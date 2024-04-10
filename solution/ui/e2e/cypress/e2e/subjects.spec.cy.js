@@ -408,7 +408,7 @@ describe("Find by Subjects", () => {
         );
         cy.get(".document__subjects a")
             .eq(0)
-            .should("have.text", " Access to Services ");
+            .should("have.text", "Access to Services");
         cy.get(".document__subjects a")
             .eq(1)
             .should("have.text", " Adult Day Health ");
