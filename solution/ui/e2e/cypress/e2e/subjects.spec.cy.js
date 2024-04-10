@@ -411,10 +411,10 @@ describe("Find by Subjects", () => {
             .should("have.text", "Access to Services");
         cy.get(".document__subjects a")
             .eq(1)
-            .should("have.text", " Adult Day Health ");
+            .should("have.text", "Adult Day Health");
         cy.get(".document__subjects a")
             .eq(2)
-            .should("have.text", " Ambulatory Prenatal Care ");
+            .should("have.text", "Ambulatory Prenatal Care");
         cy.get(`a[data-testid=add-subject-chip-4]`)
             .should("have.attr", "title")
             .and("include", "Adult Day Health");
