@@ -106,7 +106,6 @@ const subjectClick = (event) => {
             ...$route.query,
             subjects: [subjectToAdd],
         },
-        params: { subjectName: getSubjectName(subject) },
     });
 };
 

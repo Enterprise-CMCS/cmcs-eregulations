@@ -1,8 +1,7 @@
 import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from 'vue-router'
-import vuetify from "./plugins/vuetify";
-
 import Clickaway from "directives/clickaway";
+import vuetify from "./plugins/vuetify";
 
 import App from "./App.vue";
 import vueRouter from "./router";
@@ -22,28 +21,19 @@ app.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to, from) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     if (to.name === "subjects") {
-        if ( window.event?.type === "popstate" ) {
-            document.title = pageTitle;
-        } else if (_from.name) {
-            if (to.params?.subjectName) {
-                // set document title here with available information
-                document.title = `${to.params.subjectName} | ${pageTitle}`;
-            } else {
-                document.title = pageTitle;
-            }
-        }
+        document.title = pageTitle;
 
         if (!isAuthenticated && to.query?.type) {
             const { type, ...query } = to.query;
-            next({ ...to, query });
+            return { name: "subjects", query };
         }
     }
 
-    next();
+    return true;
 });
 
 // Silence duplicate navigation errors
