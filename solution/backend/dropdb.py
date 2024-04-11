@@ -24,9 +24,9 @@ def handler(event, context):
     if db_name.lower() != "prod":
         try:
             with connection.cursor() as cursor:
-                query = f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '{db_name}'"  # noqa: S608
+                query = f"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = '{db_name}'"  # noqa: S608
                 cursor.execute(query)
-                cursor.execute(f"DROP DATABASE {db_name}")
+                cursor.execute(f"DROP DATABASE {db_name} WITH ( FORCE )")
                 print(f"Database {db_name} has been removed")
         except ProgrammingError as e:
             print(f"Database was not deleted, most likely because it does not exist: {str(e)}")

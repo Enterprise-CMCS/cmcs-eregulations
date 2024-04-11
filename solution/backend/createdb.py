@@ -16,9 +16,8 @@ def handler(event, context):
 
     with connection.cursor() as cursor:
         cursor.execute(
-            "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'eregs'"
+            "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'eregs'"
         )
-    with connection.cursor() as cursor:
         cursor.execute(
             f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE eregs OWNER {os.environ.get('DB_USER')}"
         )
