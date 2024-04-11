@@ -54,6 +54,8 @@ resources:
             - - 'arn:aws:iam::'
               - Ref: AWS::AccountId
               - ${ssm:/account_vars/iam/permissions_boundary_policy}
+        ManagedPolicyArns:
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
           - PolicyName: "S3VersionDeletionPolicy"
             PolicyDocument:
