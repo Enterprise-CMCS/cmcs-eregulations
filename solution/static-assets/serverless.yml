@@ -37,6 +37,31 @@ plugins:
 
 resources:
   Resources:
+    CleanupRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Service: "lambda.amazonaws.com"
+              Action: "sts:AssumeRole"
+        Policies:
+          - PolicyName: "S3VersionDeletionPolicy"
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: "Allow"
+                  Action:
+                    - "s3:ListBucket"
+                    - "s3:ListBucketVersions"
+                    - "s3:GetBucketVersioning"
+                    - "s3:DeleteObject"
+                    - "s3:DeleteObjectVersion"
+                  Resource:
+                    - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs"
+                    - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs/*"
     AssetsBucket:
       Type: AWS::S3::Bucket
       Properties:
