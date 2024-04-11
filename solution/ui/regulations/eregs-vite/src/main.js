@@ -21,7 +21,7 @@ app.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     if (to.name === "subjects") {
