@@ -53,11 +53,12 @@ resources:
             - ''
             - - 'arn:aws:iam::'
               - Ref: AWS::AccountId
+              - ':policy'
               - ${ssm:/account_vars/iam/permissions_boundary_policy}
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
-          - PolicyName: "S3VersionDeletionPolicy"
+          - PolicyName: S3VersionManagementPolicy
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
@@ -71,6 +72,19 @@ resources:
                   Resource:
                     - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs"
                     - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs/*"
+                - Effect: Allow  # Additional permissions for logging
+                  Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                  Resource: "arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/*:*:*"
+                - Effect: "Allow"
+                  Action:
+                    - "s3:PutObject"
+                    - "s3:GetObject"
+                    - "s3:DeleteObject"
+                  Resource:
+                    - "arn:aws:s3:::serverless-${self:provider.region}-${self:provider.stage}-deployment-bucket/*"
     AssetsBucket:
       Type: AWS::S3::Bucket
       Properties:
