@@ -181,3 +181,4 @@ We use serverless in conjunction with GitHub Actions to deploy our application t
 
 ### Functions
 To allow us to deploy our application to various environments and prohibit certain Lambda functions to be deployed to different environments, we split our Lambda functions out into a specific folder.  In backend/serverless_functions there is a different YML file for each environment.  When you want to add a Lambda function to each environment, add the function the corresponding environment folder.
+
