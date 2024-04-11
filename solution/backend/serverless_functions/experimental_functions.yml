@@ -15,8 +15,8 @@ reg_site:
           resultTtlInSeconds: 0
           identitySource: method.request.header.Authorization
           type: request
-    - http: ANY /{proxy+}
-        path: /
+    - http:
+        path: /{proxy+}
         method: ANY
         authorizer:
           name: authorizer
