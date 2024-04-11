@@ -26,7 +26,7 @@ func FetchFull(ctx context.Context, date string, title int, opts ...network.Fetc
 		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrFullXML, date, title))
-	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts, nil)
 }
 
 // FetchStructure fetches the structure for a given title and options
@@ -36,7 +36,7 @@ func FetchStructure(ctx context.Context, title int, opts ...network.FetchOption)
 		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrStructureJSON, title))
-	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts, nil)
 }
 
 // FetchVersions fetches the available versions for a given title
@@ -46,7 +46,7 @@ func FetchVersions(ctx context.Context, title int, opts ...network.FetchOption) 
 		return nil, -1, err
 	}
 	ecfrURL.Path = path.Join(ecfrURL.Path, fmt.Sprintf(ecfrVersionsXML, title))
-	return network.FetchWithOptions(ctx, ecfrURL, false, opts)
+	return network.FetchWithOptions(ctx, ecfrURL, false, opts, nil)
 }
 
 // PartOption is a struct that represents a string referring to the regulation Part

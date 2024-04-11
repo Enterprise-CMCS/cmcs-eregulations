@@ -48,7 +48,7 @@ func RetrieveConfig() (*ParserConfig, int, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
-	body, code, err := network.Fetch(ctx, u, true)
+	body, code, err := network.Fetch(ctx, u, true, postAuth)
 	if err != nil {
 		return nil, code, err
 	}

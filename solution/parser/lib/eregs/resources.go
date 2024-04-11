@@ -136,7 +136,7 @@ func FetchDocumentList(ctx context.Context) ([]string, error) {
 		return nil, fmt.Errorf("failed to parse eRegs URL '%s': %+v", BaseURL, err)
 	}
 
-	reader, code, err := network.Fetch(ctx, u, true)
+	reader, code, err := network.Fetch(ctx, u, true, postAuth)
 	if err != nil {
 		if code != -1 {
 			return nil, fmt.Errorf("fetch failed with code %d: %+v", code, err)
