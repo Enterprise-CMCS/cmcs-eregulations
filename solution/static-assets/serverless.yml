@@ -84,7 +84,7 @@ resources:
                     - "s3:GetObject"
                     - "s3:DeleteObject"
                   Resource:
-                    - "arn:aws:s3:::serverless-${self:provider.region}-${self:provider.stage}-deployment-bucket/*"
+                    - "arn:aws:s3:::serverless-${self:provider.region}-${self:custom.stage}-deployment-bucket/*"
     AssetsBucket:
       Type: AWS::S3::Bucket
       Properties:
