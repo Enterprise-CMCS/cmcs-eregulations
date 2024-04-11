@@ -34,7 +34,7 @@ CSS/Javascript etc., should inherit from this template.
         </title>
         {% include "regulations/partials/favicon.html" %}
         {% block custom_styles %}
-            <link rel="stylesheet" href="{% static '/js/style.css' %}?{{ DEPLOY_NUMBER }}" />
+            <link rel="stylesheet" href="{% static '/bundles/style.css' %}?{{ DEPLOY_NUMBER }}" />
         {% endblock %}
         <link
             rel="stylesheet"
@@ -86,7 +86,7 @@ CSS/Javascript etc., should inherit from this template.
         </div>
         {% block post_footer %}
             <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.min.js"></script>
-            <script src="{% static '/js/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
+            <script src="{% static '/bundles/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
         {% endblock %}
     </body>
 </html>

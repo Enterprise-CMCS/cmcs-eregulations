@@ -18,7 +18,7 @@ const config = {
         name: "eregsMain",
         formats: ["iife"],
         fileName: (format) => `eregs-main.${format}.js`,
-        outDir: "../../../static-assets/regulations/js",
+        outDir: "../../../static-assets/regulations/bundles",
     },
 };
 
