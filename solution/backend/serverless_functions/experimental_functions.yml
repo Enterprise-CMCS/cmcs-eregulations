@@ -16,16 +16,6 @@ reg_core_migrate:
   timeout: 300
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-populate_content:
-  handler: populate_content.handler
-  timeout: 300
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-index_resources:
-  handler: index_resources.handler
-  timeout: 300
-  layers:
-    - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
 create_database:
   environment:
     STAGE: ${self:custom.stage}
