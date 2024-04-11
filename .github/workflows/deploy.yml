@@ -22,7 +22,7 @@ jobs:
     environment:
       name: ${{ matrix.environment }}
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     services:
       postgres:
         image: postgres
