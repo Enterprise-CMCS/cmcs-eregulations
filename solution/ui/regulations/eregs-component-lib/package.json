@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build:components": "LIB_NAME=components vite build",
+    "build:components": "LIB_NAME=components vite build --emptyOutDir",
     "watch-build:components": "LIB_NAME=components vite build --watch",
     "build:main": "LIB_NAME=main vite build",
     "watch-build:main": "LIB_NAME=main vite build --watch",
