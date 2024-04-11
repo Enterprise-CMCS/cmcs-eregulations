@@ -25,7 +25,6 @@ def handler(event, context):
     if not storage_bucket_name:
         raise ValueError("Missing environment variable: AWS_STORAGE_BUCKET_NAME")
 
-    # Dynamically construct the CloudFront logs bucket name based on the stage
     cloudfront_logs_bucket_name = f"eregs-{stage}-cloudfront-logs"
 
     # Empty the specified storage bucket without deleting versions
