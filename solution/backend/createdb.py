@@ -3,6 +3,8 @@ import os
 
 
 def handler(event, context):
+    TIMEOUT_MINUTES = 3
+
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
 
     import django
@@ -15,9 +17,10 @@ def handler(event, context):
         raise Exception("database is unreachable")
 
     with connection.cursor() as cursor:
+        cursor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
         cursor.execute(
             "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'eregs'"
         )
         cursor.execute(
-            f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE eregs OWNER {os.environ.get('DB_USER')}"
+            f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE eregs STRATEGY FILE_COPY OWNER {os.environ.get('DB_USER')}"
         )
