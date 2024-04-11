@@ -10,7 +10,7 @@ def handler(event, context):
     import django
     django.setup()
 
-    from django.db import connection
+    from django.db import ProgrammingError, connection
 
     connection.ensure_connection()
     if not connection.is_usable():
