@@ -114,3 +114,13 @@ Cypress.Commands.add("clearIndexedDB", async () => {
         )
     );
 });
+
+// For basic auth https://stackoverflow.com/questions/69811241/cypress-basic-authentication-in-all-cy-visit-requests
+Cypress.Commands.overwrite('visit', (originalVisit, url) => {
+    originalVisit(url, {
+        auth: {
+            username: Cypress.env("TEST_USERNAME"),
+            password: Cypress.env("TEST_PASSWORD")
+        }
+    })
+});
