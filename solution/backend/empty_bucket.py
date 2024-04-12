@@ -5,17 +5,38 @@ from botocore.exceptions import ClientError
 
 
 def delete_all_object_versions(bucket_name):
-    """
-    Deletes all versions of all objects in a versioned bucket.
-    :param bucket_name: The name of the bucket.
-    """
-    s3 = boto3.resource('s3')
-    bucket = s3.Bucket(bucket_name)
-    try:
-        bucket.object_versions.delete()
-        print(f"Permanently deleted all object versions in bucket {bucket_name}.")
-    except ClientError as e:
-        print(f"Couldn't delete objects in bucket {bucket_name}: {e}")
+    print(f"Emptying bucket {bucket_name}")
+
+    s3_client = boto3.client('s3')
+    paginator = s3_client.get_paginator('list_object_versions')
+
+    # Initialize deletion list
+    deletion_list = {'Objects': []}
+
+    # Paginate through list of object versions
+    for page in paginator.paginate(Bucket=bucket_name):
+        if 'Versions' in page:
+            for version in page['Versions']:
+                deletion_list['Objects'].append({'Key': version['Key'], 'VersionId': version['VersionId']})
+        if 'DeleteMarkers' in page:
+            for marker in page['DeleteMarkers']:
+                deletion_list['Objects'].append({'Key': marker['Key'], 'VersionId': marker['VersionId']})
+
+    # Delete if there are objects to delete
+    if deletion_list['Objects']:
+        response = s3_client.delete_objects(Bucket=bucket_name, Delete=deletion_list)
+        print(f"Deleted versions and markers from bucket {bucket_name}: {response}")
+
+    # As a safety measure, try to remove any remaining objects
+    # Note: This might not be necessary after the above deletions, but it's kept for completeness
+    response = s3_client.list_objects_v2(Bucket=bucket_name)
+    while response.get('Contents', []):
+        s3_client.delete_objects(
+            Bucket=bucket_name,
+            Delete={'Objects': [{'Key': obj['Key']} for obj in response['Contents']]})
+        response = s3_client.list_objects_v2(Bucket=bucket_name)
+
+    print(f"Bucket {bucket_name} should now be empty.")
 
 
 def empty_bucket(bucket_name):
