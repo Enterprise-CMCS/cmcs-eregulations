@@ -1,6 +1,8 @@
 import os
+
 import boto3
 from botocore.exceptions import ClientError
+
 
 def delete_all_object_versions(bucket_name):
     """
@@ -15,6 +17,7 @@ def delete_all_object_versions(bucket_name):
     except ClientError as e:
         print(f"Couldn't delete objects in bucket {bucket_name}: {e}")
 
+
 def empty_bucket(bucket_name):
     """
     Empties the S3 bucket specified by bucket_name.
@@ -26,6 +29,7 @@ def empty_bucket(bucket_name):
         print(f"Emptied bucket {bucket_name}.")
     except ClientError as e:
         print(f"Could not empty bucket {bucket_name}: {e}")
+
 
 def handler(event, context):
     """
@@ -45,8 +49,8 @@ def handler(event, context):
     empty_bucket(storage_bucket_name)
 
     # Empty the versioned CloudFront logs bucket and delete all versions
-    empty_bucket(cloudfront_logs_bucket_name)
     delete_all_object_versions(cloudfront_logs_bucket_name)
+    empty_bucket(cloudfront_logs_bucket_name)
 
     return {
         "message": f"Successfully emptied {storage_bucket_name} and {cloudfront_logs_bucket_name}."
