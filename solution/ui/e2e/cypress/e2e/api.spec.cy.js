@@ -77,7 +77,7 @@ describe("Synonyms endpoint special character testing", () => {
     SPECIAL_CHARACTERS.forEach((character) => {
         const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request(endpoint).as("request");
+            cy.request({ "url": endpoint }).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);
