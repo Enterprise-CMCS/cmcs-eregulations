@@ -115,12 +115,38 @@ Cypress.Commands.add("clearIndexedDB", async () => {
     );
 });
 
-// For basic auth https://stackoverflow.com/questions/69811241/cypress-basic-authentication-in-all-cy-visit-requests
-Cypress.Commands.overwrite('visit', (originalVisit, url) => {
-    originalVisit(url, {
-        auth: {
-            username: Cypress.env("TEST_USERNAME"),
-            password: Cypress.env("TEST_PASSWORD")
-        }
-    })
+beforeEach(() => {
+    cy.intercept("/**", (req) => {
+        const username = Cypress.env("TEST_USERNAME");
+        const password = Cypress.env("TEST_PASSWORD");
+        const token = "Basic " + btoa(username + ":" + password);
+        req.headers["Authorization"] = token;
+    });
 });
+
+// Cypress.Commands.overwrite('visit', (originalVisit, url, options) => {
+//     let newUrl = url;
+//     if (!options) {
+//         options = {};
+//     }
+//     if (!options.qs) {
+//         options.qs = {};
+//     }
+//     if (options.url) {
+//         newUrl = options.url;
+//     }
+//     options.auth = {
+//         username: Cypress.env("TEST_USERNAME"),
+//         password: Cypress.env("TEST_PASSWORD")
+//     };
+//     return originalVisit(newUrl, options);
+// });
+
+// Cypress.Commands.overwrite('request', (originalRequest, url) => {
+//     originalRequest(url, {
+//         auth: {
+//             username: Cypress.env("TEST_USERNAME"),
+//             password: Cypress.env("TEST_PASSWORD")
+//         }
+//     })
+// });
