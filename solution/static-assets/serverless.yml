@@ -72,6 +72,12 @@ resources:
                   Resource:
                     - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs"
                     - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs/*"
+                - Effect: Allow  # Additional permissions for logging
+                  Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                  Resource: "arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/*:*:*"
                 - Effect: "Allow"
                   Action:
                     - "s3:PutObject"
