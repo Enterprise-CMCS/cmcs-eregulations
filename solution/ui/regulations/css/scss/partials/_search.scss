@@ -18,7 +18,7 @@
         &::placeholder {
             letter-spacing: normal;
             position: absolute;
-            top: calc(50% + 1px);
+            top: calc(50% + 0.5px);
             transform: translateY(-50%);
             opacity: 1;
             color: #0009;
@@ -72,15 +72,6 @@
             border-color: $mid_blue;
         }
     }
-
-    //fieldset {
-    //border-radius: 3px;
-    //border: 1px solid $light_gray;
-    //}
-
-    //.v-input__control .v-input__slot {
-    //max-width: calc(100% - 24px);
-    //}
 }
 
 .form-helper-text {
