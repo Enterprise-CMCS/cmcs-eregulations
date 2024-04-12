@@ -116,6 +116,7 @@ Cypress.Commands.add("clearIndexedDB", async () => {
 });
 
 beforeEach(() => {
+    Cypress.config("baseUrl", Cypress.config().baseUrl.replace(/\/$/, ""));
     cy.intercept("/**", (req) => {
         const username = Cypress.env("TEST_USERNAME");
         const password = Cypress.env("TEST_PASSWORD");
