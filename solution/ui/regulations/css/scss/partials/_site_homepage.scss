@@ -432,6 +432,14 @@
                 .resources__container {
                     flex: 2;
 
+                    .rules-container {
+                        margin: 12px 0;
+
+                        .related-rule-list {
+                            margin-top: 20px;
+                            margin-bottom: 40px;
+                        }
+                    }
                     .v-tabs {
                         .v-slide-group__container {
                             .v-tab {
