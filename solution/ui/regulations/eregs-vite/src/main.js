@@ -1,12 +1,10 @@
 import { createApp } from "vue";
-import { isNavigationFailure, NavigationFailureType } from 'vue-router'
+import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
 import vuetify from "./plugins/vuetify";
 
 import App from "./App.vue";
 import vueRouter from "./router";
-
-
 
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
@@ -25,7 +23,9 @@ router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     if (to.name === "subjects") {
-        document.title = pageTitle;
+        if (!to.query?.subject) {
+            document.title = pageTitle;
+        }
 
         if (!isAuthenticated && to.query?.type) {
             const { type, ...query } = to.query;
