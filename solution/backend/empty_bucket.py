@@ -32,20 +32,15 @@ def empty_bucket(bucket_name):
 
 
 def handler(event, context):
-    """
-    Lambda function handler (or main script function for GitHub Actions execution).
-    """
     stage = os.environ.get("STAGE_ENV")
     storage_bucket_name = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    cloudfront_logs_bucket_name = f"eregs-{stage}-cloudfront-logs"
 
     if not stage or not storage_bucket_name:
         print("Missing required environment variable: STAGE_ENV or AWS_STORAGE_BUCKET_NAME")
         return {"message": "Error: Missing required environment variables."}
 
-    # Explicit bucket names for clarity
-    cloudfront_logs_bucket_name = f"eregs-{stage}-cloudfront-logs"
-
-    # Directly empty the non-versioned storage bucket
+    # Empty file storage bucket
     empty_bucket(storage_bucket_name)
 
     # Empty the versioned CloudFront logs bucket and delete all versions
