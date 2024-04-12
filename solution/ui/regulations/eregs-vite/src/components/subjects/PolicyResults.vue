@@ -268,5 +268,3 @@ const resultLinkClasses = (doc) => ({
         </ResultsItem>
     </div>
 </template>
-
-<style></style>
