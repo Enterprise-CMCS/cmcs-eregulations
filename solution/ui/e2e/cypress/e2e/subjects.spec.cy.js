@@ -192,7 +192,7 @@ describe("Find by Subjects", () => {
             "1 - 2 of 2 documents"
         );
         cy.get("input#main-content").type("test", { force: true });
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.get(".subject__heading").should("not.exist");
@@ -211,7 +211,7 @@ describe("Find by Subjects", () => {
             "1 - 2 of 2 results for test"
         );
         cy.get("input#main-content").clear();
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.get(".doc-type__toggle fieldset > div")
@@ -299,7 +299,7 @@ describe("Find by Subjects", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=2&q=test");
@@ -396,7 +396,7 @@ describe("Find by Subjects", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.url().should(

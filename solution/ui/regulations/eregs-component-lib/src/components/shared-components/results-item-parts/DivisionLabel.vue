@@ -11,7 +11,7 @@ defineProps({
     <span
         class="result__context--division result__context--division--bar"
         :title="`${division?.group?.name} — ${division?.name}`"
-        data-cy="division-label"
+        data-testid="division-label"
         >Uploaded by {{ division?.group?.abbreviation }} —
         {{ division?.abbreviation }}</span
     >

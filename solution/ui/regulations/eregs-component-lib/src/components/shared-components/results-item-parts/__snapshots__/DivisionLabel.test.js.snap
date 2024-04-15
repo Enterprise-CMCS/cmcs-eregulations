@@ -6,7 +6,7 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
     <div>
       <span
         class="result__context--division result__context--division--bar"
-        data-cy="division-label"
+        data-testid="division-label"
         title="Mock Group 1 — Mock Division 1"
       >
         Uploaded by MG1 — MD1
@@ -16,7 +16,7 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
   "container": <div>
     <span
       class="result__context--division result__context--division--bar"
-      data-cy="division-label"
+      data-testid="division-label"
       title="Mock Group 1 — Mock Division 1"
     >
       Uploaded by MG1 — MD1

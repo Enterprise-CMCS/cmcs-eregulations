@@ -52,7 +52,7 @@ describe("Search flow", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.url().should("include", "/search?q=test+search");
@@ -65,7 +65,7 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
 
-        cy.get('[data-cy="clear-search-form"]').click({
+        cy.get('[data-testid="clear-search-form"]').click({
             force: true,
         });
 
@@ -110,7 +110,7 @@ describe("Search flow", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get('[data-cy="search-form-submit"]').click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
 

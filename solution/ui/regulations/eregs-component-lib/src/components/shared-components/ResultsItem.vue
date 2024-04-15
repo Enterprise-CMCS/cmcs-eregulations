@@ -3,7 +3,7 @@
 <template>
     <div class="result">
         <slot name="actions"></slot>
-        <div class="category-labels" data-cy="results-item-categories">
+        <div class="category-labels" data-testid="results-item-categories">
             <slot name="labels"></slot>
         </div>
         <div class="result__context">

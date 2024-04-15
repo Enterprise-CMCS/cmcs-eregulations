@@ -15,22 +15,22 @@
             single-line
             @update:modelValue="updateSearchValue"
         >
-            <template v-slot:clear>
+            <template #clear>
                 <v-icon
-                    icon="mdi-close"
-                    @click="clearForm"
-                    tabindex="-1"
                     aria-label="Clear search form"
-                    data-cy="clear-search-form"
+                    icon="mdi-close"
+                    data-testid="clear-search-form"
+                    tabindex="-1"
+                    @click="clearForm"
                 />
             </template>
-            <template v-slot:append-inner>
+            <template #append-inner>
                 <v-icon
                     icon="mdi-magnify"
+                    :aria-label="`Search for ${searchInputValue}`"
+                    data-testid="search-form-submit"
                     @click="submitForm"
                     @keydown.enter.space.prevent="submitForm"
-                    :aria-label="`Search for ${searchInputValue}`"
-                    data-cy="search-form-submit"
                 />
             </template>
         </v-text-field>
