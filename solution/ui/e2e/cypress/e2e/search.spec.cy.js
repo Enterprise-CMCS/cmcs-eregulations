@@ -4,6 +4,12 @@ const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
 
 describe("Search flow", () => {
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        });
+    });
+
     it("has a working search box on the homepage on desktop", () => {
         cy.clearIndexedDB();
         cy.viewport("macbook-15");

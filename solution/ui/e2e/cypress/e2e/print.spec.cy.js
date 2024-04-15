@@ -4,6 +4,10 @@ describe("Print Styles", () => {
 
     beforeEach(() => {
         cy.clearIndexedDB();
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        }).as("headers");
+
         cy.setCssMedia("screen");
     });
 

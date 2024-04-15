@@ -1,6 +1,9 @@
 describe("Error page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        });
     });
 
     it("loads as a 404 page when server returns a 404 error", () => {

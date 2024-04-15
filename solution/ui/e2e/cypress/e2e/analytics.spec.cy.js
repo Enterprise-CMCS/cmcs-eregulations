@@ -4,6 +4,13 @@ const readerUsername = Cypress.env("READER_USERNAME");
 const readerPassword = Cypress.env("READER_PASSWORD");
 
 describe("Analytics", () => {
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.env("DEPLOYING");
+        }).as("headers");
+    });
+
     it("does not render Google Analytics script tag if logged in as an admin", () => {
         cy.viewport("macbook-15");
 

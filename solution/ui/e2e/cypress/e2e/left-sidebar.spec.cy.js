@@ -5,6 +5,14 @@ describe("Left sidebar", () => {
     const destination = "/42/431/";
     const testId = "Subpart-A";
 
+    beforeEach(() => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.env("DEPLOYING");
+        });
+
+    })
+
     it("opens the section when the left nav subsection is clicked", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);

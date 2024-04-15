@@ -1,6 +1,9 @@
 describe("Custom Request Headers", () => {
     beforeEach(() => {
-        cy.intercept("/**").as("headers");
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] =
+                Cypress.env("DEPLOYING");
+        }).as("headers");
     });
 
     it("has custom testing header x-automated-test added to every request", () => {

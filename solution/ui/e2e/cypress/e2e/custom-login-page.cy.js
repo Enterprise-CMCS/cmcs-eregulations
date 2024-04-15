@@ -1,6 +1,9 @@
 describe("custom login page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        });
     });
 
     it("has a flash banner at the top with a link to a feedback survey", () => {
