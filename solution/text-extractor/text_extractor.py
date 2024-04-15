@@ -18,6 +18,7 @@ from .utils import (
     get_config,
     lambda_failure,
     lambda_success,
+    configure_authorization,
 )
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
@@ -46,9 +47,16 @@ def handler(event: dict, context: dict) -> dict:
         resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
-        token = config["token"]
     except KeyError:
         return lambda_failure(400, "You must include 'id', 'uri', 'token', and 'post_url' in the request body.")
+
+    # Configure authorization, if desired
+    authorization = None
+    if "auth" in config:
+        try:
+            authorization = configure_authorization(config["auth"])
+        except Exception as e:
+            return lambda_failure(400, f"Failed to configure authorization: {str(e)}")
 
     # Retrieve the file
     logger.info("Starting file retrieval.")
@@ -86,12 +94,11 @@ def handler(event: dict, context: dict) -> dict:
 
     # Send result to eRegs
     logger.info("Sending extracted text to POST URL.")
-    resp = ''
-    header = {'Authorization': f'Bearer {token}'}
+    headers = {'Authorization': authorization} if authorization else {}
     try:
         resp = requests.post(
             post_url,
-            headers=header,
+            headers=headers,
             json={
                 "id": resource_id,
                 "text": text,
@@ -105,4 +112,4 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_failure(500, f"POST unexpectedly failed: {str(e)}")
 
     # Return success code
-    return lambda_success(f"Function exited normally. {resp.content}")
+    return lambda_success("Function exited normally.")
