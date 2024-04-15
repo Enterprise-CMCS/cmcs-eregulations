@@ -115,9 +115,6 @@ Cypress.Commands.add("clearIndexedDB", async () => {
     );
 });
 
-// Removes any trailing slashes from the baseUrl, if they exist.
-Cypress.config("baseUrl", Cypress.config().baseUrl.replace(/\/$/, ""));
-
 // Adds basic auth to all requests, except for cy.request calls.
 beforeEach(() => {
     cy.intercept("/**", (req) => {
@@ -129,7 +126,7 @@ beforeEach(() => {
 });
 
 // Adds basic auth to cy.request calls.
-Cypress.Commands.overwrite('request', (originalRequest, options) => {
+Cypress.Commands.overwrite("request", (originalRequest, options) => {
     options.auth = {
         username: Cypress.env("TEST_USERNAME"),
         password: Cypress.env("TEST_PASSWORD")

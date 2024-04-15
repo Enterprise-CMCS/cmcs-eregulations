@@ -95,7 +95,9 @@ jobs:
           serverless deploy --stage ${{ matrix.environment }} | tee output.log
           serverless invoke --function reg_core_migrate --stage ${{ matrix.environment }}
           serverless invoke --function create_su --stage ${{ matrix.environment }}
-          echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
+          url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)
+          url=${url%/}
+          echo "url=$(echo $url)" >> $GITHUB_OUTPUT
           popd
       # vite needs the .env file in order to know the URL of the api.
       - name: Make envfile

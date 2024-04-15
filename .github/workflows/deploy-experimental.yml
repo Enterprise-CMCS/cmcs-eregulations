@@ -160,7 +160,9 @@ jobs:
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
-          echo "url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)" >> $GITHUB_OUTPUT
+          url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)
+          url=${url%/}
+          echo "url=$(echo $url)" >> $GITHUB_OUTPUT
           popd
   test-python:
     needs: [deploy-django]
