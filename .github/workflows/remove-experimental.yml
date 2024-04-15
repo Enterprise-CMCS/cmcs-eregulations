@@ -14,7 +14,7 @@ jobs:
   remove:
     environment:
       name: "dev"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       # gettign PR is trivial here because the only tirgger is closing a PR
       - name: Echo PR#
