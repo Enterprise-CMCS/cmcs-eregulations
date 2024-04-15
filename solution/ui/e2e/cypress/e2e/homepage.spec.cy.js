@@ -3,9 +3,6 @@ const mainContentId = "#main-content";
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-        });
         cy.intercept("**/v3/resources/categories", {
             fixture: "categories.json",
         }).as("categories");

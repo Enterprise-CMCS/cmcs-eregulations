@@ -7,10 +7,6 @@ const readerUsername = Cypress.env("READER_USERNAME");
 const readerPassword = Cypress.env("READER_PASSWORD");
 
 const _beforeEach = () => {
-    cy.intercept("/**", (req) => {
-        req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-    });
-
     cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
 
     cy.intercept(`**/v3/title/${TITLE_42}/parts`, {

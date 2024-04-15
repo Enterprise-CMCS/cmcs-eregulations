@@ -4,9 +4,6 @@ const password = Cypress.env("TEST_PASSWORD");
 describe("Part View", () => {
     beforeEach(() => {
         cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-        }).as("headers");
     });
 
     it("loads part 433", () => {

@@ -122,6 +122,7 @@ beforeEach(() => {
         const password = Cypress.env("TEST_PASSWORD");
         const token = "Basic " + btoa(username + ":" + password);
         req.headers["Authorization"] = token;
+        req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
     });
 });
 

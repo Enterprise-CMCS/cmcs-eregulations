@@ -1,10 +1,6 @@
 describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-        });
-
         cy.intercept("**/v3/file-manager/subjects", {
             fixture: "subjects.json",
         }).as("subjects");
