@@ -5,7 +5,8 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test": "npm run cypress:run"
+    "test": "npm run cypress:run",
+    "test-local": "CYPRESS_TEST_ENV=local cypress open"
   },
   "license": "ISC",
   "devDependencies": {
