@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from common.api import OpenApiQueryParameter
-from common.functions import establish_client, get_tokens_for_user
+from common.functions import establish_client
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, Division, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
@@ -147,7 +147,6 @@ class InvokeTextExtractorViewset(APIView):
         description="Post to the lambda function",
     )
     def get(self, request, *args, **kwargs):
-        token = get_tokens_for_user(request.user)['access']
         uid = kwargs.get("content_id")
         fr_doc_id = kwargs.get("fr_doc_id")
 
@@ -184,7 +183,11 @@ class InvokeTextExtractorViewset(APIView):
             'uri': index.extract_url,
             'ignore_robots_txt': index.ignore_robots_txt,
             'post_url': post_url,
-            'token': token,
+            'auth': {
+                "type": "basic-env",
+                "username": "HTTP_AUTH_USER",
+                "password": "HTTP_AUTH_PASSWORD",
+            },
         }
         if index.file:
             try:
