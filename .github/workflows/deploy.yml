@@ -168,3 +168,4 @@ jobs:
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
         env:
           CYPRESS_DEPLOYING: true
+          CYPRESS_TEST_ENV: ${{ matrix.environment }}
