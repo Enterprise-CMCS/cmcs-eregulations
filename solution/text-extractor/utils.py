@@ -56,7 +56,7 @@ def configure_authorization(auth: dict) -> str:
             (os.environ[auth["username"]], os.environ[auth["password"]])
         )
         credentials = f"{username}:{password}"
-        token = base64.b64encode(credentials.encode("utf-8"))
+        token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
         return f"Basic {token}"
 
     raise Exception(f"'{auth_type}' is an unsupported authorization type")

@@ -86,7 +86,7 @@ class UtilsTestCase(unittest.TestCase):
         username = auth["username"]
         password = auth["password"]
         creds = f"{username}:{password}"
-        token = base64.b64encode(creds.encode("utf-8"))
+        token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
         authorization = f"Basic {token}"
 
         self.assertEqual(configure_authorization(auth), authorization)
@@ -104,7 +104,7 @@ class UtilsTestCase(unittest.TestCase):
         os.environ["PASSWORD"] = password
 
         creds = f"{username}:{password}"
-        token = base64.b64encode(creds.encode("utf-8"))
+        token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
         authorization = f"Basic {token}"
 
         self.assertEqual(configure_authorization(auth), authorization)
