@@ -20,6 +20,7 @@ from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, Division, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
 from resources.views.mixins import LocationFiltererMixin
+from common.auth import SettingsAuthentication
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
@@ -123,7 +124,7 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
 
 class PostContentTextViewset(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [JWTAuthentication, SettingsAuthentication]
 
     @extend_schema(
         description="Adds text to the content of an index.",
