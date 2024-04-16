@@ -28,9 +28,8 @@ func getAuth() *network.PostAuth {
 	stageEnv := os.Getenv("STAGE_ENV")
 	if stageEnv == "" || stageEnv == "local" || stageEnv == "prod" {
 		return nil
-	} else {
-		return postAuth
 	}
+	return postAuth
 }
 
 func init() {

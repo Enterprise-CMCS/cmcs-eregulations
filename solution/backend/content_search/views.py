@@ -15,12 +15,12 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from common.api import OpenApiQueryParameter
+from common.auth import SettingsAuthentication
 from common.functions import establish_client
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, Division, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
 from resources.views.mixins import LocationFiltererMixin
-from common.auth import SettingsAuthentication
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
