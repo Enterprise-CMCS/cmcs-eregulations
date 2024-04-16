@@ -56,7 +56,7 @@ func GetExistingParts(ctx context.Context, title int) (map[string][]string, int,
 
 	log.Trace("[eregs] Beginning checking of existing parts for title ", title, " at ", u.String())
 
-	body, code, err := network.Fetch(ctx, u, true, postAuth)
+	body, code, err := network.Fetch(ctx, u, true, getAuth())
 	if err != nil {
 		return nil, code, err
 	}
