@@ -68,8 +68,6 @@ resources:
         OwnershipControls:
           Rules:
             - ObjectOwnership: BucketOwnerPreferred
-        VersioningConfiguration:
-          Status: Enabled
         AccessControl: LogDeliveryWrite
     CloudFrontLogsBucketPolicy:
       Type: "AWS::S3::BucketPolicy"
