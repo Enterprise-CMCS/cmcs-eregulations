@@ -17,11 +17,12 @@
             hover
             click
         >
-            <copy-citation
-                slot="tooltip-content"
-                hash="{{node.label | join:'-'}}"
-                formatted-citation="{{formatted_citation}}"
-            ></copy-citation>
+            <template #tooltip-content>
+                <copy-citation
+                    hash="{{node.label | join:'-'}}"
+                    formatted-citation="{{formatted_citation}}"
+                ></copy-citation>
+            </template>
         </tooltip-container>
         {{node.title}}
     </h1>

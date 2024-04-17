@@ -10,20 +10,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code House.gov 
+          US Code House.gov
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-0"
         >
-           Web Page 
+          Web Page
         </div>
         <div
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-1"
         >
-           effective Aug 2023 
+          effective Aug 2023
         </div>
+        
       </th>
     </div>
   </body>,
@@ -34,20 +36,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code House.gov 
+        US Code House.gov
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-0"
       >
-         Web Page 
+        Web Page
       </div>
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-1"
       >
-         effective Aug 2023 
+        effective Aug 2023
       </div>
+      
     </th>
   </div>,
   "debug": [Function],
@@ -85,7 +89,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -102,8 +105,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -117,20 +120,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code House.gov 
+          US Code House.gov
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-0"
         >
-           Web Page 
+          Web Page
         </div>
         <div
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-1"
-        >
-            
-        </div>
+        />
+        
       </th>
     </div>
   </body>,
@@ -141,20 +144,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code House.gov 
+        US Code House.gov
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-0"
       >
-         Web Page 
+        Web Page
       </div>
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-1"
-      >
-          
-      </div>
+      />
+      
     </th>
   </div>,
   "debug": [Function],
@@ -192,7 +195,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -209,8 +211,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -224,20 +226,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           Statute Compilation 
+          Statute Compilation
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-0"
         >
-           PDF Document 
+          PDF Document
         </div>
         <div
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-1"
         >
-           effective Aug 2023 
+          effective Aug 2023
         </div>
+        
       </th>
     </div>
   </body>,
@@ -248,20 +252,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         Statute Compilation 
+        Statute Compilation
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-0"
       >
-         PDF Document 
+        PDF Document
       </div>
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-1"
       >
-         effective Aug 2023 
+        effective Aug 2023
       </div>
+      
     </th>
   </div>,
   "debug": [Function],
@@ -299,7 +305,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -316,8 +321,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -331,20 +336,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           Statute Compilation 
+          Statute Compilation
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-0"
         >
-           PDF Document 
+          PDF Document
         </div>
         <div
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-1"
-        >
-            
-        </div>
+        />
+        
       </th>
     </div>
   </body>,
@@ -355,20 +360,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         Statute Compilation 
+        Statute Compilation
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-0"
       >
-         PDF Document 
+        PDF Document
       </div>
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-1"
-      >
-          
-      </div>
+      />
+      
     </th>
   </div>,
   "debug": [Function],
@@ -406,7 +411,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -423,8 +427,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -438,20 +442,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code Annual 
+          US Code Annual
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-0"
         >
-           PDF Document 
+          PDF Document
         </div>
         <div
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-1"
         >
-           effective Aug 2023 
+          effective Aug 2023
         </div>
+        
       </th>
     </div>
   </body>,
@@ -462,20 +468,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code Annual 
+        US Code Annual
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-0"
       >
-         PDF Document 
+        PDF Document
       </div>
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-1"
       >
-         effective Aug 2023 
+        effective Aug 2023
       </div>
+      
     </th>
   </div>,
   "debug": [Function],
@@ -513,7 +521,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -530,8 +537,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -545,20 +552,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           US Code Annual 
+          US Code Annual
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-0"
         >
-           PDF Document 
+          PDF Document
         </div>
         <div
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-1"
-        >
-            
-        </div>
+        />
+        
       </th>
     </div>
   </body>,
@@ -569,20 +576,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         US Code Annual 
+        US Code Annual
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-0"
       >
-         PDF Document 
+        PDF Document
       </div>
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-1"
-      >
-          
-      </div>
+      />
+      
     </th>
   </div>,
   "debug": [Function],
@@ -620,7 +627,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -637,8 +643,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -652,20 +658,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           SSA.gov Compilation 
+          SSA.gov Compilation
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-0"
         >
-           Web Page 
+          Web Page
         </div>
         <div
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-1"
         >
-           effective Aug 2023 
+          effective Aug 2023
         </div>
+        
       </th>
     </div>
   </body>,
@@ -676,20 +684,22 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         SSA.gov Compilation 
+        SSA.gov Compilation
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-0"
       >
-         Web Page 
+        Web Page
       </div>
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-1"
       >
-         effective Aug 2023 
+        effective Aug 2023
       </div>
+      
     </th>
   </div>,
   "debug": [Function],
@@ -727,7 +737,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -744,8 +753,8 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -759,20 +768,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-           SSA.gov Compilation 
+          SSA.gov Compilation
         </div>
+        
         <div
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-0"
         >
-           Web Page 
+          Web Page
         </div>
         <div
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-1"
-        >
-            
-        </div>
+        />
+        
       </th>
     </div>
   </body>,
@@ -783,20 +792,20 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-         SSA.gov Compilation 
+        SSA.gov Compilation
       </div>
+      
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-0"
       >
-         Web Page 
+        Web Page
       </div>
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-1"
-      >
-          
-      </div>
+      />
+      
     </th>
   </div>,
   "debug": [Function],
@@ -834,7 +843,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -851,7 +859,7 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

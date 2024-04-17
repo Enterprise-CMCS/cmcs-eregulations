@@ -18,11 +18,12 @@
             hover
             click
         >
-            <copy-citation
-                slot="tooltip-content"
-                hash="{{node.label | join:'-'}}"
-                formatted-citation="{{formatted_citation}}"
-            ></copy-citation>
+            <template #tooltip-content>
+                <copy-citation
+                    hash="{{node.label | join:'-'}}"
+                    formatted-citation="{{formatted_citation}}"
+                ></copy-citation>
+            </template>
         </tooltip-container>
         {{node.title}}
     </h2>
@@ -41,13 +42,14 @@
                 position="under"
                 click
             >
-                <gov-info-links
-                    slot="tooltip-content"
-                    title="{{cfr_title}}"
-                    part="{{node.label.0}}"
-                    section="{{node.label.1}}"
-                    api-url="{{ API_BASE }}"
-                ></gov-info-links>
+                <template #tooltip-content>
+                    <gov-info-links
+                        title="{{cfr_title}}"
+                        part="{{node.label.0}}"
+                        section="{{node.label.1}}"
+                        api-url="{{ API_BASE }}"
+                    ></gov-info-links>
+                </template>
             </tooltip-container>
         </div>
     </div>

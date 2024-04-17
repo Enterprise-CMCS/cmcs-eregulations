@@ -4,13 +4,6 @@
 
 {% block title_prefix %}{% endblock %}
 
-{% block spa_styles %}
-<link
-    href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
-    rel="stylesheet"
-/>
-{% endblock %}
-
 {% block body_class %}site-homepage--update{% endblock %}
 
 {% block pre_header %}
@@ -25,11 +18,12 @@
 <main>
     <nav id="placeholderNav"></nav>
     <left-nav-collapse contents-description="table of contents">
-        <toc-container
-            slot="nav-contents"
-            api-url="{{ API_BASE }}"
-            home-url="{% url 'homepage' %}"
-        ></toc-container>
+        <template #nav-contents>
+            <toc-container
+                api-url="{{ API_BASE }}"
+                home-url="{% url 'homepage' %}"
+            ></toc-container>
+        </template>
     </left-nav-collapse>
     <div id="main-content">
         <div class="top-container">
@@ -67,7 +61,7 @@
                     <div class="resources__container">
                         <recent-resources
                             api-url={{ API_BASE }}
-                        />
+                        >
                     </div>
                     <div class="policy-materials__container">
                         <div class="policy-materials">

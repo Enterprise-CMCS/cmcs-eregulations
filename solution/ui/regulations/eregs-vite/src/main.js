@@ -1,47 +1,39 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-
-const { isNavigationFailure, NavigationFailureType } = VueRouter;
-
+import { createApp } from "vue";
+import { isNavigationFailure, NavigationFailureType } from "vue-router";
+import Clickaway from "directives/clickaway";
 import vuetify from "./plugins/vuetify";
+
 import App from "./App.vue";
 import vueRouter from "./router";
 
-import Clickaway from "./directives/clickaway";
-
 const mountEl = document.querySelector("#vite-app");
-Vue.config.devtools = true;
 const { customUrl, host } = mountEl.dataset;
 
 let { isAuthenticated } = mountEl.dataset;
 isAuthenticated = isAuthenticated === "True";
 
-Vue.directive("clickaway", Clickaway);
+const app = createApp(App, { ...mountEl.dataset });
+app.use(vuetify);
+
+app.directive("clickaway", Clickaway);
 
 const router = vueRouter({ customUrl, host });
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     if (to.name === "subjects") {
-        if ( window.event?.type === "popstate" ) {
+        if (!to.query?.subject) {
             document.title = pageTitle;
-        } else if (_from.name) {
-            if (to.params?.subjectName) {
-                // set document title here with available information
-                document.title = `${to.params.subjectName} | ${pageTitle}`;
-            } else {
-                document.title = pageTitle;
-            }
         }
 
         if (!isAuthenticated && to.query?.type) {
             const { type, ...query } = to.query;
-            next({ ...to, query });
+            return { name: "subjects", query };
         }
     }
 
-    next();
+    return true;
 });
 
 // Silence duplicate navigation errors
@@ -63,8 +55,5 @@ router.push = function push(location, onResolve, onReject) {
     });
 };
 
-new Vue({
-    vuetify,
-    router,
-    render: (h) => h(App, { props: { ...mountEl.dataset } }),
-}).$mount("#vite-app");
+app.use(router);
+app.mount("#vite-app");

@@ -7,84 +7,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
       <ul
         class="acts__list"
       >
+        
         <li
           class="acts-list__item"
         >
           <h4
             class="acts-item__heading acts-item__heading--active"
           >
-             Social Security Act 
+            Social Security Act
           </h4>
           <ul
             class="titles__list"
           >
+            
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XI-11"
                   to="[object Object]"
                 >
-                   Title XI 
-                </routerlink-stub>
+                   Title XI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XVI-16"
                   to="[object Object]"
                 >
-                   Title XVI 
-                </routerlink-stub>
+                   Title XVI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
-                   Title XVIII 
-                </routerlink-stub>
+                   Title XVIII
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XIX-19"
                   to="[object Object]"
                 >
-                   Title XIX 
-                </routerlink-stub>
+                   Title XIX
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--active"
                   data-testid="ssa-XXI-21"
                   to="[object Object]"
                 >
-                   Title XXI 
-                </routerlink-stub>
+                   Title XXI
+                </routerlink>
               </h4>
             </li>
+            
           </ul>
         </li>
+        
       </ul>
     </div>
   </body>,
@@ -92,84 +96,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
     <ul
       class="acts__list"
     >
+      
       <li
         class="acts-list__item"
       >
         <h4
           class="acts-item__heading acts-item__heading--active"
         >
-           Social Security Act 
+          Social Security Act
         </h4>
         <ul
           class="titles__list"
         >
+          
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XI-11"
                 to="[object Object]"
               >
-                 Title XI 
-              </routerlink-stub>
+                 Title XI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XVI-16"
                 to="[object Object]"
               >
-                 Title XVI 
-              </routerlink-stub>
+                 Title XVI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XVIII-18"
                 to="[object Object]"
               >
-                 Title XVIII 
-              </routerlink-stub>
+                 Title XVIII
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XIX-19"
                 to="[object Object]"
               >
-                 Title XIX 
-              </routerlink-stub>
+                 Title XIX
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--active"
                 data-testid="ssa-XXI-21"
                 to="[object Object]"
               >
-                 Title XXI 
-              </routerlink-stub>
+                 Title XXI
+              </routerlink>
             </h4>
           </li>
+          
         </ul>
       </li>
+      
     </ul>
   </div>,
   "debug": [Function],
@@ -207,7 +215,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -224,8 +231,8 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -236,84 +243,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
       <ul
         class="acts__list"
       >
+        
         <li
           class="acts-list__item"
         >
           <h4
             class="acts-item__heading acts-item__heading--active"
           >
-             Social Security Act 
+            Social Security Act
           </h4>
           <ul
             class="titles__list"
           >
+            
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--loading"
                   data-testid="ssa-XI-11"
                   to="[object Object]"
                 >
-                   Title XI 
-                </routerlink-stub>
+                   Title XI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--loading"
                   data-testid="ssa-XVI-16"
                   to="[object Object]"
                 >
-                   Title XVI 
-                </routerlink-stub>
+                   Title XVI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--loading"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
-                   Title XVIII 
-                </routerlink-stub>
+                   Title XVIII
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--active titles-list__link--loading"
                   data-testid="ssa-XIX-19"
                   to="[object Object]"
                 >
-                   Title XIX 
-                </routerlink-stub>
+                   Title XIX
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--loading"
                   data-testid="ssa-XXI-21"
                   to="[object Object]"
                 >
-                   Title XXI 
-                </routerlink-stub>
+                   Title XXI
+                </routerlink>
               </h4>
             </li>
+            
           </ul>
         </li>
+        
       </ul>
     </div>
   </body>,
@@ -321,84 +332,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
     <ul
       class="acts__list"
     >
+      
       <li
         class="acts-list__item"
       >
         <h4
           class="acts-item__heading acts-item__heading--active"
         >
-           Social Security Act 
+          Social Security Act
         </h4>
         <ul
           class="titles__list"
         >
+          
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--loading"
                 data-testid="ssa-XI-11"
                 to="[object Object]"
               >
-                 Title XI 
-              </routerlink-stub>
+                 Title XI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--loading"
                 data-testid="ssa-XVI-16"
                 to="[object Object]"
               >
-                 Title XVI 
-              </routerlink-stub>
+                 Title XVI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--loading"
                 data-testid="ssa-XVIII-18"
                 to="[object Object]"
               >
-                 Title XVIII 
-              </routerlink-stub>
+                 Title XVIII
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--active titles-list__link--loading"
                 data-testid="ssa-XIX-19"
                 to="[object Object]"
               >
-                 Title XIX 
-              </routerlink-stub>
+                 Title XIX
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--loading"
                 data-testid="ssa-XXI-21"
                 to="[object Object]"
               >
-                 Title XXI 
-              </routerlink-stub>
+                 Title XXI
+              </routerlink>
             </h4>
           </li>
+          
         </ul>
       </li>
+      
     </ul>
   </div>,
   "debug": [Function],
@@ -436,7 +451,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -453,8 +467,8 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -465,84 +479,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
       <ul
         class="acts__list"
       >
+        
         <li
           class="acts-list__item"
         >
           <h4
             class="acts-item__heading acts-item__heading--active"
           >
-             Social Security Act 
+            Social Security Act
           </h4>
           <ul
             class="titles__list"
           >
+            
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XI-11"
                   to="[object Object]"
                 >
-                   Title XI 
-                </routerlink-stub>
+                   Title XI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XVI-16"
                   to="[object Object]"
                 >
-                   Title XVI 
-                </routerlink-stub>
+                   Title XVI
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XVIII-18"
                   to="[object Object]"
                 >
-                   Title XVIII 
-                </routerlink-stub>
+                   Title XVIII
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link titles-list__link--active"
                   data-testid="ssa-XIX-19"
                   to="[object Object]"
                 >
-                   Title XIX 
-                </routerlink-stub>
+                   Title XIX
+                </routerlink>
               </h4>
             </li>
             <li
               class="titles-list__item"
             >
               <h4>
-                <routerlink-stub
+                <routerlink
                   class="titles-list__link"
                   data-testid="ssa-XXI-21"
                   to="[object Object]"
                 >
-                   Title XXI 
-                </routerlink-stub>
+                   Title XXI
+                </routerlink>
               </h4>
             </li>
+            
           </ul>
         </li>
+        
       </ul>
     </div>
   </body>,
@@ -550,84 +568,88 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
     <ul
       class="acts__list"
     >
+      
       <li
         class="acts-list__item"
       >
         <h4
           class="acts-item__heading acts-item__heading--active"
         >
-           Social Security Act 
+          Social Security Act
         </h4>
         <ul
           class="titles__list"
         >
+          
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XI-11"
                 to="[object Object]"
               >
-                 Title XI 
-              </routerlink-stub>
+                 Title XI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XVI-16"
                 to="[object Object]"
               >
-                 Title XVI 
-              </routerlink-stub>
+                 Title XVI
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XVIII-18"
                 to="[object Object]"
               >
-                 Title XVIII 
-              </routerlink-stub>
+                 Title XVIII
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link titles-list__link--active"
                 data-testid="ssa-XIX-19"
                 to="[object Object]"
               >
-                 Title XIX 
-              </routerlink-stub>
+                 Title XIX
+              </routerlink>
             </h4>
           </li>
           <li
             class="titles-list__item"
           >
             <h4>
-              <routerlink-stub
+              <routerlink
                 class="titles-list__link"
                 data-testid="ssa-XXI-21"
                 to="[object Object]"
               >
-                 Title XXI 
-              </routerlink-stub>
+                 Title XXI
+              </routerlink>
             </h4>
           </li>
+          
         </ul>
       </li>
+      
     </ul>
   </div>,
   "debug": [Function],
@@ -665,7 +687,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -682,7 +703,7 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

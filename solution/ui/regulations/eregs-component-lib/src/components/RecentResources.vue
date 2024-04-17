@@ -32,7 +32,7 @@ export default {
 
     data() {
         return {
-            tab: null,
+            tab: 0,
             categories: null,
             categoryNames: null,
         };
@@ -46,12 +46,14 @@ export default {
 
 <template>
     <div>
-        <v-tabs v-model="tab" slider-size="4" grow>
-            <v-tab class="content-tabs"> Recent Subregulatory Guidance </v-tab>
-            <v-tab class="content-tabs"> Recent Rules </v-tab>
+        <v-tabs grow v-model="tab">
+            <v-tab class="content-tabs" tabindex="0">
+                Recent Subregulatory Guidance
+            </v-tab>
+            <v-tab class="content-tabs" tabindex="0"> Recent Rules </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab">
-            <v-tab-item>
+        <v-window v-model="tab">
+            <v-window-item>
                 <p class="recent-rules-descriptive-text">
                     Includes 42 CFR 400, 430-460, 600, and 45 CFR 95
                 </p>
@@ -60,8 +62,8 @@ export default {
                     :categories="categories"
                     type="supplemental"
                 ></RecentChangesContainer>
-            </v-tab-item>
-            <v-tab-item>
+            </v-window-item>
+            <v-window-item>
                 <p class="recent-rules-descriptive-text">
                     Includes 42 CFR 400, 430-460, 600, and 45 CFR 95
                 </p>
@@ -69,7 +71,7 @@ export default {
                     :api-url="apiUrl"
                     type="rules"
                 ></RecentChangesContainer>
-            </v-tab-item>
-        </v-tabs-items>
+            </v-window-item>
+        </v-window>
     </div>
 </template>

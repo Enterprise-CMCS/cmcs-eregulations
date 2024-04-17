@@ -5,6 +5,7 @@
     },
     "extends": [
         "plugin:vue/recommended",
+        "plugin:vuetify/base",
         "airbnb-base",
         "prettier",
         "plugin:storybook/recommended"
@@ -13,7 +14,10 @@
         "ecmaVersion": 11,
         "sourceType": "module"
     },
-    "plugins": ["vue"],
+    "plugins": [
+        "vue",
+        "vuetify"
+    ],
     "rules": {
         "eqeqeq": "off",
         "import/no-unresolved": "off",

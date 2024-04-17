@@ -115,7 +115,6 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -132,8 +131,8 @@ exports[`Search Error Message > Renders a message with a search query 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -152,7 +151,7 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
             class="error__msg--apology"
           >
             Sorry, we’re unable to display results
-            <!---->
+            <!--v-if-->
              right now. 
           </span>
           <span
@@ -184,7 +183,7 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
           class="error__msg--apology"
         >
           Sorry, we’re unable to display results
-          <!---->
+          <!--v-if-->
            right now. 
         </span>
         <span
@@ -238,7 +237,6 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -255,8 +253,8 @@ exports[`Search Error Message > Renders a message without a search query 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;
 
@@ -271,7 +269,7 @@ exports[`Search Error Message > Renders a message without an apology 1`] = `
           class="error__msg"
           data-testid="error__msg"
         >
-          <!---->
+          <!--v-if-->
           <span
             class="error-msg__common"
           >
@@ -297,7 +295,7 @@ exports[`Search Error Message > Renders a message without an apology 1`] = `
         class="error__msg"
         data-testid="error__msg"
       >
-        <!---->
+        <!--v-if-->
         <span
           class="error-msg__common"
         >
@@ -349,7 +347,6 @@ exports[`Search Error Message > Renders a message without an apology 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -366,7 +363,7 @@ exports[`Search Error Message > Renders a message without an apology 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

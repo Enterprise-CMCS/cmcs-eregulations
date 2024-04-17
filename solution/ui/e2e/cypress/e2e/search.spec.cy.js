@@ -52,10 +52,10 @@ describe("Search flow", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should("include", "/search?q=test%20search");
+        cy.url().should("include", "/search?q=test+search");
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
         );
@@ -65,7 +65,7 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
 
-        cy.get(".search-field .v-input__icon--clear button").click({
+        cy.get('[data-testid="clear-search-form"]').click({
             force: true,
         });
 
@@ -110,7 +110,7 @@ describe("Search flow", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
 
@@ -189,13 +189,9 @@ describe("Search flow", () => {
             "We're unable to display results for this query right now"
         );
 
-        cy.get(".reg-results-content .error__msg").should(
-            "not.exist"
-        );
+        cy.get(".reg-results-content .error__msg").should("not.exist");
 
-        cy.get(
-            ".resources-results-content .error__msg"
-        ).should(
+        cy.get(".resources-results-content .error__msg").should(
             "have.text",
             "Please try a different query, try again later, or let us know."
         );
@@ -227,13 +223,9 @@ describe("Search flow", () => {
             "We're unable to display results for this query right now"
         );
 
-        cy.get(".resources-results-content .error__msg").should(
-            "not.exist"
-        );
+        cy.get(".resources-results-content .error__msg").should("not.exist");
 
-        cy.get(
-            ".reg-results-content .error__msg"
-        ).should(
+        cy.get(".reg-results-content .error__msg").should(
             "have.text",
             "Please try a different query, try again later, or let us know."
         );

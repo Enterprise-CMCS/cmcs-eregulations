@@ -119,7 +119,7 @@ describe("Find by Subjects", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", " Managed Care ")
+            .should("have.text", "Managed Care")
             .click({ force: true });
         cy.url().should("include", "/subjects?subjects=63");
         cy.get(".subject__heading")
@@ -157,7 +157,7 @@ describe("Find by Subjects", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", " Managed Care ")
+            .should("have.text", "Managed Care")
             .click({ force: true });
         cy.url().should("include", "/subjects?subjects=63");
         cy.get(".subject__heading")
@@ -180,7 +180,7 @@ describe("Find by Subjects", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
-            .should("have.text", " Access to Services ")
+            .should("have.text", "Access to Services")
             .click({ force: true });
         cy.url().should("include", "/subjects?subjects=3");
         cy.get(".subject__heading")
@@ -192,7 +192,7 @@ describe("Find by Subjects", () => {
             "1 - 2 of 2 documents"
         );
         cy.get("input#main-content").type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.get(".subject__heading").should("not.exist");
@@ -211,7 +211,7 @@ describe("Find by Subjects", () => {
             "1 - 2 of 2 results for test"
         );
         cy.get("input#main-content").clear();
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.get(".doc-type__toggle fieldset > div")
@@ -299,7 +299,7 @@ describe("Find by Subjects", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=2&q=test");
@@ -337,12 +337,12 @@ describe("Find by Subjects", () => {
             .should("include.text", "Download MSG");
         cy.get(".doc-type__label")
             .eq(0)
-            .should("include.text", " Public ")
+            .should("include.text", " Public")
             .find("i")
             .should("have.class", "fa-users");
         cy.get(".doc-type__label")
             .eq(1)
-            .should("include.text", " Internal ")
+            .should("include.text", " Internal")
             .find("i")
             .should("have.class", "fa-key");
 
@@ -396,25 +396,25 @@ describe("Find by Subjects", () => {
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
-        cy.get(".search-field .v-input__icon--append button").click({
+        cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
         cy.url().should(
             "include",
-            "/subjects?type=internal&subjects=3&q=test%20search"
+            "/subjects?type=internal&subjects=3&q=test+search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
         );
         cy.get(".document__subjects a")
             .eq(0)
-            .should("have.text", " Access to Services ");
+            .should("have.text", "Access to Services");
         cy.get(".document__subjects a")
             .eq(1)
-            .should("have.text", " Adult Day Health ");
+            .should("have.text", "Adult Day Health");
         cy.get(".document__subjects a")
             .eq(2)
-            .should("have.text", " Ambulatory Prenatal Care ");
+            .should("have.text", "Ambulatory Prenatal Care");
         cy.get(`a[data-testid=add-subject-chip-4]`)
             .should("have.attr", "title")
             .and("include", "Adult Day Health");

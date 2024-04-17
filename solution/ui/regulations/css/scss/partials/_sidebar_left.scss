@@ -82,6 +82,7 @@ aside.left-sidebar {
     }
 
     .subpart-range {
+        margin-left: 5px;
         font-size: $font-size-sm;
     }
 
@@ -281,7 +282,7 @@ aside.left-sidebar {
 
         img {
             height: $base-font-size;
-            padding-right: 5px;
+            padding-right: 9px;
             display: inline-block;
             vertical-align: middle;
             line-height: $font-size-md;

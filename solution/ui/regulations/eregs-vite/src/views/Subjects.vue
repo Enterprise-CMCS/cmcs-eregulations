@@ -1,6 +1,6 @@
 <script setup>
 import { provide, reactive, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router";
 
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
@@ -24,6 +24,7 @@ import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import JumpTo from "@/components/JumpTo.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
@@ -169,7 +170,7 @@ const getDocList = async (requestParams = "") => {
     policyDocList.value.error = false;
 
     try {
-         const contentList = await getCombinedContent({
+        const contentList = await getCombinedContent({
             apiUrl: props.apiUrl,
             cacheResponse: false,
             requestParams,
@@ -244,6 +245,14 @@ const policyDocSubjects = ref({
     loading: true,
 });
 
+const setDocumentTitle = (subjectId, subjectList) => {
+    const subjectToSelect = subjectList.filter(
+        (subjectObj) => subjectObj.id.toString() === subjectId
+    )[0];
+    const subjName = getSubjectName(subjectToSelect);
+    document.title = `${subjName} | ${document.title}`;
+};
+
 // called on load
 const getDocSubjects = async () => {
     try {
@@ -257,6 +266,14 @@ const getDocSubjects = async () => {
         console.error(error);
     } finally {
         policyDocSubjects.value.loading = false;
+
+        // set title if needed
+        if (policyDocSubjects.value.results.length && $route.query.subjects) {
+            setDocumentTitle(
+                $route.query.subjects[0],
+                policyDocSubjects.value.results
+            );
+        }
 
         // if there's a $route, call addSelectedParams
         if (!allDocTypesOnly($route.query)) {
@@ -310,6 +327,12 @@ watch(
 watch(
     () => $route.query,
     async (newQueryParams) => {
+        // set title on subject selection
+        const { subjects } = newQueryParams;
+        if (subjects) {
+            setDocumentTitle(subjects[0], policyDocSubjects.value.results);
+        }
+
         // wipe everything clean to start
         clearSelectedParams();
         clearSearchQuery();
@@ -426,7 +449,10 @@ getDocSubjects();
                         <template v-else-if="policyDocList.error">
                             <div class="doc__list">
                                 <h2
-                                    v-if="!selectedSubjectParts.length || searchQuery"
+                                    v-if="
+                                        !selectedSubjectParts.length ||
+                                        searchQuery
+                                    "
                                     class="search-results__heading"
                                 >
                                     Search Results

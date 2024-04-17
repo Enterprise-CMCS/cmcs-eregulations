@@ -9,7 +9,7 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
         data-testid="add-subject-chip-2"
         to="[object Object]"
       >
-         Subject Name 
+        Subject Name
       </router-link>
     </div>
   </body>,
@@ -19,7 +19,7 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
       data-testid="add-subject-chip-2"
       to="[object Object]"
     >
-       Subject Name 
+      Subject Name
     </router-link>
   </div>,
   "debug": [Function],
@@ -57,7 +57,6 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -74,7 +73,7 @@ exports[`Subject Chip > Renders a Subject Chip 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

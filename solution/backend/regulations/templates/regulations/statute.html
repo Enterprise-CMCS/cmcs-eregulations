@@ -4,9 +4,8 @@
 
 {% block title_prefix %}Statute Reference | {% endblock %}
 
-{% block spa_styles %}
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static '/vite/index.css' %}" />
+{% block outside_vue %}
+    {{ site_config|json_script:"site_config" }}
 {% endblock %}
 
 {% block blocking_modal %}{% endblock %}
@@ -18,7 +17,6 @@
 {% endblock %}
 
 {% block body %}
-{{ site_config|json_script:"site_config" }}
 <div
     id="vite-app"
     data-api-url="{{ API_BASE }}"

@@ -48,7 +48,7 @@ watch(titles, (newArr) => {
 });
 
 // tab state, etc
-const selectedTitle = ref(null);
+const selectedTitle = ref(0);
 
 // On load
 getTitlesArray();
@@ -56,20 +56,19 @@ getTitlesArray();
 
 <template>
     <div class="toc__container">
-        <v-tabs v-model="selectedTitle" slider-size="5">
-            <v-tab v-for="(title, i) in titles" :key="i">
+        <v-tabs v-model="selectedTitle">
+            <v-tab v-for="(title, i) in titles" :key="i" tabindex="0">
                 {{ title }}
             </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="selectedTitle" dark>
-            <v-tab-item v-for="(title, i) in titles" :key="i">
+        <v-window v-model="selectedTitle" dark>
+            <v-window-item v-for="(title, i) in titles" :key="i">
                 <template v-if="TOCs[i]">
                     <Toc :structure="TOCs[i]" />
                 </template>
-            </v-tab-item>
-        </v-tabs-items>
+            </v-window-item>
+        </v-window>
     </div>
 </template>
 
-<style>
-</style>
+<style></style>
