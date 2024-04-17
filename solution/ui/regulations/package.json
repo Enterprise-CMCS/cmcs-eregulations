@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "@cmsgov/design-system": "^2.5.0",
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@vitejs/plugin-vue": "^4.5.0",
     "@vue/test-utils": "^2.4.5",
     "flush-promises": "^1.0.2",

@@ -146,6 +146,8 @@
 
                 @media (max-width: $eds-xs-max) {
                     position: absolute;
+                    height: unset;
+                    width: unset;
                     top: unset;
                     right: unset;
                     left: 0;
