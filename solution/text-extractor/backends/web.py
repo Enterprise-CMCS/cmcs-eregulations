@@ -73,7 +73,7 @@ class WebBackend(FileBackend):
             if resp.status_code == requests.codes.OK:
                 return resp.content
             elif "Retry-After" in resp.headers:
-                retry = resp.headers["Retry-After"]
+                retry = int(resp.headers["Retry-After"])
                 logger.warning("Received a %i response with a 'Retry-After' of %i seconds.", resp.status_code, retry)
                 time.sleep(retry)
                 continue

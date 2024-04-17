@@ -24,6 +24,14 @@ var postAuth = &network.PostAuth{
 	Password: os.Getenv("EREGS_PASSWORD"),
 }
 
+func getAuth() *network.PostAuth {
+	stageEnv := os.Getenv("STAGE_ENV")
+	if stageEnv == "" || stageEnv == "local" || stageEnv == "prod" {
+		return nil
+	}
+	return postAuth
+}
+
 func init() {
 	BaseURL = os.Getenv("EREGS_API_URL_V3")
 	if BaseURL == "" {

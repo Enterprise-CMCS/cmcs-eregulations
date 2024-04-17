@@ -114,3 +114,28 @@ Cypress.Commands.add("clearIndexedDB", async () => {
         )
     );
 });
+
+// Adds basic auth to all requests, except for cy.request calls.
+beforeEach(() => {
+    cy.intercept("/**", (req) => {
+        const env = Cypress.env("TEST_ENV");
+        if(env !== "local" && env !== "prod") {
+            const username = Cypress.env("TEST_USERNAME");
+            const password = Cypress.env("TEST_PASSWORD");
+            const token = "Basic " + btoa(username + ":" + password);
+            req.headers["Authorization"] = token;
+        }
+    });
+});
+
+// Adds basic auth to cy.request calls.
+Cypress.Commands.overwrite("request", (originalRequest, options) => {
+    const env = Cypress.env("TEST_ENV");
+    if(env !== "local" && env !== "prod") {
+        options.auth = {
+            username: Cypress.env("TEST_USERNAME"),
+            password: Cypress.env("TEST_PASSWORD")
+        };
+    }
+    return originalRequest(options);
+});

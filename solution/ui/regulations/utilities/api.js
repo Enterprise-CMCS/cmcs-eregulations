@@ -30,27 +30,6 @@ localforage.config({
     storeName: "eregs_django", // Should be alphanumeric, with underscores.
 });
 
-let token;
-let decodedIdToken;
-const authHeader = (tok) => ({
-    Authorization: `Bearer ${tok}`,
-    "Content-Type": "application/json",
-});
-
-function setIdToken(encId) {
-    token = encId;
-    console.log("token is: ", token);
-}
-
-function getDecodedIdToken() {
-    return decodedIdToken;
-}
-
-function forgetIdToken() {
-    token = undefined;
-    decodedIdToken = undefined;
-}
-
 function configure(obj) {
     config = { ...config, ...obj };
 }
@@ -215,7 +194,6 @@ function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
         url: `${config.apiPath}/${urlPath}`,
         options: {
             method: "GET",
-            headers: authHeader(token),
             params,
             cacheResponse,
         },
@@ -244,7 +222,6 @@ function httpApiPost(
         url: `${config.apiPath}/${urlPath}`,
         options: {
             method: "POST",
-            headers: authHeader(token),
             params,
             body: JSON.stringify(data),
         },
@@ -587,12 +564,10 @@ const throwGenericError = async () =>
 export {
     config,
     configure,
-    forgetIdToken,
     getCacheItem,
     getCacheKeys,
     getCategories,
     getCombinedContent,
-    getDecodedIdToken,
     getGovInfoLinks,
     getLastParserSuccessDate,
     getLastUpdatedDates,
@@ -610,6 +585,5 @@ export {
     getTitles,
     removeCacheItem,
     setCacheItem,
-    setIdToken,
     throwGenericError,
 };

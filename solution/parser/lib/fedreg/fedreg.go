@@ -43,7 +43,7 @@ func fetch(ctx context.Context, path string) (io.Reader, error) {
 		return nil, fmt.Errorf("failed to parse URL: %+v", err)
 	}
 
-	reader, code, err := network.Fetch(ctx, frURL, false)
+	reader, code, err := network.Fetch(ctx, frURL, false, nil)
 	if err != nil {
 		if code != -1 {
 			return nil, fmt.Errorf("fetch failed with code %d: %+v", code, err)

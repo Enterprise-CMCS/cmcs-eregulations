@@ -7,5 +7,7 @@ useDefault = true
 description = "global allow list"
 paths = [
     "solution/text-extractor/extractors/tests/fixtures",
+    "solution/text-extractor/README.md",
+    "solution/text-extractor/test_utils.py"
 ]
 

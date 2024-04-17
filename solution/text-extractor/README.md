@@ -4,7 +4,7 @@
 2. [Supported file types](#supported-file-types)
 3. [Running locally](#running-locally)
 4. [Request structure](#request-structure)
-    1. [Currently supported backends](#currently-supported-backends)
+    2. [Currently supported backends](#currently-supported-backends)
 5. [Response structure](#response-structure)
 6. [Creating a new file backend](#creating-a-new-file-backend)
 7. [Creating a new text extractor](#creating-a-new-text-extractor)
@@ -63,6 +63,10 @@ The following data structure is required:
     "backend": "s3",                         // Optional - defaults to 'web'
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt
+    // Only necessary to include if the POST endpoint uses authentication
+    "auth": {
+        // See below for configuring authentication
+    },
     // Only necessary to include if using the S3 backend
     "aws": {
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
@@ -97,6 +101,37 @@ response = client.invoke(
 ```
 
 Direct invocation is the easiest way to asynchronously run the text extractor. Otherwise, it will be required to set up a proxy Lambda function that accepts the POST request from API Gateway and asynchronously invokes this one.
+
+## Configuring authentication
+
+The text extractor supports the use of basic authentication and token authentication. For basic auth, configure your request like so:
+
+```jsonc
+"auth": {
+    "type": "basic",
+    "username": "xxxxxx",
+    "password": "xxxxxx"
+}
+```
+
+To use basic auth but retrieve the credentials from environment variables, configure like this:
+
+```jsonc
+"auth": {
+    "type": "basic-env",
+    "username": "USERNAME_ENV_VAR",
+    "password": "PASSWORD_ENV_VAR"
+}
+```
+
+To use token-based authentication, configure like this:
+
+```jsonc
+"auth": {
+    "type": "token",
+    "token": "xxxxxx"
+}
+```
 
 ## Currently supported backends
 

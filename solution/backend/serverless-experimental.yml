@@ -103,6 +103,15 @@ functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)
 
 resources:
   Resources:
+    GatewayResponse:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.WWW-Authenticate: "'Basic'"
+        ResponseType: UNAUTHORIZED
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'
+        StatusCode: '401'
     MyS3Bucket:
       Type: AWS::S3::Bucket
       Properties:

@@ -1,6 +1,8 @@
+import os
 import json
 import logging
 import unittest
+import base64
 
 from utils import (
     clean_output,
@@ -8,6 +10,7 @@ from utils import (
     lambda_failure,
     lambda_response,
     lambda_success,
+    configure_authorization,
 )
 
 logging.disable(logging.CRITICAL)
@@ -72,3 +75,52 @@ class UtilsTestCase(unittest.TestCase):
     def test_lambda_failure(self):
         output = lambda_failure(400, "Hello world")
         self.assertEqual(output["statusCode"], 400)
+
+    def test_config_auth_basic(self):
+        auth = {
+            "type": "basic",
+            "username": "abc",
+            "password": "123",
+        }
+
+        username = auth["username"]
+        password = auth["password"]
+        creds = f"{username}:{password}"
+        token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
+        authorization = f"Basic {token}"
+
+        self.assertEqual(configure_authorization(auth), authorization)
+
+    def test_config_auth_basic_env(self):
+        auth = {
+            "type": "basic-env",
+            "username": "USERNAME",
+            "password": "PASSWORD",
+        }
+
+        username = "a-username"
+        password = "a-password"
+        os.environ["USERNAME"] = username
+        os.environ["PASSWORD"] = password
+
+        creds = f"{username}:{password}"
+        token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
+        authorization = f"Basic {token}"
+
+        self.assertEqual(configure_authorization(auth), authorization)
+
+    def test_config_auth_token(self):
+        auth = {
+            "type": "token",
+            "token": "some-token",
+        }
+        authorization = f"Bearer {auth['token']}"
+        self.assertEqual(configure_authorization(auth), authorization)
+
+    def test_config_auth_bad_type(self):
+        auth = {
+            "type": "unknown",
+            "token": "some-token",
+        }
+        with self.assertRaises(Exception):
+            configure_authorization(auth)

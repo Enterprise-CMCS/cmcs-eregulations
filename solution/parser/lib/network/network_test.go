@@ -85,7 +85,7 @@ func TestFetch(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			body, code, err := Fetch(ctx, testURL, tc.JSONErrors)
+			body, code, err := Fetch(ctx, testURL, tc.JSONErrors, nil)
 
 			if err == nil && tc.ErrorExpected {
 				t.Errorf("expected error, got nil")
@@ -399,7 +399,7 @@ func TestFetchWithOptions(t *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 			defer cancel()
 
-			body, code, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions)
+			body, code, err := FetchWithOptions(ctx, testURL, false, tc.FetchOptions, nil)
 
 			if err != nil {
 				t.Errorf("received error (%+v)", err)

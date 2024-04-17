@@ -99,7 +99,7 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 }
 
 // Fetch attempts to fetch arbitrary bytes from a given URL
-func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, int, error) {
+func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool, auth *PostAuth) (io.Reader, int, error) {
 	if jsonErrors {
 		q := fetchURL.Query()
 		q.Add("json_errors", "true")
@@ -119,6 +119,10 @@ func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool) (io.Reader, 
 	}
 
 	req.Header.Set("User-Agent", "eRegs for "+os.Getenv("NAME"))
+	if auth != nil {
+		req.SetBasicAuth(auth.Username, auth.Password)
+	}
+
 	log.Trace("[network] Fetching from ", fetchPath)
 	resp, err := client.Do(req)
 	if err != nil {
@@ -168,7 +172,7 @@ func buildQuery(opts []FetchOption) string {
 }
 
 // FetchWithOptions attempts to fetch arbitrary bytes from a given URL with provided fetch options
-func FetchWithOptions(ctx context.Context, fetchURL *url.URL, jsonErrors bool, opts []FetchOption) (io.Reader, int, error) {
+func FetchWithOptions(ctx context.Context, fetchURL *url.URL, jsonErrors bool, opts []FetchOption, auth *PostAuth) (io.Reader, int, error) {
 	fetchURL.RawQuery = buildQuery(opts)
-	return Fetch(ctx, fetchURL, jsonErrors)
+	return Fetch(ctx, fetchURL, jsonErrors, auth)
 }

@@ -2,6 +2,8 @@ import json
 import logging
 import re
 import unicodedata
+import base64
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -39,3 +41,22 @@ def get_config(event: dict) -> dict:
 def clean_output(text: str) -> str:
     text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text)
     return re.sub(r"\s+", " ", text).strip()
+
+
+def configure_authorization(auth: dict) -> str:
+    auth_type = auth["type"].lower().strip()
+    if auth_type == "token":
+        token = auth["token"]
+        return f"Bearer {token}"
+
+    if auth_type in ["basic", "basic-env"]:
+        username, password = (
+            (auth["username"], auth["password"])
+            if auth_type == "basic" else
+            (os.environ[auth["username"]], os.environ[auth["password"]])
+        )
+        credentials = f"{username}:{password}"
+        token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
+        return f"Basic {token}"
+
+    raise Exception(f"'{auth_type}' is an unsupported authorization type")
