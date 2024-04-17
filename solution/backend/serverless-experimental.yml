@@ -202,7 +202,17 @@ resources:
                    Resource:
                      - "${ssm:/eregulations/textextractor-arn}"
                      - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
-
+                - Effect: Allow
+                  Action:
+                    - "s3:ListBucket"
+                    - "s3:ListBucketVersions"
+                    - "s3:ListObjectVersions"
+                    - "s3:GetBucketVersioning"
+                    - "s3:DeleteObject"
+                    - "s3:DeleteObjectVersion"
+                  Resource:
+                    - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs"
+                    - "arn:aws:s3:::eregs-${self:custom.stage}-cloudfront-logs/*"
 
 plugins:
   - serverless-wsgi
