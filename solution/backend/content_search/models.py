@@ -18,33 +18,28 @@ from resources.models import AbstractCategory, AbstractLocation, FederalRegister
 
 
 class ContentIndexQuerySet(models.QuerySet):
-    search_type = "plain"
-    cover_density = False
-    rank_filter = float(settings.BASIC_SEARCH_FILTER)
     text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
     min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
     max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
     max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
 
-    def search_configuration(self, query):
-        if query and query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES):
-            self.search_type = "phrase"
-            self.cover_density = True
-            self.rank_filter = float(settings.QUOTED_SEARCH_FILTER)
+    def is_quoted(self, query):
+        return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
 
     def get_search_query_object(self, search_query):
-        return SearchQuery(search_query, search_type=self.search_type, config='english')
+        search_type = "phrase" if self.is_quoted(search_query) else "plain"
+        return SearchQuery(search_query, search_type=search_type, config='english')
 
     def search(self, search_query):
-        self.search_configuration(search_query)
+        cover_density = self.is_quoted(search_query)
+        rank_filter = float(settings.QUOTED_SEARCH_FILTER if cover_density else settings.BASIC_SEARCH_FILTER)
         return self.annotate(rank=SearchRank(
             RawSQL("vector_column", [], output_field=SearchVectorField()),
-            self.get_search_query_object(search_query), cover_density=self.cover_density))\
-            .filter(rank__gt=self.rank_filter)\
+            self.get_search_query_object(search_query), cover_density=cover_density))\
+            .filter(rank__gt=rank_filter)\
             .order_by('-rank')
 
     def generate_headlines(self, search_query):
-        self.search_configuration(search_query)
         query_object = self.get_search_query_object(search_query)
         return self.annotate(content_short=Substr("content", 1, self.text_max)).annotate(
             summary_headline=SearchHeadline(
