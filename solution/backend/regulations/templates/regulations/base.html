@@ -33,10 +33,17 @@ CSS/Javascript etc., should inherit from this template.
             {% endblock %}
         </title>
         {% include "regulations/partials/favicon.html" %}
-        {% block spa_styles %}{% endblock %}
+        {% block custom_styles %}
+            <link rel="stylesheet" href="{% static '/bundles/style.css' %}?{{ DEPLOY_NUMBER }}" />
+        {% endblock %}
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
+        />
         <link rel="stylesheet" href="{% static '/css/main.css' %}?{{ DEPLOY_NUMBER }}" />
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
+        {% block outside_vue %}{% endblock %}
         <div id="vue-app">
             {% block blocking_modal %}
                 <blocking-modal
@@ -51,8 +58,6 @@ CSS/Javascript etc., should inherit from this template.
 
             <div id="app-container">
                 {% block pre_header %}{% endblock %}
-
-                {% include "../browser_not_supported.html" %}
 
                 {% block flash_banner %}
                     <div class="banner--container">
@@ -75,11 +80,11 @@ CSS/Javascript etc., should inherit from this template.
                     </footer>
                 {% endblock %}
 
-                {% block post_footer %}
-                    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.15"></script>
-                    <script src="{% static '/js/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
-                {% endblock %}
             </div>
         </div>
+        {% block post_footer %}
+            <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
+            <script src="{% static '/bundles/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
+        {% endblock %}
     </body>
 </html>

@@ -14,7 +14,7 @@
                     >{{ type }}</span
                 >
                 <span v-if="publication_date" class="recent-date">{{
-                    publication_date | formatPubDate
+                    formatPubDate(publication_date)
                 }}</span>
                 |
                 <span class="recent-fr-citation" :class="citationClasses">{{
@@ -35,10 +35,10 @@ export default {
     name: "RelatedRule",
 
     inject: {
-        itemTitleLineLimit: { default: 9, },
+        itemTitleLineLimit: { default: 9 },
     },
 
-    filters: {
+    methods: {
         formatPubDate(value) {
             return formatDate(value);
         },
@@ -88,7 +88,7 @@ export default {
             };
         },
         indicatorClasses() {
-            if( this.type === "WD") {
+            if (this.type === "WD") {
                 return {
                     "tertiary-indicator": this.type === "WD",
                 };
@@ -106,7 +106,5 @@ export default {
             return `line-clamp-${this.itemTitleLineLimit}`;
         },
     },
-
-    methods: {},
 };
 </script>

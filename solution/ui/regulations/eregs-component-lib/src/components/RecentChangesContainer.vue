@@ -89,14 +89,3 @@ export default {
         />
     </div>
 </template>
-
-<style lang="scss">
-.rules-container {
-    margin: 12px 0;
-
-    .related-rule-list {
-        margin-top: 20px;
-        margin-bottom: 40px;
-    }
-}
-</style>

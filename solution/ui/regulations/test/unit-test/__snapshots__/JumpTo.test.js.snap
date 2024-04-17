@@ -14,15 +14,16 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
               class="ds-c-field"
               id="jumpToTitle"
               name="title"
-              required="required"
+              required=""
             >
               <option
-                disabled="disabled"
-                selected="selected"
+                disabled=""
                 value=""
               >
                 Title
               </option>
+              
+              
             </select>
             <span
               class="section-symbol"
@@ -32,18 +33,19 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
             <select
               aria-label="Regulation part number"
               class="ds-c-field"
-              disabled="disabled"
+              disabled=""
               id="jumpToPart"
               name="part"
-              required="required"
+              required=""
             >
               <option
                 disable=""
-                selected="selected"
                 value=""
               >
                 Part
               </option>
+              
+              
             </select>
             <span
               class="dot"
@@ -82,15 +84,16 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
             class="ds-c-field"
             id="jumpToTitle"
             name="title"
-            required="required"
+            required=""
           >
             <option
-              disabled="disabled"
-              selected="selected"
+              disabled=""
               value=""
             >
               Title
             </option>
+            
+            
           </select>
           <span
             class="section-symbol"
@@ -100,18 +103,19 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
           <select
             aria-label="Regulation part number"
             class="ds-c-field"
-            disabled="disabled"
+            disabled=""
             id="jumpToPart"
             name="part"
-            required="required"
+            required=""
           >
             <option
               disable=""
-              selected="selected"
               value=""
             >
               Part
             </option>
+            
+            
           </select>
           <span
             class="dot"
@@ -173,7 +177,6 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -190,7 +193,7 @@ exports[`Jump to > Checks to see if the snap shot matches 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

@@ -92,10 +92,11 @@ export default {
             default: "link",
         },
         btnType: {
-            validator: (value) => {
-                ["link", "btn", "labeled-btn"].includes(value);
-            },
             default: "normal",
+            validator: (value) =>
+                ["btn", "icon", "labeled-btn", "labeled-icon", "link"].includes(
+                    value
+                ),
         },
         click: {
             type: Boolean,
@@ -160,7 +161,8 @@ export default {
                 "tooltip-caret-top": this.leftSafe && this.position === "under",
                 "tooltip-caret-left":
                     !this.leftSafe && this.position === "over",
-                "tooltip-caret-top-left": !this.leftSafe && this.position === "under",
+                "tooltip-caret-top-left":
+                    !this.leftSafe && this.position === "under",
             };
         },
         tooltipStyles() {

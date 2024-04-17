@@ -1,10 +1,8 @@
 import path from "path";
 import fg from "fast-glob";
 import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue2";
-import { VuetifyResolver } from "unplugin-vue-components/resolvers";
-import Components from "unplugin-vue-components/vite";
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
+import vue from "@vitejs/plugin-vue";
+import vuetify from 'vite-plugin-vuetify';
 
 // https://www.raulmelo.dev/blog/build-javascript-library-with-multiple-entry-points-using-vite-3
 const config = {
@@ -20,7 +18,7 @@ const config = {
         name: "eregsMain",
         formats: ["iife"],
         fileName: (format) => `eregs-main.${format}.js`,
-        outDir: "../../../static-assets/regulations/js",
+        outDir: "../../../static-assets/regulations/bundles",
     },
 };
 
@@ -37,7 +35,11 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            sharedComponents: path.resolve(__dirname, "./src/components/shared-components"),
+            directives: path.resolve(__dirname, "../directives"),
+            sharedComponents: path.resolve(
+                __dirname,
+                "./src/components/shared-components"
+            ),
             utilities: path.resolve(__dirname, "../utilities"),
         },
     },
@@ -62,10 +64,7 @@ export default defineConfig({
     },
     plugins: [
         vue(),
-        Components({
-            resolvers: [VuetifyResolver()],
-        }),
-        cssInjectedByJsPlugin(),
+        vuetify({ autoImport: true }),
         {
             name: "watch-external", // https://stackoverflow.com/questions/63373804/rollup-watch-include-directory/63548394#63548394
             async buildStart() {

@@ -48,7 +48,6 @@ footer {
     }
 
     .footer-left {
-
         @include custom-max($tablet-max / 1px) {
             flex: none;
         }
@@ -71,14 +70,17 @@ footer {
             }
         }
 
+        i {
+            width: 36px;
+        }
+
         img {
             width: 100%;
             max-width: 219px;
         }
     }
 
-    .footer-middle {    
-
+    .footer-middle {
         & > * {
             padding: 0;
 
@@ -111,7 +113,6 @@ footer {
 
         & > * {
             padding: 0 $spacer-5 0 0;
-
 
             @include custom-max($tablet-max / 1px) {
                 padding: 0 $spacer-4;

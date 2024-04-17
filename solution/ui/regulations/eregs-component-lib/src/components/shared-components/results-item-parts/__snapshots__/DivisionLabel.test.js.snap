@@ -6,6 +6,7 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
     <div>
       <span
         class="result__context--division result__context--division--bar"
+        data-testid="division-label"
         title="Mock Group 1 — Mock Division 1"
       >
         Uploaded by MG1 — MD1
@@ -15,6 +16,7 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
   "container": <div>
     <span
       class="result__context--division result__context--division--bar"
+      data-testid="division-label"
       title="Mock Group 1 — Mock Division 1"
     >
       Uploaded by MG1 — MD1
@@ -55,7 +57,6 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -72,7 +73,7 @@ exports[`DivisionLabel > Renders a Division Label component 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

@@ -34,7 +34,7 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         );
 
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", " Managed Care ")
+            .should("have.text", "Managed Care")
             .click({ force: true });
         cy.title().should(
             "eq",
