@@ -38,6 +38,11 @@ h5 {
     .v-application--wrap {
         min-height: unset;
     }
+
+    ul,
+    ol {
+        padding-left: 24px;
+    }
 }
 
 //--------------------------
@@ -502,12 +507,13 @@ $header_height_mobile: 120px;
 
 $view_compare_height: 54px;
 
-a {
+a,
+.v-application a {
     color: $primary_link_color;
 
     &:focus,
     &:hover {
-        color: $primary_link_hover;
+        color: $primary_link_color;
         cursor: pointer;
         @include transition;
     }

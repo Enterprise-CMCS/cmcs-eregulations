@@ -5,13 +5,17 @@ exports[`LastParserSuccessDate > Creates a snapshot of parserdate 1`] = `
   "baseElement": <body>
     <div>
       <span>
+        
         Jun 28, 2023
+        
       </span>
     </div>
   </body>,
   "container": <div>
     <span>
+      
       Jun 28, 2023
+      
     </span>
   </div>,
   "debug": [Function],
@@ -49,7 +53,6 @@ exports[`LastParserSuccessDate > Creates a snapshot of parserdate 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -66,7 +69,7 @@ exports[`LastParserSuccessDate > Creates a snapshot of parserdate 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

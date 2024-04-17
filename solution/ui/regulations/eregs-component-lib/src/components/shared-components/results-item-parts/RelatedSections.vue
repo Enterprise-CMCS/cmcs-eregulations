@@ -37,10 +37,11 @@ const groupedLocations = _groupBy(filteredLocations, "title");
             {{ label }}<span v-if="locationsCount !== 1">s</span>:
         </span>
         <template v-if="locationsCount > 0">
-            <template v-for="(locations, title, i) in groupedLocations">
-                <span :key="title + i" class="title__span"
-                    >{{ title }} CFR
-                </span>
+            <template
+                v-for="(locations, title, i) in groupedLocations"
+                :key="title + i"
+            >
+                <span class="title__span">{{ title }} CFR </span>
                 <span
                     v-if="locations.length > 1"
                     :key="i + title"
@@ -48,11 +49,11 @@ const groupedLocations = _groupBy(filteredLocations, "title");
                     >§§
                 </span>
                 <span v-else :key="i + title" class="section-sign">§ </span>
-                <template v-for="(location, j) in locations">
-                    <span
-                        :key="location.display_name + j"
-                        class="related-section-link"
-                    >
+                <template
+                    v-for="(location, j) in locations"
+                    :key="location.display_name + j"
+                >
+                    <span class="related-section-link">
                         <a :href="locationUrl(location, base)">{{
                             locationLabel(location)
                         }}</a>

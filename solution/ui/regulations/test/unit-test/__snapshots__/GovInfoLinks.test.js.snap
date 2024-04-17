@@ -13,6 +13,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
           <div
             class="links-container"
           >
+            
             <a
               class="external"
               href="https://www.govinfo.gov/content/pkg/CFR-2022-title42-vol4/pdf/CFR-2022-title42-vol4-sec431-10.pdf"
@@ -229,6 +230,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
             >
               1996
             </a>
+            
           </div>
         </div>
         <div
@@ -258,6 +260,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
         <div
           class="links-container"
         >
+          
           <a
             class="external"
             href="https://www.govinfo.gov/content/pkg/CFR-2022-title42-vol4/pdf/CFR-2022-title42-vol4-sec431-10.pdf"
@@ -474,6 +477,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
           >
             1996
           </a>
+          
         </div>
       </div>
       <div
@@ -527,7 +531,6 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
   "getByText": [Function],
   "getByTitle": [Function],
   "html": [Function],
-  "isUnmounted": [Function],
   "queryAllByAltText": [Function],
   "queryAllByDisplayValue": [Function],
   "queryAllByLabelText": [Function],
@@ -544,7 +547,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
   "queryByTestId": [Function],
   "queryByText": [Function],
   "queryByTitle": [Function],
+  "rerender": [Function],
   "unmount": [Function],
-  "updateProps": [Function],
 }
 `;

@@ -59,18 +59,29 @@
 
         @mixin hover-background {
             &:hover,
-            &:focus {
+            &:focus,
+            &:focus-visible {
                 background-color: $mid_blue;
+                outline: 0;
+                border: none;
+
+                &:before,
+                &:after {
+                    border: none;
+                    opacity: 0;
+                }
             }
         }
 
         @mixin hover-background--dark {
             &:hover,
-            &:focus {
+            &:focus,
+            &:focus-visible {
                 background-color: $darkest_blue;
                 outline: 0;
 
-                &:before {
+                &:before,
+                &:after {
                     opacity: 0;
                 }
             }
@@ -130,6 +141,8 @@
 
             &.icon-only {
                 background-color: $dark_blue;
+                height: 18px;
+                width: 18px;
 
                 @media (max-width: $eds-xs-max) {
                     position: absolute;
@@ -160,6 +173,8 @@
                 @include hover-background;
 
                 background-color: $mid_blue_2;
+                height: 36px;
+                width: 36px;
             }
 
             .v-btn__content {
@@ -195,12 +210,17 @@
                 padding-right: 25px;
                 margin-bottom: 16px;
 
-                .v-tabs-bar {
+                .v-slide-group__container {
                     border-bottom: 1px solid $mid_blue;
 
                     .v-tab {
                         @include hover-background--dark;
 
+                        &.v-btn:focus-visible > .v-btn__overlay {
+                            opacity: 0;
+                        }
+
+                        box-sizing: border-box;
                         padding: 0;
                         min-width: 50px;
                         margin-right: 15px;
@@ -211,15 +231,22 @@
                         color: white;
                         font-weight: 400;
 
-                        &--active {
+                        &--selected {
                             @include hover-background--dark;
 
                             font-weight: 700;
                         }
-                    }
 
-                    .v-tabs-slider {
-                        background-color: $light_blue_2;
+                        .v-btn__content {
+                            margin-top: -1px;
+                            margin-left: -1px;
+                        }
+
+                        .v-tab__slider {
+                            height: 5px;
+                            background-color: $light_blue_2;
+                            bottom: 1px;
+                        }
                     }
                 }
             }
@@ -405,18 +432,41 @@
                 .resources__container {
                     flex: 2;
 
+                    .rules-container {
+                        margin: 12px 0;
+
+                        .related-rule-list {
+                            margin-top: 20px;
+                            margin-bottom: 40px;
+                        }
+                    }
+
                     .v-tabs {
-                        .v-tabs-bar {
+                        .v-slide-group__container {
                             .v-tab {
                                 border-bottom: 1px solid $light_gray;
                                 font-weight: 700;
 
-                                &--active {
+                                &:focus-visible {
+                                    &:before,
+                                    &:after {
+                                        border: none;
+                                        opacity: 0;
+                                    }
+                                }
+
+                                &--selected {
                                     border-bottom: 1px solid $dark_blue;
                                 }
                             }
 
-                            .v-tabs-slider {
+                            .v-btn__content {
+                                margin-top: -1px;
+                                margin-left: -1px;
+                            }
+
+                            .v-tab__slider {
+                                height: 3px;
                                 background-color: $dark_blue;
                             }
                         }

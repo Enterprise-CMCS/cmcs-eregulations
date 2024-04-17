@@ -3,12 +3,11 @@
 <template>
     <div class="result">
         <slot name="actions"></slot>
-        <div class="category-labels">
+        <div class="category-labels" data-testid="results-item-categories">
             <slot name="labels"></slot>
         </div>
         <div class="result__context">
             <slot name="context">
-                <div style="margin-bottom: -8px"></div>
             </slot>
         </div>
         <div class="result__link">

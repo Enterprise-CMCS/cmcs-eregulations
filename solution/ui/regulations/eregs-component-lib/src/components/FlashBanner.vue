@@ -1,6 +1,8 @@
 <template>
     <div class="flash-banner" role="banner">
-        <span class="greeting">We welcome questions and suggestions &mdash;&nbsp;</span>
+        <span class="greeting"
+            >We welcome questions and suggestions &mdash;&nbsp;</span
+        >
         <BlockingModalTrigger
             trigger-label="give us feedback."
             modal-title="Feedback survey"
@@ -17,30 +19,6 @@ export default {
     components: {
         BlockingModalTrigger,
     },
-
-    props: {},
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
-    data() {},
-
-    computed: {},
-
-    methods: {},
 };
 </script>
 
