@@ -3,7 +3,6 @@ import os
 
 
 def handler(event, context):
-    # if a basic auth header is set, use that to find the correct user/token
     authorizationHeader = None
     if 'Authorization' in event['headers']:
         authorizationHeader = event["headers"]["Authorization"]
