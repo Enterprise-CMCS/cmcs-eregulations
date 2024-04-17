@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "build:components": "LIB_NAME=components vite build --emptyOutDir",
-    "watch-build:components": "LIB_NAME=components vite build --watch",
+    "watch-build:components": "LIB_NAME=components vite build --watch --emptyOutDir",
     "build:main": "LIB_NAME=main vite build",
-    "watch-build:main": "LIB_NAME=main vite build --watch",
+    "watch-build:main": "LIB_NAME=main vite build --watch emptyOutDir",
     "build": "npm run build:components && npm run build:main"
   },
   "dependencies": {
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
