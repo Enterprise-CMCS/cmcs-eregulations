@@ -207,6 +207,7 @@ resources:
                     - "s3:ListBucket"
                     - "s3:ListBucketVersions"
                     - "s3:ListObjectVersions"
+                    - "s3:ListObjects"
                     - "s3:GetBucketVersioning"
                     - "s3:DeleteObject"
                     - "s3:DeleteObjectVersion"
