@@ -11,9 +11,11 @@ def empty_bucket(bucket_name):
 
 def handler(event, context):
     stage = os.environ.get("STAGE_ENV")
+    storage_bucket_name = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    cloudfront_logs_bucket_name = f"eregs-{stage}-cloudfront-logs"
 
     # empty storage bucket
-    empty_bucket(os.environ.get("AWS_STORAGE_BUCKET_NAME", None))
+    empty_bucket(storage_bucket_name)
 
     # empty the cloudfront logs bucket.
-    empty_bucket(f"eregs-{stage}-cloudfront-logs")
+    empty_bucket(cloudfront_logs_bucket_name)
