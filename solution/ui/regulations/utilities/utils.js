@@ -230,7 +230,7 @@ function addQueryParams(location, params) {
         queryParams.append(key, params[key]);
     });
 
-    const newUrl = url.origin + url.pathname;
+    let newUrl = url.origin + url.pathname;
 
     if (queryParams.toString()) {
         newUrl += `?${queryParams.toString()}`;
@@ -248,7 +248,7 @@ function removeQueryParams(location, keys) {
         queryParams.delete(key);
     });
 
-    const newUrl = url.origin + url.pathname;
+    let newUrl = url.origin + url.pathname;
 
     if (queryParams.toString()) {
         newUrl += `?${queryParams.toString()}`;
