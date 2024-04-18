@@ -24,25 +24,6 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.checkAccessibility();
     });
 
-    it("has a flash banner at the top with a link to a feedback survey", () => {
-        cy.viewport("macbook-15");
-        cy.request({ url: "/404", failOnStatusCode: false })
-            .its("status")
-            .should("equal", 404);
-        cy.visit("/404", { failOnStatusCode: false });
-        cy.checkFlashBanner();
-    });
-
-    it("shows feedback form in modal when clicking feedback link in flash banner", () => {
-        // feedback link is in banner
-        cy.viewport("macbook-15");
-        cy.request({ url: "/404", failOnStatusCode: false })
-            .its("status")
-            .should("equal", 404);
-        cy.visit("/404", { failOnStatusCode: false });
-        cy.checkBlockingModal();
-    });
-
     it("error-page - jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.request({ url: "/404", failOnStatusCode: false })

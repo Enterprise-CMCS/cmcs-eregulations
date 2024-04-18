@@ -3,8 +3,6 @@ import vuetify from "./plugins/vuetify";
 
 import {
     ActionBtn,
-    BlockingModal,
-    BlockingModalTrigger,
     CollapseButton,
     Collapsible,
     CopyCitation,
@@ -13,12 +11,10 @@ import {
     DropdownContent,
     DropdownHeader,
     DropdownItem,
-    FlashBanner,
     GovInfoLinks,
     HeaderComponent,
     HeaderLinks,
     HeaderSearch,
-    IFrameContainer,
     InternalDocsContainer,
     JumpTo,
     CategoryLabel,
@@ -204,8 +200,6 @@ function main() {
     const app = createApp({
         components: {
             ActionBtn,
-            BlockingModal,
-            BlockingModalTrigger,
             CollapseButton,
             Collapsible,
             CopyCitation,
@@ -214,12 +208,10 @@ function main() {
             DropdownContent,
             DropdownHeader,
             DropdownItem,
-            FlashBanner,
             GovInfoLinks,
             HeaderComponent,
             HeaderLinks,
             HeaderSearch,
-            IFrameContainer,
             InternalDocsContainer,
             JumpTo,
             CategoryLabel,

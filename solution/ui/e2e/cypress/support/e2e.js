@@ -28,8 +28,6 @@ import "cypress-axe";
 import "cypress-plugin-tab";
 
 import {
-    checkBlockingModal,
-    checkFlashBanner,
     clickHeaderLink,
     goHome,
 } from "./common-commands/header";
@@ -43,8 +41,6 @@ import { checkLinkRel } from "./common-commands/checkLinks";
 import { checkPolicyDocs } from "./common-commands/policyDocs";
 import { validateSchema } from "./validate-schema-command";
 
-Cypress.Commands.add("checkBlockingModal", checkBlockingModal);
-Cypress.Commands.add("checkFlashBanner", checkFlashBanner);
 Cypress.Commands.add("checkLinkRel", checkLinkRel);
 Cypress.Commands.add("checkPolicyDocs", checkPolicyDocs);
 Cypress.Commands.add("clickHeaderLink", clickHeaderLink);

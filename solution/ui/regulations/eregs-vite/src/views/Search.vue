@@ -1,12 +1,5 @@
 <template>
     <body class="ds-base search-page">
-        <BlockingModal>
-            <IFrameContainer
-                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
-                title="Google Forms iframe"
-            />
-        </BlockingModal>
-        <FlashBanner />
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
@@ -192,10 +185,6 @@ import {
     getTitles,
 } from "utilities/api";
 
-import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
-import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
-import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
-
 import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
@@ -215,12 +204,9 @@ export default {
 
     components: {
         Banner,
-        BlockingModal,
-        FlashBanner,
         HeaderComponent,
         HeaderLinks,
         HeaderSearch,
-        IFrameContainer,
         JumpTo,
         PaginationController,
         PolicyResults,

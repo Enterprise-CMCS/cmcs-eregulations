@@ -52,35 +52,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("has a flash banner at the top with a link to a feedback survey", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.checkFlashBanner();
-    });
-
-    it.skip("hides the flash banner when scrolling down", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get("div.flash-banner").should("be.visible");
-        cy.get("body").tab();
-        cy.focused().should("have.attr", "class", "ds-c-skip-nav");
-        cy.focused().then(() => {
-            cy.get(".ds-c-skip-nav").click({ force: true });
-            cy.wait(1000);
-            cy.get("div.flash-banner").then(($el) => {
-                const rect = $el[0].getBoundingClientRect();
-                expect(rect.bottom).to.be.lessThan(1);
-            });
-        });
-    });
-
-    it("shows feedback form in modal when clicking feedback link in flash banner", () => {
-        // feedback link is in banner
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.checkBlockingModal();
-    });
-
     it("Does not allow selection of Part till Title is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
