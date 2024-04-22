@@ -8,11 +8,6 @@ form .jump-to-input {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    padding-left: 20px;
-
-    @include custom-max(($eds-width-sm - 1) / 1px) {
-        padding-left: 0;
-    }
 
     .section-symbol {
         margin-right: 5px;
