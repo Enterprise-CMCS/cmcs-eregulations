@@ -71,7 +71,7 @@ header {
             font-size: $font-size-lg;
             line-height: 36px;
 
-            @include custom-max(($eds-width-md - 1) / 1px) {
+            @include custom-max(($eds-width-sm - 1) / 1px) {
                 font-size: $font-size-sm;
                 line-height: 18px;
             }
@@ -99,14 +99,12 @@ header {
 
             display: flex;
             align-items: center;
-            height: 100%;
-            height: 50%;
 
             a {
                 @include header__anchor--bold;
 
                 br {
-                    @include custom-min($eds-width-md / 1px) {
+                    @include custom-min($eds-width-sm / 1px) {
                         display: none;
                     }
                 }
@@ -117,14 +115,12 @@ header {
             display: flex;
             align-items: center;
             flex: unset;
-            height: 60px;
         }
 
         .header--links {
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            height: 50%;
 
             @include custom-max(($eds-width-sm - 1) / 1px) {
                 border: none;
@@ -134,7 +130,6 @@ header {
             .links--container {
                 @include custom-max(($eds-width-header-links - 1) / 1px) {
                     display: flex;
-                    height: 36px;
                 }
 
                 .more__button {
@@ -239,16 +234,25 @@ header {
 
         .header--search {
             display: flex;
+            flex: 1;
             justify-content: flex-end;
             align-items: center;
-            height: 50%;
 
             .search__form {
+                display: flex;
+                justify-content: flex-end;
+                width: 100%;
+
                 @include custom-max(($eds-width-sm - 1) / 1px) {
                     background-color: #fff;
                     left: 10px;
                     display: flex;
                     justify-content: flex-end;
+                }
+
+                &--expanded {
+                    position: absolute;
+                    left: -15px;
                 }
 
                 .form__button--toggle-mobile-search {
@@ -265,7 +269,8 @@ header {
 
                 input {
                     height: $header_input_height_wide;
-                    width: 200px;
+                    width: 100%;
+                    max-width: 320px;
                     padding: $spacer-1 0 $spacer-1 $spacer-2;
                     border: 1px solid $light_gray;
                     border-right: none;
@@ -278,17 +283,15 @@ header {
                         }
                     }
 
+                    &.visible--mobile {
+                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                            max-width: unset;
+                        }
+                    }
+
                     &[type="search"]::-webkit-search-cancel-button {
                         cursor: pointer;
                         margin-left: 6px;
-                    }
-
-                    @include custom-max(($eds-width-lg - 1) / 1px) {
-                        width: 170px;
-                    }
-
-                    @include custom-max(($eds-width-md - 1) / 1px) {
-                        width: 115px;
                     }
 
                     @include custom-max(($eds-width-sm - 1) / 1px) {
