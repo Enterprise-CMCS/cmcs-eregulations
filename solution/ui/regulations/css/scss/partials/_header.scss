@@ -84,6 +84,11 @@ header {
             width: calc(100% - 4rem);
             padding: 0 2rem;
 
+            @include custom-max(($eds-width-sm - 1) / 1px) {
+                padding: 0 1rem;
+                width: calc(100% - 2rem);
+            }
+
             &--first {
                 height: 56px;
             }
@@ -91,6 +96,11 @@ header {
             &--second {
                 height: 48px;
                 background: $lightest_blue;
+
+                @include custom-max(($eds-width-md - 1) / 1px) {
+                    padding: 0 1rem;
+                    width: calc(100% - 2rem);
+                }
             }
         }
 
@@ -252,7 +262,7 @@ header {
 
                 &--expanded {
                     position: absolute;
-                    left: -15px;
+                    left: -19px;
                 }
 
                 .form__button--toggle-mobile-search {
