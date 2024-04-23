@@ -23,29 +23,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-.nav-container {
-    overflow: auto;
-    background: $lightest_blue;
-    padding: 0 $spacer-5;
-
-    @include screen-xl {
-        padding: 0 $spacer-4;
-    }
-
-    .content {
-        margin: 0 auto;
-        max-width: $text-max-width;
-
-        h1 {
-            margin-top: 45px;
-            margin-bottom: 15px;
-        }
-
-        p:last-of-type {
-            margin-bottom: 30px !important;
-        }
-    }
-}
-</style>
