@@ -18,7 +18,7 @@ describe("Statute Table", () => {
         cy.visit("/");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Statutes",
+            label: "Access Statute Citations",
             screen: "wide",
         });
         cy.url().should("include", "/statutes/");
@@ -61,7 +61,7 @@ describe("Statute Table", () => {
         cy.visit("/");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Statutes",
+            label: "Access Statute Citations",
             screen: "narrow",
         });
         cy.url().should("include", "/statutes/");
@@ -83,7 +83,7 @@ describe("Statute Table", () => {
         cy.visit("/statutes");
         cy.clickHeaderLink({
             page: "subjects",
-            label: "Find by Subject",
+            label: "Research a Subject",
             screen: "wide",
         });
         cy.url().should("include", "/subjects");

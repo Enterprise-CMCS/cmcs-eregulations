@@ -17,7 +17,7 @@ describe("About page", { scrollBehavior: "center" }, () => {
         cy.visit("/about/");
         cy.clickHeaderLink({
             page: "subjects",
-            label: "Find by Subject",
+            label: "Research a Subject",
             screen: "wide",
         });
         cy.url().should("include", "/subjects");
