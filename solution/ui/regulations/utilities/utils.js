@@ -21,7 +21,6 @@ import _transform from "lodash/transform";
 
 const EventCodes = {
     SetSection: "SetSection",
-    OpenBlockingModal: "OpenBlockingModal",
     ClearSections: "ClearSections",
 };
 

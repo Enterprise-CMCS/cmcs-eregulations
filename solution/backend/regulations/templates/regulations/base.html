@@ -45,25 +45,8 @@ CSS/Javascript etc., should inherit from this template.
     <body class="ds-base {% block body_class %}{% endblock %}">
         {% block outside_vue %}{% endblock %}
         <div id="vue-app">
-            {% block blocking_modal %}
-                <blocking-modal
-                    where-used="django"
-                >
-                    <i-frame-container
-                        src="{{ SURVEY_URL }}?embedded=true"
-                        title="Google Forms iframe"
-                    ></i-frame-container>
-                </blocking-modal>
-            {% endblock %}
-
             <div id="app-container">
                 {% block pre_header %}{% endblock %}
-
-                {% block flash_banner %}
-                    <div class="banner--container">
-                        <flash-banner></flash-banner>
-                    </div>
-                {% endblock %}
 
                 {% block header %}
                 {% endblock %}

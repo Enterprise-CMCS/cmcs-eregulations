@@ -8,14 +8,9 @@ form .jump-to-input {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    padding-left: 20px;
-
-    @include custom-max(($eds-width-sm - 1) / 1px) {
-        padding-left: 0;
-    }
 
     .section-symbol {
-        margin-right: 5px;
+        margin-right: 4px;
         font-size: 15px;
         font-weight: 600;
     }
@@ -23,12 +18,13 @@ form .jump-to-input {
     .dot {
         font-size: $font-size-2xl;
         line-height: 1;
-        padding: 0 2px;
+        padding: 0 4px;
     }
 
     input,
     select {
         border: 1px solid $light_gray;
+        height: 2rem;
     }
 
     input {
@@ -37,7 +33,7 @@ form .jump-to-input {
 
         &.submit {
             display: inline-block;
-            line-height: 1.3;
+            line-height: 1;
             padding: $spacer-1 $spacer-2;
             border: 1px solid $jump_to_submit_disabled;
             color: $jump_to_submit_disabled;
@@ -74,7 +70,6 @@ form .jump-to-input {
     input#jumpToSection,
     input#jumpBtn {
         font-size: $font-size_md;
-        line-height: 24px;
         font-weight: 700;
         margin-top: 0px;
         margin-bottom: 0px;
@@ -83,7 +78,7 @@ form .jump-to-input {
 
     select#jumpToTitle {
         width: 85px;
-        margin-right: 5px;
+        margin-right: 4px;
     }
 
     select#jumpToPart {
@@ -92,22 +87,26 @@ form .jump-to-input {
         @include custom-max(($eds-width-md - 1) / 1px) {
             width: 70px;
         }
+
+        @include custom-max(($eds-width-sm - 1) / 1px) {
+            width: 65px;
+        }
     }
 
     input#jumpToSection {
-        margin-right: 10px;
+        margin-right: 4px;
         width: 65px;
 
         @include custom-max(($eds-width-sm - 1) / 1px) {
             width: 60px;
         }
+
+        @include custom-max(($eds-width-sm - 1) / 1px) {
+            width: 45px;
+        }
     }
 
     input#jumpBtn {
-        width: 50px;
-
-        @include custom-max(($eds-width-md - 1) / 1px) {
-            width: 40px;
-        }
+        width: 40px;
     }
 }

@@ -6,9 +6,6 @@ import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/St
 import { getStatutes, getStatutesActs } from "utilities/api";
 import { shapeTitlesResponse } from "utilities/utils";
 
-import BlockingModal from "eregsComponentLib/src/components/BlockingModal.vue";
-import FlashBanner from "eregsComponentLib/src/components/FlashBanner.vue";
-import IFrameContainer from "eregsComponentLib/src/components/IFrameContainer.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
@@ -155,13 +152,6 @@ getStatutesArray();
 
 <template>
     <body class="ds-base statute-page">
-        <BlockingModal>
-            <IFrameContainer
-                src="https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
-                title="Google Forms iframe"
-            />
-        </BlockingModal>
-        <FlashBanner />
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>

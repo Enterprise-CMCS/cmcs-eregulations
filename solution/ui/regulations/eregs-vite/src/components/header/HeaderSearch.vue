@@ -17,24 +17,30 @@ const expandSearchClick = () => {
     mobileSearchExpanded.value = !mobileSearchExpanded.value;
 };
 
-const expandStateClasses = computed(() => ({
-    hidden: !mobileSearchExpanded.value,
-    visible: mobileSearchExpanded.value,
+const formClasses = computed(() => ({
+    "search__form--expanded": mobileSearchExpanded.value,
 }));
 
-const expandButtonAriaLabel = computed(() => `${ mobileSearchExpanded.value ? "Hide" : "Show" } search bar`);
+const expandStateClasses = computed(() => ({
+    hidden: !mobileSearchExpanded.value,
+    "visible--mobile": mobileSearchExpanded.value,
+}));
+
+const expandButtonAriaLabel = computed(
+    () => `${mobileSearchExpanded.value ? "Hide" : "Show"} search bar`
+);
 </script>
 
 <template>
-    <form class="search__form" :action="searchUrl">
+    <form class="search__form" :class="formClasses" :action="searchUrl">
         <button
             type="button"
             class="form__button--toggle-mobile-search"
             :aria-label="expandButtonAriaLabel"
             @click="expandSearchClick"
         >
-            <HeaderChevronLeft v-show="mobileSearchExpanded"/>
-            <HeaderSearchIcon v-show="!mobileSearchExpanded"/>
+            <HeaderChevronLeft v-show="mobileSearchExpanded" />
+            <HeaderSearchIcon v-show="!mobileSearchExpanded" />
         </button>
         <input
             :class="expandStateClasses"

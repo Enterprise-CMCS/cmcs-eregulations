@@ -619,7 +619,7 @@ describe("Find by Subjects", () => {
         cy.visit("/subjects");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Statutes",
+            label: "Access Statute Citations",
             screen: "wide",
         });
         cy.url().should("include", "/statutes");

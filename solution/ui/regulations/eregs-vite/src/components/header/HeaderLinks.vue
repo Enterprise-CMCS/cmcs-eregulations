@@ -18,13 +18,13 @@ const props = defineProps({
 const links = [
     {
         name: "statutes",
-        label: "Statutes",
+        label: "Access Statute Citations",
         active: window.location.pathname.includes("statutes"),
         href: props.statutesUrl,
     },
     {
         name: "subjects",
-        label: "Find by Subject",
+        label: "Research a Subject",
         active: window.location.pathname.includes("subjects"),
         href: props.subjectsUrl,
     },

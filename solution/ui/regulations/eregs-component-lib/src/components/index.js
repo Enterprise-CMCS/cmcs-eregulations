@@ -1,15 +1,11 @@
 /* eslint-disable import/prefer-default-export */
 
-export { default as BlockingModal } from "./BlockingModal.vue";
-export { default as BlockingModalTrigger } from "./BlockingModalTrigger.vue";
 export { default as CollapseButton } from "./CollapseButton.vue";
 export { default as Collapsible } from "./Collapsible.vue";
 export { default as Dropdown } from "./Dropdown.vue";
 export { default as DropdownContent } from "./DropdownContent.vue";
 export { default as DropdownHeader } from "./DropdownHeader.vue";
 export { default as DropdownItem } from "./DropdownItem.vue";
-export { default as FlashBanner } from "./FlashBanner.vue";
-export { default as IFrameContainer } from "./IFrameContainer.vue";
 export { default as InternalDocsContainer } from "./reader-sidebar/InternalDocsContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
