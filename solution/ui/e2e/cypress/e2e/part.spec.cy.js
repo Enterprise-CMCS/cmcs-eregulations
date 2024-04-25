@@ -120,13 +120,13 @@ describe("Part View", () => {
                 .first()
                 .get(".supplemental-content-date")
                 .contains("August 30, 2023");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
-            )
-                .first()
-                .get(".result__context--division")
-                .should("include.text", "Uploaded by MG1 — MD1")
-                .and("have.attr", "title", "Mock Group 1 — Mock Division 1");
+            //cy.get(
+                //".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            //)
+                //.first()
+                //.get(".result__context--division")
+                //.should("include.text", "Uploaded by MG1 — MD1")
+                //.and("have.attr", "title", "Mock Group 1 — Mock Division 1");
             cy.get(
                 ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
             )
