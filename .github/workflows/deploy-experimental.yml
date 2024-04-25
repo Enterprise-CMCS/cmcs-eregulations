@@ -13,67 +13,6 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  deploy-static:
-    environment:
-      name: "dev"
-      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-22.04
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # should build first and save the artifact
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.14
-      # setup python
-      - uses: actions/setup-python@v4
-        if: success() && steps.findPr.outputs.number
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
-      # build the static assets for the website
-      - name: build static assets
-        if: success() && steps.findPr.outputs.number
-        env:
-          STATIC_URL: http://localhost:8888/
-          STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
-        run: |
-          pushd solution/backend
-          python manage.py collectstatic --noinput
-          cd ..
-          popd
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      # deploy static assets to AWS
-      - name: deploy static assets
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-        run: |
-          pushd solution/static-assets
-          npm install serverless -g
-          npm install
-          serverless deploy --stage dev${PR}
-          popd
   deploy-text-extractor:
     environment:
       name: "dev"
@@ -115,7 +54,7 @@ jobs:
     outputs:
       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-22.04
-    needs: [deploy-static, deploy-text-extractor]
+    needs: deploy-text-extractor
     steps:
       # Checkout the code
       - name: Checkout
@@ -209,7 +148,7 @@ jobs:
         working-directory: ./solution/backend
         run: |
           DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" pytest -vv
-  build-and-deploy-vue:
+  build-and-deploy-static-assets:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
@@ -238,6 +177,22 @@ jobs:
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+      # build the static assets for the website
+      - name: build static assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: http://localhost:8888/
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v1.3
         with:
@@ -351,7 +306,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    needs: [deploy-go, deploy-django, build-and-deploy-static-assets]
     steps:
       # Checkout the code
       - name: Checkout
