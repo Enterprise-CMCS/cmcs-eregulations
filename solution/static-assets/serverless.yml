@@ -19,6 +19,10 @@ custom:
       description: "Layer which contains django requirements"
       compatibleRuntimes:
         - python3.12
+  cloudfrontInvalidate:
+    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
+      items:
+        - "/*"
 
 package:
   #patterns:
@@ -34,6 +38,7 @@ package:
 plugins:
   - serverless-s3-sync
   - serverless-python-requirements
+  - serverless-cloudfront-invalidate
 
 resources:
   Resources:

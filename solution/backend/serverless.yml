@@ -85,10 +85,6 @@ custom:
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
-  cloudfrontInvalidate:
-    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
-      items:
-        - "/*"
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
@@ -318,5 +314,4 @@ plugins:
   - serverless-python-requirements
   - serverless-wsgi
   - serverless-go-plugin
-  - serverless-cloudfront-invalidate
   - serverless-associate-waf
