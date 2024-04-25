@@ -18,12 +18,12 @@ describe("Left sidebar", () => {
         cy.visit(destination);
         cy.checkLinkRel();
         cy.get(`h3#nav-Subpart-A`).click({ force: true })
-        cy.get(`h2#subpart-resources-heading`).should(
+        cy.get(`h1#subpart-resources-heading`).should(
             "contain.text",
             "Subpart A Resources"
         )
         cy.get(`a#nav-431-10.menu-section`).click({ force: true });
-        cy.get(`h2#subpart-resources-heading`).should(
+        cy.get(`h1#subpart-resources-heading`).should(
             "contain.text",
             "§ 431.10 Resources"
         )
