@@ -20,7 +20,7 @@ custom:
       compatibleRuntimes:
         - python3.12
   cloudfrontInvalidate:
-    - distributionId: ${cf:cmcs-eregs-static-assets-${self:custom.stage}.CloudFrontDistributionId}
+    - distributionIdKey: "CloudFrontDistributionId"
       items:
         - "/*"
 
