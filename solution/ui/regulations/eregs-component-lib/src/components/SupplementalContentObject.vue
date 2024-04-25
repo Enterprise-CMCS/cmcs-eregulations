@@ -10,14 +10,14 @@
                 v-if="date"
                 class="supplemental-content-date"
                 :class="{
-                    'supplemental-content-mid-bar': !isBlank(name) || division,
+                    'supplemental-content-mid-bar': !isBlank(name),
                 }"
                 >{{ formatDate(date) }}</span
             >
-            <DivisionLabel
+            <!-- DivisionLabel
                 v-if="docType === 'internal' && division"
                 :division="division"
-            />
+            /-->
             <span
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
