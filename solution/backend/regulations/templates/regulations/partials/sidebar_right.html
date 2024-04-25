@@ -17,23 +17,24 @@
                         <doc-type-label icon-type="external" doc-type="Public" />
                     </div>
                 </template>
+                <template #authed-documents>
+                    <div class="authed__container">
+                        <hr />
+                        <div class="label__container label__container--internal">
+                            <doc-type-label icon-type="internal" doc-type="Internal" />
+                        </div>
+
+                        <internal-docs-container
+                            api-url="{{ API_BASE }}"
+                            title="{{ title }}"
+                            part="{{ reg_part }}"
+                        ></internal-docs-container>
+                    </div>
+                </template>
             {% endif %}
         </supplemental-content>
         {% if user.is_authenticated %}
-            <div class="authed__container">
-                <hr />
-                <div class="label__container label__container--internal">
-                    <doc-type-label icon-type="internal" doc-type="Internal" />
-                </div>
-
-                <internal-docs-container
-                    api-url="{{ API_BASE }}"
-                    title="{{ title }}"
-                    part="{{ reg_part }}"
-                ></internal-docs-container>
-            </div>
             <div class="login__spacer"></div>
         {% endif %}
     {% endif %}
-
 </section>

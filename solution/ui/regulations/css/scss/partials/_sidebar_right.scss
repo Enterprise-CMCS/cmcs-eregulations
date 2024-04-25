@@ -214,9 +214,14 @@ button.collapsible-title {
     margin-top: $spacer-2;
 }
 
-.show-subpart-resources {
-    color: $mid_gray;
-    font-size: 12px;
+.view-all__container {
+    margin: 1rem 0;
+
+    .show-subpart-resources {
+        color: $primary_link_color;
+        font-size: 14px;
+        text-decoration: none;
+    }
 }
 
 .bold {

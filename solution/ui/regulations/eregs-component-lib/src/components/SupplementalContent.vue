@@ -1,16 +1,5 @@
 <template>
     <div>
-        <a
-            v-if="selectedPart && subparts.length === 1"
-            class="show-subpart-resources"
-            data-testid="view-all-subpart-resources"
-            @click="clearSection"
-        >
-            <span class="bold">
-                View All Subpart {{ subparts[0] }} Resources</span
-            >
-            ({{ resourceCount }})
-        </a>
         <h1 id="subpart-resources-heading">{{ activePart }} Resources</h1>
         <h2>Documents</h2>
         <slot name="login-banner"></slot>
@@ -31,6 +20,20 @@
             </supplemental-content-category>
             <simple-spinner v-if="isFetching"></simple-spinner>
         </div>
+    </div>
+    <slot name="authed-documents"></slot>
+    <div class="view-all__container">
+        <a
+            v-if="selectedPart && subparts.length === 1"
+            class="show-subpart-resources"
+            data-testid="view-all-subpart-resources"
+            @click="clearSection"
+        >
+            <span class="bold">
+                View All Subpart {{ subparts[0] }} Documents</span
+            >
+            ({{ resourceCount }})
+        </a>
     </div>
 </template>
 
@@ -244,21 +247,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-.search_resource_btn {
-    width: fit-content;
-    line-height: 18px;
-    padding: 5px 12px 5px 12px;
-    border: none;
-    text-decoration: none;
-}
-
-a.search_resource_btn:visited {
-    color: white;
-}
-
-a.search_resource_btn:hover {
-    color: white;
-}
-</style>
