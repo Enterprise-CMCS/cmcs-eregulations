@@ -187,6 +187,22 @@ describe("Part View", () => {
         );
     });
 
+    it("should allow the user to return to the current version if they visit a link to a previous version", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/Subpart-A/2020-12-31/");
+
+        cy.url().should("include", "2020-12-31");
+        cy.get(".latest-version").should("not.exist");
+        cy.findByRole("button", { name: /View Past Versions/i }).should(
+            "not.exist"
+        );
+
+        cy.get(".view-and-compare").should("be.visible");
+        cy.get("#close-link").click({ force: true });
+        cy.get(".view-and-compare").should("not.be.visible");
+        cy.get(".latest-version").should("exist");
+    });
+
     it("renders FR Doc category correctly in sidebar", () => {
         cy.intercept("**/v3/resources/?&locations=42.433.10**", {
             fixture: "42.433.10.resources.json",
