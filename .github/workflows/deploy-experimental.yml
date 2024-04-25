@@ -182,7 +182,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
       # build the static assets for the website
-      - name: build static assets
+      - name: Run collectstatic
         if: success() && steps.findPr.outputs.number
         env:
           STATIC_URL: http://localhost:8888/
@@ -200,7 +200,7 @@ jobs:
           directory: solution/ui/regulations/eregs-vite
           file_name: .env
       # build the static assets for the website
-      - name: build static assets
+      - name: Build static assets
         if: success() && steps.findPr.outputs.number
         env:
           STATIC_URL: http://localhost:8888/
@@ -217,7 +217,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
       # deploy static assets to AWS
-      - name: deploy static assets
+      - name: Deploy static assets
         if: success() && steps.findPr.outputs.number
         env:
           PR: ${{ steps.findPr.outputs.pr }}
