@@ -9,7 +9,6 @@ export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as InternalDocsContainer } from "./reader-sidebar/InternalDocsContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
-export { default as PrintBtn } from "./PrintBtn.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
 export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
