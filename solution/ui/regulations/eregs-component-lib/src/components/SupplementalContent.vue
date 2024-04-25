@@ -11,7 +11,8 @@
             >
             ({{ resourceCount }})
         </a>
-        <h2 id="subpart-resources-heading">{{ activePart }} Resources</h2>
+        <h1 id="subpart-resources-heading">{{ activePart }} Resources</h1>
+        <h2>Documents</h2>
         <slot name="login-banner"></slot>
         <slot name="public-label"></slot>
         <div class="supplemental-content-container">
