@@ -1,10 +1,6 @@
 {% load string_formatters %}
 
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
-    {% include "regulations/partials/view-button.html" %}
-    <print-btn btn_type="labeled-icon"></print-btn>
-    <hr />
-
     {% if node_list %}
         <supplemental-content
             api-url="{{ API_BASE }}"
