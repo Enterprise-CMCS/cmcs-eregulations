@@ -195,6 +195,6 @@ class SearchTest(TestCase):
                    "n class='search-highlight'>act</span>"
         self.assertEqual(expected, data["results"][0]["document_name_headline"])
 
-        expected = 'this is an <span class="search-highlight">affordable</span> <span class="search-highlight">care</span> <span'\
-                   ' class="search-highlight">act</span> document'
+        expected = "this is an <span class='search-highlight'>affordable</span> <span class='search-highlight'>care</span> <span"\
+                   " class='search-highlight'>act</span> document"
         self.assertEqual(expected, data["results"][0]["summary_headline"])
