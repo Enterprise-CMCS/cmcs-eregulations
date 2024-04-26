@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+from django.db.models import Count
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
 from common.functions import establish_client
@@ -33,7 +33,8 @@ from file_manager.serializers.groups import (
     GroupWithDivisionSerializer,
 )
 from resources.models import AbstractLocation
-from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin
+from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin, LocationFiltererMixin
+from file_manager.serializers.groupings import SubjectSerializer
 
 from .functions import get_upload_link
 from .models import (
@@ -261,3 +262,31 @@ class RepositoryCategoryTreeViewSet(OptionalPaginationMixin, viewsets.ReadOnlyMo
         Prefetch("sub_categories", RepositorySubCategory.objects.all().order_by("order")),
     ).order_by("order")
     serializer_class = RepositoryCategoryTreeSerializer
+
+
+class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for retrieving top subjects based on location.
+    Uses LocationFiltererMixin to apply location-based filters.
+    """
+    location_filter_prefix = "resources__locations__"
+    serializer_class = SubjectSerializer
+
+    def get_queryset(self):
+        """
+        Override the default queryset to filter and annotate based on locations,
+        returning only the top 5 subjects by count.
+        """
+        locations = self.request.GET.getlist("locations")
+        if not locations:
+            return Subject.objects.none()
+
+        # Fetch the 'top_x' parameter from the query parameters or use 5 as default
+        top_x = int(self.request.GET.get("top_x", 5))
+
+        # Apply location filter to the Subject queryset
+        query = Subject.objects.filter(self.get_location_filter(locations))
+        # Annotate each Subject with a count of primary keys and order by this count
+        query = query.annotate(count=Count('pk')).order_by('-count')
+        # Return only the top 5 subjects
+        return query[:top_x]
