@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useRouterLogin, useWindowLogin } from "composables/login";
 
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
@@ -8,34 +9,8 @@ const isAuthenticated = inject("isAuthenticated");
 
 const $route = useRoute();
 
-const loginUrl = ref(customLoginUrl);
+const loginUrl = useRouterLogin({ customLoginUrl, homeUrl, route: $route });
 
-const setLoginUrl = () => {
-    const redirectUrl = `${customLoginUrl}?next=${homeUrl}subjects/`;
-
-    if (!$route.fullPath.includes("?")) {
-        loginUrl.value = redirectUrl;
-        return;
-    }
-
-    const pathQuery = $route.fullPath.split("?")[1];
-
-    if (pathQuery.length == 0) {
-        loginUrl.value = redirectUrl;
-        return;
-    }
-
-    loginUrl.value = `${redirectUrl}?${pathQuery}`;
-};
-
-watch(
-    () => $route.query,
-    async () => {
-        setLoginUrl();
-    }
-);
-
-setLoginUrl();
 </script>
 
 <template>
