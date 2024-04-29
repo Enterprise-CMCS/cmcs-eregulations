@@ -8,7 +8,7 @@
 {% block title_prefix %}Single sign-on to CMCS | {% endblock %}
 
 {% block header %}
-    {% include "regulations/partials/header.html" %}
+    {% include "regulations/partials/header.html" with hide_login=True %}
 {% endblock %}
 
 {% block body %}
