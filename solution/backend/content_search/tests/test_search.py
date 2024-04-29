@@ -205,5 +205,4 @@ class SearchTest(TestCase):
         self.login()
         response = self.client.get("/v3/content-search/?q=reference")
         data = get_paginated_data(response)
-        data = data["results"][0]
         self.assertEqual(data["results"][0]["content_headline"], None)
