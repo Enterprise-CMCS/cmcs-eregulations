@@ -15,13 +15,13 @@
     data-about-url="{% url 'about' %}"
     data-custom-login-url="{% url 'custom_login' %}"
     data-custom-url="{{ CUSTOM_URL }}"
+    data-has-editable-job-code="{{ has_editable_job_code }}"
     data-home-url="{% url 'homepage' %}"
+    data-host="{{ host }}"
+    data-is-authenticated="{{ is_authenticated }}"
     data-search-url="{% url 'search' %}"
     data-statutes-url="{% url 'statutes' %}"
     data-subjects-url="{% url 'subjects' %}"
     data-survey-url="{{ SURVEY_URL }}"
-    data-host="{{ host }}"
-    data-is-authenticated="{{ is_authenticated }}"
-    data-has-editable-job-code="{{ has_editable_job_code }}"
 ></div>
 {% endblock %}

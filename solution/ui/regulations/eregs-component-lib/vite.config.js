@@ -35,7 +35,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            composeables: path.resolve(__dirname, "../composeables"),
+            composables: path.resolve(__dirname, "../composables"),
             directives: path.resolve(__dirname, "../directives"),
             sharedComponents: path.resolve(
                 __dirname,

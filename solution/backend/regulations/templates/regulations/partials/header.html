@@ -19,5 +19,12 @@
                 search-url="{% url 'search' %}"
             ></header-search>
         </template>
+        <template #sign-in>
+            <header-sign-in
+                custom-login-url="{% url 'custom_login' %}"
+                home-url="{% url 'homepage' %}"
+                is-authenticated="{{ is_authenticated }}"
+            ></header-sign-in>
+        </template>
     </header-component>
 </header>

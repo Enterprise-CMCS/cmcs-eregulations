@@ -19,11 +19,16 @@ const props = defineProps({
 
 const $route = useRoute();
 
-const loginUrl = useRouterLogin({
-    customLoginUrl: props.customLoginUrl,
-    homeUrl: props.homeUrl,
-    route: $route,
-});
+const loginUrl = $route
+    ? useRouterLogin({
+          customLoginUrl: props.customLoginUrl,
+          homeUrl: props.homeUrl,
+          route: $route,
+      })
+    : useWindowLogin({
+          customLoginUrl: props.customLoginUrl,
+          homeUrl: props.homeUrl,
+      });
 </script>
 
 <template>

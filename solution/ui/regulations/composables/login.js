@@ -1,5 +1,5 @@
 // https://vuejs.org/guide/reusability/composables
-import { ref, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 // this is garbage Copilot code; use as scaffold only
 // Logic assuming that we're in the SPA and vue-router exists
@@ -7,7 +7,7 @@ export function useRouterLogin({ customLoginUrl, homeUrl, route }) {
     const loginUrl = ref(customLoginUrl);
 
     const setLoginUrl = () => {
-        const redirectUrl = `${customLoginUrl}?next=${homeUrl}subjects/`;
+        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${route.path.substring(1)}`;
 
         if (!route.fullPath.includes("?")) {
             loginUrl.value = redirectUrl;
@@ -24,6 +24,10 @@ export function useRouterLogin({ customLoginUrl, homeUrl, route }) {
         loginUrl.value = `${redirectUrl}?${pathQuery}`;
     };
 
+    onMounted(() => {
+        setLoginUrl();
+    });
+
     watch(
         () => route.query,
         async () => {
@@ -31,23 +35,42 @@ export function useRouterLogin({ customLoginUrl, homeUrl, route }) {
         }
     );
 
-    setLoginUrl();
-
     return loginUrl;
 }
 
 // this is garbage Copilot code; use as scaffold only
 // Logic assuming that we're in Django and vue-router doesn't exist
-export function useWindowLogin() {
-    const loginUrl = ref("");
+export function useWindowLogin({ customLoginUrl, homeUrl }) {
+    const loginUrl = ref(customLoginUrl);
+
+    const setLoginUrl = () => {
+        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${window.location.pathname}`;
+
+        if (window.location.href.includes("?")) {
+            loginUrl.value = redirectUrl;
+            return;
+        }
+
+        const pathQuery = window.location.href.split("?")[1];
+
+        if (pathQuery.length == 0) {
+            loginUrl.value = redirectUrl;
+            return;
+        }
+
+        loginUrl.value = `${redirectUrl}?${pathQuery}`;
+    };
 
     onMounted(() => {
-        loginUrl.value = "/admin";
+        setLoginUrl();
     });
 
-    onUnmounted(() => {
-        loginUrl.value = "";
-    });
+    watch(
+        () => window.location,
+        async () => {
+            setLoginUrl();
+        }
+    );
 
-    return { loginUrl };
+    return loginUrl;
 }
