@@ -7,7 +7,9 @@ export function useRouterLogin({ customLoginUrl, homeUrl, route }) {
     const loginUrl = ref(customLoginUrl);
 
     const setLoginUrl = () => {
-        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${route.path.substring(1)}`;
+        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${route.path.substring(
+            1
+        )}`;
 
         if (!route.fullPath.includes("?")) {
             loginUrl.value = redirectUrl;
@@ -44,9 +46,11 @@ export function useWindowLogin({ customLoginUrl, homeUrl }) {
     const loginUrl = ref(customLoginUrl);
 
     const setLoginUrl = () => {
-        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${window.location.pathname}`;
+        const redirectUrl = `${customLoginUrl}?next=${homeUrl}${window.location.pathname.substring(
+            1
+        )}`;
 
-        if (window.location.href.includes("?")) {
+        if (!window.location.href.includes("?")) {
             loginUrl.value = redirectUrl;
             return;
         }
