@@ -25,7 +25,7 @@ class ContentListSerializer(DetailsSerializer, serializers.Serializer, ):
 class ContentSearchSerializer(ContentListSerializer, ):
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
-    content_headline = HeadlineField()
+    content_headline = HeadlineField(blank_when_no_highlight=True)
 
 
 class ContentUpdateSerializer(serializers.Serializer):
