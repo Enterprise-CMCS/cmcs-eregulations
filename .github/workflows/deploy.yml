@@ -70,6 +70,13 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+      - name: deploy static assets
+        run: |
+          pushd solution/static-assets
+          npm install serverless -g
+          npm install
+          serverless deploy --stage ${{ matrix.environment }}
+          popd
       - name: deploy text extractor lambda
         run: |
           pushd solution/text-extractor
@@ -109,8 +116,6 @@ jobs:
           make regulations
           popd
           pushd solution/static-assets
-          npm install serverless -g
-          npm install
           serverless deploy --stage ${{ matrix.environment }}
           popd
       - uses: actions/setup-go@v2
