@@ -50,8 +50,10 @@ class VariableDateFieldTest(unittest.TestCase):
 class HeadlineFieldTest(unittest.TestCase):
     def test_with_highlight(self):
         value = "hello <span class='search-highlight'>world</span>"
+
         def fake_obj():
             return None
+
         fake_obj.test_field = value
 
         field = HeadlineField()
@@ -64,8 +66,10 @@ class HeadlineFieldTest(unittest.TestCase):
 
     def test_without_highlight(self):
         value = "hello world"
+
         def fake_obj():
             return None
+
         fake_obj.test_field = value
 
         field = HeadlineField()
