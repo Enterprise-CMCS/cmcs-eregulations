@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { useRouterLogin, useWindowLogin } from "composables/login";
+import useLoginRedirectUrl from "composables/login";
 
 const props = defineProps({
     customLoginUrl: {
@@ -19,16 +19,11 @@ const props = defineProps({
 
 const $route = useRoute();
 
-const loginUrl = $route
-    ? useRouterLogin({
-          customLoginUrl: props.customLoginUrl,
-          homeUrl: props.homeUrl,
-          route: $route,
-      })
-    : useWindowLogin({
-          customLoginUrl: props.customLoginUrl,
-          homeUrl: props.homeUrl,
-      });
+const loginUrl = useLoginRedirectUrl({
+    customLoginUrl: props.customLoginUrl,
+    homeUrl: props.homeUrl,
+    route: $route,
+});
 </script>
 
 <template>

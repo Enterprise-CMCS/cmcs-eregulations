@@ -1,7 +1,7 @@
 <script setup>
 import { inject} from "vue";
 import { useRoute } from "vue-router";
-import { useRouterLogin } from "composables/login";
+import useLoginRedirectUrl from "composables/login";
 
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
@@ -9,7 +9,7 @@ const isAuthenticated = inject("isAuthenticated");
 
 const $route = useRoute();
 
-const loginUrl = useRouterLogin({ customLoginUrl, homeUrl, route: $route });
+const loginUrl = useLoginRedirectUrl({ customLoginUrl, homeUrl, route: $route });
 
 </script>
 
