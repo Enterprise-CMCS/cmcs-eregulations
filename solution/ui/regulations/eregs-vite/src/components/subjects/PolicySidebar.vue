@@ -1,7 +1,7 @@
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject} from "vue";
 import { useRoute } from "vue-router";
-import { useRouterLogin, useWindowLogin } from "composables/login";
+import { useRouterLogin } from "composables/login";
 
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");

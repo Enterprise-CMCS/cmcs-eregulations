@@ -1,12 +1,10 @@
 // https://vuejs.org/guide/reusability/composables
-
 import { ref, watch } from "vue";
 
 // this is garbage Copilot code; use as scaffold only
 // Logic assuming that we're in the SPA and vue-router exists
 export function useRouterLogin({ customLoginUrl, homeUrl, route }) {
     const loginUrl = ref(customLoginUrl);
-    console.log("route", route);
 
     const setLoginUrl = () => {
         const redirectUrl = `${customLoginUrl}?next=${homeUrl}subjects/`;

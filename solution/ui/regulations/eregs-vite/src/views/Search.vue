@@ -14,6 +14,13 @@
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
+                <template #sign-in>
+                    <HeaderSignIn
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                    />
+                </template>
             </HeaderComponent>
         </header>
         <div id="searchApp" class="search-view">
@@ -189,6 +196,7 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import HeaderSignIn from "@/components/header/HeaderSignIn.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
@@ -207,6 +215,7 @@ export default {
         HeaderComponent,
         HeaderLinks,
         HeaderSearch,
+        HeaderSignIn,
         JumpTo,
         PaginationController,
         PolicyResults,
@@ -225,9 +234,17 @@ export default {
             type: String,
             default: "/v3/",
         },
+        customLoginUrl: {
+            type: String,
+            default: "/login",
+        },
         homeUrl: {
             type: String,
             default: "/",
+        },
+        isAuthenticated: {
+            type: Boolean,
+            default: false,
         },
         searchUrl: {
             type: String,

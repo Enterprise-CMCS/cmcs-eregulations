@@ -16,6 +16,9 @@ defineProps({
             <div class="header--search">
                 <slot name="search"></slot>
             </div>
+            <div class="header--sign-in">
+                <slot name="sign-in"></slot>
+            </div>
         </div>
         <div class="header__row header__row--second">
             <div class="header--jump-to">

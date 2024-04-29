@@ -1,24 +1,35 @@
 <script setup>
-import { inject, computed, ref } from "vue";
-
-const customLoginUrl = inject("customLoginUrl");
+import { useRoute } from "vue-router";
+import { useRouterLogin, useWindowLogin } from "composables/login";
 
 const props = defineProps({
-    prop1: {
+    customLoginUrl: {
         type: String,
         required: true,
     },
-    prop2: {
+    homeUrl: {
         type: Object,
+        required: true,
+    },
+    isAuthenticated: {
+        type: Boolean,
         required: true,
     },
 });
 
+const $route = useRoute();
+
+const loginUrl = useRouterLogin({
+    customLoginUrl: props.customLoginUrl,
+    homeUrl: props.homeUrl,
+    route: $route,
+});
 </script>
 
 <template>
-    <div class="skeleton"></div>
+    <div class="skeleton">
+        <a :href="loginUrl" rel="noopener noreferrer">Sign In</a>
+    </div>
 </template>
 
 <style></style>
-
