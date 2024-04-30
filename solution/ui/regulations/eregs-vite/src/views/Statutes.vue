@@ -15,7 +15,7 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
-import SignInLink from "@/components/header/SignInLink.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 
 const props = defineProps({
@@ -174,7 +174,8 @@ getStatutesArray();
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
-                <template #sign-in>
+                <template v-if="isAuthenticated" #sign-in></template>
+                <template v-else #sign-in>
                     <SignInLink
                         :custom-login-url="customLoginUrl"
                         :home-url="homeUrl"

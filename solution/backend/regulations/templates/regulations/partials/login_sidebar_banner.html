@@ -7,7 +7,7 @@
             <sign-in-link
                 custom-login-url="{% url 'custom_login' %}"
                 home-url="{% url 'homepage' %}"
-                is-authenticated="{{ is_authenticated }}"
+                is-authenticated="{{ user.is_authenticated }}"
             ></sign-in-link>
         </span>
         to see internal resources.
