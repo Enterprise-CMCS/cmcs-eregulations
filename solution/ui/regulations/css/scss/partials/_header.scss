@@ -367,7 +367,10 @@ header {
                 margin-left: 1rem;
                 text-transform: capitalize;
             }
+        }
 
+        .header--search:has(.search__form--expanded) + .header--sign-in {
+            display: none;
         }
     }
 }
