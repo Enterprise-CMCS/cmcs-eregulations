@@ -51,7 +51,7 @@ def test_top_subjects_by_location():
 
     # Set up resources
     resources = create_resources()
-    subjects, sections = resources["subjects"], resources["sections"]
+    sections = resources["sections"]
 
     # Initialize API client
     client = APIClient()
