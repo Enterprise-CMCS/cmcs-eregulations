@@ -358,5 +358,16 @@ header {
                 }
             }
         }
+
+        .header--sign-in {
+            a {
+                @include header__anchor--bold;
+
+                color: $mid_blue;
+                margin-left: 1rem;
+                text-transform: capitalize;
+            }
+
+        }
     }
 }
