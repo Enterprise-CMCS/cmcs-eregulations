@@ -34,7 +34,7 @@ from file_manager.serializers.groups import (
 )
 from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin, LocationFiltererMixin
-from file_manager.serializers.groupings import SubjectSerializer
+from file_manager.serializers.groupings import SubjectCountsSerializer
 
 from .functions import get_upload_link
 from .models import (
@@ -270,7 +270,7 @@ class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModel
     Uses LocationFiltererMixin to apply location-based filters.
     """
     location_filter_prefix = "resources__locations__"
-    serializer_class = SubjectSerializer
+    serializer_class = SubjectCountsSerializer
 
     def get_queryset(self):
         """

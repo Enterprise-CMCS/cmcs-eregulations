@@ -1,61 +1,90 @@
-from django.test import TestCase
-from django.urls import reverse from rest_framework.test import APIClient
+import pytest
+from django.urls import reverse
 from rest_framework import status
-from file_manager.models import Subject, Location
-from file_manager.serializers.groupings import SubjectSerializer
+from rest_framework.test import APIClient
+from resources.models import AbstractResource
+from file_manager.models import Subject
+from resources.models import Subpart, Section
 
-class TopSubjectsByLocationTests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
+@pytest.mark.django_db
+def test_top_subjects_by_location():
+    """
+    Test the TopSubjectsByLocationViewSet's ability to return the top subjects based on location.
+    """
 
-        # Creating locations
-        self.location_part_433 = Location.objects.create(name="42 CFR 433")
-        self.location_section_436_110 = Location.objects.create(name="42 CFR 436.110")
-        self.location_subpart_433_A = Location.objects.create(name="42 CFR 433 Subpart A")
-        self.location_section_440_305 = Location.objects.create(name="42 CFR 440.305")
-        self.location_subpart_95_A = Location.objects.create(name="45 CFR 95 Subpart A")
+    def create_resources():
+        subject1 = Subject.objects.create(full_name="Medicaid Policies")
+        subject2 = Subject.objects.create(full_name="Health Coverage")
 
-        # Create subjects and associate them with locations
-        self.subjects = [
-            Subject.objects.create(name="Medicaid Eligibility"),
-            Subject.objects.create(name="Health Coverage"),
-            Subject.objects.create(name="Provider Reimbursements"),
-            Subject.objects.create(name="State Funding"),
-            Subject.objects.create(name="Federal Support")
-        ]
-        for subject in self.subjects:
-            subject.locations.add(self.location_part_433)
+        # Create locations
+        subpart1 = Subpart.objects.create(title=42, part=433, subpart_id="A")
+        section1 = Section.objects.create(title=42, part=433, section_id=110, parent=subpart1)
+        section2 = Section.objects.create(title=42, part=433, section_id=120, parent=subpart1)
+        section3 = Section.objects.create(title=42, part=434, section_id=130, parent=subpart1)
 
-        self.url = reverse('top-subjects-by-location')  # Update with the actual URL name if necessary
+        # Create resources and associate subjects to sections
+        resource1 = AbstractResource.objects.create()
+        resource1.subjects.add(subject1, subject2)
+        resource1.locations.add(section1)
+        resource1.save()
 
-    def test_top_subjects_default(self):
-        """
-        Test that the endpoint returns the default top 5 subjects when no specific count is provided.
-        """
-        response = self.client.get(f"{self.url}?locations={self.location_part_433.id}")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 5)
+        resource2 = AbstractResource.objects.create()
+        resource2.subjects.add(subject1, subject2)
+        resource2.locations.add(section2)
+        resource2.save()
 
-    def test_top_subjects_specific_count(self):
-        """
-        Test that the endpoint returns the correct number of subjects when a specific count is requested.
-        """
-        response = self.client.get(f"{self.url}?locations={self.location_part_433.id}&top_x=3")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 3)
+        resource3 = AbstractResource.objects.create()
+        resource3.subjects.add(subject1)
+        resource3.locations.add(section3)
+        resource3.save()
 
-    def test_top_subjects_exceeding_available(self):
-        """
-        Test that the endpoint returns all available subjects when the requested count exceeds the available number.
-        """
-        response = self.client.get(f"{self.url}?locations={self.location_part_433.id}&top_x=10")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), len(self.subjects))  # Assuming all subjects are linked to the location
+        return {
+            "subjects": [subject1, subject2],
+            "sections": [section1, section2, section3],
+        }
 
-    def test_top_subjects_no_subjects(self):
-        """
-        Test that the endpoint returns an empty list when there are no subjects associated with the location.
-        """
-        response = self.client.get(f"{self.url}?locations={self.location_subpart_95_A.id}&top_x=5")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertListEqual(response.data, [])
+    def get_response(client, url, locations, top_x):
+        locations_param = "&".join([f"locations={loc.title}.{loc.part}" for loc in locations])
+        response = client.get(f"{url}?{locations_param}&top_x={top_x}")
+        return response
+
+    # Set up resources
+    resources = create_resources()
+    subjects, sections = resources["subjects"], resources["sections"]
+
+    # Initialize API client
+    client = APIClient()
+    url = reverse('top-subjects-by-location')
+
+    # Test with all sections included
+    response = get_response(client, url, sections, 5)
+    assert response.status_code == status.HTTP_200_OK
+    results = response.json()
+
+    # Ensure specific number of subjects returned is correct
+    assert len(results) == 2, "Should return 2 subjects"
+
+    # Check counts and order
+    top_subject = results[0]
+    assert top_subject['full_name'] == "Medicaid Policies"
+    assert top_subject['count'] == 3, "Medicaid Policies should appear three times"
+
+    second_subject = results[1]
+    assert second_subject['full_name'] == "Health Coverage"
+    assert second_subject['count'] == 2, "Health Coverage should appear twice"
+
+    # Test with a location by title only
+    response = client.get(f"{url}?locations={sections[0].title}&top_x=5")
+    assert response.status_code == status.HTTP_200_OK
+
+    results = response.json()
+
+    # Check specific count of subjects in this case
+    assert len(results) == 2, "Should return 2 subject by location title"
+
+    # check top_x parameter is working
+    response = get_response(client, url, sections, 1)
+    assert response.status_code == status.HTTP_200_OK
+    results = response.json()
+    assert len(results) == 1, "Should return 1 subject"
+    assert results[0]['full_name'] == "Medicaid Policies", "Should return Medicaid Policies"

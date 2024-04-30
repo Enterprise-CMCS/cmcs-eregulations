@@ -29,6 +29,7 @@ ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),
                  'localhost',
                  'regulations-pilot.cms.gov',
                  'eregulations.cms.gov',
+                 'testserver'      
                  'host.docker.internal']
 
 # Application definition
