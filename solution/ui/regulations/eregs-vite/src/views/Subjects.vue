@@ -20,7 +20,7 @@ import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
-import HeaderSignIn from "@/components/header/HeaderSignIn.vue";
+import SignInLink from "@/components/header/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
@@ -379,7 +379,7 @@ getDocSubjects();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template #sign-in>
-                    <HeaderSignIn
+                    <SignInLink
                         :custom-login-url="customLoginUrl"
                         :home-url="homeUrl"
                         :is-authenticated="isAuthenticated"

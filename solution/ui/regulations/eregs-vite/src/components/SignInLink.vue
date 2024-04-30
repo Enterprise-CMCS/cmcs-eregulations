@@ -28,7 +28,7 @@ const loginUrl = useLoginRedirectUrl({
 
 <template>
     <div class="skeleton">
-        <a :href="loginUrl" rel="noopener noreferrer">Sign In</a>
+        <a :href="loginUrl" rel="noopener noreferrer">sign in</a>
     </div>
 </template>
 

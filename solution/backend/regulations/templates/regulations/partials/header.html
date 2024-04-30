@@ -21,11 +21,11 @@
         </template>
         <template #sign-in>
             {% if not is_authenticated and not hide_login %}
-                <header-sign-in
+                <sign-in-link
                     custom-login-url="{% url 'custom_login' %}"
                     home-url="{% url 'homepage' %}"
                     is-authenticated="{{ is_authenticated }}"
-                ></header-sign-in>
+                ></sign-in-link>
             {% endif %}
         </template>
     </header-component>

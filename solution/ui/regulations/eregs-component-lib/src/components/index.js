@@ -44,5 +44,5 @@ export { default as TocTitle } from "./shared-components/TOC/TocTitle.vue";
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
-export { default as HeaderSignIn } from "../../../eregs-vite/src/components/header/HeaderSignIn.vue";
+export { default as SignInLink } from "../../../eregs-vite/src/components/SignInLink.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
