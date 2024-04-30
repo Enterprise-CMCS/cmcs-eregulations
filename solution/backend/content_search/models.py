@@ -45,7 +45,7 @@ class ContentIndexQuerySet(models.QuerySet):
             summary_headline=SearchHeadline(
                 "summary_string",
                 query_object,
-                start_sel='<span class="search-highlight">',
+                start_sel="<span class='search-highlight'>",
                 stop_sel='</span>',
                 min_words=self.min_words,
                 max_words=self.max_words,
