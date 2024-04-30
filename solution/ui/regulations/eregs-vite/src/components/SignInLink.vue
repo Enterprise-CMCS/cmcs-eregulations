@@ -15,6 +15,10 @@ const props = defineProps({
         type: Boolean,
         required: true,
     },
+    linkLabel: {
+        type: String,
+        default: "sign in",
+    },
 });
 
 const $route = useRoute();
@@ -27,9 +31,7 @@ const loginUrl = useLoginRedirectUrl({
 </script>
 
 <template>
-    <div class="skeleton">
-        <a :href="loginUrl" rel="noopener noreferrer">sign in</a>
-    </div>
+    <a :href="loginUrl" rel="noopener noreferrer">{{ linkLabel }}</a>
 </template>
 
 <style></style>

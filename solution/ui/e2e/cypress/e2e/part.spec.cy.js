@@ -75,7 +75,7 @@ describe("Part View", () => {
             "CMCS staff participating in the Policy Repository pilot can sign in to see internal resources."
         );
 
-        cy.get("a#loginSidebar")
+        cy.get("span[data-testid=loginSidebar]")
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/42/433/Subpart-B/");
@@ -100,7 +100,7 @@ describe("Part View", () => {
             "Resources you can access include policy documents internal to CMCS."
         );
         cy.get("#loginIndicator").should("be.visible");
-        cy.get("a#loginSidebar").should("not.exist");
+        cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
         cy.wait("@resources").then(() => {
             cy.get(".right-sidebar").scrollTo("bottom");
@@ -136,8 +136,7 @@ describe("Part View", () => {
             cy.get(".show-more-button")
                 .contains("+ Show More (6)")
                 .click({ force: true });
-            cy.get(".show-more-button")
-                .contains("- Show Less (6)");
+            cy.get(".show-more-button").contains("- Show Less (6)");
         });
     });
 
@@ -211,8 +210,7 @@ describe("Part View", () => {
             cy.get(".show-more-button")
                 .contains("+ Show More (9)")
                 .click({ force: true });
-            cy.get(".show-more-button")
-                .contains("- Show Less (9)");
+            cy.get(".show-more-button").contains("- Show Less (9)");
         });
     });
 
