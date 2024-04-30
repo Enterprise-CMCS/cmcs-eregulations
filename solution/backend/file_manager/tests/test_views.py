@@ -2,9 +2,10 @@ import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-from resources.models import AbstractResource
+
 from file_manager.models import Subject
-from resources.models import Subpart, Section
+from resources.models import AbstractResource, Section, Subpart
+
 
 @pytest.mark.django_db
 def test_top_subjects_by_location():

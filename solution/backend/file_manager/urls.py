@@ -6,8 +6,8 @@ from .views import (
     RepoCategoryViewSet,
     RepositoryCategoryTreeViewSet,
     SubjectViewset,
-    UploadedFileViewset,
     TopSubjectsByLocationViewSet,
+    UploadedFileViewset,
 )
 
 urlpatterns = [

@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.db.models import Count
+
 from common.api import OpenApiQueryParameter
 from common.constants import QUOTE_TYPES
 from common.functions import establish_client
@@ -26,6 +26,7 @@ from file_manager.serializers.groupings import (
     AbstractRepositoryCategoryPolymorphicSerializer,
     MetaRepositoryCategorySerializer,
     RepositoryCategoryTreeSerializer,
+    SubjectCountsSerializer,
     SubjectDetailsSerializer,
 )
 from file_manager.serializers.groups import (
@@ -33,8 +34,7 @@ from file_manager.serializers.groups import (
     GroupWithDivisionSerializer,
 )
 from resources.models import AbstractLocation
-from resources.views.mixins import LocationExplorerViewSetMixin, OptionalPaginationMixin, LocationFiltererMixin
-from file_manager.serializers.groupings import SubjectCountsSerializer
+from resources.views.mixins import LocationExplorerViewSetMixin, LocationFiltererMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
 from .models import (
