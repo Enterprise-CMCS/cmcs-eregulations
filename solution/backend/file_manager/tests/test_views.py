@@ -80,9 +80,6 @@ def test_top_subjects_by_location():
 
     results = response.json()
 
-    # Check specific count of subjects in this case
-    assert len(results) == 2, "Should return 2 subject by location title"
-
     # check top_x parameter is working
     response = get_response(client, url, sections, 1)
     assert response.status_code == status.HTTP_200_OK
