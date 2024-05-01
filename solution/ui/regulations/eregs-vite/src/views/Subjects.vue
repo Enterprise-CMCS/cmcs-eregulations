@@ -384,6 +384,7 @@ getDocSubjects();
                         :custom-login-url="customLoginUrl"
                         :home-url="homeUrl"
                         :is-authenticated="isAuthenticated"
+                        :route="$route"
                     />
                 </template>
             </HeaderComponent>
