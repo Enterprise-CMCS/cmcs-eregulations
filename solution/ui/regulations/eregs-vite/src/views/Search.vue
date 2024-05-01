@@ -20,6 +20,7 @@
                         :custom-login-url="customLoginUrl"
                         :home-url="homeUrl"
                         :is-authenticated="isAuthenticated"
+                        :route="$route"
                     />
                 </template>
             </HeaderComponent>
@@ -181,6 +182,8 @@
 </template>
 
 <script>
+import { useRoute, useRouter } from "vue-router";
+
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
@@ -263,6 +266,13 @@ export default {
             type: String,
             default: "",
         },
+    },
+
+    setup() {
+        const $route = useRoute();
+        const $router = useRouter();
+
+        return { $route, $router };
     },
 
     provide() {
