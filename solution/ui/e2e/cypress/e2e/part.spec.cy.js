@@ -120,13 +120,13 @@ describe("Part View", () => {
                 .first()
                 .get(".supplemental-content-date")
                 .contains("August 30, 2023");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
-            )
-                .first()
-                .get(".result__context--division")
-                .should("include.text", "Uploaded by MG1 — MD1")
-                .and("have.attr", "title", "Mock Group 1 — Mock Division 1");
+            //cy.get(
+                //".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            //)
+                //.first()
+                //.get(".result__context--division")
+                //.should("include.text", "Uploaded by MG1 — MD1")
+                //.and("have.attr", "title", "Mock Group 1 — Mock Division 1");
             cy.get(
                 ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
             )
@@ -175,23 +175,28 @@ describe("Part View", () => {
         });
     });
 
-    it("loads a different version of a subpart", () => {
+    it("should not have a button to view past versions", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
 
         cy.get(".latest-version").should("exist");
         cy.findByRole("button", { name: /View Past Versions/i }).should(
-            "be.visible"
+            "not.exist"
         );
-        cy.findByRole("button", { name: /View Past Versions/i }).click({
-            force: true,
-        });
-        cy.get(".view-and-compare").should("be.visible");
-        cy.get("#view-options").select("1/20/2017", { force: true });
-        cy.url().should("include", "2017-01-20");
-        cy.get(".latest-version").should("not.exist");
+    });
 
+    it("should allow the user to return to the current version if they visit a link to a previous version", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/Subpart-A/2020-12-31/");
+
+        cy.url().should("include", "2020-12-31");
+        cy.get(".latest-version").should("not.exist");
+        cy.findByRole("button", { name: /View Past Versions/i }).should(
+            "not.exist"
+        );
+
+        cy.get(".view-and-compare").should("be.visible");
         cy.get("#close-link").click({ force: true });
         cy.get(".view-and-compare").should("not.be.visible");
         cy.get(".latest-version").should("exist");

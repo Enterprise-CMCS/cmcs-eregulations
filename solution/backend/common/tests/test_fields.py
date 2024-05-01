@@ -3,7 +3,7 @@ import unittest
 import pytest
 from django.core.exceptions import ValidationError
 
-from common.fields import VariableDateField
+from common.fields import HeadlineField, VariableDateField
 from file_manager.models import Subject
 
 
@@ -45,6 +45,40 @@ class VariableDateFieldTest(unittest.TestCase):
                 value["error_message"],
                 str(context.exception),
             )
+
+
+class HeadlineFieldTest(unittest.TestCase):
+    def test_with_highlight(self):
+        value = "hello <span class='search-highlight'>world</span>"
+
+        def fake_obj():
+            return None
+
+        fake_obj.test_field = value
+
+        field = HeadlineField()
+        field.field_name = "test_field"
+        self.assertEqual(field.to_representation(fake_obj), value)
+
+        field = HeadlineField(blank_when_no_highlight=True)
+        field.field_name = "test_field"
+        self.assertEqual(field.to_representation(fake_obj), value)
+
+    def test_without_highlight(self):
+        value = "hello world"
+
+        def fake_obj():
+            return None
+
+        fake_obj.test_field = value
+
+        field = HeadlineField()
+        field.field_name = "test_field"
+        self.assertEqual(field.to_representation(fake_obj), value)
+
+        field = HeadlineField(blank_when_no_highlight=True)
+        field.field_name = "test_field"
+        self.assertEqual(field.to_representation(fake_obj), None)
 
 
 def clean_up():

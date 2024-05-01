@@ -195,6 +195,14 @@ class SearchTest(TestCase):
                    "n class='search-highlight'>act</span>"
         self.assertEqual(expected, data["results"][0]["document_name_headline"])
 
-        expected = 'this is an <span class="search-highlight">affordable</span> <span class="search-highlight">care</span> <span'\
-                   ' class="search-highlight">act</span> document'
+        expected = "this is an <span class='search-highlight'>affordable</span> <span class='search-highlight'>care</span> <span"\
+                   " class='search-highlight'>act</span> document"
         self.assertEqual(expected, data["results"][0]["summary_headline"])
+
+    # Search for "reference" returns a file that does not have the word "reference" in its content field
+    # So the content_headline field should be blank instead of the text of the content field.
+    def test_no_highlight_blanking(self):
+        self.login()
+        response = self.client.get("/v3/content-search/?q=reference")
+        data = get_paginated_data(response)
+        self.assertEqual(data["results"][0]["content_headline"], None)

@@ -186,7 +186,15 @@ class HeadlineField(serializers.Field):
         self.model_name = model_name
         kwargs["source"] = '*'
         kwargs["read_only"] = True
+        if "blank_when_no_highlight" in kwargs:
+            self.blank_when_no_highlight = kwargs["blank_when_no_highlight"]
+            del kwargs["blank_when_no_highlight"]
+        else:
+            self.blank_when_no_highlight = False
         super().__init__(**kwargs)
 
     def to_representation(self, obj):
-        return getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
+        text = getattr(obj, f"{self.model_name}_{self.field_name}", getattr(obj, self.field_name, None))
+        if text and "<span class='search-highlight'>" not in text and self.blank_when_no_highlight:
+            return None
+        return text
