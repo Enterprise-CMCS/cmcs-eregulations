@@ -11,15 +11,10 @@ describe("Print Styles", () => {
         cy.setCssMedia("screen");
     });
 
-    it("has a print button in subpart view", () => {
+    it("does not have a print button in subpart view", () => {
         cy.viewport("macbook-15");
         cy.visit(destination);
-        cy.window().then((win) => {
-            cy.stub(win, "print");
-            cy.get(".print-btn").contains("Print").click().then(() => {
-                expect(win.print).to.be.called;
-            })
-        });
+        cy.get(".print-btn").should("not.exist");
     });
 
     it("has proper print styles for latest version", () => {
@@ -50,7 +45,7 @@ describe("Print Styles", () => {
 
         cy.get("footer .print-footer").should("have.css", "display", "block");
 
-        cy.get("header").should("have.css", "height", "48px");
+        cy.get("header").should("have.css", "height", "56px");
         cy.get("header").should("have.css", "border-top-color", "rgb(2, 102, 102)");
         cy.get("header").should("have.css", "border-bottom-color", "rgb(2, 102, 102)");
     })

@@ -18,17 +18,18 @@ aside.right-sidebar {
         height: calc(100vh - #{$header_height} - #{$spacer-5});
     }
 
-    h2 {
-        font-size: $font-size-lg;
+    h1 {
+        font-size: $base-font-size * 1.4;
         font-family: $primary_site_font;
-
-        @include screen-xl {
-            font-size: $base-font-size * 1.4;
-        }
 
         @include screen-xxl {
             font-size: $font-size-2xl;
         }
+    }
+
+    h2 {
+        font-size: $font-size-lg;
+        font-family: $primary_site_font;
     }
 
     #subpart-resources-heading {
@@ -213,9 +214,14 @@ button.collapsible-title {
     margin-top: $spacer-2;
 }
 
-.show-subpart-resources {
-    color: $mid_gray;
-    font-size: 12px;
+.view-all__container {
+    margin: 1rem 0;
+
+    .show-subpart-resources {
+        color: $primary_link_color;
+        font-size: 14px;
+        text-decoration: none;
+    }
 }
 
 .bold {

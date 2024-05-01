@@ -76,7 +76,6 @@
 }
 
 .trigger-btn,
-.print-btn,
 .link-btn {
     color: $mid_blue;
     cursor: pointer;
@@ -312,12 +311,10 @@
 }
 
 aside.right-sidebar {
-    .trigger-btn-container,
-    .print-btn-container {
+    .trigger-btn-container {
         position: relative;
 
-        .trigger-btn-labeled,
-        .print-btn-labeled {
+        .trigger-btn-labeled {
             display: flex;
             align-items: center;
             height: 30px;
