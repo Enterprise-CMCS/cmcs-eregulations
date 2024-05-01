@@ -283,10 +283,11 @@ class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModel
 
         # Fetch the 'top_x' parameter from the query parameters or use 5 as default
         top_x = int(self.request.GET.get("top_x", 5))
-
+        min_count = int(self.request.GET.get("min_count", 1))
         # Apply location filter to the Subject queryset
         query = Subject.objects.filter(self.get_location_filter(locations))
         # Annotate each Subject with a count of primary keys and order by this count
-        query = query.annotate(count=Count('pk')).order_by('-count')
+        query = query.annotate(count=Count('pk')).filter(count__gte=min_count).order_by('-count')
+
         # Return only the top 5 subjects
         return query[:top_x]

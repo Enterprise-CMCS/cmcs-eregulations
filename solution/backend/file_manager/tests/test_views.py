@@ -44,9 +44,13 @@ def test_top_subjects_by_location():
             "sections": [section1, section2, section3],
         }
 
-    def get_response(client, url, locations, top_x):
+    def get_response(client, url, locations, top_x, min_count=1):
         locations_param = "&".join([f"locations={loc.title}.{loc.part}" for loc in locations])
-        response = client.get(f"{url}?{locations_param}&top_x={top_x}")
+        if top_x:
+            locations_param += f"&top_x={top_x}"
+        if min_count:
+            locations_param += f"&min_count={min_count}"
+        response = client.get(f"{url}?{locations_param}")
         return response
 
     # Set up resources
@@ -78,11 +82,24 @@ def test_top_subjects_by_location():
     response = client.get(f"{url}?locations={sections[0].title}&top_x=5")
     assert response.status_code == status.HTTP_200_OK
 
-    results = response.json()
-
     # check top_x parameter is working
-    response = get_response(client, url, sections, 1)
+    response = get_response(client, url, sections, 1, 2)
     assert response.status_code == status.HTTP_200_OK
     results = response.json()
     assert len(results) == 1, "Should return 1 subject"
     assert results[0]['full_name'] == "Medicaid Policies", "Should return Medicaid Policies"
+
+    # Ensure the returned subjects have counts <= min_count
+    response = get_response(client, url, sections, 5, 2)
+    assert response.status_code == status.HTTP_200_OK
+    results = response.json()
+    for subject in results:
+        assert subject['count'] >= 2, f"Subject {subject['full_name']} should have a count <= 2"
+
+    # Ensure the returned subjects have counts <= 1 if none is specified
+    response = get_response(client, url, sections, 5)
+    assert response.status_code == status.HTTP_200_OK
+    results = response.json()
+
+    for subject in results:
+        assert subject['count'] >= 1, f"Subject {subject['full_name']} should have a count <= 2"
