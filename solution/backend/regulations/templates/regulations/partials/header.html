@@ -20,7 +20,7 @@
             ></header-search>
         </template>
         <template #sign-in>
-            {% if not user.is_authenticated and not hide_login %}
+            {% if not user.is_authenticated %}
                 <sign-in-link
                     custom-login-url="{% url 'custom_login' %}"
                     home-url="{% url 'homepage' %}"

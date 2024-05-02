@@ -367,6 +367,13 @@ header {
                 margin-left: 1rem;
                 text-transform: capitalize;
             }
+
+            &:hover a,
+            &:focus a,
+            &.active a {
+                @include header__anchor--active-bold;
+                padding: 0;
+            }
         }
 
         .header--search:has(.search__form--expanded) + .header--sign-in {
