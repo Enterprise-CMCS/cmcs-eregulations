@@ -45,3 +45,4 @@ export { default as HeaderLinks } from "../../../eregs-vite/src/components/heade
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
 export { default as SignInLink } from "../../../eregs-vite/src/components/SignInLink.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
+export { default as UserIcon } from "../../../eregs-vite/src/components/header/UserIcon.vue";

@@ -17,6 +17,7 @@ import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
+import UserIcon from "@/components/header/UserIcon.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -174,7 +175,9 @@ getStatutesArray();
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
-                <template v-if="isAuthenticated" #sign-in></template>
+                <template v-if="isAuthenticated" #sign-in>
+                    <UserIcon />
+                </template>
                 <template v-else #sign-in>
                     <SignInLink
                         :custom-login-url="customLoginUrl"

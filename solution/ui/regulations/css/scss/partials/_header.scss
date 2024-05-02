@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 $header_input_height_narrow: 45px;
-$header_input_height_wide: 36px;
+$header_input_height_wide: 40px;
 
 header {
     box-sizing: unset;
@@ -145,7 +145,7 @@ header {
                     @include header__anchor--bold;
                     @include header__button;
 
-                    color: $mid_blue;
+                    color: $primary_link_color;
                     display: flex;
                     align-items: center;
                     padding: 0 12px;
@@ -163,7 +163,7 @@ header {
                         margin-right: 5px;
 
                         path {
-                            fill: $mid_blue;
+                            fill: $primary_link_color;
                         }
                     }
                 }
@@ -224,7 +224,7 @@ header {
                             .header--links__anchor {
                                 @include header__anchor--bold;
 
-                                color: $mid_blue;
+                                color: $primary_link_color;
                                 line-height: 24px;
                                 text-decoration: none;
 
@@ -360,19 +360,54 @@ header {
         }
 
         .header--sign-in {
+            height: $header_input_height_wide;
+            margin-left: 1rem;
+
+            &:has(> a) {
+                margin-top: auto;
+            }
+
             a {
                 @include header__anchor--bold;
 
-                color: $mid_blue;
-                margin-left: 1rem;
+                color: $primary_link_color;
                 text-transform: capitalize;
+
+                &:hover,
+                &:focus,
+                &.active {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
             }
 
-            &:hover a,
-            &:focus a,
-            &.active a {
-                @include header__anchor--active-bold;
-                padding: 0;
+            .user-account__button {
+                height: 100%;
+
+                svg {
+                    circle {
+                        stroke: $primary_link_color;
+                    }
+
+                    path {
+                        fill: $primary_link_color;
+                    }
+                }
+
+                &:hover,
+                &:focus,
+                &.active {
+                    svg {
+                        circle {
+                            stroke: $secondary_link_color;
+                            fill: $secondary_link_color;
+                        }
+
+                        path {
+                            fill: white;
+                        }
+                    }
+                }
             }
         }
 

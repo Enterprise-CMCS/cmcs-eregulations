@@ -7,7 +7,6 @@ defineProps({
 });
 
 const isLoginPage = window.location.pathname.includes("login");
-console.log("isLoginPage", isLoginPage);
 </script>
 
 <template>

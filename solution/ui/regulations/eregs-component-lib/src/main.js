@@ -40,6 +40,7 @@ import {
     TocSubchapter,
     TocTitle,
     TooltipContainer,
+    UserIcon,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
 
@@ -237,6 +238,7 @@ function main() {
             TocSubchapter,
             TocTitle,
             TooltipContainer,
+            UserIcon,
             ViewResourcesLink,
         },
     });
