@@ -103,3 +103,11 @@ def test_top_subjects_by_location():
 
     for subject in results:
         assert subject['count'] >= 1, f"Subject {subject['full_name']} should have a count <= 2"
+
+
+    # Ensure the counts reflect distinct resources
+    assert len(results) == 2, "Should return 2 subjects"
+
+    subject_counts = {result['full_name']: result['count'] for result in results}
+    assert subject_counts['Medicaid Policies'] == 3, "Medicaid Policies should be associated with 3 unique resources"
+    assert subject_counts['Health Coverage'] == 2, "Health Coverage should be associated with 2 unique resources"

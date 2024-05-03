@@ -33,7 +33,7 @@ from file_manager.serializers.groups import (
     DivisionWithGroupSerializer,
     GroupWithDivisionSerializer,
 )
-from resources.models import AbstractLocation, AbstractResource
+from resources.models import AbstractLocation
 from resources.views.mixins import LocationExplorerViewSetMixin, LocationFiltererMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
@@ -269,7 +269,7 @@ class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModel
     ViewSet for retrieving top subjects based on location.
     Uses LocationFiltererMixin to apply location-based filters.
     """
-    location_filter_prefix = "locations__"
+    location_filter_prefix = "resources__locations__"
     serializer_class = SubjectCountsSerializer
 
     def get_queryset(self):
@@ -284,11 +284,8 @@ class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModel
         # Fetch the 'top_x' parameter from the query parameters or use 5 as default
         top_x = int(self.request.GET.get("top_x", 5))
         min_count = int(self.request.GET.get("min_count", 1))
-        resources = AbstractResource.objects.filter(self.get_location_filter(locations)).distinct().values_list('pk', flat=True)
-
-
         # Apply location filter to the Subject queryset
-        query = Subject.objects.filter(resources__pk__in=resources)
+        query = Subject.objects.filter(self.get_location_filter(locations))
         # Annotate each Subject with a count of primary keys and order by this count
         query = query.annotate(count=Count('pk')).filter(count__gte=min_count).order_by('-count')
 
