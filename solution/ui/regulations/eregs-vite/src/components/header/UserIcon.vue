@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import useDropdownMenu from "composables/dropdownMenu";
 
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
@@ -15,25 +15,17 @@ const props = defineProps({
     },
 });
 
-const moreMenuExpanded = ref(false);
-
-const accountClick = () => {
-    moreMenuExpanded.value = !moreMenuExpanded.value;
-};
-
-const closeAccountClick = () => {
-    moreMenuExpanded.value = false;
-};
+const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 </script>
 
 <template>
-    <button class="user-account__button" @click="accountClick">
+    <button class="user-account__button" @click="toggleClick">
         <UserIconSvg />
     </button>
     <HeaderDropdownMenu
-        v-if="moreMenuExpanded"
+        v-if="menuExpanded"
         class="dropdown-menu--account"
-        @close-menu="closeAccountClick"
+        @close-menu="closeClick"
     >
         <template #dropdown-menu-content> Hello there </template>
     </HeaderDropdownMenu>

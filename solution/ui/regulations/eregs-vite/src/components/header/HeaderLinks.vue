@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 
+import useDropdownMenu from "composables/dropdownMenu";
+
 import HeaderChevronUp from "../svgs/header-chevron-up.vue";
 import HeaderChevronDown from "../svgs/header-chevron-down.vue";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
@@ -31,15 +33,7 @@ const links = [
     },
 ];
 
-const moreMenuExpanded = ref(false);
-
-const moreClick = () => {
-    moreMenuExpanded.value = !moreMenuExpanded.value;
-};
-
-const closeClick = () => {
-    moreMenuExpanded.value = false;
-};
+const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 </script>
 
 <template>
@@ -56,12 +50,12 @@ const closeClick = () => {
                 </a>
             </li>
         </ul>
-        <button class="more__button" @click="moreClick">
-            <HeaderChevronUp v-show="moreMenuExpanded" />
-            <HeaderChevronDown v-show="!moreMenuExpanded" />
+        <button class="more__button" @click="toggleClick">
+            <HeaderChevronUp v-show="menuExpanded" />
+            <HeaderChevronDown v-show="!menuExpanded" />
             <span>More</span>
         </button>
-        <HeaderDropdownMenu v-if="moreMenuExpanded" @close-menu="closeClick">
+        <HeaderDropdownMenu v-if="menuExpanded" @close-menu="closeClick">
             <template #dropdown-menu-content>
                 <ul class="links__list links__list--dropdown">
                     <li v-for="(link, index) in links" :key="index">
