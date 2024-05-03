@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 import HeaderChevronUp from "../svgs/header-chevron-up.vue";
 import HeaderChevronDown from "../svgs/header-chevron-down.vue";
+import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 
 const props = defineProps({
     statutesUrl: {
@@ -60,23 +61,21 @@ const closeClick = () => {
             <HeaderChevronDown v-show="!moreMenuExpanded" />
             <span>More</span>
         </button>
-        <div
-            v-show="moreMenuExpanded"
-            v-clickaway="closeClick"
-            class="more--dropdown-menu"
-        >
-            <ul class="links__list links__list--dropdown">
-                <li v-for="(link, index) in links" :key="index">
-                    <a
-                        :data-testid="link.name"
-                        class="header--links__anchor"
-                        :class="{ active: link.active }"
-                        :href="link.href"
-                    >
-                        <span class="anchor__span">{{ link.label }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <HeaderDropdownMenu v-if="moreMenuExpanded" @close-menu="closeClick">
+            <template #dropdown-menu-content>
+                <ul class="links__list links__list--dropdown">
+                    <li v-for="(link, index) in links" :key="index">
+                        <a
+                            :data-testid="link.name"
+                            class="header--links__anchor"
+                            :class="{ active: link.active }"
+                            :href="link.href"
+                        >
+                            <span class="anchor__span">{{ link.label }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </template>
+        </HeaderDropdownMenu>
     </div>
 </template>

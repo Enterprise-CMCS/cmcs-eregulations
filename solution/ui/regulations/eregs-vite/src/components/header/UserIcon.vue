@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
+import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
 const props = defineProps({
@@ -14,8 +15,14 @@ const props = defineProps({
     },
 });
 
+const moreMenuExpanded = ref(false);
+
 const accountClick = () => {
-    console.log("account clicked");
+    moreMenuExpanded.value = !moreMenuExpanded.value;
+};
+
+const closeAccountClick = () => {
+    moreMenuExpanded.value = false;
 };
 </script>
 
@@ -23,6 +30,13 @@ const accountClick = () => {
     <button class="user-account__button" @click="accountClick">
         <UserIconSvg />
     </button>
+    <HeaderDropdownMenu
+        v-if="moreMenuExpanded"
+        class="dropdown-menu--account"
+        @close-menu="closeAccountClick"
+    >
+        <template #dropdown-menu-content> Hello there </template>
+    </HeaderDropdownMenu>
 </template>
 
 <style></style>
