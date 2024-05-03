@@ -6,6 +6,7 @@
 
 {% block outside_vue %}
     {{ site_config|json_script:"site_config" }}
+    {{ block.super }}
 {% endblock %}
 
 {% block pre_header %}

@@ -16,6 +16,10 @@ const props = defineProps({
 });
 
 const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
+
+const formLogout = () => {
+    document.oidc_logout.submit();
+};
 </script>
 
 <template>
@@ -41,7 +45,9 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
                 <slot name="user-account-content"></slot>
             </div>
             <hr>
-            <slot name="sign-out-link"></slot>
+            <slot name="sign-out-link">
+                <button class="sign-out__button" @click="formLogout">Vue Sign Out</button>
+            </slot>
         </template>
     </HeaderDropdownMenu>
 </template>

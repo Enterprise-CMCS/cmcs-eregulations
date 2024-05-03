@@ -168,9 +168,7 @@ getStatutesArray();
                     <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks
-                        :subjects-url="subjectsUrl"
-                    />
+                    <HeaderLinks :subjects-url="subjectsUrl" />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />

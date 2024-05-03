@@ -26,18 +26,7 @@
                         {{ user.username }}
                     </template>
                     <template #sign-out-link>
-                        <form
-                            id="oidc_logout"
-                            method="post"
-                            {% if request.session.oidc_id_token %}
-                                action="{% url 'oidc_logout' %}"
-                            {% else %}
-                                action="{% url 'logout' %}?next={{ request.path }}"
-                            {% endif %}
-                        >
-                            {% csrf_token %}
-                            <input id="logout" type="submit" value="Log Out" />
-                        </form>
+                        {% include "regulations/partials/logout_form.html" %}
                     </template>
                 </user-icon>
             {% else %}

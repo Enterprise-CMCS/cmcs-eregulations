@@ -5,6 +5,12 @@
     <link rel="stylesheet" href="{% static '/vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
 {% endblock %}
 
+{% block outside_vue %}
+    <div id="logoutContainer">
+        {% include "regulations/partials/logout_form.html" %}
+    </div>
+{% endblock %}
+
 {% block footer %}
     <footer>
         {% include "regulations/partials/footer.html" with spa_footer=True %}
