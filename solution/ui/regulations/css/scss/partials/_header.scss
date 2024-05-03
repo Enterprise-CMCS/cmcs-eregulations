@@ -421,6 +421,17 @@ header {
                 & + .dropdown-menu--account {
                     top: 56px;
                     right: 1rem;
+                    max-width: 250px;
+                    white-space: normal;
+
+                    .account-info {
+                        padding: 0.5rem;
+
+                        .account-message {
+                            margin: 0.25rem 0;
+                            font-size: $font-size-sm;
+                        }
+                    }
                 }
             }
         }

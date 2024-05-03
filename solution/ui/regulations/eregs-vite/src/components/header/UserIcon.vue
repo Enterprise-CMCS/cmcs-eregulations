@@ -5,9 +5,9 @@ import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
 const props = defineProps({
-    prop1: {
+    username: {
         type: String,
-        required: true,
+        default: "User",
     },
     prop2: {
         type: Object,
@@ -27,7 +27,22 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
         class="dropdown-menu--account"
         @close-menu="closeClick"
     >
-        <template #dropdown-menu-content> Hello there </template>
+        <template #dropdown-menu-content>
+            <div class="account-info">
+                <strong>
+                    <slot name="username">
+                        {{ props.username }}
+                    </slot>
+                </strong>
+                <div class="account-message">
+                    While signed in, you can access documents
+                    <strong>internal to CMCS</strong>.
+                </div>
+                <slot name="user-account-content"></slot>
+            </div>
+            <hr>
+            <slot name="sign-out-link"></slot>
+        </template>
     </HeaderDropdownMenu>
 </template>
 
