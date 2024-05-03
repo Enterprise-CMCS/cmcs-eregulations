@@ -8,25 +8,22 @@ from resources.models import AbstractResource, Section, Subpart
 
 
 @pytest.mark.django_db
-def test_top_subjects_by_location():
-    """
-    Test the TopSubjectsByLocationViewSet's ability to return the top subjects based on location.
-    """
+class TestTopSubjectsByLocation:
+    def setup_method(self, method):
+        """Setup resources and client before each test."""
+        self.client = APIClient()
+        self.url = reverse('top-subjects-by-location')
 
-    def create_resources():
         subject1 = Subject.objects.create(full_name="Medicaid Policies")
         subject2 = Subject.objects.create(full_name="Health Coverage")
 
-        # Create locations
         subpart1 = Subpart.objects.create(title=42, part=433, subpart_id="A")
         section1 = Section.objects.create(title=42, part=433, section_id=110, parent=subpart1)
         section2 = Section.objects.create(title=42, part=433, section_id=120, parent=subpart1)
-        section3 = Section.objects.create(title=42, part=434, section_id=130, parent=subpart1)
 
-        # Create resources and associate subjects to sections
         resource1 = AbstractResource.objects.create()
         resource1.subjects.add(subject1, subject2)
-        resource1.locations.add(section1)
+        resource1.locations.add(section1, section2)
         resource1.save()
 
         resource2 = AbstractResource.objects.create()
@@ -35,79 +32,73 @@ def test_top_subjects_by_location():
         resource2.save()
 
         resource3 = AbstractResource.objects.create()
-        resource3.subjects.add(subject1)
-        resource3.locations.add(section3)
+        resource3.subjects.add(subject2)
+        resource3.locations.add(subpart1)
         resource3.save()
 
-        return {
-            "subjects": [subject1, subject2],
-            "sections": [section1, section2, section3],
-        }
+        self.sections = [section1, section2]
+        self.subparts = [subpart1]
 
-    def get_response(client, url, locations, top_x, min_count=1):
+    def get_response(self, locations, top_x, min_count=1):
+        """Helper function to send a request to the API."""
         locations_param = "&".join([f"locations={loc.title}.{loc.part}" for loc in locations])
         if top_x:
             locations_param += f"&top_x={top_x}"
         if min_count:
             locations_param += f"&min_count={min_count}"
-        response = client.get(f"{url}?{locations_param}")
-        return response
+        return self.client.get(f"{self.url}?{locations_param}")
 
-    # Set up resources
-    resources = create_resources()
-    sections = resources["sections"]
+    def test_distict_resources(self):
+        """Test correct subject counts with distinct resources."""
+        response = self.get_response(self.subparts, 5)
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
 
-    # Initialize API client
-    client = APIClient()
-    url = reverse('top-subjects-by-location')
-
-    # Test with all sections included
-    response = get_response(client, url, sections, 5)
-    assert response.status_code == status.HTTP_200_OK
-    results = response.json()
-
-    # Ensure specific number of subjects returned is correct
-    assert len(results) == 2, "Should return 2 subjects"
-
-    # Check counts and order
-    top_subject = results[0]
-    assert top_subject['full_name'] == "Medicaid Policies"
-    assert top_subject['count'] == 3, "Medicaid Policies should appear three times"
-
-    second_subject = results[1]
-    assert second_subject['full_name'] == "Health Coverage"
-    assert second_subject['count'] == 2, "Health Coverage should appear twice"
-
-    # Test with a location by title only
-    response = client.get(f"{url}?locations={sections[0].title}&top_x=5")
-    assert response.status_code == status.HTTP_200_OK
-
-    # check top_x parameter is working
-    response = get_response(client, url, sections, 1, 2)
-    assert response.status_code == status.HTTP_200_OK
-    results = response.json()
-    assert len(results) == 1, "Should return 1 subject"
-    assert results[0]['full_name'] == "Medicaid Policies", "Should return Medicaid Policies"
-
-    # Ensure the returned subjects have counts <= min_count
-    response = get_response(client, url, sections, 5, 2)
-    assert response.status_code == status.HTTP_200_OK
-    results = response.json()
-    for subject in results:
-        assert subject['count'] >= 2, f"Subject {subject['full_name']} should have a count <= 2"
-
-    # Ensure the returned subjects have counts <= 1 if none is specified
-    response = get_response(client, url, sections, 5)
-    assert response.status_code == status.HTTP_200_OK
-    results = response.json()
-
-    for subject in results:
-        assert subject['count'] >= 1, f"Subject {subject['full_name']} should have a count <= 2"
+        assert len(results) == 2, "Should return 2 subjects"
+        # results count should be 4 and 3
+        assert results[0]['full_name'] == "Health Coverage"
+        assert results[0]['count'] == 4, "Medicaid Policies should appear four times"
+        assert results[1]['full_name'] == "Medicaid Policies"
+        assert results[1]['count'] == 3, "Health Coverage should appear three times"
 
 
-    # Ensure the counts reflect distinct resources
-    assert len(results) == 2, "Should return 2 subjects"
+    def test_all_sections_included(self):
+        """Test with all sections included."""
+        response = self.get_response(self.sections, 5)
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
 
-    subject_counts = {result['full_name']: result['count'] for result in results}
-    assert subject_counts['Medicaid Policies'] == 3, "Medicaid Policies should be associated with 3 unique resources"
-    assert subject_counts['Health Coverage'] == 2, "Health Coverage should be associated with 2 unique resources"
+        assert len(results) == 2, "Should return 2 subjects"
+        assert results[0]['full_name'] == "Health Coverage"
+        assert results[0]['count'] == 4, "Medicaid Policies should appear four times"
+        assert results[1]['full_name'] == "Medicaid Policies"
+        assert results[1]['count'] == 3, "Health Coverage should appear three times"
+
+    def test_location_by_title(self):
+        """Test with a location by title only."""
+        response = self.client.get(f"{self.url}?locations={self.sections[0].title}&top_x=5")
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_top_x_parameter(self):
+        """Check top_x parameter is working."""
+        response = self.get_response(self.sections, 1, 2)
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
+        assert len(results) == 1, "Should return 1 subject"
+        assert results[0]['full_name'] == "Health Coverage", "Should return Health Coverage"
+
+    def test_min_count_parameter(self):
+        """Ensure the returned subjects have counts >= min_count."""
+        response = self.get_response(self.sections, 5, 2)
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
+        for subject in results:
+            assert subject['count'] >= 2, f"Subject {subject['full_name']} should have a count >= 2"
+
+    def test_min_count_unspecified(self):
+        """Ensure subjects have counts >= 1 if min_count isn't specified."""
+        response = self.get_response(self.sections, 5)
+        assert response.status_code == status.HTTP_200_OK
+        results = response.json()
+        for subject in results:
+            assert subject['count'] >= 1, f"Subject {subject['full_name']} should have a count >= 1"

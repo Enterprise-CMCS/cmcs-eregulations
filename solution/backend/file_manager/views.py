@@ -33,7 +33,7 @@ from file_manager.serializers.groups import (
     DivisionWithGroupSerializer,
     GroupWithDivisionSerializer,
 )
-from resources.models import AbstractLocation
+from resources.models import AbstractLocation, AbstractResource
 from resources.views.mixins import LocationExplorerViewSetMixin, LocationFiltererMixin, OptionalPaginationMixin
 
 from .functions import get_upload_link
