@@ -61,7 +61,6 @@ class TestTopSubjectsByLocation:
         assert results[1]['full_name'] == "Medicaid Policies"
         assert results[1]['count'] == 3, "Health Coverage should appear three times"
 
-
     def test_all_sections_included(self):
         """Test with all sections included."""
         response = self.get_response(self.sections, 5)
