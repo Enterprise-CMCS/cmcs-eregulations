@@ -20,6 +20,7 @@ class TestTopSubjectsByLocation:
         subpart1 = Subpart.objects.create(title=42, part=433, subpart_id="A")
         section1 = Section.objects.create(title=42, part=433, section_id=110, parent=subpart1)
         section2 = Section.objects.create(title=42, part=433, section_id=120, parent=subpart1)
+        section3 = Section.objects.create(title=45, part=1, section_id=100)
 
         resource1 = AbstractResource.objects.create()
         resource1.subjects.add(subject1, subject2)
@@ -36,7 +37,12 @@ class TestTopSubjectsByLocation:
         resource3.locations.add(subpart1)
         resource3.save()
 
-        self.sections = [section1, section2]
+        resource4 = AbstractResource.objects.create()
+        resource4.subjects.add(subject1)
+        resource4.locations.add(section3)
+        resource4.save()
+
+        self.sections = [section1, section2, section3]
         self.subparts = [subpart1]
 
     def get_response(self, locations, top_x, min_count=1):
@@ -71,10 +77,10 @@ class TestTopSubjectsByLocation:
         results = response.json()
 
         assert len(results) == 2, "Should return 2 subjects"
-        assert results[0]['full_name'] == "Health Coverage"
+        assert results[0]['full_name'] == "Medicaid Policies"
         assert results[0]['count'] == 3, "Medicaid Policies should appear three times"
-        assert results[1]['full_name'] == "Medicaid Policies"
-        assert results[1]['count'] == 2, "Health Coverage should appear two times"
+        assert results[1]['full_name'] == "Health Coverage"
+        assert results[1]['count'] == 3, "Health Coverage should appear three times"
 
     def test_location_by_title(self):
         """Test with a location by title only."""
@@ -87,7 +93,7 @@ class TestTopSubjectsByLocation:
         assert response.status_code == status.HTTP_200_OK
         results = response.json()
         assert len(results) == 1, "Should return 1 subject"
-        assert results[0]['full_name'] == "Health Coverage", "Should return Health Coverage"
+        assert results[0]['full_name'] == "Medicaid Policies", "Should return Health Coverage"
 
     def test_min_count_parameter(self):
         """Ensure the returned subjects have counts >= min_count."""
