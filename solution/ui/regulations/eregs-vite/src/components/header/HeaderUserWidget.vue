@@ -6,13 +6,6 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
-const props = defineProps({
-    username: {
-        type: String,
-        default: "User",
-    },
-});
-
 const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 
 const formLogout = () => {
@@ -37,9 +30,7 @@ const iconClasses = computed(() => ({
         <template #dropdown-menu-content>
             <div class="account-info">
                 <strong>
-                    <slot name="username">
-                        {{ props.username }}
-                    </slot>
+                    <slot name="username"></slot>
                 </strong>
                 <div class="account-message">
                     While signed in, you can access documents

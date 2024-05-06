@@ -73,6 +73,10 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    username: {
+        type: String,
+        default: undefined,
+    },
 });
 
 // Router and Route
@@ -380,7 +384,11 @@ getDocSubjects();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget />
+                    <HeaderUserWidget>
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
                 </template>
                 <template v-else #sign-in>
                     <SignInLink

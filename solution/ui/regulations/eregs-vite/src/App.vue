@@ -53,6 +53,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        username: {
+            type: String,
+            default: "User",
+        },
     },
 };
 </script>
@@ -72,6 +76,7 @@ export default {
             :host="host"
             :is-authenticated="isAuthenticated === 'True'"
             :has-editable-job-code="hasEditableJobCode === 'True'"
+            :username="username"
         />
     </v-app>
 </template>

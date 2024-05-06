@@ -48,6 +48,10 @@ const props = defineProps({
         type: String,
         default: "/subjects/",
     },
+    username: {
+        type: String,
+        default: undefined,
+    },
 });
 
 // get route query params
@@ -174,7 +178,11 @@ getStatutesArray();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget />
+                    <HeaderUserWidget>
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
                 </template>
                 <template v-else #sign-in>
                     <SignInLink
