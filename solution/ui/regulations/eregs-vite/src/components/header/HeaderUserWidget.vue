@@ -19,7 +19,11 @@ const iconClasses = computed(() => ({
 </script>
 
 <template>
-    <button :class="iconClasses" @click="toggleClick">
+    <button
+        :class="iconClasses"
+        aria-label="Account Information"
+        @click="toggleClick"
+    >
         <UserIconSvg />
     </button>
     <HeaderDropdownMenu

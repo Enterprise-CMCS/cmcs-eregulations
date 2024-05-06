@@ -5,7 +5,9 @@
         height="40"
         viewBox="0 0 40 40"
         fill="none"
+        role="img"
     >
+        <title>User Icon</title>
         <svg width="40px" height="40px">
             <circle cx="20" cy="20" r="19.5" />
         </svg>
