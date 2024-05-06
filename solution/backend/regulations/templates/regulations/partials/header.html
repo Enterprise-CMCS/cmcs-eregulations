@@ -21,14 +21,14 @@
         </template>
         <template #sign-in>
             {% if user.is_authenticated %}
-                <user-icon>
+                <header-user-widget>
                     <template #username>
                         {{ user.username }}
                     </template>
                     <template #sign-out-link>
                         {% include "regulations/partials/logout_form.html" %}
                     </template>
-                </user-icon>
+                </header-user-widget>
             {% else %}
                 <sign-in-link
                     custom-login-url="{% url 'custom_login' %}"

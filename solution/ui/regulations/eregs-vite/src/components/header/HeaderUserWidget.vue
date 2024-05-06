@@ -1,4 +1,6 @@
 <script setup>
+import { computed } from "vue";
+
 import useDropdownMenu from "composables/dropdownMenu";
 
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
@@ -16,10 +18,15 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 const formLogout = () => {
     document.oidc_logout.submit();
 };
+
+const iconClasses = computed(() => ({
+    "user-account__button": true,
+    "user-account__button--expanded": menuExpanded.value,
+}));
 </script>
 
 <template>
-    <button class="user-account__button" @click="toggleClick">
+    <button :class="iconClasses" @click="toggleClick">
         <UserIconSvg />
     </button>
     <HeaderDropdownMenu
@@ -40,9 +47,11 @@ const formLogout = () => {
                 </div>
                 <slot name="user-account-content"></slot>
             </div>
-            <hr>
+            <hr />
             <slot name="sign-out-link">
-                <button class="sign-out__button" @click="formLogout">Vue Sign Out</button>
+                <button class="sign-out__button" @click="formLogout">
+                    Vue Sign Out
+                </button>
             </slot>
         </template>
     </HeaderDropdownMenu>
