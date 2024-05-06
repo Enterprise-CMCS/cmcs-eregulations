@@ -28,15 +28,19 @@ const iconClasses = computed(() => ({
         @close-menu="closeClick"
     >
         <template #dropdown-menu-content>
-            <div class="account-info">
-                <strong>
-                    <slot name="username"></slot>
-                </strong>
-                <div class="account-message">
-                    While signed in, you can access documents
-                    <strong>internal to CMCS</strong>.
+            <div class="account-info__container">
+                <div class="account-info--username">
+                    <strong>
+                        <slot name="username"></slot>
+                    </strong>
                 </div>
-                <slot name="user-account-content"></slot>
+                <div class="account-info--msg">
+                    <div class="account-message">
+                        While signed in, you can access documents
+                        <strong>internal to CMCS</strong>.
+                    </div>
+                    <slot name="user-account-content"></slot>
+                </div>
             </div>
             <hr />
             <slot name="sign-out-link">

@@ -421,17 +421,34 @@ header {
 
                 & + .dropdown-menu--account {
                     top: 56px;
-                    right: 1rem;
-                    max-width: 250px;
+                    right: 2rem;
                     white-space: normal;
 
-                    .account-info {
-                        padding: 0.5rem;
+                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                        right: 1rem;
+                    }
 
-                        .account-message {
-                            margin: 0.25rem 0;
-                            font-size: $font-size-sm;
+                    .account-info__container {
+                        padding: 0.5rem;
+                        display: inline-block;
+                        min-width: 145px;
+                        max-width: 340px;
+
+                        .account-info--username {
+                            overflow-wrap: anywhere;
                         }
+
+                        .account-info--msg {
+                            display: flex;
+
+                            .account-message {
+                                flex-grow: 1;
+                                width: 0;
+                                margin: 0.25rem 0;
+                                font-size: $font-size-sm;
+                            }
+                        }
+
                     }
                 }
             }
