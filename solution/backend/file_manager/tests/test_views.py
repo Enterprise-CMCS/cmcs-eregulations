@@ -66,9 +66,9 @@ class TestTopSubjectsByLocation:
         assert len(results) == 2, "Should return 2 subjects"
         # results count should be 4 and 3
         assert results[0]['full_name'] == "Health Coverage"
-        assert results[0]['count'] == 3, "Medicaid Policies should appear three times"
+        assert results[0]['count'] == 3, "Health Coverage should appear three times"
         assert results[1]['full_name'] == "Medicaid Policies"
-        assert results[1]['count'] == 2, "Health Coverage should appear two times"
+        assert results[1]['count'] == 2, "Medicaid Policies should appear two times"
 
     def test_all_sections_included(self):
         """Test with all sections included."""
