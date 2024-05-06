@@ -284,8 +284,11 @@ class TopSubjectsByLocationViewSet(LocationFiltererMixin, viewsets.ReadOnlyModel
         # Fetch the 'top_x' parameter from the query parameters or use 5 as default
         top_x = int(self.request.GET.get("top_x", 5))
         min_count = int(self.request.GET.get("min_count", 1))
-        # resources = AbstractResource.objects.filter(self.get_location_filter(locations)).distinct().values_list('pk', flat=True)
-        resources = AbstractResource.objects.annotate(subjects_count=Count("subjects")).filter(subjects_count__lt=10)
+
+        resources = AbstractResource.objects\
+            .annotate(subjects_count=Count("subjects"))\
+            .filter(subjects_count__lt=10).filter(self.get_location_filter(locations)).distinct()\
+            .values_list('pk', flat=True)
 
         # Apply location filter to the Subject queryset
         query = Subject.objects.filter(resources__pk__in=resources)
