@@ -18,9 +18,9 @@ export default function useLoginRedirectUrl({
             fullPath = route.fullPath;
             redirectUrl = `${customLoginUrl}?next=${homeUrl}${basePath}`;
         } else {
-            basePath = window.location.pathname.substring(1);
+            basePath = window.location.pathname;
             fullPath = window.location.href;
-            redirectUrl = `${customLoginUrl}?next=${homeUrl}${basePath}`;
+            redirectUrl = `${customLoginUrl}?next=${basePath}`;
         }
 
         if (!fullPath.includes("?")) {
