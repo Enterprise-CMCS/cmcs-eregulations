@@ -48,8 +48,11 @@ class TestTopSubjectsByLocation:
             locations_param += f"&min_count={min_count}"
         return self.client.get(f"{self.url}?{locations_param}")
 
-    def test_distict_resources(self):
-        """Test correct subject counts with distinct resources."""
+    def test_subject_counts_reflect_distinct_resources_only(self):
+        """ Ensure that the count of subjects returned only reflects counts from distinct resources.
+        This test checks that subjects linked to multiple resources are counted once per unique resource,
+        ensuring that duplicate resources for a subject do not inflate their count.
+        """
         response = self.get_response(self.subparts, 5)
         assert response.status_code == status.HTTP_200_OK
         results = response.json()
@@ -57,9 +60,9 @@ class TestTopSubjectsByLocation:
         assert len(results) == 2, "Should return 2 subjects"
         # results count should be 4 and 3
         assert results[0]['full_name'] == "Health Coverage"
-        assert results[0]['count'] == 4, "Medicaid Policies should appear four times"
+        assert results[0]['count'] == 3, "Medicaid Policies should appear three times"
         assert results[1]['full_name'] == "Medicaid Policies"
-        assert results[1]['count'] == 3, "Health Coverage should appear three times"
+        assert results[1]['count'] == 2, "Health Coverage should appear two times"
 
     def test_all_sections_included(self):
         """Test with all sections included."""
@@ -69,9 +72,9 @@ class TestTopSubjectsByLocation:
 
         assert len(results) == 2, "Should return 2 subjects"
         assert results[0]['full_name'] == "Health Coverage"
-        assert results[0]['count'] == 4, "Medicaid Policies should appear four times"
+        assert results[0]['count'] == 3, "Medicaid Policies should appear three times"
         assert results[1]['full_name'] == "Medicaid Policies"
-        assert results[1]['count'] == 3, "Health Coverage should appear three times"
+        assert results[1]['count'] == 2, "Health Coverage should appear two times"
 
     def test_location_by_title(self):
         """Test with a location by title only."""
