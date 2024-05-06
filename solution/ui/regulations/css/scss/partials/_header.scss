@@ -448,7 +448,30 @@ header {
                                 font-size: $font-size-sm;
                             }
                         }
+                    }
 
+                    hr {
+                        border: 0;
+                        height: 1px;
+                        background: $border_color;
+                    }
+
+                    .account--sign-out {
+                        padding: 0.5rem;
+
+                        button,
+                        form input {
+                            @include header__anchor--bold;
+
+                            color: $primary_link_color;
+
+                            &:hover,
+                            &:focus,
+                            &.active {
+                                @include header__anchor--active-bold;
+                                padding: 0;
+                            }
+                        }
                     }
                 }
             }

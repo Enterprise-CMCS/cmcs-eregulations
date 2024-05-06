@@ -43,11 +43,13 @@ const iconClasses = computed(() => ({
                 </div>
             </div>
             <hr />
-            <slot name="sign-out-link">
-                <button class="sign-out__button" @click="formLogout">
-                    Vue Sign Out
-                </button>
-            </slot>
+            <div class="account--sign-out">
+                <slot name="sign-out-link">
+                    <button class="sign-out__button" @click="formLogout">
+                        Sign Out
+                    </button>
+                </slot>
+            </div>
         </template>
     </HeaderDropdownMenu>
 </template>
