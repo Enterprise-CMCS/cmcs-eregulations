@@ -33,7 +33,6 @@ from file_manager.serializers.groups import (
     DivisionWithGroupSerializer,
     GroupWithDivisionSerializer,
 )
-
 from resources.models import AbstractLocation, AbstractResource
 from resources.views.mixins import LocationExplorerViewSetMixin, LocationFiltererMixin, OptionalPaginationMixin
 
