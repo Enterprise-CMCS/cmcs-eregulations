@@ -15,7 +15,7 @@
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <UserIcon />
+                    <HeaderUserWidget />
                 </template>
                 <template v-else #sign-in>
                     <SignInLink
@@ -210,7 +210,7 @@ import RegResults from "@/components/search/RegResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import UserIcon from "@/components/header/UserIcon.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
 const DEFAULT_TITLE = "42";
 
@@ -230,7 +230,7 @@ export default {
         SearchEmptyState,
         SearchErrorMsg,
         SearchInput,
-        UserIcon,
+        HeaderUserWidget,
     },
 
     props: {

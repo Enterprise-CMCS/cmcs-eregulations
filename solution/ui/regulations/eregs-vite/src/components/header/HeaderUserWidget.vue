@@ -9,10 +9,6 @@ const props = defineProps({
         type: String,
         default: "User",
     },
-    prop2: {
-        type: Object,
-        required: true,
-    },
 });
 
 const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
