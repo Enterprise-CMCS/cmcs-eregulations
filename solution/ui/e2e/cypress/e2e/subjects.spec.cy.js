@@ -93,7 +93,7 @@ describe("Find by Subjects", () => {
 
         cy.injectAxe();
 
-        cy.get("#loginIndicator").should("not.be.visible");
+        cy.get("button[data-testid='user-account-button']").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
@@ -143,7 +143,7 @@ describe("Find by Subjects", () => {
         });
         cy.visit("/subjects");
         cy.url().should("include", "/subjects/");
-        cy.get("#loginIndicator").should("be.visible");
+        cy.get("button[data-testid='user-account-button']").should("be.visible");
         cy.get(".subject__heading").should("not.exist");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
@@ -633,7 +633,7 @@ describe("Find by Subjects", () => {
         });
     });
 
-    it("returns you to the custom eua login page when you log out", () => {
+    it("should show the external only view of the subjects page after you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -641,9 +641,9 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.get("#logout").click();
+        cy.eregsLogout({ landingPage: "/subjects" });
         cy.url().should("include", "/subjects");
-        cy.get("#loginIndicator").should("not.be.visible");
+        cy.get("button[data-testid='user-account-button']").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")

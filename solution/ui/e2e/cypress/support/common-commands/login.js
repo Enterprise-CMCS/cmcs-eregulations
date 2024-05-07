@@ -6,10 +6,11 @@ export const eregsLogin = ({ username, password, landingPage = "/" }) => {
     cy.get("#id_password").type(password);
     cy.get("#login-form").submit();
     cy.visit(landingPage);
+    cy.get("button[data-testid='user-account-button']").should("be.visible");
 };
 
-export const eregsLogout = () => {
+export const eregsLogout = ({ landingPage = "/" }) => {
     cy.get("button[data-testid='user-account-button']").click();
     cy.get("form#oidc_logout").submit();
-    cy.visit("/");
+    cy.visit(landingPage);
 };
