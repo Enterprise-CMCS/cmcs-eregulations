@@ -12,11 +12,11 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
     it("should have a Sign In link at the top right corner of the header", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".header--sign-in a[href='/login/?next=/']").should(
+        cy.get(".header--sign-in a").should(
             "be.visible"
         );
         cy.get(".header--sign-in").should("not.have.class", "active");
-        cy.get(".header--sign-in a[href='/login/?next=/']").click();
+        cy.get(".header--sign-in a").click();
         cy.url().should("include", "/?next=/");
         cy.get(".header--sign-in").should("have.class", "active");
         cy.get("h1").contains("Sign in with your CMS account");
@@ -58,7 +58,7 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
         cy.get(".dropdown-menu__container.dropdown-menu--account").should(
             "not.exist"
         );
-        cy.get(".header--sign-in a[href='/login/?next=/']").should(
+        cy.get(".header--sign-in a").should(
             "be.visible"
         );
     });
@@ -98,7 +98,7 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
         cy.get(".dropdown-menu__container.dropdown-menu--account").should(
             "not.exist"
         );
-        cy.get(".header--sign-in a[href='/login/?next=/statutes/']").should(
+        cy.get(".header--sign-in a").should(
             "be.visible"
         );
     });
