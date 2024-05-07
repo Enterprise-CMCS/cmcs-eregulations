@@ -186,15 +186,8 @@ header {
                 }
 
                 .more--dropdown-menu {
-                    top: $header_height_mobile;
-                    margin-top: 15px;
-
-                    @include custom-min($eds-width-header-links / 1px) {
+                    @include custom-min($eds-width-sm / 1px) {
                         display: none;
-                    }
-
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
-                        right: 15px;
                     }
                 }
 

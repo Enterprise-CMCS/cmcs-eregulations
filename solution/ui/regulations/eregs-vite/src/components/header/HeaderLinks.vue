@@ -55,7 +55,11 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
             <HeaderChevronDown v-show="!menuExpanded" />
             <span>More</span>
         </button>
-        <HeaderDropdownMenu v-if="menuExpanded" @close-menu="closeClick">
+        <HeaderDropdownMenu
+            v-if="menuExpanded"
+            class="more--dropdown-menu"
+            @close-menu="closeClick"
+        >
             <template #dropdown-menu-content>
                 <ul class="links__list links__list--dropdown">
                     <li v-for="(link, index) in links" :key="index">
