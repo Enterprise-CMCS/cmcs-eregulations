@@ -20,8 +20,9 @@ const iconClasses = computed(() => ({
 
 <template>
     <button
-        :class="iconClasses"
         aria-label="Account Information"
+        :class="iconClasses"
+        data-testid="user-account-button"
         @click="toggleClick"
     >
         <UserIconSvg />
