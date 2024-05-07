@@ -210,13 +210,13 @@ export default {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
                         categories: rawCategories,
-                        resources: response.results
+                        resources: response.results,
                     });
                 } else {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
                         categories: rawCategories,
-                        resources: subpartResponse.results
+                        resources: subpartResponse.results,
                     });
                 }
             } catch (error) {
@@ -232,7 +232,16 @@ export default {
                 this.part,
                 this.subparts[0]
             );
-            const secList = sections.map((section) => section.identifier[1]);
+
+            const getSectionsRecursive = (sectionList) =>
+                sectionList.flatMap((section) => {
+                    if (section.type !== "section")
+                        return getSectionsRecursive(section.children);
+                    return section.identifier[1];
+                });
+
+            const secList = getSectionsRecursive(sections);
+
             this.partDict[this.part] = {
                 title: this.title,
                 subparts: this.subparts,
