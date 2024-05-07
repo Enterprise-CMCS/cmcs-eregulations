@@ -1,6 +1,8 @@
 import re
 
 import requests
+import logging
+
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group, User
@@ -19,6 +21,8 @@ from .models import (
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
+
+logger = logging.getLogger(__name__)
 
 admin.site.logout_template = 'admin/logged_out.html'
 
@@ -82,6 +86,11 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
     def create_user(self, claims) -> User:
         email = claims.get("email")
         jobcodes = claims.get("jobcodes")
+
+        # print out to the logs all the claims values using logger
+        logger.info("=================Claims:")
+        for key, value in claims.items():
+            logger.info(f'================{key}: {value}')
 
         if jobcodes:
             # Extract the id_token from the claims
