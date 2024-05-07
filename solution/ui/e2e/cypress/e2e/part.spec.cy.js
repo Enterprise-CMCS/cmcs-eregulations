@@ -75,7 +75,7 @@ describe("Part View", () => {
             "CMCS staff participating in the Policy Repository pilot can sign in to see internal resources."
         );
 
-        cy.get("span[data-testid=loginSidebar]")
+        cy.get("span[data-testid=loginSidebar] a")
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/42/433/Subpart-B/");
@@ -99,7 +99,7 @@ describe("Part View", () => {
         cy.get(".div__login-sidebar").contains(
             "Resources you can access include policy documents internal to CMCS."
         );
-        cy.get("#loginIndicator").should("be.visible");
+        cy.get("button[data-testid='user-account-button']").should("be.visible");
         cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
         cy.wait("@resources").then(() => {
