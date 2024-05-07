@@ -376,6 +376,13 @@ header {
                 margin-top: auto;
             }
 
+            &.active {
+                a {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
+            }
+
             a {
                 @include header__anchor--bold;
 
