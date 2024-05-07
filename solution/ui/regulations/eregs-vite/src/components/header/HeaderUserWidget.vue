@@ -50,7 +50,11 @@ const iconClasses = computed(() => ({
             <hr />
             <div class="account--sign-out">
                 <slot name="sign-out-link">
-                    <button class="sign-out__button" @click="formLogout">
+                    <button
+                        class="sign-out__button"
+                        data-testid="vue-sign-out-button"
+                        @click="formLogout"
+                    >
                         Sign Out
                     </button>
                 </slot>
