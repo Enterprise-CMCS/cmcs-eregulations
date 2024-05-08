@@ -55,7 +55,10 @@ class LocationFiltererMixin:
                     q &= (
                         Q(**{f"{self.location_filter_prefix}section__section_id": split[2]})
                         if is_int(split[2])
-                        else Q(**{f"{self.location_filter_prefix}subpart__subpart_id": split[2]})
+                        else (
+                            Q(**{f"{self.location_filter_prefix}subpart__subpart_id": split[2]}) |
+                            Q(**{f"{self.location_filter_prefix}section__parent__subpart__subpart_id": split[2]})
+                        )
                     )
 
             queries.append(q)

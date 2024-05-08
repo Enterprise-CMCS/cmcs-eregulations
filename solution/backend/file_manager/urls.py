@@ -6,6 +6,7 @@ from .views import (
     RepoCategoryViewSet,
     RepositoryCategoryTreeViewSet,
     SubjectViewset,
+    TopSubjectsByLocationViewSet,
     UploadedFileViewset,
 )
 
@@ -19,6 +20,9 @@ urlpatterns = [
     path("subjects", SubjectViewset.as_view({
         "get": "list",
     })),
+    path("subjects/top_by_location", TopSubjectsByLocationViewSet.as_view({
+        "get": "list",
+    }), name='top-subjects-by-location'),
     path("groups", GroupViewset.as_view({
         "get": "list",
     })),

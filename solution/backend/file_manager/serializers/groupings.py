@@ -13,6 +13,10 @@ class SubjectSerializer(serializers.Serializer):
     abbreviation = serializers.CharField()
 
 
+class SubjectCountsSerializer(SubjectSerializer):
+    count = serializers.IntegerField()
+
+
 class SubjectDetailsSerializer(SubjectSerializer):
     content = serializers.SerializerMethodField()
     internal_content = serializers.IntegerField()
