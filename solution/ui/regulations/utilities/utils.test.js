@@ -8,6 +8,7 @@ import {
     getFileNameSuffix,
     getFileTypeButton,
     getRequestParams,
+    getSectionsRecursive,
     romanize,
     shapeTitlesResponse,
 } from "utilities/utils.js";
@@ -22,6 +23,8 @@ import parts42Fixture from "cypress/fixtures/parts-42.json";
 import parts45Fixture from "cypress/fixtures/parts-45.json";
 import categoriesFixture from "cypress/fixtures/categories.json";
 import categoriesInternalFixture from "cypress/fixtures/categories-internal.json";
+import subjectGroupsFixture from "cypress/fixtures/42.431.E.toc.parts.json";
+import subjectGroupsExpectedSectionsFixture from "cypress/fixtures/42.431.E.sections-list.json";
 
 describe("formatResourceCategories", () => {
     it("formats public resources", async () => {
@@ -290,5 +293,10 @@ describe("Utilities.js", () => {
                 ],
             },
         });
+    });
+
+    it("getSectionsRecursive properly gets the sections from a list of subject groups", async () => {
+        const sections = getSectionsRecursive(subjectGroupsFixture);
+        expect(sections).toStrictEqual(subjectGroupsExpectedSectionsFixture);
     });
 });
