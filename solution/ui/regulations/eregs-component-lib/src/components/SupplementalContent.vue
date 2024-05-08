@@ -39,7 +39,11 @@
 
 <script>
 import { getSupplementalContent, getSubpartTOC } from "utilities/api";
-import { EventCodes, formatResourceCategories } from "utilities/utils";
+import {
+    EventCodes,
+    formatResourceCategories,
+    getSectionsRecursive,
+} from "utilities/utils";
 
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
@@ -232,13 +236,6 @@ export default {
                 this.part,
                 this.subparts[0]
             );
-
-            const getSectionsRecursive = (sectionList) =>
-                sectionList.flatMap((section) => {
-                    if (section.type !== "section")
-                        return getSectionsRecursive(section.children);
-                    return section.identifier[1];
-                });
 
             const secList = getSectionsRecursive(sections);
 
