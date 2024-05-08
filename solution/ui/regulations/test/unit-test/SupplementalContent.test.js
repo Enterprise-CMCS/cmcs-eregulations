@@ -112,7 +112,7 @@ describe("Supplemental Content", () => {
             "view-all-subpart-resources"
         );
         expect(viewAllSubpartRes.textContent).toBe(
-            " View All Subpart A Resources (136) "
+            " View All Subpart A Documents (136) "
         );
 
         const subG = screen.getByLabelText("expand Subregulatory Guidance");

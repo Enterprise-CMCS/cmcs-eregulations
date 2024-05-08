@@ -1,0 +1,379 @@
+[
+    {
+        "type": "subject_group",
+        "label": "General Provisions",
+        "parent": ["E"],
+        "reserved": false,
+        "identifier": ["ECFR14123c518724401"],
+        "label_level": "General Provisions",
+        "parent_type": "subpart",
+        "descendant_range": ["431.200", "431.206"],
+        "label_description": "General Provisions",
+        "children": [
+            {
+                "type": "section",
+                "label": "§ 431.200 Basis and scope.",
+                "parent": ["ECFR14123c518724401"],
+                "reserved": false,
+                "identifier": ["431", "200"],
+                "label_level": "§ 431.200",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Basis and scope.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.201 Definitions.",
+                "parent": ["ECFR14123c518724401"],
+                "reserved": false,
+                "identifier": ["431", "201"],
+                "label_level": "§ 431.201",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Definitions.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.202 State plan requirements.",
+                "parent": ["ECFR14123c518724401"],
+                "reserved": false,
+                "identifier": ["431", "202"],
+                "label_level": "§ 431.202",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "State plan requirements.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.205 Provision of hearing system.",
+                "parent": ["ECFR14123c518724401"],
+                "reserved": false,
+                "identifier": ["431", "205"],
+                "label_level": "§ 431.205",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Provision of hearing system.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.206 Informing applicants and beneficiaries.",
+                "parent": ["ECFR14123c518724401"],
+                "reserved": false,
+                "identifier": ["431", "206"],
+                "label_level": "§ 431.206",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Informing applicants and beneficiaries.",
+                "children": null
+            }
+        ]
+    },
+    {
+        "type": "subject_group",
+        "label": "Notice",
+        "parent": ["E"],
+        "reserved": false,
+        "identifier": ["ECFR803dd5eda355b92"],
+        "label_level": "Notice",
+        "parent_type": "subpart",
+        "descendant_range": ["431.210", "431.214"],
+        "label_description": "Notice",
+        "children": [
+            {
+                "type": "section",
+                "label": "§ 431.210 Content of notice.",
+                "parent": ["ECFR803dd5eda355b92"],
+                "reserved": false,
+                "identifier": ["431", "210"],
+                "label_level": "§ 431.210",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Content of notice.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.211 Advance notice.",
+                "parent": ["ECFR803dd5eda355b92"],
+                "reserved": false,
+                "identifier": ["431", "211"],
+                "label_level": "§ 431.211",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Advance notice.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.213 Exceptions from advance notice.",
+                "parent": ["ECFR803dd5eda355b92"],
+                "reserved": false,
+                "identifier": ["431", "213"],
+                "label_level": "§ 431.213",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Exceptions from advance notice.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.214 Notice in cases of probable fraud.",
+                "parent": ["ECFR803dd5eda355b92"],
+                "reserved": false,
+                "identifier": ["431", "214"],
+                "label_level": "§ 431.214",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Notice in cases of probable fraud.",
+                "children": null
+            }
+        ]
+    },
+    {
+        "type": "subject_group",
+        "label": "Right to Hearing",
+        "parent": ["E"],
+        "reserved": false,
+        "identifier": ["ECFR4e89d7b32b71f9d"],
+        "label_level": "Right to Hearing",
+        "parent_type": "subpart",
+        "descendant_range": ["431.220", "431.224"],
+        "label_description": "Right to Hearing",
+        "children": [
+            {
+                "type": "section",
+                "label": "§ 431.220 When a hearing is required.",
+                "parent": ["ECFR4e89d7b32b71f9d"],
+                "reserved": false,
+                "identifier": ["431", "220"],
+                "label_level": "§ 431.220",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "When a hearing is required.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.221 Request for hearing.",
+                "parent": ["ECFR4e89d7b32b71f9d"],
+                "reserved": false,
+                "identifier": ["431", "221"],
+                "label_level": "§ 431.221",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Request for hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.222 Group hearings.",
+                "parent": ["ECFR4e89d7b32b71f9d"],
+                "reserved": false,
+                "identifier": ["431", "222"],
+                "label_level": "§ 431.222",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Group hearings.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.223 Denial or dismissal of request for a hearing.",
+                "parent": ["ECFR4e89d7b32b71f9d"],
+                "reserved": false,
+                "identifier": ["431", "223"],
+                "label_level": "§ 431.223",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Denial or dismissal of request for a hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.224 Expedited appeals.",
+                "parent": ["ECFR4e89d7b32b71f9d"],
+                "reserved": false,
+                "identifier": ["431", "224"],
+                "label_level": "§ 431.224",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Expedited appeals.",
+                "children": null
+            }
+        ]
+    },
+    {
+        "type": "subject_group",
+        "label": "Procedures",
+        "parent": ["E"],
+        "reserved": false,
+        "identifier": ["ECFR8f26a68cc25862f"],
+        "label_level": "Procedures",
+        "parent_type": "subpart",
+        "descendant_range": ["431.230", "431.246"],
+        "label_description": "Procedures",
+        "children": [
+            {
+                "type": "section",
+                "label": "§ 431.230 Maintaining services.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "230"],
+                "label_level": "§ 431.230",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Maintaining services.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.231 Reinstating services.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "231"],
+                "label_level": "§ 431.231",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Reinstating services.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.232 Adverse decision of local evidentiary hearing.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "232"],
+                "label_level": "§ 431.232",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Adverse decision of local evidentiary hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.233 State agency hearing after adverse decision of local evidentiary hearing.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "233"],
+                "label_level": "§ 431.233",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "State agency hearing after adverse decision of local evidentiary hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.240 Conducting the hearing.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "240"],
+                "label_level": "§ 431.240",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Conducting the hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.241 Matters to be considered at the hearing.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "241"],
+                "label_level": "§ 431.241",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Matters to be considered at the hearing.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.242 Procedural rights of the applicant or beneficiary.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "242"],
+                "label_level": "§ 431.242",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Procedural rights of the applicant or beneficiary.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.243 Parties in cases involving an eligibility determination.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "243"],
+                "label_level": "§ 431.243",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Parties in cases involving an eligibility determination.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.244 Hearing decisions.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "244"],
+                "label_level": "§ 431.244",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Hearing decisions.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.245 Notifying the applicant or beneficiary of a State agency decision.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "245"],
+                "label_level": "§ 431.245",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Notifying the applicant or beneficiary of a State agency decision.",
+                "children": null
+            },
+            {
+                "type": "section",
+                "label": "§ 431.246 Corrective action.",
+                "parent": ["ECFR8f26a68cc25862f"],
+                "reserved": false,
+                "identifier": ["431", "246"],
+                "label_level": "§ 431.246",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Corrective action.",
+                "children": null
+            }
+        ]
+    },
+    {
+        "type": "subject_group",
+        "label": "Federal Financial Participation",
+        "parent": ["E"],
+        "reserved": false,
+        "identifier": ["ECFR370de681c5a0a70"],
+        "label_level": "Federal Financial Participation",
+        "parent_type": "subpart",
+        "descendant_range": ["431.250"],
+        "label_description": "Federal Financial Participation",
+        "children": [
+            {
+                "type": "section",
+                "label": "§ 431.250 Federal financial participation.",
+                "parent": ["ECFR370de681c5a0a70"],
+                "reserved": false,
+                "identifier": ["431", "250"],
+                "label_level": "§ 431.250",
+                "parent_type": "subject_group",
+                "descendant_range": null,
+                "label_description": "Federal financial participation.",
+                "children": null
+            }
+        ]
+    }
+]

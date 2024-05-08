@@ -39,7 +39,11 @@
 
 <script>
 import { getSupplementalContent, getSubpartTOC } from "utilities/api";
-import { EventCodes, formatResourceCategories } from "utilities/utils";
+import {
+    EventCodes,
+    formatResourceCategories,
+    getSectionsRecursive,
+} from "utilities/utils";
 
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
@@ -210,13 +214,13 @@ export default {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
                         categories: rawCategories,
-                        resources: response.results
+                        resources: response.results,
                     });
                 } else {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
                         categories: rawCategories,
-                        resources: subpartResponse.results
+                        resources: subpartResponse.results,
                     });
                 }
             } catch (error) {
@@ -232,7 +236,9 @@ export default {
                 this.part,
                 this.subparts[0]
             );
-            const secList = sections.map((section) => section.identifier[1]);
+
+            const secList = getSectionsRecursive(sections);
+
             this.partDict[this.part] = {
                 title: this.title,
                 subparts: this.subparts,

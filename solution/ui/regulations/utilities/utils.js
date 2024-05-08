@@ -984,6 +984,17 @@ const getCurrentSectionFromHash = (windowHash) => {
     return citations.slice(0, 2).join("-");
 };
 
+/**
+ * @param {Array<object>} sectionList - array of Table of Contents objects from getSubpartTOC
+ * @returns {Array<string>} - array of section identifier numbers as strings
+ */
+const getSectionsRecursive = (tocPartsList) =>
+    tocPartsList.flatMap((tocPart) => {
+        if (tocPart.type !== "section")
+            return getSectionsRecursive(tocPart.children);
+        return tocPart.identifier[1];
+    });
+
 export {
     addMarks,
     addQueryParams,
@@ -1015,8 +1026,9 @@ export {
     getKebabLabel,
     getKebabTitle,
     getParagraphDepth,
-    getRequestParams,
     getQueryParam,
+    getRequestParams,
+    getSectionsRecursive,
     getTagContent,
     highlightText,
     isAbsoluteUrl,
