@@ -266,7 +266,7 @@ const getDocSubjects = async () => {
         // set title if needed
         if (policyDocSubjects.value.results.length && $route.query.subjects) {
             setDocumentTitle(
-                $route.query.subjects[0],
+                $route.query.subjects,
                 policyDocSubjects.value.results
             );
         }
