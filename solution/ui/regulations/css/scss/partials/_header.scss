@@ -374,6 +374,7 @@ header {
                 a {
                     @include header__anchor--active-bold;
                     padding: 0;
+                    pointer-events: none;
                 }
             }
 
