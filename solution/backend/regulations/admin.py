@@ -4,6 +4,8 @@ import requests
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
 from django.contrib.auth.models import Group, User
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
@@ -20,7 +22,6 @@ from .models import (
     StatuteLinkConverter,
 )
 
-admin.site.logout_template = 'admin/logged_out.html'
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"
@@ -70,6 +71,15 @@ def roman_to_int(roman):
         num = roman_table[roman[i]]
         result = result - num if 3 * num < result else result + num
     return result
+
+
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('department',)}),
+    )
+
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
