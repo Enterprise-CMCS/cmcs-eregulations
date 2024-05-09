@@ -366,16 +366,27 @@ header {
             height: $header_input_height_wide;
             margin-left: 1rem;
 
-            &:has(> a) {
+            &:has(> a),
+            &:has(> span.disabled) {
                 margin-top: auto;
             }
 
             &.active {
+                span.disabled {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
+
                 a {
                     @include header__anchor--active-bold;
                     padding: 0;
                     pointer-events: none;
                 }
+            }
+
+            span.disabled {
+                @include header__anchor--bold;
+                text-transform: capitalize;
             }
 
             a {

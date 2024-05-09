@@ -34,6 +34,7 @@
                     custom-login-url="{% url 'custom_login' %}"
                     home-url="{% url 'homepage' %}"
                     is-authenticated="{{ user.is_authenticated }}"
+                    location="{{ location }}"
                 ></sign-in-link>
             {% endif %}
         </template>

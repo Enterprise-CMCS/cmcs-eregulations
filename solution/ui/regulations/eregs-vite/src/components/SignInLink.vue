@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from "vue";
 import useLoginRedirectUrl from "composables/login";
 
 const props = defineProps({
@@ -22,6 +23,10 @@ const props = defineProps({
         type: Object,
         default: undefined,
     },
+    location: {
+        type: String,
+        default: undefined,
+    },
 });
 
 const loginUrl = useLoginRedirectUrl({
@@ -29,10 +34,21 @@ const loginUrl = useLoginRedirectUrl({
     homeUrl: props.homeUrl,
     route: props.route,
 });
+
+const linkClasses = computed(() => ({
+    disabled: props.location === "login_page",
+}));
 </script>
 
 <template>
-    <a :href="loginUrl" rel="noopener noreferrer">{{ linkLabel }}</a>
+    <template v-if="location === 'login_page'">
+        <span class="disabled">{{ linkLabel }}</span>
+    </template>
+    <template v-else>
+        <a :href="loginUrl" :class="linkClasses" rel="noopener noreferrer">{{
+            linkLabel
+        }}</a>
+    </template>
 </template>
 
 <style></style>
