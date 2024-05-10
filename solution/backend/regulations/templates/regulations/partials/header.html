@@ -26,7 +26,7 @@
                         {{ user.username }}
                     </template>
                     <template #account-links>
-                        <a href="/" rel="noopener noreferrer">Manage Content</a>
+                        <a href="{% url 'homepage' %}admin" rel="noopener noreferrer">Manage Content</a>
                     </template>
                     <template #sign-out-link>
                         {% include "regulations/partials/logout_form.html" %}
