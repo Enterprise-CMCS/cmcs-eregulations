@@ -55,7 +55,10 @@ const adminUrl = computed(() => `${props.homeUrl}admin`);
                     </div>
                 </div>
                 <div class="account-info--links">
-                    <a :href="adminUrl" rel="noopener noreferrer"
+                    <a
+                        :href="adminUrl"
+                        rel="noopener noreferrer"
+                        data-testid="manage-content-link"
                         >Manage Content</a
                     >
                 </div>

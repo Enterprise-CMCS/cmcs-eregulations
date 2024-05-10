@@ -12,9 +12,7 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
     it("should have a Sign In link at the top right corner of the header", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".header--sign-in a").should(
-            "be.visible"
-        );
+        cy.get(".header--sign-in a").should("be.visible");
         cy.get(".header--sign-in").should("not.have.class", "active");
         cy.get(".header--sign-in a").click();
         cy.url().should("include", "/?next=/");
@@ -53,14 +51,17 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
         cy.get(".dropdown-menu__container.dropdown-menu--account").should(
             "be.visible"
         );
+        cy.get("a[data-testid='manage-content-link']")
+            .contains("Manage Content")
+            .should("be.visible")
+            .and("have.attr", "href")
+            .and("include", "admin");
         cy.get("form#oidc_logout").should("be.visible");
         cy.get("form#oidc_logout").submit();
         cy.get(".dropdown-menu__container.dropdown-menu--account").should(
             "not.exist"
         );
-        cy.get(".header--sign-in a").should(
-            "be.visible"
-        );
+        cy.get(".header--sign-in a").should("be.visible");
     });
 
     it("should have an account info dropdown menu with Sign Out button and hidden Sign Out form on Single Page App page when logged in", () => {
@@ -98,8 +99,6 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
         cy.get(".dropdown-menu__container.dropdown-menu--account").should(
             "not.exist"
         );
-        cy.get(".header--sign-in a").should(
-            "be.visible"
-        );
+        cy.get(".header--sign-in a").should("be.visible");
     });
 });
