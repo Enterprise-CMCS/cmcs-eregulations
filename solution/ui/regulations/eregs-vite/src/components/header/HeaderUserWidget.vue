@@ -23,6 +23,8 @@ const iconClasses = computed(() => ({
     "user-account__button": true,
     "user-account__button--expanded": menuExpanded.value,
 }));
+
+const adminUrl = computed(() => `${props.homeUrl}admin`);
 </script>
 
 <template>
@@ -53,7 +55,7 @@ const iconClasses = computed(() => ({
                     </div>
                 </div>
                 <div class="account-info--links">
-                    <a :href="homeUrl + 'admin'" rel="noopener noreferrer"
+                    <a :href="adminUrl" rel="noopener noreferrer"
                         >Manage Content</a
                     >
                 </div>
