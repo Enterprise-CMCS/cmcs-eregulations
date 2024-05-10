@@ -9,6 +9,17 @@ describe("Login and Logout Validation", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("checks a11y for sign in elements", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/" });
+        cy.get("button[data-testid='user-account-button']").click({
+            force: true,
+        });
+        cy.checkLinkRel();
+        cy.injectAxe();
+        cy.checkAccessibility();
+    });
+
     it("should have a Sign In link at the top right corner of the header", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
