@@ -11,6 +11,7 @@ from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
+from django.contrib.auth import get_user_model
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
 
@@ -89,7 +90,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                 and claims.get("email_verified", False)
         )
 
-    def create_user(self, claims) -> User:
+    def create_user(self, claims):
+        User = get_user_model()
         email = claims.get("email")
         jobcodes = claims.get("jobcodes")
 
@@ -115,7 +117,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
             return None
 
     @transaction.atomic
-    def update_user(self, user: User, claims) -> User:
+    def update_user(self, user: User, claims):
         """Update existing user with new claims, if necessary save, and return user"""
 
         jobcodes = claims.get("jobcodes")
