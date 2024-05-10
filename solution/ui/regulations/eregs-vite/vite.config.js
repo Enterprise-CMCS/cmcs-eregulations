@@ -19,6 +19,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "src"),
+            composables: path.resolve(__dirname, "../composables"),
             directives: path.resolve(__dirname, "../directives"),
             eregsComponentLib: path.resolve(
                 __dirname,

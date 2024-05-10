@@ -41,9 +41,9 @@ export const clickHeaderLink = ({
             .should("have.attr", "class")
             .and("match", /active/);
     } else {
-        cy.get(`${listLocation} > ul.links__list`).should("not.be.visible");
+        cy.get(`${listLocation} ul.links__list`).should("not.exist");
 
-        cy.get(".more--dropdown-menu").should("not.be.visible");
+        cy.get(".more--dropdown-menu").should("not.exist");
 
         cy.get("button.more__button")
             .should("be.visible")
@@ -52,7 +52,7 @@ export const clickHeaderLink = ({
         cy.get(".more--dropdown-menu").should("be.visible");
 
         cy.get(
-            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+            `${listLocation} ul.links__list li a[data-testid=${page.toLowerCase()}]`
         )
             .should("be.visible")
             .should("have.text", label)

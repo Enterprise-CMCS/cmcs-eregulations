@@ -15,7 +15,9 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
 const props = defineProps({
     aboutUrl: {
@@ -26,9 +28,17 @@ const props = defineProps({
         type: String,
         default: "/v3/",
     },
+    customLoginUrl: {
+        type: String,
+        default: "/login",
+    },
     homeUrl: {
         type: String,
         default: "/",
+    },
+    isAuthenticated: {
+        type: Boolean,
+        default: false,
     },
     searchUrl: {
         type: String,
@@ -37,6 +47,10 @@ const props = defineProps({
     subjectsUrl: {
         type: String,
         default: "/subjects/",
+    },
+    username: {
+        type: String,
+        default: undefined,
     },
 });
 
@@ -158,12 +172,25 @@ getStatutesArray();
                     <JumpTo :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks
-                        :subjects-url="subjectsUrl"
-                    />
+                    <HeaderLinks :subjects-url="subjectsUrl" />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
+                </template>
+                <template v-if="isAuthenticated" #sign-in>
+                    <HeaderUserWidget>
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
+                </template>
+                <template v-else #sign-in>
+                    <SignInLink
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                        :route="$route"
+                    />
                 </template>
             </HeaderComponent>
         </header>

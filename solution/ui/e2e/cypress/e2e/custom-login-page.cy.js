@@ -6,6 +6,17 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("custom-login-page - does not render an anchor for header Sign In link when on login page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".header--sign-in a").should("exist");
+        cy.get(".header--sign-in span.disabled").should("not.exist");
+
+        cy.get(".header--sign-in a").click({ force: true });
+        cy.get(".header--sign-in a").should("not.exist");
+        cy.get(".header--sign-in span.disabled").should("exist");
+    });
+
     it("custom-login-page - jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
@@ -22,7 +33,7 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("allows a user to go back to the homepage by clicking the top left link", () => {
+    it("custom-login-page - allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
         cy.goHome();

@@ -19,5 +19,24 @@
                 search-url="{% url 'search' %}"
             ></header-search>
         </template>
+        <template #sign-in>
+            {% if user.is_authenticated %}
+                <header-user-widget>
+                    <template #username>
+                        {{ user.username }}
+                    </template>
+                    <template #sign-out-link>
+                        {% include "regulations/partials/logout_form.html" %}
+                    </template>
+                </header-user-widget>
+            {% else %}
+                <sign-in-link
+                    custom-login-url="{% url 'custom_login' %}"
+                    home-url="{% url 'homepage' %}"
+                    is-authenticated="{{ user.is_authenticated }}"
+                    location="{{ location }}"
+                ></sign-in-link>
+            {% endif %}
+        </template>
     </header-component>
 </header>

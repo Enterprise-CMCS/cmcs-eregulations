@@ -35,7 +35,7 @@ import {
     jumpToRegulationPart,
     jumpToRegulationPartSection,
 } from "./common-commands/jumpTo";
-import { eregsLogin } from "./common-commands/login";
+import { eregsLogin, eregsLogout } from "./common-commands/login";
 import { clickStatuteLink } from "./common-commands/statutes";
 import { checkLinkRel } from "./common-commands/checkLinks";
 import { checkPolicyDocs } from "./common-commands/policyDocs";
@@ -52,6 +52,7 @@ Cypress.Commands.add(
     jumpToRegulationPartSection
 );
 Cypress.Commands.add("eregsLogin", eregsLogin);
+Cypress.Commands.add("eregsLogout", eregsLogout);
 Cypress.Commands.add("validateSchema", validateSchema);
 
 // Print cypress-axe violations to the terminal

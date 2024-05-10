@@ -6,6 +6,7 @@
 
 {% block outside_vue %}
     {{ site_config|json_script:"site_config" }}
+    {{ block.super }}
 {% endblock %}
 
 {% block pre_header %}
@@ -17,10 +18,13 @@
     id="vite-app"
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
+    data-custom-login-url="{% url 'custom_login' %}"
     data-custom-url="{{ CUSTOM_URL }}"
     data-home-url="{% url 'homepage' %}"
+    data-host="{{ host }}"
+    data-is-authenticated="{{ user.is_authenticated }}"
     data-search-url="{% url 'search' %}"
     data-subjects-url="{% url 'subjects' %}"
-    data-host="{{ host }}"
+    data-username="{{ user.username }}"
 ></div>
 {% endblock %}

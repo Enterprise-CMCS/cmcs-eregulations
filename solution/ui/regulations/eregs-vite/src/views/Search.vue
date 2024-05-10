@@ -14,6 +14,21 @@
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
+                <template v-if="isAuthenticated" #sign-in>
+                    <HeaderUserWidget>
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
+                </template>
+                <template v-else #sign-in>
+                    <SignInLink
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                        :route="$route"
+                    />
+                </template>
             </HeaderComponent>
         </header>
         <div id="searchApp" class="search-view">
@@ -173,6 +188,8 @@
 </template>
 
 <script>
+import { useRoute, useRouter } from "vue-router";
+
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
@@ -189,6 +206,7 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
@@ -196,6 +214,7 @@ import RegResults from "@/components/search/RegResults.vue";
 import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
 const DEFAULT_TITLE = "42";
 
@@ -207,6 +226,7 @@ export default {
         HeaderComponent,
         HeaderLinks,
         HeaderSearch,
+        SignInLink,
         JumpTo,
         PaginationController,
         PolicyResults,
@@ -214,6 +234,7 @@ export default {
         SearchEmptyState,
         SearchErrorMsg,
         SearchInput,
+        HeaderUserWidget,
     },
 
     props: {
@@ -225,9 +246,17 @@ export default {
             type: String,
             default: "/v3/",
         },
+        customLoginUrl: {
+            type: String,
+            default: "/login",
+        },
         homeUrl: {
             type: String,
             default: "/",
+        },
+        isAuthenticated: {
+            type: Boolean,
+            default: false,
         },
         searchUrl: {
             type: String,
@@ -245,6 +274,17 @@ export default {
             type: String,
             default: "",
         },
+        username: {
+            type: String,
+            default: undefined,
+        },
+    },
+
+    setup() {
+        const $route = useRoute();
+        const $router = useRouter();
+
+        return { $route, $router };
     },
 
     provide() {

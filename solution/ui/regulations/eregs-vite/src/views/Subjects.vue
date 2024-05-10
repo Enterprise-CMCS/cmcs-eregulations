@@ -20,6 +20,8 @@ import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
@@ -70,6 +72,10 @@ const props = defineProps({
     surveyUrl: {
         type: String,
         default: "",
+    },
+    username: {
+        type: String,
+        default: undefined,
     },
 });
 
@@ -376,6 +382,21 @@ getDocSubjects();
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
+                </template>
+                <template v-if="isAuthenticated" #sign-in>
+                    <HeaderUserWidget>
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
+                </template>
+                <template v-else #sign-in>
+                    <SignInLink
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                        :route="$route"
+                    />
                 </template>
             </HeaderComponent>
         </header>
