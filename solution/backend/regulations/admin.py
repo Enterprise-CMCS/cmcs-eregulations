@@ -3,26 +3,25 @@ import re
 import requests
 from defusedxml.minidom import parseString
 from django.contrib import admin, messages
-from django.contrib.auth.models import Group, User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
-from django.contrib.auth import get_user_model
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
 
 from .models import (
+    CustomUser,
     RegulationLinkConfiguration,
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
-
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"
@@ -79,6 +78,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('department',)}),
     )
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
 
