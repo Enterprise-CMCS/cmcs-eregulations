@@ -1,5 +1,6 @@
 from django.db import models
 from solo.models import SingletonModel
+from django.contrib.auth.models import AbstractUser
 
 from common.fields import (
     CfrRefField,
@@ -25,6 +26,9 @@ ROMAN_TABLE = [
     [1, "I"]
 ]
 
+
+class CustomUser(AbstractUser):
+    department = models.CharField(max_length=100, blank=True, null=True)
 
 class SiteConfiguration(SingletonModel):
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
