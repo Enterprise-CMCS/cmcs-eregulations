@@ -21,12 +21,9 @@
         </template>
         <template #sign-in>
             {% if user.is_authenticated %}
-                <header-user-widget>
+                <header-user-widget home-url="{% url 'homepage' %}">
                     <template #username>
                         {{ user.username }}
-                    </template>
-                    <template #account-links>
-                        <a href="{% url 'homepage' %}admin" rel="noopener noreferrer">Manage Content</a>
                     </template>
                     <template #sign-out-link>
                         {% include "regulations/partials/logout_form.html" %}

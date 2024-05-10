@@ -6,6 +6,13 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
+const props = defineProps({
+    homeUrl: {
+        type: String,
+        default: "/",
+    },
+});
+
 const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 
 const formLogout = () => {
@@ -46,7 +53,9 @@ const iconClasses = computed(() => ({
                     </div>
                 </div>
                 <div class="account-info--links">
-                    <slot name="account-links"></slot>
+                    <a :href="homeUrl + 'admin'" rel="noopener noreferrer"
+                        >Manage Content</a
+                    >
                 </div>
             </div>
             <hr />

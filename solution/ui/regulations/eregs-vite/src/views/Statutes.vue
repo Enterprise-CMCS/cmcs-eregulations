@@ -178,7 +178,7 @@ getStatutesArray();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget>
+                    <HeaderUserWidget :home-url="homeUrl">
                         <template #username>
                             {{ username }}
                         </template>
