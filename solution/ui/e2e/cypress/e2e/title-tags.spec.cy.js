@@ -55,5 +55,17 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
             "eq",
             "Find by Subject | Medicaid & CHIP eRegulations"
         );
+
+        cy.visit("/subjects/?subjects=1");
+        cy.title().should(
+            "eq",
+            "Cures Act | Find by Subject | Medicaid & CHIP eRegulations"
+        );
+
+        cy.visit("/subjects/?subjects=18");
+        cy.title().should(
+            "eq",
+            "Collateral Contacts | Find by Subject | Medicaid & CHIP eRegulations"
+        );
     });
 });

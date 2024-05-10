@@ -109,12 +109,16 @@ const subjectClick = (event) => {
     });
 };
 
-const subjectClasses = (subjectId) => ({
-    "sidebar-li__button": true,
-    "sidebar-li__button--selected": $route.query.subjects?.includes(
-        subjectId.toString()
-    ),
-});
+const subjectClasses = (subjectId) => {
+    const routeArr = _isArray($route.query.subjects)
+        ? $route.query.subjects
+        : [$route.query.subjects];
+
+    return {
+        "sidebar-li__button": true,
+        "sidebar-li__button--selected": routeArr.includes(subjectId.toString()),
+    };
+};
 
 const filterResetClasses = computed(() => ({
     "subjects__filter-reset": true,
