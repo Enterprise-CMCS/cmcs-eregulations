@@ -44,7 +44,9 @@ const iconClasses = computed(() => ({
                         While signed in, you can access documents
                         <strong>internal to CMCS</strong>.
                     </div>
-                    <slot name="user-account-content"></slot>
+                </div>
+                <div class="account-info--links">
+                    <slot name="account-links"></slot>
                 </div>
             </div>
             <hr />
