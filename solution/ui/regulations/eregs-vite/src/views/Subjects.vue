@@ -169,9 +169,11 @@ const policyDocList = ref({
     error: false,
 });
 
-const getDocList = async (requestParams = "") => {
+const getDocList = async (requestParamsString = "") => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
+
+    const requestParams = requestParamsString + "&page_size=50";
 
     try {
         const contentList = await getCombinedContent({
