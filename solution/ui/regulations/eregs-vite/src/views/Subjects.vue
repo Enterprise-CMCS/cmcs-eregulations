@@ -124,10 +124,11 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
+    const { q, page, ...rest } = $route.query;
     $router.push({
         name: "subjects",
         query: {
-            ...$route.query,
+            ...rest,
             q: payload.query,
         },
     });
