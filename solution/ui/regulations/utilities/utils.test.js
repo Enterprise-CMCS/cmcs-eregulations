@@ -202,7 +202,7 @@ describe("Utilities.js", () => {
             page: 1,
         };
 
-        expect(getRequestParams(query8)).toBe("q=test");
+        expect(getRequestParams(query8)).toBe("q=test&page=1");
 
         const query9 = {
             q: "test",
