@@ -491,7 +491,7 @@ getDocSubjects();
                                 :base="homeUrl"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"
-                                :page="$route.query.page"
+                                :page="parseInt($route.query.page, 10) || 1"
                                 :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
@@ -503,7 +503,7 @@ getDocSubjects();
                                     <PaginationController
                                         v-if="policyDocList.count > 0"
                                         :count="policyDocList.count"
-                                        :page="$route.query.page"
+                                        :page="parseInt($route.query.page, 10) || 1"
                                         :page-size="pageSize"
                                         view="subjects"
                                     />
