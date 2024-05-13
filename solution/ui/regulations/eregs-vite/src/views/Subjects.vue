@@ -90,6 +90,8 @@ const FilterTypesDict = {
     q: "query",
 };
 
+const pageSize = 50;
+
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
@@ -173,7 +175,7 @@ const getDocList = async (requestParamsString = "") => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
 
-    const requestParams = requestParamsString + "&page_size=50";
+    const requestParams = `${requestParamsString}&page_size=${pageSize}&paginate=true`;
 
     try {
         const contentList = await getCombinedContent({
@@ -315,9 +317,6 @@ const setSelectedSubjectParts = () => {
         selectedSubjectParts.value = [];
     }
 };
-
-// pagination
-const pageSize = 50;
 
 watch(
     () => policyDocSubjects.value.loading,
@@ -498,8 +497,8 @@ getDocSubjects();
                                     <PaginationController
                                         v-if="policyDocList.count > 0"
                                         :count="policyDocList.count"
-                                        :page="1"
-                                        :page-size="50"
+                                        :page="$route.query.page"
+                                        :page-size="pageSize"
                                         view="subjects"
                                     />
                                 </div>
