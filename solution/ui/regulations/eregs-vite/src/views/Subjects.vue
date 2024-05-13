@@ -227,6 +227,10 @@ provide("selectedParams", selectedParams);
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
 
+    if (paramType === "page") {
+        return;
+    }
+
     if (paramType === "q") {
         searchQuery.value = paramValue;
         return;
