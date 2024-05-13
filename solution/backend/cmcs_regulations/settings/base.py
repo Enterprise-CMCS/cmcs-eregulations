@@ -31,8 +31,6 @@ ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),
                  'eregulations.cms.gov',
                  'host.docker.internal']
 
-AUTH_USER_MODEL = 'regulations.CustomUser'
-
 # Application definition
 
 INSTALLED_APPS = [
