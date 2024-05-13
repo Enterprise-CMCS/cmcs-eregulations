@@ -89,6 +89,10 @@ defineProps({
         type: Array,
         default: () => [],
     },
+    resultsCount: {
+        type: Number,
+        default: 0,
+    },
     partsLastUpdated: {
         type: Object,
         default: () => {},
@@ -140,7 +144,7 @@ const resultLinkClasses = (doc) => ({
                 <span v-if="results.length > 0"
                     >1 - {{ results.length }} of</span
                 >
-                {{ results.length }} <span v-if="searchQuery">result</span
+                {{ resultsCount }} <span v-if="searchQuery">result</span
                 ><span v-else>document</span>
                 <span v-if="results.length != 1">s</span>
                 <span v-if="searchQuery">

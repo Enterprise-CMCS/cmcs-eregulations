@@ -23,6 +23,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
@@ -162,6 +163,7 @@ const getPartsLastUpdated = async () => {
 
 // policyDocList fetch for policy document list
 const policyDocList = ref({
+    count: 0,
     results: [],
     loading: true,
     error: false,
@@ -178,9 +180,11 @@ const getDocList = async (requestParams = "") => {
             requestParams,
         });
         policyDocList.value.results = contentList.results;
+        policyDocList.value.count = contentList.count;
     } catch (error) {
         console.error(error);
         policyDocList.value.results = [];
+        policyDocList.value.count = 0;
         policyDocList.value.error = true;
     } finally {
         policyDocList.value.loading = false;
@@ -309,6 +313,9 @@ const setSelectedSubjectParts = () => {
         selectedSubjectParts.value = [];
     }
 };
+
+// pagination
+const pageSize = 50;
 
 watch(
     () => policyDocSubjects.value.loading,
@@ -478,11 +485,23 @@ getDocSubjects();
                             <PolicyResults
                                 :base="homeUrl"
                                 :results="policyDocList.results"
+                                :results-count="policyDocList.count"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
                                 :search-query="searchQuery"
                                 :selected-subject-parts="selectedSubjectParts"
                             />
+                            <div class="pagination-expand-row">
+                                <div class="pagination-expand-container">
+                                    <PaginationController
+                                        v-if="policyDocList.count > 0"
+                                        :count="policyDocList.count"
+                                        :page="1"
+                                        :page-size="50"
+                                        view="subjects"
+                                    />
+                                </div>
+                            </div>
                         </template>
                     </template>
                 </div>
