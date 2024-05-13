@@ -491,6 +491,8 @@ getDocSubjects();
                                 :base="homeUrl"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"
+                                :page="$route.query.page"
+                                :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
                                 :search-query="searchQuery"
