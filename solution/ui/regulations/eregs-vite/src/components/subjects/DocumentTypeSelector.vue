@@ -56,7 +56,10 @@ const toggleDocumentType = (clickedType) => {
 
     $router.push({
         name: "subjects",
-        query: queryClone,
+        query: {
+            ...queryClone,
+            page: undefined,
+        },
     });
 };
 
