@@ -28,7 +28,7 @@ ROMAN_TABLE = [
 
 
 class CustomUser(AbstractUser):
-    department = models.CharField(max_length=100, blank=True, null=True)
+    department = models.CharField(max_length=100, blank=True)
 
     # Change related_name for groups and user_permissions to avoid conflict
     groups = models.ManyToManyField(
