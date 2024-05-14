@@ -47,7 +47,7 @@
                     :description="category.description"
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.sub_categories"
-                    :isFetching="isFetching"
+                    :is-fetching="isFetching"
                 >
                 </supplemental-content-category>
                 <template v-if="isFrDocCategory">

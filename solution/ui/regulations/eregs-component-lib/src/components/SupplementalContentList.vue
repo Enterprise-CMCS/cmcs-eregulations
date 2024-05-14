@@ -1,5 +1,5 @@
 <template>
-    <div class="supplemental-content-list" v-if="!has_sub_categories">
+    <div class="supplemental-content-list">
         <supplemental-content-object
             v-for="(content, index) in limitedContent"
             :key="index"
