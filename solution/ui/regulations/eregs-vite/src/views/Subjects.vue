@@ -33,6 +33,10 @@ import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
 const props = defineProps({
+    adminUrl: {
+        type: String,
+        default: "/admin/",
+    },
     aboutUrl: {
         type: String,
         default: "/about/",
@@ -384,7 +388,7 @@ getDocSubjects();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget :home-url="homeUrl">
+                    <HeaderUserWidget :admin-url="adminUrl">
                         <template #username>
                             {{ username }}
                         </template>

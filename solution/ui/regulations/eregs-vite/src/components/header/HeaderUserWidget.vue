@@ -7,9 +7,9 @@ import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
 const props = defineProps({
-    homeUrl: {
+    adminUrl: {
         type: String,
-        default: "/",
+        default: "/admin/",
     },
 });
 
@@ -23,8 +23,6 @@ const iconClasses = computed(() => ({
     "user-account__button": true,
     "user-account__button--expanded": menuExpanded.value,
 }));
-
-const adminUrl = computed(() => `${props.homeUrl}admin`);
 </script>
 
 <template>

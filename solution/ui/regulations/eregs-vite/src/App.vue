@@ -5,6 +5,10 @@ export default {
     components: {},
 
     props: {
+        adminUrl: {
+            type: String,
+            default: "/admin/",
+        },
         apiUrl: {
             type: String,
             default: "/v2/",
@@ -64,6 +68,7 @@ export default {
 <template>
     <v-app>
         <router-view
+            :admin-url="adminUrl"
             :api-url="apiUrl"
             :about-url="aboutUrl"
             :custom-login-url="customLoginUrl"

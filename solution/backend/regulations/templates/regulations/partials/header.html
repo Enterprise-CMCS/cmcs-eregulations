@@ -21,7 +21,7 @@
         </template>
         <template #sign-in>
             {% if user.is_authenticated %}
-                <header-user-widget home-url="{% url 'homepage' %}">
+                <header-user-widget admin-url="{% url 'admin:index' %}">
                     <template #username>
                         {{ user.username }}
                     </template>

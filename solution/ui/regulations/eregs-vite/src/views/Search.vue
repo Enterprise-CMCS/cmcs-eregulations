@@ -15,7 +15,7 @@
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget :home-url="homeUrl">
+                    <HeaderUserWidget :admin-url="adminUrl">
                         <template #username>
                             {{ username }}
                         </template>
@@ -238,6 +238,10 @@ export default {
     },
 
     props: {
+        adminUrl: {
+            type: String,
+            default: "/admin/",
+        },
         aboutUrl: {
             type: String,
             default: "/about/",
