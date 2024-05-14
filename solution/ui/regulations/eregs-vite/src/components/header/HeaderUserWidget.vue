@@ -6,6 +6,13 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
+const props = defineProps({
+    adminUrl: {
+        type: String,
+        default: "/admin/",
+    },
+});
+
 const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
 
 const formLogout = () => {
@@ -44,7 +51,14 @@ const iconClasses = computed(() => ({
                         While signed in, you can access documents
                         <strong>internal to CMCS</strong>.
                     </div>
-                    <slot name="user-account-content"></slot>
+                </div>
+                <div class="account-info--links">
+                    <a
+                        :href="adminUrl"
+                        rel="noopener noreferrer"
+                        data-testid="manage-content-link"
+                        >Manage Content</a
+                    >
                 </div>
             </div>
             <hr />

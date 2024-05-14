@@ -376,12 +376,6 @@ header {
                     @include header__anchor--active-bold;
                     padding: 0;
                 }
-
-                a {
-                    @include header__anchor--active-bold;
-                    padding: 0;
-                    pointer-events: none;
-                }
             }
 
             span.disabled {
@@ -443,6 +437,7 @@ header {
 
                     .account-info__container {
                         padding: 0.5rem;
+                        padding-bottom: 0;
                         display: inline-block;
                         min-width: 145px;
                         max-width: 340px;
@@ -459,6 +454,24 @@ header {
                                 width: 0;
                                 margin: 0.25rem 0;
                                 font-size: $font-size-sm;
+                            }
+                        }
+
+                        .account-info--links {
+                            margin: 0.75rem 0;
+
+                            a {
+                                @include header__anchor--bold;
+
+                                color: $primary_link_color;
+                                transition: none;
+
+                                &:hover,
+                                &:focus,
+                                &.active {
+                                    @include header__anchor--active-bold;
+                                    padding: 0;
+                                }
                             }
                         }
                     }

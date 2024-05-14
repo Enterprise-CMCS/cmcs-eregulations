@@ -20,6 +20,10 @@ import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
 const props = defineProps({
+    adminUrl: {
+        type: String,
+        default: "/admin/",
+    },
     aboutUrl: {
         type: String,
         default: "/about/",
@@ -178,7 +182,7 @@ getStatutesArray();
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
                 <template v-if="isAuthenticated" #sign-in>
-                    <HeaderUserWidget>
+                    <HeaderUserWidget :admin-url="adminUrl">
                         <template #username>
                             {{ username }}
                         </template>
