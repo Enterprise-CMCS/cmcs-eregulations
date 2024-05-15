@@ -1,4 +1,4 @@
-from . import InternalResource
+from .resource import InternalResource
 
 
 class InternalLink(InternalResource):

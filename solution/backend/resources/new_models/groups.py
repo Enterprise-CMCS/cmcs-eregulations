@@ -1,12 +1,15 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.postgres.aggregates import ArrayAgg
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-from . import NewAbstractResource
+from django_jsonform.models.fields import ArrayField
+
+from .resource import NewAbstractResource
 
 
 class ResourceGroup(NewAbstractResource):
-    name = models.CharField(max_length=512, blank=True)
     common_identifiers = ArrayField(
         models.CharField(max_length=512, blank=True),
         default=list,
