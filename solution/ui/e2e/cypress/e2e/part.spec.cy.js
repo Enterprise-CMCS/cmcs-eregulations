@@ -147,7 +147,7 @@ describe("Part View", () => {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.intercept(
-            "**content-search/?resource-type=internal&locations=42.433.A**",
+            "**v3/content-search/?resource-type=internal&locations=42.433.A**",
             {
                 fixture: "42.433.A.internal.json",
             }
@@ -178,6 +178,11 @@ describe("Part View", () => {
             "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
         )
             .should("exist")
+            .scrollIntoView();
+
+        cy.get(
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
+        )
             .and("be.visible")
             .and(
                 "contain.text",
@@ -186,35 +191,35 @@ describe("Part View", () => {
 
         // Assert that internal documents can also mix with subcategories
         // Find and expand Internal Documents category
-        cy.get("button[data-test='[Mock] Category with child']")
+        cy.get("button[data-test='Internal Documents and Correspondence']")
             .scrollIntoView()
             .click({ force: true });
 
         // Assert that subcategory is visible
-        cy.get("button[data-test='[Mock] Subcategory with parent']").should(
+        cy.get("button[data-test='Policy Context/Interpretation']").should(
             "be.visible"
         );
 
         // Assert that supplemental content list is visible alongside subcategories
         cy.get(
-            "div[data-test='[Mock] Category with child'] > .supplemental-content-list"
+            "div[data-test='Internal Documents and Correspondence'] > .supplemental-content-list"
         ).should("exist");
 
         // Assert that supplemental content that is not in a subcategory is visible
         // and contains expected text
         cy.get(
-            "div[data-test='[Mock] Category with child'] > .supplemental-content-list a .supplemental-content-description"
+            "div[data-test='Internal Documents and Correspondence'] > .supplemental-content-list a .supplemental-content-description"
         )
             .first()
-            .should("exist")
-            .scrollIntoView();
+            .should("exist");
 
         cy.get(
-            "div[data-test='[Mock] Category with child'] > .supplemental-content-list a .supplemental-content-description"
+            "div[data-test='Internal Documents and Correspondence'] > .supplemental-content-list a .supplemental-content-description"
         )
             .first()
-            .should("be.visible")
-            .and("contain.text", "[Mock] Test");
+            .find("span")
+            .first()
+            .should("contain.text", "[Mock] TXT testDownload TXT");
     });
 
     it("loads a subpart view in a mobile width", () => {
