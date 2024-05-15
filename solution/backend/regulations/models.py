@@ -50,7 +50,6 @@ class CustomUser(AbstractUser):
     )
 
 
-
 class SiteConfiguration(SingletonModel):
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
 
