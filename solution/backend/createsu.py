@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 import os
 
-import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
-django.setup()
-
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
-
 
 def handler(self, *args, **options):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
@@ -17,6 +8,7 @@ def handler(self, *args, **options):
     django.setup()
 
     from django.contrib.auth.models import Group, User
+    User = get_user_model()
 
     e_regs_admin_group, _ = Group.objects.get_or_create(name='EREGS_ADMIN')
     e_regs_reader_group, _ = Group.objects.get_or_create(name='EREGS_READER')
