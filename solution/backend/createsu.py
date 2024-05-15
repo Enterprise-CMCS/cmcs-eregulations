@@ -7,8 +7,8 @@ def handler(self, *args, **options):
     import django
     django.setup()
 
-    from django.contrib.auth.models import Group
     from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import Group
 
     User = get_user_model()
 
