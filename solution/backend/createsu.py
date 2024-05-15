@@ -7,7 +7,9 @@ def handler(self, *args, **options):
     import django
     django.setup()
 
-    from django.contrib.auth.models import Group, User
+    from django.contrib.auth.models import Group
+    from django.contrib.auth import get_user_model
+
     User = get_user_model()
 
     e_regs_admin_group, _ = Group.objects.get_or_create(name='EREGS_ADMIN')
