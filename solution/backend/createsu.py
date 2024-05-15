@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
