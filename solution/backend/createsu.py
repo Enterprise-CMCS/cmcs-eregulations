@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
+django.setup()
 
 from django.contrib.auth import get_user_model
 
