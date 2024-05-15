@@ -99,7 +99,9 @@ describe("Part View", () => {
         cy.get(".div__login-sidebar").contains(
             "Resources you can access include policy documents internal to CMCS."
         );
-        cy.get("button[data-testid='user-account-button']").should("be.visible");
+        cy.get("button[data-testid='user-account-button']").should(
+            "be.visible"
+        );
         cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
         cy.wait("@resources").then(() => {
@@ -121,12 +123,12 @@ describe("Part View", () => {
                 .get(".supplemental-content-date")
                 .contains("August 30, 2023");
             //cy.get(
-                //".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            //".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
             //)
-                //.first()
-                //.get(".result__context--division")
-                //.should("include.text", "Uploaded by MG1 — MD1")
-                //.and("have.attr", "title", "Mock Group 1 — Mock Division 1");
+            //.first()
+            //.get(".result__context--division")
+            //.should("include.text", "Uploaded by MG1 — MD1")
+            //.and("have.attr", "title", "Mock Group 1 — Mock Division 1");
             cy.get(
                 ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
             )
@@ -138,6 +140,49 @@ describe("Part View", () => {
                 .click({ force: true });
             cy.get(".show-more-button").contains("- Show Less (6)");
         });
+    });
+
+    it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
+        cy.intercept("**v3/resources/?&locations=42.433.A**", {
+            fixture: "42.433.A.resources.json",
+        }).as("resources433A");
+        cy.intercept(
+            "**content-search/?resource-type=internal&locations=42.433.A**",
+            {
+                fixture: "42.433.A.internal.json",
+            }
+        ).as("internal433A");
+
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/42/433/Subpart-A");
+
+        // Find and expand Subregulatory Guidance category
+        cy.get("button[data-test='Subregulatory Guidance']")
+            .scrollIntoView()
+            .click({ force: true });
+
+        // Assert that subcategory is visible
+        cy.get(
+            "button[data-test='State Medicaid Director Letter (SMDL)']"
+        ).should("be.visible");
+
+        // Assert that supplemental content list is visible alongside subcategories
+        cy.get(
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list"
+        ).should("exist");
+
+        // Assert that supplemental content that is not in a subcategory is visible
+        // and contains expected text
+        cy.get(
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
+        )
+            .should("exist")
+            .and("be.visible")
+            .and(
+                "contain.text",
+                "Cost Allocations for Surveys of Home Health Agencies (HHAs)"
+            );
     });
 
     it("loads a subpart view in a mobile width", () => {
