@@ -183,6 +183,38 @@ describe("Part View", () => {
                 "contain.text",
                 "Cost Allocations for Surveys of Home Health Agencies (HHAs)"
             );
+
+        // Assert that internal documents can also mix with subcategories
+        // Find and expand Internal Documents category
+        cy.get("button[data-test='[Mock] Category with child']")
+            .scrollIntoView()
+            .click({ force: true });
+
+        // Assert that subcategory is visible
+        cy.get("button[data-test='[Mock] Subcategory with parent']").should(
+            "be.visible"
+        );
+
+        // Assert that supplemental content list is visible alongside subcategories
+        cy.get(
+            "div[data-test='[Mock] Category with child'] > .supplemental-content-list"
+        ).should("exist");
+
+        // Assert that supplemental content that is not in a subcategory is visible
+        // and contains expected text
+        cy.get(
+            "div[data-test='[Mock] Category with child'] > .supplemental-content-list a .supplemental-content-description"
+        )
+            .first()
+            .should("exist")
+            .scrollIntoView();
+
+        cy.get(
+            "div[data-test='[Mock] Category with child'] > .supplemental-content-list a .supplemental-content-description"
+        )
+            .first()
+            .should("be.visible")
+            .and("contain.text", "[Mock] Test");
     });
 
     it("loads a subpart view in a mobile width", () => {
