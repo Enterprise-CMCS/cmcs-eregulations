@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import os
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 def handler(self, *args, **options):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
