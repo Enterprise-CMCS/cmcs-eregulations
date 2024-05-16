@@ -111,6 +111,10 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         if paginate and not search_query:
             query = self.paginate_queryset(query)
 
+        # sort by the contents of the results
+        if search_query:
+            query = sorted(query, key=lambda x: x.headline_score, reverse=True)
+
         context = self.get_serializer_context()
         if search_query:
             serializer = ContentSearchSerializer(query, many=True, context=context)

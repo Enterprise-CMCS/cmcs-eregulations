@@ -1,9 +1,11 @@
 import secrets
 import string
 
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.test import Client, TestCase
 from django.urls import reverse
+from django.conf import settings  # To access the custom user model
+User = settings.AUTH_USER_MODEL
 
 
 class SubjectsViewTest(TestCase):

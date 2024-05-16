@@ -1,11 +1,13 @@
 import unittest
 from unittest.mock import patch
 
-from django.contrib.auth.models import Group, User  # Import the Group model
+from django.contrib.auth.models import Group
 from django.test import TransactionTestCase
+from django.conf import settings  # To access the custom user model
 
 from ..admin import OidcAdminAuthenticationBackend
 
+User = settings.AUTH_USER_MODEL
 
 class OidcAdminAuthenticationBackendTest(TransactionTestCase):
     def setUp(self):
