@@ -80,7 +80,9 @@ class CustomUserAdmin(UserAdmin):
     )
     list_display = ['username', 'email', 'first_name', 'last_name', 'department']  # Add 'department' here
 
+
 admin.site.register(CustomUser, CustomUserAdmin)
+
 
 class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
     def verify_claims(self, claims) -> bool:
