@@ -46,7 +46,9 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", str, False),
                     OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
-                              "\"&categories=X&categories=Y\" for multiple.", int, False),
+                                        "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("internal_categories", "Limit results to only internal documents found within these file categories. Use "
+                                        "\"&internal_categories=X&internal_categories=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
@@ -59,6 +61,7 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
         categories = self.request.GET.getlist("categories")
+        internal_categories = self.request.GET.getlist("internal_categories")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
         paginate = self.request.GET.get("paginate") != 'false'
@@ -73,6 +76,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                 query = query.filter(subjects__id__in=subjects)
         if categories:
             query = query.filter(category__id__in=categories)
+        if internal_categories:
+            query = query.filter(upload_category__id__in=internal_categories)
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
