@@ -33,6 +33,7 @@ const removeClick = (event) => {
         query: {
             ...routeClone,
             ...paramsToPush,
+            page: undefined,
         },
     });
 };
