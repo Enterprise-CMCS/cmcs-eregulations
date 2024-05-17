@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'resources',
     'solo',
     'user.apps.UserConfig',
+    'user',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
