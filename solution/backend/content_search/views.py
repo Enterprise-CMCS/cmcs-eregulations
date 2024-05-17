@@ -56,7 +56,7 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
-        category = self.request.GET.getlist("category")
+        categories = self.request.GET.getlist("categories")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
         paginate = self.request.GET.get("paginate") != 'false'
@@ -69,8 +69,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                 query = query.filter(subjects__isnull=False)
             else:
                 query = query.filter(subjects__id__in=subjects)
-        if category:
-            query = query.filter(category__id=category)
+        if categories:
+            query = query.filter(category__id__in=categories)
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
