@@ -45,6 +45,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", str, False),
+                    OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
+                              "\"&categories=X&categories=Y\" for multiple.", int, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
