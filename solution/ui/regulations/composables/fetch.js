@@ -2,7 +2,7 @@ import { ref } from "vue";
 
 export default function useFetch({ method, apiUrl, cacheResponse = true }) {
     const responseObj = ref({
-        data: null,
+        data: [],
         error: null,
         loading: true,
     });

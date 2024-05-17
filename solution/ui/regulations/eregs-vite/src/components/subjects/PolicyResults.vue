@@ -153,20 +153,15 @@ const resultLinkClasses = (doc) => ({
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
                 >
-                <FetchCategoriesContainer />
-                <v-select
-                    label="Choose Category"
-                    density="compact"
-                    :items="[
-                        'California',
-                        'Colorado',
-                        'Florida',
-                        'Georgia',
-                        'Texas',
-                        'Wyoming',
-                    ]"
-                    variant="outlined"
-                ></v-select>
+                <FetchCategoriesContainer v-slot="slotProps">
+                    <v-select
+                        label="Choose Category"
+                        :loading="slotProps.loading"
+                        density="compact"
+                        :items="slotProps.data.map((category) => category.name)"
+                        variant="outlined"
+                    ></v-select>
+                </FetchCategoriesContainer>
             </div>
         </template>
         <slot name="empty-state"></slot>

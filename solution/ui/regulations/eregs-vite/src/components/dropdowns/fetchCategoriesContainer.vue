@@ -22,10 +22,7 @@ const categoriesList = useFetch({ method: getCategories, apiUrl });
 </script>
 
 <template>
-    <div class="skeleton">
-        {{ categoriesList.loading ? "Loading..." : "Loaded" }}
-        {{ categoriesList.data }}
-    </div>
+    <slot :data="categoriesList.data" :loading="categoriesList.loading"></slot>
 </template>
 
 <style></style>
