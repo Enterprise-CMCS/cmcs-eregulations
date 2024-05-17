@@ -243,9 +243,13 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getCategories = async (apiUrl) => {
+const getCategories = async (apiUrl, cacheResponse = true) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}resources/categories`);
+        return httpApiGetLegacy(
+            `${apiUrl}resources/categories`,
+            {},
+            cacheResponse
+        );
     }
 
     return httpApiGet("resources/categories");

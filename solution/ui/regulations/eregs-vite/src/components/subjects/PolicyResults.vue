@@ -13,6 +13,7 @@ import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
+import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
 import SubjectChips from "./SubjectChips.vue";
 
 const addSurroundingEllipses = (str) => {
@@ -152,6 +153,20 @@ const resultLinkClasses = (doc) => ({
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
                 >
+                <FetchCategoriesContainer />
+                <v-select
+                    label="Choose Category"
+                    density="compact"
+                    :items="[
+                        'California',
+                        'Colorado',
+                        'Florida',
+                        'Georgia',
+                        'Texas',
+                        'Wyoming',
+                    ]"
+                    variant="outlined"
+                ></v-select>
             </div>
         </template>
         <slot name="empty-state"></slot>
