@@ -232,7 +232,7 @@ provide("selectedParams", selectedParams);
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
 
-    if (paramType === "page") {
+    if (paramType === "page" || paramType === "category") {
         return;
     }
 
@@ -508,7 +508,9 @@ getDocSubjects();
                                     <PaginationController
                                         v-if="policyDocList.count > 0"
                                         :count="policyDocList.count"
-                                        :page="parseInt($route.query.page, 10) || 1"
+                                        :page="
+                                            parseInt($route.query.page, 10) || 1
+                                        "
                                         :page-size="pageSize"
                                         view="subjects"
                                     />
