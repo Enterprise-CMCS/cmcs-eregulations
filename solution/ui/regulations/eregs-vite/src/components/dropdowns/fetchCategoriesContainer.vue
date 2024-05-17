@@ -22,7 +22,11 @@ const categoriesList = useFetch({ method: getCategories, apiUrl });
 </script>
 
 <template>
-    <slot :data="categoriesList.data" :loading="categoriesList.loading"></slot>
+    <slot
+        :data="categoriesList.data"
+        :error="categoriesList.error"
+        :loading="categoriesList.loading"
+    ></slot>
 </template>
 
 <style></style>
