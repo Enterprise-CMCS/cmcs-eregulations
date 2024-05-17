@@ -46,9 +46,10 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", str, False),
                     OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
-                                        "\"&categories=X&categories=Y\" for multiple.", int, False),
-                    OpenApiQueryParameter("internal_categories", "Limit results to only internal documents found within these file categories. Use "
-                                        "\"&internal_categories=X&internal_categories=Y\" for multiple.", int, False),
+                                          "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("internal_categories", "Limit results to only internal documents found within these "
+                                          "file categories. Use \"&internal_categories=X&internal_categories=Y\" for multiple.",
+                                          int, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
