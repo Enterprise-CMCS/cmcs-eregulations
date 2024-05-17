@@ -23,6 +23,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
@@ -93,6 +94,8 @@ const FilterTypesDict = {
     q: "query",
 };
 
+const pageSize = 50;
+
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
 provide("base", props.homeUrl);
@@ -125,10 +128,11 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
+    const { q, page, ...rest } = $route.query;
     $router.push({
         name: "subjects",
         query: {
-            ...$route.query,
+            ...rest,
             q: payload.query,
         },
     });
@@ -166,14 +170,17 @@ const getPartsLastUpdated = async () => {
 
 // policyDocList fetch for policy document list
 const policyDocList = ref({
+    count: 0,
     results: [],
     loading: true,
     error: false,
 });
 
-const getDocList = async (requestParams = "") => {
+const getDocList = async (requestParamsString = "") => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
+
+    const requestParams = `${requestParamsString}&page_size=${pageSize}&paginate=true`;
 
     try {
         const contentList = await getCombinedContent({
@@ -182,9 +189,11 @@ const getDocList = async (requestParams = "") => {
             requestParams,
         });
         policyDocList.value.results = contentList.results;
+        policyDocList.value.count = contentList.count;
     } catch (error) {
         console.error(error);
         policyDocList.value.results = [];
+        policyDocList.value.count = 0;
         policyDocList.value.error = true;
     } finally {
         policyDocList.value.loading = false;
@@ -222,6 +231,10 @@ provide("selectedParams", selectedParams);
 
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
+
+    if (paramType === "page") {
+        return;
+    }
 
     if (paramType === "q") {
         searchQuery.value = paramValue;
@@ -482,11 +495,25 @@ getDocSubjects();
                             <PolicyResults
                                 :base="homeUrl"
                                 :results="policyDocList.results"
+                                :results-count="policyDocList.count"
+                                :page="parseInt($route.query.page, 10) || 1"
+                                :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
                                 :search-query="searchQuery"
                                 :selected-subject-parts="selectedSubjectParts"
                             />
+                            <div class="pagination-expand-row">
+                                <div class="pagination-expand-container">
+                                    <PaginationController
+                                        v-if="policyDocList.count > 0"
+                                        :count="policyDocList.count"
+                                        :page="parseInt($route.query.page, 10) || 1"
+                                        :page-size="pageSize"
+                                        view="subjects"
+                                    />
+                                </div>
+                            </div>
                         </template>
                     </template>
                 </div>

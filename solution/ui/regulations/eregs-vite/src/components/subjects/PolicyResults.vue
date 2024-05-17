@@ -5,7 +5,11 @@ import { useRoute } from "vue-router";
 import _isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
-import { getFileTypeButton, DOCUMENT_TYPES_MAP } from "utilities/utils";
+import {
+    getCurrentPageResultsRange,
+    getFileTypeButton,
+    DOCUMENT_TYPES_MAP,
+} from "utilities/utils";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
@@ -86,10 +90,22 @@ export default {
 </script>
 
 <script setup>
-defineProps({
+const props = defineProps({
     results: {
         type: Array,
         default: () => [],
+    },
+    resultsCount: {
+        type: Number,
+        default: 0,
+    },
+    page: {
+        type: String,
+        default: "1",
+    },
+    pageSize: {
+        type: Number,
+        default: 10,
     },
     partsLastUpdated: {
         type: Object,
@@ -130,6 +146,12 @@ const resultLinkClasses = (doc) => ({
     external: doc.resource_type === "external",
     "document__link--search": !!$route?.query?.q,
 });
+
+const currentPageResultsRange = getCurrentPageResultsRange({
+    count: props.resultsCount,
+    page: props.page,
+    pageSize: props.pageSize,
+});
 </script>
 
 <template>
@@ -140,9 +162,10 @@ const resultLinkClasses = (doc) => ({
             </h2>
             <div class="search-results-count">
                 <span v-if="results.length > 0"
-                    >1 - {{ results.length }} of</span
+                    >{{ currentPageResultsRange[0] }} -
+                    {{ currentPageResultsRange[1] }} of</span
                 >
-                {{ results.length }} <span v-if="searchQuery">result</span
+                {{ resultsCount }} <span v-if="searchQuery">result</span
                 ><span v-else>document</span>
                 <span v-if="results.length != 1">s</span>
                 <span v-if="searchQuery">
