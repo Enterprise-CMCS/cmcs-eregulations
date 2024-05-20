@@ -1,6 +1,8 @@
 import pytest
 from django.contrib.auth.models import User
+
 from user.models import Profile
+
 
 @pytest.mark.django_db
 def test_user_profile_creation():
@@ -13,6 +15,7 @@ def test_user_profile_creation():
     # Check the department field
     profile = Profile.objects.get(user=user)
     assert profile.department == ''
+
 
 @pytest.mark.django_db
 def test_user_profile_update():
