@@ -9,11 +9,11 @@ from django.db.models import (
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.admin import AbstractAdmin as BaseAdmin
 from common.filters import IndexPopulatedFilter
 from common.functions import establish_client
 from content_search.functions import add_to_index
 from content_search.models import ContentIndex
-from common.admin import AbstractAdmin as BaseAdmin
 from resources.models import AbstractLocation
 
 from .functions import get_upload_link

@@ -1,7 +1,7 @@
 from django.db import models
 
-from common.mixins import DisplayNameFieldMixin
 from common.fields import CombinedNaturalSort
+from common.mixins import DisplayNameFieldMixin
 
 
 class NewSubject(models.Model, DisplayNameFieldMixin):

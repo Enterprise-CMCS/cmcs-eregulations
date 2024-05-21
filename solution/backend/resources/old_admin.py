@@ -3,9 +3,7 @@ import json
 import re
 
 from django import forms
-from django.apps import apps
 from django.contrib import admin, messages
-from django.contrib.admin.sites import site
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.db.models import (
     Case,

@@ -1,5 +1,4 @@
 from django.db import models
-
 from model_utils.managers import InheritanceManager
 
 from common.mixins import DisplayNameFieldMixin
@@ -13,7 +12,8 @@ class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
     objects = InheritanceManager()
 
     def __str__(self):
-        return f"{self.name} ({self._meta.verbose_name})"
+        name = getattr(self, "name", f"Category {self.pk}")
+        return f"{name} ({self._meta.verbose_name})"
 
 
 class AbstractPublicCategory(NewAbstractCategory):

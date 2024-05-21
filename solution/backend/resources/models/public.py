@@ -1,9 +1,7 @@
 from django.db import models
-
 from django_jsonform.models.fields import ArrayField
 
 from .resource import AbstractPublicResource
-
 
 FR_ACTION_TYPES = [("RFI", "RFI"), ("NPRM", "NPRM"), ("Final", "Final")]
 
@@ -36,7 +34,7 @@ class FederalRegisterLink(AbstractPublicResource):
 
     def __str__(self):
         return f"{self.date} {self.document_number}: {self.document_id}"
-    
+
     class Meta:
         ordering = ["-date", "document_number", "document_id", "title"]
         verbose_name = "Federal Register Link"

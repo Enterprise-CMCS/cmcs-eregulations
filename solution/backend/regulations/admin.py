@@ -2,10 +2,10 @@ import re
 
 import requests
 from defusedxml.minidom import parseString
-from django.contrib import admin, messages
-from django.contrib.auth.models import Group, User
-from django.contrib.admin.sites import site
 from django.apps import apps
+from django.contrib import admin, messages
+from django.contrib.admin.sites import site
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction

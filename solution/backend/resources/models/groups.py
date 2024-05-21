@@ -1,9 +1,8 @@
+from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
 from django.db.models import Q
-from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 from django_jsonform.models.fields import ArrayField
 
 from .resource import NewAbstractResource
