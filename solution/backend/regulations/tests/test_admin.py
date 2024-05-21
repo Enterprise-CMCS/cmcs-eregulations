@@ -18,7 +18,9 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
             "email": "homer.simpson@example.com",
             "email_verified": True,
             "jobcodes": "cn=EREGS_ADMIN,cn=EREGS_EDITOR, ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,"
-                        "dc=cms,dc=hhs,dc=gov "
+                        "dc=cms,dc=hhs,dc=gov ",
+            "department": "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBBi",
+
         }
 
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
@@ -31,6 +33,21 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         result = self.backend.verify_claims(invalid_claims)
         self.assertFalse(result)
 
+    def test_user_without_department(self):
+        backend = OidcAdminAuthenticationBackend()
+
+        claims = {
+            "email": "testuser@example.com",
+            "email_verified": True,
+            "jobcodes": "cn=EREGS_READER",
+            "firstName": "Test",
+            "lastName": "User"
+        }
+
+        user = backend.create_user(claims)
+        self.assertIsNotNone(user)
+        self.assertEqual(user.email, "testuser@example.com")
+        self.assertEqual(user.profile.department, '')
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_user_is_active_if_have_jobcodes(self, mock_create_user):
         # Create a user with valid jobcodes
