@@ -12,6 +12,8 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
+from user.models import Profile
+
 
 from .models import (
     RegulationLinkConfiguration,
@@ -80,6 +82,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         )
 
     def create_user(self, claims) -> User:
+        department = claims.get("department")
         email = claims.get("email")
         jobcodes = claims.get("jobcodes")
 
@@ -96,6 +99,12 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                     user = User.objects.get(email=email)
                 except User.DoesNotExist:
                     user = User.objects.create_user(email, email)
+
+                # Update or create the profile
+                profile, created = Profile.objects.get_or_create(user=user)
+                if department:
+                    profile.department = department
+                profile.save()
 
                 user = self.update_user(user, claims)
                 user.save()
@@ -136,6 +145,14 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         # Update user's first and last names
         user.first_name = claims.get("firstName", user.first_name)
         user.last_name = claims.get("lastName", user.last_name)
+
+        # Update user's profile information
+        department = claims.get("department")
+        profile, created = Profile.objects.get_or_create(user=user)
+        if department:
+            profile.department = department
+
+        profile.save()
 
         # Check if there are any relevant jobcodes
         user.is_active = bool(relevant_jobcodes)
