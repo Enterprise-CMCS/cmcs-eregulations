@@ -20,8 +20,8 @@ class ResourceGroup(NewAbstractResource):
     resources = models.ManyToManyField(NewAbstractResource, blank=True, related_name="resource_groups")
 
     def __str__(self):
-        if self.name:
-            name = self.name
+        if self.document_id:
+            name = self.document_id
         elif self.common_identifiers:
             name = ", ".join(self.common_identifiers)
         else:
