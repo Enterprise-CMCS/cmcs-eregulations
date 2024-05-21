@@ -1,0 +1,166 @@
+{
+    "count": 3,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "doc_name_string": "[Mock] TXT test",
+            "file_name_string": "test.txt",
+            "date_string": "2023-08-30",
+            "summary_string": "",
+            "locations": [
+                {
+                    "id": 200,
+                    "title": 42,
+                    "part": 433,
+                    "type": "section",
+                    "section_id": 10,
+                    "parent": 1026
+                }
+            ],
+            "resource_type": "internal",
+            "subjects": [],
+            "category": {
+                "id": 1,
+                "name": "Internal Documents and Correspondence",
+                "description": "Emails, memos, and notes between CMS staff (including ROs), issue papers, one-pagers",
+                "order": 100,
+                "show_if_empty": true,
+                "type": "repositorycategory"
+            },
+            "url": "6c8c5ce0-8879-46fb-aa8c-56c7539f686d",
+            "id": 13681,
+            "document_name_headline": null,
+            "summary_headline": null,
+            "division": null
+        },
+        {
+            "doc_name_string": "RE Question regarding insulin supplies.msg",
+            "file_name_string": "RE Question regarding insulin supplies (1).msg",
+            "date_string": "2018-06-06",
+            "summary_string": "Internal emails between the region and central office about whether Medicaid supplies may be purchased from suppliers outside of the US",
+            "locations": [
+                {
+                    "id": 1026,
+                    "title": 42,
+                    "part": 433,
+                    "type": "subpart",
+                    "subpart_id": "A"
+                },
+                {
+                    "id": 1029,
+                    "title": 42,
+                    "part": 433,
+                    "type": "subpart",
+                    "subpart_id": "B"
+                }
+            ],
+            "resource_type": "internal",
+            "subjects": [
+                {
+                    "id": 145,
+                    "full_name": "Durable Medical Equipment",
+                    "short_name": null,
+                    "abbreviation": "DME"
+                },
+                {
+                    "id": 92,
+                    "full_name": "Out of Country Services",
+                    "short_name": null,
+                    "abbreviation": null
+                },
+                {
+                    "id": 447,
+                    "full_name": "Federal Financial Participation",
+                    "short_name": null,
+                    "abbreviation": "FFP"
+                }
+            ],
+            "category": {
+                "id": 21,
+                "name": "Policy Context/Interpretation",
+                "description": "",
+                "order": 0,
+                "show_if_empty": false,
+                "type": "repositorysubcategory",
+                "parent": {
+                    "id": 1,
+                    "name": "Internal Documents and Correspondence",
+                    "description": "Emails, memos, and notes between CMS staff (including ROs), issue papers, one-pagers",
+                    "order": 100,
+                    "show_if_empty": true,
+                    "type": ""
+                }
+            },
+            "url": "a1ab22d6-18f4-4a8a-94fd-26258a53f103",
+            "id": 10933,
+            "document_name_headline": null,
+            "summary_headline": null,
+            "division": {
+                "id": 1,
+                "name": "Division of Benefits and Coverage",
+                "abbreviation": "DBC",
+                "group": {
+                    "id": 1,
+                    "name": "Medicaid Benefits and Health Programs Group",
+                    "abbreviation": "MBHPG"
+                }
+            }
+        },
+        {
+            "doc_name_string": "1979 SMM (State Medicaid Manual) re PCS",
+            "file_name_string": "1979 SMM re PCS.pdf",
+            "date_string": "1979-04-04",
+            "summary_string": "",
+            "locations": [
+                {
+                    "id": 200,
+                    "title": 42,
+                    "part": 433,
+                    "type": "section",
+                    "section_id": 10,
+                    "parent": 1026
+                },
+                {
+                    "id": 1,
+                    "title": 42,
+                    "part": 440,
+                    "type": "section",
+                    "section_id": 167,
+                    "parent": 1124
+                }
+            ],
+            "resource_type": "internal",
+            "subjects": [
+                {
+                    "id": 96,
+                    "full_name": "Personal Care Services",
+                    "short_name": null,
+                    "abbreviation": "PCS"
+                }
+            ],
+            "category": {
+                "id": 1,
+                "name": "Internal Documents and Correspondence",
+                "description": "Emails, memos, and notes between CMS staff (including ROs), issue papers, one-pagers",
+                "order": 100,
+                "show_if_empty": true,
+                "type": "repositorycategory"
+            },
+            "url": "6d8620c5-3e60-4193-9259-3411d5f22813",
+            "id": 13680,
+            "document_name_headline": null,
+            "summary_headline": null,
+            "division": {
+                "id": 1,
+                "name": "Division of Benefits and Coverage",
+                "abbreviation": "DBC",
+                "group": {
+                    "id": 1,
+                    "name": "Medicaid Benefits and Health Programs Group",
+                    "abbreviation": "MBHPG"
+                }
+            }
+        }
+    ]
+}
