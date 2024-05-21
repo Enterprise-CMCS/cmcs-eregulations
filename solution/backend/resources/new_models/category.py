@@ -16,7 +16,11 @@ class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
         return f"{self.name} ({self._meta.verbose_name})"
 
 
-class PublicCategory(NewAbstractCategory):
+class AbstractPublicCategory(NewAbstractCategory):
+    pass
+
+
+class PublicCategory(AbstractPublicCategory):
     name = models.CharField(max_length=512, unique=True)
 
     class Meta:
@@ -25,9 +29,9 @@ class PublicCategory(NewAbstractCategory):
         verbose_name_plural = "Public Categories"
 
 
-class PublicSubCategory(NewAbstractCategory):
+class PublicSubCategory(AbstractPublicCategory):
     name = models.CharField(max_length=512, unique=True)
-    parent = models.ForeignKey(PublicCategory, on_delete=models.CASCADE, related_name="sub_categories")
+    parent = models.ForeignKey(PublicCategory, on_delete=models.CASCADE, related_name="subcategories")
 
     class Meta:
         ordering = ["order", "name"]
@@ -35,7 +39,11 @@ class PublicSubCategory(NewAbstractCategory):
         verbose_name_plural = "Public Subcategories"
 
 
-class InternalCategory(NewAbstractCategory):
+class AbstractInternalCategory(NewAbstractCategory):
+    pass
+
+
+class InternalCategory(AbstractInternalCategory):
     name = models.CharField(max_length=512, unique=True)
 
     class Meta:
@@ -44,9 +52,9 @@ class InternalCategory(NewAbstractCategory):
         verbose_name_plural = "Internal Categories"
 
 
-class InternalSubCategory(NewAbstractCategory):
+class InternalSubCategory(AbstractInternalCategory):
     name = models.CharField(max_length=512, unique=True)
-    parent = models.ForeignKey(InternalCategory, on_delete=models.CASCADE, related_name="sub_categories")
+    parent = models.ForeignKey(InternalCategory, on_delete=models.CASCADE, related_name="subcategories")
 
     class Meta:
         ordering = ["order", "name"]

@@ -31,7 +31,7 @@ class ResourceGroup(NewAbstractResource):
     class Meta:
         verbose_name = "Resource Group"
         verbose_name_plural = "Resource Groups"
-        ordering = ("name", "common_identifiers")
+        ordering = ["document_id", "common_identifiers"]
 
 
 def update_group(group):
@@ -44,12 +44,12 @@ def update_group(group):
         first = query[0]
 
         query = group.resources.aggregate(
-            all_citations=ArrayAgg("citations", distinct=True, filter=Q(citations__isnull=False)),
+            all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False)),
             all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False)),
         )
 
-        group.citations.set(query["all_citations"])
-        group.subjects.set(query["all_subjects"])
+        group.cfr_citations.set(query["all_citations"] or [])
+        group.subjects.set(query["all_subjects"] or [])
         group.category = first.category
         group.date = first.date
         group.save()

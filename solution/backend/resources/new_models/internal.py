@@ -1,9 +1,12 @@
 import os
+import uuid
 
-from .resource import InternalResource
+from django.db import models
+
+from .resource import AbstractInternalResource
 
 
-class InternalLink(InternalResource):
+class InternalLink(AbstractInternalResource):
     pass
 
 
@@ -12,7 +15,7 @@ InternalLink._meta.get_field("url").help_text = \
     "To link to an existing document - for example in Box or SharePoint - enter the full URL here."
 
 
-class InternalFile(InternalResource):
+class InternalFile(AbstractInternalResource):
     file_name = models.CharField(max_length=512, blank=True, editable=False)
     file_type = models.CharField(max_length=32, blank=True, editable=False)
     uid = models.UUIDField(

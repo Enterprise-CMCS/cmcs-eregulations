@@ -2,13 +2,13 @@ from django.db import models
 
 from django_jsonform.models.fields import ArrayField
 
-from .resource import PublicResource
+from .resource import AbstractPublicResource
 
 
 FR_ACTION_TYPES = [("RFI", "RFI"), ("NPRM", "NPRM"), ("Final", "Final")]
 
 
-class FederalRegisterLink(PublicResource):
+class FederalRegisterLink(AbstractPublicResource):
     docket_numbers = ArrayField(
         models.CharField(max_length=512, blank=True),
         default=list,
@@ -35,10 +35,10 @@ class FederalRegisterLink(PublicResource):
     )
 
     def __str__(self):
-        return f"{self.date} {self.document_number}: {self.name}"
+        return f"{self.date} {self.document_number}: {self.document_id}"
     
     class Meta:
-        ordering = ["-date", "document_number", "name", "description"]
+        ordering = ["-date", "document_number", "document_id", "title"]
         verbose_name = "Federal Register Link"
         verbose_name_plural = "Federal Register Links"
 
@@ -49,11 +49,11 @@ FederalRegisterLink._meta.get_field("document_id").help_text = \
     "where \"55\" is the volume number and \"10938\" is the page number."
 
 
-class PublicLink(PublicResource):
+class PublicLink(AbstractPublicResource):
     def __str__(self):
-        return f"{self.date} {self.name} {self.description[:50]}"
+        return f"{self.date} {self.document_id} {self.title[:50]}"
 
     class Meta:
-        ordering = ["-date", "name", "description"]
+        ordering = ["-date", "document_id", "title"]
         verbose_name = "Public Link"
         verbose_name_plural = "Public Links"

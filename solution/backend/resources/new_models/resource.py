@@ -78,11 +78,11 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
     objects = InheritanceManager()
 
 
-class PublicResource(NewAbstractResource):
+class AbstractPublicResource(NewAbstractResource):
     pass
 
 
-class InternalResource(NewAbstractResource):
+class AbstractInternalResource(NewAbstractResource):
     # TODO: add division foreignkey
     # help_text="Choose the Division that can see this document on eRegulations."
     #           "If it should be visible to everyone who is logged in, choose \"Visible to all CMCS\"."
