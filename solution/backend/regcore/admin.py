@@ -8,7 +8,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from solo.admin import SingletonModelAdmin
 
-from resources.admin import BaseAdmin
+from common.admin import AbstractAdmin
 
 from .models import ParserConfiguration, PartConfiguration
 from .search.models import Synonym
@@ -94,6 +94,6 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 
 
 @admin.register(Synonym)
-class SynonymAdmin(BaseAdmin):
+class SynonymAdmin(AbstractAdmin):
     admin_priority = 20
     ordering = ('baseWord',)

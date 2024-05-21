@@ -1,3 +1,5 @@
+from resources.old_models import *
+
 from .category import *
 from .citations import *
 from .groups import *

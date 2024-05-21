@@ -46,23 +46,6 @@ from .models import (
 from .serializers.locations import AbstractLocationPolymorphicSerializer
 
 
-class BaseAdmin(admin.ModelAdmin):
-    list_per_page = 200
-    admin_priority = 20
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        lookups = getattr(self, "foreignkey_lookups", {})
-        if db_field.name in lookups:
-            kwargs["queryset"] = lookups[db_field.name]()
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def formfield_for_manytomany(self, db_field, request, **kwargs):
-        lookups = getattr(self, "manytomany_lookups", {})
-        if db_field.name in lookups:
-            kwargs["queryset"] = lookups[db_field.name]()
-        return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-
 @admin.register(ResourcesConfiguration)
 class ResourcesConfigurationAdmin(SingletonModelAdmin):
     admin_priority = 0
@@ -682,24 +665,3 @@ class FederalRegisterDocumentGroupAdmin(BaseAdmin):
 
     def number_of_documents(self, obj):
         return obj.number_of_documents
-
-
-# Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
-def get_app_list(self, request, app_label=None):
-    app_dict = self._build_app_dict(request, app_label)
-    for app_name in app_dict.keys():
-        app = app_dict[app_name]
-        model_priority = {
-            model['object_name']: getattr(
-                site._registry[apps.get_model(app_name, model['object_name'])],
-                'admin_priority',
-                20
-            )
-            for model in app['models']
-        }
-        app['models'].sort(key=lambda x: model_priority[x['object_name']])
-    return list(app_dict.values())
-
-
-# Patch Django's built in get_app_list function
-admin.AdminSite.get_app_list = get_app_list
