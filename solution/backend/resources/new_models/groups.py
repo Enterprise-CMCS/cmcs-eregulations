@@ -17,7 +17,7 @@ class ResourceGroup(NewAbstractResource):
         help_text="Common identifiers to use when grouping resources. For example, when grouping Federal Register Documents, "
                   "use the docket number prefix, like \"CMS-1234-\".",
     )
-    resources = models.ManyToManyField(NewAbstractResource, blank=True, related_name="groups")
+    resources = models.ManyToManyField(NewAbstractResource, blank=True, related_name="resource_groups")
 
     def __str__(self):
         if self.name:
@@ -66,5 +66,5 @@ def post_save_group(sender, instance, **kwargs):
 
 @receiver(post_save, sender=NewAbstractResource)
 def post_save_group_resources(sender, instance, **kwargs):
-    for i in instance.groups.all():
+    for i in instance.resource_groups.all():
         update_group(i)

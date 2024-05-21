@@ -188,7 +188,19 @@ def copy_federal_register_links(apps, schema_editor):
 
 
 def copy_internal_files(apps, schema_editor):
+    if not apps.is_installed("file_manager"):
+        return  # Skip copying repo files
+    try:
+        UploadedFile = apps.get_model("file_manager", "UploadedFile")
+    except Exception:
+        return  # Failed to import needed models, skip copying repo files
+    InternalFile = apps.get_model("resources", "InternalFile")
 
+    for i in UploadedFile.objects.all():
+        InternalFile.objects.create(
+            old_pk=i.pk,
+            
+        )
 
 def copy_groups(apps, schema_editor):
     pass

@@ -15,6 +15,9 @@ from common.fields import (
 from common.mixins import DisplayNameFieldMixin
 
 
+from resources.new_models import *
+
+
 # Field mixins
 class InternalNotesFieldMixin(models.Model):
     internal_notes = models.TextField(null=True, blank=True)
