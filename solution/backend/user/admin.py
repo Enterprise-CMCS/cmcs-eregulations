@@ -10,6 +10,8 @@ class ProfileInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'Profiles'
     fields = ('department',)
+    readonly_fields = ('department',)
+
 
 
 class CustomUserAdmin(BaseUserAdmin):
