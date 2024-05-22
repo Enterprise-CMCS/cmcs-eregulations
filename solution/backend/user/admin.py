@@ -13,7 +13,6 @@ class ProfileInline(admin.StackedInline):
     readonly_fields = ('department',)
 
 
-
 class CustomUserAdmin(BaseUserAdmin):
     inlines = (ProfileInline,)
     list_display = ('username', 'email', 'first_name', 'last_name', 'department')
