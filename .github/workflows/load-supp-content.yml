@@ -32,7 +32,7 @@ jobs:
       - name: add supplemental content to database
         run: |
           pushd serverless
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless invoke --function populate_content --stage ${{ github.event.inputs.env }}
           popd
