@@ -48,6 +48,7 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertIsNotNone(user)
         self.assertEqual(user.email, "testuser@example.com")
         self.assertEqual(user.profile.department, '')
+
     @patch.object(OidcAdminAuthenticationBackend, 'create_user')
     def test_user_is_active_if_have_jobcodes(self, mock_create_user):
         # Create a user with valid jobcodes
