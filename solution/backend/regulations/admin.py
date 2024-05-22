@@ -101,7 +101,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                     user = User.objects.create_user(email, email)
 
                 # Update or create the profile
-                profile, created = Profile.objects.get_or_create(user=user)
+                profile, _ = Profile.objects.get_or_create(user=user)
                 if department:
                     profile.department = department
                 profile.save()
@@ -148,7 +148,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
         # Update user's profile information
         department = claims.get("department")
-        profile, created = Profile.objects.get_or_create(user=user)
+        profile, _ = Profile.objects.get_or_create(user=user)
         if department:
             profile.department = department
 
