@@ -243,6 +243,19 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
+/**
+ * Retrieves a list of categories from an API.
+ *
+ * This function fetches categories data from a specified API endpoint.
+ * It utilizes the `httpApiGetLegacy` or `httpApiGet` function depending on the provided `apiUrl`.
+ *
+ * @param {string} [apiUrl] The URL of the API endpoint containing category data.
+ *        If not provided, a default endpoint is used.
+ * @param {boolean} [cacheResponse=true] Optional flag indicating whether to cache the response. Defaults to true.
+ *
+ * @returns {Promise<object>} A promise that resolves to an object containing category data.
+ * @throws {Error} May throw an error if the API request fails.
+ */
 const getCategories = async (apiUrl, cacheResponse = true) => {
     if (apiUrl) {
         return httpApiGetLegacy(
@@ -255,7 +268,6 @@ const getCategories = async (apiUrl, cacheResponse = true) => {
     return httpApiGet("resources/categories");
 };
 
-// ---------- api calls ---------------
 /**
  * Get formatted date of most recent successful run of the ECFR parser
  *
