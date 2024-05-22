@@ -70,7 +70,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/static-assets
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --stage dev${PR}
           popd

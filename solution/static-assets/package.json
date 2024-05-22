@@ -7,8 +7,5 @@
         "serverless-cloudfront-invalidate": "^1.12.2",
         "serverless-python-requirements": "^5.4.0",
         "serverless-s3-sync": "^1.17.3"
-    },
-    "overrides": {
-        "serverless": "^3.38.0"
     }
 }
