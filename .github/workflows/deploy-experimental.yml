@@ -70,7 +70,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/static-assets
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --stage dev${PR}
           popd
@@ -106,7 +106,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/text-extractor
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           serverless deploy --stage dev${PR}
           popd
   deploy-django:
@@ -154,7 +154,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/backend
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
@@ -268,7 +268,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/static-assets
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --stage dev${PR}
           popd
@@ -305,7 +305,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/parser
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --stage dev${PR} --config ./serverless-ecfr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev${PR} --config ./serverless-ecfr.yml
@@ -317,7 +317,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/parser
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless deploy --stage dev${PR} --config ./serverless-fr.yml
           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
