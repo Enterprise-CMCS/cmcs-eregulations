@@ -45,7 +45,7 @@ jobs:
           PR: ${{ github.event.number }}
         run: |
           pushd solution/parser
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           chmod +x ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh 
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
@@ -63,7 +63,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/backend
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless invoke --config ./serverless-experimental.yml --function empty_bucket --stage dev${PR}
           # remove the database if its there.
@@ -77,7 +77,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/text-extractor
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           serverless remove --stage dev${PR}
           popd
       # Remove the static assets
@@ -88,7 +88,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd solution/static-assets
-          npm install serverless -g
+          npm install serverless@">=3.38.0 <4" -g
           npm install
           serverless remove --stage dev${PR}
           popd
