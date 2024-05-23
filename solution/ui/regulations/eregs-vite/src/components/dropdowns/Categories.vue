@@ -31,7 +31,7 @@ watch(
                 name: "subjects",
                 query: {
                     ...$route.query,
-                    category: undefined,
+                    categories: undefined,
                 },
             });
         } else {
@@ -39,7 +39,7 @@ watch(
                 name: "subjects",
                 query: {
                     ...$route.query,
-                    category: newValue,
+                    categories: newValue,
                 },
             });
         }

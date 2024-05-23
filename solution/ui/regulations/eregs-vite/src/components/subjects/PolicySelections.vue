@@ -44,6 +44,7 @@ watch(
     () => selectedParams.paramString,
     async () => {
         selections.value = selectedParams.paramsArray
+            .filter((param) => FilterTypesDict[param.type])
             .map((param) => ({
                 label: FilterTypesDict[param.type],
                 id: param.id,
