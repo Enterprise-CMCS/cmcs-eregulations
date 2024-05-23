@@ -29,34 +29,27 @@ const itemProps = (item) => ({
 });
 
 const filteredList = computed(() =>
-    props.list
-        .map((item) => ({
-            id: item.id,
-            name: item.name,
-            documentType: "external",
-        }))
+    props.list.map((item) => ({
+        id: item.id,
+        name: item.name,
+        documentType: "external",
+    }))
 );
 
 watch(
     () => selectedId.value,
     (newValue) => {
-        if (!newValue) {
-            $router.push({
-                name: "subjects",
-                query: {
-                    ...$route.query,
-                    categories: undefined,
-                },
-            });
-        } else {
-            $router.push({
-                name: "subjects",
-                query: {
-                    ...$route.query,
-                    categories: newValue,
-                },
-            });
-        }
+        let categories;
+
+        if (newValue) categories = newValue;
+
+        $router.push({
+            name: "subjects",
+            query: {
+                ...$route.query,
+                categories,
+            },
+        });
     }
 );
 </script>

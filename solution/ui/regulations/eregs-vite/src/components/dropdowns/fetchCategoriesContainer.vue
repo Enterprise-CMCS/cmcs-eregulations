@@ -3,7 +3,7 @@ import { computed, inject, ref } from "vue";
 
 import useFetch from "composables/fetch";
 
-import { getExternalCategories } from "utilities/api";
+import { getExternalCategoriesTree } from "utilities/api";
 
 const props = defineProps({
     apiUrl: {
@@ -18,7 +18,7 @@ const props = defineProps({
 
 const apiUrl = inject("apiUrl");
 
-const categoriesList = useFetch({ method: getExternalCategories, apiUrl });
+const categoriesList = useFetch({ method: getExternalCategoriesTree, apiUrl });
 </script>
 
 <template>
