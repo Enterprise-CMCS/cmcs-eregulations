@@ -266,7 +266,7 @@ const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
 };
 
 /**
- * Retrieves a top-down representation of categories, with each category containing zero or more sub-categories.
+ * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
  *
  * @param {object} options - An object containing options for the request.
  * @param {string} [options.apiUrl] - The base URL of the external API.
@@ -556,11 +556,12 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = true }) => {
  */
 
 /**
+ * Retrieves a flat list of all internal categories and subcategories from an API.
+ *
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-
 const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
@@ -571,6 +572,25 @@ const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
     }
 
     return httpApiGet("file-manager/categories", cacheResponse);
+};
+
+/**
+ * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
+ *
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
+ */
+const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = true }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}file-manager/categories/tree`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("file-manager/categories/tree", cacheResponse);
 };
 
 /**
