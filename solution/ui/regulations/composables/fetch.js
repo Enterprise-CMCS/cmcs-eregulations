@@ -7,7 +7,7 @@ export default function useFetch({ method, apiUrl, cacheResponse = true }) {
         loading: true,
     });
 
-    method(apiUrl, cacheResponse)
+    method({ apiUrl, cacheResponse })
         .then((response) => {
             responseObj.value.data = response;
         })

@@ -244,19 +244,16 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 /**
- * Retrieves a flat list of all categories and subcategories from an API.
+ * Retrieves a flat list of all external categories and subcategories from an API.
  *
- * This function fetches categories data from a specified API endpoint.
- * It utilizes the `httpApiGetLegacy` or `httpApiGet` function depending on the provided `apiUrl`.
- *
- * @param {string} [apiUrl] The URL of the API endpoint containing category data.
- *        If not provided, a default endpoint is used.
- * @param {boolean} [cacheResponse=true] Optional flag indicating whether to cache the response. Defaults to true.
- *
- * @returns {Promise<object>} A promise that resolves to an object containing category data.
- * @throws {Error} May throw an error if the API request fails.
+ * @param {object} options - An object containing options for the request.
+ * @param {string} [options.apiUrl] - The base URL of the external API.
+ *   If provided, this function will fetch data from the external API.
+ *   Otherwise, it will fetch data from the internal API with a default URL.
+ * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @returns {Promise<object>} - A promise that resolves to an object containing the fetched category data.
  */
-const getCategories = async (apiUrl, cacheResponse = true) => {
+const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories`,
@@ -271,17 +268,14 @@ const getCategories = async (apiUrl, cacheResponse = true) => {
 /**
  * Retrieves a top-down representation of categories, with each category containing zero or more sub-categories.
  *
- * This function fetches categories data from a specified API endpoint.
- * It utilizes the `httpApiGetLegacy` or `httpApiGet` function depending on the provided `apiUrl`.
- *
- * @param {string} [apiUrl] The URL of the API endpoint containing category data.
- *        If not provided, a default endpoint is used.
- * @param {boolean} [cacheResponse=true] Optional flag indicating whether to cache the response. Defaults to true.
- *
- * @returns {Promise<object>} A promise that resolves to an object containing category data.
- * @throws {Error} May throw an error if the API request fails.
+ * @param {object} options - An object containing options for the request.
+ * @param {string} [options.apiUrl] - The base URL of the external API.
+ *   If provided, this function will fetch data from the external API.
+ *   Otherwise, it will fetch data from the internal API with a default URL.
+ * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @returns {Promise<object>} - A promise that resolves to an object containing the fetched category data.
  */
-const getExternalCategoriesTree = async (apiUrl, cacheResponse = true) => {
+const getExternalCategoriesTree = async ({apiUrl, cacheResponse = true}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories/tree`,
@@ -425,7 +419,7 @@ const getSupplementalContent = async ({
     }
 
     if (categories) {
-        const catList = await getCategories();
+        const catList = await getExternalCategories();
         categories.forEach((category) => {
             sString = `${sString}&categories=${
                 catList.find((x) => x.name === category).id
@@ -607,8 +601,8 @@ export {
     configure,
     getCacheItem,
     getCacheKeys,
-    getCategories,
     getCombinedContent,
+    getExternalCategories,
     getExternalCategoriesTree,
     getGovInfoLinks,
     getLastParserSuccessDate,
