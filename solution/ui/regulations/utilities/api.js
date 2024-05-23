@@ -251,7 +251,7 @@ const setCacheItem = async (key, data) => {
  *   If provided, this function will fetch data from the external API.
  *   Otherwise, it will fetch data from the internal API with a default URL.
  * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
- * @returns {Promise<object>} - A promise that resolves to an object containing the fetched category data.
+ * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
 const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
     if (apiUrl) {
@@ -273,7 +273,7 @@ const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
  *   If provided, this function will fetch data from the external API.
  *   Otherwise, it will fetch data from the internal API with a default URL.
  * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
- * @returns {Promise<object>} - A promise that resolves to an object containing the fetched category data.
+ * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
 const getExternalCategoriesTree = async ({apiUrl, cacheResponse = true}) => {
     if (apiUrl) {
@@ -560,6 +560,7 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<PolicyDocCategory>>} - Promise that contains array of categories when fulfilled
  */
+
 const getPolicyDocCategories = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(

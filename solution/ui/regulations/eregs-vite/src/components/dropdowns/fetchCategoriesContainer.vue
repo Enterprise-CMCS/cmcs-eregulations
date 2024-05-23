@@ -18,14 +18,17 @@ const props = defineProps({
 
 const apiUrl = inject("apiUrl");
 
-const categoriesList = useFetch({ method: getExternalCategoriesTree, apiUrl });
+const externalCategories = useFetch({
+    method: getExternalCategoriesTree,
+    apiUrl,
+});
 </script>
 
 <template>
     <slot
-        :data="categoriesList.data"
-        :error="categoriesList.error"
-        :loading="categoriesList.loading"
+        :data="externalCategories.data"
+        :error="externalCategories.error"
+        :loading="externalCategories.loading"
     ></slot>
 </template>
 
