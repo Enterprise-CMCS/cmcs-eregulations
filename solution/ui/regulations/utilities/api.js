@@ -244,7 +244,7 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 /**
- * Retrieves a list of categories from an API.
+ * Retrieves a flat list of all categories and subcategories from an API.
  *
  * This function fetches categories data from a specified API endpoint.
  * It utilizes the `httpApiGetLegacy` or `httpApiGet` function depending on the provided `apiUrl`.
@@ -266,6 +266,31 @@ const getCategories = async (apiUrl, cacheResponse = true) => {
     }
 
     return httpApiGet("resources/categories");
+};
+
+/**
+ * Retrieves a top-down representation of categories, with each category containing zero or more sub-categories.
+ *
+ * This function fetches categories data from a specified API endpoint.
+ * It utilizes the `httpApiGetLegacy` or `httpApiGet` function depending on the provided `apiUrl`.
+ *
+ * @param {string} [apiUrl] The URL of the API endpoint containing category data.
+ *        If not provided, a default endpoint is used.
+ * @param {boolean} [cacheResponse=true] Optional flag indicating whether to cache the response. Defaults to true.
+ *
+ * @returns {Promise<object>} A promise that resolves to an object containing category data.
+ * @throws {Error} May throw an error if the API request fails.
+ */
+const getExternalCategoriesTree = async (apiUrl, cacheResponse = true) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}resources/categories/tree`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("resources/categories/tree");
 };
 
 /**
@@ -584,6 +609,7 @@ export {
     getCacheKeys,
     getCategories,
     getCombinedContent,
+    getExternalCategoriesTree,
     getGovInfoLinks,
     getLastParserSuccessDate,
     getLastUpdatedDates,
