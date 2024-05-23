@@ -1,34 +1,62 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { inject, ref, watchEffect } from "vue";
 
 import useFetch from "composables/fetch";
 
-import { getExternalCategoriesTree } from "utilities/api";
+import {
+    getExternalCategoriesTree,
+    getInternalCategoriesTree,
+} from "utilities/api";
 
-const props = defineProps({
+defineProps({
     apiUrl: {
         type: String,
         required: true,
-    },
-    filterList: {
-        type: Array,
-        default: () => [],
     },
 });
 
 const apiUrl = inject("apiUrl");
 
+const combinedCategories = ref({
+    loading: true,
+    error: null,
+    data: [],
+});
+
 const externalCategories = useFetch({
     method: getExternalCategoriesTree,
     apiUrl,
+});
+
+const internalCategories = useFetch({
+    method: getInternalCategoriesTree,
+    apiUrl,
+});
+
+watchEffect(() => {
+    combinedCategories.value.loading =
+        externalCategories.value.loading || internalCategories.value.loading;
+
+    if (!combinedCategories.value.loading) {
+        // move to method
+        const externalCats = externalCategories.value.data.map((cat) => ({
+            ...cat,
+            documentType: "external",
+        }));
+        const internalCats = internalCategories.value.data.map((cat) => ({
+            ...cat,
+            documentType: "internal",
+        }));
+        combinedCategories.value.data = [...externalCats, ...internalCats];
+    }
 });
 </script>
 
 <template>
     <slot
-        :data="externalCategories.data"
+        :data="combinedCategories.data"
         :error="externalCategories.error"
-        :loading="externalCategories.loading"
+        :loading="combinedCategories.loading"
     ></slot>
 </template>
 

@@ -627,6 +627,7 @@ export {
     getExternalCategoriesTree,
     getGovInfoLinks,
     getInternalCategories,
+    getInternalCategoriesTree,
     getInternalSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,
