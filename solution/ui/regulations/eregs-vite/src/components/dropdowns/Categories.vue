@@ -1,9 +1,9 @@
 <script setup>
-import { watch } from "vue";
+import { computed, watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
-defineProps({
+const props = defineProps({
     list: {
         type: Array,
         required: true,
@@ -22,6 +22,20 @@ const $route = useRoute();
 const $router = useRouter();
 
 const selectedId = defineModel("id");
+
+const itemProps = (item) => ({
+    value: item.id,
+    title: item.name,
+});
+
+const filteredList = computed(() =>
+    props.list
+        .map((item) => ({
+            id: item.id,
+            name: item.name,
+            documentType: "external",
+        }))
+);
 
 watch(
     () => selectedId.value,
@@ -54,9 +68,8 @@ watch(
         label="Choose Category"
         :loading="loading"
         density="compact"
-        :items="list"
-        item-title="name"
-        item-value="id"
+        :items="filteredList"
+        :item-props="itemProps"
         variant="outlined"
     ></v-select>
 </template>
