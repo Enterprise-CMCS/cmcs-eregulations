@@ -31,7 +31,7 @@ watch(
                 name: "subjects",
                 query: {
                     ...$route.query,
-                    category: null,
+                    category: undefined,
                 },
             });
         } else {
