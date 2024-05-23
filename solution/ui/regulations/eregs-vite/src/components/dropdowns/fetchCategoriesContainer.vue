@@ -47,7 +47,7 @@ watchEffect(() => {
         }));
         const internalCats = internalCategories.value.data.map((cat) => ({
             ...cat,
-            categoryType: "internal_categories",
+            categoryType: "intcategories",
         }));
         combinedCategories.value.data = [...externalCats, ...internalCats];
     }

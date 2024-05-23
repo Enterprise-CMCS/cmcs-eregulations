@@ -35,7 +35,7 @@ watch(
 
         const {
             categories,
-            internal_categories,
+            intcategories,
             ...restOfRoute
         } = $route.query;
 
