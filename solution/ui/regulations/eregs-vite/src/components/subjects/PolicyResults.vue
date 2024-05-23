@@ -17,8 +17,6 @@ import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
-import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
-import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
 import SubjectChips from "./SubjectChips.vue";
 
 const addSurroundingEllipses = (str) => {
@@ -177,13 +175,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
                 >
-                <FetchCategoriesContainer v-slot="slotProps">
-                    <CategoriesDropdown
-                        :list="slotProps.data"
-                        :error="slotProps.error"
-                        :loading="slotProps.loading"
-                    />
-                </FetchCategoriesContainer>
             </div>
         </template>
         <slot name="empty-state"></slot>

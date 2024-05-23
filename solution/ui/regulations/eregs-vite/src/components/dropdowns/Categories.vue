@@ -3,7 +3,7 @@ import { watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
-const props = defineProps({
+defineProps({
     list: {
         type: Array,
         required: true,
@@ -25,7 +25,7 @@ const selectedId = defineModel("id");
 
 watch(
     () => selectedId.value,
-    (newValue, oldValue) => {
+    (newValue) => {
         if (!newValue) {
             $router.push({
                 name: "subjects",
@@ -48,7 +48,6 @@ watch(
 </script>
 
 <template>
-    Selected: {{ selectedId }}
     <v-select
         v-model="selectedId"
         clearable

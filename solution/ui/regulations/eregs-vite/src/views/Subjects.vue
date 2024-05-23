@@ -16,7 +16,9 @@ import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
+import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
+import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -464,6 +466,15 @@ getDocSubjects();
                             <SelectedSubjectHeading
                                 :selected-subject-parts="selectedSubjectParts"
                             />
+                        </div>
+                        <div>
+                            <FetchCategoriesContainer v-slot="slotProps">
+                                <CategoriesDropdown
+                                    :list="slotProps.data"
+                                    :error="slotProps.error"
+                                    :loading="slotProps.loading"
+                                />
+                            </FetchCategoriesContainer>
                         </div>
                         <template
                             v-if="
