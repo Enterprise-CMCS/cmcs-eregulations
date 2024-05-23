@@ -24,30 +24,33 @@ const $router = useRouter();
 const selectedId = defineModel("id");
 
 const itemProps = (item) => ({
-    value: item.id,
+    value: `${item.id}-${item.categoryType}`,
     title: item.name,
 });
-
-const filteredList = computed(() =>
-    props.list.map((item) => ({
-        id: item.id,
-        name: item.name,
-        documentType: "external",
-    }))
-);
 
 watch(
     () => selectedId.value,
     (newValue) => {
-        let categories;
+        let categoriesObj = {};
 
-        if (newValue) categories = newValue;
+        const {
+            categories,
+            internal_categories,
+            ...restOfRoute
+        } = $route.query;
+
+        if (newValue) {
+            const [id, categoryType] = newValue.split("-");
+            categoriesObj = {
+                [categoryType]: id,
+            };
+        }
 
         $router.push({
             name: "subjects",
             query: {
-                ...$route.query,
-                categories,
+                ...restOfRoute,
+                ...categoriesObj,
             },
         });
     }
@@ -61,7 +64,7 @@ watch(
         label="Choose Category"
         :loading="loading"
         density="compact"
-        :items="filteredList"
+        :items="list"
         :item-props="itemProps"
         variant="outlined"
     ></v-select>

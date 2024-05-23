@@ -33,6 +33,8 @@ const internalCategories = useFetch({
     apiUrl,
 });
 
+// watchEffect: super watch
+// https://vuejs.org/guide/essentials/watchers.html#watcheffect
 watchEffect(() => {
     combinedCategories.value.loading =
         externalCategories.value.loading || internalCategories.value.loading;
@@ -41,11 +43,11 @@ watchEffect(() => {
         // move to method
         const externalCats = externalCategories.value.data.map((cat) => ({
             ...cat,
-            documentType: "external",
+            categoryType: "categories",
         }));
         const internalCats = internalCategories.value.data.map((cat) => ({
             ...cat,
-            documentType: "internal",
+            categoryType: "internal_categories",
         }));
         combinedCategories.value.data = [...externalCats, ...internalCats];
     }
