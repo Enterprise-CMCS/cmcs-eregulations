@@ -8,7 +8,7 @@ import _isEmpty from "lodash/isEmpty";
 import {
     getCombinedContent,
     getLastUpdatedDates,
-    getPolicyDocSubjects,
+    getInternalSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -277,7 +277,7 @@ const setDocumentTitle = (subjectId, subjectList) => {
 // called on load
 const getDocSubjects = async () => {
     try {
-        const subjectsResponse = await getPolicyDocSubjects({
+        const subjectsResponse = await getInternalSubjects({
             apiUrl: props.apiUrl,
             cacheResponse: false,
         });

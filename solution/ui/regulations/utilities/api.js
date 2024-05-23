@@ -531,7 +531,7 @@ const getStatutes = async ({
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
-const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalSubjects = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/subjects`,
@@ -544,24 +544,24 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
 };
 
 /**
- * An object representing a policy document category
- * @typedef {Object} PolicyDocCategory
+ * An object representing an internal category
+ * @typedef {Object} InternalCategory
  * @property {number} id - Category id
  * @property {string} name - Category name
  * @property {string} description - Category description
  * @property {number} order - Category order
  * @property {boolean} show_if_empty - Whether to show category if empty
  * @property {string} type - Category type
- * @property {PolicyDocCategory|undefined} parent - Parent category
+ * @property {InternalCategory|undefined} parent - Parent category
  */
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
- * @returns {Promise<Array<PolicyDocCategory>>} - Promise that contains array of categories when fulfilled
+ * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
 
-const getPolicyDocCategories = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories`,
@@ -606,11 +606,11 @@ export {
     getExternalCategories,
     getExternalCategoriesTree,
     getGovInfoLinks,
+    getInternalCategories,
+    getInternalSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,
-    getPolicyDocCategories,
-    getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
     getStatutes,
