@@ -27,6 +27,20 @@
     .v-list-item {
         min-height: unset;
         padding: 0;
+
+        &:hover > .v-list-item__overlay,
+        &:focus-visible > .v-list-item__overlay,
+        &.v-list-item--active > .v-list-item__overlay {
+            opacity: 0;
+        }
+
+        &:hover,
+        &:focus-visible,
+        &.v-list-item--active {
+            .v-list-item-title {
+                @include font-bold-keep-width;
+            }
+        }
     }
 
     .v-list-item__content:has(.doc-type__label) {
