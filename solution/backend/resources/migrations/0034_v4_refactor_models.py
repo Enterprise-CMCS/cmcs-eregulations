@@ -217,6 +217,7 @@ class Migration(migrations.Migration):
             name='ResourceGroup',
             fields=[
                 ('newabstractresource_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='resources.newabstractresource')),
+                ('name', models.CharField(max_length=512, blank=True, help_text='In leiu of (or in addition to) a list of common document identifiers, you may specify a name that identifies this group of documents.')),
                 ('common_identifiers', django_jsonform.models.fields.ArrayField(base_field=models.CharField(blank=True, max_length=512), blank=True, default=list, help_text='Common identifiers to use when grouping resources. For example, when grouping Federal Register Documents, use the docket number prefix, like "CMS-1234-".', size=None)),
                 ('resources', models.ManyToManyField(blank=True, related_name='resource_groups', to='resources.newabstractresource')),
             ],

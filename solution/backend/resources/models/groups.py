@@ -9,6 +9,12 @@ from .resource import NewAbstractResource
 
 
 class ResourceGroup(NewAbstractResource):
+    name = models.CharField(
+        max_length=512,
+        blank=True,
+        help_text="In leiu of (or in addition to) a list of common document identifiers, "
+                  "you may specify a name that identifies this group of documents.",
+    )
     common_identifiers = ArrayField(
         models.CharField(max_length=512, blank=True),
         default=list,

@@ -10,11 +10,11 @@ from resources.models import (
 
 @admin.register(ResourceGroup)
 class ResourceGroupAdmin(AbstractAdmin):
-    list_display = ["document_id", "common_identifiers", "number_of_resources"]
-    list_display_links = ["document_id", "common_identifiers", "number_of_resources"]
-    search_fields = ["document_id", "common_identifiers"]
+    list_display = ["name", "common_identifiers", "number_of_resources"]
+    list_display_links = ["name", "common_identifiers", "number_of_resources"]
+    search_fields = ["name", "common_identifiers"]
 
-    fields = ["document_id", "common_identifiers", "resources"]
+    fields = ["name", "common_identifiers", "resources"]
     filter_horizontal = ["resources"]
 
     manytomany_lookups = {

@@ -114,7 +114,7 @@ class AbstractResourceAdmin(AbstractAdmin):
         bulk_title = form.cleaned_data.get("bulk_title")
         bad_citations = []
         bulk_adds = []
-        bulk_cits = []
+        bulk_add_strs = []
 
         super().save_related(request, form, formsets, change)
         if bulk_citations:
@@ -128,7 +128,7 @@ class AbstractResourceAdmin(AbstractAdmin):
             if bulk_adds:
                 for citation in bulk_adds:
                     form.instance.cfr_citations.add(citation)
-                    bulk_cits.append(AbstractLocationPolymorphicSerializer(citation).data)
+                    bulk_add_strs.append(AbstractLocationPolymorphicSerializer(citation).data)
 
         # Create and append changelog object, if any citations changes occured
         if additions or removals or bulk_adds:
@@ -137,7 +137,7 @@ class AbstractResourceAdmin(AbstractAdmin):
                 "date": str(timezone.now()),
                 "additions": additions,
                 "removals": removals,
-                "bulk_adds": bulk_cits,
+                "bulk_adds": bulk_add_strs,
             })
             form.instance.save()
 
