@@ -1,9 +1,9 @@
 <script setup>
-import { computed, watch } from "vue";
+import { watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
-const props = defineProps({
+defineProps({
     list: {
         type: Array,
         required: true,
