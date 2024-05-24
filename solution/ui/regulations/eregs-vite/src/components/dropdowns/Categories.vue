@@ -71,13 +71,14 @@ watch(
     <v-select
         v-model="selectedId"
         clearable
+        clear-icon="mdi-close"
+        menu-icon="mdi-menu-swap"
         label="Choose Category"
         :loading="loading"
         density="compact"
         :items="list"
         :item-props="itemProps"
         variant="outlined"
-        menu="true"
     >
         <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props">

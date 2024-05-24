@@ -23,6 +23,16 @@
     }
 }
 
+.v-field__append-inner {
+    width: 30px;
+
+    & > .v-icon.v-select__menu-icon {
+        font-size: 36px;
+        opacity: 1;
+        transition: none;
+    }
+}
+
 .v-overlay-container {
     .v-list-item {
         min-height: unset;
