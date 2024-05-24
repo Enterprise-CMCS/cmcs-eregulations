@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'regcore.search',
     'resources',
     'solo',
+    'user.apps.UserConfig',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
