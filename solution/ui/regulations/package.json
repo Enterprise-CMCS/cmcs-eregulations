@@ -29,7 +29,7 @@
     "sass": "^1.76.0",
     "vue": "^3.4.23",
     "vue-loader": "^16.0.0",
-    "vuetify": "^3.5.17"
+    "vuetify": "^3.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
