@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
 
-from .resource import NewAbstractResource
+from .resources import NewAbstractResource
 
 
 class ResourceGroup(NewAbstractResource):

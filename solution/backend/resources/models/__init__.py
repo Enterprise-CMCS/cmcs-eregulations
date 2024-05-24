@@ -1,9 +1,9 @@
 from resources.old_models import *  # noqa
 
-from .category import *  # noqa
+from .categories import *  # noqa
 from .citations import *  # noqa
 from .groups import *  # noqa
-from .internal import *  # noqa
-from .public import *  # noqa
-from .resource import *  # noqa
-from .subject import *  # noqa
+from .internal_resources import *  # noqa
+from .public_resources import *  # noqa
+from .resources import *  # noqa
+from .subjects import *  # noqa

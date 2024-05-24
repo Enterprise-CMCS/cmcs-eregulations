@@ -11,9 +11,9 @@ from common.fields import (
 )
 from common.mixins import DisplayNameFieldMixin
 
-from .category import NewAbstractCategory
+from .categories import NewAbstractCategory
 from .citations import AbstractCitation
-from .subject import NewSubject
+from .subjects import NewSubject
 
 
 class NewAbstractResource(models.Model, DisplayNameFieldMixin):

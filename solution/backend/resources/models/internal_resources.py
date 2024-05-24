@@ -3,7 +3,7 @@ import uuid
 
 from django.db import models
 
-from .resource import AbstractInternalResource
+from .resources import AbstractInternalResource
 
 
 class InternalLink(AbstractInternalResource):
