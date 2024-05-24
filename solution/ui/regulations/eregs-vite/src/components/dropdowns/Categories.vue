@@ -20,8 +20,15 @@ defineProps({
 
 const $route = useRoute();
 const $router = useRouter();
+const { categories, intcategories, ...restOfRoute } = $route.query;
 
 const selectedId = defineModel("id");
+
+if (categories) {
+    selectedId.value = `${categories}-categories`;
+} else if (intcategories) {
+    selectedId.value = `${intcategories}-intcategories`;
+}
 
 const itemProps = (item) => ({
     value: `${item.id}-${item.categoryType}`,
@@ -32,12 +39,6 @@ watch(
     () => selectedId.value,
     (newValue) => {
         let categoriesObj = {};
-
-        const {
-            categories,
-            intcategories,
-            ...restOfRoute
-        } = $route.query;
 
         if (newValue) {
             const [id, categoryType] = newValue.split("-");

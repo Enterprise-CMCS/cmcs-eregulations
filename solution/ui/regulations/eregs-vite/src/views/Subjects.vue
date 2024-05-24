@@ -23,7 +23,6 @@ import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
-import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
@@ -32,6 +31,7 @@ import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
