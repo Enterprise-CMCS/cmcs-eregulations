@@ -229,9 +229,13 @@ def copy_resource_groups(apps, schema_editor):
     FederalRegisterLink = apps.get_model("resources", "FederalRegisterLink")
 
     for i in FederalRegisterDocumentGroup.objects.all():
-        group = ResourceGroup.objects.create(
-            common_identifiers=i.docket_number_prefixes,
-        )
+        # If docket_number_prefixes is a name instead of a prefix, then fill the 'name' field instead.
+        if len(i.docket_number_prefixes) == 1 and not i.docket_number_prefixes[0].endswith("-"):
+            kwargs = {"name": i.docket_number_prefixes[0]}
+        else:
+            kwargs = {"common_identifiers": i.docket_number_prefixes}
+
+        group = ResourceGroup.objects.create(**kwargs)
 
         old_resources = i.documents.all().values_list("pk", flat=True)
         group.resources.set(FederalRegisterLink.objects.filter(old_pk__in=old_resources))
