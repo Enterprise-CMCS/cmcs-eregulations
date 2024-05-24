@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from "vue";
+import { inject, watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
@@ -26,6 +26,8 @@ defineProps({
         default: true,
     },
 });
+
+const isAuthenticated = inject("isAuthenticated");
 
 const $route = useRoute();
 const $router = useRouter();
@@ -83,7 +85,7 @@ watch(
         <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props">
                 <DocTypeLabel
-                    v-if="item.raw.catIndex == 0"
+                    v-if="isAuthenticated && item.raw.catIndex == 0"
                     :icon-type="catTypeDict[item.raw.categoryType]"
                     :doc-type="
                         DOCUMENT_TYPES_MAP[catTypeDict[item.raw.categoryType]]

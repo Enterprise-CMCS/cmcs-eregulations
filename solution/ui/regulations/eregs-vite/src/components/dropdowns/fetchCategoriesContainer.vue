@@ -16,6 +16,7 @@ defineProps({
 });
 
 const apiUrl = inject("apiUrl");
+const isAuthenticated = inject("isAuthenticated");
 
 const combinedCategories = ref({
     loading: true,
@@ -31,6 +32,9 @@ const externalCategories = useFetch({
 const internalCategories = useFetch({
     method: getInternalCategoriesTree,
     apiUrl,
+    cacheResponse: false,
+    needsAuthentication: true,
+    isAuthenticated,
 });
 
 // watchEffect: super watch
