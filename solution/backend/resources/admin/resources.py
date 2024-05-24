@@ -179,8 +179,6 @@ class AbstractResourceForm(forms.ModelForm):
         disabled=True,
     )
 
-    # TODO: check desired behavior of and implement duplicate document checking
-
 
 class AbstractPublicResourceForm(AbstractResourceForm):
     pass

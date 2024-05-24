@@ -24,9 +24,8 @@ class NewSubpart(AbstractCitation):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        query = NewSubpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).values_list("pk", flat=True)
-        if query and self.pk not in query:
-            raise ValidationError({NON_FIELD_ERRORS: [f"Citation \"{str(self)}\" already exists."]})
+        if NewSubpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).exclude(pk=self.pk):
+            raise ValidationError(f"Citation \"{str(self)}\" already exists.")
 
     class Meta:
         verbose_name = "Subpart"
@@ -43,9 +42,8 @@ class NewSection(AbstractCitation):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        query = NewSection.objects.filter(title=self.title, part=self.part, section_id=self.section_id).values_list("pk", flat=True)
-        if query and self.pk not in query:
-            raise ValidationError({NON_FIELD_ERRORS: [f"Citation \"{str(self)}\" already exists."]})
+        if NewSection.objects.filter(title=self.title, part=self.part, section_id=self.section_id).exclude(pk=self.pk):
+            raise ValidationError(f"Citation \"{str(self)}\" already exists.")
 
     class Meta:
         verbose_name = "Section"

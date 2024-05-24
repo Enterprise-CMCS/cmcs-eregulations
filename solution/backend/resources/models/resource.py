@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
+
 from model_utils.managers import InheritanceManager
 
 from common.fields import (
@@ -42,6 +44,7 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
     cfr_citation_history = models.JSONField(
         default=list,
         verbose_name="CFR citation history",
+        blank=True,
     )
 
     subjects = models.ManyToManyField(
@@ -80,9 +83,16 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
 class AbstractPublicResource(NewAbstractResource):
-    pass
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if self.url and AbstractPublicResource.objects.filter(url__iexact=self.url).exclude(pk=self.pk):
+            raise ValidationError(f"A public resource with the URL \"{self.url}\" already exists.")
 
 
 class AbstractInternalResource(NewAbstractResource):

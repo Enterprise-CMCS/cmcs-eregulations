@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('approved', models.BooleanField(default=True, help_text='Documents will be visible on eRegulations to all authorized users once they are approved.')),
-                ('cfr_citation_history', models.JSONField(verbose_name='CFR citation history', default=list)),
+                ('cfr_citation_history', models.JSONField(verbose_name='CFR citation history', default=list, blank=True)),
                 ('act_citations', common.fields.StatuteRefField(blank=True, default=list)),
                 ('usc_citations', common.fields.UscRefField(blank=True, default=list, verbose_name='U.S. Code citations')),
                 ('editor_notes', models.TextField(blank=True, help_text='Use this field to store notes meant for other editors. Notes in this field are not displayed outside this editing screen.')),
