@@ -67,42 +67,6 @@ class AbstractResourceAdmin(AbstractAdmin):
             Prefetch("category", NewAbstractCategory.objects.all().select_subclasses()),
         )
 
-    # Retrieves a citation object if it exists, otherwise None.
-    # Valid sections: 42 433.1, 42 CFR 433.1, 42 433 1
-    # Valid subparts: 42 433.A, 42 CFR 433 Subpart A, 42 CFR 433.A, 42 433 A
-    # All inputs can have no title (i.e. 433.1 instead of 42 CFR 433.1, etc.)
-    def get_citation(self, citation, default_title):
-        CITATION_REGEX = r"^(?:([0-9]+)\s+(?:cfr)?(?:\s+)?)?([0-9]+)(?:(?:[\s]+|[.])([0-9]+)"\
-                         r"|(?:\.|\s+(?:subpart\s+)?)((?!subpart)[a-z]+))$"
-        match = re.search(CITATION_REGEX, citation, re.IGNORECASE)
-        if not match:
-            return None
-
-        title, part, section, subpart = match.groups()
-        title = title or default_title
-
-        # TODO: newsection->section, same for subpart
-        kwargs = {
-            **{"title": title, "part": part},
-            **({"newsection__section_id": section} if section else {"newsubpart__subpart_id": subpart}),
-        }
-
-        try:
-            return AbstractCitation.objects.get_subclass(**kwargs)
-        except AbstractCitation.DoesNotExist:
-            return None
-
-    def get_bulk_citations(self, bulk_citations, bulk_title=""):
-        bulk_adds = []
-        bad_citations = []
-        for cit_id in [i.strip() for i in bulk_citations.split(",")]:
-            citation = self.get_citation(cit_id, bulk_title)
-            if citation:
-                bulk_adds.append(citation)
-            else:
-                bad_citations.append(cit_id)
-        return bulk_adds, bad_citations
-
     # Overrides the save method in django admin to handle many to many relationships.
     # Looks at the citations added in bulk uploads and adds them if allowed, sends error message if not.
     def save_related(self, request, form, formsets, change):
@@ -112,34 +76,15 @@ class AbstractResourceAdmin(AbstractAdmin):
         additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_citations]
         removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_citations if x not in selection]
 
-        bulk_citations = form.cleaned_data.get("bulk_citations")
-        bulk_title = form.cleaned_data.get("bulk_title")
-        bad_citations = []
-        bulk_adds = []
-        bulk_add_strs = []
-
         super().save_related(request, form, formsets, change)
-        if bulk_citations:
-            bulk_adds, bad_citations = self.get_bulk_citations(bulk_citations, bulk_title)
-            if bad_citations:
-                messages.add_message(
-                    request,
-                    messages.ERROR,
-                    f"The following CFR citations could not be added: {', '.join(bad_citations)}",
-                )
-            if bulk_adds:
-                for citation in bulk_adds:
-                    form.instance.cfr_citations.add(citation)
-                    bulk_add_strs.append(AbstractLocationPolymorphicSerializer(citation).data)
 
         # Create and append changelog object, if any citations changes occured
-        if additions or removals or bulk_adds:
+        if additions or removals:
             form.instance.cfr_citation_history.append({
                 "user": str(request.user),
                 "date": str(timezone.now()),
                 "additions": additions,
                 "removals": removals,
-                "bulk_adds": bulk_add_strs,
             })
             form.instance.save()
 
@@ -157,21 +102,6 @@ class AbstractInternalResourceAdmin(AbstractResourceAdmin):
 
 
 class AbstractResourceForm(forms.ModelForm):
-    bulk_title = forms.IntegerField(
-        required=False,
-        help_text="If any bulk locations are missing a title, add it here.",
-    )
-
-    bulk_citations = forms.CharField(
-        widget=forms.Textarea,
-        required=False,
-        help_text=mark_safe(  # noqa: S308
-            "Add a list of CFR citations separated by a comma. For example: \"42 CFR 430.10, 42 430 Subpart B, 45 18.150\". "
-            "<a href=\"https://docs.google.com/document/d/1HKjg5pUQnRP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#\" target=\"blank\">"
-            "Click here for detailed documentation.</a>"
-        ),
-    )
-
     cfr_citation_history = forms.JSONField(
         label="CFR citation history",
         widget=widgets.LocationHistoryWidget(attrs={"rows": 10, "cols": 120}),

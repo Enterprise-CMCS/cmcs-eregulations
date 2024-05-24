@@ -23,16 +23,15 @@ class LocationHistoryWidget(Textarea):
                 return ""
             for i in range(len(data)):
                 row = data[i]
-                additions = self.locations_to_strings(row["additions"])
+
+                additions = self.locations_to_strings(row["additions"] + row.get("bulk_adds", []))
                 removals = self.locations_to_strings(row["removals"])
                 bulk_adds = self.locations_to_strings(row["bulk_adds"])
                 date = parse_datetime(row["date"]).strftime("%Y-%m-%d at %I:%M %p")
-                output.append(f"{i + 1}: On {date}, {row['user']} %s%s%s%s%s." % (
+                output.append(f"{i + 1}: On {date}, {row['user']} %s%s%s." % (
                     f"added {additions}" if additions else "",
                     " and " if additions and removals else "",
                     f"removed {removals}" if removals else "",
-                    " and " if (additions or removals) and bulk_adds else "",
-                    f"bulk added {bulk_adds}" if bulk_adds else "",
                 ))
             return "\n".join(output)
         except Exception:

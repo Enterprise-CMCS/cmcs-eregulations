@@ -1,17 +1,131 @@
-from django.contrib import admin
+import requests
 
-from .resources import AbstractInternalResourceAdmin
+from django.contrib import admin
+from django.conf import settings
+from django import forms
+from django.urls import reverse
+from django.utils.html import format_html
+
+from common.functions import establish_client
+
+from .resources import (
+    AbstractInternalResourceAdmin,
+    AbstractInternalResourceForm,
+)
 from resources.models import (
     InternalLink,
     InternalFile,
+
 )
+
+
+class InternalLinkForm(AbstractInternalResourceForm):
+    pass
 
 
 @admin.register(InternalLink)
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
-    pass
+    form = InternalLinkForm
+    list_display = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
+    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
+    search_fields = ["date", "document_id", "title", "summary"]
+
+    fieldsets = [
+        ("Basics", {
+            "fields": ["url", "title"],
+        }),
+        ("Details", {
+            "fields": ["date", "document_id", "summary", "editor_notes"],
+        }),
+        ("Categorization", {
+            "fields": ["category", "subjects"],
+        }),
+        ("Related citations", {
+            "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+        }),
+        ("Change history", {
+            "fields": ["cfr_citation_history"],
+        }),
+        ("Document status", {
+            "fields": ["approved"],
+        }),
+    ]
+
+
+class InternalFileForm(AbstractInternalResourceForm):
+    file_upload = forms.FileField(required=False)
 
 
 @admin.register(InternalFile)
 class InternalFileAdmin(AbstractInternalResourceAdmin):
-    pass
+    form = InternalFileForm
+    list_display = ["date", "document_id", "category", "updated_at"]
+    search_fields = ["date", "document_id"]
+    ordering = ["date", "document_id", "category", "updated_at"]
+    readonly_fields = ["download_file", "file_name", "file_type"]
+
+    fieldsets = [
+        ("Basics", {
+            "fields": ["file_upload", "title"],
+        }),
+        ("Details", {
+            "fields": ["date", "document_id", "summary", "editor_notes"],
+        }),
+        ("Categorization", {
+            "fields": ["category", "subjects"],
+        }),
+        ("Related citations", {
+            "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+        }),
+        ("Change history", {
+            "fields": ["cfr_citation_history"],
+        }),
+        ("Document status", {
+            "fields": ["approved"],
+        }),
+    ]
+
+    # TODO: use presigned URL to upload to S3 directly, bypassing API Gateway restrictions
+    # Easy to follow how to: https://www.hacksoft.io/blog/direct-to-s3-file-upload-with-django
+    # Most of these methods will be rewritten then.
+
+    def get_upload_link(self, key):
+        s3_client = establish_client('s3')
+        return s3_client.generate_presigned_post(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key=key,
+            ExpiresIn=20,
+        )
+
+    def save_model(self, request, obj, form, change):
+        path = form.cleaned_data.get("file_upload")
+        if path:
+            obj.file_name = path._name
+            self.upload_file(path, obj)
+        super().save_model(request, obj, form, change)
+
+    def upload_file(self, file, obj):
+        result = self.get_upload_link(obj.key)
+        requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
+
+    def del_file(self, obj):
+        s3_client = establish_client("s3")
+        key = obj.get_key()
+
+        try:
+            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
+        except Exception:
+            raise Exception("Unable to delete")
+
+    def delete_model(self, request, obj):
+        try:
+            self.del_file(obj)
+            obj.delete()
+        except Exception:
+            raise Exception("Could not delete from server")
+
+    def download_file(self, obj):
+        if obj.id:
+            link = reverse("file-download", kwargs={"file_id": obj.uid})
+            return format_html(f"<input type=\"button\" onclick=\"location.href='{link}'\" value=\"Download File\" />")
+        return "N/A"

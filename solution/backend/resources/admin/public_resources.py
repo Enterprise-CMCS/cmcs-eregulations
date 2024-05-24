@@ -43,10 +43,6 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         ("Document status", {
             "fields": ["approved"],
         }),
-        ("Advanced", {
-            "classes": ["collapse"],
-            "fields": ["bulk_title", "bulk_citations"],
-        }),
     ]
 
 
@@ -60,11 +56,13 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.pk:
+            # Populate the FilteredSelectMultiple widget for resource groups
             self.initial['resource_groups'] = self.instance.resource_groups.all()
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
         if instance.pk:
+            # Add groups to the resource_groups ManyToMany
             instance.resource_groups.clear()
             instance.resource_groups.add(*self.cleaned_data['resource_groups'])
         return instance
@@ -95,10 +93,6 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Document status", {
             "fields": ["approved"],
-        }),
-        ("Advanced", {
-            "classes": ["collapse"],
-            "fields": ["bulk_title", "bulk_citations"],
         }),
     ]
 
