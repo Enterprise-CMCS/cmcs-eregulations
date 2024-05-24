@@ -3,6 +3,15 @@ import { watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
+import { DOCUMENT_TYPES_MAP } from "utilities/utils";
+
+import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
+
+const catTypeDict = {
+    categories: "external",
+    intcategories: "internal",
+};
+
 defineProps({
     list: {
         type: Array,
@@ -68,7 +77,20 @@ watch(
         :items="list"
         :item-props="itemProps"
         variant="outlined"
-    ></v-select>
+        menu="true"
+    >
+        <template v-slot:item="{ props, item }">
+            <v-list-item v-bind="props">
+                <DocTypeLabel
+                    v-if="item.raw.catIndex == 0"
+                    :icon-type="catTypeDict[item.raw.categoryType]"
+                    :doc-type="
+                        DOCUMENT_TYPES_MAP[catTypeDict[item.raw.categoryType]]
+                    "
+                />
+            </v-list-item>
+        </template>
+    </v-select>
 </template>
 
 <style></style>

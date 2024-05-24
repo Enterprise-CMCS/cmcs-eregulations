@@ -23,6 +23,28 @@
     }
 }
 
+.v-overlay-container {
+    .v-list-item {
+        min-height: unset;
+        padding: 0;
+    }
+
+    .v-list-item__content:has(.doc-type__label) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .v-list-item-title {
+        font-size: 14px;
+        line-height: 22px;
+        padding: 8px 0;
+    }
+
+    .doc-type__label {
+        margin-top: 8px;
+    }
+}
+
 #subjectsApp.repository-view {
     margin-bottom: 1rem;
     display: flex;

@@ -41,14 +41,18 @@ watchEffect(() => {
 
     if (!combinedCategories.value.loading) {
         // move to method
-        const externalCats = externalCategories.value.data.map((cat) => ({
+        const externalCats = externalCategories.value.data.map((cat, i) => ({
             ...cat,
             categoryType: "categories",
+            catIndex: i,
         }));
-        const internalCats = internalCategories.value.data.map((cat) => ({
+
+        const internalCats = internalCategories.value.data.map((cat, i) => ({
             ...cat,
             categoryType: "intcategories",
+            catIndex: i,
         }));
+
         combinedCategories.value.data = [...externalCats, ...internalCats];
     }
 });
