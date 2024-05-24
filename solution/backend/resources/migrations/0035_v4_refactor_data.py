@@ -254,10 +254,6 @@ def copy_resource_groups(apps, schema_editor):
         group.save()
 
 
-def throw_exception(apps, schema_editor):
-    raise Exception("oops")
-
-
 class Migration(migrations.Migration):
     atomic = False
 

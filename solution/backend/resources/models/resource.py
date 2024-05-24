@@ -35,10 +35,14 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         AbstractCitation,
         blank=True,
         related_name="resources",
+        verbose_name="CFR citations",
         help_text="Select regulation citations related to this document. "
                   "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
-    cfr_citation_history = models.JSONField(default=list)
+    cfr_citation_history = models.JSONField(
+        default=list,
+        verbose_name="CFR citation history",
+    )
 
     subjects = models.ManyToManyField(
         NewSubject,
@@ -47,8 +51,8 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Select subjects related to this document. Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
 
-    act_citations = StatuteRefField(verbose_name="Statute reference citations")
-    usc_citations = UscRefField(verbose_name="U.S.C. reference citations")
+    act_citations = StatuteRefField(verbose_name="Act citations")
+    usc_citations = UscRefField(verbose_name="U.S. Code citations")
     # TODO somehow add combined help text for these fields:
     # help_text="Designate statute citations that are related to this document."
     #           "You can use either the Act and Section of the Act, or the Title and Section of the U.S. Code."
