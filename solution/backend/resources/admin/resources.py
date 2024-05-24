@@ -41,6 +41,7 @@ from resources.models import (
     NewAbstractCategory,
     AbstractPublicCategory,
     AbstractCitation,
+    AbstractInternalCategory,
 )
 
 from resources.serializers.locations import AbstractLocationPolymorphicSerializer
@@ -80,9 +81,10 @@ class AbstractResourceAdmin(AbstractAdmin):
         title, part, section, subpart = match.groups()
         title = title or default_title
 
+        # TODO: newsection->section, same for subpart
         kwargs = {
             **{"title": title, "part": part},
-            **({"newsection__section_id": section} if section else {"newsubpart__subpart_id": subpart}),  # TODO: newsection->section, same for subpart
+            **({"newsection__section_id": section} if section else {"newsubpart__subpart_id": subpart}),
         }
 
         try:
@@ -163,8 +165,8 @@ class AbstractResourceForm(forms.ModelForm):
     bulk_citations = forms.CharField(
         widget=forms.Textarea,
         required=False,
-        help_text=mark_safe(
-            "Add a list of locations separated by a comma. For example: \"42 CFR 430.10, 42 430 Subpart B, 45 18.150\". "
+        help_text=mark_safe(  # noqa: S308
+            "Add a list of CFR citations separated by a comma. For example: \"42 CFR 430.10, 42 430 Subpart B, 45 18.150\". "
             "<a href=\"https://docs.google.com/document/d/1HKjg5pUQnRP98i9xbGy0fPiGq_0a6p2PRXhwuDbmiek/edit#\" target=\"blank\">"
             "Click here for detailed documentation.</a>"
         ),

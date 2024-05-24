@@ -51,7 +51,7 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Select subjects related to this document. Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
 
-    act_citations = StatuteRefField(verbose_name="Act citations")
+    act_citations = StatuteRefField()
     usc_citations = UscRefField(verbose_name="U.S. Code citations")
     # TODO somehow add combined help text for these fields:
     # help_text="Designate statute citations that are related to this document."
@@ -72,10 +72,10 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
 
     title = models.TextField(blank=True)
     date = VariableDateField(blank=True)
-    url = models.URLField(max_length=512, blank=True)
-    extract_url = models.URLField(max_length=512, blank=True)
+    url = models.URLField(max_length=512, blank=True, verbose_name="URL")
+    extract_url = models.URLField(max_length=512, blank=True, verbose_name="Extract URL")
 
-    document_id_sort = NaturalSortField("document_id", null=True)
+    document_id_sort = NaturalSortField("document_id", null=True, verbose_name="Document ID sort")
     title_sort = NaturalSortField("title", null=True)
 
     objects = InheritanceManager()
