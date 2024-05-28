@@ -23,13 +23,45 @@
     }
 }
 
-.v-field__append-inner {
-    width: 30px;
+.subjects__category-select {
+    .v-input__control {
+        .v-field {
+            &--appended {
+                padding-inline-end: 4px;
+            }
 
-    & > .v-icon.v-select__menu-icon {
-        font-size: 36px;
-        opacity: 1;
-        transition: none;
+            .v-field__field {
+                .v-field__input {
+                    padding-inline: 4px;
+                    min-height: 30px;
+                }
+
+                .v-select__selection-text,
+                .v-field-label {
+                    font-size: 14px;
+                    line-height: 22px;
+                    margin-left: 4px;
+                }
+
+                .v-field--variant-outlined.v-field--focused .v-field__outline,
+                .v-field-outline {
+                    --v-field-border-width: 1px;
+                    color: $border_color;
+                    --v-field-border-opacity: 1;
+                }
+            }
+        }
+    }
+
+    .v-field__append-inner {
+        width: 24px;
+
+        & > .v-icon.v-select__menu-icon {
+            min-width: 18px;
+            font-size: 36px;
+            opacity: 1;
+            transition: none;
+        }
     }
 }
 

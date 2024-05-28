@@ -76,6 +76,7 @@ watch(
 <template>
     <v-select
         v-model="selectedId"
+        class="subjects__category-select"
         variant="outlined"
         clearable
         persistent-clear
@@ -88,7 +89,7 @@ watch(
         :items="list"
         :item-props="itemProps"
     >
-        <template v-slot:item="{ props, item }">
+        <template #item="{ props, item }">
             <v-list-item v-bind="props">
                 <DocTypeLabel
                     v-if="isAuthenticated && item.raw.catIndex == 0"
