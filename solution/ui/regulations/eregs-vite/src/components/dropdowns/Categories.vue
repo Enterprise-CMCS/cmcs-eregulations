@@ -53,13 +53,12 @@ watch(
     () => selectedId.value,
     (newValue) => {
         let categoriesObj = {};
+
         const { categories, intcategories, ...restOfRoute } = $route.query;
 
         if (newValue) {
             const [id, categoryType] = newValue.split("-");
-            categoriesObj = {
-                [categoryType]: id,
-            };
+            categoriesObj[categoryType] = id;
         }
 
         $router.push({
