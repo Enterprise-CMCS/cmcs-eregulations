@@ -8,14 +8,13 @@ from common.mixins import DisplayNameFieldMixin
 
 
 class AbstractCategoryManager(InheritanceManager):
-    pass
-    # def get_queryset(self):
-    #     return super().get_queryset().annotate(
-    #         is_fr_doc_category=models.ExpressionWrapper(
-    #             ~models.Q(fr_doc_category_config=None),
-    #             output_field=models.BooleanField()
-    #         )
-    #     )
+    def get_queryset(self):
+        return super().get_queryset().annotate(
+            is_fr_link_category=models.ExpressionWrapper(
+                ~models.Q(fr_link_category_config=None),
+                output_field=models.BooleanField()
+            )
+        )
 
 
 class NewAbstractCategory(models.Model, DisplayNameFieldMixin):

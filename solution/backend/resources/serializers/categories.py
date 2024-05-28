@@ -21,10 +21,10 @@ from resources.models import (
 class AbstractCategorySerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            PublicCategory: ("public_category", PublicCategoryIDSerializer),
-            PublicSubCategory: ("public_subcategory", PublicSubCategoryIDSerializer),
-            InternalCategory: ("internal_category", InternalCategoryIDSerializer),
-            InternalSubCategory: ("internal_subcategory", InternalSubCategoryIDSerializer),
+            PublicCategory: ("public_category", PublicCategorySerializer),
+            PublicSubCategory: ("public_subcategory", PublicSubCategorySerializer),
+            InternalCategory: ("internal_category", InternalCategorySerializer),
+            InternalSubCategory: ("internal_subcategory", InternalSubCategorySerializer),
         }
 
 
@@ -34,23 +34,8 @@ class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
+    is_fr_link_category = serializers.BooleanField()
     type = PolymorphicTypeField()
-
-
-class PublicSubCategoryIDSerializer(CategorySerializer):
-    parent = serializers.PrimaryKeyRelatedField(read_only=True)
-
-
-class PublicCategoryIDSerializer(CategorySerializer):
-    subcategories = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
-
-
-class InternalSubCategoryIDSerializer(CategorySerializer):
-    parent = serializers.PrimaryKeyRelatedField(read_only=True)
-
-
-class InternalCategoryIDSerializer(CategorySerializer):
-    subcategories = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
 
 
 class PublicSubCategorySerializer(CategorySerializer):

@@ -261,13 +261,13 @@ def copy_resource_groups(apps, schema_editor):
 def copy_resources_config(apps, schema_editor):
     OldResourcesConfiguration = apps.get_model("resources", "ResourcesConfiguration")
     NewResourcesConfiguration = apps.get_model("resources", "NewResourcesConfiguration")
-    NewAbstractCategory = apps.get_model("resources", "NewAbstractCategory")
+    AbstractPublicCategory = apps.get_model("resources", "AbstractPublicCategory")
     old = OldResourcesConfiguration.objects.first()
-    new = NewResourcesConfiguration.objects.get_or_create()
+    new, _ = NewResourcesConfiguration.objects.get_or_create()
     if old:
         try:
-            category = NewAbstractCategory.objects.get(old_pk=old.fr_doc_category.pk)
-        except NewAbstractCategory.DoesNotExist:
+            category = AbstractPublicCategory.objects.get(old_pk=old.fr_doc_category.pk)
+        except AbstractPublicCategory.DoesNotExist:
             category = None
         new.fr_link_category = category
         new.save()
