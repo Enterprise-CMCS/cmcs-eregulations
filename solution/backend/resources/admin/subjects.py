@@ -3,6 +3,7 @@ from django.contrib import admin
 from common.admin import AbstractAdmin
 from resources.models import NewSubject
 
+
 @admin.register(NewSubject)
 class NewSubjectAdmin(AbstractAdmin):
     list_display = ["full_name", "short_name", "abbreviation"]

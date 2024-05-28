@@ -1,14 +1,13 @@
-from drf_spectacular.utils import OpenApiTypes, extend_schema_field
 from rest_framework import serializers
-
-from .polymorphic import (
-    PolymorphicSerializer,
-    PolymorphicTypeField,
-)
 
 from resources.models import (
     NewSection,
     NewSubpart,
+)
+
+from .polymorphic import (
+    PolymorphicSerializer,
+    PolymorphicTypeField,
 )
 
 

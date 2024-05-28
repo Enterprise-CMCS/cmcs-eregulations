@@ -1,7 +1,6 @@
 from django.db import models
 from model_utils.managers import (
     InheritanceManager,
-    InheritanceQuerySet,
 )
 
 from common.mixins import DisplayNameFieldMixin

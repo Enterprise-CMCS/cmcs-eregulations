@@ -1,15 +1,16 @@
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
 from django.db.models import Prefetch
+
+from resources.models import (
+    FederalRegisterLink,
+    PublicLink,
+    ResourceGroup,
+)
 
 from .resources import (
     AbstractPublicResourceAdmin,
     AbstractPublicResourceForm,
-)
-from resources.models import (
-    PublicLink,
-    FederalRegisterLink,
-    ResourceGroup,
 )
 
 
@@ -71,8 +72,10 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
 @admin.register(FederalRegisterLink)
 class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     form = FederalRegisterLinkForm
-    list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number", "category", "action_type", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number", "category", "action_type", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
+                    "category", "action_type", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
+                          "category", "action_type", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number"]
 
     fieldsets = [
@@ -80,7 +83,8 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["url", "title"],
         }),
         ("Details", {
-            "fields": ["date", "document_id", "document_number", "docket_numbers", "resource_groups", "action_type", ("correction", "withdrawal"), "editor_notes"],
+            "fields": ["date", "document_id", "document_number", "docket_numbers", "resource_groups",
+                       "action_type", ("correction", "withdrawal"), "editor_notes"],
         }),
         ("Categorization", {
             "fields": ["category", "subjects"],

@@ -1,21 +1,15 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
-from drf_spectacular.utils import extend_schema
-
-from resources.serializers import (
-    AbstractCitationSerializer,
-    PublicCategorySerializer,
-    MetaCategorySerializer,
-    SubpartWithChildrenSerializer,
-    SectionWithParentSerializer,
-)
 
 from resources.models import (
     AbstractCitation,
     NewSection,
     NewSubpart,
+)
+from resources.serializers import (
+    AbstractCitationSerializer,
+    SectionWithParentSerializer,
+    SubpartWithChildrenSerializer,
 )
 
 

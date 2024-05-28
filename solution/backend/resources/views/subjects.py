@@ -1,20 +1,11 @@
-from django.db.models import Prefetch, Q, Count, Value
+from django.db.models import Count, Q, Value
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
-from drf_spectacular.utils import extend_schema
-
-from resources.serializers import (
-    AbstractCitationSerializer,
-    PublicCategorySerializer,
-    MetaCategorySerializer,
-    SubpartWithChildrenSerializer,
-    SectionWithParentSerializer,
-    SubjectSerializer,
-)
 
 from resources.models import (
     NewSubject,
+)
+from resources.serializers import (
+    SubjectSerializer,
 )
 
 

@@ -1,6 +1,7 @@
 import json
 
 from django.forms.widgets import Textarea
+from django.utils.dateparse import parse_datetime
 
 
 class LocationHistoryWidget(Textarea):
@@ -26,7 +27,7 @@ class LocationHistoryWidget(Textarea):
 
                 additions = self.locations_to_strings(row["additions"] + row.get("bulk_adds", []))
                 removals = self.locations_to_strings(row["removals"])
-                bulk_adds = self.locations_to_strings(row["bulk_adds"])
+                self.locations_to_strings(row["bulk_adds"])
                 date = parse_datetime(row["date"]).strftime("%Y-%m-%d at %I:%M %p")
                 output.append(f"{i + 1}: On {date}, {row['user']} %s%s%s." % (
                     f"added {additions}" if additions else "",

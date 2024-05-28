@@ -1,16 +1,14 @@
 from django.urls import path
 
-
 from resources.views import (
-    PublicCategoryViewSet,
-    InternalCategoryViewSet,
     CitationViewSet,
-    SectionViewSet,
-    SubpartViewSet,
-    SubjectViewSet,
+    InternalCategoryViewSet,
+    PublicCategoryViewSet,
     ResourceGroupViewSet,
+    SectionViewSet,
+    SubjectViewSet,
+    SubpartViewSet,
 )
-
 
 urlpatterns = [
     # path("", ResourceViewSet.as_view({

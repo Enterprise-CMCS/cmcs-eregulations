@@ -1,7 +1,7 @@
 from drf_spectacular.utils import (
     OpenApiTypes,
-    extend_schema_field,
     PolymorphicProxySerializer,
+    extend_schema_field,
 )
 from rest_framework import serializers
 

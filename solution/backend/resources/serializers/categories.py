@@ -1,20 +1,16 @@
-from drf_spectacular.utils import OpenApiTypes, extend_schema_field
 from rest_framework import serializers
+
+from resources.models import (
+    InternalCategory,
+    InternalSubCategory,
+    PublicCategory,
+    PublicSubCategory,
+)
 
 from .polymorphic import (
     PolymorphicSerializer,
     PolymorphicTypeField,
     ProxySerializerWrapper,
-)
-
-from resources.models import (
-    NewAbstractCategory,
-    AbstractPublicCategory,
-    PublicCategory,
-    PublicSubCategory,
-    AbstractInternalCategory,
-    InternalCategory,
-    InternalSubCategory,
 )
 
 

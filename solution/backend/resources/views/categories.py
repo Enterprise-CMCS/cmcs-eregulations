@@ -1,20 +1,17 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
-from drf_spectacular.utils import extend_schema
-
-from resources.serializers import (
-    PublicCategorySerializer,
-    MetaCategorySerializer,
-    InternalCategorySerializer,
-)
+from rest_framework.permissions import IsAuthenticated
 
 from resources.models import (
-    PublicCategory,
-    PublicSubCategory,
     InternalCategory,
     InternalSubCategory,
+    PublicCategory,
+    PublicSubCategory,
+)
+from resources.serializers import (
+    InternalCategorySerializer,
+    PublicCategorySerializer,
 )
 
 

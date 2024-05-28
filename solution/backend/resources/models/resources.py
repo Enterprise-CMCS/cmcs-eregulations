@@ -1,6 +1,5 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
-
 from model_utils.managers import InheritanceManager
 
 from common.fields import (
@@ -51,7 +50,8 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         NewSubject,
         blank=True,
         related_name="resources",
-        help_text="Select subjects related to this document. Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
+        help_text="Select subjects related to this document. Hold down \"Control\", "
+                  "or \"Command\" on a Mac, to select more than one.",
     )
 
     act_citations = StatuteRefField()

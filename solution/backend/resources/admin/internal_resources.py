@@ -1,21 +1,19 @@
 import requests
-
-from django.contrib import admin
-from django.conf import settings
 from django import forms
+from django.conf import settings
+from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
 from common.functions import establish_client
+from resources.models import (
+    InternalFile,
+    InternalLink,
+)
 
 from .resources import (
     AbstractInternalResourceAdmin,
     AbstractInternalResourceForm,
-)
-from resources.models import (
-    InternalLink,
-    InternalFile,
-
 )
 
 
