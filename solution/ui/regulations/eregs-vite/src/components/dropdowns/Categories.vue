@@ -76,15 +76,17 @@ watch(
 <template>
     <v-select
         v-model="selectedId"
+        variant="outlined"
         clearable
+        persistent-clear
+        single-line
         clear-icon="mdi-close"
         menu-icon="mdi-menu-swap"
         label="Choose Category"
-        :loading="loading"
         density="compact"
+        :loading="loading"
         :items="list"
         :item-props="itemProps"
-        variant="outlined"
     >
         <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props">
