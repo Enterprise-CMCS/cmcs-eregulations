@@ -476,7 +476,10 @@ getDocSubjects();
                                 <CategoriesDropdown
                                     :list="slotProps.data"
                                     :error="slotProps.error"
-                                    :loading="slotProps.loading"
+                                    :loading="
+                                        slotProps.loading ||
+                                        policyDocList.loading
+                                    "
                                 />
                             </FetchCategoriesContainer>
                         </div>

@@ -85,6 +85,7 @@ watch(
         label="Choose Category"
         density="compact"
         :loading="loading"
+        :disabled="loading"
         :items="list"
         :item-props="itemProps"
     >
