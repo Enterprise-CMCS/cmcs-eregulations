@@ -2,8 +2,8 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from file_manager.serializers.groupings import AbstractRepositoryCategoryPolymorphicSerializer
-from resources.serializers.categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
-from resources.serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
+from resources.old_serializers.categories import AbstractCategoryPolymorphicSerializer, MetaCategorySerializer
+from resources.old_serializers.locations import AbstractLocationPolymorphicSerializer, MetaLocationSerializer
 
 
 class DetailsSerializer(serializers.Serializer):

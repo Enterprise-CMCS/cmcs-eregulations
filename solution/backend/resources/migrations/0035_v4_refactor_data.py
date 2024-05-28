@@ -258,6 +258,21 @@ def copy_resource_groups(apps, schema_editor):
         group.save()
 
 
+def copy_resources_config(apps, schema_editor):
+    OldResourcesConfiguration = apps.get_model("resources", "ResourcesConfiguration")
+    NewResourcesConfiguration = apps.get_model("resources", "NewResourcesConfiguration")
+    NewAbstractCategory = apps.get_model("resources", "NewAbstractCategory")
+    old = OldResourcesConfiguration.objects.first()
+    new = NewResourcesConfiguration.objects.get_or_create()
+    if old:
+        try:
+            category = NewAbstractCategory.objects.get(old_pk=old.fr_doc_category.pk)
+        except NewAbstractCategory.DoesNotExist:
+            category = None
+        new.fr_link_category = category
+        new.save()
+
+
 class Migration(migrations.Migration):
     atomic = False
 
@@ -274,4 +289,5 @@ class Migration(migrations.Migration):
         migrations.RunPython(copy_federal_register_links, atomic=True),
         migrations.RunPython(copy_internal_files, atomic=True),
         migrations.RunPython(copy_resource_groups, atomic=True),
+        migrations.RunPython(copy_resources_config, atomic=True),
     ]

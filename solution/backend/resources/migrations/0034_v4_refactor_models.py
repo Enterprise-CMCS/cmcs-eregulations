@@ -256,4 +256,14 @@ class Migration(migrations.Migration):
             },
             bases=('resources.abstractpubliccategory',),
         ),
+        migrations.CreateModel(
+            name='NewResourcesConfiguration',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('fr_link_category', models.ForeignKey(blank=True, help_text='The category that contains Federal Register Links. This affects all newly uploaded Federal Register Links.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='fr_link_category_config', to='resources.newabstractcategory')),
+            ],
+            options={
+                'verbose_name': 'Resources Configuration',
+            },
+        ),
     ]

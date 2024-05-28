@@ -1,7 +1,21 @@
 from django.db import models
-from model_utils.managers import InheritanceManager
+from model_utils.managers import (
+    InheritanceManager,
+    InheritanceQuerySet,
+)
 
 from common.mixins import DisplayNameFieldMixin
+
+
+class AbstractCategoryManager(InheritanceManager):
+    pass
+    # def get_queryset(self):
+    #     return super().get_queryset().annotate(
+    #         is_fr_doc_category=models.ExpressionWrapper(
+    #             ~models.Q(fr_doc_category_config=None),
+    #             output_field=models.BooleanField()
+    #         )
+    #     )
 
 
 class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
@@ -9,7 +23,7 @@ class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
 
-    objects = InheritanceManager()
+    objects = AbstractCategoryManager()
 
     def __str__(self):
         name = getattr(self, "name", f"Category {self.pk}")

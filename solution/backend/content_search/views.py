@@ -20,7 +20,7 @@ from common.functions import establish_client
 from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
 from file_manager.models import AbstractRepoCategory, Division, Group, Subject
 from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
-from resources.views.mixins import LocationFiltererMixin
+from resources.old_views.mixins import LocationFiltererMixin
 
 from .models import ContentIndex
 from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer

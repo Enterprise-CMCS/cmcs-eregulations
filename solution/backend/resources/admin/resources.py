@@ -44,7 +44,7 @@ from resources.models import (
     AbstractInternalCategory,
 )
 
-from resources.serializers.locations import AbstractLocationPolymorphicSerializer
+#from resources.serializers.locations import AbstractLocationPolymorphicSerializer
 
 
 class AbstractResourceAdmin(AbstractAdmin):
@@ -73,8 +73,10 @@ class AbstractResourceAdmin(AbstractAdmin):
         # Compute diff of selected and saved citations for the changelog
         selection = form.cleaned_data["cfr_citations"]
         saved_citations = list(form.instance.cfr_citations.all().select_subclasses())
-        additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_citations]
-        removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_citations if x not in selection]
+        #additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_citations]
+        #removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_citations if x not in selection]
+        additions = []
+        removals = []
 
         super().save_related(request, form, formsets, change)
 
