@@ -2,7 +2,7 @@ import json
 
 import requests
 from django.conf import settings
-from django.db.models import F, Prefetch
+from django.db.models import F, Prefetch, Q
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -76,9 +76,12 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             else:
                 query = query.filter(subjects__id__in=subjects)
         if categories:
-            query = query.filter(category__id__in=categories)
+            # query = query.filter(category__id__in=categories)
+            query = query.filter(Q(category__id__in=categories) | Q(category__subcategory__parent__id__in=categories))
         if internal_categories:
             query = query.filter(upload_category__id__in=internal_categories)
+            # query = query.filter(Q(upload_category__id__in=internal_categories) |
+                                 # Q(upload_category__repositorysubcategory__parent__id__in=internal_categories))
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
