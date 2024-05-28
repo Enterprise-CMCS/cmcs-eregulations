@@ -234,7 +234,11 @@ provide("selectedParams", selectedParams);
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
 
-    if (paramType === "page" || paramType === "categories") {
+    if (
+        paramType === "page" ||
+        paramType === "categories" ||
+        paramType === "intcategories"
+    ) {
         return;
     }
 
