@@ -76,8 +76,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
             else:
                 query = query.filter(subjects__id__in=subjects)
         if categories:
-            # query = query.filter(category__id__in=categories)
-            query = query.filter(Q(category__id__in=categories) | Q(category__subcategory__parent__id__in=categories))
+            query = query.filter(category__id__in=categories)
+            # query = query.filter(Q(category__id__in=categories) | Q(category__subcategory__parent__id__in=categories))
         if internal_categories:
             query = query.filter(upload_category__id__in=internal_categories)
             # query = query.filter(Q(upload_category__id__in=internal_categories) |
