@@ -7,7 +7,8 @@ from .resources import AbstractInternalResource
 
 
 class InternalLink(AbstractInternalResource):
-    pass
+    def __str__(self):
+        return f"{self.document_id} {self.summary[:50]}"
 
 
 # Override the URL field's help_text for internal links specifically

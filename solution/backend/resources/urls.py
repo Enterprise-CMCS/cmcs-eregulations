@@ -3,6 +3,12 @@ from django.urls import path
 
 from resources.views import (
     PublicCategoryViewSet,
+    InternalCategoryViewSet,
+    CitationViewSet,
+    SectionViewSet,
+    SubpartViewSet,
+    SubjectViewSet,
+    ResourceGroupViewSet,
 )
 
 
@@ -26,22 +32,25 @@ urlpatterns = [
     # path("internal_links", InternalLinkViewSet.as_view({
     #     "get": "list",
     # })),
+    path("resource_groups", ResourceGroupViewSet.as_view({
+        "get": "list",
+    })),
     path("public_categories", PublicCategoryViewSet.as_view({
         "get": "list",
     })),
-    # path("categories/internal", InternalCategoryViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("subjects", SubjectViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("citations", CitationViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("citations/sections", SectionViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("citations/subparts", SubpartViewSet.as_view({
-    #     "get": "list",
-    # })),
+    path("internal_categories", InternalCategoryViewSet.as_view({
+        "get": "list",
+    })),
+    path("subjects", SubjectViewSet.as_view({
+        "get": "list",
+    })),
+    path("citations", CitationViewSet.as_view({
+        "get": "list",
+    })),
+    path("citations/sections", SectionViewSet.as_view({
+        "get": "list",
+    })),
+    path("citations/subparts", SubpartViewSet.as_view({
+        "get": "list",
+    })),
 ]
