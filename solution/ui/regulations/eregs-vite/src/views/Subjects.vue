@@ -141,12 +141,6 @@ const clearSearchQuery = () => {
 const executeSearch = (payload) => {
     const routeClone = { ...$route.query };
 
-    searchInputRemoveList.forEach((item) => {
-        if (routeClone[item]) {
-            delete routeClone[item];
-        }
-    });
-
     const cleanedRoute = useRemoveList({
         route: routeClone,
         removeList: searchInputRemoveList,
