@@ -20,7 +20,7 @@ const props = defineProps({
 const $router = useRouter();
 const $route = useRoute();
 
-const removeList = inject("commonRemoveList");
+const removeList = inject("commonRemoveList", []);
 
 const state = reactive({
     filter: "",

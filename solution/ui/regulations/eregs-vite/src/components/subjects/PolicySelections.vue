@@ -10,8 +10,8 @@ const $route = useRoute();
 const selectedParams = inject("selectedParams");
 const FilterTypesDict = inject("FilterTypesDict");
 
-const commonRemoveList = inject("commonRemoveList");
-const additionalRemoveList = inject("policySelectionsRemoveList");
+const commonRemoveList = inject("commonRemoveList", []);
+const additionalRemoveList = inject("policySelectionsRemoveList", []);
 const removeList = commonRemoveList.concat(additionalRemoveList);
 
 const removeClick = () => {
