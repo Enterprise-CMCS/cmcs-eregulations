@@ -108,8 +108,11 @@ provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
 
 // provide router query params to remove on child component change
-provide("commonRemoveList", ["page", "categories", "intcategories"]);
-provide("policySelectionsRemoveList", ["subjects"]);
+const commonRemoveList = ["page", "categories", "intcategories"];
+provide("commonRemoveList", commonRemoveList);
+const policySelectionsRemoveList = ["subjects"];
+provide("policySelectionsRemoveList", policySelectionsRemoveList);
+const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
 /**
  * @param {Object} queryParams - $route.query
@@ -134,23 +137,36 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
-    const { q, page, categories, intcategories, ...rest } = $route.query;
+    const routeClone = { ...$route.query };
+
+    searchInputRemoveList.forEach((item) => {
+        if (routeClone[item]) {
+            delete routeClone[item];
+        }
+    });
 
     $router.push({
         name: "subjects",
         query: {
-            ...rest,
+            ...routeClone,
             q: payload.query,
         },
     });
 };
 
 const clearSearchInput = () => {
-    const { q, page, categories, intcategories, ...rest } = $route.query;
+    const routeClone = { ...$route.query };
+
+    searchInputRemoveList.forEach((item) => {
+        if (routeClone[item]) {
+            delete routeClone[item];
+        }
+    });
+
     $router.push({
         name: "subjects",
         query: {
-            ...rest,
+            ...routeClone,
         },
     });
 };
