@@ -23,7 +23,11 @@
     }
 }
 
-.subjects__category-select {
+.filter__select {
+    &--category {
+        width: 300px;
+    }
+
     .v-input__control {
         .v-field {
             &--appended {
@@ -54,7 +58,8 @@
             }
         }
 
-        .v-field__clearable, .v-field__append-inner {
+        .v-field__clearable,
+        .v-field__append-inner {
             height: 30px;
         }
 
@@ -422,6 +427,14 @@
                 }
             }
         }
+    }
+
+    .subject__filters--row {
+        padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
     }
 
     .doc__list {

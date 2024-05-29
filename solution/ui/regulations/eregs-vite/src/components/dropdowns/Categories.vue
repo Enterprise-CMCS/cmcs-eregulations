@@ -116,11 +116,12 @@ watch(
 <template>
     <v-select
         v-model="selectedId"
-        class="subjects__category-select"
+        class="filter__select filter__select--category"
         variant="outlined"
         clearable
         persistent-clear
         single-line
+        hide-details
         clear-icon="mdi-close"
         menu-icon="mdi-menu-swap"
         label="Choose Category"

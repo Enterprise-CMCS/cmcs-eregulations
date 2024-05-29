@@ -489,7 +489,7 @@ getDocSubjects();
                                 :selected-subject-parts="selectedSubjectParts"
                             />
                         </div>
-                        <div>
+                        <div class="subject__filters--row">
                             <FetchCategoriesContainer v-slot="slotProps">
                                 <CategoriesDropdown
                                     :list="slotProps.data"
