@@ -10,28 +10,19 @@ const $route = useRoute();
 const selectedParams = inject("selectedParams");
 const FilterTypesDict = inject("FilterTypesDict");
 
-const removeClick = (event) => {
-    const { type, id } = event.target.dataset;
-    const { page, categories, intcategories, ...routeClone } = $route.query;
-    const paramsToUpdate = routeClone[type];
-
-    const paramsArray = _isArray(paramsToUpdate)
-        ? paramsToUpdate
-        : [paramsToUpdate];
-
-    const filteredParamsArray = paramsArray.filter((paramId) => paramId !== id);
-
-    const paramsToPush =
-        filteredParamsArray.length > 0 ? { [type]: filteredParamsArray } : {};
-
-    delete routeClone[type];
+const removeClick = () => {
+    const {
+        page,
+        categories,
+        intcategories,
+        subjects,
+        ...restOfRoute
+    } = $route.query;
 
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
-            ...paramsToPush,
-            page: undefined,
+            ...restOfRoute,
         },
     });
 };
