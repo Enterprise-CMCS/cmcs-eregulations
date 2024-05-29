@@ -34,6 +34,8 @@
                 .v-field__input {
                     padding-inline: 4px;
                     min-height: 30px;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
                 }
 
                 .v-select__selection-text,
@@ -51,16 +53,20 @@
                 }
             }
         }
-    }
 
-    .v-field__append-inner {
-        width: 24px;
+        .v-field__clearable, .v-field__append-inner {
+            height: 30px;
+        }
 
-        & > .v-icon.v-select__menu-icon {
-            min-width: 18px;
-            font-size: 36px;
-            opacity: 1;
-            transition: none;
+        .v-field__append-inner {
+            width: 24px;
+
+            & > .v-icon.v-select__menu-icon {
+                min-width: 18px;
+                font-size: 30px;
+                opacity: 1;
+                transition: none;
+            }
         }
     }
 }
@@ -93,11 +99,15 @@
     .v-list-item-title {
         font-size: 14px;
         line-height: 22px;
-        padding: 8px 0;
+        padding: 8px 0 0;
     }
 
     .doc-type__label {
         margin-top: 8px;
+
+        &--internal {
+            margin-top: 16px;
+        }
     }
 }
 
