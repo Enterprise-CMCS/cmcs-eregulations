@@ -15,6 +15,7 @@ import {
     HeaderComponent,
     HeaderLinks,
     HeaderSearch,
+    SignInLink,
     InternalDocsContainer,
     JumpTo,
     CategoryLabel,
@@ -39,6 +40,7 @@ import {
     TocSubchapter,
     TocTitle,
     TooltipContainer,
+    HeaderUserWidget,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
 
@@ -211,6 +213,7 @@ function main() {
             HeaderComponent,
             HeaderLinks,
             HeaderSearch,
+            SignInLink,
             InternalDocsContainer,
             JumpTo,
             CategoryLabel,
@@ -235,6 +238,7 @@ function main() {
             TocSubchapter,
             TocTitle,
             TooltipContainer,
+            HeaderUserWidget,
             ViewResourcesLink,
         },
     });

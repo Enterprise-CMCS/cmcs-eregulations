@@ -89,13 +89,15 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
         elif resource_type == 'external':
             query = query.filter(resource_type='external')
 
+        ranked_results = None
+
         if search_query:
             query = query.search(search_query)
             if paginate:
-                results = [i.pk for i in self.paginate_queryset(query)]
+                ranked_results = [i.pk for i in self.paginate_queryset(query)]
             else:
-                results = list(query.values_list("pk", flat=True))
-            query = ContentIndex.objects.filter(pk__in=results).generate_headlines(search_query)
+                ranked_results = list(query.values_list("pk", flat=True))
+            query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
         else:
             query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
 
@@ -110,6 +112,11 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
 
         if paginate and not search_query:
             query = self.paginate_queryset(query)
+
+        # If results need to be sorted by rank, do so.
+        # Not applicable if there is no search term.
+        if ranked_results:
+            query = sorted(query, key=lambda x: ranked_results.index(x.id))
 
         context = self.get_serializer_context()
         if search_query:

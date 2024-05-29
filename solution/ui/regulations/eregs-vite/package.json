@@ -12,16 +12,16 @@
   "dependencies": {
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
-    "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
+    "vue": "^3.4.23",
+    "vue-router": "^4.3.2",
     "vue-template-compiler": "^2.7.16",
-    "vuetify": "^3.5.17"
+    "vuetify": "^3.6.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.6.2",
     "eslint-plugin-vuetify": "^2.2.0",
     "sass": "^1.69.3",
-    "vite": "^5.2.10",
+    "vite": "^5.2.11",
     "vite-plugin-vuetify": "^2.0.3"
   },
   "optionalDependencies": {

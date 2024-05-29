@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'regcore.search',
     'resources',
     'solo',
+    'user.apps.UserConfig',
     'corsheaders',
     'drf_spectacular',
     'django.contrib.sitemaps',
@@ -299,7 +300,7 @@ CSP_SCRIPT_SRC_ELEM = [
     "'unsafe-eval'",
     STATIC_URL,
     "https://*.googletagmanager.com",
-    "https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vue@3.4.23/dist/vue.global.prod.js",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js",
 ]

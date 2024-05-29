@@ -16,14 +16,14 @@
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
     "shelljs": "^0.8.5",
-    "vue": "^3.4.21",
-    "vuetify": "^3.5.17"
+    "vue": "^3.4.23",
+    "vuetify": "^3.6.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.6.2",
     "eslint-plugin-vuetify": "^2.2.0",
     "fast-glob": "^3.2.12",
-    "vite": "^5.2.10",
+    "vite": "^5.2.11",
     "vite-plugin-vuetify": "^2.0.3"
   },
   "optionalDependencies": {

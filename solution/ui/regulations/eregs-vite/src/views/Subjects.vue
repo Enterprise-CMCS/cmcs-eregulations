@@ -20,7 +20,10 @@ import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
@@ -31,6 +34,10 @@ import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
 const props = defineProps({
+    adminUrl: {
+        type: String,
+        default: "/admin/",
+    },
     aboutUrl: {
         type: String,
         default: "/about/",
@@ -71,6 +78,10 @@ const props = defineProps({
         type: String,
         default: "",
     },
+    username: {
+        type: String,
+        default: undefined,
+    },
 });
 
 // Router and Route
@@ -82,6 +93,8 @@ const FilterTypesDict = {
     type: "Type",
     q: "query",
 };
+
+const pageSize = 50;
 
 // provide Django template variables
 provide("apiUrl", props.apiUrl);
@@ -115,10 +128,11 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
+    const { q, page, ...rest } = $route.query;
     $router.push({
         name: "subjects",
         query: {
-            ...$route.query,
+            ...rest,
             q: payload.query,
         },
     });
@@ -156,14 +170,17 @@ const getPartsLastUpdated = async () => {
 
 // policyDocList fetch for policy document list
 const policyDocList = ref({
+    count: 0,
     results: [],
     loading: true,
     error: false,
 });
 
-const getDocList = async (requestParams = "") => {
+const getDocList = async (requestParamsString = "") => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
+
+    const requestParams = `${requestParamsString}&page_size=${pageSize}&paginate=true`;
 
     try {
         const contentList = await getCombinedContent({
@@ -172,9 +189,11 @@ const getDocList = async (requestParams = "") => {
             requestParams,
         });
         policyDocList.value.results = contentList.results;
+        policyDocList.value.count = contentList.count;
     } catch (error) {
         console.error(error);
         policyDocList.value.results = [];
+        policyDocList.value.count = 0;
         policyDocList.value.error = true;
     } finally {
         policyDocList.value.loading = false;
@@ -212,6 +231,10 @@ provide("selectedParams", selectedParams);
 
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
+
+    if (paramType === "page") {
+        return;
+    }
 
     if (paramType === "q") {
         searchQuery.value = paramValue;
@@ -266,7 +289,7 @@ const getDocSubjects = async () => {
         // set title if needed
         if (policyDocSubjects.value.results.length && $route.query.subjects) {
             setDocumentTitle(
-                $route.query.subjects[0],
+                $route.query.subjects,
                 policyDocSubjects.value.results
             );
         }
@@ -377,6 +400,21 @@ getDocSubjects();
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
                 </template>
+                <template v-if="isAuthenticated" #sign-in>
+                    <HeaderUserWidget :admin-url="adminUrl">
+                        <template #username>
+                            {{ username }}
+                        </template>
+                    </HeaderUserWidget>
+                </template>
+                <template v-else #sign-in>
+                    <SignInLink
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                        :route="$route"
+                    />
+                </template>
             </HeaderComponent>
         </header>
         <div id="subjectsApp" class="repository-view ds-l-container">
@@ -457,11 +495,25 @@ getDocSubjects();
                             <PolicyResults
                                 :base="homeUrl"
                                 :results="policyDocList.results"
+                                :results-count="policyDocList.count"
+                                :page="parseInt($route.query.page, 10) || 1"
+                                :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
                                 :search-query="searchQuery"
                                 :selected-subject-parts="selectedSubjectParts"
                             />
+                            <div class="pagination-expand-row">
+                                <div class="pagination-expand-container">
+                                    <PaginationController
+                                        v-if="policyDocList.count > 0"
+                                        :count="policyDocList.count"
+                                        :page="parseInt($route.query.page, 10) || 1"
+                                        :page-size="pageSize"
+                                        view="subjects"
+                                    />
+                                </div>
+                            </div>
                         </template>
                     </template>
                 </div>

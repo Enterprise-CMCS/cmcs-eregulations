@@ -206,3 +206,14 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?q=reference")
         data = get_paginated_data(response)
         self.assertEqual(data["results"][0]["content_headline"], None)
+
+    # If sorted by 'id', a search for 'fire' from fixture data will return two results with pk's 92 then 98.
+    # We want the results sorted by rank, which if working properly will return the reverse: 98 then 92.
+    def test_rank_sorting(self):
+        self.login()
+        response = self.client.get("/v3/content-search/?q=fire")
+        data = get_paginated_data(response)
+        results = data["results"]
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0]["id"], 98)
+        self.assertEqual(results[1]["id"], 92)

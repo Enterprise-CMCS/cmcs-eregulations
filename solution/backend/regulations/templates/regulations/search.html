@@ -11,14 +11,18 @@
 {% block body %}
 <div
     id="vite-app"
+    data-admin-url="{% url 'admin:index' %}"
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
+    data-custom-login-url="{% url 'custom_login' %}"
     data-custom-url="{{ CUSTOM_URL }}"
     data-home-url="{% url 'homepage' %}"
-    data-search-url="{% url 'search' %}"
     data-host="{{ host }}"
+    data-is-authenticated="{{ user.is_authenticated }}"
+    data-search-url="{% url 'search' %}"
     data-statutes-url="{% url 'statutes' %}"
     data-subjects-url="{% url 'subjects' %}"
     data-survey-url="{{ SURVEY_URL }}"
+    data-username="{{ user.username }}"
 ></div>
 {% endblock %}

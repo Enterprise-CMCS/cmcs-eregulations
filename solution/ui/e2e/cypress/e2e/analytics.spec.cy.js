@@ -20,7 +20,7 @@ describe("Analytics", () => {
         cy.eregsLogin({ username: readerUsername, password: readerPassword, landingPage: "/" });
         cy.get('head script[src*="googletagmanager"]').should("exist");
 
-        cy.get("#logout").click();
+        cy.eregsLogout({ landingPage: "/" });
 
         cy.eregsLogin({ username, password, landingPage: "/" });
         cy.visit("/");

@@ -5,7 +5,22 @@
 @import "../application_settings";
 
 $header_input_height_narrow: 45px;
-$header_input_height_wide: 36px;
+$header_input_height_wide: 40px;
+
+.dropdown-menu__container {
+    position: absolute;
+    right: 0px;
+    top: 40px;
+    white-space: nowrap;
+    background: $lightest_gray;
+    padding: 20px 30px;
+    z-index: 1;
+    border: 1px solid $light_gray;
+    border-radius: 3px;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+    -moz-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+}
 
 header {
     box-sizing: unset;
@@ -137,6 +152,8 @@ header {
             }
 
             .links--container {
+                position: relative;
+
                 @include custom-max(($eds-width-header-links - 1) / 1px) {
                     display: flex;
                 }
@@ -145,7 +162,7 @@ header {
                     @include header__anchor--bold;
                     @include header__button;
 
-                    color: $mid_blue;
+                    color: $primary_link_color;
                     display: flex;
                     align-items: center;
                     padding: 0 12px;
@@ -163,37 +180,23 @@ header {
                         margin-right: 5px;
 
                         path {
-                            fill: $mid_blue;
+                            fill: $primary_link_color;
                         }
                     }
                 }
 
                 .more--dropdown-menu {
-                    position: absolute;
-                    top: 115px;
-                    background: $lightest_gray;
-                    margin-left: 12px;
-                    border: 1px solid $light_gray;
-                    border-radius: 3px;
-                    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
-                    -webkit-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
-                    -moz-box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
-
-                    @include custom-min($eds-width-header-links / 1px) {
+                    @include custom-min($eds-width-sm / 1px) {
                         display: none;
-                    }
-
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
-                        right: 15px;
                     }
                 }
 
                 ul.links__list {
                     list-style: none;
+                    padding: 0;
 
                     &.links__list--dropdown {
                         margin: 0;
-                        padding: 20px 30px;
 
                         li {
                             &:not(:last-child) {
@@ -224,7 +227,7 @@ header {
                             .header--links__anchor {
                                 @include header__anchor--bold;
 
-                                color: $mid_blue;
+                                color: $primary_link_color;
                                 line-height: 24px;
                                 text-decoration: none;
 
@@ -357,6 +360,156 @@ header {
                     }
                 }
             }
+        }
+
+        .header--sign-in {
+            height: $header_input_height_wide;
+            margin-left: 1rem;
+
+            &:has(> a),
+            &:has(> span.disabled) {
+                margin-top: auto;
+            }
+
+            &.active {
+                span.disabled {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
+            }
+
+            span.disabled {
+                @include header__anchor--bold;
+                text-transform: capitalize;
+            }
+
+            a {
+                @include header__anchor--bold;
+
+                color: $primary_link_color;
+                text-transform: capitalize;
+
+                &:hover,
+                &:focus,
+                &.active {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
+            }
+
+            .user-account__button {
+                height: 100%;
+
+                svg {
+                    circle {
+                        stroke: $primary_link_color;
+                    }
+
+                    path {
+                        fill: $primary_link_color;
+                    }
+                }
+
+                &--expanded,
+                &:hover,
+                &:focus,
+                &.active {
+                    svg {
+                        circle {
+                            stroke: $secondary_link_color;
+                            fill: $secondary_link_color;
+                        }
+
+                        path {
+                            fill: white;
+                        }
+                    }
+                }
+
+                & + .dropdown-menu--account {
+                    top: 56px;
+                    right: 2rem;
+                    white-space: normal;
+
+                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                        right: 1rem;
+                    }
+
+                    .account-info__container {
+                        padding: 0.5rem;
+                        padding-bottom: 0;
+                        display: inline-block;
+                        min-width: 145px;
+                        max-width: 340px;
+
+                        .account-info--username {
+                            overflow-wrap: anywhere;
+                        }
+
+                        .account-info--msg {
+                            display: flex;
+
+                            .account-message {
+                                flex-grow: 1;
+                                width: 0;
+                                margin: 0.25rem 0;
+                                font-size: $font-size-sm;
+                            }
+                        }
+
+                        .account-info--links {
+                            margin: 0.75rem 0;
+
+                            a {
+                                @include header__anchor--bold;
+
+                                color: $primary_link_color;
+                                transition: none;
+
+                                &:hover,
+                                &:focus,
+                                &.active {
+                                    @include header__anchor--active-bold;
+                                    padding: 0;
+                                }
+                            }
+                        }
+                    }
+
+                    hr {
+                        border: 0;
+                        height: 1px;
+                        background: $border_color;
+                    }
+
+                    .account--sign-out {
+                        padding: 0.5rem;
+
+                        button,
+                        form input {
+                            @include header__anchor--bold;
+
+                            color: $primary_link_color;
+
+                            &:hover,
+                            &:focus,
+                            &.active {
+                                @include header__anchor--active-bold;
+                                padding: 0;
+                            }
+                        }
+
+                        form input {
+                            background-color: unset;
+                            height: 22px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .header--search:has(.search__form--expanded) + .header--sign-in {
+            display: none;
         }
     }
 }

@@ -26,6 +26,23 @@ const _beforeEach = () => {
     }).as("subjects");
 };
 
+const _beforePaginate = () => {
+    cy.intercept(
+        "**/v3/content-search/?resource-type=external&page_size=50&paginate=true**",
+        {
+            fixture: "policy-docs-50-p1.json",
+        }
+    ).as("initialPage");
+
+    cy.intercept("**/v3/content-search/?resource-type=external&page=1**", {
+        fixture: "policy-docs-50-p1.json",
+    }).as("page1");
+
+    cy.intercept("**/v3/content-search/?resource-type=external&page=2**", {
+        fixture: "policy-docs-50-p2.json",
+    }).as("page2");
+};
+
 Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
     cy.intercept("**/v3/content-search/?q=mock**", {
         fixture: "policy-docs.json",
@@ -62,8 +79,7 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/resources?q=test");
         cy.url().should("not.include", "/resources");
-        cy.url().should("include", "/subjects/")
-            .and("not.include", "q=test");
+        cy.url().should("include", "/subjects/").and("not.include", "q=test");
         cy.get(".div__login-sidebar a")
             .should("have.attr", "href")
             .and("include", "next")
@@ -93,7 +109,7 @@ describe("Find by Subjects", () => {
 
         cy.injectAxe();
 
-        cy.get("#loginIndicator").should("not.be.visible");
+        cy.get("button[data-testid='user-account-button']").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
@@ -143,7 +159,9 @@ describe("Find by Subjects", () => {
         });
         cy.visit("/subjects");
         cy.url().should("include", "/subjects/");
-        cy.get("#loginIndicator").should("be.visible");
+        cy.get("button[data-testid='user-account-button']").should(
+            "be.visible"
+        );
         cy.get(".subject__heading").should("not.exist");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-3] a"
@@ -514,7 +532,9 @@ describe("Find by Subjects", () => {
     });
 
     it("should display and fetch the correct search query on load if it is included in URL", () => {
-        cy.intercept("**/v3/content-search/?q=streamlined%20modular%20certification**").as("qFiles");
+        cy.intercept(
+            "**/v3/content-search/?q=streamlined%20modular%20certification**"
+        ).as("qFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -525,7 +545,10 @@ describe("Find by Subjects", () => {
         cy.wait("@qFiles").then((interception) => {
             expect(interception.response.statusCode).to.eq(200);
         });
-        cy.get("input#main-content").should("have.value", "streamlined modular certification");
+        cy.get("input#main-content").should(
+            "have.value",
+            "streamlined modular certification"
+        );
         cy.get(".subject__heading").should("not.exist");
     });
 
@@ -633,7 +656,7 @@ describe("Find by Subjects", () => {
         });
     });
 
-    it("returns you to the custom eua login page when you log out", () => {
+    it("should show the external only view of the subjects page after you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -641,9 +664,9 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.get("#logout").click();
+        cy.eregsLogout({ landingPage: "/subjects" });
         cy.url().should("include", "/subjects");
-        cy.get("#loginIndicator").should("not.be.visible");
+        cy.get("button[data-testid='user-account-button']").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
@@ -654,5 +677,75 @@ describe("Find by Subjects", () => {
             .find("input")
             .should("not.be.checked")
             .and("be.disabled");
+    });
+});
+
+describe("Subjects Page -- Pagination", () => {
+    beforeEach(() => {
+        _beforeEach();
+        _beforePaginate();
+    });
+
+    it("Goes to the second page of results when clicking the Next button", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/" });
+        cy.visit("/subjects");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get(".current-page.selected").contains("1");
+        cy.get(".pagination-control.left-control > .back-btn").should(
+            "have.class",
+            "disabled"
+        );
+        cy.wait("@initialPage").then((interception) => {
+            const count = interception.response.body.count;
+            cy.get(".search-results-count").contains(`1 - 50 of ${count} documents`);
+        });
+        cy.get(".pagination-control.right-control")
+            .contains("Next")
+            .click({ force: true });
+        cy.wait("@page2").then((interception) => {
+            const count = interception.response.body.count;
+            cy.url().should("include", "page=2");
+            cy.get(".search-results-count").contains(`51 - 100 of ${count} documents`);
+            cy.get(".current-page.selected").contains("2");
+        });
+    });
+
+    it("Goes to the second page of results when clicking on page 2", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/" });
+        cy.visit("/subjects");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .uncheck({ force: true });
+        cy.get(".current-page.selected").contains("1");
+        cy.get(".page-number-li.unselected")
+            .contains("2")
+            .click({ force: true });
+        cy.wait("@page2").then((interception) => {
+            const count = interception.response.body.count;
+            cy.url().should("include", "page=2");
+            cy.get(".search-results-count").contains(
+                `51 - 100 of ${count} documents`
+            );
+            cy.get(".current-page.selected").contains("2");
+        });
+    });
+
+    it("Goes to the second page of results on load when page=2 in the URL", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/" });
+        cy.visit("/subjects/?type=external&page=2");
+        cy.wait("@page2").then((interception) => {
+            const count = interception.response.body.count;
+            cy.get(".search-results-count").contains(
+                `51 - 100 of ${count} documents`
+            );
+            cy.get(".current-page.selected").contains("2");
+        });
     });
 });

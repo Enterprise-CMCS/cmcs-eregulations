@@ -96,25 +96,26 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
-    const subject = props.policyDocSubjects.results.find(
-        (s) => s.id === parseInt(subjectToAdd, 10)
-    );
-
     $router.push({
         name: "subjects",
         query: {
             ...$route.query,
+            page: undefined,
             subjects: [subjectToAdd],
         },
     });
 };
 
-const subjectClasses = (subjectId) => ({
-    "sidebar-li__button": true,
-    "sidebar-li__button--selected": $route.query.subjects?.includes(
-        subjectId.toString()
-    ),
-});
+const subjectClasses = (subjectId) => {
+    const routeArr = _isArray($route.query.subjects)
+        ? $route.query.subjects
+        : [$route.query.subjects];
+
+    return {
+        "sidebar-li__button": true,
+        "sidebar-li__button--selected": routeArr.includes(subjectId.toString()),
+    };
+};
 
 const filterResetClasses = computed(() => ({
     "subjects__filter-reset": true,
