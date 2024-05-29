@@ -122,6 +122,7 @@ watch(
         persistent-clear
         single-line
         hide-details
+        flat
         clear-icon="mdi-close"
         menu-icon="mdi-menu-swap"
         label="Choose Category"

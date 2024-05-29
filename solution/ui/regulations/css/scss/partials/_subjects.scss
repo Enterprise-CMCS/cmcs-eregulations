@@ -77,6 +77,17 @@
 }
 
 .v-overlay-container {
+    .v-menu > .v-overlay__content {
+        margin-top: 8px;
+        box-shadow: unset;
+
+        & > .v-list {
+            margin-top: 8px;
+            border: 1px solid $border_color;
+            box-shadow: unset;
+        }
+    }
+
     .v-list-item {
         min-height: unset;
         padding: 0;
