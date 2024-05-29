@@ -25,8 +25,8 @@ class ResourceGroup(NewAbstractResource):
     resources = models.ManyToManyField(NewAbstractResource, blank=True, related_name="resource_groups")
 
     def __str__(self):
-        if self.document_id:
-            name = self.document_id
+        if self.name:
+            name = self.name
         elif self.common_identifiers:
             name = ", ".join(self.common_identifiers)
         else:
@@ -36,7 +36,7 @@ class ResourceGroup(NewAbstractResource):
     class Meta:
         verbose_name = "Resource Group"
         verbose_name_plural = "Resource Groups"
-        ordering = ["document_id", "common_identifiers"]
+        ordering = ["name", "common_identifiers"]
 
 
 def update_group(group):
