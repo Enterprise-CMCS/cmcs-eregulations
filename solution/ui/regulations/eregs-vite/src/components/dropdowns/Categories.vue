@@ -80,12 +80,12 @@ watch(
 watch(
     () => $route.query,
     (newQueryParams, oldQueryParams) => {
-        const { q: newQ } = newQueryParams;
-        const { q: oldQ } = oldQueryParams;
+        const { q: newQ, subjects: newSubjects } = newQueryParams;
+        const { q: oldQ, subjects: oldSubjects } = oldQueryParams;
 
-        // SearchInput component is already scrubbing categories from route;
+        // Other components are already scrubbing categories from route;
         // Silently reset selectedId so that route change doesn't trigger
-        if (newQ !== oldQ) {
+        if (newQ !== oldQ || newSubjects !== oldSubjects) {
             silentReset.value = true;
             selectedId.value = undefined;
         }

@@ -12,7 +12,7 @@ const FilterTypesDict = inject("FilterTypesDict");
 
 const removeClick = (event) => {
     const { type, id } = event.target.dataset;
-    const routeClone = { ...$route.query };
+    const { page, categories, intcategories, ...routeClone } = $route.query;
     const paramsToUpdate = routeClone[type];
 
     const paramsArray = _isArray(paramsToUpdate)
@@ -22,9 +22,7 @@ const removeClick = (event) => {
     const filteredParamsArray = paramsArray.filter((paramId) => paramId !== id);
 
     const paramsToPush =
-        filteredParamsArray.length > 0
-            ? { [type]: filteredParamsArray }
-            : {};
+        filteredParamsArray.length > 0 ? { [type]: filteredParamsArray } : {};
 
     delete routeClone[type];
 
