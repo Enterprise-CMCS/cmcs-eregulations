@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onBeforeMount, ref, watch } from "vue";
+import { inject, onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 
 import useRemoveList from "composables/removeList";
 
@@ -120,6 +120,34 @@ watch(
         }
     }
 );
+
+// popstate to update the select on back/forward click
+const onPopState = (event) => {
+    const currentPopState = event?.state?.current ?? "";
+
+    const isIntcategories = currentPopState.includes("intcategories");
+    const isCategories = !isIntcategories && currentPopState.includes("categories");
+
+    silentReset.value = true;
+
+    if (isIntcategories) {
+        // use regex to find a number of any length in a string that has the following pattern:
+        // subjects?subjects=2&intcategories=3
+        const intcategories = currentPopState.match(/(?<=intcategories=)\d+/)[0];
+        selectedId.value = `${intcategories}-intcategories`;
+    } else if (isCategories) {
+        // use regex to find a number of any length in a string that has the following pattern:
+        // subjects?subjects=2&categories=3
+        const categories = currentPopState.match(/(?<=categories=)\d+/)[0];
+        selectedId.value = `${categories}-categories`;
+    }
+};
+
+onMounted(() => {
+    window.addEventListener("popstate", onPopState);
+});
+
+onUnmounted(() => window.removeEventListener("resize", onPopState));
 </script>
 
 <template>
