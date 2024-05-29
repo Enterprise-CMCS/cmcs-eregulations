@@ -1,6 +1,8 @@
 <script setup>
 import { inject, onBeforeMount, ref, watch } from "vue";
 
+import useRemoveList from "composables/removeList";
+
 import _isUndefined from "lodash/isUndefined";
 
 import { useRoute, useRouter } from "vue-router";
@@ -8,6 +10,8 @@ import { useRoute, useRouter } from "vue-router";
 import { DOCUMENT_TYPES_MAP } from "utilities/utils";
 
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
+
+const removeList = inject("commonRemoveList", []);
 
 const catTypeDict = {
     categories: "external",
@@ -57,8 +61,6 @@ watch(
     (newValue) => {
         const categoriesObj = {};
 
-        const { categories, intcategories, ...restOfRoute } = $route.query;
-
         if (newValue) {
             const [id, categoryType] = newValue.split("-");
             categoriesObj[categoryType] = id;
@@ -69,10 +71,17 @@ watch(
             return;
         }
 
+        const routeClone = { ...$route.query };
+
+        const cleanedRoute = useRemoveList({
+            route: routeClone,
+            removeList
+        });
+
         $router.push({
             name: "subjects",
             query: {
-                ...restOfRoute,
+                ...cleanedRoute,
                 ...categoriesObj,
             },
         });
