@@ -19,7 +19,7 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
             "email_verified": True,
             "jobcodes": "cn=EREGS_ADMIN,cn=EREGS_EDITOR, ou=Groups,dc=cms,dc=hhs,dc=gov,cn=EXAMPLE_TEST,ou=Groups,"
                         "dc=cms,dc=hhs,dc=gov ",
-            "department": "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBBi",
+            "department": "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB",
 
         }
 
@@ -82,11 +82,30 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertTrue(updated_user.is_active)
 
         # Ensure the user is associated with the correct groups
+        print(f"Groups: {updated_user.groups.all()}")
         self.assertTrue(updated_user.groups.filter(name='EREGS_ADMIN').exists())
         self.assertTrue(updated_user.groups.filter(name='EREGS_EDITOR').exists())
 
         # Ensure the user is not associated with the incorrect groups
         self.assertFalse(updated_user.groups.filter(name='EREGS_READER').exists())
+
+    def test_user_with_department_group_division(self):
+        user = self.backend.create_user(self.mock_claims)
+
+        # Ensure the user is created
+        self.assertIsNotNone(user)
+        profile = user.profile
+        profile.refresh_from_db()
+        print(f"Department: {profile.department}")
+        print(f"Group: {profile.group}")
+        print(f"Division: {profile.division}")
+
+        # Ensure the user's profile has the correct department, group, and division
+        self.assertEqual(profile.department, "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB")
+        self.assertIsNotNone(profile.group)
+        self.assertEqual(profile.group.name, "FMG")
+        self.assertIsNotNone(profile.division)
+        self.assertEqual(profile.division.name, "DFOE")
 
     # Ensure user with EREGS_ADMIN jobcode is staff, active and superuser
     def test_user_with_admin_jobcode(self):

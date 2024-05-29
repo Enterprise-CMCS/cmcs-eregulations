@@ -12,8 +12,8 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
+from user.models import Profile, Group, Division, set_group_and_division
 
-from user.models import Profile
 
 from user.models import Profile
 
@@ -102,15 +102,8 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
                 except User.DoesNotExist:
                     user = User.objects.create_user(email, email)
 
-                # Update or create the profile
-                profile, _ = Profile.objects.get_or_create(user=user)
-                if department:
-                    profile.department = department
-                profile.save()
-
                 user = self.update_user(user, claims)
                 user.save()
-
                 return user
         else:
             return None
@@ -150,11 +143,10 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
         # Update user's profile information
         department = claims.get("department")
-        profile, _ = Profile.objects.get_or_create(user=user)
         if department:
-            profile.department = department
+            user.profile.department = department
+            set_group_and_division(user.profile)
 
-        profile.save()
 
         # Check if there are any relevant jobcodes
         user.is_active = bool(relevant_jobcodes)
