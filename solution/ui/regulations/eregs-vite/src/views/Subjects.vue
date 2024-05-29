@@ -107,6 +107,10 @@ provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
 
+// provide router query params to remove on child component change
+provide("commonRemoveList", ["page", "categories", "intcategories"]);
+provide("policySelectionsRemoveList", ["subjects"]);
+
 /**
  * @param {Object} queryParams - $route.query
  * @returns {Boolean} - true if all doc types are selected and nothing else

@@ -10,19 +10,23 @@ const $route = useRoute();
 const selectedParams = inject("selectedParams");
 const FilterTypesDict = inject("FilterTypesDict");
 
+const commonRemoveList = inject("commonRemoveList");
+const additionalRemoveList = inject("policySelectionsRemoveList");
+const removeList = commonRemoveList.concat(additionalRemoveList);
+
 const removeClick = () => {
-    const {
-        page,
-        categories,
-        intcategories,
-        subjects,
-        ...restOfRoute
-    } = $route.query;
+    const routeClone = { ...$route.query };
+
+    removeList.forEach((item) => {
+        if (routeClone[item]) {
+            delete routeClone[item];
+        }
+    });
 
     $router.push({
         name: "subjects",
         query: {
-            ...restOfRoute,
+            ...routeClone,
         },
     });
 };
