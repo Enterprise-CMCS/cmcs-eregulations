@@ -130,7 +130,8 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
-    const { q, page, ...rest } = $route.query;
+    const { q, page, categories, intcategories, ...rest } = $route.query;
+
     $router.push({
         name: "subjects",
         query: {
@@ -141,7 +142,7 @@ const executeSearch = (payload) => {
 };
 
 const clearSearchInput = () => {
-    const { q, page, ...rest } = $route.query;
+    const { q, page, categories, intcategories, ...rest } = $route.query;
     $router.push({
         name: "subjects",
         query: {

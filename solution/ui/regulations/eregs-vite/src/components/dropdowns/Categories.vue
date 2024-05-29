@@ -1,5 +1,5 @@
 <script setup>
-import { inject, onBeforeMount, watch } from "vue";
+import { inject, onBeforeMount, ref, watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
@@ -33,6 +33,7 @@ const $route = useRoute();
 const $router = useRouter();
 
 const selectedId = defineModel("id");
+const silentReset = ref(false);
 
 onBeforeMount(() => {
     const { categories, intcategories } = $route.query;
@@ -61,6 +62,11 @@ watch(
             categoriesObj[categoryType] = id;
         }
 
+        if (silentReset.value) {
+            silentReset.value = false;
+            return;
+        }
+
         $router.push({
             name: "subjects",
             query: {
@@ -68,6 +74,21 @@ watch(
                 ...categoriesObj,
             },
         });
+    }
+);
+
+watch(
+    () => $route.query,
+    (newQueryParams, oldQueryParams) => {
+        const { q: newQ } = newQueryParams;
+        const { q: oldQ } = oldQueryParams;
+
+        // SearchInput component is already scrubbing categories from route;
+        // Silently reset selectedId so that route change doesn't trigger
+        if (newQ !== oldQ) {
+            silentReset.value = true;
+            selectedId.value = undefined;
+        }
     }
 );
 </script>
