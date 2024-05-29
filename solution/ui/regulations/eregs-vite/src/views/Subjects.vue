@@ -111,10 +111,11 @@ provide("isAuthenticated", props.isAuthenticated);
 
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
-provide("commonRemoveList", commonRemoveList);
 const policySelectionsRemoveList = ["subjects"];
-provide("policySelectionsRemoveList", policySelectionsRemoveList);
 const searchInputRemoveList = commonRemoveList.concat(["q"]);
+
+provide("commonRemoveList", commonRemoveList);
+provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
 /**
  * @param {Object} queryParams - $route.query
@@ -255,11 +256,7 @@ provide("selectedParams", selectedParams);
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
 
-    if (
-        paramType === "page" ||
-        paramType === "categories" ||
-        paramType === "intcategories"
-    ) {
+    if (commonRemoveList.includes(paramType)) {
         return;
     }
 

@@ -65,7 +65,7 @@ watchEffect(() => {
 <template>
     <slot
         :data="combinedCategories.data"
-        :error="externalCategories.error"
+        :error="externalCategories.error || internalCategories.error"
         :loading="combinedCategories.loading"
     ></slot>
 </template>
