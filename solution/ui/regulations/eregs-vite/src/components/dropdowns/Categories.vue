@@ -1,6 +1,8 @@
 <script setup>
 import { inject, onBeforeMount, ref, watch } from "vue";
 
+import _isUndefined from "lodash/isUndefined";
+
 import { useRoute, useRouter } from "vue-router";
 
 import { DOCUMENT_TYPES_MAP } from "utilities/utils";
@@ -80,12 +82,22 @@ watch(
 watch(
     () => $route.query,
     (newQueryParams, oldQueryParams) => {
-        const { q: newQ, subjects: newSubjects } = newQueryParams;
-        const { q: oldQ, subjects: oldSubjects } = oldQueryParams;
+        const {
+            categories: newCategories,
+            intcategories: newIntcategories,
+        } = newQueryParams;
+        const {
+            categories: oldCategories,
+            intcategories: oldIntcategories,
+        } = oldQueryParams;
 
         // Other components are already scrubbing categories from route;
         // Silently reset selectedId so that route change doesn't trigger
-        if (newQ !== oldQ || newSubjects !== oldSubjects) {
+        if (
+            (_isUndefined(newCategories) && newCategories !== oldCategories) ||
+            (_isUndefined(newIntcategories) &&
+                newIntcategories !== oldIntcategories)
+        ) {
             silentReset.value = true;
             selectedId.value = undefined;
         }

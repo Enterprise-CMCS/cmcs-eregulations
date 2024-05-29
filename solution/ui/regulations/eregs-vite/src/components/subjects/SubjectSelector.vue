@@ -96,11 +96,12 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
+    const { page, categories, intcategories, ...restOfRoute } = $route.query;
+
     $router.push({
         name: "subjects",
         query: {
-            ...$route.query,
-            page: undefined,
+            ...restOfRoute,
             subjects: [subjectToAdd],
         },
     });
