@@ -34,6 +34,22 @@
                 padding-inline-end: 4px;
             }
 
+            .v-field__outline {
+                > .v-field__outline__start,
+                > .v-field__outline__end {
+                    border: 1px solid $border_color;
+                    opacity: 1;
+                }
+
+                > .v-field__outline__start {
+                    border-right: none;
+                }
+
+                > .v-field__outline__end {
+                    border-left: none;
+                }
+            }
+
             .v-field__field {
                 .v-field__input {
                     padding-inline: 4px;
