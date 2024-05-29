@@ -1,7 +1,8 @@
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
-
 import { useRouter, useRoute } from "vue-router";
+
+import useRemoveList from "composables/removeList";
 
 import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";
@@ -100,16 +101,15 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
-    removeList.forEach((item) => {
-        if (routeClone[item]) {
-            delete routeClone[item];
-        }
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList,
     });
 
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
+            ...cleanedRoute,
             subjects: [subjectToAdd],
         },
     });

@@ -2,6 +2,8 @@
 import { inject, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import useRemoveList from "composables/removeList";
+
 import _isArray from "lodash/isArray";
 
 const $router = useRouter();
@@ -17,16 +19,15 @@ const removeList = commonRemoveList.concat(additionalRemoveList);
 const removeClick = () => {
     const routeClone = { ...$route.query };
 
-    removeList.forEach((item) => {
-        if (routeClone[item]) {
-            delete routeClone[item];
-        }
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList,
     });
 
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
+            ...cleanedRoute,
         },
     });
 };

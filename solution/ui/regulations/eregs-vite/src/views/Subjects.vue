@@ -2,6 +2,8 @@
 import { provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import useRemoveList from "composables/removeList";
+
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
@@ -145,10 +147,15 @@ const executeSearch = (payload) => {
         }
     });
 
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList: searchInputRemoveList,
+    });
+
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
+            ...cleanedRoute,
             q: payload.query,
         },
     });
@@ -157,16 +164,15 @@ const executeSearch = (payload) => {
 const clearSearchInput = () => {
     const routeClone = { ...$route.query };
 
-    searchInputRemoveList.forEach((item) => {
-        if (routeClone[item]) {
-            delete routeClone[item];
-        }
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList: searchInputRemoveList,
     });
 
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
+            ...cleanedRoute,
         },
     });
 };
