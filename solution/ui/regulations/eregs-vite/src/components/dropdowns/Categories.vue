@@ -55,7 +55,7 @@ const itemProps = (item) => ({
 watch(
     () => selectedId.value,
     (newValue) => {
-        let categoriesObj = {};
+        const categoriesObj = {};
 
         const { categories, intcategories, ...restOfRoute } = $route.query;
 
@@ -91,8 +91,16 @@ watch(
             intcategories: oldIntcategories,
         } = oldQueryParams;
 
+        if (
+            (oldCategories && newIntcategories) ||
+            (oldIntcategories && newCategories)
+        ) {
+            return;
+        }
+
         // Other components are already scrubbing categories from route;
         // Silently reset selectedId so that route change doesn't trigger
+        // a route update and a subsequent re-fetch of content-search
         if (
             (_isUndefined(newCategories) && newCategories !== oldCategories) ||
             (_isUndefined(newIntcategories) &&
