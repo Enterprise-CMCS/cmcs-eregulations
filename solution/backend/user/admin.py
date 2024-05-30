@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 
-from .models import Profile, Division, DepartmentGroup
+from .models import DepartmentGroup, Division, Profile
 
 
 class ProfileInline(admin.StackedInline):
@@ -21,14 +21,11 @@ class CustomUserAdmin(BaseUserAdmin):
     def department(self, instance):
         return instance.profile.department
 
-
     def department_group(self, instance):
         return instance.profile.department_group.name if instance.profile.department_group else None
 
-
     def division(self, instance):
         return instance.profile.division.name if instance.profile.division else None
-
 
     def get_inline_instances(self, request, obj=None):
         if not obj:
