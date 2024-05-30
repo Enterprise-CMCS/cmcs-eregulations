@@ -34,9 +34,11 @@
                 padding-inline-end: 4px;
             }
 
-            &.v-field--variant-outlined.v-field--focused:not(.v-field--dirty) {
-                .v-label.v-field-label {
-                    visibility: visible;
+            &.v-field--variant-outlined.v-field--focused {
+                &:not(.v-field--dirty) {
+                    .v-label.v-field-label {
+                        visibility: visible;
+                    }
                 }
 
                 .v-field__outline {
