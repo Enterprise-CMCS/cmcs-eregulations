@@ -119,6 +119,10 @@
         min-height: unset;
         padding: 0;
 
+        &::after {
+            opacity: 0;
+        }
+
         &:hover > .v-list-item__overlay,
         &:focus-visible > .v-list-item__overlay,
         &.v-list-item--active > .v-list-item__overlay {
