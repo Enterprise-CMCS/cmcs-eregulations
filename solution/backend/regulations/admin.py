@@ -82,7 +82,6 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         )
 
     def create_user(self, claims) -> User:
-        department = claims.get("department")
         email = claims.get("email")
         jobcodes = claims.get("jobcodes")
 

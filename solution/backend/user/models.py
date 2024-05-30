@@ -13,9 +13,18 @@ class DepartmentGroup(models.Model):
 
 
 class Division(models.Model):
-    department_group = models.ForeignKey(DepartmentGroup, blank=True, null=True, related_name="divisions", on_delete=models.SET_NULL)
-    name = models.CharField(max_length=512, null=False, blank=False, unique=True)
-    abbreviation = models.CharField(max_length=64, null=True, blank=True)
+    department_group = models.ForeignKey(DepartmentGroup,
+                                         blank=True,
+                                         null=True,
+                                         related_name="divisions",
+                                         on_delete=models.SET_NULL)
+    name = models.CharField(max_length=512,
+                            null=False,
+                            blank=False,
+                            unique=True)
+    abbreviation = models.CharField(max_length=64,
+                                    null=True,
+                                    blank=True)
 
     def __str__(self):
         return self.name
@@ -24,8 +33,14 @@ class Division(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     department = models.CharField(max_length=100, blank=True, default='')
-    department_group = models.ForeignKey(DepartmentGroup, on_delete=models.SET_NULL, null=True, blank=True)
-    division = models.ForeignKey(Division, on_delete=models.SET_NULL, null=True, blank=True)
+    department_group = models.ForeignKey(DepartmentGroup,
+                                         on_delete=models.SET_NULL,
+                                         null=True,
+                                         blank=True)
+    division = models.ForeignKey(Division,
+                                 on_delete=models.SET_NULL,
+                                 null=True,
+                                 blank=True)
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
