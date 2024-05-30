@@ -12,8 +12,8 @@ from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
-from user.models import Profile, Group, Division, set_group_and_division
 
+from user.models import set_department_group_and_division
 
 from .models import (
     RegulationLinkConfiguration,
@@ -143,8 +143,7 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         department = claims.get("department")
         if department:
             user.profile.department = department
-            set_group_and_division(user.profile)
-
+            set_department_group_and_division(user.profile)
 
         # Check if there are any relevant jobcodes
         user.is_active = bool(relevant_jobcodes)

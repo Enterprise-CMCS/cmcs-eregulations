@@ -95,15 +95,11 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         # Ensure the user is created
         self.assertIsNotNone(user)
         profile = user.profile
-        profile.refresh_from_db()
-        print(f"Department: {profile.department}")
-        print(f"Group: {profile.group}")
-        print(f"Division: {profile.division}")
 
         # Ensure the user's profile has the correct department, group, and division
         self.assertEqual(profile.department, "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB")
-        self.assertIsNotNone(profile.group)
-        self.assertEqual(profile.group.name, "FMG")
+        self.assertIsNotNone(profile.department_group)
+        self.assertEqual(profile.department_group.name, "FMG")
         self.assertIsNotNone(profile.division)
         self.assertEqual(profile.division.name, "DFOE")
 
