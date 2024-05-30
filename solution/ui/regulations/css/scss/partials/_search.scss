@@ -28,7 +28,7 @@
     .v-field__append-inner i,
     .v-field__clearable i {
         opacity: 1;
-        color: $mid_blue;
+        color: $secondary_border_color;
     }
 
     .v-field__append-inner i {
@@ -59,17 +59,17 @@
 
     .v-field__clearable i {
         padding-right: 2px;
-        border-right: 1px solid $light_gray;
+        border-right: 1px solid $border_color;
     }
 
     .v-field__outline > * {
         opacity: 1;
-        border-color: $light_gray;
+        border-color: $border_color;
     }
 
     .v-field--focused {
         .v-field__outline > * {
-            border-color: $mid_blue;
+            border-color: $secondary_border_color;
         }
     }
 }
@@ -151,7 +151,7 @@
                 margin: $spacer-3 0;
 
                 h2 {
-                    border-bottom: 2px solid $mid_blue;
+                    border-bottom: 2px solid $secondary_border_color;
                     margin-block-end: 1em !important;
                 }
             }

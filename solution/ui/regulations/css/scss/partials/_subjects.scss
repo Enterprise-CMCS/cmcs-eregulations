@@ -34,10 +34,21 @@
                 padding-inline-end: 4px;
             }
 
+            &.v-field--variant-outlined.v-field--focused .v-field__outline {
+                > * {
+                    border-color: $secondary_border_color;
+                }
+            }
+
+            .v-field--focused {
+                .v-field__outline > * {
+                    border-color: $secondary_border_color;
+                }
+            }
+
             .v-field__outline {
-                > .v-field__outline__start,
-                > .v-field__outline__end {
-                    border: 1px solid $border_color;
+                > * {
+                    border-color: $border_color;
                     opacity: 1;
                 }
 
@@ -131,14 +142,15 @@
     .v-list-item-title {
         font-size: 14px;
         line-height: 22px;
-        padding: 8px 0 0;
+        padding: 4px 0;
     }
 
     .doc-type__label {
-        margin-top: 8px;
+        margin-top: 4px;
+        margin-bottom: 4px;
 
         &--internal {
-            margin-top: 16px;
+            margin-top: 12px;
         }
     }
 }
@@ -251,8 +263,8 @@
                 margin-top: 0;
 
                 .ds-c-choice:checked + label::before {
-                    background-color: $mid_blue;
-                    border-color: $mid_blue;
+                    background-color: $secondary_border_color;
+                    border-color: $secondary_border_color;
                 }
 
                 label {
