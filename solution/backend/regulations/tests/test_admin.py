@@ -100,8 +100,8 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertEqual(profile.department, "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB")
         self.assertIsNotNone(profile.department_group)
         self.assertEqual(profile.department_group.name, "FMG")
-        self.assertIsNotNone(profile.division)
-        self.assertEqual(profile.division.name, "DFOE")
+        self.assertIsNotNone(profile.department_division)
+        self.assertEqual(profile.department_division.name, "DFOE")
 
     # Ensure user with EREGS_ADMIN jobcode is staff, active and superuser
     def test_user_with_admin_jobcode(self):
