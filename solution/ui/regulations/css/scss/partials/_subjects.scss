@@ -34,9 +34,15 @@
                 padding-inline-end: 4px;
             }
 
-            &.v-field--variant-outlined.v-field--focused .v-field__outline {
-                > * {
-                    border-color: $secondary_border_color;
+            &.v-field--variant-outlined.v-field--focused:not(.v-field--dirty) {
+                .v-label.v-field-label {
+                    visibility: visible;
+                }
+
+                .v-field__outline {
+                    > * {
+                        border-color: $secondary_border_color;
+                    }
                 }
             }
 
