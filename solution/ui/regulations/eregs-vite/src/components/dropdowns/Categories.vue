@@ -75,7 +75,7 @@ watch(
 
         const cleanedRoute = useRemoveList({
             route: routeClone,
-            removeList
+            removeList,
         });
 
         $router.push({
@@ -126,14 +126,17 @@ const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
 
     const isIntcategories = currentPopState.includes("intcategories");
-    const isCategories = !isIntcategories && currentPopState.includes("categories");
+    const isCategories =
+        !isIntcategories && currentPopState.includes("categories");
 
     silentReset.value = true;
 
     if (isIntcategories) {
         // use regex to find a number of any length in a string that has the following pattern:
         // subjects?subjects=2&intcategories=3
-        const intcategories = currentPopState.match(/(?<=intcategories=)\d+/)[0];
+        const intcategories = currentPopState.match(
+            /(?<=intcategories=)\d+/
+        )[0];
         selectedId.value = `${intcategories}-intcategories`;
     } else if (isCategories) {
         // use regex to find a number of any length in a string that has the following pattern:
@@ -154,6 +157,7 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
     <v-select
         v-model="selectedId"
         class="filter__select filter__select--category"
+        data-testid="category-select"
         variant="outlined"
         clearable
         persistent-clear
@@ -170,7 +174,12 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
         :item-props="itemProps"
     >
         <template #item="{ props, item }">
-            <v-list-item v-bind="props">
+            <v-list-item
+                v-bind="props"
+                :data-testid="`${catTypeDict[item.raw.categoryType]}-${
+                    item.raw.catIndex
+                }`"
+            >
                 <DocTypeLabel
                     v-if="isAuthenticated && item.raw.catIndex == 0"
                     :class="`doc-type__label--${

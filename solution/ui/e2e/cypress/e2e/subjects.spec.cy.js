@@ -59,6 +59,49 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
 describe("Find by Subjects", () => {
     beforeEach(_beforeEach);
 
+    it("should not have a categories filter on initial load with no selected filter params", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects/");
+        cy.get("div[data-testid='category-select']").should("not.exist");
+    });
+
+    it("should have a categories filter after selecting a subject, and not have a categories filter after removing the subject", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects/");
+        cy.get("div[data-testid='category-select']").should("not.exist");
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .and("have.text", "Choose Category");
+    });
+
+    it("should update the URL when a category is selected", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects/");
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .and("have.text", "Choose Category");
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0'] div")
+            .eq(1)
+            .click({ force: true });
+        cy.url().should("include", "/subjects?subjects=63&categories=3");
+    });
+
     it("redirects /policy-repository to /subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/policy-repository?subjects=2&q=test");
@@ -701,7 +744,9 @@ describe("Subjects Page -- Pagination", () => {
         );
         cy.wait("@initialPage").then((interception) => {
             const count = interception.response.body.count;
-            cy.get(".search-results-count").contains(`1 - 50 of ${count} documents`);
+            cy.get(".search-results-count").contains(
+                `1 - 50 of ${count} documents`
+            );
         });
         cy.get(".pagination-control.right-control")
             .contains("Next")
@@ -709,7 +754,9 @@ describe("Subjects Page -- Pagination", () => {
         cy.wait("@page2").then((interception) => {
             const count = interception.response.body.count;
             cy.url().should("include", "page=2");
-            cy.get(".search-results-count").contains(`51 - 100 of ${count} documents`);
+            cy.get(".search-results-count").contains(
+                `51 - 100 of ${count} documents`
+            );
             cy.get(".current-page.selected").contains("2");
         });
     });
