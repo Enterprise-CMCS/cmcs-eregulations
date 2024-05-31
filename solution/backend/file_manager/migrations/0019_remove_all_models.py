@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('content_search', '0011_remove_v3_dependencies'),
         ('file_manager', '0018_auto_20240313_1400'),
+        ('resources', '0037_detangle_file_manager'),
     ]
 
     operations = [

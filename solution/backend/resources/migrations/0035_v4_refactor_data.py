@@ -264,13 +264,12 @@ def copy_resources_config(apps, schema_editor):
     AbstractPublicCategory = apps.get_model("resources", "AbstractPublicCategory")
     old = OldResourcesConfiguration.objects.first()
     new, _ = NewResourcesConfiguration.objects.get_or_create()
-    if old:
+    if old and old.fr_doc_category:
         try:
-            category = AbstractPublicCategory.objects.get(old_pk=old.fr_doc_category.pk)
+            new.fr_link_category = AbstractPublicCategory.objects.get(old_pk=old.fr_doc_category.pk)
+            new.save()
         except AbstractPublicCategory.DoesNotExist:
-            category = None
-        new.fr_link_category = category
-        new.save()
+            pass
 
 
 class Migration(migrations.Migration):
