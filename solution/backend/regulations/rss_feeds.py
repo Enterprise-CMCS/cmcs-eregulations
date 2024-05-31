@@ -1,7 +1,7 @@
 from dateutil import parser
 from django.contrib.syndication.views import Feed
 
-from resources.models import NewAbstractResource
+from resources.models import AbstractResource
 
 
 class ResourceFeed(Feed):
@@ -20,7 +20,7 @@ class ResourceFeed(Feed):
 
     def items(self):
         results = []
-        resources = NewAbstractResource.objects.filter(approved=True).select_subclasses()
+        resources = AbstractResource.objects.filter(approved=True).select_subclasses()
         # if there is no date value then we will use this placeholder date for the datepublished.
         place_holder_pubdate = '1970-01-01'
         for resource in resources:

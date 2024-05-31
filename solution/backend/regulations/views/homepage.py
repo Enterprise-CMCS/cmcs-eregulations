@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView
 
 from regcore.models import Part
 from regcore.serializers.toc import FrontPageTOCSerializer
-from resources.models import NewResourcesConfiguration
+from resources.models import ResourcesConfiguration
 
 logger = logging.getLogger(__name__)
 

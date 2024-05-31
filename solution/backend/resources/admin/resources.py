@@ -11,7 +11,7 @@ from resources.models import (
     AbstractCitation,
     AbstractInternalCategory,
     AbstractPublicCategory,
-    NewAbstractCategory,
+    AbstractCategory,
 )
 
 from . import (
@@ -39,7 +39,7 @@ class AbstractResourceAdmin(AbstractAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(
-            Prefetch("category", NewAbstractCategory.objects.all().select_subclasses()),
+            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
         )
 
     # Overrides the save method in django admin to handle many to many relationships.

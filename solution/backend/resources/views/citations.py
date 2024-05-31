@@ -3,8 +3,8 @@ from rest_framework import viewsets
 
 from resources.models import (
     AbstractCitation,
-    NewSection,
-    NewSubpart,
+    Section,
+    Subpart,
 )
 from resources.serializers import (
     AbstractCitationSerializer,
@@ -20,13 +20,13 @@ class CitationViewSet(viewsets.ReadOnlyModelViewSet):
 
 class SectionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SectionWithParentSerializer
-    queryset = NewSection.objects.prefetch_related(
-        Prefetch("parent", NewSubpart.objects.all()),
+    queryset = Section.objects.prefetch_related(
+        Prefetch("parent", Subpart.objects.all()),
     )
 
 
 class SubpartViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SubpartWithChildrenSerializer
-    queryset = NewSubpart.objects.prefetch_related(
-        Prefetch("children", NewSection.objects.all()),
+    queryset = Subpart.objects.prefetch_related(
+        Prefetch("children", Section.objects.all()),
     )

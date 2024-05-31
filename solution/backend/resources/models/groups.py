@@ -5,10 +5,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
 
-from .resources import NewAbstractResource
+from .resources import AbstractResource
 
 
-class ResourceGroup(NewAbstractResource):
+class ResourceGroup(AbstractResource):
     name = models.CharField(
         max_length=512,
         blank=True,
@@ -22,7 +22,7 @@ class ResourceGroup(NewAbstractResource):
         help_text="Common identifiers to use when grouping resources. For example, when grouping Federal Register Documents, "
                   "use the docket number prefix, like \"CMS-1234-\".",
     )
-    resources = models.ManyToManyField(NewAbstractResource, blank=True, related_name="resource_groups")
+    resources = models.ManyToManyField(AbstractResource, blank=True, related_name="resource_groups")
 
     def __str__(self):
         if self.name:
@@ -41,7 +41,7 @@ class ResourceGroup(NewAbstractResource):
 
 def update_group(group):
     post_save.disconnect(post_save_group, sender=ResourceGroup)
-    post_save.disconnect(post_save_group_resources, sender=NewAbstractResource)
+    post_save.disconnect(post_save_group_resources, sender=AbstractResource)
     try:
         query = group.resources.all().order_by("-date")
         if not query:
@@ -61,7 +61,7 @@ def update_group(group):
 
     finally:
         post_save.connect(post_save_group, sender=ResourceGroup)
-        post_save.connect(post_save_group_resources, sender=NewAbstractResource)
+        post_save.connect(post_save_group_resources, sender=AbstractResource)
 
 
 @receiver(post_save, sender=ResourceGroup)
@@ -69,7 +69,7 @@ def post_save_group(sender, instance, **kwargs):
     update_group(instance)
 
 
-@receiver(post_save, sender=NewAbstractResource)
+@receiver(post_save, sender=AbstractResource)
 def post_save_group_resources(sender, instance, **kwargs):
     for i in instance.resource_groups.all():
         update_group(i)

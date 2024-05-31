@@ -13,7 +13,7 @@ from django.db.models.functions import Substr
 
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
-from resources.models import NewAbstractResource
+from resources.models import AbstractResource
 
 
 class ContentIndexQuerySet(models.QuerySet):
@@ -104,5 +104,5 @@ class ContentIndex(models.Model):
     rank_b_string = models.TextField(blank=True, null=True)
     rank_c_string = models.TextField(blank=True, null=True)
     rank_d_string = models.TextField(blank=True, null=True)
-    resource = models.ForeignKey(NewAbstractResource, blank=True, null=True, on_delete=models.CASCADE)
+    resource = models.ForeignKey(AbstractResource, blank=True, null=True, on_delete=models.CASCADE)
     objects = ContentIndexManager()

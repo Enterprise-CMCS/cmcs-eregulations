@@ -3,7 +3,7 @@ from django.db.models import Count
 
 from common.admin import AbstractAdmin
 from resources.models import (
-    NewAbstractResource,
+    AbstractResource,
     ResourceGroup,
 )
 
@@ -18,7 +18,7 @@ class ResourceGroupAdmin(AbstractAdmin):
     filter_horizontal = ["resources"]
 
     manytomany_lookups = {
-        "resources": lambda: NewAbstractResource.objects.all().select_subclasses(),
+        "resources": lambda: AbstractResource.objects.all().select_subclasses(),
     }
 
     def get_queryset(self, request):

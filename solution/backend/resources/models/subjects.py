@@ -4,7 +4,7 @@ from common.fields import CombinedNaturalSort
 from common.mixins import DisplayNameFieldMixin
 
 
-class NewSubject(models.Model, DisplayNameFieldMixin):
+class Subject(models.Model, DisplayNameFieldMixin):
     full_name = models.CharField(max_length=512, blank=False)
     short_name = models.CharField(max_length=50, blank=True)
     abbreviation = models.CharField(max_length=10, blank=True)

@@ -4,7 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from resources.models import (
     AbstractPublicResource,
-    NewAbstractResource,
+    AbstractResource,
     ResourceGroup,
 )
 from resources.serializers import ResourceGroupSerializer
@@ -15,7 +15,7 @@ class ResourceGroupViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        resource_filter = (NewAbstractResource
+        resource_filter = (AbstractResource
                            if self.request.user.is_authenticated else
                            AbstractPublicResource).objects.select_subclasses()
         return ResourceGroup.objects.prefetch_related(
