@@ -1,5 +1,3 @@
-from resources.old_models import *  # noqa
-
 from .categories import *  # noqa
 from .citations import *  # noqa
 from .groups import *  # noqa

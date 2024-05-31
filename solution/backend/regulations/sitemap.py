@@ -4,7 +4,7 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
 from regcore.models import Part
-from resources.models import AbstractResource
+from resources.models import NewAbstractResource
 
 
 class PartSitemap(Sitemap):
@@ -64,7 +64,7 @@ class SupplementalContentSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return AbstractResource.objects.filter(approved=True)
+        return NewAbstractResource.objects.filter(approved=True)
 
     def lastmod(self, item):
         return item.updated_at

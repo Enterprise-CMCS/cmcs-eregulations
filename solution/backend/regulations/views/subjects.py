@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
 
-from file_manager.models import Subject
+from resources.models import NewSubject
 
 
 class SubjectsView(TemplateView):
@@ -12,11 +12,11 @@ class SubjectsView(TemplateView):
         subject_id = self.request.GET.get('subjects')
 
         try:
-            subject = Subject.objects.get(id=subject_id)
+            subject = NewSubject.objects.get(id=subject_id)
             subject_abbreviation = subject.abbreviation
             subject_fullname = subject.full_name
             subject_name = subject_abbreviation if subject_abbreviation else subject_fullname
-        except (ValueError, Subject.DoesNotExist):
+        except (ValueError, NewSubject.DoesNotExist):
             subject_name = None
 
         host = self.request.get_host()

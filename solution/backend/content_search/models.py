@@ -13,8 +13,7 @@ from django.db.models.functions import Substr
 
 from common.constants import QUOTE_TYPES
 from common.fields import VariableDateField
-from file_manager.models import AbstractRepoCategory, Division, Subject, UploadedFile
-from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument, SupplementalContent
+from resources.models import NewAbstractResource
 
 
 class ContentIndexQuerySet(models.QuerySet):
@@ -100,20 +99,10 @@ class ContentIndex(models.Model):
     url = models.CharField(max_length=512, blank=True, null=True)
     extract_url = models.CharField(max_length=512, blank=True, null=True)
     ignore_robots_txt = models.BooleanField(default=False)
-    subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
-    division = models.ForeignKey(Division, null=True, blank=True, on_delete=models.SET_NULL)
-    upload_category = models.ForeignKey(
-        AbstractRepoCategory, related_name="content", blank=True, null=True, on_delete=models.CASCADE)
-    category = models.ForeignKey(
-        AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="content"
-    )
-    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="content", verbose_name="Regulation Locations")
     resource_type = models.CharField(max_length=25, null=True, blank=True)
     rank_a_string = models.TextField(blank=True, null=True)
     rank_b_string = models.TextField(blank=True, null=True)
     rank_c_string = models.TextField(blank=True, null=True)
     rank_d_string = models.TextField(blank=True, null=True)
-    file = models.ForeignKey(UploadedFile, blank=True, null=True, on_delete=models.CASCADE)
-    supplemental_content = models.ForeignKey(SupplementalContent, blank=True, null=True, on_delete=models.CASCADE)
-    fr_doc = models.ForeignKey(FederalRegisterDocument, blank=True, null=True, on_delete=models.CASCADE)
+    resource = models.ForeignKey(NewAbstractResource, blank=True, null=True, on_delete=models.CASCADE)
     objects = ContentIndexManager()
