@@ -660,6 +660,7 @@ describe("Find by Subjects", () => {
     });
 
     it("should only show category type labels when logged in", () => {
+        cy.clearIndexedDB();
         cy.viewport("macbook-15");
 
         // Visit without authenticating
@@ -705,6 +706,7 @@ describe("Find by Subjects", () => {
     });
 
     it("should have a categories filter after selecting a subject, and not have a categories filter after removing the subject", () => {
+        cy.clearIndexedDB();
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password, landingPage: "/subjects/" });
         cy.visit("/subjects/");
