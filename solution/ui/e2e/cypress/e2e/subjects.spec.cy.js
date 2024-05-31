@@ -24,6 +24,14 @@ const _beforeEach = () => {
     cy.intercept("**/v3/file-manager/subjects", {
         fixture: "subjects.json",
     }).as("subjects");
+
+    cy.intercept("**/v3/file-manager/categories/tree", {
+        fixture: "categories-internal-tree.json",
+    }).as("internalCategories");
+
+    cy.intercept("**/v3/resources/categories/tree", {
+        fixture: "categories-tree.json",
+    }).as("categories");
 };
 
 const _beforePaginate = () => {
@@ -58,49 +66,6 @@ Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
 
 describe("Find by Subjects", () => {
     beforeEach(_beforeEach);
-
-    it("should not have a categories filter on initial load with no selected filter params", () => {
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-        cy.visit("/subjects/");
-        cy.get("div[data-testid='category-select']").should("not.exist");
-    });
-
-    it("should have a categories filter after selecting a subject, and not have a categories filter after removing the subject", () => {
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-        cy.visit("/subjects/");
-        cy.get("div[data-testid='category-select']").should("not.exist");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", "Managed Care")
-            .click({ force: true });
-        cy.get("div[data-testid='category-select']")
-            .should("exist")
-            .and("have.text", "Choose Category");
-    });
-
-    it("should update the URL when a category is selected", () => {
-        cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-        cy.visit("/subjects/");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", "Managed Care")
-            .click({ force: true });
-        cy.get("div[data-testid='category-select']")
-            .should("exist")
-            .and("have.text", "Choose Category");
-        cy.get("div[data-testid='category-select']").click();
-        cy.get("div[data-testid='external-0'] div")
-            .eq(1)
-            .click({ force: true });
-        cy.url().should("include", "/subjects?subjects=63&categories=3");
-    });
 
     it("redirects /policy-repository to /subjects", () => {
         cy.viewport("macbook-15");
@@ -673,6 +638,186 @@ describe("Find by Subjects", () => {
         cy.get("@contentSearch.all").then((interception) => {
             expect(interception).to.have.length(0);
         });
+    });
+
+    it("should not have a categories filter on initial load with no selected filter params", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects/");
+        cy.get("div[data-testid='category-select']").should("not.exist");
+    });
+
+    it("should have a categories filter on initial load if page visited with a categories query param in URL", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects/?categories=3");
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find(".v-select__selection")
+            .should("have.text", "Related Statutes");
+        cy.get("div[data-testid='category-select']")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("not.be.visible");
+    });
+
+    it("should only show category type labels when logged in", () => {
+        cy.viewport("macbook-15");
+
+        // Visit without authenticating
+        cy.visit("/subjects?q=test");
+
+        // Assert that category select label is visible
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
+
+        // Open category select dropdown and assert that
+        // Doc Type label does not exist
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']")
+            .find(".doc-type__label")
+            .should("not.exist");
+
+        // Assert that internal categories do not exist
+        cy.get("div[data-testid='internal-0']").should("not.exist");
+
+        // Log in and visit the same page
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects?q=test");
+
+        // Open category select dropdown and assert that
+        // Doc Type label is visible
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']")
+            .find(".doc-type__label")
+            .should("include.text", " Public")
+            .find("i")
+            .should("have.class", "fa-users");
+        cy.get("div[data-testid='internal-0']")
+            .should("exist")
+            .scrollIntoView();
+        cy.get("div[data-testid='internal-0']")
+            .find(".doc-type__label")
+            .should("include.text", " Internal")
+            .find("i")
+            .should("have.class", "fa-key");
+    });
+
+    it("should have a categories filter after selecting a subject, and not have a categories filter after removing the subject", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects/");
+
+        // Assert that the category filter is not visible
+        cy.get("div[data-testid='category-select']").should("not.exist");
+
+        // Select subject
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
+
+        // Assert that the category filter is visible
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
+
+        // Remove subject
+        cy.get("button[data-testid=remove-subject-63]").click({ force: true });
+
+        // Assert that the category filter is not visible
+        cy.get("div[data-testid='category-select']").should("not.exist");
+    });
+
+    it("should clear selected category if query string or subject is toggled", () => {
+        cy.viewport("macbook-15");
+
+        // Log in
+        cy.eregsLogin({ username, password, landingPage: "/subjects/" });
+        cy.visit("/subjects/");
+
+        // Assert that category filter is not visible
+        cy.get("div[data-testid='category-select']").should("not.exist");
+
+        // Select a subject
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
+
+        // Assert that the category filter is visible
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
+
+        // Select a category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        // Assert that category select label changes and
+        // URL is updated with selected category ID
+        cy.get("div[data-testid='category-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Related Statutes");
+        cy.get("div[data-testid='category-select']")
+            .find("label")
+            .should("not.be.visible");
+        cy.url().should("include", "/subjects?subjects=63&categories=3");
+
+        // Select a different subject
+        cy.get(`button[data-testid=add-subject-1]`).click({
+            force: true,
+        });
+
+        // Assert that category is removed from URL and
+        // category select label is reset
+        cy.url().should("include", "/subjects?subjects=1");
+        cy.url().should("not.include", "&categories=3");
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
+
+        // Select a new category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        // Assert that category select label changes and URL updates
+        cy.get("div[data-testid='category-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Related Statutes");
+        cy.get("div[data-testid='category-select']")
+            .find("label")
+            .should("not.be.visible");
+        cy.url().should("include", "/subjects?subjects=1&categories=3");
+
+        // Add text query and submit
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        // Assert that category is removed from URL and
+        // category select label is reset
+        cy.url().should("include", "/subjects?subjects=1&q=test");
+        cy.url().should("not.include", "&categories=3");
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
     });
 
     it("goes to another SPA page from the subjects page", () => {
