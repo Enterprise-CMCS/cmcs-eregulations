@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content_search', '0011_remove_contentindex_category_and_more'),
+        ('content_search', '0011_remove_v3_dependencies'),
         ('file_manager', '0018_auto_20240313_1400'),
     ]
 
