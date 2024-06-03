@@ -107,6 +107,15 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertEqual(user.profile.department, "/DHHS/CMS/OA/CMCS/DEHPG")
         self.assertEqual(user.profile.department_group.name, "DEHPG")
         self.assertIsNone(user.profile.department_division)
+    def test_update_user_with_changed_department(self):
+        self.mock_claims["department"] = "my department"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertEqual(user.profile.department, "my department")
+        self.mock_claims["department"] = "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB"
+        user = self.backend.create_user(self.mock_claims)
+        self.assertEqual(user.profile.department, "/DHHS/CMS/OA/CMCS/FMG/DFOE/FOEBB")
+        self.assertEqual(user.profile.department_group.name, "FMG")
+        self.assertEqual(user.profile.department_division.name, "DFOE")
 
     def test_user_with_admin_jobcode(self):
         self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
