@@ -2,19 +2,19 @@
 
 import django.db.models.deletion
 from django.db import migrations, models
+from django.db.models import Case, When, OuterRef, Subquery
 
 
 def migrate_resources(apps, schema_editor):
     ContentIndex = apps.get_model("content_search", "ContentIndex")
     AbstractPublicResource = apps.get_model("resources", "AbstractPublicResource")
     AbstractInternalResource = apps.get_model("resources", "AbstractInternalResource")
-    for i in ContentIndex.objects.all():
-        if i.file:
-            i.resource = AbstractInternalResource.objects.get(old_pk=i.file.pk)
-        elif i.fr_doc or i.supplemental_content:
-            old_resource = i.fr_doc or i.supplemental_content
-            i.resource = AbstractPublicResource.objects.get(old_pk=old_resource.pk)
-        i.save()
+    ContentIndex.objects.update(resource=Case(
+        When(file__isnull=False, then=Subquery(AbstractInternalResource.objects.filter(old_pk=OuterRef("file__pk")).values("pk"))),
+        When(fr_doc__isnull=False, then=Subquery(AbstractPublicResource.objects.filter(old_pk=OuterRef("fr_doc__pk")).values("pk"))),
+        When(supplemental_content__isnull=False, then=Subquery(AbstractPublicResource.objects.filter(old_pk=OuterRef("supplemental_content__pk")).values("pk"))),
+        default=None,
+    ))
 
 
 class Migration(migrations.Migration):
