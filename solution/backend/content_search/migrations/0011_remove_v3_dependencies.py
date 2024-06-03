@@ -5,7 +5,11 @@ from django.db import migrations, models
 from django.db.models import Case, When, OuterRef, Subquery
 
 
+TIMEOUT_MINUTES = 10
+
+
 def migrate_resources(apps, schema_editor):
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
     ContentIndex = apps.get_model("content_search", "ContentIndex")
     AbstractPublicResource = apps.get_model("resources", "AbstractPublicResource")
     AbstractInternalResource = apps.get_model("resources", "AbstractInternalResource")
