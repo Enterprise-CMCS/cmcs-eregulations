@@ -116,12 +116,12 @@
         margin-top: 8px;
         box-shadow: unset;
         max-width: 300px !important;
-        overflow-x: hidden;
 
         & > .v-list {
             margin-top: 8px;
             border: 1px solid $border_color;
             box-shadow: unset;
+            overflow-x: hidden;
         }
     }
 
