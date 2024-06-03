@@ -115,6 +115,8 @@
     .v-menu > .v-overlay__content {
         margin-top: 8px;
         box-shadow: unset;
+        max-width: 300px !important;
+        overflow-x: hidden;
 
         & > .v-list {
             margin-top: 8px;
@@ -155,6 +157,7 @@
         font-size: 14px;
         line-height: 22px;
         padding: 4px 0;
+        white-space: normal;
     }
 
     .doc-type__label {
