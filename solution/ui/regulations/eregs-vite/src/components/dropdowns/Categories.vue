@@ -45,8 +45,10 @@ onBeforeMount(() => {
     const { categories, intcategories } = $route.query;
 
     if (categories) {
+        silentReset.value = true;
         selectedId.value = `${categories}-categories`;
     } else if (intcategories) {
+        silentReset.value = true;
         selectedId.value = `${intcategories}-intcategories`;
     }
 });
