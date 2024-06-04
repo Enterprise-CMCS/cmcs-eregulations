@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     selectedSubjectParts: {
         type: Array,
         required: true,
@@ -9,9 +9,10 @@ const props = defineProps({
 
 <template>
     <h1>
-        <template v-for="(part, index) in selectedSubjectParts" :key="part[0]">
+        <template v-for="(part, index) in selectedSubjectParts">
             <span
                 v-if="part[0]"
+                :key="part[0]"
                 class="subj-heading__span"
                 :class="{
                     'subj-heading__span--border': index === 0,

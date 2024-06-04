@@ -1,5 +1,5 @@
 <script>
-import { getCategories } from "utilities/api";
+import { getExternalCategories } from "utilities/api";
 
 import RecentChangesContainer from "./RecentChangesContainer.vue";
 
@@ -14,7 +14,9 @@ export default {
     },
 
     async created() {
-        const categoriesResult = await getCategories(this.apiUrl);
+        const categoriesResult = await getExternalCategories({
+            apiUrl: this.apiUrl,
+        });
         this.categories = categoriesResult
             .flatMap((cat) =>
                 cat.parent?.name === "Subregulatory Guidance"
@@ -22,19 +24,12 @@ export default {
                     : []
             )
             .join("");
-
-        this.categoryNames = categoriesResult
-            .flatMap((cat) =>
-                cat.parent?.name === "Subregulatory Guidance" ? cat.name : []
-            )
-            .join(",");
     },
 
     data() {
         return {
             tab: 0,
             categories: null,
-            categoryNames: null,
         };
     },
 
@@ -46,7 +41,7 @@ export default {
 
 <template>
     <div>
-        <v-tabs grow v-model="tab">
+        <v-tabs v-model="tab" grow>
             <v-tab class="content-tabs" tabindex="0">
                 Recent Subregulatory Guidance
             </v-tab>

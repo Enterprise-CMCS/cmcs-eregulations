@@ -2,6 +2,8 @@
 import { inject, ref, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import useRemoveList from "composables/removeList";
+
 import _isArray from "lodash/isArray";
 
 const $router = useRouter();
@@ -10,30 +12,22 @@ const $route = useRoute();
 const selectedParams = inject("selectedParams");
 const FilterTypesDict = inject("FilterTypesDict");
 
-const removeClick = (event) => {
-    const { type, id } = event.target.dataset;
+const commonRemoveList = inject("commonRemoveList", []);
+const additionalRemoveList = inject("policySelectionsRemoveList", []);
+const removeList = commonRemoveList.concat(additionalRemoveList);
+
+const removeClick = () => {
     const routeClone = { ...$route.query };
-    const paramsToUpdate = routeClone[type];
 
-    const paramsArray = _isArray(paramsToUpdate)
-        ? paramsToUpdate
-        : [paramsToUpdate];
-
-    const filteredParamsArray = paramsArray.filter((paramId) => paramId !== id);
-
-    const paramsToPush =
-        filteredParamsArray.length > 0
-            ? { [type]: filteredParamsArray }
-            : {};
-
-    delete routeClone[type];
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList,
+    });
 
     $router.push({
         name: "subjects",
         query: {
-            ...routeClone,
-            ...paramsToPush,
-            page: undefined,
+            ...cleanedRoute,
         },
     });
 };
@@ -44,6 +38,7 @@ watch(
     () => selectedParams.paramString,
     async () => {
         selections.value = selectedParams.paramsArray
+            .filter((param) => FilterTypesDict[param.type])
             .map((param) => ({
                 label: FilterTypesDict[param.type],
                 id: param.id,

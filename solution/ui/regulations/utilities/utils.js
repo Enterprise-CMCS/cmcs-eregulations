@@ -35,6 +35,8 @@ const PARAM_MAP = {
     q: "q",
     type: "resource-type",
     page: "page",
+    categories: "categories",
+    intcategories: "internal_categories",
 };
 
 /**
@@ -59,6 +61,8 @@ const PARAM_MAP = {
  * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
  * @property {function} type - Validates that the type is either "external", "internal", or "all"
  * @property {function} page - Validates that the page is a number
+ * @property {function} categories - Validates that the category is a number
+ * @property {function} intcategories - Validates that the internal category is a number
  */
 const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
@@ -66,6 +70,8 @@ const PARAM_VALIDATION_DICT = {
     q: (query) => query === undefined || query.length > 0,
     type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
     page: (page) => !Number.isNaN(parseInt(page, 10)),
+    categories: (category) => !Number.isNaN(parseInt(category, 10)),
+    intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
 };
 
 /**

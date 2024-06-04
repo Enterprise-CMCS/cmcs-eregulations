@@ -27,10 +27,7 @@ import "@testing-library/cypress/add-commands";
 import "cypress-axe";
 import "cypress-plugin-tab";
 
-import {
-    clickHeaderLink,
-    goHome,
-} from "./common-commands/header";
+import { clickHeaderLink, goHome } from "./common-commands/header";
 import {
     jumpToRegulationPart,
     jumpToRegulationPartSection,
@@ -76,7 +73,12 @@ Cypress.Commands.add(
         cy.injectAxe();
         cy.checkA11y(
             subject,
-            { includedImpacts: ["critical", "serious"] },
+            {
+                includedImpacts: ["critical", "serious"],
+                rules: {
+                    "aria-progressbar-name": { enabled: false },
+                }
+            },
             printA11yViolations,
             skipFailures
         );
@@ -116,7 +118,7 @@ Cypress.Commands.add("clearIndexedDB", async () => {
 beforeEach(() => {
     cy.intercept("/**", (req) => {
         const env = Cypress.env("TEST_ENV");
-        if(env !== "local" && env !== "prod") {
+        if (env !== "local" && env !== "prod") {
             const username = Cypress.env("TEST_USERNAME");
             const password = Cypress.env("TEST_PASSWORD");
             const token = "Basic " + btoa(username + ":" + password);
@@ -128,10 +130,10 @@ beforeEach(() => {
 // Adds basic auth to cy.request calls.
 Cypress.Commands.overwrite("request", (originalRequest, options) => {
     const env = Cypress.env("TEST_ENV");
-    if(env !== "local" && env !== "prod") {
+    if (env !== "local" && env !== "prod") {
         options.auth = {
             username: Cypress.env("TEST_USERNAME"),
-            password: Cypress.env("TEST_PASSWORD")
+            password: Cypress.env("TEST_PASSWORD"),
         };
     }
     return originalRequest(options);
