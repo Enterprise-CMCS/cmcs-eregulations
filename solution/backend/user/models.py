@@ -57,15 +57,7 @@ def set_department_group_and_division(profile, save_profile=True):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        profile = Profile.objects.create(user=instance)
-        set_department_group_and_division(profile, save_profile=False)
-        profile.save()
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    if hasattr(instance, 'profile'):
-        set_department_group_and_division(instance.profile, save_profile=False)
-        instance.profile.save()
+def update_user_profile(sender, instance, created, **kwargs):
+    profile = Profile.objects.create(user=instance) if created else instance.profile
+    set_department_group_and_division(profile, save_profile=False)
+    profile.save()
