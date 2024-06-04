@@ -24,7 +24,6 @@ from .models import (
     StatuteLinkConverter,
 )
 
-
 admin.site.logout_template = 'admin/logged_out.html'
 
 
