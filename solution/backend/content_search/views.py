@@ -2,30 +2,28 @@ import json
 
 import requests
 from django.conf import settings
-from django.db.models import F, Prefetch
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from common.api import OpenApiQueryParameter
 from common.auth import SettingsAuthentication
 from common.functions import establish_client
-from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-#from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
-#$from resources.old_views.mixins import LocationFiltererMixin
+from common.mixins import OptionalPaginationMixin
 
+# from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
+# from resources.old_views.mixins import LocationFiltererMixin
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentUpdateSerializer
 
 
-class ContentSearchViewset(viewsets.ReadOnlyModelViewSet): #LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+# was (LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     queryset = ContentIndex.objects.all()
     paginate_by_default = True
@@ -48,7 +46,8 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet): #LocationFiltererMixi
     #                                       "Search for text within file metadata. Searches document name, file name, "
     #                                       "date, and summary/description.", str, False),
     #                 OpenApiQueryParameter("resource-type",
-    #                                       "Limit results to only resources found within this resource type.  Internal, External,"
+    #                                       "Limit results to only resources found within this resource type.
+    #   Internal, External,"
     #                                       "all. Use \"&resource-type=external\"", str, ''),
     #                 ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
     # )
@@ -165,7 +164,8 @@ class InvokeTextExtractorViewset(APIView):
 
         if fr_doc_id:
             try:
-                doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
+                # doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
+                doc = None
                 response = requests.get(
                     f"https://www.federalregister.gov/api/v1/documents/{doc.document_number}.json",
                     timeout=20,

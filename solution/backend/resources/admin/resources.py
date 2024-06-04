@@ -8,10 +8,10 @@ from django.utils import timezone
 from common.admin import AbstractAdmin
 from common.filters import IndexPopulatedFilter
 from resources.models import (
+    AbstractCategory,
     AbstractCitation,
     AbstractInternalCategory,
     AbstractPublicCategory,
-    AbstractCategory,
 )
 
 from . import (
@@ -19,7 +19,7 @@ from . import (
     widgets,
 )
 
-#from resources.serializers.locations import AbstractLocationPolymorphicSerializer
+# from resources.serializers.locations import AbstractLocationPolymorphicSerializer
 
 
 class AbstractResourceAdmin(AbstractAdmin):
@@ -48,8 +48,8 @@ class AbstractResourceAdmin(AbstractAdmin):
         # Compute diff of selected and saved citations for the changelog
         form.cleaned_data["cfr_citations"]
         list(form.instance.cfr_citations.all().select_subclasses())
-        #additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_citations]
-        #removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_citations if x not in selection]
+        # additions = [AbstractLocationPolymorphicSerializer(x).data for x in selection if x not in saved_citations]
+        # removals = [AbstractLocationPolymorphicSerializer(x).data for x in saved_citations if x not in selection]
         additions = []
         removals = []
 

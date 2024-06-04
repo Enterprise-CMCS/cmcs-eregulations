@@ -10,13 +10,13 @@ class ContentListSerializer(serializers.Serializer):
     summary_string = serializers.CharField()
     locations = serializers.SerializerMethodField()
     resource_type = serializers.CharField()
-    #subjects = SubjectSerializer(many=True, read_only=True)
+    # subjects = SubjectSerializer(many=True, read_only=True)
     category = serializers.SerializerMethodField()
     url = serializers.CharField()
     id = serializers.IntegerField()
     document_name_headline = HeadlineField()
     summary_headline = HeadlineField()
-    #division = DivisionWithGroupSerializer()
+    # division = DivisionWithGroupSerializer()
 
 
 class ContentSearchSerializer(ContentListSerializer, ):
