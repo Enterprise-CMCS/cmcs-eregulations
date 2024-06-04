@@ -10,12 +10,12 @@ from common.fields import (
 )
 from common.mixins import DisplayNameFieldMixin
 
-from .categories import NewAbstractCategory
+from .categories import AbstractCategory
 from .citations import AbstractCitation
-from .subjects import NewSubject
+from .subjects import Subject
 
 
-class NewAbstractResource(models.Model, DisplayNameFieldMixin):
+class AbstractResource(models.Model, DisplayNameFieldMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     approved = models.BooleanField(
@@ -23,7 +23,7 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Documents will be visible on eRegulations to all authorized users once they are approved.",
     )
     category = models.ForeignKey(
-        NewAbstractCategory,
+        AbstractCategory,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -47,7 +47,7 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
     )
 
     subjects = models.ManyToManyField(
-        NewSubject,
+        Subject,
         blank=True,
         related_name="resources",
         help_text="Select subjects related to this document. Hold down \"Control\", "
@@ -88,14 +88,14 @@ class NewAbstractResource(models.Model, DisplayNameFieldMixin):
         super().save(*args, **kwargs)
 
 
-class AbstractPublicResource(NewAbstractResource):
+class AbstractPublicResource(AbstractResource):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
         if self.url and AbstractPublicResource.objects.filter(url__iexact=self.url).exclude(pk=self.pk):
             raise ValidationError(f"A public resource with the URL \"{self.url}\" already exists.")
 
 
-class AbstractInternalResource(NewAbstractResource):
+class AbstractInternalResource(AbstractResource):
     # TODO: add division foreignkey
     # help_text="Choose the Division that can see this document on eRegulations."
     #           "If it should be visible to everyone who is logged in, choose \"Visible to all CMCS\"."

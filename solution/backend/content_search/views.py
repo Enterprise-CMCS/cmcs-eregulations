@@ -2,131 +2,130 @@ import json
 
 import requests
 from django.conf import settings
-from django.db.models import F, Prefetch
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.exceptions import NotAuthenticated
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from common.api import OpenApiQueryParameter
 from common.auth import SettingsAuthentication
 from common.functions import establish_client
-from common.mixins import PAGINATION_PARAMS, OptionalPaginationMixin
-from file_manager.models import AbstractRepoCategory, Division, Group, Subject
-from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
-from resources.old_views.mixins import LocationFiltererMixin
+from common.mixins import OptionalPaginationMixin
 
+# from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
+# from resources.old_views.mixins import LocationFiltererMixin
 from .models import ContentIndex
-from .serializers import ContentListSerializer, ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentUpdateSerializer
 
 
-class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+# was (LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     queryset = ContentIndex.objects.all()
     paginate_by_default = True
     location_filter_prefix = "locations__"
     pagination_class = OptionalPaginationMixin.pagination_class
 
-    @extend_schema(
-        description="Retrieve list of uploaded files",
-        parameters=[
-                    OpenApiQueryParameter("category_details",
-                                          "Specify whether to show details of a category, or just the ID.",
-                                          bool, False),
-                    OpenApiQueryParameter("location_details",
-                                          "Specify whether to show details of a location, or just the ID.",
-                                          bool, False),
-                    OpenApiQueryParameter("subjects",
-                                          "Limit results to only resources found within these subjects. Use "
-                                          "\"&subjects=X&subjects=Y\" for multiple.", str, False),
-                    OpenApiQueryParameter("q",
-                                          "Search for text within file metadata. Searches document name, file name, "
-                                          "date, and summary/description.", str, False),
-                    OpenApiQueryParameter("resource-type",
-                                          "Limit results to only resources found within this resource type.  Internal, External,"
-                                          "all. Use \"&resource-type=external\"", str, ''),
-                    ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
-    )
+    # @extend_schema(
+    #     description="Retrieve list of uploaded files",
+    #     parameters=[
+    #                 OpenApiQueryParameter("category_details",
+    #                                       "Specify whether to show details of a category, or just the ID.",
+    #                                       bool, False),
+    #                 OpenApiQueryParameter("location_details",
+    #                                       "Specify whether to show details of a location, or just the ID.",
+    #                                       bool, False),
+    #                 OpenApiQueryParameter("subjects",
+    #                                       "Limit results to only resources found within these subjects. Use "
+    #                                       "\"&subjects=X&subjects=Y\" for multiple.", str, False),
+    #                 OpenApiQueryParameter("q",
+    #                                       "Search for text within file metadata. Searches document name, file name, "
+    #                                       "date, and summary/description.", str, False),
+    #                 OpenApiQueryParameter("resource-type",
+    #                                       "Limit results to only resources found within this resource type.
+    #   Internal, External,"
+    #                                       "all. Use \"&resource-type=external\"", str, ''),
+    #                 ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
+    # )
     def list(self, request):
-        locations = self.request.GET.getlist("locations")
-        subjects = self.request.GET.getlist("subjects")
-        category = self.request.GET.getlist("category")
-        resource_type = self.request.GET.get("resource-type")
-        search_query = self.request.GET.get("q")
-        paginate = self.request.GET.get("paginate") != 'false'
-        query = self.queryset
-        q_obj = self.get_location_filter(locations)
-        if q_obj:
-            query = query.filter(q_obj)
-        if subjects:
-            if subjects[0] == 'all':
-                query = query.filter(subjects__isnull=False)
-            else:
-                query = query.filter(subjects__id__in=subjects)
-        if category:
-            query = query.filter(category__id=category)
-        locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        subjects_prefetch = Subject.objects.all()
-        category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
-        repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
-                                                     .select_related("repositorysubcategory__parent")
-        division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
+        # locations = self.request.GET.getlist("locations")
+        # subjects = self.request.GET.getlist("subjects")
+        # category = self.request.GET.getlist("category")
+        # resource_type = self.request.GET.get("resource-type")
+        # search_query = self.request.GET.get("q")
+        # paginate = self.request.GET.get("paginate") != 'false'
+        # query = self.queryset
+        # q_obj = self.get_location_filter(locations)
+        # if q_obj:
+        #     query = query.filter(q_obj)
+        # if subjects:
+        #     if subjects[0] == 'all':
+        #         query = query.filter(subjects__isnull=False)
+        #     else:
+        #         query = query.filter(subjects__id__in=subjects)
+        # if category:
+        #     query = query.filter(category__id=category)
+        # locations_prefetch = AbstractLocation.objects.all().select_subclasses()
+        # subjects_prefetch = Subject.objects.all()
+        # category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
+        # repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
+        #                                              .select_related("repositorysubcategory__parent")
+        # division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
 
-        # If they are not authenticated and the resource type is internal, raise an error
-        if not request.user.is_authenticated:
-            if resource_type == 'internal':
-                raise NotAuthenticated()
-            else:
-                query = query.filter(resource_type='external')
-        elif resource_type == 'internal':
-            query = query.filter(resource_type='internal')
-        elif resource_type == 'external':
-            query = query.filter(resource_type='external')
+        # # If they are not authenticated and the resource type is internal, raise an error
+        # if not request.user.is_authenticated:
+        #     if resource_type == 'internal':
+        #         raise NotAuthenticated()
+        #     else:
+        #         query = query.filter(resource_type='external')
+        # elif resource_type == 'internal':
+        #     query = query.filter(resource_type='internal')
+        # elif resource_type == 'external':
+        #     query = query.filter(resource_type='external')
 
-        ranked_results = None
+        # ranked_results = None
 
-        if search_query:
-            query = query.search(search_query)
-            if paginate:
-                ranked_results = [i.pk for i in self.paginate_queryset(query)]
-            else:
-                ranked_results = list(query.values_list("pk", flat=True))
-            query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
-        else:
-            query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
+        # if search_query:
+        #     query = query.search(search_query)
+        #     if paginate:
+        #         ranked_results = [i.pk for i in self.paginate_queryset(query)]
+        #     else:
+        #         ranked_results = list(query.values_list("pk", flat=True))
+        #     query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
+        # else:
+        #     query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
 
-        context = self.get_serializer_context()
-        context['content_id'] = True
-        query = query.prefetch_related(
-            Prefetch("locations", queryset=locations_prefetch),
-            Prefetch("subjects", queryset=subjects_prefetch),
-            Prefetch("category", queryset=category_prefetch),
-            Prefetch("upload_category", queryset=repo_category_prefetch),
-            Prefetch("division", queryset=division_prefetch)).distinct()
+        # context = self.get_serializer_context()
+        # context['content_id'] = True
+        # query = query.prefetch_related(
+        #     Prefetch("locations", queryset=locations_prefetch),
+        #     Prefetch("subjects", queryset=subjects_prefetch),
+        #     Prefetch("category", queryset=category_prefetch),
+        #     Prefetch("upload_category", queryset=repo_category_prefetch),
+        #     Prefetch("division", queryset=division_prefetch)).distinct()
 
-        if paginate and not search_query:
-            query = self.paginate_queryset(query)
+        # if paginate and not search_query:
+        #     query = self.paginate_queryset(query)
 
-        # If results need to be sorted by rank, do so.
-        # Not applicable if there is no search term.
-        if ranked_results:
-            query = sorted(query, key=lambda x: ranked_results.index(x.id))
+        # # If results need to be sorted by rank, do so.
+        # # Not applicable if there is no search term.
+        # if ranked_results:
+        #     query = sorted(query, key=lambda x: ranked_results.index(x.id))
 
-        context = self.get_serializer_context()
-        if search_query:
-            serializer = ContentSearchSerializer(query, many=True, context=context)
-        else:
-            serializer = ContentListSerializer(query, many=True, context=context)
-        if paginate:
-            return self.get_paginated_response(serializer.data)
-        else:
-            return Response(serializer.data)
+        # context = self.get_serializer_context()
+        # if search_query:
+        #     serializer = ContentSearchSerializer(query, many=True, context=context)
+        # else:
+        #     serializer = ContentListSerializer(query, many=True, context=context)
+        # if paginate:
+        #     return self.get_paginated_response(serializer.data)
+        # else:
+        #     return Response(serializer.data)
+        return Response("Not implemented yet")
 
 
 class PostContentTextViewset(APIView):
@@ -165,7 +164,8 @@ class InvokeTextExtractorViewset(APIView):
 
         if fr_doc_id:
             try:
-                doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
+                # doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
+                doc = None
                 response = requests.get(
                     f"https://www.federalregister.gov/api/v1/documents/{doc.document_number}.json",
                     timeout=20,

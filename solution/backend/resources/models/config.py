@@ -1,12 +1,12 @@
 from django.db import models
 from solo.models import SingletonModel
 
-from resources.models import NewAbstractCategory
+from resources.models import AbstractCategory
 
 
-class NewResourcesConfiguration(SingletonModel):
+class ResourcesConfiguration(SingletonModel):
     fr_link_category = models.ForeignKey(
-        NewAbstractCategory,
+        AbstractCategory,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,

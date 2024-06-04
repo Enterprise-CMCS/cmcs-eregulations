@@ -16,7 +16,7 @@ class AbstractCitation(models.Model, DisplayNameFieldMixin):
         super().save(*args, **kwargs)
 
 
-class NewSubpart(AbstractCitation):
+class Subpart(AbstractCitation):
     subpart_id = models.CharField(max_length=12)
 
     def __str__(self):
@@ -24,7 +24,7 @@ class NewSubpart(AbstractCitation):
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if NewSubpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).exclude(pk=self.pk):
+        if Subpart.objects.filter(title=self.title, part=self.part, subpart_id=self.subpart_id).exclude(pk=self.pk):
             raise ValidationError(f"Citation \"{str(self)}\" already exists.")
 
     class Meta:
@@ -33,16 +33,16 @@ class NewSubpart(AbstractCitation):
         ordering = ["title", "part", "subpart_id"]
 
 
-class NewSection(AbstractCitation):
+class Section(AbstractCitation):
     section_id = models.IntegerField()
-    parent = models.ForeignKey(NewSubpart, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
+    parent = models.ForeignKey(Subpart, null=True, blank=True, on_delete=models.SET_NULL, related_name="children")
 
     def __str__(self):
         return f"{self.title} CFR {self.part}.{self.section_id}"
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if NewSection.objects.filter(title=self.title, part=self.part, section_id=self.section_id).exclude(pk=self.pk):
+        if Section.objects.filter(title=self.title, part=self.part, section_id=self.section_id).exclude(pk=self.pk):
             raise ValidationError(f"Citation \"{str(self)}\" already exists.")
 
     class Meta:

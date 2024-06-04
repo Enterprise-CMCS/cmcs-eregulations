@@ -22,7 +22,7 @@ class HomepageView(TemplateView):
         today = date.today()
         parts = Part.objects.effective(today)
         resources_config = ResourcesConfiguration.objects.first()
-        fr_docs_category_name = resources_config.fr_doc_category.name if resources_config.fr_doc_category else ""
+        fr_docs_category_name = resources_config.fr_link_category.name if resources_config.fr_link_category else ""
 
         if not parts:
             return context

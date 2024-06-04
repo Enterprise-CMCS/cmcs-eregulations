@@ -3,8 +3,8 @@ from django.db.models import Prefetch
 
 from common.admin import AbstractAdmin
 from resources.models import (
-    NewSection,
-    NewSubpart,
+    Section,
+    Subpart,
 )
 
 
@@ -14,8 +14,8 @@ class AbstractCitationAdmin(AbstractAdmin):
         return super().get_search_results(request, queryset, search_term)
 
 
-@admin.register(NewSection)
-class NewSectionAdmin(AbstractCitationAdmin):
+@admin.register(Section)
+class SectionAdmin(AbstractCitationAdmin):
     list_display = ["title", "part", "section_id", "parent"]
     search_fields = ["title", "part", "section_id", "parent__subpart_id"]
     ordering = ["title", "part", "section_id", "parent"]
@@ -23,17 +23,17 @@ class NewSectionAdmin(AbstractCitationAdmin):
     autocomplete_fields = ["parent"]
 
     foreignkey_lookups = {
-        "parent": lambda: NewSubpart.objects.all(),
+        "parent": lambda: Subpart.objects.all(),
     }
 
     def get_queryset(self, request):
         return super().get_queryset(request).prefetch_related(
-            Prefetch("parent", NewSubpart.objects.all()),
+            Prefetch("parent", Subpart.objects.all()),
         )
 
 
-@admin.register(NewSubpart)
-class NewSubpartAdmin(AbstractCitationAdmin):
+@admin.register(Subpart)
+class SubpartAdmin(AbstractCitationAdmin):
     list_display = ["title", "part", "subpart_id"]
     search_fields = ["title", "part", "subpart_id"]
     ordering = ["title", "part", "subpart_id"]

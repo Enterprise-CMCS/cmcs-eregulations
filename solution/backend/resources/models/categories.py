@@ -16,7 +16,7 @@ class AbstractCategoryManager(InheritanceManager):
         )
 
 
-class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
+class AbstractCategory(models.Model, DisplayNameFieldMixin):
     description = models.TextField(blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
@@ -28,7 +28,7 @@ class NewAbstractCategory(models.Model, DisplayNameFieldMixin):
         return f"{name} ({self._meta.verbose_name})"
 
 
-class AbstractPublicCategory(NewAbstractCategory):
+class AbstractPublicCategory(AbstractCategory):
     pass
 
 
@@ -51,7 +51,7 @@ class PublicSubCategory(AbstractPublicCategory):
         verbose_name_plural = "Public Subcategories"
 
 
-class AbstractInternalCategory(NewAbstractCategory):
+class AbstractInternalCategory(AbstractCategory):
     pass
 
 

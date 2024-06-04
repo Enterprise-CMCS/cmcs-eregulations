@@ -1,3 +1,5 @@
+from functools import partial
+
 import common.fields
 import common.mixins
 import django.core.validators
@@ -6,6 +8,14 @@ import django_jsonform.models.fields
 from django.db import migrations, models
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Q
+
+
+TIMEOUT_MINUTES = 10
+
+
+def migration(func, apps, schema_editor):
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+    func(apps, schema_editor)
 
 
 def create_category_params(from_obj):
@@ -264,13 +274,12 @@ def copy_resources_config(apps, schema_editor):
     AbstractPublicCategory = apps.get_model("resources", "AbstractPublicCategory")
     old = OldResourcesConfiguration.objects.first()
     new, _ = NewResourcesConfiguration.objects.get_or_create()
-    if old:
+    if old and old.fr_doc_category:
         try:
-            category = AbstractPublicCategory.objects.get(old_pk=old.fr_doc_category.pk)
+            new.fr_link_category = AbstractPublicCategory.objects.get(old_pk=old.fr_doc_category.pk)
+            new.save()
         except AbstractPublicCategory.DoesNotExist:
-            category = None
-        new.fr_link_category = category
-        new.save()
+            pass
 
 
 class Migration(migrations.Migration):
@@ -281,13 +290,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(copy_public_categories, atomic=True),
-        migrations.RunPython(copy_internal_categories, atomic=True),
-        migrations.RunPython(copy_citations, atomic=True),
-        migrations.RunPython(copy_subjects, atomic=True),
-        migrations.RunPython(copy_public_links, atomic=True),
-        migrations.RunPython(copy_federal_register_links, atomic=True),
-        migrations.RunPython(copy_internal_files, atomic=True),
-        migrations.RunPython(copy_resource_groups, atomic=True),
-        migrations.RunPython(copy_resources_config, atomic=True),
+        migrations.RunPython(partial(migration, copy_public_categories), atomic=True),
+        migrations.RunPython(partial(migration, copy_internal_categories), atomic=True),
+        migrations.RunPython(partial(migration, copy_citations), atomic=True),
+        migrations.RunPython(partial(migration, copy_subjects), atomic=True),
+        migrations.RunPython(partial(migration, copy_public_links), atomic=True),
+        migrations.RunPython(partial(migration, copy_federal_register_links), atomic=True),
+        migrations.RunPython(partial(migration, copy_internal_files), atomic=True),
+        migrations.RunPython(partial(migration, copy_resource_groups), atomic=True),
+        migrations.RunPython(partial(migration, copy_resources_config), atomic=True),
     ]

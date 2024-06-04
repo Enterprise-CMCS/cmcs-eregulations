@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from resources.models import (
-    NewSection,
-    NewSubpart,
+    Section,
+    Subpart,
 )
 
 from .polymorphic import (
@@ -14,8 +14,8 @@ from .polymorphic import (
 class AbstractCitationSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            NewSection: ("section", SectionSerializer),
-            NewSubpart: ("subpart", SubpartSerializer),
+            Section: ("section", SectionSerializer),
+            Subpart: ("subpart", SubpartSerializer),
         }
 
 
