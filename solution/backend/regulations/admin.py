@@ -24,7 +24,9 @@ from .models import (
     StatuteLinkConverter,
 )
 
+
 admin.site.logout_template = 'admin/logged_out.html'
+
 
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
 def get_app_list(self, request, app_label=None):
