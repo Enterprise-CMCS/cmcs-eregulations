@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
 
-import { getCombinedContent, getPolicyDocCategories } from "utilities/api";
+import { getCombinedContent, getInternalCategories } from "utilities/api";
 
 import {
     EventCodes,
@@ -40,7 +40,7 @@ const getCategories = async () => {
     let categories = [];
 
     try {
-        categories = await getPolicyDocCategories({
+        categories = await getInternalCategories({
             apiUrl: props.apiUrl,
             cacheResponse: false,
         });

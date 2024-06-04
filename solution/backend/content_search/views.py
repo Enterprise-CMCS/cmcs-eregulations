@@ -2,7 +2,7 @@ import json
 
 import requests
 from django.conf import settings
-from django.db.models import F, Prefetch
+from django.db.models import F, Prefetch, Q
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -45,6 +45,11 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                     OpenApiQueryParameter("subjects",
                                           "Limit results to only resources found within these subjects. Use "
                                           "\"&subjects=X&subjects=Y\" for multiple.", str, False),
+                    OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
+                                          "\"&categories=X&categories=Y\" for multiple.", int, False),
+                    OpenApiQueryParameter("internal_categories", "Limit results to only internal documents found within these "
+                                          "file categories. Use \"&internal_categories=X&internal_categories=Y\" for multiple.",
+                                          int, False),
                     OpenApiQueryParameter("q",
                                           "Search for text within file metadata. Searches document name, file name, "
                                           "date, and summary/description.", str, False),
@@ -56,7 +61,8 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
     def list(self, request):
         locations = self.request.GET.getlist("locations")
         subjects = self.request.GET.getlist("subjects")
-        category = self.request.GET.getlist("category")
+        categories = self.request.GET.getlist("categories")
+        internal_categories = self.request.GET.getlist("internal_categories")
         resource_type = self.request.GET.get("resource-type")
         search_query = self.request.GET.get("q")
         paginate = self.request.GET.get("paginate") != 'false'
@@ -69,8 +75,11 @@ class ContentSearchViewset(LocationFiltererMixin, OptionalPaginationMixin, views
                 query = query.filter(subjects__isnull=False)
             else:
                 query = query.filter(subjects__id__in=subjects)
-        if category:
-            query = query.filter(category__id=category)
+        if categories:
+            query = query.filter(Q(category__id__in=categories) | Q(category__subcategory__parent__id__in=categories))
+        if internal_categories:
+            query = query.filter(Q(upload_category__id__in=internal_categories) |
+                                 Q(upload_category__repositorysubcategory__parent__id__in=internal_categories))
         locations_prefetch = AbstractLocation.objects.all().select_subclasses()
         subjects_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
