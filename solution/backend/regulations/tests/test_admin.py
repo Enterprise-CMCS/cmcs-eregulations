@@ -129,6 +129,7 @@ class OidcAdminAuthenticationBackendTest(TransactionTestCase):
         self.assertEqual(user.profile.department, "my department")
         self.assertIsNone(user.profile.department_group)
         self.assertIsNone(user.profile.department_division)
+
     def test_user_with_admin_jobcode(self):
         self.mock_claims["jobcodes"] = "cn=EREGS_ADMIN,ou=Groups,dc=cms,dc=hhs,dc=gov"
         user = self.backend.create_user(self.mock_claims)
