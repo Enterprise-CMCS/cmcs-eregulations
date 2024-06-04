@@ -39,6 +39,9 @@ def set_department_group_and_division(profile, save_profile=True):
     if not profile.department:
         return
 
+    profile.department_group = None
+    profile.department_division = None
+
     department_parts = profile.department.split('/')
     if len(department_parts) >= 6:
         group_name = department_parts[5]
