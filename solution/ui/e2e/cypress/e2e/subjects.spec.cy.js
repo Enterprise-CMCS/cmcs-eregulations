@@ -942,4 +942,18 @@ describe("Subjects Page -- Pagination", () => {
             cy.get(".current-page.selected").contains("2");
         });
     });
+
+    it("Goes to the second page of results on load when page=2 AND a category in the URL", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password, landingPage: "/" });
+        cy.visit("/subjects/?type=external&page=2&categories=3");
+        cy.wait("@page2").then((interception) => {
+            const count = interception.response.body.count;
+            cy.get(".search-results-count").contains(
+                `51 - 100 of ${count} documents`
+            );
+            cy.get(".current-page.selected").contains("2");
+            cy.url().should("include", "/subjects/?type=external&page=2&categories=3");
+        });
+    });
 });

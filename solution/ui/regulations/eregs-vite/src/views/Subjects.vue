@@ -373,7 +373,13 @@ watch(
         // set title on subject selection
         const { subjects } = newQueryParams;
         if (subjects) {
-            setDocumentTitle(subjects[0], policyDocSubjects.value.results);
+            const subjectTitleToSet = _isArray(subjects)
+                ? subjects[0]
+                : subjects;
+            setDocumentTitle(
+                subjectTitleToSet,
+                policyDocSubjects.value.results
+            );
         }
 
         // wipe everything clean to start
