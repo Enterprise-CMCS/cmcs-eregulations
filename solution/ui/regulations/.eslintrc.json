@@ -26,6 +26,7 @@
         "no-nested-ternary": "off",
         "prefer-template": "off",
         "vue/order-in-components": "off",
+        "vue/multi-word-component-names": "off",
         "vue/no-multiple-template-root": "off",
         "vue/no-unsupported-features": [
             "error",

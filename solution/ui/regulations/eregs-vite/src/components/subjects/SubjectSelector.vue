@@ -1,7 +1,8 @@
 <script setup>
-import { computed, reactive, watch } from "vue";
-
+import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
+
+import useRemoveList from "composables/removeList";
 
 import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";
@@ -19,6 +20,8 @@ const props = defineProps({
 
 const $router = useRouter();
 const $route = useRoute();
+
+const removeList = inject("commonRemoveList", []);
 
 const state = reactive({
     filter: "",
@@ -90,17 +93,23 @@ const debouncedFilter = _debounce(getFilteredSubjects, 100);
 watch(() => state.filter, debouncedFilter);
 
 const subjectClick = (event) => {
-    const subjects = $route?.query?.subjects ?? [];
+    const routeClone = { ...$route.query };
+
+    const subjects = routeClone?.subjects ?? [];
     const subjectsArray = _isArray(subjects) ? subjects : [subjects];
     const subjectToAdd = event.currentTarget.dataset.id;
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList,
+    });
+
     $router.push({
         name: "subjects",
         query: {
-            ...$route.query,
-            page: undefined,
+            ...cleanedRoute,
             subjects: [subjectToAdd],
         },
     });

@@ -2,13 +2,15 @@
 import { provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import useRemoveList from "composables/removeList";
+
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
     getLastUpdatedDates,
-    getPolicyDocSubjects,
+    getInternalSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -16,12 +18,13 @@ import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
+import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
+import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
-import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
@@ -30,6 +33,7 @@ import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
+import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
@@ -105,6 +109,14 @@ provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
 
+// provide router query params to remove on child component change
+const commonRemoveList = ["page", "categories", "intcategories"];
+const policySelectionsRemoveList = ["subjects"];
+const searchInputRemoveList = commonRemoveList.concat(["q"]);
+
+provide("commonRemoveList", commonRemoveList);
+provide("policySelectionsRemoveList", policySelectionsRemoveList);
+
 /**
  * @param {Object} queryParams - $route.query
  * @returns {Boolean} - true if all doc types are selected and nothing else
@@ -128,22 +140,34 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
-    const { q, page, ...rest } = $route.query;
+    const routeClone = { ...$route.query };
+
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList: searchInputRemoveList,
+    });
+
     $router.push({
         name: "subjects",
         query: {
-            ...rest,
+            ...cleanedRoute,
             q: payload.query,
         },
     });
 };
 
 const clearSearchInput = () => {
-    const { q, page, ...rest } = $route.query;
+    const routeClone = { ...$route.query };
+
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList: searchInputRemoveList,
+    });
+
     $router.push({
         name: "subjects",
         query: {
-            ...rest,
+            ...cleanedRoute,
         },
     });
 };
@@ -232,7 +256,7 @@ provide("selectedParams", selectedParams);
 const setSelectedParams = (subjectsListRef) => (param) => {
     const [paramType, paramValue] = param;
 
-    if (paramType === "page") {
+    if (commonRemoveList.includes(paramType)) {
         return;
     }
 
@@ -275,7 +299,7 @@ const setDocumentTitle = (subjectId, subjectList) => {
 // called on load
 const getDocSubjects = async () => {
     try {
-        const subjectsResponse = await getPolicyDocSubjects({
+        const subjectsResponse = await getInternalSubjects({
             apiUrl: props.apiUrl,
             cacheResponse: false,
         });
@@ -349,7 +373,13 @@ watch(
         // set title on subject selection
         const { subjects } = newQueryParams;
         if (subjects) {
-            setDocumentTitle(subjects[0], policyDocSubjects.value.results);
+            const subjectTitleToSet = _isArray(subjects)
+                ? subjects[0]
+                : subjects;
+            setDocumentTitle(
+                subjectTitleToSet,
+                policyDocSubjects.value.results
+            );
         }
 
         // wipe everything clean to start
@@ -465,6 +495,18 @@ getDocSubjects();
                                 :selected-subject-parts="selectedSubjectParts"
                             />
                         </div>
+                        <div class="subject__filters--row">
+                            <FetchCategoriesContainer v-slot="slotProps">
+                                <CategoriesDropdown
+                                    :list="slotProps.data"
+                                    :error="slotProps.error"
+                                    :loading="
+                                        slotProps.loading ||
+                                        policyDocList.loading
+                                    "
+                                />
+                            </FetchCategoriesContainer>
+                        </div>
                         <template
                             v-if="
                                 policyDocList.loading ||
@@ -508,7 +550,9 @@ getDocSubjects();
                                     <PaginationController
                                         v-if="policyDocList.count > 0"
                                         :count="policyDocList.count"
-                                        :page="parseInt($route.query.page, 10) || 1"
+                                        :page="
+                                            parseInt($route.query.page, 10) || 1
+                                        "
                                         :page-size="pageSize"
                                         view="subjects"
                                     />

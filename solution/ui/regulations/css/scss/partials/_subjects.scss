@@ -23,6 +23,154 @@
     }
 }
 
+.filter__select {
+    &--category {
+        width: 300px;
+    }
+
+    .v-input__control {
+        .v-field {
+            &--appended {
+                padding-inline-end: 4px;
+            }
+
+            &.v-field--variant-outlined.v-field--focused {
+                &:not(.v-field--dirty) {
+                    .v-label.v-field-label {
+                        visibility: visible;
+                    }
+                }
+
+                .v-field__outline {
+                    > * {
+                        border-color: $secondary_border_color;
+                    }
+                }
+            }
+
+            .v-field--focused {
+                .v-field__outline > * {
+                    border-color: $secondary_border_color;
+                }
+            }
+
+            .v-field__outline {
+                > * {
+                    border-color: $border_color;
+                    opacity: 1;
+                }
+
+                > .v-field__outline__start {
+                    border-right: none;
+                }
+
+                > .v-field__outline__end {
+                    border-left: none;
+                }
+            }
+
+            .v-field__field {
+                .v-field__input {
+                    padding-inline: 4px;
+                    min-height: 30px;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
+                }
+
+                .v-select__selection-text,
+                .v-field-label {
+                    font-size: 14px;
+                    line-height: 22px;
+                    margin-left: 4px;
+                }
+
+                .v-field--variant-outlined.v-field--focused .v-field__outline,
+                .v-field-outline {
+                    --v-field-border-width: 1px;
+                    color: $border_color;
+                    --v-field-border-opacity: 1;
+                }
+            }
+        }
+
+        .v-field__clearable,
+        .v-field__append-inner {
+            height: 30px;
+        }
+
+        .v-field__append-inner {
+            width: 24px;
+
+            & > .v-icon.v-select__menu-icon {
+                min-width: 18px;
+                font-size: 30px;
+                opacity: 1;
+                transition: none;
+            }
+        }
+    }
+}
+
+.v-overlay-container {
+    .v-menu > .v-overlay__content {
+        margin-top: 8px;
+        box-shadow: unset;
+        max-width: 300px !important;
+
+        & > .v-list {
+            margin-top: 8px;
+            border: 1px solid $border_color;
+            box-shadow: unset;
+            overflow-x: hidden;
+        }
+    }
+
+    .v-list-item {
+        min-height: unset;
+        padding: 0;
+
+        &::after {
+            opacity: 0;
+        }
+
+        &:hover > .v-list-item__overlay,
+        &:focus-visible > .v-list-item__overlay,
+        &.v-list-item--active > .v-list-item__overlay {
+            opacity: 0;
+        }
+
+        &:hover,
+        &:focus-visible,
+        &.v-list-item--active {
+            .v-list-item-title {
+                @include font-bold-keep-width;
+            }
+        }
+    }
+
+    .v-list-item__content:has(.doc-type__label) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .v-list-item-title {
+        font-size: 14px;
+        line-height: 22px;
+        padding: 4px 0;
+        white-space: normal;
+    }
+
+    .doc-type__label {
+        cursor: default;
+        margin-top: 4px;
+        margin-bottom: 4px;
+
+        &--internal {
+            margin-top: 12px;
+        }
+    }
+}
+
 #subjectsApp.repository-view {
     margin-bottom: 1rem;
     display: flex;
@@ -131,8 +279,8 @@
                 margin-top: 0;
 
                 .ds-c-choice:checked + label::before {
-                    background-color: $mid_blue;
-                    border-color: $mid_blue;
+                    background-color: $secondary_border_color;
+                    border-color: $secondary_border_color;
                 }
 
                 label {
@@ -334,6 +482,14 @@
                 }
             }
         }
+    }
+
+    .subject__filters--row {
+        padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
     }
 
     .doc__list {

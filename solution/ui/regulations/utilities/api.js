@@ -243,15 +243,50 @@ const setCacheItem = async (key, data) => {
 };
 
 // ---------- api calls ---------------
-const getCategories = async (apiUrl) => {
+/**
+ * Retrieves a flat list of all external categories and subcategories from an API.
+ *
+ * @param {object} options - An object containing options for the request.
+ * @param {string} [options.apiUrl] - The base URL of the external API.
+ *   If provided, this function will fetch data from the external API.
+ *   Otherwise, it will fetch data from the internal API with a default URL.
+ * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
+ */
+const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}resources/categories`);
+        return httpApiGetLegacy(
+            `${apiUrl}resources/categories`,
+            {},
+            cacheResponse
+        );
     }
 
     return httpApiGet("resources/categories");
 };
 
-// ---------- api calls ---------------
+/**
+ * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
+ *
+ * @param {object} options - An object containing options for the request.
+ * @param {string} [options.apiUrl] - The base URL of the external API.
+ *   If provided, this function will fetch data from the external API.
+ *   Otherwise, it will fetch data from the internal API with a default URL.
+ * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
+ */
+const getExternalCategoriesTree = async ({apiUrl, cacheResponse = true}) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}resources/categories/tree`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("resources/categories/tree");
+};
+
 /**
  * Get formatted date of most recent successful run of the ECFR parser
  *
@@ -384,7 +419,7 @@ const getSupplementalContent = async ({
     }
 
     if (categories) {
-        const catList = await getCategories();
+        const catList = await getExternalCategories();
         categories.forEach((category) => {
             sString = `${sString}&categories=${
                 catList.find((x) => x.name === category).id
@@ -496,7 +531,7 @@ const getStatutes = async ({
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
-const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalSubjects = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/subjects`,
@@ -509,23 +544,25 @@ const getPolicyDocSubjects = async ({ apiUrl, cacheResponse = true }) => {
 };
 
 /**
- * An object representing a policy document category
- * @typedef {Object} PolicyDocCategory
+ * An object representing an internal category
+ * @typedef {Object} InternalCategory
  * @property {number} id - Category id
  * @property {string} name - Category name
  * @property {string} description - Category description
  * @property {number} order - Category order
  * @property {boolean} show_if_empty - Whether to show category if empty
  * @property {string} type - Category type
- * @property {PolicyDocCategory|undefined} parent - Parent category
+ * @property {InternalCategory|undefined} parent - Parent category
  */
 
 /**
+ * Retrieves a flat list of all internal categories and subcategories from an API.
+ *
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=true] - Whether to cache the response
- * @returns {Promise<Array<PolicyDocCategory>>} - Promise that contains array of categories when fulfilled
+ * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getPolicyDocCategories = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories`,
@@ -535,6 +572,25 @@ const getPolicyDocCategories = async ({ apiUrl, cacheResponse = true }) => {
     }
 
     return httpApiGet("file-manager/categories", cacheResponse);
+};
+
+/**
+ * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
+ *
+ * @param {string} [apiUrl] - API base url passed in from Django template
+ * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
+ */
+const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = true }) => {
+    if (apiUrl) {
+        return httpApiGetLegacy(
+            `${apiUrl}file-manager/categories/tree`,
+            {},
+            cacheResponse
+        );
+    }
+
+    return httpApiGet("file-manager/categories/tree", cacheResponse);
 };
 
 /**
@@ -566,14 +622,16 @@ export {
     configure,
     getCacheItem,
     getCacheKeys,
-    getCategories,
     getCombinedContent,
+    getExternalCategories,
+    getExternalCategoriesTree,
     getGovInfoLinks,
+    getInternalCategories,
+    getInternalCategoriesTree,
+    getInternalSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,
-    getPolicyDocCategories,
-    getPolicyDocSubjects,
     getRecentResources,
     getRegSearchResults,
     getStatutes,
