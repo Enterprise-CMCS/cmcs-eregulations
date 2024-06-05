@@ -1,5 +1,5 @@
-Cryptography==38.0.0,<42
-pyopenssl==23.3.0
+Cryptography
+pyopenssl
 Werkzeug==0.15.5
 zappa-django-utils
 boto3
