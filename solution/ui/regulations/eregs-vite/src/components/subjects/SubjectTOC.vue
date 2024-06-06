@@ -1,7 +1,7 @@
 <script setup>
 import { computed, inject } from "vue";
 
-import { getSubjectName, getSubjectNameParts } from "utilities/filters";
+import { getSubjectNameParts } from "utilities/filters";
 
 const isAuthenticated = inject("isAuthenticated");
 
