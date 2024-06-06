@@ -6,8 +6,6 @@ import vuetify from "./plugins/vuetify";
 import App from "./App.vue";
 import vueRouter from "./router";
 
-import _isArray from "lodash/isArray";
-
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
 
