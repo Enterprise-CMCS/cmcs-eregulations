@@ -4,6 +4,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import useRemoveList from "composables/removeList";
 
+import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
@@ -264,7 +265,8 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         return;
     }
 
-    paramValue.forEach((paramId) => {
+    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
+    paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
             (subjectObj) => paramId === subjectObj.id.toString()
         )[0];
@@ -371,7 +373,9 @@ watch(
         // set title on subject selection
         const { subjects } = newQueryParams;
         if (subjects) {
-            const subjectTitleToSet = subjects[0];
+            const subjectTitleToSet = _isArray(subjects)
+                ? subjects[0]
+                : subjects;
             setDocumentTitle(
                 subjectTitleToSet,
                 policyDocSubjects.value.results

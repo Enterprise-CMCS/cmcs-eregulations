@@ -35,7 +35,7 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                         :to="{
                             name: 'subjects',
                             query: {
-                                subjects: [subject.id.toString()],
+                                subjects: subject.id.toString(),
                             },
                         }"
                     >

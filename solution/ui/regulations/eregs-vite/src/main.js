@@ -24,22 +24,14 @@ const router = vueRouter({ customUrl, host });
 router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
-    const queryClone = { ...to.query };
-
-    Object.entries(queryClone).forEach(([key, value]) => {
-        if (!_isArray(value)) {
-            queryClone[key] = [value];
-        }
-    });
-
     if (to.name === "subjects") {
-        if (!queryClone?.subject) {
+        if (!to.query?.subject) {
             document.title = pageTitle;
         }
 
-        if (!isAuthenticated && queryClone?.type) {
-            const { type, ...typelessQuery } = queryClone;
-            return { name: "subjects", typelessQuery };
+        if (!isAuthenticated && to.query?.type) {
+            const { type, ...typelessQuery } = to.query;
+            return { name: "subjects", query: typelessQuery };
         }
     }
 
