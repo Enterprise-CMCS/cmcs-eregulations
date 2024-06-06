@@ -11,8 +11,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import logging
+import cryptography
+import OpenSSL
+
 from datetime import datetime
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+logger.info(f'==========>>>>Cryptography version: {cryptography.__version__}')
+logger.info(f'==========>>>>pyOpenSSL version: {OpenSSL.__version__}')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
