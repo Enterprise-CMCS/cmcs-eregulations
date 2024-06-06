@@ -6,6 +6,8 @@ import vuetify from "./plugins/vuetify";
 import App from "./App.vue";
 import vueRouter from "./router";
 
+import _isArray from "lodash/isArray";
+
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
 
@@ -22,14 +24,22 @@ const router = vueRouter({ customUrl, host });
 router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
+    const queryClone = { ...to.query };
+
+    Object.entries(queryClone).forEach(([key, value]) => {
+        if (!_isArray(value)) {
+            queryClone[key] = [value];
+        }
+    });
+
     if (to.name === "subjects") {
-        if (!to.query?.subject) {
+        if (!queryClone?.subject) {
             document.title = pageTitle;
         }
 
-        if (!isAuthenticated && to.query?.type) {
-            const { type, ...query } = to.query;
-            return { name: "subjects", query };
+        if (!isAuthenticated && queryClone?.type) {
+            const { type, ...typelessQuery } = queryClone;
+            return { name: "subjects", typelessQuery };
         }
     }
 
