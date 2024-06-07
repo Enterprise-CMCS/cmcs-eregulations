@@ -6,6 +6,8 @@ import vuetify from "./plugins/vuetify";
 import App from "./App.vue";
 import vueRouter from "./router";
 
+import _isArray from "lodash/isArray";
+
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
 
@@ -21,6 +23,15 @@ const router = vueRouter({ customUrl, host });
 
 router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
+
+    // If you pass multiple query params in the URL, Vue Router will parse them as arrays.
+    // This is a workaround to convert them back to strings -- we only need the first value.
+    // `type` is the only query param that should be an array.
+    Object.entries(to.query).forEach(([key, value]) => {
+        if (_isArray(value) && key != "type") {
+            to.query[key] = value[0];
+        }
+    });
 
     if (to.name === "subjects") {
         if (!to.query?.subject) {
