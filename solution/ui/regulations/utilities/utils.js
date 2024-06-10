@@ -74,6 +74,10 @@ const PARAM_VALIDATION_DICT = {
     intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
 };
 
+const PARAM_ENCODE_DICT = {
+    q: (query) => encodeURIComponent(query),
+};
+
 /**
  * @param {string} fileName - name of the file
  * @returns {string | null} - returns null if the file name is not a string or does not pass validation;
@@ -146,7 +150,12 @@ const getRequestParams = (query) => {
             );
 
             return filteredValues
-                .map((v) => `${PARAM_MAP[key]}=${v}`)
+                .map(
+                    (v) =>
+                        `${PARAM_MAP[key]}=${
+                            PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
+                        }`
+                )
                 .join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))

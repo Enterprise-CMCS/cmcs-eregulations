@@ -424,7 +424,7 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             this.resourcesError = false;
-            const requestParams = `q=${query}&page=${
+            const requestParams = `q=${encodeURIComponent(query)}&page=${
                 page ?? 1
             }&page_size=${pageSize}&paginate=true`;
             let response = "";
