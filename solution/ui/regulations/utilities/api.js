@@ -630,7 +630,7 @@ const getCombinedContent = async ({
 }) =>
     httpApiGetLegacy(
         `${apiUrl}content-search/${
-            requestParams ? `?${encodeURIComponent(requestParams)}&` : "?"
+            requestParams ? `?${requestParams}&` : "?"
         }location_details=true&category_details=true`,
         {},
         cacheResponse
