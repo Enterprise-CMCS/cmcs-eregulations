@@ -4,7 +4,6 @@
     "description": "Serverless config for eRegs core",
     "private": true,
     "dependencies": {
-        "serverless-cloudfront-invalidate": "^1.12.2",
         "serverless-python-requirements": "^5.4.0",
         "serverless-s3-sync": "^1.17.3"
     }
