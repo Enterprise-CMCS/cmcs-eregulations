@@ -190,7 +190,11 @@ function fetchJson({
 
 // ---------- helper functions ---------------
 
-function httpApiGet(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
+function httpApiGet(
+    urlPath,
+    { params } = {},
+    cacheResponse = DEFAULT_CACHE_RESPONSE
+) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -202,7 +206,11 @@ function httpApiGet(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESP
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
+function httpApiGetLegacy(
+    urlPath,
+    { params } = {},
+    cacheResponse = DEFAULT_CACHE_RESPONSE
+) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -254,7 +262,10 @@ const setCacheItem = async (key, data) => {
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
+const getExternalCategories = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories`,
@@ -276,7 +287,10 @@ const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESP
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategoriesTree = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
+const getExternalCategoriesTree = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories/tree`,
@@ -532,7 +546,10 @@ const getStatutes = async ({
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
-const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
+const getInternalSubjects = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/subjects`,
@@ -563,7 +580,10 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPO
  * @param {boolean} [cacheResponse=DEFAULTS_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
+const getInternalCategories = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories`,
@@ -582,7 +602,10 @@ const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RES
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
+const getInternalCategoriesTree = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories/tree`,
