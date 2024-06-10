@@ -1,4 +1,3 @@
-=======
 /**
  * This file is a modified version of https://github.com/aghadiry/serverless-cloudfront-invalidate,
  * which is licensed under the MIT license.
