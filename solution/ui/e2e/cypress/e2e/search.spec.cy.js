@@ -55,7 +55,7 @@ describe("Search flow", () => {
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should("include", "/search?q=test+search");
+        cy.url().should("include", "/search?q=test%2520search");
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
         );

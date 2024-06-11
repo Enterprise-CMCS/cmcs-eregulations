@@ -427,7 +427,7 @@ describe("Find by Subjects", () => {
         });
         cy.url().should(
             "include",
-            "/subjects?type=internal&subjects=3&q=test+search"
+            "/subjects?type=internal&subjects=3&q=test%2520search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
