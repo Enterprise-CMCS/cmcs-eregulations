@@ -45,8 +45,10 @@ onBeforeMount(() => {
     const { categories, intcategories } = $route.query;
 
     if (categories) {
+        silentReset.value = true;
         selectedId.value = `${categories}-categories`;
     } else if (intcategories) {
+        silentReset.value = true;
         selectedId.value = `${intcategories}-intcategories`;
     }
 });
@@ -150,7 +152,7 @@ onMounted(() => {
     window.addEventListener("popstate", onPopState);
 });
 
-onUnmounted(() => window.removeEventListener("resize", onPopState));
+onUnmounted(() => window.removeEventListener("popstate", onPopState));
 </script>
 
 <template>

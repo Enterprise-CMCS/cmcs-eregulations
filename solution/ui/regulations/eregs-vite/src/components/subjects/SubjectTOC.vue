@@ -1,7 +1,7 @@
 <script setup>
 import { computed, inject } from "vue";
 
-import { getSubjectName, getSubjectNameParts } from "utilities/filters";
+import { getSubjectNameParts } from "utilities/filters";
 
 const isAuthenticated = inject("isAuthenticated");
 
@@ -35,7 +35,7 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                         :to="{
                             name: 'subjects',
                             query: {
-                                subjects: [subject.id.toString()],
+                                subjects: subject.id.toString(),
                             },
                         }"
                     >
