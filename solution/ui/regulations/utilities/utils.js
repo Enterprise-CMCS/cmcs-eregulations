@@ -74,6 +74,17 @@ const PARAM_VALIDATION_DICT = {
     intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
 };
 
+/**
+ * Dictionary of query parameters to encode before sending to the API.
+ *
+ * * @type {Object}
+ * @property {function} q - Encodes the q search string query parameter
+ *
+ * @example
+ * const query = "SMDL #12-002";
+ * const encodedQuery = PARAM_ENCODE_DICT.q(query);
+ * console.log(encodedQuery); // "SMDL%20%2312-002"
+ */
 const PARAM_ENCODE_DICT = {
     q: (query) => encodeURIComponent(query),
 };
