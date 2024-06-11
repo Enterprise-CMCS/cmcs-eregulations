@@ -93,7 +93,7 @@ export default {
         },
         searchQuery: {
             type: String,
-            default: undefined,
+            default: "",
         },
         synonyms: {
             type: Array,
@@ -106,17 +106,17 @@ export default {
     },
 
     created() {
-        this.searchInputValue = this.searchQuery;
+        this.searchInputValue = decodeURIComponent(this.searchQuery);
     },
     data() {
         return {
-            searchInputValue: undefined,
+            searchInputValue: "",
         };
     },
 
     computed: {
         multiWordQuery() {
-            if (this.searchQuery === undefined) return false;
+            if (this.searchQuery === "") return false;
 
             return (
                 this.searchQuery.split(" ").length > 1 &&
@@ -128,14 +128,16 @@ export default {
 
     methods: {
         submitForm() {
-            this.$emit("execute-search", { query: this.searchInputValue });
+            this.$emit("execute-search", {
+                query: encodeURIComponent(this.searchInputValue),
+            });
         },
         clearForm() {
-            this.searchInputValue = undefined;
+            this.searchInputValue = "";
             this.$emit("clear-form");
         },
         updateSearchValue(value) {
-            this.searchInputValue = value;
+            this.searchInputValue = decodeURIComponent(value);
         },
         synonymLink(synonym) {
             this.$router.push({
@@ -162,7 +164,7 @@ export default {
     watch: {
         searchQuery: {
             async handler(newQuery) {
-                this.searchInputValue = newQuery;
+                this.searchInputValue = decodeURIComponent(newQuery);
             },
         },
     },

@@ -386,9 +386,7 @@ const getRegSearchResults = async ({
     page_size = 100,
 }) => {
     const response = await httpApiGet(
-        `search?q=${encodeURIComponent(
-            q
-        )}&paginate=${paginate}&page_size=${page_size}&page=${page}`
+        `search?q=${q}&paginate=${paginate}&page_size=${page_size}&page=${page}`
     );
 
     return response;

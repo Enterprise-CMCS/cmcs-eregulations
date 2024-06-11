@@ -310,7 +310,7 @@ export default {
             );
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
-                query: this.searchQuery,
+                query: encodeURIComponent(this.searchQuery),
                 page: this.page,
                 pageSize: this.pageSize,
             });
@@ -424,7 +424,7 @@ export default {
         },
         async retrieveResourcesResults({ query, page, pageSize }) {
             this.resourcesError = false;
-            const requestParams = `q=${encodeURIComponent(query)}&page=${
+            const requestParams = `q=${query}&page=${
                 page ?? 1
             }&page_size=${pageSize}&paginate=true`;
             let response = "";

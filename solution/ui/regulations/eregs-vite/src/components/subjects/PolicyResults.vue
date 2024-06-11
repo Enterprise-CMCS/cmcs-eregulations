@@ -169,7 +169,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <span v-if="searchQuery">
                     for
                     <span class="search-query__span">{{
-                        searchQuery
+                        decodeURIComponent(searchQuery)
                     }}</span></span
                 >
                 <span v-if="searchQuery && selectedSubjectParts[0]">
