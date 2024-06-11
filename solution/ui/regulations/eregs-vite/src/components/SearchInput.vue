@@ -164,7 +164,7 @@ export default {
     watch: {
         searchQuery: {
             async handler(newQuery) {
-                this.searchInputValue = decodeURIComponent(newQuery);
+                this.updateSearchValue(newQuery);
             },
         },
     },

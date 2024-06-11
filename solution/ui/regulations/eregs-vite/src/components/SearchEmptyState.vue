@@ -4,14 +4,21 @@
         <div class="options-list">
             <div class="query-prompt">
                 See results for
-                <span class="query-emphasis">{{ query }}</span> on:
+                <span class="query-emphasis">{{
+                    decodeURIComponent(query)
+                }}</span>
+                on:
             </div>
             <ul class="external-resource-links">
                 <li v-if="showInternalLink">
                     <a :href="eregsLink">{{ eregs_url_label }}</a>
                 </li>
                 <li>
-                    <a :href="ecfrLink" class="external" target="_blank" rel="noopener noreferrer"
+                    <a
+                        :href="ecfrLink"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >eCFR</a
                     >
                 </li>
@@ -25,7 +32,11 @@
                     >
                 </li>
                 <li>
-                    <a :href="medicaidGovLink" class="external" target="_blank" rel="noopener noreferrer"
+                    <a
+                        :href="medicaidGovLink"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >Medicaid.gov</a
                     >
                 </li>

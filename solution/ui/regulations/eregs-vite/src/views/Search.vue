@@ -310,7 +310,7 @@ export default {
             );
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
-                query: encodeURIComponent(this.searchQuery),
+                query: this.searchQuery,
                 page: this.page,
                 pageSize: this.pageSize,
             });
