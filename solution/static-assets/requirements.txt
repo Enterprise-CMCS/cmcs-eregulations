@@ -1,7 +1,6 @@
 cryptography>=42,<43
 pyopenssl>=24,<25
 Werkzeug==0.15.5
-zappa-django-utils
 boto3
 django-debug-toolbar
 django>=5,<6
