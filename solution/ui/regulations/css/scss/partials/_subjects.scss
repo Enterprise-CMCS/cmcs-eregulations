@@ -24,8 +24,6 @@
 }
 
 .doc-type__toggle {
-    margin-right: 24px;
-
     fieldset {
         margin-top: 0;
 
@@ -63,7 +61,11 @@
 
 .filter__select {
     &--category {
-        max-width: 225px;
+        width: 225px;
+
+        &.v-input {
+            flex: unset;
+        }
     }
 
     .v-input__control {
@@ -503,6 +505,8 @@
         padding: 0 1rem;
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
         align-items: center;
         margin-bottom: 1rem;
     }
