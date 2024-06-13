@@ -1065,6 +1065,7 @@ export {
     isFloat,
     mapToArray,
     niceDate,
+    PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
     removeFragmentParams,

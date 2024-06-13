@@ -9,6 +9,7 @@ import {
     getFileTypeButton,
     getRequestParams,
     getSectionsRecursive,
+    PARAM_ENCODE_DICT,
     romanize,
     shapeTitlesResponse,
 } from "utilities/utils.js";
@@ -114,6 +115,34 @@ describe("Utilities.js", () => {
             457: "2023-08-31",
             460: "2023-08-04",
         });
+    });
+
+    it("PARAM_ENCODE_DICT.q properly encodes special characters", async () => {
+        expect(PARAM_ENCODE_DICT.q(" ")).toBe("%20");
+        expect(PARAM_ENCODE_DICT.q("&")).toBe("%26");
+        expect(PARAM_ENCODE_DICT.q("%")).toBe("%25");
+        expect(PARAM_ENCODE_DICT.q("?")).toBe("%3F");
+        expect(PARAM_ENCODE_DICT.q("=")).toBe("%3D");
+        expect(PARAM_ENCODE_DICT.q("/")).toBe("%2F");
+        expect(PARAM_ENCODE_DICT.q("\\")).toBe("%5C");
+        expect(PARAM_ENCODE_DICT.q("#")).toBe("%23");
+        expect(PARAM_ENCODE_DICT.q(";")).toBe("%3B");
+        expect(PARAM_ENCODE_DICT.q(":")).toBe("%3A");
+        expect(PARAM_ENCODE_DICT.q('"')).toBe("%22");
+        expect(PARAM_ENCODE_DICT.q("<")).toBe("%3C");
+        expect(PARAM_ENCODE_DICT.q(">")).toBe("%3E");
+        expect(PARAM_ENCODE_DICT.q("{")).toBe("%7B");
+        expect(PARAM_ENCODE_DICT.q("}")).toBe("%7D");
+        expect(PARAM_ENCODE_DICT.q("[")).toBe("%5B");
+        expect(PARAM_ENCODE_DICT.q("]")).toBe("%5D");
+        expect(PARAM_ENCODE_DICT.q("|")).toBe("%7C");
+        expect(PARAM_ENCODE_DICT.q("^")).toBe("%5E");
+        expect(PARAM_ENCODE_DICT.q("`")).toBe("%60");
+        expect(PARAM_ENCODE_DICT.q("@")).toBe("%40");
+        expect(PARAM_ENCODE_DICT.q("$")).toBe("%24");
+        expect(PARAM_ENCODE_DICT.q("+")).toBe("%2B");
+        expect(PARAM_ENCODE_DICT.q(",")).toBe("%2C");
+        expect(PARAM_ENCODE_DICT.q("SMDL #12-002")).toBe("SMDL%20%2312-002");
     });
 
     it("getActAbbr returns expected act abbreviation", async () => {
