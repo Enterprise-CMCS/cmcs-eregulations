@@ -4,8 +4,6 @@ import { useRouter, useRoute } from "vue-router";
 
 import useRemoveList from "composables/removeList";
 
-import _isArray from "lodash/isArray";
-
 const $router = useRouter();
 const $route = useRoute();
 

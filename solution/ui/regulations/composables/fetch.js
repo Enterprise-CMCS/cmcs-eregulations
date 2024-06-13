@@ -3,7 +3,7 @@ import { ref } from "vue";
 export default function useFetch({
     method,
     apiUrl,
-    cacheResponse = true,
+    cacheResponse,
     needsAuthentication = false,
     isAuthenticated = false,
 }) {
