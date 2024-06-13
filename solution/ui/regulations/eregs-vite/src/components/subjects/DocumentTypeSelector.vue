@@ -104,7 +104,6 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
 
 <template>
     <div class="doc-type__toggle-container">
-        <h3>Documents to Show</h3>
         <div class="doc-type__toggle">
             <fieldset class="ds-c-fieldset" aria-invalid="false">
                 <div v-for="(type, index) in DOCUMENT_TYPES" :key="type">
