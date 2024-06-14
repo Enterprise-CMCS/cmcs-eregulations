@@ -7,7 +7,7 @@
         "serverless-python-requirements": "^5.4.0",
         "serverless-s3-sync": "^1.17.3",
         "aws-sdk": "^2.224.1",
-        "chalk": "^2.3.1",
+        "chalk": "^5.3.0",
         "proxy-agent": "^6.3.0",
         "randomstring": "^1.1.5"
     }
