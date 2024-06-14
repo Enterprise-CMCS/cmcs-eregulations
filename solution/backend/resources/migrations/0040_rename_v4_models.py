@@ -47,6 +47,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('content_search', '0011_remove_v3_dependencies'),
         ('resources', '0039_remove_old_pk_fields'),
+        ('file_manager', '0019_remove_all_models'),
     ]
 
     operations = [

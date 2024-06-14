@@ -15,21 +15,26 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from common.auth import SettingsAuthentication
 from common.functions import establish_client
-from common.mixins import OptionalPaginationMixin
+from common.mixins import CitationFiltererMixin
 
-# from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument
+from resources.models import (
+    AbstractCategory,
+    AbstractCitation,
+    AbstractResource,
+    Subject,
+)
 # from resources.old_views.mixins import LocationFiltererMixin
 from .models import ContentIndex
-from .serializers import ContentUpdateSerializer
+from .serializers import ContentUpdateSerializer, ContentSearchSerializer
 
 
 # was (LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
-    model = ContentIndex
-    queryset = ContentIndex.objects.all()
-    paginate_by_default = True
-    location_filter_prefix = "locations__"
-    pagination_class = OptionalPaginationMixin.pagination_class
+# class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
+#     model = ContentIndex
+#     queryset = ContentIndex.objects.all()
+#     paginate_by_default = True
+#     location_filter_prefix = "locations__"
+#     pagination_class = OptionalPaginationMixin.pagination_class
 
     # @extend_schema(
     #     description="Retrieve list of uploaded files",
@@ -56,7 +61,7 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
     #                                       "all. Use \"&resource-type=external\"", str, ''),
     #                 ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
     # )
-    def list(self, request):
+    # def list(self, request):
         # locations = self.request.GET.getlist("locations")
         # subjects = self.request.GET.getlist("subjects")
         # categories = self.request.GET.getlist("categories")
@@ -134,7 +139,46 @@ class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
         #     return self.get_paginated_response(serializer.data)
         # else:
         #     return Response(serializer.data)
-        return Response("Not implemented yet")
+        # return Response("Not implemented yet")
+
+
+class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
+    model = ContentIndex
+    serializer_class = ContentSearchSerializer
+    citation_filter_prefix = "resource__cfr_citations__"
+
+    def get_queryset(self):
+        citations = self.request.GET.getlist("citations")
+        subjects = self.request.GET.getlist("subjects")
+        categories = self.request.GET.getlist("categories")
+        search_query = self.request.GET.get("q")
+
+        query = ContentIndex.objects.prefetch_related(
+            Prefetch("resource", AbstractResource.objects.select_subclasses()),
+        )
+
+        # Filter inclusively by citations if this array exists
+        citation_filter = self.get_citation_filter(citations)
+        if citation_filter:
+            query = query.filter(citation_filter)
+
+        # Filter by subject pks if subjects array is present
+        if subjects:
+            query = query.filter(resource__subjects__pk__in=subjects)
+        
+        # Filter by categories (both parent and subcategories) if the categories array is present
+        if categories:
+            query = query.filter(
+                Q(resource__category__pk__in=categories) |
+                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+            )
+
+        citations_prefetch = AbstractCitation.objects.select_subclasses()
+        subjects_prefetch = Subject.objects.all()
+        categories_prefetch = AbstractCategory.objects.select_subclasses()
+
+        return query
 
 
 class PostContentTextViewset(APIView):

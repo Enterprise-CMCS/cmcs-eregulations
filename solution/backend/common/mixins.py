@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter
@@ -38,3 +39,52 @@ class DisplayNameFieldMixin:
     @property
     def display_name(self):
         return str(self)
+
+
+# Must define "citation_filter_prefix" (e.g. "" for none, or "citations__")
+# May define "citation_filter_max_depth" to restrict to searching e.g. titles (=1), or titles and parts (=2)
+class CitationFiltererMixin:
+    PARAMETERS = [
+        OpenApiQueryParameter("citations",
+                              "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
+                              "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+    ]
+
+    citation_filter_max_depth = 100
+
+    def get_citation_filter(self, citations):
+        queries = []
+        for loc in citations:
+            split = loc.split(".")
+            length = len(split)
+
+            if length < 1 or \
+               (length >= 1 and not is_int(split[0])) or \
+               (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
+                raise BadRequest(f"\"{loc}\" is not a valid title, part, section, or subpart!")
+
+            q = Q(**{f"{self.citation_filter_prefix}title": split[0]})
+            if length > 1:
+                if self.citation_filter_max_depth < 2:
+                    raise BadRequest(f"\"{loc}\" is too specific. You may only specify titles.")
+                q &= Q(**{f"{self.citation_filter_prefix}part": split[1]})
+                if length > 2:
+                    if self.citation_filter_max_depth < 3:
+                        raise BadRequest(f"\"{loc}\" is too specific. You may only specify titles and parts.")
+                    q &= (
+                        Q(**{f"{self.citation_filter_prefix}section__section_id": split[2]})
+                        if is_int(split[2])
+                        else (
+                            Q(**{f"{self.citation_filter_prefix}subpart__subpart_id": split[2]}) |
+                            Q(**{f"{self.citation_filter_prefix}section__parent__subpart__subpart_id": split[2]})
+                        )
+                    )
+
+            queries.append(q)
+
+        if queries:
+            q_obj = queries[0]
+            for q in queries[1:]:
+                q_obj |= q
+            return q_obj
+        return None

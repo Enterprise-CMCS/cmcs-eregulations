@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import ContentSearchViewset, EditContentView, InvokeTextExtractorViewset, PostContentTextViewset
+from .views import ContentSearchViewSet, EditContentView, InvokeTextExtractorViewset, PostContentTextViewset
 
 urlpatterns = [
-    path("", ContentSearchViewset.as_view({
+    path("", ContentSearchViewSet.as_view({
         "get": "list",
     })),
     path("id/", PostContentTextViewset.as_view(), name='post-content'),
