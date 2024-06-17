@@ -21,7 +21,10 @@ let boxesArr;
 if (!isAuthenticated) {
     boxesArr = ["external"];
 } else if (
-    _isUndefined(typeParams) ||
+    _isUndefined(typeParams)
+) {
+    boxesArr = [];
+} else if (
     typeParams === "all" ||
     typeParams.includes("all")
 ) {
