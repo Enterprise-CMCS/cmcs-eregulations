@@ -73,8 +73,8 @@ watch(
         if (!_isUndefined(newTypeParams)) {
             // "all" is only set when clicking a subject chip, so it is safe to use here
             if (newTypeParams.includes("all")) {
-                checkedBoxes.value = [...DOCUMENT_TYPES];
-                 return;
+                checkedBoxes.value = [];
+                return;
             }
 
             if (_isArray(newTypeParams)) {
