@@ -20,10 +20,8 @@ let boxesArr;
 
 if (!isAuthenticated) {
     boxesArr = ["external"];
-} else if (_isUndefined(typeParams)) {
+} else if (_isUndefined(typeParams) || typeParams.includes("all")) {
     boxesArr = [];
-} else if (typeParams === "all" || typeParams.includes("all")) {
-    boxesArr = [...DOCUMENT_TYPES];
 } else if (_isArray(typeParams)) {
     boxesArr = typeParams;
 } else {
