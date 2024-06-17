@@ -20,14 +20,9 @@ let boxesArr;
 
 if (!isAuthenticated) {
     boxesArr = ["external"];
-} else if (
-    _isUndefined(typeParams)
-) {
+} else if (_isUndefined(typeParams)) {
     boxesArr = [];
-} else if (
-    typeParams === "all" ||
-    typeParams.includes("all")
-) {
+} else if (typeParams === "all" || typeParams.includes("all")) {
     boxesArr = [...DOCUMENT_TYPES];
 } else if (_isArray(typeParams)) {
     boxesArr = typeParams;
@@ -75,9 +70,18 @@ watch(
 
         const { type: newTypeParams } = newQueryParams;
 
-        // "all" is only set when clicking a subject chip, so it is safe to use here
-        if (!_isUndefined(newTypeParams) && newTypeParams.includes("all")) {
-            checkedBoxes.value = [...DOCUMENT_TYPES];
+        if (!_isUndefined(newTypeParams)) {
+            // "all" is only set when clicking a subject chip, so it is safe to use here
+            if (newTypeParams.includes("all")) {
+                checkedBoxes.value = [...DOCUMENT_TYPES];
+                 return;
+            }
+
+            if (_isArray(newTypeParams)) {
+                checkedBoxes.value = newTypeParams;
+            } else {
+                checkedBoxes.value = [newTypeParams];
+            }
         }
     }
 );

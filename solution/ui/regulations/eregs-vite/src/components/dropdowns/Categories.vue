@@ -62,10 +62,15 @@ watch(
     () => selectedId.value,
     (newValue) => {
         const categoriesObj = {};
+        const docTypeObj = {};
 
         if (newValue) {
             const [id, categoryType] = newValue.split("-");
             categoriesObj[categoryType] = id;
+
+            if (isAuthenticated) {
+                docTypeObj.type = catTypeDict[categoryType];
+            }
         }
 
         if (silentReset.value) {
@@ -85,6 +90,7 @@ watch(
             query: {
                 ...cleanedRoute,
                 ...categoriesObj,
+                ...docTypeObj,
             },
         });
     }
