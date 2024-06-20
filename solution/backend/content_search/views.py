@@ -4,6 +4,7 @@ import requests
 from django.conf import settings
 from django.db.models import F, Prefetch, Q
 from django.http import HttpResponseBadRequest
+from django.core.exceptions import BadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
 from drf_spectacular.utils import extend_schema
@@ -12,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from drf_spectacular.utils import OpenApiParameter
 
 from common.auth import SettingsAuthentication
 from common.functions import establish_client
@@ -23,139 +25,98 @@ from resources.models import (
     AbstractResource,
     Subject,
 )
-# from resources.old_views.mixins import LocationFiltererMixin
 from .models import ContentIndex
 from .serializers import ContentUpdateSerializer, ContentSearchSerializer
 
-
-# was (LocationFiltererMixin, OptionalPaginationMixin, viewsets.ReadOnlyModelViewSet):
-# class ContentSearchViewset(viewsets.ReadOnlyModelViewSet):
-#     model = ContentIndex
-#     queryset = ContentIndex.objects.all()
-#     paginate_by_default = True
-#     location_filter_prefix = "locations__"
-#     pagination_class = OptionalPaginationMixin.pagination_class
-
-    # @extend_schema(
-    #     description="Retrieve list of uploaded files",
-    #     parameters=[
-    #                 OpenApiQueryParameter("category_details",
-    #                                       "Specify whether to show details of a category, or just the ID.",
-    #                                       bool, False),
-    #                 OpenApiQueryParameter("location_details",
-    #                                       "Specify whether to show details of a location, or just the ID.",
-    #                                       bool, False),
-    #                 OpenApiQueryParameter("subjects",
-    #                                       "Limit results to only resources found within these subjects. Use "
-    #                                       "\"&subjects=X&subjects=Y\" for multiple.", str, False),
-    #                 OpenApiQueryParameter("categories", "Limit results to only resources found within these categories. Use "
-    #                                       "\"&categories=X&categories=Y\" for multiple.", int, False),
-    #                 OpenApiQueryParameter("internal_categories", "Limit results to only internal documents found within these "
-    #                                       "file categories. Use \"&internal_categories=X&internal_categories=Y\" for multiple.",
-    #                                       int, False),
-    #                 OpenApiQueryParameter("q",
-    #                                       "Search for text within file metadata. Searches document name, file name, "
-    #                                       "date, and summary/description.", str, False),
-    #                 OpenApiQueryParameter("resource-type",
-    #                                       "Limit results to only resources found within this resource type.  Internal, External,"
-    #                                       "all. Use \"&resource-type=external\"", str, ''),
-    #                 ] + LocationFiltererMixin.PARAMETERS + OptionalPaginationMixin.PARAMETERS + PAGINATION_PARAMS
-    # )
-    # def list(self, request):
-        # locations = self.request.GET.getlist("locations")
-        # subjects = self.request.GET.getlist("subjects")
-        # categories = self.request.GET.getlist("categories")
-        # internal_categories = self.request.GET.getlist("internal_categories")
-        # resource_type = self.request.GET.get("resource-type")
-        # search_query = self.request.GET.get("q")
-        # paginate = self.request.GET.get("paginate") != 'false'
-        # query = self.queryset
-        # q_obj = self.get_location_filter(locations)
-        # if q_obj:
-        #     query = query.filter(q_obj)
-        # if subjects:
-        #     if subjects[0] == 'all':
-        #         query = query.filter(subjects__isnull=False)
-        #     else:
-        #         query = query.filter(subjects__id__in=subjects)
-        # if categories:
-        #     query = query.filter(Q(category__id__in=categories) | Q(category__subcategory__parent__id__in=categories))
-        # if internal_categories:
-        #     query = query.filter(Q(upload_category__id__in=internal_categories) |
-        #                          Q(upload_category__repositorysubcategory__parent__id__in=internal_categories))
-        # locations_prefetch = AbstractLocation.objects.all().select_subclasses()
-        # subjects_prefetch = Subject.objects.all()
-        # category_prefetch = AbstractCategory.objects.all().select_subclasses().select_related("subcategory__parent")
-        # repo_category_prefetch = AbstractRepoCategory.objects.all().select_subclasses()\
-        #                                              .select_related("repositorysubcategory__parent")
-        # division_prefetch = Division.objects.all().prefetch_related(Prefetch("group", queryset=Group.objects.all()))
-
-        # # If they are not authenticated and the resource type is internal, raise an error
-        # if not request.user.is_authenticated:
-        #     if resource_type == 'internal':
-        #         raise NotAuthenticated()
-        #     else:
-        #         query = query.filter(resource_type='external')
-        # elif resource_type == 'internal':
-        #     query = query.filter(resource_type='internal')
-        # elif resource_type == 'external':
-        #     query = query.filter(resource_type='external')
-
-        # ranked_results = None
-
-        # if search_query:
-        #     query = query.search(search_query)
-        #     if paginate:
-        #         ranked_results = [i.pk for i in self.paginate_queryset(query)]
-        #     else:
-        #         ranked_results = list(query.values_list("pk", flat=True))
-        #     query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
-        # else:
-        #     query = query.order_by(F('date_string').desc(nulls_last=True), F('doc_name_string').asc(nulls_last=True))
-
-        # context = self.get_serializer_context()
-        # context['content_id'] = True
-        # query = query.prefetch_related(
-        #     Prefetch("locations", queryset=locations_prefetch),
-        #     Prefetch("subjects", queryset=subjects_prefetch),
-        #     Prefetch("category", queryset=category_prefetch),
-        #     Prefetch("upload_category", queryset=repo_category_prefetch),
-        #     Prefetch("division", queryset=division_prefetch)).distinct()
-
-        # if paginate and not search_query:
-        #     query = self.paginate_queryset(query)
-
-        # # If results need to be sorted by rank, do so.
-        # # Not applicable if there is no search term.
-        # if ranked_results:
-        #     query = sorted(query, key=lambda x: ranked_results.index(x.id))
-
-        # context = self.get_serializer_context()
-        # if search_query:
-        #     serializer = ContentSearchSerializer(query, many=True, context=context)
-        # else:
-        #     serializer = ContentListSerializer(query, many=True, context=context)
-        # if paginate:
-        #     return self.get_paginated_response(serializer.data)
-        # else:
-        #     return Response(serializer.data)
-        # return Response("Not implemented yet")
+from common.mixins import ViewSetPagination
 
 
+@extend_schema(
+    description="Retrieve list of uploaded files",
+    parameters=[
+        OpenApiParameter(
+            name="subjects",
+            required=False,
+            type=int,
+            description="Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
+                        "Use \"&subjects=1&subjects=2\" for multiple.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="categories",
+            required=False,
+            type=int,
+            description="Limit results to only resources found within these categories. Categories are referenced by ID, not "
+                        "name. Use \"&categories=1&categories=2\" for multiple.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="q",
+            required=True,
+            type=str,
+            description="Search for this text within public and internal resources, and regulation text. "
+                        "Fields searched depends on the underlying data type.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_public",
+            required=False,
+            type=str,
+            description="Show ('true') or hide ('false') public resources, including Federal Register and other public links. "
+                        "Default is true.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_internal",
+            required=False,
+            type=str,
+            description="Show ('true') or hide ('false') internal resources, including files and internal links. "
+                        "Default is true.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_regulations",
+            required=False,
+            type=str,
+            description="Show ('true') or hide ('false') regulation text, including sections and appendices. "
+                        "Default is true.",
+            location=OpenApiParameter.QUERY,
+        ),
+    ] #+ LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
+)
 class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
     citation_filter_prefix = "resource__cfr_citations__"
+    pagination_class = ViewSetPagination
+
+    def get_boolean_parameter(self, param, default):
+        value = self.request.GET.get(param)
+        if not value:
+            return default
+        value = value.lower().strip()
+        if value in ("true", "t", "y", "yes", "1"):
+            return True
+        elif value in ("false", "f", "n", "no", "0"):
+            return False
+        raise BadRequest(f"Parameter '{param}' has an invalid value: '{value}'.")
 
     def get_queryset(self):
         citations = self.request.GET.getlist("citations")
         subjects = self.request.GET.getlist("subjects")
         categories = self.request.GET.getlist("categories")
-        search_query = self.request.GET.get("q")
+        show_public = self.get_boolean_parameter("show_public", True)
+        show_internal = self.get_boolean_parameter("show_internal", True)
+        show_regulations = self.get_boolean_parameter("show_regulations", True)
 
-        query = ContentIndex.objects.prefetch_related(
-            Prefetch("resource", AbstractResource.objects.select_subclasses()),
-        )
+        # /v4/content-search/?q=asdf&show_public&citations=42.
+        # /v4/resources/?citations=42...
+
+        search_query = self.request.GET.get("q")
+        if not search_query:
+            raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
+
+        query = ContentIndex.objects.all()
 
         # Filter inclusively by citations if this array exists
         citation_filter = self.get_citation_filter(citations)
@@ -174,9 +135,27 @@ class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet)
                 Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
             )
 
-        citations_prefetch = AbstractCitation.objects.select_subclasses()
-        subjects_prefetch = Subject.objects.all()
-        categories_prefetch = AbstractCategory.objects.select_subclasses()
+        # Filter by public, internal, and regulation text
+        if not show_public:
+            query = query.exclude(resource__abstractpublicresource__isnull=False)
+        if not show_internal or not self.request.user.is_authenticated:
+            query = query.exclude(resource__abstractinternalresource__isnull=False)
+        if not show_regulations:
+            query = query.exclude(reg_text__isnull=False)
+
+        # Perform search and headline generation
+        query = query.search(search_query)
+        ranked_results = [i.pk for i in self.paginate_queryset(query)]
+        query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
+
+        # Prefetch all related data
+        query = query.prefetch_related(
+            Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
+                Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("category", AbstractCategory.objects.select_subclasses()),
+                Prefetch("subjects", Subject.objects.all()),
+            )),
+        )
 
         return query
 

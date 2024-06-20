@@ -17,9 +17,10 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             name='date_string',
         ),
-        migrations.RemoveField(
+        migrations.RenameField(
             model_name='contentindex',
-            name='doc_name_string',
+            old_name='doc_name_string',
+            new_name='name',
         ),
         migrations.RemoveField(
             model_name='contentindex',
@@ -37,9 +38,10 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             name='resource_type',
         ),
-        migrations.RemoveField(
+        migrations.RenameField(
             model_name='contentindex',
-            name='summary_string',
+            old_name='summary_string',
+            new_name='summary',
         ),
         migrations.RemoveField(
             model_name='contentindex',
@@ -49,19 +51,21 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             name='url',
         ),
-        migrations.AddField(
-            model_name='contentindex',
-            name='name',
-            field=models.TextField(blank=True),
-        ),
-        migrations.AddField(
-            model_name='contentindex',
-            name='summary',
-            field=models.TextField(blank=True),
-        ),
         migrations.AlterField(
             model_name='contentindex',
             name='content',
+            field=models.TextField(blank=True, default=''),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='contentindex',
+            name='name',
+            field=models.TextField(blank=True, default=''),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='contentindex',
+            name='summary',
             field=models.TextField(blank=True, default=''),
             preserve_default=False,
         ),

@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.core.exceptions import BadRequest
 from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter
@@ -39,6 +40,14 @@ class DisplayNameFieldMixin:
     @property
     def display_name(self):
         return str(self)
+
+
+def is_int(x):
+    try:
+        _ = int(x)
+        return True
+    except ValueError:
+        return False
 
 
 # Must define "citation_filter_prefix" (e.g. "" for none, or "citations__")

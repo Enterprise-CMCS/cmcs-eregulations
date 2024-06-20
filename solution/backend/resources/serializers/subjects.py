@@ -7,5 +7,8 @@ class SubjectSerializer(serializers.Serializer):
     short_name = serializers.CharField()
     abbreviation = serializers.CharField()
     description = serializers.CharField()
+
+
+class SubjectWithCountsSerializer(SubjectSerializer):
     public_resources = serializers.IntegerField()
     internal_resources = serializers.IntegerField()

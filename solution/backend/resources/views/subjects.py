@@ -1,16 +1,12 @@
 from django.db.models import Count, Q, Value
 from rest_framework import viewsets
 
-from resources.models import (
-    Subject,
-)
-from resources.serializers import (
-    SubjectSerializer,
-)
+from resources.models import Subject
+from resources.serializers import SubjectWithCountsSerializer
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = SubjectSerializer
+    serializer_class = SubjectWithCountsSerializer
 
     def get_queryset(self):
         return Subject.objects.annotate(**{

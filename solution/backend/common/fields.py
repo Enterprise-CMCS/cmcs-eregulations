@@ -29,7 +29,6 @@ class VariableDateField(models.CharField):
     def __init__(self, *args, **kwargs):
         kwargs = {**kwargs, **{
             "max_length": 10,
-            "null": True,
             "blank": True,
             "help_text": "Leave blank or enter the date the document was created or published. "
                          "Some examples of valid dates are: \"2024\", \"2024-01\", or \"2024-01-31\".",

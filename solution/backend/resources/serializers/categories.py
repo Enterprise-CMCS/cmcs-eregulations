@@ -17,9 +17,9 @@ from .polymorphic import (
 class AbstractCategorySerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            PublicCategory: ("public_category", PublicCategorySerializer),
+            PublicCategory: ("public_category", PublicSubCategorySerializer),
             PublicSubCategory: ("public_subcategory", PublicSubCategorySerializer),
-            InternalCategory: ("internal_category", InternalCategorySerializer),
+            InternalCategory: ("internal_category", InternalSubCategorySerializer),
             InternalSubCategory: ("internal_subcategory", InternalSubCategorySerializer),
         }
 

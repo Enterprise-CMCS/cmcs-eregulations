@@ -59,23 +59,23 @@ class ContentIndexQuerySet(models.QuerySet):
                 query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel='</span>',
-                _min_words=self._min_words,
-                _max_words=self._max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 config='english',
                 fragment_delimiter='...',
-                _max_fragments=self._max_fragments,
+                max_fragments=self._max_fragments,
             ),
             name_headline=SearchHeadline(
                 "name",
                 query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
-                _min_words=self._min_words,
-                _max_words=self._max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 config='english',
                 highlight_all=True,
                 fragment_delimiter='...',
-                _max_fragments=self._max_fragments,
+                max_fragments=self._max_fragments,
             ),
             content_headline=SearchHeadline(
                 "content_short",
@@ -83,10 +83,10 @@ class ContentIndexQuerySet(models.QuerySet):
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 config='english',
-                _min_words=self._min_words,
-                _max_words=self._max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 fragment_delimiter='...',
-                _max_fragments=self._max_fragments,
+                max_fragments=self._max_fragments,
             ),
         )
 
@@ -134,7 +134,7 @@ def get_or_create_index(instance, created):
 def update_indexed_resource(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.document_id
-    index.summary = instance.description
+    index.summary = instance.title
     index.rank_a_string = "{} {}".format(
         instance.document_id,
         instance.title,
