@@ -2,33 +2,30 @@ import json
 
 import requests
 from django.conf import settings
-from django.db.models import F, Prefetch, Q
-from django.http import HttpResponseBadRequest
 from django.core.exceptions import BadRequest
+from django.db.models import Prefetch, Q
+from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.urls import reverse
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from drf_spectacular.utils import OpenApiParameter
 
 from common.auth import SettingsAuthentication
 from common.functions import establish_client
-from common.mixins import CitationFiltererMixin
-
+from common.mixins import CitationFiltererMixin, ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
     AbstractResource,
     Subject,
 )
-from .models import ContentIndex
-from .serializers import ContentUpdateSerializer, ContentSearchSerializer
 
-from common.mixins import ViewSetPagination
+from .models import ContentIndex
+from .serializers import ContentSearchSerializer, ContentUpdateSerializer
 
 
 @extend_schema(
@@ -82,7 +79,7 @@ from common.mixins import ViewSetPagination
                         "Default is true.",
             location=OpenApiParameter.QUERY,
         ),
-    ] #+ LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
+    ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
 )
 class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
@@ -126,7 +123,7 @@ class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet)
         # Filter by subject pks if subjects array is present
         if subjects:
             query = query.filter(resource__subjects__pk__in=subjects)
-        
+
         # Filter by categories (both parent and subcategories) if the categories array is present
         if categories:
             query = query.filter(

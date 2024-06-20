@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from common.fields import HeadlineField
-
 from resources.serializers import AbstractResourceSerializer
 
 

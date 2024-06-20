@@ -1,20 +1,20 @@
 from rest_framework import serializers
 
-from .polymorphic import (
-    PolymorphicSerializer,
-    PolymorphicTypeField,
+from resources.models import (
+    FederalRegisterLink,
+    InternalFile,
+    InternalLink,
+    PublicLink,
 )
 
 from .categories import AbstractCategorySerializer
 from .citations import AbstractCitationSerializer
+from .polymorphic import (
+    PolymorphicSerializer,
+    PolymorphicTypeField,
+)
 from .subjects import SubjectSerializer
 
-from resources.models import (
-    PublicLink,
-    FederalRegisterLink,
-    InternalLink,
-    InternalFile,
-)
 
 class AbstractResourceSerializer(PolymorphicSerializer):
     def get_serializer_map(self):

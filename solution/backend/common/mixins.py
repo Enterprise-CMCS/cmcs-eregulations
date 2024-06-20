@@ -1,5 +1,5 @@
-from django.db.models import Q
 from django.core.exceptions import BadRequest
+from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 
 from .api import OpenApiQueryParameter

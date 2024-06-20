@@ -1,4 +1,3 @@
-import uuid
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -14,18 +13,13 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from common.constants import QUOTE_TYPES
-from common.fields import VariableDateField
-
 from regcore.models import Part
 from resources.models import (
     AbstractResource,
-    PublicLink,
     FederalRegisterLink,
-    InternalLink,
     InternalFile,
-    Subject,
-    AbstractCategory,
-    AbstractCitation,
+    InternalLink,
+    PublicLink,
 )
 
 
@@ -119,7 +113,7 @@ class ContentIndex(models.Model):
     resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
     reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
 
-    objects = ContentIndexManager()  
+    objects = ContentIndexManager()
 
 
 def get_or_create_index(instance, created):
