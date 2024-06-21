@@ -106,9 +106,7 @@ class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet)
         show_internal = self.get_boolean_parameter("show_internal", True)
         show_regulations = self.get_boolean_parameter("show_regulations", True)
 
-        # /v4/content-search/?q=asdf&show_public&citations=42.
-        # /v4/resources/?citations=42...
-
+        # Retrieve the required search query param
         search_query = self.request.GET.get("q")
         if not search_query:
             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
@@ -157,139 +155,31 @@ class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet)
         return query
 
 
+@extend_schema(
+    description="Adds text to the content of an index.",
+    request=ContentUpdateSerializer,
+    responses={200: ContentUpdateSerializer}
+)
 class PostContentTextViewset(APIView):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication, SettingsAuthentication]
+    authentication_classes = [SettingsAuthentication]
 
-    @extend_schema(
-        description="Adds text to the content of an index.",
-        request=ContentUpdateSerializer,
-        responses={200: ContentUpdateSerializer}
-    )
     def post(self, request, *args, **kwargs):
         post_data = request.data
         id = post_data['id']
         text = post_data['text']
-        index = ContentIndex.objects.get(uid=id)
-        index.content = text
-        index.save()
-        return Response(data=f'Index was updated for {index.doc_name_string}')
+        try:
+            rows = ContentIndex.objects.filter(id=id).update(content=text)
+            return Response(data=f"Index was updated for {rows} rows.")
+        except ContentIndex.DoesNotExist:
+            raise BadRequest(f"An index matching {id} does not exist.")
 
 
-class InvokeTextExtractorViewset(APIView):
+@extend_schema(
+    description="Invokes the text extractor for the given content index ID.",
+)
+class InvokeTextExtractorViewSet(APIView):
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(
-        description="Post to the lambda function",
-    )
     def get(self, request, *args, **kwargs):
-        uid = kwargs.get("content_id")
-        fr_doc_id = kwargs.get("fr_doc_id")
-
-        index = ContentIndex.objects.get(uid=uid)
-        if not index:
-            return Response({'message': "Index does not exist"})
-        extract_url = index.extract_url
-
-        if fr_doc_id:
-            try:
-                # doc = FederalRegisterDocument.objects.get(id=fr_doc_id)
-                doc = None
-                response = requests.get(
-                    f"https://www.federalregister.gov/api/v1/documents/{doc.document_number}.json",
-                    timeout=20,
-                )
-                response.raise_for_status()
-                content = json.loads(response.content)
-                extract_url = content["raw_text_url"]
-                doc.raw_text_url = extract_url
-                doc.save()
-                index.extract_url = extract_url
-                index.ignore_robots_txt = True
-                index.save()
-            except Exception:
-                return Response({"message": "Failed to fetch the raw text URL."})
-
-        if not settings.USE_LOCAL_TEXTRACT:
-            post_url = request.build_absolute_uri(reverse("post-content"))
-        else:
-            post_url = "http://host.docker.internal:8000" + reverse("post-content")
-
-        json_object = {
-            'id': uid,
-            'uri': index.extract_url,
-            'ignore_robots_txt': index.ignore_robots_txt,
-            'post_url': post_url,
-            'auth': {
-                "type": "basic-env",
-                "username": "HTTP_AUTH_USER",
-                "password": "HTTP_AUTH_PASSWORD",
-            },
-        }
-        if index.file:
-            try:
-                json_object['uri'] = index.file.get_key()
-                json_object['backend'] = 's3'
-                # The lambda already has permissions to access the S3 bucket.  Only on a local run do we pass the keys.
-                if settings.USE_LOCAL_TEXTRACT:
-                    json_object["aws"] = {
-                                            "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
-                                            "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
-                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
-                                            'use_lambda': False,
-                                            'aws_region': 'us-east-1'
-                                        }
-                else:
-                    json_object["aws"] = {
-                                            'use_lambda': True,
-                                            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
-                                        }
-            except ValueError:
-                json_object['backend'] = 'web'
-
-        if settings.USE_LOCAL_TEXTRACT:
-            # return Response(json_object)
-            docker_url = 'http://host.docker.internal:8001/'
-            resp = requests.post(
-                docker_url,
-                data=json.dumps(json_object),
-                timeout=60,
-            )
-            resp.raise_for_status()
-        else:
-            if settings.TEXT_EXTRACTOR_ARN:
-                textract_arn = settings.TEXT_EXTRACTOR_ARN
-            else:
-                textract_arn = settings.TEXTRACT_ARN
-            lambda_client = establish_client('lambda')
-            resp = lambda_client.invoke(FunctionName=textract_arn,
-                                        InvocationType='Event',
-                                        Payload=json.dumps(json_object))
-        return Response(data={'response': resp})
-
-
-class EditContentView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @extend_schema(
-        description="redirects to a resource of an index.",
-    )
-    def get(self, request, *args, **kwargs):
-        id = kwargs.get("resource_id")
-        index = ContentIndex.objects.get(id=id)
-        obj = None
-
-        if index.file is not None:
-            obj = index.file
-
-        elif index.supplemental_content is not None:
-            obj = index.supplemental_content
-
-        elif index.fr_doc is not None:
-            obj = index.fr_doc
-
-        if obj is not None:
-            url = reverse('admin:%s_%s_change' % (obj._meta.app_label, obj._meta.model_name), args=[obj.id])
-            return redirect(url)
-        else:
-            return HttpResponseBadRequest("Invalid index - no associated file, supplemental content, or fr_doc.")
+        return Response("Not implemented")
