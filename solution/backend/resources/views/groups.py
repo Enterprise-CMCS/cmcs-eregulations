@@ -1,6 +1,7 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets
-from rest_framework.pagination import PageNumberPagination
+
+from common.mixins import ViewSetPagination
 
 from resources.models import (
     AbstractPublicResource,
@@ -12,7 +13,7 @@ from resources.serializers import ResourceGroupSerializer
 
 class ResourceGroupViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ResourceGroupSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = ViewSetPagination
 
     def get_queryset(self):
         resource_filter = (AbstractResource
