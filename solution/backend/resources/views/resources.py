@@ -64,7 +64,8 @@ class ResourceViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
 
         # Filter out internal resources if the user is not logged in
         if not self.request.user.is_authenticated:
-            query = query.filter(abstractresource_ptr__abstractinternalresource__isnull=True)
+            prefix = "" if self.model == AbstractResource else "abstractresource_ptr__"
+            query = query.filter(**{f"{prefix}abstractinternalresource__isnull": True})
 
         return query.select_subclasses()
 
