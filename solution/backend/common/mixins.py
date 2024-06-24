@@ -85,7 +85,7 @@ class CitationFiltererMixin:
                         if is_int(split[2])
                         else (
                             Q(**{f"{self.citation_filter_prefix}subpart__subpart_id": split[2]}) |
-                            Q(**{f"{self.citation_filter_prefix}section__parent__subpart__subpart_id": split[2]})
+                            Q(**{f"{self.citation_filter_prefix}section__parent__subpart_id": split[2]})
                         )
                     )
 
