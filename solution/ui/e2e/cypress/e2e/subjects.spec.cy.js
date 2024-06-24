@@ -876,11 +876,7 @@ describe("Subjects Page -- Pagination", () => {
     it("Goes to the second page of results when clicking the Next button", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password, landingPage: "/" });
-        cy.visit("/subjects");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .uncheck({ force: true });
+        cy.visit("/subjects?type=external");
         cy.get(".current-page.selected").contains("1");
         cy.get(".pagination-control.left-control > .back-btn").should(
             "have.class",
@@ -908,11 +904,7 @@ describe("Subjects Page -- Pagination", () => {
     it("Goes to the second page of results when clicking on page 2", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password, landingPage: "/" });
-        cy.visit("/subjects");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .uncheck({ force: true });
+        cy.visit("/subjects?type=external");
         cy.get(".current-page.selected").contains("1");
         cy.get(".page-number-li.unselected")
             .contains("2")
