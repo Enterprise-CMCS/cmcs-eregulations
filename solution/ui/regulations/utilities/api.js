@@ -535,13 +535,13 @@ const getStatutes = async ({
 const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file-manager/subjects`,
+            `${apiUrl}resources/subjects`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file-manager/subjects", cacheResponse);
+    return httpApiGet("resources/subjects", cacheResponse);
 };
 
 /**
