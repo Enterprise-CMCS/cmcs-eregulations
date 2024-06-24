@@ -84,19 +84,29 @@ watch(
 );
 
 // popstate to update the checkbox on back/forward click
-const onPopState = () => {
+const onPopState = (event) => {
     if (!isAuthenticated) {
         return;
     }
 
-    const { type: queryTypes } = $route.query;
+    const currentPopState = event?.state?.current ?? "";
 
-    if (_isUndefined(queryTypes) || queryTypes === "all") {
-        checkedBoxes.value = [...DOCUMENT_TYPES];
-    } else if (_isArray(queryTypes)) {
-        checkedBoxes.value = queryTypes;
-    } else {
-        checkedBoxes.value = [queryTypes];
+    const isInternal =
+        currentPopState.includes("type") &&
+        currentPopState.includes("internal");
+    const isExternal =
+        currentPopState.includes("type") &&
+        currentPopState.includes("external");
+    const isAll =
+        currentPopState.includes("type") && currentPopState.includes("all");
+    const isNone = !currentPopState.includes("type");
+
+    if (isInternal) {
+        checkedBoxes.value = ["internal"];
+    } else if (isExternal) {
+        checkedBoxes.value = ["external"];
+    } else if (isAll || isNone) {
+        checkedBoxes.value = [];
     }
 };
 
