@@ -118,16 +118,7 @@ describe("Find by Subjects", () => {
         cy.injectAxe();
 
         cy.get("button[data-testid='user-account-button']").should("not.exist");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .should("be.checked")
-            .and("be.disabled");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("not.be.checked")
-            .and("be.disabled");
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
 
         cy.checkAccessibility();
 
