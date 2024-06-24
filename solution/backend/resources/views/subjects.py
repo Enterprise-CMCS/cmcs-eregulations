@@ -1,12 +1,15 @@
 from django.db.models import Count, Q, Value
 from rest_framework import viewsets
 
+from common.mixins import ViewSetPagination
+
 from resources.models import Subject
 from resources.serializers import SubjectWithCountsSerializer
 
 
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SubjectWithCountsSerializer
+    pagination_class = ViewSetPagination
 
     def get_queryset(self):
         return Subject.objects.annotate(**{

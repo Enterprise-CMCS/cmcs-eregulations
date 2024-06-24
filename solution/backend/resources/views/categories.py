@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from common.mixins import ViewSetPagination
+
 from resources.models import (
     InternalCategory,
     InternalSubCategory,
@@ -16,6 +18,7 @@ from resources.serializers import (
 
 
 class PublicCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    pagination_class = ViewSetPagination
     serializer_class = PublicCategorySerializer
     queryset = PublicCategory.objects.all().prefetch_related(
         Prefetch("subcategories", PublicSubCategory.objects.order_by("order")),
@@ -23,6 +26,7 @@ class PublicCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class InternalCategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    pagination_class = ViewSetPagination
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = InternalCategorySerializer
