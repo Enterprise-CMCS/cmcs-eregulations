@@ -136,7 +136,7 @@ describe("Find by Subjects", () => {
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
             .click({ force: true });
-        cy.url().should("include", "/subjects?subjects=63");
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
         cy.get(".subject__heading")
             .should("exist")
             .and("have.text", "Managed Care");
