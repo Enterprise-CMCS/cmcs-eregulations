@@ -257,13 +257,13 @@ const setCacheItem = async (key, data) => {
 const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/categories`,
+            `${apiUrl}resources/public_categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/categories");
+    return httpApiGet("resources/public_categories");
 };
 
 /**
@@ -279,13 +279,13 @@ const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESP
 const getExternalCategoriesTree = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/categories/tree`,
+            `${apiUrl}resources/public_categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/categories/tree");
+    return httpApiGet("resources/public_categories");
 };
 
 /**
@@ -566,13 +566,13 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPO
 const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file-manager/categories`,
+            `${apiUrl}resources/internal_categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file-manager/categories", cacheResponse);
+    return httpApiGet("resources/internal_categories", cacheResponse);
 };
 
 /**
@@ -585,13 +585,13 @@ const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RES
 const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file-manager/categories/tree`,
+            `${apiUrl}resources/internal_categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file-manager/categories/tree", cacheResponse);
+    return httpApiGet("resources/internal_categories", cacheResponse);
 };
 
 /**
