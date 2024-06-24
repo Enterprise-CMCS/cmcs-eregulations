@@ -159,6 +159,12 @@ onMounted(() => {
 });
 
 onUnmounted(() => window.removeEventListener("popstate", onPopState));
+
+const onMenuUpdate = () => {
+    // if we're toggling the menu via click or kb event,
+    // we are not being silent
+    if (silentReset.value) silentReset.value = false;
+};
 </script>
 
 <template>
@@ -180,6 +186,7 @@ onUnmounted(() => window.removeEventListener("popstate", onPopState));
         :disabled="loading"
         :items="list"
         :item-props="itemProps"
+        @update:menu="onMenuUpdate"
     >
         <template #item="{ props, item }">
             <v-list-item
@@ -202,5 +209,3 @@ onUnmounted(() => window.removeEventListener("popstate", onPopState));
         </template>
     </v-select>
 </template>
-
-<style></style>
