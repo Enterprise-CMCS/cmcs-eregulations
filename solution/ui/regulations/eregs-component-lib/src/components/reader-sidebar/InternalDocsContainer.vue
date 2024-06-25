@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
 
-import { getCombinedContent, getInternalCategories } from "utilities/api";
+import { getInternalCategories, getInternalDocs } from "utilities/api";
 
 import {
     EventCodes,
@@ -79,10 +79,10 @@ const getDocuments = async ({ section }) => {
     try {
         const results = await Promise.all([
             getCategories(),
-            getCombinedContent({
+            getInternalDocs({
                 apiUrl: props.apiUrl,
                 cacheResponse: false,
-                requestParams: `resource-type=internal&${locationString}`,
+                requestParams: `${locationString}`,
             }),
         ]);
 
@@ -90,7 +90,7 @@ const getDocuments = async ({ section }) => {
         const documents = results[1];
 
         internalDocuments.value.results = formatResourceCategories({
-            categories,
+            categories: categories.results,
             resources: documents.results,
             apiUrl: props.apiUrl,
         });

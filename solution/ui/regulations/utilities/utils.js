@@ -645,10 +645,6 @@ const formatResourceCategories = ({
 }) => {
     const categoriesClone = [...categories];
 
-    console.log("categoriesClone", categoriesClone);
-
-    console.log("resources", resources.map((r) => r.category.type));
-
     resources
         .filter(
             (resource) =>

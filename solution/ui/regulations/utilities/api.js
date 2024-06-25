@@ -593,7 +593,20 @@ const getCombinedContent = async ({
 }) =>
     httpApiGetLegacy(
         `${apiUrl}content-search/${
-            requestParams ? `?${requestParams}&` : "?"
+            requestParams ? `?${requestParams}` : ""
+        }`,
+        {},
+        cacheResponse
+    );
+
+const getInternalDocs = async ({
+    apiUrl,
+    requestParams = "",
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) =>
+    httpApiGetLegacy(
+        `${apiUrl}resources/internal${
+            requestParams ? `?${requestParams}` : ""
         }`,
         {},
         cacheResponse
@@ -615,6 +628,7 @@ export {
     getGovInfoLinks,
     getInternalCategories,
     getInternalCategoriesTree,
+    getInternalDocs,
     getInternalSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,
