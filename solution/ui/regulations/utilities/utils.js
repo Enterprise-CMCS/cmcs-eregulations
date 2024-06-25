@@ -645,20 +645,21 @@ const formatResourceCategories = ({
 }) => {
     const categoriesClone = [...categories];
 
-    resources
-        .filter(
-            (resource) =>
-                resource.category?.type === "public_category" ||
-                resource.category?.type === "internal_category"
-        )
-        .forEach((resource) => {
-            if (resource.category?.type === "internal_category") {
-                resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
-            }
+    resources.forEach((resource) => {
+        if (
+            resource.category?.type === "internal_category" ||
+            resource.category?.type === "internal_subcategory"
+        ) {
+            resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
+        }
+
+        if (
+            resource.category?.type === "public_category" ||
+            resource.category?.type === "internal_category"
+        ) {
             const existingCategory = categoriesClone.find(
                 (category) => category.name === resource.category.name
             );
-
             if (existingCategory) {
                 if (!existingCategory.supplemental_content) {
                     existingCategory.supplemental_content = [];
@@ -669,58 +670,40 @@ const formatResourceCategories = ({
                     JSON.stringify(resource.category)
                 );
                 newCategory.supplemental_content = [resource];
-                newCategory.sub_categories = [];
+                newCategory.subcategories = [];
                 categoriesClone.push(newCategory);
             }
-        });
+        }
+    });
 
-    const subCategories = [];
-
-    resources
-        .filter(
-            (resource) =>
-                resource.category?.type === "public_subcategory" ||
-                resource.category?.type === "internal_subcategory"
-        )
-        .forEach((resource) => {
-            if (resource.category?.type === "internal_subcategory") {
-                resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
-            }
-            const existingSubCategory = subCategories.find(
-                (category) => category.name === resource.category.name
-            );
-
-            if (existingSubCategory) {
-                if (!existingSubCategory.supplemental_content) {
-                    existingSubCategory.supplemental_content = [];
+    resources.forEach((resource) => {
+        if (
+            resource.category?.type === "public_subcategory" ||
+            resource.category?.type === "internal_subcategory"
+        ) {
+            categoriesClone.forEach((category) => {
+                if (!category.subcategories) {
+                    return;
                 }
-                existingSubCategory.supplemental_content.push(resource);
-            } else {
-                const newSubCategory = JSON.parse(
-                    JSON.stringify(resource.category)
-                );
-                newSubCategory.supplemental_content = [resource];
-                subCategories.push(newSubCategory);
-            }
-        });
 
-    const formattedCategories = categoriesClone.map((c) => {
-        const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = subCategories.filter(
-            (subcategory) => subcategory.parent?.id === category?.id
-        );
-
-        return category;
+                category.subcategories.forEach((subcategory) => {
+                    if (subcategory.name === resource.category.name) {
+                        if (!subcategory.supplemental_content) {
+                            subcategory.supplemental_content = [];
+                        }
+                        subcategory.supplemental_content.push(resource);
+                    }
+                });
+            });
+        }
     });
 
-    formattedCategories.sort((a, b) => a.order - b.order);
-    formattedCategories.forEach((category) => {
-        category.sub_categories.sort((a, b) => a.order - b.order);
+    categoriesClone.sort((a, b) => a.order - b.order);
+    categoriesClone.forEach((category) => {
+        category.subcategories.sort((a, b) => a.order - b.order);
     });
 
-    return formattedCategories.filter(
-        (category) => category.type !== "repositorysubcategory"
-    );
+    return categoriesClone;
 };
 
 function flattenSubpart(subpart) {

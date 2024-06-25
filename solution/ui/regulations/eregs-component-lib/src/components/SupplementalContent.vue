@@ -38,7 +38,11 @@
 </template>
 
 <script>
-import { getSupplementalContent, getSubpartTOC } from "utilities/api";
+import {
+    getExternalCategories,
+    getSupplementalContent,
+    getSubpartTOC,
+} from "utilities/api";
 import {
     EventCodes,
     formatResourceCategories,
@@ -63,6 +67,21 @@ function getDefaultCategories() {
         return category;
     });
 }
+
+const getCategories = async (apiUrl) => {
+    let categories = [];
+
+    try {
+        categories = await getExternalCategories({
+            apiUrl,
+            cacheResponse: false,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return categories;
+};
 
 export default {
     components: {
@@ -198,28 +217,30 @@ export default {
                 }
                 await this.getPartDictionary();
 
-                const subpartResponse = await getSupplementalContent({
-                    apiUrl: this.apiUrl,
-                    partDict: this.partDict,
-                    pageSize: 1000,
-                });
+                const results = await Promise.all([
+                    getCategories(this.apiUrl),
+                    getSupplementalContent({
+                        apiUrl: this.apiUrl,
+                        partDict: this.partDict,
+                        pageSize: 1000,
+                    }),
+                ]);
+
+                const categories = results[0];
+                const subpartResponse = results[1];
 
                 this.resourceCount = subpartResponse.count;
-
-                const rawCategories = JSON.parse(
-                    document.getElementById("categories").textContent
-                );
 
                 if (response !== "") {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
-                        categories: rawCategories,
+                        categories: categories.results,
                         resources: response.results,
                     });
                 } else {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
-                        categories: rawCategories,
+                        categories: categories.results,
                         resources: subpartResponse.results,
                     });
                 }
