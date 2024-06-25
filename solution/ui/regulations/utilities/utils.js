@@ -653,7 +653,7 @@ const formatResourceCategories = ({
         )
         .forEach((resource) => {
             if (resource.category?.type === "internal_category") {
-                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+                resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
             }
             const existingCategory = categoriesClone.find(
                 (category) => category.name === resource.category.name
@@ -684,7 +684,7 @@ const formatResourceCategories = ({
         )
         .forEach((resource) => {
             if (resource.category?.type === "internal_subcategory") {
-                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
+                resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
             }
             const existingSubCategory = subCategories.find(
                 (category) => category.name === resource.category.name
