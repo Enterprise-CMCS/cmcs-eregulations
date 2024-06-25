@@ -4,8 +4,7 @@ import pytest
 from django.core.exceptions import ValidationError
 
 from common.fields import HeadlineField, VariableDateField
-from file_manager.models import Subject
-
+from resources.models import Subject
 
 class VariableDateFieldTest(unittest.TestCase):
     def setUp(self):
