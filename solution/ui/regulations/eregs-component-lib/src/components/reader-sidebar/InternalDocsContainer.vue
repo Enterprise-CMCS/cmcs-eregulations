@@ -66,13 +66,13 @@ const getDocuments = async ({ section }) => {
     let locationString;
 
     if (section) {
-        locationString = `locations=${props.title}.${props.part}.${section}`;
+        locationString = `citations=${props.title}.${props.part}.${section}`;
     } else {
         const sectionsClone = [...rawNodeList.sections];
         locationString = sectionsClone.reduce(
             (acc, currentSection) =>
-                `${acc}&locations=${props.title}.${props.part}.${currentSection}`,
-            `locations=${props.title}.${props.part}.${rawNodeList.subparts[0]}`
+                `${acc}&citations=${props.title}.${props.part}.${currentSection}`,
+            `citations=${props.title}.${props.part}.${rawNodeList.subparts[0]}`
         );
     }
 
@@ -148,7 +148,7 @@ watch(selectedSection, (newValue) => {
                 :name="category.name"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
-                :sub_categories="category.sub_categories"
+                :subcategories="category.subcategories"
                 :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
