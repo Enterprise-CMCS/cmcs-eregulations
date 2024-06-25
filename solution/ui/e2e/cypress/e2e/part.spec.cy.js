@@ -261,7 +261,7 @@ describe("Part View", () => {
         cy.contains("433.10").click({ force: true });
         cy.url().should("include", "#433-10");
         cy.wait("@resources43310").then(() => {
-            cy.get(".is-fr-doc-btn").click({ force: true });
+            cy.get(".is-fr-link-btn").click({ force: true });
             cy.get(".show-more-button")
                 .contains("+ Show More (9)")
                 .click({ force: true });

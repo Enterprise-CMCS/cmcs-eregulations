@@ -50,7 +50,7 @@
                     :is-fetching="isFetching"
                 >
                 </supplemental-content-category>
-                <template v-if="isFrDocCategory">
+                <template v-if="isFrLinkCategory">
                     <related-rule-list
                         v-if="supplemental_content"
                         :rules="supplemental_content"
@@ -116,7 +116,7 @@ export default {
             type: Array,
             required: false,
         },
-        isFrDocCategory: {
+        isFrLinkCategory: {
             type: Boolean,
             required: false,
             default: false,
@@ -138,7 +138,7 @@ export default {
         collapseButtonClasses() {
             return {
                 subcategory: this.subcategory,
-                "is-fr-doc-btn": this.isFrDocCategory,
+                "is-fr-link-btn": this.isFrLinkCategory,
             };
         },
     },

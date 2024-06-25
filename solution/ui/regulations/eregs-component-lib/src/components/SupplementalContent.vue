@@ -14,7 +14,7 @@
                 :supplemental_content="category.supplemental_content"
                 :subcategories="category.subcategories"
                 :is-fetching="isFetching"
-                :is-fr-doc-category="category.is_fr_doc_category"
+                :is-fr-link-category="category.is_fr_link_category"
                 :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
