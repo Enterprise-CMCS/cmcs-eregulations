@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from common.fields import HeadlineField, VariableDateField
 from resources.models import Subject
 
+
 class VariableDateFieldTest(unittest.TestCase):
     def setUp(self):
         self.field = VariableDateField()

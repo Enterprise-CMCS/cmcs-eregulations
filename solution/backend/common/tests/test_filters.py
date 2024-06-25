@@ -4,6 +4,7 @@ from common.filters import IndexPopulatedFilter
 from content_search.models import ContentIndex
 from resources.models.internal_resources import InternalFile
 
+
 @pytest.mark.django_db
 def test_index_populated_filter():
     a = InternalFile.objects.create(document_name="a")
