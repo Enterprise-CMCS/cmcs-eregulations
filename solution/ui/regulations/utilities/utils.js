@@ -698,12 +698,25 @@ const formatResourceCategories = ({
         }
     });
 
-    categoriesClone.sort((a, b) => a.order - b.order);
-    categoriesClone.forEach((category) => {
+    const returnArr = categoriesClone
+        .filter((category) => {
+            if (category.supplemental_content) return true;
+
+            const hasPopulatedSubcategory = category.subcategories.some(
+                (subcategory) => subcategory.supplemental_content
+            );
+
+            if (hasPopulatedSubcategory) return true;
+
+            return false;
+        })
+        .sort((a, b) => a.order - b.order);
+
+    returnArr.forEach((category) => {
         category.subcategories.sort((a, b) => a.order - b.order);
     });
 
-    return categoriesClone;
+    return returnArr;
 };
 
 function flattenSubpart(subpart) {
