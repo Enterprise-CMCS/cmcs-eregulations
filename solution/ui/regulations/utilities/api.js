@@ -257,13 +257,13 @@ const setCacheItem = async (key, data) => {
 const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/public_categories`,
+            `${apiUrl}resources/public/categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/public_categories");
+    return httpApiGet("resources/public/categories");
 };
 
 /**
@@ -279,13 +279,13 @@ const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESP
 const getExternalCategoriesTree = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/public_categories`,
+            `${apiUrl}resources/public/categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/public_categories");
+    return httpApiGet("resources/public/categories");
 };
 
 /**
@@ -352,12 +352,12 @@ const getRecentResources = async (
 ) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
+            `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
             {} // params, default
         );
     }
     return httpApiGetLegacy(
-        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
+        `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
         {} // params, default
     );
 };
