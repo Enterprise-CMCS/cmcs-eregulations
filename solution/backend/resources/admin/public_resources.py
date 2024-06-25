@@ -108,3 +108,11 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         return super().get_queryset(request).prefetch_related(
             Prefetch("resource_groups", ResourceGroup.objects.all()),
         )
+
+    # Override document_id's default help_text to show specific FR link information
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['document_id'].help_text = \
+            "This is the citation number for the rule. It usually looks like this: \"55 FR 10938\", " \
+            "where \"55\" is the volume number and \"10938\" is the page number."
+        return form
