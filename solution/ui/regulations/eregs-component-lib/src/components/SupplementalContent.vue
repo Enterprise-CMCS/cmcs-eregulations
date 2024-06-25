@@ -12,7 +12,7 @@
                 :subcategory="false"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
-                :sub_categories="category.sub_categories"
+                :subcategories="category.subcategories"
                 :is-fetching="isFetching"
                 :is-fr-doc-category="category.is_fr_doc_category"
                 :show-if-empty="category.show_if_empty"
@@ -63,7 +63,7 @@ function getDefaultCategories() {
 
     return rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = [];
+        category.subcategories = [];
         return category;
     });
 }

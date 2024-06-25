@@ -3,8 +3,8 @@
         <supplemental-content-object
             v-for="(content, index) in limitedContent"
             :key="index"
-            :name="content.name"
-            :description="content.description || content.doc_name_string"
+            :name="content.document_id"
+            :description="content.title || content.doc_name_string"
             :date="content.date || content.date_string"
             :division="content.division"
             :url="content.url"
@@ -92,7 +92,7 @@ export default {
             type: Array,
             required: true,
         },
-        has_sub_categories: {
+        hasSubcategories: {
             type: Number,
             required: true,
         },
