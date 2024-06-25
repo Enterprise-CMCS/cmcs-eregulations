@@ -552,13 +552,13 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPO
 const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/internal_categories`,
+            `${apiUrl}resources/internal/categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/internal_categories", cacheResponse);
+    return httpApiGet("resources/internal/categories", cacheResponse);
 };
 
 /**
@@ -571,13 +571,13 @@ const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RES
 const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/internal_categories`,
+            `${apiUrl}resources/internal/categories`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/internal_categories", cacheResponse);
+    return httpApiGet("resources/internal/categories", cacheResponse);
 };
 
 /**
@@ -594,7 +594,7 @@ const getCombinedContent = async ({
     httpApiGetLegacy(
         `${apiUrl}content-search/${
             requestParams ? `?${requestParams}&` : "?"
-        },
+        }`,
         {},
         cacheResponse
     );
