@@ -1,7 +1,7 @@
 <script setup>
 const iconTypesDict = {
-    "external": "users",
-    "internal": "key",
+    "public_link": "users",
+    "internal_file": "key",
 };
 
 const props = defineProps({

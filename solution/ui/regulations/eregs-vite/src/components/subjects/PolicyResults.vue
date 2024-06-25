@@ -29,8 +29,8 @@ const addSurroundingEllipses = (str) => {
 
 const getResultLinkText = (item) => {
     let linkText;
-    if (item.resource_type === "internal") {
-        linkText = item.document_name_headline || item.doc_name_string;
+    if (item.resource.type === "internal") {
+        linkText = item.document_name_headline || item.resource.document_id;
     } else {
         linkText = item.summary_headline || item.summary_string;
     }
@@ -40,12 +40,12 @@ const getResultLinkText = (item) => {
 
 const showResultSnippet = (item) => {
     if (
-        item.resource_type === "internal" &&
+        item.resource.type === "internal_file" &&
         (item.content_headline || item.summary_headline || item.summary_string)
     )
         return true;
 
-    if (item.resource_type === "external" && item.content_headline) return true;
+    if (item.resource.type === "public_link" && item.content_headline) return true;
 
     return false;
 };
@@ -53,7 +53,7 @@ const showResultSnippet = (item) => {
 const getResultSnippet = (item) => {
     let snippet;
 
-    if (item.resource_type === "internal") {
+    if (item.resource.type === "internal_file") {
         if (
             item.content_headline &&
             item.content_headline.includes("search-highlight")
@@ -68,7 +68,7 @@ const getResultSnippet = (item) => {
         return snippet;
     }
 
-    if (item.resource_type === "external") {
+    if (item.resource.type === "public_link") {
         if (item.content_headline) {
             snippet = addSurroundingEllipses(item.content_headline);
         } else if (item.content_string) {
@@ -132,16 +132,16 @@ const $route = useRoute();
 const apiUrl = inject("apiUrl");
 const base = inject("base");
 
-const getUrl = ({ resource_type: resourceType, url }) =>
-    resourceType === "external" ? url : `${apiUrl}file-manager/files/${url}`;
+const getUrl = ({ type: resourceType, url, uid }) =>
+    resourceType === "public_link" ? url : `${apiUrl}resources/internal/files/${uid}`;
 
 const needsBar = (item) =>
-    item.resource_type === "external" &&
-    item.date_string &&
-    item.doc_name_string;
+    item.resource.type === "public_link" &&
+    item.resource.date &&
+    item.resource.document_id;
 
 const resultLinkClasses = (doc) => ({
-    external: doc.resource_type === "external",
+    external: doc.resource.type === "public_link",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -195,64 +195,64 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #labels>
                 <DocTypeLabel
-                    v-if="!_isEmpty(doc.resource_type)"
-                    :icon-type="doc.resource_type"
-                    :doc-type="DOCUMENT_TYPES_MAP[doc.resource_type]"
+                    v-if="!_isEmpty(doc.resource.type)"
+                    :icon-type="doc.resource.type"
+                    :doc-type="DOCUMENT_TYPES_MAP[doc.resource.type]"
                 />
-                <template v-if="doc.resource_type === 'internal'">
+                <template v-if="doc.resource.type === 'internal_file'">
                     <CategoryLabel
-                        v-if="!_isEmpty(doc.category)"
+                        v-if="!_isEmpty(doc.resource.category)"
                         :name="
                             doc.category?.parent
-                                ? doc.category?.parent?.name
-                                : doc.category?.name
+                                ? doc.resource?.category?.parent?.name
+                                : doc.resource?.category?.name
                         "
                         type="category"
                     />
                     <CategoryLabel
-                        v-if="doc.category?.parent"
-                        :name="doc.category?.name"
+                        v-if="doc.resource?.category?.parent"
+                        :name="doc.resource?.category?.name"
                         type="subcategory"
                     />
                 </template>
                 <template v-else>
                     <CategoryLabel
-                        v-if="!_isEmpty(doc.category)"
+                        v-if="!_isEmpty(doc.resource.category)"
                         :name="
                             doc.category?.parent
-                                ? doc.category?.parent?.name
-                                : doc.category?.name
+                                ? doc.resource?.category?.parent?.name
+                                : doc.resource?.category?.name
                         "
                         type="category"
                     />
                     <CategoryLabel
-                        v-if="doc.category?.parent"
-                        :name="doc.category?.name"
+                        v-if="doc.resource?.category?.parent"
+                        :name="doc.resource?.category?.name"
                         type="subcategory"
                     />
                 </template>
             </template>
             <template #context>
                 <span
-                    v-if="doc.date_string"
+                    v-if="doc.resource.date"
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
-                    >{{ formatDate(doc.date_string) }}</span
+                    >{{ formatDate(doc.resource.date) }}</span
                 >
                 <!-- DivisionLabel
-                    v-if="doc.resource_type === 'internal' && doc.division"
+                    v-if="doc.type === 'internal' && doc.division"
                     :division="doc.division"
                 /-->
                 <span
                     v-if="
-                        doc.resource_type === 'external' && doc.doc_name_string
+                        doc.resource.type === 'public_link' && doc.resource.document_id
                     "
-                    >{{ doc.doc_name_string }}</span
+                    >{{ doc.resource.document_id }}</span
                 >
             </template>
             <template #link>
                 <a
-                    :href="getUrl(doc)"
+                    :href="getUrl(doc.resource)"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="document__link document__link--filename"
@@ -274,16 +274,16 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #chips>
                 <div
-                    v-if="doc.subjects.length > 0"
+                    v-if="doc.resource.subjects.length > 0"
                     class="document__info-block"
                 >
-                    <SubjectChips :subjects="doc.subjects" />
+                    <SubjectChips :subjects="doc.resource.subjects" />
                 </div>
             </template>
             <template #sections>
                 <RelatedSections
                     :base="base"
-                    :item="doc"
+                    :item="doc.resource"
                     :parts-last-updated="partsLastUpdated"
                     label="Related Regulation Citation"
                 />

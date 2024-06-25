@@ -22,7 +22,7 @@ const props = defineProps({
     },
 });
 
-const filteredLocations = props.item.locations.filter((location) => {
+const filteredLocations = props.item.cfr_citations.filter((location) => {
     const { part } = location;
     return props.partsLastUpdated[part];
 });
