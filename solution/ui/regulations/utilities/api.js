@@ -389,9 +389,7 @@ const getSupplementalContent = async ({
     maxResults = 1000,
     paginate = true,
     page = 1,
-    catDetails = true,
     pageSize = 100,
-    locationDetails = true,
     sortMethod = "newest",
     frGrouping = true,
     builtLocationString = "",
@@ -428,8 +426,6 @@ const getSupplementalContent = async ({
         });
     }
 
-    sString = `${sString}&category_details=${catDetails}`;
-    sString = `${sString}&location_details=${locationDetails}`;
     sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
     sString = `${sString}&sort=${sortMethod}`;
     sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
@@ -608,7 +604,7 @@ const getCombinedContent = async ({
     httpApiGetLegacy(
         `${apiUrl}content-search/${
             requestParams ? `?${requestParams}&` : "?"
-        }location_details=true&category_details=true`,
+        },
         {},
         cacheResponse
     );
