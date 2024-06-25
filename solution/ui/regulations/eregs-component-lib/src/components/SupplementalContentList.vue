@@ -40,8 +40,8 @@
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"
                 :key="index"
-                :name="content.name"
-                :description="content.description || content.doc_name_string"
+                :name="content.document_id"
+                :description="content.title || content.doc_name_string"
                 :date="content.date || content.date_string"
                 :url="content.url"
                 :doc-type="content.resource_type ?? 'external'"
