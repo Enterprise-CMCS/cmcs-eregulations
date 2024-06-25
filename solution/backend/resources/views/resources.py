@@ -39,7 +39,7 @@ class ResourceViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
         categories = self.request.GET.getlist("categories")
         subjects = self.request.GET.getlist("subjects")
 
-        query = self.model.objects.order_by(F("date").desc(nulls_last=True)).prefetch_related(
+        query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
             Prefetch("category", AbstractCategory.objects.select_subclasses()),
             Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
             Prefetch("subjects", Subject.objects.all()),
