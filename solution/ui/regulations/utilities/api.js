@@ -383,7 +383,6 @@ const getRegSearchResults = async ({
 const getSupplementalContent = async ({
     partDict,
     title,
-    categories,
     q = "",
     start,
     maxResults = 1000,
@@ -414,15 +413,6 @@ const getSupplementalContent = async ({
             if (part.sections.length === 0 && part.subparts.length === 0) {
                 sString = `${sString}&citations=${part.title}.${partKey}`;
             }
-        });
-    }
-
-    if (categories) {
-        const catList = await getExternalCategories();
-        categories.forEach((category) => {
-            sString = `${sString}&categories=${
-                catList.find((x) => x.name === category).id
-            }`;
         });
     }
 
