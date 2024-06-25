@@ -7,9 +7,10 @@
             :description="content.title || content.doc_name_string"
             :date="content.date || content.date_string"
             :division="content.division"
+            :uid="content.uid"
             :url="content.url"
-            :doc-type="content.resource_type ?? 'external'"
-            :file-name="content.file_name_string"
+            :doc-type="content.type ?? 'external'"
+            :file-name="content.file_name"
         >
         </supplemental-content-object>
         <collapse-button
@@ -43,8 +44,9 @@
                 :name="content.document_id"
                 :description="content.title || content.doc_name_string"
                 :date="content.date || content.date_string"
+                :uid="content.uid"
                 :url="content.url"
-                :doc-type="content.resource_type ?? 'external'"
+                :doc-type="content.type ?? 'external'"
             >
             </supplemental-content-object>
             <collapse-button

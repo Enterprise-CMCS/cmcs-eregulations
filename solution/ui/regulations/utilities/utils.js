@@ -110,16 +110,16 @@ const getFileNameSuffix = (fileName) => {
 /**
  * @param {Object} args - Arguments object
  * @param {string} args.file_name_string - The name of the file
- * @param {string} args.url - The url of the document
+ * @param {string} args.uid - The uid of the document
  *
  * @returns {string} - HTML string for the file type button
  */
-const getFileTypeButton = ({ fileName, url }) => {
+const getFileTypeButton = ({ fileName, uid }) => {
     const fileTypeSuffix = getFileNameSuffix(fileName);
 
     let fileTypeButton;
     if (fileName && fileTypeSuffix) {
-        fileTypeButton = `<span data-testid='download-chip-${url}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+        fileTypeButton = `<span data-testid='download-chip-${uid}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
     }
 
     return `${fileTypeButton ?? ""}`;

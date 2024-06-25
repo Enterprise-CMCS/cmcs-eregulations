@@ -15,7 +15,7 @@
                 >{{ formatDate(date) }}</span
             >
             <!-- DivisionLabel
-                v-if="docType === 'internal' && division"
+                v-if="docType === 'internal_file' && division"
                 :division="division"
             /-->
             <span
@@ -23,7 +23,7 @@
                 class="supplemental-content-title"
                 :class="{
                     'supplemental-content-external-link':
-                        docType !== 'internal' && isBlank(description),
+                        docType !== 'internal_file' && isBlank(description),
                 }"
                 >{{ name }}</span
             >
@@ -32,7 +32,7 @@
                 class="supplemental-content-description"
                 :class="{
                     'supplemental-content-external-link':
-                        docType !== 'internal',
+                        docType !== 'internal_file',
                 }"
             >
                 <span
@@ -40,7 +40,7 @@
                         description +
                         addFileTypeButton({
                             fileName,
-                            url,
+                            uid,
                             docType,
                         })
                     "
@@ -83,6 +83,11 @@ export default {
             required: false,
             default: null,
         },
+        uid: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
         url: {
             type: String,
             default: undefined,
@@ -103,14 +108,14 @@ export default {
         isBlank(str) {
             return !str || /^\s*$/.test(str);
         },
-        addFileTypeButton({ fileName, url, docType }) {
-            if (docType !== "internal") {
+        addFileTypeButton({ fileName, uid, docType }) {
+            if (docType !== "internal_file") {
                 return "";
             }
 
             return getFileTypeButton({
                 fileName,
-                url,
+                uid,
             });
         },
         formatDate(value) {
