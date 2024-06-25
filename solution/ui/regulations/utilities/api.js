@@ -401,20 +401,20 @@ const getSupplementalContent = async ({
     let sString = "";
 
     if (partDict === "all") {
-        sString = title ? `${sString}&locations=${title}` : "";
+        sString = title ? `${sString}&citations=${title}` : "";
     } else if (builtLocationString !== "") {
         sString = `${sString}&${builtLocationString}`;
     } else {
         Object.keys(partDict).forEach((partKey) => {
             const part = partDict[partKey];
             part.subparts.forEach((subPart) => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${subPart}`;
+                sString = `${sString}&citations=${part.title}.${partKey}.${subPart}`;
             });
             part.sections.forEach((section) => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${section}`;
+                sString = `${sString}&citations=${part.title}.${partKey}.${section}`;
             });
             if (part.sections.length === 0 && part.subparts.length === 0) {
-                sString = `${sString}&locations=${part.title}.${partKey}`;
+                sString = `${sString}&citations=${part.title}.${partKey}`;
             }
         });
     }
@@ -438,9 +438,9 @@ const getSupplementalContent = async ({
     let response = "";
 
     if (apiUrl) {
-        response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
+        response = await httpApiGetLegacy(`${apiUrl}resources/public?${sString}`);
     } else {
-        response = await httpApiGet(`resources/?${sString}`);
+        response = await httpApiGet(`resources/public?${sString}`);
     }
     return response;
 };

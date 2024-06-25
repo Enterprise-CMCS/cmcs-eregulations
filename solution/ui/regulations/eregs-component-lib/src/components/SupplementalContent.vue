@@ -123,7 +123,7 @@ export default {
             this.isFetching = true;
             if (this.selectedPart) {
                 this.fetchContent(
-                    `locations=${this.title}.${this.part}.${
+                    `citations=${this.title}.${this.part}.${
                         this.selectedPart.split(".")[1]
                     }`
                 );
@@ -176,11 +176,11 @@ export default {
             }
 
             if (Number.isNaN(section)) {
-                return `locations=${this.title}.${this.part}.${section}`;
+                return `citations=${this.title}.${this.part}.${section}`;
             }
 
             this.selectedPart = `§ ${section}`;
-            return `locations=${this.title}.${section}`;
+            return `citations=${this.title}.${section}`;
         },
         async fetchContent(location) {
             try {
