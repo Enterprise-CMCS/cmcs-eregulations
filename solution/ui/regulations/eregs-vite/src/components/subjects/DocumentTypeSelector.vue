@@ -20,12 +20,8 @@ let boxesArr;
 
 if (!isAuthenticated) {
     boxesArr = ["external"];
-} else if (
-    _isUndefined(typeParams) ||
-    typeParams === "all" ||
-    typeParams.includes("all")
-) {
-    boxesArr = [...DOCUMENT_TYPES];
+} else if (_isUndefined(typeParams) || typeParams.includes("all")) {
+    boxesArr = [];
 } else if (_isArray(typeParams)) {
     boxesArr = typeParams;
 } else {
@@ -72,27 +68,45 @@ watch(
 
         const { type: newTypeParams } = newQueryParams;
 
-        // "all" is only set when clicking a subject chip, so it is safe to use here
-        if (!_isUndefined(newTypeParams) && newTypeParams.includes("all")) {
-            checkedBoxes.value = [...DOCUMENT_TYPES];
+        if (!_isUndefined(newTypeParams)) {
+            if (newTypeParams.includes("all")) {
+                checkedBoxes.value = [];
+                return;
+            }
+
+            if (_isArray(newTypeParams)) {
+                checkedBoxes.value = newTypeParams;
+            } else {
+                checkedBoxes.value = [newTypeParams];
+            }
         }
     }
 );
 
 // popstate to update the checkbox on back/forward click
-const onPopState = () => {
+const onPopState = (event) => {
     if (!isAuthenticated) {
         return;
     }
 
-    const { type: queryTypes } = $route.query;
+    const currentPopState = event?.state?.current ?? "";
 
-    if (_isUndefined(queryTypes) || queryTypes === "all") {
-        checkedBoxes.value = [...DOCUMENT_TYPES];
-    } else if (_isArray(queryTypes)) {
-        checkedBoxes.value = queryTypes;
-    } else {
-        checkedBoxes.value = [queryTypes];
+    const isInternal =
+        currentPopState.includes("type") &&
+        currentPopState.includes("internal");
+    const isExternal =
+        currentPopState.includes("type") &&
+        currentPopState.includes("external");
+    const isAll =
+        currentPopState.includes("type") && currentPopState.includes("all");
+    const isNone = !currentPopState.includes("type");
+
+    if (isInternal) {
+        checkedBoxes.value = ["internal"];
+    } else if (isExternal) {
+        checkedBoxes.value = ["external"];
+    } else if (isAll || isNone) {
+        checkedBoxes.value = [];
     }
 };
 
@@ -104,7 +118,6 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
 
 <template>
     <div class="doc-type__toggle-container">
-        <h3>Documents to Show</h3>
         <div class="doc-type__toggle">
             <fieldset class="ds-c-fieldset" aria-invalid="false">
                 <div v-for="(type, index) in DOCUMENT_TYPES" :key="type">

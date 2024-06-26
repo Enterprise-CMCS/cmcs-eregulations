@@ -486,7 +486,6 @@ getDocSubjects();
                             />
                         </template>
                         <template #filters>
-                            <DocumentTypeSelector />
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
                             />
@@ -511,6 +510,7 @@ getDocSubjects();
                             />
                         </div>
                         <div class="subject__filters--row">
+                            <DocumentTypeSelector v-if="isAuthenticated" />
                             <FetchCategoriesContainer v-slot="slotProps">
                                 <CategoriesDropdown
                                     :list="slotProps.data"

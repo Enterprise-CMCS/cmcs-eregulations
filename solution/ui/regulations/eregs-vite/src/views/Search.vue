@@ -455,16 +455,24 @@ export default {
                 return;
             }
 
+            const encodedQuery = encodeURIComponent(query);
+
             this.regsLoading = true;
             this.resourcesLoading = true;
 
-            this.retrieveResourcesResults({ query, page, pageSize }).then(
-                () => {
-                    this.resourcesLoading = false;
-                }
-            );
+            this.retrieveResourcesResults({
+                query: encodedQuery,
+                page,
+                pageSize,
+            }).then(() => {
+                this.resourcesLoading = false;
+            });
 
-            this.retrieveRegResults({ query, page, pageSize }).then(() => {
+            this.retrieveRegResults({
+                query,
+                page,
+                pageSize,
+            }).then(() => {
                 this.regsLoading = false;
             });
         },

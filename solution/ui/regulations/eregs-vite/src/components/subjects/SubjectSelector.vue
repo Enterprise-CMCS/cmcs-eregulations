@@ -111,6 +111,7 @@ const subjectClick = (event) => {
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
+            type: ["all"],
         },
     });
 };

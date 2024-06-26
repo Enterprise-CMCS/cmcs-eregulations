@@ -79,6 +79,21 @@ const PARAM_VALIDATION_DICT = {
 };
 
 /**
+ * Dictionary of query parameters to encode before sending to the API.
+ *
+ * * @type {Object}
+ * @property {function} q - Encodes the q search string query parameter
+ *
+ * @example
+ * const query = "SMDL #12-002";
+ * const encodedQuery = PARAM_ENCODE_DICT.q(query);
+ * console.log(encodedQuery); // "SMDL%20%2312-002"
+ */
+const PARAM_ENCODE_DICT = {
+    q: (query) => encodeURIComponent(query),
+};
+
+/**
  * @param {string} fileName - name of the file
  * @returns {string | null} - returns null if the file name is not a string or does not pass validation;
  * otherwise returns the suffix of the file name
@@ -150,7 +165,12 @@ const getRequestParams = (query) => {
             );
 
             return filteredValues
-                .map((v) => `${PARAM_MAP[key]}=${v}`)
+                .map(
+                    (v) =>
+                        `${PARAM_MAP[key]}=${
+                            PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
+                        }`
+                )
                 .join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))
@@ -1008,6 +1028,7 @@ export {
     isFloat,
     mapToArray,
     niceDate,
+    PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
     removeFragmentParams,
