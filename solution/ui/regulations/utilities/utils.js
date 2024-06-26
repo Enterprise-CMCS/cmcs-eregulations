@@ -270,43 +270,6 @@ function removeQueryParams(location, keys) {
     return newUrl;
 }
 
-function getCategoryTree(categories) {
-    let catOptions = [];
-    let categoryDict = {};
-    for (let category in categories) {
-        let cat = categories[category];
-        if (cat.object_type === "subcategory") {
-            if (cat.parent.name in categoryDict) {
-                categoryDict[cat.parent.name].children.push({
-                    id: cat.name,
-                    label: cat.name,
-                });
-            } else {
-                categoryDict[cat.parent.name] = {
-                    id: cat.parent.name,
-                    label: cat.parent.name,
-                    children: [{ id: cat.name, label: cat.name }],
-                };
-            }
-        } else if (!(cat.name in categoryDict)) {
-            categoryDict[cat.name] = {
-                id: cat.name,
-                label: cat.name,
-                children: [],
-            };
-        }
-    }
-
-    for (let category in categoryDict) {
-        if (categoryDict[category].children.length === 0) {
-            delete categoryDict[category].children;
-        }
-        catOptions.push(categoryDict[category]);
-    }
-
-    return catOptions;
-}
-
 function getFragmentParam(location, key) {
     const fragmentParams = new URL(location).hash;
     const hashKeyValues = {};
@@ -1024,7 +987,6 @@ export {
     formatResourceCategories,
     generateId,
     getActAbbr,
-    getCategoryTree,
     getCurrentPageResultsRange,
     getCurrentSectionFromHash,
     getDisplayName,

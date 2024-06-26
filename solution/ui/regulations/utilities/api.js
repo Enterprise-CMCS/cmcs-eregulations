@@ -253,31 +253,6 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 /**
- * Retrieves a flat list of all external categories and subcategories from an API.
- *
- * @param {object} options - An object containing options for the request.
- * @param {string} [options.apiUrl] - The base URL of the external API.
- *   If provided, this function will fetch data from the external API.
- *   Otherwise, it will fetch data from the internal API with a default URL.
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
- */
-const getExternalCategories = async ({
-    apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}resources/public/categories`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet("resources/public/categories");
-};
-
-/**
  * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
  *
  * @param {object} options - An object containing options for the request.
@@ -287,7 +262,7 @@ const getExternalCategories = async ({
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategoriesTree = async ({
+const getExternalCategories = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
@@ -562,35 +537,13 @@ const getInternalSubjects = async ({
  */
 
 /**
- * Retrieves a flat list of all internal categories and subcategories from an API.
- *
- * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=DEFAULTS_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
- */
-const getInternalCategories = async ({
-    apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}resources/internal/categories`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet("resources/internal/categories", cacheResponse);
-};
-
-/**
  * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
  *
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategoriesTree = async ({
+const getInternalCategories = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
@@ -659,10 +612,8 @@ export {
     getCombinedContent,
     getContentWithoutQuery,
     getExternalCategories,
-    getExternalCategoriesTree,
     getGovInfoLinks,
     getInternalCategories,
-    getInternalCategoriesTree,
     getInternalDocs,
     getInternalSubjects,
     getLastParserSuccessDate,
