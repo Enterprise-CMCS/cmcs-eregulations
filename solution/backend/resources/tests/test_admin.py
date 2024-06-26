@@ -97,7 +97,7 @@ class TestAdminFunctions(TestCase):
             results = self.publicLinkAdmin.add_content(output)
         good_section = Section.objects.get(section_id=200)
         good_category = AbstractCategory.objects.get(name="test")
-        id = str(SupplementalContent.objects.get(name='content-1').id)
+        id = str(PublicLink.objects.get(name='content-1').id)
         row1 = {"name": f"<a href=/admin/resources/public/links/{id}/change/ target='blank'>content-1</a>",
                 "category": good_category, "added_locations": [good_section], "failed_locations": [" 200"]}
         self.assertEqual(results[0][0], row1)

@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 from common.functions import get_tokens_for_user
 from common.test_functions.common_functions import get_paginated_data
 from content_search.models import ContentIndex
-from resources.models import InternalCategory, PublicCategory, Section, Subject
+from resources.models import InternalCategory, PublicCategory, PublicLink, Section, Subject
 
 
 class SearchTest(APITestCase):
@@ -17,7 +17,7 @@ class SearchTest(APITestCase):
         self.assertEqual(data['results'][0]["doc_name_string"], self.internal_docs[id]["document_name"])
 
     def clean_up(self):
-        PublicLinks.objects.all().delete()
+        PublicLink.objects.all().delete()
         PublicCategory.objects.all().delete()
         InternalCategory.objects.all().delete()
 
@@ -37,7 +37,7 @@ class SearchTest(APITestCase):
 
         with open("content_search/tests/fixtures/sample_supplemental.json", "r") as f:
             for i, data in enumerate(json.load(f)):
-                file = PublicLinks.objects.create(**data)
+                file = PublicLink.objects.create(**data)
                 if i == 0:
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
