@@ -37,7 +37,6 @@ const DOCUMENT_TYPES_MAP = {
 const PARAM_MAP = {
     subjects: "subjects",
     q: "q",
-    type: "resource-type",
     page: "page",
     categories: "categories",
     intcategories: "internal_categories",
@@ -165,12 +164,33 @@ const getRequestParams = (query) => {
             );
 
             return filteredValues
-                .map(
-                    (v) =>
-                        `${PARAM_MAP[key]}=${
+                .map((v) => {
+                    if (key === "type") {
+                        let flagString = "";
+                        switch (v) {
+                            case "external":
+                                flagString =
+                                    "show_internal=false&show_regulations=false";
+                                break;
+                            case "internal":
+                                flagString =
+                                    "show_public=false&show_regulations=false";
+                                break;
+                            case "all":
+                                flagString =
+                                    "show_public=true&show_internal=true&show_regulations=true";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        return flagString;
+                    } else {
+                        return `${PARAM_MAP[key]}=${
                             PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
-                        }`
-                )
+                        }`;
+                    }
+                })
                 .join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))
