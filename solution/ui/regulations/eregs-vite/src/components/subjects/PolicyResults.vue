@@ -28,8 +28,6 @@ const addSurroundingEllipses = (str) => {
 };
 
 const getFieldVal = ({ item, fieldName }) => {
-    console.log("item", item);
-
     if (item.resource) {
         return item.resource[fieldName];
     } else {
@@ -378,15 +376,15 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             <template #chips>
                 <div
                     v-if="
-                        getFieldVal({ item: doc, fieldname: 'subjects' }) &&
-                        getFieldVal({ item: doc, fieldname: 'subjects' })
+                        getFieldVal({ item: doc, fieldName: 'subjects' }) &&
+                        getFieldVal({ item: doc, fieldName: 'subjects' })
                             .length > 0
                     "
                     class="document__info-block"
                 >
                     <SubjectChips
                         :subjects="
-                            getFieldVal({ item: doc, fieldname: 'subjects' })
+                            getFieldVal({ item: doc, fieldName: 'subjects' })
                         "
                     />
                 </div>
