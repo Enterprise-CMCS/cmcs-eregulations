@@ -426,7 +426,7 @@ export default {
             this.resourcesError = false;
             const requestParams = `q=${query}&page=${
                 page ?? 1
-            }&page_size=${pageSize}&paginate=true`;
+            }&page_size=${pageSize}`;
             let response = "";
             try {
                 response = await getCombinedContent({

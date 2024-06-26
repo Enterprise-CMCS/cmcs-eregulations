@@ -9,6 +9,7 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
+    getContentWithoutQuery,
     getLastUpdatedDates,
     getInternalSubjects,
     getTitles,
@@ -200,18 +201,27 @@ const policyDocList = ref({
     error: false,
 });
 
-const getDocList = async (requestParamsString = "") => {
+const getDocList = async ({ requestParamString = "", query }) => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
 
-    const requestParams = `${requestParamsString}&page_size=${pageSize}&paginate=true`;
+    const requestParams = `${requestParamString}&page_size=${pageSize}`;
+
+    let contentList;
 
     try {
-        const contentList = await getCombinedContent({
-            apiUrl: props.apiUrl,
-            cacheResponse: false,
-            requestParams,
-        });
+        if (query) {
+            contentList = await getCombinedContent({
+                apiUrl: props.apiUrl,
+                requestParams,
+            });
+        } else {
+            contentList = await getContentWithoutQuery({
+                apiUrl: props.apiUrl,
+                requestParams,
+            });
+        }
+
         policyDocList.value.results = contentList.results;
         policyDocList.value.count = contentList.count;
     } catch (error) {
@@ -301,7 +311,6 @@ const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getInternalSubjects({
             apiUrl: props.apiUrl,
-            cacheResponse: false,
         });
 
         policyDocSubjects.value.results = subjectsResponse.results;
@@ -329,7 +338,10 @@ const getDocSubjects = async () => {
                 setSelectedParams(policyDocSubjects)(param);
             });
 
-            getDocList(getRequestParams($route.query));
+            getDocList({
+                requestParamString: getRequestParams($route.query),
+                query: $route.query.q,
+            });
         }
     }
 };
@@ -408,7 +420,10 @@ watch(
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
-        await getDocList(newRequestParams);
+        await getDocList({
+            requestParamString: newRequestParams,
+            query: $route.query.q,
+        });
     }
 );
 
