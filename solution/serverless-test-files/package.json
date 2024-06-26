@@ -7,8 +7,5 @@
     "serverless-go-plugin": "^2.0.1",
     "serverless-python-requirements": "^5.1.1",
     "serverless-wsgi": "^1.7.8"
-  },
-  "dependencies": {
-    "serverless-cloudfront-invalidate": "^1.12.2"
   }
 }

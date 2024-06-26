@@ -38,7 +38,7 @@ defineProps({
         :to="{
             name: 'subjects',
             query: {
-                subjects: [subjectId.toString()],
+                subjects: subjectId.toString(),
                 type: ['all'],
             },
             params: { subjectName },

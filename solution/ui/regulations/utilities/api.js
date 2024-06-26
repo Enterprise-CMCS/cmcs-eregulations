@@ -10,6 +10,7 @@ import _map from "lodash/map";
 import localforage from "localforage";
 
 import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
+const DEFAULT_CACHE_RESPONSE = false; // Change this to true if needed
 
 const apiPath = `${
     import.meta.env.VITE_ENV === "prod" &&
@@ -38,7 +39,7 @@ function fetchJson({
     url,
     options = {},
     retryCount = 0,
-    cacheResponse = true,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
@@ -189,7 +190,7 @@ function fetchJson({
 
 // ---------- helper functions ---------------
 
-function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
+function httpApiGet(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -201,7 +202,7 @@ function httpApiGet(urlPath, { params } = {}, cacheResponse = true) {
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = true) {
+function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -216,7 +217,7 @@ function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = true) {
 function httpApiPost(
     urlPath,
     { data = {}, params } = {},
-    cacheResponse = true
+    cacheResponse = DEFAULT_CACHE_RESPONSE
 ) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
@@ -250,10 +251,10 @@ const setCacheItem = async (key, data) => {
  * @param {string} [options.apiUrl] - The base URL of the external API.
  *   If provided, this function will fetch data from the external API.
  *   Otherwise, it will fetch data from the internal API with a default URL.
- * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
+const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories`,
@@ -272,10 +273,10 @@ const getExternalCategories = async ({apiUrl, cacheResponse = true}) => {
  * @param {string} [options.apiUrl] - The base URL of the external API.
  *   If provided, this function will fetch data from the external API.
  *   Otherwise, it will fetch data from the internal API with a default URL.
- * @param {boolean} [options.cacheResponse=true] - A boolean flag indicating whether to cache the API response. Defaults to true.
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategoriesTree = async ({apiUrl, cacheResponse = true}) => {
+const getExternalCategoriesTree = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}resources/categories/tree`,
@@ -528,10 +529,10 @@ const getStatutes = async ({
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
-const getInternalSubjects = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/subjects`,
@@ -559,10 +560,10 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = true }) => {
  * Retrieves a flat list of all internal categories and subcategories from an API.
  *
  * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @param {boolean} [cacheResponse=DEFAULTS_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories`,
@@ -578,10 +579,10 @@ const getInternalCategories = async ({ apiUrl, cacheResponse = true }) => {
  * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
  *
  * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = true }) => {
+const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
             `${apiUrl}file-manager/categories/tree`,
@@ -596,13 +597,13 @@ const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = true }) => {
 /**
  * @param {string} apiUrl - API base url passed in from Django template
  * @param {string} [requestParams] - Query string parameters to pass to API
- * @param {boolean} [cacheResponse=true] - Whether to cache the response
+ * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getCombinedContent = async ({
     apiUrl,
     requestParams = "",
-    cacheResponse = true,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGetLegacy(
         `${apiUrl}content-search/${

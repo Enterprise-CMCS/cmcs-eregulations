@@ -2,41 +2,53 @@ from django.urls import path
 
 from resources.views import (
     CitationViewSet,
+    FederalRegisterLinkViewSet,
     InternalCategoryViewSet,
+    InternalFileViewSet,
+    InternalLinkViewSet,
+    InternalResourceViewSet,
     PublicCategoryViewSet,
+    PublicLinkViewSet,
+    PublicResourceViewSet,
     ResourceGroupViewSet,
+    ResourceViewSet,
     SectionViewSet,
     SubjectViewSet,
     SubpartViewSet,
 )
 
 urlpatterns = [
-    # path("", ResourceViewSet.as_view({
+    path("", ResourceViewSet.as_view({
+        "get": "list",
+    })),
+    path("public", PublicResourceViewSet.as_view({
+        "get": "list",
+    })),
+    path("public/links", PublicLinkViewSet.as_view({
+        "get": "list",
+    })),
+    path("public/federal_register_links", FederalRegisterLinkViewSet.as_view({
+        "get": "list",
+    })),
+    # path("public/federal_register_links/document_numbers", FederalRegisterLinkDocumentNumberViewSet.as_view({
     #     "get": "list",
     # })),
-    # path("federal_register_links", FederalRegisterLinkViewSet.as_view({
-    #     "get": "list",
-    #     "put": "update",
-    # })),
-    # path("federal_register_links/document_numbers", FederalRegisterLinkDocNumViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("public_links", PublicLinkViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("internal_files", InternalFileViewSet.as_view({
-    #     "get": "list",
-    # })),
-    # path("internal_links", InternalLinkViewSet.as_view({
-    #     "get": "list",
-    # })),
+    path("internal", InternalResourceViewSet.as_view({
+        "get": "list",
+    })),
+    path("internal/files", InternalFileViewSet.as_view({
+        "get": "list",
+    })),
+    path("internal/links", InternalLinkViewSet.as_view({
+        "get": "list",
+    })),
     path("resource_groups", ResourceGroupViewSet.as_view({
         "get": "list",
     })),
-    path("public_categories", PublicCategoryViewSet.as_view({
+    path("public/categories", PublicCategoryViewSet.as_view({
         "get": "list",
     })),
-    path("internal_categories", InternalCategoryViewSet.as_view({
+    path("internal/categories", InternalCategoryViewSet.as_view({
         "get": "list",
     })),
     path("subjects", SubjectViewSet.as_view({

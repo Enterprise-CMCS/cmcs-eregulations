@@ -72,13 +72,6 @@ watch-all: ## watch everything for changes
 watch-all:
 	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor
 
-.PHONY: storybook
-storybook: ## Run storybook for regulations
-storybook: ui/regulations/.storybook
-	cd ui/regulations; \
-		npm install; \
-		npm run storybook
-
 .PHONY: lint
 lint:
 	flake8;

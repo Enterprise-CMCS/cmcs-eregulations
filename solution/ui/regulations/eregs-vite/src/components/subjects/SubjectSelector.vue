@@ -110,7 +110,7 @@ const subjectClick = (event) => {
         name: "subjects",
         query: {
             ...cleanedRoute,
-            subjects: [subjectToAdd],
+            subjects: subjectToAdd,
         },
     });
 };

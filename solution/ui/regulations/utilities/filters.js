@@ -60,7 +60,7 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
  * getSubjectName({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // "Federal Regulations"
  */
 const getSubjectName = (subject) =>
-    subject.short_name || subject.abbreviation || subject.full_name;
+    subject?.short_name || subject?.abbreviation || subject?.full_name;
 
 /**
  * @param subject {Object} - a subject

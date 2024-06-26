@@ -38,7 +38,7 @@ package:
 plugins:
   - serverless-s3-sync
   - serverless-python-requirements
-  - serverless-cloudfront-invalidate
+  - ./custom-cf-invalidate-plugin
 
 resources:
   Resources:
