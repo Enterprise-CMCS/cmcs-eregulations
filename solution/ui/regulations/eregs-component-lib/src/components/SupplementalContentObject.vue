@@ -21,19 +21,13 @@
             <span
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
-                :class="{
-                    'supplemental-content-external-link':
-                        docType !== 'internal_file' && isBlank(description),
-                }"
+                :class="getLinkClasses(docType, description)"
                 >{{ name }}</span
             >
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"
-                :class="{
-                    'supplemental-content-external-link':
-                        docType !== 'internal_file',
-                }"
+                :class="getLinkClasses(docType, description)"
             >
                 <span
                     v-html="
@@ -51,7 +45,7 @@
 </template>
 
 <script>
-import { getFileTypeButton } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
 
 import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
 
@@ -95,7 +89,7 @@ export default {
         docType: {
             type: String,
             required: false,
-            default: "external",
+            default: "public_link",
         },
         fileName: {
             type: String,
@@ -109,7 +103,7 @@ export default {
             return !str || /^\s*$/.test(str);
         },
         addFileTypeButton({ fileName, uid, docType }) {
-            if (docType !== "internal_file") {
+            if (DOCUMENT_TYPES_MAP[docType] !== "Internal") {
                 return "";
             }
 
@@ -130,6 +124,13 @@ export default {
             }
             const format = new Intl.DateTimeFormat("en-US", options);
             return format.format(date);
+        },
+        getLinkClasses(docType, description) {
+            return {
+                "supplemental-content-external-link":
+                    DOCUMENT_TYPES_MAP[docType] !== "Internal" &&
+                    this.isBlank(description),
+            };
         },
     },
 };

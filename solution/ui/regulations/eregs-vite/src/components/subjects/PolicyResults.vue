@@ -29,7 +29,7 @@ const addSurroundingEllipses = (str) => {
 
 const getResultLinkText = (item) => {
     let linkText;
-    if (item.resource.type === "internal") {
+    if (DOCUMENT_TYPES_MAP[item.resource.type] === "Internal") {
         linkText = item.document_name_headline || item.resource.document_id;
     } else {
         linkText = item.summary_headline || item.summary_string;
@@ -40,12 +40,12 @@ const getResultLinkText = (item) => {
 
 const showResultSnippet = (item) => {
     if (
-        item.resource.type === "internal_file" &&
+        DOCUMENT_TYPES_MAP[item.resource.type] === "Internal" &&
         (item.content_headline || item.summary_headline || item.summary_string)
     )
         return true;
 
-    if (item.resource.type === "public_link" && item.content_headline) return true;
+    if (DOCUMENT_TYPES_MAP[item.resource.type] === "Public" && item.content_headline) return true;
 
     return false;
 };
@@ -53,7 +53,7 @@ const showResultSnippet = (item) => {
 const getResultSnippet = (item) => {
     let snippet;
 
-    if (item.resource.type === "internal_file") {
+    if (DOCUMENT_TYPES_MAP[item.resource.type] === "Internal") {
         if (
             item.content_headline &&
             item.content_headline.includes("search-highlight")
@@ -68,7 +68,7 @@ const getResultSnippet = (item) => {
         return snippet;
     }
 
-    if (item.resource.type === "public_link") {
+    if (DOCUMENT_TYPES_MAP[item.resource.type] === "Public") {
         if (item.content_headline) {
             snippet = addSurroundingEllipses(item.content_headline);
         } else if (item.content_string) {
@@ -133,15 +133,15 @@ const apiUrl = inject("apiUrl");
 const base = inject("base");
 
 const getUrl = ({ type: resourceType, url, uid }) =>
-    resourceType === "public_link" ? url : `${apiUrl}resources/internal/files/${uid}`;
+    DOCUMENT_TYPES_MAP[resourceType] === "Public" ? url : `${apiUrl}resources/internal/files/${uid}`;
 
 const needsBar = (item) =>
-    item.resource.type === "public_link" &&
+    DOCUMENT_TYPES_MAP[item.resource.type] === "Public" &&
     item.resource.date &&
     item.resource.document_id;
 
 const resultLinkClasses = (doc) => ({
-    external: doc.resource.type === "public_link",
+    external: DOCUMENT_TYPES_MAP[doc.resource.type] === "Public",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -199,7 +199,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :icon-type="doc.resource.type"
                     :doc-type="DOCUMENT_TYPES_MAP[doc.resource.type]"
                 />
-                <template v-if="doc.resource.type === 'internal_file'">
+                <template v-if="DOCUMENT_TYPES_MAP[doc.resource.type] === 'Internal'">
                     <CategoryLabel
                         v-if="!_isEmpty(doc.resource.category)"
                         :name="
@@ -245,7 +245,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 /-->
                 <span
                     v-if="
-                        doc.resource.type === 'public_link' && doc.resource.document_id
+                        DOCUMENT_TYPES_MAP[doc.resource.type] === 'Public' && doc.resource.document_id
                     "
                     >{{ doc.resource.document_id }}</span
                 >
