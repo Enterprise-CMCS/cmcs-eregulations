@@ -132,7 +132,11 @@ export default {
         },
         hasChildren() {
             return !!(
-                this.subcategories?.length || this.supplemental_content?.length
+                this.supplemental_content?.length ||
+                (this.subcategories &&
+                    this.subcategories.some(
+                        (subcategory) => subcategory.supplemental_content
+                    ))
             );
         },
         collapseButtonClasses() {

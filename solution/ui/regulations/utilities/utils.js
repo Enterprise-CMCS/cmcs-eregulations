@@ -667,7 +667,8 @@ const formatResourceCategories = ({
 
     const returnArr = categoriesClone
         .filter((category) => {
-            if (category.supplemental_content) return true;
+            if (category.supplemental_content || category.show_if_empty)
+                return true;
 
             const hasPopulatedSubcategory = category.subcategories.some(
                 (subcategory) => subcategory.supplemental_content
