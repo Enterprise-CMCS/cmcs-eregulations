@@ -7,8 +7,9 @@ from rest_framework.test import APIClient
 
 from common.test_functions.common_functions import get_paginated_data
 from content_search.models import ContentIndex
+from resources.models import FederalRegisterLink, InternalCategory, PublicCategory, PublicLink, Section, Subject
 from resources.models.internal_resources import InternalFile
-from resources.models import Subject, FederalRegisterLink, Section, PublicLink, PublicCategory, InternalCategory
+
 
 class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):

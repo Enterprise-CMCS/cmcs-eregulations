@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase
 from common.functions import get_tokens_for_user
 from common.test_functions.common_functions import get_paginated_data
 from content_search.models import ContentIndex
-from resources.models import Subject, Section, PublicLink, PublicCategory, InternalCategory
+from resources.models import InternalCategory, PublicCategory, Section, Subject
 
 
 class SearchTest(APITestCase):
@@ -20,6 +20,7 @@ class SearchTest(APITestCase):
         PublicLinks.objects.all().delete()
         PublicCategory.objects.all().delete()
         InternalCategory.objects.all().delete()
+
     def get_token(self):
         user = User.objects.create_superuser(username='test_user', password='test')  # noqa: S106
         return get_tokens_for_user(user)['access']

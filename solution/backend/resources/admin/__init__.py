@@ -5,4 +5,3 @@ from .subjects import *  # noqa
 from .public_resources import *  # noqa
 from .internal_resources import *  # noqa
 from .resources import * # noqa
-
