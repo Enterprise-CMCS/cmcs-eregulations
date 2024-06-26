@@ -142,9 +142,9 @@ def update_indexed_resource(sender, instance, created, **kwargs):
 @receiver(post_save, sender=InternalFile)
 def update_indexed_file(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
-    index.name = instance.document_id
+    index.name = instance.title
     index.summary = instance.summary
-    index.rank_a_string = instance.document_id
+    index.rank_a_string = instance.title
     index.rank_b_string = instance.summary
     index.rank_c_string = "{} {}".format(
         instance.date,
