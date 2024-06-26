@@ -2,7 +2,6 @@ from django.db.models import Count, Q, Value
 from rest_framework import viewsets
 
 from common.mixins import ViewSetPagination
-
 from resources.models import Subject
 from resources.serializers import SubjectWithCountsSerializer
 

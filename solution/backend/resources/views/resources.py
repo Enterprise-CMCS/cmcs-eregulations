@@ -39,7 +39,7 @@ class ResourceViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
         categories = self.request.GET.getlist("categories")
         subjects = self.request.GET.getlist("subjects")
 
-        query = self.model.objects.order_by(F("date").desc(nulls_last=True)).prefetch_related(
+        query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
             Prefetch("category", AbstractCategory.objects.select_subclasses()),
             Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
             Prefetch("subjects", Subject.objects.all()),
@@ -64,7 +64,8 @@ class ResourceViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
 
         # Filter out internal resources if the user is not logged in
         if not self.request.user.is_authenticated:
-            query = query.filter(abstractresource_ptr__abstractinternalresource__isnull=True)
+            prefix = "" if self.model == AbstractResource else "abstractresource_ptr__"
+            query = query.filter(**{f"{prefix}abstractinternalresource__isnull": True})
 
         return query.select_subclasses()
 

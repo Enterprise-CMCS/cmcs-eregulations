@@ -219,7 +219,7 @@ def copy_internal_files(apps, schema_editor):
             approved=True,
             category=categories[i.category.pk] if i.category else None,
             editor_notes=i.internal_notes or "",
-            document_id=i.document_name or "",
+            title=i.document_name or "",
             summary=i.summary or "",
             created_at=i.updated_at,
             updated_at=i.updated_at,

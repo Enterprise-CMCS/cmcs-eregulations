@@ -2,7 +2,6 @@ from django.db.models import Prefetch
 from rest_framework import viewsets
 
 from common.mixins import ViewSetPagination
-
 from resources.models import (
     AbstractPublicResource,
     AbstractResource,
