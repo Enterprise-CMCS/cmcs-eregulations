@@ -6,11 +6,9 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from common.test_functions.common_functions import get_paginated_data
-from content_search.functions import index_group
 from content_search.models import ContentIndex
-from file_manager.models import Subject, UploadedFile
-from resources.models import Category, FederalRegisterDocument, Section, SupplementalContent
-
+from resources.models.internal_resources import InternalFile
+from resources.models import Subject, FederalRegisterLink, Section, PublicLink, PublicCategory, InternalCategory
 
 class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):
@@ -24,50 +22,66 @@ class SearchTest(TestCase):
         self.client.force_authenticate(self.user)
 
     def clean_up(self):
-        SupplementalContent.objects.all().delete()
-        FederalRegisterDocument.objects.all().delete()
-        UploadedFile.objects.all().delete()
+        PublicLink.objects.all().delete()
+        FederalRegisterLink.objects.all().delete()
+        InternalFile.objects.all().delete()
         ContentIndex.objects.all().delete()
+        PublicLink.objects.all().delete()
+        PublicCategory.objects.all().delete()
+        InternalCategory.objects.all().delete()
 
     def setUp(self):
         self.clean_up()
         self.internal_docs = []
         self.location1 = Section.objects.create(title="42", part="433", section_id="1")
         self.location2 = Section.objects.create(title="33", part="31", section_id="22")
-        category = Category.objects.create(name='test category')
+        self.public_category = PublicCategory.objects.create(name='public test category')
+        self.internal_category = InternalCategory.objects.create(name='internal test category')
         self.subject1 = Subject.objects.create()
         self.subject2 = Subject.objects.create()
 
         with open("content_search/tests/fixtures/sample_supplemental.json", "r") as f:
             for i, data in enumerate(json.load(f)):
-                file = SupplementalContent.objects.create(**data)
-                if i == 0:  # only assign location and subject on item 0
+                file = PublicLink.objects.create(**data)
+                if i == 0:
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
-                    file.category = category
+                    file.category = self.public_category
+                    file.save()
+                elif i == 1:  # Assign internal category for another item
+                    file.locations.set([self.location1])
+                    file.subjects.set([self.subject1])
+                    file.category = self.internal_category
                     file.save()
 
         with open("content_search/tests/fixtures/sample_fr_doc.json", "r") as f:
             for i, data in enumerate(json.load(f)):
-                file = FederalRegisterDocument.objects.create(**data)
-                if i == 0:  # only assign location and subject on item 0
+                file = FederalRegisterLink.objects.create(**data)
+                if i == 0:
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
-                    file.category = category
+                    file.category = self.public_category
+                    file.save()
+                elif i == 1:  # Assign internal category for another item
+                    file.locations.set([self.location1])
+                    file.subjects.set([self.subject1])
+                    file.category = self.internal_category
                     file.save()
 
         with open("content_search/tests/fixtures/sample_files.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 self.internal_docs.append(data)
-                file = UploadedFile.objects.create(**data)
-                if i == 0:  # only assign location and subject on item 0
+                file = InternalFile.objects.create(**data)
+                if i == 0:
                     file.locations.set([self.location2])
                     file.subjects.set([self.subject2])
+                    file.category = self.public_category
                     file.save()
-
-        index_group(SupplementalContent.objects.all())
-        index_group(FederalRegisterDocument.objects.all())
-        index_group(UploadedFile.objects.all())
+                elif i == 1:  # Assign internal category for another item
+                    file.locations.set([self.location1])
+                    file.subjects.set([self.subject1])
+                    file.category = self.internal_category
+                    file.save()
 
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search/?resource-type=internal")
