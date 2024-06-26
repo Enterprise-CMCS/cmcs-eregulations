@@ -26,8 +26,10 @@ const EventCodes = {
 
 const DOCUMENT_TYPES = ["external", "internal"];
 const DOCUMENT_TYPES_MAP = {
-    public_link: "Public",
+    external: "Public",
     federal_register_link: "Public",
+    public_link: "Public",
+    internal: "Internal",
     internal_file: "Internal",
     internal_link: "Internal",
 };

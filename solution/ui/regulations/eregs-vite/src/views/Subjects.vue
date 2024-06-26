@@ -304,7 +304,7 @@ const getDocSubjects = async () => {
             cacheResponse: false,
         });
 
-        policyDocSubjects.value.results = subjectsResponse;
+        policyDocSubjects.value.results = subjectsResponse.results;
     } catch (error) {
         console.error(error);
     } finally {
