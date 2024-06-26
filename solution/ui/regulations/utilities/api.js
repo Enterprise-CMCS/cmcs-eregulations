@@ -578,13 +578,18 @@ const getCombinedContent = async ({
 const getContentWithoutQuery = async ({
     apiUrl,
     requestParams = "",
+    docType, // "public" or "internal"
     cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) =>
-    httpApiGetLegacy(
-        `${apiUrl}resources/${requestParams ? `?${requestParams}` : ""}`,
+}) => {
+    const typeString = docType ? `${docType.toLowerCase()}` : "";
+    const rqParams = requestParams ? `?${requestParams}` : "";
+
+    return httpApiGetLegacy(
+        `${apiUrl}resources/${typeString}${rqParams}`,
         {},
         cacheResponse
     );
+};
 
 const getInternalDocs = async ({
     apiUrl,

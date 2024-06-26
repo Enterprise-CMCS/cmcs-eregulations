@@ -17,7 +17,11 @@ import {
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import {
+    DOCUMENT_TYPES_MAP,
+    getRequestParams,
+    PARAM_VALIDATION_DICT,
+} from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
@@ -201,11 +205,12 @@ const policyDocList = ref({
     error: false,
 });
 
-const getDocList = async ({ requestParamString = "", query }) => {
+const getDocList = async ({ requestParamString = "", query, type }) => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
 
     const requestParams = `${requestParamString}&page_size=${pageSize}`;
+    const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
 
     let contentList;
 
@@ -214,11 +219,13 @@ const getDocList = async ({ requestParamString = "", query }) => {
             contentList = await getCombinedContent({
                 apiUrl: props.apiUrl,
                 requestParams,
+                docType,
             });
         } else {
             contentList = await getContentWithoutQuery({
                 apiUrl: props.apiUrl,
                 requestParams,
+                docType,
             });
         }
 
@@ -341,6 +348,7 @@ const getDocSubjects = async () => {
             getDocList({
                 requestParamString: getRequestParams($route.query),
                 query: $route.query.q,
+                type: $route.query.type,
             });
         }
     }
@@ -423,6 +431,7 @@ watch(
         await getDocList({
             requestParamString: newRequestParams,
             query: $route.query.q,
+            type: $route.query.type,
         });
     }
 );
