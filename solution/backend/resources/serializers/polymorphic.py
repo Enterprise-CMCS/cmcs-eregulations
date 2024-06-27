@@ -18,7 +18,8 @@ class PolymorphicSerializer(serializers.Serializer):
         if instance_type in self.get_serializer_map():
             setattr(instance, "type", self.get_serializer_map()[instance_type][0])
             return self.get_serializer_map()[instance_type][1](instance=instance, context=self.context).data
-        return "Serializer not available"
+        #return "Serializer not available"
+        return str(instance.id)
 
 
 # Permits a "type" field to be properly displayed by polymorphic serializers (e.g. { "type": "Section" })

@@ -39,6 +39,7 @@ class ResourceSerializer(serializers.Serializer):
     title = serializers.CharField()
     date = serializers.CharField()
     url = serializers.CharField()
+    related_resources = AbstractResourceSerializer(many=True)
 
 
 class PublicResourceSerializer(ResourceSerializer):

@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.auth import SettingsAuthentication
-from common.mixins import CitationFiltererMixin, ViewSetPagination
+from common.mixins import ViewSetPagination
+from resources.utils import get_citation_filter
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -73,10 +74,9 @@ from .serializers import ContentSearchSerializer, ContentUpdateSerializer
         ),
     ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
 )
-class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
-    citation_filter_prefix = "resource__cfr_citations__"
     pagination_class = ViewSetPagination
 
     def get_boolean_parameter(self, param, default):
@@ -106,7 +106,7 @@ class ContentSearchViewSet(CitationFiltererMixin, viewsets.ReadOnlyModelViewSet)
         query = ContentIndex.objects.all()
 
         # Filter inclusively by citations if this array exists
-        citation_filter = self.get_citation_filter(citations)
+        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
         if citation_filter:
             query = query.filter(citation_filter)
 

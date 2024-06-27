@@ -5,7 +5,21 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
 
-from .resources import AbstractResource
+from .resources import (
+    AbstractResource,
+    AbstractPublicResource,
+    AbstractInternalResource,
+)
+
+from .public_resources import (
+    PublicLink,
+    FederalRegisterLink,
+)
+
+from .internal_resources import (
+    InternalFile,
+    InternalLink,
+)
 
 
 class ResourceGroup(models.Model):
@@ -37,3 +51,33 @@ class ResourceGroup(models.Model):
         verbose_name = "Resource Group"
         verbose_name_plural = "Resource Groups"
         ordering = ["name", "common_identifiers"]
+
+
+def update_related_resources(resource):
+    groups = resource.resource_groups.all()
+    AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
+    for group in groups:
+        group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
+    related_resources = AbstractResource.objects.filter(resource_groups__in=groups).exclude(pk=resource.pk)
+    resource.related_resources.set(related_resources)
+    for related_resource in related_resources:
+        related_groups = related_resource.resource_groups.all()
+        related_resources = AbstractResource.objects.filter(resource_groups__in=related_groups).exclude(pk=related_resource.pk)
+        related_resource.related_resources.set(related_resources)
+
+
+@receiver(post_save, sender=ResourceGroup)
+def update_resource_group(sender, instance, **kwargs):
+    for resource in instance.resources.all():
+        update_related_resources(resource)
+
+
+@receiver(post_save, sender=AbstractResource)
+@receiver(post_save, sender=AbstractPublicResource)
+@receiver(post_save, sender=AbstractInternalResource)
+@receiver(post_save, sender=PublicLink)
+@receiver(post_save, sender=FederalRegisterLink)
+@receiver(post_save, sender=InternalFile)
+@receiver(post_save, sender=InternalLink)
+def update_group_resources(sender, instance, **kwargs):
+    update_related_resources(instance)
