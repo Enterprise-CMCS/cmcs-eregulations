@@ -27,7 +27,7 @@
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"
-                :class="getLinkClasses(docType, description)"
+                :class="getLinkClasses(docType)"
             >
                 <span
                     v-html="
