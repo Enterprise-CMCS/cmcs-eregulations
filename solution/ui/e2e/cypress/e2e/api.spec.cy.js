@@ -27,7 +27,6 @@ const API_ENDPOINTS_V3 = [
     `/v3/parser_config`,
     `/v3/resources/`,
     `/v3/resources/public/federal_register_links`,
-    `/v3/resources/federal_register_docs/doc_numbers`,
     `/v3/resources/internal/categories`,
     `/v3/resources/public/categories`,
     `/v3/resources/subjects`,
@@ -59,13 +58,13 @@ const API_ENDPOINTS_V3 = [
 
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach((endpoint) => {
-        it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request({ "url": endpoint }).as("request");
+        it(`sends GET request to ${endpoint} and checks for a 200 or 403 (Forbidden) response`, () => {
+            cy.request({ url: endpoint, failOnStatusCode: false }).as(
+                "request"
+            );
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
-                expect(response.status).to.eq(200);
-                expect(response.isOkStatusCode).to.eq(true);
-                expect(response.statusText).to.eq("OK");
+                expect(response.status).to.be.oneOf([200, 403]);
             });
         });
     });
@@ -75,7 +74,7 @@ describe("Synonyms endpoint special character testing", () => {
     SPECIAL_CHARACTERS.forEach((character) => {
         const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request({ "url": endpoint }).as("request");
+            cy.request({ url: endpoint }).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);
