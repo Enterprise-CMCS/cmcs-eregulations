@@ -4,16 +4,17 @@ from django.contrib.admin import AdminSite
 from django.test import TestCase
 
 from resources.admin import AbstractResourceAdmin, PublicLinkAdmin
-from resources.models import AbstractCategory, AbstractResource, PublicLink, Section, Subpart
+from resources.models import AbstractCategory, AbstractResource, PublicLink, Section, Subpart, PublicCategory, InternalCategory
 
 
 class TestAdminFunctions(TestCase):
     def setUp(self):
         self.resourcesAdmin = AbstractResourceAdmin(model=AbstractResource, admin_site=AdminSite())
         self.publicLinkAdmin = PublicLinkAdmin(model=PublicLink, admin_site=AdminSite())
+        self.public_category = PublicCategory.objects.create(name='Test Public Category')
+        self.internal_category = InternalCategory.objects.create(name='Test Internal Category')
         Section.objects.create(title=42, part=400, section_id=200)
         Subpart.objects.create(title=42, part=433, subpart_id="A")
-        AbstractCategory.objects.create(name="test")
 
     def test_add_resources(self):
         bulk_add, bad_locations = self.resourcesAdmin.get_bulk_locations("400.200, 5656565", "42")
@@ -96,7 +97,7 @@ class TestAdminFunctions(TestCase):
             output = csv.reader(resources, quotechar='"', delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             results = self.publicLinkAdmin.add_content(output)
         good_section = Section.objects.get(section_id=200)
-        good_category = AbstractCategory.objects.get(name="test")
+        good_category = PublicCategory.objects.get(name="test")
         id = str(PublicLink.objects.get(name='content-1').id)
         row1 = {"name": f"<a href=/admin/resources/public/links/{id}/change/ target='blank'>content-1</a>",
                 "category": good_category, "added_locations": [good_section], "failed_locations": [" 200"]}

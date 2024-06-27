@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 
-from file_manager.models import Subject
+from resources.models import Subject
 from resources.models import (
-    FederalRegisterDocument,
-    FederalRegisterDocumentGroup,
+    FederalRegisterLink,
+    ResourceGroup,
     Section,
-    SupplementalContent,
+    PublicLink,
 )
 
 
@@ -16,18 +16,18 @@ class TestResourcesEndpoint(TestCase):
         subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
         s1 = Section.objects.create(title=1, part=1, section_id=1)
         s2 = Section.objects.create(title=1, part=1, section_id=2)
-        g1 = FederalRegisterDocumentGroup.objects.create(id=1)
+        g1 = ResourceGroup.objects.create(id=1)
         today = datetime.today().strftime('%Y-%m-%d')
         yesterday = (datetime.now() - timedelta(1)).strftime('%Y-%m-%d')
         twodaysago = (datetime.now() - timedelta(2)).strftime('%Y-%m-%d')
-        f1 = FederalRegisterDocument.objects.create(id=1, group=g1, date=today)
+        f1 = FederalRegisterLink.objects.create(id=1, group=g1, date=today)
         f1.locations.set([s1, s2])
         f1.subjects.set([subject])
         f1.save()
-        f2 = FederalRegisterDocument.objects.create(id=2, group=g1, date=twodaysago)
+        f2 = FederalRegisterLink.objects.create(id=2, group=g1, date=twodaysago)
         f2.locations.set([s1, s2])
         f2.save()
-        f3 = FederalRegisterDocument.objects.create(id=3, group=g1, date=yesterday, approved=False)
+        f3 = FederalRegisterLink.objects.create(id=3, group=g1, date=yesterday, approved=False)
         f3.locations.set([s1, s2])
         f3.save()
 
@@ -56,11 +56,11 @@ class TestResourcesEndpoint(TestCase):
         self.assertEqual(subject["abbreviation"], "ATS")
 
 
-class TestSupplementalContentEndpoint(TestCase):
+class TestPublicLinkEndpoint(TestCase):
     def setUp(self):
         subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
         section = Section.objects.create(title=1, part=1, section_id=1)
-        resource = SupplementalContent.objects.create(id=1)
+        resource = PublicLink.objects.create(id=1)
         resource.locations.set([section])
         resource.subjects.set([subject])
         resource.save()
@@ -79,7 +79,7 @@ class TestFRDocEndpoint(TestCase):
     def setUp(self):
         subject = Subject.objects.create(full_name="Access to Services", short_name="Test", abbreviation="ATS")
         section = Section.objects.create(title=1, part=1, section_id=1)
-        resource = FederalRegisterDocument.objects.create(id=1)
+        resource = FederalRegisterLink.objects.create(id=1)
         resource.locations.set([section])
         resource.subjects.set([subject])
         resource.save()
