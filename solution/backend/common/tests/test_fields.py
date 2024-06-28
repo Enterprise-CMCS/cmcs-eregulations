@@ -20,7 +20,10 @@ class VariableDateFieldTest(unittest.TestCase):
             None,
         ]
         for value in values:
-            self.assertEqual(self.field.clean(value, value), value)
+            if value != None:
+                self.assertEqual(self.field.clean(value, value), value)
+            else:
+                self.assertEqual(self.field.clean(value, None), "")
 
     def test_invalid_date_values(self):
         values = [

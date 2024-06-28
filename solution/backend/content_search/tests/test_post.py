@@ -35,16 +35,16 @@ class SearchTest(APITestCase):
         self.subject1 = Subject.objects.create()
         self.subject2 = Subject.objects.create()
 
-        with open("content_search/tests/fixtures/sample_supplemental.json", "r") as f:
+        with open("content_search/tests/fixtures/public_links.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 file = PublicLink.objects.create(**data)
                 if i == 0:
-                    file.locations.set([self.location2])
+                    file.cfr_citations.set([self.location2])
                     file.subjects.set([self.subject2])
                     file.category = self.public_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
-                    file.locations.set([self.location1])
+                    file.cfr_citations.set([self.location1])
                     file.subjects.set([self.subject1])
                     file.category = self.internal_category
                     file.save()
@@ -52,7 +52,7 @@ class SearchTest(APITestCase):
     def test_update_content_public_category(self):
         content = ContentIndex.objects.filter(resource__category=self.public_category).first()
         json_object = {
-            'id': content.uid,
+            'id': content.id,
             'text': 'test public'
         }
         response = self.client.post("/v3/content-search/id/",
@@ -71,7 +71,7 @@ class SearchTest(APITestCase):
     def test_update_content_internal_category(self):
         content = ContentIndex.objects.filter(resource__category=self.internal_category).first()
         json_object = {
-            'id': content.uid,
+            'id': content.id,
             'text': 'test internal'
         }
         response = self.client.post("/v3/content-search/id/",

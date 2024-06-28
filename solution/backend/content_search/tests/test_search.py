@@ -34,52 +34,52 @@ class SearchTest(TestCase):
     def setUp(self):
         self.clean_up()
         self.internal_docs = []
-        self.location1 = Section.objects.create(title="42", part="433", section_id="1")
-        self.location2 = Section.objects.create(title="33", part="31", section_id="22")
+        self.cfr_citations1 = Section.objects.create(title="42", part="433", section_id="1")
+        self.cfr_citations2 = Section.objects.create(title="33", part="31", section_id="22")
         self.public_category = PublicCategory.objects.create(name='public test category')
         self.internal_category = InternalCategory.objects.create(name='internal test category')
         self.subject1 = Subject.objects.create()
         self.subject2 = Subject.objects.create()
 
-        with open("content_search/tests/fixtures/sample_supplemental.json", "r") as f:
+        with open("content_search/tests/fixtures/public_links.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 file = PublicLink.objects.create(**data)
                 if i == 0:
-                    file.locations.set([self.location2])
+                    file.cfr_citations.set([self.cfr_citations2])
                     file.subjects.set([self.subject2])
                     file.category = self.public_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
-                    file.locations.set([self.location1])
+                    file.cfr_citations.set([self.cfr_citations1])
                     file.subjects.set([self.subject1])
                     file.category = self.internal_category
                     file.save()
 
-        with open("content_search/tests/fixtures/sample_fr_doc.json", "r") as f:
+        with open("content_search/tests/fixtures/fr_docs.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 file = FederalRegisterLink.objects.create(**data)
                 if i == 0:
-                    file.locations.set([self.location2])
+                    file.cfr_citations.set([self.cfr_citations2])
                     file.subjects.set([self.subject2])
                     file.category = self.public_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
-                    file.locations.set([self.location1])
+                    file.cfr_citations.set([self.cfr_citations1])
                     file.subjects.set([self.subject1])
                     file.category = self.internal_category
                     file.save()
 
-        with open("content_search/tests/fixtures/sample_files.json", "r") as f:
+        with open("content_search/tests/fixtures/internal_files.json", "r") as f:
             for i, data in enumerate(json.load(f)):
                 self.internal_docs.append(data)
                 file = InternalFile.objects.create(**data)
                 if i == 0:
-                    file.locations.set([self.location2])
+                    file.cfr_citations.set([self.cfr_citations2])
                     file.subjects.set([self.subject2])
                     file.category = self.public_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
-                    file.locations.set([self.location1])
+                    file.cfr_citations.set([self.cfr_citations1])
                     file.subjects.set([self.subject1])
                     file.category = self.internal_category
                     file.save()
@@ -118,6 +118,7 @@ class SearchTest(TestCase):
         self.login()
         response = self.client.get(r"/v3/content-search/?q=fire&resource-type=external")
         data = get_paginated_data(response)
+        print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
         response = self.client.get(r"/v3/content-search/?q='end%20fire'&resource-type=external")
         data = get_paginated_data(response)
@@ -158,14 +159,14 @@ class SearchTest(TestCase):
             data = get_paginated_data(response)
             self.assertIn(word, data['results'][0]["file_name_string"])
 
-    def test_inclusive_location_filter(self):
+    def test_inclusive_cfr_citations_filter(self):
         self.login()
-        response = self.client.get("/v3/content-search/?resource-type=internal&q=test&locations=42.433")
+        response = self.client.get("/v3/content-search/?resource-type=internal&q=test&cfr_citations=42.433")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 0)
 
-        response = self.client.get("/v3/content-search/?resource-type=internal&q=test&locations=42.433&locations=33.31")
+        response = self.client.get("/v3/content-search/?resource-type=internal&q=test&cfr_citations=42.433&cfr_citations=33.31")
         data = get_paginated_data(response)
         self.check_exclusive_response(response, 0)
 
