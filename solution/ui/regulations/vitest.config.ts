@@ -8,7 +8,7 @@ export default defineConfig({
         globals: true,
         setupFiles: ["./test/configuration/setup-test.js"],
         coverage: {
-            provider: 'c8'
+            provider: 'v8'
           },
     },
     resolve: {
