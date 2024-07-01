@@ -44,7 +44,10 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
             Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
             Prefetch("subjects", Subject.objects.all()),
             Prefetch("related_resources", AbstractResource.objects.select_subclasses().prefetch_related(
+                Prefetch("category", AbstractCategory.objects.select_subclasses()),
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("subjects", Subject.objects.all()),
+                Prefetch("related_resources", queryset=None),
             )),
         )
 
