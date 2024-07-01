@@ -710,9 +710,11 @@ const formatResourceCategories = ({
             if (category.supplemental_content || category.show_if_empty)
                 return true;
 
-            const hasPopulatedSubcategory = category.subcategories.some(
-                (subcategory) => subcategory.supplemental_content
-            );
+            const hasPopulatedSubcategory =
+                category.subcategories &&
+                category.subcategories.some(
+                    (subcategory) => subcategory.supplemental_content
+                );
 
             if (hasPopulatedSubcategory) return true;
 
