@@ -245,7 +245,9 @@ describe("Utilities.js", () => {
             type: "internal",
         };
 
-        expect(getRequestParams(query10)).toBe("q=test&resource-type=internal");
+        expect(getRequestParams(query10)).toBe(
+            "q=test&show_public=false&show_regulations=false"
+        );
 
         const query11 = {
             q: "test",
@@ -253,7 +255,9 @@ describe("Utilities.js", () => {
             page: undefined,
         };
 
-        expect(getRequestParams(query11)).toBe("q=test&resource-type=all");
+        expect(getRequestParams(query11)).toBe(
+            "q=test&show_public=true&show_internal=true&show_regulations=true"
+        );
     });
 
     it("gets the proper suffix for a filename or returns null", async () => {
@@ -274,7 +278,7 @@ describe("Utilities.js", () => {
     describe("getFileTypeButton", () => {
         it("is a DOCX file", async () => {
             expect(
-                getFileTypeButton({ fileName: "index_zero.docx", url: "url" })
+                getFileTypeButton({ fileName: "index_zero.docx", uid: "url" })
             ).toBe(
                 "<span data-testid='download-chip-url' class='result__link--file-type'>Download DOCX</span>"
             );
