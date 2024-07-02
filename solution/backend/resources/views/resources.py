@@ -4,7 +4,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from common.mixins import ViewSetPagination
-from resources.utils import get_citation_filter
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -24,10 +23,12 @@ from resources.serializers import (
     InternalLinkSerializer,
     PublicLinkSerializer,
 )
+from resources.utils import get_citation_filter
 
-        # OpenApiQueryParameter("citations",
-        #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
-        #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+
+# OpenApiQueryParameter("citations",
+#                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
+#                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
 class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
@@ -53,8 +54,8 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
 
         if group_resources:
             query = query.filter(Q(group_parent=True) | Q(related_resources__isnull=True)).filter(
-                get_citation_filter(citations, "cfr_citations__") |
-                get_citation_filter(citations, "related_resources__cfr_citations__")
+                get_citation_filter(citations, "cfr_citations__")  # |
+                # get_citation_filter(citations, "related_resources__cfr_citations__")
             )
 
         # Filter by categories (both parent and subcategories) if the categories array is present

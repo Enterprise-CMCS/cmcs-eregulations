@@ -9,13 +9,13 @@ from rest_framework.views import APIView
 
 from common.auth import SettingsAuthentication
 from common.mixins import ViewSetPagination
-from resources.utils import get_citation_filter
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
     AbstractResource,
     Subject,
 )
+from resources.utils import get_citation_filter
 
 from .models import ContentIndex
 from .serializers import ContentSearchSerializer, ContentUpdateSerializer

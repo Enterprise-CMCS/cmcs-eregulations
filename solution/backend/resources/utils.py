@@ -1,7 +1,7 @@
 # Functions and mixins that are exportable to other apps may go here
 
-from django.db.models import Q
 from django.core.exceptions import BadRequest
+from django.db.models import Q
 
 
 # Returns True if x is an integer, False otherwise.

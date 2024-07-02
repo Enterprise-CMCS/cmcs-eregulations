@@ -1,24 +1,20 @@
-from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import ArrayField
 
-from .resources import (
-    AbstractResource,
-    AbstractPublicResource,
-    AbstractInternalResource,
-)
-
-from .public_resources import (
-    PublicLink,
-    FederalRegisterLink,
-)
-
 from .internal_resources import (
     InternalFile,
     InternalLink,
+)
+from .public_resources import (
+    FederalRegisterLink,
+    PublicLink,
+)
+from .resources import (
+    AbstractInternalResource,
+    AbstractPublicResource,
+    AbstractResource,
 )
 
 
