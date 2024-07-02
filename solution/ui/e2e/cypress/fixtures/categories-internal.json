@@ -1,50 +1,27 @@
-[
-    {
-        "id": 3,
-        "name": "test childless cat",
-        "description": "this category is childless.",
-        "order": 1,
-        "show_if_empty": true,
-        "type": "repositorycategory"
-    },
-    {
-        "id": 2,
-        "name": "TestSubCat",
-        "description": "",
-        "order": 1,
-        "show_if_empty": false,
-        "type": "repositorysubcategory",
-        "parent": {
-            "id": 1,
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 26,
             "name": "TestCat",
-            "description": "This is a test category.  It may have child subcategories.",
-            "order": 2,
+            "description": "[Mock] Internal Category",
+            "order": 0,
             "show_if_empty": false,
-            "type": ""
+            "is_fr_link_category": false,
+            "type": "",
+            "subcategories": [
+                {
+                    "id": 27,
+                    "name": "TestSubCat",
+                    "description": "",
+                    "order": 0,
+                    "show_if_empty": false,
+                    "is_fr_link_category": false,
+                    "type": ""
+                }
+            ]
         }
-    },
-    {
-        "id": 1,
-        "name": "TestCat",
-        "description": "This is a test category.  It may have child subcategories.",
-        "order": 2,
-        "show_if_empty": false,
-        "type": "repositorycategory"
-    },
-    {
-        "id": 4,
-        "name": "TestSubCat 2",
-        "description": "",
-        "order": 2,
-        "show_if_empty": false,
-        "type": "repositorysubcategory",
-        "parent": {
-            "id": 1,
-            "name": "TestCat",
-            "description": "This is a test category.  It may have child subcategories.",
-            "order": 2,
-            "show_if_empty": false,
-            "type": ""
-        }
-    }
-]
+    ]
+}

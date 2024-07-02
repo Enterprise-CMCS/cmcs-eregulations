@@ -53,7 +53,7 @@ class ReaderView(CitationContextMixin, TemplateView):
         part_label = toc['label_description']
         tree = self.get_content(context, document, toc)
         node_list = self.get_supp_content_params(context, [tree])
-        categories = list(PublicCategory.objects.contains_fr_docs().order_by('order').values())
+        categories = list(PublicCategory.objects.order_by('order').values())
 
         locations = AbstractCitation.objects.filter(part=reg_part).select_subclasses().annotate(
             num_locations=Count(

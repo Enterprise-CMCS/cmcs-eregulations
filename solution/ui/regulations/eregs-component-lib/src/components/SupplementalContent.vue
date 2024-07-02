@@ -12,9 +12,9 @@
                 :subcategory="false"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
-                :sub_categories="category.sub_categories"
+                :subcategories="category.subcategories"
                 :is-fetching="isFetching"
-                :is-fr-doc-category="category.is_fr_doc_category"
+                :is-fr-link-category="category.is_fr_link_category"
                 :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
@@ -38,7 +38,11 @@
 </template>
 
 <script>
-import { getSupplementalContent, getSubpartTOC } from "utilities/api";
+import {
+    getExternalCategories,
+    getSupplementalContent,
+    getSubpartTOC,
+} from "utilities/api";
 import {
     EventCodes,
     formatResourceCategories,
@@ -59,10 +63,25 @@ function getDefaultCategories() {
 
     return rawCategories.map((c) => {
         const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = [];
+        category.subcategories = [];
         return category;
     });
 }
+
+const getCategories = async (apiUrl) => {
+    let categories = [];
+
+    try {
+        categories = await getExternalCategories({
+            apiUrl,
+            cacheResponse: false,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return categories;
+};
 
 export default {
     components: {
@@ -123,7 +142,7 @@ export default {
             this.isFetching = true;
             if (this.selectedPart) {
                 this.fetchContent(
-                    `locations=${this.title}.${this.part}.${
+                    `citations=${this.title}.${this.part}.${
                         this.selectedPart.split(".")[1]
                     }`
                 );
@@ -176,11 +195,11 @@ export default {
             }
 
             if (Number.isNaN(section)) {
-                return `locations=${this.title}.${this.part}.${section}`;
+                return `citations=${this.title}.${this.part}.${section}`;
             }
 
             this.selectedPart = `§ ${section}`;
-            return `locations=${this.title}.${section}`;
+            return `citations=${this.title}.${section}`;
         },
         async fetchContent(location) {
             try {
@@ -198,28 +217,30 @@ export default {
                 }
                 await this.getPartDictionary();
 
-                const subpartResponse = await getSupplementalContent({
-                    apiUrl: this.apiUrl,
-                    partDict: this.partDict,
-                    pageSize: 1000,
-                });
+                const results = await Promise.all([
+                    getCategories(this.apiUrl),
+                    getSupplementalContent({
+                        apiUrl: this.apiUrl,
+                        partDict: this.partDict,
+                        pageSize: 1000,
+                    }),
+                ]);
+
+                const categories = results[0];
+                const subpartResponse = results[1];
 
                 this.resourceCount = subpartResponse.count;
-
-                const rawCategories = JSON.parse(
-                    document.getElementById("categories").textContent
-                );
 
                 if (response !== "") {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
-                        categories: rawCategories,
+                        categories: categories.results,
                         resources: response.results,
                     });
                 } else {
                     this.categories = formatResourceCategories({
                         apiUrl: this.apiUrl,
-                        categories: rawCategories,
+                        categories: categories.results,
                         resources: subpartResponse.results,
                     });
                 }

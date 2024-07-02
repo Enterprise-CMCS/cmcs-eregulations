@@ -171,10 +171,10 @@ export default {
             if (rule.correction) {
                 return "CORR";
             }
-            return rule.doc_type || rule.category?.name || rule.type;
+            return rule.action_type || rule.category?.name || rule.type;
         },
         citation(rule) {
-            return rule.citation || rule.name;
+            return rule.citation || rule.document_id;
         },
         html_url(rule) {
             return rule.html_url || rule.url;

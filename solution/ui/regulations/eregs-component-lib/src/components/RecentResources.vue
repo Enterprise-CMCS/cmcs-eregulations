@@ -17,13 +17,16 @@ export default {
         const categoriesResult = await getExternalCategories({
             apiUrl: this.apiUrl,
         });
-        this.categories = categoriesResult
-            .flatMap((cat) =>
-                cat.parent?.name === "Subregulatory Guidance"
-                    ? `&categories=${cat.id}`
-                    : []
-            )
-            .join("");
+
+        const subregulatoryGuidance = categoriesResult.results.filter(
+            (cat) => cat.name === "Subregulatory Guidance"
+        )[0];
+
+        if (subregulatoryGuidance) {
+            this.categories = subregulatoryGuidance.subcategories
+                .map((cat) => `&categories=${cat.id}`)
+                .join("");
+        }
     },
 
     data() {

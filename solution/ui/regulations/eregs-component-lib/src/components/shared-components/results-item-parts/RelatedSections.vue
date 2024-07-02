@@ -22,10 +22,12 @@ const props = defineProps({
     },
 });
 
-const filteredLocations = props.item.locations.filter((location) => {
-    const { part } = location;
-    return props.partsLastUpdated[part];
-});
+const filteredLocations = props.item.cfr_citations
+    ? props.item.cfr_citations.filter((location) => {
+          const { part } = location;
+          return props.partsLastUpdated[part];
+      })
+    : [];
 
 const locationsCount = filteredLocations.length;
 const groupedLocations = _groupBy(filteredLocations, "title");
@@ -48,7 +50,7 @@ const groupedLocations = _groupBy(filteredLocations, "title");
                     class="section-sign"
                     >§§
                 </span>
-                <span v-else :key="i + title" class="section-sign">§ </span>
+                <span v-else :key="i + title + i" class="section-sign">§ </span>
                 <template
                     v-for="(location, j) in locations"
                     :key="location.display_name + j"

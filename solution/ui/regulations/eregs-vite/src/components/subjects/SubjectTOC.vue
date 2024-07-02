@@ -60,19 +60,19 @@ const subjectsLength = computed(() => props.policyDocSubjects.results.length);
                     </router-link>
                     <div class="subj-toc-li__count">
                         <span class="subj-doc__count subj-doc__count--public">{{
-                            subject.external_content ?? 0
+                            subject.public_resources ?? 0
                         }}</span>
                         public
                         <span v-if="isAuthenticated"
                             >and
                             <span
                                 class="subj-doc__count subj-doc__count--internal"
-                                >{{ subject.internal_content ?? 0 }}</span
+                                >{{ subject.internal_resources ?? 0 }}</span
                             >
                             internal </span
                         >resource<span
                             v-if="
-                                isAuthenticated || subject.external_content != 1
+                                isAuthenticated || subject.public_resources != 1
                             "
                             >s</span
                         >

@@ -4,8 +4,8 @@ import { inject, ref, watchEffect } from "vue";
 import useFetch from "composables/fetch";
 
 import {
-    getExternalCategoriesTree,
-    getInternalCategoriesTree,
+    getExternalCategories,
+    getInternalCategories,
 } from "utilities/api";
 
 defineProps({
@@ -25,12 +25,12 @@ const combinedCategories = ref({
 });
 
 const externalCategories = useFetch({
-    method: getExternalCategoriesTree,
+    method: getExternalCategories,
     apiUrl,
 });
 
 const internalCategories = useFetch({
-    method: getInternalCategoriesTree,
+    method: getInternalCategories,
     apiUrl,
     cacheResponse: false,
     needsAuthentication: true,

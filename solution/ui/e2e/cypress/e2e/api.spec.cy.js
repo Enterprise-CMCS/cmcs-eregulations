@@ -22,20 +22,22 @@ const SPECIAL_CHARACTERS = [
 
 const API_ENDPOINTS_V3 = [
     `/v3/acts`,
-    `/v3/content-search`,
+    `/v3/content-search?q=${SEARCH_TERM}`,
     `/v3/ecfr_parser_result/${TITLE}`,
-    `/v3/file-manager/categories`,
-    `/v3/file-manager/subjects`,
     `/v3/parser_config`,
     `/v3/resources/`,
-    `/v3/resources/categories`,
-    `/v3/resources/categories/tree`,
-    `/v3/resources/federal_register_docs`,
-    `/v3/resources/federal_register_docs/doc_numbers`,
-    `/v3/resources/locations`,
-    `/v3/resources/locations/sections`,
-    `/v3/resources/locations/subparts`,
-    `/v3/resources/supplemental_content`,
+    `/v3/resources/citations`,
+    `/v3/resources/citations/sections`,
+    `/v3/resources/citations/subparts`,
+    `/v3/resources/internal`,
+    `/v3/resources/internal/categories`,
+    `/v3/resources/internal/files`,
+    `/v3/resources/internal/links`,
+    `/v3/resources/public`,
+    `/v3/resources/public/categories`,
+    `/v3/resources/public/federal_register_links`,
+    `/v3/resources/public/links`,
+    `/v3/resources/subjects`,
     `/v3/search?q=${SEARCH_TERM}`,
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
@@ -54,19 +56,17 @@ const API_ENDPOINTS_V3 = [
     `/v3/title/${TITLE}/toc`,
     `/v3/titles`,
     `/v3/toc`,
-    `/v3/file-manager/groups`,
-    `/v3/file-manager/divisions`,
 ];
 
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach((endpoint) => {
-        it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request({ "url": endpoint }).as("request");
+        it(`sends GET request to ${endpoint} and checks for a 200 or 403 (Forbidden) response`, () => {
+            cy.request({ url: endpoint, failOnStatusCode: false }).as(
+                "request"
+            );
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
-                expect(response.status).to.eq(200);
-                expect(response.isOkStatusCode).to.eq(true);
-                expect(response.statusText).to.eq("OK");
+                expect(response.status).to.be.oneOf([200, 403]);
             });
         });
     });
@@ -76,7 +76,7 @@ describe("Synonyms endpoint special character testing", () => {
     SPECIAL_CHARACTERS.forEach((character) => {
         const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request({ "url": endpoint }).as("request");
+            cy.request({ url: endpoint }).as("request");
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 expect(response.status).to.eq(200);

@@ -1,6 +1,6 @@
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
-import aliases from './alias.js'
+import aliases from "./alias.js";
 
 export default defineConfig({
     plugins: [vue()],
@@ -8,11 +8,11 @@ export default defineConfig({
         globals: true,
         setupFiles: ["./test/configuration/setup-test.js"],
         coverage: {
-            provider: 'c8'
-          },
+            reporter: ["text", "json", "html"],
+            provider: "v8",
+        },
     },
     resolve: {
-        alias : aliases
+        alias: aliases,
     },
-
 });

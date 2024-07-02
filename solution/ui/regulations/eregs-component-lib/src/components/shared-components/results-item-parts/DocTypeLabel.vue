@@ -1,7 +1,9 @@
 <script setup>
+import { DOCUMENT_TYPES_MAP } from "utilities/utils";
+
 const iconTypesDict = {
-    "external": "users",
-    "internal": "key",
+    Public: "users",
+    Internal: "key",
 };
 
 const props = defineProps({
@@ -18,7 +20,7 @@ const props = defineProps({
 
 <template>
     <div class="doc-type__label">
-        <i :class="`fa fa-${iconTypesDict[iconType]}`"></i>
+        <i :class="`fa fa-${iconTypesDict[DOCUMENT_TYPES_MAP[iconType]]}`"></i>
         {{ docType }}
     </div>
 </template>
