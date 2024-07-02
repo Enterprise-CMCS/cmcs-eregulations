@@ -81,6 +81,9 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     document_id_sort = NaturalSortField("document_id", null=True, verbose_name="Document ID sort")
     title_sort = NaturalSortField("title", null=True)
 
+    related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
+    group_parent = models.BooleanField(default=True)
+
     objects = InheritanceManager()
 
     def save(self, *args, **kwargs):
