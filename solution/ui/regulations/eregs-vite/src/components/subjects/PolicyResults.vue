@@ -220,7 +220,12 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <a
                     v-if="hasEditableJobCode"
                     class="edit-button"
-                    :href="apiUrl + 'content-search/resource/' + doc.id"
+                    :href="
+                        apiUrl +
+                        'resources/' +
+                        getFieldVal({ item: doc, fieldName: 'id' }) +
+                        '/edit'
+                    "
                 >
                     Edit
                     <i class="fas fa-edit"></i>
