@@ -56,3 +56,21 @@ def get_citation_filter(citations, filter_prefix, max_depth=100):
     for q in queries:
         q_obj |= q
     return q_obj
+
+
+# Convert a boolean value encoded as a string to a bool.
+#
+# 'true', 't', 'y', 'yes', '1' all return True.
+# 'false', 'f', 'n', 'no', '0' all return False.
+#
+# value: the string to convert to a bool (case insensitive)
+# default: the default to return if 'value' is None
+def string_to_bool(value, default):
+    if not value:
+        return default
+    value = value.lower().strip()
+    if value in ("true", "t", "y", "yes", "1"):
+        return True
+    elif value in ("false", "f", "n", "no", "0"):
+        return False
+    raise ValueError(f"The value '{value}' cannot be converted to a bool.")
