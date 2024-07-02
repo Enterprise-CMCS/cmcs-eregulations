@@ -82,6 +82,9 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     title_sort = NaturalSortField("title", null=True)
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
+    related_citations = models.ManyToManyField(AbstractCitation, blank=True)
+    related_categories = models.ManyToManyField(AbstractCategory, blank=True)
+    related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
 
     objects = InheritanceManager()

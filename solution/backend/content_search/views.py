@@ -131,9 +131,13 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             query = query.exclude(reg_text__isnull=False)
 
         # Perform search and headline generation
+        # Note that search is performed twice: first on the entire dataset and then on the current page.
+        # This allows us to preserve rank ordering while only generating headlines on the current page's data.
+        # Generating headlines on the entire dataset can be extremely expensive, but duplicating the search operation
+        # on a small subset is cheap and effective.
         query = query.search(search_query)
-        ranked_results = [i.pk for i in self.paginate_queryset(query)]
-        query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
+        current_page = [i.pk for i in self.paginate_queryset(query)]
+        query = ContentIndex.objects.filter(pk__in=current_page).search(search_query).generate_headlines(search_query)
 
         # Prefetch all related data
         query = query.prefetch_related(
