@@ -3,22 +3,6 @@
 from django.db import migrations, models
 
 
-def link_resources(apps, schema_editor):
-    AbstractResource = apps.get_model("resources", "AbstractResource")
-    for resource in AbstractResource.objects.all():
-        groups = resource.resource_groups.all()
-        AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
-        for group in groups:
-            group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
-        related_resources = AbstractResource.objects.filter(resource_groups__in=groups).exclude(pk=resource.pk)
-        resource.related_resources.set(related_resources)
-        for related_resource in related_resources:
-            related_groups = related_resource.resource_groups.all()
-            related_resources = AbstractResource.objects.filter(resource_groups__in=related_groups) \
-                                                .exclude(pk=related_resource.pk)
-            related_resource.related_resources.set(related_resources)
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -36,5 +20,4 @@ class Migration(migrations.Migration):
             name='related_resources',
             field=models.ManyToManyField(blank=True, to='resources.abstractresource'),
         ),
-        migrations.RunPython(link_resources),
     ]

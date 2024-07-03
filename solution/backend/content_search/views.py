@@ -15,7 +15,7 @@ from resources.models import (
     AbstractResource,
     Subject,
 )
-from resources.utils import get_citation_filter
+from resources.utils import get_citation_filter, string_to_bool
 
 from .models import ContentIndex
 from .serializers import ContentSearchSerializer, ContentUpdateSerializer
@@ -79,24 +79,13 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentSearchSerializer
     pagination_class = ViewSetPagination
 
-    def get_boolean_parameter(self, param, default):
-        value = self.request.GET.get(param)
-        if not value:
-            return default
-        value = value.lower().strip()
-        if value in ("true", "t", "y", "yes", "1"):
-            return True
-        elif value in ("false", "f", "n", "no", "0"):
-            return False
-        raise BadRequest(f"Parameter '{param}' has an invalid value: '{value}'.")
-
     def get_queryset(self):
         citations = self.request.GET.getlist("citations")
         subjects = self.request.GET.getlist("subjects")
         categories = self.request.GET.getlist("categories")
-        show_public = self.get_boolean_parameter("show_public", True)
-        show_internal = self.get_boolean_parameter("show_internal", True)
-        show_regulations = self.get_boolean_parameter("show_regulations", True)
+        show_public = string_to_bool(self.request.GET.get("show_public"), True)
+        show_internal = string_to_bool(self.request.GET.get("show_internal"), True)
+        show_regulations = string_to_bool(self.request.GET.get("show_regulations"), True)
 
         # Retrieve the required search query param
         search_query = self.request.GET.get("q")
@@ -131,9 +120,13 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             query = query.exclude(reg_text__isnull=False)
 
         # Perform search and headline generation
+        # Note that search is performed twice: first on the entire dataset and then on the current page.
+        # This allows us to preserve rank ordering while only generating headlines on the current page's data.
+        # Generating headlines on the entire dataset can be extremely expensive, but duplicating the search operation
+        # on a small subset is cheap and effective.
         query = query.search(search_query)
-        ranked_results = [i.pk for i in self.paginate_queryset(query)]
-        query = ContentIndex.objects.filter(pk__in=ranked_results).generate_headlines(search_query)
+        current_page = [i.pk for i in self.paginate_queryset(query)]
+        query = ContentIndex.objects.filter(pk__in=current_page).search(search_query).generate_headlines(search_query)
 
         # Prefetch all related data
         query = query.prefetch_related(
