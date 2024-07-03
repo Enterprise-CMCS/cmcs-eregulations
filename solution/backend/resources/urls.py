@@ -4,12 +4,14 @@ from resources.views import (
     CitationViewSet,
     FederalRegisterLinkViewSet,
     InternalCategoryViewSet,
+    InternalFileDownloadViewSet,
     InternalFileViewSet,
     InternalLinkViewSet,
     InternalResourceViewSet,
     PublicCategoryViewSet,
     PublicLinkViewSet,
     PublicResourceViewSet,
+    ResourceEditViewSet,
     ResourceGroupViewSet,
     ResourceViewSet,
     SectionViewSet,
@@ -21,6 +23,7 @@ urlpatterns = [
     path("", ResourceViewSet.as_view({
         "get": "list",
     })),
+    path("<int:id>/edit", ResourceEditViewSet.as_view()),
     path("public", PublicResourceViewSet.as_view({
         "get": "list",
     })),
@@ -39,6 +42,7 @@ urlpatterns = [
     path("internal/files", InternalFileViewSet.as_view({
         "get": "list",
     })),
+    path("internal/files/<uid>", InternalFileDownloadViewSet.as_view()),
     path("internal/links", InternalLinkViewSet.as_view({
         "get": "list",
     })),
