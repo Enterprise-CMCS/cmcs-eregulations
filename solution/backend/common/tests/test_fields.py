@@ -20,7 +20,7 @@ class VariableDateFieldTest(unittest.TestCase):
             None,
         ]
         for value in values:
-            if value != None:
+            if value is not None:
                 self.assertEqual(self.field.clean(value, value), value)
             else:
                 self.assertEqual(self.field.clean(value, None), "")

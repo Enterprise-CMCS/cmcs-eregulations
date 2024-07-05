@@ -2,12 +2,12 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 
-from resources.models import Subject
 from resources.models import (
     FederalRegisterLink,
+    PublicLink,
     ResourceGroup,
     Section,
-    PublicLink,
+    Subject,
 )
 
 

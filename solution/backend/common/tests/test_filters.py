@@ -11,8 +11,8 @@ def test_index_populated_filter():
     b = InternalFile.objects.create(document_id="b")
 
     # Retrieve the existing ContentIndex instances linked to InternalFile instances
-    index_a, created_a = ContentIndex.objects.get_or_create(resource=a)
-    index_b, created_b = ContentIndex.objects.get_or_create(resource=b)
+    index_a, _ = ContentIndex.objects.get_or_create(resource=a)
+    ContentIndex.objects.get_or_create(resource=b)
 
     # Update the content field for index_a
     index_a.content = "Hello world"

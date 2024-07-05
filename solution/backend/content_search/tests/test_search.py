@@ -86,12 +86,14 @@ class SearchTest(TestCase):
                     file.save()
 
     def test_no_query_not_logged_in(self):
-        response = self.client.get(f"/v3/content-search?show_internal=true&show_regulations=false")
+        response = self.client.get("/v3/content-search?show_internal=true&show_regulations=false")
         self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+
     def test_no_query_returns_400(self):
         self.login()
         response = self.client.get("/v3/content-search/?show_internal=false&show_regulations=false")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_public_resources_access_logged_in(self):
         self.login()
         response = self.client.get("/v3/resources/public")
@@ -99,7 +101,7 @@ class SearchTest(TestCase):
 
     def test_single_response_queries(self):
         self.login()
-        response = self.client.get(f"/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
+        response = self.client.get("/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
         print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
@@ -107,7 +109,7 @@ class SearchTest(TestCase):
         data = get_paginated_data(response)
         print(f"Data: {data}")
         self.assertEqual(data['count'], 0)
-        response = self.client.get(f"/v3/content-search/?q='start%20fire'&show_internal=false&show_regulations=false")
+        response = self.client.get("/v3/content-search/?q='start%20fire'&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
         print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
@@ -126,7 +128,8 @@ class SearchTest(TestCase):
         self.assertEqual(data["count"], 2)
         self.assertEqual(data["results"][0]["resource"]["title"], self.internal_docs[0]["title"])
         self.assertEqual(data["results"][1]["resource"]["title"], self.internal_docs[2]["title"])
-        response = self.client.get("/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
+        response = self.client.\
+            get("/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
         print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
@@ -164,7 +167,8 @@ class SearchTest(TestCase):
     def test_inclusive_subject_filter(self):
         self.login()
 
-        response = self.client.get(f"/v3/content-search/?show_public=false&show_regulations=false&q=test&subjects={self.subject1.id}")
+        response = self.client.\
+            get(f"/v3/content-search/?show_public=false&show_regulations=false&q=test&subjects={self.subject1.id}")
         data = get_paginated_data(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data['count'], 0)

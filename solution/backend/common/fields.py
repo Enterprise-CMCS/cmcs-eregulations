@@ -50,6 +50,7 @@ class VariableDateField(models.CharField):
             value = ""
         return super().clean(value, model_instance)
 
+
 class NaturalSortField(models.CharField):
     def __init__(self, for_field, **kwargs):
         self.for_field = for_field
