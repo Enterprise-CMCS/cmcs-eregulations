@@ -124,23 +124,19 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?q=file")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data["count"], 2)
         self.assertEqual(data["results"][0]["resource"]["title"], self.internal_docs[0]["title"])
         self.assertEqual(data["results"][1]["resource"]["title"], self.internal_docs[2]["title"])
         response = self.client.\
             get("/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
         response = self.client.get("/v3/content-search/?q=fire&show_public=false&show_regulations=false")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
         data = get_paginated_data(response)
         response = self.client.get("/v3/content-search/?q=fire&show_regulations=false&page_size=2")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 2)
 
     def test_search_by_filename_variations(self):
@@ -174,7 +170,12 @@ class SearchTest(TestCase):
         self.assertEqual(data['count'], 0)
 
         response = self.client.get(
-            f"/v3/content-search/?show_public=false&show_regulations=false&q=test&subjects={self.subject1.id}&subjects={self.subject2.id}")
+            f"/v3/content-search/?"
+            f"show_public=false&"
+            f"show_regulations=false&"
+            f"q=test&"
+            f"subjects={self.subject1.id}&"
+            f"subjects={self.subject2.id}")
         self.check_exclusive_response(response, 0)
 
     def test_content_search(self):

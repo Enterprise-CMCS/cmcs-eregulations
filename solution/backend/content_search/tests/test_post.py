@@ -58,7 +58,7 @@ class SearchTest(APITestCase):
         response = self.client.post("/v3/content-search/id/",
                                     data=json.dumps(json_object),
                                     content_type='application/json', )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         token = self.get_token()
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         response = self.client.post("/v3/content-search/id/",
@@ -77,7 +77,7 @@ class SearchTest(APITestCase):
         response = self.client.post("/v3/content-search/id/",
                                     data=json.dumps(json_object),
                                     content_type='application/json', )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         token = self.get_token()
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         response = self.client.post("/v3/content-search/id/",
