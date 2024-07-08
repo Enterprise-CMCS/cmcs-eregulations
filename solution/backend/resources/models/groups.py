@@ -54,6 +54,16 @@ class ResourceGroup(models.Model):
 def update_related_resources(resource, first=True):
     groups = resource.resource_groups.all()
 
+    if not groups:
+        # This resource does not belong to any groups, so we will treat it differently.
+        # Set related_X to contain only the X objects in the individual resource.
+        # We must do this for filtering purposes when `group_resources=true` on resource endpoints.
+        resource.related_resources.clear()
+        resource.related_citations.set(resource.cfr_citations.all())
+        resource.related_categories.set([resource.category] if resource.category else [])
+        resource.related_subjects.set(resource.subjects.all())
+        return
+
     if first:
         AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
         for group in groups:
