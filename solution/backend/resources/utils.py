@@ -29,8 +29,8 @@ def get_citation_filter(citations, filter_prefix, max_depth=100):
         length = len(split)
 
         if length < 1 or \
-            (length >= 1 and not is_int(split[0])) or \
-            (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
+                (length >= 1 and not is_int(split[0])) or \
+                (length >= 2 and (not is_int(split[0]) or not is_int(split[1]))):
             raise BadRequest(f"\"{loc}\" is not a valid title, part, section, or subpart!")
 
         q = Q(**{f"{filter_prefix}title": split[0]})
@@ -45,8 +45,8 @@ def get_citation_filter(citations, filter_prefix, max_depth=100):
                     Q(**{f"{filter_prefix}section__section_id": split[2]})
                     if is_int(split[2])
                     else (
-                        Q(**{f"{filter_prefix}subpart__subpart_id": split[2]}) |
-                        Q(**{f"{filter_prefix}section__parent__subpart_id": split[2]})
+                            Q(**{f"{filter_prefix}subpart__subpart_id": split[2]}) |
+                            Q(**{f"{filter_prefix}section__parent__subpart_id": split[2]})
                     )
                 )
 

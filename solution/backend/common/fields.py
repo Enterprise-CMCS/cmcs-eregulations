@@ -44,6 +44,12 @@ class VariableDateField(models.CharField):
 
         super().__init__(*args, **kwargs)
 
+    def clean(self, value, model_instance):
+        # Convert None to an empty string
+        if value is None:
+            value = ""
+        return super().clean(value, model_instance)
+
 
 class NaturalSortField(models.CharField):
     def __init__(self, for_field, **kwargs):

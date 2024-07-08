@@ -1,20 +1,23 @@
 [
     {
-        "document_id": "Test file 1",
-        "file_name": "cheese",
+        "title": "Test file 1",
+        "url": "https://internal.example.com/report1",
         "date": "2023-01-01",
-        "summary": "This is a test file containing test information"
+        "file_name": "cheese",
+        "summary": "This is a test file containing test information."
     },
     {
-        "document_id": "Internal notes",
-        "file_name": "pokemon",
+        "title": "Internal notes",
+        "url": "https://internal.example.com/report3",
         "date": "2019-05-12",
+        "file_name": "pokemon",
         "summary": "Important notes that cannot be public"
     },
     {
-        "document_id": "Policy reference file fire fire fire",
-        "file_name": "policyreference.pptx",
+        "title": "Policy reference file fire fire fire",
+        "url": "https://internal.example.com/report4",
         "date": "2020-02-29",
+        "file_name": "policyreference.pptx",
         "summary": "Hi hello some policy stuff goes here with fire"
     }
 ]
