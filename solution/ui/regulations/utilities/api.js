@@ -341,12 +341,12 @@ const getRecentResources = async (
 ) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
+            `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}${categories}`,
             {} // params, default
         );
     }
     return httpApiGetLegacy(
-        `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
+        `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}`,
         {} // params, default
     );
 };
