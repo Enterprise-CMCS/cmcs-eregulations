@@ -39,7 +39,12 @@ class ResourceSerializer(serializers.Serializer):
     title = serializers.CharField()
     date = serializers.CharField()
     url = serializers.CharField()
-    related_resources = AbstractResourceSerializer(many=True)
+    related_resources = serializers.SerializerMethodField()
+
+    def get_related_resources(self, obj):
+        if self.context.get("show_related", False):
+            return AbstractResourceSerializer(instance=obj.related_resources, many=True).data
+        return None
 
 
 class PublicResourceSerializer(ResourceSerializer):

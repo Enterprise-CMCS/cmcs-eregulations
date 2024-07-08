@@ -7,24 +7,8 @@ from django.contrib.postgres.aggregates import ArrayAgg
 
 
 def generate_related(apps, schema_editor):
-    AbstractResource = apps.get_model("resources", "AbstractResource")
-    for resource in AbstractResource.objects.all():
-        groups = resource.resource_groups.all()
-        AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
-        for group in groups:
-            group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
-        related_resources = AbstractResource.objects.filter(resource_groups__in=groups)
-        related_aggregates = related_resources.aggregate(
-            all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False), default=Value([])),
-            all_categories=ArrayAgg("category", distinct=True, filter=Q(category__isnull=False), default=Value([])),
-            all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False), default=Value([])),
-        )
-        related_resources = related_resources.exclude(pk=resource.pk)
-
-        resource.related_resources.set(related_resources)
-        resource.related_citations.set(related_aggregates["all_citations"])
-        resource.related_categories.set(related_aggregates["all_categories"])
-        resource.related_subjects.set(related_aggregates["all_subjects"])
+    # This is superseded by 0047's generate_related function
+    pass
 
 
 class Migration(migrations.Migration):
