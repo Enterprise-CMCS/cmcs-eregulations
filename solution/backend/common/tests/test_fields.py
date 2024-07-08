@@ -4,7 +4,7 @@ import pytest
 from django.core.exceptions import ValidationError
 
 from common.fields import HeadlineField, VariableDateField
-from file_manager.models import Subject
+from resources.models import Subject
 
 
 class VariableDateFieldTest(unittest.TestCase):
@@ -20,7 +20,10 @@ class VariableDateFieldTest(unittest.TestCase):
             None,
         ]
         for value in values:
-            self.assertEqual(self.field.clean(value, value), value)
+            if value is not None:
+                self.assertEqual(self.field.clean(value, value), value)
+            else:
+                self.assertEqual(self.field.clean(value, None), "")
 
     def test_invalid_date_values(self):
         values = [
