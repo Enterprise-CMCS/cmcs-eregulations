@@ -373,13 +373,9 @@ const getSupplementalContent = async ({
     partDict,
     title,
     q = "",
-    start,
-    maxResults = 1000,
-    paginate = true,
     page = 1,
     pageSize = 100,
     sortMethod = "newest",
-    frGrouping = true,
     builtLocationString = "",
     apiUrl = "",
 }) => {
@@ -405,10 +401,7 @@ const getSupplementalContent = async ({
         });
     }
 
-    sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
-    sString = `${sString}&sort=${sortMethod}`;
-    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
-    sString = `${sString}&fr_grouping=${frGrouping}`;
+    sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
 
     let response = "";
 
