@@ -138,7 +138,7 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**v3/resources/public/?&citations=42.433.A**", {
+        cy.intercept("**v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.intercept(
@@ -181,7 +181,7 @@ describe("Part View", () => {
             .and("be.visible")
             .and(
                 "contain.text",
-                "Cost Allocations for Surveys of Home Health Agencies (HHAs)"
+                "Mock title"
             );
     });
 
@@ -247,8 +247,8 @@ describe("Part View", () => {
         cy.get(".latest-version").should("exist");
     });
 
-    it.skip("renders FR Doc category correctly in sidebar", () => {
-        cy.intercept("**/v3/resources/?&locations=42.433.10**", {
+    it("renders FR Doc category correctly in sidebar", () => {
+        cy.intercept("**/v3/resources/public?&citations=42.433.10**", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
         cy.viewport("macbook-15");
@@ -258,9 +258,9 @@ describe("Part View", () => {
         cy.wait("@resources43310").then(() => {
             cy.get(".is-fr-link-btn").click({ force: true });
             cy.get(".show-more-button")
-                .contains("+ Show More (9)")
+                .contains("+ Show More (10)")
                 .click({ force: true });
-            cy.get(".show-more-button").contains("- Show Less (9)");
+            cy.get(".show-more-button").contains("- Show Less (10)");
         });
     });
 
