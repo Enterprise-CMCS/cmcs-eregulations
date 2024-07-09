@@ -6,7 +6,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-        cy.intercept("**/v3/resources/categories", {
+        cy.intercept("**/v3/resources/public/categories", {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
@@ -281,7 +281,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
-        //cy.wait("@categories");
+        cy.wait("@categories");
         cy.get(".recent-rules-descriptive-text")
             .first()
             .should(($el) => {
