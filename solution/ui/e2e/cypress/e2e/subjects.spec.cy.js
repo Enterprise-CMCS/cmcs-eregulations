@@ -21,16 +21,16 @@ const _beforeEach = () => {
         fixture: "parts-45.json",
     }).as("parts45");
 
-    cy.intercept("**/v3/file-manager/subjects", {
+    cy.intercept("**/v3/resources/subjects", {
         fixture: "subjects.json",
     }).as("subjects");
 
-    cy.intercept("**/v3/file-manager/categories/tree", {
-        fixture: "categories-internal-tree.json",
+    cy.intercept("**/v3/resources/internal/categories", {
+        fixture: "categories-internal.json",
     }).as("internalCategories");
 
-    cy.intercept("**/v3/resources/categories/tree", {
-        fixture: "categories-tree.json",
+    cy.intercept("**/v3/resources/public/categories", {
+        fixture: "categories.json",
     }).as("categories");
 };
 
@@ -129,7 +129,7 @@ describe("Find by Subjects", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
         )
             .should("be.visible")
-            .and("have.text", "0 public resources");
+            .and("have.text", "1 public resource");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
@@ -169,7 +169,7 @@ describe("Find by Subjects", () => {
             ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
         )
             .should("be.visible")
-            .and("have.text", "0 public and 1 internal resources");
+            .and("have.text", "1 public and 0 internal resources");
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-63] a"
         ).scrollIntoView();
