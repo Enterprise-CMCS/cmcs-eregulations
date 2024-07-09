@@ -65,23 +65,29 @@ def update_related_resources(resource, first=True):
         return
 
     if first:
+        # Set the parent of each group (most recent by date at the top of each group's hierarchy)
         AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
         for group in groups:
             group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
 
+    # Compute the related resources, citations, categories, and subjects
+    # Except for related_resources, these lists are inclusive of the resource we are processing
     related_resources = AbstractResource.objects.filter(resource_groups__in=groups)
     related_aggregates = related_resources.aggregate(
         all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False), default=Value([])),
         all_categories=ArrayAgg("category", distinct=True, filter=Q(category__isnull=False), default=Value([])),
         all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False), default=Value([])),
     )
-    related_resources = related_resources.exclude(pk=resource.pk)
+    related_resources = related_resources.exclude(pk=resource.pk)  # Exclude the current resource for related_resources
+
+    # Set related_X for this resource
     resource.related_resources.set(related_resources)
     resource.related_citations.set(related_aggregates["all_citations"])
     resource.related_categories.set(related_aggregates["all_categories"])
     resource.related_subjects.set(related_aggregates["all_subjects"])
 
     if first:
+        # For the first resource processed, also update all of its related_resources
         for related_resource in related_resources:
             update_related_resources(related_resource, False)
 
