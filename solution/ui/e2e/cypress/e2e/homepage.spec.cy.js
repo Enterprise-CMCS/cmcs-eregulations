@@ -10,7 +10,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
-            "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true**",
+            "**v3/resources/public/federal_register_links?page=1&page_size=3**",
             { fixture: "frdocs.json" }
         ).as("frdocs");
     });
@@ -52,7 +52,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it.skip("has grouped FR docs in Related Rules tab", () => {
+    it("has grouped FR docs in Related Rules tab", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
@@ -60,12 +60,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .contains("Recent Rules")
             .click({ force: true });
 
-        // test that something is displayed instead of relying on an interception fixture
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
             expect($els).to.have.length(3);
-            cy.wrap($els[0]).find(".recent-title").should("exist");
-            cy.wrap($els[0])
+            cy.wrap($els[1]).find(".recent-title").should("exist");
+            cy.wrap($els[1])
                 .find(".recent-flag")
                 .then(($flag) => {
                     expect($flag).to.have.text("Final");
@@ -92,15 +91,15 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .should("not.exist");
     });
 
-    it.skip("Sets the label as Final, when correction and withdraw are both set to false", () => {
+    it("Sets the label as Final, when correction and withdraw are both set to false", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
             .click();
         cy.get(".related-rule.ungrouped").then(($els) => {
-            cy.wrap($els[0]).find(".recent-title").should("exist");
-            cy.wrap($els[0])
+            cy.wrap($els[1]).find(".recent-title").should("exist");
+            cy.wrap($els[1])
                 .find(".recent-flag")
                 .then(($flag) => {
                     expect($flag).to.have.text("Final");
@@ -111,7 +110,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it.skip("Sets the label as WD when Correction is false and Withdrawal is true", () => {
+    it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container .v-tabs")
@@ -138,7 +137,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it.skip("Sets the label as WD when Correction is true and Withdrawal is true", () => {
+    it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container .v-tabs")
@@ -165,15 +164,15 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it.skip("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
+    it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
             .click();
-        cy.get(".related-rule.grouped").then(($els) => {
-            cy.wrap($els[1]).find(".recent-title").should("not.exist");
-            cy.wrap($els[1])
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            cy.wrap($els[0]).find(".recent-title").should("exist");
+            cy.wrap($els[0])
                 .find(".recent-flag")
                 .then(($flag) => {
                     expect($flag).to.have.text("CORR");
