@@ -35,6 +35,14 @@ const getFieldVal = ({ item, fieldName }) => {
     }
 };
 
+const getParentCategoryName = ({ item, categoriesArr }) => {
+    const parentId = getFieldVal({ item, fieldName: "category" }).parent;
+
+    if (!parentId) return null;
+
+    return categoriesArr.find((category) => category.id === parentId).name;
+};
+
 const getResultLinkText = (item) => {
     let linkText;
     if (
@@ -118,6 +126,10 @@ export default {
 
 <script setup>
 const props = defineProps({
+    categories: {
+        type: Array,
+        default: () => [],
+    },
     results: {
         type: Array,
         default: () => [],
@@ -263,10 +275,10 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                             getFieldVal({ item: doc, fieldName: 'category' }) &&
                             getFieldVal({ item: doc, fieldName: 'category' })
                                 .parent
-                                ? getFieldVal({
+                                ? getParentCategoryName({
                                       item: doc,
-                                      fieldName: 'category',
-                                  }).parent?.name
+                                      categoriesArr: categories,
+                                  })
                                 : getFieldVal({
                                       item: doc,
                                       fieldName: 'category',
@@ -301,10 +313,10 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                             getFieldVal({ item: doc, fieldName: 'category' }) &&
                             getFieldVal({ item: doc, fieldName: 'category' })
                                 .parent
-                                ? getFieldVal({
+                                ? getParentCategoryName({
                                       item: doc,
-                                      fieldName: 'category',
-                                  }).parent?.name
+                                      categoriesArr: categories,
+                                  })
                                 : getFieldVal({
                                       item: doc,
                                       fieldName: 'category',

@@ -122,6 +122,11 @@ const searchInputRemoveList = commonRemoveList.concat(["q"]);
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
+const categoriesRef = ref([]);
+const setCategories = (categories) => {
+    categoriesRef.value = categories;
+};
+
 /**
  * @param {Object} queryParams - $route.query
  * @returns {Boolean} - true if all doc types are selected and nothing else
@@ -520,7 +525,10 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
-                            <FetchCategoriesContainer v-slot="slotProps">
+                            <FetchCategoriesContainer
+                                v-slot="slotProps"
+                                :categories-capture-function="setCategories"
+                            >
                                 <CategoriesDropdown
                                     :list="slotProps.data"
                                     :error="slotProps.error"
@@ -560,6 +568,7 @@ getDocSubjects();
                         <template v-else>
                             <PolicyResults
                                 :base="homeUrl"
+                                :categories="categoriesRef"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"
                                 :page="parseInt($route.query.page, 10) || 1"

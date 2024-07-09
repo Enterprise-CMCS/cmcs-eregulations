@@ -8,10 +8,15 @@ import {
     getInternalCategories,
 } from "utilities/api";
 
-defineProps({
+const props = defineProps({
     apiUrl: {
         type: String,
         required: true,
+    },
+    categoriesCaptureFunction: {
+        type: Function,
+        required: false,
+        default: () => {},
     },
 });
 
@@ -44,7 +49,6 @@ watchEffect(() => {
         externalCategories.value.loading || internalCategories.value.loading;
 
     if (!combinedCategories.value.loading) {
-        // move to method
         const externalCats = externalCategories.value.data.map((cat, i) => ({
             ...cat,
             categoryType: "categories",
@@ -58,6 +62,8 @@ watchEffect(() => {
         }));
 
         combinedCategories.value.data = [...externalCats, ...internalCats];
+
+        props.categoriesCaptureFunction(combinedCategories.value.data);
     }
 });
 </script>
