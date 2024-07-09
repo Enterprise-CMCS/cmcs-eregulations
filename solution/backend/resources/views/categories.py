@@ -11,14 +11,14 @@ from resources.models import (
     PublicSubCategory,
 )
 from resources.serializers import (
-    InternalCategorySerializer,
-    PublicCategorySerializer,
+    InternalCategoryWithSubCategoriesSerializer,
+    PublicCategoryWithSubCategoriesSerializer,
 )
 
 
 class PublicCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
-    serializer_class = PublicCategorySerializer
+    serializer_class = PublicCategoryWithSubCategoriesSerializer
     queryset = PublicCategory.objects.all().prefetch_related(
         Prefetch("subcategories", PublicSubCategory.objects.order_by("order")),
     ).order_by("order")
@@ -28,7 +28,7 @@ class InternalCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    serializer_class = InternalCategorySerializer
+    serializer_class = InternalCategoryWithSubCategoriesSerializer
     queryset = InternalCategory.objects.all().prefetch_related(
         Prefetch("subcategories", InternalSubCategory.objects.order_by("order")),
     ).order_by("order")

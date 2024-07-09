@@ -17,9 +17,9 @@ from .polymorphic import (
 class AbstractCategorySerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            PublicCategory: ("public_category", PublicSubCategorySerializer),
+            PublicCategory: ("public_category", PublicCategorySerializer),
             PublicSubCategory: ("public_subcategory", PublicSubCategorySerializer),
-            InternalCategory: ("internal_category", InternalSubCategorySerializer),
+            InternalCategory: ("internal_category", InternalCategorySerializer),
             InternalSubCategory: ("internal_subcategory", InternalSubCategorySerializer),
         }
 
@@ -35,19 +35,27 @@ class CategorySerializer(serializers.Serializer):
 
 
 class PublicSubCategorySerializer(CategorySerializer):
-    pass
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
-class PublicCategorySerializer(CategorySerializer):
+class PublicCategoryWithSubCategoriesSerializer(CategorySerializer):
     subcategories = PublicSubCategorySerializer(many=True)
 
 
-class InternalSubCategorySerializer(CategorySerializer):
+class PublicCategorySerializer(CategorySerializer):
     pass
 
 
-class InternalCategorySerializer(CategorySerializer):
+class InternalSubCategorySerializer(CategorySerializer):
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class InternalCategoryWithSubCategoriesSerializer(CategorySerializer):
     subcategories = InternalSubCategorySerializer(many=True)
+
+
+class InternalCategorySerializer(CategorySerializer):
+    pass
 
 
 MetaCategorySerializer = ProxySerializerWrapper(
