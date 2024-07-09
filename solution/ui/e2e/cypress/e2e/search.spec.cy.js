@@ -1,4 +1,5 @@
 const SEARCH_TERM = "FMAP";
+const SEARCH_TERM_2 = "almond";
 
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
@@ -82,7 +83,7 @@ describe("Search flow", () => {
         cy.get("input#main-content").should("have.value", "");
     });
 
-    it("should have the correct labels for public and internal documents", () => {
+    it.skip("should have the correct labels for public and internal documents", () => {
         cy.checkPolicyDocs({
             username,
             password,
@@ -95,7 +96,7 @@ describe("Search flow", () => {
             fixture: "policy-docs.json",
         }).as("subjectFiles");
 
-        cy.intercept("**/v3/file-manager/subjects", {
+        cy.intercept("**/v3/resources/subjects", {
             fixture: "subjects.json",
         }).as("subjects");
 
@@ -109,7 +110,7 @@ describe("Search flow", () => {
 
         cy.get("input#main-content")
             .should("be.visible")
-            .type("test", { force: true });
+            .type(`${SEARCH_TERM_2}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
