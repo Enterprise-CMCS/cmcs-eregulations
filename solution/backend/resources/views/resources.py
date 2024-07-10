@@ -61,11 +61,11 @@ class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
         if self.group_resources:
             # Prefetch related_resources and filter out non-parent group members
             query = query.prefetch_related(
-                Prefetch("related_resources", AbstractResource.objects.select_subclasses().prefetch_related(
+                Prefetch("related_resources", AbstractResource.objects.filter(approved=True).prefetch_related(
                     Prefetch("category", category_prefetch),
                     Prefetch("cfr_citations", citation_prefetch),
                     Prefetch("subjects", subject_prefetch),
-                )),
+                ).select_subclasses()),
             ).filter(Q(group_parent=True) | Q(related_resources__isnull=True))
             citation_prefix = "related_citations__"
             category_prefix = "related_categories__"

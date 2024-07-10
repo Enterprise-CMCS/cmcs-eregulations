@@ -155,3 +155,49 @@ class TestResourceGrouping(TestCase):
         self.assertCountEqual(link.related_categories_set, [0])
         self.assertCountEqual(link.related_subjects_set, [0, 1])
         self.assertCountEqual(link.related_citations_set, [0, 1])
+
+    # TODO: this test should pass.
+    #
+    # Right now, removing a parent of a group from the group does not properly recompute the group parents.
+    # Also it might be expected that related_X fields are not properly computed as well in this case.
+    #
+    # This should only affect multigroup scenarios of which we currently have none on production, so
+    # fixing this can be a followup ticket.
+    #
+    # Expected fix: rewrite the post-save hook to correctly compute parents and related_X fields for resources
+    # that are part of a group _OR_ have related_resources set. We currently only process the former.
+
+    # # Test that a resource's related_X fields are cleared when removed from a group
+    # def test_group_removal(self):
+    #     # Remove the first link's group assignments
+    #     first = FederalRegisterLink.objects.order_by("id").first()
+    #     first.resource_groups.clear()
+    #     first.save()
+
+    #     # Get the first link again
+    #     first = FederalRegisterLink.objects.order_by("id").annotate(
+    #         related_resources_set=distinct_array_agg("related_resources"),
+    #         related_categories_set=distinct_array_agg("related_categories"),
+    #         related_subjects_set=distinct_array_agg("related_subjects"),
+    #         related_citations_set=distinct_array_agg("related_citations"),
+    #     ).distinct().first()
+
+    #     # Verify that its related_X fields are reset
+    #     self.assertEqual(len(first.related_resources_set), 0)
+    #     self.assertCountEqual(first.related_categories_set, [0])
+    #     self.assertCountEqual(first.related_subjects_set, [0])
+    #     self.assertCountEqual(first.related_citations_set, [0, 1])
+
+    #     # Get the other (still grouped) links
+    #     links = FederalRegisterLink.objects.filter(resource_groups__isnull=False).order_by("id").annotate(
+    #         related_resources_set=distinct_array_agg("related_resources"),
+    #         related_categories_set=distinct_array_agg("related_categories"),
+    #         related_subjects_set=distinct_array_agg("related_subjects"),
+    #         related_citations_set=distinct_array_agg("related_citations"),
+    #     ).distinct()
+
+    #     # Verify group_parent field is set correctly
+    #     for i in [1, 2, 3]:
+    #         self.assertEqual(links[i].group_parent, True, msg=f"resource {i} should be a group parent now, but isn't!")
+    #     for i in [4, 5]:
+    #         self.assertEqual(links[i].group_parent, False, msg=f"resource {i} should not be a group parent now, but is!")
