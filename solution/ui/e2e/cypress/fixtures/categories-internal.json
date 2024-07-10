@@ -19,7 +19,8 @@
                     "order": 0,
                     "show_if_empty": false,
                     "is_fr_link_category": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 26
                 }
             ]
         }

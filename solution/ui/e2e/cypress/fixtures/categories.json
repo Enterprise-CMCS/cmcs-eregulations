@@ -7,7 +7,7 @@
             "description": "Statutes that relate to the subject matter of the subpart or section",
             "id": 1,
             "is_fr_link_category": false,
-            "name": "Related Statutes",
+            "name": "Related Statutes in Fixture",
             "order": 200,
             "show_if_empty": false,
             "subcategories": [],
@@ -27,7 +27,7 @@
             "description": "Regulations outside the Subpart related to the subject matter",
             "id": 3,
             "is_fr_link_category": false,
-            "name": "Related Regulations",
+            "name": "Related Regulations Fixture Item",
             "order": 300,
             "show_if_empty": false,
             "subcategories": [],
@@ -113,7 +113,8 @@
                     "name": "SPA Resources",
                     "order": 101,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 },
                 {
                     "description": "",
@@ -122,7 +123,8 @@
                     "name": "Technical Assistance for States",
                     "order": 200,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 },
                 {
                     "description": "",
@@ -131,7 +133,8 @@
                     "name": "Templates",
                     "order": 300,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 },
                 {
                     "description": "",
@@ -140,7 +143,8 @@
                     "name": "Toolkits",
                     "order": 500,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 },
                 {
                     "description": "",
@@ -149,7 +153,8 @@
                     "name": "Waiver Resources",
                     "order": 600,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 },
                 {
                     "description": "",
@@ -158,7 +163,8 @@
                     "name": "Other Resources",
                     "order": 900,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 11
                 }
             ],
             "type": ""
@@ -188,7 +194,8 @@
                     "name": "Topic Briefs and Reports",
                     "order": 0,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 19
                 },
                 {
                     "description": "",
@@ -197,7 +204,8 @@
                     "name": "HHS and CMS Reports to Congress",
                     "order": 200,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 19
                 }
             ],
             "type": ""
@@ -217,7 +225,8 @@
                     "name": "OIG Reports",
                     "order": 550,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 22
                 },
                 {
                     "description": "",
@@ -226,7 +235,8 @@
                     "name": "GAO Reports",
                     "order": 601,
                     "show_if_empty": false,
-                    "type": ""
+                    "type": "",
+                    "parent": 22
                 }
             ],
             "type": ""

@@ -378,7 +378,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                                 item: doc,
                                 fieldName: 'file_name',
                             }),
-                            url: getFieldVal({ item: doc, fieldName: 'url' }),
+                            uid: getFieldVal({ item: doc, fieldName: 'uid' }),
                         })
                     "
                 ></a>

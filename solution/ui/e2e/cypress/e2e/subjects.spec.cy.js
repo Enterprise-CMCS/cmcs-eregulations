@@ -332,11 +332,6 @@ describe("Find by Subjects", () => {
             .and("include", "/42/430/Subpart-A/");
         cy.get(".result__link")
             .eq(0)
-            .find("a")
-            .should("not.include.text", "Download")
-            .and("have.class", "external");
-        cy.get(".result__link")
-            .eq(1)
             .should("include.text", "Download")
             .find("a")
             .should("not.have.class", "external")
@@ -344,16 +339,21 @@ describe("Find by Subjects", () => {
                 "span[data-testid=download-chip-1149e520-6691-4f00-9094-d741b0b114a5]"
             )
             .should("include.text", "Download MSG");
+        cy.get(".result__link")
+            .eq(1)
+            .find("a")
+            .should("not.include.text", "Download")
+            .and("have.class", "external");
         cy.get(".doc-type__label")
             .eq(0)
-            .should("include.text", " Public")
-            .find("i")
-            .should("have.class", "fa-users");
-        cy.get(".doc-type__label")
-            .eq(1)
             .should("include.text", " Internal")
             .find("i")
             .should("have.class", "fa-key");
+        cy.get(".doc-type__label")
+            .eq(1)
+            .should("include.text", " Public")
+            .find("i")
+            .should("have.class", "fa-users");
 
         cy.checkAccessibility();
     });
@@ -375,7 +375,7 @@ describe("Find by Subjects", () => {
 
     it("should update the URL when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
+            fixture: "policy-docs-search.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
         cy.eregsLogin({
@@ -407,17 +407,17 @@ describe("Find by Subjects", () => {
             .should("have.text", "Access to Services");
         cy.get(".document__subjects a")
             .eq(1)
-            .should("have.text", "Adult Day Health");
+            .should("have.text", "Access to Services");
         cy.get(".document__subjects a")
             .eq(2)
             .should("have.text", "Ambulatory Prenatal Care");
-        cy.get(`a[data-testid=add-subject-chip-4]`)
+        cy.get(`a[data-testid=add-subject-chip-5]`)
             .should("have.attr", "title")
-            .and("include", "Adult Day Health");
-        cy.get(`a[data-testid=add-subject-chip-4]`).click({
+            .and("include", "Ambulatory Prenatal Care");
+        cy.get(`a[data-testid=add-subject-chip-5]`).click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=4&type=all");
+        cy.url().should("include", "/subjects?subjects=5&type=all");
         cy.get("input#main-content").should("have.value", "");
     });
 
@@ -632,7 +632,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .should("exist")
             .find(".v-select__selection")
-            .should("have.text", "Related Statutes");
+            .should("have.text", "Related Regulations Fixture Item");
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("have.text", "Choose Category")
@@ -749,7 +749,7 @@ describe("Find by Subjects", () => {
         // URL is updated with selected category ID
         cy.get("div[data-testid='category-select']")
             .find(".v-select__selection")
-            .should("have.text", "Related Statutes");
+            .should("have.text", "Related Statutes in Fixture");
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("not.be.visible");
@@ -767,7 +767,7 @@ describe("Find by Subjects", () => {
 
         cy.url().should(
             "include",
-            "/subjects?subjects=63&categories=3&type=external"
+            "/subjects?subjects=63&categories=1&type=external"
         );
 
         // Select a different subject
@@ -792,13 +792,13 @@ describe("Find by Subjects", () => {
         // Assert that category select label changes and URL updates
         cy.get("div[data-testid='category-select']")
             .find(".v-select__selection")
-            .should("have.text", "Related Statutes");
+            .should("have.text", "Related Statutes in Fixture");
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("not.be.visible");
         cy.url().should(
             "include",
-            "/subjects?subjects=1&type=external&categories=3"
+            "/subjects?subjects=1&type=external&categories=1"
         );
 
         // Add text query and submit
