@@ -50,8 +50,7 @@ const getResultLinkText = (item) => {
         "Internal"
     ) {
         linkText =
-            item.document_name_headline ||
-            getFieldVal({ item, fieldName: "document_id" }) ||
+            item.name_headline ||
             getFieldVal({ item, fieldName: "title" });
     } else {
         linkText =
