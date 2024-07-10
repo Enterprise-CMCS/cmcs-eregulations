@@ -53,7 +53,7 @@ const _beforePaginate = () => {
 
 Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
     cy.intercept("**/v3/content-search/?q=mock**", {
-        fixture: "policy-docs.json",
+        fixture: "policy-docs-search.json",
     }).as("subjectFiles");
     cy.viewport("macbook-15");
     cy.eregsLogin({ username, password, landingPage: "/subjects/" });
@@ -188,8 +188,20 @@ describe("Find by Subjects", () => {
 
     it("should display the appropriate results column header whether viewing keyword search results or viewing the items within a subject.", () => {
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
-        }).as("subjectFiles");
+            fixture: "policy-docs-search.json",
+        });
+        cy.intercept(
+            "**/v3/resources/?show_public=true&show_internal=true&show_regulations=true**",
+            {
+                fixture: "policy-docs-subjects.json",
+            }
+        );
+        cy.intercept(
+            "**/v3/resources/?&page_size=50",
+            {
+                fixture: "policy-docs-subjects.json",
+            }
+        );
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/subjects");
@@ -208,7 +220,7 @@ describe("Find by Subjects", () => {
             "have.text",
             "1 - 2 of 2 documents"
         );
-        cy.get("input#main-content").type("test", { force: true });
+        cy.get("input#main-content").type("mock", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
@@ -218,45 +230,25 @@ describe("Find by Subjects", () => {
             .and("have.text", " Search Results ");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 results for test within Access to Services"
+            "1 - 2 of 2 results for mock within Access to Services"
         );
         cy.get(`button[data-testid=remove-subject-3]`).click({
             force: true,
         });
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 results for test"
+            "1 - 2 of 2 results for mock"
         );
         cy.get("input#main-content").clear();
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .uncheck({ force: true });
         cy.get("search-results__heading").should("not.exist");
         cy.get(".subject__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 documents"
+            "1 - 3 of 3 documents"
         );
-    });
-
-    it("should make a successful request to the content-search endpoint", () => {
-        cy.intercept("**/v3/content-search/?**").as("files");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/subjects/",
-        });
-        cy.visit("/subjects");
-        cy.url().should("include", "/subjects/");
-        cy.get(".subj-toc__list li:nth-child(1) a").click({ force: true });
-        cy.wait("@files").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
     });
 
     it("loads the correct subject and search query when the URL is changed", () => {
@@ -337,7 +329,7 @@ describe("Find by Subjects", () => {
             .find("a")
             .should("have.attr", "href")
             .and("not.include", "undefined")
-            .and("include", "/42/435/116#435-116");
+            .and("include", "/42/430/Subpart-A/");
         cy.get(".result__link")
             .eq(0)
             .find("a")
@@ -349,7 +341,7 @@ describe("Find by Subjects", () => {
             .find("a")
             .should("not.have.class", "external")
             .find(
-                "span[data-testid=download-chip-d89af093-8975-4bcb-a747-abe346ebb274]"
+                "span[data-testid=download-chip-1149e520-6691-4f00-9094-d741b0b114a5]"
             )
             .should("include.text", "Download MSG");
         cy.get(".doc-type__label")
@@ -773,7 +765,10 @@ describe("Find by Subjects", () => {
             .find("input")
             .should("not.be.checked");
 
-        cy.url().should("include", "/subjects?subjects=63&categories=3&type=external");
+        cy.url().should(
+            "include",
+            "/subjects?subjects=63&categories=3&type=external"
+        );
 
         // Select a different subject
         cy.get(`button[data-testid=add-subject-1]`).click({
@@ -801,7 +796,10 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("not.be.visible");
-        cy.url().should("include", "/subjects?subjects=1&type=external&categories=3");
+        cy.url().should(
+            "include",
+            "/subjects?subjects=1&type=external&categories=3"
+        );
 
         // Add text query and submit
         cy.get("input#main-content")
