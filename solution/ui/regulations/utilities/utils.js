@@ -127,7 +127,7 @@ const getFileNameSuffix = (fileName) => {
 
 /**
  * @param {Object} args - Arguments object
- * @param {string} args.file_name_string - The name of the file
+ * @param {string} args.fileName - The name of the file
  * @param {string} args.uid - The uid of the document
  *
  * @returns {string} - HTML string for the file type button

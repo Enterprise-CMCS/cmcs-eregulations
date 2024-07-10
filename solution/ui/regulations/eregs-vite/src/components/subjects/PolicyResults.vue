@@ -376,7 +376,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                         getFileTypeButton({
                             fileName: getFieldVal({
                                 item: doc,
-                                fieldName: 'file_name_string',
+                                fieldName: 'file_name',
                             }),
                             url: getFieldVal({ item: doc, fieldName: 'url' }),
                         })
