@@ -118,16 +118,7 @@ describe("Find by Subjects", () => {
         cy.injectAxe();
 
         cy.get("button[data-testid='user-account-button']").should("not.exist");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .should("be.checked")
-            .and("be.disabled");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("not.be.checked")
-            .and("be.disabled");
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
 
         cy.checkAccessibility();
 
@@ -145,7 +136,7 @@ describe("Find by Subjects", () => {
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
             .click({ force: true });
-        cy.url().should("include", "/subjects?subjects=63");
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
         cy.get(".subject__heading")
             .should("exist")
             .and("have.text", "Managed Care");
@@ -328,13 +319,13 @@ describe("Find by Subjects", () => {
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=2&q=test");
+        cy.url().should("include", "/subjects?subjects=2&type=all&q=test");
 
         cy.get(`button[data-testid=remove-subject-2]`).click({
             force: true,
         });
         cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-        cy.url().should("include", "/subjects?q=test");
+        cy.url().should("include", "/subjects?type=all&q=test");
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
@@ -402,23 +393,10 @@ describe("Find by Subjects", () => {
         });
 
         cy.visit("/subjects/");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .uncheck({ force: true });
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .should("not.be.checked");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("be.checked");
-        cy.url().should("include", "/subjects?type=internal");
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
-        cy.url().should("include", "/subjects?type=internal&subjects=3");
+        cy.url().should("include", "/subjects?subjects=3&type=all");
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
@@ -427,7 +405,7 @@ describe("Find by Subjects", () => {
         });
         cy.url().should(
             "include",
-            "/subjects?type=internal&subjects=3&q=test+search"
+            "/subjects?subjects=3&type=all&q=test+search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
@@ -447,14 +425,6 @@ describe("Find by Subjects", () => {
         cy.get(`a[data-testid=add-subject-chip-4]`).click({
             force: true,
         });
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .should("be.checked");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("be.checked");
         cy.url().should("include", "/subjects?subjects=4&type=all");
         cy.get("input#main-content").should("have.value", "");
     });
@@ -560,7 +530,7 @@ describe("Find by Subjects", () => {
         cy.get(".subject__heading").should("not.exist");
     });
 
-    it("should have a Documents to Show checkbox list", () => {
+    it("should have a Documents to Show checkbox list only when a subject is selected or text is searched", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -568,30 +538,61 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
-        cy.get(".doc-type__toggle-container h3").should(
-            "have.text",
-            "Documents to Show"
-        );
-        cy.get(".doc-type__toggle fieldset").should("exist");
+
+        // doc type checkboxes should not be visible on load
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
+
+        // select a subject fro ToC
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
+
+        // doc type checkboxes should be visible now
         cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("label")
             .should("have.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("label")
+            .should("have.text", "Internal Resources");
+
+        // Remove subject
+        cy.get("button[data-testid=remove-subject-63]").click({ force: true });
+
+        // doc type checkboxes should no longer be visible
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
+
+        // search for a term
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type("test", { force: true });
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        // doc type checkboxes should be visible now
+        cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
+        cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
-            .find("input")
-            .should("be.checked")
-            .and("have.value", "external");
+            .find("label")
+            .should("have.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("label")
             .should("have.text", "Internal Resources");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("be.checked")
-            .and("have.value", "internal");
+
+        // Clear search
+        cy.get("form.search-form .v-field__clearable i").click({
+            force: true,
+        });
+
+        // doc type checkboxes should no longer be visible
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
     });
 
     it("should show only the Table of Contents if both or neither checkboxes are checked", () => {
@@ -601,27 +602,14 @@ describe("Find by Subjects", () => {
             password,
             landingPage: "/subjects/",
         });
-        cy.visit("/subjects");
-        cy.get(".subj-toc__container").should("exist");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .uncheck({ force: true });
-        cy.url().should("include", "/subjects?type=internal");
+        cy.visit("/subjects?type=internal");
         cy.get(".subj-toc__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
             .uncheck({ force: true });
         cy.get(".subj-toc__container").should("exist");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .check({ force: true });
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .check({ force: true });
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
         cy.url().should("include", "/subjects");
     });
 
@@ -773,7 +761,19 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("not.be.visible");
-        cy.url().should("include", "/subjects?subjects=63&categories=3");
+
+        // Assert that External document type checkbox has been selected
+        // and Internal document type checkbox has been deselected
+        cy.get(".doc-type__toggle fieldset")
+            .eq(0)
+            .find("input")
+            .should("be.checked");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("not.be.checked");
+
+        cy.url().should("include", "/subjects?subjects=63&categories=3&type=external");
 
         // Select a different subject
         cy.get(`button[data-testid=add-subject-1]`).click({
@@ -801,7 +801,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .find("label")
             .should("not.be.visible");
-        cy.url().should("include", "/subjects?subjects=1&categories=3");
+        cy.url().should("include", "/subjects?subjects=1&type=external&categories=3");
 
         // Add text query and submit
         cy.get("input#main-content")
@@ -813,7 +813,7 @@ describe("Find by Subjects", () => {
 
         // Assert that category is removed from URL and
         // category select label is reset
-        cy.url().should("include", "/subjects?subjects=1&q=test");
+        cy.url().should("include", "/subjects?subjects=1&type=external&q=test");
         cy.url().should("not.include", "&categories=3");
         cy.get("div[data-testid='category-select']")
             .should("exist")
@@ -846,7 +846,7 @@ describe("Find by Subjects", () => {
         });
     });
 
-    it("should show the external only view of the subjects page after you log out", () => {
+    it("should not show document type selector after you log out", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -854,19 +854,16 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects");
+
+        cy.get(`button[data-testid=add-subject-1]`).click({
+            force: true,
+        });
+        cy.get(".doc-type__toggle fieldset").should("exist");
+
         cy.eregsLogout({ landingPage: "/subjects" });
         cy.url().should("include", "/subjects");
         cy.get("button[data-testid='user-account-button']").should("not.exist");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .should("be.checked")
-            .and("be.disabled");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .should("not.be.checked")
-            .and("be.disabled");
+        cy.get(".doc-type__toggle fieldset").should("not.exist");
     });
 });
 
@@ -879,11 +876,7 @@ describe("Subjects Page -- Pagination", () => {
     it("Goes to the second page of results when clicking the Next button", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password, landingPage: "/" });
-        cy.visit("/subjects");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .uncheck({ force: true });
+        cy.visit("/subjects?type=external");
         cy.get(".current-page.selected").contains("1");
         cy.get(".pagination-control.left-control > .back-btn").should(
             "have.class",
@@ -911,11 +904,7 @@ describe("Subjects Page -- Pagination", () => {
     it("Goes to the second page of results when clicking on page 2", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password, landingPage: "/" });
-        cy.visit("/subjects");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .uncheck({ force: true });
+        cy.visit("/subjects?type=external");
         cy.get(".current-page.selected").contains("1");
         cy.get(".page-number-li.unselected")
             .contains("2")
@@ -953,7 +942,10 @@ describe("Subjects Page -- Pagination", () => {
                 `51 - 100 of ${count} documents`
             );
             cy.get(".current-page.selected").contains("2");
-            cy.url().should("include", "/subjects/?type=external&page=2&categories=3");
+            cy.url().should(
+                "include",
+                "/subjects/?type=external&page=2&categories=3"
+            );
         });
     });
 });
