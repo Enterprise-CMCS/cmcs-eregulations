@@ -28,7 +28,7 @@ const addSurroundingEllipses = (str) => {
 };
 
 const getFieldVal = ({ item, fieldName }) => {
-    if (item.resource) {
+    if (item?.resource) {
         return item.resource[fieldName];
     } else {
         return item[fieldName];
@@ -36,11 +36,17 @@ const getFieldVal = ({ item, fieldName }) => {
 };
 
 const getParentCategoryName = ({ item, categoriesArr }) => {
+    if (!item) return null;
+
     const parentId = getFieldVal({ item, fieldName: "category" }).parent;
 
     if (!parentId) return null;
 
-    return categoriesArr.find((category) => category.id === parentId).name;
+    const parentCategory = categoriesArr.find(
+        (category) => category.id === parentId
+    );
+
+    return parentCategory?.name ?? null;
 };
 
 const getResultLinkText = (item) => {
@@ -50,8 +56,7 @@ const getResultLinkText = (item) => {
         "Internal"
     ) {
         linkText =
-            item.name_headline ||
-            getFieldVal({ item, fieldName: "title" });
+            item.name_headline || getFieldVal({ item, fieldName: "title" });
     } else {
         linkText =
             item.summary_headline ||
@@ -268,7 +273,11 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                                     item: doc,
                                     fieldName: 'category',
                                 })
-                            )
+                            ) &&
+                            getParentCategoryName({
+                                item: doc,
+                                categoriesArr: categories,
+                            })
                         "
                         :name="
                             getFieldVal({ item: doc, fieldName: 'category' }) &&

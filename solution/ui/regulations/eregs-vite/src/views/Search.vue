@@ -137,6 +137,7 @@
                         <PolicyResults
                             v-else
                             :base="homeUrl"
+                            :categories="combinedCategories.data ?? []"
                             :parts-last-updated="partsLastUpdated"
                             :results="resourcesResults"
                             view="search"
@@ -189,6 +190,7 @@
 
 <script>
 import { useRoute, useRouter } from "vue-router";
+import useCategories from "composables/categories";
 
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
@@ -288,7 +290,12 @@ export default {
         const $route = useRoute();
         const $router = useRouter();
 
-        return { $route, $router };
+        const combinedCategories = useCategories({
+            apiUrl: this.apiUrl,
+            isAuthenticated: this.isAuthenticated,
+        });
+
+        return { $route, $router, combinedCategories };
     },
 
     provide() {

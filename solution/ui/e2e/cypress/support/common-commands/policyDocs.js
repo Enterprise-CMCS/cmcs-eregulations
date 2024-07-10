@@ -2,6 +2,13 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.intercept("**/v3/content-search/?q=mock**", {
         fixture: "policy-docs-search.json",
     }).as("queriedFiles");
+    cy.intercept("**/v3/resources/public/categories", {
+        fixture: "categories.json",
+    });
+    cy.intercept("**/v3/resources/internal/categories", {
+        fixture: "categories-internal.json",
+    });
+
     cy.viewport("macbook-15");
     cy.eregsLogin({
         username,

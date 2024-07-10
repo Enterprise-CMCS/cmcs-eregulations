@@ -83,7 +83,7 @@ describe("Search flow", () => {
         cy.get("input#main-content").should("have.value", "");
     });
 
-    it.skip("should have the correct labels for public and internal documents", () => {
+    it("should have the correct labels for public and internal documents", () => {
         cy.checkPolicyDocs({
             username,
             password,

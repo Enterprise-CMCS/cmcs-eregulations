@@ -1,18 +1,9 @@
 <script setup>
-import { inject, ref, watchEffect } from "vue";
+import { inject, watchEffect } from "vue";
 
-import useFetch from "composables/fetch";
-
-import {
-    getExternalCategories,
-    getInternalCategories,
-} from "utilities/api";
+import useCategories from "composables/categories";
 
 const props = defineProps({
-    apiUrl: {
-        type: String,
-        required: true,
-    },
     categoriesCaptureFunction: {
         type: Function,
         required: false,
@@ -23,46 +14,13 @@ const props = defineProps({
 const apiUrl = inject("apiUrl");
 const isAuthenticated = inject("isAuthenticated");
 
-const combinedCategories = ref({
-    loading: true,
-    error: null,
-    data: [],
-});
-
-const externalCategories = useFetch({
-    method: getExternalCategories,
-    apiUrl,
-});
-
-const internalCategories = useFetch({
-    method: getInternalCategories,
-    apiUrl,
-    cacheResponse: false,
-    needsAuthentication: true,
+const combinedCategories = useCategories({
+    apiUrl: apiUrl,
     isAuthenticated,
 });
 
-// watchEffect: super watch
-// https://vuejs.org/guide/essentials/watchers.html#watcheffect
 watchEffect(() => {
-    combinedCategories.value.loading =
-        externalCategories.value.loading || internalCategories.value.loading;
-
-    if (!combinedCategories.value.loading) {
-        const externalCats = externalCategories.value.data.map((cat, i) => ({
-            ...cat,
-            categoryType: "categories",
-            catIndex: i,
-        }));
-
-        const internalCats = internalCategories.value.data.map((cat, i) => ({
-            ...cat,
-            categoryType: "intcategories",
-            catIndex: i,
-        }));
-
-        combinedCategories.value.data = [...externalCats, ...internalCats];
-
+    if (combinedCategories.value.data) {
         props.categoriesCaptureFunction(combinedCategories.value.data);
     }
 });
@@ -71,7 +29,7 @@ watchEffect(() => {
 <template>
     <slot
         :data="combinedCategories.data"
-        :error="externalCategories.error || internalCategories.error"
+        :error="combinedCategories.error"
         :loading="combinedCategories.loading"
     ></slot>
 </template>
