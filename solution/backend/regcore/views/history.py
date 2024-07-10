@@ -10,6 +10,7 @@ from regcore.serializers.history import HistorySerializer
 
 from .utils import OpenApiPathParameter
 
+HTTPX_TIMEOUT = 10
 GOVINFO_YEAR_MIN = 1996
 GOVINFO_LINK = "https://www.govinfo.gov/link/cfr/{}/{}?sectionnum={}&year={}&link-type=pdf"
 
@@ -42,7 +43,7 @@ async def get_years(title, part, section):
         "part": part,
         "section": section,
     }
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=httpx.Timeout(HTTPX_TIMEOUT)) as client:
         years = await asyncio.gather(*[check_year(section_data, year, client) for year in range(GOVINFO_YEAR_MIN, max_year)])
     return [year for year in years if year is not None]
 
