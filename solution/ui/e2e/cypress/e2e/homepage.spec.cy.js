@@ -11,7 +11,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         }).as("categories");
         cy.intercept(
             "**v3/resources/public/federal_register_links?page=1&page_size=3",
-            { fixture: "frdocs.json" }
+            { fixture: "frdocs-homepage.json" }
         ).as("frdocs");
     });
 
