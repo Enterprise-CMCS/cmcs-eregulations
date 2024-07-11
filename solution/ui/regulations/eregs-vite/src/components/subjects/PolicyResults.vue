@@ -273,11 +273,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                                     item: doc,
                                     fieldName: 'category',
                                 })
-                            ) &&
-                            getParentCategoryName({
-                                item: doc,
-                                categoriesArr: categories,
-                            })
+                            )
                         "
                         :name="
                             getFieldVal({ item: doc, fieldName: 'category' }) &&
