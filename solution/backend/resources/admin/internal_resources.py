@@ -61,7 +61,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
 
     fieldsets = [
         ("Basics", {
-            "fields": ["file_upload", "title"],
+            "fields": ["file_name", "file_upload", "title"],
         }),
         ("Details", {
             "fields": ["date", "document_id", "summary", "editor_notes"],
