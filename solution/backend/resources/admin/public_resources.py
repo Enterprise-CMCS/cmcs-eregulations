@@ -38,9 +38,6 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
         }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
-        }),
         ("Document status", {
             "fields": ["approved"],
         }),
@@ -91,9 +88,6 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
-        }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
         }),
         ("Document status", {
             "fields": ["approved"],

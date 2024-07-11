@@ -41,9 +41,6 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
         }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
-        }),
         ("Document status", {
             "fields": ["approved"],
         }),
@@ -74,9 +71,6 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
-        }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
         }),
         ("Document status", {
             "fields": ["approved"],

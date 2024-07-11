@@ -40,11 +40,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Select regulation citations related to this document. "
                   "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
-    cfr_citation_history = models.JSONField(
-        default=list,
-        verbose_name="CFR citation history",
-        blank=True,
-    )
 
     subjects = models.ManyToManyField(
         Subject,
