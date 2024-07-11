@@ -138,11 +138,11 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**v3/resources/public?&citations=42.433.A**", {
+        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.intercept(
-            "**v3/resources/internal&citations=42.433.A**",
+            "**/v3/resources/internal&citations=42.433.A**",
             {
                 fixture: "42.433.A.internal.json",
             }
