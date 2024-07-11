@@ -10,7 +10,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
-            "**v3/resources/public/federal_register_links?page=1&page_size=3**",
+            "**v3/resources/public/federal_register_links?page=1&page_size=3",
             { fixture: "frdocs.json" }
         ).as("frdocs");
     });
