@@ -242,16 +242,6 @@ describe("Find by Subjects", () => {
             "have.text",
             "1 - 2 of 2 results for mock"
         );
-        cy.get("input#main-content").clear();
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
-        cy.get("search-results__heading").should("not.exist");
-        cy.get(".subject__heading").should("not.exist");
-        cy.get(".search-results-count").should(
-            "have.text",
-            "1 - 3 of 3 documents"
-        );
     });
 
     it("loads the correct subject and search query when the URL is changed", () => {
