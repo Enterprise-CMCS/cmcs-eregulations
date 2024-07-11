@@ -21,7 +21,6 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
 from regulations.views.subjects import SubjectsView
-from regulations.views.supplemental_content import SupplementalContentView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -46,7 +45,6 @@ urlpatterns = [
     path('search/', SearchView.as_view(), name='search'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('supplemental_content/<id>/', SupplementalContentView.as_view(), name='supplemental_content'),
     path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView, name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
