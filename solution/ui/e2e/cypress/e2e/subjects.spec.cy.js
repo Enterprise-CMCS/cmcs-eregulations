@@ -36,17 +36,17 @@ const _beforeEach = () => {
 
 const _beforePaginate = () => {
     cy.intercept(
-        "**/v3/content-search/?resource-type=external&page_size=50&paginate=true**",
+        "**/v3/resources/public?show_internal=false&show_regulations=false**",
         {
             fixture: "policy-docs-50-p1.json",
         }
     ).as("initialPage");
 
-    cy.intercept("**/v3/content-search/?resource-type=external&page=1**", {
+    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=1**", {
         fixture: "policy-docs-50-p1.json",
     }).as("page1");
 
-    cy.intercept("**/v3/content-search/?resource-type=external&page=2**", {
+    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=2**", {
         fixture: "policy-docs-50-p2.json",
     }).as("page2");
 };
