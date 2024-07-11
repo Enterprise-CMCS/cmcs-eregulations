@@ -35,11 +35,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
 
     cy.get('[data-testid="results-item-categories"] .category-label')
         .first()
-        .should("include.text", "Subregulatory Test Guidance");
-
-    cy.get('[data-testid="results-item-categories"] .subcategory-label')
-        .first()
-        .should("include.text", "Mock Subcategory");
+        .should("include.text", "Mock Category");
 
     // Public doc
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
@@ -54,8 +50,8 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .eq(1)
         .should("include.text", "Subregulatory Test Guidance");
 
-    //cy.get('[data-testid="results-item-categories"] .subcategory-label')
-        //.eq(1)
-        //.should("include.text", "CMCS Informational Bulletin (CIB)");
+    cy.get('[data-testid="results-item-categories"] .subcategory-label')
+        .eq(0)
+        .should("include.text", "Mock Subcategory");
 
 };

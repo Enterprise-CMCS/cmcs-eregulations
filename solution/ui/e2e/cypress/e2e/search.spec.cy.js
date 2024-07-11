@@ -93,7 +93,7 @@ describe("Search flow", () => {
 
     it("should go to the Subjects page with a selected subject when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
+            fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
         cy.intercept("**/v3/resources/subjects", {
@@ -115,7 +115,7 @@ describe("Search flow", () => {
             force: true,
         });
 
-        cy.get(`a[data-testid=add-subject-chip-3]`).click({
+        cy.get(`a[data-testid=add-subject-chip-3]`).first().click({
             force: true,
         });
 
@@ -214,7 +214,7 @@ describe("Search flow", () => {
         }).as("resourcesError");
 
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
+            fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
