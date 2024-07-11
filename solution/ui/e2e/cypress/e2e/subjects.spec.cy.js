@@ -190,17 +190,14 @@ describe("Find by Subjects", () => {
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs-search.json",
         });
-        cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs-search.json",
-        });
         cy.intercept(
-            "**/v3/resources/?show_public=true&show_internal=true&show_regulations=true**",
+            "**/v3/resources/?&page_size=50",
             {
                 fixture: "policy-docs-subjects.json",
             }
         );
         cy.intercept(
-            "**/v3/resources/?&page_size=50",
+            "**/v3/resources/?subjects=3&page_size=50",
             {
                 fixture: "policy-docs-subjects.json",
             }
@@ -221,7 +218,7 @@ describe("Find by Subjects", () => {
         cy.get("search-results__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 documents"
+            "1 - 3 of 3 documents"
         );
         cy.get("input#main-content").type("mock", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
