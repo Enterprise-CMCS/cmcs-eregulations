@@ -41,12 +41,6 @@ class FederalRegisterLink(AbstractPublicResource):
         verbose_name_plural = "Federal Register Links"
 
 
-# Override document_id's default help_text to show specific FR link information
-FederalRegisterLink._meta.get_field("document_id").help_text = \
-    "This is the citation number for the rule. It usually looks like this: \"55 FR 10938\", " \
-    "where \"55\" is the volume number and \"10938\" is the page number."
-
-
 class PublicLink(AbstractPublicResource):
     def __str__(self):
         return f"{self.date} {self.document_id} {self.title[:50]}"

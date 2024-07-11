@@ -46,6 +46,13 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
     ]
 
+    # Override the URL field's help_text for internal links specifically
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['url'].help_text = \
+            "To link to an existing document - for example in Box or SharePoint - enter the full URL here."
+        return form
+
 
 class InternalFileForm(AbstractInternalResourceForm):
     file_upload = forms.FileField(required=False)

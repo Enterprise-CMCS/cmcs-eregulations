@@ -11,11 +11,6 @@ class InternalLink(AbstractInternalResource):
         return f"{self.document_id} {self.summary[:50]}"
 
 
-# Override the URL field's help_text for internal links specifically
-InternalLink._meta.get_field("url").help_text = \
-    "To link to an existing document - for example in Box or SharePoint - enter the full URL here."
-
-
 class InternalFile(AbstractInternalResource):
     file_name = models.CharField(max_length=512, blank=True, editable=False)
     file_type = models.CharField(max_length=32, blank=True, editable=False)
