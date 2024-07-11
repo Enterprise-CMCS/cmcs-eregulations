@@ -129,6 +129,7 @@ class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
 
+
 class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
     paginate_by_default = False
     queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
