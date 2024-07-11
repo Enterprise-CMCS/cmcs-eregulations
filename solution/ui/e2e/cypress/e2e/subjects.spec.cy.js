@@ -190,6 +190,9 @@ describe("Find by Subjects", () => {
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs-search.json",
         });
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs-search.json",
+        });
         cy.intercept(
             "**/v3/resources/?show_public=true&show_internal=true&show_regulations=true**",
             {
