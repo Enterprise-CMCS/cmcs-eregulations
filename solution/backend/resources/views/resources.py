@@ -16,12 +16,15 @@ from resources.models import (
     PublicLink,
     Subject,
 )
+
+
 from resources.serializers import (
     AbstractResourceSerializer,
     FederalRegisterLinkSerializer,
     InternalFileSerializer,
     InternalLinkSerializer,
     PublicLinkSerializer,
+    StringListSerializer,
 )
 from resources.utils import get_citation_filter, string_to_bool
 
@@ -125,3 +128,8 @@ class InternalFileViewSet(InternalResourceViewSet):
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
+
+class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
+    paginate_by_default = False
+    queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
+    serializer_class = StringListSerializer

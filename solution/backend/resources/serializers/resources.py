@@ -75,3 +75,7 @@ class InternalFileSerializer(InternalResourceSerializer):
     file_name = serializers.CharField()
     file_type = serializers.CharField()
     uid = serializers.CharField()
+
+class StringListSerializer(serializers.Serializer):
+    def to_representation(self, instance):
+        return instance
