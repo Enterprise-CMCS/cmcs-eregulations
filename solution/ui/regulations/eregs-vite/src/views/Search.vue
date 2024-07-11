@@ -286,13 +286,13 @@ export default {
         },
     },
 
-    setup() {
+    setup(props) {
         const $route = useRoute();
         const $router = useRouter();
 
         const combinedCategories = useCategories({
-            apiUrl: this.apiUrl,
-            isAuthenticated: this.isAuthenticated,
+            apiUrl: props.apiUrl,
+            isAuthenticated: props.isAuthenticated,
         });
 
         return { $route, $router, combinedCategories };
