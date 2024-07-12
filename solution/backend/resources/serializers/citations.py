@@ -40,3 +40,16 @@ class SectionWithParentSerializer(SectionSerializer):
 
 class SubpartWithChildrenSerializer(SubpartSerializer):
     children = SectionSerializer(many=True)
+
+
+class SectionCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Section
+        fields = "__all__"
+
+
+class SectionRangeCreateSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    part = serializers.CharField()
+    first_sec = serializers.IntegerField()
+    last_sec = serializers.IntegerField()

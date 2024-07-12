@@ -1,7 +1,10 @@
 from django.db.models import F, Prefetch, Q
+from django.db import transaction
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
 
 from common.mixins import ViewSetPagination
 from resources.models import (
@@ -109,10 +112,23 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     serializer_class = FederalRegisterLinkSerializer
 
-
-class FederalRegisterLinkDocumentNumberViewSet(viewsets.ReadOnlyModelViewSet):
-    pass  # TODO: implement this endpoint
-
+    @transaction.atomic
+    @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
+                               "If the document already exists, it will be updated.")
+    def update(self, request, **kwargs):
+        data = request.data
+        frdoc, created = FederalRegisterLink.objects.get_or_create(document_number=data["document_number"])
+        data["id"] = frdoc.pk
+        sc = self.get_serializer(frdoc, data=data, context={**self.get_serializer_context(), **{"created": created}})
+        try:
+            if sc.is_valid(raise_exception=True):
+                sc.save()
+                response = sc.validated_data
+                return JsonResponse(response)
+        except Exception as e:
+            if created:
+                frdoc.delete()
+            raise e
 
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
@@ -131,6 +147,5 @@ class InternalLinkViewSet(InternalResourceViewSet):
 
 
 class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
-    paginate_by_default = False
     queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
     serializer_class = StringListSerializer
