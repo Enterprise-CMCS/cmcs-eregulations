@@ -1,12 +1,8 @@
-from django.db.models import F, Prefetch, Q
-from django.db import transaction
-from drf_spectacular.utils import extend_schema
-from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse
-
 from common.mixins import ViewSetPagination
+from django.db import transaction
+from django.db.models import F, Prefetch, Q
+from django.http import JsonResponse
+from drf_spectacular.utils import extend_schema
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -19,8 +15,6 @@ from resources.models import (
     PublicLink,
     Subject,
 )
-
-
 from resources.serializers import (
     AbstractResourceSerializer,
     FederalRegisterLinkSerializer,
@@ -30,6 +24,9 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import get_citation_filter, string_to_bool
+from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 # OpenApiQueryParameter("citations",
@@ -110,6 +107,8 @@ class PublicLinkViewSet(PublicResourceViewSet):
 
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = FederalRegisterLinkSerializer
 
     @transaction.atomic
