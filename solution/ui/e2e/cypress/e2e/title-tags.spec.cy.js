@@ -5,7 +5,7 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
 
-        cy.intercept("**/v3/file-manager/subjects", {
+        cy.intercept("**/v3/resources/subjects", {
             fixture: "subjects.json",
         }).as("subjects");
     });

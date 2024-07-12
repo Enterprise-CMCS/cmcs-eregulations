@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from "vue";
 
-import { getCombinedContent, getInternalCategories } from "utilities/api";
+import { getInternalCategories, getInternalDocs } from "utilities/api";
 
 import {
     EventCodes,
@@ -66,23 +66,23 @@ const getDocuments = async ({ section }) => {
     let locationString;
 
     if (section) {
-        locationString = `locations=${props.title}.${props.part}.${section}`;
+        locationString = `citations=${props.title}.${props.part}.${section}`;
     } else {
         const sectionsClone = [...rawNodeList.sections];
         locationString = sectionsClone.reduce(
             (acc, currentSection) =>
-                `${acc}&locations=${props.title}.${props.part}.${currentSection}`,
-            `locations=${props.title}.${props.part}.${rawNodeList.subparts[0]}`
+                `${acc}&citations=${props.title}.${props.part}.${currentSection}`,
+            `citations=${props.title}.${props.part}.${rawNodeList.subparts[0]}`
         );
     }
 
     try {
         const results = await Promise.all([
             getCategories(),
-            getCombinedContent({
+            getInternalDocs({
                 apiUrl: props.apiUrl,
                 cacheResponse: false,
-                requestParams: `resource-type=internal&${locationString}`,
+                requestParams: `${locationString}`,
             }),
         ]);
 
@@ -90,7 +90,7 @@ const getDocuments = async ({ section }) => {
         const documents = results[1];
 
         internalDocuments.value.results = formatResourceCategories({
-            categories,
+            categories: categories.results,
             resources: documents.results,
             apiUrl: props.apiUrl,
         });
@@ -148,7 +148,7 @@ watch(selectedSection, (newValue) => {
                 :name="category.name"
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
-                :sub_categories="category.sub_categories"
+                :subcategories="category.subcategories"
                 :show-if-empty="category.show_if_empty"
             >
             </supplemental-content-category>
