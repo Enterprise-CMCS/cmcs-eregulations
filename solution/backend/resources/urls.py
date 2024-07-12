@@ -33,6 +33,7 @@ urlpatterns = [
     })),
     path("public/federal_register_links", FederalRegisterLinkViewSet.as_view({
         "get": "list",
+        "put": "update",
     })),
     path("public/federal_register_links/document_numbers", FederalRegisterLinksNumberViewSet.as_view({
         "get": "list",
