@@ -16,7 +16,7 @@
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
     "shelljs": "^0.8.5",
-    "vue": "^3.4.23",
+    "vue": "^3.4.29",
     "vuetify": "^3.6.11"
   },
   "devDependencies": {
