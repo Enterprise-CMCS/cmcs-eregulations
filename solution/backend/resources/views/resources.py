@@ -32,19 +32,17 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
-class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
+class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
 
     def get_serializer_context(self):
-        return {"show_related": self.group_resources}
-
+        return {"show_related": string_to_bool(self.request.GET.get("group_resources"), True)}
     def get_queryset(self):
         citations = self.request.GET.getlist("citations")
         categories = self.request.GET.getlist("categories")
         subjects = self.request.GET.getlist("subjects")
-        self.group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
 
         category_prefetch = AbstractCategory.objects.select_subclasses()
         citation_prefetch = AbstractCitation.objects.select_subclasses()
