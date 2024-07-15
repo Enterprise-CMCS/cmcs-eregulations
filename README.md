@@ -27,6 +27,12 @@ See "Quick Start" in [SECRETSCANNING.md](SECRETSCANNING.md#quick-start) to ensur
 git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
 ```
 
+Or if using SSH keys:
+
+```
+git clone git@github.com:Enterprise-CMCS/cmcs-eregulations.git
+```
+
 ## Create your Dockerfile
 
 - Create the Dockerfile
