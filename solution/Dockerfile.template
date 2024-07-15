@@ -3,6 +3,8 @@ FROM python:3.12-alpine
 COPY ["static-assets/requirements.txt", "/app/src/"]
 WORKDIR /app/src/
 
+RUN apk add libffi-dev
+
 RUN apk --update add ca-certificates build-base postgresql-dev \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/*
