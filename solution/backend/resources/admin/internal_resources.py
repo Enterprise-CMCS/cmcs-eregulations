@@ -61,8 +61,8 @@ class InternalFileForm(AbstractInternalResourceForm):
 @admin.register(InternalFile)
 class InternalFileAdmin(AbstractInternalResourceAdmin):
     form = InternalFileForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
+    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "summary"]
     ordering = ["date", "document_id", "category", "updated_at"]
     readonly_fields = ["download_file", "file_name", "file_type"]
