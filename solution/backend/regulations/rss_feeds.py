@@ -27,7 +27,7 @@ class ResourceFeed(Feed):
             results.append({
                 'date': self.get_date(resource.date),
                 'date_published': resource.date if resource.date else place_holder_pubdate,
-                'description': resource.description.replace('\x02', ''),
+                'description': resource.summary.replace('\x02', ''),
                 'url': resource.url,
                 'name': resource.name,
             })

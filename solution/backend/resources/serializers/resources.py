@@ -76,8 +76,8 @@ class FederalRegisterLinkCreateSerializer(serializers.Serializer):
         created = self.context.get("created", False)
         sections = validated_data.get("sections", []) or []
         section_ranges = validated_data.get("section_ranges", []) or []
-        name = validated_data.get('name', instance.name)
-        description = validated_data.get('description', instance.description)
+        name = validated_data.get('name', instance.document_id)
+        description = validated_data.get('description', instance.title)
 
         # set basic fields and group if instance is new
         if created:
@@ -90,7 +90,7 @@ class FederalRegisterLinkCreateSerializer(serializers.Serializer):
             instance.document_number = validated_data.get('document_number', instance.document_number)
             instance.date = validated_data.get('date', instance.date)
             instance.approved = validated_data.get('approved', instance.approved)
-            instance.action_type = validated_data.get('doc_type', instance.doc_type)
+            instance.action_type = validated_data.get('doc_type', instance.action_type)
             instance.category = self.get_category()
             self.set_group(instance)
 

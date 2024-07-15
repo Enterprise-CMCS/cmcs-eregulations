@@ -28,6 +28,8 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+from resources.serializers import FederalRegisterLinkCreateSerializer
+
 
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
@@ -107,7 +109,11 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [BasicAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = FederalRegisterLinkSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return FederalRegisterLinkCreateSerializer
+        return FederalRegisterLinkSerializer
 
     @transaction.atomic
     @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
