@@ -1,5 +1,4 @@
 # maintenance/lambda_function.py
-import json
 
 def lambda_handler(event, context):
     # HTML content for the maintenance page
@@ -13,9 +12,10 @@ def lambda_handler(event, context):
     </head>
     <body>
         <h1>eRegulations is temporarily offline for maintenance.</h1>
-        <p>You can use eCFR for regulations in the meantime. If you have any questions, please check the eRegs user help channel in CMS Slack (#cms-eregulations-help) or reach out to 
-        <a href="mailto:britta.gustafson@a1msolutions.com">britta.gustafson@a1msolutions.com</a> and 
-        <a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a>.</p>
+        <p>You can use eCFR for regulations in the meantime. If you have any questions, please check the
+         eRegs user help channel in CMS Slack (#cms-eregulations-help) or reach out to
+         <a href="mailto:britta.gustafson@a1msolutions.com">britta.gustafson@a1msolutions.com</a> and
+         <a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a>.</p>
     </body>
     </html>
     '''
