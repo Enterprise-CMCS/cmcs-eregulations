@@ -3,6 +3,7 @@ from django.urls import path
 from resources.views import (
     CitationViewSet,
     FederalRegisterLinkViewSet,
+    FederalRegisterLinksNumberViewSet,
     InternalCategoryViewSet,
     InternalFileDownloadViewSet,
     InternalFileViewSet,
@@ -32,10 +33,11 @@ urlpatterns = [
     })),
     path("public/federal_register_links", FederalRegisterLinkViewSet.as_view({
         "get": "list",
+        "put": "update",
     })),
-    # path("public/federal_register_links/document_numbers", FederalRegisterLinkDocumentNumberViewSet.as_view({
-    #     "get": "list",
-    # })),
+    path("public/federal_register_links/document_numbers", FederalRegisterLinksNumberViewSet.as_view({
+        "get": "list",
+    })),
     path("internal", InternalResourceViewSet.as_view({
         "get": "list",
     })),

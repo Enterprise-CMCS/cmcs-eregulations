@@ -24,8 +24,8 @@ class InternalLinkForm(AbstractInternalResourceForm):
 @admin.register(InternalLink)
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
     form = InternalLinkForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved", "document_id_sort"]
+    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "summary"]
 
     fieldsets = [
