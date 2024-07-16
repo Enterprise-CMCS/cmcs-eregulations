@@ -1,6 +1,6 @@
 # maintenance/lambda_function.py
 
-def lambda_handler(event, context):
+def handler(event, context):
     # HTML content for the maintenance page
     html_content = '''
     <!DOCTYPE html>
