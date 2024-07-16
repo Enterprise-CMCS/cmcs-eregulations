@@ -54,7 +54,7 @@ export default {
             type: Boolean,
             required: false,
             default: false,
-        }
+        },
     },
 
     data: function () {
@@ -77,9 +77,9 @@ export default {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
                 if (this.state === "collapsed" && this.overflow) {
-                    this.$refs.target.style.overflow = "visible"
+                    this.$refs.target.style.overflow = "visible";
                 }
-            } else {
+            } else if (this.$refs.target) {
                 this.$refs.target.classList.add("display-none");
                 this.$refs.target.style.oveflow = "hidden";
             }
@@ -88,7 +88,7 @@ export default {
             if (this.dataName === target) {
                 if (this.$refs.target) {
                     this.$refs.target.classList.remove("display-none");
-                    this.$refs.target.style.overflow = "hidden"
+                    this.$refs.target.style.overflow = "hidden";
                 }
                 requestAnimationFrame(() => {
                     this.computeHeight();

@@ -12,10 +12,10 @@ import (
 )
 
 // DocumentURL is the relative path to post FR documents to
-var DocumentURL = "/resources/federal_register_docs"
+var DocumentURL = "/resources/public/federal_register_links"
 
 // DocListURL is the relative path to retrieve a list of FR docs that eRegs already has
-var DocListURL = "/resources/federal_register_docs/doc_numbers"
+var DocListURL = "/resources/public/federal_register_links/document_numbers"
 
 // Section represents a section identifier in the eRegs supplemental content system
 type Section struct {

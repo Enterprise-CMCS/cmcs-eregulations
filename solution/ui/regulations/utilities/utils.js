@@ -27,13 +27,16 @@ const EventCodes = {
 const DOCUMENT_TYPES = ["external", "internal"];
 const DOCUMENT_TYPES_MAP = {
     external: "Public",
+    federal_register_link: "Public",
+    public_link: "Public",
     internal: "Internal",
+    internal_file: "Internal",
+    internal_link: "Internal",
 };
 
 const PARAM_MAP = {
     subjects: "subjects",
     q: "q",
-    type: "resource-type",
     page: "page",
     categories: "categories",
     intcategories: "internal_categories",
@@ -124,17 +127,17 @@ const getFileNameSuffix = (fileName) => {
 
 /**
  * @param {Object} args - Arguments object
- * @param {string} args.file_name_string - The name of the file
- * @param {string} args.url - The url of the document
+ * @param {string} args.fileName - The name of the file
+ * @param {string} args.uid - The uid of the document
  *
  * @returns {string} - HTML string for the file type button
  */
-const getFileTypeButton = ({ fileName, url }) => {
+const getFileTypeButton = ({ fileName, uid }) => {
     const fileTypeSuffix = getFileNameSuffix(fileName);
 
     let fileTypeButton;
     if (fileName && fileTypeSuffix) {
-        fileTypeButton = `<span data-testid='download-chip-${url}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+        fileTypeButton = `<span data-testid='download-chip-${uid}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
     }
 
     return `${fileTypeButton ?? ""}`;
@@ -161,12 +164,33 @@ const getRequestParams = (query) => {
             );
 
             return filteredValues
-                .map(
-                    (v) =>
-                        `${PARAM_MAP[key]}=${
+                .map((v) => {
+                    if (key === "type") {
+                        let flagString = "";
+                        switch (v) {
+                            case "external":
+                                flagString =
+                                    "show_internal=false&show_regulations=false";
+                                break;
+                            case "internal":
+                                flagString =
+                                    "show_public=false&show_regulations=false";
+                                break;
+                            case "all":
+                                flagString =
+                                    "show_public=true&show_internal=true&show_regulations=true";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        return flagString;
+                    } else {
+                        return `${PARAM_MAP[key]}=${
                             PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
-                        }`
-                )
+                        }`;
+                    }
+                })
                 .join("&");
         })
         .filter(([key, value]) => !_isEmpty(value))
@@ -284,43 +308,6 @@ function removeQueryParams(location, keys) {
 
     newUrl += url.hash;
     return newUrl;
-}
-
-function getCategoryTree(categories) {
-    let catOptions = [];
-    let categoryDict = {};
-    for (let category in categories) {
-        let cat = categories[category];
-        if (cat.object_type === "subcategory") {
-            if (cat.parent.name in categoryDict) {
-                categoryDict[cat.parent.name].children.push({
-                    id: cat.name,
-                    label: cat.name,
-                });
-            } else {
-                categoryDict[cat.parent.name] = {
-                    id: cat.parent.name,
-                    label: cat.parent.name,
-                    children: [{ id: cat.name, label: cat.name }],
-                };
-            }
-        } else if (!(cat.name in categoryDict)) {
-            categoryDict[cat.name] = {
-                id: cat.name,
-                label: cat.name,
-                children: [],
-            };
-        }
-    }
-
-    for (let category in categoryDict) {
-        if (categoryDict[category].children.length === 0) {
-            delete categoryDict[category].children;
-        }
-        catOptions.push(categoryDict[category]);
-    }
-
-    return catOptions;
 }
 
 function getFragmentParam(location, key) {
@@ -665,20 +652,21 @@ const formatResourceCategories = ({
 }) => {
     const categoriesClone = [...categories];
 
-    resources
-        .filter(
-            (resource) =>
-                resource.category?.type === "category" ||
-                resource.category?.type === "repositorycategory"
-        )
-        .forEach((resource) => {
-            if (resource.category?.type === "repositorycategory") {
-                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
-            }
+    resources.forEach((resource) => {
+        if (
+            resource.category?.type === "internal_category" ||
+            resource.category?.type === "internal_subcategory"
+        ) {
+            resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
+        }
+
+        if (
+            resource.category?.type === "public_category" ||
+            resource.category?.type === "internal_category"
+        ) {
             const existingCategory = categoriesClone.find(
                 (category) => category.name === resource.category.name
             );
-
             if (existingCategory) {
                 if (!existingCategory.supplemental_content) {
                     existingCategory.supplemental_content = [];
@@ -689,58 +677,56 @@ const formatResourceCategories = ({
                     JSON.stringify(resource.category)
                 );
                 newCategory.supplemental_content = [resource];
-                newCategory.sub_categories = [];
+                newCategory.subcategories = [];
                 categoriesClone.push(newCategory);
             }
-        });
+        }
+    });
 
-    const subCategories = [];
-
-    resources
-        .filter(
-            (resource) =>
-                resource.category?.type === "subcategory" ||
-                resource.category?.type === "repositorysubcategory"
-        )
-        .forEach((resource) => {
-            if (resource.category?.type === "repositorysubcategory") {
-                resource.url = `${apiUrl}file-manager/files/${resource.url}`;
-            }
-            const existingSubCategory = subCategories.find(
-                (category) => category.name === resource.category.name
-            );
-
-            if (existingSubCategory) {
-                if (!existingSubCategory.supplemental_content) {
-                    existingSubCategory.supplemental_content = [];
+    resources.forEach((resource) => {
+        if (
+            resource.category?.type === "public_subcategory" ||
+            resource.category?.type === "internal_subcategory"
+        ) {
+            categoriesClone.forEach((category) => {
+                if (!category.subcategories) {
+                    return;
                 }
-                existingSubCategory.supplemental_content.push(resource);
-            } else {
-                const newSubCategory = JSON.parse(
-                    JSON.stringify(resource.category)
+
+                category.subcategories.forEach((subcategory) => {
+                    if (subcategory.name === resource.category.name) {
+                        if (!subcategory.supplemental_content) {
+                            subcategory.supplemental_content = [];
+                        }
+                        subcategory.supplemental_content.push(resource);
+                    }
+                });
+            });
+        }
+    });
+
+    const returnArr = categoriesClone
+        .filter((category) => {
+            if (category.supplemental_content || category.show_if_empty)
+                return true;
+
+            const hasPopulatedSubcategory =
+                category.subcategories &&
+                category.subcategories.some(
+                    (subcategory) => subcategory.supplemental_content
                 );
-                newSubCategory.supplemental_content = [resource];
-                subCategories.push(newSubCategory);
-            }
-        });
 
-    const formattedCategories = categoriesClone.map((c) => {
-        const category = JSON.parse(JSON.stringify(c));
-        category.sub_categories = subCategories.filter(
-            (subcategory) => subcategory.parent?.id === category?.id
-        );
+            if (hasPopulatedSubcategory) return true;
 
-        return category;
+            return false;
+        })
+        .sort((a, b) => a.order - b.order);
+
+    returnArr.forEach((category) => {
+        category.subcategories.sort((a, b) => a.order - b.order);
     });
 
-    formattedCategories.sort((a, b) => a.order - b.order);
-    formattedCategories.forEach((category) => {
-        category.sub_categories.sort((a, b) => a.order - b.order);
-    });
-
-    return formattedCategories.filter(
-        (category) => category.type !== "repositorysubcategory"
-    );
+    return returnArr;
 };
 
 function flattenSubpart(subpart) {
@@ -1044,7 +1030,6 @@ export {
     formatResourceCategories,
     generateId,
     getActAbbr,
-    getCategoryTree,
     getCurrentPageResultsRange,
     getCurrentSectionFromHash,
     getDisplayName,

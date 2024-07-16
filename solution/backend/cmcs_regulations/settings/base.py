@@ -298,7 +298,7 @@ CSP_SCRIPT_SRC_ELEM = [
     "'unsafe-eval'",
     STATIC_URL,
     "https://*.googletagmanager.com",
-    "https://cdn.jsdelivr.net/npm/vue@3.4.23/dist/vue.global.prod.js",
+    "https://cdn.jsdelivr.net/npm/vue@3.4.29/dist/vue.global.prod.js",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-bundle.js",
     "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui-standalone-preset.js",
 ]

@@ -73,9 +73,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     url = models.URLField(max_length=512, blank=True, verbose_name="URL")
     extract_url = models.URLField(max_length=512, blank=True, verbose_name="Extract URL")
 
-    document_id_sort = NaturalSortField("document_id", null=True, verbose_name="Document ID sort")
-    title_sort = NaturalSortField("title", null=True)
-
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
     related_categories = models.ManyToManyField(AbstractCategory, blank=True)

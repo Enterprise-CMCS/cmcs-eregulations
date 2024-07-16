@@ -9,6 +9,7 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
+    getContentWithoutQuery,
     getLastUpdatedDates,
     getInternalSubjects,
     getTitles,
@@ -16,7 +17,11 @@ import {
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import {
+    DOCUMENT_TYPES_MAP,
+    getRequestParams,
+    PARAM_VALIDATION_DICT,
+} from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
@@ -117,6 +122,11 @@ const searchInputRemoveList = commonRemoveList.concat(["q"]);
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
+const categoriesRef = ref([]);
+const setCategories = (categories) => {
+    categoriesRef.value = categories;
+};
+
 /**
  * @param {Object} queryParams - $route.query
  * @returns {Boolean} - true if all doc types are selected and nothing else
@@ -200,18 +210,30 @@ const policyDocList = ref({
     error: false,
 });
 
-const getDocList = async (requestParamsString = "") => {
+const getDocList = async ({ requestParamString = "", query, type }) => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
 
-    const requestParams = `${requestParamsString}&page_size=${pageSize}&paginate=true`;
+    const requestParams = `${requestParamString}&page_size=${pageSize}`;
+    const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
+
+    let contentList;
 
     try {
-        const contentList = await getCombinedContent({
-            apiUrl: props.apiUrl,
-            cacheResponse: false,
-            requestParams,
-        });
+        if (query) {
+            contentList = await getCombinedContent({
+                apiUrl: props.apiUrl,
+                requestParams,
+                docType,
+            });
+        } else {
+            contentList = await getContentWithoutQuery({
+                apiUrl: props.apiUrl,
+                requestParams,
+                docType,
+            });
+        }
+
         policyDocList.value.results = contentList.results;
         policyDocList.value.count = contentList.count;
     } catch (error) {
@@ -301,10 +323,9 @@ const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getInternalSubjects({
             apiUrl: props.apiUrl,
-            cacheResponse: false,
         });
 
-        policyDocSubjects.value.results = subjectsResponse;
+        policyDocSubjects.value.results = subjectsResponse.results;
     } catch (error) {
         console.error(error);
     } finally {
@@ -329,7 +350,11 @@ const getDocSubjects = async () => {
                 setSelectedParams(policyDocSubjects)(param);
             });
 
-            getDocList(getRequestParams($route.query));
+            getDocList({
+                requestParamString: getRequestParams($route.query),
+                query: $route.query.q,
+                type: $route.query.type,
+            });
         }
     }
 };
@@ -408,7 +433,11 @@ watch(
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
-        await getDocList(newRequestParams);
+        await getDocList({
+            requestParamString: newRequestParams,
+            query: $route.query.q,
+            type: $route.query.type,
+        });
     }
 );
 
@@ -496,7 +525,10 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
-                            <FetchCategoriesContainer v-slot="slotProps">
+                            <FetchCategoriesContainer
+                                v-slot="slotProps"
+                                :categories-capture-function="setCategories"
+                            >
                                 <CategoriesDropdown
                                     :list="slotProps.data"
                                     :error="slotProps.error"
@@ -536,6 +568,7 @@ getDocSubjects();
                         <template v-else>
                             <PolicyResults
                                 :base="homeUrl"
+                                :categories="categoriesRef"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"
                                 :page="parseInt($route.query.page, 10) || 1"

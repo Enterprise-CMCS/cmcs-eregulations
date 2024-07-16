@@ -1,9 +1,8 @@
-from django.db.models import F, Prefetch, Q
-from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
-
 from common.mixins import ViewSetPagination
+from django.db import transaction
+from django.db.models import F, Prefetch, Q
+from django.http import JsonResponse
+from drf_spectacular.utils import extend_schema
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -22,14 +21,20 @@ from resources.serializers import (
     InternalFileSerializer,
     InternalLinkSerializer,
     PublicLinkSerializer,
+    StringListSerializer,
 )
 from resources.utils import get_citation_filter, string_to_bool
+from rest_framework import viewsets
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+from resources.serializers import FederalRegisterLinkCreateSerializer
 
 
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
-class ResourceViewSet(viewsets.ReadOnlyModelViewSet):
+class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
@@ -104,12 +109,31 @@ class PublicLinkViewSet(PublicResourceViewSet):
 
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
-    serializer_class = FederalRegisterLinkSerializer
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    def get_serializer_class(self):
+        if self.request.method == "PUT":
+            return FederalRegisterLinkCreateSerializer
+        return FederalRegisterLinkSerializer
 
-class FederalRegisterLinkDocumentNumberViewSet(viewsets.ReadOnlyModelViewSet):
-    pass  # TODO: implement this endpoint
-
+    @transaction.atomic
+    @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
+                               "If the document already exists, it will be updated.")
+    def update(self, request, **kwargs):
+        data = request.data
+        frdoc, created = FederalRegisterLink.objects.get_or_create(document_number=data["document_number"])
+        data["id"] = frdoc.pk
+        sc = self.get_serializer(frdoc, data=data, context={**self.get_serializer_context(), **{"created": created}})
+        try:
+            if sc.is_valid(raise_exception=True):
+                sc.save()
+                response = sc.validated_data
+                return JsonResponse(response)
+        except Exception as e:
+            if created:
+                frdoc.delete()
+            raise e
 
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
@@ -125,3 +149,8 @@ class InternalFileViewSet(InternalResourceViewSet):
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
+
+
+class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
+    serializer_class = StringListSerializer
