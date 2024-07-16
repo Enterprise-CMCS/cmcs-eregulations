@@ -79,16 +79,16 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ContentSearchSerializer
     pagination_class = ViewSetPagination
 
-    def get_queryset(self):
-        citations = self.request.GET.getlist("citations")
-        subjects = self.request.GET.getlist("subjects")
-        categories = self.request.GET.getlist("categories")
-        show_public = string_to_bool(self.request.GET.get("show_public"), True)
-        show_internal = string_to_bool(self.request.GET.get("show_internal"), True)
-        show_regulations = string_to_bool(self.request.GET.get("show_regulations"), True)
+    def list(self, request, *args, **kwargs):
+        citations = request.GET.getlist("citations")
+        subjects = request.GET.getlist("subjects")
+        categories = request.GET.getlist("categories")
+        show_public = string_to_bool(request.GET.get("show_public"), True)
+        show_internal = string_to_bool(request.GET.get("show_internal"), True)
+        show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
 
         # Retrieve the required search query param
-        search_query = self.request.GET.get("q")
+        search_query = request.GET.get("q")
         if not search_query:
             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
 
@@ -120,13 +120,9 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             query = query.exclude(reg_text__isnull=False)
 
         # Perform search and headline generation
-        # Note that search is performed twice: first on the entire dataset and then on the current page.
-        # This allows us to preserve rank ordering while only generating headlines on the current page's data.
-        # Generating headlines on the entire dataset can be extremely expensive, but duplicating the search operation
-        # on a small subset is cheap and effective.
         query = query.search(search_query)
         current_page = [i.pk for i in self.paginate_queryset(query)]
-        query = ContentIndex.objects.filter(pk__in=current_page).search(search_query).generate_headlines(search_query)
+        query = ContentIndex.objects.filter(pk__in=current_page).generate_headlines(search_query)
 
         # Prefetch all related data
         query = query.prefetch_related(
@@ -137,7 +133,12 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             )),
         )
 
-        return query
+        # Sort the current page by rank
+        query = sorted(query, key=lambda x: current_page.index(x.pk))
+
+        # Serialize and return the results
+        serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
+        return self.get_paginated_response(serializer.data)
 
 
 @extend_schema(
