@@ -214,7 +214,7 @@ const getDocList = async ({ requestParamString = "", query, type }) => {
     policyDocList.value.loading = true;
     policyDocList.value.error = false;
 
-    const requestParams = `${requestParamString}&page_size=${pageSize}`;
+    const requestParams = `${requestParamString}&page_size=${pageSize}&group_resources=false`;
     const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
 
     let contentList;
