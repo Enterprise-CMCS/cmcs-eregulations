@@ -85,7 +85,7 @@ describe("Part View", () => {
         cy.intercept("**/v3/resources/public?&citations=42.431.A**").as(
             "resources"
         );
-        cy.intercept("**/v3/resources/internal/categories", {
+        cy.intercept("**/v3/resources/internal/categories**", {
             fixture: "categories-internal.json",
         }).as("internal-categories");
         cy.intercept("**/v3/resources/internal?citations=42.431.A**", {

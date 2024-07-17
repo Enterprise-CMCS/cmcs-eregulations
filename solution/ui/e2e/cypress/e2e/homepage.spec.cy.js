@@ -6,7 +6,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-        cy.intercept("**/v3/resources/public/categories", {
+        cy.intercept("**/v3/resources/public/categories**", {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
