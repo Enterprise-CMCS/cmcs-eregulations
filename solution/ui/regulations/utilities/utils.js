@@ -653,10 +653,7 @@ const formatResourceCategories = ({
     const categoriesClone = [...categories];
 
     resources.forEach((resource) => {
-        if (
-            resource.category?.type === "internal_category" ||
-            resource.category?.type === "internal_subcategory"
-        ) {
+        if (resource.type === "internal_file") {
             resource.url = `${apiUrl}resources/internal/files/${resource.uid}`;
         }
 
