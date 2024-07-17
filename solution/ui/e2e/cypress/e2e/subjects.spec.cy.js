@@ -191,13 +191,13 @@ describe("Find by Subjects", () => {
             fixture: "policy-docs-search.json",
         });
         cy.intercept(
-            "**/v3/resources/?&page_size=50",
+            "**/v3/resources/?&page_size=50&group_resources=false",
             {
                 fixture: "policy-docs-subjects.json",
             }
         );
         cy.intercept(
-            "**/v3/resources/?subjects=3&page_size=50",
+            "**/v3/resources/?subjects=3&page_size=50&group_resources=false",
             {
                 fixture: "policy-docs-subjects.json",
             }
