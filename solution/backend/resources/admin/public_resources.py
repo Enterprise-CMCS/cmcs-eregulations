@@ -59,10 +59,11 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
 
     def save(self, *args, **kwargs):
         instance = super().save(*args, **kwargs)
-        if instance.pk:
-            # Add groups to the resource_groups ManyToMany
-            instance.resource_groups.clear()
-            instance.resource_groups.add(*self.cleaned_data['resource_groups'])
+        if not instance.pk:
+            instance.save()
+        # Add groups to the resource_groups ManyToMany
+        instance.resource_groups.clear()
+        instance.resource_groups.add(*self.cleaned_data['resource_groups'])
         return instance
 
 
