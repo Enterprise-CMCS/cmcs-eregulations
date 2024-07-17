@@ -1,7 +1,6 @@
 from .base import * # noqa
 import os
 
-
 USE_AWS_TOKEN = True
 S3_AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
 S3_AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", 'test')
