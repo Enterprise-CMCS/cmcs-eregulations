@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0035_v4_refactor_data'),
+        ('resources', '0035i_v4_refactor_data'),
     ]
 
     operations = [
