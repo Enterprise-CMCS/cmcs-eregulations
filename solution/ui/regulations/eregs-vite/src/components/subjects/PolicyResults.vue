@@ -178,9 +178,9 @@ const apiUrl = inject("apiUrl");
 const base = inject("base");
 
 const getUrl = ({ type: resourceType, url, uid }) =>
-    DOCUMENT_TYPES_MAP[resourceType] === "Public"
-        ? url
-        : `${apiUrl}resources/internal/files/${uid}`;
+    resourceType === "internal_file"
+        ? `${apiUrl}resources/internal/files/${uid}`
+        : url;
 
 const needsBar = (item) =>
     DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] === "Public" &&
