@@ -22,7 +22,10 @@ def copy_resource_groups(apps, schema_editor):
 
 def delete_old_resource_groups(apps, schema_editor):
     OldResourceGroup = apps.get_model("resources", "ResourceGroup")
+    AbstractResource = apps.get_model("resources", "AbstractResource")
+    pks = list(OldResourceGroup.objects.values_list("pk", flat=True))
     OldResourceGroup.objects.all().delete()
+    AbstractResource.objects.filter(pk__in=pks).delete()
 
 
 class Migration(migrations.Migration):
