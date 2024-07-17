@@ -3,8 +3,11 @@ from django.db.models import Value, Q
 from django.contrib.postgres.aggregates import ArrayAgg
 
 
+TIMEOUT_MINUTES = 10
+
 
 def generate_related(apps, schema_editor):
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
     AbstractResource = apps.get_model("resources", "AbstractResource")
     for resource in AbstractResource.objects.all():
         groups = resource.resource_groups.all()
