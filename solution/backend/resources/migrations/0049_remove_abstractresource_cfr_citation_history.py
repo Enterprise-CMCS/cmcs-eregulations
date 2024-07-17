@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0047_recompute_related_fields'),
+        ('resources', '0048_remove_abstractresource_document_id_sort_and_more'),
     ]
 
     operations = [
