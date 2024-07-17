@@ -96,7 +96,7 @@ describe("Search flow", () => {
             fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
-        cy.intercept("**/v3/resources/subjects", {
+        cy.intercept("**/v3/resources/subjects**", {
             fixture: "subjects.json",
         }).as("subjects");
 

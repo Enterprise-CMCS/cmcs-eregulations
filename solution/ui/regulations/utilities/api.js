@@ -268,13 +268,13 @@ const getExternalCategories = async ({
 }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/public/categories`,
+            `${apiUrl}resources/public/categories?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/public/categories");
+    return httpApiGet("resources/public/categories?page_size=1000");
 };
 
 /**
@@ -508,13 +508,13 @@ const getInternalSubjects = async ({
 }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/subjects`,
+            `${apiUrl}resources/subjects?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/subjects", cacheResponse);
+    return httpApiGet("resources/subjects?page_size=1000", cacheResponse);
 };
 
 /**
@@ -542,13 +542,13 @@ const getInternalCategories = async ({
 }) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/internal/categories`,
+            `${apiUrl}resources/internal/categories?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/internal/categories", cacheResponse);
+    return httpApiGet("resources/internal/categories?page_size=1000", cacheResponse);
 };
 
 /**

@@ -21,15 +21,15 @@ const _beforeEach = () => {
         fixture: "parts-45.json",
     }).as("parts45");
 
-    cy.intercept("**/v3/resources/subjects", {
+    cy.intercept("**/v3/resources/subjects**", {
         fixture: "subjects.json",
     }).as("subjects");
 
-    cy.intercept("**/v3/resources/internal/categories", {
+    cy.intercept("**/v3/resources/internal/categories**", {
         fixture: "categories-internal.json",
     }).as("internalCategories");
 
-    cy.intercept("**/v3/resources/public/categories", {
+    cy.intercept("**/v3/resources/public/categories**", {
         fixture: "categories.json",
     }).as("categories");
 };
