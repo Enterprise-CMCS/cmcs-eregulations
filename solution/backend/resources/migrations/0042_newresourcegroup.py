@@ -4,7 +4,11 @@ import django_jsonform.models.fields
 from django.db import migrations, models
 
 
+TIMEOUT_MINUTES = 10
+
+
 def copy_resource_groups(apps, schema_editor):
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
     NewResourceGroup = apps.get_model("resources", "NewResourceGroup")
     OldResourceGroup = apps.get_model("resources", "ResourceGroup")
     for i in OldResourceGroup.objects.all():
