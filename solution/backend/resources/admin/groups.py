@@ -28,3 +28,10 @@ class ResourceGroupAdmin(AbstractAdmin):
 
     def number_of_resources(self, obj):
         return obj.number_of_resources
+
+    # This override allows the grouping post-save hook to work properly.
+    # Normally Django saves the model before updating related fields, but this causes aggregates of citations etc to not
+    # return the correct data. So we need to save after updating related fields.
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        form.instance.save()        

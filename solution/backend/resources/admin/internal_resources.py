@@ -41,13 +41,17 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
         }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
-        }),
         ("Document status", {
             "fields": ["approved"],
         }),
     ]
+
+    # Override the URL field's help_text for internal links specifically
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['url'].help_text = \
+            "To link to an existing document - for example in Box or SharePoint - enter the full URL here."
+        return form
 
 
 class InternalFileForm(AbstractInternalResourceForm):
@@ -57,14 +61,15 @@ class InternalFileForm(AbstractInternalResourceForm):
 @admin.register(InternalFile)
 class InternalFileAdmin(AbstractInternalResourceAdmin):
     form = InternalFileForm
-    list_display = ["date", "document_id", "category", "updated_at"]
-    search_fields = ["date", "document_id"]
+    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    search_fields = ["date", "document_id", "title", "summary"]
     ordering = ["date", "document_id", "category", "updated_at"]
     readonly_fields = ["download_file", "file_name", "file_type"]
 
     fieldsets = [
         ("Basics", {
-            "fields": ["file_upload", "title"],
+            "fields": ["file_name", "file_upload", "title"],
         }),
         ("Details", {
             "fields": ["date", "document_id", "summary", "editor_notes"],
@@ -74,9 +79,6 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
-        }),
-        ("Change history", {
-            "fields": ["cfr_citation_history"],
         }),
         ("Document status", {
             "fields": ["approved"],

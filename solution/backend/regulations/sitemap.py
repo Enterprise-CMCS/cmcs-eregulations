@@ -4,7 +4,6 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 
 from regcore.models import Part
-from resources.models import AbstractResource
 
 
 class PartSitemap(Sitemap):
@@ -56,18 +55,3 @@ class PartSitemap(Sitemap):
             if item.get(key):
                 kwargs[key] = item[key]
         return reverse("reader_view", kwargs=kwargs)
-
-
-class SupplementalContentSitemap(Sitemap):
-
-    changefreq = "daily"
-    priority = 0.5
-
-    def items(self):
-        return AbstractResource.objects.filter(approved=True)
-
-    def lastmod(self, item):
-        return item.updated_at
-
-    def location(self, item):
-        return reverse("supplemental_content", kwargs={"id": item.id})
