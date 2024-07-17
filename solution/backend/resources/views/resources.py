@@ -1,8 +1,12 @@
-from common.mixins import ViewSetPagination
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
+from rest_framework import viewsets
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+
+from common.mixins import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -17,6 +21,7 @@ from resources.models import (
 )
 from resources.serializers import (
     AbstractResourceSerializer,
+    FederalRegisterLinkCreateSerializer,
     FederalRegisterLinkSerializer,
     InternalFileSerializer,
     InternalLinkSerializer,
@@ -24,11 +29,6 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import get_citation_filter, string_to_bool
-from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
-from resources.serializers import FederalRegisterLinkCreateSerializer
 
 
 # OpenApiQueryParameter("citations",
@@ -134,6 +134,7 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
             if created:
                 frdoc.delete()
             raise e
+
 
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource

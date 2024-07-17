@@ -1,33 +1,34 @@
-from rest_framework import serializers
 import re
+
 from django.db.models import Q
+from rest_framework import serializers
 
 from resources.models import (
-    AbstractCategory,
     AbstractCitation,
     AbstractPublicCategory,
-    PublicCategory,
     FederalRegisterLink,
-    ResourceGroup,
     InternalFile,
     InternalLink,
+    PublicCategory,
     PublicLink,
+    ResourceGroup,
     ResourcesConfiguration,
     Section,
 )
 
 from .categories import AbstractCategorySerializer
-from .citations import AbstractCitationSerializer
+from .citations import (
+    AbstractCitationSerializer,
+    SectionCreateSerializer,
+    SectionRangeCreateSerializer,
+)
 from .polymorphic import (
     PolymorphicSerializer,
     PolymorphicTypeField,
 )
 from .subjects import SubjectSerializer
 
-from .citations import (
-    SectionCreateSerializer,
-    SectionRangeCreateSerializer,
-)
+
 class AbstractResourceSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
@@ -36,6 +37,7 @@ class AbstractResourceSerializer(PolymorphicSerializer):
             InternalLink: ("internal_link", InternalLinkSerializer),
             InternalFile: ("internal_file", InternalFileSerializer),
         }
+
 
 class FederalRegisterLinkCreateSerializer(serializers.Serializer):
     sections = SectionCreateSerializer(many=True, allow_null=True)
@@ -173,6 +175,7 @@ class FederalRegisterLinkCreateSerializer(serializers.Serializer):
         main.common_identifiers = list(set(prefixes))
         main.save()
         return main
+
 
 class ResourceSerializer(serializers.Serializer):
     type = PolymorphicTypeField()

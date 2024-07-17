@@ -34,4 +34,4 @@ class ResourceGroupAdmin(AbstractAdmin):
     # return the correct data. So we need to save after updating related fields.
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
-        form.instance.save()        
+        form.instance.save()

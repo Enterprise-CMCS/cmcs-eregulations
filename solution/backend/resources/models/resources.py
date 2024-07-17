@@ -3,7 +3,6 @@ from django.db import models
 from model_utils.managers import InheritanceManager
 
 from common.fields import (
-    NaturalSortField,
     StatuteRefField,
     UscRefField,
     VariableDateField,

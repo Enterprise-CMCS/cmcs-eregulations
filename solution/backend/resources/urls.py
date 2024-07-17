@@ -2,8 +2,8 @@ from django.urls import path
 
 from resources.views import (
     CitationViewSet,
-    FederalRegisterLinkViewSet,
     FederalRegisterLinksNumberViewSet,
+    FederalRegisterLinkViewSet,
     InternalCategoryViewSet,
     InternalFileDownloadViewSet,
     InternalFileViewSet,
