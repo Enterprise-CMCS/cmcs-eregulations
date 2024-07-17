@@ -13,7 +13,7 @@ reg_core_migrate:
   handler: migrate.handler
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
-  timeout: 300
+  timeout: 900
 create_su:
   handler: createsu.handler
   layers:
