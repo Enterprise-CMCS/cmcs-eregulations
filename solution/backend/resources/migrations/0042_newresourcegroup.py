@@ -20,6 +20,11 @@ def copy_resource_groups(apps, schema_editor):
         group.save()
 
 
+def delete_old_resource_groups(apps, schema_editor):
+    OldResourceGroup = apps.get_model("resources", "ResourceGroup")
+    OldResourceGroup.objects.all().delete()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -42,4 +47,5 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.RunPython(copy_resource_groups),
+        migrations.RunPython(delete_old_resource_groups),
     ]
