@@ -190,7 +190,7 @@ const needsBar = (item) =>
 const resultLinkClasses = (doc) => ({
     external:
         DOCUMENT_TYPES_MAP[getFieldVal({ item: doc, fieldName: "type" })] ===
-        "Public",
+        "Public" || getFieldVal({ item: doc, fieldName: "type" }) === "internal_link",
     "document__link--search": !!$route?.query?.q,
 });
 

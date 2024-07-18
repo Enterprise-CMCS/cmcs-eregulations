@@ -150,6 +150,10 @@
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
+
+        &.supplemental-content-external-link {
+            display: flex;
+        }
     }
 
     .supplemental-content-external-link {

@@ -128,7 +128,8 @@ export default {
         getLinkClasses(docType, description) {
             return {
                 "supplemental-content-external-link":
-                    DOCUMENT_TYPES_MAP[docType] !== "Internal" &&
+                    (DOCUMENT_TYPES_MAP[docType] === "Public" ||
+                        docType === "internal_link") &&
                     this.isBlank(description),
             };
         },
