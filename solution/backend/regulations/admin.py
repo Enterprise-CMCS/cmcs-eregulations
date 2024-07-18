@@ -2,7 +2,9 @@ import re
 
 import requests
 from defusedxml.minidom import parseString
+from django.apps import apps
 from django.contrib import admin, messages
+from django.contrib.admin.sites import site
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
@@ -23,6 +25,27 @@ from .models import (
 )
 
 admin.site.logout_template = 'admin/logged_out.html'
+
+
+# Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
+def get_app_list(self, request, app_label=None):
+    app_dict = self._build_app_dict(request, app_label)
+    for app_name in app_dict.keys():
+        app = app_dict[app_name]
+        model_priority = {
+            model['object_name']: getattr(
+                site._registry[apps.get_model(app_name, model['object_name'])],
+                'admin_priority',
+                20
+            )
+            for model in app['models']
+        }
+        app['models'].sort(key=lambda x: model_priority[x['object_name']])
+    return list(app_dict.values())
+
+
+# Patch Django's built in get_app_list function
+admin.AdminSite.get_app_list = get_app_list
 
 # Finds all HTML/XML tags for removal, e.g. "<a href="#">abc</a>" becomes "abc".
 MARKUP_PATTERN = r"</?[^>]+>"

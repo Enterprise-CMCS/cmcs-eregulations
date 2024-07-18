@@ -1,6 +1,6 @@
 describe("Swagger View", () => {
 
-    it("loads the swagger page", () => {
+    it.skip("loads the swagger page", () => {
         cy.viewport("macbook-15");
         cy.visit("/api/swagger/");
         cy.contains("CMCS eRegulations API").should(

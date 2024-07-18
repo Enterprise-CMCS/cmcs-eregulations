@@ -190,7 +190,11 @@ function fetchJson({
 
 // ---------- helper functions ---------------
 
-function httpApiGet(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
+function httpApiGet(
+    urlPath,
+    { params } = {},
+    cacheResponse = DEFAULT_CACHE_RESPONSE
+) {
     return fetchJson({
         url: `${config.apiPath}/${urlPath}`,
         options: {
@@ -202,7 +206,11 @@ function httpApiGet(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESP
 }
 
 // use when components used directly in Django templates
-function httpApiGetLegacy(urlPath, { params } = {}, cacheResponse = DEFAULT_CACHE_RESPONSE) {
+function httpApiGetLegacy(
+    urlPath,
+    { params } = {},
+    cacheResponse = DEFAULT_CACHE_RESPONSE
+) {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -245,28 +253,6 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 /**
- * Retrieves a flat list of all external categories and subcategories from an API.
- *
- * @param {object} options - An object containing options for the request.
- * @param {string} [options.apiUrl] - The base URL of the external API.
- *   If provided, this function will fetch data from the external API.
- *   Otherwise, it will fetch data from the internal API with a default URL.
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
- */
-const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}resources/categories`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet("resources/categories");
-};
-
-/**
  * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
  *
  * @param {object} options - An object containing options for the request.
@@ -276,16 +262,19 @@ const getExternalCategories = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESP
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
-const getExternalCategoriesTree = async ({apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE}) => {
+const getExternalCategories = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}resources/categories/tree`,
+            `${apiUrl}resources/public/categories?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/categories/tree");
+    return httpApiGet("resources/public/categories?page_size=1000");
 };
 
 /**
@@ -352,12 +341,12 @@ const getRecentResources = async (
 ) => {
     if (type !== "rules") {
         return httpApiGetLegacy(
-            `${apiURL}resources/supplemental_content?page=${page}&page_size=${pageSize}&paginate=true&category_details=true${categories}`,
+            `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}${categories}`,
             {} // params, default
         );
     }
     return httpApiGetLegacy(
-        `${apiURL}resources/federal_register_docs?page=${page}&page_size=${pageSize}&paginate=true&category_details=true`,
+        `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}`,
         {} // params, default
     );
 };
@@ -383,17 +372,10 @@ const getRegSearchResults = async ({
 const getSupplementalContent = async ({
     partDict,
     title,
-    categories,
     q = "",
-    start,
-    maxResults = 1000,
-    paginate = true,
     page = 1,
-    catDetails = true,
     pageSize = 100,
-    locationDetails = true,
     sortMethod = "newest",
-    frGrouping = true,
     builtLocationString = "",
     apiUrl = "",
 }) => {
@@ -401,46 +383,34 @@ const getSupplementalContent = async ({
     let sString = "";
 
     if (partDict === "all") {
-        sString = title ? `${sString}&locations=${title}` : "";
+        sString = title ? `${sString}&citations=${title}` : "";
     } else if (builtLocationString !== "") {
         sString = `${sString}&${builtLocationString}`;
     } else {
         Object.keys(partDict).forEach((partKey) => {
             const part = partDict[partKey];
             part.subparts.forEach((subPart) => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${subPart}`;
+                sString = `${sString}&citations=${part.title}.${partKey}.${subPart}`;
             });
             part.sections.forEach((section) => {
-                sString = `${sString}&locations=${part.title}.${partKey}.${section}`;
+                sString = `${sString}&citations=${part.title}.${partKey}.${section}`;
             });
             if (part.sections.length === 0 && part.subparts.length === 0) {
-                sString = `${sString}&locations=${part.title}.${partKey}`;
+                sString = `${sString}&citations=${part.title}.${partKey}`;
             }
         });
     }
 
-    if (categories) {
-        const catList = await getExternalCategories();
-        categories.forEach((category) => {
-            sString = `${sString}&categories=${
-                catList.find((x) => x.name === category).id
-            }`;
-        });
-    }
-
-    sString = `${sString}&category_details=${catDetails}`;
-    sString = `${sString}&location_details=${locationDetails}`;
-    sString = `${sString}&start=${start}&max_results=${maxResults}${queryString}`;
-    sString = `${sString}&sort=${sortMethod}`;
-    sString = `${sString}&paginate=${paginate}&page_size=${pageSize}&page=${page}`;
-    sString = `${sString}&fr_grouping=${frGrouping}`;
+    sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
 
     let response = "";
 
     if (apiUrl) {
-        response = await httpApiGetLegacy(`${apiUrl}resources/?${sString}`);
+        response = await httpApiGetLegacy(
+            `${apiUrl}resources/public?${sString}`
+        );
     } else {
-        response = await httpApiGet(`resources/?${sString}`);
+        response = await httpApiGet(`resources/public?${sString}`);
     }
     return response;
 };
@@ -532,16 +502,19 @@ const getStatutes = async ({
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
  */
-const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
+const getInternalSubjects = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file-manager/subjects`,
+            `${apiUrl}resources/subjects?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file-manager/subjects", cacheResponse);
+    return httpApiGet("resources/subjects?page_size=1000", cacheResponse);
 };
 
 /**
@@ -557,41 +530,25 @@ const getInternalSubjects = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPO
  */
 
 /**
- * Retrieves a flat list of all internal categories and subcategories from an API.
- *
- * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=DEFAULTS_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
- */
-const getInternalCategories = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}file-manager/categories`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet("file-manager/categories", cacheResponse);
-};
-
-/**
  * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
  *
  * @param {string} [apiUrl] - API base url passed in from Django template
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
  */
-const getInternalCategoriesTree = async ({ apiUrl, cacheResponse = DEFAULT_CACHE_RESPONSE }) => {
+const getInternalCategories = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
     if (apiUrl) {
         return httpApiGetLegacy(
-            `${apiUrl}file-manager/categories/tree`,
+            `${apiUrl}resources/internal/categories?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("file-manager/categories/tree", cacheResponse);
+    return httpApiGet("resources/internal/categories?page_size=1000", cacheResponse);
 };
 
 /**
@@ -606,9 +563,36 @@ const getCombinedContent = async ({
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGetLegacy(
-        `${apiUrl}content-search/${
-            requestParams ? `?${requestParams}&` : "?"
-        }location_details=true&category_details=true`,
+        `${apiUrl}content-search/${requestParams ? `?${requestParams}` : ""}`,
+        {},
+        cacheResponse
+    );
+
+const getContentWithoutQuery = async ({
+    apiUrl,
+    requestParams = "",
+    docType, // "public" or "internal"
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) => {
+    const typeString = docType ? `${docType.toLowerCase()}` : "";
+    const rqParams = requestParams ? `?${requestParams}` : "";
+
+    return httpApiGetLegacy(
+        `${apiUrl}resources/${typeString}${rqParams}`,
+        {},
+        cacheResponse
+    );
+};
+
+const getInternalDocs = async ({
+    apiUrl,
+    requestParams = "",
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) =>
+    httpApiGetLegacy(
+        `${apiUrl}resources/internal${
+            requestParams ? `?${requestParams}` : ""
+        }`,
         {},
         cacheResponse
     );
@@ -624,11 +608,11 @@ export {
     getCacheItem,
     getCacheKeys,
     getCombinedContent,
+    getContentWithoutQuery,
     getExternalCategories,
-    getExternalCategoriesTree,
     getGovInfoLinks,
     getInternalCategories,
-    getInternalCategoriesTree,
+    getInternalDocs,
     getInternalSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,

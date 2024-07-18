@@ -15,32 +15,26 @@
                 >{{ formatDate(date) }}</span
             >
             <!-- DivisionLabel
-                v-if="docType === 'internal' && division"
+                v-if="docType === 'internal_file' && division"
                 :division="division"
             /-->
             <span
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
-                :class="{
-                    'supplemental-content-external-link':
-                        docType !== 'internal' && isBlank(description),
-                }"
+                :class="getLinkClasses(docType, description)"
                 >{{ name }}</span
             >
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"
-                :class="{
-                    'supplemental-content-external-link':
-                        docType !== 'internal',
-                }"
+                :class="getLinkClasses(docType)"
             >
                 <span
                     v-html="
                         description +
                         addFileTypeButton({
                             fileName,
-                            url,
+                            uid,
                             docType,
                         })
                     "
@@ -51,7 +45,7 @@
 </template>
 
 <script>
-import { getFileTypeButton } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
 
 import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
 
@@ -83,6 +77,11 @@ export default {
             required: false,
             default: null,
         },
+        uid: {
+            type: String,
+            required: false,
+            default: undefined,
+        },
         url: {
             type: String,
             default: undefined,
@@ -90,7 +89,7 @@ export default {
         docType: {
             type: String,
             required: false,
-            default: "external",
+            default: "public_link",
         },
         fileName: {
             type: String,
@@ -103,14 +102,14 @@ export default {
         isBlank(str) {
             return !str || /^\s*$/.test(str);
         },
-        addFileTypeButton({ fileName, url, docType }) {
-            if (docType !== "internal") {
+        addFileTypeButton({ fileName, uid, docType }) {
+            if (DOCUMENT_TYPES_MAP[docType] !== "Internal") {
                 return "";
             }
 
             return getFileTypeButton({
                 fileName,
-                url,
+                uid,
             });
         },
         formatDate(value) {
@@ -125,6 +124,13 @@ export default {
             }
             const format = new Intl.DateTimeFormat("en-US", options);
             return format.format(date);
+        },
+        getLinkClasses(docType, description) {
+            return {
+                "supplemental-content-external-link":
+                    DOCUMENT_TYPES_MAP[docType] !== "Internal" &&
+                    this.isBlank(description),
+            };
         },
     },
 };

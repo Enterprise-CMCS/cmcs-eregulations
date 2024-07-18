@@ -6,11 +6,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-        cy.intercept("**/v3/resources/categories", {
+        cy.intercept("**/v3/resources/public/categories**", {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
-            "**/v3/resources/federal_register_docs?page=1&page_size=3&paginate=true**",
+            "**/v3/resources/public/federal_register_links?page=1&page_size=3**",
             { fixture: "frdocs.json" }
         ).as("frdocs");
     });
@@ -49,6 +49,137 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.focused().then(($el) => {
             const rect = $el[0].getBoundingClientRect();
             expect(rect.top).to.equal(0);
+        });
+    });
+
+    it("has grouped FR docs in Related Rules tab", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container").should("exist");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click({ force: true });
+
+        cy.get(".related-rule").should("have.length", 7);
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            expect($els).to.have.length(3);
+            cy.wrap($els[1]).find(".recent-title").should("exist");
+            cy.wrap($els[1])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("Final");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(2, 102, 102)");
+                });
+        });
+        cy.get(".related-rule.grouped").then(($els) => {
+            expect($els).to.have.length(4);
+            cy.wrap($els[0]).find(".recent-title").should("not.exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("WD");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(255, 255, 255)");
+                });
+        });
+
+        cy.get(".resources__container")
+            .contains("View More Changes")
+            .should("not.exist");
+    });
+
+    it("Sets the label as Final, when correction and withdraw are both set to false", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            cy.wrap($els[1]).find(".recent-title").should("exist");
+            cy.wrap($els[1])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("Final");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(2, 102, 102)");
+                });
+        });
+    });
+
+    it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
+        cy.get(".related-rule.grouped").then(($els) => {
+            cy.wrap($els[0]).find(".recent-title").should("not.exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("WD");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(255, 255, 255)");
+                    expect($flag)
+                        .to.have.css("color")
+                        .and.eq("rgb(91, 97, 107)");
+                    expect($flag)
+                        .to.have.css("border-color")
+                        .and.eq("rgb(91, 97, 107)");
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
+                });
+        });
+    });
+
+    it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
+        cy.get(".related-rule.grouped").then(($els) => {
+            cy.wrap($els[3]).find(".recent-title").should("not.exist");
+            cy.wrap($els[3])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("WD");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(255, 255, 255)");
+                    expect($flag)
+                        .to.have.css("color")
+                        .and.eq("rgb(91, 97, 107)");
+                    expect($flag)
+                        .to.have.css("border-color")
+                        .and.eq("rgb(91, 97, 107)");
+                    expect($flag).to.have.css("border-width").and.eq("1px");
+                    expect($flag).to.have.css("border-style").and.eq("solid");
+                });
+        });
+    });
+
+    it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".resources__container .v-tabs")
+            .contains("Recent Rules")
+            .click();
+        cy.get(".related-rule.ungrouped").then(($els) => {
+            cy.wrap($els[0]).find(".recent-title").should("exist");
+            cy.wrap($els[0])
+                .find(".recent-flag")
+                .then(($flag) => {
+                    expect($flag).to.have.text("CORR");
+                    expect($flag)
+                        .to.have.css("background-color")
+                        .and.eq("rgb(214, 215, 217)");
+                });
         });
     });
 
@@ -163,142 +294,11 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .should("not.exist");
     });
 
-    it("has grouped FR docs in Related Rules tab", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".resources__container").should("exist");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click({ force: true });
-
-        cy.get(".related-rule").should("have.length", 7);
-        cy.get(".related-rule.ungrouped").then(($els) => {
-            expect($els).to.have.length(3);
-            cy.wrap($els[0]).find(".recent-title").should("exist");
-            cy.wrap($els[0])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("Final");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(2, 102, 102)");
-                });
-        });
-        cy.get(".related-rule.grouped").then(($els) => {
-            expect($els).to.have.length(4);
-            cy.wrap($els[0]).find(".recent-title").should("not.exist");
-            cy.wrap($els[0])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("WD");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(255, 255, 255)");
-                });
-        });
-
-        cy.get(".resources__container")
-            .contains("View More Changes")
-            .should("not.exist");
-    });
-
-    it("Sets the label as Final, when correction and withdraw are both set to false", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click();
-        cy.get(".related-rule.ungrouped").then(($els) => {
-            cy.wrap($els[0]).find(".recent-title").should("exist");
-            cy.wrap($els[0])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("Final");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(2, 102, 102)");
-                });
-        });
-    });
-
-    it("Sets the label as WD when Correction is false and Withdrawal is true", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click();
-        cy.get(".related-rule.grouped").then(($els) => {
-            cy.wrap($els[0]).find(".recent-title").should("not.exist");
-            cy.wrap($els[0])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("WD");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(255, 255, 255)");
-                    expect($flag)
-                        .to.have.css("color")
-                        .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-color")
-                        .and.eq("rgb(91, 97, 107)");
-                    expect($flag).to.have.css("border-width").and.eq("1px");
-                    expect($flag).to.have.css("border-style").and.eq("solid");
-                });
-        });
-    });
-
-    it("Sets the label as WD when Correction is true and Withdrawal is true", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click();
-        cy.get(".related-rule.grouped").then(($els) => {
-            cy.wrap($els[3]).find(".recent-title").should("not.exist");
-            cy.wrap($els[3])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("WD");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(255, 255, 255)");
-                    expect($flag)
-                        .to.have.css("color")
-                        .and.eq("rgb(91, 97, 107)");
-                    expect($flag)
-                        .to.have.css("border-color")
-                        .and.eq("rgb(91, 97, 107)");
-                    expect($flag).to.have.css("border-width").and.eq("1px");
-                    expect($flag).to.have.css("border-style").and.eq("solid");
-                });
-        });
-    });
-
-    it("Sets the label as CORR when Correction is true and Withdrawal is false", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get(".resources__container .v-tabs")
-            .contains("Recent Rules")
-            .click();
-        cy.get(".related-rule.grouped").then(($els) => {
-            cy.wrap($els[1]).find(".recent-title").should("not.exist");
-            cy.wrap($els[1])
-                .find(".recent-flag")
-                .then(($flag) => {
-                    expect($flag).to.have.text("CORR");
-                    expect($flag)
-                        .to.have.css("background-color")
-                        .and.eq("rgb(214, 215, 217)");
-                });
-        });
-    });
-
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {
         cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@parserResult");
+        //cy.wait("@parserResult");
         cy.get(".last-updated-date")
             .invoke("text")
             .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);

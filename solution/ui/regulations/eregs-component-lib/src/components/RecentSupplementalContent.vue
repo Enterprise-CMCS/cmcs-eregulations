@@ -40,8 +40,8 @@ export default {
                 <CategoryLabel :name="content.category.name" type="category" />
             </div>
             <SupplementalContentObject
-                :name="content.name"
-                :description="content.description"
+                :name="content.document_id"
+                :description="content.title"
                 :date="content.date"
                 :url="content.url"
             >

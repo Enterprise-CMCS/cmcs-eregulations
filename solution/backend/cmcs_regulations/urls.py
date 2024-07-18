@@ -21,12 +21,10 @@ from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
 from rest_framework_simplejwt import views as jwt_views
 
-from regulations.rss_feeds import ResourceFeed
-from regulations.sitemap import PartSitemap, SupplementalContentSitemap
+from regulations.sitemap import PartSitemap
 
 sitemaps = {
     "Parts": PartSitemap,
-    "SupplementalContent": SupplementalContentSitemap,
 }
 
 urlpatterns = [
@@ -38,7 +36,6 @@ urlpatterns = [
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('latest/feed/', ResourceFeed()),
     path('oidc/', include('mozilla_django_oidc.urls')),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),

@@ -1,4 +1,3 @@
-import uuid
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -10,60 +9,67 @@ from django.contrib.postgres.search import (
 from django.db import models
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from common.constants import QUOTE_TYPES
-from common.fields import VariableDateField
-from file_manager.models import AbstractRepoCategory, Division, Subject, UploadedFile
-from resources.models import AbstractCategory, AbstractLocation, FederalRegisterDocument, SupplementalContent
+from regcore.models import Part
+from resources.models import (
+    AbstractResource,
+    FederalRegisterLink,
+    InternalFile,
+    InternalLink,
+    PublicLink,
+)
 
 
 class ContentIndexQuerySet(models.QuerySet):
-    text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
-    min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
-    max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
-    max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
+    _text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
+    _min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
+    _max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
+    _max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
 
-    def is_quoted(self, query):
+    def _is_quoted(self, query):
         return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
 
-    def get_search_query_object(self, search_query):
-        search_type = "phrase" if self.is_quoted(search_query) else "plain"
+    def _get_search_query_object(self, search_query):
+        search_type = "phrase" if self._is_quoted(search_query) else "plain"
         return SearchQuery(search_query, search_type=search_type, config='english')
 
     def search(self, search_query):
-        cover_density = self.is_quoted(search_query)
+        cover_density = self._is_quoted(search_query)
         rank_filter = float(settings.QUOTED_SEARCH_FILTER if cover_density else settings.BASIC_SEARCH_FILTER)
         return self.annotate(rank=SearchRank(
             RawSQL("vector_column", [], output_field=SearchVectorField()),
-            self.get_search_query_object(search_query), cover_density=cover_density))\
+            self._get_search_query_object(search_query), cover_density=cover_density))\
             .filter(rank__gt=rank_filter)\
             .order_by('-rank')
 
     def generate_headlines(self, search_query):
-        query_object = self.get_search_query_object(search_query)
-        return self.annotate(content_short=Substr("content", 1, self.text_max)).annotate(
+        query_object = self._get_search_query_object(search_query)
+        return self.annotate(content_short=Substr("content", 1, self._text_max)).annotate(
             summary_headline=SearchHeadline(
-                "summary_string",
+                "summary",
                 query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel='</span>',
-                min_words=self.min_words,
-                max_words=self.max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 config='english',
                 fragment_delimiter='...',
-                max_fragments=self.max_fragments,
+                max_fragments=self._max_fragments,
             ),
-            document_name_headline=SearchHeadline(
-                "doc_name_string",
+            name_headline=SearchHeadline(
+                "name",
                 query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
-                min_words=self.min_words,
-                max_words=self.max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 config='english',
                 highlight_all=True,
                 fragment_delimiter='...',
-                max_fragments=self.max_fragments,
+                max_fragments=self._max_fragments,
             ),
             content_headline=SearchHeadline(
                 "content_short",
@@ -71,10 +77,10 @@ class ContentIndexQuerySet(models.QuerySet):
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
                 config='english',
-                min_words=self.min_words,
-                max_words=self.max_words,
+                min_words=self._min_words,
+                max_words=self._max_words,
                 fragment_delimiter='...',
-                max_fragments=self.max_fragments,
+                max_fragments=self._max_fragments,
             ),
         )
 
@@ -83,37 +89,71 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
     pass
 
 
-# The index is supposed to be an all encompassing index allowing different models to share an index
+class IndexedRegulationText(models.Model):
+    # TODO: add fields for indexed reg text. see regcore/search/models.py.
+    parent = models.ForeignKey(Part, on_delete=models.CASCADE)
+
+
+# This model is an all encompassing searchable index allowing different models to share an index.
 # Instead of recalculating the vector column each time a change in weights are done the values will be stored
-# in the field values of for the rank_{}_string.  This will allow simpler updates in the future.
+# in the rank_{}_string fields.
 class ContentIndex(models.Model):
-    uid = models.CharField(
-        primary_key=False,
-        default=uuid.uuid4,
-        editable=False,
-        max_length=36)
-    doc_name_string = models.CharField(max_length=512, null=True, blank=True)
-    summary_string = models.TextField(blank=True, null=True)
-    file_name_string = models.CharField(max_length=512, null=True, blank=True)
-    date_string = VariableDateField()
-    content = models.TextField(blank=True, null=True)
-    url = models.CharField(max_length=512, blank=True, null=True)
-    extract_url = models.CharField(max_length=512, blank=True, null=True)
-    ignore_robots_txt = models.BooleanField(default=False)
-    subjects = models.ManyToManyField(Subject, blank=True, related_name="content")
-    division = models.ForeignKey(Division, null=True, blank=True, on_delete=models.SET_NULL)
-    upload_category = models.ForeignKey(
-        AbstractRepoCategory, related_name="content", blank=True, null=True, on_delete=models.CASCADE)
-    category = models.ForeignKey(
-        AbstractCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="content"
-    )
-    locations = models.ManyToManyField(AbstractLocation, blank=True, related_name="content", verbose_name="Regulation Locations")
-    resource_type = models.CharField(max_length=25, null=True, blank=True)
-    rank_a_string = models.TextField(blank=True, null=True)
-    rank_b_string = models.TextField(blank=True, null=True)
-    rank_c_string = models.TextField(blank=True, null=True)
-    rank_d_string = models.TextField(blank=True, null=True)
-    file = models.ForeignKey(UploadedFile, blank=True, null=True, on_delete=models.CASCADE)
-    supplemental_content = models.ForeignKey(SupplementalContent, blank=True, null=True, on_delete=models.CASCADE)
-    fr_doc = models.ForeignKey(FederalRegisterDocument, blank=True, null=True, on_delete=models.CASCADE)
+    # Fields used for generating search headlines
+    name = models.TextField(blank=True)
+    summary = models.TextField(blank=True)
+    content = models.TextField(blank=True)
+
+    # Rank fields for searching
+    rank_a_string = models.TextField(blank=True)
+    rank_b_string = models.TextField(blank=True)
+    rank_c_string = models.TextField(blank=True)
+    rank_d_string = models.TextField(blank=True)
+
+    # OneToOne fields linked to possible indexed types
+    resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
+    reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
+
     objects = ContentIndexManager()
+
+
+def get_or_create_index(instance, created):
+    if created or not hasattr(instance, "index") or not instance.index:
+        return ContentIndex.objects.create(resource=instance)
+    return instance.index
+
+
+@receiver(post_save, sender=PublicLink)
+@receiver(post_save, sender=FederalRegisterLink)
+@receiver(post_save, sender=InternalLink)
+def update_indexed_resource(sender, instance, created, **kwargs):
+    index = get_or_create_index(instance, created)
+    index.name = instance.document_id
+    index.summary = instance.title
+    index.rank_a_string = "{} {}".format(
+        instance.document_id,
+        instance.title,
+    )
+    index.rank_b_string = ""
+    index.rank_c_string = instance.date
+    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+    index.save()
+
+
+@receiver(post_save, sender=InternalFile)
+def update_indexed_file(sender, instance, created, **kwargs):
+    index = get_or_create_index(instance, created)
+    index.name = instance.title
+    index.summary = instance.summary
+    index.rank_a_string = instance.title
+    index.rank_b_string = instance.summary
+    index.rank_c_string = "{} {}".format(
+        instance.date,
+        instance.file_name,
+    )
+    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+    index.save()
+
+
+@receiver(post_save, sender=Part)
+def update_indexed_part(sender, instance, created, **kwargs):
+    pass

@@ -3,110 +3,43 @@ import re
 from django.db.models import Q
 from rest_framework import serializers
 
-from common.fields import HeadlineField
-from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
-from common.serializers.mix import DetailsSerializer
-from common.utils import ProxySerializerWrapper
-from file_manager.serializers.groupings import SubjectSerializer
 from resources.models import (
-    AbstractCategory,
-    AbstractLocation,
-    Category,
-    FederalRegisterDocument,
-    FederalRegisterDocumentGroup,
+    AbstractCitation,
+    AbstractPublicCategory,
+    FederalRegisterLink,
+    InternalFile,
+    InternalLink,
+    PublicCategory,
+    PublicLink,
+    ResourceGroup,
     ResourcesConfiguration,
     Section,
-    SupplementalContent,
 )
 
-from .locations import (
+from .categories import AbstractCategorySerializer
+from .citations import (
+    AbstractCitationSerializer,
     SectionCreateSerializer,
     SectionRangeCreateSerializer,
 )
+from .polymorphic import (
+    PolymorphicSerializer,
+    PolymorphicTypeField,
+)
+from .subjects import SubjectSerializer
 
 
-class AbstractResourcePolymorphicSerializer(PolymorphicSerializer):
+class AbstractResourceSerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            SupplementalContent: ("supplemental_content", SupplementalContentSerializer),
-            FederalRegisterDocument: ("federal_register_doc", FederalRegisterDocumentSerializer),
+            PublicLink: ("public_link", PublicLinkSerializer),
+            FederalRegisterLink: ("federal_register_link", FederalRegisterLinkSerializer),
+            InternalLink: ("internal_link", InternalLinkSerializer),
+            InternalFile: ("internal_file", InternalFileSerializer),
         }
 
 
-class AbstractResourceSerializer(DetailsSerializer, serializers.Serializer):
-    id = serializers.IntegerField()
-    created_at = serializers.CharField()
-    updated_at = serializers.CharField()
-    approved = serializers.BooleanField()
-    snippet = serializers.SerializerMethodField()
-    category = serializers.SerializerMethodField()
-    locations = serializers.SerializerMethodField()
-    subjects = SubjectSerializer(many=True)
-
-    type = PolymorphicTypeField()
-
-    def get_snippet(self, obj):
-        if hasattr(obj, 'snippet'):
-            return obj.snippet
-
-
-class DateFieldSerializer(serializers.Serializer):
-    date = serializers.CharField()
-
-
-# Provides fields most often used in resources
-class TypicalResourceFieldsSerializer(DateFieldSerializer):
-    name = serializers.CharField()
-    description = serializers.CharField()
-    url = serializers.CharField()
-
-
-class SupplementalContentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    name_headline = HeadlineField("supplementalcontent")
-    description_headline = HeadlineField("supplementalcontent")
-
-
-class SimpleFederalRegisterDocumentSerializer(AbstractResourceSerializer, TypicalResourceFieldsSerializer):
-    docket_numbers = serializers.ListField(child=serializers.CharField())
-    document_number = serializers.CharField()
-    doc_type = serializers.CharField()
-    correction = serializers.BooleanField()
-    withdrawal = serializers.BooleanField()
-    name_headline = HeadlineField("federalregisterdocument")
-    description_headline = HeadlineField("federalregisterdocument")
-    document_number_headline = HeadlineField("federalregisterdocument")
-
-
-class FederalRegisterDocumentSerializer(SimpleFederalRegisterDocumentSerializer):
-    related_docs = SimpleFederalRegisterDocumentSerializer(many=True, source="related_resources")
-
-    def to_representation(self, instance):
-        obj = super().to_representation(instance)
-        if not self.context.get("fr_grouping", False):
-            del obj["related_docs"]
-            return obj
-        docs = [obj] + obj["related_docs"]
-        del obj["related_docs"]
-        docs = sorted(docs, key=lambda i: i["date"] or "", reverse=True)
-        docs[0]["related_docs"] = docs[1:]
-        return docs[0]
-
-
-class ResourceSearchSerializer(serializers.Serializer):
-    count = serializers.IntegerField()
-    next = serializers.CharField()
-    previous = serializers.CharField()
-    results = AbstractResourcePolymorphicSerializer(many=True)
-
-
-MetaResourceSerializer = ProxySerializerWrapper(
-    component_name="MetaResourceSerializer",
-    serializers=[SupplementalContentSerializer, FederalRegisterDocumentSerializer],
-    resource_type_field_name=None,
-)
-
-
-class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
+class FederalRegisterLinkCreateSerializer(serializers.Serializer):
     sections = SectionCreateSerializer(many=True, allow_null=True)
     section_ranges = SectionRangeCreateSerializer(many=True, allow_null=True, required=False)
     url = serializers.URLField(allow_blank=True, allow_null=True)
@@ -124,13 +57,13 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
 
     def get_category(self):
         config = ResourcesConfiguration.objects.first()
-        category = config.fr_doc_category
+        category = config.fr_link_category
         if not category:
             try:
-                category = AbstractCategory.objects.get(name="Federal Register Docs")
-            except AbstractCategory.DoesNotExist:
-                category = Category.objects.create(name="Federal Register Docs")
-            config.fr_doc_category = category
+                category = AbstractPublicCategory.objects.get(name="Federal Register Links")
+            except AbstractPublicCategory.DoesNotExist:
+                category = PublicCategory.objects.create(name="Federal Register Links")
+            config.fr_link_category = category
             config.save()
         return category
 
@@ -145,32 +78,28 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         created = self.context.get("created", False)
         sections = validated_data.get("sections", []) or []
         section_ranges = validated_data.get("section_ranges", []) or []
-        name = validated_data.get('name', instance.name)
-        description = validated_data.get('description', instance.description)
+        name = validated_data.get('name', instance.document_id)
+        description = validated_data.get('description', instance.title)
 
         # set basic fields and group if instance is new
         if created:
             instance.url = validated_data.get('url', instance.url)
-            instance.description = description
-            instance.description_sort = self.naturalize(description)
-            instance.name = name
-            instance.name_sort = self.naturalize(name)
+            instance.title = description
+            instance.title_sort = self.naturalize(description)
+            instance.document_id = name
+            instance.document_id_sort = self.naturalize(name)
             instance.docket_numbers = validated_data.get('docket_numbers', instance.docket_numbers)
             instance.document_number = validated_data.get('document_number', instance.document_number)
             instance.date = validated_data.get('date', instance.date)
             instance.approved = validated_data.get('approved', instance.approved)
-            instance.doc_type = validated_data.get('doc_type', instance.doc_type)
+            instance.action_type = validated_data.get('doc_type', instance.action_type)
             instance.category = self.get_category()
             self.set_group(instance)
 
-        instance.raw_text_url = validated_data.get("raw_text_url", "")
+        instance.extract_url = validated_data.get("raw_text_url", "")
 
         # set the locations on the instance
         self.set_locations(instance, sections, section_ranges)
-
-        # reapply changelog if instance is not new
-        if not created:
-            self.apply_changelog(instance)
 
         # save and return
         instance.save()
@@ -195,22 +124,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
         q = queries[0]
         for i in queries[1:]:
             q |= i
-        return AbstractLocation.objects.filter(q).select_subclasses()
-
-    def apply_changelog(self, instance):
-        all_additions = []
-        all_removals = []
-        for change in instance.location_history:
-            additions = [i.copy() for i in change["additions"] + change["bulk_adds"]]
-            removals = [i.copy() for i in change["removals"]]
-            for i in additions + removals:
-                del i["id"]
-            for i in additions:
-                all_removals.remove(i) if i in all_removals else all_additions.append(i)
-            for i in removals:
-                all_additions.remove(i) if i in all_additions else all_removals.append(i)
-        instance.locations.remove(*self.get_location_objects(all_removals))
-        instance.locations.add(*self.get_location_objects(all_additions))
+        return AbstractCitation.objects.filter(q).select_subclasses()
 
     def set_locations(self, instance, raw_sections, raw_ranges):
         locations = []
@@ -231,7 +145,7 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             Section.objects.get_or_create(title=title, part=part, section_id=last_section)
             sections = Section.objects.filter(title=title, part=part, section_id__range=(first_section, last_section))
             locations.extend(list(sections))
-        instance.locations.set(locations)
+        instance.cfr_citations.set(locations)
 
     def set_group(self, instance):
         prefixes = []
@@ -240,27 +154,78 @@ class FederalRegisterDocumentCreateSerializer(serializers.Serializer):
             if len(d) > 1:
                 prefixes.append("-".join(d[0:-1]) + "-")
         if len(prefixes) > 0:
-            groups = FederalRegisterDocumentGroup.objects.filter(docket_number_prefixes__overlap=prefixes)
+            groups = ResourceGroup.objects.filter(common_identifiers__overlap=prefixes)
             if len(groups) == 0:
-                group = FederalRegisterDocumentGroup.objects.create(docket_number_prefixes=prefixes)
+                group = ResourceGroup.objects.create(common_identifiers=prefixes)
             else:
                 group = self.combine_groups(groups) if len(groups) > 1 else groups[0]
-            group.docket_number_prefixes = list(set(group.docket_number_prefixes + prefixes))
+            group.common_identifiers = list(set(group.common_identifiers + prefixes))
             group.save()
-            instance.group = group
+            instance.resource_groups.set([group])
 
     def combine_groups(self, groups):
         main = groups[0]
-        docs = main.documents.all()
-        prefixes = main.docket_number_prefixes
+        docs = main.resources.all()
+        prefixes = main.common_identifiers
         for group in groups[1:]:
-            docs |= group.documents.all()
-            prefixes += group.docket_number_prefixes
+            docs |= group.resources.all()
+            prefixes += group.common_identifiers
             group.delete()
-        main.documents.set(docs.distinct())
-        main.docket_number_prefixes = list(set(prefixes))
+        main.resources.set(docs.distinct())
+        main.common_identifiers = list(set(prefixes))
         main.save()
         return main
+
+
+class ResourceSerializer(serializers.Serializer):
+    type = PolymorphicTypeField()
+    id = serializers.IntegerField()
+    created_at = serializers.CharField()
+    updated_at = serializers.CharField()
+    approved = serializers.BooleanField()
+    category = AbstractCategorySerializer()
+    cfr_citations = AbstractCitationSerializer(many=True)
+    subjects = SubjectSerializer(many=True)
+    document_id = serializers.CharField()
+    title = serializers.CharField()
+    date = serializers.CharField()
+    url = serializers.CharField()
+    related_resources = serializers.SerializerMethodField()
+
+    def get_related_resources(self, obj):
+        if self.context.get("show_related", False):
+            return AbstractResourceSerializer(instance=obj.related_resources, many=True).data
+        return None
+
+
+class PublicResourceSerializer(ResourceSerializer):
+    pass
+
+
+class InternalResourceSerializer(ResourceSerializer):
+    summary = serializers.CharField()
+
+
+class PublicLinkSerializer(PublicResourceSerializer):
+    pass
+
+
+class FederalRegisterLinkSerializer(PublicResourceSerializer):
+    docket_numbers = serializers.ListField(child=serializers.CharField())
+    document_number = serializers.CharField()
+    correction = serializers.BooleanField()
+    withdrawal = serializers.BooleanField()
+    action_type = serializers.CharField()
+
+
+class InternalLinkSerializer(InternalResourceSerializer):
+    pass
+
+
+class InternalFileSerializer(InternalResourceSerializer):
+    file_name = serializers.CharField()
+    file_type = serializers.CharField()
+    uid = serializers.CharField()
 
 
 class StringListSerializer(serializers.Serializer):

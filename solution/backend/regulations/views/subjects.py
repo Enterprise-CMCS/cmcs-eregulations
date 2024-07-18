@@ -1,6 +1,6 @@
 from django.views.generic.base import TemplateView
 
-from file_manager.models import Subject
+from resources.models import Subject
 
 
 class SubjectsView(TemplateView):

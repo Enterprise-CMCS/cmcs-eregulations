@@ -15,7 +15,6 @@ urlpatterns = [
     path("admin/bulk_synonyms", BulkSynonymView.as_view(), name="bulk_synonyms"),
     path("v3/", include([
         path("resources/", include('resources.urls')),
-        path("file-manager/", include('file_manager.urls')),
         path("content-search/", include('content_search.urls')),
         path("search/", include('regcore.search.urls')),
         path("toc", title.TOCViewSet.as_view({

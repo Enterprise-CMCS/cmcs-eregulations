@@ -1,0 +1,17 @@
+[
+    {
+        "document_id": "Test Federal Document 1",
+        "url": "https://www.test.gov/doc1",
+        "date": "2023-01-01"
+    },
+    {
+        "document_id": "Another one bites the dust",
+        "url": "https://freddy.com/doc2",
+        "date": "2019-05-12"
+    },
+    {
+        "document_id": "Man this was a chore",
+        "url": "https://Cantbeclever.com/doc3",
+        "date": "2020-02-29"
+    }
+]

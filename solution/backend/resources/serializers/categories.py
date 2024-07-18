@@ -1,16 +1,26 @@
-from drf_spectacular.utils import OpenApiTypes, extend_schema_field
 from rest_framework import serializers
 
-from common.serializers.clean import PolymorphicSerializer, PolymorphicTypeField
-from common.utils import ProxySerializerWrapper
-from resources.models import Category, SubCategory
+from resources.models import (
+    InternalCategory,
+    InternalSubCategory,
+    PublicCategory,
+    PublicSubCategory,
+)
+
+from .polymorphic import (
+    PolymorphicSerializer,
+    PolymorphicTypeField,
+    ProxySerializerWrapper,
+)
 
 
-class AbstractCategoryPolymorphicSerializer(PolymorphicSerializer):
+class AbstractCategorySerializer(PolymorphicSerializer):
     def get_serializer_map(self):
         return {
-            Category: ("category", CategorySerializer),
-            SubCategory: ("subcategory", SubCategorySerializer),
+            PublicCategory: ("public_category", PublicCategorySerializer),
+            PublicSubCategory: ("public_subcategory", PublicSubCategorySerializer),
+            InternalCategory: ("internal_category", InternalCategorySerializer),
+            InternalSubCategory: ("internal_subcategory", InternalSubCategorySerializer),
         }
 
 
@@ -20,33 +30,41 @@ class CategorySerializer(serializers.Serializer):
     description = serializers.CharField()
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
-    is_fr_doc_category = serializers.SerializerMethodField()
+    is_fr_link_category = serializers.BooleanField()
     type = PolymorphicTypeField()
 
-    @extend_schema_field(OpenApiTypes.BOOL)
-    def get_is_fr_doc_category(self, obj):
-        try:
-            return obj.is_fr_doc_category
-        except Exception:
-            return False
+
+class PublicSubCategorySerializer(CategorySerializer):
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
 
 
-class SubCategorySerializer(CategorySerializer):
-    parent = serializers.SerializerMethodField()
+class PublicCategoryWithSubCategoriesSerializer(CategorySerializer):
+    subcategories = PublicSubCategorySerializer(many=True)
 
-    @extend_schema_field(CategorySerializer)
-    def get_parent(self, obj):
-        if self.context.get("parent_details", True):
-            return CategorySerializer(obj.parent).data
-        return serializers.PrimaryKeyRelatedField(read_only=True).to_representation(obj.parent)
+
+class PublicCategorySerializer(CategorySerializer):
+    pass
+
+
+class InternalSubCategorySerializer(CategorySerializer):
+    parent = serializers.PrimaryKeyRelatedField(read_only=True)
+
+
+class InternalCategoryWithSubCategoriesSerializer(CategorySerializer):
+    subcategories = InternalSubCategorySerializer(many=True)
+
+
+class InternalCategorySerializer(CategorySerializer):
+    pass
 
 
 MetaCategorySerializer = ProxySerializerWrapper(
     component_name="MetaCategorySerializer",
-    serializers=[CategorySerializer, SubCategorySerializer],
     resource_type_field_name="type",
+    serializers=[
+        PublicCategorySerializer,
+        PublicSubCategorySerializer,
+        InternalCategorySerializer,
+        InternalSubCategorySerializer,
+    ],
 )
-
-
-class CategoryTreeSerializer(CategorySerializer):
-    sub_categories = CategorySerializer(many=True)

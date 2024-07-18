@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test-vue": "vitest --environment jsdom",
+    "test-vue-ui": "vitest --environment jsdom --coverage.enabled=true --ui",
     "test-vue-coverage": "vitest --environment jsdom run --coverage",
     "css": "npx sass -I node_modules css/scss/main.scss ../../static-assets/regulations/css/main.css",
     "css-deploy": "npx sass -I node_modules css/scss/main-deploy.scss ../../static-assets/regulations/css/main.css",
@@ -30,8 +31,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
-    "@testing-library/vue": "^8.0.3",
-    "@vitest/coverage-c8": "^0.31.1",
+    "@testing-library/vue": "^8.1.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "@vitest/ui": "^1.6.0",
     "@vue/component-compiler": "^4.2.4",
     "babel-loader": "^8.2.2",
     "eslint": "^8.57.0",
@@ -46,7 +48,7 @@
     "prettier": "2.2.1",
     "sass-loader": "^13.0.2",
     "vite": "^5.3.1",
-    "vitest": "^0.31.0",
+    "vitest": "^1.6.0",
     "vue-eslint-parser": "^9.4.2",
     "webpack": "^5.76.0",
     "whatwg-fetch": "^3.6.2"

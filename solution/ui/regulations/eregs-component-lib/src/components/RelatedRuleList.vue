@@ -10,17 +10,17 @@
                 :html_url="html_url(rule)"
                 :action="rule.action"
             />
-            <template v-if="rule.related_docs && rule.related_docs.length > 0">
+            <template v-if="rule.related_resources && rule.related_resources.length > 0">
                 <related-rule
-                    v-for="(related_doc, ii) in rule.related_docs"
-                    :key="ii + 'grouped' + related_doc.document_number"
-                    :title="ruleTitle(related_doc)"
-                    :type="type(related_doc)"
-                    :citation="citation(related_doc)"
-                    :publication_date="publication_date(related_doc)"
-                    :document_number="related_doc.document_number"
-                    :html_url="html_url(related_doc)"
-                    :action="related_doc.action"
+                    v-for="(related_resource, ii) in rule.related_resources"
+                    :key="ii + 'grouped' + related_resource.document_number"
+                    :title="ruleTitle(related_resource)"
+                    :type="type(related_resource)"
+                    :citation="citation(related_resource)"
+                    :publication_date="publication_date(related_resource)"
+                    :document_number="related_resource.document_number"
+                    :html_url="html_url(related_resource)"
+                    :action="related_resource.action"
                     grouped
                 />
             </template>
@@ -62,18 +62,18 @@
                 >
                 </related-rule>
                 <template
-                    v-if="rule.related_docs && rule.related_docs.length > 0"
+                    v-if="rule.related_resources && rule.related_resources.length > 0"
                 >
                     <related-rule
-                        v-for="(related_doc, ii) in rule.related_docs"
-                        :key="ii + 'grouped' + related_doc.document_number"
-                        :title="ruleTitle(related_doc)"
-                        :type="type(related_doc)"
-                        :citation="citation(related_doc)"
-                        :publication_date="publication_date(related_doc)"
-                        :document_number="related_doc.document_number"
-                        :html_url="html_url(related_doc)"
-                        :action="related_doc.action"
+                        v-for="(related_resource, ii) in rule.related_resources"
+                        :key="ii + 'grouped' + related_resource.document_number"
+                        :title="ruleTitle(related_resource)"
+                        :type="type(related_resource)"
+                        :citation="citation(related_resource)"
+                        :publication_date="publication_date(related_resource)"
+                        :document_number="related_resource.document_number"
+                        :html_url="html_url(related_resource)"
+                        :action="related_resource.action"
                         grouped
                     />
                 </template>
@@ -171,10 +171,10 @@ export default {
             if (rule.correction) {
                 return "CORR";
             }
-            return rule.doc_type || rule.category?.name || rule.type;
+            return rule.action_type || rule.category?.name || rule.type;
         },
         citation(rule) {
-            return rule.citation || rule.name;
+            return rule.citation || rule.document_id;
         },
         html_url(rule) {
             return rule.html_url || rule.url;

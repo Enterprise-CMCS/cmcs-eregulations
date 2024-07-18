@@ -1,4 +1,5 @@
 const SEARCH_TERM = "FMAP";
+const SEARCH_TERM_2 = "almond";
 
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
@@ -92,10 +93,10 @@ describe("Search flow", () => {
 
     it("should go to the Subjects page with a selected subject when a subject chip is clicked", () => {
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
+            fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
-        cy.intercept("**/v3/file-manager/subjects", {
+        cy.intercept("**/v3/resources/subjects**", {
             fixture: "subjects.json",
         }).as("subjects");
 
@@ -109,12 +110,12 @@ describe("Search flow", () => {
 
         cy.get("input#main-content")
             .should("be.visible")
-            .type("test", { force: true });
+            .type(`${SEARCH_TERM_2}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
 
-        cy.get(`a[data-testid=add-subject-chip-3]`).click({
+        cy.get(`a[data-testid=add-subject-chip-3]`).first().click({
             force: true,
         });
 
@@ -213,7 +214,7 @@ describe("Search flow", () => {
         }).as("resourcesError");
 
         cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs.json",
+            fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
