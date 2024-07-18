@@ -39,7 +39,7 @@ const PARAM_MAP = {
     q: "q",
     page: "page",
     categories: "categories",
-    intcategories: "internal_categories",
+    intcategories: "categories",
 };
 
 /**
