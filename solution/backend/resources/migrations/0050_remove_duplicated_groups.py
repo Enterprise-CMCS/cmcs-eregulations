@@ -3,11 +3,15 @@
 from django.db import migrations
 
 
+TIMEOUT_MINUTES = 10
+
+
 def same(a, b):
     return a["common_identifiers"] == b["common_identifiers"] and a["name"] == b["name"]
 
 
 def remove_duplicated_groups(apps, schema_editor):
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
     ResourceGroup = apps.get_model("resources", "ResourceGroup")
     groups = list(ResourceGroup.objects.values("common_identifiers", "name", "pk"))
     keep = []
