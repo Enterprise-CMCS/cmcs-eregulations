@@ -150,10 +150,6 @@
         color: $primary_link_color;
         text-decoration: none;
         font-size: $font-size-sm;
-
-        &.supplemental-content-external-link {
-            display: flex;
-        }
     }
 
     .supplemental-content-external-link {
@@ -164,7 +160,7 @@
 }
 
 .internal-docs__container {
-    .supplemental-content-description > span {
+    .supplemental-content-description > span:has(.result__link--file-type) {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
