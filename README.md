@@ -126,8 +126,8 @@ In order to update your local data with the most recent version of production, y
    - `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
    - It is recommended that you put these backups in the `db_backup` folder at the root of the project; this folder is ignored by git.
 
-> [!NOTE]
-> pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
+   > [!NOTE]
+   > pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
 
 1. Next, run the script `./solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database. Log in to AWS and retrieve the necessary credentials.
 
