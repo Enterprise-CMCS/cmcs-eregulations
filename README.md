@@ -109,11 +109,7 @@ For admin site customizations, please use the icon set at [Boxicons](https://box
 
 ## Importing resource data
 
-To populate the created database with seed data for resources, run the command below in the solution directory.
-
-```
-make local.seed
-```
+See the [Exporting data from production](#exporting-data-from-production) section of the README below to get a copy of the data.
 
 ## Exporting data from production
 
@@ -121,7 +117,7 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
-You must also have postgres version 15. 
+1. You must have postgres version 15 locally on your machine with local postgres server turned off.
 
 1. Connect to the VPN. 
 
@@ -131,11 +127,18 @@ You must also have postgres version 15.
 
 (Note: pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
 
-3. Next, run the script `/solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database.
+3. Next, run the script `./solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database. Log in to AWS and retrieve the necessary credentials.
+
+   - to get these credentials, go to a lambda function
+   - click on the configuration tab
+   - click on the environment variables
+   - All of them should be there
 
 4. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
 
-5. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
+5. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
+   a. the local database name should be `localhost`
+   b. the local port should be `5432`
 
 6. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
 
