@@ -71,7 +71,10 @@ const showResultSnippet = (item) => {
     if (
         DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
             "Internal" &&
-        (item.content_headline || item.summary_headline || item.summary_string)
+        (item.content_headline ||
+            item.summary_headline ||
+            item.summary_string ||
+            item.summary)
     )
         return true;
 
@@ -101,6 +104,8 @@ const getResultSnippet = (item) => {
             snippet = addSurroundingEllipses(item.summary_headline);
         } else if (item.summary_string) {
             snippet = item.summary_string;
+        } else if (item.summary) {
+            snippet = item.summary;
         }
 
         return snippet;
