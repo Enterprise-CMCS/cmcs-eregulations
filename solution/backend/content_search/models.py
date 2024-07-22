@@ -124,8 +124,7 @@ def get_or_create_index(instance, created):
 
 @receiver(post_save, sender=PublicLink)
 @receiver(post_save, sender=FederalRegisterLink)
-@receiver(post_save, sender=InternalLink)
-def update_indexed_resource(sender, instance, created, **kwargs):
+def update_indexed_public_resource(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.document_id
     index.summary = instance.title
@@ -140,7 +139,7 @@ def update_indexed_resource(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=InternalFile)
-def update_indexed_file(sender, instance, created, **kwargs):
+def update_indexed_internal_file(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.title
     index.summary = instance.summary
@@ -150,6 +149,18 @@ def update_indexed_file(sender, instance, created, **kwargs):
         instance.date,
         instance.file_name,
     )
+    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+    index.save()
+
+
+@receiver(post_save, sender=InternalLink)
+def update_indexed_internal_link(sender, instance, created, **kwargs):
+    index = get_or_create_index(instance, created)
+    index.name = instance.title
+    index.summary = instance.summary
+    index.rank_a_string = instance.title
+    index.rank_b_string = instance.summary
+    index.rank_c_string = instance.date
     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
     index.save()
 
