@@ -125,7 +125,7 @@ In order to update your local data with the most recent version of production, y
 3. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
 
    - `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
-   - It is recommended that you put these backups in the `db_backup` folder at the root of the project; this folder is ignored by git.
+   - It is recommended that you put these backups in a folder that is hidden from `git`.  We suggest creating a folder in the root of the project named `db_backup` and dumping all of your backups into it.  This directory name is safe to use, as it has already been added to the project's `.gitignore`.
 
 > [!NOTE]
 > pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
