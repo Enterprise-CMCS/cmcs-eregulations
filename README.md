@@ -16,7 +16,7 @@ We have public documentation about our product, design, and research processes i
 -   git
 -   node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
 -   pre-commit hooks
--   postgresql v15
+-   PostgreSQL 15
 
 ### Set up Git pre-commit hooks
 
@@ -118,7 +118,7 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
-1. You must have `postgres` v15 installed locally on your machine. Local postgres server must be turned **off**.
+1. You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). Local PostgreSQL server must be turned **off**.
 
 2. Connect to the VPN. 
 
