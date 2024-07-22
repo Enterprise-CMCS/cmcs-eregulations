@@ -183,7 +183,6 @@ const getUrl = ({ type: resourceType, url, uid }) =>
         : url;
 
 const needsBar = (item) =>
-    DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] === "Public" &&
     getFieldVal({ item, fieldName: "date" }) &&
     getFieldVal({ item, fieldName: "document_id" });
 
@@ -358,12 +357,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :division="doc.division"
                 /-->
                 <span
-                    v-if="
-                        DOCUMENT_TYPES_MAP[
-                            getFieldVal({ item: doc, fieldName: 'type' })
-                        ] === 'Public' &&
-                        getFieldVal({ item: doc, fieldName: 'document_id' })
-                    "
+                    v-if="getFieldVal({ item: doc, fieldName: 'document_id' })"
                     >{{
                         getFieldVal({ item: doc, fieldName: "document_id" })
                     }}</span
