@@ -121,7 +121,7 @@ In order to update your local data with the most recent version of production, y
 
 1. Connect to the VPN. 
 
-2. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
+2. Create a backup of the database you intend to restore using pg_dump. (It is recommended that you put these backups in the `db_backup` folder at the root of the project; this folder is ignored by git.) Execute the following command:
 
 `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
 
