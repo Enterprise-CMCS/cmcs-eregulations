@@ -156,7 +156,6 @@ jobs:
           pushd solution/backend
           npm install serverless@">=3.38.0 <4" -g
           npm install
-          serverless deploy --config ./serverless-maintenance.yml --stage maintenance${PR} | tee output.log
           serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
           serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
           serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
