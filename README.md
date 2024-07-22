@@ -16,6 +16,7 @@ We have public documentation about our product, design, and research processes i
 -   git
 -   node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
 -   pre-commit hooks
+-   PostgreSQL 15
 
 ### Set up Git pre-commit hooks
 
@@ -109,11 +110,7 @@ For admin site customizations, please use the icon set at [Boxicons](https://box
 
 ## Importing resource data
 
-To populate the created database with seed data for resources, run the command below in the solution directory.
-
-```
-make local.seed
-```
+See the [Exporting data from production](#exporting-data-from-production) section of the README below to get a copy of the data.
 
 ## Exporting data from production
 
@@ -121,27 +118,43 @@ If the data seems out of sync with production, you may want to get a more recent
 
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
-You must also have postgres version 15. 
+1. You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). Local PostgreSQL server must be turned **off**.
 
-1. Connect to the VPN. 
+2. Connect to the VPN. 
 
-2. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
+3. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
 
-`pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
+   - `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
+   - It is recommended that you put these backups in a folder that is hidden from `git`.  We suggest creating a folder in the root of the project named `db_backup` and dumping all of your backups into it.  This directory name is safe to use, as it has already been added to the project's `.gitignore`.
 
-(Note: pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
+> [!NOTE]
+> pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
 
-3. Next, run the script `/solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database.
+4. Next, run the script `./solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database. Log in to AWS and retrieve the necessary credentials.
 
-4. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
+   - These parameters are available in AWS Parameter Store.
+   - However, an easier way to get these credentials is:
+      - Go to a Lamba Function
+      - Click on the "Configuration" tab
+      - Click on "Environment variables"
+      - All required information should be displayed
 
-5. With the backup file ready, proceed to restore the database by running the script `/solution/backend/scripts/restore_db.sh`.
+5. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
 
-6. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+   - The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
 
-7. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
-8. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
-a. Visit the local website and ensure that the data has been copied. 
+6. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
+
+   - local database name: `localhost`
+   - local port: `5432`
+
+7. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+
+8. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+
+9. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
+
+   - Visit the local website and ensure that the data has been copied. 
 
 
 ### Adding a new model
