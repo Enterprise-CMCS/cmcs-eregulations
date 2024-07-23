@@ -5,7 +5,7 @@
     "private": true,
     "dependencies": {
         "serverless-python-requirements": "^6.1.0",
-        "serverless-s3-sync": "^1.17.3",
+        "serverless-s3-sync": "^3.3.0",
         "aws-sdk": "^2.224.1",
         "chalk": "^2.3.1",
         "proxy-agent": "^6.4.0",
