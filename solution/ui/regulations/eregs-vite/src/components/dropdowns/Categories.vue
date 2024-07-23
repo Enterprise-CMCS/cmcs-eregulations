@@ -18,7 +18,7 @@ const catTypeDict = {
     intcategories: "internal",
 };
 
-defineProps({
+const props = defineProps({
     list: {
         type: Array,
         required: true,
@@ -42,19 +42,16 @@ const selectedId = defineModel("id");
 const silentReset = ref(false);
 
 onBeforeMount(() => {
-    const { categories, intcategories } = $route.query;
+    const { categories } = $route.query;
 
     if (categories) {
         silentReset.value = true;
-        selectedId.value = `${categories}-categories`;
-    } else if (intcategories) {
-        silentReset.value = true;
-        selectedId.value = `${intcategories}-intcategories`;
+        selectedId.value = parseInt(categories, 10);
     }
 });
 
 const itemProps = (item) => ({
-    value: `${item.id}-${item.categoryType}`,
+    value: item.id,
     title: item.name,
 });
 
@@ -62,15 +59,11 @@ watch(
     () => selectedId.value,
     (newValue) => {
         const categoriesObj = {};
-        const docTypeObj = {};
+
+        console.log("categories list", props.list);
 
         if (newValue) {
-            const [id, categoryType] = newValue.split("-");
-            categoriesObj[categoryType] = id;
-
-            if (isAuthenticated) {
-                docTypeObj.type = catTypeDict[categoryType];
-            }
+            categoriesObj["categories"] = newValue;
         }
 
         if (silentReset.value) {
@@ -90,7 +83,6 @@ watch(
             query: {
                 ...cleanedRoute,
                 ...categoriesObj,
-                ...docTypeObj,
             },
         });
     }
@@ -99,30 +91,13 @@ watch(
 watch(
     () => $route.query,
     (newQueryParams, oldQueryParams) => {
-        const {
-            categories: newCategories,
-            intcategories: newIntcategories,
-        } = newQueryParams;
-        const {
-            categories: oldCategories,
-            intcategories: oldIntcategories,
-        } = oldQueryParams;
-
-        if (
-            (oldCategories && newIntcategories) ||
-            (oldIntcategories && newCategories)
-        ) {
-            return;
-        }
+        const { categories: newCategories } = newQueryParams;
+        const { categories: oldCategories } = oldQueryParams;
 
         // Other components are already scrubbing categories from route;
         // Silently reset selectedId so that route change doesn't trigger
         // a route update and a subsequent re-fetch of content-search
-        if (
-            (_isUndefined(newCategories) && newCategories !== oldCategories) ||
-            (_isUndefined(newIntcategories) &&
-                newIntcategories !== oldIntcategories)
-        ) {
+        if (_isUndefined(newCategories) && newCategories !== oldCategories) {
             silentReset.value = true;
             selectedId.value = undefined;
         }
@@ -133,24 +108,15 @@ watch(
 const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
 
-    const isIntcategories = currentPopState.includes("intcategories");
-    const isCategories =
-        !isIntcategories && currentPopState.includes("categories");
+    const isCategories = currentPopState.includes("categories");
 
     silentReset.value = true;
 
-    if (isIntcategories) {
-        // use regex to find a number of any length in a string that has the following pattern:
-        // subjects?subjects=2&intcategories=3
-        const intcategories = currentPopState.match(
-            /(?<=intcategories=)\d+/
-        )[0];
-        selectedId.value = `${intcategories}-intcategories`;
-    } else if (isCategories) {
+    if (isCategories) {
         // use regex to find a number of any length in a string that has the following pattern:
         // subjects?subjects=2&categories=3
         const categories = currentPopState.match(/(?<=categories=)\d+/)[0];
-        selectedId.value = `${categories}-categories`;
+        selectedId.value = parseInt(categories, 10);
     }
 };
 

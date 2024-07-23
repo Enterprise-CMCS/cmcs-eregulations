@@ -115,7 +115,7 @@ provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
 
 // provide router query params to remove on child component change
-const commonRemoveList = ["page", "categories", "intcategories"];
+const commonRemoveList = ["page", "categories"];
 const policySelectionsRemoveList = ["subjects"];
 const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
