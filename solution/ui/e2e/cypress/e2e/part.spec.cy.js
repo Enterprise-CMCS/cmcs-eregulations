@@ -127,6 +127,13 @@ describe("Part View", () => {
                 .first()
                 .find(".supplemental-content-description")
                 .contains("[Mock] Internal PDF");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+            )
+                .eq(1)
+                .find(".supplemental-content-description")
+                .should("have.class", "supplemental-content-external-link")
+                .and("include.text", "[Mock] Test 1 -- internal link");
             cy.get(".internal-docs__container div[data-test=TestSubCat]")
                 .find(".show-more-button")
                 .contains("+ Show More (6)")
@@ -141,12 +148,9 @@ describe("Part View", () => {
         cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
-        cy.intercept(
-            "**/v3/resources/internal&citations=42.433.A**",
-            {
-                fixture: "42.433.A.internal.json",
-            }
-        ).as("internal433A");
+        cy.intercept("**/v3/resources/internal&citations=42.433.A**", {
+            fixture: "42.433.A.internal.json",
+        }).as("internal433A");
 
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
@@ -179,10 +183,7 @@ describe("Part View", () => {
             "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
         )
             .and("be.visible")
-            .and(
-                "contain.text",
-                "Mock title"
-            );
+            .and("contain.text", "Mock title");
     });
 
     it("loads a subpart view in a mobile width", () => {

@@ -230,14 +230,14 @@ describe("Find by Subjects", () => {
             .and("have.text", " Search Results ");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 results for mock within Access to Services"
+            "1 - 3 of 3 results for mock within Access to Services"
         );
         cy.get(`button[data-testid=remove-subject-3]`).click({
             force: true,
         });
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 2 of 2 results for mock"
+            "1 - 3 of 3 results for mock"
         );
     });
 
@@ -320,7 +320,7 @@ describe("Find by Subjects", () => {
             .should("have.attr", "href")
             .and("not.include", "undefined")
             .and("include", "/42/430/Subpart-A/");
-        cy.get(".result__link")
+        cy.get(".result__link") // internal_file
             .eq(0)
             .should("include.text", "Download")
             .find("a")
@@ -329,8 +329,13 @@ describe("Find by Subjects", () => {
                 "span[data-testid=download-chip-1149e520-6691-4f00-9094-d741b0b114a5]"
             )
             .should("include.text", "Download MSG");
-        cy.get(".result__link")
+        cy.get(".result__link") // public_link
             .eq(1)
+            .find("a")
+            .should("not.include.text", "Download")
+            .and("have.class", "external");
+        cy.get(".result__link") // internal_link
+            .eq(2)
             .find("a")
             .should("not.include.text", "Download")
             .and("have.class", "external");
