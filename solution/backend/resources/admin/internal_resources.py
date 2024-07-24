@@ -110,12 +110,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
 
     def del_file(self, obj):
         s3_client = establish_client("s3")
-        key = obj.get_key()
-
-        try:
-            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
-        except Exception:
-            raise Exception("Unable to delete")
+        s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=obj.key)
 
     def delete_model(self, request, obj):
         try:
