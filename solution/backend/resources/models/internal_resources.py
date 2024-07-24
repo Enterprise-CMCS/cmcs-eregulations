@@ -10,6 +10,10 @@ class InternalLink(AbstractInternalResource):
     def __str__(self):
         return f"{self.document_id} {self.summary[:50]}"
 
+    class Meta:
+        verbose_name = "Internal Link"
+        verbose_name_plural = "Internal Links"
+
 
 class InternalFile(AbstractInternalResource):
     file_name = models.CharField(max_length=512, blank=True, editable=False)
@@ -30,3 +34,7 @@ class InternalFile(AbstractInternalResource):
 
     def __str__(self):
         return f"{self.document_id} {self.summary[:50]}"
+
+    class Meta:
+        verbose_name = "Internal File"
+        verbose_name_plural = "Internal Files"
