@@ -16,6 +16,7 @@ class AbstractCitationAdmin(AbstractAdmin):
 
 @admin.register(Section)
 class SectionAdmin(AbstractCitationAdmin):
+    admin_priority = 9990
     list_display = ["title", "part", "section_id", "parent"]
     search_fields = ["title", "part", "section_id", "parent__subpart_id"]
     ordering = ["title", "part", "section_id", "parent"]
@@ -34,6 +35,7 @@ class SectionAdmin(AbstractCitationAdmin):
 
 @admin.register(Subpart)
 class SubpartAdmin(AbstractCitationAdmin):
+    admin_priority = 9991
     list_display = ["title", "part", "subpart_id"]
     search_fields = ["title", "part", "subpart_id"]
     ordering = ["title", "part", "subpart_id"]

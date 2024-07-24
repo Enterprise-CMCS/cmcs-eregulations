@@ -23,6 +23,7 @@ class InternalLinkForm(AbstractInternalResourceForm):
 
 @admin.register(InternalLink)
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
+    admin_priority = 20
     form = InternalLinkForm
     list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
@@ -60,6 +61,7 @@ class InternalFileForm(AbstractInternalResourceForm):
 
 @admin.register(InternalFile)
 class InternalFileAdmin(AbstractInternalResourceAdmin):
+    admin_priority = 21
     form = InternalFileForm
     list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
@@ -110,12 +112,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
 
     def del_file(self, obj):
         s3_client = establish_client("s3")
-        key = obj.get_key()
-
-        try:
-            s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=key)
-        except Exception:
-            raise Exception("Unable to delete")
+        s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=obj.key)
 
     def delete_model(self, request, obj):
         try:

@@ -130,7 +130,7 @@
             "uid": "34299796-e8ed-4f3e-87ab-64f852ae7a7c"
         },
         {
-            "type": "internal_file",
+            "type": "internal_link",
             "id": 2010,
             "created_at": "2024-06-27 14:01:03.218783",
             "updated_at": "2024-06-27 14:01:24.805811",
@@ -155,13 +155,10 @@
             ],
             "subjects": [],
             "document_id": "",
-            "title": "[Mock] Test file 1",
+            "title": "[Mock] Test 1 -- internal link",
             "date": "2024-01-01",
-            "url": "",
-            "summary": "",
-            "file_name": "",
-            "file_type": "",
-            "uid": "263565ff-2758-41b6-9fcb-3c82d59cb989"
+            "url": "http://www.sharepoint.com",
+            "summary": ""
         },
         {
             "type": "internal_file",
