@@ -27,7 +27,7 @@ def populate_config(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0001_to_0051_squashed'),
+        ('resources', '0001_to_0052_squashed'),
     ]
 
     operations = [

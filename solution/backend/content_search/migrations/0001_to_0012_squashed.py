@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('regcore', '0014_auto_20230322_2234'),
-        ('resources', '0001_to_0051_squashed'),
+        ('resources', '0001_to_0052_squashed'),
     ]
 
     operations = [
