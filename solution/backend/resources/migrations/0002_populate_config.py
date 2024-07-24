@@ -14,10 +14,10 @@ def populate_config(apps, schema_editor):
 
     if not config.fr_link_category:
         try:
-            category = PublicCategory.objects.get(name__in=["Federal Register Docs", "Federal Register Links"])
+            category = PublicCategory.objects.filter(name__in=["Federal Register Docs", "Federal Register Links"]).first()
         except PublicCategory.DoesNotExist:
             try:
-                category = PublicSubCategory.objects.get(name__in=["Federal Register Docs", "Federal Register Links"])
+                category = PublicSubCategory.objects.filter(name__in=["Federal Register Docs", "Federal Register Links"]).first()
             except PublicSubCategory.DoesNotExist:
                 category = PublicCategory.objects.create(name="Federal Register Links")
         config.fr_link_category = category
