@@ -23,6 +23,7 @@ class InternalLinkForm(AbstractInternalResourceForm):
 
 @admin.register(InternalLink)
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
+    admin_priority = 20
     form = InternalLinkForm
     list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
@@ -60,6 +61,7 @@ class InternalFileForm(AbstractInternalResourceForm):
 
 @admin.register(InternalFile)
 class InternalFileAdmin(AbstractInternalResourceAdmin):
+    admin_priority = 21
     form = InternalFileForm
     list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]

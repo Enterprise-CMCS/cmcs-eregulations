@@ -20,6 +20,7 @@ class PublicLinkForm(AbstractPublicResourceForm):
 
 @admin.register(PublicLink)
 class PublicLinkAdmin(AbstractPublicResourceAdmin):
+    admin_priority = 10
     form = PublicLinkForm
     list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
@@ -69,6 +70,7 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
 
 @admin.register(FederalRegisterLink)
 class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
+    admin_priority = 11
     form = FederalRegisterLinkForm
     list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
                     "category", "action_type", "updated_at", "approved"]

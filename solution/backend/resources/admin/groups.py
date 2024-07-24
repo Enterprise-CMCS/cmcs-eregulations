@@ -10,6 +10,7 @@ from resources.models import (
 
 @admin.register(ResourceGroup)
 class ResourceGroupAdmin(AbstractAdmin):
+    admin_priority = 50
     list_display = ["name", "common_identifiers", "number_of_resources"]
     list_display_links = ["name", "common_identifiers", "number_of_resources"]
     search_fields = ["name", "common_identifiers"]
