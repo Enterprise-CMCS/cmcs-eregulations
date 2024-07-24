@@ -1,13 +1,45 @@
 #!/bin/bash
 # This script will dump the given database data to a file.
 # Prompt for user input
-read -p "Enter the database user: " DB_USER
-read -p "Enter the database host: " DB_HOST
-read -p "Enter the database port: " DB_PORT
-read -p "Enter the database name: " DB_NAME
-read -sp "Enter the database password: " DB_PASSWORD
+
+read -p "Enter the environment you wish you backup (dev/val/prod): " ENV
+
+if [ "$ENV" == "dev" ]; then
+  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-dev-reg_site"
+elif [ "$ENV" == "val" ]; then
+  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-val-reg_site"
+elif [ "$ENV" == "prod" ]; then
+  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-prod-reg_site"
+else
+  echo "Invalid environment. Exiting..."
+  exit 1
+fi
+
+
+# Get the environment variables from the Lambda function
+data=$(aws lambda get-function-configuration --function-name $LAMBDA_FUNCTION_NAME --query 'Environment.Variables.{DB_HOST:DB_HOST,DB_PORT:DB_PORT,DB_NAME:DB_NAME,DB_USER:DB_USER,DB_PASSWORD:DB_PASSWORD}' --output json)
+
+# Parse the JSON data
+DB_HOST=$(echo $data | jq -r '.DB_HOST')
+DB_PORT=$(echo $data | jq -r '.DB_PORT')
+DB_NAME=$(echo $data | jq -r '.DB_NAME')
+DB_USER=$(echo $data | jq -r '.DB_USER')
+DB_PASSWORD=$(echo $data | jq -r '.DB_PASSWORD')
+
+# Validate if the environment variables were parsed correctly
+if [ -z "$DB_HOST" ] || [ -z "$DB_PORT" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then
+  echo "Failed to retrieve necessary environment variables. Exiting..."
+  exit 1
+fi
 
 CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
 BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
 
+# Dump the database
 PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME
+
+if [ $? -eq 0 ]; then
+  echo "Backup successful! File saved as $BACKUP_FILENAME"
+else
+  echo "Backup failed!"
+fi

@@ -128,36 +128,29 @@ In order to update your local data with the most recent version of production, y
    - It is recommended that you put these backups in a folder that is hidden from `git`.  We suggest creating a folder in the root of the project named `db_backup` and dumping all of your backups into it.  This directory name is safe to use, as it has already been added to the project's `.gitignore`.
 
 > [!NOTE]
-> pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
-
-4. Next, run the script `./solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database. Log in to AWS and retrieve the necessary credentials.
-
-   - These parameters are available in AWS Parameter Store.
-   - However, an easier way to get these credentials is:
-      - Go to a Lamba Function
-      - Click on the "Configuration" tab
-      - Click on "Environment variables"
-      - All required information should be displayed
-
-5. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
+> restore_db.sh also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
+4. Sign in to the Cloudtamer CMS portal (cloudtamer.cms.gov) to retrieve your short-term access keys.
+5. Paste the access keys into your terminal. This will enable you to use AWS CLI commands.
+6. Run the script by executing ./solution/backend/scripts/backup_db.sh from your terminal.
+7. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
 
    - The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
 
-6. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
+8. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
 
    - local database name: `localhost`
    - local port: `5432`
 
-7. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+9. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
 
-8. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+10. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
 
-9. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
+11. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
 
    - Visit the local website and ensure that the data has been copied. 
 
 
-### Adding a new model
+## Adding a new model
 
 If adding a new model, update the following files:
 
