@@ -28,7 +28,9 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
 
     def __str__(self):
         name = getattr(self, "name", f"Category {self.pk}")
-        return f"{name} ({self._meta.verbose_name})"
+        option_string = f"{name} ({self._meta.verbose_name})"
+        indent = "Subcategory" in self._meta.verbose_name
+        return f"{'⠀⠀' if indent else ''}{option_string}"
 
 
 class AbstractPublicCategory(AbstractCategory):
