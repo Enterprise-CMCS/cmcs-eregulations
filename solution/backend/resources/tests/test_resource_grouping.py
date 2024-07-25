@@ -41,6 +41,9 @@ def distinct_array_agg(field):
 
 class TestResourceGrouping(TestCase):
     def setUp(self):
+        # As part of initial migrations, an FR Link category is created which will
+        # cause duplicate key errors if the following line is not run.
+        PublicCategory.objects.all().delete()
         groups = [ResourceGroup.objects.create(id=i) for i in range(3)]
         categories = [PublicCategory.objects.create(id=i, name=f"{i}") for i in range(6)]
         subjects = [Subject.objects.create(id=i) for i in range(6)]
