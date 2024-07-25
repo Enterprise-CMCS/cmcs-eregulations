@@ -71,7 +71,10 @@ const showResultSnippet = (item) => {
     if (
         DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
             "Internal" &&
-        (item.content_headline || item.summary_headline || item.summary_string)
+        (item.content_headline ||
+            item.summary_headline ||
+            item.summary_string ||
+            item.summary)
     )
         return true;
 
@@ -101,6 +104,8 @@ const getResultSnippet = (item) => {
             snippet = addSurroundingEllipses(item.summary_headline);
         } else if (item.summary_string) {
             snippet = item.summary_string;
+        } else if (item.summary) {
+            snippet = item.summary;
         }
 
         return snippet;
@@ -183,7 +188,6 @@ const getUrl = ({ type: resourceType, url, uid }) =>
         : url;
 
 const needsBar = (item) =>
-    DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] === "Public" &&
     getFieldVal({ item, fieldName: "date" }) &&
     getFieldVal({ item, fieldName: "document_id" });
 
@@ -358,12 +362,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :division="doc.division"
                 /-->
                 <span
-                    v-if="
-                        DOCUMENT_TYPES_MAP[
-                            getFieldVal({ item: doc, fieldName: 'type' })
-                        ] === 'Public' &&
-                        getFieldVal({ item: doc, fieldName: 'document_id' })
-                    "
+                    v-if="getFieldVal({ item: doc, fieldName: 'document_id' })"
                     >{{
                         getFieldVal({ item: doc, fieldName: "document_id" })
                     }}</span
