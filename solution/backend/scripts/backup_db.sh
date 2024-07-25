@@ -17,14 +17,15 @@ fi
 
 
 # Get the environment variables from the Lambda function
-data=$(aws lambda get-function-configuration --function-name $LAMBDA_FUNCTION_NAME --query 'Environment.Variables.{DB_HOST:DB_HOST,DB_PORT:DB_PORT,DB_NAME:DB_NAME,DB_USER:DB_USER,DB_PASSWORD:DB_PASSWORD}' --output json)
+data=$(aws lambda get-function-configuration --function-name $LAMBDA_FUNCTION_NAME --query 'Environment.Variables.{DB_HOST:DB_HOST,DB_PORT:DB_PORT,DB_NAME:DB_NAME,DB_USER:DB_USER,DB_PASSWORD:DB_PASSWORD}' --output text)
 
-# Parse the JSON data
-DB_HOST=$(echo $data | jq -r '.DB_HOST')
-DB_PORT=$(echo $data | jq -r '.DB_PORT')
-DB_NAME=$(echo $data | jq -r '.DB_NAME')
-DB_USER=$(echo $data | jq -r '.DB_USER')
-DB_PASSWORD=$(echo $data | jq -r '.DB_PASSWORD')
+data_array=($data)
+
+DB_HOST=${data_array[0]}
+DB_NAME=${data_array[1]}
+DB_PASSWORD=${data_array[2]}
+DB_PORT=${data_array[3]}
+DB_USER=${data_array[4]}
 
 # Validate if the environment variables were parsed correctly
 if [ -z "$DB_HOST" ] || [ -z "$DB_PORT" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then
@@ -35,6 +36,7 @@ fi
 CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
 BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
 
+echo "Backing up database $DB_NAME on $DB_HOST to $BACKUP_FILENAME now..."
 # Dump the database
 PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME
 
