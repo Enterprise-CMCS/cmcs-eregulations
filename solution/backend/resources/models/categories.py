@@ -8,10 +8,13 @@ from common.mixins import DisplayNameFieldMixin
 
 class AbstractCategoryManager(InheritanceManager):
     def get_queryset(self):
-        return super().get_queryset().annotate(
-            is_fr_link_category=models.ExpressionWrapper(
-                ~models.Q(fr_link_category_config=None),
-                output_field=models.BooleanField()
+        return (
+            super()
+            .get_queryset()
+            .annotate(
+                is_fr_link_category=models.ExpressionWrapper(
+                    ~models.Q(fr_link_category_config=None), output_field=models.BooleanField()
+                )
             )
         )
 
