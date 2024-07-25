@@ -16,7 +16,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@cmsgov/design-system": "^2.5.0",
+    "@cmsgov/design-system": "^10.1.2",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@vitejs/plugin-vue": "^4.6.2",
     "@vue/test-utils": "^2.4.6",
