@@ -8,13 +8,10 @@ from common.mixins import DisplayNameFieldMixin
 
 class AbstractCategoryManager(InheritanceManager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .annotate(
-                is_fr_link_category=models.ExpressionWrapper(
-                    ~models.Q(fr_link_category_config=None), output_field=models.BooleanField()
-                )
+        return super().get_queryset().annotate(
+            is_fr_link_category=models.ExpressionWrapper(
+                ~models.Q(fr_link_category_config=None),
+                output_field=models.BooleanField()
             )
         )
 
@@ -28,9 +25,7 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
 
     def __str__(self):
         name = getattr(self, "name", f"Category {self.pk}")
-        option_string = f"{name} ({self._meta.verbose_name})"
-        indent = "Subcategory" in self._meta.verbose_name
-        return f"{'⠀⠀' if indent else ''}{option_string}"
+        return f"{name} ({self._meta.verbose_name})"
 
 
 class AbstractPublicCategory(AbstractCategory):
