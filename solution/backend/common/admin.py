@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.db import models
 from django.forms import ModelChoiceField
+from django.utils.safestring import mark_safe
 
 
 class CustomCategoryChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return f"⠀⠀{obj.name}" if "Subcategory" in obj._meta.verbose_name else obj.name
+        return mark_safe(f"&nbsp;&nbsp;&nbsp;&nbsp;{obj.name}") if "Subcategory" in obj._meta.verbose_name else obj.name
 
 
 class AbstractAdmin(admin.ModelAdmin):
