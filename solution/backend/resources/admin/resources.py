@@ -14,6 +14,7 @@ from resources.models import (
 )
 
 from . import actions
+from .widgets import CustomCategoryChoiceField
 
 # Abstract resource admin classes.
 # Make changes that apply to all resource admin pages, or public or internal pages here.
@@ -67,8 +68,14 @@ class AbstractResourceForm(forms.ModelForm):
 
 
 class AbstractPublicResourceForm(AbstractResourceForm):
-    pass
+    category = CustomCategoryChoiceField(
+        queryset=AbstractPublicCategory.objects.all().select_subclasses(),
+        required=False,
+    )
 
 
 class AbstractInternalResourceForm(AbstractResourceForm):
-    pass
+    category = CustomCategoryChoiceField(
+        queryset=AbstractInternalCategory.objects.all().select_subclasses(),
+        required=False,
+    )
