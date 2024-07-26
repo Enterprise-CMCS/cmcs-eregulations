@@ -38,7 +38,7 @@ class AbstractPublicCategory(AbstractCategory):
 class PublicCategory(AbstractPublicCategory):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if PublicCategory.objects.filter(name=self.name).exclude(pk=self.pk):
+        if PublicCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
             raise ValidationError(f"Public Category \"{str(self)}\" already exists.")
 
     class Meta:
@@ -50,7 +50,7 @@ class PublicCategory(AbstractPublicCategory):
 class PublicSubCategory(AbstractPublicCategory):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if PublicSubCategory.objects.filter(name=self.name).exclude(pk=self.pk):
+        if PublicSubCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
             raise ValidationError(f"Public SubCategory \"{str(self)}\" already exists.")
 
     class Meta:
@@ -66,7 +66,7 @@ class AbstractInternalCategory(AbstractCategory):
 class InternalCategory(AbstractInternalCategory):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if InternalCategory.objects.filter(name=self.name).exclude(pk=self.pk):
+        if InternalCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
             raise ValidationError(f"Internal Category \"{str(self)}\" already exists.")
 
     class Meta:
@@ -78,7 +78,7 @@ class InternalCategory(AbstractInternalCategory):
 class InternalSubCategory(AbstractInternalCategory):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
-        if InternalSubCategory.objects.filter(name=self.name).exclude(pk=self.pk):
+        if InternalSubCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
             raise ValidationError(f"Internal SubCategory \"{str(self)}\" already exists.")
 
     class Meta:
