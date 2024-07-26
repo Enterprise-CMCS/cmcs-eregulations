@@ -119,45 +119,37 @@ If the data seems out of sync with production, you may want to get a more recent
 In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
 
 1. You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). Local PostgreSQL server must be turned **off**.
-
-2. Connect to the VPN. 
-
-3. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
+2. Ensure you have [AWS CLI](#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed locally on your machine.
+3. Connect to the VPN. 
+4. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
 
    - `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
    - It is recommended that you put these backups in a folder that is hidden from `git`.  We suggest creating a folder in the root of the project named `db_backup` and dumping all of your backups into it.  This directory name is safe to use, as it has already been added to the project's `.gitignore`.
 
 > [!NOTE]
-> pg_restore also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
-
-4. Next, run the script `./solution/backend/scripts/backup_db.sh`. You'll be prompted to provide the credentials for the production database. Log in to AWS and retrieve the necessary credentials.
-
-   - These parameters are available in AWS Parameter Store.
-   - However, an easier way to get these credentials is:
-      - Go to a Lamba Function
-      - Click on the "Configuration" tab
-      - Click on "Environment variables"
-      - All required information should be displayed
-
-5. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
+> restore_db.sh also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
+5. Sign in to the Cloudtamer CMS portal (cloudtamer.cms.gov) to retrieve your short-term access keys.
+6. Paste the access keys into your terminal. This will enable you to use AWS CLI commands.
+7. Run the script by executing ./solution/backend/scripts/backup_db.sh from your terminal.
+8. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
 
    - The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
 
-6. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
+9. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
 
    - local database name: `localhost`
    - local port: `5432`
 
-7. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+10. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
 
-8. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+11. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
 
-9. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
+12. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
 
    - Visit the local website and ensure that the data has been copied. 
 
 
-### Adding a new model
+## Adding a new model
 
 If adding a new model, update the following files:
 
