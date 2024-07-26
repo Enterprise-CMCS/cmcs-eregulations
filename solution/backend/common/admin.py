@@ -5,10 +5,7 @@ from django.forms import ModelChoiceField
 
 class CustomCategoryChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        needs_indent = "Subcategory" in obj._meta.verbose_name
-        name_string = f"{obj.name} ({obj._meta.verbose_name})"
-
-        return f"⠀⠀{name_string}" if needs_indent else name_string
+        return f"⠀⠀{obj.name}" if "Subcategory" in obj._meta.verbose_name else obj.name
 
 
 class AbstractAdmin(admin.ModelAdmin):
