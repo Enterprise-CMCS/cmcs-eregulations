@@ -30,6 +30,12 @@ functions:
           arn: !GetAtt TextExtractorQueue.Arn
 
 resources:
+  Outputs:
+    TextExtractorQueueArn:
+      Value: !GetAtt TextExtractorQueue.Arn
+    TextExtractorQueueUrl:
+      Value: !GetAtt TextExtractorQueue.QueueUrl
+      
   Resources:
     TextExtractorQueue:
       Type: AWS::SQS::Queue
