@@ -61,6 +61,16 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: QueuePolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - sqs:ReceiveMessage
+                    - sqs:DeleteMessage
+                    - sqs:GetQueueAttributes
+                  Resource: !GetAtt TextExtractorQueue.Arn
           - PolicyName: TextDetectionPolicy
             PolicyDocument:
               Version: '2012-10-17'
