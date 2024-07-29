@@ -58,6 +58,8 @@ provider:
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
     TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
+    TEXT_EXTRACTOR_QUEUE_ARN: ${self:custom.settings.text_extractor_queue_arn}
+    TEXT_EXTRACTOR_QUEUE_URL: ${self:custom.settings.text_extractor_queue_url}
   tracing:
     apiGateway: true
   vpc:
@@ -85,6 +87,8 @@ custom:
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
+    text_extractor_queue_arn: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueArn}
+    text_extractor_queue_url: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueUrl}
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
