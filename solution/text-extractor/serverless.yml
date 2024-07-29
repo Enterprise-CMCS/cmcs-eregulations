@@ -24,9 +24,20 @@ functions:
     image:
       name: appimage
     timeout: 900
+    reservedConcurrency: 10
+    events:
+      - sqs:
+          arn: !GetAtt TextExtractorQueue.Arn
 
 resources:
   Resources:
+    TextExtractorQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.stage}-text-extractor-queue
+        DelaySeconds: 0
+        MessageRetentionPeriod: 345600 # 4 days
+        VisibilityTimeout: 30
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:

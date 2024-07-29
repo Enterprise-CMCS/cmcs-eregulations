@@ -59,8 +59,8 @@ provider:
     TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
     # This text extractor is the "main dev" extractor.  Used if one is not created in experimental.
     TEXTRACT_ARN: ${ssm:/eregulations/textextractor-arn}
-    TEXT_EXTRACTOR_QUEUE_ARN: ${self:custom.settings.text_extractor_queue_arn}
-    TEXT_EXTRACTOR_QUEUE_URL: ${self:custom.settings.text_extractor_queue_url}
+    # TEXT_EXTRACTOR_QUEUE_ARN: ${self:custom.settings.text_extractor_queue_arn}
+    # TEXT_EXTRACTOR_QUEUE_URL: ${self:custom.settings.text_extractor_queue_url}
   vpc:
     securityGroupIds:
       - ${ssm:/eregulations/aws/securitygroupid}
@@ -94,8 +94,8 @@ custom:
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
-    text_extractor_queue_arn: !GetAtt TextExtractorQueue.Arn
-    text_extractor_queue_url: !GetAtt TextExtractorQueue.QueueUrl
+    # text_extractor_queue_arn: !GetAtt TextExtractorQueue.Arn
+    # text_extractor_queue_url: !GetAtt TextExtractorQueue.QueueUrl
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
@@ -103,13 +103,6 @@ functions: ${file(serverless_functions/${self:custom.environment}_functions.yml)
 
 resources:
   Resources:
-    TextExtractorQueue:
-      Type: "AWS::SQS::Queue"
-      Properties:
-        QueueName: ${opt:stage, self:provider.stage}-text-extractor-queue
-        DelaySeconds: 0
-        MessageRetentionPeriod: 345600 # 4 days
-        VisibilityTimeout: 30
     GatewayResponse:
       Type: 'AWS::ApiGateway::GatewayResponse'
       Properties:
