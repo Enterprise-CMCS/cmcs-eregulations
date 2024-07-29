@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.managers import (
     InheritanceManager,
@@ -17,6 +18,8 @@ class AbstractCategoryManager(InheritanceManager):
 
 
 class AbstractCategory(models.Model, DisplayNameFieldMixin):
+    name = models.CharField(max_length=512)
+    parent = models.ForeignKey("self", on_delete=models.CASCADE, related_name="subcategories", null=True, blank=True)
     description = models.TextField(blank=True)
     order = models.IntegerField(default=0, blank=True)
     show_if_empty = models.BooleanField(default=False)
@@ -33,7 +36,10 @@ class AbstractPublicCategory(AbstractCategory):
 
 
 class PublicCategory(AbstractPublicCategory):
-    name = models.CharField(max_length=512, unique=True)
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if PublicCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
+            raise ValidationError(f"Public Category \"{str(self)}\" already exists.")
 
     class Meta:
         ordering = ["order", "name"]
@@ -42,8 +48,10 @@ class PublicCategory(AbstractPublicCategory):
 
 
 class PublicSubCategory(AbstractPublicCategory):
-    name = models.CharField(max_length=512, unique=True)
-    parent = models.ForeignKey(PublicCategory, on_delete=models.CASCADE, related_name="subcategories")
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if PublicSubCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
+            raise ValidationError(f"Public SubCategory \"{str(self)}\" already exists.")
 
     class Meta:
         ordering = ["order", "name"]
@@ -56,7 +64,10 @@ class AbstractInternalCategory(AbstractCategory):
 
 
 class InternalCategory(AbstractInternalCategory):
-    name = models.CharField(max_length=512, unique=True)
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if InternalCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
+            raise ValidationError(f"Internal Category \"{str(self)}\" already exists.")
 
     class Meta:
         ordering = ["order", "name"]
@@ -65,8 +76,10 @@ class InternalCategory(AbstractInternalCategory):
 
 
 class InternalSubCategory(AbstractInternalCategory):
-    name = models.CharField(max_length=512, unique=True)
-    parent = models.ForeignKey(InternalCategory, on_delete=models.CASCADE, related_name="subcategories")
+    def validate_unique(self, exclude=None):
+        super().validate_unique(exclude=exclude)
+        if InternalSubCategory.objects.filter(name__iexact=self.name).exclude(pk=self.pk):
+            raise ValidationError(f"Internal SubCategory \"{str(self)}\" already exists.")
 
     class Meta:
         ordering = ["order", "name"]
