@@ -34,7 +34,7 @@ resources:
     TextExtractorQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:custom.stage}-text-extractor-queue
+        QueueName: ${self:custom.stage}-text-extractor-queue.fifo
         DelaySeconds: 0
         MessageRetentionPeriod: 345600 # 4 days
         VisibilityTimeout: 900
