@@ -4,6 +4,7 @@
 2. [Supported file types](#supported-file-types)
 3. [Running locally](#running-locally)
 4. [Request structure](#request-structure)
+    1. [Configuring authentication](#configuring-authentication)
     2. [Currently supported backends](#currently-supported-backends)
 5. [Response structure](#response-structure)
 6. [Creating a new file backend](#creating-a-new-file-backend)
@@ -18,7 +19,7 @@
 
 # About
 
-This Lambda function is run to extract text from a variety of file types and POST it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
+This Lambda function is run to extract text from a variety of file types and upload it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
 
 # Supported file types
 
@@ -57,12 +58,11 @@ The following data structure is required:
 ```jsonc
 {
     "uri": "object_uri",                     // The web URL or object name to extract text from.
-    "post_url": "https://api-url-here/",     // The API URL to POST the text to. This should include a unique ID of some sort.
-    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication.
+    "upload_url": "https://api-url-here/",     // The API URL to PATCH the text to. This should include a unique ID of some sort.
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
-    // Only necessary to include if the POST endpoint uses authentication.
+    // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
     },
@@ -71,13 +71,13 @@ The following data structure is required:
         "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket.
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key.
         "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from.
-        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development).
-        "aws_region": "us-east-1"            // AWS region for Textract.
+        "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
+        "aws_region": "us-east-1"            // AWS region to use.
     },
 }
 ```
 
-It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the POST body to a stringified version of the structure above.
+It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
 If you wish to directly invoke this function, you may do so like this:
 
@@ -144,16 +144,17 @@ The extractor will continue retrying until the content downloads, a fatal error 
 
 # Response structure
 
-When the function completes, it will send the text and ID back to the `post_url` specified in the request as a JSON POST request formatted like:
+When the function completes, it will send the text and ID back to the `upload_url` specified in the request as a JSON PATCH request formatted like:
 
 ```jsonc
 {
-    "id": 1,          // The eRegs database ID specified in the request
     "text": "xxxxxx"  // The text extracted   
 }
 ```
 
-Future iterations may include POSTing error messages to eRegs if they occur, but for now errors will be recorded in logs only and no POST will be sent.
+The `upload_url` parameter must contain a unique identifier, because the request body will not.
+
+Future iterations may include uploading error messages to eRegs if they occur, but for now errors will be recorded in logs only and no PATCH will be sent.
 
 # Creating a new file backend
 
@@ -186,7 +187,7 @@ from .sample import SampleBackend as SampleBackend  # Note the redundant alias, 
 .... etc ...
 ```
 
-The backend is now registered and will be automatically instantiated when `"backend": "sample"` is included in the POST request.
+The backend is now registered and will be automatically instantiated when `"backend": "sample"` is included in the request.
 
 # Creating a new text extractor
 

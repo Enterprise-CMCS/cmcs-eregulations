@@ -45,9 +45,9 @@ def handler(event: dict, context: dict) -> dict:
     logger.info("Retrieving required parameters from event.")
     try:
         uri = config["uri"]
-        post_url = config["post_url"]
+        upload_url = config["upload_url"]
     except KeyError:
-        return lambda_failure(400, "You must include 'uri', 'token', and 'post_url' in the request body.")
+        return lambda_failure(400, "You must include 'uri', 'token', and 'upload_url' in the request body.")
 
     # Configure authorization, if desired
     authorization = None
@@ -96,7 +96,7 @@ def handler(event: dict, context: dict) -> dict:
     headers = {'Authorization': authorization} if authorization else {}
     try:
         resp = requests.patch(
-            post_url,
+            upload_url,
             headers=headers,
             json={
                 "text": text,

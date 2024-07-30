@@ -17,10 +17,12 @@ from resources.models import FederalRegisterLink
 # client_type: the boto3-recognized AWS resource to create a client for.
 def establish_client(client_type):
     if settings.USE_AWS_TOKEN:
-        return boto3.client(client_type,
-                            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
-                            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
-                            region_name="us-east-1")
+        return boto3.client(
+            client_type,
+            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-1",
+        )
     else:
         return boto3.client(client_type, region_name="us-east-1")
 
@@ -114,14 +116,16 @@ def string_to_bool(value, default):
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resource):
     update_content_url = reverse("update_content", args=[resource.pk])
-    post_url = (request.build_absolute_uri(update_content_url)
-                if not settings.USE_LOCAL_TEXTRACT else
-                f"http://host.docker.internal:8000{update_content_url}")
+    upload_url = (
+        request.build_absolute_uri(update_content_url)
+        if not settings.USE_LOCAL_TEXTRACT else
+        f"http://host.docker.internal:8000{update_content_url}"
+    )
 
     request = {
         "id": resource.pk,
         "ignore_robots_txt": isinstance(resource, FederalRegisterLink),
-        "post_url": post_url,
+        "upload_url": upload_url,
         "auth": {
             "type": "basic-env",
             "username": "HTTP_AUTH_USER",
