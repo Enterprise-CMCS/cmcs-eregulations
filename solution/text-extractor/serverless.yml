@@ -32,7 +32,7 @@ functions:
 resources:
   Outputs:
     TextExtractorQueueUrl:
-      Value: !GetAtt TextExtractorQueue.Url
+      Value: !GetAtt TextExtractorQueue.QueueUrl
       
   Resources:
     TextExtractorQueue:
