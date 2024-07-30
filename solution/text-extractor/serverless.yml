@@ -31,8 +31,8 @@ functions:
 
 resources:
   Outputs:
-    TextExtractorQueueArn:
-      Value: !GetAtt TextExtractorQueue.Arn
+    TextExtractorQueueUrl:
+      Value: !GetAtt TextExtractorQueue.Url
       
   Resources:
     TextExtractorQueue:
@@ -43,6 +43,7 @@ resources:
         MessageRetentionPeriod: 345600 # 4 days
         VisibilityTimeout: 900
         FifoQueue: true
+        ContentBasedDeduplication: true
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:

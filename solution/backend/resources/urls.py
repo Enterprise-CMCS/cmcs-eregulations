@@ -28,7 +28,7 @@ urlpatterns = [
     })),
     path("<int:id>/edit", ResourceEditViewSet.as_view()),
     path("<int:id>/extract", InvokeTextExtractorViewSet.as_view()),
-    path("<int:id>/update_content", PostContentTextViewset.as_view()),
+    path("<int:id>/update_content", PostContentTextViewset.as_view(), name="update_content"),
     path("public", PublicResourceViewSet.as_view({
         "get": "list",
     })),

@@ -231,7 +231,7 @@ USE_LOCAL_TEXTRACT = False
 
 TEXT_EXTRACTOR_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", "")
 TEXTRACT_ARN = os.environ.get('TEXTRACT_ARN', "")
-TEXT_EXTRACTOR_QUEUE_ARN = os.environ.get("TEXT_EXTRACTOR_QUEUE_ARN", "")
+TEXT_EXTRACTOR_QUEUE_URL = os.environ.get("TEXT_EXTRACTOR_QUEUE_URL", "")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",

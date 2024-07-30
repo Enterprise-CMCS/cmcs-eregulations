@@ -56,24 +56,23 @@ The following data structure is required:
 
 ```jsonc
 {
-    "id": 1,                                 // The eRegs database ID of the object to update
-    "uri": "object_uri",                     // The web URL or object name to extract text from
-    "post_url": "https://api-url-here/",     // The API URL to POST the text to
-    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
-    "backend": "s3",                         // Optional - defaults to 'web'
-    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
-    "ignore_robots_txt": true,               // Optional - include to ignore robots.txt
-    // Only necessary to include if the POST endpoint uses authentication
+    "uri": "object_uri",                     // The web URL or object name to extract text from.
+    "post_url": "https://api-url-here/",     // The API URL to POST the text to. This should include a unique ID of some sort.
+    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication.
+    "backend": "s3",                         // Optional - defaults to 'web'.
+    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
+    "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
+    // Only necessary to include if the POST endpoint uses authentication.
     "auth": {
-        // See below for configuring authentication
+        // See below for configuring authentication.
     },
-    // Only necessary to include if using the S3 backend
+    // Only necessary to include if using the S3 backend.
     "aws": {
-        "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
-        "aws_secret_access_key": "xxxxxx",   // The AWS secret key
-        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from
-        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development)
-        "aws_region": "us-east-1"            // AWS region for Textract
+        "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket.
+        "aws_secret_access_key": "xxxxxx",   // The AWS secret key.
+        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from.
+        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development).
+        "aws_region": "us-east-1"            // AWS region for Textract.
     },
 }
 ```

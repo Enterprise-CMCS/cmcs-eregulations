@@ -44,11 +44,10 @@ def handler(event: dict, context: dict) -> dict:
     # Retrieve required arguments
     logger.info("Retrieving required parameters from event.")
     try:
-        resource_id = config["id"]
         uri = config["uri"]
         post_url = config["post_url"]
     except KeyError:
-        return lambda_failure(400, "You must include 'id', 'uri', 'token', and 'post_url' in the request body.")
+        return lambda_failure(400, "You must include 'uri', 'token', and 'post_url' in the request body.")
 
     # Configure authorization, if desired
     authorization = None
@@ -96,11 +95,10 @@ def handler(event: dict, context: dict) -> dict:
     logger.info("Sending extracted text to POST URL.")
     headers = {'Authorization': authorization} if authorization else {}
     try:
-        resp = requests.post(
+        resp = requests.patch(
             post_url,
             headers=headers,
             json={
-                "id": resource_id,
                 "text": text,
             },
             timeout=60,
