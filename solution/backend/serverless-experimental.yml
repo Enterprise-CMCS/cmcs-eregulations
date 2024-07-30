@@ -166,7 +166,7 @@ resources:
                 - Effect: Allow
                   Action:
                     - sqs:SendMessage
-                  Resource: "${self:custom.text_extractor_queue_arn}"
+                  Resource: "${self:custom.settings.text_extractor_queue_arn}"
           - PolicyName: StorageBucketPolicy
             PolicyDocument:
               Version: '2012-10-17'
