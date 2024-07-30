@@ -114,7 +114,7 @@ def string_to_bool(value, default):
 # Does not return on success, raises on failure.
 # Note that a successful return does not necessarily indicate a successful extraction.
 # Check text-extractor logs to verify extraction.
-def call_text_extractor(request, resource):
+def call_text_extractor(request, resource, sqs_group_id=None):
     update_content_url = reverse("update_content", args=[resource.pk])
     upload_url = (
         request.build_absolute_uri(update_content_url)
@@ -169,6 +169,7 @@ def call_text_extractor(request, resource):
         sqs_client.send_message(
             QueueUrl=settings.TEXT_EXTRACTOR_QUEUE_URL,
             MessageBody=request,
+            MessageGroupId=sqs_group_id,
         )
     elif settings.TEXT_EXTRACTOR_ARN:
         lambda_client = establish_client("lambda")

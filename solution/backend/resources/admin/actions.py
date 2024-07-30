@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from django.contrib import admin, messages
 from django.urls import reverse
@@ -21,11 +22,12 @@ def mark_not_approved(modeladmin, request, queryset):
 
 @admin.action(description="Extract text from selected resources")
 def extract_text(modeladmin, request, queryset):
+    group_id = str(uuid.uuid4())
     success = 0
     failure = []
     for i in queryset:
         try:
-            call_text_extractor(request, i)
+            call_text_extractor(request, i, sqs_group_id=group_id)
             success += 1
         except Exception as e:
             logger.error("Failed to invoke text extractor for %s with ID %i: %s", i._meta.verbose_name, i.pk, str(e))
