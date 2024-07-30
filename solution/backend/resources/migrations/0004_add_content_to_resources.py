@@ -36,7 +36,7 @@ def copy_content(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0002_populate_config'),
+        ('resources', '0003_remove_internalcategory_name_and_more'),
     ]
 
     operations = [
