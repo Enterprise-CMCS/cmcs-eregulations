@@ -94,6 +94,7 @@ custom:
     ALLOWED_HOST: '.amazonaws.com'
     text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
     text_extractor_queue_url: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueUrl}
+    text_extractor_queue_arn: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueArn}
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
     version: V2
@@ -158,6 +159,14 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: SendToTextExtractorQueuePolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - sqs:SendMessage
+                  Resource: ${self:custom.text_extractor_queue_arn}
           - PolicyName: StorageBucketPolicy
             PolicyDocument:
               Version: '2012-10-17'

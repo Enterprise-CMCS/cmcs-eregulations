@@ -33,6 +33,8 @@ resources:
   Outputs:
     TextExtractorQueueUrl:
       Value: !GetAtt TextExtractorQueue.QueueUrl
+    TextExtractorQueueArn:
+      Value: !GetAtt TextExtractorQueue.Arn
       
   Resources:
     TextExtractorQueue:
