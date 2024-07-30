@@ -128,6 +128,7 @@ def update_indexed_public_resource(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.document_id
     index.summary = instance.title
+    index.content = instance.content
     index.rank_a_string = "{} {}".format(
         instance.document_id,
         instance.title,
@@ -143,6 +144,7 @@ def update_indexed_internal_file(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.title
     index.summary = instance.summary
+    index.content = instance.content
     index.rank_a_string = instance.title
     index.rank_b_string = instance.summary
     index.rank_c_string = "{} {}".format(
@@ -158,6 +160,7 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
     index = get_or_create_index(instance, created)
     index.name = instance.title
     index.summary = instance.summary
+    index.content = instance.content
     index.rank_a_string = instance.title
     index.rank_b_string = instance.summary
     index.rank_c_string = instance.date

@@ -9,6 +9,8 @@ from resources.views import (
     InternalFileViewSet,
     InternalLinkViewSet,
     InternalResourceViewSet,
+    InvokeTextExtractorViewSet,
+    PostContentTextViewset,
     PublicCategoryViewSet,
     PublicLinkViewSet,
     PublicResourceViewSet,
@@ -25,6 +27,8 @@ urlpatterns = [
         "get": "list",
     })),
     path("<int:id>/edit", ResourceEditViewSet.as_view()),
+    path("<int:id>/extract", InvokeTextExtractorViewSet.as_view()),
+    path("<int:id>/update_content", PostContentTextViewset.as_view()),
     path("public", PublicResourceViewSet.as_view({
         "get": "list",
     })),

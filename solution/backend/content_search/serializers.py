@@ -11,8 +11,3 @@ class ContentSearchSerializer(serializers.Serializer):
 
     resource = AbstractResourceSerializer()
     reg_text = serializers.PrimaryKeyRelatedField(read_only=True)
-
-
-class ContentUpdateSerializer(serializers.Serializer):
-    id = serializers.CharField()
-    text = serializers.CharField()

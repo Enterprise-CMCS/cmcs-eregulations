@@ -78,6 +78,8 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
 
+    content = models.TextField(blank=True)
+
     objects = InheritanceManager()
 
     def save(self, *args, **kwargs):
