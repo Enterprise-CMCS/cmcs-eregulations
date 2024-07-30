@@ -1,8 +1,10 @@
-
 from django import forms
 from django.db.models import (
+    F,
     Prefetch,
+    Value,
 )
+from django.db.models.functions import Concat
 
 from common.admin import AbstractAdmin
 from common.filters import IndexPopulatedFilter
@@ -14,6 +16,7 @@ from resources.models import (
 )
 
 from . import actions
+from .widgets import CustomCategoryChoiceField
 
 # Abstract resource admin classes.
 # Make changes that apply to all resource admin pages, or public or internal pages here.
@@ -35,8 +38,12 @@ class AbstractResourceAdmin(AbstractAdmin):
     }
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related(
-            Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related(
+                Prefetch("category", AbstractCategory.objects.all().select_subclasses()),
+            )
         )
 
     # This override allows the grouping post-save hook to work properly.
@@ -62,13 +69,24 @@ class AbstractInternalResourceAdmin(AbstractResourceAdmin):
 # Abstract resource admin forms.
 # Make changes to forms (widgets etc) for all resource admin pages, or public or internal pages here.
 
+
 class AbstractResourceForm(forms.ModelForm):
     pass
 
 
 class AbstractPublicResourceForm(AbstractResourceForm):
-    pass
+    category = CustomCategoryChoiceField(
+        queryset=AbstractPublicCategory.objects.annotate(sort_name=Concat(F("parent__name"), Value(" "), F("name")))
+        .order_by("sort_name")
+        .select_subclasses(),
+        required=False,
+    )
 
 
 class AbstractInternalResourceForm(AbstractResourceForm):
-    pass
+    category = CustomCategoryChoiceField(
+        queryset=AbstractInternalCategory.objects.annotate(sort_name=Concat(F("parent__name"), Value(" "), F("name")))
+        .order_by("sort_name")
+        .select_subclasses(),
+        required=False,
+    )
