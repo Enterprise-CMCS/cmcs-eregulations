@@ -45,5 +45,9 @@ class Migration(migrations.Migration):
             name='content',
             field=models.TextField(blank=True),
         ),
+        migrations.AlterModelOptions(
+            name='abstractresource',
+            options={'base_manager_name': 'objects'},
+        ),
         migrations.RunPython(copy_content, reverse_code=migrations.RunPython.noop),
     ]
