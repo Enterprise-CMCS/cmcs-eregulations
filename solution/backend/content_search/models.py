@@ -86,7 +86,8 @@ class ContentIndexQuerySet(models.QuerySet):
 
 
 class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
-    pass
+    def get_queryset(self):
+        return super().get_queryset().defer("content")
 
 
 class IndexedRegulationText(models.Model):
@@ -114,6 +115,11 @@ class ContentIndex(models.Model):
     reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
 
     objects = ContentIndexManager()
+
+    class Meta:
+        verbose_name = "Content Index"
+        verbose_name_plural = "Content Indices"
+        base_manager_name = "objects"
 
 
 def get_or_create_index(instance, created):
