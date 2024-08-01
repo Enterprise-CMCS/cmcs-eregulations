@@ -58,7 +58,7 @@ The following data structure is required:
 ```jsonc
 {
     "uri": "object_uri",                     // The web URL or object name to extract text from.
-    "upload_url": "https://api-url-here/",     // The API URL to PATCH the text to. This should include a unique ID of some sort.
+    "upload_url": "https://api-url-here/",   // The API URL to PATCH the text to.
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
@@ -66,11 +66,11 @@ The following data structure is required:
     "auth": {
         // See below for configuring authentication.
     },
-    // Only necessary to include if using the S3 backend.
+    // Only necessary to include if using the S3 backend and/or the AWS Textract extractor classes.
     "aws": {
-        "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket.
+        "aws_access_key_id": "xxxxxx",       // The access key for AWS.
         "aws_secret_access_key": "xxxxxx",   // The AWS secret key.
-        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from.
+        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve objects from (only required for S3 backend).
         "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
         "aws_region": "us-east-1"            // AWS region to use.
     },
@@ -141,6 +141,8 @@ If you're using the S3 backend, you must include the `aws` dictionary in the exa
 If you're using web, no further configuration is required. Set the `uri` to the URL to download, including the scheme (http or https). Note that the web backend has built-in retries in the event of a timeout or a `429 TOO MANY REQUESTS` response. By default, the extractor will wait 30 seconds between retries, or if a `Retry-After` header is specified, it will wait for the number of seconds specified there.
 
 The extractor will continue retrying until the content downloads, a fatal error occurs, or the Lambda timeout occurs. Please note that if the Lambda timeout is increased, so too will the maximum amount of retries.
+
+By default, the web extractor respects robots.txt. However, if you are confident that an exception is permitted, you may pass in `ignore_robots_txt: true`. This option must be exercised with caution, and must never be set for all requests.
 
 # Response structure
 

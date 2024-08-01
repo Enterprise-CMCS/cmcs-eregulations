@@ -44,10 +44,11 @@ def handler(event: dict, context: dict) -> dict:
     # Retrieve required arguments
     logger.info("Retrieving required parameters from event.")
     try:
+        resource_id = config["id"]
         uri = config["uri"]
         upload_url = config["upload_url"]
     except KeyError:
-        return lambda_failure(400, "You must include 'uri', 'token', and 'upload_url' in the request body.")
+        return lambda_failure(400, "You must include 'id', 'uri', 'token', and 'upload_url' in the request body.")
 
     # Configure authorization, if desired
     authorization = None
@@ -92,22 +93,25 @@ def handler(event: dict, context: dict) -> dict:
     text = clean_output(text)
 
     # Send result to eRegs
-    logger.info("Sending extracted text to POST URL.")
+    logger.info("Sending extracted text to PATCH URL.")
     headers = {'Authorization': authorization} if authorization else {}
     try:
         resp = requests.patch(
             upload_url,
             headers=headers,
             json={
+                "id": resource_id,
                 "text": text,
             },
             timeout=60,
         )
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
-        return lambda_failure(500, f"Failed to POST results: {str(e)}")
+        if hasattr(e, "response") and e.response:
+            return lambda_failure(500, f"Failed to PATCH results with status code {e.response.status_code}: {e.response.text}")
+        return lambda_failure(500, f"Failed to PATCH results: {str(e)}")
     except Exception as e:
-        return lambda_failure(500, f"POST unexpectedly failed: {str(e)}")
+        return lambda_failure(500, f"PATCH unexpectedly failed: {str(e)}")
 
     # Return success code
     return lambda_success("Function exited normally.")

@@ -102,7 +102,7 @@ def string_to_bool(value, default):
 # Run the text extractor for the given resource.
 #
 # Note the choice of execution path based on the three Django settings:
-#   - USE_LOCAL_TEXTRACT: if true will use http://localhost:8001 instead of the AWS client.
+#   - USE_LOCAL_TEXTRACT: if true will use the local dockerized text extractor instead of the AWS client.
 #   - TEXT_EXTRACTOR_QUEUE_URL: if set will use the SQS queue instead of invoking the Lambda directly.
 #   - TEXT_EXTRACTOR_ARN: if the above is not set and this is, will invoke the Lamba directly.
 # If none of these are set properly, ImproperlyConfigured is raised.
@@ -111,7 +111,7 @@ def string_to_bool(value, default):
 # request: the Django Request object that caused this call to occur.
 # resource: any subclass of AbstractResource.
 #
-# Does not return on success, raises on failure.
+# Does not return a value on success, but raises on failure.
 # Note that a successful return does not necessarily indicate a successful extraction.
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resource, sqs_group_id=None):
@@ -163,6 +163,8 @@ def call_text_extractor(request, resource, sqs_group_id=None):
             data=request,
             timeout=60,
         )
+        if resp.status_code != requests.codes.OK and hasattr(resp, "text") and resp.text:
+            raise RuntimeError(f"POST failed with {resp.status_code}: {resp.text}")
         resp.raise_for_status()
     elif settings.TEXT_EXTRACTOR_QUEUE_URL:
         sqs_client = establish_client("sqs")

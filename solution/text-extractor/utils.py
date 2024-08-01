@@ -27,6 +27,9 @@ def lambda_failure(status_code: int, message: str) -> dict:
 
 def get_config(event: dict) -> dict:
     logger.info("Retrieving Lambda event dictionary.")
+    if "Records" in event and event["Records"]:
+        # Invoked from SQS (we handle only one message at a time)
+        raise Exception(event["Records"][0]["body"])
     if "body" not in event:
         # Assume we are invoked directly
         logger.debug("No 'body' key present in event, assuming direct invocation.")
