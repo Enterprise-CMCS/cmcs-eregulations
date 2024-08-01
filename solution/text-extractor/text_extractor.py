@@ -107,7 +107,7 @@ def handler(event: dict, context: dict) -> dict:
         )
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
-        if hasattr(e, "response") and e.response:
+        if hasattr(e, "response") and hasattr(e.response, "text") and e.response.text:
             return lambda_failure(500, f"Failed to PATCH results with status code {e.response.status_code}: {e.response.text}")
         return lambda_failure(500, f"Failed to PATCH results: {str(e)}")
     except Exception as e:
