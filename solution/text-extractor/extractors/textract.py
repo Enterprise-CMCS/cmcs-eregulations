@@ -32,9 +32,9 @@ class TextractExtractor(Extractor):
             }
             logger.debug("Retrieved AWS parameters from config.")
         except KeyError:
-            logger.warning("Failed to retrieve AWS parameters from config, attempting to use default parameters.")
+            logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
             return {
-                "config": boto3.session.Config(signature_version='s3v4', region_name="us-east-1"),
+                "config": boto3.session.Config(signature_version='s3v4'),
             }
 
     def _extract(self, file: bytes) -> str:

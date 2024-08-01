@@ -141,7 +141,7 @@ def call_text_extractor(request, resource):
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
             "use_lambda": False,
             "aws_region": "us-east-1",
-        } if not settings.USE_LOCAL_TEXT_EXTRACTOR else {
+        } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         }

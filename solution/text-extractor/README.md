@@ -68,14 +68,16 @@ The following data structure is required:
     },
     // Only necessary to include if using the S3 backend and/or the AWS Textract extractor classes.
     "aws": {
-        "aws_access_key_id": "xxxxxx",       // The access key for AWS.
-        "aws_secret_access_key": "xxxxxx",   // The AWS secret key.
+        "aws_access_key_id": "xxxxxx",       // The access key for AWS, see below for details.
+        "aws_secret_access_key": "xxxxxx",   // The AWS secret key, see below for details.
         "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve objects from (only required for S3 backend).
         "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
-        "aws_region": "us-east-1"            // AWS region to use.
+        "aws_region": "us-east-1"            // AWS region to use, see below for details.
     },
 }
 ```
+
+Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has permissions to access AWS Textract and S3.
 
 It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
