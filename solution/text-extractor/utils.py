@@ -33,13 +33,13 @@ def get_config(event: dict) -> dict:
         logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
         return json.loads(event["Records"][0]["body"])
 
-    # Handle invocation from AWS (via boto3 etc.)
+    # Handle API Gateway invocation
     if "body" in event and event["body"]:
-        logger.debug("Found truthy 'body' key in event, assuming AWS invocation.")
+        logger.debug("Found truthy 'body' key in event, assuming API Gateway invocation.")
         return json.loads(event["body"])
 
-    # Handle API Gateway invocation
-    logger.debug("No 'body' key present in event, assuming invocation via API Gateway.")
+    # Handle direct invocation via boto3 etc.
+    logger.debug("No 'body' key present in event, assuming direct AWS invocation.")
     return event
 
 
