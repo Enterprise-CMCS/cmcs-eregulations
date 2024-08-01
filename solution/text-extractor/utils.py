@@ -27,18 +27,20 @@ def lambda_failure(status_code: int, message: str) -> dict:
 
 def get_config(event: dict) -> dict:
     logger.info("Retrieving Lambda event dictionary.")
+
+    # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
-        # Invoked from SQS (we handle only one message at a time)
-        raise Exception(event["Records"][0]["body"])
-    if "body" not in event:
-        # Assume we are invoked directly
-        logger.debug("No 'body' key present in event, assuming direct invocation.")
-        return event
-    else:
-        try:
-            return json.loads(event["body"])
-        except Exception as e:
-            raise Exception(f"unable to parse body as JSON: {str(e)}")
+        logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
+        return json.loads(event["Records"][0]["body"])
+
+    # Handle invocation from AWS (via boto3 etc.)
+    if "body" in event and event["body"]:
+        logger.debug("Found truthy 'body' key in event, assuming AWS invocation.")
+        return json.loads(event["body"])
+
+    # Handle API Gateway invocation
+    logger.debug("No 'body' key present in event, assuming invocation via API Gateway.")
+    return event
 
 
 def clean_output(text: str) -> str:
