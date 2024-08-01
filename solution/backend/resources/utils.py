@@ -102,7 +102,7 @@ def string_to_bool(value, default):
 # Run the text extractor for the given resource.
 #
 # Note the choice of execution path based on the three Django settings:
-#   - USE_LOCAL_TEXTRACT: if true will use the local dockerized text extractor instead of the AWS client.
+#   - USE_LOCAL_TEXT_EXTRACTOR: if true will use the local dockerized text extractor instead of the AWS client.
 #   - TEXT_EXTRACTOR_QUEUE_URL: if set will use the SQS queue instead of invoking the Lambda directly.
 #   - TEXT_EXTRACTOR_ARN: if the above is not set and this is, will invoke the Lamba directly.
 # If none of these are set properly, ImproperlyConfigured is raised.
@@ -118,7 +118,7 @@ def call_text_extractor(request, resource, sqs_group_id=None):
     update_content_url = reverse("content", args=[resource.pk])
     upload_url = (
         request.build_absolute_uri(update_content_url)
-        if not settings.USE_LOCAL_TEXTRACT else
+        if not settings.USE_LOCAL_TEXT_EXTRACTOR else
         f"http://host.docker.internal:8000{update_content_url}"
     )
 
@@ -130,7 +130,7 @@ def call_text_extractor(request, resource, sqs_group_id=None):
             "type": "basic-env",
             "username": "HTTP_AUTH_USER",
             "password": "HTTP_AUTH_PASSWORD",
-        } if not settings.USE_LOCAL_TEXTRACT else {
+        } if not settings.USE_LOCAL_TEXT_EXTRACTOR else {
             "type": "basic",
             "username": settings.HTTP_AUTH_USER,
             "password": settings.HTTP_AUTH_PASSWORD,
@@ -141,7 +141,7 @@ def call_text_extractor(request, resource, sqs_group_id=None):
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
             "use_lambda": False,
             "aws_region": "us-east-1",
-        } if not settings.USE_LOCAL_TEXTRACT else {
+        } if not settings.USE_LOCAL_TEXT_EXTRACTOR else {
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         }
@@ -156,7 +156,7 @@ def call_text_extractor(request, resource, sqs_group_id=None):
 
     request = json.dumps(request)
 
-    if settings.USE_LOCAL_TEXTRACT:
+    if settings.USE_LOCAL_TEXT_EXTRACTOR:
         docker_url = "http://host.docker.internal:8001/"
         resp = requests.post(
             docker_url,

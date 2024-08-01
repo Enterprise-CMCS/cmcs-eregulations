@@ -55,10 +55,6 @@ provider:
     SEARCH_HEADLINE_MIN_WORDS: ${ssm:/eregulations/search_headline_min_words}
     SEARCH_HEADLINE_MAX_WORDS: ${ssm:/eregulations/search_headline_max_words}
     SEARCH_HEADLINE_MAX_FRAGMENTS: ${ssm:/eregulations/search_headline_max_fragments}
-    # This text extractor is for an experimental deploy if one is made.
-    TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
-    # This text extractor is the "main dev" extractor.  Used if one is not created in experimental.
-    TEXTRACT_ARN: ${ssm:/eregulations/textextractor-arn}
     TEXT_EXTRACTOR_QUEUE_URL: ${self:custom.settings.text_extractor_queue_url}
   vpc:
     securityGroupIds:
@@ -92,7 +88,6 @@ custom:
     DB_NAME: ${self:custom.stage}
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
-    text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
     text_extractor_queue_url: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueUrl}
     text_extractor_queue_arn: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueArn}
   associateWaf:
@@ -212,12 +207,6 @@ resources:
                          - "Ref" : "ServerlessDeploymentBucket"
                      - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}"
                      - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
-                -  Effect: "Allow"
-                   Action:
-                     - "lambda:InvokeFunction"
-                   Resource:
-                     - "${ssm:/eregulations/textextractor-arn}"
-                     - "${self:custom.settings.text_extractor_arn}" # Extractor created by the environment
                 - Effect: Allow
                   Action:
                     - "s3:ListBucket"
