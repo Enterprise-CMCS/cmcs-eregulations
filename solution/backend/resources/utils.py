@@ -115,7 +115,7 @@ def string_to_bool(value, default):
 # Note that a successful return does not necessarily indicate a successful extraction.
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resource, sqs_group_id=None):
-    update_content_url = reverse("update_content", args=[resource.pk])
+    update_content_url = reverse("content", args=[resource.pk])
     upload_url = (
         request.build_absolute_uri(update_content_url)
         if not settings.USE_LOCAL_TEXTRACT else

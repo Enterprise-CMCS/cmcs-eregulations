@@ -28,6 +28,8 @@ functions:
     events:
       - sqs:
           arn: !GetAtt TextExtractorQueue.Arn
+          batchSize: 1
+          
 
 resources:
   Outputs:

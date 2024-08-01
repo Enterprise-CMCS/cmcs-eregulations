@@ -14,7 +14,7 @@ from resources.serializers import ContentUpdateSerializer
     request=ContentUpdateSerializer,
     responses={200: dict, 404: dict, 400: dict},
 )
-class PostContentTextViewset(APIView):
+class ContentTextViewSet(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [SettingsAuthentication]
 
@@ -33,13 +33,3 @@ class PostContentTextViewset(APIView):
             return Response(data=f"A {resource._meta.verbose_name} with ID {pk} was updated successfully.")
         except AbstractResource.DoesNotExist:
             raise NotFound(f"A resource matching {pk} does not exist.")
-
-
-@extend_schema(
-    description="Invokes the text extractor for the given resource ID.",
-)
-class InvokeTextExtractorViewSet(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        return Response("Not implemented")
