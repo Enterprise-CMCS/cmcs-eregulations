@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from common.admin import AbstractAdmin
+from common.admin import CustomAdminMixin
 from resources.models import (
     AbstractResource,
     ResourceGroup,
@@ -9,7 +9,7 @@ from resources.models import (
 
 
 @admin.register(ResourceGroup)
-class ResourceGroupAdmin(AbstractAdmin):
+class ResourceGroupAdmin(CustomAdminMixin, admin.ModelAdmin):
     admin_priority = 50
     list_display = ["name", "common_identifiers", "number_of_resources"]
     list_display_links = ["name", "common_identifiers", "number_of_resources"]

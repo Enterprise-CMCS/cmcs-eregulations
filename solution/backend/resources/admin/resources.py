@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django import forms
 from django.db.models import (
     F,
@@ -6,7 +7,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Concat
 
-from common.admin import AbstractAdmin
+from common.admin import CustomAdminMixin
 from common.filters import IndexPopulatedFilter
 from resources.models import (
     AbstractCategory,
@@ -22,7 +23,7 @@ from .widgets import CustomCategoryChoiceField
 # Make changes that apply to all resource admin pages, or public or internal pages here.
 
 
-class AbstractResourceAdmin(AbstractAdmin):
+class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved, actions.extract_text]
     filter_horizontal = ["cfr_citations", "subjects"]
     empty_value_display = "NONE"

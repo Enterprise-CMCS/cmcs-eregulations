@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.db.models import Prefetch
 
-from common.admin import AbstractAdmin
+from common.admin import CustomAdminMixin
 from resources.models import (
     Section,
     Subpart,
 )
 
 
-class AbstractCitationAdmin(AbstractAdmin):
+class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         # TODO: use regex extract title, part, and section/subpart to search
         return super().get_search_results(request, queryset, search_term)
