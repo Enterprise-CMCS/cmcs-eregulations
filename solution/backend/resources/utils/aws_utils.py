@@ -9,6 +9,7 @@ from django.urls import reverse
 from resources.models import FederalRegisterLink
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
+_LOCAL_EREGS_URL = "http://host.docker.internal:8000"
 
 
 # Establishes an AWS client.
@@ -63,11 +64,11 @@ def _extract_via_sqs(batch, client):
             QueueUrl=settings.TEXT_EXTRACTOR_QUEUE_URL,
             Entries=entries,
         )
-        success += len(resp["Successful"])
+        success += len(resp.get("Successful", []))
         fail += [{
             "id": int(i["Id"]),
             "reason": f"Received code {i['Code']}: {i['Message']}",
-        } for i in resp["Failed"]]
+        } for i in resp.get("Failed", [])]
     except Exception as e:
         success = 0
         fail = [{
@@ -134,7 +135,7 @@ def call_text_extractor(request, resources):
         "id": i.pk,
         "ignore_robots_txt": isinstance(i, FederalRegisterLink),
         "upload_url": (
-            f"http://host.docker.internal:8000{reverse('content', args=[i.pk])}"
+            f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
             request.build_absolute_uri(reverse("content", args=[i.pk]))
         ),
