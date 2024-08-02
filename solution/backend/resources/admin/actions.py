@@ -21,28 +21,25 @@ def mark_not_approved(modeladmin, request, queryset):
 
 @admin.action(description="Extract text from selected resources")
 def extract_text(modeladmin, request, queryset):
-    success = 0
-    failure = []
-    for i in queryset:
-        try:
-            call_text_extractor(request, i)
-            success += 1
-        except Exception as e:
-            logger.error("Failed to invoke text extractor for %s with ID %i: %s", i._meta.verbose_name, i.pk, str(e))
-            url = reverse(f"admin:{i._meta.app_label}_{i._meta.model_name}_change", args=[i.pk])
-            failure.append(f"<a href=\"{url}\">{i.pk}</a>")
+    successes, failures = call_text_extractor(request, queryset)
+
+    failure_urls = []
+    for i in failures:
+        logger.error("Failed to invoke text extractor for resource with ID %i: %s", i["id"], i["reason"])
+        url = reverse("edit", args=[i["id"]])
+        failure_urls.append(f"<a href=\"{url}\">{i["id"]}</a>")
 
     message = ""
-    message += f"Text extraction successfully started on {success} resource{'s' if success > 1 else ''}" if success else ""
-    if failure:
-        message += ", but " if success else "Text "
-        message += f"extraction failed for the following resource{'s' if len(failure) > 1 else ''}: {', '.join(failure)}. "
+    message += f"Text extraction successfully started on {successes} resource{'s' if successes > 1 else ''}" if successes else ""
+    if failures:
+        message += ", but " if successes else "Text "
+        message += f"extraction failed for the following resource{'s' if len(failures) > 1 else ''}: {', '.join(failure_urls)}. "
         message += "Please be sure " + (
             "these items have valid URLs or attached files"
-            if len(failure) > 1 else
+            if len(failures) > 1 else
             "this item has a valid URL or attached file"
         )
         message += ", then contact support for assistance if needed"
     message += "."
 
-    modeladmin.message_user(request, format_html(message), messages.ERROR if failure else messages.SUCCESS)
+    modeladmin.message_user(request, format_html(message), messages.ERROR if failures else messages.SUCCESS)
