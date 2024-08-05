@@ -37,8 +37,6 @@ provider:
     CUSTOM_URL: ${ssm:/eregulations/custom_url, ''}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
-    SEARCHGOV_KEY: ${ssm:/eregulations/searchgov/key}
-    SEARCHGOV_SITE_NAME: ${ssm:/eregulations/searchgov/site_name}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
     OIDC_OP_JWKS_ENDPOINT: ${ssm:/eregulations/oidc/jwks_endpoint}
     OIDC_RP_CLIENT_ID: ${ssm:/eregulations/oidc/client_id}
