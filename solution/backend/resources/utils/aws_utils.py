@@ -127,7 +127,7 @@ def _get_resource_keys(resource):
 # resources: a list containing subclasses of AbstractResource to process.
 #
 # Returns:
-# A dict of successes by count, and failures by dict: {"id": x, "reason": "y"}.
+# Two values; successes by count, and failures by dict: {"id": x, "reason": "y"}.
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
