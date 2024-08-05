@@ -104,11 +104,11 @@ def _extract_via_lambda(batch, client):
 def _get_resource_keys(resource):
     if hasattr(resource, "key"):
         return {
-            "uri": resource.key or "",
+            "uri": resource.key,
             "backend": "s3",
         }
     return {
-        "uri": resource.extract_url or resource.url or "",
+        "uri": resource.extract_url or resource.url,
         "backend": "web",
     }
 
