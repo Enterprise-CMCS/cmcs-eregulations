@@ -100,6 +100,7 @@ def _extract_via_lambda(batch, client):
     return success, fail
 
 
+# Internal function to compute the 2 keys needed for text-extractor requests: "uri" and "backend".
 def _get_resource_keys(resource):
     if hasattr(resource, "key"):
         return {
@@ -112,25 +113,24 @@ def _get_resource_keys(resource):
     }
 
 
-# Run the text extractor for the given resource.
+# Run the text extractor for the given resources.
+# For SQS, requests are batched by groups of 10.
 #
 # Note the choice of execution path based on the three Django settings:
 #   - USE_LOCAL_TEXT_EXTRACTOR: if true will use the local dockerized text extractor instead of the AWS client.
 #   - TEXT_EXTRACTOR_QUEUE_URL: if set will use the SQS queue instead of invoking the Lambda directly.
 #   - TEXT_EXTRACTOR_ARN: if the above is not set and this is, will invoke the Lamba directly.
-# If none of these are set properly, ImproperlyConfigured is raised.
+# If none of these are set, ImproperlyConfigured is raised.
 #
 # Arguments:
 # request: the Django Request object that caused this call to occur.
-# resource: a list containing subclasses of AbstractResource to process.
+# resources: a list containing subclasses of AbstractResource to process.
 #
-# Returns a dict of successes and failures by ID.
-# Note that a successful return does not necessarily indicate a successful extraction.
+# Returns:
+# A dict of successes by count, and failures by dict: {"id": x, "reason": "y"}.
+# Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
-    succeed_count = 0
-    failures = []
-
     requests = [{**{
         "id": i.pk,
         "ignore_robots_txt": isinstance(i, FederalRegisterLink),
@@ -159,6 +159,13 @@ def call_text_extractor(request, resources):
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         },
     }, **_get_resource_keys(i)} for i in resources]
+
+    succeed_count = 0
+    failures = [{
+        "id": i["id"],
+        "reason": "The URI field is blank for this resource.",
+    } for i in requests if not i["uri"].strip()]
+    requests = [i for i in requests if i["uri"].strip()]
 
     if settings.USE_LOCAL_TEXT_EXTRACTOR:
         extract_function = _extract_via_http
