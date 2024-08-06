@@ -1,12 +1,10 @@
 from django.contrib import admin
-from django.db.models import Prefetch
-
 from solo.admin import SingletonModelAdmin
 
 from common.admin import CustomAdminMixin
 from resources.models import (
-    ResourcesConfiguration,
     AbstractPublicCategory,
+    ResourcesConfiguration,
 )
 
 
