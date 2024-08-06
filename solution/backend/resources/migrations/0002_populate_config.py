@@ -31,5 +31,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(populate_config),
+        migrations.RunPython(populate_config, reverse_code=migrations.RunPython.noop),
     ]

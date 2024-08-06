@@ -28,9 +28,12 @@ functions:
     events:
       - sqs:
           arn: !GetAtt TextExtractorQueue.Arn
+          batchSize: 1
 
 resources:
   Outputs:
+    TextExtractorQueueUrl:
+      Value: !GetAtt TextExtractorQueue.QueueUrl
     TextExtractorQueueArn:
       Value: !GetAtt TextExtractorQueue.Arn
       
@@ -38,11 +41,10 @@ resources:
     TextExtractorQueue:
       Type: AWS::SQS::Queue
       Properties:
-        QueueName: ${self:custom.stage}-text-extractor-queue.fifo
+        QueueName: ${self:custom.stage}-text-extractor-queue
         DelaySeconds: 0
         MessageRetentionPeriod: 345600 # 4 days
         VisibilityTimeout: 900
-        FifoQueue: true
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:

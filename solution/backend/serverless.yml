@@ -57,8 +57,7 @@ provider:
     EUA_FEATUREFLAG: ${ssm:/eregulations/eua/featureflag}
     DEPLOY_NUMBER: ${env:RUN_ID}
     AWS_STORAGE_BUCKET_NAME: file-repo-eregs-${self:custom.stage}
-    TEXT_EXTRACTOR_ARN: ${self:custom.settings.text_extractor_arn}
-    TEXT_EXTRACTOR_QUEUE_ARN: ${self:custom.settings.text_extractor_queue_arn}
+    TEXT_EXTRACTOR_QUEUE_URL: ${self:custom.settings.text_extractor_queue_url}
   tracing:
     apiGateway: true
   vpc:
@@ -85,7 +84,7 @@ custom:
     DB_NAME: eregs
     USERNAME: eregsuser
     ALLOWED_HOST: '.amazonaws.com'
-    text_extractor_arn: ${cf:text-extractor-${self:custom.stage}.TextDashextractorLambdaFunctionQualifiedArn}
+    text_extractor_queue_url: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueUrl}
     text_extractor_queue_arn: ${cf:text-extractor-${self:custom.stage}.TextExtractorQueueArn}
   associateWaf:
     name: APIGateway-eregs-allow-usa-plus-territories-${self:custom.stage}
@@ -153,6 +152,14 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: SendToTextExtractorQueuePolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - sqs:SendMessage
+                  Resource: "${self:custom.settings.text_extractor_queue_arn}"
           - PolicyName: StorageBucketPolicy
             PolicyDocument:
               Version: '2012-10-17'
@@ -196,11 +203,6 @@ resources:
                        - - "arn:aws:s3:::"
                          - "Ref" : "ServerlessDeploymentBucket"
                      - "arn:aws:s3:::file-repo-eregs-${self:custom.stage}/*"
-                -  Effect: "Allow"
-                   Action:
-                     - "lambda:InvokeFunction"
-                   Resource:
-                     - "${self:custom.settings.text_extractor_arn}"
     ServerlessSecurityGroup:
       Type: AWS::EC2::SecurityGroup
       Properties:

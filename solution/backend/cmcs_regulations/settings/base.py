@@ -225,13 +225,9 @@ SIGNUP_URL = os.environ.get(
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 
-USE_LOCAL_TEXTRACT = False
-# The first text extractor is if it was created by serverless.  If it wasnt then it will use the
-# text extractor who's arn you provide in the docker file.
-
+USE_LOCAL_TEXT_EXTRACTOR = False
 TEXT_EXTRACTOR_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", "")
-TEXTRACT_ARN = os.environ.get('TEXTRACT_ARN', "")
-TEXT_EXTRACTOR_QUEUE_ARN = os.environ.get("TEXT_EXTRACTOR_QUEUE_ARN", "")
+TEXT_EXTRACTOR_QUEUE_URL = os.environ.get("TEXT_EXTRACTOR_QUEUE_URL", "")
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",

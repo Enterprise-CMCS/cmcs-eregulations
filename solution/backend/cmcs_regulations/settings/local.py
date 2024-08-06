@@ -46,9 +46,7 @@ STORAGES = {
     },
 }
 USE_AWS_TOKEN = True
-TEXTRACT_KEY_ID = os.environ.get("TEXTRACT_KEY_ID", None)
-TEXTRACT_SECRET_KEY = os.environ.get("TEXTRACT_SECRET_KEY", None)
-USE_LOCAL_TEXTRACT = True
+USE_LOCAL_TEXT_EXTRACTOR = True
 BASE_URL = os.environ.get("BASE_URL", "")
 
 # EUA settings
