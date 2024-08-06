@@ -41,6 +41,8 @@ services:
       - text-extractor
     networks:
       - eregs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   static-assets:
     image: nginx
     ports:
@@ -65,6 +67,8 @@ services:
       - ./text-extractor:/var/task/app
     networks:
       - eregs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 volumes:
   eregs-data:
 

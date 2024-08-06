@@ -3,11 +3,7 @@ from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from common.auth import SettingsAuthentication
 from common.mixins import ViewSetPagination
 from resources.models import (
     AbstractCategory,
@@ -18,7 +14,7 @@ from resources.models import (
 from resources.utils import get_citation_filter, string_to_bool
 
 from .models import ContentIndex
-from .serializers import ContentSearchSerializer, ContentUpdateSerializer
+from .serializers import ContentSearchSerializer
 
 
 @extend_schema(
@@ -139,33 +135,3 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         # Serialize and return the results
         serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
         return self.get_paginated_response(serializer.data)
-
-
-@extend_schema(
-    description="Adds text to the content of an index.",
-    request=ContentUpdateSerializer,
-    responses={200: ContentUpdateSerializer}
-)
-class PostContentTextViewset(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [SettingsAuthentication]
-
-    def post(self, request, *args, **kwargs):
-        post_data = request.data
-        id = post_data['id']
-        text = post_data['text']
-        try:
-            rows = ContentIndex.objects.filter(id=id).update(content=text)
-            return Response(data=f"Index was updated for {rows} rows.")
-        except ContentIndex.DoesNotExist:
-            raise BadRequest(f"An index matching {id} does not exist.")
-
-
-@extend_schema(
-    description="Invokes the text extractor for the given content index ID.",
-)
-class InvokeTextExtractorViewSet(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        return Response("Not implemented")

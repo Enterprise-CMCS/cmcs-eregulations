@@ -28,6 +28,27 @@ class UtilsTestCase(unittest.TestCase):
         output = clean_output(text)
         self.assertEqual(output, "")
 
+    def test_get_config_sqs_invocation(self):
+        record = {
+            "hello": "world",
+            "x": 1,
+        }
+
+        body = {
+            "not": "what we want",
+        }
+
+        event = {
+            "Records": [
+                {"body": json.dumps(record)},
+                {"body": json.dumps(body)},
+            ],
+            "body": json.dumps(body),
+        }
+
+        output = get_config(event)
+        self.assertEqual(output, record)
+
     def test_get_config_normal_invocation(self):
         body = {
             "hello": "world",

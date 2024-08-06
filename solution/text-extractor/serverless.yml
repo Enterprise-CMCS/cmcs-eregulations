@@ -24,9 +24,27 @@ functions:
     image:
       name: appimage
     timeout: 900
+    reservedConcurrency: 10
+    events:
+      - sqs:
+          arn: !GetAtt TextExtractorQueue.Arn
+          batchSize: 1
 
 resources:
+  Outputs:
+    TextExtractorQueueUrl:
+      Value: !GetAtt TextExtractorQueue.QueueUrl
+    TextExtractorQueueArn:
+      Value: !GetAtt TextExtractorQueue.Arn
+      
   Resources:
+    TextExtractorQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.stage}-text-extractor-queue
+        DelaySeconds: 0
+        MessageRetentionPeriod: 345600 # 4 days
+        VisibilityTimeout: 900
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
@@ -50,6 +68,16 @@ resources:
         ManagedPolicyArns:
           - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         Policies:
+          - PolicyName: QueuePolicy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - sqs:ReceiveMessage
+                    - sqs:DeleteMessage
+                    - sqs:GetQueueAttributes
+                  Resource: !GetAtt TextExtractorQueue.Arn
           - PolicyName: TextDetectionPolicy
             PolicyDocument:
               Version: '2012-10-17'

@@ -30,7 +30,7 @@ class InternalFile(AbstractInternalResource):
 
     @property
     def key(self):
-        return f"uploaded_files/{str(self.uid)}{self.extension}"
+        return f"uploaded_files/{str(self.uid)}{self.extension}" if self.file_name else ""
 
     def __str__(self):
         return f"{self.document_id} {self.summary[:50]}"
