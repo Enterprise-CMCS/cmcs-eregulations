@@ -6,3 +6,4 @@ from .public_resources import *  # noqa
 from .resources import *  # noqa
 from .subjects import *  # noqa
 from .config import *  # noqa
+from .utility_models import *  # noqa

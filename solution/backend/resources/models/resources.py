@@ -12,11 +12,7 @@ from common.mixins import DisplayNameFieldMixin
 from .categories import AbstractCategory
 from .citations import AbstractCitation
 from .subjects import Subject
-
-
-class AbstractResourceManager(InheritanceManager):
-    def get_queryset(self):
-        return super().get_queryset().defer("content")
+from .utility_models import SingleStringModel
 
 
 class AbstractResource(models.Model, DisplayNameFieldMixin):
@@ -83,16 +79,13 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
 
-    content = models.TextField(blank=True)
+    content = models.OneToOneField(SingleStringModel, on_delete=models.SET_NULL, related_name="resource", blank=True, null=True)
 
-    objects = AbstractResourceManager()
+    objects = InheritanceManager()
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-
-    class Meta:
-        base_manager_name = "objects"
 
 
 class AbstractPublicResource(AbstractResource):

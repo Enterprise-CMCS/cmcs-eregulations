@@ -88,7 +88,7 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         if not search_query:
             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
 
-        query = ContentIndex.objects.all()
+        query = ContentIndex.objects.defer("content")
 
         # Filter inclusively by citations if this array exists
         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
