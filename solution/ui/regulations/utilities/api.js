@@ -333,9 +333,13 @@ const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
 
 /**
  * Gets the three most recent resources of a type.
- * @param {*} apiURL - base url for the api
- * @param {*} type  - type of resource, fr doc or not
- * @returns 3 resources
+ * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} options - parameters needed for API call
+ * @param {number} [options.page=1] - Page number to retrieve.
+ * @param {number} [options.pageSize=3] - Number of items to retrieve.
+ * @param {string} [options.type="rules"] - Type of resource to retrieve.  Ex: "rules" or "links"
+ * @param {string} [options.categories] - Categories to filter by.
+ * @returns {Promise<Array<Object>>} - Promise that contains array of resources when fulfilled
  */
 const getRecentResources = async (
     apiURL,
@@ -354,16 +358,23 @@ const getRecentResources = async (
 };
 
 /**
- *
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} [options.q=""] - Search query string.
+ * @param {boolean} [options.paginate=true] - Whether to paginate results.
+ * @param {number} [options.page=1] - Page number to retrieve.
+ * @param {number} [options.page_size=100] - Number of items to retrieve.
+ * @returns {Promise<Object>} - Promise that contains search results when fulfilled
  */
 const getRegSearchResults = async ({
+    apiUrl,
     q = "",
     paginate = true,
     page = 1,
     page_size = 100,
 }) => {
-    const response = await httpApiGetWithConfig(
-        `search?q=${encodeURIComponent(
+    const response = await httpApiGet(
+        `${apiUrl}search?q=${encodeURIComponent(
             q
         )}&paginate=${paginate}&page_size=${page_size}&page=${page}`
     );

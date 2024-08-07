@@ -413,6 +413,7 @@ export default {
             this.regsError = false;
             try {
                 const response = await getRegSearchResults({
+                    apiUrl: this.apiUrl,
                     q: query,
                     page,
                     page_size: pageSize,
