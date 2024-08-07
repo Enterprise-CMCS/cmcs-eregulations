@@ -273,13 +273,12 @@ const setCacheItem = async (key, data) => {
 const getExternalCategories = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) => {
-    return httpApiGet(
+}) =>
+    httpApiGet(
         `${apiUrl}resources/public/categories?page_size=1000`,
         {},
         cacheResponse
     );
-};
 
 /**
  * Get formatted date of most recent successful run of the ECFR parser
