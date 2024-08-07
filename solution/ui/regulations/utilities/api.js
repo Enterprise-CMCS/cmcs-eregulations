@@ -31,10 +31,6 @@ localforage.config({
     storeName: "eregs_django", // Should be alphanumeric, with underscores.
 });
 
-function configure(obj) {
-    config = { ...config, ...obj };
-}
-
 function fetchJson({
     url,
     options = {},
@@ -189,8 +185,15 @@ function fetchJson({
 }
 
 // ---------- helper functions ---------------
-
-function httpApiGet(
+/**
+ * Get JSON data from an API endpoint using the GET method via an API URL that uses a config value.
+ * @param {string} urlPath - Path to the API endpoints
+ * @param {Object} options - Object containing options for the request
+ * @param {Object} [options.params] - Query string parameters to pass to the API
+ * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<Object>} - Promise that contains the JSON response when fulfilled
+ **/
+function httpApiGetWithConfig(
     urlPath,
     { params } = {},
     cacheResponse = DEFAULT_CACHE_RESPONSE
@@ -205,8 +208,15 @@ function httpApiGet(
     });
 }
 
-// use when components used directly in Django templates
-function httpApiGetLegacy(
+/**
+ * Get JSON data from an API endpoint using the GET method.
+ * @param {string} urlPath - Path to the API endpoints
+ * @param {Object} options - Object containing options for the request
+ * @param {Object} [options.params] - Query string parameters to pass to the API
+ * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<Object>} - Promise that contains the JSON response when fulfilled
+ * */
+function httpApiGet(
     urlPath,
     { params } = {},
     cacheResponse = DEFAULT_CACHE_RESPONSE
@@ -257,8 +267,6 @@ const setCacheItem = async (key, data) => {
  *
  * @param {object} options - An object containing options for the request.
  * @param {string} [options.apiUrl] - The base URL of the external API.
- *   If provided, this function will fetch data from the external API.
- *   Otherwise, it will fetch data from the internal API with a default URL.
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
  */
@@ -266,15 +274,11 @@ const getExternalCategories = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
-    if (apiUrl) {
-        return httpApiGetLegacy(
-            `${apiUrl}resources/public/categories?page_size=1000`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGet("resources/public/categories?page_size=1000");
+    return httpApiGet(
+        `${apiUrl}resources/public/categories?page_size=1000`,
+        {},
+        cacheResponse
+    );
 };
 
 /**
@@ -287,9 +291,7 @@ const getExternalCategories = async ({
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
 const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
-    const result = await httpApiGetLegacy(
-        `${apiURL}ecfr_parser_result/${title}`
-    );
+    const result = await httpApiGet(`${apiURL}ecfr_parser_result/${title}`);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 
@@ -300,21 +302,21 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
  */
 const getTOC = async ({ title, apiUrl }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(
+        return httpApiGet(
             title ? `${apiUrl}title/${title}/toc` : `${apiUrl}toc`
         );
     }
 
-    return httpApiGet(title ? `title/${title}/toc` : `toc`);
+    return httpApiGetWithConfig(title ? `title/${title}/toc` : `toc`);
 };
 
 const getSubpartTOC = async (apiURL, title, part, subPart) =>
-    httpApiGetLegacy(
+    httpApiGet(
         `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
 const getSynonyms = async (query) =>
-    httpApiGet(`synonyms?q=${encodeURIComponent(query)}`);
+    httpApiGetWithConfig(`synonyms?q=${encodeURIComponent(query)}`);
 
 /* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
  * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
@@ -323,7 +325,7 @@ const getSynonyms = async (query) =>
  */
 const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
     const results = await Promise.all(
-        titleArr.map((title) => httpApiGet(`title/${title}/parts`))
+        titleArr.map((title) => httpApiGet(`${apiUrl}title/${title}/parts`))
     );
 
     return createLastUpdatedDates(results);
@@ -340,12 +342,12 @@ const getRecentResources = async (
     { page = 1, pageSize = 3, type = "rules", categories }
 ) => {
     if (type !== "rules") {
-        return httpApiGetLegacy(
+        return httpApiGet(
             `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}${categories}`,
             {} // params, default
         );
     }
-    return httpApiGetLegacy(
+    return httpApiGet(
         `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}`,
         {} // params, default
     );
@@ -360,7 +362,7 @@ const getRegSearchResults = async ({
     page = 1,
     page_size = 100,
 }) => {
-    const response = await httpApiGet(
+    const response = await httpApiGetWithConfig(
         `search?q=${encodeURIComponent(
             q
         )}&paginate=${paginate}&page_size=${page_size}&page=${page}`
@@ -406,11 +408,9 @@ const getSupplementalContent = async ({
     let response = "";
 
     if (apiUrl) {
-        response = await httpApiGetLegacy(
-            `${apiUrl}resources/public?${sString}`
-        );
+        response = await httpApiGet(`${apiUrl}resources/public?${sString}`);
     } else {
-        response = await httpApiGet(`resources/public?${sString}`);
+        response = await httpApiGetWithConfig(`resources/public?${sString}`);
     }
     return response;
 };
@@ -422,10 +422,10 @@ const getSupplementalContent = async ({
  */
 const getTitles = async (apiUrl) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}titles`);
+        return httpApiGet(`${apiUrl}titles`);
     }
 
-    return httpApiGet("titles");
+    return httpApiGetWithConfig("titles");
 };
 
 /**
@@ -440,7 +440,7 @@ const getTitles = async (apiUrl) => {
  * @returns {Array<{year: string, link: string}>}
  */
 const getGovInfoLinks = async (apiURL, params) => {
-    const result = await httpApiGetLegacy(
+    const result = await httpApiGet(
         `${apiURL}title/${params.title}/part/${params.part}/history/${
             Object.keys(params)[2]
         }/${Object.values(params)[2]}`
@@ -457,10 +457,10 @@ const getGovInfoLinks = async (apiURL, params) => {
  */
 const getParts = async (title, apiUrl) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}title/${title}/parts`);
+        return httpApiGet(`${apiUrl}title/${title}/parts`);
     }
 
-    return httpApiGet(`title/${title}/parts`);
+    return httpApiGetWithConfig(`title/${title}/parts`);
 };
 
 /**
@@ -470,10 +470,10 @@ const getParts = async (title, apiUrl) => {
  */
 const getStatutesActs = async ({ apiUrl }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(`${apiUrl}acts`);
+        return httpApiGet(`${apiUrl}acts`);
     }
 
-    return httpApiGet("acts");
+    return httpApiGetWithConfig("acts");
 };
 
 /**
@@ -489,12 +489,14 @@ const getStatutes = async ({
     title = "19",
 }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(
+        return httpApiGet(
             `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`
         );
     }
 
-    return httpApiGet(`statutes?act=${encodeURIComponent(act)}&title=${title}`);
+    return httpApiGetWithConfig(
+        `statutes?act=${encodeURIComponent(act)}&title=${title}`
+    );
 };
 
 /**
@@ -507,14 +509,17 @@ const getInternalSubjects = async ({
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(
+        return httpApiGet(
             `${apiUrl}resources/subjects?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/subjects?page_size=1000", cacheResponse);
+    return httpApiGetWithConfig(
+        "resources/subjects?page_size=1000",
+        cacheResponse
+    );
 };
 
 /**
@@ -541,14 +546,17 @@ const getInternalCategories = async ({
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
     if (apiUrl) {
-        return httpApiGetLegacy(
+        return httpApiGet(
             `${apiUrl}resources/internal/categories?page_size=1000`,
             {},
             cacheResponse
         );
     }
 
-    return httpApiGet("resources/internal/categories?page_size=1000", cacheResponse);
+    return httpApiGetWithConfig(
+        "resources/internal/categories?page_size=1000",
+        cacheResponse
+    );
 };
 
 /**
@@ -562,7 +570,7 @@ const getCombinedContent = async ({
     requestParams = "",
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
-    httpApiGetLegacy(
+    httpApiGet(
         `${apiUrl}content-search/${requestParams ? `?${requestParams}` : ""}`,
         {},
         cacheResponse
@@ -577,7 +585,7 @@ const getContentWithoutQuery = async ({
     const typeString = docType ? `${docType.toLowerCase()}` : "";
     const rqParams = requestParams ? `?${requestParams}` : "";
 
-    return httpApiGetLegacy(
+    return httpApiGet(
         `${apiUrl}resources/${typeString}${rqParams}`,
         {},
         cacheResponse
@@ -589,7 +597,7 @@ const getInternalDocs = async ({
     requestParams = "",
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
-    httpApiGetLegacy(
+    httpApiGet(
         `${apiUrl}resources/internal${
             requestParams ? `?${requestParams}` : ""
         }`,
@@ -604,7 +612,6 @@ const throwGenericError = async () =>
 
 export {
     config,
-    configure,
     getCacheItem,
     getCacheKeys,
     getCombinedContent,
