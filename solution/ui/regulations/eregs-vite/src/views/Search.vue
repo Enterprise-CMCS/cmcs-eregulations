@@ -492,7 +492,10 @@ export default {
             }
 
             try {
-                const synonyms = await getSynonyms(this.removeQuotes(query));
+                const synonyms = await getSynonyms({
+                    apiUrl: this.apiUrl,
+                    query: this.removeQuotes(query),
+                });
 
                 const activeSynonyms = synonyms.map((word) =>
                     word.synonyms

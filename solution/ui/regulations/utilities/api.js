@@ -289,8 +289,8 @@ const getExternalCategories = async ({
  *
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
-const getLastParserSuccessDate = async ({ apiURL, title = "42" }) => {
-    const result = await httpApiGet(`${apiURL}ecfr_parser_result/${title}`);
+const getLastParserSuccessDate = async ({ apiUrl, title = "42" }) => {
+    const result = await httpApiGet(`${apiUrl}ecfr_parser_result/${title}`);
     return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
 };
 
@@ -330,8 +330,8 @@ const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
         `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
-const getSynonyms = async (query) =>
-    httpApiGetWithConfig(`synonyms?q=${encodeURIComponent(query)}`);
+const getSynonyms = async ({ apiUrl, query }) =>
+    httpApiGet(`${apiUrl}synonyms?q=${encodeURIComponent(query)}`);
 
 /* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
  * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
