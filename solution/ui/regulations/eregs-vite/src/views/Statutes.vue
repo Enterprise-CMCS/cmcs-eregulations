@@ -173,7 +173,7 @@ getStatutesArray();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl" />
+                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks :subjects-url="subjectsUrl" />

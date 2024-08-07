@@ -432,7 +432,7 @@ const getSupplementalContent = async ({
 };
 
 /**
- * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ * @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
  * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
  */
 const getTitles = async (apiUrl) => httpApiGet(`${apiUrl}titles`);
@@ -445,7 +445,6 @@ const getTitles = async (apiUrl) => httpApiGet(`${apiUrl}titles`);
  * @param {string} params.title - CFR title number.
  * @param {string} params.part - CFR part numer within title.
  * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
- *
  * @returns {Array<{year: string, link: string}>}
  */
 const getGovInfoLinks = async (apiURL, params) =>
@@ -457,30 +456,25 @@ const getGovInfoLinks = async (apiURL, params) =>
 
 /**
  * @param {string} title - Title number.  Ex: `42` or `45`
- * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
- *
- * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: string, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
+ * @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
+ * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: Date, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
 const getParts = async (title, apiUrl) =>
     httpApiGet(`${apiUrl}title/${title}/parts`);
 
 /**
- * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
+ * @param {Object} params - parameters needed for API call
+ * @param {string} params.apiUrl - API base url passed in from Django template when component is used in Django template
  *
  * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
  */
-const getStatutesActs = async ({ apiUrl }) => {
-    if (apiUrl) {
-        return httpApiGet(`${apiUrl}acts`);
-    }
-
-    return httpApiGetWithConfig("acts");
-};
+const getStatutesActs = async ({ apiUrl }) => httpApiGet(`${apiUrl}acts`);
 
 /**
- * @param {string} [act=Social Security Act] - Act on which to filter.
- * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {string} [title=19] - Act title number as digits.
+ * @param {Object} params - parameters needed for API call
+ * @param {string} [params.act=Social Security Act] - Act on which to filter.
+ * @param {string} params.apiUrl - API base url passed in from Django template
+ * @param {string} [params.title=19] - Act title number as digits.
  *
  * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
@@ -488,17 +482,10 @@ const getStatutes = async ({
     act = "Social Security Act",
     apiUrl,
     title = "19",
-}) => {
-    if (apiUrl) {
-        return httpApiGet(
-            `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`
-        );
-    }
-
-    return httpApiGetWithConfig(
-        `statutes?act=${encodeURIComponent(act)}&title=${title}`
+}) =>
+    httpApiGet(
+        `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`
     );
-};
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template
