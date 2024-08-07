@@ -211,7 +211,7 @@ export default {
                 if (location) {
                     response = await getSupplementalContent({
                         apiUrl: this.apiUrl,
-                        builtLocationString: location,
+                        builtCitationString: location,
                         pageSize: 1000,
                     });
                 }
