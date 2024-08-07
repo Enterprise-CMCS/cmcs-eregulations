@@ -251,12 +251,12 @@ export default {
             }
         },
         async getPartDictionary() {
-            const sections = await getSubpartTOC(
-                this.apiUrl,
-                this.title,
-                this.part,
-                this.subparts[0]
-            );
+            const sections = await getSubpartTOC({
+                apiUrl: this.apiUrl,
+                title: this.title,
+                part: this.part,
+                subPart: this.subparts[0],
+            });
 
             const secList = getSectionsRecursive(sections);
 

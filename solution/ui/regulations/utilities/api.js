@@ -295,23 +295,39 @@ const getLastParserSuccessDate = async (apiURL, { title = "42" }) => {
 };
 
 /**
- * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
- *
- * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
+ * @typedef {Object} TocSection
+ * @property {"title" | "chapter" | "subchapter" | "part"} type - The type of TOC entry.
+ * @property {string} label - The full label/name of the TOC entry.
+ * @property {string[]} parent - An array of parent identifiers (e.g., ["42"], ["IV"]).
+ * @property {boolean} reserved - ???
+ * @property {string[]} identifier - An array of identifiers for the section within its type (e.g., ["42"], ["IV"], ["400"]).
+ * @property {string} label_level - A shortened form of the label that corresponds to the type identifier (e.g., "Title 42", "Part 400").
+ * @property {"" | "title" | "chapter" | "subchapter"} parent_type - The type of the parent section.
+ * @property {[string, string] | null} descendant_range - The range of descendant sections, if applicable.
+ * @property {string} label_description - A shortened form of the label that corresponds to the description of the TOC entry.
+ * @property {TocSection[]} children - An array of child TOC entries.
  */
-const getTOC = async ({ title, apiUrl }) => {
-    if (apiUrl) {
-        return httpApiGet(
-            title ? `${apiUrl}title/${title}/toc` : `${apiUrl}toc`
-        );
-    }
 
-    return httpApiGetWithConfig(title ? `title/${title}/toc` : `toc`);
-};
+/**
+ * @param {Object} options - parameters needed for API calls
+ * @param {string} [options.title] - Title number.  Ex: `42` or `45`
+ * @param {string} [options.apiUrl] - API base url passed in from Django template when component is used in Django template
+ * @returns {Promise<TocSection>} - Promise that contains object with TOC structure when fulfilled
+ */
+const getTOC = async ({ title, apiUrl }) =>
+    httpApiGet(title ? `${apiUrl}title/${title}/toc` : `${apiUrl}toc`);
 
-const getSubpartTOC = async (apiURL, title, part, subPart) =>
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {string} options.title - Title number.  Ex: `42` or `45`
+ * @param {string} options.part - Part number within title.
+ * @param {string} options.subPart - Subpart letter within part.
+ * @returns {Promise<TocSection>} - Promise that contains object with TOC structure when fulfilled
+ **/
+const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
     httpApiGet(
-        `${apiURL}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+        `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
 const getSynonyms = async (query) =>
