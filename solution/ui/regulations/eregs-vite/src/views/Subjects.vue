@@ -191,10 +191,10 @@ const partsLastUpdated = ref({
 const getPartsLastUpdated = async () => {
     try {
         const titles = await getTitles(props.apiUrl);
-        partsLastUpdated.value.results = await getLastUpdatedDates(
-            props.apiUrl,
-            titles
-        );
+        partsLastUpdated.value.results = await getLastUpdatedDates({
+            apiUrl: props.apiUrl,
+            titles,
+        });
     } catch (error) {
         console.error(error);
     } finally {

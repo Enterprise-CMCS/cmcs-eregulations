@@ -311,10 +311,10 @@ export default {
     async created() {
         if (this.searchQuery) {
             this.titles = await getTitles(this.apiUrl);
-            this.partsLastUpdated = await getLastUpdatedDates(
-                this.apiUrl,
-                this.titles
-            );
+            this.partsLastUpdated = await getLastUpdatedDates({
+                apiUrl: this.apiUrl,
+                titles: this.titles
+            });
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,

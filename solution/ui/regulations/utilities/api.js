@@ -330,17 +330,31 @@ const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
         `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
+/**
+ * @typedef {Object} SynonymType
+ * @property {string} baseWord - The base word for the synonym.
+ * @property {boolean} isActive - Whether the synonym is active.
+ * @property {SynonymType[]} synonyms - An array of synonyms for the base word.
+ **/
+
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {string} options.query - Search query string.
+ * @returns {Promise<SynonymType>} - Promise that contains array of synonyms when fulfilled
+ **/
 const getSynonyms = async ({ apiUrl, query }) =>
     httpApiGet(`${apiUrl}synonyms?q=${encodeURIComponent(query)}`);
 
-/* @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
- * @param {Array<string>} [titleArr=["42"]] - Array of titlesto map over.
+/* @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Array<string>} [options.titles=["42"]] - Array of titlesto map over.
  *
  * @returns {Object.<string, string>} - Object with Part numbers as keys and YYYY-MM-DD datestring as values
  */
-const getLastUpdatedDates = async (apiUrl, titleArr = ["42"]) => {
+const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
     const results = await Promise.all(
-        titleArr.map((title) => httpApiGet(`${apiUrl}title/${title}/parts`))
+        titles.map((title) => httpApiGet(`${apiUrl}title/${title}/parts`))
     );
 
     return createLastUpdatedDates(results);
