@@ -3,7 +3,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl" />
+                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -310,7 +310,7 @@ export default {
 
     async created() {
         if (this.searchQuery) {
-            this.titles = await getTitles();
+            this.titles = await getTitles(this.apiUrl);
             this.partsLastUpdated = await getLastUpdatedDates(
                 this.apiUrl,
                 this.titles
