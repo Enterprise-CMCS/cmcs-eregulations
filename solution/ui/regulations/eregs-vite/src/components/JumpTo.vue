@@ -63,7 +63,7 @@
     </div>
 </template>
 <script>
-import { getTitles, getParts } from "utilities/api.js";
+import { getTitles, getParts as fetchParts } from "utilities/api.js";
 
 export default {
     name: "JumpTo",
@@ -142,7 +142,7 @@ export default {
 
     methods: {
         async getParts(title) {
-            const partsList = await getParts(title, this.apiUrl);
+            const partsList = await fetchParts(title, this.apiUrl);
             // temporarily filter part 75. See EREGCSC-1397
             this.filteredParts = partsList
                 .map((part) => part.name)

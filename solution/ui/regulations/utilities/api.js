@@ -448,15 +448,12 @@ const getTitles = async (apiUrl) => httpApiGet(`${apiUrl}titles`);
  *
  * @returns {Array<{year: string, link: string}>}
  */
-const getGovInfoLinks = async (apiURL, params) => {
-    const result = await httpApiGet(
+const getGovInfoLinks = async (apiURL, params) =>
+    await httpApiGet(
         `${apiURL}title/${params.title}/part/${params.part}/history/${
             Object.keys(params)[2]
         }/${Object.values(params)[2]}`
     );
-
-    return result;
-};
 
 /**
  * @param {string} title - Title number.  Ex: `42` or `45`
@@ -464,13 +461,8 @@ const getGovInfoLinks = async (apiURL, params) => {
  *
  * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: string, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
-const getParts = async (title, apiUrl) => {
-    if (apiUrl) {
-        return httpApiGet(`${apiUrl}title/${title}/parts`);
-    }
-
-    return httpApiGetWithConfig(`title/${title}/parts`);
-};
+const getParts = async (title, apiUrl) =>
+    httpApiGet(`${apiUrl}title/${title}/parts`);
 
 /**
  * @param {string} [apiUrl] - API base url passed in from Django template when component is used in Django template
