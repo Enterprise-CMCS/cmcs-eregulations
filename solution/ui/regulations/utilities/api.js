@@ -31,12 +31,12 @@ localforage.config({
     storeName: "eregs_django", // Should be alphanumeric, with underscores.
 });
 
-function fetchJson({
+const fetchJson = ({
     url,
     options = {},
     retryCount = 0,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) {
+}) => {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
     let httpStatus;
@@ -194,11 +194,11 @@ function fetchJson({
  * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Object>} - Promise that contains the JSON response when fulfilled
  * */
-function httpApiGet(
+const httpApiGet = (
     urlPath,
     { params } = {},
     cacheResponse = DEFAULT_CACHE_RESPONSE
-) {
+) => {
     return fetchJson({
         url: `${urlPath}`,
         options: {
@@ -312,7 +312,7 @@ const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
  * @param {number} [options.pageSize=3] - Number of items to retrieve.
  * @param {string} [options.type="rules"] - Type of resource to retrieve.  Ex: "rules" or "links"
  * @param {string} [options.categories] - Categories to filter by.
- * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>>} - Promise that contains array of resources when fulfilled
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>>} - Promise that contains array of resources when fulfilled
  */
 const getRecentResources = async (
     apiURL,
@@ -469,7 +469,7 @@ const getStatutes = async ({
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<{id: number, full_name: string, short_name: string, abbreviation: string, description: string, public_resources: number, internal_resources: number}>}>} - Promise that contains array of subjects when fulfilled
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<{id: number, full_name: string, short_name: string, abbreviation: string, description: string, public_resources: number, internal_resources: number}>}>} - Promise that contains array of subjects when fulfilled
  */
 const getInternalSubjects = async ({
     apiUrl,
@@ -496,7 +496,7 @@ const getInternalSubjects = async ({
  * @param {Object} options - An object containing options for the request.
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{counts: number, next: string|null, previous: string|null, results: InternalCategory[]}>} - Promise that contains array of categories when fulfilled
+ * @returns {Promise<{counts: number, next: ?string, previous: ?string, results: InternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getInternalCategories = async ({
     apiUrl,
@@ -528,7 +528,7 @@ const getInternalCategories = async ({
  * @param {object} options - An object containing options for the request.
  * @param {string} [options.apiUrl] - The base URL of the external API.
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{counts: number, next: string|null, previous: string|null, results: ExternalCategory[]}>} - Promise that contains array of categories when fulfilled
+ * @returns {Promise<{counts: number, next: ?string, previous: ?string, results: ExternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getExternalCategories = async ({
     apiUrl,
@@ -545,7 +545,7 @@ const getExternalCategories = async ({
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [optons.requestParams] - Query string parameters to pass to API
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getCombinedContent = async ({
     apiUrl,
@@ -563,7 +563,7 @@ const getCombinedContent = async ({
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [options.requestParams] - Query string parameters to pass to API
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getContentWithoutQuery = async ({
     apiUrl,
@@ -586,7 +586,7 @@ const getContentWithoutQuery = async ({
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [options.requestParams] - Query string parameters to pass to API
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getInternalDocs = async ({
     apiUrl,
