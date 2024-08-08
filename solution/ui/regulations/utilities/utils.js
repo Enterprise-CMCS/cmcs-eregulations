@@ -246,51 +246,6 @@ const getQueryParam = (location, key) => {
     return queryParams.get(key);
 }
 
-// convert current date to YYYY-MM-DD
-const getKebabDate = (date = new Date()) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month}-${day}`;
-};
-
-const getKebabLabel = (label) => {
-    if (!label) return "na-label";
-    return `${label.join("-")}`;
-};
-
-const getKebabTitle = (label) => {
-    return `${getKebabLabel(label)}-title`;
-};
-
-const getDisplayName = (label, title = 42) => {
-    if (!label) return "na-label";
-    return `${title} ${label.join(".")}`;
-};
-
-// lifted straight from django pdepth templatetag
-const getParagraphDepth = (value) => {
-    const sectionDepth = 2;
-
-    const labelLength = value?.label?.length;
-    const markerLength = value?.marker?.length;
-
-    let depth = labelLength - sectionDepth;
-
-    if (markerLength > 1) {
-        depth = depth - (markerLength - 1);
-    }
-
-    if (depth < 1) return 1;
-
-    return depth;
-};
-
-function capitalizeFirstLetter(string) {
-    return string[0].toUpperCase() + string.slice(1);
-}
-
 /**
  *
  * @param length {number} - number of elements in array
@@ -427,20 +382,6 @@ const formatResourceCategories = ({
     return returnArr;
 };
 
-function flattenSubpart(subpart) {
-    const result = JSON.parse(JSON.stringify(subpart));
-    const subjectGroupSections = subpart.children
-        .filter((child) => child.type === "subject_group")
-        .flatMap((subjgrp) => subjgrp.children)
-        .filter((child) => child.type === "section");
-
-    result.children = result.children
-        .concat(subjectGroupSections)
-        .filter((child) => child.type === "section");
-
-    return result;
-}
-
 const formatDate = (value) => {
     const date = new Date(value);
     const options = {
@@ -553,84 +494,6 @@ const scrollToElement = (element, offsetPx = 0) => {
 };
 
 /**
- * Trap focus in an element (higher-order function)
- * adapted from: https://hidde.blog/using-javascript-to-trap-focus-in-an-element/
- *
- * @param {HTMLElement} element - element in which to trap focus
- *
- * @returns {() => void} - function to remove event listener when invoked
- */
-function trapFocus(element) {
-    const focusableEls = element.querySelectorAll(
-        'a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled]), div:not([disabled]), iframe'
-    );
-
-    const firstFocusableEl = focusableEls[0];
-    const lastFocusableEl = focusableEls[focusableEls.length - 1];
-    const KEYCODE_TAB = 9;
-
-    const callbackFunc = (e) => {
-        const isTabPressed = e.key === "Tab" || e.keyCode === KEYCODE_TAB;
-
-        if (!isTabPressed) {
-            return;
-        }
-
-        if (e.shiftKey) {
-            /* shift + tab */ if (document.activeElement === firstFocusableEl) {
-                lastFocusableEl.focus();
-                e.preventDefault();
-            }
-        } /* tab */ else {
-            if (document.activeElement === lastFocusableEl) {
-                firstFocusableEl.focus();
-                e.preventDefault();
-            }
-        }
-    };
-
-    element.addEventListener("keydown", callbackFunc);
-
-    return function () {
-        element.removeEventListener("keydown", callbackFunc);
-    };
-}
-
-/**
- * Convert digit to roman numeral.
- * Adapted from: https://blog.stevenlevithan.com/archives/javascript-roman-numeral-converter#comment-823972
- *
- * @param {number} num - number to convert
- * @returns {string} - roman numeral
- */
-const romanize = (num) => {
-    var romansObj = {
-        M: 1000,
-        CM: 900,
-        D: 500,
-        CD: 400,
-        C: 100,
-        XC: 90,
-        L: 50,
-        XL: 40,
-        X: 10,
-        IX: 9,
-        V: 5,
-        IV: 4,
-        I: 1,
-    };
-
-    return Object.keys(romansObj).reduce(
-        function (acc, roman) {
-            acc.str += roman.repeat(acc.num / romansObj[roman]);
-            acc.num %= romansObj[roman];
-            return acc;
-        },
-        { str: "", num: num }
-    ).str;
-};
-
-/**
  * @param {string} act - full name of act. Ex: "Social Security Act"
  * @param {Array<{[key: string]: string}>} actTypes - array of objects with act type abbreviations as keys and act type names as values
  *
@@ -710,7 +573,6 @@ const getSectionsRecursive = (tocPartsList) =>
 
 export {
     addMarks,
-    capitalizeFirstLetter,
     createLastUpdatedDates,
     consolidateToMap,
     createOneIndexedArray,
@@ -718,34 +580,25 @@ export {
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
     EventCodes,
-    flattenSubpart,
     formatAmount,
     formatDate,
     formatResourceCategories,
     getActAbbr,
     getCurrentPageResultsRange,
     getCurrentSectionFromHash,
-    getDisplayName,
     getFileNameSuffix,
     getFileTypeButton,
-    getKebabDate,
-    getKebabLabel,
-    getKebabTitle,
-    getParagraphDepth,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,
     getTagContent,
     highlightText,
-    isAmountFormatCorrect,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
-    romanize,
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,
     swallowError,
-    trapFocus,
 };
