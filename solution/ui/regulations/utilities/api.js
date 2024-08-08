@@ -12,6 +12,7 @@ import localforage from "localforage";
 import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
 const DEFAULT_CACHE_RESPONSE = false; // Change this to true if needed
 
+// still needed for caching purposes
 const apiPath = `${
     import.meta.env.VITE_ENV === "prod" &&
     window.location.host.includes("cms.gov")
@@ -20,7 +21,6 @@ const apiPath = `${
 }/v3`;
 
 let config = {
-    apiPath,
     fetchMode: "cors",
     maxRetryCount: 2,
 };
@@ -185,28 +185,6 @@ function fetchJson({
 }
 
 // ---------- helper functions ---------------
-/**
- * Get JSON data from an API endpoint using the GET method via an API URL that uses a config value.
- * @param {string} urlPath - Path to the API endpoints
- * @param {Object} options - Object containing options for the request
- * @param {Object} [options.params] - Query string parameters to pass to the API
- * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Object>} - Promise that contains the JSON response when fulfilled
- **/
-function httpApiGetWithConfig(
-    urlPath,
-    { params } = {},
-    cacheResponse = DEFAULT_CACHE_RESPONSE
-) {
-    return fetchJson({
-        url: `${config.apiPath}/${urlPath}`,
-        options: {
-            method: "GET",
-            params,
-            cacheResponse,
-        },
-    });
-}
 
 /**
  * Get JSON data from an API endpoint using the GET method.
@@ -232,22 +210,6 @@ function httpApiGet(
     });
 }
 
-function httpApiPost(
-    urlPath,
-    { data = {}, params } = {},
-    cacheResponse = DEFAULT_CACHE_RESPONSE
-) {
-    return fetchJson({
-        url: `${config.apiPath}/${urlPath}`,
-        options: {
-            method: "POST",
-            params,
-            body: JSON.stringify(data),
-        },
-        cacheResponse,
-    });
-}
-
 // ---------- cache helpers -----------
 
 const getCacheKeys = async () => localforage.keys();
@@ -263,29 +225,11 @@ const setCacheItem = async (key, data) => {
 
 // ---------- api calls ---------------
 /**
- * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
- *
- * @param {object} options - An object containing options for the request.
- * @param {string} [options.apiUrl] - The base URL of the external API.
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<object>>} - Promise that contains array of categories when fulfilled
- */
-const getExternalCategories = async ({
-    apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) =>
-    httpApiGet(
-        `${apiUrl}resources/public/categories?page_size=1000`,
-        {},
-        cacheResponse
-    );
-
-/**
  * Get formatted date of most recent successful run of the ECFR parser
  *
- * @param {Object} params - parameters needed for API call
- * @param {string} params.apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
- * @param {string} [params.title=42] - CFR title number.
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - version of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {string} [options.title=42] - CFR title number.
  *
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
@@ -323,7 +267,7 @@ const getTOC = async ({ title, apiUrl }) =>
  * @param {string} options.title - Title number.  Ex: `42` or `45`
  * @param {string} options.part - Part number within title.
  * @param {string} options.subPart - Subpart letter within part.
- * @returns {Promise<TocSection>} - Promise that contains object with TOC structure when fulfilled
+ * @returns {Promise<TocSection[]>} - Promise that contains object with TOC structure when fulfilled
  **/
 const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
     httpApiGet(
@@ -341,7 +285,7 @@ const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
  * @param {string} options.query - Search query string.
- * @returns {Promise<SynonymType>} - Promise that contains array of synonyms when fulfilled
+ * @returns {Promise<SynonymType[]>} - Promise that contains array of synonyms when fulfilled
  **/
 const getSynonyms = async ({ apiUrl, query }) =>
     httpApiGet(`${apiUrl}synonyms?q=${encodeURIComponent(query)}`);
@@ -368,7 +312,7 @@ const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
  * @param {number} [options.pageSize=3] - Number of items to retrieve.
  * @param {string} [options.type="rules"] - Type of resource to retrieve.  Ex: "rules" or "links"
  * @param {string} [options.categories] - Categories to filter by.
- * @returns {Promise<Array<Object>>} - Promise that contains array of resources when fulfilled
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>>} - Promise that contains array of resources when fulfilled
  */
 const getRecentResources = async (
     apiURL,
@@ -470,12 +414,12 @@ const getTitles = async ({ apiUrl }) => httpApiGet(`${apiUrl}titles`);
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
  *
- * @param {Object} params - parameters needed for API call
- * @param {string} params.apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
- * @param {Object} params.filterParams - Object containing filter parameters for the requestParams
- * @param {string} params.filterParams.title - CFR title number.
- * @param {string} params.filterParams.part - CFR part numer within title.
- * @param {string} params.filterParams.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} options.filterParams - Object containing filter parameters for the requestParams
+ * @param {string} options.filterParams.title - CFR title number.
+ * @param {string} options.filterParams.part - CFR part numer within title.
+ * @param {string} options.filterParams.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
  * @returns {Array<{year: string, link: string}>}
  */
 const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
@@ -488,27 +432,27 @@ const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
     );
 
 /**
- * @param {Object} params - parameters needed for API call
- * @param {string} params.title - Title number.  Ex: `42` or `45`
- * @param {string} params.apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.title - Title number.  Ex: `42` or `45`
+ * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
  * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: Date, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
 const getParts = async ({ title, apiUrl }) =>
     httpApiGet(`${apiUrl}title/${title}/parts`);
 
 /**
- * @param {Object} params - parameters needed for API call
- * @param {string} params.apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
  *
  * @returns {Promise <Array<{act: string, title: number, title_roman: string}>} - Promise that contains array of title objects when fulfilled
  */
 const getStatutesActs = async ({ apiUrl }) => httpApiGet(`${apiUrl}acts`);
 
 /**
- * @param {Object} params - parameters needed for API call
- * @param {string} [params.act=Social Security Act] - Act on which to filter.
- * @param {string} params.apiUrl - API base url passed in from Django template
- * @param {string} [params.title=19] - Act title number as digits.
+ * @param {Object} options - parameters needed for API call
+ * @param {string} [options.act=Social Security Act] - Act on which to filter.
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} [options.title=19] - Act title number as digits.
  *
  * @returns {Promise <Array<{section: string, title: number, usc: string, act: string, name: string, statute_title: string, source_url: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
@@ -522,27 +466,16 @@ const getStatutes = async ({
     );
 
 /**
- * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<{id: number, full_name: string, short_name: string, abbreviation: string}>>} - Promise that contains array of subjects when fulfilled
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<{id: number, full_name: string, short_name: string, abbreviation: string, description: string, public_resources: number, internal_resources: number}>}>} - Promise that contains array of subjects when fulfilled
  */
 const getInternalSubjects = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) => {
-    if (apiUrl) {
-        return httpApiGet(
-            `${apiUrl}resources/subjects?page_size=1000`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGetWithConfig(
-        "resources/subjects?page_size=1000",
-        cacheResponse
-    );
-};
+}) =>
+    httpApiGet(`${apiUrl}resources/subjects?page_size=1000`, {}, cacheResponse);
 
 /**
  * An object representing an internal category
@@ -561,8 +494,8 @@ const getInternalSubjects = async ({
  * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
  *
  * @param {Object} options - An object containing options for the request.
- * @param {string} params.apiUrl - API base url passed in from Django template
- * @param {boolean} [params.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{counts: number, next: string|null, previous: string|null, results: InternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getInternalCategories = async ({
@@ -576,9 +509,42 @@ const getInternalCategories = async ({
     );
 
 /**
- * @param {string} apiUrl - API base url passed in from Django template
- * @param {string} [requestParams] - Query string parameters to pass to API
- * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * An object representing an external category
+ * @typedef {Object} ExternalCategory
+ * @property {number} id - Category id
+ * @property {string} name - Category name
+ * @property {string} description - Category description
+ * @property {number} order - Category order
+ * @property {boolean} show_if_empty - Whether to show category if empty
+ * @property {boolean} is_fr_link_category - Whether category is a Federal Register link category
+ * @property {string} type - Category type
+ * @property {number} [parent] - Parent category id
+ * @property {ExternalCategory[]} subcategories - Array of subcategories
+ */
+
+/**
+ * Retrieves a top-down representation of external categories, with each category containing zero or more sub-categories.
+ *
+ * @param {object} options - An object containing options for the request.
+ * @param {string} [options.apiUrl] - The base URL of the external API.
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<{counts: number, next: string|null, previous: string|null, results: ExternalCategory[]}>} - Promise that contains array of categories when fulfilled
+ */
+const getExternalCategories = async ({
+    apiUrl,
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) =>
+    httpApiGet(
+        `${apiUrl}resources/public/categories?page_size=1000`,
+        {},
+        cacheResponse
+    );
+
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} [optons.requestParams] - Query string parameters to pass to API
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getCombinedContent = async ({
@@ -592,6 +558,13 @@ const getCombinedContent = async ({
         cacheResponse
     );
 
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} [options.requestParams] - Query string parameters to pass to API
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
 const getContentWithoutQuery = async ({
     apiUrl,
     requestParams = "",
@@ -608,6 +581,13 @@ const getContentWithoutQuery = async ({
     );
 };
 
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} [options.requestParams] - Query string parameters to pass to API
+ * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<{count: number, next: string|null, previous: string|null, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
 const getInternalDocs = async ({
     apiUrl,
     requestParams = "",
