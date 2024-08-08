@@ -31,38 +31,3 @@ const itemLocationSchema = {
         parent: { type: "number", nullable: true },
     },
 };
-
-const searchGovResourcesItemSchema = {
-    type: "object",
-    properties: {
-        id: { type: "number" },
-        created_at: { type: "string" },
-        updated_at: { type: "string" },
-        approved: { type: "boolean" },
-        snippet: { type: "string", nullable: true },
-        category: itemCategorySchema,
-        locations: { type: "array", items: itemLocationSchema },
-        type: { type: "string" }, // could be enum for supplemental_content, federal_register_doc, etc
-        date: { type: "string", nullable: true },
-        name: { type: "string", nullable: true },
-        description: { type: "string" },
-        internalURL: { type: "string" },
-        name_headline: { type: "string", nullable: true },
-        description_headline: { type: "string", nullable: true },
-        // ...more for federal_register_doc etc
-    },
-};
-
-// might need to use $ref to make have required fields for nested schemas
-export const getSearchGovResourcesSchema = {
-    $id: "searchGovResourcesSchema",
-    type: "object",
-    properties: {
-        count: { type: "number" },
-        next: { type: "string", nullable: true },
-        previous: { type: "string", nullable: true },
-        results: { type: "array", items: searchGovResourcesItemSchema },
-    },
-
-    required: ["count", "next", "previous", "results"],
-};
