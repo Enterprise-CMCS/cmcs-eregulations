@@ -470,26 +470,30 @@ const getTitles = async ({ apiUrl }) => httpApiGet(`${apiUrl}titles`);
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
  *
- * @param {string} apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
  * @param {Object} params - parameters needed for API call
- * @param {string} params.title - CFR title number.
- * @param {string} params.part - CFR part numer within title.
- * @param {string} params.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
+ * @param {string} params.apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
+ * @param {Object} params.filterParams - Object containing filter parameters for the requestParams
+ * @param {string} params.filterParams.title - CFR title number.
+ * @param {string} params.filterParams.part - CFR part numer within title.
+ * @param {string} params.filterParams.[("section"|"appendix"|"subpart")] - CFR idenfifier for node type.  Ex. for "section": "10"
  * @returns {Array<{year: string, link: string}>}
  */
-const getGovInfoLinks = async (apiURL, params) =>
+const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
     await httpApiGet(
-        `${apiURL}title/${params.title}/part/${params.part}/history/${
-            Object.keys(params)[2]
-        }/${Object.values(params)[2]}`
+        `${apiUrl}title/${filterParams.title}/part/${
+            filterParams.part
+        }/history/${Object.keys(filterParams)[2]}/${
+            Object.values(filterParams)[2]
+        }`
     );
 
 /**
- * @param {string} title - Title number.  Ex: `42` or `45`
- * @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
+ * @param {Object} params - parameters needed for API call
+ * @param {string} params.title - Title number.  Ex: `42` or `45`
+ * @param {string} params.apiUrl - API base url passed in from Django template when component is used in Django template
  * @returns {Promise <Array<{date: string, depth: number, id: number, last_updated: Date, name: string}>} - Promise that contains array of part objects for provided title when fulfilled
  */
-const getParts = async (title, apiUrl) =>
+const getParts = async ({ title, apiUrl }) =>
     httpApiGet(`${apiUrl}title/${title}/parts`);
 
 /**
@@ -549,33 +553,27 @@ const getInternalSubjects = async ({
  * @property {number} order - Category order
  * @property {boolean} show_if_empty - Whether to show category if empty
  * @property {string} type - Category type
- * @property {InternalCategory|undefined} parent - Parent category
+ * @property {number} [parent] - Parent category id
+ * @property {InternalCategory[]} subcategories - Array of subcategories
  */
 
 /**
  * Retrieves a top-down representation of internal categories, with each category containing zero or more sub-categories.
  *
- * @param {string} [apiUrl] - API base url passed in from Django template
- * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
- * @returns {Promise<Array<InternalCategory>>} - Promise that contains array of categories when fulfilled
+ * @param {Object} options - An object containing options for the request.
+ * @param {string} params.apiUrl - API base url passed in from Django template
+ * @param {boolean} [params.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
+ * @returns {Promise<{counts: number, next: string|null, previous: string|null, results: InternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getInternalCategories = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
-}) => {
-    if (apiUrl) {
-        return httpApiGet(
-            `${apiUrl}resources/internal/categories?page_size=1000`,
-            {},
-            cacheResponse
-        );
-    }
-
-    return httpApiGetWithConfig(
-        "resources/internal/categories?page_size=1000",
+}) =>
+    httpApiGet(
+        `${apiUrl}resources/internal/categories?page_size=1000`,
+        {},
         cacheResponse
     );
-};
 
 /**
  * @param {string} apiUrl - API base url passed in from Django template
