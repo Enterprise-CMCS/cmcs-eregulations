@@ -105,7 +105,7 @@ export default {
 
     async created() {
         // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        this.titles = await getTitles(this.apiUrl);
+        this.titles = await getTitles({ apiUrl: this.apiUrl });
         if (this.titles.length === 1) {
             this.selectedTitle = this.titles[0];
             this.defaultTitle = this.selectedTitle;

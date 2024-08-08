@@ -461,10 +461,11 @@ const getSupplementalContent = async ({
 };
 
 /**
- * @param {string} apiUrl - API base url passed in from Django template when component is used in Django template
- * @returns {Promise<Array<number>>} - Promise that contains array of title numbers when fulfilled
- */
-const getTitles = async (apiUrl) => httpApiGet(`${apiUrl}titles`);
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @returns {Promise<Array<number>>} - Promise that contains array of title objects when fulfilled
+ **/
+const getTitles = async ({ apiUrl }) => httpApiGet(`${apiUrl}titles`);
 
 /**
  * Get array of objects containing valid GovInfo docs years with links to the PDF files.
