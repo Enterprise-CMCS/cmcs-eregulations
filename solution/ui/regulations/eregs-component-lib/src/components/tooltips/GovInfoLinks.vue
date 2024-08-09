@@ -63,10 +63,13 @@ export default {
     },
 
     created() {
-        getGovInfoLinks(this.apiUrl, {
-            title: this.title,
-            part: this.part,
-            section: this.section,
+        getGovInfoLinks({
+            apiUrl: this.apiUrl,
+            filterParams: {
+                title: this.title,
+                part: this.part,
+                section: this.section,
+            },
         })
             .then((response) => {
                 this.govInfoLinks = response.sort((a, b) => b.year - a.year);

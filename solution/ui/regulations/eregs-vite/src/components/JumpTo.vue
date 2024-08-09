@@ -63,7 +63,7 @@
     </div>
 </template>
 <script>
-import { getTitles, getParts } from "utilities/api.js";
+import { getTitles, getParts as fetchParts } from "utilities/api.js";
 
 export default {
     name: "JumpTo",
@@ -105,7 +105,7 @@ export default {
 
     async created() {
         // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        this.titles = await getTitles(this.apiUrl);
+        this.titles = await getTitles({ apiUrl: this.apiUrl });
         if (this.titles.length === 1) {
             this.selectedTitle = this.titles[0];
             this.defaultTitle = this.selectedTitle;
@@ -142,7 +142,7 @@ export default {
 
     methods: {
         async getParts(title) {
-            const partsList = await getParts(title, this.apiUrl);
+            const partsList = await fetchParts({ title, apiUrl: this.apiUrl });
             // temporarily filter part 75. See EREGCSC-1397
             this.filteredParts = partsList
                 .map((part) => part.name)

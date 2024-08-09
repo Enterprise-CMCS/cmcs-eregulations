@@ -3,7 +3,7 @@
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl" />
+                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -310,11 +310,11 @@ export default {
 
     async created() {
         if (this.searchQuery) {
-            this.titles = await getTitles();
-            this.partsLastUpdated = await getLastUpdatedDates(
-                this.apiUrl,
-                this.titles
-            );
+            this.titles = await getTitles({ apiUrl: this.apiUrl });
+            this.partsLastUpdated = await getLastUpdatedDates({
+                apiUrl: this.apiUrl,
+                titles: this.titles,
+            });
             this.retrieveSynonyms(this.searchQuery);
             this.retrieveAllResults({
                 query: this.searchQuery,
@@ -413,6 +413,7 @@ export default {
             this.regsError = false;
             try {
                 const response = await getRegSearchResults({
+                    apiUrl: this.apiUrl,
                     q: query,
                     page,
                     page_size: pageSize,
@@ -491,7 +492,10 @@ export default {
             }
 
             try {
-                const synonyms = await getSynonyms(this.removeQuotes(query));
+                const synonyms = await getSynonyms({
+                    apiUrl: this.apiUrl,
+                    query: this.removeQuotes(query),
+                });
 
                 const activeSynonyms = synonyms.map((word) =>
                     word.synonyms

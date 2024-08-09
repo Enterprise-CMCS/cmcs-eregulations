@@ -22,7 +22,7 @@ provide("homeUrl", props.homeUrl);
 // Titles
 const titles = ref([]);
 const getTitlesArray = async () => {
-    const titlesArray = await getTitles(props.apiUrl);
+    const titlesArray = await getTitles({ apiUrl: props.apiUrl });
     const formattedTitleNamesArray = titlesArray.map(
         (title) => `Title ${title}`
     );
