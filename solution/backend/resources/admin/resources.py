@@ -19,10 +19,10 @@ from resources.models import (
     AbstractInternalCategory,
     AbstractPublicCategory,
 )
+from resources.utils import call_text_extractor
 
 from . import actions
 from .widgets import CustomCategoryChoiceField
-from resources.utils import call_text_extractor
 
 logger = logging.getLogger(__name__)
 

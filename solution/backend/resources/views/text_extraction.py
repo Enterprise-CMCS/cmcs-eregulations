@@ -1,9 +1,9 @@
+from django.db import transaction
 from drf_spectacular.utils import extend_schema
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from django.db import transaction
 
 from common.auth import SettingsAuthentication
 from resources.models import AbstractResource, SingleStringModel
