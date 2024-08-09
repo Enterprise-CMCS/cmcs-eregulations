@@ -1,6 +1,7 @@
 import argparse
 import json
-import multiprocessing
+import threading
+from queue import Queue
 import signal
 import sys
 import urllib.parse
@@ -11,23 +12,34 @@ import requests
 
 class ApiProxy:
     def start_server(self, hostname, internal_port, external_port, enable_async):
+        queue = Queue()
+
+        def process_requests():
+            while True:
+                request = queue.get()
+                try:
+                    requests.post(request["url"], headers=request["headers"], data=request["data"])
+                except Exception as e:
+                    print(f"Error processing async request: {str(e)}")
+                queue.task_done()
+
         class ProxyHTTPRequestHandler(BaseHTTPRequestHandler):
             protocol_version = "HTTP/1.0"
 
             def do_GET(self):
-                self._handle_request("GET", requests.get)
+                self._handle_request("GET")
 
             def do_DELETE(self):
-                self._handle_request("DELETE", requests.delete)
+                self._handle_request("DELETE")
 
             def do_POST(self):
-                self._handle_request("POST", requests.post)
+                self._handle_request("POST")
 
             def do_PUT(self):
-                self._handle_request("PUT", requests.put)
+                self._handle_request("PUT")
 
             def do_PATCH(self):
-                self._handle_request("PATCH", requests.patch)
+                self._handle_request("PATCH")
 
             def _send_response(self, status_code, headers, body):
                 self.send_response(status_code)
@@ -37,7 +49,7 @@ class ApiProxy:
                 body = body.encode() if not isinstance(body, bytes) else body
                 self.wfile.write(body)
 
-            def _handle_request(self, method, requests_func):
+            def _handle_request(self, method):
                 url = f"http://{hostname}:{internal_port}/2015-03-31/functions/function/invocations"
                 path = urllib.parse.urlparse(self.path)
 
@@ -71,11 +83,11 @@ class ApiProxy:
                 }
 
                 if enable_async:
-                    multiprocessing.Process(
-                        target=requests.post,
-                        args=(url,),
-                        kwargs={"headers": headers, "data": json.dumps(data)},
-                    ).start()
+                    queue.put({
+                        "url": url,
+                        "headers": headers,
+                        "data": json.dumps(data),
+                    })
                     self._send_response(200, {}, "")
                     return
 
@@ -110,6 +122,11 @@ class ApiProxy:
 
         server_address = ('', external_port)
         self.httpd = HTTPServer(server_address, ProxyHTTPRequestHandler)
+
+        # Start a separate thread to process async requests
+        if enable_async:
+            threading.Thread(target=process_requests).start()
+
         self.httpd.serve_forever()
 
 
