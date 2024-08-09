@@ -12,7 +12,6 @@ from common.mixins import DisplayNameFieldMixin
 from .categories import AbstractCategory
 from .citations import AbstractCitation
 from .subjects import Subject
-from .utility_models import SingleStringModel
 
 
 class AbstractResource(models.Model, DisplayNameFieldMixin):
@@ -79,13 +78,19 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
 
-    content = models.OneToOneField(SingleStringModel, on_delete=models.SET_NULL, related_name="resource", blank=True, null=True)
-
     objects = InheritanceManager()
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+
+class ResourceContent(models.Model):
+    value = models.TextField(blank=True)
+    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="content")
+
+    def __str__(self):
+        return self.value[:100] + "..." if len(self.value) > 100 else self.value
 
 
 class AbstractPublicResource(AbstractResource):

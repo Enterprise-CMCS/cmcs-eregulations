@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from common.auth import SettingsAuthentication
-from resources.models import AbstractResource, SingleStringModel
+from resources.models import AbstractResource, ResourceContent
 from resources.serializers import ContentUpdateSerializer
 
 
@@ -30,11 +30,9 @@ class ContentTextViewSet(APIView):
 
         try:
             resource = AbstractResource.objects.select_subclasses().get(pk=pk)
-            if not resource.content:
-                resource.content = SingleStringModel.objects.create()
-                resource.save()
-            resource.content.value = serializer.validated_data.get("text", "")
-            resource.content.save()
+            content, _ = ResourceContent.objects.get_or_create(resource=resource)
+            content.value = serializer.validated_data.get("text", "")
+            content.save()
             return Response(data=f"A {resource._meta.verbose_name} with ID {pk} was updated successfully.")
         except AbstractResource.DoesNotExist:
             raise NotFound(f"A resource matching {pk} does not exist.")

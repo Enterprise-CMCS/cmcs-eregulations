@@ -26,19 +26,13 @@ def copy_content(apps, schema_editor):
         return
 
     AbstractResource = apps.get_model("resources", "AbstractResource")
-    SingleStringModel = apps.get_model("resources", "SingleStringModel")
-
-    # For all AbstractResources, populate the 'content' field with a new SingleStringModel
-    for resource in AbstractResource.objects.all():
-        content = SingleStringModel.objects.create(value="")
-        resource.content = content
-        resource.save()
+    ResourceContent = apps.get_model("resources", "ResourceContent")
 
     # Copy the content from the ContentIndex model to the new SingleStringModel
     for index in ContentIndex.objects.filter(resource__isnull=False):
-        resource = index.resource
-        resource.content.value = index.content
-        resource.content.save()
+        content = ResourceContent.objects.create(resource=index.resource)
+        content.value = index.content
+        content.save()
 
 
 class Migration(migrations.Migration):
@@ -48,13 +42,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='SingleStringModel',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.TextField(blank=True)),
-            ],
-        ),
         migrations.AddField(
             model_name='resourcesconfiguration',
             name='auto_extract',
@@ -65,10 +52,13 @@ class Migration(migrations.Migration):
             name='fr_link_category',
             field=models.ForeignKey(blank=True, help_text='The category that contains Federal Register Links. This affects all newly uploaded Federal Register Links.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='fr_link_category_config', to='resources.abstractcategory', verbose_name='FR Link Category'),
         ),
-        migrations.AddField(
-            model_name='abstractresource',
-            name='content',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='resource', to='resources.singlestringmodel'),
+        migrations.CreateModel(
+            name='ResourceContent',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('value', models.TextField(blank=True)),
+                ('resource', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='content', to='resources.abstractresource')),
+            ],
         ),
         migrations.RunPython(copy_content, reverse_code=migrations.RunPython.noop),
     ]

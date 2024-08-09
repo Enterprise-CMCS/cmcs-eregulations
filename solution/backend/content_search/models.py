@@ -20,7 +20,7 @@ from resources.models import (
     InternalFile,
     InternalLink,
     PublicLink,
-    SingleStringModel,
+    ResourceContent,
 )
 
 
@@ -121,12 +121,11 @@ class ContentIndex(models.Model):
         verbose_name_plural = "Content Indices"
 
 
-@receiver(post_save, sender=SingleStringModel)
+@receiver(post_save, sender=ResourceContent)
 def update_content_field(sender, instance, created, **kwargs):
-    if hasattr(instance, "resource") and instance.resource:
-        index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
-        index.content = instance.value
-        index.save()
+    index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
+    index.content = instance.value
+    index.save()
 
 
 @receiver(post_save, sender=PublicLink)
