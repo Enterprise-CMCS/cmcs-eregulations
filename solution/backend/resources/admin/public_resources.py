@@ -106,6 +106,12 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
             Prefetch("resource_groups", ResourceGroup.objects.all()),
         )
 
+    def save_model(self, request, obj, form, change):
+        if change and form.initial.get("url") != form.cleaned_data.get("url"):
+            # Attempt to use the Federal Register API to retrieve the document's extract_url parameter
+            pass
+        super().save_model(request, obj, form, change)
+
     # Override document_id's default help_text to show specific FR link information
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
