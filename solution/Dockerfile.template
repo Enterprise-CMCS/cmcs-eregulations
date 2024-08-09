@@ -12,8 +12,6 @@ RUN apk --update add ca-certificates build-base postgresql-dev \
 RUN pip install --no-cache-dir --upgrade pip setuptools \
     && pip install -r requirements.txt
 
-ENV SEARCHGOV_KEY=''
-ENV SEARCHGOV_SITE_NAME=''
 ENV EREGS_USERNAME=""
 ENV EREGS_PASSWORD=""
 ENV HTTP_AUTH_USER=""
