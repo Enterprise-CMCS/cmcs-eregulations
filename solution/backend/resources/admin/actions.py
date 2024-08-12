@@ -27,7 +27,7 @@ def extract_text(modeladmin, request, queryset):
     for i in failures:
         logger.error("Failed to invoke text extractor for resource with ID %i: %s", i["id"], i["reason"])
         url = reverse("edit", args=[i["id"]])
-        failure_urls.append(f"<a target=\"_blank\" href=\"{url}\">{i["id"]}</a>")
+        failure_urls.append(f"<a target=\"_blank\" href=\"{url}\">{i['id']}</a>")
 
     message = ""
     message += f"Text extraction successfully started on {successes} resource{'s' if successes > 1 else ''}" if successes else ""
