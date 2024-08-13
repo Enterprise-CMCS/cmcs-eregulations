@@ -18,6 +18,7 @@ from resources.models import (
     AbstractCitation,
     AbstractInternalCategory,
     AbstractPublicCategory,
+    ResourcesConfiguration,
 )
 from resources.utils import (
     call_text_extractor,
@@ -60,7 +61,8 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change, *args, **kwargs):
         super().save_model(request, obj, form, change)
-        if not change or field_changed(form, "url") or kwargs.pop("force_extract", False):
+        auto_extract = ResourcesConfiguration.get_solo().auto_extract
+        if auto_extract and (not change or field_changed(form, "url") or kwargs.pop("force_extract", False)):
             _, fail = call_text_extractor(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{str(obj)}</a>"
             if fail:

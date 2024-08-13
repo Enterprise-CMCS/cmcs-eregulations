@@ -1,3 +1,5 @@
+import logging
+
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
@@ -7,6 +9,8 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from common.mixins import ViewSetPagination
+from common.auth import SettingsAuthentication
+
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -18,6 +22,7 @@ from resources.models import (
     InternalLink,
     PublicLink,
     Subject,
+    ResourcesConfiguration,
 )
 from resources.serializers import (
     AbstractResourceSerializer,
@@ -28,7 +33,13 @@ from resources.serializers import (
     PublicLinkSerializer,
     StringListSerializer,
 )
-from resources.utils import get_citation_filter, string_to_bool
+from resources.utils import (
+    get_citation_filter,
+    string_to_bool,
+    call_text_extractor,
+)
+
+logger = logging.getLogger(__name__)
 
 
 # OpenApiQueryParameter("citations",
@@ -109,7 +120,7 @@ class PublicLinkViewSet(PublicResourceViewSet):
 
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
-    authentication_classes = [BasicAuthentication]
+    authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_serializer_class(self):
@@ -122,18 +133,16 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
                                "If the document already exists, it will be updated.")
     def update(self, request, **kwargs):
         data = request.data
-        frdoc, created = FederalRegisterLink.objects.get_or_create(document_number=data["document_number"])
-        data["id"] = frdoc.pk
-        sc = self.get_serializer(frdoc, data=data, context={**self.get_serializer_context(), **{"created": created}})
-        try:
-            if sc.is_valid(raise_exception=True):
-                sc.save()
-                response = sc.validated_data
-                return JsonResponse(response)
-        except Exception as e:
-            if created:
-                frdoc.delete()
-            raise e
+        link, created = FederalRegisterLink.objects.get_or_create(document_number=data["document_number"])
+        data["id"] = link.pk
+        sc = self.get_serializer(link, data=data, context={**self.get_serializer_context(), **{"created": created}})
+        sc.is_valid(raise_exception=True)
+        sc.save()
+        if ResourcesConfiguration.get_solo().auto_extract:
+            _, fail = call_text_extractor(request, FederalRegisterLink.objects.filter(pk=link.pk))
+            if fail:
+                logger.warning(f"Failed to extract text for Federal Register Link {link.pk}: {fail[0]['reason']}")
+        return JsonResponse(sc.validated_data)
 
 
 class InternalResourceViewSet(ResourceViewSet):
