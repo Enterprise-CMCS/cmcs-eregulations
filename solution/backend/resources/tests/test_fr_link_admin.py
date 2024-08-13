@@ -54,8 +54,7 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(link.extract_url, "https://example.com/raw_text")
 
         response_messages = list(get_messages(request))
-        self.assertEqual(len(response_messages), 1)
-        self.assertEqual(response_messages[0].level, messages.SUCCESS)
+        self.assertEqual(len(response_messages), 0)
 
     @patch('resources.admin.requests.get')
     @patch('resources.admin.resources.call_text_extractor')
@@ -90,8 +89,7 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(link.extract_url, "https://example.com/raw_text")
 
         response_messages = list(get_messages(request))
-        self.assertEqual(len(response_messages), 1)
-        self.assertEqual(response_messages[0].level, messages.SUCCESS)
+        self.assertEqual(len(response_messages), 0)
 
     @patch('resources.admin.requests.get')
     @patch('resources.admin.resources.call_text_extractor')
@@ -123,7 +121,7 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(link.extract_url, "")
 
         response_messages = list(get_messages(request))
-        self.assertEqual(len(response_messages), 2)
+        self.assertEqual(len(response_messages), 1)
         self.assertEqual(response_messages[0].level, messages.WARNING)
         self.assertIn("Failed to retrieve the URL used for extracting raw text", response_messages[0].message)
 
