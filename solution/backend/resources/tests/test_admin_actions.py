@@ -9,6 +9,7 @@ from django.urls import reverse
 from resources.admin import PublicLinkAdmin
 from resources.admin.actions import mark_approved, mark_not_approved
 from resources.models import PublicLink
+from resources.utils import get_support_link
 
 
 class AdminActionsTestCase(TestCase):
@@ -53,8 +54,7 @@ class AdminActionsTestCase(TestCase):
             "Text extraction successfully started on 1 resource, but extraction failed for the following resource: "
             f"<a target=\"_blank\" href=\"{edit_url}\">{self.resource2.pk}</a>. "
             "Please be sure this item has a valid URL or attached file, then "
-            "<a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg"
-            "/viewform?embedded=true\" target=\"_blank\">contact support</a> for assistance if needed."
+            f"{get_support_link('contact support')} for assistance if needed."
         )
 
         self.assertEqual(len(messages), 1)
@@ -77,8 +77,7 @@ class AdminActionsTestCase(TestCase):
             "Text extraction successfully started on 2 resources, but extraction failed for the following resource: "
             f"<a target=\"_blank\" href=\"{edit_url}\">{self.resource2.pk}</a>. "
             "Please be sure this item has a valid URL or attached file, then "
-            "<a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg"
-            "/viewform?embedded=true\" target=\"_blank\">contact support</a> for assistance if needed."
+            f"{get_support_link('contact support')} for assistance if needed."
         )
 
         self.assertEqual(len(messages), 1)
@@ -106,8 +105,7 @@ class AdminActionsTestCase(TestCase):
             f"<a target=\"_blank\" href=\"{edit_url1}\">{self.resource2.pk}</a>, "
             f"<a target=\"_blank\" href=\"{edit_url2}\">{self.resource3.pk}</a>. "
             "Please be sure these items have valid URLs or attached files, then "
-            "<a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg"
-            "/viewform?embedded=true\" target=\"_blank\">contact support</a> for assistance if needed."
+            f"{get_support_link('contact support')} for assistance if needed."
         )
 
         self.assertEqual(len(messages), 1)
@@ -135,8 +133,7 @@ class AdminActionsTestCase(TestCase):
             f"<a target=\"_blank\" href=\"{edit_url1}\">{self.resource2.pk}</a>, "
             f"<a target=\"_blank\" href=\"{edit_url2}\">{self.resource3.pk}</a>. "
             "Please be sure these items have valid URLs or attached files, then "
-            "<a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg"
-            "/viewform?embedded=true\" target=\"_blank\">contact support</a> for assistance if needed."
+            f"{get_support_link('contact support')} for assistance if needed."
         )
 
         self.assertEqual(len(messages), 1)
