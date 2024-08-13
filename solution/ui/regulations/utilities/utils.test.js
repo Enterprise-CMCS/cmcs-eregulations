@@ -57,19 +57,19 @@ describe("formatResourceCategories", () => {
     it("formats internal docs", async () => {
         const formattedInternalResources = formatResourceCategories({
             resources: internalDocsFixture.results,
-            categories: categoriesInternalFixture,
+            categories: categoriesInternalFixture.results,
         });
 
         expect(
             formattedInternalResources[0].supplemental_content[0]
-                .file_name_string
-        ).toEqual("RE Draft PT Services Reply.rtf");
+                .file_name
+        ).toEqual("ff-test-em-8.pdf");
         expect(
             formattedInternalResources[0].supplemental_content[0]
-                .file_name_string
+                .file_name
         ).toEqual(
             formattedInternalDocsFixture[0].supplemental_content[0]
-                .file_name_string
+                .file_name
         );
         expect(
             _isEqual(
