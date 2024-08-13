@@ -5,12 +5,11 @@ from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
-from common.mixins import ViewSetPagination
 from common.auth import SettingsAuthentication
-
+from common.mixins import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -21,8 +20,8 @@ from resources.models import (
     InternalFile,
     InternalLink,
     PublicLink,
-    Subject,
     ResourcesConfiguration,
+    Subject,
 )
 from resources.serializers import (
     AbstractResourceSerializer,
@@ -34,9 +33,9 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import (
+    call_text_extractor,
     get_citation_filter,
     string_to_bool,
-    call_text_extractor,
 )
 
 logger = logging.getLogger(__name__)
@@ -141,7 +140,7 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
         if ResourcesConfiguration.get_solo().auto_extract:
             _, fail = call_text_extractor(request, FederalRegisterLink.objects.filter(pk=link.pk))
             if fail:
-                logger.warning(f"Failed to extract text for Federal Register Link {link.pk}: {fail[0]['reason']}")
+                logger.warning("Failed to extract text for Federal Register Link %i: %s", link.pk, fail[0]["reason"])
         return JsonResponse(sc.validated_data)
 
 
