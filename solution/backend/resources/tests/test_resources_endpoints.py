@@ -67,6 +67,14 @@ class TestResourcesEndpoint(TestCase):
             for j in i["related_resources"]:
                 self.assertEqual(j["approved"], True)
 
+    def test_group_ordering_by_date(self):
+        FederalRegisterLink.objects.filter(id=3).update(approved=True)
+        response = self.client.get("/v3/resources/?cfr_citations=1.1.1&cfr_citations=1.1.2")
+        data = get_paginated_data(response)["results"]
+        self.assertEqual(data[0]["id"], 1)
+        self.assertEqual(data[0]["related_resources"][0]["id"], 3)
+        self.assertEqual(data[0]["related_resources"][1]["id"], 2)
+
     def test_unapproved_resources_showing(self):
         response = self.client.get("/v3/resources/?cfr_citations=1.1.1&cfr_citations=1.1.2&group_resources=false")
         data = get_paginated_data(response)["results"]
