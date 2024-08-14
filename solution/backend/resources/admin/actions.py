@@ -4,7 +4,7 @@ from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import format_html
 
-from resources.utils import call_text_extractor
+from resources.utils import call_text_extractor, get_support_link
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +39,7 @@ def extract_text(modeladmin, request, queryset):
             if len(failures) > 1 else
             "this item has a valid URL or attached file"
         )
-        message += ", then <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg"\
-                   "/viewform?embedded=true\" target=\"_blank\">contact support</a> for assistance if needed"
+        message += f", then {get_support_link('contact support')} for assistance if needed"
     message += "."
 
     modeladmin.message_user(request, format_html(message), messages.ERROR if failures else messages.SUCCESS)
