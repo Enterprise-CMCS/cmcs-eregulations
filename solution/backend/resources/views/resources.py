@@ -70,7 +70,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
                     Prefetch("category", category_prefetch),
                     Prefetch("cfr_citations", citation_prefetch),
                     Prefetch("subjects", subject_prefetch),
-                ).select_subclasses()),
+                ).order_by(F("date").desc(nulls_last=True)).select_subclasses()),
             ).filter(Q(group_parent=True) | Q(related_resources__isnull=True))
             citation_prefix = "related_citations__"
             category_prefix = "related_categories__"
