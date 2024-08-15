@@ -50,15 +50,17 @@ class AdminActionsTestCase(TestCase):
 
         # Assert the expected message is displayed to the user
         edit_url = reverse("edit", args=[self.resource2.pk])
-        expected_message = (
-            "Text extraction successfully started on 1 resource, but extraction failed for the following resource: "
-            f"<a target=\"_blank\" href=\"{edit_url}\">{self.resource2.pk}</a>. "
-            "Please be sure this item has a valid URL or attached file, then "
-            f"{get_support_link('contact support')} for assistance if needed."
-        )
+        expected = [
+            "Text extraction requested for 1 resource.",
+            f"Failed to request text extraction for the following resource: <a target=\"_blank\" href=\"{edit_url}\">"
+            f"{self.resource2.pk}</a>. Please be sure this item has a valid URL or attached file, then "
+            f"{get_support_link('contact support')} for assistance if needed.",
+        ]
 
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(messages[0].message, expected_message)
+        self.assertEqual(len(messages), 2)
+        messages = [m.message for m in messages]
+        for i in expected:
+            self.assertIn(i, messages)
 
     @patch('resources.admin.actions.call_text_extractor')
     def test_extract_text_multiple_success_single_fail(self, mock_call_text_extractor):
@@ -73,15 +75,17 @@ class AdminActionsTestCase(TestCase):
 
         # Assert the expected message is displayed to the user
         edit_url = reverse("edit", args=[self.resource2.pk])
-        expected_message = (
-            "Text extraction successfully started on 2 resources, but extraction failed for the following resource: "
-            f"<a target=\"_blank\" href=\"{edit_url}\">{self.resource2.pk}</a>. "
-            "Please be sure this item has a valid URL or attached file, then "
-            f"{get_support_link('contact support')} for assistance if needed."
-        )
+        expected = [
+            "Text extraction requested for 2 resources.",
+            f"Failed to request text extraction for the following resource: <a target=\"_blank\" href=\"{edit_url}\">"
+            f"{self.resource2.pk}</a>. Please be sure this item has a valid URL or attached file, then "
+            f"{get_support_link('contact support')} for assistance if needed.",
+        ]
 
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(messages[0].message, expected_message)
+        self.assertEqual(len(messages), 2)
+        messages = [m.message for m in messages]
+        for i in expected:
+            self.assertIn(i, messages)
 
     @patch('resources.admin.actions.call_text_extractor')
     def test_extract_text_multiple_success_multiple_fail(self, mock_call_text_extractor):
@@ -100,16 +104,17 @@ class AdminActionsTestCase(TestCase):
         # Assert the expected message is displayed to the user
         edit_url1 = reverse("edit", args=[self.resource2.pk])
         edit_url2 = reverse("edit", args=[self.resource3.pk])
-        expected_message = (
-            "Text extraction successfully started on 2 resources, but extraction failed for the following resources: "
-            f"<a target=\"_blank\" href=\"{edit_url1}\">{self.resource2.pk}</a>, "
-            f"<a target=\"_blank\" href=\"{edit_url2}\">{self.resource3.pk}</a>. "
-            "Please be sure these items have valid URLs or attached files, then "
-            f"{get_support_link('contact support')} for assistance if needed."
-        )
+        expected = [
+            "Text extraction requested for 2 resources.",
+            f"Failed to request text extraction for the following resources: <a target=\"_blank\" href=\"{edit_url1}\">"
+            f"{self.resource2.pk}</a>, <a target=\"_blank\" href=\"{edit_url2}\">{self.resource3.pk}</a>. Please be sure these "
+            f"items have valid URLs or attached files, then {get_support_link('contact support')} for assistance if needed.",
+        ]
 
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(messages[0].message, expected_message)
+        self.assertEqual(len(messages), 2)
+        messages = [m.message for m in messages]
+        for i in expected:
+            self.assertIn(i, messages)
 
     @patch('resources.admin.actions.call_text_extractor')
     def test_extract_text_multiple_failures(self, mock_call_text_extractor):
@@ -129,7 +134,7 @@ class AdminActionsTestCase(TestCase):
         edit_url1 = reverse("edit", args=[self.resource2.pk])
         edit_url2 = reverse("edit", args=[self.resource3.pk])
         expected_message = (
-            "Text extraction failed for the following resources: "
+            "Failed to request text extraction for the following resources: "
             f"<a target=\"_blank\" href=\"{edit_url1}\">{self.resource2.pk}</a>, "
             f"<a target=\"_blank\" href=\"{edit_url2}\">{self.resource3.pk}</a>. "
             "Please be sure these items have valid URLs or attached files, then "

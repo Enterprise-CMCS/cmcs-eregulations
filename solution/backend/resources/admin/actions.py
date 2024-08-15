@@ -29,17 +29,18 @@ def extract_text(modeladmin, request, queryset):
         url = reverse("edit", args=[i["id"]])
         failure_urls.append(f"<a target=\"_blank\" href=\"{url}\">{i['id']}</a>")
 
-    message = ""
-    message += f"Text extraction successfully started on {successes} resource{'s' if successes > 1 else ''}" if successes else ""
+    if successes:
+        modeladmin.message_user(
+            request,
+            format_html(f"Text extraction requested for {successes} resource{'s' if successes > 1 else ''}."),
+            messages.SUCCESS,
+        )
+
     if failures:
-        message += ", but " if successes else "Text "
-        message += f"extraction failed for the following resource{'s' if len(failures) > 1 else ''}: {', '.join(failure_urls)}. "
-        message += "Please be sure " + (
+        message = f"Failed to request text extraction for the following resource{'s' if len(failures) > 1 else ''}: "
+        message += f"{', '.join(failure_urls)}. Please be sure " + (
             "these items have valid URLs or attached files"
             if len(failures) > 1 else
             "this item has a valid URL or attached file"
-        )
-        message += f", then {get_support_link('contact support')} for assistance if needed"
-    message += "."
-
-    modeladmin.message_user(request, format_html(message), messages.ERROR if failures else messages.SUCCESS)
+        ) + f", then {get_support_link('contact support')} for assistance if needed."
+        modeladmin.message_user(request, format_html(message), messages.ERROR)

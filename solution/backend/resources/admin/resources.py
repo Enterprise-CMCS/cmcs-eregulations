@@ -67,11 +67,12 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{str(obj)}</a>"
             if fail:
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])
-                message = f"Text extraction failed to start for {obj._meta.verbose_name} \"{url}\". Please ensure the item has "\
-                          f"a valid URL or attached file, then {get_support_link('contact support')} for assistance if needed."
+                message = f"Failed to request text extraction for {obj._meta.verbose_name} \"{url}\". Please ensure the item "\
+                          f"has a valid URL or attached file, then {get_support_link('contact support')} "\
+                          "for assistance if needed."
                 level = messages.WARNING
             else:
-                message = f"Text extraction successfully started for {obj._meta.verbose_name} \"{url}\"."
+                message = f"Text extraction requested for {obj._meta.verbose_name} \"{url}\"."
                 level = messages.SUCCESS
             self.message_user(request, format_html(message), level=level)
 
