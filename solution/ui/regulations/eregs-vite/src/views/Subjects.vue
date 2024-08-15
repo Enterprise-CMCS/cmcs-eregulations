@@ -190,11 +190,11 @@ const partsLastUpdated = ref({
 
 const getPartsLastUpdated = async () => {
     try {
-        const titles = await getTitles();
-        partsLastUpdated.value.results = await getLastUpdatedDates(
-            props.apiUrl,
-            titles
-        );
+        const titles = await getTitles({ apiUrl: props.apiUrl });
+        partsLastUpdated.value.results = await getLastUpdatedDates({
+            apiUrl: props.apiUrl,
+            titles,
+        });
     } catch (error) {
         console.error(error);
     } finally {
@@ -451,7 +451,7 @@ getDocSubjects();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :home-url="homeUrl" />
+                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks :statutes-url="statutesUrl" />

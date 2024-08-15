@@ -1,5 +1,5 @@
 /**
- * @param dateString {string} - a date string in YYYY-MM-DD format
+ * @param {string} dateString - a date string in YYYY-MM-DD format
  * @returns {string} - a date string in Month D/DD, YYYY format
  */
 const formatDate = (dateString) => {
@@ -17,12 +17,13 @@ const formatDate = (dateString) => {
 };
 
 /**
- * @param location {Object} - a Subpart or Section of the Regs
- * @param location.title {string} - the title number of the location (ex: 42)
- * @param location.type {string} - the type of location (ex: Subpart, Section)
- * @param location.part {string} - the part number for the location
- * @param location.section_id {?string} - the section number
- * @param location.subpart_id {?string} - the subpart name
+ *
+ * @param {Object} location - a Subpart or Section of the Regs
+ * @param {string} location.title - the title number of the location (ex: 42)
+ * @param {string} location.type - the type of location (ex: Subpart, Section)
+ * @param {string} location.part - the part number for the location
+ * @param {?string} location.section_id - the section number
+ * @param {?string} location.subpart_id - the subpart name
  * @returns {string} - a properly formatted label
  */
 const locationLabel = ({ type, part, section_id, subpart_id }) => {
@@ -32,13 +33,13 @@ const locationLabel = ({ type, part, section_id, subpart_id }) => {
 };
 
 /**
- * @param location {Object} - a Subpart or Section of the Regs
- * @param location.title {string} - the title number of the location (ex: 42)
- * @param location.type {string} - the type of location (ex: Subpart, Section)
- * @param location.part {string} - the part number for the location
- * @param location.section_id {?string} - the section number
- * @param location.subpart_id {?string} - the subpart name
- * @param base {string} - base to be prepended to returned URL
+ * @param {Object} location - a Subpart or Section of the Regs
+ * @param {string} location.title - the title number of the location (ex: 42)
+ * @param {string} location.type - the type of location (ex: Subpart, Section)
+ * @param {string} location.part - the part number for the location
+ * @param {?string} location.section_id - the section number
+ * @param {?string} location.subpart_id - the subpart name
+ * @param {string} base - base to be prepended to returned URL
  * @returns {string} - URL to location
  */
 const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
@@ -51,10 +52,10 @@ const locationUrl = ({ title, type, part, section_id, subpart_id }, base) => {
 };
 
 /**
- * @param subject {Object} - a subject
- * @param subject.short_name {string | null} - the short name of the subject
- * @param subject.abbreviation {string | null} - the abbreviation of the subject
- * @param subject.full_name {string} - the full name of the subject
+ * @param {Object} subject - a subject
+ * @param {?string} subject.short_name - the short name of the subject
+ * @param {?string} subject.abbreviation - the abbreviation of the subject
+ * @param {string} subject.full_name - the full name of the subject
  * @returns {string} - a properly formatted subject name
  * @example
  * getSubjectName({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // "Federal Regulations"
@@ -63,12 +64,13 @@ const getSubjectName = (subject) =>
     subject?.short_name || subject?.abbreviation || subject?.full_name;
 
 /**
- * @param subject {Object} - a subject
- * @param subject.short_name {string | null} - the short name of the subject
- * @param subject.abbreviation {string | null} - the abbreviation of the subject
- * @param subject.full_name {string} - the full name of the subject
- * @typedef {[string, boolean]} NamePartTuple - an array containing a name (string or null) at index 0 and a boolean indicating whether it should be bolded at index 1
- * @returns {Array<NamePartTuple>} - an array of NamePartTuples
+ * @typedef {[name: string, isBolded: boolean]} NamePartTuple - an array containing a name (string or null) at index 0 and a boolean indicating whether it should be bolded at index 1
+ *
+ * @param {Object} subject - a subject
+ * @param {?string} subject.short_name - the short name of the subject
+ * @param {?string} subject.abbreviation - the abbreviation of the subject
+ * @param {string} subject.full_name - the full name of the subject
+ * @returns {NamePartTuple[]} - an array of NamePartTuples
  * @example
  * getSubjectNameParts({ short_name: null, abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["CFR", true], ["Code of Federal Regulations", false]]
  * getSubjectNameParts({ short_name: "Federal Regulations", abbreviation: "CFR", full_name: "Code of Federal Regulations" }) // [["Federal Regulations", true], ["Code of Federal Regulations", false]]
@@ -87,8 +89,9 @@ const getSubjectNameParts = (subject) => {
 };
 
 /**
- * @param subjects {Array} - an array of subjects
- * @returns {Array} - an array of subjects sorted by name
+ * @param {Object} a - a Subject
+ * @param {Object} b - a Subject
+ * @returns {number} - a number indicating the sort order of the two subjects
  */
 const sortSubjects = (a, b) => {
     const aName = getSubjectName(a).toLowerCase();

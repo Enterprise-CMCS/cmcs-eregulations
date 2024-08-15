@@ -26,14 +26,12 @@ export default {
     },
 
     created() {
-        getLastParserSuccessDate(this.apiUrl, { title: 42 })
-            .then(
-                (response) => {
-                    this.lastParserSuccess = response;
-                }
-            )
+        getLastParserSuccessDate({ apiUrl: this.apiUrl })
+            .then((response) => {
+                this.lastParserSuccess = response;
+            })
             .catch(() => {
-                    this.lastParserSuccess = "N/A";
+                this.lastParserSuccess = "N/A";
             });
     },
 
