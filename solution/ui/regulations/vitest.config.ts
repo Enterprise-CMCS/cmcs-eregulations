@@ -10,6 +10,7 @@ export default defineConfig({
         coverage: {
             reporter: ["text", "json", "html"],
             provider: "v8",
+            exclude: ["msw/**"],
         },
     },
     resolve: {
