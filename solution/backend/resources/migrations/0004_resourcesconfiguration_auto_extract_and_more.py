@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='resourcesconfiguration',
             name='auto_extract',
-            field=models.BooleanField(default=False, help_text='Check this box if eRegs should automatically request text extraction on any resource when its URL or attached file has changed.', verbose_name='Auto Extract'),
+            field=models.BooleanField(default=False, help_text='Check this box if eRegs should automatically request text extraction on any resource when it is originally saved/created or when its source is changed: URL (for public and internal links), document number (for FR links), or attached file (for internal files).', verbose_name='Auto Extract'),
         ),
         migrations.AlterField(
             model_name='resourcesconfiguration',

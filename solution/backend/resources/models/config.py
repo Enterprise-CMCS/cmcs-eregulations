@@ -17,8 +17,9 @@ class ResourcesConfiguration(SingletonModel):
 
     auto_extract = models.BooleanField(
         default=False,
-        help_text="Check this box if eRegs should automatically request text extraction on any resource when its URL or "
-                  "attached file has changed.",
+        help_text="Check this box if eRegs should automatically request text extraction on any resource when it is originally "
+                  "saved/created or when its source is changed: URL (for public and internal links), document number "
+                  "(for FR links), or attached file (for internal files).",
         verbose_name="Auto Extract",
     )
 
