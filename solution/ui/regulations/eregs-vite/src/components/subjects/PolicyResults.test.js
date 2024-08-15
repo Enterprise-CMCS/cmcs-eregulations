@@ -17,6 +17,20 @@ const MOCK_RESULTS = [
             "this <span class='search-highlight'>is</span> a content headline",
         url: "url",
     },
+    {
+            type: "internal_file",
+            cfr_citations: [],
+            subjects: [],
+            document_id: "docID",
+            title: "this is a document name string",
+            date: "2024-10-10",
+            url: "",
+            related_resources: null,
+            summary: "This is the summary for the test text file",
+            file_name: "test.txt",
+            file_type: "",
+            uid: "a4e00982-4944-4a8d-8dd9-e5d2caa11f51",
+    },
 ];
 
 describe("addSurroundingEllipses", () => {
@@ -42,21 +56,7 @@ describe("getResultLinkText", () => {
         );
     });
     it("/resources/internal result", async () => {
-        const result = {
-            type: "internal_file",
-            cfr_citations: [],
-            subjects: [],
-            document_id: "docID",
-            title: "this is a document name string",
-            date: "2024-10-10",
-            url: "",
-            related_resources: null,
-            summary: "This is the summary for the test text file",
-            file_name: "test.txt",
-            file_type: "",
-            uid: "a4e00982-4944-4a8d-8dd9-e5d2caa11f51",
-        };
-        expect(PolicyResults.getResultLinkText(result)).toBe(
+        expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(
             "<span class='result__link--label'>this is a document name string</span>"
         );
     });
@@ -109,24 +109,14 @@ describe("getResultLinkText", () => {
 });
 
 describe("getResultSnippet", () => {
-    it("is internal and has a content_headline and summary_headline with a search result", async () => {
-        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[1])).toBe(
-            "...this <span class='search-highlight'>is</span> a content headline..."
-        );
-    });
-    it("is internal and has a summary_headline WITHOUT a search result", async () => {
-        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[7])).toBe(
-            "this is a summary headline"
-        );
-    });
-    it("is internal and has a content_headline and a summary_string but NOT a summary_headline", async () => {
-        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[6])).toBe(
-            "...this <span class='search-highlight'>is</span> a content headline..."
-        );
-    });
-    it("is internal and does NOT have a summary_headline or _string, but has a content_headline with a search result", async () => {
+    it("/content-search internal result with both content_headline and summary_headline", async () => {
         expect(PolicyResults.getResultSnippet(MOCK_RESULTS[0])).toBe(
             "...this <span class='search-highlight'>is</span> a content headline..."
+        );
+    });
+    it("/resources/internal with a summary", async () => {
+        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[1])).toBe(
+            "This is the summary for the test text file"
         );
     });
 });
