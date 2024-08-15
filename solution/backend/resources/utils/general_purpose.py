@@ -1,6 +1,7 @@
 # Functions and mixins that are exportable to other apps may go here
 
 
+from django.conf import settings
 from django.core.exceptions import BadRequest
 from django.db.models import Q
 
@@ -12,6 +13,18 @@ def is_int(x):
         return True
     except ValueError:
         return False
+
+
+# Returns a support link if it exists with custom link text if provided.
+def get_support_link(link_text):
+    if hasattr(settings, "SURVEY_URL") and settings.SURVEY_URL:
+        return f"<a href=\"{settings.SURVEY_URL}\" target=\"_blank\">{link_text}</a>"
+    return link_text
+
+
+# Returne True if the given field has changed in the form, False otherwise.
+def field_changed(form, field):
+    return form.initial.get(field) != form.cleaned_data.get(field)
 
 
 # Generates an OR'd together Q query of all citations passed in via the "citations" argument.

@@ -1,17 +1,25 @@
+import json
+import logging
+
+import requests
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db.models import Prefetch
+from django.utils.html import format_html
 
 from resources.models import (
     FederalRegisterLink,
     PublicLink,
     ResourceGroup,
 )
+from resources.utils import field_changed, get_support_link
 
 from .resources import (
     AbstractPublicResourceAdmin,
     AbstractPublicResourceForm,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class PublicLinkForm(AbstractPublicResourceForm):
@@ -105,6 +113,30 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         return super().get_queryset(request).prefetch_related(
             Prefetch("resource_groups", ResourceGroup.objects.all()),
         )
+
+    def save_model(self, request, obj, form, change):
+        force_extract = False
+        if not change or field_changed(form, "document_number") or field_changed(form, "url"):
+            # Attempt to use the Federal Register's API to retrieve the document's raw text URL
+            try:
+                document_number = form.cleaned_data.get("document_number")
+                response = requests.get(
+                    f"https://www.federalregister.gov/api/v1/documents/{document_number}.json",
+                    timeout=10,
+                )
+                response.raise_for_status()
+                content = json.loads(response.content)
+                obj.extract_url = content["raw_text_url"]
+                force_extract = True
+            except Exception as e:
+                # This can be due to a bad document_number, a network error, or a JSON parse error due to an invalid response.
+                # We handle all cases in the same way: show a warning to the user, log the error, then finally save the model.
+                logger.warning("Failed to retrieve the raw text URL for Federal Register Link \"%s\": %s", document_number, e)
+                message = "Failed to retrieve the URL used for extracting raw text from the Federal Register. "\
+                          f"Please check the document number and try again, or {get_support_link('contact support')} "\
+                          "for assistance."
+                self.message_user(request, format_html(message), level=messages.WARNING)
+        super().save_model(request, obj, form, change, force_extract=force_extract)
 
     # Override document_id's default help_text to show specific FR link information
     def get_form(self, request, obj=None, **kwargs):

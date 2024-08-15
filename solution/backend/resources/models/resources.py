@@ -14,11 +14,6 @@ from .citations import AbstractCitation
 from .subjects import Subject
 
 
-class AbstractResourceManager(InheritanceManager):
-    def get_queryset(self):
-        return super().get_queryset().defer("content")
-
-
 class AbstractResource(models.Model, DisplayNameFieldMixin):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -83,16 +78,19 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
 
-    content = models.TextField(blank=True)
-
-    objects = AbstractResourceManager()
+    objects = InheritanceManager()
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
 
-    class Meta:
-        base_manager_name = "objects"
+
+class ResourceContent(models.Model):
+    value = models.TextField(blank=True)
+    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="content")
+
+    def __str__(self):
+        return self.value[:100] + "..." if len(self.value) > 100 else self.value
 
 
 class AbstractPublicResource(AbstractResource):
