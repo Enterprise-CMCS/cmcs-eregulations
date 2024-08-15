@@ -156,6 +156,10 @@ test.vitest.coverage:
 	cd ui/regulations;\
 		npm install;\
 		npm run test-vue-coverage;
+test.vitest.ui:
+	cd ui/regulations;\
+		npm install;\
+		npm run test-vue-ui;
 
 ##uncomment the -vvv if there are errors running pytest. 
 test.pytest:
