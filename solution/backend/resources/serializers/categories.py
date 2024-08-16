@@ -42,6 +42,7 @@ class PublicSubCategorySerializer(CategorySerializer):
 
     parent = serializers.SerializerMethodField()
 
+
 class PublicCategoryWithSubCategoriesSerializer(CategorySerializer):
     subcategories = PublicSubCategorySerializer(many=True)
 

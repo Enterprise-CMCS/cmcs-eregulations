@@ -79,8 +79,8 @@ ruff:
 	docker-compose exec regulations ruff check --preview .
 	docker-compose exec text-extractor ruff check --preview .
 ruff-fix:
-	docker-compose exec regulations ruff --preview --fix .
-	docker-compose exec text-extractor ruff --preview --fix .
+	docker-compose exec regulations ruff check --preview --fix .
+	docker-compose exec text-extractor ruff check --preview --fix .
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000

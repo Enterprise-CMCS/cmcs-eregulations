@@ -1,8 +1,8 @@
 import re
+from typing import List, Optional
 
 from django.db.models import Q
 from rest_framework import serializers
-from typing import Optional, List
 
 from resources.models import (
     AbstractCitation,

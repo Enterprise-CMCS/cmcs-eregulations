@@ -18,6 +18,7 @@ class ContentSearchSerializer(serializers.Serializer):
 
     reg_text = serializers.SerializerMethodField()
 
+
 class ContentUpdateSerializer(serializers.Serializer):
     id = serializers.CharField()
     text = serializers.CharField()
