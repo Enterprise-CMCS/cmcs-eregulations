@@ -4,6 +4,7 @@
 2. [Supported file types](#supported-file-types)
 3. [Running locally](#running-locally)
 4. [Request structure](#request-structure)
+    1. [Configuring authentication](#configuring-authentication)
     2. [Currently supported backends](#currently-supported-backends)
 5. [Response structure](#response-structure)
 6. [Creating a new file backend](#creating-a-new-file-backend)
@@ -18,7 +19,7 @@
 
 # About
 
-This Lambda function is run to extract text from a variety of file types and POST it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
+This Lambda function is run to extract text from a variety of file types and upload it to an arbitrary URL. The purpose of this is to support eRegs' full-text search goals as our users begin uploading files to the policy repository.
 
 # Supported file types
 
@@ -56,29 +57,29 @@ The following data structure is required:
 
 ```jsonc
 {
-    "id": 1,                                 // The eRegs database ID of the object to update
-    "uri": "object_uri",                     // The web URL or object name to extract text from
-    "post_url": "https://api-url-here/",     // The API URL to POST the text to
-    "token": "xxxxxx",                       // If the return point uses a jwt token for authentication
-    "backend": "s3",                         // Optional - defaults to 'web'
-    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions
-    "ignore_robots_txt": true,               // Optional - include to ignore robots.txt
-    // Only necessary to include if the POST endpoint uses authentication
+    "uri": "object_uri",                     // The web URL or object name to extract text from.
+    "upload_url": "https://api-url-here/",   // The API URL to PATCH the text to.
+    "backend": "s3",                         // Optional - defaults to 'web'.
+    "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
+    "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
+    // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
-        // See below for configuring authentication
+        // See below for configuring authentication.
     },
-    // Only necessary to include if using the S3 backend
+    // Only necessary to include if using the S3 backend and/or the AWS Textract extractor classes.
     "aws": {
-        "aws_access_key_id": "xxxxxx",       // The access key for the AWS bucket
-        "aws_secret_access_key": "xxxxxx",   // The AWS secret key
-        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve the object from
-        "use_lambda": true,                  // If you are using a local text extractor or a deployed text extractor (pertains to local development)
-        "aws_region": "us-east-1"            // AWS region for Textract
+        "aws_access_key_id": "xxxxxx",       // The access key for AWS, see below for details.
+        "aws_secret_access_key": "xxxxxx",   // The AWS secret key, see below for details.
+        "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve objects from (only required for S3 backend).
+        "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
+        "aws_region": "us-east-1"            // AWS region to use, see below for details.
     },
 }
 ```
 
-It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the POST body to a stringified version of the structure above.
+Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has permissions to access AWS Textract and S3.
+
+It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
 If you wish to directly invoke this function, you may do so like this:
 
@@ -143,18 +144,21 @@ If you're using web, no further configuration is required. Set the `uri` to the 
 
 The extractor will continue retrying until the content downloads, a fatal error occurs, or the Lambda timeout occurs. Please note that if the Lambda timeout is increased, so too will the maximum amount of retries.
 
+By default, the web extractor respects robots.txt. However, if you are confident that an exception is permitted, you may pass in `ignore_robots_txt: true`. This option must be exercised with caution, and must never be set for all requests.
+
 # Response structure
 
-When the function completes, it will send the text and ID back to the `post_url` specified in the request as a JSON POST request formatted like:
+When the function completes, it will send the text and ID back to the `upload_url` specified in the request as a JSON PATCH request formatted like:
 
 ```jsonc
 {
-    "id": 1,          // The eRegs database ID specified in the request
     "text": "xxxxxx"  // The text extracted   
 }
 ```
 
-Future iterations may include POSTing error messages to eRegs if they occur, but for now errors will be recorded in logs only and no POST will be sent.
+The `upload_url` parameter must contain a unique identifier, because the request body will not.
+
+Future iterations may include uploading error messages to eRegs if they occur, but for now errors will be recorded in logs only and no PATCH will be sent.
 
 # Creating a new file backend
 
@@ -187,7 +191,7 @@ from .sample import SampleBackend as SampleBackend  # Note the redundant alias, 
 .... etc ...
 ```
 
-The backend is now registered and will be automatically instantiated when `"backend": "sample"` is included in the POST request.
+The backend is now registered and will be automatically instantiated when `"backend": "sample"` is included in the request.
 
 # Creating a new text extractor
 

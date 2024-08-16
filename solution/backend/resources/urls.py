@@ -2,6 +2,7 @@ from django.urls import path
 
 from resources.views import (
     CitationViewSet,
+    ContentTextViewSet,
     FederalRegisterLinksNumberViewSet,
     FederalRegisterLinkViewSet,
     InternalCategoryViewSet,
@@ -24,7 +25,8 @@ urlpatterns = [
     path("", ResourceViewSet.as_view({
         "get": "list",
     })),
-    path("<int:id>/edit", ResourceEditViewSet.as_view()),
+    path("<int:id>/edit", ResourceEditViewSet.as_view(), name="edit"),
+    path("<int:id>/content", ContentTextViewSet.as_view(), name="content"),
     path("public", PublicResourceViewSet.as_view({
         "get": "list",
     })),

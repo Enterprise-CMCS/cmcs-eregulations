@@ -20,6 +20,7 @@ from resources.models import (
     InternalFile,
     InternalLink,
     PublicLink,
+    ResourceContent,
 )
 
 
@@ -115,17 +116,22 @@ class ContentIndex(models.Model):
 
     objects = ContentIndexManager()
 
+    class Meta:
+        verbose_name = "Content Index"
+        verbose_name_plural = "Content Indices"
 
-def get_or_create_index(instance, created):
-    if created or not hasattr(instance, "index") or not instance.index:
-        return ContentIndex.objects.create(resource=instance)
-    return instance.index
+
+@receiver(post_save, sender=ResourceContent)
+def update_content_field(sender, instance, created, **kwargs):
+    index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
+    index.content = instance.value
+    index.save()
 
 
 @receiver(post_save, sender=PublicLink)
 @receiver(post_save, sender=FederalRegisterLink)
 def update_indexed_public_resource(sender, instance, created, **kwargs):
-    index = get_or_create_index(instance, created)
+    index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.document_id
     index.summary = instance.title
     index.rank_a_string = "{} {}".format(
@@ -140,7 +146,7 @@ def update_indexed_public_resource(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=InternalFile)
 def update_indexed_internal_file(sender, instance, created, **kwargs):
-    index = get_or_create_index(instance, created)
+    index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.title
     index.summary = instance.summary
     index.rank_a_string = instance.title
@@ -155,7 +161,7 @@ def update_indexed_internal_file(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=InternalLink)
 def update_indexed_internal_link(sender, instance, created, **kwargs):
-    index = get_or_create_index(instance, created)
+    index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.title
     index.summary = instance.summary
     index.rank_a_string = instance.title

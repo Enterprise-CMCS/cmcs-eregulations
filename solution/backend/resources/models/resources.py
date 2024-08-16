@@ -85,6 +85,14 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         super().save(*args, **kwargs)
 
 
+class ResourceContent(models.Model):
+    value = models.TextField(blank=True)
+    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="content")
+
+    def __str__(self):
+        return self.value[:100] + "..." if len(self.value) > 100 else self.value
+
+
 class AbstractPublicResource(AbstractResource):
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)

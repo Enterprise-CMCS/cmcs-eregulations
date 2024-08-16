@@ -1,7 +1,4 @@
-from django.contrib import admin
-
-
-class AbstractAdmin(admin.ModelAdmin):
+class CustomAdminMixin:
     list_per_page = 200
     admin_priority = 20
 

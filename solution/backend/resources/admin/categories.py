@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Prefetch
 
-from common.admin import AbstractAdmin
+from common.admin import CustomAdminMixin
 from resources.models import (
     InternalCategory,
     InternalSubCategory,
@@ -10,7 +10,7 @@ from resources.models import (
 )
 
 
-class AbstractCategoryAdmin(AbstractAdmin):
+class AbstractCategoryAdmin(CustomAdminMixin, admin.ModelAdmin):
     pass
 
 
