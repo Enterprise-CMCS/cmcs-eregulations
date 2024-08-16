@@ -4,6 +4,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
 from common.auth import SettingsAuthentication
 from regcore.models import ECFRParserResult, ParserConfiguration, Part
@@ -15,6 +16,16 @@ from regcore.serializers.parser import (
 
 from .utils import OpenApiPathParameter
 
+
+class SettingsAuthenticationScheme(OpenApiAuthenticationExtension):
+    target_class = 'common.auth.SettingsAuthentication'  # Full import path to your authentication class
+    name = 'SettingsAuth'  # Name used in the OpenAPI schema
+
+    def get_security_definition(self, auto_schema):
+        return {
+            'type': 'http',
+            'scheme': 'bearer'
+        }
 
 @extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")
 class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):

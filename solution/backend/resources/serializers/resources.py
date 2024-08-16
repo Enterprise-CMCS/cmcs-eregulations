@@ -2,6 +2,7 @@ import re
 
 from django.db.models import Q
 from rest_framework import serializers
+from typing import Optional, List
 
 from resources.models import (
     AbstractCitation,
@@ -192,7 +193,7 @@ class ResourceSerializer(serializers.Serializer):
     url = serializers.CharField()
     related_resources = serializers.SerializerMethodField()
 
-    def get_related_resources(self, obj):
+    def get_related_resources(self, obj) -> Optional[List[dict]]:
         if self.context.get("show_related", False):
             return AbstractResourceSerializer(instance=obj.related_resources, many=True).data
         return None
