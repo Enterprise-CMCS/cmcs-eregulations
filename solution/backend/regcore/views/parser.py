@@ -18,8 +18,8 @@ from .utils import OpenApiPathParameter
 
 
 class SettingsAuthenticationScheme(OpenApiAuthenticationExtension):
-    target_class = 'common.auth.SettingsAuthentication'  # Full import path to your authentication class
-    name = 'SettingsAuth'  # Name used in the OpenAPI schema
+    target_class = 'common.auth.SettingsAuthentication'
+    name = 'SettingsAuth'
 
     def get_security_definition(self, auto_schema):
         return {
