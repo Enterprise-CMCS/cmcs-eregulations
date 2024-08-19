@@ -3,7 +3,8 @@ import logging
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -112,6 +113,42 @@ class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
 
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="citations",
+            type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
+            location=OpenApiParameter.QUERY,
+            description="List of citation IDs to filter by",
+            required=False,
+            explode=False,  # Treat as an array, not a CSV string
+        ),
+        OpenApiParameter(
+            name="categories",
+            type=OpenApiTypes.STR,  # Assuming categories are strings, use OpenApiTypes.INT if they're integers
+            location=OpenApiParameter.QUERY,
+            description="List of category IDs to filter by, including subcategories",
+            required=False,
+            explode=False,
+        ),
+        OpenApiParameter(
+            name="subjects",
+            type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
+            location=OpenApiParameter.QUERY,
+            description="List of subject IDs to filter by",
+            required=False,
+            explode=False,
+        ),
+        OpenApiParameter(
+            name="group_resources",
+            type=OpenApiTypes.BOOL,
+            location=OpenApiParameter.QUERY,
+            description="Boolean flag to control resource grouping",
+            required=False,
+            default=True,
+        ),
+    ]
+)
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
