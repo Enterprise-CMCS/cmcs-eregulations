@@ -45,6 +45,41 @@ logger = logging.getLogger(__name__)
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+
+COMMON_QUERY_PARAMETERS = [
+    OpenApiParameter(
+        name="citations",
+        type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="List of citation IDs to filter by",
+        required=False,
+        explode=False,  # Treat as an array, not a CSV string
+    ),
+    OpenApiParameter(
+        name="categories",
+        type=OpenApiTypes.STR,  # Assuming categories are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="List of category IDs to filter by, including subcategories",
+        required=False,
+        explode=False,
+    ),
+    OpenApiParameter(
+        name="subjects",
+        type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="List of subject IDs to filter by",
+        required=False,
+        explode=False,
+    ),
+    OpenApiParameter(
+        name="group_resources",
+        type=OpenApiTypes.BOOL,
+        location=OpenApiParameter.QUERY,
+        description="Boolean flag to control resource grouping",
+        required=False,
+        default=True,
+    ),
+]
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
@@ -113,47 +148,13 @@ class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
 
-@extend_schema(
-    parameters=[
-        OpenApiParameter(
-            name="citations",
-            type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
-            location=OpenApiParameter.QUERY,
-            description="List of citation IDs to filter by",
-            required=False,
-            explode=False,  # Treat as an array, not a CSV string
-        ),
-        OpenApiParameter(
-            name="categories",
-            type=OpenApiTypes.STR,  # Assuming categories are strings, use OpenApiTypes.INT if they're integers
-            location=OpenApiParameter.QUERY,
-            description="List of category IDs to filter by, including subcategories",
-            required=False,
-            explode=False,
-        ),
-        OpenApiParameter(
-            name="subjects",
-            type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
-            location=OpenApiParameter.QUERY,
-            description="List of subject IDs to filter by",
-            required=False,
-            explode=False,
-        ),
-        OpenApiParameter(
-            name="group_resources",
-            type=OpenApiTypes.BOOL,
-            location=OpenApiParameter.QUERY,
-            description="Boolean flag to control resource grouping",
-            required=False,
-            default=True,
-        ),
-    ]
-)
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
 
 
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]
@@ -180,18 +181,20 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
                 logger.warning("Failed to extract text for Federal Register Link %i: %s", link.pk, fail[0]["reason"])
         return JsonResponse(sc.validated_data)
 
-
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
 
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
 
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
