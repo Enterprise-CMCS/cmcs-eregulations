@@ -10,7 +10,6 @@ import {
     getRequestParams,
     getSectionsRecursive,
     PARAM_ENCODE_DICT,
-    romanize,
     shapeTitlesResponse,
 } from "utilities/utils.js";
 
@@ -31,47 +30,46 @@ describe("formatResourceCategories", () => {
     it("formats public resources", async () => {
         const formattedResources = formatResourceCategories({
             resources: publicDocsFixture.results,
-            categories: categoriesFixture,
+            categories: categoriesFixture.results,
         });
-        expect(formattedResources[11].name).toBe("Subregulatory Guidance");
-        expect(formattedResources[11].name).toEqual(
-            formattedPublicDocsFixture[11].name
+        expect(formattedResources[0].name).toBe("Proposed and Final Rules");
+        expect(formattedResources[0].name).toEqual(
+            formattedPublicDocsFixture[0].name
         );
-        expect(formattedResources[11].description).toBe(
-            "SMDLs, SHOs, CIBs, FAQs, SMM"
+        expect(formattedResources[0].description).toBe(
+            "Federal Register documents with agency policy proposals and decisions"
         );
-        expect(formattedResources[11].description).toEqual(
-            formattedPublicDocsFixture[11].description
+        expect(formattedResources[0].description).toEqual(
+            formattedPublicDocsFixture[0].description
         );
         expect(
-            formattedResources[11].sub_categories[0].supplemental_content[0]
-                .name
-        ).toBe("SHO # 21-008");
+            formattedResources[0].supplemental_content[0]
+                .title
+        ).toBe("Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010; Correction");
         expect(
-            formattedResources[11].sub_categories[0].supplemental_content[0]
-                .name
+            formattedResources[0].supplemental_content[0]
+                .title
         ).toEqual(
-            formattedPublicDocsFixture[11].sub_categories[0]
-                .supplemental_content[0].name
+            formattedPublicDocsFixture[0].supplemental_content[0].title
         );
     });
 
     it("formats internal docs", async () => {
         const formattedInternalResources = formatResourceCategories({
             resources: internalDocsFixture.results,
-            categories: categoriesInternalFixture,
+            categories: categoriesInternalFixture.results,
         });
 
         expect(
             formattedInternalResources[0].supplemental_content[0]
-                .file_name_string
-        ).toEqual("RE Draft PT Services Reply.rtf");
+                .file_name
+        ).toEqual("ff-test-em-8.pdf");
         expect(
             formattedInternalResources[0].supplemental_content[0]
-                .file_name_string
+                .file_name
         ).toEqual(
             formattedInternalDocsFixture[0].supplemental_content[0]
-                .file_name_string
+                .file_name
         );
         expect(
             _isEqual(
@@ -289,13 +287,6 @@ describe("Utilities.js", () => {
                 getFileTypeButton({ fileName: "index_four.pdf", url: "url" })
             ).toBe("");
         });
-    });
-
-    it("romanize properly converts numbers to roman numerals", async () => {
-        expect(romanize(1)).toBe("I");
-        expect(romanize(2)).toBe("II");
-        expect(romanize(21)).toBe("XXI");
-        expect(romanize(1936)).toBe("MCMXXXVI");
     });
 
     it("shapeTitlesResponse properly shapes /v3/acts Response to be used in StatuteSelector", async () => {
