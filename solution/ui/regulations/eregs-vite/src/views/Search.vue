@@ -9,7 +9,6 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getCombinedContent,
-    getContentWithoutQuery,
     getLastUpdatedDates,
     getInternalSubjects,
     getTitles,
@@ -145,5 +144,8 @@ provide("isAuthenticated", props.isAuthenticated);
                 </template>
             </HeaderComponent>
         </header>
+        <div id="searchApp" class="search-view">
+            <h1>Search Results</h1>
+        </div>
     </body>
 </template>

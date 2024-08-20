@@ -96,10 +96,10 @@ header {
             align-items: center;
             justify-content: space-between;
             width: calc(100% - 4rem);
-            padding: 0 2rem;
+            padding: 0 $grid-margin-lg;
 
             @include custom-max(($eds-width-sm - 1) / 1px) {
-                padding: 0 1rem;
+                padding: 0 $grid-margin-sm;
                 width: calc(100% - 2rem);
             }
 
@@ -112,7 +112,7 @@ header {
                 background: $lightest_blue;
 
                 @include custom-max(($eds-width-md - 1) / 1px) {
-                    padding: 0 1rem;
+                    padding: 0 $grid-margin-sm;
                     width: calc(100% - 2rem);
                 }
             }
