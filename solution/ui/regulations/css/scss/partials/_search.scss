@@ -9,6 +9,23 @@
     margin-bottom: 1em;
 }
 
+// NEW STYLES -----------------
+.search-page {
+    #searchApp.search-view {
+        @include eds-gutters;
+
+        margin-top: var(--spacer-5);
+        display: flex;
+        flex-direction: column;
+
+        h1 {
+            margin-bottom: var(--spacer-4);
+        }
+    }
+}
+
+// OLD STYLES -----------------
+
 .search-field {
     background-color: #fff;
 
