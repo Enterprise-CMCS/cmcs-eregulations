@@ -1,5 +1,4 @@
 import re
-from typing import List, Optional
 
 from django.db.models import Q
 from drf_spectacular.utils import extend_schema_field

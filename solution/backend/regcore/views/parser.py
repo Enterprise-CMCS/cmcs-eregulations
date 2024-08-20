@@ -15,6 +15,7 @@ from regcore.serializers.parser import (
 
 from .utils import OpenApiPathParameter
 
+
 @extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")
 class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ParserConfigurationSerializer

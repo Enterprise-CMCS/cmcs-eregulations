@@ -4,7 +4,7 @@ from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -80,6 +80,8 @@ COMMON_QUERY_PARAMETERS = [
         default=True,
     ),
 ]
+
+
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
@@ -178,6 +180,7 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
             if fail:
                 logger.warning("Failed to extract text for Federal Register Link %i: %s", link.pk, fail[0]["reason"])
         return JsonResponse(sc.validated_data)
+
 
 @extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalResourceViewSet(ResourceViewSet):
