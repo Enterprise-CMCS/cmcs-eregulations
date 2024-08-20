@@ -10,12 +10,15 @@ $eds-md-max: $eds-width-lg - 1; // 1199px
 
 $eds-width-header-links: 1240px;
 
+// CSS custom properties
 :root {
     // Breakpoints
-    --eds-width-xs: 320px;
-    --eds-width-sm: 780px;
-    --eds-width-md: 1024px;
-    --eds-width-lg: 1200px;
+    --eds-width-xs: $eds-width-xs;
+    --eds-width-sm: $eds-width-sm;
+    --eds-width-md: $eds-width-md;
+    --eds-width-lg: $eds-width-lg;
+
+    --cms-ds-width-sm: 544px;
 
     // Margins
     --grid-margin-sm: 1rem;
@@ -27,4 +30,12 @@ $eds-width-header-links: 1240px;
     --spacer-3: 0.75rem; // 12px
     --spacer-4: 1rem; // 16px
     --spacer-5: 1.5rem; // 24px
+}
+
+@mixin eds-gutters {
+    padding: 0 var(--grid-margin-sm);
+
+    @media (min-width: $eds-width-md) {
+        padding: 0 var(--grid-margin-lg);
+    }
 }
