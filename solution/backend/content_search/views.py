@@ -68,6 +68,14 @@ from .serializers import ContentSearchSerializer
                         "Default is true.",
             location=OpenApiParameter.QUERY,
         ),
+        OpenApiParameter(
+            name="citations",
+            required=False,
+            type=int,
+            description= "Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                         "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
+            location=OpenApiParameter.QUERY,
+        ),
     ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
 )
 class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):

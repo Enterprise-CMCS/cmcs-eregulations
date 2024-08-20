@@ -148,13 +148,11 @@ class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]

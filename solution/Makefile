@@ -95,6 +95,8 @@ local.regulations: ## Run migrations and restart the regulations-core
 	docker-compose exec regulations python manage.py migrate; \
 		docker-compose restart regulations; \
 		sleep 5;
+local.spectacular: ## Run swagger locally 
+	docker-compose exec regulations python manage.py spectacular --file schema.yaml
 
 tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**/*.go
 	cd tools/ecfr-parser; go build -o build/ecfr-parser .

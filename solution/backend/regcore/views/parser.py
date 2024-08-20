@@ -1,6 +1,5 @@
 from django.db import transaction
 from django.http import Http404, JsonResponse
-from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -15,18 +14,6 @@ from regcore.serializers.parser import (
 )
 
 from .utils import OpenApiPathParameter
-
-
-class SettingsAuthenticationScheme(OpenApiAuthenticationExtension):
-    target_class = 'common.auth.SettingsAuthentication'
-    name = 'SettingsAuth'
-
-    def get_security_definition(self, auto_schema):
-        return {
-            'type': 'http',
-            'scheme': 'bearer'
-        }
-
 
 @extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")
 class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):

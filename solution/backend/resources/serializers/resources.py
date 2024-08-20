@@ -2,6 +2,7 @@ import re
 from typing import List, Optional
 
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from resources.models import (
@@ -193,7 +194,8 @@ class ResourceSerializer(serializers.Serializer):
     url = serializers.CharField()
     related_resources = serializers.SerializerMethodField()
 
-    def get_related_resources(self, obj) -> Optional[List[dict]]:
+    @extend_schema_field(serializers.ListField(child=serializers.DictField()))
+    def get_related_resources(self, obj):
         if self.context.get("show_related", False):
             return AbstractResourceSerializer(instance=obj.related_resources, many=True).data
         return None
