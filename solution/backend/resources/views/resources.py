@@ -51,7 +51,8 @@ COMMON_QUERY_PARAMETERS = [
         name="citations",
         type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
         location=OpenApiParameter.QUERY,
-        description="List of citation IDs to filter by",
+        description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                    "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
         required=False,
         explode=False,  # Treat as an array, not a CSV string
     ),
