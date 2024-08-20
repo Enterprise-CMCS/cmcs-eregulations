@@ -17,4 +17,3 @@ class ResourceGroupSerializer(serializers.Serializer):
         return [resource.id for resource in obj.resources.all()]
 
     resources = serializers.SerializerMethodField()
-
