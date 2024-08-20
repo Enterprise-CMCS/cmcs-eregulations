@@ -17,8 +17,3 @@ class ContentSearchSerializer(serializers.Serializer):
         return obj.reg_text.id if obj.reg_text else None
 
     reg_text = serializers.SerializerMethodField()
-
-
-class ContentUpdateSerializer(serializers.Serializer):
-    id = serializers.CharField()
-    text = serializers.CharField()
