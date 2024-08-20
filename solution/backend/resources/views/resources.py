@@ -189,13 +189,11 @@ class InternalResourceViewSet(ResourceViewSet):
     permission_classes = [IsAuthenticated]
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer

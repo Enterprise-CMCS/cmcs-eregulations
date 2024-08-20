@@ -18,13 +18,3 @@ class ResourceGroupSerializer(serializers.Serializer):
 
     resources = serializers.SerializerMethodField()
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        request = self.context.get('request', None)
-
-        # Serialize resources by full representation if requested
-        if request and request.query_params.get('serialize_by') == 'full':
-            resource_serializer = ResourceSerializer(instance.resources.all(), many=True)
-            representation['resources'] = resource_serializer.data
-
-        return representation
