@@ -484,12 +484,24 @@ getDocSubjects();
                 <SearchInput
                     form-class="search-form"
                     label="Search for a document"
-                    page="search"
+                    parent="search"
                     :search-query="searchQuery"
                     @execute-search="executeSearch"
                     @clear-form="clearSearchInput"
                 />
                 Filters will also be here
+                <DocumentTypeSelector v-if="isAuthenticated" parent="search" />
+                <FetchCategoriesContainer
+                    v-slot="slotProps"
+                    :categories-capture-function="setCategories"
+                >
+                    <CategoriesDropdown
+                        :list="slotProps.data"
+                        :error="slotProps.error"
+                        :loading="slotProps.loading || policyDocList.loading"
+                        parent="search"
+                    />
+                </FetchCategoriesContainer>
             </section>
             <hr />
             <section class="search-results">

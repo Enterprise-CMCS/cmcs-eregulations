@@ -493,7 +493,7 @@ getDocSubjects();
                             <SearchInput
                                 form-class="search-form"
                                 label="Search for a document"
-                                page="subjects"
+                                parent="subjects"
                                 :search-query="searchQuery"
                                 @execute-search="executeSearch"
                                 @clear-form="clearSearchInput"
@@ -536,6 +536,7 @@ getDocSubjects();
                                         slotProps.loading ||
                                         policyDocList.loading
                                     "
+                                    parent="subjects"
                                 />
                             </FetchCategoriesContainer>
                         </div>

@@ -8,6 +8,13 @@ import _isUndefined from "lodash/isUndefined";
 
 import { DOCUMENT_TYPES, DOCUMENT_TYPES_MAP } from "utilities/utils";
 
+const props = defineProps({
+    parent: {
+        type: String,
+        default: "subjects",
+    },
+});
+
 const $route = useRoute();
 const $router = useRouter();
 
@@ -51,7 +58,7 @@ const toggleDocumentType = (clickedType) => {
     }
 
     $router.push({
-        name: "subjects",
+        name: props.parent,
         query: {
             ...queryClone,
             page: undefined,
