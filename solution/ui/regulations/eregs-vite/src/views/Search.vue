@@ -112,6 +112,12 @@ provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
 provide("homeUrl", props.homeUrl);
 provide("isAuthenticated", props.isAuthenticated);
+
+// search query refs and methods
+const searchQuery = ref($route.query.q || "");
+const clearSearchQuery = () => {
+    searchQuery.value = "";
+};
 </script>
 
 <template>
@@ -122,7 +128,10 @@ provide("isAuthenticated", props.isAuthenticated);
                     <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -144,8 +153,22 @@ provide("isAuthenticated", props.isAuthenticated);
                 </template>
             </HeaderComponent>
         </header>
-        <div id="searchApp" class="search-view">
+        <main id="searchApp" class="search-view">
             <h1>Search Results</h1>
-        </div>
+            <section role="search">
+                <SearchInput
+                    form-class="search-form"
+                    label="Search for a document"
+                    page="subjects"
+                    :search-query="searchQuery"
+                />
+                Filters will also be here
+            </section>
+            <hr />
+            <section class="search-results">
+                Count and sort options here
+                <h3>Search results here</h3>
+            </section>
+        </main>
     </body>
 </template>
