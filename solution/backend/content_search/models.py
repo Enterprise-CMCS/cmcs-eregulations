@@ -1,3 +1,4 @@
+import re
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -36,6 +37,17 @@ class ContentIndexQuerySet(models.QuerySet):
     def _get_search_query_object(self, search_query):
         search_type = "phrase" if self._is_quoted(search_query) else "plain"
         return SearchQuery(search_query, search_type=search_type, config='english')
+
+    def defer_text(self):
+        return self.defer(
+            "name",
+            "summary",
+            "content",
+            "rank_a_string",
+            "rank_b_string",
+            "rank_c_string",
+            "rank_d_string",
+        )
 
     def search(self, search_query):
         cover_density = self._is_quoted(search_query)
@@ -91,8 +103,14 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 
 class IndexedRegulationText(models.Model):
-    # TODO: add fields for indexed reg text. see regcore/search/models.py.
-    parent = models.ForeignKey(Part, on_delete=models.CASCADE)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    title = models.IntegerField(default=0)
+    date = models.DateField(blank=True, null=True)
+    part_title = models.TextField(blank=True)
+    part_number = models.IntegerField(default=0)
+    node_type = models.CharField(max_length=32, blank=True)
+    node_id = models.CharField(max_length=32, blank=True)
+    node_title = models.TextField(blank=True)
 
 
 # This model is an all encompassing searchable index allowing different models to share an index.
@@ -171,6 +189,65 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
     index.save()
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+
+def index_part_node(part, piece, indices, contents, parent=None):
+    try:
+        node_type = piece.get("node_type", "").lower()
+        part_number, node_id = {
+            "section": (0, 1),
+            "appendix": (6, 3),
+        }[node_type]
+
+        label = piece["label"]
+        part_number = int(label[part_number])
+        node_id = label[node_id]
+        node_title = " ".join(label)
+
+        content = piece.get("title", piece.get("text", ""))
+        children = piece.pop("children", []) or []
+        for child in children:
+            content += child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
+
+        contents.append(content)
+        indices.append(IndexedRegulationText(
+            part=part,
+            title=part.title,
+            date=part.date,
+            part_title=part.document["title"],
+            part_number=part_number,
+            node_type=node_type,
+            node_id=node_id,
+            node_title=node_title,
+        ))
+
+    except Exception as e:
+        logger.warning(str(e))
+        children = piece.pop("children", []) or []
+        for child in children:
+            index_part_node(part, child, indices, contents, parent=piece)
+
+    return indices, contents
+
+
 @receiver(post_save, sender=Part)
 def update_indexed_part(sender, instance, created, **kwargs):
-    pass
+    # Delete all previously indexed parts with the same name and title
+    parts = Part.objects.filter(name=instance.name, title=instance.title)
+    IndexedRegulationText.objects.filter(part__in=parts).delete()
+
+    # Only index the latest version of the part
+    part = parts.latest("date")
+    indices, contents = index_part_node(part, part.document, [], [])
+    indices = IndexedRegulationText.objects.bulk_create(indices)
+    ContentIndex.objects.bulk_create([ContentIndex(
+        name=i.node_title,
+        content=c,
+        reg_text=i,
+        rank_a_string=f"{i.node_id} {i.node_title}",
+        rank_b_string=f"{i.part_title}",
+        rank_c_string=f"{c}",
+        rank_d_string="",
+    ) for i, c in zip(indices, contents)])
