@@ -9,7 +9,7 @@ import vueRouter from "./router";
 import _isArray from "lodash/isArray";
 
 const mountEl = document.querySelector("#vite-app");
-const { customUrl, host } = mountEl.dataset;
+const { customUrl, host, isAuthenticated } = mountEl.dataset;
 
 const app = createApp(App);
 app.use(vuetify);
