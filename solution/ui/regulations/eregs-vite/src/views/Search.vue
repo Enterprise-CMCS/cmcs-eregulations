@@ -2,13 +2,14 @@
 import { inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
+
 
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
-    getCombinedContent,
     getLastUpdatedDates,
     getInternalSubjects,
     getTitles,
@@ -17,7 +18,6 @@ import {
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import {
-    DOCUMENT_TYPES_MAP,
     getRequestParams,
     PARAM_VALIDATION_DICT,
 } from "utilities/utils";
@@ -32,14 +32,9 @@ import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
-import PolicySelections from "@/components/subjects/PolicySelections.vue";
-import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
 import SignInLink from "@/components/SignInLink.vue";
-import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
-import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -57,25 +52,16 @@ const username = inject("username");
 const $route = useRoute();
 const $router = useRouter();
 
-const FilterTypesDict = {
-    subjects: "Subject",
-    type: "Type",
-    q: "query",
-};
-
 const pageSize = 50;
 
 // provide Django template variables
 provide("currentRouteName", $route.name);
-provide("FilterTypesDict", FilterTypesDict);
 
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
-const policySelectionsRemoveList = ["subjects"];
 const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
 provide("commonRemoveList", commonRemoveList);
-provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
 const categoriesRef = ref([]);
 const setCategories = (categories) => {
@@ -157,49 +143,7 @@ const getPartsLastUpdated = async () => {
     }
 };
 
-// policyDocList fetch for policy document list
-const policyDocList = ref({
-    count: 0,
-    results: [],
-    loading: true,
-    error: false,
-});
-
-const getDocList = async ({ requestParamString = "", query, type }) => {
-    policyDocList.value.loading = true;
-    policyDocList.value.error = false;
-
-    const requestParams = `${requestParamString}&page_size=${pageSize}&group_resources=false`;
-    const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
-
-    let contentList;
-
-    try {
-        if (query) {
-            contentList = await getCombinedContent({
-                apiUrl,
-                requestParams,
-                docType,
-            });
-        } else {
-            contentList = await getContentWithoutQuery({
-                apiUrl,
-                requestParams,
-                docType,
-            });
-        }
-
-        policyDocList.value.results = contentList.results;
-        policyDocList.value.count = contentList.count;
-    } catch (error) {
-        console.error(error);
-        policyDocList.value.results = [];
-        policyDocList.value.count = 0;
-        policyDocList.value.error = true;
-    } finally {
-        policyDocList.value.loading = false;
-    }
-};
+const { policyDocList, getDocList } = useSearchResults();
 
 // use "reactive" method to make urlParams reactive when provided/injected
 // selectedParams.paramString is used as the reactive prop
@@ -306,6 +250,8 @@ const getDocSubjects = async () => {
             });
 
             getDocList({
+                apiUrl,
+                pageSize,
                 requestParamString: getRequestParams($route.query),
                 query: $route.query.q,
                 type: $route.query.type,
@@ -388,7 +334,9 @@ watch(
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
-        await getDocList({
+        getDocList({
+            apiUrl,
+            pageSize,
             requestParamString: newRequestParams,
             query: $route.query.q,
             type: $route.query.type,
