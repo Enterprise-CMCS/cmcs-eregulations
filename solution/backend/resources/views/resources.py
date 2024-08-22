@@ -82,6 +82,7 @@ COMMON_QUERY_PARAMETERS = [
     ),
 ]
 
+
 @extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
@@ -183,7 +184,6 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
         return JsonResponse(sc.validated_data)
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
     authentication_classes = [SessionAuthentication]
