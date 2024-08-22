@@ -54,13 +54,6 @@ export default {
 
     components: {},
 
-    props: {
-        apiUrl: {
-            type: String,
-            default: "wrong again"
-        }
-    },
-
     data() {
         return {
             cacheKeys: "",

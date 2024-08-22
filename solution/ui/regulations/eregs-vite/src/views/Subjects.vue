@@ -1,5 +1,5 @@
 <script setup>
-import { provide, reactive, ref, watch } from "vue";
+import { inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import useRemoveList from "composables/removeList";
@@ -42,56 +42,16 @@ import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
 
-const props = defineProps({
-    adminUrl: {
-        type: String,
-        default: "/admin/",
-    },
-    aboutUrl: {
-        type: String,
-        default: "/about/",
-    },
-    apiUrl: {
-        type: String,
-        default: "/v3/",
-    },
-    customLoginUrl: {
-        type: String,
-        default: "/login",
-    },
-    hasEditableJobCode: {
-        type: Boolean,
-        default: false,
-    },
-    homeUrl: {
-        type: String,
-        default: "/",
-    },
-    isAuthenticated: {
-        type: Boolean,
-        default: false,
-    },
-    searchUrl: {
-        type: String,
-        default: "/search/",
-    },
-    statutesUrl: {
-        type: String,
-        default: "/statutes/",
-    },
-    subjectsUrl: {
-        type: String,
-        default: "/subjects/",
-    },
-    surveyUrl: {
-        type: String,
-        default: "",
-    },
-    username: {
-        type: String,
-        default: undefined,
-    },
-});
+const adminUrl = inject("adminUrl");
+const apiUrl = inject("apiUrl");
+const customLoginUrl = inject("customLoginUrl");
+const hasEditableJobCode = inject("hasEditableJobCode");
+const homeUrl = inject("homeUrl");
+const isAuthenticated = inject("isAuthenticated");
+const searchUrl = inject("searchUrl");
+const statutesUrl = inject("statutesUrl");
+const surveyUrl = inject("surveyUrl");
+const username = inject("username");
 
 // Router and Route
 const $route = useRoute();
@@ -106,13 +66,8 @@ const FilterTypesDict = {
 const pageSize = 50;
 
 // provide Django template variables
-provide("apiUrl", props.apiUrl);
-provide("base", props.homeUrl);
 provide("currentRouteName", $route.name);
-provide("customLoginUrl", props.customLoginUrl);
 provide("FilterTypesDict", FilterTypesDict);
-provide("homeUrl", props.homeUrl);
-provide("isAuthenticated", props.isAuthenticated);
 
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
@@ -190,9 +145,9 @@ const partsLastUpdated = ref({
 
 const getPartsLastUpdated = async () => {
     try {
-        const titles = await getTitles({ apiUrl: props.apiUrl });
+        const titles = await getTitles({ apiUrl });
         partsLastUpdated.value.results = await getLastUpdatedDates({
-            apiUrl: props.apiUrl,
+            apiUrl,
             titles,
         });
     } catch (error) {
@@ -222,13 +177,13 @@ const getDocList = async ({ requestParamString = "", query, type }) => {
     try {
         if (query) {
             contentList = await getCombinedContent({
-                apiUrl: props.apiUrl,
+                apiUrl,
                 requestParams,
                 docType,
             });
         } else {
             contentList = await getContentWithoutQuery({
-                apiUrl: props.apiUrl,
+                apiUrl,
                 requestParams,
                 docType,
             });
@@ -322,7 +277,7 @@ const setDocumentTitle = (subjectId, subjectList) => {
 const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getInternalSubjects({
-            apiUrl: props.apiUrl,
+            apiUrl,
         });
 
         policyDocSubjects.value.results = subjectsResponse.results;

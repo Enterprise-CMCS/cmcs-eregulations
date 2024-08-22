@@ -14,8 +14,13 @@ const { customUrl, host } = mountEl.dataset;
 let { isAuthenticated } = mountEl.dataset;
 isAuthenticated = isAuthenticated === "True";
 
-const app = createApp(App, { ...mountEl.dataset });
+const app = createApp(App);
 app.use(vuetify);
+
+// App-level provide of all data attributes on the mount element
+for (datum in mountEl.dataset) {
+    app.provide(datum, mountEl.dataset[datum]);
+}
 
 app.directive("clickaway", Clickaway);
 
