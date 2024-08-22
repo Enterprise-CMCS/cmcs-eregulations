@@ -189,10 +189,6 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
     index.save()
 
 
-import logging
-
-logger = logging.getLogger(__name__)
-
 def index_part_node(part, piece, indices, contents, parent=None):
     try:
         node_type = piece.get("node_type", "").lower()
@@ -204,7 +200,6 @@ def index_part_node(part, piece, indices, contents, parent=None):
         label = piece["label"]
         part_number = int(label[part_number])
         node_id = label[node_id]
-        node_title = " ".join(label)
 
         content = piece.get("title", piece.get("text", ""))
         children = piece.pop("children", []) or []
@@ -220,11 +215,10 @@ def index_part_node(part, piece, indices, contents, parent=None):
             part_number=part_number,
             node_type=node_type,
             node_id=node_id,
-            node_title=node_title,
+            node_title=piece["title"],
         ))
 
     except Exception as e:
-        logger.warning(str(e))
         children = piece.pop("children", []) or []
         for child in children:
             index_part_node(part, child, indices, contents, parent=piece)
