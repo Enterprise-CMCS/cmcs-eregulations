@@ -82,7 +82,7 @@ COMMON_QUERY_PARAMETERS = [
     ),
 ]
 
-
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
