@@ -2,6 +2,7 @@
 import { inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
 
 import _isArray from "lodash/isArray";
@@ -157,49 +158,7 @@ const getPartsLastUpdated = async () => {
     }
 };
 
-// policyDocList fetch for policy document list
-const policyDocList = ref({
-    count: 0,
-    results: [],
-    loading: true,
-    error: false,
-});
-
-const getDocList = async ({ requestParamString = "", query, type }) => {
-    policyDocList.value.loading = true;
-    policyDocList.value.error = false;
-
-    const requestParams = `${requestParamString}&page_size=${pageSize}&group_resources=false`;
-    const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
-
-    let contentList;
-
-    try {
-        if (query) {
-            contentList = await getCombinedContent({
-                apiUrl,
-                requestParams,
-                docType,
-            });
-        } else {
-            contentList = await getContentWithoutQuery({
-                apiUrl,
-                requestParams,
-                docType,
-            });
-        }
-
-        policyDocList.value.results = contentList.results;
-        policyDocList.value.count = contentList.count;
-    } catch (error) {
-        console.error(error);
-        policyDocList.value.results = [];
-        policyDocList.value.count = 0;
-        policyDocList.value.error = true;
-    } finally {
-        policyDocList.value.loading = false;
-    }
-};
+const { policyDocList, getDocList } = useSearchResults();
 
 // use "reactive" method to make urlParams reactive when provided/injected
 // selectedParams.paramString is used as the reactive prop
@@ -306,6 +265,8 @@ const getDocSubjects = async () => {
             });
 
             getDocList({
+                apiUrl,
+                pageSize,
                 requestParamString: getRequestParams($route.query),
                 query: $route.query.q,
                 type: $route.query.type,
@@ -388,7 +349,9 @@ watch(
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
         const newRequestParams = getRequestParams(newQueryParams);
-        await getDocList({
+        getDocList({
+            apiUrl,
+            pageSize,
             requestParamString: newRequestParams,
             query: $route.query.q,
             type: $route.query.type,
