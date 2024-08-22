@@ -376,8 +376,6 @@ getDocSubjects();
             </section>
             <hr />
             <section class="search-results">
-                Count and sort options here
-                <h3>Search results here</h3>
                 <template
                     v-if="policyDocList.loading || partsLastUpdated.loading"
                 >
