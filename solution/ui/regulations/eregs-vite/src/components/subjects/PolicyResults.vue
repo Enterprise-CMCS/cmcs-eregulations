@@ -194,7 +194,8 @@ const needsBar = (item) =>
 const resultLinkClasses = (doc) => ({
     external:
         DOCUMENT_TYPES_MAP[getFieldVal({ item: doc, fieldName: "type" })] ===
-        "Public" || getFieldVal({ item: doc, fieldName: "type" }) === "internal_link",
+            "Public" ||
+        getFieldVal({ item: doc, fieldName: "type" }) === "internal_link",
     "document__link--search": !!$route?.query?.q,
 });
 
@@ -207,18 +208,21 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 
 <template>
     <div class="doc__list">
-        <template v-if="view !== 'search'">
-            <h2 v-if="searchQuery" class="search-results__heading">
-                Search Results
-            </h2>
-            <div class="search-results-count">
-                <span v-if="results.length > 0"
-                    >{{ currentPageResultsRange[0] }} -
-                    {{ currentPageResultsRange[1] }} of</span
-                >
-                {{ resultsCount }} <span v-if="searchQuery">result</span
-                ><span v-else>document</span>
-                <span v-if="results.length != 1">s</span>
+        <h2
+            v-if="view !== 'search' && searchQuery"
+            class="search-results__heading"
+        >
+            Search Results
+        </h2>
+        <div class="search-results-count">
+            <span v-if="results.length > 0"
+                >{{ currentPageResultsRange[0] }} -
+                {{ currentPageResultsRange[1] }} of</span
+            >
+            {{ resultsCount }} <span v-if="searchQuery">result</span
+            ><span v-else>document</span>
+            <span v-if="results.length != 1">s</span>
+            <template v-if="view !== 'search'">
                 <span v-if="searchQuery">
                     for
                     <span class="search-query__span">{{
@@ -228,8 +232,8 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
                 >
-            </div>
-        </template>
+            </template>
+        </div>
         <slot name="empty-state"></slot>
         <ResultsItem
             v-for="doc in results"

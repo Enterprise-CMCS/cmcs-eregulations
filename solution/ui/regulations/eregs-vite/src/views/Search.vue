@@ -260,39 +260,6 @@ const getDocSubjects = async () => {
     }
 };
 
-const selectedSubjectParts = ref([]);
-
-const setSelectedSubjectParts = () => {
-    if (selectedParams.paramsArray.length) {
-        if (selectedParams.paramsArray[0].id) {
-            const selectedSubject = policyDocSubjects.value.results.filter(
-                (subjectObj) =>
-                    subjectObj.id.toString() ===
-                    selectedParams.paramsArray[0].id
-            )[0];
-            selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
-        }
-    } else {
-        selectedSubjectParts.value = [];
-    }
-};
-
-watch(
-    () => policyDocSubjects.value.loading,
-    async (newLoading) => {
-        if (!newLoading) {
-            setSelectedSubjectParts();
-        }
-    }
-);
-
-watch(
-    () => selectedParams.paramString,
-    async () => {
-        setSelectedSubjectParts();
-    }
-);
-
 watch(
     () => $route.query,
     async (newQueryParams) => {
@@ -418,12 +385,6 @@ getDocSubjects();
                 </template>
                 <template v-else-if="policyDocList.error">
                     <div class="doc__list">
-                        <h2
-                            v-if="!selectedSubjectParts.length || searchQuery"
-                            class="search-results__heading"
-                        >
-                            Search Results
-                        </h2>
                         <SearchErrorMsg
                             :search-query="searchQuery"
                             show-apology
@@ -443,6 +404,7 @@ getDocSubjects();
                         :has-editable-job-code="hasEditableJobCode"
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
+                        view="search"
                     />
                     <div class="pagination-expand-row">
                         <div class="pagination-expand-container">
@@ -451,7 +413,7 @@ getDocSubjects();
                                 :count="policyDocList.count"
                                 :page="parseInt($route.query.page, 10) || 1"
                                 :page-size="pageSize"
-                                view="subjects"
+                                view="search"
                             />
                         </div>
                     </div>
