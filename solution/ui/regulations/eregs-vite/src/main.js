@@ -11,15 +11,18 @@ import _isArray from "lodash/isArray";
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host } = mountEl.dataset;
 
-let { isAuthenticated } = mountEl.dataset;
-isAuthenticated = isAuthenticated === "True";
-
 const app = createApp(App);
 app.use(vuetify);
 
 // App-level provide of all data attributes on the mount element
 for (datum in mountEl.dataset) {
-    app.provide(datum, mountEl.dataset[datum]);
+    if (mountEl.dataset[datum] === "True") {
+        app.provide(datum, true);
+    } else if (mountEl.dataset[datum] === "False") {
+        app.provide(datum, false);
+    } else {
+        app.provide(datum, mountEl.dataset[datum]);
+    }
 }
 
 app.directive("clickaway", Clickaway);
@@ -43,7 +46,7 @@ router.beforeEach((to) => {
             document.title = pageTitle;
         }
 
-        if (!isAuthenticated && to.query?.type) {
+        if (isAuthenticated === "False" && to.query?.type) {
             const { type, ...typelessQuery } = to.query;
             return { name: "subjects", query: typelessQuery };
         }
