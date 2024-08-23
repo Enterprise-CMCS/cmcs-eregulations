@@ -337,7 +337,7 @@ getDocSubjects();
                     @execute-search="executeSearch"
                     @clear-form="resetSearch"
                 />
-                <template v-if="$route.query.q">
+                <fieldset class="search__fieldset" v-if="$route.query.q">
                     <DocumentTypeSelector parent="search" />
                     <FetchCategoriesContainer
                         v-slot="slotProps"
@@ -352,7 +352,7 @@ getDocSubjects();
                             parent="search"
                         />
                     </FetchCategoriesContainer>
-                </template>
+                </fieldset>
             </section>
             <section class="search-results">
                 <template

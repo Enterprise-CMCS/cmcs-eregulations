@@ -22,6 +22,20 @@
         h1 {
             margin-bottom: var(--spacer-4);
         }
+
+        .search__fieldset {
+            border: unset;
+            padding: unset;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: var(--spacer-4);
+
+            .doc-type__toggle fieldset {
+                flex-wrap: wrap;
+            }
+        }
     }
 }
 
