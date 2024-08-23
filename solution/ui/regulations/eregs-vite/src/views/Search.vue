@@ -5,7 +5,6 @@ import { useRoute, useRouter } from "vue-router";
 import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
 
-
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
@@ -17,10 +16,7 @@ import {
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
-import {
-    getRequestParams,
-    PARAM_VALIDATION_DICT,
-} from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
@@ -143,7 +139,7 @@ const getPartsLastUpdated = async () => {
     }
 };
 
-const { policyDocList, getDocList } = useSearchResults();
+const { policyDocList, getDocList, clearDocList } = useSearchResults();
 
 // use "reactive" method to make urlParams reactive when provided/injected
 // selectedParams.paramString is used as the reactive prop
@@ -209,12 +205,9 @@ const policyDocSubjects = ref({
     loading: true,
 });
 
-const setDocumentTitle = (subjectId, subjectList) => {
-    const subjectToSelect = subjectList.filter(
-        (subjectObj) => subjectObj.id.toString() === subjectId
-    )[0];
-    const subjName = getSubjectName(subjectToSelect);
-    document.title = `${subjName} | ${document.title}`;
+const setTitle = (query) => {
+    const querySubString = query ? `for ${query} ` : "";
+    document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
 // called on load
@@ -230,54 +223,47 @@ const getDocSubjects = async () => {
     } finally {
         policyDocSubjects.value.loading = false;
 
-        // set title if needed
-        if (policyDocSubjects.value.results.length && $route.query.subjects) {
-            setDocumentTitle(
-                $route.query.subjects,
-                policyDocSubjects.value.results
-            );
+        if (!$route.query.q) {
+            clearDocList();
+            return;
         }
 
-        // if there's a $route, call addSelectedParams
-        if (!allDocTypesOnly($route.query)) {
-            // wipe everything clean to start
-            clearSelectedParams();
-            clearSearchQuery();
+        // wipe everything clean to start
+        clearSelectedParams();
+        clearSearchQuery();
 
-            // now that everything is cleaned, iterate over new query params
-            Object.entries($route.query).forEach((param) => {
-                setSelectedParams(policyDocSubjects)(param);
-            });
+        // now that everything is cleaned, iterate over new query params
+        Object.entries($route.query).forEach((param) => {
+            setSelectedParams(policyDocSubjects)(param);
+        });
 
-            getDocList({
-                apiUrl,
-                pageSize,
-                requestParamString: getRequestParams($route.query),
-                query: $route.query.q,
-                type: $route.query.type,
-            });
-        }
+        getDocList({
+            apiUrl,
+            pageSize,
+            requestParamString: getRequestParams($route.query),
+            query: $route.query.q,
+            type: $route.query.type,
+        });
     }
 };
 
 watch(
     () => $route.query,
     async (newQueryParams) => {
-        // set title on subject selection
-        const { subjects } = newQueryParams;
-        if (subjects) {
-            const subjectTitleToSet = _isArray(subjects)
-                ? subjects[0]
-                : subjects;
-            setDocumentTitle(
-                subjectTitleToSet,
-                policyDocSubjects.value.results
-            );
-        }
+        const { q } = newQueryParams;
 
         // wipe everything clean to start
         clearSelectedParams();
         clearSearchQuery();
+
+        // set document title
+        setTitle(q);
+
+        // early return if there's no query
+        if (!q) {
+            clearDocList();
+            return;
+        }
 
         const sanitizedQueryParams = Object.entries(newQueryParams).filter(
             ([key]) => PARAM_VALIDATION_DICT[key]
@@ -389,6 +375,9 @@ getDocSubjects();
                             :survey-url="surveyUrl"
                         />
                     </div>
+                </template>
+                <template v-else-if="policyDocList.results === 0">
+                    <div class="doc__list">No results</div>
                 </template>
                 <template v-else>
                     <PolicyResults

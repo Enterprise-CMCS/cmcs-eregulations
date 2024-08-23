@@ -55,5 +55,12 @@ export default function useSearchResults() {
         }
     };
 
-    return { policyDocList, getDocList };
+    const clearDocList = () => {
+        policyDocList.value.results = [];
+        policyDocList.value.count = 0;
+        policyDocList.value.loading = false;
+        policyDocList.value.error = false;
+    };
+
+    return { policyDocList, getDocList, clearDocList };
 }
