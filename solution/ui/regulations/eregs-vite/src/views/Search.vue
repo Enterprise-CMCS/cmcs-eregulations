@@ -360,7 +360,6 @@ getDocSubjects();
                     />
                 </FetchCategoriesContainer>
             </section>
-            <hr />
             <section class="search-results">
                 <template
                     v-if="policyDocList.loading || partsLastUpdated.loading"

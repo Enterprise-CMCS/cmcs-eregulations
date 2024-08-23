@@ -1,4 +1,6 @@
 // Breakpoints
+// SCSS variables still needed for media queries
+// https://bholmes.dev/blog/alternative-to-css-variable-media-queries/
 $eds-width-xs: 320px;
 $eds-width-sm: 780px;
 $eds-width-md: 1024px;
@@ -13,10 +15,10 @@ $eds-width-header-links: 1240px;
 // CSS custom properties
 :root {
     // Breakpoints
-    --eds-width-xs: $eds-width-xs;
-    --eds-width-sm: $eds-width-sm;
-    --eds-width-md: $eds-width-md;
-    --eds-width-lg: $eds-width-lg;
+    --eds-width-xs: 320px;
+    --eds-width-sm: 780px;
+    --eds-width-md: 1024px;
+    --eds-width-lg: 1200px;
 
     --cms-ds-width-sm: 544px;
 
