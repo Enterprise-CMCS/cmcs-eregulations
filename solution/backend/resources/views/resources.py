@@ -83,12 +83,21 @@ COMMON_QUERY_PARAMETERS = [
 ]
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
+@extend_schema( parameters=COMMON_QUERY_PARAMETERS )
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
 
+    @extend_schema(
+        description="Retrieve, filter, and group various resources based on citations, "
+                    "categories, subjects, and other criteria. This endpoint allows "
+                    "authenticated and unauthenticated users to search through approved "
+                    "resources, with options to group resources and filter by related fields "
+                    "such as categories, subjects, and citations.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
     def get_serializer_context(self):
         return {"show_related": string_to_bool(self.request.GET.get("group_resources"), True)}
 
@@ -147,16 +156,24 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
         return query.distinct().select_subclasses()
 
-
+@extend_schema(description="Retrieve a list of public resources with optional filtering by "
+                           "citations, categories, subjects, and resource grouping." )
 class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
-
+@extend_schema(description="Retrieve a list of public links, including options to filter by citations, "
+                           "categories, subjects, and grouping criteria. This endpoint is available to "
+                           "all users.")
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
 
 
+@extend_schema(description="Retrieve and update Federal Register links. "
+                            "This endpoint allows filtering by citations, "
+                            "categories, subjects, and grouping criteria. "
+                            "Only authenticated users can update existing Federal i"
+                            "Register links.")
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]
@@ -189,17 +206,32 @@ class InternalResourceViewSet(ResourceViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(description="Retrieve a list of internal resources, which are only "
+                               "accessible to authenticated users. This endpoint supports "
+                               "filtering by citations, categories, subjects, and grouping criteria")
 
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+
+@extend_schema(description="Retrieve a list of internal files, accessible only to authenticated users. "
+                           "This endpoint supports filtering by citations, categories, subjects, and "
+                           "grouping criteria." )
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
 
+@extend_schema(description="Retrieve a list of internal links, accessible only to "
+                           "authenticated users. This endpoint supports filtering by "
+                           "citations, categories, subjects, and grouping criteria.")
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
 
 
+@extend_schema(description="Retrieve a distinct list of Federal Register document numbers. "
+                           "This endpoint is read-only and returns a list of unique document numbers")
 class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
     serializer_class = StringListSerializer

@@ -18,7 +18,9 @@ from .serializers import ContentSearchSerializer
 
 
 @extend_schema(
-    description="Retrieve list of uploaded files",
+    description="Search and retrieve content with highlighted matching terms. "
+                "This endpoint allows you to search through both resources and regulation texts, "
+                "returning relevant content with highlighted matches in the name, summary, and content fields.",
     parameters=[
         OpenApiParameter(
             name="subjects",
@@ -78,6 +80,7 @@ from .serializers import ContentSearchSerializer
         ),
     ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
 )
+
 class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
