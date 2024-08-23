@@ -41,7 +41,6 @@ from resources.utils import (
 
 logger = logging.getLogger(__name__)
 
-
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
@@ -92,7 +91,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
     @extend_schema(
         description="Retrieve, filter, and group various resources based on citations, "
                     "categories, subjects, and other criteria. This endpoint allows "
-                    "authenticated and unauthenticated users to search through approved "
+                    "authenticated and unauthenticated users to view approved "
                     "resources, with options to group resources and filter by related fields "
                     "such as categories, subjects, and citations.",
     )
@@ -173,10 +172,10 @@ class PublicLinkViewSet(PublicResourceViewSet):
 
 
 @extend_schema(description="Retrieve and update Federal Register links. "
-                            "This endpoint allows filtering by citations, "
-                            "categories, subjects, and grouping criteria. "
-                            "Only authenticated users can update existing Federal i"
-                            "Register links.")
+                           "This endpoint allows filtering by citations, "
+                           "categories, subjects, and grouping criteria. "
+                           "Only authenticated users can update existing Federal "
+                           "Register links.")
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]
