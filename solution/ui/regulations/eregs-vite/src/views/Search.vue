@@ -103,19 +103,10 @@ const executeSearch = (payload) => {
     });
 };
 
-const clearSearchInput = () => {
-    const routeClone = { ...$route.query };
-
-    const cleanedRoute = useRemoveList({
-        route: routeClone,
-        removeList: searchInputRemoveList,
-    });
-
+const resetSearch = () => {
     $router.push({
         name: "search",
-        query: {
-            ...cleanedRoute,
-        },
+        query: {},
     });
 };
 
@@ -344,21 +335,24 @@ getDocSubjects();
                     parent="search"
                     :search-query="searchQuery"
                     @execute-search="executeSearch"
-                    @clear-form="clearSearchInput"
+                    @clear-form="resetSearch"
                 />
-                Filters will also be here
-                <DocumentTypeSelector v-if="isAuthenticated" parent="search" />
-                <FetchCategoriesContainer
-                    v-slot="slotProps"
-                    :categories-capture-function="setCategories"
-                >
-                    <CategoriesDropdown
-                        :list="slotProps.data"
-                        :error="slotProps.error"
-                        :loading="slotProps.loading || policyDocList.loading"
-                        parent="search"
-                    />
-                </FetchCategoriesContainer>
+                <template v-if="$route.query.q">
+                    <DocumentTypeSelector parent="search" />
+                    <FetchCategoriesContainer
+                        v-slot="slotProps"
+                        :categories-capture-function="setCategories"
+                    >
+                        <CategoriesDropdown
+                            :list="slotProps.data"
+                            :error="slotProps.error"
+                            :loading="
+                                slotProps.loading || policyDocList.loading
+                            "
+                            parent="search"
+                        />
+                    </FetchCategoriesContainer>
+                </template>
             </section>
             <section class="search-results">
                 <template

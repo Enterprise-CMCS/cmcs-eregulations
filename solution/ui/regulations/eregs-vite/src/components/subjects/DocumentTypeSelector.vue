@@ -22,12 +22,16 @@ const { type: typeParams } = $route.query;
 
 const isAuthenticated = inject("isAuthenticated");
 
+let docTypesArr = DOCUMENT_TYPES;
+
+if (!isAuthenticated) {
+    docTypesArr = docTypesArr.filter((type) => type !== "internal");
+}
+
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
 
-if (!isAuthenticated) {
-    boxesArr = ["external"];
-} else if (_isUndefined(typeParams) || typeParams.includes("all")) {
+if (_isUndefined(typeParams) || typeParams.includes("all")) {
     boxesArr = [];
 } else if (_isArray(typeParams)) {
     boxesArr = typeParams;
@@ -39,10 +43,6 @@ const checkedBoxes = ref(boxesArr);
 
 // onClick event to set the $route
 const toggleDocumentType = (clickedType) => {
-    if (!isAuthenticated) {
-        return;
-    }
-
     const { type: queryCloneType, ...queryClone } = $route.query;
     const refTypesBeforeClick = checkedBoxes.value;
 
@@ -127,7 +127,8 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
     <div class="doc-type__toggle-container">
         <div class="doc-type__toggle">
             <fieldset class="ds-c-fieldset" aria-invalid="false">
-                <div v-for="(type, index) in DOCUMENT_TYPES" :key="type">
+                <template v-if="showRegulations"> </template>
+                <div v-for="(type, index) in docTypesArr" :key="type">
                     <div class="ds-c-choice-wrapper">
                         <input
                             :id="`choice-list--1__choice--${index}`"
@@ -136,7 +137,6 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
                             name="checkbox_choices"
                             type="checkbox"
                             :value="type"
-                            :disabled="!isAuthenticated"
                             @click="toggleDocumentType(type)"
                         />
                         <label
