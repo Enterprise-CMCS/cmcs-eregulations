@@ -6,6 +6,7 @@ from common.mixins import ViewSetPagination
 from resources.models import Subject
 from resources.serializers import SubjectWithCountsSerializer
 
+
 @extend_schema(
     description="Retrieve a list of subjects, each annotated with the count of associated public and internal resources. "
                 "Authenticated users can see the count of both public and internal resources, while unauthenticated users "

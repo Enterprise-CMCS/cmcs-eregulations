@@ -16,6 +16,7 @@ from resources.serializers import (
     PublicCategoryWithSubCategoriesSerializer,
 )
 
+
 @extend_schema(
     description="Retrieve a list of public categories along with their subcategories. "
                 "This endpoint provides access to categories that are publicly available. "
@@ -28,6 +29,7 @@ class PublicCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = PublicCategory.objects.all().prefetch_related(
         Prefetch("subcategories", PublicSubCategory.objects.order_by("order")),
     ).order_by("order")
+
 
 @extend_schema(
     description="Retrieve a list of internal categories along with their subcategories. "

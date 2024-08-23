@@ -10,6 +10,7 @@ from resources.models import (
 )
 from resources.serializers import ResourceGroupSerializer
 
+
 @extend_schema(
     description="Retrieve a list of resource groups, which are collections of related resources. "
                 "This endpoint supports both authenticated and unauthenticated users, with different "

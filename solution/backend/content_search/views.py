@@ -80,7 +80,6 @@ from .serializers import ContentSearchSerializer
         ),
     ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
 )
-
 class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer

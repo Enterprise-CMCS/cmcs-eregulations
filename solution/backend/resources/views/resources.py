@@ -83,7 +83,7 @@ COMMON_QUERY_PARAMETERS = [
 ]
 
 
-@extend_schema( parameters=COMMON_QUERY_PARAMETERS )
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
@@ -98,6 +98,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+
     def get_serializer_context(self):
         return {"show_related": string_to_bool(self.request.GET.get("group_resources"), True)}
 
@@ -156,10 +157,12 @@ class ResourceViewSet(viewsets.ModelViewSet):
 
         return query.distinct().select_subclasses()
 
+
 @extend_schema(description="Retrieve a list of public resources with optional filtering by "
-                           "citations, categories, subjects, and resource grouping." )
+                           "citations, categories, subjects, and resource grouping.")
 class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
+
 
 @extend_schema(description="Retrieve a list of public links, including options to filter by citations, "
                            "categories, subjects, and grouping criteria. This endpoint is available to "
@@ -209,14 +212,13 @@ class InternalResourceViewSet(ResourceViewSet):
     @extend_schema(description="Retrieve a list of internal resources, which are only "
                                "accessible to authenticated users. This endpoint supports "
                                "filtering by citations, categories, subjects, and grouping criteria")
-
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
 
 @extend_schema(description="Retrieve a list of internal files, accessible only to authenticated users. "
                            "This endpoint supports filtering by citations, categories, subjects, and "
-                           "grouping criteria." )
+                           "grouping criteria.")
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer

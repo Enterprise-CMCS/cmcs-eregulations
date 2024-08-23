@@ -14,6 +14,7 @@ from resources.serializers import (
     SubpartWithChildrenSerializer,
 )
 
+
 @extend_schema(
     description="Retrieve a list of legal citations, which may include references to sections, subparts, and other "
                 "regulatory text. This endpoint supports access to different types of citations, and the results are "
@@ -23,6 +24,7 @@ class CitationViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractCitationSerializer
     queryset = AbstractCitation.objects.select_subclasses()
+
 
 @extend_schema(
     description="Retrieve a list of sections within regulatory text, including their parent subparts. "
@@ -35,6 +37,7 @@ class SectionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Section.objects.prefetch_related(
         Prefetch("parent", Subpart.objects.all()),
     )
+
 
 @extend_schema(
     description="Retrieve a list of subparts within regulatory text, including their child sections. "
