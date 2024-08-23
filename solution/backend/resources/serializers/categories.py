@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from resources.models import (
@@ -35,7 +36,11 @@ class CategorySerializer(serializers.Serializer):
 
 
 class PublicSubCategorySerializer(CategorySerializer):
-    parent = serializers.PrimaryKeyRelatedField(read_only=True)
+    @extend_schema_field(serializers.IntegerField())
+    def get_parent(self, obj):
+        return obj.parent.id if obj.parent else None
+
+    parent = serializers.SerializerMethodField()
 
 
 class PublicCategoryWithSubCategoriesSerializer(CategorySerializer):
@@ -47,7 +52,11 @@ class PublicCategorySerializer(CategorySerializer):
 
 
 class InternalSubCategorySerializer(CategorySerializer):
-    parent = serializers.PrimaryKeyRelatedField(read_only=True)
+    @extend_schema_field(serializers.IntegerField())
+    def get_parent(self, obj):
+        return obj.parent.id if obj.parent else None
+
+    parent = serializers.SerializerMethodField()
 
 
 class InternalCategoryWithSubCategoriesSerializer(CategorySerializer):

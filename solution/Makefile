@@ -79,8 +79,8 @@ ruff:
 	docker-compose exec regulations ruff check --preview .
 	docker-compose exec text-extractor ruff check --preview .
 ruff-fix:
-	docker-compose exec regulations ruff --preview --fix .
-	docker-compose exec text-extractor ruff --preview --fix .
+	docker-compose exec regulations ruff check --preview --fix .
+	docker-compose exec text-extractor ruff check --preview --fix .
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000
@@ -95,6 +95,8 @@ local.regulations: ## Run migrations and restart the regulations-core
 	docker-compose exec regulations python manage.py migrate; \
 		docker-compose restart regulations; \
 		sleep 5;
+local.spectacular: ## Run swagger locally 
+	docker-compose exec regulations python manage.py spectacular --file schema.yaml
 
 tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**/*.go
 	cd tools/ecfr-parser; go build -o build/ecfr-parser .

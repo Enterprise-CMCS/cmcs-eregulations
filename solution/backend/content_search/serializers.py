@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from common.fields import HeadlineField
@@ -10,4 +11,9 @@ class ContentSearchSerializer(serializers.Serializer):
     content_headline = HeadlineField(blank_when_no_highlight=True)
 
     resource = AbstractResourceSerializer()
-    reg_text = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    @extend_schema_field(serializers.IntegerField())
+    def get_reg_text(self, obj):
+        return obj.reg_text.id if obj.reg_text else None
+
+    reg_text = serializers.SerializerMethodField()
