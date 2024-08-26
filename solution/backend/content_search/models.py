@@ -26,6 +26,19 @@ from resources.models import (
 )
 
 
+class Synonym(models.Model):
+    is_active = models.BooleanField(default=True)
+    base_word = models.CharField(max_length=128)
+    synonyms = models.ManyToManyField("self", blank=True)
+
+    def __str__(self):
+        return self.base_word if self.is_active else f'{self.base_word} (inactive)'
+
+    @property
+    def filtered_synonyms(self):
+        return self.synonyms.filter(is_active=True).order_by("base_word")
+
+
 class ContentIndexQuerySet(models.QuerySet):
     _text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
     _min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
