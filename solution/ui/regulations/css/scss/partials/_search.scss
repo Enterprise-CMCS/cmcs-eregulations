@@ -9,7 +9,6 @@
     margin-bottom: 1em;
 }
 
-// NEW STYLES -----------------
 .search-page {
     #searchApp.search-view {
         @include eds-gutters;
@@ -20,6 +19,10 @@
         max-width: var(--eds-width-md);
 
         h1 {
+            margin-bottom: var(--spacer-4);
+        }
+
+        .query-filters__section {
             margin-bottom: var(--spacer-4);
         }
 
@@ -36,10 +39,42 @@
                 flex-wrap: wrap;
             }
         }
+
+        .search-form {
+            margin-bottom: var(--spacer-4);
+
+            .search-suggestion {
+                margin: 0px;
+                font-size: $font-size-sm;
+            }
+        }
+
+        .search-results {
+            &-count {
+                margin-bottom: var(--spacer-6);
+            }
+        }
+
+        .pagination-expand-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: 100px;
+
+            .pagination-expand-container {
+                width: 100%;
+                max-width: 521px;
+                margin: 0 45px;
+
+                .pagination-expand-cta {
+                    margin-top: 14px;
+                }
+            }
+        }
     }
 }
 
-// OLD STYLES -----------------
+// SEARCH INPUT -----------------
 
 .search-field {
     background-color: #fff;
@@ -108,102 +143,4 @@
 
 .form-helper-text {
     margin-top: 10px;
-}
-
-.search-page {
-    #searchApp.search-view {
-        display: flex;
-        flex-direction: column;
-
-        > .nav-container {
-            padding: 0 90px;
-        }
-
-        .search-form {
-            margin-bottom: 30px;
-
-            .search-suggestion {
-                margin: 0px;
-                font-size: $font-size-sm;
-            }
-        }
-
-        .combined-results-container {
-            overflow: auto;
-            margin-bottom: 16px;
-            padding: 0 45px;
-            display: flex;
-            justify-content: space-between;
-
-            @mixin common-results-styles {
-                flex: 1;
-                margin: 0 auto;
-                padding: 0 45px;
-                max-width: calc(50% - 90px);
-                overflow-wrap: break-word;
-                @content;
-            }
-
-            .reg-results-content {
-                @include common-results-styles;
-
-                .result {
-                    &__context {
-                        margin-bottom: 4px;
-                    }
-
-                    &__link {
-                        margin-bottom: 4px;
-
-                        a {
-                            display: block;
-                        }
-                    }
-                }
-            }
-
-            .resources-results-content {
-                @include common-results-styles;
-
-                .result {
-                    &__link {
-                        a {
-                            text-decoration: none;
-
-                            &.external {
-                                display: block;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .search-results-count {
-                font-weight: bold;
-                margin: $spacer-3 0;
-
-                h2 {
-                    border-bottom: 2px solid $secondary_border_color;
-                    margin-block-end: 1em !important;
-                }
-            }
-        }
-
-        .pagination-expand-row {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-bottom: 100px;
-
-            .pagination-expand-container {
-                width: 100%;
-                max-width: 521px;
-                margin: 0 45px;
-
-                .pagination-expand-cta {
-                    margin-top: 14px;
-                }
-            }
-        }
-    }
 }

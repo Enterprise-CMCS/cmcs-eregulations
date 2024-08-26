@@ -328,7 +328,7 @@ getDocSubjects();
         </header>
         <main id="searchApp" class="search-view">
             <h1>Search Results</h1>
-            <section role="search">
+            <section class="query-filters__section" role="search">
                 <SearchInput
                     form-class="search-form"
                     label="Search for a document"
