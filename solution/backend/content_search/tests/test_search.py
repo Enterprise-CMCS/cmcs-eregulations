@@ -237,18 +237,27 @@ class SearchTest(TestCase):
     # This test ensures that reg text is included in the search results, and only if show_regulations is set to true or not set.
     def test_reg_text_search(self):
         self.login()
+
+        # Exclude resources but this search will not match any reg text
         response = self.client.get("/v3/content-search/?q=fire&show_internal=false&show_public=false")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 0)
 
+        # Reg text should not show up for this search
         response = self.client.get("/v3/content-search/?q=fire")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 2)
 
+        # Ensure that excluding reg text works
+        response = self.client.get("/v3/content-search/?q=federal&show_regulations=false")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 1)
+
+        # Ensure that reg text is included in the search results and the structure is correct
         response = self.client.get("/v3/content-search/?q=federal")
         data = get_paginated_data(response)
         self.assertEqual(data['count'], 3)
-        self.assertTrue(any([i["reg_text"] is not None for i in data["results"]]))
+        self.assertTrue(any([i["reg_text"] for i in data["results"]]))
         for i in [i for i in data["results"] if i["reg_text"] is not None]:
             self.assertEqual(i["reg_text"]["title"], 42)
             self.assertEqual(i["reg_text"]["date"], "2023-01-01")
