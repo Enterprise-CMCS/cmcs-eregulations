@@ -8,7 +8,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from regcore.models import Part
-from regcore.search.models import Synonym
 
 
 class RegcoreSerializerTestCase(APITestCase):
@@ -21,9 +20,6 @@ class RegcoreSerializerTestCase(APITestCase):
         Part.objects.all().delete()
         Part.objects.create(title='42', date="2020-06-30", last_updated="2022-09-21 08:36:45.735759", depth=2,
                             structure=structure, name=400, document={"document": "test"}, depth_stack=depth)
-        s1, _ = Synonym.objects.get_or_create(isActive=True, baseWord="Syn1")
-        s2, _ = Synonym.objects.get_or_create(isActive=True, baseWord="S2")
-        s2.synonyms.set([s1])
 
     def test_get_title(self):
         payload = [
@@ -54,21 +50,6 @@ class RegcoreSerializerTestCase(APITestCase):
         self.assertEqual(x['name'], parts[0]['name'])
         self.assertEqual(x['depth'], parts[0]['depth'])
         self.assertEqual(x['id'], parts[0]['id'])
-
-    def test_get_synonyms(self):
-        response = self.client.get("/v3/synonyms?q=S2")
-        data = dict(response.data[0])
-        synonyms = dict(data)
-        self.assertEqual(synonyms['synonyms'], [{'baseWord': "Syn1", "isActive": True}])
-        response = self.client.get("/v3/synonyms?q=Syn1")
-        data = dict(response.data[0])
-        synonyms = dict(data)
-        self.assertEqual(synonyms['synonyms'], [{'baseWord': "S2", "isActive": True}])
-
-    def test_synonyms_special_characters(self):
-        for i in ["%", "138% FPL", "138 % FPL", "\"", "\"\"", "#", ".", "..", "?"]:
-            response = self.client.get(f"/v3/synonyms?q={i}")
-            self.assertEqual(response.status_code, 200)
 
     def test_get_title_versions(self):
         response = self.client.get("/v3/title/42/versions")
