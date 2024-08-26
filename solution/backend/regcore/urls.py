@@ -7,7 +7,6 @@ from regcore.views import (
     metadata,
     parser,
     part,
-    synonyms,
     title,
 )
 
@@ -16,7 +15,6 @@ urlpatterns = [
     path("v3/", include([
         path("resources/", include('resources.urls')),
         path("content-search/", include('content_search.urls')),
-        path("search/", include('regcore.search.urls')),
         path("toc", title.TOCViewSet.as_view({
             "get": "list",
         })),
@@ -68,9 +66,6 @@ urlpatterns = [
         })),
         path("part", parser.PartUploadViewSet.as_view({
             "put": "update",
-        })),
-        path("synonyms", synonyms.SynonymViewSet.as_view({
-            "get": "list",
         })),
         path("parser_config", parser.ParserConfigurationViewSet.as_view({
             "get": "retrieve",
