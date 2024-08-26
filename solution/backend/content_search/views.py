@@ -18,7 +18,9 @@ from .serializers import ContentSearchSerializer
 
 
 @extend_schema(
-    description="Retrieve list of uploaded files",
+    description="Search and retrieve content with highlighted matching terms. "
+                "This endpoint allows you to search through both resources and regulation texts, "
+                "returning relevant content with highlighted matches in the name, summary, and content fields.",
     parameters=[
         OpenApiParameter(
             name="subjects",
@@ -66,6 +68,14 @@ from .serializers import ContentSearchSerializer
             type=str,
             description="Show ('true') or hide ('false') regulation text, including sections and appendices. "
                         "Default is true.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="citations",
+            required=False,
+            type=int,
+            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
             location=OpenApiParameter.QUERY,
         ),
     ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS

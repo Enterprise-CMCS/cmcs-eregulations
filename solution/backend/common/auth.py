@@ -1,5 +1,17 @@
 from django.conf import settings
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
 from rest_framework import authentication, exceptions
+
+
+class SettingsAuthenticationScheme(OpenApiAuthenticationExtension):
+    target_class = 'common.auth.SettingsAuthentication'
+    name = 'SettingsAuth'
+
+    def get_security_definition(self, auto_schema):
+        return {
+            'type': 'http',
+            'scheme': 'bearer'
+        }
 
 
 class SettingsUser:
