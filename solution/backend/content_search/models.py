@@ -14,6 +14,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from common.constants import QUOTE_TYPES
+from content_search.utils import remove_control_characters
 from regcore.models import Part
 from resources.models import (
     AbstractResource,
@@ -199,26 +200,26 @@ def index_part_node(part, piece, indices, contents, parent=None):
 
         label = piece["label"]
         part_number = int(label[part_number])
-        node_id = label[node_id]
+        node_id = remove_control_characters(label[node_id])
 
         content = piece.get("title", piece.get("text", ""))
         children = piece.pop("children", []) or []
         for child in children:
             content += child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
 
-        contents.append(content)
+        contents.append(remove_control_characters(content))
         indices.append(IndexedRegulationText(
             part=part,
             title=part.title,
             date=part.date,
-            part_title=part.document["title"],
+            part_title=remove_control_characters(part.document["title"]),
             part_number=part_number,
             node_type=node_type,
             node_id=node_id,
-            node_title=piece["title"],
+            node_title=remove_control_characters(piece["title"]),
         ))
 
-    except Exception as e:
+    except Exception:
         children = piece.pop("children", []) or []
         for child in children:
             index_part_node(part, child, indices, contents, parent=piece)
