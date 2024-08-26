@@ -13,7 +13,7 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex
+from .models import ContentIndex, IndexedRegulationText
 from .serializers import ContentSearchSerializer
 
 
@@ -133,9 +133,12 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Prefetch all related data
         query = query.prefetch_related(
+            Prefetch("reg_text", IndexedRegulationText.objects.all()),
             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
-                Prefetch("category", AbstractCategory.objects.select_subclasses()),
+                Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
+                    Prefetch("parent", AbstractCategory.objects.select_subclasses()),
+                )),
                 Prefetch("subjects", Subject.objects.all()),
             )),
         )
