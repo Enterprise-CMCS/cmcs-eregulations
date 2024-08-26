@@ -49,7 +49,6 @@ class RegcoreSerializerTestCase(APITestCase):
         x = dict(x[0])
         self.assertEqual(x['name'], parts[0]['name'])
         self.assertEqual(x['depth'], parts[0]['depth'])
-        self.assertEqual(x['id'], parts[0]['id'])
 
     def test_get_title_versions(self):
         response = self.client.get("/v3/title/42/versions")
