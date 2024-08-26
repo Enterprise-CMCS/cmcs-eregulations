@@ -34,10 +34,6 @@ class Synonym(models.Model):
     def __str__(self):
         return self.base_word if self.is_active else f'{self.base_word} (inactive)'
 
-    @property
-    def filtered_synonyms(self):
-        return self.synonyms.filter(is_active=True).order_by("base_word")
-
 
 class ContentIndexQuerySet(models.QuerySet):
     _text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
