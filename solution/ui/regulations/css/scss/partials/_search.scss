@@ -61,10 +61,24 @@
             justify-content: center;
             margin-bottom: 100px;
 
+            @media (min-width: $eds-width-sm) {
+                justify-content: flex-start;
+            }
+
             .pagination-expand-container {
                 width: 100%;
                 max-width: 521px;
-                margin: 0 45px;
+
+                @media (min-width: $eds-width-sm) {
+                    width: auto;
+                    max-width: unset;
+                }
+
+                nav.pagination-controls .pagination-control {
+                    @media (min-width: $eds-width-sm) {
+                        min-width: unset;
+                    }
+                }
 
                 .pagination-expand-cta {
                     margin-top: 14px;
