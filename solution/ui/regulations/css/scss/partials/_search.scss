@@ -27,6 +27,7 @@
         }
 
         .search__fieldset {
+            margin-top: var(--spacer-4);
             border: unset;
             padding: unset;
             display: flex;
@@ -41,8 +42,6 @@
         }
 
         .search-form {
-            margin-bottom: var(--spacer-4);
-
             .search-suggestion {
                 margin: 0px;
                 font-size: $font-size-sm;
@@ -153,8 +152,4 @@
             border-color: $secondary_border_color;
         }
     }
-}
-
-.form-helper-text {
-    margin-top: 10px;
 }
