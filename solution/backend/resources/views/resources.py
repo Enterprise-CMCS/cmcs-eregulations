@@ -3,7 +3,8 @@ import logging
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
@@ -40,14 +41,62 @@ from resources.utils import (
 
 logger = logging.getLogger(__name__)
 
-
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+
+COMMON_QUERY_PARAMETERS = [
+    OpenApiParameter(
+        name="citations",
+        type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                    "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
+        required=False,
+        explode=False,  # Treat as an array, not a CSV string
+    ),
+    OpenApiParameter(
+        name="categories",
+        type=OpenApiTypes.STR,  # Assuming categories are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="List of category IDs to filter by, including subcategories",
+        required=False,
+        explode=False,
+    ),
+    OpenApiParameter(
+        name="subjects",
+        type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
+        location=OpenApiParameter.QUERY,
+        description="List of subject IDs to filter by",
+        required=False,
+        explode=False,
+    ),
+    OpenApiParameter(
+        name="group_resources",
+        type=OpenApiTypes.BOOL,
+        location=OpenApiParameter.QUERY,
+        description="Boolean flag to control resource grouping",
+        required=False,
+        default=True,
+    ),
+]
+
+
+@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
+
+    @extend_schema(
+        description="Retrieve, filter, and group various resources based on citations, "
+                    "categories, subjects, and other criteria. This endpoint allows "
+                    "authenticated and unauthenticated users to view approved "
+                    "resources, with options to group resources and filter by related fields "
+                    "such as categories, subjects, and citations.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_serializer_context(self):
         return {"show_related": string_to_bool(self.request.GET.get("group_resources"), True)}
@@ -108,15 +157,25 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return query.distinct().select_subclasses()
 
 
+@extend_schema(description="Retrieve a list of public resources with optional filtering by "
+                           "citations, categories, subjects, and resource grouping.")
 class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
 
+@extend_schema(description="Retrieve a list of public links, including options to filter by citations, "
+                           "categories, subjects, and grouping criteria. This endpoint is available to "
+                           "all users.")
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
 
 
+@extend_schema(description="Retrieve and update Federal Register links. "
+                           "This endpoint allows filtering by citations, "
+                           "categories, subjects, and grouping criteria. "
+                           "Only authenticated users can update existing Federal "
+                           "Register links.")
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]
@@ -149,17 +208,31 @@ class InternalResourceViewSet(ResourceViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(description="Retrieve a list of internal resources, which are only "
+                               "accessible to authenticated users. This endpoint supports "
+                               "filtering by citations, categories, subjects, and grouping criteria")
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
+
+@extend_schema(description="Retrieve a list of internal files, accessible only to authenticated users. "
+                           "This endpoint supports filtering by citations, categories, subjects, and "
+                           "grouping criteria.")
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
 
+@extend_schema(description="Retrieve a list of internal links, accessible only to "
+                           "authenticated users. This endpoint supports filtering by "
+                           "citations, categories, subjects, and grouping criteria.")
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
 
 
+@extend_schema(description="Retrieve a distinct list of Federal Register document numbers. "
+                           "This endpoint is read-only and returns a list of unique document numbers")
 class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
     serializer_class = StringListSerializer
