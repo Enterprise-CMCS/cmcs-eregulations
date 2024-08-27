@@ -1,5 +1,6 @@
 /* eslint-disable */
 import _delay from "lodash/delay";
+import _difference from "lodash/difference";
 import _endsWith from "lodash/endsWith";
 import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
@@ -152,25 +153,27 @@ const getRequestParams = (query) => {
             return filteredValues
                 .map((v) => {
                     if (key === "type") {
-                        let flagString = "";
-                        switch (v) {
-                            case "external":
-                                flagString =
-                                    "show_internal=false&show_regulations=false";
-                                break;
-                            case "internal":
-                                flagString =
-                                    "show_public=false&show_regulations=false";
-                                break;
-                            case "all":
-                                flagString =
-                                    "show_public=true&show_internal=true&show_regulations=true";
-                                break;
-                            default:
-                                break;
+                        // if type='all', early return with explicit query params
+                        if (v === "all") {
+                            return "show_public=true&show_internal=true&show_regulations=true";
                         }
 
-                        return flagString;
+                        // Since the API defaults to showing all types, we need to
+                        // pass display_<type>=false for the types that are not in the array
+                        // of types that the user wants to see.
+                        const typeArray = v.split(",");
+                        const differenceArray = _difference(
+                            DOCUMENT_TYPES,
+                            typeArray
+                        );
+
+                        const paramsArray = differenceArray.map((type) => {
+                            const typeArg =
+                                type === "external" ? "public" : type;
+                            return `show_${typeArg}=false`;
+                        });
+
+                        return paramsArray.join("&");
                     } else {
                         return `${PARAM_MAP[key]}=${
                             PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
