@@ -42,56 +42,54 @@ if (_isUndefined(typeParams) || typeParams.includes("all")) {
 
 const checkedBoxes = ref(boxesArr);
 
-watch(
-    () => checkedBoxes.value,
-    (newCheckedBoxes) => {
-        const { type, ...queryClone } = $route.query;
+const onCheckboxChange = (event) => {
+    const { checked, value } = event.target;
+    const { type, ...queryClone } = $route.query;
 
-        const intersection = _intersection(newCheckedBoxes, docTypesArr);
-
-        const newTypes = _isEmpty(intersection)
-            ? undefined
-            : intersection.join(",");
-
-        $router.push({
-            name: props.parent,
-            query: {
-                ...queryClone,
-                type: newTypes,
-                page: undefined,
-            },
-        });
+    if (checked) {
+        checkedBoxes.value = [...checkedBoxes.value, value];
+    } else {
+        checkedBoxes.value = checkedBoxes.value.filter(
+            (item) => item !== value
+        );
     }
-);
 
+    const newTypes = _isEmpty(checkedBoxes.value)
+        ? undefined
+        : checkedBoxes.value.join(",");
+
+    $router.push({
+        name: props.parent,
+        query: {
+            ...queryClone,
+            type: newTypes,
+            page: undefined,
+        },
+    });
+};
+
+// TODO: popstate
+// If I'm going to have to do all this popstate nonsense anyway,
+// I might as well just use the router to manage the state of the checkboxes
 // popstate to update the checkbox on back/forward click
 const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
     const currentPopStateArr = currentPopState.split("?");
-    console.log("currentPopStateArr", currentPopStateArr);
 
     if (currentPopStateArr.length > 1) {
         const queryParams = new URLSearchParams(currentPopStateArr[1]);
         const type = queryParams.get("type");
 
-        console.log("type", type);
-
-        if (_isUndefined(type) || type.includes("all")) {
-            checkedBoxes.value = [];
-        } else {
-            checkedBoxes.value = type.split(",");
-        }
-    } else {
-        checkedBoxes.value = [];
+        checkedBoxes.value = type ? type.split(",") : [];
     }
-
-    // checkedBoxes.value = currentPopState;
 };
 
 onMounted(() => {
     window.addEventListener("popstate", onPopState);
 });
-onUnmounted(() => window.removeEventListener("resize", onPopState));
+onUnmounted(() => {
+    window.removeEventListener("popstate", onPopState);
+});
 </script>
 
 <template>
@@ -103,11 +101,12 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
                     <div class="ds-c-choice-wrapper">
                         <input
                             :id="`choice-list--1__choice--${index}`"
-                            v-model="checkedBoxes"
                             class="ds-c-choice ds-c-choice--small"
                             name="checkbox_choices"
                             type="checkbox"
                             :value="type"
+                            :checked="checkedBoxes.includes(type)"
+                            @change="onCheckboxChange"
                         />
                         <label
                             class="ds-c-label"
