@@ -52,8 +52,6 @@ def _extract_via_http(batch, client):
 
 
 def _extract_via_sqs(batch, client):
-    success = 0
-    fail = []
     entries = [{
         "Id": str(i["id"]),
         "MessageBody": json.dumps(i),
@@ -64,8 +62,8 @@ def _extract_via_sqs(batch, client):
             QueueUrl=settings.TEXT_EXTRACTOR_QUEUE_URL,
             Entries=entries,
         )
-        success += len(resp.get("Successful", []))
-        fail += [{
+        success = len(resp.get("Successful", []))
+        fail = [{
             "id": int(i["Id"]),
             "reason": f"Received code {i['Code']}: {i['Message']}",
         } for i in resp.get("Failed", [])]

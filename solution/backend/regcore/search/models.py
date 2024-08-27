@@ -1,4 +1,3 @@
-import re
 
 from django.contrib.postgres.search import (
     SearchHeadline,
@@ -80,41 +79,3 @@ class Synonym(models.Model):
     @property
     def filtered_synonyms(self):
         return self.synonyms.filter(isActive=True).order_by("baseWord")
-
-
-def create_search(part, piece, memo, parent=None, ):
-    if (piece.get("node_type", None) in ["SECTION", "APPENDIX"]):
-        if piece.get("node_type", None) == "SECTION":
-            part_number = piece["label"][0]
-            section_number = piece["label"][1]
-            section_string = ".".join(piece["label"])
-        else:
-            part_number = piece["label"][6]
-            section_number = piece["label"][3]
-            section_string = " ".join(piece["label"])
-
-        si = SearchIndexV2(
-            part_number=part_number,
-            section_number=section_number,
-            section_title=piece["title"],
-            part_title=part.document['title'],
-            part=part,
-            section_string=section_string,
-            content=piece.get("title", piece.get("text", "")),
-        )
-        children = piece.pop("children", []) or []
-        for child in children:
-            si.content = si.content + child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
-        memo.append(si)
-    else:
-        children = piece.pop("children", []) or []
-        for child in children:
-            create_search(part, child, memo, parent=piece)
-
-    return memo
-
-
-def update_search(sender, instance, created, **kwargs):
-    SearchIndexV2.objects.filter(part=instance).delete()
-    contexts = create_search(instance, instance.document, [])
-    SearchIndexV2.objects.bulk_create(contexts, ignore_conflicts=True)

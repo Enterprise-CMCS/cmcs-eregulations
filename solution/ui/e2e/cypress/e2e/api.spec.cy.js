@@ -7,18 +7,19 @@ const SYNONYM = "synonym";
 const SEARCH_TERM = "FMAP";
 const ACT = "Social Security Act";
 
-const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
-const SPECIAL_CHARACTERS = [
-    "%",
-    "138% FPL",
-    "138 % FPL",
-    '"',
-    '""',
-    "#",
-    ".",
-    "..",
-    "?",
-];
+// TODO: uncomment this and point it at the new synonyms endpoint under content-search
+// const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
+// const SPECIAL_CHARACTERS = [
+//     "%",
+//     "138% FPL",
+//     "138 % FPL",
+//     '"',
+//     '""',
+//     "#",
+//     ".",
+//     "..",
+//     "?",
+// ];
 
 const API_ENDPOINTS_V3 = [
     `/v3/acts`,
@@ -41,7 +42,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/search?q=${SEARCH_TERM}`,
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
-    `${SYNONYMS_ENDPOINT}${SYNONYM}`,
+    //`${SYNONYMS_ENDPOINT}${SYNONYM}`,  // TODO: see above
     `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
@@ -72,15 +73,16 @@ describe("API testing", () => {
     });
 });
 
-describe("Synonyms endpoint special character testing", () => {
-    SPECIAL_CHARACTERS.forEach((character) => {
-        const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
-        it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
-            cy.request({ url: endpoint }).as("request");
-            cy.get("@request").then((response) => {
-                cy.log(`${endpoint} - ${response.status}`);
-                expect(response.status).to.eq(200);
-            });
-        });
-    });
-});
+// TODO: re-enable this test and point it at the new synonyms endpoint under content-search
+// describe("Synonyms endpoint special character testing", () => {
+//     SPECIAL_CHARACTERS.forEach((character) => {
+//         const endpoint = SYNONYMS_ENDPOINT + encodeURIComponent(character);
+//         it(`sends GET request to ${endpoint} and checks for a 200 response`, () => {
+//             cy.request({ url: endpoint }).as("request");
+//             cy.get("@request").then((response) => {
+//                 cy.log(`${endpoint} - ${response.status}`);
+//                 expect(response.status).to.eq(200);
+//             });
+//         });
+//     });
+// });

@@ -13,7 +13,7 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex
+from .models import ContentIndex, IndexedRegulationText
 from .serializers import ContentSearchSerializer
 
 
@@ -98,7 +98,8 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         if not search_query:
             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
 
-        query = ContentIndex.objects.defer("content")
+        # Defer all unnecessary text fields to reduce database load and memory usage
+        query = ContentIndex.objects.defer_text()
 
         # Filter inclusively by citations if this array exists
         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
@@ -128,13 +129,16 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         # Perform search and headline generation
         query = query.search(search_query)
         current_page = [i.pk for i in self.paginate_queryset(query)]
-        query = ContentIndex.objects.filter(pk__in=current_page).generate_headlines(search_query)
+        query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
 
         # Prefetch all related data
         query = query.prefetch_related(
+            Prefetch("reg_text", IndexedRegulationText.objects.all()),
             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
-                Prefetch("category", AbstractCategory.objects.select_subclasses()),
+                Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
+                    Prefetch("parent", AbstractCategory.objects.select_subclasses()),
+                )),
                 Prefetch("subjects", Subject.objects.all()),
             )),
         )
