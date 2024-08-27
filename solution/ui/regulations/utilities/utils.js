@@ -24,7 +24,8 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
-const DOCUMENT_TYPES = ["external", "internal"];
+const DOCUMENT_TYPES = ["regulations", "external", "internal"];
+
 const DOCUMENT_TYPES_MAP = {
     external: "Public",
     federal_register_link: "Public",
@@ -32,6 +33,7 @@ const DOCUMENT_TYPES_MAP = {
     internal: "Internal",
     internal_file: "Internal",
     internal_link: "Internal",
+    regulations: "Regulations",
 };
 
 const PARAM_MAP = {
@@ -206,7 +208,7 @@ const parseError = (err) => {
         }
         return new Error(message);
     }
-}
+};
 
 const swallowError = (promise, fn = () => ({})) => {
     try {
@@ -216,14 +218,14 @@ const swallowError = (promise, fn = () => ({})) => {
     } catch (err) {
         return fn(err);
     }
-}
+};
 
 // a promise friendly delay function
 const delay = (seconds) => {
     return new Promise((resolve) => {
         _delay(resolve, seconds * 1000);
     });
-}
+};
 
 /**
  * Converts date from YYYY-MM-DD to MMM DD, YYYY
@@ -244,7 +246,7 @@ const niceDate = (kebabDate) => {
 const getQueryParam = (location, key) => {
     const queryParams = new URL(location).searchParams;
     return queryParams.get(key);
-}
+};
 
 /**
  *

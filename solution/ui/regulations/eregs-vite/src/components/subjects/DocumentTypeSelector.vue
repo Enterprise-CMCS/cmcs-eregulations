@@ -3,6 +3,7 @@ import { ref, inject, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import _isArray from "lodash/isArray";
+import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
@@ -24,97 +25,67 @@ const isAuthenticated = inject("isAuthenticated");
 
 let docTypesArr = DOCUMENT_TYPES;
 
-if (!isAuthenticated) {
+if (props.parent !== "search")
+    docTypesArr = docTypesArr.filter((type) => type !== "regulations");
+
+if (!isAuthenticated)
     docTypesArr = docTypesArr.filter((type) => type !== "internal");
-}
 
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
 
 if (_isUndefined(typeParams) || typeParams.includes("all")) {
     boxesArr = [];
-} else if (_isArray(typeParams)) {
-    boxesArr = typeParams;
 } else {
-    boxesArr = [typeParams];
+    boxesArr = typeParams.split(",");
 }
 
 const checkedBoxes = ref(boxesArr);
 
-// onClick event to set the $route
-const toggleDocumentType = (clickedType) => {
-    const { type: queryCloneType, ...queryClone } = $route.query;
-    const refTypesBeforeClick = checkedBoxes.value;
-
-    if (_isEmpty(refTypesBeforeClick)) {
-        queryClone.type = [clickedType];
-    } else if (refTypesBeforeClick.includes(clickedType)) {
-        const filteredTypes = refTypesBeforeClick.filter(
-            (docType) => docType !== clickedType
-        );
-        if (!_isEmpty(filteredTypes)) {
-            queryClone.type = filteredTypes;
-        }
-    }
-
-    $router.push({
-        name: props.parent,
-        query: {
-            ...queryClone,
-            page: undefined,
-        },
-    });
-};
-
 watch(
-    () => $route.query,
-    async (newQueryParams) => {
-        if (!isAuthenticated) {
-            return;
-        }
+    () => checkedBoxes.value,
+    (newCheckedBoxes) => {
+        const { type, ...queryClone } = $route.query;
 
-        const { type: newTypeParams } = newQueryParams;
+        const intersection = _intersection(newCheckedBoxes, docTypesArr);
 
-        if (!_isUndefined(newTypeParams)) {
-            if (newTypeParams.includes("all")) {
-                checkedBoxes.value = [];
-                return;
-            }
+        const newTypes = _isEmpty(intersection)
+            ? undefined
+            : intersection.join(",");
 
-            if (_isArray(newTypeParams)) {
-                checkedBoxes.value = newTypeParams;
-            } else {
-                checkedBoxes.value = [newTypeParams];
-            }
-        }
+        $router.push({
+            name: props.parent,
+            query: {
+                ...queryClone,
+                type: newTypes,
+                page: undefined,
+            },
+        });
     }
 );
 
 // popstate to update the checkbox on back/forward click
 const onPopState = (event) => {
-    if (!isAuthenticated) {
-        return;
-    }
-
     const currentPopState = event?.state?.current ?? "";
+    const currentPopStateArr = currentPopState.split("?");
+    console.log("currentPopStateArr", currentPopStateArr);
 
-    const isInternal =
-        currentPopState.includes("type") &&
-        currentPopState.includes("internal");
-    const isExternal =
-        currentPopState.includes("type") &&
-        currentPopState.includes("external");
-    const isAll =
-        currentPopState.includes("type") && currentPopState.includes("all");
-    const isNone = !currentPopState.includes("type");
+    if (currentPopStateArr.length > 1) {
+        const queryParams = new URLSearchParams(currentPopStateArr[1]);
+        const type = queryParams.get("type");
 
-    if (isInternal) {
-        checkedBoxes.value = ["internal"];
-    } else if (isExternal) {
-        checkedBoxes.value = ["external"];
-    } else if (isAll || isNone) {
+        console.log("type", type);
+
+        if (_isUndefined(type) || type.includes("all")) {
+            checkedBoxes.value = [];
+        } else {
+            checkedBoxes.value = type.split(",");
+        }
+    } else {
         checkedBoxes.value = [];
     }
+
+    // checkedBoxes.value = currentPopState;
 };
 
 onMounted(() => {
@@ -137,14 +108,16 @@ onUnmounted(() => window.removeEventListener("resize", onPopState));
                             name="checkbox_choices"
                             type="checkbox"
                             :value="type"
-                            @click="toggleDocumentType(type)"
                         />
                         <label
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
                             <span class=""
-                                >{{ DOCUMENT_TYPES_MAP[type] }} Resources</span
+                                >{{ DOCUMENT_TYPES_MAP[type]
+                                }}<span v-if="type !== 'regulations'">
+                                    Resources</span
+                                ></span
                             >
                         </label>
                     </div>
