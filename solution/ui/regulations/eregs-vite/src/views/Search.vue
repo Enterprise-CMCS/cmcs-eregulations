@@ -14,7 +14,7 @@ import {
     getTitles,
 } from "utilities/api";
 
-import { getSubjectName, getSubjectNameParts } from "utilities/filters";
+import { getSubjectName } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -49,6 +49,24 @@ const $route = useRoute();
 const $router = useRouter();
 
 const pageSize = 50;
+
+// show/hide categories dropdown
+const showCategoriesRef = ref();
+
+const setShowCategories = (type) => {
+    // hide categories dropdown if only regulations are selected
+    if (
+        type &&
+        type.split(",").length === 1 &&
+        type.split(",")[0] === "regulations"
+    ) {
+        showCategoriesRef.value = false;
+    } else {
+        showCategoriesRef.value = true;
+    }
+};
+
+setShowCategories($route.query.type);
 
 // provide Django template variables
 provide("currentRouteName", $route.name);
@@ -241,7 +259,9 @@ const getDocSubjects = async () => {
 watch(
     () => $route.query,
     async (newQueryParams) => {
-        const { q } = newQueryParams;
+        const { q, type } = newQueryParams;
+
+        setShowCategories(type);
 
         // wipe everything clean to start
         clearSelectedParams();
@@ -344,6 +364,7 @@ getDocSubjects();
                         :categories-capture-function="setCategories"
                     >
                         <CategoriesDropdown
+                            v-show="showCategoriesRef"
                             :list="slotProps.data"
                             :error="slotProps.error"
                             :loading="

@@ -54,6 +54,21 @@ const onCheckboxChange = (event) => {
         );
     }
 
+    // if only Regulations is checked, remove categories from route
+    if (checkedBoxes.value.length === 1 && checkedBoxes.value[0] === "regulations") {
+        $router.push({
+            name: props.parent,
+            query: {
+                ...queryClone,
+                type: "regulations",
+                categories: undefined,
+                page: undefined,
+            },
+        });
+
+        return;
+    }
+
     const newTypes = _isEmpty(checkedBoxes.value)
         ? undefined
         : checkedBoxes.value.join(",");
