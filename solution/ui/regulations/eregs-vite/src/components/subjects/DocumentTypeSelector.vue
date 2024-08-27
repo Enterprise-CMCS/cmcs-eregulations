@@ -70,7 +70,6 @@ const onCheckboxChange = (event) => {
 
 watch(() => $route.query, (newQuery) => {
     const { type: typeParams } = newQuery;
-    console.log("not a lot, I hope");
 
     if (_isUndefined(typeParams) || typeParams.includes("all")) {
         checkedBoxes.value = [];
