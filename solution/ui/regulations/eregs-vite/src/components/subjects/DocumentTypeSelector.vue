@@ -68,10 +68,17 @@ const onCheckboxChange = (event) => {
     });
 };
 
-// TODO: popstate
-// If I'm going to have to do all this popstate nonsense anyway,
-// I might as well just use the router to manage the state of the checkboxes
-// popstate to update the checkbox on back/forward click
+watch(() => $route.query, (newQuery) => {
+    const { type: typeParams } = newQuery;
+    console.log("not a lot, I hope");
+
+    if (_isUndefined(typeParams) || typeParams.includes("all")) {
+        checkedBoxes.value = [];
+    } else {
+        checkedBoxes.value = typeParams.split(",");
+    }
+});
+
 const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
     const currentPopStateArr = currentPopState.split("?");
