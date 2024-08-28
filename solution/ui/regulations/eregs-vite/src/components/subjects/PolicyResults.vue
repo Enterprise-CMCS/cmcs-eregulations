@@ -30,6 +30,8 @@ const addSurroundingEllipses = (str) => {
 const getFieldVal = ({ item, fieldName }) => {
     if (item?.resource) {
         return item.resource[fieldName];
+    } else if (item?.reg_text) {
+        return item.reg_text[fieldName];
     } else {
         return item[fieldName];
     }
@@ -60,7 +62,9 @@ const getResultLinkText = (item) => {
     } else {
         linkText =
             item.summary_headline ||
+            item.name_headline ||
             item.summary_string ||
+            getFieldVal({ item, fieldName: "node_title" }) ||
             getFieldVal({ item, fieldName: "title" });
     }
 
