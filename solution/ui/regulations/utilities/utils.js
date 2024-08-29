@@ -60,7 +60,14 @@ const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
         !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
-    type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
+    type: (type) => {
+        if (type === "all") return true;
+        if (_isString(type)) {
+            const typeArray = type.split(",");
+            return typeArray.every((t) => DOCUMENT_TYPES.includes(t));
+        }
+        return false;
+    },
     page: (page) => !Number.isNaN(parseInt(page, 10)),
     categories: (category) => !Number.isNaN(parseInt(category, 10)),
     intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
