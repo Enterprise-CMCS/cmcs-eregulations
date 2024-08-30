@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import requests
 from django import forms
@@ -30,9 +31,10 @@ class PublicLinkForm(AbstractPublicResourceForm):
 class PublicLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 10
     form = PublicLinkForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "url"]
+    ordering = ["-updated_at"]
 
     fieldsets = [
         ("Basics", {
@@ -52,6 +54,23 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         }),
     ]
 
+    def category_name_without_annotation(self, obj):
+        return obj.category.get_category_name_without_annotation() if obj.category else ""
+
+    def category_name(self, obj):
+        if obj.category:
+            name = obj.category.name
+            # Remove any text in parentheses at the end of the string
+            name = re.sub(r'\s*\([^)]*\)\s*$', '', name)
+            return name.strip()
+        return ""
+
+    category_name_without_annotation.short_description = "Category"
+
+    class Media:
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }
 
 class FederalRegisterLinkForm(AbstractPublicResourceForm):
     resource_groups = forms.ModelMultipleChoiceField(
@@ -81,11 +100,11 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 11
     form = FederalRegisterLinkForm
     list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
-                    "category", "action_type", "updated_at", "approved"]
+                    "action_type", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
-                          "category", "action_type", "updated_at", "approved"]
+                          "action_type", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number", "url"]
-
+    ordering = ["-updated_at"]
     fieldsets = [
         ("Basics", {
             "fields": ["url", "title"],
