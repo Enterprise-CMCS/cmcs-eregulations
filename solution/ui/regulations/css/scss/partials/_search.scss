@@ -52,6 +52,20 @@
             &-count {
                 margin-bottom: var(--spacer-6);
             }
+
+            .doc__list {
+                .result {
+                    &__link {
+                        a {
+                            text-decoration: none;
+
+                            &.external {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .pagination-expand-row {

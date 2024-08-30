@@ -486,7 +486,6 @@ getDocSubjects();
                         </template>
                         <template v-else>
                             <PolicyResults
-                                :base="homeUrl"
                                 :categories="categoriesRef"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"

@@ -4,11 +4,10 @@ import { useRoute } from "vue-router";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { formatDate } from "utilities/filters";
+import { formatDate, locationUrl } from "utilities/filters";
 import {
     deserializeResult,
     getCurrentPageResultsRange,
-    getFieldVal,
     getFileTypeButton,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
@@ -161,7 +160,6 @@ const props = defineProps({
 const $route = useRoute();
 
 const apiUrl = inject("apiUrl");
-const base = inject("base");
 const homeUrl = inject("homeUrl");
 
 const transformedResults = computed(() =>
@@ -172,7 +170,16 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-        ? `${homeUrl}${doc.reg_title}/${doc.part_number}/${doc.node_id}/#${doc.part_number}-${doc.node_id}`
+        ? locationUrl(
+              {
+                  title: doc.reg_title,
+                  type: doc.node_type,
+                  part: doc.part_number,
+                  section_id: doc.node_id,
+                  subpart_id: doc.node_id,
+              },
+              homeUrl
+          )
         : doc.url;
 
 const needsBar = (item) => item.date && item.document_id;
@@ -300,16 +307,14 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     v-if="doc.subjects?.length > 0"
                     class="document__info-block"
                 >
-                    <SubjectChips
-                        :subjects="doc.subjects"
-                    />
+                    <SubjectChips :subjects="doc.subjects" />
                 </div>
             </template>
             <template #sections>
                 <RelatedSections
                     v-if="doc.type !== 'reg_text'"
-                    :base="base"
-                    :item="doc.resource ? doc.resource : doc"
+                    :base="homeUrl"
+                    :item="doc"
                     :parts-last-updated="partsLastUpdated"
                     label="Related Regulation Citation"
                 />
