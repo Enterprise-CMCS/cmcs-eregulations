@@ -57,14 +57,6 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
     def category_name_without_annotation(self, obj):
         return obj.category.get_category_name_without_annotation() if obj.category else ""
 
-    def category_name(self, obj):
-        if obj.category:
-            name = obj.category.name
-            # Remove any text in parentheses at the end of the string
-            name = re.sub(r'\s*\([^)]*\)\s*$', '', name)
-            return name.strip()
-        return ""
-
     category_name_without_annotation.short_description = "Category"
 
     class Media:
