@@ -31,6 +31,8 @@ const DOCUMENT_TYPES_MAP = {
     external: "Public",
     federal_register_link: "Public",
     public_link: "Public",
+    public_link: "Public",
+    reg_text: "Public",
     internal: "Internal",
     internal_file: "Internal",
     internal_link: "Internal",
@@ -583,12 +585,54 @@ const getSectionsRecursive = (tocPartsList) =>
         return tocPart.identifier[1];
     });
 
+const getFieldVal = ({ item, fieldName }) => {
+    if (item?.resource) {
+        // content-search
+        return item.resource[fieldName];
+    } else if (item?.reg_text) {
+        return item.reg_text[fieldName];
+    } else {
+        return item[fieldName];
+    }
+};
+
+const deserializeResult = (obj) => {
+    const returnObj = {};
+
+    returnObj.category = getFieldVal({ item: obj, fieldName: "category" });
+    returnObj.content_headline = obj.content_headline;
+    returnObj.date = getFieldVal({ item: obj, fieldName: "date" });
+    returnObj.document_id = getFieldVal({ item: obj, fieldName: "document_id" });
+    returnObj.file_name = getFieldVal({ item: obj, fieldName: "file_name" });
+    returnObj.id = getFieldVal({ item: obj, fieldName: "id" });
+    returnObj.name_headline = obj.name_headline;
+    returnObj.node_id = obj.reg_text?.node_id;
+    returnObj.node_type = obj.reg_text?.node_type;
+    returnObj.part_number = obj.reg_text?.part_number;
+    returnObj.part_title = obj.reg_text?.part_title;
+    returnObj.reg_title = obj.reg_text?.title;
+    returnObj.subjects = getFieldVal({ item: obj, fieldName: "subjects" });
+    returnObj.summary = obj.summary;
+    returnObj.summary_headline = obj.summary_headline;
+    returnObj.summary_string = obj.summary_string;
+    returnObj.title = obj.reg_text
+        ? getFieldVal({ item: obj, fieldName: "node_title" })
+        : getFieldVal({ item: obj, fieldName: "title" });
+    returnObj.type =
+        getFieldVal({ item: obj, fieldName: "type" }) ?? "reg_text";
+    returnObj.uid = getFieldVal({ item: obj, fieldName: "uid" });
+    returnObj.url = getFieldVal({ item: obj, fieldName: "url" });
+
+    return returnObj;
+};
+
 export {
     addMarks,
     createLastUpdatedDates,
     consolidateToMap,
     createOneIndexedArray,
     delay,
+    deserializeResult,
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
     EventCodes,
@@ -598,6 +642,7 @@ export {
     getActAbbr,
     getCurrentPageResultsRange,
     getCurrentSectionFromHash,
+    getFieldVal,
     getFileNameSuffix,
     getFileTypeButton,
     getQueryParam,
