@@ -6,6 +6,7 @@ import _isEmpty from "lodash/isEmpty";
 
 import { formatDate, locationUrl } from "utilities/filters";
 import {
+    createRegResultLink,
     deserializeResult,
     getCurrentPageResultsRange,
     getFileTypeButton,
@@ -170,15 +171,17 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-        ? locationUrl(
+        ? createRegResultLink(
               {
+                  date: doc.date,
+                  headline: doc.content_headline,
+                  part_number: doc.part_number,
+                  section_number: doc.node_id,
+                  section_title: doc.title,
                   title: doc.reg_title,
-                  type: doc.node_type,
-                  part: doc.part_number,
-                  section_id: doc.node_id,
-                  subpart_id: doc.node_id,
               },
-              homeUrl
+              homeUrl,
+              $route.query?.q
           )
         : doc.url;
 

@@ -292,6 +292,32 @@ const getTagContent = (htmlString, tagClass) => {
     return highlightTermsArray;
 };
 
+const createRegResultLink = (
+    { headline, title, part_number, section_number, date, section_title },
+    baseUrl,
+    query
+) => {
+    // get highlight content from headline
+    const highlightedTermsArray = getTagContent(headline, "search-highlight");
+    const rawQuery = query.replaceAll("%", "%25");
+    const uniqTermsArray = Array.from(
+        new Set([rawQuery, ...highlightedTermsArray])
+    );
+
+    const highlightParams =
+        uniqTermsArray.length > 0 ? `?q=${uniqTermsArray.join(",")}` : "";
+
+    let section = section_number;
+    let location = `${part_number}-${section_number}`;
+
+    if (section_title.includes("Appendix")) {
+        section = `Subpart-${section}`;
+        location = `${section_title.split("-")[0].trim().replace(/\s/g, "-")}`;
+    }
+
+    return `${baseUrl}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
+};
+
 /**
  * @param count {number} - total number of results
  * @param page {number} - current page number
@@ -600,10 +626,16 @@ const deserializeResult = (obj) => {
     const returnObj = {};
 
     returnObj.category = getFieldVal({ item: obj, fieldName: "category" });
-    returnObj.cfr_citations = getFieldVal({ item: obj, fieldName: "cfr_citations" });
+    returnObj.cfr_citations = getFieldVal({
+        item: obj,
+        fieldName: "cfr_citations",
+    });
     returnObj.content_headline = obj.content_headline;
     returnObj.date = getFieldVal({ item: obj, fieldName: "date" });
-    returnObj.document_id = getFieldVal({ item: obj, fieldName: "document_id" });
+    returnObj.document_id = getFieldVal({
+        item: obj,
+        fieldName: "document_id",
+    });
     returnObj.file_name = getFieldVal({ item: obj, fieldName: "file_name" });
     returnObj.id = getFieldVal({ item: obj, fieldName: "id" });
     returnObj.name_headline = obj.name_headline;
@@ -630,6 +662,7 @@ const deserializeResult = (obj) => {
 export {
     addMarks,
     createLastUpdatedDates,
+    createRegResultLink,
     consolidateToMap,
     createOneIndexedArray,
     delay,
