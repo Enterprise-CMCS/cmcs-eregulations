@@ -53,7 +53,7 @@ const PARAM_MAP = {
  * @type {Object}
  * @property {function} subjects - Validates that the subject is a number
  * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
- * @property {function} type - Validates that the type is either "external", "internal", or "all"
+ * @property {function} type - Validates that the type is either "all" or a comma-separated string of valid document types
  * @property {function} page - Validates that the page is a number
  * @property {function} categories - Validates that the category is a number
  * @property {function} intcategories - Validates that the internal category is a number
@@ -142,13 +142,6 @@ const getFileTypeButton = ({ fileName, uid }) => {
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
- * @example
- * const query = {
- *    subjects: ["1", "2", "3"],
- *    q: "test",
- * }
- * const queryString = getRequestParams(query);
- * console.log(queryString); // subjects=1&subjects=2&subjects=3&q=test
  */
 const getRequestParams = (query) => {
     const requestParams = Object.entries(query)

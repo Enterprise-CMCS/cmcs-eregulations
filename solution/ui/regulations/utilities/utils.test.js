@@ -244,16 +244,43 @@ describe("Utilities.js", () => {
         };
 
         expect(getRequestParams(query10)).toBe(
-            "q=test&show_public=false&show_regulations=false"
+            "q=test&show_regulations=false&show_public=false"
         );
 
         const query11 = {
+            q: "test",
+            type: "regulations",
+        };
+
+        expect(getRequestParams(query11)).toBe(
+            "q=test&show_public=false&show_internal=false"
+        );
+
+        const query12 = {
+            q: "test",
+            type: "regulations,internal",
+        };
+
+        expect(getRequestParams(query12)).toBe(
+            "q=test&show_public=false"
+        );
+
+        const query13 = {
+            q: "test",
+            type: "regulations,external",
+        };
+
+        expect(getRequestParams(query13)).toBe(
+            "q=test&show_internal=false"
+        );
+
+        const queryAll = {
             q: "test",
             type: "all",
             page: undefined,
         };
 
-        expect(getRequestParams(query11)).toBe(
+        expect(getRequestParams(queryAll)).toBe(
             "q=test&show_public=true&show_internal=true&show_regulations=true"
         );
     });
