@@ -49,6 +49,11 @@
         }
 
         .search-results {
+            .loading__span {
+                display: block;
+                margin-bottom: calc(100px + var(--spacer-6));
+            }
+
             &-count {
                 margin-bottom: var(--spacer-6);
             }
