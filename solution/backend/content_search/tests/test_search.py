@@ -96,9 +96,11 @@ class SearchTest(TestCase):
 
     def test_unapproved_is_hidden(self):
         PublicLink.objects.create(approved=False, title="Unapproved")
+        PublicLink.objects.create(approved=True, title="Not unapproved")
         response = self.client.get("/v3/content-search/?q=unapproved")
         data = get_paginated_data(response)
-        self.assertEqual(data['count'], 0)
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['results'][0]['resource']['title'], "Not unapproved")
 
     def test_single_response_queries(self):
         self.login()
