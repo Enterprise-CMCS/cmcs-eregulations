@@ -100,6 +100,9 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
         query = ContentIndex.objects.defer("content")
 
+        # Filter out unapproved resources
+        query = query.filter(resource__approved=True)
+
         # Filter inclusively by citations if this array exists
         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
         if citation_filter:
