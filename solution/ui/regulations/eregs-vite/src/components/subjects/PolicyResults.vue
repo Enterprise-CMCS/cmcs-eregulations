@@ -108,6 +108,7 @@ const getResultSnippet = (item) => {
 
 export default {
     addSurroundingEllipses,
+    getParentCategoryName,
     getResultLinkText,
     getResultSnippet,
     showResultSnippet,
