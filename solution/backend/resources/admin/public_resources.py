@@ -61,7 +61,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
 
     class Media:
         css = {
-            'all': ('admin/css/custom_admin.css',)
+            'all': ('css/admin/custom_admin.css',)
         }
 
 class FederalRegisterLinkForm(AbstractPublicResourceForm):
