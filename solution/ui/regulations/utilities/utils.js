@@ -143,9 +143,17 @@ const getFileTypeButton = ({ fileName, uid }) => {
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
  */
-const getRequestParams = ({ queryParams }) => {
-    const requestParams = Object.entries(queryParams)
-        .filter(([key, _value]) => PARAM_VALIDATION_DICT[key])
+const getRequestParams = ({ queryParams, disallowList = [] }) => {
+    const rawParams = Object.entries(queryParams).filter(
+        ([key, _value]) => PARAM_VALIDATION_DICT[key]
+    );
+
+    // if no type, set type to all so we can handle disallowList
+    if (rawParams.filter(([key, _value]) => key === "type").length === 0) {
+        rawParams.push(["type", "all"]);
+    }
+
+    const formattedParams = rawParams
         .map(([key, value]) => {
             const valueArray = _isArray(value) ? value : [value];
             const filteredValues = valueArray.filter((value) =>
@@ -157,19 +165,35 @@ const getRequestParams = ({ queryParams }) => {
                     if (key === "type") {
                         // if type='all', early return with explicit query params
                         if (v === "all") {
-                            return "show_public=true&show_internal=true&show_regulations=true";
+                            if (disallowList.length === 0) return "";
+
+                            return disallowList
+                                .filter((type) =>
+                                    PARAM_VALIDATION_DICT["type"](type)
+                                )
+                                .map((type) => {
+                                    const typeArg =
+                                        type === "external" ? "public" : type;
+                                    return `show_${typeArg}=false`;
+                                })
+                                .join("&");
                         }
 
                         // Since the API defaults to showing all types, we need to
                         // pass display_<type>=false for the types that are not in the array
                         // of types that the user wants to see.
                         const typeArray = v.split(",");
+
                         const differenceArray = _difference(
                             DOCUMENT_TYPES,
                             typeArray
                         );
 
-                        const paramsArray = differenceArray.map((type) => {
+                        const unionWithDisallowed = [
+                            ...new Set([...differenceArray, ...disallowList]),
+                        ];
+
+                        const paramsArray = unionWithDisallowed.map((type) => {
                             const typeArg =
                                 type === "external" ? "public" : type;
                             return `show_${typeArg}=false`;
@@ -187,7 +211,7 @@ const getRequestParams = ({ queryParams }) => {
         .filter(([_key, value]) => !_isEmpty(value))
         .join("&");
 
-    return requestParams;
+    return formattedParams;
 };
 
 const parseError = (err) => {

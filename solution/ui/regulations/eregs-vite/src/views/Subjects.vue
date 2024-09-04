@@ -16,10 +16,7 @@ import {
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
-import {
-    getRequestParams,
-    PARAM_VALIDATION_DICT,
-} from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
@@ -62,6 +59,7 @@ const FilterTypesDict = {
 };
 
 const pageSize = 50;
+const disallowList = ["regulations"];
 
 // provide Django template variables
 provide("currentRouteName", $route.name);
@@ -264,7 +262,10 @@ const getDocSubjects = async () => {
             getDocList({
                 apiUrl,
                 pageSize,
-                requestParamString: getRequestParams({ queryParams: $route.query }),
+                requestParamString: getRequestParams({
+                    queryParams: $route.query,
+                    disallowList,
+                }),
                 query: $route.query.q,
                 type: $route.query.type,
             });
@@ -345,7 +346,10 @@ watch(
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
-        const newRequestParams = getRequestParams({ queryParams: newQueryParams });
+        const newRequestParams = getRequestParams({
+            queryParams: newQueryParams,
+            disallowList,
+        });
         getDocList({
             apiUrl,
             pageSize,
