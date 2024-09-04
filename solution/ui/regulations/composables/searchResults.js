@@ -1,11 +1,9 @@
 import { ref } from "vue";
 
-import useFetch from "./fetch";
-
 import { getCombinedContent, getContentWithoutQuery } from "utilities/api";
 import { DOCUMENT_TYPES_MAP } from "utilities/utils";
 
-export default function useSearchResults() {
+function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     const policyDocList = ref({
         count: 0,
         results: [],
@@ -64,3 +62,5 @@ export default function useSearchResults() {
 
     return { policyDocList, getDocList, clearDocList };
 }
+
+export default () => useSearchResults({ getCombinedContent, getContentWithoutQuery });
