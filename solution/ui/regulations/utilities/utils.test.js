@@ -258,24 +258,69 @@ describe("Utilities.js", () => {
             type: "regulations,internal",
         };
 
-        expect(getRequestParams({ queryParams: query12 })).toBe("q=test&show_public=false");
+        expect(getRequestParams({ queryParams: query12 })).toBe(
+            "q=test&show_public=false"
+        );
 
         const query13 = {
             q: "test",
             type: "regulations,external",
         };
 
-        expect(getRequestParams({ queryParams: query13 })).toBe("q=test&show_internal=false");
+        expect(getRequestParams({ queryParams: query13 })).toBe(
+            "q=test&show_internal=false"
+        );
 
         const queryAll = {
             q: "test",
             type: "all",
-            page: undefined,
         };
 
-        expect(getRequestParams({ queryParams: queryAll })).toBe(
-            "q=test&show_public=true&show_internal=true&show_regulations=true"
-        );
+        expect(getRequestParams({ queryParams: queryAll })).toBe("q=test");
+
+        const queryDisallow1 = {
+            q: "test",
+            type: "all",
+        };
+
+        expect(
+            getRequestParams({
+                queryParams: queryDisallow1,
+                disallowList: ["regulations"],
+            })
+        ).toBe("q=test&show_regulations=false");
+
+        const queryDisallow2 = {
+            q: "test",
+            type: "internal,external",
+        };
+
+        expect(
+            getRequestParams({
+                queryParams: queryDisallow2,
+                disallowList: ["internal"],
+            })
+        ).toBe("q=test&show_regulations=false&show_internal=false");
+
+        const queryDisallow3 = {
+            q: "test",
+        };
+
+        expect(
+            getRequestParams({
+                queryParams: queryDisallow3,
+                disallowList: ["internal"],
+            })
+        ).toBe("q=test&show_internal=false");
+
+        const queryDisallow4 = {};
+
+        expect(
+            getRequestParams({
+                queryParams: queryDisallow4,
+                disallowList: ["internal"],
+            })
+        ).toBe("show_internal=false");
     });
 
     it("gets the proper suffix for a filename or returns null", async () => {
