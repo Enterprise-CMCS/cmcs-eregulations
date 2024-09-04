@@ -297,7 +297,9 @@ watch(
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
-        const newRequestParams = getRequestParams({ queryParams: newQueryParams });
+        const newRequestParams = getRequestParams({
+            queryParams: newQueryParams,
+        });
         getDocList({
             apiUrl,
             pageSize,
@@ -358,7 +360,12 @@ getDocSubjects();
                     @clear-form="resetSearch"
                 />
                 <fieldset class="search__fieldset" v-if="$route.query.q">
-                    <DocumentTypeSelector parent="search" />
+                    <DocumentTypeSelector
+                        parent="search"
+                        :loading="
+                            policyDocList.loading || partsLastUpdated.loading
+                        "
+                    />
                     <FetchCategoriesContainer
                         v-slot="slotProps"
                         :categories-capture-function="setCategories"

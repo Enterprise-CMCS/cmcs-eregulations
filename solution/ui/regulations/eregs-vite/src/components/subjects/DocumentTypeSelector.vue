@@ -14,6 +14,10 @@ const props = defineProps({
         type: String,
         default: "subjects",
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const $route = useRoute();
@@ -127,6 +131,7 @@ onUnmounted(() => {
                             type="checkbox"
                             :value="type"
                             :checked="checkedBoxes.includes(type)"
+                            :disabled="loading"
                             @change="onCheckboxChange"
                         />
                         <label
