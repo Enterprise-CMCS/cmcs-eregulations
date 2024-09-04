@@ -42,14 +42,10 @@ describe("formatResourceCategories", () => {
         expect(formattedResources[0].description).toEqual(
             formattedPublicDocsFixture[0].description
         );
-        expect(
-            formattedResources[0].supplemental_content[0]
-                .title
-        ).toBe("Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010; Correction");
-        expect(
-            formattedResources[0].supplemental_content[0]
-                .title
-        ).toEqual(
+        expect(formattedResources[0].supplemental_content[0].title).toBe(
+            "Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010; Correction"
+        );
+        expect(formattedResources[0].supplemental_content[0].title).toEqual(
             formattedPublicDocsFixture[0].supplemental_content[0].title
         );
     });
@@ -61,15 +57,12 @@ describe("formatResourceCategories", () => {
         });
 
         expect(
-            formattedInternalResources[0].supplemental_content[0]
-                .file_name
+            formattedInternalResources[0].supplemental_content[0].file_name
         ).toEqual("ff-test-em-8.pdf");
         expect(
-            formattedInternalResources[0].supplemental_content[0]
-                .file_name
+            formattedInternalResources[0].supplemental_content[0].file_name
         ).toEqual(
-            formattedInternalDocsFixture[0].supplemental_content[0]
-                .file_name
+            formattedInternalDocsFixture[0].supplemental_content[0].file_name
         );
         expect(
             _isEqual(
@@ -178,7 +171,7 @@ describe("Utilities.js", () => {
             q: "test",
         };
 
-        expect(getRequestParams(query1)).toBe(
+        expect(getRequestParams({ queryParams: query1 })).toBe(
             "subjects=1&subjects=2&subjects=3&q=test"
         );
 
@@ -187,40 +180,44 @@ describe("Utilities.js", () => {
             q: "test",
         };
 
-        expect(getRequestParams(query2)).toBe("subjects=1&subjects=2&q=test");
+        expect(getRequestParams({ queryParams: query2 })).toBe(
+            "subjects=1&subjects=2&q=test"
+        );
 
         const query3 = {
             subjects: ["1,2", "3"],
             q: "test",
         };
 
-        expect(getRequestParams(query3)).toBe("subjects=3&q=test");
+        expect(getRequestParams({ queryParams: query3 })).toBe(
+            "subjects=3&q=test"
+        );
 
         const query4 = {
             subjects: "erq",
         };
 
-        expect(getRequestParams(query4)).toBe("");
+        expect(getRequestParams({ queryParams: query4 })).toBe("");
 
         const query5 = {
             q: "",
         };
 
-        expect(getRequestParams(query5)).toBe("");
+        expect(getRequestParams({ queryParams: query5 })).toBe("");
 
         const query6 = {
             subjects: "adasdf",
             q: "",
         };
 
-        expect(getRequestParams(query6)).toBe("");
+        expect(getRequestParams({ queryParams: query6 })).toBe("");
 
         const query7 = {
             subjects: ["1", "2", "3"],
             q: "",
         };
 
-        expect(getRequestParams(query7)).toBe(
+        expect(getRequestParams({ queryParams: query7 })).toBe(
             "subjects=1&subjects=2&subjects=3"
         );
 
@@ -229,21 +226,21 @@ describe("Utilities.js", () => {
             page: 1,
         };
 
-        expect(getRequestParams(query8)).toBe("q=test&page=1");
+        expect(getRequestParams({ queryParams: query8 })).toBe("q=test&page=1");
 
         const query9 = {
             q: "test",
             type: "public",
         };
 
-        expect(getRequestParams(query9)).toBe("q=test");
+        expect(getRequestParams({ queryParams: query9 })).toBe("q=test");
 
         const query10 = {
             q: "test",
             type: "internal",
         };
 
-        expect(getRequestParams(query10)).toBe(
+        expect(getRequestParams({ queryParams: query10 })).toBe(
             "q=test&show_regulations=false&show_public=false"
         );
 
@@ -252,7 +249,7 @@ describe("Utilities.js", () => {
             type: "regulations",
         };
 
-        expect(getRequestParams(query11)).toBe(
+        expect(getRequestParams({ queryParams: query11 })).toBe(
             "q=test&show_public=false&show_internal=false"
         );
 
@@ -261,18 +258,14 @@ describe("Utilities.js", () => {
             type: "regulations,internal",
         };
 
-        expect(getRequestParams(query12)).toBe(
-            "q=test&show_public=false"
-        );
+        expect(getRequestParams({ queryParams: query12 })).toBe("q=test&show_public=false");
 
         const query13 = {
             q: "test",
             type: "regulations,external",
         };
 
-        expect(getRequestParams(query13)).toBe(
-            "q=test&show_internal=false"
-        );
+        expect(getRequestParams({ queryParams: query13 })).toBe("q=test&show_internal=false");
 
         const queryAll = {
             q: "test",
@@ -280,7 +273,7 @@ describe("Utilities.js", () => {
             page: undefined,
         };
 
-        expect(getRequestParams(queryAll)).toBe(
+        expect(getRequestParams({ queryParams: queryAll })).toBe(
             "q=test&show_public=true&show_internal=true&show_regulations=true"
         );
     });

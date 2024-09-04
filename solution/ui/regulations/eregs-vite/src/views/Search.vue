@@ -249,7 +249,7 @@ const getDocSubjects = async () => {
         getDocList({
             apiUrl,
             pageSize,
-            requestParamString: getRequestParams($route.query),
+            requestParamString: getRequestParams({ queryParams: $route.query }),
             query: $route.query.q,
             type: $route.query.type,
         });
@@ -297,7 +297,7 @@ watch(
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
-        const newRequestParams = getRequestParams(newQueryParams);
+        const newRequestParams = getRequestParams({ queryParams: newQueryParams });
         getDocList({
             apiUrl,
             pageSize,

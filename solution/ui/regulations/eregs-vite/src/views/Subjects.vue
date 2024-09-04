@@ -9,8 +9,6 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import {
-    getCombinedContent,
-    getContentWithoutQuery,
     getLastUpdatedDates,
     getInternalSubjects,
     getTitles,
@@ -19,7 +17,6 @@ import {
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import {
-    DOCUMENT_TYPES_MAP,
     getRequestParams,
     PARAM_VALIDATION_DICT,
 } from "utilities/utils";
@@ -267,7 +264,7 @@ const getDocSubjects = async () => {
             getDocList({
                 apiUrl,
                 pageSize,
-                requestParamString: getRequestParams($route.query),
+                requestParamString: getRequestParams({ queryParams: $route.query }),
                 query: $route.query.q,
                 type: $route.query.type,
             });
@@ -348,7 +345,7 @@ watch(
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
-        const newRequestParams = getRequestParams(newQueryParams);
+        const newRequestParams = getRequestParams({ queryParams: newQueryParams });
         getDocList({
             apiUrl,
             pageSize,

@@ -143,8 +143,8 @@ const getFileTypeButton = ({ fileName, uid }) => {
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
  */
-const getRequestParams = (query) => {
-    const requestParams = Object.entries(query)
+const getRequestParams = ({ queryParams }) => {
+    const requestParams = Object.entries(queryParams)
         .filter(([key, _value]) => PARAM_VALIDATION_DICT[key])
         .map(([key, value]) => {
             const valueArray = _isArray(value) ? value : [value];
