@@ -106,11 +106,14 @@ const getResultSnippet = (item) => {
     return snippet;
 };
 
+const partDocumentTitleLabel = (string) => string.toLowerCase();
+
 export default {
     addSurroundingEllipses,
     getParentCategoryName,
     getResultLinkText,
     getResultSnippet,
+    partDocumentTitleLabel,
     showResultSnippet,
 };
 </script>
@@ -272,8 +275,11 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 />
             </template>
             <template #context>
+                <span v-if="doc.part_title" class="result__context--date">{{
+                    partDocumentTitleLabel(doc.part_title)
+                }}</span>
                 <span
-                    v-if="doc.date"
+                    v-else-if="doc.date"
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
                     >{{ formatDate(doc.date) }}</span
