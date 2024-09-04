@@ -1,6 +1,5 @@
 import json
 import logging
-import re
 
 import requests
 from django import forms
@@ -63,6 +62,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         css = {
             'all': ('css/admin/custom_admin.css',)
         }
+
 
 class FederalRegisterLinkForm(AbstractPublicResourceForm):
     resource_groups = forms.ModelMultipleChoiceField(

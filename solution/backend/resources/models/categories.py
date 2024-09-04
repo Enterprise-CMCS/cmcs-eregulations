@@ -33,6 +33,7 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
     def get_category_name_without_annotation(self):
         return self.name
 
+
 class AbstractPublicCategory(AbstractCategory):
     pass
 
