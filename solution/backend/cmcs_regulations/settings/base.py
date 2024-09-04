@@ -100,9 +100,6 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static-assets'),
-]
 
 LOGGING = {
     "version": 1,
