@@ -257,7 +257,12 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :doc-type="DOCUMENT_TYPES_MAP[doc.type]"
                 />
                 <CategoryLabel
-                    v-if="!_isEmpty(doc.category)"
+                    v-if="doc.type === 'reg_text'"
+                    name="Regulations"
+                    type="regulations"
+                />
+                <CategoryLabel
+                    v-else-if="!_isEmpty(doc.category)"
                     :name="
                         doc.category?.parent
                             ? getParentCategoryName({
