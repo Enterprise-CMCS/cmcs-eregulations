@@ -87,7 +87,6 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
         return instance
 
 
-
 @admin.register(FederalRegisterLink)
 class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 11
