@@ -25,8 +25,8 @@ class InternalLinkForm(AbstractInternalResourceForm):
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
     admin_priority = 20
     form = InternalLinkForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "summary"]
 
     fieldsets = [
@@ -46,6 +46,9 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
             "fields": ["approved"],
         }),
     ]
+
+    def category_name_without_annotation(self, obj):
+        return obj.category.get_category_name_without_annotation() if obj.category else ""
 
     class Media:
         css = {

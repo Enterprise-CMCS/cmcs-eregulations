@@ -87,6 +87,7 @@ class FederalRegisterLinkForm(AbstractPublicResourceForm):
         return instance
 
 
+
 @admin.register(FederalRegisterLink)
 class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 11
@@ -115,6 +116,11 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["approved"],
         }),
     ]
+
+    class Media:
+        css = {
+            'all': ('css/admin/custom_admin.css',)
+        }
 
     def in_groups(self, obj):
         groups = ", ".join([str(i) for i in obj.resource_groups.all()])
