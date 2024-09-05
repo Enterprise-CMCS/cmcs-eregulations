@@ -36,17 +36,17 @@ const _beforeEach = () => {
 
 const _beforePaginate = () => {
     cy.intercept(
-        "**/v3/resources/public?show_internal=false&show_regulations=false**",
+        "**/v3/resources/public?show_regulations=false&show_internal=false**",
         {
             fixture: "policy-docs-50-p1.json",
         }
     ).as("initialPage");
 
-    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=1**", {
+    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=1**", {
         fixture: "policy-docs-50-p1.json",
     }).as("page1");
 
-    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=2**", {
+    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=2**", {
         fixture: "policy-docs-50-p2.json",
     }).as("page2");
 };
@@ -197,7 +197,7 @@ describe("Find by Subjects", () => {
             }
         );
         cy.intercept(
-            "**/v3/resources/?subjects=3&page_size=50&group_resources=false",
+            "**/v3/resources/?subjects=3&show_regulations=false&page_size=50&group_resources=false",
             {
                 fixture: "policy-docs-subjects.json",
             }
