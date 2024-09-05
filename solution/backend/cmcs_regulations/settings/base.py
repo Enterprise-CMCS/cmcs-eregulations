@@ -101,6 +101,7 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
