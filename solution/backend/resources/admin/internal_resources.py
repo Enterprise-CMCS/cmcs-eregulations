@@ -25,9 +25,10 @@ class InternalLinkForm(AbstractInternalResourceForm):
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
     admin_priority = 20
     form = InternalLinkForm
-    list_display = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "summary"]
+    ordering = ["-updated_at"]
 
     fieldsets = [
         ("Basics", {
@@ -71,10 +72,10 @@ class InternalFileForm(AbstractInternalResourceForm):
 class InternalFileAdmin(AbstractInternalResourceAdmin):
     admin_priority = 21
     form = InternalFileForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "summary"]
-    ordering = ["date", "document_id", "category", "updated_at"]
+    ordering = ["-updated_at"]
     readonly_fields = ["download_file", "file_name", "file_type"]
 
     fieldsets = [
@@ -94,9 +95,6 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
             "fields": ["approved"],
         }),
     ]
-
-    def category_name_without_annotation(self, obj):
-        return obj.category.get_category_name_without_annotation() if obj.category else ""
 
     class Media:
         css = {

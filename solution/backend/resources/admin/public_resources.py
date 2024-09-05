@@ -30,8 +30,8 @@ class PublicLinkForm(AbstractPublicResourceForm):
 class PublicLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 10
     form = PublicLinkForm
-    list_display = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category_name_without_annotation", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     search_fields = ["date", "document_id", "title", "url"]
     ordering = ["-updated_at"]
 
@@ -52,11 +52,6 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["approved"],
         }),
     ]
-
-    def category_name_without_annotation(self, obj):
-        return obj.category.get_category_name_without_annotation() if obj.category else ""
-
-    category_name_without_annotation.short_description = "Category"
 
     class Media:
         css = {

@@ -30,9 +30,6 @@ class AbstractCategory(models.Model, DisplayNameFieldMixin):
         name = getattr(self, "name", f"Category {self.pk}")
         return f"{name} ({self._meta.verbose_name})"
 
-    def get_category_name_without_annotation(self):
-        return self.name
-
 
 class AbstractPublicCategory(AbstractCategory):
     pass

@@ -3,7 +3,7 @@ pyopenssl>=24,<25
 Werkzeug==0.15.5
 boto3
 django-debug-toolbar
-django>=5.0.7
+django>=5.1
 requests
 djangorestframework
 psycopg2-binary
