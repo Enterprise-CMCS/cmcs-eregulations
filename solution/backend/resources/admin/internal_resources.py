@@ -48,9 +48,6 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
     ]
 
-    def category_name_without_annotation(self, obj):
-        return obj.category.get_category_name_without_annotation() if obj.category else ""
-
     class Media:
         css = {
             'all': ('css/admin/custom_admin.css',)

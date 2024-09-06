@@ -82,6 +82,12 @@ This data is not maintained and should not be relied on for any purpose other th
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
 
+## Update css for admin site
+
+To update the css for the admin site, you will need to update the scss files in the `solutions/ui/src/scss` directory.  Once you have made your changes, you will need to run `make local.collectstatic` to compile the scss files into css files.  This will update/create the css files in the `solutions/ui/regulations/css/admin` directory.  
+You will need to restart the local environment to see the changes.  If you created a new file in that directory then you will have to restart your docker container to see the changes. 
+The Makefile will automatically move those files to the correct location where STATIC_ROOT is defined. This is the location where Django will look for static files.
+
 ## Testing eRegs
 
 #### Testing setup
