@@ -16,9 +16,11 @@ from resources.serializers import (
 
 
 @extend_schema(
-    description="Retrieve a list of legal citations, which may include references to sections, subparts, and other "
-                "regulatory text. This endpoint supports access to different types of citations, and the results are "
-                "ordered based on the specific citation subclass. "
+    description="Retrieve a list of regulation (CFR) citations. "
+                "This endpoint provides access to multiple types of " 
+                "citations (section citations and subpart citations), " 
+                "and the results are in alphanumeric order based on citation " 
+                "hierarchy (title, part, subpart, and section)."
 )
 class CitationViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination

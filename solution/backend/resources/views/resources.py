@@ -63,7 +63,8 @@ COMMON_QUERY_PARAMETERS = [
         name="subjects",
         type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
         location=OpenApiParameter.QUERY,
-        description="List of subject IDs to filter by",
+        description="List of subject IDs to filter by. Use \"&subjects=1&subjects=2\""
+                    " for multiple.",
         required=False,
         explode=False,
     ),
