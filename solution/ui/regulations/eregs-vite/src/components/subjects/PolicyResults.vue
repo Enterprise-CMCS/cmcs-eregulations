@@ -197,6 +197,7 @@ const resultLinkClasses = (doc) => ({
         (doc.type === "internal_link" ||
             DOCUMENT_TYPES_MAP[doc.type] === "Public"),
     "document__link--search": !!$route?.query?.q,
+    "document__link--regulations": doc.type === "reg_text",
 });
 
 const currentPageResultsRange = getCurrentPageResultsRange({
@@ -298,8 +299,12 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             <template #link>
                 <a
                     :href="getUrl(doc)"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    :target="doc.type === 'reg_text' ? undefined : '_blank'"
+                    :rel="
+                        doc.type === 'reg_text'
+                            ? undefined
+                            : 'noopener noreferrer'
+                    "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
                     v-html="

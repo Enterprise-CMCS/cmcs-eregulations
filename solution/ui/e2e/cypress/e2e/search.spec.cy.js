@@ -1,3 +1,6 @@
+const TITLE_42 = 42;
+const TITLE_45 = 45;
+
 const SEARCH_TERM = "FMAP";
 const SEARCH_TERM_2 = "almond";
 
@@ -10,17 +13,31 @@ describe("Search flow", () => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
 
+        cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
+
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs-search.json",
         }).as("subjectFiles");
+
+        cy.intercept(`**/v3/title/${TITLE_42}/parts`, {
+            fixture: "parts-42.json",
+        }).as("parts42");
+
+        cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
+            fixture: "parts-45.json",
+        }).as("parts45");
 
         cy.intercept("**/v3/resources/subjects**", {
             fixture: "subjects.json",
         }).as("subjects");
 
-        cy.intercept("**/v3/title/42/parts**", {
-            fixture: "parts-last-updated.json",
-        }).as("partsLastUpdated");
+        cy.intercept("**/v3/resources/internal/categories**", {
+            fixture: "categories-internal.json",
+        }).as("internalCategories");
+
+        cy.intercept("**/v3/resources/public/categories**", {
+            fixture: "categories.json",
+        }).as("categories");
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -170,7 +187,6 @@ describe("Search flow", () => {
             .eq(2)
             .find("label")
             .should("have.text", "Internal Resources");
-
     });
 
     it("should not show the categories dropdown when only regulations are selected", () => {
@@ -236,40 +252,18 @@ describe("Search flow", () => {
             "include",
             `/search?q=${SEARCH_TERM}&type=regulations,external,internal`
         );
-
     });
 
-    it.skip("", () => {});
-
-    it.skip("displays results of the search and highlights search term in regulation text", () => {
+    it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".reg-results-content .search-results-count > h2").should(
-            "have.text",
-            "Regulations"
-        );
-        cy.get(".reg-results-content .search-results-count > span").should(
-            "be.visible"
-        );
-        cy.get(".resources-results-content .search-results-count > h2").should(
-            "have.text",
-            "Resources"
-        );
-        cy.get(
-            ".resources-results-content .search-results-count > span"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link"
-        ).should("be.visible");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
-        ).should("have.attr", "href");
-        cy.get(
-            ".reg-results-content .reg-results-container .result:nth-child(1) .result__link a"
-        ).click({ force: true });
-        cy.url().should("include", `${SEARCH_TERM}#`);
+        cy.get("a.document__link--regulations")
+            .should("have.attr", "href")
+            .and("include", `${SEARCH_TERM}#435-928`);
+        cy.get("a.document__link--regulations").click({ force: true });
+        cy.url().should("include", `${SEARCH_TERM}#435-928`);
         cy.focused().then(($el) => {
-            cy.get($el).within(($focusedEl) => {
+            cy.get($el).within((k$focusedEl) => {
                 cy.get("mark.highlight")
                     .contains(`${SEARCH_TERM}`)
                     .should(
