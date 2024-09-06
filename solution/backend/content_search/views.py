@@ -74,7 +74,7 @@ from .serializers import ContentSearchSerializer
             name="citations",
             required=False,
             type=int,
-            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y&subjects=1&subjects=2\" "
+            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
                         "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
             location=OpenApiParameter.QUERY,
         ),
