@@ -18,6 +18,9 @@ describe("Search flow", () => {
             fixture: "subjects.json",
         }).as("subjects");
 
+        cy.intercept("**/v3/title/42/parts**", {
+            fixture: "parts-last-updated.json",
+        }).as("partsLastUpdated");
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -136,6 +139,107 @@ describe("Search flow", () => {
             .should("exist")
             .and("have.text", "Care Coordination");
     });
+
+    it("should not show internal checkbox when not logged in", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("label")
+            .should("have.text", "Regulations");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("label")
+            .should("have.text", "Public Resources");
+        cy.get(".doc-type__toggle fieldset > div").eq(2).should("not.exist");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+
+        cy.get("input#main-content")
+            .should("be.visible")
+            .type(`${SEARCH_TERM}`, { force: true });
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(2)
+            .find("label")
+            .should("have.text", "Internal Resources");
+
+    });
+
+    it("should not show the categories dropdown when only regulations are selected", () => {
+        cy.viewport("macbook-15");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get("div[data-testid='category-select']").should("be.visible");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .check({ force: true });
+        cy.get("div[data-testid='category-select']").should("not.be.visible");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .check({ force: true });
+        cy.get("div[data-testid='category-select']").should("be.visible");
+    });
+
+    it("has the correct type params in URL for each doc type combination", () => {
+        cy.viewport("macbook-15");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .check({ force: true });
+
+        cy.url().should("include", `/search?q=${SEARCH_TERM}&type=regulations`);
+        cy.url().should("not.include", "external");
+        cy.url().should("not.include", "internal");
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .check({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&type=regulations,external`
+        );
+        cy.url().should("not.include", "internal");
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(2)
+            .find("input")
+            .check({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&type=regulations,external,internal`
+        );
+
+    });
+
+    it.skip("", () => {});
 
     it.skip("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
