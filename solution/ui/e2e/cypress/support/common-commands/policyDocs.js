@@ -35,12 +35,12 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
 
     cy.get('[data-testid="results-item-categories"] .category-label')
         .first()
-        .should("include.text", "Mock Category");
+        .should("include.text", "TestCat");
 
-    // Public doc
+    // Regulations Doc
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
         .eq(1)
-        .should("include.text", " Public");
+        .should("include.text", "Public")
 
     cy.get('[data-testid="results-item-categories"] i')
         .eq(1)
@@ -48,10 +48,35 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
 
     cy.get('[data-testid="results-item-categories"] .category-label')
         .eq(1)
-        .should("include.text", "Subregulatory Test Guidance");
+        .should("include.text", "Regulations");
+
+    // Public doc
+    cy.get('[data-testid="results-item-categories"] .doc-type__label')
+        .eq(2)
+        .should("include.text", " Public");
+
+    cy.get('[data-testid="results-item-categories"] i')
+        .eq(2)
+        .should("have.class", "fa-users");
+
+    cy.get('[data-testid="results-item-categories"] .category-label')
+        .eq(1)
+        .should("include.text", "Related Regulations Fixture Item");
 
     cy.get('[data-testid="results-item-categories"] .subcategory-label')
-        .eq(0)
-        .should("include.text", "Mock Subcategory");
+        .eq(1)
+        .should("include.text", "State Medicaid Director Letter (SMDL)");
 
+    // FR Doc
+    cy.get('[data-testid="results-item-categories"] .doc-type__label')
+        .eq(3)
+        .should("include.text", " Public");
+
+    cy.get('[data-testid="results-item-categories"] i')
+        .eq(3)
+        .should("have.class", "fa-users");
+
+    cy.get('[data-testid="results-item-categories"] .category-label')
+        .eq(2)
+        .should("include.text", "Proposed and Final Rules");
 };
