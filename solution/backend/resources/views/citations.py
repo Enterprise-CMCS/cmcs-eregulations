@@ -17,9 +17,9 @@ from resources.serializers import (
 
 @extend_schema(
     description="Retrieve a list of regulation (CFR) citations. "
-                "This endpoint provides access to multiple types of " 
-                "citations (section citations and subpart citations), " 
-                "and the results are in alphanumeric order based on citation " 
+                "This endpoint provides access to multiple types of "
+                "citations (section citations and subpart citations), "
+                "and the results are in alphanumeric order based on citation "
                 "hierarchy (title, part, subpart, and section)."
 )
 class CitationViewSet(viewsets.ReadOnlyModelViewSet):

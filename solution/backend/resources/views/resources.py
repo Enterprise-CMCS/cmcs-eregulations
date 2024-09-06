@@ -207,15 +207,15 @@ class InternalResourceViewSet(ResourceViewSet):
 
     @extend_schema(description="Retrieve a list of internal resources, including both "
                                "internal files and internal links, which are only accessible "
-                               "to authenticated users. This endpoint supports options to " 
+                               "to authenticated users. This endpoint supports options to "
                                "group resources and filter by citations, categories, and subjects.")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
 
 @extend_schema(description="Retrieve a list of internal files, which are only"
-                           "accessible to authenticated users. This endpoint " 
-                           "supports options to group resources and filter by " 
+                           "accessible to authenticated users. This endpoint "
+                           "supports options to group resources and filter by "
                            "citations, categories, and subjects.")
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
@@ -224,7 +224,7 @@ class InternalFileViewSet(InternalResourceViewSet):
 
 @extend_schema(description="Retrieve a list of internal links, which are "
                            "only accessible to authenticated users. This "
-                           "endpoint supports options to group resources " 
+                           "endpoint supports options to group resources "
                            "and filter by citations, categories, and subjects.")
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
