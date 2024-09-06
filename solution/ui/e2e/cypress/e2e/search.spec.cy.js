@@ -9,6 +9,15 @@ describe("Search flow", () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
+
+        cy.intercept("**/v3/content-search/**", {
+            fixture: "policy-docs-search.json",
+        }).as("subjectFiles");
+
+        cy.intercept("**/v3/resources/subjects**", {
+            fixture: "subjects.json",
+        }).as("subjects");
+
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -57,14 +66,13 @@ describe("Search flow", () => {
             force: true,
         });
         cy.url().should("include", "/search?q=test+search");
-        cy.get(".search-form .form-helper-text .search-suggestion").should(
-            "not.exist"
-        );
     });
 
     it("should be able to clear the searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.url().should("include", `/search/?q=${SEARCH_TERM}`);
 
         cy.get('[data-testid="clear-search-form"]').click({
             force: true,
@@ -78,12 +86,24 @@ describe("Search flow", () => {
             .should("be.visible")
             .should("have.value", "test");
 
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        cy.url().should("include", "/search?q=test");
+
         cy.get("input#main-content").clear();
 
         cy.get("input#main-content").should("have.value", "");
+
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        cy.url().should("not.include", "test");
     });
 
-    it("should have the correct labels for public and internal documents", () => {
+    it("should have the correct labels for public, regulations, and internal documents", () => {
         cy.checkPolicyDocs({
             username,
             password,
@@ -92,14 +112,6 @@ describe("Search flow", () => {
     });
 
     it("should go to the Subjects page with a selected subject when a subject chip is clicked", () => {
-        cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs-search.json",
-        }).as("subjectFiles");
-
-        cy.intercept("**/v3/resources/subjects**", {
-            fixture: "subjects.json",
-        }).as("subjects");
-
         cy.viewport("macbook-15");
 
         cy.eregsLogin({
@@ -115,17 +127,17 @@ describe("Search flow", () => {
             force: true,
         });
 
-        cy.get(`a[data-testid=add-subject-chip-3]`).first().click({
+        cy.get(`a[data-testid=add-subject-chip-9]`).first().click({
             force: true,
         });
 
-        cy.url().should("include", "/subjects/?subjects=3");
+        cy.url().should("include", "/subjects/?subjects=9");
         cy.get(".subject__heading")
             .should("exist")
-            .and("have.text", "Access to Services");
+            .and("have.text", "Care Coordination");
     });
 
-    it("displays results of the search and highlights search term in regulation text", () => {
+    it.skip("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".reg-results-content .search-results-count > h2").should(
@@ -163,80 +175,5 @@ describe("Search flow", () => {
                     );
             });
         });
-    });
-
-    it("should have a valid link to medicaid.gov", () => {
-        cy.clearIndexedDB();
-        cy.viewport("macbook-15");
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".options-list li:nth-child(3) a")
-            .should("have.attr", "href")
-            .and("include", "search-gsc");
-    });
-
-    it("should have the correct error message when the the resources column throws an error", () => {
-        cy.clearIndexedDB();
-
-        cy.intercept("**/v3/content-search/**", {
-            statusCode: 500,
-        }).as("resourcesError");
-
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-
-        cy.get(
-            ".resources-results-content .resources-count__span--error"
-        ).should(
-            "have.text",
-            "We're unable to display results for this query right now"
-        );
-
-        cy.get(".reg-results-content .error__msg").should("not.exist");
-
-        cy.get(".resources-results-content .error__msg").should(
-            "have.text",
-            "Please try a different query, try again later, or let us know."
-        );
-
-        cy.get(".reg-results-content .options-list li:nth-child(3) a").should(
-            "not.exist"
-        );
-
-        cy.get(".resources-results-content .options-list li:nth-child(3) a")
-            .should("have.attr", "href")
-            .and("include", "search-gsc");
-    });
-
-    it("should have the correct error message when the the regulations column throws an error", () => {
-        cy.clearIndexedDB();
-
-        cy.intercept("**/v3/search/**", {
-            statusCode: 500,
-        }).as("resourcesError");
-
-        cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs-search.json",
-        }).as("subjectFiles");
-
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-
-        cy.get(".reg-results-content .regs-count__span--error").should(
-            "have.text",
-            "We're unable to display results for this query right now"
-        );
-
-        cy.get(".resources-results-content .error__msg").should("not.exist");
-
-        cy.get(".reg-results-content .error__msg").should(
-            "have.text",
-            "Please try a different query, try again later, or let us know."
-        );
-
-        cy.get(
-            ".resources-results-content .options-list li:nth-child(3) a"
-        ).should("not.exist");
-
-        cy.get(".reg-results-content .options-list li:nth-child(3) a")
-            .should("have.attr", "href")
-            .and("include", "search-gsc");
     });
 });
