@@ -254,6 +254,15 @@ describe("Search flow", () => {
         );
     });
 
+    it("category should be selected on load if included in URL", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects/?categories=3");
+        cy.get("div[data-testid='category-select']")
+            .should("exist")
+            .find(".v-select__selection")
+            .should("have.text", "Related Regulations Fixture Item");
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
@@ -263,7 +272,7 @@ describe("Search flow", () => {
         cy.get("a.document__link--regulations").click({ force: true });
         cy.url().should("include", `${SEARCH_TERM}#435-928`);
         cy.focused().then(($el) => {
-            cy.get($el).within((k$focusedEl) => {
+            cy.get($el).within((_$focusedEl) => {
                 cy.get("mark.highlight")
                     .contains(`${SEARCH_TERM}`)
                     .should(
