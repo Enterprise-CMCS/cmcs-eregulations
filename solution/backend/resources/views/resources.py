@@ -41,17 +41,13 @@ from resources.utils import (
 
 logger = logging.getLogger(__name__)
 
-# OpenApiQueryParameter("citations",
-#                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
-#                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
-
 COMMON_QUERY_PARAMETERS = [
     OpenApiParameter(
         name="citations",
         type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
         location=OpenApiParameter.QUERY,
         description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                    "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
+                    "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
         required=False,
         explode=False,  # Treat as an array, not a CSV string
     ),
@@ -208,24 +204,27 @@ class InternalResourceViewSet(ResourceViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(description="Retrieve a list of internal resources, which are only "
-                               "accessible to authenticated users. This endpoint supports "
-                               "filtering by citations, categories, subjects, and grouping criteria")
+    @extend_schema(description="Retrieve a list of internal resources, including both "
+                               "internal files and internal links, which are only accessible "
+                               "to authenticated users. This endpoint supports options to " 
+                               "group resources and filter by citations, categories, and subjects.")
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
 
-@extend_schema(description="Retrieve a list of internal files, accessible only to authenticated users. "
-                           "This endpoint supports filtering by citations, categories, subjects, and "
-                           "grouping criteria.")
+@extend_schema(description="Retrieve a list of internal files, which are only"
+                           "accessible to authenticated users. This endpoint " 
+                           "supports options to group resources and filter by " 
+                           "citations, categories, and subjects.")
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
 
-@extend_schema(description="Retrieve a list of internal links, accessible only to "
-                           "authenticated users. This endpoint supports filtering by "
-                           "citations, categories, subjects, and grouping criteria.")
+@extend_schema(description="Retrieve a list of internal links, which are "
+                           "only accessible to authenticated users. This "
+                           "endpoint supports options to group resources " 
+                           "and filter by citations, categories, and subjects.")
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
