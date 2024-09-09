@@ -18,6 +18,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    typeCount: {
+        type: Object,
+        default: () => ({}),
+    },
 });
 
 const $route = useRoute();
@@ -59,7 +63,10 @@ const onCheckboxChange = (event) => {
     }
 
     // if only Regulations is checked, remove categories from route
-    if (checkedBoxes.value.length === 1 && checkedBoxes.value[0] === "regulations") {
+    if (
+        checkedBoxes.value.length === 1 &&
+        checkedBoxes.value[0] === "regulations"
+    ) {
         $router.push({
             name: props.parent,
             query: {
@@ -87,15 +94,18 @@ const onCheckboxChange = (event) => {
     });
 };
 
-watch(() => $route.query, (newQuery) => {
-    const { type: typeParams } = newQuery;
+watch(
+    () => $route.query,
+    (newQuery) => {
+        const { type: typeParams } = newQuery;
 
-    if (_isUndefined(typeParams) || typeParams.includes("all")) {
-        checkedBoxes.value = [];
-    } else {
-        checkedBoxes.value = typeParams.split(",");
+        if (_isUndefined(typeParams) || typeParams.includes("all")) {
+            checkedBoxes.value = [];
+        } else {
+            checkedBoxes.value = typeParams.split(",");
+        }
     }
-});
+);
 
 const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
@@ -107,6 +117,12 @@ const onPopState = (event) => {
 
         checkedBoxes.value = type ? type.split(",") : [];
     }
+};
+
+const makeLabel = ({ type }) => {
+    return `${DOCUMENT_TYPES_MAP[type]} ${
+        type !== "regulations" ? "Resources" : ""
+    } (${props.typeCount[type] ? props.typeCount[type] : "0"})`;
 };
 
 onMounted(() => {
@@ -138,12 +154,7 @@ onUnmounted(() => {
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
-                            <span class=""
-                                >{{ DOCUMENT_TYPES_MAP[type]
-                                }}<span v-if="type !== 'regulations'">
-                                    Resources</span
-                                ></span
-                            >
+                            <span>{{ makeLabel({ type }) }}</span>
                         </label>
                     </div>
                 </div>
