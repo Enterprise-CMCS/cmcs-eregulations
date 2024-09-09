@@ -6,6 +6,7 @@ import { DOCUMENT_TYPES_MAP } from "utilities/utils";
 function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     const policyDocList = ref({
         count: 0,
+        typeCount: {},
         results: [],
         loading: true,
         error: false,
@@ -43,10 +44,12 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
 
             policyDocList.value.results = contentList.results;
             policyDocList.value.count = contentList.count;
+            policyDocList.value.typeCount.regulations = 1;
         } catch (error) {
             console.error(error);
             policyDocList.value.results = [];
             policyDocList.value.count = 0;
+            policyDocList.value.typeCount = {};
             policyDocList.value.error = true;
         } finally {
             policyDocList.value.loading = false;
@@ -56,6 +59,7 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     const clearDocList = () => {
         policyDocList.value.results = [];
         policyDocList.value.count = 0;
+        policyDocList.value.typeCount = {};
         policyDocList.value.loading = false;
         policyDocList.value.error = false;
     };

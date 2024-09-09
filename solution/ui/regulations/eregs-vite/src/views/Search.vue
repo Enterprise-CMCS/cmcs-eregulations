@@ -365,6 +365,7 @@ getDocSubjects();
                         :loading="
                             policyDocList.loading || partsLastUpdated.loading
                         "
+                        :type-count="policyDocList.typeCount"
                     />
                     <FetchCategoriesContainer
                         v-slot="slotProps"
