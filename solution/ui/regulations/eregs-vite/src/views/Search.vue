@@ -1,3 +1,320 @@
+<script setup>
+import { inject, provide, reactive, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import useSearchResults from "composables/searchResults";
+import useRemoveList from "composables/removeList";
+
+import _isArray from "lodash/isArray";
+import _isEmpty from "lodash/isEmpty";
+
+import {
+    getLastUpdatedDates,
+    getInternalSubjects,
+    getTitles,
+} from "utilities/api";
+
+import { getSubjectName } from "utilities/filters";
+
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+
+import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
+import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
+import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
+import HeaderComponent from "@/components/header/HeaderComponent.vue";
+import HeaderLinks from "@/components/header/HeaderLinks.vue";
+import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
+import JumpTo from "@/components/JumpTo.vue";
+import PaginationController from "@/components/pagination/PaginationController.vue";
+import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
+import SearchInput from "@/components/SearchInput.vue";
+import SignInLink from "@/components/SignInLink.vue";
+
+const adminUrl = inject("adminUrl");
+const apiUrl = inject("apiUrl");
+const customLoginUrl = inject("customLoginUrl");
+const hasEditableJobCode = inject("hasEditableJobCode");
+const homeUrl = inject("homeUrl");
+const isAuthenticated = inject("isAuthenticated");
+const searchUrl = inject("searchUrl");
+const statutesUrl = inject("statutesUrl");
+const subjectsUrl = inject("subjectsUrl");
+const surveyUrl = inject("surveyUrl");
+const username = inject("username");
+
+// Router and Route
+const $route = useRoute();
+const $router = useRouter();
+
+const pageSize = 50;
+
+// show/hide categories dropdown
+const showCategoriesRef = ref();
+
+const setShowCategories = (type) => {
+    // hide categories dropdown if only regulations are selected
+    if (
+        type &&
+        type.split(",").length === 1 &&
+        type.split(",")[0] === "regulations"
+    ) {
+        showCategoriesRef.value = false;
+    } else {
+        showCategoriesRef.value = true;
+    }
+};
+
+setShowCategories($route.query.type);
+
+// provide Django template variables
+provide("currentRouteName", $route.name);
+
+// provide router query params to remove on child component change
+const commonRemoveList = ["page", "categories", "intcategories"];
+const searchInputRemoveList = commonRemoveList.concat(["q"]);
+
+provide("commonRemoveList", commonRemoveList);
+
+const categoriesRef = ref([]);
+const setCategories = (categories) => {
+    categoriesRef.value = categories;
+};
+
+/**
+ * @param {Object} queryParams - $route.query
+ * @returns {Boolean} - true if all doc types are selected and nothing else
+ */
+const allDocTypesOnly = (queryParams) => {
+    const { type, ...rest } = queryParams;
+    if (
+        (type && type.includes("all") && _isEmpty(rest)) ||
+        (!type && _isEmpty(rest))
+    ) {
+        return true;
+    }
+
+    return false;
+};
+
+// search query refs and methods
+const searchQuery = ref($route.query.q || "");
+const clearSearchQuery = () => {
+    searchQuery.value = "";
+};
+
+const executeSearch = (payload) => {
+    const routeClone = { ...$route.query };
+
+    const cleanedRoute = useRemoveList({
+        route: routeClone,
+        removeList: searchInputRemoveList,
+    });
+
+    $router.push({
+        name: "search",
+        query: {
+            ...cleanedRoute,
+            q: payload.query,
+        },
+    });
+};
+
+const resetSearch = () => {
+    $router.push({
+        name: "search",
+        query: {},
+    });
+};
+
+// partsLastUpdated fetch for related regulations citations filtering
+const partsLastUpdated = ref({
+    results: {},
+    loading: true,
+});
+
+const getPartsLastUpdated = async () => {
+    try {
+        const titles = await getTitles({ apiUrl });
+        partsLastUpdated.value.results = await getLastUpdatedDates({
+            apiUrl,
+            titles,
+        });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        partsLastUpdated.value.loading = false;
+    }
+};
+
+const { policyDocList, getDocList, clearDocList } = useSearchResults();
+
+// use "reactive" method to make urlParams reactive when provided/injected
+// selectedParams.paramString is used as the reactive prop
+const selectedParams = reactive({
+    paramString: "",
+    paramsArray: [],
+});
+
+// method to add selected params
+const addSelectedParams = (paramArgs) => {
+    const { id, name, type } = paramArgs;
+
+    // update paramString that is used as reactive prop for watch
+    if (selectedParams.paramString) {
+        selectedParams.paramString += `&${type}=${id}`;
+    } else {
+        selectedParams.paramString = `?${type}=${id}`;
+    }
+
+    // create new selectedParams key for array of objects for selections
+    selectedParams.paramsArray.push({ id, name, type });
+};
+
+const clearSelectedParams = () => {
+    selectedParams.paramString = "";
+    selectedParams.paramsArray = [];
+};
+
+provide("selectedParams", selectedParams);
+
+const setSelectedParams = (subjectsListRef) => (param) => {
+    const [paramType, paramValue] = param;
+
+    if (commonRemoveList.includes(paramType)) {
+        return;
+    }
+
+    if (paramType === "q") {
+        searchQuery.value = paramValue;
+        return;
+    }
+
+    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
+    paramList.forEach((paramId) => {
+        const subject = subjectsListRef.value.results.filter(
+            (subjectObj) => paramId === subjectObj.id.toString()
+        )[0];
+
+        if (subject) {
+            addSelectedParams({
+                type: paramType,
+                id: paramId,
+                name: getSubjectName(subject),
+            });
+        }
+    });
+};
+
+// policyDocSubjects fetch for subject selector
+// fetch here so we have it in context; pass down to selector via props
+const policyDocSubjects = ref({
+    results: [],
+    loading: true,
+});
+
+const setTitle = (query) => {
+    const querySubString = query ? `for ${query} ` : "";
+    document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
+};
+
+// called on load
+const getDocSubjects = async () => {
+    try {
+        const subjectsResponse = await getInternalSubjects({
+            apiUrl,
+        });
+
+        policyDocSubjects.value.results = subjectsResponse.results;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        policyDocSubjects.value.loading = false;
+
+        if (!$route.query.q) {
+            clearDocList();
+            return;
+        }
+
+        // wipe everything clean to start
+        clearSelectedParams();
+        clearSearchQuery();
+
+        // now that everything is cleaned, iterate over new query params
+        Object.entries($route.query).forEach((param) => {
+            setSelectedParams(policyDocSubjects)(param);
+        });
+
+        getDocList({
+            apiUrl,
+            pageSize,
+            requestParamString: getRequestParams({ queryParams: $route.query }),
+            query: $route.query.q,
+            type: $route.query.type,
+        });
+    }
+};
+
+watch(
+    () => $route.query,
+    async (newQueryParams) => {
+        const { q, type } = newQueryParams;
+
+        setShowCategories(type);
+
+        // wipe everything clean to start
+        clearSelectedParams();
+        clearSearchQuery();
+
+        // set document title
+        setTitle(q);
+
+        // early return if there's no query
+        if (!q) {
+            clearDocList();
+            return;
+        }
+
+        const sanitizedQueryParams = Object.entries(newQueryParams).filter(
+            ([key]) => PARAM_VALIDATION_DICT[key]
+        );
+
+        // if all params are removed, return
+        if (_isEmpty(sanitizedQueryParams)) {
+            return;
+        }
+
+        // if both internal and external checkboxes are selected and nothing else, return
+        if (allDocTypesOnly($route.query)) {
+            return;
+        }
+
+        // now that everything is cleaned, iterate over new query params
+        Object.entries(newQueryParams).forEach(
+            setSelectedParams(policyDocSubjects)
+        );
+
+        // parse $route.query to return `${key}=${value}` string
+        // and provide to getDocList
+        const newRequestParams = getRequestParams({
+            queryParams: newQueryParams,
+        });
+        getDocList({
+            apiUrl,
+            pageSize,
+            requestParamString: newRequestParams,
+            query: $route.query.q,
+            type: $route.query.type,
+        });
+    }
+);
+
+// fetches on page load
+getPartsLastUpdated();
+getDocSubjects();
+</script>
+
 <template>
     <body class="ds-base search-page">
         <header id="header" class="sticky">
@@ -31,539 +348,84 @@
                 </template>
             </HeaderComponent>
         </header>
-        <div id="searchApp" class="search-view">
-            <Banner title="Search Results">
-                <template #input>
-                    <SearchInput
-                        form-class="search-form"
-                        label="Search Regulations"
-                        page="search"
-                        :search-query="searchQuery"
-                        :synonyms="synonyms"
-                        @execute-search="executeSearch"
-                        @clear-form="clearSearchQuery"
-                    />
-                </template>
-            </Banner>
-            <div class="combined-results-container">
-                <div class="reg-results-content">
-                    <div class="search-results-count">
-                        <h2>Regulations</h2>
-                        <span v-if="regsLoading">Loading...</span>
-                        <span
-                            v-else-if="regsError"
-                            class="regs-count__span--error"
-                            >We're unable to display results for this query
-                            right now</span
-                        >
-                        <span v-else>
-                            <span v-if="totalRegResultsCount > 0">
-                                {{ currentPageRegResultsRange[0] }} -
-                                {{ currentPageRegResultsRange[1] }} of
-                            </span>
-                            {{ totalRegResultsCount }} result<span
-                                v-if="totalRegResultsCount != 1"
-                                >s</span
-                            >
-                        </span>
-                    </div>
-                    <template v-if="!regsLoading">
-                        <template v-if="regsError">
-                            <SearchErrorMsg :survey-url="surveyUrl" />
-                            <template
-                                v-if="!isLoading && resourcesResults.length > 0"
-                            >
-                                <SearchEmptyState
-                                    :query="searchQuery"
-                                    :show-internal-link="false"
-                                />
-                            </template>
-                        </template>
-                        <RegResults
-                            v-else
-                            :results="regResults"
-                            :query="searchQuery"
-                        >
-                            <template #empty-state>
-                                <template
-                                    v-if="
-                                        regResults.length == 0 &&
-                                        combinedPageCount > 0 &&
-                                        !isLoading
-                                    "
-                                >
-                                    <SearchEmptyState
-                                        :query="searchQuery"
-                                        :show-internal-link="false"
-                                    />
-                                </template>
-                            </template>
-                        </RegResults>
-                    </template>
-                </div>
-                <div class="resources-results-content">
-                    <div class="search-results-count">
-                        <h2>Resources</h2>
-                        <span v-if="resourcesLoading">Loading...</span>
-                        <span
-                            v-else-if="resourcesError"
-                            class="resources-count__span--error"
-                            >We're unable to display results for this query
-                            right now</span
-                        >
-                        <span v-else>
-                            <span v-if="totalResourcesResultsCount > 0">
-                                {{ currentPageResourcesResultsRange[0] }} -
-                                {{ currentPageResourcesResultsRange[1] }} of
-                            </span>
-                            {{ totalResourcesResultsCount }} result<span
-                                v-if="totalResourcesResultsCount != 1"
-                                >s</span
-                            >
-                        </span>
-                    </div>
-                    <template v-if="!resourcesLoading">
-                        <template v-if="resourcesError">
-                            <SearchErrorMsg :survey-url="surveyUrl" />
-                            <template
-                                v-if="!isLoading && regResults.length > 0"
-                            >
-                                <SearchEmptyState
-                                    :query="searchQuery"
-                                    :show-internal-link="false"
-                                />
-                            </template>
-                        </template>
-                        <PolicyResults
-                            v-else
-                            :base="homeUrl"
-                            :categories="combinedCategories.data ?? []"
-                            :parts-last-updated="partsLastUpdated"
-                            :results="resourcesResults"
-                            view="search"
-                        >
-                            <template #empty-state>
-                                <template
-                                    v-if="
-                                        resourcesResults.length == 0 &&
-                                        combinedPageCount > 0 &&
-                                        !isLoading
-                                    "
-                                >
-                                    <SearchEmptyState
-                                        :query="searchQuery"
-                                        :show-internal-link="false"
-                                    />
-                                </template>
-                            </template>
-                        </PolicyResults>
-                    </template>
-                </div>
-            </div>
-            <div v-if="!isLoading" class="pagination-expand-row">
-                <div class="pagination-expand-container">
-                    <PaginationController
-                        v-if="totalCount > 0"
-                        :count="paginationCount"
-                        :page="page"
-                        :page-size="pageSize"
-                        view="search"
-                    />
-                    <div
-                        v-if="
-                            (regResults.length > 0 &&
-                                resourcesResults.length > 0) ||
-                            totalCount == 0
+        <main id="searchApp" class="search-view">
+            <h1>Search Results</h1>
+            <section class="query-filters__section" role="search">
+                <SearchInput
+                    form-class="search-form"
+                    label="Search for a document"
+                    parent="search"
+                    :search-query="searchQuery"
+                    @execute-search="executeSearch"
+                    @clear-form="resetSearch"
+                />
+                <fieldset class="search__fieldset" v-if="$route.query.q">
+                    <DocumentTypeSelector
+                        parent="search"
+                        :loading="
+                            policyDocList.loading || partsLastUpdated.loading
                         "
-                        class="pagination-expand-cta"
+                    />
+                    <FetchCategoriesContainer
+                        v-slot="slotProps"
+                        :categories-capture-function="setCategories"
                     >
-                        <SearchEmptyState
-                            :query="searchQuery"
-                            :show-internal-link="false"
+                        <CategoriesDropdown
+                            v-show="showCategoriesRef"
+                            :list="slotProps.data"
+                            :error="slotProps.error"
+                            :loading="
+                                slotProps.loading || policyDocList.loading
+                            "
+                            parent="search"
+                        />
+                    </FetchCategoriesContainer>
+                </fieldset>
+            </section>
+            <section class="search-results">
+                <template
+                    v-if="policyDocList.loading || partsLastUpdated.loading"
+                >
+                    <span class="loading__span">Loading...</span>
+                </template>
+                <template v-else-if="policyDocList.error">
+                    <div class="doc__list">
+                        <SearchErrorMsg
+                            :search-query="searchQuery"
+                            show-apology
+                            :survey-url="surveyUrl"
                         />
                     </div>
-                </div>
-            </div>
-        </div>
+                </template>
+                <template v-else-if="policyDocList.results === 0">
+                    <div class="doc__list">No results</div>
+                </template>
+                <template v-else>
+                    <PolicyResults
+                        :categories="categoriesRef"
+                        :results="policyDocList.results"
+                        :results-count="policyDocList.count"
+                        :page="parseInt($route.query.page, 10) || 1"
+                        :page-size="pageSize"
+                        :parts-last-updated="partsLastUpdated.results"
+                        :has-editable-job-code="hasEditableJobCode"
+                        :search-query="searchQuery"
+                        :selected-subject-parts="selectedSubjectParts"
+                        view="search"
+                    />
+                    <div class="pagination-expand-row">
+                        <div class="pagination-expand-container">
+                            <PaginationController
+                                v-if="policyDocList.count > 0"
+                                :count="policyDocList.count"
+                                :page="parseInt($route.query.page, 10) || 1"
+                                :page-size="pageSize"
+                                view="search"
+                            />
+                        </div>
+                    </div>
+                </template>
+            </section>
+        </main>
     </body>
 </template>
-
-<script>
-import { useRoute, useRouter } from "vue-router";
-import useCategories from "composables/categories";
-
-import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
-
-import { getCurrentPageResultsRange, stripQuotes } from "utilities/utils";
-import {
-    getCombinedContent,
-    getLastUpdatedDates,
-    getRegSearchResults,
-    getSynonyms,
-    getTitles,
-} from "utilities/api";
-
-import Banner from "@/components/Banner.vue";
-import HeaderComponent from "@/components/header/HeaderComponent.vue";
-import HeaderLinks from "@/components/header/HeaderLinks.vue";
-import HeaderSearch from "@/components/header/HeaderSearch.vue";
-import SignInLink from "@/components/SignInLink.vue";
-import JumpTo from "@/components/JumpTo.vue";
-import PaginationController from "@/components/pagination/PaginationController.vue";
-import PolicyResults from "@/components/subjects/PolicyResults.vue";
-import RegResults from "@/components/search/RegResults.vue";
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
-import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
-import SearchInput from "@/components/SearchInput.vue";
-import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
-
-const DEFAULT_TITLE = "42";
-
-export default {
-    name: "SearchView",
-
-    components: {
-        Banner,
-        HeaderComponent,
-        HeaderLinks,
-        HeaderSearch,
-        SignInLink,
-        JumpTo,
-        PaginationController,
-        PolicyResults,
-        RegResults,
-        SearchEmptyState,
-        SearchErrorMsg,
-        SearchInput,
-        HeaderUserWidget,
-    },
-
-    props: {
-        adminUrl: {
-            type: String,
-            default: "/admin/",
-        },
-        aboutUrl: {
-            type: String,
-            default: "/about/",
-        },
-        apiUrl: {
-            type: String,
-            default: "/v3/",
-        },
-        customLoginUrl: {
-            type: String,
-            default: "/login",
-        },
-        homeUrl: {
-            type: String,
-            default: "/",
-        },
-        isAuthenticated: {
-            type: Boolean,
-            default: false,
-        },
-        searchUrl: {
-            type: String,
-            default: "/search/",
-        },
-        statutesUrl: {
-            type: String,
-            default: "/statutes/",
-        },
-        subjectsUrl: {
-            type: String,
-            default: "/subjects/",
-        },
-        surveyUrl: {
-            type: String,
-            default: "",
-        },
-        username: {
-            type: String,
-            default: undefined,
-        },
-    },
-
-    setup(props) {
-        const $route = useRoute();
-        const $router = useRouter();
-
-        const combinedCategories = useCategories({
-            apiUrl: props.apiUrl,
-            isAuthenticated: props.isAuthenticated,
-        });
-
-        return { $route, $router, combinedCategories };
-    },
-
-    provide() {
-        return {
-            apiUrl: this.apiUrl,
-            base: this.homeUrl,
-            currentRouteName: this.$route.name,
-        };
-    },
-
-    beforeCreate() {},
-
-    async created() {
-        if (this.searchQuery) {
-            this.titles = await getTitles({ apiUrl: this.apiUrl });
-            this.partsLastUpdated = await getLastUpdatedDates({
-                apiUrl: this.apiUrl,
-                titles: this.titles,
-            });
-            this.retrieveSynonyms(this.searchQuery);
-            this.retrieveAllResults({
-                query: this.searchQuery,
-                page: this.page,
-                pageSize: this.pageSize,
-            });
-        } else {
-            this.regsLoading = false;
-            this.resourcesLoading = false;
-        }
-    },
-
-    data() {
-        return {
-            pageSize: 50,
-            regsLoading: true,
-            resourcesLoading: true,
-            partsLastUpdated: {},
-            queryParams: this.$route.query,
-            regsError: false,
-            regResults: [],
-            totalRegResultsCount: 0,
-            resourcesError: false,
-            resourcesResults: [],
-            totalResourcesResultsCount: 0,
-            searchInputValue: undefined,
-            synonyms: [],
-            unquotedSearch: false,
-            titles: [DEFAULT_TITLE],
-        };
-    },
-
-    computed: {
-        isLoading() {
-            return this.regsLoading || this.resourcesLoading;
-        },
-        page() {
-            return _isUndefined(this.queryParams.page)
-                ? this.queryParams.page
-                : parseInt(this.queryParams.page, 10);
-        },
-        searchQuery: {
-            get() {
-                return this.queryParams.q || undefined;
-            },
-            set(value) {
-                this.searchInputValue = value;
-            },
-        },
-        multiWordQuery() {
-            if (this.searchQuery === undefined) return false;
-
-            return (
-                this.searchQuery.split(" ").length > 1 &&
-                this.searchQuery[0] !== '"' &&
-                this.searchQuery[this.searchQuery.length - 1] !== '"'
-            );
-        },
-        combinedPageCount() {
-            return this.regResults.length + this.resourcesResults.length;
-        },
-        paginationCount() {
-            return Math.max(
-                this.totalRegResultsCount,
-                this.totalResourcesResultsCount
-            );
-        },
-        totalCount() {
-            return this.totalRegResultsCount + this.totalResourcesResultsCount;
-        },
-        currentPageRegResultsRange() {
-            return getCurrentPageResultsRange({
-                count: this.totalRegResultsCount,
-                page: this.page,
-                pageSize: this.pageSize,
-            });
-        },
-        currentPageResourcesResultsRange() {
-            return getCurrentPageResultsRange({
-                count: this.totalResourcesResultsCount,
-                page: this.page,
-                pageSize: this.pageSize,
-            });
-        },
-    },
-
-    methods: {
-        removeQuotes(string) {
-            return stripQuotes(string);
-        },
-        setTitle(query) {
-            const querySubString = query ? `for ${query} ` : "";
-            document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
-        },
-        async retrieveRegResults({ query, page, pageSize }) {
-            this.regsError = false;
-            try {
-                const response = await getRegSearchResults({
-                    apiUrl: this.apiUrl,
-                    q: query,
-                    page,
-                    page_size: pageSize,
-                });
-                this.regResults = response?.results ?? [];
-                this.totalRegResultsCount = response?.count ?? 0;
-            } catch (error) {
-                console.error(
-                    "Error retrieving regulation search results: ",
-                    error
-                );
-                this.regsError = true;
-                this.regResults = [];
-                this.totalRegResultsCount = 0;
-            }
-        },
-        async retrieveResourcesResults({ query, page, pageSize }) {
-            this.resourcesError = false;
-            const requestParams = `q=${query}&page=${
-                page ?? 1
-            }&page_size=${pageSize}`;
-            let response = "";
-            try {
-                response = await getCombinedContent({
-                    apiUrl: this.apiUrl,
-                    cacheResponse: false,
-                    requestParams,
-                });
-
-                this.resourcesResults = response?.results ?? [];
-                this.totalResourcesResultsCount = response?.count ?? 0;
-            } catch (error) {
-                console.error(
-                    "Error retrieving regulation search results: ",
-                    error
-                );
-                this.resourcesError = true;
-                this.resourcesResults = [];
-                this.totalResourcesResultsCount = 0;
-            }
-        },
-        async retrieveAllResults({ query, page, pageSize }) {
-            if (!query) {
-                this.regResults = [];
-                this.resourcesResults = [];
-
-                return;
-            }
-
-            const encodedQuery = encodeURIComponent(query);
-
-            this.regsLoading = true;
-            this.resourcesLoading = true;
-
-            this.retrieveResourcesResults({
-                query: encodedQuery,
-                page,
-                pageSize,
-            }).then(() => {
-                this.resourcesLoading = false;
-            });
-
-            this.retrieveRegResults({
-                query,
-                page,
-                pageSize,
-            }).then(() => {
-                this.regsLoading = false;
-            });
-        },
-        async retrieveSynonyms(query) {
-            this.synonyms = [];
-
-            if (!query) {
-                return;
-            }
-
-            try {
-                const synonyms = await getSynonyms({
-                    apiUrl: this.apiUrl,
-                    query: this.removeQuotes(query),
-                });
-
-                const activeSynonyms = synonyms.map((word) =>
-                    word.synonyms
-                        .filter((synonym) => synonym.isActive === true)
-                        .map((synonym) => synonym.baseWord)
-                )[0];
-
-                this.synonyms = activeSynonyms ?? [];
-            } catch (error) {
-                console.error("Error retrieving synonyms");
-                this.synonyms = [];
-            }
-        },
-        executeSearch(payload) {
-            this.synonyms = [];
-            this.$router.push({
-                name: "search",
-                query: {
-                    q: payload.query,
-                },
-            });
-        },
-        clearSearchQuery() {
-            this.synonyms = [];
-            this.totalRegResultsCount = 0;
-            this.totalResourcesResultsCount = 0;
-            this.$router.push({
-                name: "search",
-                query: {
-                    page: undefined,
-                    q: undefined,
-                },
-            });
-        },
-    },
-
-    watch: {
-        "$route.query": {
-            async handler(toQueries) {
-                this.queryParams = toQueries;
-            },
-        },
-        queryParams: {
-            async handler(newParams, oldParams) {
-                const queryChanged = newParams.q !== oldParams.q;
-                const pageChanged = newParams.page !== oldParams.page;
-
-                if (queryChanged) {
-                    this.setTitle(this.searchQuery);
-
-                    if (_isEmpty(this.searchQuery)) {
-                        this.regResults = [];
-                        this.resourcesResults = [];
-                        return;
-                    }
-
-                    this.retrieveSynonyms(this.searchQuery);
-                }
-
-                if (queryChanged || pageChanged) {
-                    this.retrieveAllResults({
-                        query: this.searchQuery,
-                        page: this.page,
-                        pageSize: this.pageSize,
-                    });
-                }
-            },
-        },
-    },
-};
-</script>

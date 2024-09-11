@@ -87,7 +87,7 @@ export default {
             type: String,
             required: true,
         },
-        page: {
+        parent: {
             type: String,
             required: true,
         },
@@ -139,7 +139,7 @@ export default {
         },
         synonymLink(synonym) {
             this.$router.push({
-                name: this.page,
+                name: this.parent,
                 query: {
                     ...this.queryParams,
                     page: undefined,
@@ -149,7 +149,7 @@ export default {
         },
         quotedLink() {
             this.$router.push({
-                name: this.page,
+                name: this.parent,
                 query: {
                     ...this.queryParams,
                     page: undefined,

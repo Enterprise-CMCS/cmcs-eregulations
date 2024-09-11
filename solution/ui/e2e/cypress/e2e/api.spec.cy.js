@@ -39,7 +39,6 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/public/federal_register_links`,
     `/v3/resources/public/links`,
     `/v3/resources/subjects`,
-    `/v3/search?q=${SEARCH_TERM}`,
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
     //`${SYNONYMS_ENDPOINT}${SYNONYM}`,  // TODO: see above

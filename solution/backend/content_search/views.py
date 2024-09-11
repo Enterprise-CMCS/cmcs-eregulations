@@ -101,6 +101,9 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         # Defer all unnecessary text fields to reduce database load and memory usage
         query = ContentIndex.objects.defer_text()
 
+        # Filter out unapproved resources
+        query = query.exclude(resource__approved=False)
+
         # Filter inclusively by citations if this array exists
         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
         if citation_filter:
