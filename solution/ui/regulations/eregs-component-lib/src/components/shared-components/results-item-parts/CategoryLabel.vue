@@ -12,9 +12,7 @@ const props = defineProps({
     },
 });
 
-const labelClass = computed(() =>
-    props.type === "subcategory" ? "subcategory-label" : "category-label"
-);
+const labelClass = computed(() => `${props.type}-label`);
 </script>
 
 <template>

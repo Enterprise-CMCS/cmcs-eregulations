@@ -101,7 +101,6 @@ aside {
         @include screen-lg {
             padding: 0 $spacer-4;
         }
-
     }
 
     &[data-state="expanded"] {

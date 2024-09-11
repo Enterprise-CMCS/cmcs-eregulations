@@ -36,8 +36,14 @@
 
         background: #e3eef9;
 
-        &.category-label {
+        &.category-label,
+        &.regulations-label {
             font-weight: 600;
+        }
+
+        &.regulations-label {
+            color: #fff;
+            background: $primary_color;
         }
     }
 }
@@ -73,7 +79,6 @@
             &--bar {
                 padding-left: 8px;
                 border-left: 1px solid $mid_gray;
-
             }
         }
     }

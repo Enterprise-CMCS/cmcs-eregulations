@@ -1,8 +1,17 @@
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from common.fields import HeadlineField
 from resources.serializers import AbstractResourceSerializer
+
+
+class IndexedRegulationTextSerializer(serializers.Serializer):
+    title = serializers.IntegerField()
+    date = serializers.CharField()
+    part_title = serializers.CharField()
+    part_number = serializers.IntegerField()
+    node_type = serializers.CharField()
+    node_id = serializers.CharField()
+    node_title = serializers.CharField()
 
 
 class ContentSearchSerializer(serializers.Serializer):
@@ -11,9 +20,4 @@ class ContentSearchSerializer(serializers.Serializer):
     content_headline = HeadlineField(blank_when_no_highlight=True)
 
     resource = AbstractResourceSerializer()
-
-    @extend_schema_field(serializers.IntegerField())
-    def get_reg_text(self, obj):
-        return obj.reg_text.id if obj.reg_text else None
-
-    reg_text = serializers.SerializerMethodField()
+    reg_text = IndexedRegulationTextSerializer()

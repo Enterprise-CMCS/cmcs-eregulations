@@ -1,3 +1,5 @@
+@import "./eregs_design_system.scss";
+
 // NOTE: Our variables use _ between words. CMS Design System variables use - between words. Sass will treat this the same, but it will help at a glance to know where the variable is coming from.
 
 // Django toolbar changes.  Needed for cypress testing
@@ -35,7 +37,7 @@ h5 {
 .v-application {
     font-family: Open Sans, Helvetica, sans-serif;
 
-    .v-application--wrap {
+    .v-application__wrap {
         min-height: unset;
     }
 
@@ -235,23 +237,6 @@ $font_size_hero_h1_tablet: 20px;
         -webkit-text-stroke-width: 0;
     }
 }
-
-//--------------------------
-// Breakpoints
-//--------------------------
-
-// eRegs Design System (eds)
-
-$eds-width-xs: 320px;
-$eds-width-sm: 780px;
-$eds-width-md: 1024px;
-$eds-width-lg: 1200px;
-
-$eds-xs-max: $eds-width-sm - 1; // 779px
-$eds-sm-max: $eds-width-md - 1; // 1023px
-$eds-md-max: $eds-width-lg - 1; // 1199px
-
-$eds-width-header-links: 1240px;
 
 // Uses CMS Design System + a larger screen size
 

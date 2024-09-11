@@ -18,18 +18,22 @@ const catTypeDict = {
     intcategories: "internal",
 };
 
-defineProps({
-    list: {
-        type: Array,
-        required: true,
-    },
+const props = defineProps({
     error: {
         type: Object,
         default: () => {},
     },
+    list: {
+        type: Array,
+        required: true,
+    },
     loading: {
         type: Boolean,
         default: true,
+    },
+    parent: {
+        type: String,
+        default: "subjects",
     },
 });
 
@@ -86,7 +90,7 @@ watch(
         });
 
         $router.push({
-            name: "subjects",
+            name: props.parent,
             query: {
                 ...cleanedRoute,
                 ...categoriesObj,

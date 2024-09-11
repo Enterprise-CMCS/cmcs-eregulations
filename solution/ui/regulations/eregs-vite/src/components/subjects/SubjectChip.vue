@@ -1,7 +1,7 @@
 <script setup>
 import { inject } from "vue";
 
-const base = inject("base") ?? "/";
+const base = inject("homeUrl") ?? "/";
 const currentRouteName = inject("currentRouteName") ?? "subjects";
 
 defineProps({

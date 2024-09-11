@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
@@ -19,44 +19,14 @@ import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
-const props = defineProps({
-    adminUrl: {
-        type: String,
-        default: "/admin/",
-    },
-    aboutUrl: {
-        type: String,
-        default: "/about/",
-    },
-    apiUrl: {
-        type: String,
-        default: "/v3/",
-    },
-    customLoginUrl: {
-        type: String,
-        default: "/login",
-    },
-    homeUrl: {
-        type: String,
-        default: "/",
-    },
-    isAuthenticated: {
-        type: Boolean,
-        default: false,
-    },
-    searchUrl: {
-        type: String,
-        default: "/search/",
-    },
-    subjectsUrl: {
-        type: String,
-        default: "/subjects/",
-    },
-    username: {
-        type: String,
-        default: undefined,
-    },
-});
+const adminUrl = inject("adminUrl");
+const apiUrl = inject("apiUrl");
+const customLoginUrl = inject("customLoginUrl");
+const homeUrl = inject("homeUrl");
+const isAuthenticated = inject("isAuthenticated");
+const searchUrl = inject("searchUrl");
+const subjectsUrl = inject("subjectsUrl");
+const username = inject("username");
 
 // get route query params
 const $route = useRoute();
@@ -76,7 +46,7 @@ const acts = ref({
 const getActTitles = async () => {
     try {
         const actsArray = await getStatutesActs({
-            apiUrl: props.apiUrl,
+            apiUrl,
         });
 
         acts.value.results = actsArray;
@@ -106,7 +76,7 @@ const getStatutesArray = async () => {
     try {
         const statutesArray = await getStatutes({
             act: ACT_TYPES[queryParams.value.act],
-            apiUrl: props.apiUrl,
+            apiUrl,
             title: queryParams.value.title,
         });
 

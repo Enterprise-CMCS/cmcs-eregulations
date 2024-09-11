@@ -1,88 +1,12 @@
 <script>
 export default {
     name: "App",
-
-    components: {},
-
-    props: {
-        adminUrl: {
-            type: String,
-            default: "/admin/",
-        },
-        apiUrl: {
-            type: String,
-            default: "/v2/",
-        },
-        aboutUrl: {
-            type: String,
-            default: "/about/",
-        },
-        customLoginUrl: {
-            type: String,
-            default: "",
-        },
-        customUrl: {
-            type: String,
-            default: "",
-        },
-        homeUrl: {
-            type: String,
-            default: "",
-        },
-        searchUrl: {
-            type: String,
-            default: "",
-        },
-        statutesUrl: {
-            type: String,
-            default: "",
-        },
-        subjectsUrl: {
-            type: String,
-            default: "",
-        },
-        surveyUrl: {
-            type: String,
-            default: "",
-        },
-        host: {
-            type: String,
-            default: "",
-        },
-        isAuthenticated: {
-            type: Boolean,
-            default: false,
-        },
-        hasEditableJobCode: {
-            type: Boolean,
-            default: false,
-        },
-        username: {
-            type: String,
-            default: "User",
-        },
-    },
 };
 </script>
 
 <template>
     <v-app>
-        <router-view
-            :admin-url="adminUrl"
-            :api-url="apiUrl"
-            :about-url="aboutUrl"
-            :custom-login-url="customLoginUrl"
-            :custom-url="customUrl"
-            :home-url="homeUrl"
-            :search-url="searchUrl"
-            :statutes-url="statutesUrl"
-            :subjects-url="subjectsUrl"
-            :survey-url="surveyUrl"
-            :host="host"
-            :is-authenticated="isAuthenticated === 'True'"
-            :has-editable-job-code="hasEditableJobCode === 'True'"
-            :username="username"
-        />
+        <router-view />
     </v-app>
 </template>
 
