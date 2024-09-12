@@ -31,9 +31,8 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 10
     form = PublicLinkForm
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "url"]
-    ordering = ["-updated_at"]
 
     fieldsets = [
         ("Basics", {
@@ -88,10 +87,8 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     form = FederalRegisterLinkForm
     list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
                     "action_type", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
-                          "action_type", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "docket_numbers", "document_number", "updated_at"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number", "url"]
-    ordering = ["-updated_at"]
     fieldsets = [
         ("Basics", {
             "fields": ["url", "title"],
