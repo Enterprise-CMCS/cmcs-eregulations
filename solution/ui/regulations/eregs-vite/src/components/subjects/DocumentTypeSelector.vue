@@ -122,7 +122,13 @@ const onPopState = (event) => {
 const makeLabel = ({ type }) => {
     return `${DOCUMENT_TYPES_MAP[type]} ${
         type !== "regulations" ? "Resources" : ""
-    } (${props.typeCount[type] ? props.typeCount[type] : "0"})`;
+    } (${
+        props.typeCount[type]
+            ? props.typeCount[type]
+            : props.loading
+                ? "--"
+                : "0"
+    })`;
 };
 
 onMounted(() => {

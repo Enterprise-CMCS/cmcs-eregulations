@@ -21,6 +21,7 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     }) => {
         policyDocList.value.loading = true;
         policyDocList.value.error = false;
+        policyDocList.value.typeCount = {};
 
         const requestParams = `${requestParamString}&page_size=${pageSize}&group_resources=false`;
         const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
@@ -44,7 +45,9 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
 
             policyDocList.value.results = contentList.results;
             policyDocList.value.count = contentList.count;
-            policyDocList.value.typeCount.regulations = 1;
+            policyDocList.value.typeCount.regulations = contentList.reg_text_count;
+            policyDocList.value.typeCount.internal = contentList.internal_count;
+            policyDocList.value.typeCount.external = contentList.public_count;
         } catch (error) {
             console.error(error);
             policyDocList.value.results = [];

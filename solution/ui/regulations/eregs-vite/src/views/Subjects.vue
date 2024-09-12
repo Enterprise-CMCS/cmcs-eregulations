@@ -443,7 +443,10 @@ getDocSubjects();
                             />
                         </div>
                         <div class="subject__filters--row">
-                            <DocumentTypeSelector v-if="isAuthenticated" />
+                            <DocumentTypeSelector
+                                v-if="isAuthenticated"
+                                :type-count="policyDocList.typeCount"
+                            />
                             <FetchCategoriesContainer
                                 v-slot="slotProps"
                                 :categories-capture-function="setCategories"
