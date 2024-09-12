@@ -82,10 +82,13 @@ This data is not maintained and should not be relied on for any purpose other th
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
 
-## Update css for admin site
+## Update CSS for admin site
 
-To update the css for the admin site, you will need to update the files in the `solutions/ui/regulations/css` directory.  Once you have made your changes, you will need to run `make local.collectstatic`.  This will update/create the css files in the `solutions/static-assets/css/admin` directory.  
-You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where STATIC_ROOT is defined. This is the location where Django will look for static files.
+To change the styling of the admin site, add custom style rules to `solutions/ui/regulations/css/admin/custom_admin.css`.  
+
+To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solutions/static-assets/css/admin` directory.
+
+You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
 
 ## Testing eRegs
 
