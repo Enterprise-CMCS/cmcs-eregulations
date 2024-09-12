@@ -92,14 +92,14 @@ header {
         }
 
         .header__row {
+            @include eds-gutters;
+
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: calc(100% - 4rem);
-            padding: 0 2rem;
 
-            @include custom-max(($eds-width-sm - 1) / 1px) {
-                padding: 0 1rem;
+            @include custom-max(($eds-width-md - 1) / 1px) {
                 width: calc(100% - 2rem);
             }
 
@@ -110,11 +110,6 @@ header {
             &--second {
                 height: 48px;
                 background: $lightest_blue;
-
-                @include custom-max(($eds-width-md - 1) / 1px) {
-                    padding: 0 1rem;
-                    width: calc(100% - 2rem);
-                }
             }
         }
 

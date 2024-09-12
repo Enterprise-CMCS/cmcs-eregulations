@@ -6,7 +6,8 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from common.test_functions.common_functions import get_paginated_data
-from content_search.models import ContentIndex
+from content_search.models import ContentIndex, IndexedRegulationText
+from regcore.models import Part
 from resources.models import FederalRegisterLink, InternalCategory, PublicCategory, PublicLink, Section, Subject
 from resources.models.internal_resources import InternalFile
 
@@ -15,7 +16,6 @@ class SearchTest(TestCase):
     def check_exclusive_response(self, response, id):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['results'][0]["resource"]["title"], self.internal_docs[id]["title"])
 
     def login(self) -> None:
@@ -31,6 +31,8 @@ class SearchTest(TestCase):
         PublicLink.objects.all().delete()
         PublicCategory.objects.all().delete()
         InternalCategory.objects.all().delete()
+        Part.objects.all().delete()
+        IndexedRegulationText.objects.all().delete()
 
     def setUp(self):
         self.clean_up()
@@ -85,6 +87,9 @@ class SearchTest(TestCase):
                     file.category = self.internal_category
                     file.save()
 
+        with open("content_search/tests/fixtures/part.json", "r") as f:
+            Part.objects.create(**json.load(f))
+
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search?show_internal=true&show_regulations=false")
         self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
@@ -94,28 +99,30 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?show_internal=false&show_regulations=false")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_public_resources_access_logged_in(self):
-        self.login()
-        response = self.client.get("/v3/resources/public")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_unapproved_is_hidden(self):
+        PublicLink.objects.create(approved=False, title="Unapproved")
+        PublicLink.objects.create(approved=True, title="Not unapproved")
+        response = self.client.get("/v3/content-search/?q=unapproved")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['results'][0]['resource']['title'], "Not unapproved")
 
     def test_single_response_queries(self):
         self.login()
         response = self.client.get("/v3/content-search/?q=fire&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
+
         response = self.client.get(r"/v3/content-search/?q='end%20fire'&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 0)
+
         response = self.client.get("/v3/content-search/?q='start%20fire'&show_internal=false&show_regulations=false")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 1)
+
         response = self.client.get("/v3/content-search/?q=fire")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data['count'], 2)
 
     def test_multi_response_query(self):
@@ -146,7 +153,6 @@ class SearchTest(TestCase):
             response = self.client.get(f"/v3/content-search/?show_internal=true&q={word}")
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             data = get_paginated_data(response)
-            print(f"Data: {data}")
             self.assertIn(word, data['results'][0]['resource']['file_name'])
 
     def test_inclusive_citations_filter(self):
@@ -206,7 +212,6 @@ class SearchTest(TestCase):
 
         expected = "abc <span class='search-highlight'>affordable</span> xyz <span class='search-highlight'>care</span> 123 <spa"\
                    "n class='search-highlight'>act</span>"
-        print(f"Data: {data['results'][0]}")
         self.assertEqual(expected, data["results"][0]["name_headline"])
 
         expected = "this is an <span class='search-highlight'>affordable</span> <span class='search-highlight'>care</span> <span"\
@@ -219,7 +224,6 @@ class SearchTest(TestCase):
         self.login()
         response = self.client.get("/v3/content-search/?q=reference")
         data = get_paginated_data(response)
-        print(f"Data: {data}")
         self.assertEqual(data["results"][0]["content_headline"], '')
 
     # If sorted by 'id', a search for 'fire' from fixture data will return two results with pk's 92 then 98.
@@ -229,7 +233,42 @@ class SearchTest(TestCase):
         response = self.client.get("/v3/content-search/?q=fire")
         data = get_paginated_data(response)
         results = data["results"]
-        print(f"Results: {results}")
         self.assertEqual(len(results), 2)
         self.assertEqual(results[0]['resource']["title"], "Policy reference file fire fire fire")
         self.assertEqual(results[1]['resource']["title"], "But the worlds been burning since the worlds been turning")
+
+    # This test ensures that reg text is included in the search results, and only if show_regulations is set to true or not set.
+    def test_reg_text_search(self):
+        self.login()
+
+        # Exclude resources but this search will not match any reg text
+        response = self.client.get("/v3/content-search/?q=fire&show_internal=false&show_public=false")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 0)
+
+        # Reg text should not show up for this search
+        response = self.client.get("/v3/content-search/?q=fire")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 2)
+
+        # Ensure that excluding reg text works
+        response = self.client.get("/v3/content-search/?q=federal&show_regulations=false")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 1)
+
+        # Ensure that reg text is included in the search results and the structure is correct
+        response = self.client.get("/v3/content-search/?q=federal")
+        data = get_paginated_data(response)
+        self.assertEqual(data['count'], 3)
+        self.assertTrue(any([i["reg_text"] for i in data["results"]]))
+        for i in [i for i in data["results"] if i["reg_text"] is not None]:
+            self.assertEqual(i["reg_text"]["title"], 42)
+            self.assertEqual(i["reg_text"]["date"], "2023-01-01")
+            self.assertEqual(i["reg_text"]["part_title"], "PART 400 - INTRODUCTION; DEFINITIONS")
+            self.assertEqual(i["reg_text"]["part_number"], 400)
+            self.assertEqual(i["reg_text"]["node_type"], "section")
+            self.assertIn(i["reg_text"]["node_id"], ["200", "203"])
+            self.assertIn(
+                i["reg_text"]["node_title"],
+                ["§ 400.200 General definitions.", "§ 400.203 Definitions specific to Medicaid."],
+            )

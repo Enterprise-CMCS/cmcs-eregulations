@@ -1,5 +1,6 @@
 /* eslint-disable */
 import _delay from "lodash/delay";
+import _difference from "lodash/difference";
 import _endsWith from "lodash/endsWith";
 import _filter from "lodash/filter";
 import _forEach from "lodash/forEach";
@@ -24,14 +25,18 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
-const DOCUMENT_TYPES = ["external", "internal"];
+const DOCUMENT_TYPES = ["regulations", "external", "internal"];
+
 const DOCUMENT_TYPES_MAP = {
     external: "Public",
     federal_register_link: "Public",
     public_link: "Public",
+    public_link: "Public",
+    reg_text: "Public",
     internal: "Internal",
     internal_file: "Internal",
     internal_link: "Internal",
+    regulations: "Regulations",
 };
 
 const PARAM_MAP = {
@@ -48,7 +53,7 @@ const PARAM_MAP = {
  * @type {Object}
  * @property {function} subjects - Validates that the subject is a number
  * @property {function} q - Validates that the query is a string or undefined.  We need to allow undefined because Vue Router can return undefined if the query param is not present.
- * @property {function} type - Validates that the type is either "external", "internal", or "all"
+ * @property {function} type - Validates that the type is either "all" or a comma-separated string of valid document types
  * @property {function} page - Validates that the page is a number
  * @property {function} categories - Validates that the category is a number
  * @property {function} intcategories - Validates that the internal category is a number
@@ -57,7 +62,14 @@ const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
         !Number.isNaN(parseInt(subject, 10)) && !Number.isNaN(Number(subject)),
     q: (query) => query === undefined || query.length > 0,
-    type: (type) => DOCUMENT_TYPES.includes(type) || type === "all",
+    type: (type) => {
+        if (type === "all") return true;
+        if (_isString(type)) {
+            const typeArray = type.split(",");
+            return typeArray.every((t) => DOCUMENT_TYPES.includes(t));
+        }
+        return false;
+    },
     page: (page) => !Number.isNaN(parseInt(page, 10)),
     categories: (category) => !Number.isNaN(parseInt(category, 10)),
     intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
@@ -130,17 +142,18 @@ const getFileTypeButton = ({ fileName, uid }) => {
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
- * @example
- * const query = {
- *    subjects: ["1", "2", "3"],
- *    q: "test",
- * }
- * const queryString = getRequestParams(query);
- * console.log(queryString); // subjects=1&subjects=2&subjects=3&q=test
  */
-const getRequestParams = (query) => {
-    const requestParams = Object.entries(query)
-        .filter(([key, _value]) => PARAM_VALIDATION_DICT[key])
+const getRequestParams = ({ queryParams, disallowList = [] }) => {
+    const rawParams = Object.entries(queryParams).filter(
+        ([key, _value]) => PARAM_VALIDATION_DICT[key]
+    );
+
+    // if no type, set type to all so we can handle disallowList
+    if (rawParams.filter(([key, _value]) => key === "type").length === 0) {
+        rawParams.push(["type", "all"]);
+    }
+
+    const formattedParams = rawParams
         .map(([key, value]) => {
             const valueArray = _isArray(value) ? value : [value];
             const filteredValues = valueArray.filter((value) =>
@@ -150,25 +163,43 @@ const getRequestParams = (query) => {
             return filteredValues
                 .map((v) => {
                     if (key === "type") {
-                        let flagString = "";
-                        switch (v) {
-                            case "external":
-                                flagString =
-                                    "show_internal=false&show_regulations=false";
-                                break;
-                            case "internal":
-                                flagString =
-                                    "show_public=false&show_regulations=false";
-                                break;
-                            case "all":
-                                flagString =
-                                    "show_public=true&show_internal=true&show_regulations=true";
-                                break;
-                            default:
-                                break;
+                        // if type='all', early return with explicit query params
+                        if (v === "all") {
+                            if (disallowList.length === 0) return "";
+
+                            return disallowList
+                                .filter((type) =>
+                                    PARAM_VALIDATION_DICT["type"](type)
+                                )
+                                .map((type) => {
+                                    const typeArg =
+                                        type === "external" ? "public" : type;
+                                    return `show_${typeArg}=false`;
+                                })
+                                .join("&");
                         }
 
-                        return flagString;
+                        // Since the API defaults to showing all types, we need to
+                        // pass display_<type>=false for the types that are not in the array
+                        // of types that the user wants to see.
+                        const typeArray = v.split(",");
+
+                        const differenceArray = _difference(
+                            DOCUMENT_TYPES,
+                            typeArray
+                        );
+
+                        const unionWithDisallowed = [
+                            ...new Set([...differenceArray, ...disallowList]),
+                        ];
+
+                        const paramsArray = unionWithDisallowed.map((type) => {
+                            const typeArg =
+                                type === "external" ? "public" : type;
+                            return `show_${typeArg}=false`;
+                        });
+
+                        return paramsArray.join("&");
                     } else {
                         return `${PARAM_MAP[key]}=${
                             PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
@@ -180,7 +211,7 @@ const getRequestParams = (query) => {
         .filter(([_key, value]) => !_isEmpty(value))
         .join("&");
 
-    return requestParams;
+    return formattedParams;
 };
 
 const parseError = (err) => {
@@ -206,7 +237,7 @@ const parseError = (err) => {
         }
         return new Error(message);
     }
-}
+};
 
 const swallowError = (promise, fn = () => ({})) => {
     try {
@@ -216,14 +247,14 @@ const swallowError = (promise, fn = () => ({})) => {
     } catch (err) {
         return fn(err);
     }
-}
+};
 
 // a promise friendly delay function
 const delay = (seconds) => {
     return new Promise((resolve) => {
         _delay(resolve, seconds * 1000);
     });
-}
+};
 
 /**
  * Converts date from YYYY-MM-DD to MMM DD, YYYY
@@ -244,7 +275,7 @@ const niceDate = (kebabDate) => {
 const getQueryParam = (location, key) => {
     const queryParams = new URL(location).searchParams;
     return queryParams.get(key);
-}
+};
 
 /**
  *
@@ -276,6 +307,32 @@ const getTagContent = (htmlString, tagClass) => {
         return highlightEl.innerHTML;
     });
     return highlightTermsArray;
+};
+
+const createRegResultLink = (
+    { headline, title, part_number, section_number, date, section_title },
+    baseUrl,
+    query
+) => {
+    // get highlight content from headline
+    const highlightedTermsArray = getTagContent(headline, "search-highlight");
+    const rawQuery = query.replaceAll("%", "%25");
+    const uniqTermsArray = Array.from(
+        new Set([rawQuery, ...highlightedTermsArray])
+    );
+
+    const highlightParams =
+        uniqTermsArray.length > 0 ? `?q=${uniqTermsArray.join(",")}` : "";
+
+    let section = section_number;
+    let location = `${part_number}-${section_number}`;
+
+    if (section_title.includes("Appendix")) {
+        section = `Subpart-${section}`;
+        location = `${section_title.split("-")[0].trim().replace(/\s/g, "-")}`;
+    }
+
+    return `${baseUrl}${title}/${part_number}/${section}/${date}/${highlightParams}#${location}`;
 };
 
 /**
@@ -571,12 +628,62 @@ const getSectionsRecursive = (tocPartsList) =>
         return tocPart.identifier[1];
     });
 
+const getFieldVal = ({ item, fieldName }) => {
+    if (item?.resource) {
+        // content-search
+        return item.resource[fieldName];
+    } else if (item?.reg_text) {
+        return item.reg_text[fieldName];
+    } else {
+        return item[fieldName];
+    }
+};
+
+const deserializeResult = (obj) => {
+    const returnObj = {};
+
+    returnObj.category = getFieldVal({ item: obj, fieldName: "category" });
+    returnObj.cfr_citations = getFieldVal({
+        item: obj,
+        fieldName: "cfr_citations",
+    });
+    returnObj.content_headline = obj.content_headline;
+    returnObj.date = getFieldVal({ item: obj, fieldName: "date" });
+    returnObj.document_id = getFieldVal({
+        item: obj,
+        fieldName: "document_id",
+    });
+    returnObj.file_name = getFieldVal({ item: obj, fieldName: "file_name" });
+    returnObj.id = getFieldVal({ item: obj, fieldName: "id" });
+    returnObj.name_headline = obj.name_headline;
+    returnObj.node_id = obj.reg_text?.node_id;
+    returnObj.node_type = obj.reg_text?.node_type;
+    returnObj.part_number = obj.reg_text?.part_number;
+    returnObj.part_title = obj.reg_text?.part_title;
+    returnObj.reg_title = obj.reg_text?.title;
+    returnObj.subjects = getFieldVal({ item: obj, fieldName: "subjects" });
+    returnObj.summary = obj.summary;
+    returnObj.summary_headline = obj.summary_headline;
+    returnObj.summary_string = obj.summary_string;
+    returnObj.title = obj.reg_text
+        ? getFieldVal({ item: obj, fieldName: "node_title" })
+        : getFieldVal({ item: obj, fieldName: "title" });
+    returnObj.type =
+        getFieldVal({ item: obj, fieldName: "type" }) ?? "reg_text";
+    returnObj.uid = getFieldVal({ item: obj, fieldName: "uid" });
+    returnObj.url = getFieldVal({ item: obj, fieldName: "url" });
+
+    return returnObj;
+};
+
 export {
     addMarks,
     createLastUpdatedDates,
+    createRegResultLink,
     consolidateToMap,
     createOneIndexedArray,
     delay,
+    deserializeResult,
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
     EventCodes,
@@ -586,6 +693,7 @@ export {
     getActAbbr,
     getCurrentPageResultsRange,
     getCurrentSectionFromHash,
+    getFieldVal,
     getFileNameSuffix,
     getFileTypeButton,
     getQueryParam,

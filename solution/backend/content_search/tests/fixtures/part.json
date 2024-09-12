@@ -1,0 +1,1357 @@
+{
+    "name": 400,
+    "title": 42,
+    "date": "2023-01-01",
+    "document": {
+        "label": [
+            "400"
+        ],
+        "title": "PART 400 - INTRODUCTION; DEFINITIONS ",
+        "source": {
+            "header": "",
+            "content": "",
+            "node_type": ""
+        },
+        "children": [
+            {
+                "label": [
+                    "A"
+                ],
+                "title": "Subpart A [Reserved]",
+                "children": null,
+                "node_type": "SUBPART"
+            },
+            {
+                "label": [
+                    "B"
+                ],
+                "title": "Subpart B - Definitions",
+                "children": [
+                    {
+                        "label": [
+                            "400",
+                            "200"
+                        ],
+                        "title": "\u00a7 400.200 General definitions.",
+                        "children": [
+                            {
+                                "text": "In this chapter, unless the context indicates otherwise&#x2014; ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "4a860943d9f0bc294a1698eaec498b16"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Act</I> means the Social Security Act, and titles referred to are titles of that Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "275d5c592b97328bdadf04a01872b48c"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Administrator</I> means the Administrator, Centers for Medicare &amp; Medicaid Services (CMS), formerly the Health Care Financing Administration (HCFA). ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "525464db6901e3dfb9c7ce6fb8254582"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>ALJ</I> stands for administrative law judge. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "1e962a546dc32cc2e67654bfd9b4ff5d"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Area</I> means the geographical area within the boundaries of a State, or a State or other jurisdiction, designated as constituting an area with respect to which a Professional Standards Review Organization or a Utilization and Quality Control Peer Review Organization has been or may be designated. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "5135750c63881fb9d6d4de36dcb8b580"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Beneficiary</I> means a person who is entitled to Medicare benefits and/or has been determined to be eligible for Medicaid. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "696bb197bdfae2619eb28faf6a51ecf0"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>CMP</I> stands for competitive medical plan. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "12b6610f3bbf669d79c028f862836f0d"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Conditions of participation</I> includes <I>requirements for participation</I> as the latter term is used in part 483 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "d4f7f87f71fd0c7db5ad45cd9ba0820b"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Condition level</I> deficiencies includes deficiencies with respect to &#x201C;level A requirements&#x201D; as the latter term is used in parts 442 and 483 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "958360178491f098586d6a1f14b5e568"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>CORF</I> stands for comprehensive outpatient rehabilitation facility. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "f2c992a751c43935d1d58cf546aca242"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>CFR</I> stands for Code of Federal Regulations. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "02a29cf9f062e8ec285c82f8245cb215"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>CMS</I> stands for Centers for Medicare &amp; Medicaid Services, formerly the Health Care Financing Administration (HCFA). ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "454c4097100c558e5f106d788693d857"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>CY</I> stands for calendar year. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "548b39ad29189858357c378da97f91b1"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>DAB</I> stands for Departmental Appeals Board. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "905643977b77cff16d3bff61641fc296"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Department</I> means the Department of Health and Human Services (HHS), formerly the Department of Health, Education, and Welfare. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "e4c693228d665b39cb864c6e8ec4c976"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>ESRD</I> stands for end-stage renal disease. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "a34c56e0c2577709f3ab68f601cf7524"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>FDA</I> stands for the Food and Drug Administration. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "151a7f15351961cdd1c78287183d0c88"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>FQHC</I> means Federally qualified health center. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b2b3b745379f3048397c47699b49fd94"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>FR</I> stands for <E T=\"04\">Federal Register.</E> ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "dedc99702bfb605119034f39a14ee781"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>FY</I> stands for fiscal year. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "7992f51cc0d7482b22d3a761519a64fc"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>HCPP</I> stands for health care prepayment plan. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "8070cd9dcacb8f0282338272dd5f4f3f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>HHS</I> stands for the Department of Health and Human Services. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "6926ab7aa7d024ab7eed2a32eb5355db"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>HHA</I> stands for home health agency. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b61d03fb2dabd318e3d91501cc1e9dc5"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>HMO</I> stands for health maintenance organization. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "0325f02fc47c78854c49c0c78ae90ccd"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>ICF</I> stands for intermediate care facility. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b8b3db7adf100ebec1cf818169415830"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>ICF/IID</I> stands for intermediate care facility for individuals with intellectual disabilities. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "918750a53b5b925ea06f5348e88f0537"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicaid</I> means medical assistance provided under a State plan approved under title XIX of the Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "e09da6100ecb690b68c144ac0685bd7f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare</I> means the health insurance program for the aged and disabled under title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "6a7b1017eb78751ad6e0a680af4ee080"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare Savings Programs</I> (MSPs) has the same meaning described in &#xA7; 435.4 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "bc26caa3e7f9fb54d0f664369934349f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>NCD</I> stands for national coverage determination. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "5f69592745fb2ebfd88d2a36d6e3755d"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>OASDI</I> stands for the Old Age, Survivors, and Disability Insurance program under title II of the Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b32a17809aa8d27a9af4c6ddfdb33aa7"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>OIG</I> stands for the Department's Office of the Inspector General. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "573b399e60bd4b1a4e3d161fa648b2c0"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Public Health Emergency (PHE)</I> means the Public Health Emergency determined to exist nationwide as of January 27, 2020, by the Secretary pursuant to section 319 of the Public Health Service Act on January 31, 2020, as a result of confirmed cases of COVID&#x2013;19, including any subsequent renewals. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "4d36a6d6227b41fae614f87e8e5a04c8"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>QDWI</I> stands for Qualified Disabled and Working Individual. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "564e52092fff00f8c8fbfa3e2754ec45"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>QIO</I> stands for quality improvement organization. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "1842c850f9d0859f436b66258e416c23"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>QMB</I> stands for Qualified Medicare Beneficiary. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b4b08860344a5ac643f62df188019549"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Qualified Disabled and Working Individual</I> means an individual who&#x2014; ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "021dfdb92a89025b85e976623e4ed8e9"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(1) Is eligible to enroll for Medicare Part A under section 1818A of the Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "509d42ea9541511c19b0f44c21bf4e27"
+                                ],
+                                "marker": [
+                                    "1"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(2) Has income, as determined in accordance with SSI methodologies, that does not exceed 200 percent of the Federal poverty guidelines (as defined and revised annually by the Office of Management and Budget) for a family of the size of the individual's family; ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "882dc65fb2ac7ccc02a72a64b277bea0"
+                                ],
+                                "marker": [
+                                    "2"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(3) Has resources, as determined in accordance with SSI methodologies, that do not exceed twice the relevant maximum amount established, for SSI eligibility, for an individual or for an individual and his or her spouse; and ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "17087e5f6bde279d32072d67177e29d5"
+                                ],
+                                "marker": [
+                                    "3"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(4) Is not otherwise eligible for Medicaid. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "70c61957590fe70ba6751ad20b91b266"
+                                ],
+                                "marker": [
+                                    "4"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Qualified Medicare Beneficiary (QMB)</I> means an individual described in &#xA7; 435.123 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "420a1672573436abcfb9b17b87e7d557"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Qualifying Individual</I> (QI) means an individual described in &#xA7; 435.125 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "84795cde5f078f6a16197f3525c2c790"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Quality improvement organization</I> means an organization that has a contract with CMS, under part B of title XI of the Act, to perform utilization and quality control review of the health care furnished, or to be furnished, to Medicare beneficiaries. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "675ac0e3ddd5c2bc9db78c66edf7ba7f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Regional Administrator</I> means a Regional Administrator of CMS. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "fded0333f0aba524b28c2b7e07f13700"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Regional Office</I> means one of the regional offices of CMS. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "f0ce49c78493c493016008b014476115"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>RHC</I> stands for rural health clinic. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "3ad1d494ae7ef1f6a287aad71540fa71"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>RRB</I> stands for Railroad Retirement Board. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "c31f49216f8ae5806fb81d225512b179"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Secretary</I> means the Secretary of Health and Human Services. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "d6627750fb374eb679db97c93c5c1356"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>SNF</I> stands for skilled nursing facility. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "23b1df3970057fdd73d2fd3ba672e027"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Social security benefits</I> means monthly cash benefits payable under section 202 or 223 of the Act. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "ec9fcd8555029c822bdeead58e92da69"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Specified Low-Income Medicare Beneficiary (SLMB)</I> means an individual described in &#xA7; 435.124 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "a582a14b29c30fb6d179ec79e4009f54"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>SSA</I> stands for Social Security Administration. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "5faa8f71c6fb8e9dc60fcf8be19e1921"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>United States</I> means the fifty States, the District of Columbia, the Commonwealth of Puerto Rico, the Virgin Islands, Guam, American Samoa, and the Northern Mariana Islands. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "b05bfca1bdd46d1f4fcfe5182e79c16d"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>U.S.C.</I> stands for United States Code. ",
+                                "label": [
+                                    "400",
+                                    "200",
+                                    "d58852687102f54c7da7f5b67903fc2f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "content": "[48 FR 12534, Mar. 25, 1983] ",
+                                "node_type": "Citation"
+                            }
+                        ],
+                        "node_type": "SECTION"
+                    },
+                    {
+                        "label": [
+                            "400",
+                            "202"
+                        ],
+                        "title": "\u00a7 400.202 Definitions specific to Medicare.",
+                        "children": [
+                            {
+                                "text": "As used in connection with the Medicare program, unless the context indicates otherwise&#x2014; ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "61b4064875cea6bed25557e4bdbffcf6"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Carrier</I> means an entity that has a contract with CMS to determine and make Medicare payments for Part B benefits payable on a charge basis and to perform other related functions. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "773853e6908fb8c1c471858f59543970"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Critical access hospital (CAH)</I> means a facility designated by HFCA as meeting the applicable requirements of section 1820 of the Act and of subpart F of part 485 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "05ef255f0cc176a3b6d888fa4e97ba37"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Departmental Appeals Board means:</I> (1) Except as provided in paragraphs (2) and (3) of this definition, a Board established in the office of the Secretary, whose members act in panels to provide impartial review of disputed decisions made by operating components of the Department or by ALJs. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "2fd6775be6af1ecbf6482c68a25a21b8"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(2) For purposes of review of ALJ decisions under part 405, subparts G and H; part 417, subpart Q; part 422, subpart M; and part 478, subpart B of this chapter, the Medicare Appeals Council designated by the Board Chair. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "04d2672f2923a48a5ea6d4605cb6af54"
+                                ],
+                                "marker": [
+                                    "2"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(3) For purposes of part 426 of this chapter, a Member of the Board and, at the discretion of the Board Chair, any other Board staff appointed by the Board Chair to perform a review under that part. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "a309ed0d39ebcc14e65c2ddf54c377d3"
+                                ],
+                                "marker": [
+                                    "3"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Entitled</I> means that an individual meets all the requirements for Medicare benefits. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "78104ab813d0407e3daf579af15f5652"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Essential access community hospital (EACH)</I> means a hospital designated by CMS as meeting the applicable requirements of section 1820 of the Act and of subpart G of part 412 of this chapter, as in effect on September 30, 1997. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "a67d2cca8d838196114027349cda4dcc"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>GME</I> stands for graduate medical education. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "c98e01ee28fcc579278d422a990139a7"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Hospital insurance benefits</I> means payments on behalf of, and in rare circumstances directly to, an entitled individual for services that are covered under Part A of title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "ec7f623a23cb06ad288d1e603d2299dc"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Intermediary</I> means an entity that has a contract with CMS to determine and make Medicare payments for Part A or Part B benefits payable on a cost basis and to perform other related functions. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "31f677ca9a39db670e42b89d7c90f5c0"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Local coverage determination (LCD)</I> means a decision by a fiscal intermediary or a carrier under Medicare Part A or Part B, as applicable, whether to cover a particular service on an intermediary-wide or carrier-wide basis in accordance with section 1862(a)(1)(A) of the Act. An LCD may provide that a service is not reasonable and necessary for certain diagnoses and/or for certain diagnosis codes. An LCD does not include a determination of which procedure code, if any, is assigned to a service or a determination with respect to the amount of payment to be made for the service. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "a2b9d3f260c698ed38115abe5372d450"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare integrity program contractor</I> means an entity that has a contract with CMS under section 1893 of the Act to perform exclusively one or more of the program integrity activities specified in that section. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "1feca569414800be17abf257fdbc8edb"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare Part A</I> means the hospital insurance program authorized under Part A of title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "f4a9edaff0f9a4d8be91fe5de5d98cfd"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare Part B</I> means the supplementary medical insurance program authorized under Part B of title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "1afffcec07e98179ffbe31b16e78b7dd"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare Part C</I> means the choice of Medicare benefits through Medicare Advantage plans authorized under Part C of the title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "1a7d19215d00b5f1b4b6455e23d87935"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicare Part D</I> means the voluntary prescription drug benefit program authorized under Part D of title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "9aaf7bcad6450a57b537abc3e1d261ae"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>National coverage determination (NCD)</I> means a decision that CMS makes regarding whether to cover a particular service nationally under title XVIII of the Act. An NCD does not include a determination of what code, if any, is assigned to a service or a determination with respect to the amount of payment to be made for the service. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "b905294cbfba035d185596d2a6916980"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Nonparticipating supplier</I> means a supplier that does not have an agreement with CMS to participate in Part B of Medicare in effect on the date of the service. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "9d01d9f36c8c14a9e681a68664a03dcf"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Participating supplier</I> means a supplier that has an agreement with CMS to participate in Part B of Medicare in effect on the date of the service. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "4d126988f3572d85814a28d2b31d82a6"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Payment on an assignment-related basis</I> means payment for Part B services&#x2014; ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "d93e1a50264bc9832fce84690908d450"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(1) To a physician or other supplier that accepts assignment from the beneficiary, in accordance with &#xA7; 424.55 or &#xA7; 424.56 of this chapter; ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "1d2b5410496de55414fe90d693ae167e"
+                                ],
+                                "marker": [
+                                    "1"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(2) To a physician or other supplier after the beneficiary's death, in accordance with &#xA7; 424.64(c)(1) of this chapter; or ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "1e27ad4e07bd0102a10e8c7bebf5d523"
+                                ],
+                                "marker": [
+                                    "2"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(3) To an entity that pays the physician or other supplier under a health benefit plan, in accordance with &#xA7; 424.66 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "71e75b34a717a87ebe00363235ac11cb"
+                                ],
+                                "marker": [
+                                    "3"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Provider</I> means a hospital, a CAH, a skilled nursing facility, a comprehensive outpatient rehabilitation facility, a home health agency, or a hospice that has in effect an agreement to participate in Medicare, or a clinic, a rehabilitation agency, or a public health agency that has in effect a similar agreement but only to furnish outpatient physical therapy or speech pathology services, or a community mental health center that has in effect a similar agreement but only to furnish partial hospitalization services. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "be9c1eb8d47fd782341e0690fa884faf"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Railroad retirement benefits</I> means monthly benefits payable to individuals under the Railroad Retirement Act of 1974 (45 U.S.C. beginning at section 231). ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "c0c79b147991565fc114a631fdae9b67"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Services</I> means medical care or services and items, such as medical diagnosis and treatment, drugs and biologicals, supplies, appliances, and equipment, medical social services, and use of hospital, CAH, or SNF facilities. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "634e9a8a58ddf15ac3089be4418971f0"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Supplementary medical insurance benefits</I> means payment to or on behalf of an entitled individual for services covered under Part B of title XVIII of the Act. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "082760a9524120bbe763bd7ff6c3bc28"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Supplier</I> means a physician or other practitioner, or an entity other than a provider, that furnishes health care services under Medicare. ",
+                                "label": [
+                                    "400",
+                                    "202",
+                                    "ebf64b000d72ad6003ed9c8fd2028f5a"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "content": "[48 FR 12534, Mar. 25, 1983] ",
+                                "node_type": "Citation"
+                            }
+                        ],
+                        "node_type": "SECTION"
+                    },
+                    {
+                        "label": [
+                            "400",
+                            "203"
+                        ],
+                        "title": "\u00a7 400.203 Definitions specific to Medicaid.",
+                        "children": [
+                            {
+                                "text": "As used in connection with the Medicaid program, unless the context indicates otherwise&#x2014; ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "c0fc1947f5f07d2160e1ec9689e5f31c"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Applicant</I> means an individual whose written application for Medicaid has been submitted to the agency determining Medicaid eligibility, but has not received final action. This includes an individual (who need not be alive at the time of application) whose application is submitted through a representative or a person acting responsibly for the individual. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "f54e7c58bd10ffb0a1bd88cd252c8233"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Federal financial participation</I> (FFP) means the Federal Government's share of a State's expenditures under the Medicaid program. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "6d215aa9f24dd42a0b695da75498f010"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>FMAP</I> stands for the Federal medical assistance percentage, which is used to calculate the amount of Federal share of State expenditures for services. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "f022d14cf18f3fbc60ce5a2eea2f6f90"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Intellectual disability</I> means the condition that was previously referred to as mental retardation. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "3b7cfa84898534d270c13dbba1dafaab"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Medicaid agency</I> or <I>agency</I> means the single State agency administering or supervising the administration of a State Medicaid plan. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "90a4862d3149c0f013e7642b088b0550"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Nursing facility (NF),</I> effective October 1, 1990, means an SNF or an ICF participating in the Medicaid program. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "9e46dbc9b29465cfe0e91026966d0429"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>PCCM</I> stands for primary care case manager. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "90713563071f0cc5d961348f7e5a6c9f"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>PCP</I> stands for primary care physician. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "dca8523ad257b175f99e04d180be39d3"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Provider</I> means either of the following: ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "7e41793e0a4b00faa59c24c3161cdca2"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(1) For the fee-for-service program, any individual or entity furnishing Medicaid services under an agreement with the Medicaid agency. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "4362a432e2f0dcd454b4f545a86d3766"
+                                ],
+                                "marker": [
+                                    "1"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "(2) For the managed care program, any individual or entity that is engaged in the delivery of health care services and is legally authorized to do so by the State in which it delivers the services. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "3bf3db8bbfe9dfb07ff922701520cca6"
+                                ],
+                                "marker": [
+                                    "2"
+                                ],
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>Services</I> means the types of medical assistance specified in section 1905(a) of the Act and defined in subpart A of part 440 of this chapter. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "4f681b309bb482ae00801a24a784be12"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>State</I> means the several States, the District of Columbia, the Commonwealth of Puerto Rico, the Virgin Islands, Guam, American Samoa and the Northern Mariana Islands. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "d0931f6317610555a97615051113a840"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "text": "<I>State plan</I> or <I>the plan</I> means a comprehensive written commitment by a Medicaid agency, submitted under section 1902(a) of the Act, to administer or supervise the administration of a Medicaid program in accordance with Federal requirements. ",
+                                "label": [
+                                    "400",
+                                    "203",
+                                    "91e611da6a28317016529a93ff20b8b0"
+                                ],
+                                "marker": null,
+                                "node_type": "Paragraph"
+                            },
+                            {
+                                "content": "[48 FR 12534, Mar. 25, 1983, as amended at 50 FR 33029, Aug. 16, 1985; 56 FR 8852, Mar. 1, 1991; 57 FR 29155, June 30, 1992; 67 FR 41094, June 14, 2002; 77 FR 29028, May 16, 2012] ",
+                                "node_type": "Citation"
+                            }
+                        ],
+                        "node_type": "SECTION"
+                    }
+                ],
+                "node_type": "SUBPART"
+            },
+            {
+                "label": [
+                    "C"
+                ],
+                "title": "Subpart C [Reserved]",
+                "children": null,
+                "node_type": "SUBPART"
+            }
+        ],
+        "authority": {
+            "header": "Authority:",
+            "content": "42 U.S.C. 1302 and 1395hh and 44 U.S.C. Chapter 35. ",
+            "node_type": ""
+        },
+        "node_type": "PART",
+        "structure": null,
+        "editorial_note": {
+            "header": "",
+            "content": "",
+            "node_type": ""
+        }
+    },
+    "depth_stack": [
+        {
+            "type": "title",
+            "label": "Title 42 - Public Health",
+            "parent": [],
+            "reserved": false,
+            "identifier": [
+                "42"
+            ],
+            "label_level": "Title 42",
+            "parent_type": "",
+            "descendant_range": null,
+            "label_description": "Public Health"
+        },
+        {
+            "type": "chapter",
+            "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+            "parent": [
+                "42"
+            ],
+            "reserved": false,
+            "identifier": [
+                "IV"
+            ],
+            "label_level": " Chapter IV",
+            "parent_type": "title",
+            "descendant_range": [
+                "400",
+                "699"
+            ],
+            "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
+        },
+        {
+            "type": "subchapter",
+            "label": "Subchapter A - General Provisions",
+            "parent": [
+                "IV"
+            ],
+            "reserved": false,
+            "identifier": [
+                "A"
+            ],
+            "label_level": "Subchapter A",
+            "parent_type": "chapter",
+            "descendant_range": [
+                "400",
+                "403"
+            ],
+            "label_description": "General Provisions"
+        },
+        {
+            "type": "part",
+            "label": "Part 400 - Introduction; Definitions",
+            "parent": [
+                "A"
+            ],
+            "reserved": false,
+            "identifier": [
+                "400"
+            ],
+            "label_level": "Part 400",
+            "parent_type": "subchapter",
+            "descendant_range": [
+                "400.200",
+                "400.203"
+            ],
+            "label_description": "Introduction; Definitions"
+        }
+    ],
+    "depth": 3,
+    "structure": {
+        "type": "title",
+        "label": "Title 42 - Public Health",
+        "parent": [],
+        "children": [
+            {
+                "type": "chapter",
+                "label": " Chapter IV - Centers for Medicare & Medicaid Services, Department of Health and Human Services",
+                "parent": [
+                    "42"
+                ],
+                "children": [
+                    {
+                        "type": "subchapter",
+                        "label": "Subchapter A - General Provisions",
+                        "parent": [
+                            "IV"
+                        ],
+                        "children": [
+                            {
+                                "type": "part",
+                                "label": "Part 400 - Introduction; Definitions",
+                                "parent": [
+                                    "A"
+                                ],
+                                "children": [
+                                    {
+                                        "type": "subpart",
+                                        "label": "Subpart A [Reserved]",
+                                        "parent": [
+                                            "400"
+                                        ],
+                                        "children": [],
+                                        "reserved": true,
+                                        "identifier": [
+                                            "A"
+                                        ],
+                                        "label_level": "Subpart A",
+                                        "parent_type": "part",
+                                        "descendant_range": null,
+                                        "label_description": "Subpart A [Reserved]"
+                                    },
+                                    {
+                                        "type": "subpart",
+                                        "label": "Subpart B - Definitions",
+                                        "parent": [
+                                            "400"
+                                        ],
+                                        "children": [
+                                            {
+                                                "type": "section",
+                                                "label": "\u00a7 400.200 General definitions.",
+                                                "parent": [
+                                                    "B"
+                                                ],
+                                                "children": null,
+                                                "reserved": false,
+                                                "identifier": [
+                                                    "400",
+                                                    "200"
+                                                ],
+                                                "label_level": "\u00a7 400.200",
+                                                "parent_type": "subpart",
+                                                "descendant_range": null,
+                                                "label_description": "General definitions."
+                                            },
+                                            {
+                                                "type": "section",
+                                                "label": "\u00a7 400.202 Definitions specific to Medicare.",
+                                                "parent": [
+                                                    "B"
+                                                ],
+                                                "children": null,
+                                                "reserved": false,
+                                                "identifier": [
+                                                    "400",
+                                                    "202"
+                                                ],
+                                                "label_level": "\u00a7 400.202",
+                                                "parent_type": "subpart",
+                                                "descendant_range": null,
+                                                "label_description": "Definitions specific to Medicare."
+                                            },
+                                            {
+                                                "type": "section",
+                                                "label": "\u00a7 400.203 Definitions specific to Medicaid.",
+                                                "parent": [
+                                                    "B"
+                                                ],
+                                                "children": null,
+                                                "reserved": false,
+                                                "identifier": [
+                                                    "400",
+                                                    "203"
+                                                ],
+                                                "label_level": "\u00a7 400.203",
+                                                "parent_type": "subpart",
+                                                "descendant_range": null,
+                                                "label_description": "Definitions specific to Medicaid."
+                                            }
+                                        ],
+                                        "reserved": false,
+                                        "identifier": [
+                                            "B"
+                                        ],
+                                        "label_level": "Subpart B",
+                                        "parent_type": "part",
+                                        "descendant_range": [
+                                            "400.200",
+                                            "400.203"
+                                        ],
+                                        "label_description": "Definitions"
+                                    },
+                                    {
+                                        "type": "subpart",
+                                        "label": "Subpart C [Reserved]",
+                                        "parent": [
+                                            "400"
+                                        ],
+                                        "children": [],
+                                        "reserved": true,
+                                        "identifier": [
+                                            "C"
+                                        ],
+                                        "label_level": "Subpart C",
+                                        "parent_type": "part",
+                                        "descendant_range": null,
+                                        "label_description": "Subpart C [Reserved]"
+                                    }
+                                ],
+                                "reserved": false,
+                                "identifier": [
+                                    "400"
+                                ],
+                                "label_level": "Part 400",
+                                "parent_type": "subchapter",
+                                "descendant_range": [
+                                    "400.200",
+                                    "400.203"
+                                ],
+                                "label_description": "Introduction; Definitions"
+                            }
+                        ],
+                        "reserved": false,
+                        "identifier": [
+                            "A"
+                        ],
+                        "label_level": "Subchapter A",
+                        "parent_type": "chapter",
+                        "descendant_range": [
+                            "400",
+                            "403"
+                        ],
+                        "label_description": "General Provisions"
+                    }
+                ],
+                "reserved": false,
+                "identifier": [
+                    "IV"
+                ],
+                "label_level": " Chapter IV",
+                "parent_type": "title",
+                "descendant_range": [
+                    "400",
+                    "699"
+                ],
+                "label_description": "Centers for Medicare &amp; Medicaid Services, Department of Health and Human Services"
+            }
+        ],
+        "reserved": false,
+        "identifier": [
+            "42"
+        ],
+        "label_level": "Title 42",
+        "parent_type": "",
+        "descendant_range": null,
+        "label_description": "Public Health"
+    }
+}
