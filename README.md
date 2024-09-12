@@ -84,9 +84,9 @@ This data is not maintained and should not be relied on for any purpose other th
 
 ## Update CSS for admin site
 
-To change the styling of the admin site, add custom style rules to `solutions/ui/regulations/css/admin/custom_admin.css`.  
+To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.  
 
-To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solutions/static-assets/css/admin` directory.
+To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solution/static-assets/css/admin` directory.
 
 You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
 
