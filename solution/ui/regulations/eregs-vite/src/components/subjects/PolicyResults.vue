@@ -1,11 +1,13 @@
 <script>
-import { inject } from "vue";
+import { computed, inject } from "vue";
 import { useRoute } from "vue-router";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { formatDate } from "utilities/filters";
+import { formatDate, locationUrl } from "utilities/filters";
 import {
+    createRegResultLink,
+    deserializeResult,
     getCurrentPageResultsRange,
     getFileTypeButton,
     DOCUMENT_TYPES_MAP,
@@ -27,23 +29,15 @@ const addSurroundingEllipses = (str) => {
     return str;
 };
 
-const getFieldVal = ({ item, fieldName }) => {
-    if (item?.resource) {
-        return item.resource[fieldName];
-    } else {
-        return item[fieldName];
-    }
-};
+const getParentCategoryName = ({ itemCategory, categoriesArr }) => {
+    if (!itemCategory) return null;
 
-const getParentCategoryName = ({ item, categoriesArr }) => {
-    if (!item) return null;
-
-    const parentId = getFieldVal({ item, fieldName: "category" }).parent;
+    const parentId = itemCategory.parent;
 
     if (!parentId) return null;
 
     const parentCategory = categoriesArr.find(
-        (category) => category.id === parentId
+        (category) => category.id == parentId
     );
 
     return parentCategory?.name ?? null;
@@ -51,17 +45,15 @@ const getParentCategoryName = ({ item, categoriesArr }) => {
 
 const getResultLinkText = (item) => {
     let linkText;
-    if (
-        DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
-        "Internal"
-    ) {
-        linkText =
-            item.name_headline || getFieldVal({ item, fieldName: "title" });
+    if (DOCUMENT_TYPES_MAP[item.type] === "Internal") {
+        linkText = item.name_headline || item.title;
     } else {
         linkText =
             item.summary_headline ||
+            item.name_headline ||
             item.summary_string ||
-            getFieldVal({ item, fieldName: "title" });
+            item.node_title ||
+            item.title;
     }
 
     return `<span class='result__link--label'>${linkText}</span>`;
@@ -69,8 +61,7 @@ const getResultLinkText = (item) => {
 
 const showResultSnippet = (item) => {
     if (
-        DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
-            "Internal" &&
+        DOCUMENT_TYPES_MAP[item.type] === "Internal" &&
         (item.content_headline ||
             item.summary_headline ||
             item.summary_string ||
@@ -78,11 +69,7 @@ const showResultSnippet = (item) => {
     )
         return true;
 
-    if (
-        DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
-            "Public" &&
-        item.content_headline
-    )
+    if (DOCUMENT_TYPES_MAP[item.type] === "Public" && item.content_headline)
         return true;
 
     return false;
@@ -91,10 +78,7 @@ const showResultSnippet = (item) => {
 const getResultSnippet = (item) => {
     let snippet;
 
-    if (
-        DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
-        "Internal"
-    ) {
+    if (DOCUMENT_TYPES_MAP[item.type] === "Internal") {
         if (
             item.content_headline &&
             item.content_headline.includes("search-highlight")
@@ -111,10 +95,7 @@ const getResultSnippet = (item) => {
         return snippet;
     }
 
-    if (
-        DOCUMENT_TYPES_MAP[getFieldVal({ item, fieldName: "type" })] ===
-        "Public"
-    ) {
+    if (DOCUMENT_TYPES_MAP[item.type] === "Public") {
         if (item.content_headline) {
             snippet = addSurroundingEllipses(item.content_headline);
         } else if (item.content_string) {
@@ -125,10 +106,14 @@ const getResultSnippet = (item) => {
     return snippet;
 };
 
+const partDocumentTitleLabel = (string) => string.toLowerCase();
+
 export default {
     addSurroundingEllipses,
+    getParentCategoryName,
     getResultLinkText,
     getResultSnippet,
+    partDocumentTitleLabel,
     showResultSnippet,
 };
 </script>
@@ -180,22 +165,39 @@ const props = defineProps({
 const $route = useRoute();
 
 const apiUrl = inject("apiUrl");
-const base = inject("base");
+const homeUrl = inject("homeUrl");
 
-const getUrl = ({ type: resourceType, url, uid }) =>
-    resourceType === "internal_file"
-        ? `${apiUrl}resources/internal/files/${uid}`
-        : url;
+const transformedResults = computed(() =>
+    props.results.map((result) => deserializeResult(result))
+);
 
-const needsBar = (item) =>
-    getFieldVal({ item, fieldName: "date" }) &&
-    getFieldVal({ item, fieldName: "document_id" });
+const getUrl = (doc) =>
+    doc.type === "internal_file"
+        ? `${apiUrl}resources/internal/files/${doc.uid}`
+        : doc.type === "reg_text"
+        ? createRegResultLink(
+              {
+                  date: doc.date,
+                  headline: doc.content_headline,
+                  part_number: doc.part_number,
+                  section_number: doc.node_id,
+                  section_title: doc.title,
+                  title: doc.reg_title,
+              },
+              homeUrl,
+              $route.query?.q
+          )
+        : doc.url;
+
+const needsBar = (item) => item.date && item.document_id;
 
 const resultLinkClasses = (doc) => ({
     external:
-        DOCUMENT_TYPES_MAP[getFieldVal({ item: doc, fieldName: "type" })] ===
-        "Public" || getFieldVal({ item: doc, fieldName: "type" }) === "internal_link",
+        doc.type !== "reg_text" &&
+        (doc.type === "internal_link" ||
+            DOCUMENT_TYPES_MAP[doc.type] === "Public"),
     "document__link--search": !!$route?.query?.q,
+    "document__link--regulations": doc.type === "reg_text",
 });
 
 const currentPageResultsRange = getCurrentPageResultsRange({
@@ -207,18 +209,21 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 
 <template>
     <div class="doc__list">
-        <template v-if="view !== 'search'">
-            <h2 v-if="searchQuery" class="search-results__heading">
-                Search Results
-            </h2>
-            <div class="search-results-count">
-                <span v-if="results.length > 0"
-                    >{{ currentPageResultsRange[0] }} -
-                    {{ currentPageResultsRange[1] }} of</span
-                >
-                {{ resultsCount }} <span v-if="searchQuery">result</span
-                ><span v-else>document</span>
-                <span v-if="results.length != 1">s</span>
+        <h2
+            v-if="view !== 'search' && searchQuery"
+            class="search-results__heading"
+        >
+            Search Results
+        </h2>
+        <div class="search-results-count">
+            <span v-if="results.length > 0"
+                >{{ currentPageResultsRange[0] }} -
+                {{ currentPageResultsRange[1] }} of</span
+            >
+            {{ resultsCount }} <span v-if="searchQuery">result</span
+            ><span v-else>document</span>
+            <span v-if="results.length != 1">s</span>
+            <template v-if="view !== 'search'">
                 <span v-if="searchQuery">
                     for
                     <span class="search-query__span">{{
@@ -228,24 +233,19 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <span v-if="searchQuery && selectedSubjectParts[0]">
                     within {{ selectedSubjectParts[1][0] }}</span
                 >
-            </div>
-        </template>
+            </template>
+        </div>
         <slot name="empty-state"></slot>
         <ResultsItem
-            v-for="doc in results"
+            v-for="doc in transformedResults"
             :key="doc.uid"
             class="doc-list__document"
         >
             <template #actions>
                 <a
-                    v-if="hasEditableJobCode"
+                    v-if="hasEditableJobCode && doc.id"
                     class="edit-button"
-                    :href="
-                        apiUrl +
-                        'resources/' +
-                        getFieldVal({ item: doc, fieldName: 'id' }) +
-                        '/edit'
-                    "
+                    :href="`${apiUrl}resources/${doc.id}/edit'`"
                 >
                     Edit
                     <i class="fas fa-edit"></i>
@@ -253,136 +253,65 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #labels>
                 <DocTypeLabel
-                    v-if="
-                        !_isEmpty(getFieldVal({ item: doc, fieldName: 'type' }))
-                    "
-                    :icon-type="getFieldVal({ item: doc, fieldName: 'type' })"
-                    :doc-type="
-                        DOCUMENT_TYPES_MAP[
-                            getFieldVal({ item: doc, fieldName: 'type' })
-                        ]
-                    "
+                    v-if="doc.type"
+                    :icon-type="doc.type"
+                    :doc-type="DOCUMENT_TYPES_MAP[doc.type]"
                 />
-                <template
-                    v-if="
-                        DOCUMENT_TYPES_MAP[
-                            getFieldVal({ item: doc, fieldName: 'type' })
-                        ] === 'Internal'
+                <CategoryLabel
+                    v-if="doc.type === 'reg_text'"
+                    name="Regulations"
+                    type="regulations"
+                />
+                <CategoryLabel
+                    v-else-if="!_isEmpty(doc.category)"
+                    :name="
+                        doc.category?.parent
+                            ? getParentCategoryName({
+                                  itemCategory: doc.category,
+                                  categoriesArr: categories,
+                              })
+                            : doc.category?.name
                     "
-                >
-                    <CategoryLabel
-                        v-if="
-                            !_isEmpty(
-                                getFieldVal({
-                                    item: doc,
-                                    fieldName: 'category',
-                                })
-                            )
-                        "
-                        :name="
-                            getFieldVal({ item: doc, fieldName: 'category' }) &&
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .parent
-                                ? getParentCategoryName({
-                                      item: doc,
-                                      categoriesArr: categories,
-                                  })
-                                : getFieldVal({
-                                      item: doc,
-                                      fieldName: 'category',
-                                  }).name
-                        "
-                        type="category"
-                    />
-                    <CategoryLabel
-                        v-if="
-                            getFieldVal({ item: doc, fieldName: 'category' }) &&
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .parent
-                        "
-                        :name="
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .name
-                        "
-                        type="subcategory"
-                    />
-                </template>
-                <template v-else>
-                    <CategoryLabel
-                        v-if="
-                            !_isEmpty(
-                                getFieldVal({
-                                    item: doc,
-                                    fieldName: 'category',
-                                })
-                            )
-                        "
-                        :name="
-                            getFieldVal({ item: doc, fieldName: 'category' }) &&
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .parent
-                                ? getParentCategoryName({
-                                      item: doc,
-                                      categoriesArr: categories,
-                                  })
-                                : getFieldVal({
-                                      item: doc,
-                                      fieldName: 'category',
-                                  }).name
-                        "
-                        type="category"
-                    />
-                    <CategoryLabel
-                        v-if="
-                            getFieldVal({ item: doc, fieldName: 'category' }) &&
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .parent
-                        "
-                        :name="
-                            getFieldVal({ item: doc, fieldName: 'category' })
-                                .name
-                        "
-                        type="subcategory"
-                    />
-                </template>
+                    type="category"
+                />
+                <CategoryLabel
+                    v-if="doc.category?.parent"
+                    :name="doc.category?.name"
+                    type="subcategory"
+                />
             </template>
             <template #context>
+                <span v-if="doc.part_title" class="result__context--date">{{
+                    partDocumentTitleLabel(doc.part_title)
+                }}</span>
                 <span
-                    v-if="getFieldVal({ item: doc, fieldName: 'date' })"
+                    v-else-if="doc.date"
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
-                    >{{
-                        formatDate(
-                            getFieldVal({ item: doc, fieldName: "date" })
-                        )
-                    }}</span
+                    >{{ formatDate(doc.date) }}</span
                 >
                 <!-- DivisionLabel
                     v-if="doc.type === 'internal' && doc.division"
                     :division="doc.division"
                 /-->
-                <span
-                    v-if="getFieldVal({ item: doc, fieldName: 'document_id' })"
-                    >{{
-                        getFieldVal({ item: doc, fieldName: "document_id" })
-                    }}</span
-                >
+                <span v-if="doc.document_id">{{ doc.document_id }}</span>
             </template>
             <template #link>
                 <a
-                    :href="getUrl(doc.resource ? doc.resource : doc)"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    :href="getUrl(doc)"
+                    :target="doc.type === 'reg_text' ? undefined : '_blank'"
+                    :rel="
+                        doc.type === 'reg_text'
+                            ? undefined
+                            : 'noopener noreferrer'
+                    "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
                     v-html="
                         getResultLinkText(doc) +
                         getFileTypeButton({
-                            fileName: getFieldVal({
-                                item: doc,
-                                fieldName: 'file_name',
-                            }),
-                            uid: getFieldVal({ item: doc, fieldName: 'uid' }),
+                            fileName: doc.file_name,
+                            uid: doc.uid,
                         })
                     "
                 ></a>
@@ -395,24 +324,17 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #chips>
                 <div
-                    v-if="
-                        getFieldVal({ item: doc, fieldName: 'subjects' }) &&
-                        getFieldVal({ item: doc, fieldName: 'subjects' })
-                            .length > 0
-                    "
+                    v-if="doc.subjects?.length > 0"
                     class="document__info-block"
                 >
-                    <SubjectChips
-                        :subjects="
-                            getFieldVal({ item: doc, fieldName: 'subjects' })
-                        "
-                    />
+                    <SubjectChips :subjects="doc.subjects" />
                 </div>
             </template>
             <template #sections>
                 <RelatedSections
-                    :base="base"
-                    :item="doc.resource ? doc.resource : doc"
+                    v-if="doc.type !== 'reg_text'"
+                    :base="homeUrl"
+                    :item="doc"
                     :parts-last-updated="partsLastUpdated"
                     label="Related Regulation Citation"
                 />
