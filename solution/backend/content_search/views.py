@@ -4,7 +4,7 @@ from django.db.models import Prefetch, Q
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 
-from common.mixins import ViewSetPagination
+from cmcs_regulations.utils import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -15,6 +15,15 @@ from resources.utils import get_citation_filter, string_to_bool
 
 from .models import ContentIndex, IndexedRegulationText
 from .serializers import ContentSearchSerializer
+
+
+class ContentSearchPagination(ViewSetPagination):
+    def get_count_map(self):
+        return [
+            {"name": "internal_count", "count_field": "resource", "filter": Q(resource__abstractinternalresource__isnull=False)},
+            {"name": "public_count", "count_field": "resource", "filter": Q(resource__abstractpublicresource__isnull=False)},
+            {"name": "reg_text_count", "count_field": "reg_text", "filter": None},
+        ]
 
 
 @extend_schema(
@@ -78,12 +87,12 @@ from .serializers import ContentSearchSerializer
                         "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
             location=OpenApiParameter.QUERY,
         ),
-    ]  # + LocationFiltererMixin.PARAMETERS + PAGINATION_PARAMS
+    ] + ViewSetPagination.QUERY_PARAMETERS,
 )
 class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
-    pagination_class = ViewSetPagination
+    pagination_class = ContentSearchPagination
 
     def list(self, request, *args, **kwargs):
         citations = request.GET.getlist("citations")

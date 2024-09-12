@@ -9,8 +9,8 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+from cmcs_regulations.utils import ViewSetPagination
 from common.auth import SettingsAuthentication
-from common.mixins import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -44,6 +44,18 @@ logger = logging.getLogger(__name__)
 # OpenApiQueryParameter("citations",
 #                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
 #                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
+
+
+class ResourceCountPagination(ViewSetPagination):
+    def get_count_map(self):
+        prefix = "" if self.view.model == AbstractResource else "abstractresource_ptr__"
+        internal_filter = Q(**{f"{prefix}abstractinternalresource__isnull": False})
+        public_filter = Q(**{f"{prefix}abstractpublicresource__isnull": False})
+        return [
+            {"name": "internal_count", "count_field": "pk", "filter": internal_filter},
+            {"name": "public_count", "count_field": "pk", "filter": public_filter},
+        ]
+
 
 COMMON_QUERY_PARAMETERS = [
     OpenApiParameter(
@@ -84,7 +96,7 @@ COMMON_QUERY_PARAMETERS = [
 
 @extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
-    pagination_class = ViewSetPagination
+    pagination_class = ResourceCountPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
 
