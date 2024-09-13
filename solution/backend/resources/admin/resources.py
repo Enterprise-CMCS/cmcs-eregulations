@@ -39,7 +39,7 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved, actions.extract_text]
     filter_horizontal = ["cfr_citations", "subjects"]
     empty_value_display = "NONE"
-    ordering = ["-updated_at", "date", "document_id", "category", "-created_at"]
+    ordering = ["-updated_at"]
 
     list_filter = [
         "approved",
