@@ -1,10 +1,10 @@
 
-from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 
-from cmcs_regulations.utils import ViewSetPagination
+from cmcs_regulations.utils.api_exceptions import BadRequest
+from cmcs_regulations.utils.pagination import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,

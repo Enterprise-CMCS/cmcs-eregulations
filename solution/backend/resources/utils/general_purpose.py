@@ -2,8 +2,9 @@
 
 
 from django.conf import settings
-from django.core.exceptions import BadRequest
 from django.db.models import Q
+
+from cmcs_regulations.utils.api_exceptions import BadRequest
 
 
 # Returns True if x is an integer, False otherwise.
