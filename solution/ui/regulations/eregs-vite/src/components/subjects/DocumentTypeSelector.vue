@@ -126,7 +126,7 @@ const makeLabel = ({ type }) => {
 };
 
 const makeCount = ({ type }) => {
-    if (props.loading) return "(--)";
+    if (props.loading) return "";
 
     return _isUndefined(props.typeCount[type])
         ? ""
