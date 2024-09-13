@@ -186,7 +186,7 @@ describe("Search flow", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(2)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("have.text", "Internal Resources(1)");
     });
 
     it("should not show the categories dropdown when only regulations are selected", () => {
