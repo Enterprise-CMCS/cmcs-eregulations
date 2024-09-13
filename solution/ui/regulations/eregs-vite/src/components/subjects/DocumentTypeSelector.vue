@@ -122,13 +122,15 @@ const onPopState = (event) => {
 const makeLabel = ({ type }) => {
     return `${DOCUMENT_TYPES_MAP[type]} ${
         type !== "regulations" ? "Resources" : ""
-    } (${
-        props.typeCount[type]
-            ? props.typeCount[type]
-            : props.loading
-                ? "--"
-                : "0"
-    })`;
+    }`;
+};
+
+const makeCount = ({ type }) => {
+    if (props.loading) return "(--)";
+
+    return _isUndefined(props.typeCount[type])
+        ? ""
+        : `(${props.typeCount[type]})`;
 };
 
 onMounted(() => {
@@ -160,7 +162,12 @@ onUnmounted(() => {
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
-                            <span>{{ makeLabel({ type }) }}</span>
+                            <span class="label__span">{{
+                                makeLabel({ type })
+                            }}</span>
+                            <span class="count__span">{{
+                                makeCount({ type })
+                            }}</span>
                         </label>
                     </div>
                 </div>

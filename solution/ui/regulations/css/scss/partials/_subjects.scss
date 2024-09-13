@@ -54,6 +54,13 @@
                 margin: 0;
                 font-size: 14px;
                 line-height: 22px;
+
+                .count__span {
+                    min-width: var(--spacer-6);
+                    padding-left: var(--spacer-2);
+                    display: flex;
+                    justify-content: end;
+                }
             }
         }
     }
