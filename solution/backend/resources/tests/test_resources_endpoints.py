@@ -45,6 +45,27 @@ class TestResourcesEndpoint(TestCase):
         file1.cfr_citations.set([s1, s2])
         file1.save()
 
+    def test_counts_logged_in(self):
+        self.login()
+        response = self.client.get("/v3/resources/?group_resources=false")
+        data = get_paginated_data(response)
+        self.assertEqual(len(data["results"]), 3)
+        self.assertIn("count", data)
+        self.assertIn("internal_count", data)
+        self.assertIn("public_count", data)
+        self.assertEqual(data["internal_count"], 1)
+        self.assertEqual(data["public_count"], 2)
+
+    def test_counts_logged_out(self):
+        response = self.client.get("/v3/resources/?group_resources=false")
+        data = get_paginated_data(response)
+        self.assertEqual(len(data["results"]), 2)
+        self.assertIn("count", data)
+        self.assertIn("internal_count", data)
+        self.assertIn("public_count", data)
+        self.assertEqual(data["internal_count"], 0)
+        self.assertEqual(data["public_count"], 2)
+
     def test_duplicate_groups(self):
         # If groups are duplicated, then len(response.data) will be greater than 1
         # This is because all 3 created docs have the same cfr_citations

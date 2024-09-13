@@ -30,8 +30,8 @@ class PublicLinkForm(AbstractPublicResourceForm):
 class PublicLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 10
     form = PublicLinkForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "url"]
 
     fieldsets = [
@@ -51,6 +51,11 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["approved"],
         }),
     ]
+
+    class Media:
+        css = {
+            'all': ('css/admin/custom_admin.css',)
+        }
 
 
 class FederalRegisterLinkForm(AbstractPublicResourceForm):
@@ -81,11 +86,9 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
     admin_priority = 11
     form = FederalRegisterLinkForm
     list_display = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
-                    "category", "action_type", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "in_groups", "docket_numbers", "document_number",
-                          "category", "action_type", "updated_at", "approved"]
+                    "action_type", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "docket_numbers", "document_number", "updated_at"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number", "url"]
-
     fieldsets = [
         ("Basics", {
             "fields": ["url", "title"],
@@ -104,6 +107,11 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["approved"],
         }),
     ]
+
+    class Media:
+        css = {
+            'all': ('css/admin/custom_admin.css',)
+        }
 
     def in_groups(self, obj):
         groups = ", ".join([str(i) for i in obj.resource_groups.all()])

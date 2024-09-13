@@ -36,17 +36,17 @@ const _beforeEach = () => {
 
 const _beforePaginate = () => {
     cy.intercept(
-        "**/v3/resources/public?show_internal=false&show_regulations=false**",
+        "**/v3/resources/public?show_regulations=false&show_internal=false**",
         {
             fixture: "policy-docs-50-p1.json",
         }
     ).as("initialPage");
 
-    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=1**", {
+    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=1**", {
         fixture: "policy-docs-50-p1.json",
     }).as("page1");
 
-    cy.intercept("**/v3/resources/public?show_internal=false&show_regulations=false&page=2**", {
+    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=2**", {
         fixture: "policy-docs-50-p2.json",
     }).as("page2");
 };
@@ -197,7 +197,7 @@ describe("Find by Subjects", () => {
             }
         );
         cy.intercept(
-            "**/v3/resources/?subjects=3&page_size=50&group_resources=false",
+            "**/v3/resources/?subjects=3&show_regulations=false&page_size=50&group_resources=false",
             {
                 fixture: "policy-docs-subjects.json",
             }
@@ -230,14 +230,14 @@ describe("Find by Subjects", () => {
             .and("have.text", " Search Results ");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 3 of 3 results for mock within Access to Services"
+            "1 - 4 of 4 results for mock within Access to Services"
         );
         cy.get(`button[data-testid=remove-subject-3]`).click({
             force: true,
         });
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 3 of 3 results for mock"
+            "1 - 4 of 4 results for mock"
         );
     });
 
@@ -319,21 +319,20 @@ describe("Find by Subjects", () => {
             .find("a")
             .should("have.attr", "href")
             .and("not.include", "undefined")
-            .and("include", "/42/430/Subpart-A/");
+            .and("include", "/42/440/130#440-130");
         cy.get(".result__link") // internal_file
             .eq(0)
             .should("include.text", "Download")
             .find("a")
             .should("not.have.class", "external")
             .find(
-                "span[data-testid=download-chip-1149e520-6691-4f00-9094-d741b0b114a5]"
+                "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]"
             )
             .should("include.text", "Download MSG");
-        cy.get(".result__link") // public_link
+        cy.get(".result__link") // regulations link
             .eq(1)
             .find("a")
             .should("not.include.text", "Download")
-            .and("have.class", "external");
         cy.get(".result__link") // internal_link
             .eq(2)
             .find("a")
@@ -399,20 +398,20 @@ describe("Find by Subjects", () => {
         );
         cy.get(".document__subjects a")
             .eq(0)
-            .should("have.text", "Access to Services");
+            .should("have.text", "FMAP");
         cy.get(".document__subjects a")
             .eq(1)
-            .should("have.text", "Access to Services");
+            .should("have.text", "Preventive Services");
         cy.get(".document__subjects a")
             .eq(2)
-            .should("have.text", "Ambulatory Prenatal Care");
-        cy.get(`a[data-testid=add-subject-chip-5]`)
+            .should("have.text", "VIII group");
+        cy.get(`a[data-testid=add-subject-chip-167]`)
             .should("have.attr", "title")
-            .and("include", "Ambulatory Prenatal Care");
-        cy.get(`a[data-testid=add-subject-chip-5]`).click({
+            .and("include", "New Adult Group");
+        cy.get(`a[data-testid=add-subject-chip-167]`).click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=5&type=all");
+        cy.url().should("include", "/subjects?subjects=167&type=all");
         cy.get("input#main-content").should("have.value", "");
     });
 

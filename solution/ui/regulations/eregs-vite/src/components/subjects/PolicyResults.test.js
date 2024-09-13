@@ -54,7 +54,8 @@ const MOCK_RESULTS = [
         name_headline: "",
         summary_headline:
             "this <span class='search-highlight'>is</span> a summary headline",
-        content_headline: "this <span class='search-highlight'>is</span> a content headline",
+        content_headline:
+            "this <span class='search-highlight'>is</span> a content headline",
         resource: {
             type: "public_link",
             category: {},
@@ -87,22 +88,99 @@ describe("addSurroundingEllipses", () => {
     });
 });
 
+describe("getParentCategoryName", () => {
+    const itemCategory = {
+        parent: 1,
+    };
+
+    const categoriesArr = [
+        {
+            id: 1,
+            name: "Statutes",
+            description: "",
+            order: 200,
+            show_if_empty: false,
+            is_fr_link_category: false,
+            type: "",
+            subcategories: [],
+            categoryType: "categories",
+            catIndex: 0,
+        },
+    ];
+    it("returns null if no itemCategory", async () => {
+        expect(
+            PolicyResults.getParentCategoryName({
+                itemCategory: "",
+            })
+        ).toBe(null);
+    });
+
+    it("returns the parent category name", async () => {
+        expect(
+            PolicyResults.getParentCategoryName({
+                itemCategory,
+                categoriesArr,
+            })
+        ).toBe("Statutes");
+    });
+});
+
 describe("getResultLinkText", () => {
-    it("/content_search internal result", async () => {
-        expect(PolicyResults.getResultLinkText(MOCK_RESULTS[0])).toBe(
-            "<span class='result__link--label'>this is a document name headline</span>"
+    const cs_internal_1 = {
+        type: "internal",
+        name_headline: "this is a name_headline field",
+        title: "this is a title field",
+    };
+
+    it("/content_search internal result 1", async () => {
+        expect(PolicyResults.getResultLinkText(cs_internal_1)).toBe(
+            "<span class='result__link--label'>this is a name_headline field</span>"
         );
     });
+
+    const cs_internal_2 = {
+        type: "internal",
+        name_headline: "",
+        title: "this is a title field",
+    };
+
+    it("/content_search internal result 2", async () => {
+        expect(PolicyResults.getResultLinkText(cs_internal_2)).toBe(
+            "<span class='result__link--label'>this is a title field</span>"
+        );
+    });
+
     it("/resources/internal result", async () => {
         expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(
             "<span class='result__link--label'>this is a document name string</span>"
         );
     });
+
+    const cs_external_1 = {
+        type: "external",
+        summary_headline: "this is a summary_headline field",
+        name_headline: "this is a name_headline field",
+        title: "this is a title field",
+    };
+
     it("/content-search external result", async () => {
-        expect(PolicyResults.getResultLinkText(MOCK_RESULTS[2])).toBe(
-            "<span class='result__link--label'>this <span class='search-highlight'>is</span> a summary headline</span>"
+        expect(PolicyResults.getResultLinkText(cs_external_1)).toBe(
+            "<span class='result__link--label'>this is a summary_headline field</span>"
         );
     });
+
+    const cs_external_2 = {
+        type: "external",
+        summary_headline: "",
+        name_headline: "this is a name_headline field",
+    };
+
+    it("/content-search external result", async () => {
+        expect(PolicyResults.getResultLinkText(cs_external_2)).toBe(
+            "<span class='result__link--label'>this is a name_headline field</span>"
+        );
+    });
+
     it("/resources/public (external) result", async () => {
         const result = {
             type: "federal_register_link",
@@ -128,11 +206,83 @@ describe("getResultLinkText", () => {
 });
 
 describe("getResultSnippet", () => {
-    it("/content-search internal result with both content_headline and summary_headline", async () => {
-        expect(PolicyResults.getResultSnippet(MOCK_RESULTS[0])).toBe(
-            "...this <span class='search-highlight'>is</span> a content headline..."
+    const cs_internal_1 = {
+        type: "internal",
+        content_headline:
+            "this is a <span class='search-highlight'>content_headline</span>",
+    };
+
+    it("/content-search internal result with both content_headline", async () => {
+        expect(PolicyResults.getResultSnippet(cs_internal_1)).toBe(
+            "...this is a <span class='search-highlight'>content_headline</span>..."
         );
     });
+
+    const cs_internal_2 = {
+        type: "internal",
+        content_headline: "",
+        summary_headline:
+            "this is a <span class='search-highlight'>summary_headline</span>",
+    };
+
+    it("/content-search internal result with summary_headline", async () => {
+        expect(PolicyResults.getResultSnippet(cs_internal_2)).toBe(
+            "...this is a <span class='search-highlight'>summary_headline</span>..."
+        );
+    });
+
+    const cs_internal_3 = {
+        type: "internal",
+        content_headline: "",
+        summary_headline: "",
+        summary_string: "this is a summary_string",
+    };
+
+    it("/content-search internal result with summary_string", async () => {
+        expect(PolicyResults.getResultSnippet(cs_internal_3)).toBe(
+            "this is a summary_string"
+        );
+    });
+
+    const cs_internal_4 = {
+        type: "internal",
+        content_headline: "",
+        summary_headline: "",
+        summary_string: "",
+        summary: "this is a summary",
+    };
+
+    it("/content-search internal result with summary", async () => {
+        expect(PolicyResults.getResultSnippet(cs_internal_4)).toBe(
+            "this is a summary"
+        );
+    });
+
+    const cs_external_1 = {
+        type: "external",
+        content_headline:
+            "this is a <span class='search-highlight'>content_headline</span>",
+        content_string: "this is a content_string",
+    };
+
+    it("/content-search external result with content_headline", async () => {
+        expect(PolicyResults.getResultSnippet(cs_external_1)).toBe(
+            "...this is a <span class='search-highlight'>content_headline</span>..."
+        );
+    });
+
+    const cs_external_2 = {
+        type: "external",
+        content_headline: "",
+        content_string: "this is a content_string",
+    };
+
+    it("/content-search external result with content_string", async () => {
+        expect(PolicyResults.getResultSnippet(cs_external_2)).toBe(
+            "this is a content_string"
+        );
+    });
+
     it("/resources/internal with a summary", async () => {
         expect(PolicyResults.getResultSnippet(MOCK_RESULTS[1])).toBe(
             "This is the summary for the test text file"
@@ -141,12 +291,29 @@ describe("getResultSnippet", () => {
 });
 
 describe("showResultSnippet", () => {
-    it("/content-search internal result and has a summary_headline", async () => {
-        expect(PolicyResults.showResultSnippet(MOCK_RESULTS[0])).toBe(true);
+    const cs_internal_1 = {
+        type: "internal",
+        content_headline:
+            "this is a <span class='search-highlight'>content_headline</span>",
+    };
+
+    it("/content-search internal result and has a content_headline", async () => {
+        expect(PolicyResults.showResultSnippet(cs_internal_1)).toBe(true);
     });
+
+    const cs_internal_2 = {
+        type: "internal",
+        content_headline: "",
+    };
+
+    it("/content-search internal result and does not have headlines or summaries", async () => {
+        expect(PolicyResults.showResultSnippet(cs_internal_2)).toBe(false);
+    });
+
     it("/resources/internal result and has a summary_headline", async () => {
         expect(PolicyResults.showResultSnippet(MOCK_RESULTS[1])).toBe(true);
     });
+
     it("/resources/internal and does NOT have a summary_headline or summary_string or content_headline", async () => {
         const result = {
             type: "internal_file",
@@ -164,10 +331,23 @@ describe("showResultSnippet", () => {
         };
         expect(PolicyResults.showResultSnippet(result)).toBe(false);
     });
+
+    const cs_external_1 = {
+        type: "external",
+        content_headline:
+            "this is a <span class='search-highlight'>content_headline</span>",
+    };
+
     it("/content-search external and has a content_headline", async () => {
-        expect(PolicyResults.showResultSnippet(MOCK_RESULTS[3])).toBe(true);
+        expect(PolicyResults.showResultSnippet(cs_external_1)).toBe(true);
     });
+
+    const cs_external_2 = {
+        type: "external",
+        content_headline: "",
+    };
+
     it("/content-search external and does NOT have a content_headline", async () => {
-        expect(PolicyResults.showResultSnippet(MOCK_RESULTS[2])).toBe(false);
+        expect(PolicyResults.showResultSnippet(cs_external_2)).toBe(false);
     });
 });

@@ -1,172 +1,231 @@
 {
-    "count": 3,
+    "count": 4,
     "next": null,
     "previous": null,
     "results": [
         {
-            "type": "internal_file",
-            "id": 2007,
-            "created_at": "2024-07-09 15:19:36.129789",
-            "updated_at": "2024-07-10 10:38:27.931896",
-            "approved": true,
-            "category": {
-                "id": 26,
-                "name": "Mock Category",
-                "description": "This is a mock category",
-                "order": 0,
-                "show_if_empty": false,
-                "is_fr_link_category": false,
-                "type": "internal_category"
-            },
-            "cfr_citations": [
-                {
-                    "id": 18,
-                    "title": 42,
-                    "part": 430,
-                    "type": "subpart",
-                    "subpart_id": "A"
+            "content_headline": "<span class='search-highlight'>FMAP</span> (not “newly eligible” <span class='search-highlight'>FMAP</span>) on Medicaid expenditures associated with these new adults. As it pertains to Section 4106 and the extra 1% <span class='search-highlight'>FMAP</span>, can CMS please confirm that Delaware can claim the extra 1% on Section 4106 services attributable to our new adults up to 100% FPL that currently",
+            "name_headline": "Delaware QQ - ACA 4106 Provision",
+            "reg_text": null,
+            "resource": {
+                "approved": true,
+                "category": {
+                    "id": 27,
+                    "name": "Mock Category",
+                    "description": "This is a mock category",
+                    "is_fr_link_category": false,
+                    "order": 0,
+                    "parent": 26,
+                    "show_if_empty": false,
+                    "type": "internal_subcategory"
                 },
-                {
-                    "id": 25,
-                    "title": 42,
-                    "part": 430,
-                    "type": "section",
-                    "section_id": 10
-                }
-            ],
-            "subjects": [
-                {
-                    "id": 3,
-                    "full_name": "Access to Services",
-                    "short_name": "",
-                    "abbreviation": "",
-                    "description": ""
-                }
-            ],
-            "document_id": "internal document id field",
-            "title": "mock internal file",
-            "date": "2024-09-09",
-            "url": "",
-            "related_resources": [],
-            "summary": "This is the summary to the mock internal file",
-            "file_name": "mock-file.msg",
-            "file_type": "",
-            "uid": "1149e520-6691-4f00-9094-d741b0b114a5"
+                "cfr_citations": [
+                    {
+                        "id": 781,
+                        "part": 440,
+                        "section_id": 130,
+                        "title": 42,
+                        "type": "section"
+                    }
+                ],
+                "created_at": "2024-07-18 10:22:56.341901",
+                "date": "2014-06-23",
+                "document_id": "",
+                "file_name": "Delaware QQ - ACA 4106 Provision.msg",
+                "file_type": "",
+                "id": 3541,
+                "related_resources": null,
+                "subjects": [
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Federal Medical Assistance Percentage",
+                        "id": 9,
+                        "short_name": "FMAP"
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Preventive Services",
+                        "id": 108,
+                        "short_name": ""
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "New Adult Group",
+                        "id": 167,
+                        "short_name": "VIII group"
+                    }
+                ],
+                "summary": "Emails between DE and CMCS regarding questions about the ACA section 4106 and the extra 1% FMAP as they prepare for SPA submission",
+                "title": "Delaware QQ - ACA 4106 Provision",
+                "type": "internal_file",
+                "uid": "868e968c-d1f5-4518-b458-b6e735ef0f3d",
+                "updated_at": "2024-07-18 10:22:56.351740",
+                "url": ""
+            },
+            "summary_headline": "Emails between DE and CMCS regarding questions about the ACA section 4106 and the extra 1% <span class='search-highlight'>FMAP</span> as they prepare for SPA submission"
         },
         {
-            "type": "public_link",
-            "id": 1000,
-            "created_at": "2024-07-08 10:21:58.934030",
-            "updated_at": "2024-07-10 09:42:40.084033",
-            "approved": true,
-            "category": {
-                "id": 27,
-                "name": "Mock Subcategory",
-                "description": "",
-                "order": 0,
-                "show_if_empty": false,
-                "is_fr_link_category": false,
-                "type": "internal_subcategory",
-                "parent": 4
+            "content_headline": "<span class='search-highlight'>FMAP</span> for failure to submit certain data.(a)  Basis.  This section implements section 1902(tt)(2)(A) of the Social Security Act.(b)  Application of the <span class='search-highlight'>FMAP</span> reduction.  (1) <span class='search-highlight'>FMAP</span> means the State-specific Federal medical assistance percentage as defined in the first sentence of section 1905(b) of the Act",
+            "name_headline": "§ 435.928 Reduction in <span class='search-highlight'>FMAP</span> for failure to submit certain data.",
+            "reg_text": {
+                "date": "2024-06-17",
+                "node_id": "928",
+                "node_title": "§ 435.928 Reduction in FMAP for failure to submit certain data.",
+                "node_type": "section",
+                "part_number": 435,
+                "part_title": "PART 435—ELIGIBILITY IN THE STATES, DISTRICT OF COLUMBIA, THE NORTHERN MARIANA ISLANDS, AND AMERICAN SAMOA",
+                "title": 42
             },
-            "cfr_citations": [
-                {
-                    "id": 209,
-                    "title": 42,
-                    "part": 433,
-                    "type": "subpart",
-                    "subpart_id": "A"
-                },
-                {
-                    "id": 938,
-                    "title": 42,
-                    "part": 447,
-                    "type": "section",
-                    "section_id": 253
-                },
-                {
-                    "id": 975,
-                    "title": 42,
-                    "part": 447,
-                    "type": "section",
-                    "section_id": 509
-                },
-                {
-                    "id": 976,
-                    "title": 42,
-                    "part": 447,
-                    "type": "section",
-                    "section_id": 510
-                }
-            ],
-            "subjects": [
-                {
-                    "id": 3,
-                    "full_name": "Access to Services",
-                    "short_name": "",
-                    "abbreviation": "",
-                    "description": ""
-                },
-                {
-                    "id": 5,
-                    "full_name": "Ambulatory Prenatal Care",
-                    "short_name": "",
-                    "abbreviation": "",
-                    "description": ""
-                }
-            ],
-            "document_id": "document id field",
-            "title": "mock public link",
-            "date": "2017-06-29",
-            "url": "https://www.medicaid.gov/sites/default/files/medicaid-chip-program-information/by-topics/prescription-drugs/downloads/rx-releases/mfr-releases/mfr-rel-105.pdf",
-            "related_resources": []
+            "resource": null,
+            "summary_headline": ""
         },
         {
-            "type": "internal_link",
-            "id": 20077,
-            "created_at": "2024-07-09 15:19:36.129789",
-            "updated_at": "2024-07-10 10:38:27.931896",
-            "approved": true,
-            "category": {
-                "id": 26,
-                "name": "Mock Category",
-                "description": "This is a mock category",
-                "order": 0,
-                "show_if_empty": false,
-                "is_fr_link_category": false,
-                "type": "internal_category"
-            },
-            "cfr_citations": [
-                {
-                    "id": 18,
-                    "title": 42,
-                    "part": 430,
-                    "type": "subpart",
-                    "subpart_id": "A"
+            "content_headline": "<span class='search-highlight'>FMAP</span>\" referenced in section 2105(b) of the Act. In turn, the enhanced <span class='search-highlight'>FMAP</span> is calculated based on the Medicaid <span class='search-highlight'>FMAP</span>. This provision of TRRA indicates that the enhanced <span class='search-highlight'>FMAP</span> under section 2105(b) of the Act will be based on the Medicaid <span class='search-highlight'>FMAP</span> otherwise determined without application of the provisions",
+            "name_headline": "SMDL #03-005",
+            "reg_text": null,
+            "resource": {
+                "approved": true,
+                "category": {
+                    "description": "",
+                    "id": 4,
+                    "is_fr_link_category": false,
+                    "name": "State Medicaid Director Letter (SMDL)",
+                    "order": 100,
+                    "parent": 3,
+                    "show_if_empty": false,
+                    "type": "public_subcategory"
                 },
-                {
-                    "id": 25,
-                    "title": 42,
-                    "part": 430,
-                    "type": "section",
-                    "section_id": 10
-                }
-            ],
-            "subjects": [
-                {
-                    "id": 3,
-                    "full_name": "Access to Services",
-                    "short_name": "",
-                    "abbreviation": "",
-                    "description": ""
-                }
-            ],
-            "document_id": "internal document id field",
-            "title": "mock internal link",
-            "date": "2024-09-09",
-            "url": "http://www.sharepoint.com",
-            "related_resources": [],
-            "summary": "This is the summary to the mock internal link"
+                "cfr_citations": [
+                    {
+                        "id": 232,
+                        "part": 433,
+                        "section_id": 10,
+                        "title": 42,
+                        "type": "section"
+                    },
+                    {
+                        "id": 245,
+                        "part": 433,
+                        "section_id": 51,
+                        "title": 42,
+                        "type": "section"
+                    },
+                    {
+                        "id": 1454,
+                        "part": 457,
+                        "section_id": 628,
+                        "title": 42,
+                        "type": "section"
+                    },
+                    {
+                        "id": 247,
+                        "part": 433,
+                        "section_id": 53,
+                        "title": 42,
+                        "type": "section"
+                    }
+                ],
+                "created_at": "2024-07-18 10:22:30.394694",
+                "date": "2003-06-13",
+                "document_id": "SMDL #03-005",
+                "id": 2057,
+                "related_resources": null,
+                "subjects": [
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Territories",
+                        "id": 49,
+                        "short_name": ""
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Budget and Expenditures",
+                        "id": 227,
+                        "short_name": ""
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "State Financial Share",
+                        "id": 37,
+                        "short_name": ""
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Federal Medical Assistance Percentage",
+                        "id": 9,
+                        "short_name": "FMAP"
+                    }
+                ],
+                "title": "Temporary FMAP increase under the Jobs and Growth Tax Relief Reconciliation Act of 2003 (TRRA)",
+                "type": "public_link",
+                "updated_at": "2024-07-18 10:22:30.406516",
+                "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/smd061303.pdf"
+            },
+            "summary_headline": "Temporary <span class='search-highlight'>FMAP</span> increase under the Jobs and Growth Tax Relief Reconciliation Act of 2003 (TRRA)"
+        },
+        {
+            "content_headline": "<span class='search-highlight'>FMAP</span>) (``temporary <span class='search-highlight'>FMAP</span> increase'') under section 1905(b) of the Social Security Act (the Act). States must meet certain conditions in order to receive the temporary <span class='search-highlight'>FMAP</span> increase. Specifically, as relevant to this notice, under section 6008(b)(3) of the FFCRA, States must provide that an individual who is enrolled",
+            "name_headline": "87 FR 58456",
+            "reg_text": null,
+            "resource": {
+                "action_type": "Final",
+                "approved": true,
+                "category": {
+                    "description": "Federal Register documents with agency policy proposals and decisions",
+                    "id": 2,
+                    "is_fr_link_category": true,
+                    "name": "Proposed and Final Rules",
+                    "order": 250,
+                    "show_if_empty": false,
+                    "type": "public_category"
+                },
+                "cfr_citations": [
+                    {
+                        "id": 309,
+                        "part": 433,
+                        "section_id": 400,
+                        "title": 42,
+                        "type": "section"
+                    }
+                ],
+                "correction": false,
+                "created_at": "2024-07-18 10:22:35.320776",
+                "date": "2022-09-27",
+                "docket_numbers": ["CMS-9912-N"],
+                "document_id": "87 FR 58456",
+                "document_number": "2022-20973",
+                "id": 2302,
+                "related_resources": null,
+                "subjects": [
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "COVID-19",
+                        "id": 152,
+                        "short_name": ""
+                    },
+                    {
+                        "abbreviation": "",
+                        "description": "",
+                        "full_name": "Federal Medical Assistance Percentage",
+                        "id": 9,
+                        "short_name": "FMAP"
+                    }
+                ],
+                "title": "Medicaid Program; Temporary Increase in Federal Medical Assistance Percentage (FMAP) in Response to the COVID-19 Public Health Emergency (PHE); Reopening of Public Comment Period",
+                "type": "federal_register_link",
+                "updated_at": "2024-07-18 10:22:35.332593",
+                "url": "https://www.federalregister.gov/documents/2022/09/27/2022-20973/medicaid-program-temporary-increase-in-federal-medical-assistance-percentage-fmap-in-response-to-the",
+                "withdrawal": false
+            },
+            "summary_headline": "Medicaid Program; Temporary Increase in Federal Medical Assistance Percentage (<span class='search-highlight'>FMAP</span>) in Response to the COVID-19 Public Health Emergency (PHE); Reopening of Public Comment Period"
         }
     ]
 }

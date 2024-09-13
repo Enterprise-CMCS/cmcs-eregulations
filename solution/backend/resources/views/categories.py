@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from common.mixins import ViewSetPagination
+from cmcs_regulations.utils import ViewSetPagination
 from resources.models import (
     InternalCategory,
     InternalSubCategory,

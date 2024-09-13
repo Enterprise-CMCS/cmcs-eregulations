@@ -25,8 +25,8 @@ class InternalLinkForm(AbstractInternalResourceForm):
 class InternalLinkAdmin(AbstractInternalResourceAdmin):
     admin_priority = 20
     form = InternalLinkForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
 
     fieldsets = [
@@ -47,6 +47,11 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
     ]
 
+    class Media:
+        css = {
+            'all': ('css/admin/custom_admin.css',)
+        }
+
     # Override the URL field's help_text for internal links specifically
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -63,10 +68,9 @@ class InternalFileForm(AbstractInternalResourceForm):
 class InternalFileAdmin(AbstractInternalResourceAdmin):
     admin_priority = 21
     form = InternalFileForm
-    list_display = ["date", "document_id", "title", "category", "updated_at", "approved"]
-    list_display_links = ["date", "document_id", "title", "category", "updated_at", "approved"]
+    list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
+    list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
-    ordering = ["date", "document_id", "category", "updated_at"]
     readonly_fields = ["download_file", "file_name", "file_type"]
 
     fieldsets = [
@@ -87,6 +91,10 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         }),
     ]
 
+    class Media:
+        css = {
+            'all': ('css/admin/custom_admin.css',)
+        }
     # TODO: use presigned URL to upload to S3 directly, bypassing API Gateway restrictions
     # Easy to follow how to: https://www.hacksoft.io/blog/direct-to-s3-file-upload-with-django
     # Most of these methods will be rewritten then.

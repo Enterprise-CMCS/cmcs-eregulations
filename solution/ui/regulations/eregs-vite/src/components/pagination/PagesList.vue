@@ -126,13 +126,13 @@ li {
 }
 
 .desktop-list {
-    @include custom-max($mobile-max / 1px) {
+    @include custom-max($eds-xs-max / 1px) {
         display: none;
     }
 }
 
 .mobile-list {
-    @include screen-md {
+    @include screen-eds-sm {
         display: none;
     }
 
