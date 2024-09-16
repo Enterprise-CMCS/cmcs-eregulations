@@ -28,6 +28,7 @@ import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import SearchEmptyState from "@/components/SearchEmptyState.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInLink from "@/components/SignInLink.vue";
@@ -399,6 +400,10 @@ getDocSubjects();
                 </template>
                 <template v-else-if="policyDocList.results === 0">
                     <div class="doc__list">No results</div>
+                    <SearchEmptyState
+                        :query="searchQuery"
+                        :show-internal-link="isAuthenticated"
+                    />
                 </template>
                 <template v-else>
                     <PolicyResults
@@ -424,6 +429,10 @@ getDocSubjects();
                             />
                         </div>
                     </div>
+                    <SearchEmptyState
+                        :query="searchQuery"
+                        :show-internal-link="isAuthenticated"
+                    />
                 </template>
             </section>
         </main>
