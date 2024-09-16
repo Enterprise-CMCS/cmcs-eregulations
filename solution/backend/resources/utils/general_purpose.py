@@ -3,6 +3,8 @@
 
 from django.conf import settings
 from django.db.models import Q
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 
@@ -26,6 +28,19 @@ def get_support_link(link_text):
 # Returne True if the given field has changed in the form, False otherwise.
 def field_changed(form, field):
     return form.initial.get(field) != form.cleaned_data.get(field)
+
+
+# This parameter can be used with drf-spectacular's @extend_schema to reflect citation filtering functionality.
+CITATION_FILTER_PARAMETER = OpenApiParameter(
+    name="citations",
+    type=OpenApiTypes.STR,
+    location=OpenApiParameter.QUERY,
+    description="Limit results to only items linked to these citations. Use \"&citations=X&citations=Y\" "
+                "for multiple. Example formats: \"42\", \"42.433\", \"42.433.15\", and \"42.433.D\". "
+                "Do not use citation object IDs to filter by citation; this is an unsupported operation.",
+    required=False,
+    explode=True,
+)
 
 
 # Generates an OR'd together Q query of all citations passed in via the "citations" argument.

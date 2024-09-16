@@ -34,16 +34,13 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import (
+    CITATION_FILTER_PARAMETER,
     call_text_extractor,
     get_citation_filter,
     string_to_bool,
 )
 
 logger = logging.getLogger(__name__)
-
-# OpenApiQueryParameter("citations",
-#                       "Limit results to only resources linked to these CFR Citations. Use \"&citations=X&citations=Y\" "
-#                       "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D.", str, False),
 
 
 class ResourceCountPagination(ViewSetPagination):
@@ -57,56 +54,51 @@ class ResourceCountPagination(ViewSetPagination):
         ]
 
 
-COMMON_QUERY_PARAMETERS = [
-    OpenApiParameter(
-        name="citations",
-        type=OpenApiTypes.STR,  # Assuming citations are strings, use OpenApiTypes.INT if they're integers
-        location=OpenApiParameter.QUERY,
-        description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                    "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
-        required=False,
-        explode=False,  # Treat as an array, not a CSV string
-    ),
+RESOURCE_ENDPOINT_PARAMETERS = [
+    CITATION_FILTER_PARAMETER,
     OpenApiParameter(
         name="categories",
-        type=OpenApiTypes.STR,  # Assuming categories are strings, use OpenApiTypes.INT if they're integers
+        type=OpenApiTypes.STR,
         location=OpenApiParameter.QUERY,
-        description="List of category IDs to filter by, including subcategories",
+        description="List of category/subcategory object IDs to filter by. "
+                    "Use \"&categories=1&categories=2\" for multiple.",
         required=False,
-        explode=False,
+        explode=True,
     ),
     OpenApiParameter(
         name="subjects",
-        type=OpenApiTypes.STR,  # Assuming subjects are strings, use OpenApiTypes.INT if they're integers
+        type=OpenApiTypes.STR,
         location=OpenApiParameter.QUERY,
-        description="List of subject IDs to filter by. Use \"&subjects=1&subjects=2\""
-                    " for multiple.",
+        description="List of subject IDs to filter by. "
+                    "Use \"&subjects=1&subjects=2\" for multiple.",
         required=False,
-        explode=False,
+        explode=True,
     ),
     OpenApiParameter(
         name="group_resources",
         type=OpenApiTypes.BOOL,
         location=OpenApiParameter.QUERY,
-        description="Boolean flag to control resource grouping",
+        description="Set to \"true\" to group related resources together under the \"related_resources\" field. "
+                    "Set to \"false\" to disable grouping.",
         required=False,
         default=True,
     ),
-]
+] + ViewSetPagination.QUERY_PARAMETERS
 
 
-@extend_schema(parameters=COMMON_QUERY_PARAMETERS)
 class ResourceViewSet(viewsets.ModelViewSet):
     pagination_class = ResourceCountPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
 
     @extend_schema(
+        tags=["resources"],
         description="Retrieve, filter, and group various resources based on citations, "
                     "categories, subjects, and other criteria. This endpoint allows "
                     "authenticated and unauthenticated users to view approved "
                     "resources, with options to group resources and filter by related fields "
                     "such as categories, subjects, and citations.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -170,25 +162,33 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return query.distinct().select_subclasses()
 
 
-@extend_schema(description="Retrieve a list of public resources with optional filtering by "
-                           "citations, categories, subjects, and resource grouping.")
 class PublicResourceViewSet(ResourceViewSet):
     model = AbstractPublicResource
 
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of public resources, including options to filter by citations, "
+                    "categories, subjects, and grouping criteria. This endpoint is available to all users.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
-@extend_schema(description="Retrieve a list of public links, including options to filter by citations, "
-                           "categories, subjects, and grouping criteria. This endpoint is available to "
-                           "all users.")
+
 class PublicLinkViewSet(PublicResourceViewSet):
     model = PublicLink
     serializer_class = PublicLinkSerializer
 
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of public links, including options to filter by citations, "
+                    "categories, subjects, and grouping criteria. This endpoint is available to all users.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
-@extend_schema(description="Retrieve and update Federal Register links. "
-                           "This endpoint allows filtering by citations, "
-                           "categories, subjects, and grouping criteria. "
-                           "Only authenticated users can update existing Federal "
-                           "Register links.")
+
 class FederalRegisterLinkViewSet(PublicResourceViewSet):
     model = FederalRegisterLink
     authentication_classes = [SettingsAuthentication]
@@ -199,9 +199,21 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
             return FederalRegisterLinkCreateSerializer
         return FederalRegisterLinkSerializer
 
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of Federal Register links, including options to filter by citations, "
+                    "categories, subjects, and grouping criteria. This endpoint is available to all users.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     @transaction.atomic
-    @extend_schema(description="Upload a Federal Register Document to the eRegs Resources system. "
-                               "If the document already exists, it will be updated.")
+    @extend_schema(
+        tags=["resources"],
+        description="Upload a Federal Register link to the eRegs Resources system. "
+                    "If the document already exists, it will be updated.",
+    )
     def update(self, request, **kwargs):
         data = request.data
         link, created = FederalRegisterLink.objects.get_or_create(document_number=data["document_number"])
@@ -221,34 +233,53 @@ class InternalResourceViewSet(ResourceViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(description="Retrieve a list of internal resources, including both "
-                               "internal files and internal links, which are only accessible "
-                               "to authenticated users. This endpoint supports options to "
-                               "group resources and filter by citations, categories, and subjects.")
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of internal resources, including both internal files and internal links, "
+                    "which are only accessible to authenticated users. This endpoint supports options to group "
+                    "resources and filter by citations, categories, and subjects.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
 
 
-@extend_schema(description="Retrieve a list of internal files, which are only"
-                           "accessible to authenticated users. This endpoint "
-                           "supports options to group resources and filter by "
-                           "citations, categories, and subjects.")
 class InternalFileViewSet(InternalResourceViewSet):
     model = InternalFile
     serializer_class = InternalFileSerializer
 
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of internal files, which are only accessible to authenticated users. "
+                    "This endpoint supports options to group resources and filter by citations, categories, and subjects.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
-@extend_schema(description="Retrieve a list of internal links, which are "
-                           "only accessible to authenticated users. This "
-                           "endpoint supports options to group resources "
-                           "and filter by citations, categories, and subjects.")
+
 class InternalLinkViewSet(InternalResourceViewSet):
     model = InternalLink
     serializer_class = InternalLinkSerializer
 
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of internal links, which are only accessible to authenticated users. "
+                    "This endpoint supports options to group resources and filter by citations, categories, and subjects.",
+        parameters=RESOURCE_ENDPOINT_PARAMETERS,
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
-@extend_schema(description="Retrieve a distinct list of Federal Register document numbers. "
-                           "This endpoint is read-only and returns a list of unique document numbers")
+
 class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = FederalRegisterLink.objects.all().values_list("document_number", flat=True).distinct()
     serializer_class = StringListSerializer
+
+    @extend_schema(
+        tags=["resources"],
+        description="Retrieve a list of Federal Register document numbers. "
+                    "This endpoint is read-only and returns a list of unique document numbers.",
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
