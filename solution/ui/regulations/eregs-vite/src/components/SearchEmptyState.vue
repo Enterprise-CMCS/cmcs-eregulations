@@ -11,7 +11,11 @@
                     <a :href="eregsLink">{{ eregs_url_label }}</a>
                 </li>
                 <li>
-                    <a :href="ecfrLink" class="external" target="_blank" rel="noopener noreferrer"
+                    <a
+                        :href="ecfrLink"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >eCFR</a
                     >
                 </li>
@@ -25,7 +29,11 @@
                     >
                 </li>
                 <li>
-                    <a :href="medicaidGovLink" class="external" target="_blank" rel="noopener noreferrer"
+                    <a
+                        :href="medicaidGovLink"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >Medicaid.gov</a
                     >
                 </li>
