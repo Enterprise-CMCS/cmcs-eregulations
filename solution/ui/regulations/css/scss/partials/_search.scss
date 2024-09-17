@@ -178,3 +178,37 @@
         }
     }
 }
+
+// SEARCH EMPTY STATE -----------------
+
+.empty-state-container {
+    border: 2px solid $lightest_gray;
+
+    > * {
+        padding: 0 25px;
+    }
+
+    .empty-state-container-title {
+        display: flex;
+        align-items: center;
+        height: 41px;
+        font-size: $font-size-xs;
+        font-weight: bold;
+        text-transform: uppercase;
+        background-color: $lightest_gray;
+        margin-bottom: 10px;
+    }
+
+    .options-list {
+        font-size: $font-size-sm;
+        line-height: 18px;
+
+        .query-emphasis {
+            font-weight: bold;
+        }
+
+        ul {
+            margin: 10px 0 20px;
+        }
+    }
+}
