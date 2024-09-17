@@ -59,6 +59,13 @@
             }
 
             .doc__list {
+                .no-results__span {
+                    display: block;
+                    margin-top: var(--spacer-4);
+                    margin-bottom: var(--spacer-5);
+                    font-size: $font-size-lg;
+                    line-height: 1.5rem;
+                }
                 .result {
                     &__link {
                         a {

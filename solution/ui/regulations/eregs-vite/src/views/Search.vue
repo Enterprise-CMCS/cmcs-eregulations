@@ -398,8 +398,14 @@ getDocSubjects();
                         />
                     </div>
                 </template>
-                <template v-else-if="policyDocList.results === 0">
-                    <div class="doc__list">No results</div>
+                <template v-else-if="policyDocList.results.length == 0">
+                    <div class="doc__list">
+                        <span class="no-results__span"
+                            >Your search for
+                            <strong>{{ searchQuery }}</strong> did not match any
+                            results with the selected filters.</span
+                        >
+                    </div>
                     <SearchEmptyState
                         :query="searchQuery"
                         :show-internal-link="isAuthenticated"
