@@ -257,6 +257,9 @@ const getDocSubjects = async () => {
     }
 };
 
+const sanitizeQueryParams = (queryParams) =>
+    Object.entries(queryParams).filter(([key]) => PARAM_VALIDATION_DICT[key]);
+
 watch(
     () => $route.query,
     async (newQueryParams) => {
@@ -277,16 +280,14 @@ watch(
             return;
         }
 
-        const sanitizedQueryParams = Object.entries(newQueryParams).filter(
-            ([key]) => PARAM_VALIDATION_DICT[key]
-        );
+        const sanitizedQueryParams = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
         if (_isEmpty(sanitizedQueryParams)) {
             return;
         }
 
-        // if both internal and external checkboxes are selected and nothing else, return
+        // if all three checkboxes are selected and nothing else, return
         if (allDocTypesOnly($route.query)) {
             return;
         }
@@ -409,6 +410,7 @@ getDocSubjects();
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
+                        :sanitized-query-params="sanitizeQueryParams($route.query)"
                     />
                 </template>
                 <template v-else>
@@ -438,6 +440,7 @@ getDocSubjects();
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
+                        :sanitized-query-params="sanitizeQueryParams($route.query)"
                     />
                 </template>
             </section>
