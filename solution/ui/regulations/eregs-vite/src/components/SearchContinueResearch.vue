@@ -4,13 +4,19 @@ import { computed } from "vue";
 import { stripQuotes } from "utilities/utils";
 
 const makeEcfrLink = ({ query, title }) =>
-    `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${query}`;
+    `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${encodeURIComponent(
+        query
+    )}`;
 
 const makeFederalRegisterLink = (query) =>
-    `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${query}`;
+    `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${encodeURIComponent(
+        query
+    )}`;
 
 const makeMedicaidGovLink = (query) =>
-    `https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=${query}&gsc.sort=`;
+    `https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=${encodeURIComponent(
+        query
+    )}&gsc.sort=`;
 
 const makeUsCodeLink = (query) => {
     const urlEncodedQuery = encodeURIComponent(query);
