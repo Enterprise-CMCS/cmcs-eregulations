@@ -1,5 +1,5 @@
 <script setup>
-import { inject, provide, reactive, ref, watch } from "vue";
+import { computed, inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import useSearchResults from "composables/searchResults";
@@ -260,6 +260,14 @@ const getDocSubjects = async () => {
 const sanitizeQueryParams = (queryParams) =>
     Object.entries(queryParams).filter(([key]) => PARAM_VALIDATION_DICT[key]);
 
+const sanitizedQueryParams = ref(sanitizeQueryParams($route.query));
+
+const activeFilters = computed(() =>
+    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q")
+);
+
+const hasActiveFilters = computed(() => activeFilters.value.length > 0);
+
 watch(
     () => $route.query,
     async (newQueryParams) => {
@@ -280,10 +288,10 @@ watch(
             return;
         }
 
-        const sanitizedQueryParams = sanitizeQueryParams(newQueryParams);
+        sanitizedQueryParams.value = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams)) {
+        if (_isEmpty(sanitizedQueryParams.value)) {
             return;
         }
 
@@ -387,7 +395,9 @@ getDocSubjects();
             <section class="search-results">
                 <template v-if="!searchQuery"></template>
                 <template
-                    v-else-if="policyDocList.loading || partsLastUpdated.loading"
+                    v-else-if="
+                        policyDocList.loading || partsLastUpdated.loading
+                    "
                 >
                     <span class="loading__span">Loading...</span>
                 </template>
@@ -405,15 +415,16 @@ getDocSubjects();
                         <span class="no-results__span"
                             >Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
-                            results with the selected filters.</span
+                            results
+                            <span v-if="hasActiveFilters"
+                                >with the selected filters</span
+                            ><span v-else>on eRegulations</span>.</span
                         >
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
-                        :sanitized-query-params="
-                            sanitizeQueryParams($route.query)
-                        "
+                        :active-filters="activeFilters"
                     />
                 </template>
                 <template v-else>
@@ -443,9 +454,7 @@ getDocSubjects();
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
-                        :sanitized-query-params="
-                            sanitizeQueryParams($route.query)
-                        "
+                        :active-filters="activeFilters"
                     />
                 </template>
             </section>

@@ -42,8 +42,8 @@ const props = defineProps({
         type: String,
         default: "search",
     },
-    sanitizedQueryParams: {
-        type: Object,
+    activeFilters: {
+        type: Array,
         default: () => [],
     },
 });
@@ -53,11 +53,7 @@ const containerClasses = computed(() => ({
     "research__container--no-results": props.resultsCount == 0,
 }));
 
-const activeFilters = computed(() =>
-    props.sanitizedQueryParams.filter(([key, _value]) => key !== "q")
-);
-
-const hasActiveFilters = computed(() => activeFilters.value.length > 0);
+const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 </script>
 
 <template>
