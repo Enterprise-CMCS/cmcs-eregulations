@@ -1,0 +1,4 @@
+table#result_list tbody tr td {
+    /* Allow wrapping on all columns*/
+    white-space: normal !important;
+}
