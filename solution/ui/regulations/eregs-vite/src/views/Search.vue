@@ -437,7 +437,7 @@ getDocSubjects();
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"
-                        :show-internal-link="isAuthenticated"
+                        :results-count="policyDocList.count"
                     />
                 </template>
             </section>

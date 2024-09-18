@@ -13,7 +13,8 @@ const props = defineProps({
 });
 
 const containerClasses = computed(() => ({
-    "research__container--no-results": props.resultsCount === 0,
+    "research__container--results": props.resultsCount > 0,
+    "research__container--no-results": props.resultsCount == 0,
 }));
 
 const eregsLink = computed(() =>
