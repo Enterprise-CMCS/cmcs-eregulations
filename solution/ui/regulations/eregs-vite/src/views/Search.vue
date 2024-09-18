@@ -385,8 +385,9 @@ getDocSubjects();
                 </fieldset>
             </section>
             <section class="search-results">
+                <template v-if="!searchQuery"></template>
                 <template
-                    v-if="policyDocList.loading || partsLastUpdated.loading"
+                    v-else-if="policyDocList.loading || partsLastUpdated.loading"
                 >
                     <span class="loading__span">Loading...</span>
                 </template>
@@ -410,7 +411,9 @@ getDocSubjects();
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
-                        :sanitized-query-params="sanitizeQueryParams($route.query)"
+                        :sanitized-query-params="
+                            sanitizeQueryParams($route.query)
+                        "
                     />
                 </template>
                 <template v-else>
@@ -440,7 +443,9 @@ getDocSubjects();
                     <SearchContinueResearch
                         :query="searchQuery"
                         :results-count="policyDocList.count"
-                        :sanitized-query-params="sanitizeQueryParams($route.query)"
+                        :sanitized-query-params="
+                            sanitizeQueryParams($route.query)
+                        "
                     />
                 </template>
             </section>
