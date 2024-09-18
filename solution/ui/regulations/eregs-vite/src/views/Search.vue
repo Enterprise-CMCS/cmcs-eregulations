@@ -28,7 +28,7 @@ import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
-import SearchEmptyState from "@/components/SearchEmptyState.vue";
+import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInLink from "@/components/SignInLink.vue";
@@ -406,9 +406,9 @@ getDocSubjects();
                             results with the selected filters.</span
                         >
                     </div>
-                    <SearchEmptyState
+                    <SearchContinueResearch
                         :query="searchQuery"
-                        :show-internal-link="isAuthenticated"
+                        :results-count="policyDocList.count"
                     />
                 </template>
                 <template v-else>
@@ -435,7 +435,7 @@ getDocSubjects();
                             />
                         </div>
                     </div>
-                    <SearchEmptyState
+                    <SearchContinueResearch
                         :query="searchQuery"
                         :show-internal-link="isAuthenticated"
                     />
