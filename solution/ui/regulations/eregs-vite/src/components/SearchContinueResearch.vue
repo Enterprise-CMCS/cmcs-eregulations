@@ -1,8 +1,34 @@
-<script setup>
+<script>
 import { computed } from "vue";
 
 import { stripQuotes } from "utilities/utils";
 
+const makeEcfrLink = ({ query, title }) =>
+    `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${query}`;
+
+const makeFederalRegisterLink = (query) =>
+    `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${query}`;
+
+const makeMedicaidGovLink = (query) =>
+    `https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=${query}&gsc.sort=`;
+
+const makeUsCodeLink = (query) => {
+    const urlEncodedQuery = encodeURIComponent(query);
+    const base64Query = btoa(query);
+    const urlEncodedBase64Query = encodeURIComponent(base64Query);
+
+    return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=%28${urlEncodedQuery}%29+AND+%28%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2819%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2821%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2818%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2816%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2811%29%29%29&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Ctrue%7C%5B42%3A%3A%3A%3A7%3A19%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A21%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A18%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A16%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A11%3A%3A%3Atrue%3A%5D%7C%5BQWxsIEZpZWxkcw%3D%3D%3A%5D`;
+};
+
+export default {
+    makeEcfrLink,
+    makeFederalRegisterLink,
+    makeMedicaidGovLink,
+    makeUsCodeLink,
+};
+</script>
+
+<script setup>
 const props = defineProps({
     query: {
         type: String,
@@ -83,7 +109,53 @@ const hasActiveFilters = computed(() => activeFilters.value.length > 0);
                 >Try your search for <strong>{{ query }}</strong> on other
                 websites</span
             >
-            <span class="row__content">List of website links here</span>
+            <ul class="row__content row__content--list">
+                <li>
+                    <a
+                        :href="makeEcfrLink({ query, title: 42 })"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >eCFR Title 42</a
+                    >
+                </li>
+                <li>
+                    <a
+                        :href="makeEcfrLink({ query, title: 45 })"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >eCFR Title 45</a
+                    >
+                </li>
+                <li>
+                    <a
+                        :href="makeMedicaidGovLink(query)"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Medicaid.gov</a
+                    >
+                </li>
+                <li>
+                    <a
+                        :href="makeFederalRegisterLink(query)"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >Federal Register</a
+                    >
+                </li>
+                <li>
+                    <a
+                        :href="makeUsCodeLink(query)"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >United States Code</a
+                    >
+                </li>
+            </ul>
         </div>
     </div>
 </template>
