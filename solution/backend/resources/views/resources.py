@@ -30,6 +30,9 @@ from resources.serializers import (
     FederalRegisterLinkSerializer,
     InternalFileSerializer,
     InternalLinkSerializer,
+    MetaInternalResourceSerializer,
+    MetaPublicResourceSerializer,
+    MetaResourceSerializer,
     PublicLinkSerializer,
     StringListSerializer,
 )
@@ -99,6 +102,7 @@ class ResourceViewSet(viewsets.ModelViewSet):
                     "resources, with options to group resources and filter by related fields "
                     "such as categories, subjects, and citations.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: MetaResourceSerializer.many(True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -170,6 +174,7 @@ class PublicResourceViewSet(ResourceViewSet):
         description="Retrieve a list of public resources, including options to filter by citations, "
                     "categories, subjects, and grouping criteria. This endpoint is available to all users.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: MetaPublicResourceSerializer.many(True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -184,6 +189,7 @@ class PublicLinkViewSet(PublicResourceViewSet):
         description="Retrieve a list of public links, including options to filter by citations, "
                     "categories, subjects, and grouping criteria. This endpoint is available to all users.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: PublicLinkSerializer(many=True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -204,6 +210,7 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
         description="Retrieve a list of Federal Register links, including options to filter by citations, "
                     "categories, subjects, and grouping criteria. This endpoint is available to all users.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: FederalRegisterLinkSerializer(many=True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -213,6 +220,8 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
         tags=["resources"],
         description="Upload a Federal Register link to the eRegs Resources system. "
                     "If the document already exists, it will be updated.",
+        request=FederalRegisterLinkCreateSerializer,
+        responses={200: FederalRegisterLinkSerializer},
     )
     def update(self, request, **kwargs):
         data = request.data
@@ -239,6 +248,7 @@ class InternalResourceViewSet(ResourceViewSet):
                     "which are only accessible to authenticated users. This endpoint supports options to group "
                     "resources and filter by citations, categories, and subjects.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: MetaInternalResourceSerializer.many(True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -253,6 +263,7 @@ class InternalFileViewSet(InternalResourceViewSet):
         description="Retrieve a list of internal files, which are only accessible to authenticated users. "
                     "This endpoint supports options to group resources and filter by citations, categories, and subjects.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: InternalFileSerializer(many=True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -267,6 +278,7 @@ class InternalLinkViewSet(InternalResourceViewSet):
         description="Retrieve a list of internal links, which are only accessible to authenticated users. "
                     "This endpoint supports options to group resources and filter by citations, categories, and subjects.",
         parameters=RESOURCE_ENDPOINT_PARAMETERS,
+        responses={200: InternalLinkSerializer(many=True)},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
@@ -280,6 +292,7 @@ class FederalRegisterLinksNumberViewSet(viewsets.ReadOnlyModelViewSet):
         tags=["resources"],
         description="Retrieve a list of Federal Register document numbers. "
                     "This endpoint is read-only and returns a list of unique document numbers.",
+        responses={(200, "application/json"): {"type": "string"}},
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
