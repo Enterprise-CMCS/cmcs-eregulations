@@ -27,9 +27,11 @@ class ContentSearchPagination(ViewSetPagination):
 
 
 @extend_schema(
+    tags=["content_search"],
     description="Search and retrieve content with highlighted matching terms. "
                 "This endpoint allows you to search through both resources and regulation texts, "
                 "returning relevant content with highlighted matches in the name, summary, and content fields.",
+    responses={200: ContentSearchSerializer(many=True)},
     parameters=[
         OpenApiParameter(
             name="subjects",

@@ -31,16 +31,6 @@ from .polymorphic import (
 from .subjects import SubjectSerializer
 
 
-class AbstractResourceSerializer(PolymorphicSerializer):
-    def get_serializer_map(self):
-        return {
-            PublicLink: ("public_link", PublicLinkSerializer),
-            FederalRegisterLink: ("federal_register_link", FederalRegisterLinkSerializer),
-            InternalLink: ("internal_link", InternalLinkSerializer),
-            InternalFile: ("internal_file", InternalFileSerializer),
-        }
-
-
 class FederalRegisterLinkCreateSerializer(serializers.Serializer):
     sections = SectionCreateSerializer(many=True, allow_null=True)
     section_ranges = SectionRangeCreateSerializer(many=True, allow_null=True, required=False)
@@ -266,3 +256,14 @@ MetaInternalResourceSerializer = ProxySerializerWrapper(
         InternalFileSerializer,
     ],
 )
+
+
+@extend_schema_field(MetaResourceSerializer.many(False))
+class AbstractResourceSerializer(PolymorphicSerializer):
+    def get_serializer_map(self):
+        return {
+            PublicLink: ("public_link", PublicLinkSerializer),
+            FederalRegisterLink: ("federal_register_link", FederalRegisterLinkSerializer),
+            InternalLink: ("internal_link", InternalLinkSerializer),
+            InternalFile: ("internal_file", InternalFileSerializer),
+        }
