@@ -3,6 +3,19 @@ import { describe, it, expect } from "vitest";
 import SearchContinueResearch from "./SearchContinueResearch.vue";
 
 describe("Search Continue Research", () => {
+    it("correctly determines if a query string has spaces", () => {
+        expect(SearchContinueResearch.hasSpaces("test")).toBe(false);
+        expect(SearchContinueResearch.hasSpaces("test query")).toBe(
+            true
+        );
+    });
+
+    it("correctly determines if a query has quotes", () => {
+        expect(SearchContinueResearch.hasQuotes("test")).toBe(false);
+        expect(SearchContinueResearch.hasQuotes('"test"')).toBe(true);
+        expect(SearchContinueResearch.hasQuotes("'test'")).toBe(true);
+    });
+
     it("makes the expected ECFR link", () => {
         expect(
             SearchContinueResearch.makeEcfrLink({

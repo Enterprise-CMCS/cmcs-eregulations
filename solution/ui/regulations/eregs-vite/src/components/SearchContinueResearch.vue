@@ -3,6 +3,9 @@ import { computed } from "vue";
 
 import { stripQuotes } from "utilities/utils";
 
+const hasSpaces = (str) => /[\s]/.test(str);
+const hasQuotes = (str) => /["']/.test(str);
+
 const makeEcfrLink = ({ query, title }) =>
     `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${encodeURIComponent(
         query
@@ -27,6 +30,8 @@ const makeUsCodeLink = (query) => {
 };
 
 export default {
+    hasQuotes,
+    hasSpaces,
     makeEcfrLink,
     makeFederalRegisterLink,
     makeMedicaidGovLink,
@@ -65,48 +70,53 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 <template>
     <div class="research__container" :class="containerClasses">
         <div class="research__title">Continue Your Research</div>
-        <div v-if="resultsCount > 0 || hasActiveFilters" class="research__row">
-            <span class="row__title">{{
-                resultsCount > 0
-                    ? "Make your search more specific"
-                    : "Broaden your search on eRegulations"
-            }}</span>
+        <div
+            v-if="resultsCount > 0 && !hasQuotes(query) && hasSpaces(query)"
+            class="research__row"
+            data-testid="research-row-1"
+        >
+            <span class="row__title">Make your search more specific</span>
             <span class="row__content">
-                <span v-if="resultsCount > 0"
-                    >Try your search with quotes:
-                    <router-link
-                        :to="{
-                            name: parent,
-                            query: {
-                                ...activeFilters.reduce(
-                                    (acc, [key, value]) => ({
-                                        ...acc,
-                                        [key]: value,
-                                    }),
-                                    {}
-                                ),
-                                q: `&quot;${stripQuotes(query)}&quot;`,
-                            },
-                        }"
-                        >"{{ stripQuotes(query) }}"</router-link
-                    >
-                </span>
-                <span v-else
-                    >Choose a different filter option above or
-                    <router-link
-                        :to="{
-                            name: parent,
-                            query: {
-                                q: query,
-                            },
-                        }"
-                    >
-                        reset all active filters</router-link
-                    >.</span
+                Try your search with quotes:
+                <router-link
+                    :to="{
+                        name: parent,
+                        query: {
+                            ...activeFilters.reduce(
+                                (acc, [key, value]) => ({
+                                    ...acc,
+                                    [key]: value,
+                                }),
+                                {}
+                            ),
+                            q: `&quot;${stripQuotes(query)}&quot;`,
+                        },
+                    }"
+                    >"{{ stripQuotes(query) }}"</router-link
                 >
             </span>
         </div>
-        <div class="research__row">
+        <div
+            v-else-if="hasActiveFilters"
+            class="research__row"
+            data-testid="research-row-1"
+        >
+            <span class="row__title">Broaden your search on eRegulations</span>
+            <span class="row__content">
+                Choose a different filter option above or
+                <router-link
+                    :to="{
+                        name: parent,
+                        query: {
+                            q: query,
+                        },
+                    }"
+                >
+                    reset all active filters</router-link
+                >.
+            </span>
+        </div>
+        <div class="research__row" data-testid="research-row-2">
             <span class="row__title"
                 >Try your search for <strong>{{ query }}</strong> on other
                 websites</span
