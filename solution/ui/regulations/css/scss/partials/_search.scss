@@ -214,14 +214,19 @@
 
         .row__title {
             display: inline-block;
-            width: 280px;
+            flex: 0 0  280px;
             margin-right: var(--spacer-6);
+
+            @media (max-width: $eds-width-sm) {
+                flex: 0 0  135px;
+            }
         }
 
         .row__content {
             &--list {
                 display: flex;
                 flex-wrap: wrap;
+                align-content: flex-start;
                 margin: 0;
                 padding: 0;
                 list-style-type: none;
