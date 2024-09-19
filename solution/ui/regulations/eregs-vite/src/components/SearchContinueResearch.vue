@@ -69,14 +69,14 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 
 <template>
     <div class="research__container" :class="containerClasses">
-        <div class="research__title">Continue Your Research</div>
+        <h3 class="research__title">Continue Your Research</h3>
         <div
             v-if="resultsCount > 0 && !hasQuotes(query) && hasSpaces(query)"
             class="research__row"
             data-testid="research-row-1"
         >
             <span class="row__title">Make your search more specific</span>
-            <span class="row__content">
+            <span class="row__content" data-testid="quoted-search-link-parent">
                 Try your search with quotes:
                 <router-link
                     :to="{
@@ -102,7 +102,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
             data-testid="research-row-1"
         >
             <span class="row__title">Broaden your search on eRegulations</span>
-            <span class="row__content">
+            <span class="row__content" data-testid="reset-filters-parent">
                 Choose a different filter option above or
                 <router-link
                     :to="{
