@@ -1,5 +1,5 @@
 <script setup>
-import { inject, provide, reactive, ref, watch } from "vue";
+import { computed, inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import useSearchResults from "composables/searchResults";
@@ -28,6 +28,7 @@ import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInLink from "@/components/SignInLink.vue";
@@ -256,6 +257,17 @@ const getDocSubjects = async () => {
     }
 };
 
+const sanitizeQueryParams = (queryParams) =>
+    Object.entries(queryParams).filter(([key]) => PARAM_VALIDATION_DICT[key]);
+
+const sanitizedQueryParams = ref(sanitizeQueryParams($route.query));
+
+const activeFilters = computed(() =>
+    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q")
+);
+
+const hasActiveFilters = computed(() => activeFilters.value.length > 0);
+
 watch(
     () => $route.query,
     async (newQueryParams) => {
@@ -276,16 +288,14 @@ watch(
             return;
         }
 
-        const sanitizedQueryParams = Object.entries(newQueryParams).filter(
-            ([key]) => PARAM_VALIDATION_DICT[key]
-        );
+        sanitizedQueryParams.value = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams)) {
+        if (_isEmpty(sanitizedQueryParams.value)) {
             return;
         }
 
-        // if both internal and external checkboxes are selected and nothing else, return
+        // if all three checkboxes are selected and nothing else, return
         if (allDocTypesOnly($route.query)) {
             return;
         }
@@ -383,8 +393,11 @@ getDocSubjects();
                 </fieldset>
             </section>
             <section class="search-results">
+                <template v-if="!searchQuery"></template>
                 <template
-                    v-if="policyDocList.loading || partsLastUpdated.loading"
+                    v-else-if="
+                        policyDocList.loading || partsLastUpdated.loading
+                    "
                 >
                     <span class="loading__span">Loading...</span>
                 </template>
@@ -397,8 +410,22 @@ getDocSubjects();
                         />
                     </div>
                 </template>
-                <template v-else-if="policyDocList.results === 0">
-                    <div class="doc__list">No results</div>
+                <template v-else-if="policyDocList.results.length == 0">
+                    <div class="doc__list">
+                        <span class="no-results__span"
+                            >Your search for
+                            <strong>{{ searchQuery }}</strong> did not match any
+                            results
+                            <span v-if="hasActiveFilters"
+                                >with the selected filters</span
+                            ><span v-else>on eRegulations</span>.</span
+                        >
+                    </div>
+                    <SearchContinueResearch
+                        :query="searchQuery"
+                        :results-count="policyDocList.count"
+                        :active-filters="activeFilters"
+                    />
                 </template>
                 <template v-else>
                     <PolicyResults
@@ -424,6 +451,11 @@ getDocSubjects();
                             />
                         </div>
                     </div>
+                    <SearchContinueResearch
+                        :query="searchQuery"
+                        :results-count="policyDocList.count"
+                        :active-filters="activeFilters"
+                    />
                 </template>
             </section>
         </main>
