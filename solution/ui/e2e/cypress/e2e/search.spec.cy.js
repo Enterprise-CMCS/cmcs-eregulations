@@ -3,6 +3,9 @@ const TITLE_45 = 45;
 
 const SEARCH_TERM = "FMAP";
 const SEARCH_TERM_2 = "almond";
+const NO_RESULTS_SEARCH_TERM = "no results";
+const SPACED_SEARCH_TERM = "test query";
+const QUOTED_SEARCH_TERM = '"test query"';
 
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
@@ -15,11 +18,11 @@ describe("Search flow", () => {
 
         cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
 
-        cy.intercept("**/v3/content-search/**", {
+        cy.intercept(`**/v3/content-search/**`, {
             fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
-        cy.intercept(`**/v3/title/${TITLE_42}/parts`, {
+        cy.intercept("**/v3/title/${TITLE_42}/parts", {
             fixture: "parts-42.json",
         }).as("parts42");
 
@@ -282,5 +285,89 @@ describe("Search flow", () => {
                     );
             });
         });
+    });
+
+    it("shows the appropriate messages when there are no search results", () => {
+        cy.intercept(`**/v3/content-search/**`, {
+            internal_count: 0,
+            public_count: 0,
+            reg_text_count: 0,
+            next: null,
+            previous: null,
+            count: 0,
+            results: [],
+        }).as("noResults");
+
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(".no-results__span").should(
+            "have.text",
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`
+        );
+
+        cy.get("[data-testid=research-row-1]").should("not.exist");
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .check({ force: true });
+
+        cy.get(".no-results__span").should(
+            "have.text",
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results with the selected filters.`
+        );
+
+        cy.get("[data-testid=research-row-1]")
+            .should("exist")
+            .find("[data-testid=reset-filters-parent] a")
+            .should("have.text", " reset all active filters")
+            .click({ force: true });
+
+        cy.get(".no-results__span").should(
+            "have.text",
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`
+        );
+
+        cy.get("[data-testid=research-row-1]").should("not.exist");
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .should("not.be.checked");
+    });
+
+    it("has a Continue Your Research section on the search page", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".research__title").should("exist");
+        cy.get(".research__title").should(
+            "have.text",
+            "Continue Your Research"
+        );
+
+        cy.get("[data-testid=research-row-1]").should("not.exist");
+        cy.get("[data-testid=research-row-2]").should("exist");
+    });
+
+    it("properly quotes searches and updates the Continue Your Research component when quoted", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SPACED_SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".research__title").should("exist");
+        cy.get(".research__title").should(
+            "have.text",
+            "Continue Your Research"
+        );
+
+        cy.get("[data-testid=research-row-1]")
+            .should("exist")
+            .find("[data-testid=quoted-search-link-parent] a")
+            .should("exist")
+            .and("have.text", '"test query"')
+            .click({ force: true });
+
+        cy.url().should("include", "/search?q=%22test+query%22");
+
+        cy.get("[data-testid=research-row-1]").should("not.exist");
     });
 });
