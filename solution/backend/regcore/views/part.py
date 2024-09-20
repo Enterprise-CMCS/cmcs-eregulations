@@ -8,6 +8,7 @@ from .utils import OpenApiPathParameter
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of versions of a specific Part within a specific Title. Response is a simple list of strings.",
     parameters=[
         OpenApiPathParameter("title", "Title where Part is contained, e.g. 42.", int),
