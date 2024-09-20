@@ -471,7 +471,7 @@ const getStatutes = async ({
  * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<{id: number, full_name: string, short_name: string, abbreviation: string, description: string, public_resources: number, internal_resources: number}>}>} - Promise that contains array of subjects when fulfilled
  */
-const getInternalSubjects = async ({
+const getSubjects = async ({
     apiUrl,
     cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
@@ -616,7 +616,7 @@ export {
     getGovInfoLinks,
     getInternalCategories,
     getInternalDocs,
-    getInternalSubjects,
+    getSubjects,
     getLastParserSuccessDate,
     getLastUpdatedDates,
     getParts,

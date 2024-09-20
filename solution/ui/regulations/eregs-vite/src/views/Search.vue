@@ -10,7 +10,7 @@ import _isEmpty from "lodash/isEmpty";
 
 import {
     getLastUpdatedDates,
-    getInternalSubjects,
+    getSubjects,
     getTitles,
 } from "utilities/api";
 
@@ -223,7 +223,7 @@ const setTitle = (query) => {
 // called on load
 const getDocSubjects = async () => {
     try {
-        const subjectsResponse = await getInternalSubjects({
+        const subjectsResponse = await getSubjects({
             apiUrl,
         });
 
