@@ -26,18 +26,9 @@ from .citations import (
 from .polymorphic import (
     PolymorphicSerializer,
     PolymorphicTypeField,
+    ProxySerializerWrapper,
 )
 from .subjects import SubjectSerializer
-
-
-class AbstractResourceSerializer(PolymorphicSerializer):
-    def get_serializer_map(self):
-        return {
-            PublicLink: ("public_link", PublicLinkSerializer),
-            FederalRegisterLink: ("federal_register_link", FederalRegisterLinkSerializer),
-            InternalLink: ("internal_link", InternalLinkSerializer),
-            InternalFile: ("internal_file", InternalFileSerializer),
-        }
 
 
 class FederalRegisterLinkCreateSerializer(serializers.Serializer):
@@ -233,3 +224,46 @@ class InternalFileSerializer(InternalResourceSerializer):
 class StringListSerializer(serializers.Serializer):
     def to_representation(self, instance):
         return instance
+
+
+MetaResourceSerializer = ProxySerializerWrapper(
+    component_name="MetaResourceSerializer",
+    resource_type_field_name="type",
+    serializers=[
+        PublicLinkSerializer,
+        FederalRegisterLinkSerializer,
+        InternalLinkSerializer,
+        InternalFileSerializer,
+    ],
+)
+
+
+MetaPublicResourceSerializer = ProxySerializerWrapper(
+    component_name="MetaPublicResourceSerializer",
+    resource_type_field_name="type",
+    serializers=[
+        PublicLinkSerializer,
+        FederalRegisterLinkSerializer,
+    ],
+)
+
+
+MetaInternalResourceSerializer = ProxySerializerWrapper(
+    component_name="MetaInternalResourceSerializer",
+    resource_type_field_name="type",
+    serializers=[
+        InternalLinkSerializer,
+        InternalFileSerializer,
+    ],
+)
+
+
+@extend_schema_field(MetaResourceSerializer.many(False))
+class AbstractResourceSerializer(PolymorphicSerializer):
+    def get_serializer_map(self):
+        return {
+            PublicLink: ("public_link", PublicLinkSerializer),
+            FederalRegisterLink: ("federal_register_link", FederalRegisterLinkSerializer),
+            InternalLink: ("internal_link", InternalLinkSerializer),
+            InternalFile: ("internal_file", InternalFileSerializer),
+        }

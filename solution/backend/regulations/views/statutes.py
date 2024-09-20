@@ -18,6 +18,7 @@ class StatuteLinkConverterSerializer(serializers.Serializer):
 
 
 @extend_schema(
+    tags=["regulations/statutes"],
     description="Retrieve a list of Statute Link Converters for a given act or all acts.",
     parameters=[
         OpenApiQueryParameter("act", "The act to filter down to.", str, False),
@@ -47,7 +48,10 @@ class ActListSerializer(serializers.Serializer):
     title_roman = serializers.CharField(source="statute_title_roman")
 
 
-@extend_schema(description="Retrieve a list of all acts and their titles. Compiled from internal Statute Link Converters.")
+@extend_schema(
+    tags=["regulations/statutes"],
+    description="Retrieve a list of all acts and their titles. Compiled from internal Statute Link Converters.",
+)
 class ActListViewSet(viewsets.ReadOnlyModelViewSet):
     model = StatuteLinkConverter
     serializer_class = ActListSerializer

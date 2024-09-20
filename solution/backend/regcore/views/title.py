@@ -14,14 +14,18 @@ from regcore.serializers.toc import (
 from .utils import OpenApiPathParameter
 
 
-@extend_schema(description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
-                           "Each object in the array is a TOC for a specific Title.")
+@extend_schema(
+    tags=["regcore/metadata"],
+    description="Retrieve the table of contents (TOC) for all Titles, with detail down to the Part level. "
+                "Each object in the array is a TOC for a specific Title.",
+)
 class TOCViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
     serializer_class = FrontPageTOCSerializer
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a simple list of all Titles in the system.",
     responses={(200, "application/json"): {"type": "string"}},
 )
@@ -31,6 +35,7 @@ class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve the table of contents for a specific Title, with detail down to the Part level.",
     parameters=[OpenApiPathParameter("title", "Title of interest, e.g. 42.", int)],
 )
@@ -47,6 +52,7 @@ class TitleTOCViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of the latest version of each Part contained within a specific Title, in numerical order.",
     parameters=[OpenApiPathParameter("title", "Title to retrieve Parts from, e.g. 42.", int)],
 )
@@ -59,6 +65,7 @@ class PartsViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of parts associated with each version of the regulations.",
     parameters=[OpenApiPathParameter("title", "Title to retrieve versions from, e.g. 42.", int)],
 )

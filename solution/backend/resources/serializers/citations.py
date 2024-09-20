@@ -8,6 +8,7 @@ from resources.models import (
 from .polymorphic import (
     PolymorphicSerializer,
     PolymorphicTypeField,
+    ProxySerializerWrapper,
 )
 
 
@@ -53,3 +54,13 @@ class SectionRangeCreateSerializer(serializers.Serializer):
     part = serializers.CharField()
     first_sec = serializers.IntegerField()
     last_sec = serializers.IntegerField()
+
+
+MetaCitationSerializer = ProxySerializerWrapper(
+    component_name="MetaCitationSerializer",
+    resource_type_field_name="type",
+    serializers=[
+        SectionSerializer,
+        SubpartSerializer,
+    ],
+)

@@ -1,10 +1,10 @@
 
-from django.core.exceptions import BadRequest
 from django.db.models import Prefetch, Q
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 
-from cmcs_regulations.utils import ViewSetPagination
+from cmcs_regulations.utils.api_exceptions import BadRequest
+from cmcs_regulations.utils.pagination import ViewSetPagination
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -27,9 +27,11 @@ class ContentSearchPagination(ViewSetPagination):
 
 
 @extend_schema(
+    tags=["content_search"],
     description="Search and retrieve content with highlighted matching terms. "
                 "This endpoint allows you to search through both resources and regulation texts, "
                 "returning relevant content with highlighted matches in the name, summary, and content fields.",
+    responses={200: ContentSearchSerializer(many=True)},
     parameters=[
         OpenApiParameter(
             name="subjects",
@@ -84,7 +86,7 @@ class ContentSearchPagination(ViewSetPagination):
             required=False,
             type=int,
             description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D., str, False",
+                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
             location=OpenApiParameter.QUERY,
         ),
     ] + ViewSetPagination.QUERY_PARAMETERS,
