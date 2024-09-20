@@ -71,7 +71,8 @@ class ContentSearchPagination(ViewSetPagination):
             required=False,
             type=str,
             description="Show ('true') or hide ('false') internal resources, including files and internal links. "
-                        "Default is true.",
+                        "Default is true. Note that internal resources are only shown if the user is authenticated. "
+                        "If the user is not authenticated, this flag will have no effect.",
             location=OpenApiParameter.QUERY,
         ),
         OpenApiParameter(
