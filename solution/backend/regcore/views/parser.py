@@ -16,7 +16,10 @@ from regcore.serializers.parser import (
 from .utils import OpenApiPathParameter
 
 
-@extend_schema(description="Retrieve configuration for the eCFR and Federal Register parsers.")
+@extend_schema(
+    tags=["regcore/parser"],
+    description="Retrieve configuration for the eCFR and Federal Register parsers.",
+)
 class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ParserConfigurationSerializer
 
@@ -31,6 +34,7 @@ class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
+    tags=["regcore/parser"],
     description="Retrieve the latest ECFRParserResult or create a new ECFRParserResult object for the title.",
     parameters=[OpenApiPathParameter("title", "Title the parser was run for, e.g. 42.", int)],
 )
@@ -51,7 +55,10 @@ class ParserResultViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
 
-@extend_schema(description="Upload a regulation Part to eRegs. Typically only used by the eCFR parser.")
+@extend_schema(
+    tags=["regcore/parser"],
+    description="Upload a regulation Part to eRegs. Typically only used by the eCFR parser.",
+)
 class PartUploadViewSet(viewsets.ModelViewSet):
     serializer_class = PartUploadSerializer
     authentication_classes = [SettingsAuthentication]

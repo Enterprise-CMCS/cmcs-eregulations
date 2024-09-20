@@ -8,9 +8,11 @@ from resources.serializers import SubjectWithCountsSerializer
 
 
 @extend_schema(
+    tags=["resources/metadata"],
     description="Retrieve a list of subjects, each annotated with the count of associated public and internal resources. "
                 "Authenticated users can see the count of both public and internal resources, while unauthenticated users "
-                "only see the count of public resources. The subjects are ordered by a predefined sort order."
+                "only see the count of public resources. The subjects are ordered by a predefined sort order.",
+    responses={200: SubjectWithCountsSerializer(many=True)},
 )
 class SubjectViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SubjectWithCountsSerializer

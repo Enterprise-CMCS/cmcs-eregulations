@@ -13,6 +13,7 @@ from .utils import OpenApiPathParameter
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve the table of contents for a specific version of a specific Part of a specific Title, "
                 "with detail down to the Section level.",
     parameters=PartPropertiesMixin.PARAMETERS,
@@ -26,6 +27,7 @@ class PartTOCViewSet(PartPropertiesMixin, viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of Sections contained within a version of a Part.",
     parameters=PartStructureNodesMixin.PARAMETERS,
 )
@@ -34,6 +36,7 @@ class PartSectionsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of Subparts contained within a version of a Part.",
     parameters=PartStructureNodesMixin.PARAMETERS,
 )
@@ -42,6 +45,7 @@ class PartSubpartsViewSet(PartStructureNodesMixin, viewsets.ReadOnlyModelViewSet
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a table of contents for a specific Subpart contained within a Part, "
                 "with detail down to the Section level.",
     parameters=[OpenApiPathParameter("subpart", "The Subpart of interest, e.g. A.", str)] + PartPropertiesMixin.PARAMETERS,

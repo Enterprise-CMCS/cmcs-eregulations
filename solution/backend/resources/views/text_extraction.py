@@ -5,15 +5,17 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from cmcs_regulations.utils.api_exceptions import ExceptionSerializer
 from common.auth import SettingsAuthentication
 from resources.models import AbstractResource, ResourceContent
 from resources.serializers import ContentUpdateSerializer
 
 
 @extend_schema(
+    tags=["resources/metadata"],
     description="Adds extracted text to the resource specified by the ID field.",
     request=ContentUpdateSerializer,
-    responses={200: dict, 404: dict, 400: dict},
+    responses={200: str, 404: ExceptionSerializer, 400: ExceptionSerializer},
 )
 class ContentTextViewSet(APIView):
     permission_classes = [IsAuthenticated]

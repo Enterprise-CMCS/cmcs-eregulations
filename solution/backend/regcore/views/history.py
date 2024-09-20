@@ -49,6 +49,7 @@ async def get_years(title, part, section):
 
 
 @extend_schema(
+    tags=["regcore/metadata"],
     description="Retrieve a list of links to GovInfo PDFs for historical versions of a regulation section.",
     parameters=[
         OpenApiPathParameter("title", "The title containing the regulation section.", int),
