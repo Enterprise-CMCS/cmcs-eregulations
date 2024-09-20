@@ -92,36 +92,26 @@ class SearchTest(TestCase):
 
     def test_counts_logged_in(self):
         self.login()
-        response = self.client.get("/v3/content-search/?q=test")
-        data = get_paginated_data(response)
-        self.assertEqual(len(data["results"]), 3)
-        self.assertIn("count", data)
-        self.assertIn("internal_count", data)
-        self.assertIn("public_count", data)
-        self.assertEqual(data["internal_count"], 1)
-        self.assertEqual(data["public_count"], 2)
+        data = self.client.get("/v3/content-search/counts?q=test").data
+        self.assertEqual(data["internal_resource_count"], 1)
+        self.assertEqual(data["public_resource_count"], 2)
+        data = self.client.get("/v3/content-search/?q=test").data
+        self.assertEqual(data["count"], 3)
 
     def test_counts_logged_out(self):
-        response = self.client.get("/v3/content-search/?q=test")
-        data = get_paginated_data(response)
-        self.assertEqual(len(data["results"]), 2)
-        self.assertIn("count", data)
-        self.assertIn("internal_count", data)
-        self.assertIn("public_count", data)
-        self.assertEqual(data["internal_count"], 0)
-        self.assertEqual(data["public_count"], 2)
+        data = self.client.get("/v3/content-search/counts?q=test").data
+        self.assertEqual(data["internal_resource_count"], 0)
+        self.assertEqual(data["public_resource_count"], 2)
+        data = self.client.get("/v3/content-search/?q=test").data
+        self.assertEqual(data["count"], 2)
 
     def test_reg_text_count(self):
-        response = self.client.get("/v3/content-search/?q=federal")
-        data = get_paginated_data(response)
-        self.assertEqual(len(data["results"]), 3)
-        self.assertIn("count", data)
-        self.assertIn("internal_count", data)
-        self.assertIn("public_count", data)
-        self.assertIn("reg_text_count", data)
-        self.assertEqual(data["internal_count"], 0)
-        self.assertEqual(data["public_count"], 1)
-        self.assertEqual(data["reg_text_count"], 2)
+        data = self.client.get("/v3/content-search/counts?q=federal").data
+        self.assertEqual(data["internal_resource_count"], 0)
+        self.assertEqual(data["public_resource_count"], 1)
+        self.assertEqual(data["regulation_text_count"], 2)
+        data = self.client.get("/v3/content-search/?q=federal").data
+        self.assertEqual(data["count"], 3)
 
     def test_no_query_not_logged_in(self):
         response = self.client.get("/v3/content-search?show_internal=true&show_regulations=false")

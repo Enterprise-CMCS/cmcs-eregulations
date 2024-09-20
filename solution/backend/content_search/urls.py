@@ -6,7 +6,7 @@ urlpatterns = [
     path("", ContentSearchViewSet.as_view({
         "get": "list",
     })),
-    path("count", ContentCountViewSet.as_view({
+    path("counts", ContentCountViewSet.as_view({
         "get": "list",
     }), name="content_count"),
 ]
