@@ -8,11 +8,7 @@ import useRemoveList from "composables/removeList";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import {
-    getLastUpdatedDates,
-    getSubjects,
-    getTitles,
-} from "utilities/api";
+import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
 
 import { getSubjectName } from "utilities/filters";
 
@@ -390,6 +386,30 @@ getDocSubjects();
                             parent="search"
                         />
                     </FetchCategoriesContainer>
+                    <v-select
+                        menu
+                        class="filter__select filter__select--subjects"
+                        data-testid="subjects-select"
+                        variant="outlined"
+                        clearable
+                        persistent-clear
+                        single-line
+                        hide-details
+                        flat
+                        clear-icon="mdi-close"
+                        menu-icon="mdi-menu-swap"
+                        label="Choose Subject"
+                        density="compact"
+                        :loading="
+                            policyDocList.loading || policyDocSubjects.loading
+                        "
+                        :disabled="
+                            policyDocList.loading || policyDocSubjects.loading
+                        "
+                        :items="policyDocSubjects.results"
+                        item-title="full_name"
+                        item-value="id"
+                    ></v-select>
                 </fieldset>
             </section>
             <section class="search-results">

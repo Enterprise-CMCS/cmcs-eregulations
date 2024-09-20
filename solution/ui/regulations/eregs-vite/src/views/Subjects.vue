@@ -8,11 +8,7 @@ import useRemoveList from "composables/removeList";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import {
-    getLastUpdatedDates,
-    getSubjects,
-    getTitles,
-} from "utilities/api";
+import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 

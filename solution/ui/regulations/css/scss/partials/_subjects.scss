@@ -60,7 +60,7 @@
 }
 
 .filter__select {
-    &--category {
+    &--category, &--subjects {
         width: 225px;
 
         &.v-input {
