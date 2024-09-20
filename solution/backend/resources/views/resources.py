@@ -47,14 +47,14 @@ logger = logging.getLogger(__name__)
 
 
 class ResourceCountPagination(ViewSetPagination):
-    def get_count_map(self):
-        prefix = "" if self.view.model == AbstractResource else "abstractresource_ptr__"
-        internal_filter = Q(**{f"{prefix}abstractinternalresource__isnull": False})
-        public_filter = Q(**{f"{prefix}abstractpublicresource__isnull": False})
-        return [
-            {"name": "internal_count", "count_field": "pk", "filter": internal_filter},
-            {"name": "public_count", "count_field": "pk", "filter": public_filter},
-        ]
+    def get_additional_attributes(self):
+        try:
+            from content_search.views import ContentCountViewSet
+            return {**super().get_additional_attributes(), **{
+                "count_url": ContentCountViewSet.generate_url(self.request),
+            }}
+        except ImportError:
+            return super().get_additional_attributes()
 
 
 RESOURCE_ENDPOINT_PARAMETERS = [

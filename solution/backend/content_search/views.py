@@ -1,7 +1,10 @@
 
-from django.db.models import Prefetch, Q
+from django.db.models import Count, Prefetch, Q
+from django.http import QueryDict
+from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
+from rest_framework.response import Response
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
@@ -14,16 +17,14 @@ from resources.models import (
 from resources.utils import get_citation_filter, string_to_bool
 
 from .models import ContentIndex, IndexedRegulationText
-from .serializers import ContentSearchSerializer
+from .serializers import ContentCountSerializer, ContentSearchSerializer
 
 
 class ContentSearchPagination(ViewSetPagination):
-    def get_count_map(self):
-        return [
-            {"name": "internal_count", "count_field": "resource", "filter": Q(resource__abstractinternalresource__isnull=False)},
-            {"name": "public_count", "count_field": "resource", "filter": Q(resource__abstractpublicresource__isnull=False)},
-            {"name": "reg_text_count", "count_field": "reg_text", "filter": None},
-        ]
+    def get_additional_attributes(self):
+        return {**super().get_additional_attributes(), **{
+            "count_url": ContentCountViewSet.generate_url(self.request),
+        }}
 
 
 @extend_schema(
@@ -163,3 +164,101 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         # Serialize and return the results
         serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
         return self.get_paginated_response(serializer.data)
+
+
+@extend_schema(
+    tags=["content_search"],
+    description="Retrieve the number of results for a given set of filters. "
+                "This endpoint allows you to get the number of results per type (public, internal, reg-text) "
+                "without retrieving the actual content. Useful for pagination and displaying the number of results. "
+                "Note that internal resources are only counted if the user is authenticated.",
+    responses={200: ContentCountSerializer},
+    parameters=[
+        OpenApiParameter(
+            name="q",
+            required=False,
+            type=str,
+            description="Search for this text within public and internal resources, and regulation text. "
+                        "Fields searched depends on the underlying data type.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="citations",
+            required=False,
+            type=int,
+            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="subjects",
+            required=False,
+            type=int,
+            description="Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
+                        "Use \"&subjects=1&subjects=2\" for multiple.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="categories",
+            required=False,
+            type=int,
+            description="Limit results to only resources found within these categories. Categories are referenced by ID, not "
+                        "name. Use \"&categories=1&categories=2\" for multiple.",
+            location=OpenApiParameter.QUERY,
+        ),
+    ],
+)
+class ContentCountViewSet(viewsets.ViewSet):
+    # Used for automatically generating a URL to the count endpoint
+    def generate_url(request):
+        new_get = QueryDict(mutable=True)
+        [new_get.update({i: j}) for i, j in request.GET.items() if i in ["q", "citations", "subjects", "categories"]]
+        return request.build_absolute_uri(reverse("content_count")) + f"?{new_get.urlencode()}"
+
+    def list(self, request, *args, **kwargs):
+        # Retrieve optional parameters
+        citations = request.GET.getlist("citations")
+        subjects = request.GET.getlist("subjects")
+        categories = request.GET.getlist("categories")
+        search_query = request.GET.get("q")
+
+        # Defer all unnecessary text fields to reduce database load and memory usage
+        query = ContentIndex.objects.defer_text()
+
+        # Filter out unapproved resources
+        query = query.exclude(resource__approved=False)
+
+        # Filter inclusively by citations if this array exists
+        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
+        if citation_filter:
+            query = query.filter(citation_filter)
+
+        # Filter by subject pks if subjects array is present
+        if subjects:
+            query = query.filter(resource__subjects__pk__in=subjects)
+
+        # Filter by categories (both parent and subcategories) if the categories array is present
+        if categories:
+            query = query.filter(
+                Q(resource__category__pk__in=categories) |
+                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+            )
+
+        # Filter out internal resources if the user is not authenticated
+        if not self.request.user.is_authenticated:
+            query = query.exclude(resource__abstractinternalresource__isnull=False)
+
+        # Perform search if 'q' parameter exists
+        if search_query:
+            query = query.search(search_query)
+
+        # Aggregate the counts of internal, public, and reg text
+        query = query.aggregate(
+            internal_resource_count=Count("resource", filter=Q(resource__abstractinternalresource__isnull=False)),
+            public_resource_count=Count("resource", filter=Q(resource__abstractpublicresource__isnull=False)),
+            regulation_text_count=Count("reg_text"),
+        )
+
+        # Serialize and return the results
+        return Response(ContentCountSerializer(query).data)
