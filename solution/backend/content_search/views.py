@@ -26,6 +26,16 @@ class ContentSearchPagination(ViewSetPagination):
             "count_url": ContentCountViewSet.generate_url(self.request),
         }}
 
+    def get_additional_attribute_schemas(self):
+        return {**super().get_additional_attribute_schemas(), **{
+            "count_url": {
+                "type": "string",
+                "format": "uri",
+                "nullable": True,
+                "example": "http://api.example.org/content_count/?q=example",
+            },
+        }}
+
 
 @extend_schema(
     tags=["content_search"],

@@ -56,6 +56,16 @@ class ResourceCountPagination(ViewSetPagination):
         except ImportError:
             return super().get_additional_attributes()
 
+    def get_additional_attribute_schemas(self):
+        return {**super().get_additional_attribute_schemas(), **{
+            "count_url": {
+                "type": "string",
+                "format": "uri",
+                "nullable": True,
+                "example": "http://api.example.org/content_count/?q=example",
+            },
+        }}
+
 
 RESOURCE_ENDPOINT_PARAMETERS = [
     CITATION_FILTER_PARAMETER,

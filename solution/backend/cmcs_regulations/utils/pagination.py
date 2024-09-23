@@ -7,6 +7,8 @@ from rest_framework.response import Response
 # Provides a "page_size" parameter for controlling the number of results per page. Default page size is 100.
 #
 # To include additional attributes, override `get_additional_attributes` and return a dictionary of additional attributes.
+# To reflect additional attributes in the OpenAPI schema, override `get_additional_attribute_schemas` and return a dictionary.
+#    - See `get_paginated_response_schema` for an example of an additional attribute schema.
 class ViewSetPagination(PageNumberPagination):
     QUERY_PARAMETERS = [
         OpenApiParameter(
@@ -33,6 +35,9 @@ class ViewSetPagination(PageNumberPagination):
     def get_additional_attributes(self):
         return {}
 
+    def get_additional_attribute_schemas(self):
+        return {}
+
     def paginate_queryset(self, queryset, request, view=None):
         self.queryset = queryset
         self.request = request
@@ -49,3 +54,26 @@ class ViewSetPagination(PageNumberPagination):
                 "results": data,
             },
         })
+
+    def get_paginated_response_schema(self, schema):
+        return {
+            "type": "object",
+            "required": ["count", "results"],
+            "properties": {
+                **self.get_additional_attribute_schemas(),
+                "next": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/accounts/?page=4",
+                },
+                "previous": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/accounts/?page=2",
+                },
+                "count": {"type": "integer", "example": 123},
+                "results": schema,
+            },
+        }
