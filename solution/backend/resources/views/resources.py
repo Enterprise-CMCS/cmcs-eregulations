@@ -57,14 +57,18 @@ class ResourceCountPagination(ViewSetPagination):
             return super().get_additional_attributes()
 
     def get_additional_attribute_schemas(self):
-        return {**super().get_additional_attribute_schemas(), **{
-            "count_url": {
-                "type": "string",
-                "format": "uri",
-                "nullable": True,
-                "example": "http://api.example.org/content_count/?q=example",
-            },
-        }}
+        try:
+            from content_search.views import ContentCountViewSet  # noqa
+            return {**super().get_additional_attribute_schemas(), **{
+                "count_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/content_count/?q=example",
+                },
+            }}
+        except ImportError:
+            return super().get_additional_attribute_schemas()
 
 
 RESOURCE_ENDPOINT_PARAMETERS = [
