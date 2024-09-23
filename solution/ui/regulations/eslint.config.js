@@ -1,5 +1,6 @@
 // eslint.config.js
 import pluginVue from "eslint-plugin-vue";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default [
     ...pluginVue.configs["flat/recommended"],
@@ -29,4 +30,5 @@ export default [
             "vue/no-v-html": "off",
         },
     },
+    eslintPluginPrettierRecommended,
 ];
