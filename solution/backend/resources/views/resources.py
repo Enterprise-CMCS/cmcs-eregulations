@@ -6,7 +6,6 @@ from django.http import JsonResponse
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from cmcs_regulations.utils import ViewSetPagination
@@ -253,7 +252,6 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
 
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
-    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     @extend_schema(

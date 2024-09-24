@@ -1,7 +1,6 @@
 from django.db.models import Prefetch
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from cmcs_regulations.utils import ViewSetPagination
@@ -44,7 +43,6 @@ class PublicCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 )
 class InternalCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
-    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     serializer_class = InternalCategoryWithSubCategoriesSerializer
     queryset = InternalCategory.objects.all().prefetch_related(
