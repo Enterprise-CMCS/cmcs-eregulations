@@ -68,14 +68,14 @@ const fetchJson = ({
         // Filter out params with undefined or null values
         const paramKeysToPass = _filter(
             paramKeys,
-            (key) => !_isNil(_get(merged.params, key)),
+            (key) => !_isNil(_get(merged.params, key))
         );
         const query = _map(
             paramKeysToPass,
             (key) =>
                 `${encodeURIComponent(key)}=${encodeURIComponent(
-                    _get(merged.params, key),
-                )}`,
+                    _get(merged.params, key)
+                )}`
         ).join("&");
         url = query ? `${url}?${query}` : url;
     }
@@ -84,7 +84,7 @@ const fetchJson = ({
         .then(
             () =>
                 cacheResponse &&
-                localforage.getItem(url.replace(apiPath, merged.method)),
+                localforage.getItem(url.replace(apiPath, merged.method))
         )
         .then((value) => {
             if (value && Date.now() < value.expiration_date) {
@@ -104,12 +104,12 @@ const fetchJson = ({
                 return Promise.resolve()
                     .then(() =>
                         console.info(
-                            `Retrying count = ${retryCount}, Backoff = ${backoff}`,
-                        ),
+                            `Retrying count = ${retryCount}, Backoff = ${backoff}`
+                        )
                     )
                     .then(() => delay(backoff))
                     .then(() =>
-                        fetchJson({ url, options, retryCount: retryCount + 1 }),
+                        fetchJson({ url, options, retryCount: retryCount + 1 })
                     );
             }
             throw parseError(err);
@@ -143,8 +143,8 @@ const fetchJson = ({
                         return Promise.resolve()
                             .then(() =>
                                 console.info(
-                                    `Retrying count = ${retryCount}, Backoff = ${backoff}`,
-                                ),
+                                    `Retrying count = ${retryCount}, Backoff = ${backoff}`
+                                )
                             )
                             .then(() => delay(backoff))
                             .then(() =>
@@ -152,7 +152,7 @@ const fetchJson = ({
                                     url,
                                     options,
                                     retryCount: retryCount + 1,
-                                }),
+                                })
                             );
                     }
                     throw parseError({
@@ -161,7 +161,7 @@ const fetchJson = ({
                     });
                 } else {
                     throw parseError(
-                        new Error("The server did not return a json response."),
+                        new Error("The server did not return a json response.")
                     );
                 }
             }
@@ -176,7 +176,7 @@ const fetchJson = ({
                     json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
                     localforage.setItem(
                         url.replace(apiPath, merged.method),
-                        json,
+                        json
                     );
                 }
                 return json;
@@ -197,7 +197,7 @@ const fetchJson = ({
 const httpApiGet = (
     urlPath,
     { params } = {},
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
+    cacheResponse = DEFAULT_CACHE_RESPONSE
 ) => {
     return fetchJson({
         url: `${urlPath}`,
@@ -271,7 +271,7 @@ const getTOC = async ({ title, apiUrl }) =>
  **/
 const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
     httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`,
+        `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
     );
 
 /**
@@ -298,7 +298,7 @@ const getSynonyms = async ({ apiUrl, query }) =>
  */
 const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
     const results = await Promise.all(
-        titles.map((title) => httpApiGet(`${apiUrl}title/${title}/parts`)),
+        titles.map((title) => httpApiGet(`${apiUrl}title/${title}/parts`))
     );
 
     return createLastUpdatedDates(results);
@@ -316,17 +316,17 @@ const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
  */
 const getRecentResources = async (
     apiURL,
-    { page = 1, pageSize = 3, type = "rules", categories },
+    { page = 1, pageSize = 3, type = "rules", categories }
 ) => {
     if (type !== "rules") {
         return httpApiGet(
             `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}${categories}`,
-            {}, // params, default
+            {} // params, default
         );
     }
     return httpApiGet(
         `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}`,
-        {}, // params, default
+        {} // params, default
     );
 };
 
@@ -348,8 +348,8 @@ const getRegSearchResults = async ({
 }) => {
     const response = await httpApiGet(
         `${apiUrl}search?q=${encodeURIComponent(
-            q,
-        )}&paginate=${paginate}&page_size=${page_size}&page=${page}`,
+            q
+        )}&paginate=${paginate}&page_size=${page_size}&page=${page}`
     );
 
     return response;
@@ -428,7 +428,7 @@ const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
             filterParams.part
         }/history/${Object.keys(filterParams)[2]}/${
             Object.values(filterParams)[2]
-        }`,
+        }`
     );
 
 /**
@@ -462,7 +462,7 @@ const getStatutes = async ({
     title = "19",
 }) =>
     httpApiGet(
-        `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`,
+        `${apiUrl}statutes?act=${encodeURIComponent(act)}&title=${title}`
     );
 
 /**
@@ -505,7 +505,7 @@ const getInternalCategories = async ({
     httpApiGet(
         `${apiUrl}resources/internal/categories?page_size=1000`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 
 /**
@@ -537,7 +537,7 @@ const getExternalCategories = async ({
     httpApiGet(
         `${apiUrl}resources/public/categories?page_size=1000`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 
 /**
@@ -555,7 +555,7 @@ const getCombinedContent = async ({
     httpApiGet(
         `${apiUrl}content-search/${requestParams ? `?${requestParams}` : ""}`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 
 const getGranularCounts = async ({
@@ -566,7 +566,7 @@ const getGranularCounts = async ({
     httpApiGet(
         `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 
 /**
@@ -588,7 +588,7 @@ const getContentWithoutQuery = async ({
     return httpApiGet(
         `${apiUrl}resources/${typeString}${rqParams}`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 };
 
@@ -609,7 +609,7 @@ const getInternalDocs = async ({
             requestParams ? `?${requestParams}` : ""
         }`,
         {},
-        cacheResponse,
+        cacheResponse
     );
 
 const throwGenericError = async () =>
