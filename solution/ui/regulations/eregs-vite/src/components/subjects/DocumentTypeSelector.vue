@@ -12,6 +12,7 @@ import {
     COUNT_TYPES_MAP,
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
+    getRequestParams,
 } from "utilities/utils";
 
 const props = defineProps({
@@ -41,17 +42,32 @@ if (props.parent !== "search")
 if (!isAuthenticated)
     docTypesArr = docTypesArr.filter((type) => type !== "internal");
 
-const counts = ref({});
+const counts = ref({
+    results: {},
+    loading: true,
+    error: false,
+});
 
-const fetchCounts = async () => {
-    const response = await getGranularCounts({
-        apiUrl,
-    });
+const fetchCounts = async ({ queryParams }) => {
+    counts.value.loading = true;
+    counts.value.error = false;
 
-    counts.value = response;
+    try {
+        const response = await getGranularCounts({
+            apiUrl,
+            requestParams: getRequestParams({ queryParams }),
+        });
+
+        counts.value.results = response;
+    } catch (error) {
+        counts.value.error = true;
+        counts.value.results = {};
+    } finally {
+        counts.value.loading = false;
+    }
 };
 
-fetchCounts();
+fetchCounts({ queryParams: $route.query });
 
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
@@ -113,6 +129,8 @@ watch(
     (newQuery) => {
         const { type: typeParams } = newQuery;
 
+        fetchCounts({ queryParams: newQuery });
+
         if (_isUndefined(typeParams) || typeParams.includes("all")) {
             checkedBoxes.value = [];
         } else {
@@ -144,9 +162,9 @@ const makeCount = ({ type }) => {
 
     const mappedType = COUNT_TYPES_MAP[type];
 
-    return _isUndefined(counts.value[mappedType])
+    return _isUndefined(counts.value.results[mappedType])
         ? ""
-        : `(${counts.value[mappedType]})`;
+        : `(${counts.value.results[mappedType]})`;
 };
 
 onMounted(() => {
