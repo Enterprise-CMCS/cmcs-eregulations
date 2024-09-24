@@ -88,7 +88,7 @@ const onCheckboxChange = (event) => {
         checkedBoxes.value = [...checkedBoxes.value, value];
     } else {
         checkedBoxes.value = checkedBoxes.value.filter(
-            (item) => item !== value,
+            (item) => item !== value
         );
     }
 
@@ -136,7 +136,7 @@ watch(
         } else {
             checkedBoxes.value = typeParams.split(",");
         }
-    },
+    }
 );
 
 const onPopState = (event) => {
