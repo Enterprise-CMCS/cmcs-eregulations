@@ -31,12 +31,17 @@ const DOCUMENT_TYPES_MAP = {
     external: "Public",
     federal_register_link: "Public",
     public_link: "Public",
-    public_link: "Public",
     reg_text: "Public",
     internal: "Internal",
     internal_file: "Internal",
     internal_link: "Internal",
     regulations: "Regulations",
+};
+
+const COUNT_TYPES_MAP = {
+    external: "public_resource_count",
+    internal: "internal_resource_count",
+    regulations: "regulation_text_count",
 };
 
 const PARAM_MAP = {
@@ -681,6 +686,7 @@ export {
     createLastUpdatedDates,
     createRegResultLink,
     consolidateToMap,
+    COUNT_TYPES_MAP,
     createOneIndexedArray,
     delay,
     deserializeResult,

@@ -9,7 +9,7 @@ export default [
             eqeqeq: "off",
             "import/no-unresolved": "off",
             "import/first": "off",
-            "no-console": ["error", { allow: ["warn", "error"] }],
+            "no-console": ["error", { allow: ["warn", "error", "info"] }],
             "no-nested-ternary": "off",
             "prefer-template": "off",
             "vue/html-indent": ["error", 4],

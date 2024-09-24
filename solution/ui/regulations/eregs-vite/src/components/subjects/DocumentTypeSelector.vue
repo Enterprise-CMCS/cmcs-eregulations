@@ -7,7 +7,12 @@ import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
-import { DOCUMENT_TYPES, DOCUMENT_TYPES_MAP } from "utilities/utils";
+import { getGranularCounts } from "utilities/api";
+import {
+    COUNT_TYPES_MAP,
+    DOCUMENT_TYPES,
+    DOCUMENT_TYPES_MAP,
+} from "utilities/utils";
 
 const props = defineProps({
     parent: {
@@ -18,10 +23,6 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    typeCount: {
-        type: Object,
-        default: () => ({}),
-    },
 });
 
 const $route = useRoute();
@@ -29,6 +30,7 @@ const $router = useRouter();
 
 const { type: typeParams } = $route.query;
 
+const apiUrl = inject("apiUrl");
 const isAuthenticated = inject("isAuthenticated");
 
 let docTypesArr = DOCUMENT_TYPES;
@@ -38,6 +40,18 @@ if (props.parent !== "search")
 
 if (!isAuthenticated)
     docTypesArr = docTypesArr.filter((type) => type !== "internal");
+
+const counts = ref({});
+
+const fetchCounts = async () => {
+    const response = await getGranularCounts({
+        apiUrl,
+    });
+
+    counts.value = response;
+};
+
+fetchCounts();
 
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
@@ -58,7 +72,7 @@ const onCheckboxChange = (event) => {
         checkedBoxes.value = [...checkedBoxes.value, value];
     } else {
         checkedBoxes.value = checkedBoxes.value.filter(
-            (item) => item !== value
+            (item) => item !== value,
         );
     }
 
@@ -104,7 +118,7 @@ watch(
         } else {
             checkedBoxes.value = typeParams.split(",");
         }
-    }
+    },
 );
 
 const onPopState = (event) => {
@@ -128,9 +142,11 @@ const makeLabel = ({ type }) => {
 const makeCount = ({ type }) => {
     if (props.loading) return "";
 
-    return _isUndefined(props.typeCount[type])
+    const mappedType = COUNT_TYPES_MAP[type];
+
+    return _isUndefined(counts.value[mappedType])
         ? ""
-        : `(${props.typeCount[type]})`;
+        : `(${counts.value[mappedType]})`;
 };
 
 onMounted(() => {
