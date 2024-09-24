@@ -199,7 +199,7 @@ const setSelectedParams = (subjectsListRef) => (param) => {
     const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
     paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
-            (subjectObj) => paramId === subjectObj.id.toString()
+            (subjectObj) => paramId === subjectObj.id.toString(),
         )[0];
 
         if (subject) {
@@ -221,7 +221,7 @@ const policyDocSubjects = ref({
 
 const setDocumentTitle = (subjectId, subjectList) => {
     const subjectToSelect = subjectList.filter(
-        (subjectObj) => subjectObj.id.toString() === subjectId
+        (subjectObj) => subjectObj.id.toString() === subjectId,
     )[0];
     const subjName = getSubjectName(subjectToSelect);
     document.title = `${subjName} | ${document.title}`;
@@ -244,7 +244,7 @@ const getDocSubjects = async () => {
         if (policyDocSubjects.value.results.length && $route.query.subjects) {
             setDocumentTitle(
                 $route.query.subjects,
-                policyDocSubjects.value.results
+                policyDocSubjects.value.results,
             );
         }
 
@@ -281,7 +281,7 @@ const setSelectedSubjectParts = () => {
             const selectedSubject = policyDocSubjects.value.results.filter(
                 (subjectObj) =>
                     subjectObj.id.toString() ===
-                    selectedParams.paramsArray[0].id
+                    selectedParams.paramsArray[0].id,
             )[0];
             selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
         }
@@ -296,14 +296,14 @@ watch(
         if (!newLoading) {
             setSelectedSubjectParts();
         }
-    }
+    },
 );
 
 watch(
     () => selectedParams.paramString,
     async () => {
         setSelectedSubjectParts();
-    }
+    },
 );
 
 watch(
@@ -317,7 +317,7 @@ watch(
                 : subjects;
             setDocumentTitle(
                 subjectTitleToSet,
-                policyDocSubjects.value.results
+                policyDocSubjects.value.results,
             );
         }
 
@@ -326,7 +326,7 @@ watch(
         clearSearchQuery();
 
         const sanitizedQueryParams = Object.entries(newQueryParams).filter(
-            ([key]) => PARAM_VALIDATION_DICT[key]
+            ([key]) => PARAM_VALIDATION_DICT[key],
         );
 
         // if all params are removed, return
@@ -341,7 +341,7 @@ watch(
 
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(
-            setSelectedParams(policyDocSubjects)
+            setSelectedParams(policyDocSubjects),
         );
 
         // parse $route.query to return `${key}=${value}` string
@@ -357,7 +357,7 @@ watch(
             query: $route.query.q,
             type: $route.query.type,
         });
-    }
+    },
 );
 
 // fetches on page load
@@ -370,7 +370,7 @@ getDocSubjects();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
+                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks :statutes-url="statutesUrl" />
@@ -443,10 +443,7 @@ getDocSubjects();
                             />
                         </div>
                         <div class="subject__filters--row">
-                            <DocumentTypeSelector
-                                v-if="isAuthenticated"
-                                :type-count="policyDocList.typeCount"
-                            />
+                            <DocumentTypeSelector v-if="isAuthenticated" />
                             <FetchCategoriesContainer
                                 v-slot="slotProps"
                                 :categories-capture-function="setCategories"

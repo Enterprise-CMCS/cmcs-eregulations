@@ -195,7 +195,7 @@ const setSelectedParams = (subjectsListRef) => (param) => {
     const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
     paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
-            (subjectObj) => paramId === subjectObj.id.toString()
+            (subjectObj) => paramId === subjectObj.id.toString(),
         )[0];
 
         if (subject) {
@@ -263,7 +263,7 @@ const sanitizeQueryParams = (queryParams) =>
 const sanitizedQueryParams = ref(sanitizeQueryParams($route.query));
 
 const activeFilters = computed(() =>
-    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q")
+    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q"),
 );
 
 const hasActiveFilters = computed(() => activeFilters.value.length > 0);
@@ -302,7 +302,7 @@ watch(
 
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(
-            setSelectedParams(policyDocSubjects)
+            setSelectedParams(policyDocSubjects),
         );
 
         // parse $route.query to return `${key}=${value}` string
@@ -317,7 +317,7 @@ watch(
             query: $route.query.q,
             type: $route.query.type,
         });
-    }
+    },
 );
 
 // fetches on page load
@@ -330,7 +330,7 @@ getDocSubjects();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
+                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -369,13 +369,12 @@ getDocSubjects();
                     @execute-search="executeSearch"
                     @clear-form="resetSearch"
                 />
-                <fieldset class="search__fieldset" v-if="$route.query.q">
+                <fieldset v-if="$route.query.q" class="search__fieldset">
                     <DocumentTypeSelector
                         parent="search"
                         :loading="
                             policyDocList.loading || partsLastUpdated.loading
                         "
-                        :type-count="policyDocList.typeCount"
                     />
                     <FetchCategoriesContainer
                         v-slot="slotProps"
