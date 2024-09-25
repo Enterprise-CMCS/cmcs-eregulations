@@ -2,6 +2,8 @@
 import { ref, inject, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import useCounts from "composables/counts";
+
 import _isArray from "lodash/isArray";
 import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
@@ -42,32 +44,9 @@ if (props.parent !== "search")
 if (!isAuthenticated)
     docTypesArr = docTypesArr.filter((type) => type !== "internal");
 
-const counts = ref({
-    results: {},
-    loading: true,
-    error: false,
-});
+const { counts, fetchCounts } = useCounts();
 
-const fetchCounts = async ({ queryParams }) => {
-    counts.value.loading = true;
-    counts.value.error = false;
-
-    try {
-        const response = await getGranularCounts({
-            apiUrl,
-            requestParams: getRequestParams({ queryParams }),
-        });
-
-        counts.value.results = response;
-    } catch (error) {
-        counts.value.error = true;
-        counts.value.results = {};
-    } finally {
-        counts.value.loading = false;
-    }
-};
-
-fetchCounts({ queryParams: $route.query });
+fetchCounts({ apiUrl, queryParams: $route.query });
 
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
@@ -129,7 +108,7 @@ watch(
     (newQuery) => {
         const { type: typeParams } = newQuery;
 
-        fetchCounts({ queryParams: newQuery });
+        fetchCounts({ apiUrl, queryParams: newQuery });
 
         if (_isUndefined(typeParams) || typeParams.includes("all")) {
             checkedBoxes.value = [];
