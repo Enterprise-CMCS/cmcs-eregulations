@@ -9,12 +9,10 @@ import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
-import { getGranularCounts } from "utilities/api";
 import {
     COUNT_TYPES_MAP,
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
-    getRequestParams,
 } from "utilities/utils";
 
 const props = defineProps({
