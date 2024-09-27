@@ -88,10 +88,10 @@ const fetchJson = ({
         )
         .then((value) => {
             if (value && Date.now() < value.expiration_date) {
-                console.log("CACHE HIT");
+                console.info("CACHE HIT");
                 return value;
             } else {
-                console.log("CACHE MISS");
+                console.info("CACHE MISS");
                 return fetch(url, merged);
             }
         })
@@ -103,7 +103,7 @@ const fetchJson = ({
 
                 return Promise.resolve()
                     .then(() =>
-                        console.log(
+                        console.info(
                             `Retrying count = ${retryCount}, Backoff = ${backoff}`
                         )
                     )
@@ -142,7 +142,7 @@ const fetchJson = ({
 
                         return Promise.resolve()
                             .then(() =>
-                                console.log(
+                                console.info(
                                     `Retrying count = ${retryCount}, Backoff = ${backoff}`
                                 )
                             )
@@ -182,7 +182,7 @@ const fetchJson = ({
                 return json;
             }
         });
-}
+};
 
 // ---------- helper functions ---------------
 
@@ -208,7 +208,7 @@ const httpApiGet = (
         retryCount: 0, // retryCount, default
         cacheResponse,
     });
-}
+};
 
 // ---------- cache helpers -----------
 
@@ -558,6 +558,17 @@ const getCombinedContent = async ({
         cacheResponse
     );
 
+const getGranularCounts = async ({
+    apiUrl,
+    requestParams = "",
+    cacheResponse = DEFAULT_CACHE_RESPONSE,
+}) =>
+    httpApiGet(
+        `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
+        {},
+        cacheResponse
+    );
+
 /**
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
@@ -614,6 +625,7 @@ export {
     getContentWithoutQuery,
     getExternalCategories,
     getGovInfoLinks,
+    getGranularCounts,
     getInternalCategories,
     getInternalDocs,
     getInternalSubjects,
