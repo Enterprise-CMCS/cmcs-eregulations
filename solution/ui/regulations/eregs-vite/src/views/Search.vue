@@ -372,44 +372,46 @@ getDocSubjects();
                             policyDocList.loading || partsLastUpdated.loading
                         "
                     />
-                    <FetchCategoriesContainer
-                        v-slot="slotProps"
-                        :categories-capture-function="setCategories"
-                    >
-                        <CategoriesDropdown
-                            v-show="showCategoriesRef"
-                            :list="slotProps.data"
-                            :error="slotProps.error"
+                    <div class="search__fieldset--dropdowns">
+                        <FetchCategoriesContainer
+                            v-slot="slotProps"
+                            :categories-capture-function="setCategories"
+                        >
+                            <CategoriesDropdown
+                                v-show="showCategoriesRef"
+                                :list="slotProps.data"
+                                :error="slotProps.error"
+                                :loading="
+                                    slotProps.loading || policyDocList.loading
+                                "
+                                parent="search"
+                            />
+                        </FetchCategoriesContainer>
+                        <v-select
+                            menu
+                            class="filter__select filter__select--subjects"
+                            data-testid="subjects-select"
+                            variant="outlined"
+                            clearable
+                            persistent-clear
+                            single-line
+                            hide-details
+                            flat
+                            clear-icon="mdi-close"
+                            menu-icon="mdi-menu-swap"
+                            label="Choose Subject"
+                            density="compact"
                             :loading="
-                                slotProps.loading || policyDocList.loading
+                                policyDocList.loading || policyDocSubjects.loading
                             "
-                            parent="search"
-                        />
-                    </FetchCategoriesContainer>
-                    <v-select
-                        menu
-                        class="filter__select filter__select--subjects"
-                        data-testid="subjects-select"
-                        variant="outlined"
-                        clearable
-                        persistent-clear
-                        single-line
-                        hide-details
-                        flat
-                        clear-icon="mdi-close"
-                        menu-icon="mdi-menu-swap"
-                        label="Choose Subject"
-                        density="compact"
-                        :loading="
-                            policyDocList.loading || policyDocSubjects.loading
-                        "
-                        :disabled="
-                            policyDocList.loading || policyDocSubjects.loading
-                        "
-                        :items="policyDocSubjects.results"
-                        item-title="full_name"
-                        item-value="id"
-                    ></v-select>
+                            :disabled="
+                                policyDocList.loading || policyDocSubjects.loading
+                            "
+                            :items="policyDocSubjects.results"
+                            item-title="full_name"
+                            item-value="id"
+                        ></v-select>
+                    </div>
                 </fieldset>
             </section>
             <section class="search-results">

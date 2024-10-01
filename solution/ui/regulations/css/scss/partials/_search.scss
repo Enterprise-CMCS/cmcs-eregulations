@@ -41,6 +41,12 @@
             .doc-type__toggle fieldset {
                 flex-wrap: wrap;
             }
+
+            &--dropdowns {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacer-2);
+            }
         }
 
         .search-form {
@@ -216,11 +222,11 @@
 
         .row__title {
             display: inline-block;
-            flex: 0 0  280px;
+            flex: 0 0 280px;
             margin-right: var(--spacer-6);
 
             @media (max-width: $eds-width-sm) {
-                flex: 0 0  135px;
+                flex: 0 0 135px;
             }
         }
 
