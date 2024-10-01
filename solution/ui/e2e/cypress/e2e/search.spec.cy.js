@@ -161,6 +161,10 @@ describe("Search flow", () => {
     });
 
     it("should not show internal checkbox when not logged in", () => {
+        cy.intercept(`**/v3/content-search/counts**`, {
+            fixture: "counts.json",
+        }).as("counts");
+
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".doc-type__toggle fieldset > div")
@@ -189,7 +193,7 @@ describe("Search flow", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(2)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("have.text", "Internal Resources(1)");
     });
 
     it("should not show the categories dropdown when only regulations are selected", () => {
@@ -242,7 +246,7 @@ describe("Search flow", () => {
 
         cy.url().should(
             "include",
-            `/search?q=${SEARCH_TERM}&type=regulations,external`
+            `/search?q=${SEARCH_TERM}&type=regulations,external`,
         );
         cy.url().should("not.include", "internal");
 
@@ -253,7 +257,7 @@ describe("Search flow", () => {
 
         cy.url().should(
             "include",
-            `/search?q=${SEARCH_TERM}&type=regulations,external,internal`
+            `/search?q=${SEARCH_TERM}&type=regulations,external,internal`,
         );
     });
 
@@ -281,7 +285,7 @@ describe("Search flow", () => {
                     .should(
                         "have.css",
                         "background-color",
-                        "rgb(252, 229, 175)"
+                        "rgb(252, 229, 175)",
                     );
             });
         });
@@ -289,9 +293,6 @@ describe("Search flow", () => {
 
     it("shows the appropriate messages when there are no search results", () => {
         cy.intercept(`**/v3/content-search/**`, {
-            internal_count: 0,
-            public_count: 0,
-            reg_text_count: 0,
             next: null,
             previous: null,
             count: 0,
@@ -303,7 +304,7 @@ describe("Search flow", () => {
 
         cy.get(".no-results__span").should(
             "have.text",
-            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`,
         );
 
         cy.get("[data-testid=research-row-1]").should("not.exist");
@@ -315,7 +316,7 @@ describe("Search flow", () => {
 
         cy.get(".no-results__span").should(
             "have.text",
-            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results with the selected filters.`
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results with the selected filters.`,
         );
 
         cy.get("[data-testid=research-row-1]")
@@ -326,7 +327,7 @@ describe("Search flow", () => {
 
         cy.get(".no-results__span").should(
             "have.text",
-            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`
+            `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`,
         );
 
         cy.get("[data-testid=research-row-1]").should("not.exist");
@@ -343,7 +344,7 @@ describe("Search flow", () => {
         cy.get(".research__title").should("exist");
         cy.get(".research__title").should(
             "have.text",
-            "Continue Your Research"
+            "Continue Your Research",
         );
 
         cy.get("[data-testid=research-row-1]").should("not.exist");
@@ -356,7 +357,7 @@ describe("Search flow", () => {
         cy.get(".research__title").should("exist");
         cy.get(".research__title").should(
             "have.text",
-            "Continue Your Research"
+            "Continue Your Research",
         );
 
         cy.get("[data-testid=research-row-1]")

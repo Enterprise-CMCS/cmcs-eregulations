@@ -6,7 +6,7 @@
   "devDependencies": {
     "serverless-associate-waf": "^1.2.1",
     "serverless-go-plugin": "^2.0.1",
-    "serverless-python-requirements": "^5.1.1",
+    "serverless-python-requirements": "^5.4.0",
     "serverless-wsgi": "^1.7.8"
   }
 }

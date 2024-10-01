@@ -47,24 +47,20 @@ class TestResourcesEndpoint(TestCase):
 
     def test_counts_logged_in(self):
         self.login()
-        response = self.client.get("/v3/resources/?group_resources=false")
-        data = get_paginated_data(response)
-        self.assertEqual(len(data["results"]), 3)
-        self.assertIn("count", data)
-        self.assertIn("internal_count", data)
-        self.assertIn("public_count", data)
-        self.assertEqual(data["internal_count"], 1)
-        self.assertEqual(data["public_count"], 2)
+        data = self.client.get("/v3/resources/?group_resources=false").data
+        self.assertEqual(data["count"], 3)
+        self.assertIn("count_url", data)
+        data = self.client.get(data["count_url"]).data
+        self.assertEqual(data["internal_resource_count"], 1)
+        self.assertEqual(data["public_resource_count"], 2)
 
     def test_counts_logged_out(self):
-        response = self.client.get("/v3/resources/?group_resources=false")
-        data = get_paginated_data(response)
-        self.assertEqual(len(data["results"]), 2)
-        self.assertIn("count", data)
-        self.assertIn("internal_count", data)
-        self.assertIn("public_count", data)
-        self.assertEqual(data["internal_count"], 0)
-        self.assertEqual(data["public_count"], 2)
+        data = self.client.get("/v3/resources/?group_resources=false").data
+        self.assertEqual(data["count"], 2)
+        self.assertIn("count_url", data)
+        data = self.client.get(data["count_url"]).data
+        self.assertEqual(data["internal_resource_count"], 0)
+        self.assertEqual(data["public_resource_count"], 2)
 
     def test_duplicate_groups(self):
         # If groups are duplicated, then len(response.data) will be greater than 1

@@ -6,7 +6,6 @@ from django.http import JsonResponse
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from cmcs_regulations.utils import ViewSetPagination
@@ -47,14 +46,28 @@ logger = logging.getLogger(__name__)
 
 
 class ResourceCountPagination(ViewSetPagination):
-    def get_count_map(self):
-        prefix = "" if self.view.model == AbstractResource else "abstractresource_ptr__"
-        internal_filter = Q(**{f"{prefix}abstractinternalresource__isnull": False})
-        public_filter = Q(**{f"{prefix}abstractpublicresource__isnull": False})
-        return [
-            {"name": "internal_count", "count_field": "pk", "filter": internal_filter},
-            {"name": "public_count", "count_field": "pk", "filter": public_filter},
-        ]
+    def get_additional_attributes(self):
+        try:
+            from content_search.views import ContentCountViewSet
+            return {**super().get_additional_attributes(), **{
+                "count_url": ContentCountViewSet.generate_url(self.request),
+            }}
+        except ImportError:
+            return super().get_additional_attributes()
+
+    def get_additional_attribute_schemas(self):
+        try:
+            from content_search.views import ContentCountViewSet  # noqa
+            return {**super().get_additional_attribute_schemas(), **{
+                "count_url": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/content_count/?q=example",
+                },
+            }}
+        except ImportError:
+            return super().get_additional_attribute_schemas()
 
 
 RESOURCE_ENDPOINT_PARAMETERS = [
@@ -239,7 +252,6 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
 
 class InternalResourceViewSet(ResourceViewSet):
     model = AbstractInternalResource
-    authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     @extend_schema(

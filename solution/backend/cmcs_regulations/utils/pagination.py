@@ -1,4 +1,3 @@
-from django.db.models import Count
 from drf_spectacular.utils import OpenApiParameter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -7,10 +6,9 @@ from rest_framework.response import Response
 # Generic pagination for viewsets.
 # Provides a "page_size" parameter for controlling the number of results per page. Default page size is 100.
 #
-# To include counts of types in the response, subclass this and override `get_count_map` to return a list
-# of dictionaries of the form: {"name": "name_of_count", "count_field": "field_to_count", "filter": Q() filter or None}.
-#
 # To include additional attributes, override `get_additional_attributes` and return a dictionary of additional attributes.
+# To reflect additional attributes in the OpenAPI schema, override `get_additional_attribute_schemas` and return a dictionary.
+#    - See `get_paginated_response_schema` for an example of an additional attribute schema.
 class ViewSetPagination(PageNumberPagination):
     QUERY_PARAMETERS = [
         OpenApiParameter(
@@ -34,19 +32,10 @@ class ViewSetPagination(PageNumberPagination):
     max_page_size = 1000
     page_size = 100
 
-    def get_count_map(self):
-        return None
-
-    def get_additional_counts(self):
-        additional_counts = self.get_count_map()
-        if not additional_counts:
-            return {}
-        counts = self.queryset.aggregate(
-            **{count["name"]: Count(count["count_field"], filter=count["filter"]) for count in additional_counts}
-        )
-        return {count["name"]: counts[count["name"]] for count in additional_counts}
-
     def get_additional_attributes(self):
+        return {}
+
+    def get_additional_attribute_schemas(self):
         return {}
 
     def paginate_queryset(self, queryset, request, view=None):
@@ -58,7 +47,6 @@ class ViewSetPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response({
             **self.get_additional_attributes(),
-            **self.get_additional_counts(),
             **{
                 "next": self.get_next_link(),
                 "previous": self.get_previous_link(),
@@ -66,3 +54,26 @@ class ViewSetPagination(PageNumberPagination):
                 "results": data,
             },
         })
+
+    def get_paginated_response_schema(self, schema):
+        return {
+            "type": "object",
+            "required": ["count", "results"],
+            "properties": {
+                **self.get_additional_attribute_schemas(),
+                "next": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/accounts/?page=4",
+                },
+                "previous": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                    "example": "http://api.example.org/accounts/?page=2",
+                },
+                "count": {"type": "integer", "example": 123},
+                "results": schema,
+            },
+        }

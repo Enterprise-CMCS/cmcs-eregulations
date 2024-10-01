@@ -21,3 +21,9 @@ class ContentSearchSerializer(serializers.Serializer):
 
     resource = AbstractResourceSerializer()
     reg_text = IndexedRegulationTextSerializer()
+
+
+class ContentCountSerializer(serializers.Serializer):
+    internal_resource_count = serializers.IntegerField()
+    public_resource_count = serializers.IntegerField()
+    regulation_text_count = serializers.IntegerField()
