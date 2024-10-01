@@ -373,20 +373,6 @@ getDocSubjects();
                         "
                     />
                     <div class="search__fieldset--dropdowns">
-                        <FetchCategoriesContainer
-                            v-slot="slotProps"
-                            :categories-capture-function="setCategories"
-                        >
-                            <CategoriesDropdown
-                                v-show="showCategoriesRef"
-                                :list="slotProps.data"
-                                :error="slotProps.error"
-                                :loading="
-                                    slotProps.loading || policyDocList.loading
-                                "
-                                parent="search"
-                            />
-                        </FetchCategoriesContainer>
                         <v-select
                             menu
                             class="filter__select filter__select--subjects"
@@ -411,6 +397,20 @@ getDocSubjects();
                             item-title="full_name"
                             item-value="id"
                         ></v-select>
+                        <FetchCategoriesContainer
+                            v-slot="slotProps"
+                            :categories-capture-function="setCategories"
+                        >
+                            <CategoriesDropdown
+                                v-show="showCategoriesRef"
+                                :list="slotProps.data"
+                                :error="slotProps.error"
+                                :loading="
+                                    slotProps.loading || policyDocList.loading
+                                "
+                                parent="search"
+                            />
+                        </FetchCategoriesContainer>
                     </div>
                 </fieldset>
             </section>
