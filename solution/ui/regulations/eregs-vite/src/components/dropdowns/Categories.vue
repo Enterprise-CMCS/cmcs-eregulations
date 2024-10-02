@@ -1,5 +1,13 @@
 <script setup>
-import { inject, onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
+import {
+    inject,
+    onBeforeMount,
+    onMounted,
+    onUnmounted,
+    provide,
+    ref,
+    watch,
+} from "vue";
 
 import useRemoveList from "composables/removeList";
 
@@ -7,9 +15,7 @@ import _isUndefined from "lodash/isUndefined";
 
 import { useRoute, useRouter } from "vue-router";
 
-import { DOCUMENT_TYPES_MAP } from "utilities/utils";
-
-import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
+import GenericDropdown from "./GenericDropdown.vue";
 
 const removeList = inject("commonRemoveList", []);
 
@@ -17,6 +23,8 @@ const catTypeDict = {
     categories: "external",
     intcategories: "internal",
 };
+
+provide("catTypeDict", catTypeDict);
 
 const props = defineProps({
     error: {
@@ -60,11 +68,13 @@ onBeforeMount(() => {
 const itemProps = (item) => ({
     value: `${item.id}-${item.categoryType}`,
     title: item.name,
+    "data-testid": `${catTypeDict[item.categoryType]}-${item.id}`,
 });
 
 watch(
     () => selectedId.value,
     (newValue) => {
+        console.log("selectedId changed", newValue);
         const categoriesObj = {};
         const docTypeObj = {};
 
@@ -103,14 +113,10 @@ watch(
 watch(
     () => $route.query,
     (newQueryParams, oldQueryParams) => {
-        const {
-            categories: newCategories,
-            intcategories: newIntcategories,
-        } = newQueryParams;
-        const {
-            categories: oldCategories,
-            intcategories: oldIntcategories,
-        } = oldQueryParams;
+        const { categories: newCategories, intcategories: newIntcategories } =
+            newQueryParams;
+        const { categories: oldCategories, intcategories: oldIntcategories } =
+            oldQueryParams;
 
         if (
             (oldCategories && newIntcategories) ||
@@ -165,6 +171,7 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener("popstate", onPopState));
 
 const onMenuUpdate = () => {
+    console.log("menu updated");
     // if we're toggling the menu via click or kb event,
     // we are not being silent
     if (silentReset.value) silentReset.value = false;
@@ -172,44 +179,17 @@ const onMenuUpdate = () => {
 </script>
 
 <template>
-    <v-select
+    <GenericDropdown
         v-model="selectedId"
-        class="filter__select filter__select--category"
+        class="filter__select--category"
         data-testid="category-select"
-        variant="outlined"
-        clearable
-        persistent-clear
-        single-line
-        hide-details
-        flat
-        clear-icon="mdi-close"
-        menu-icon="mdi-menu-swap"
+        item-type="CategoriesItem"
         label="Choose Category"
-        density="compact"
         :loading="loading"
         :disabled="loading"
         :items="list"
         :item-props="itemProps"
         @update:menu="onMenuUpdate"
     >
-        <template #item="{ props, item }">
-            <v-list-item
-                v-bind="props"
-                :data-testid="`${catTypeDict[item.raw.categoryType]}-${
-                    item.raw.catIndex
-                }`"
-            >
-                <DocTypeLabel
-                    v-if="isAuthenticated && item.raw.catIndex == 0"
-                    :class="`doc-type__label--${
-                        catTypeDict[item.raw.categoryType]
-                    }`"
-                    :icon-type="catTypeDict[item.raw.categoryType]"
-                    :doc-type="
-                        DOCUMENT_TYPES_MAP[catTypeDict[item.raw.categoryType]]
-                    "
-                />
-            </v-list-item>
-        </template>
-    </v-select>
+    </GenericDropdown>
 </template>

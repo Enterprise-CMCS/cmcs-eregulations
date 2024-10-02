@@ -17,6 +17,7 @@ import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
 import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
+import GenericDropdown from "@/components/dropdowns/GenericDropdown.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -373,30 +374,22 @@ getDocSubjects();
                         "
                     />
                     <div class="search__fieldset--dropdowns">
-                        <v-select
-                            menu
-                            class="filter__select filter__select--subjects"
-                            data-testid="subjects-select"
-                            variant="outlined"
-                            clearable
-                            persistent-clear
-                            single-line
-                            hide-details
-                            flat
-                            clear-icon="mdi-close"
-                            menu-icon="mdi-menu-swap"
+                        <GenericDropdown
+                            class="filter__select--subjects"
+                            data-testid="subjects-select-1234h"
                             label="Choose Subject"
-                            density="compact"
                             :loading="
-                                policyDocList.loading || policyDocSubjects.loading
+                                policyDocList.loading ||
+                                policyDocSubjects.loading
                             "
                             :disabled="
-                                policyDocList.loading || policyDocSubjects.loading
+                                policyDocList.loading ||
+                                policyDocSubjects.loading
                             "
                             :items="policyDocSubjects.results"
                             item-title="full_name"
                             item-value="id"
-                        ></v-select>
+                        />
                         <FetchCategoriesContainer
                             v-slot="slotProps"
                             :categories-capture-function="setCategories"
