@@ -3,7 +3,7 @@ import CategoriesItem from "./CategoriesItem.vue";
 
 const itemTypes = { CategoriesItem };
 
-const props = defineProps({
+defineProps({
     itemType: {
         type: String,
         default: undefined,
@@ -26,9 +26,11 @@ const props = defineProps({
         density="compact"
     >
         <template v-if="itemType" #item="{ props, item }">
-            <v-list-item v-bind="props">
-                <component :is="itemTypes[itemType]" :item="item" />
-            </v-list-item>
+            <component
+                :is="itemTypes[itemType]"
+                :scoped-props="props"
+                :item="item"
+            />
         </template>
     </v-select>
 </template>

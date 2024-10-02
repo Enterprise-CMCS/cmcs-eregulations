@@ -74,7 +74,6 @@ const itemProps = (item) => ({
 watch(
     () => selectedId.value,
     (newValue) => {
-        console.log("selectedId changed", newValue);
         const categoriesObj = {};
         const docTypeObj = {};
 
@@ -171,7 +170,6 @@ onMounted(() => {
 onUnmounted(() => window.removeEventListener("popstate", onPopState));
 
 const onMenuUpdate = () => {
-    console.log("menu updated");
     // if we're toggling the menu via click or kb event,
     // we are not being silent
     if (silentReset.value) silentReset.value = false;
@@ -182,7 +180,6 @@ const onMenuUpdate = () => {
     <GenericDropdown
         v-model="selectedId"
         class="filter__select--category"
-        data-testid="category-select"
         item-type="CategoriesItem"
         label="Choose Category"
         :loading="loading"
