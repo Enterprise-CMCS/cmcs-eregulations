@@ -17,7 +17,6 @@ import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
 import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
-import GenericDropdown from "@/components/dropdowns/GenericDropdown.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -29,6 +28,7 @@ import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInLink from "@/components/SignInLink.vue";
+import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -49,22 +49,22 @@ const $router = useRouter();
 const pageSize = 50;
 
 // show/hide categories dropdown
-const showCategoriesRef = ref();
+const showDropdownsRef = ref();
 
-const setShowCategories = (type) => {
+const setShowDropdowns = (type) => {
     // hide categories dropdown if only regulations are selected
     if (
         type &&
         type.split(",").length === 1 &&
         type.split(",")[0] === "regulations"
     ) {
-        showCategoriesRef.value = false;
+        showDropdownsRef.value = false;
     } else {
-        showCategoriesRef.value = true;
+        showDropdownsRef.value = true;
     }
 };
 
-setShowCategories($route.query.type);
+setShowDropdowns($route.query.type);
 
 // provide Django template variables
 provide("currentRouteName", $route.name);
@@ -270,7 +270,7 @@ watch(
     async (newQueryParams) => {
         const { q, type } = newQueryParams;
 
-        setShowCategories(type);
+        setShowDropdowns(type);
 
         // wipe everything clean to start
         clearSelectedParams();
@@ -374,28 +374,22 @@ getDocSubjects();
                         "
                     />
                     <div class="search__fieldset--dropdowns">
-                        <GenericDropdown
-                            class="filter__select--subjects"
-                            data-testid="subjects-select-1234h"
-                            label="Choose Subject"
+                        <SubjectsDropdown
+                            v-show="showDropdownsRef"
+                            :list="policyDocSubjects.results"
+                            :error="policyDocSubjects.error"
                             :loading="
                                 policyDocList.loading ||
                                 policyDocSubjects.loading
                             "
-                            :disabled="
-                                policyDocList.loading ||
-                                policyDocSubjects.loading
-                            "
-                            :items="policyDocSubjects.results"
-                            item-title="full_name"
-                            item-value="id"
+                            parent="search"
                         />
                         <FetchCategoriesContainer
                             v-slot="slotProps"
                             :categories-capture-function="setCategories"
                         >
                             <CategoriesDropdown
-                                v-show="showCategoriesRef"
+                                v-show="showDropdownsRef"
                                 :list="slotProps.data"
                                 :error="slotProps.error"
                                 :loading="
