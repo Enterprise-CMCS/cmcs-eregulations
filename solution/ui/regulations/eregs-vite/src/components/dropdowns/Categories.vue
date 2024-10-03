@@ -177,6 +177,8 @@ const onMenuUpdate = () => {
 </script>
 
 <template>
+    <!-- use fallthrough attributes ($attrs) to be sent into v-select -->
+    <!-- https://vuejs.org/guide/components/attrs -->
     <GenericDropdown
         v-model="selectedId"
         class="filter__select--category"
