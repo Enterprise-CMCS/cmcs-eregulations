@@ -76,7 +76,6 @@ class TestResourceGrouping(TestCase):
         link.subjects.set([subjects[6]])
         link.save()
 
-
     # Ensure only items 0 and 1 are computed to be group parents
     def test_group_parents(self):
         links = FederalRegisterLink.objects.filter(resource_groups__isnull=False).order_by("id").distinct()
@@ -212,7 +211,7 @@ class TestResourceGrouping(TestCase):
         ).distinct()
 
         # To simplify the following code, get link by pk instead of array index
-        get_link = lambda i: [link for link in links if link.id == i][0]
+        def get_link(i): return [link for link in links if link.id == i][0]
 
         # Verify group_parent field is set correctly
         for i in config["parents_true"]:

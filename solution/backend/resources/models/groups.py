@@ -59,7 +59,8 @@ def update_related_resources(resource, first=True):
     # Note that all_groups and all_resources are cast to lists of pks to avoid issues with the queryset being erased
     # later in this function for reasons unknown.
     new_groups = resource.resource_groups.all()
-    all_groups = list(ResourceGroup.objects.filter(Q(pk__in=new_groups) | Q(resources__in=resource.related_resources.all())).distinct().values_list("pk", flat=True))
+    q = Q(pk__in=new_groups) | Q(resources__in=resource.related_resources.all())
+    all_groups = list(ResourceGroup.objects.filter(q).distinct().values_list("pk", flat=True))
     all_resources = list(AbstractResource.objects.filter(resource_groups__in=all_groups).distinct().values_list("pk", flat=True))
 
     if first:
