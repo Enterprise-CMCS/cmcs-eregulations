@@ -52,44 +52,50 @@ class ResourceGroup(models.Model):
 
 
 def update_related_resources(resource, first=True):
-    groups = resource.resource_groups.all()
+    # Compute the difference between old groups and new groups and process all affected resources.
+    # This takes care of the case where the resource was previously in a group, but is now not in that group.
+    # We must ensure related fields and parents are updated for all related_resources that currently exist.
+    #
+    # Note that all_groups and all_resources are cast to lists of pks to avoid issues with the queryset being erased
+    # later in this function for reasons unknown.
+    new_groups = resource.resource_groups.all()
+    all_groups = list(ResourceGroup.objects.filter(Q(pk__in=new_groups) | Q(resources__in=resource.related_resources.all())).distinct().values_list("pk", flat=True))
+    all_resources = list(AbstractResource.objects.filter(resource_groups__in=all_groups).distinct().values_list("pk", flat=True))
 
-    if not groups:
-        # This resource does not belong to any groups, so we will treat it differently.
+    if first:
+        # Set the parent of each affected group (most recent by date at the top of each group's hierarchy)
+        AbstractResource.objects.filter(pk__in=all_resources).update(group_parent=False)
+        for group in ResourceGroup.objects.filter(pk__in=all_groups):
+            group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
+
+    # Compute the related resources, citations, categories, and subjects
+    # Except for related_resources, these lists are inclusive of the resource we are processing
+    if new_groups:
+        related_resources = AbstractResource.objects.filter(resource_groups__in=new_groups)
+        related_aggregates = related_resources.aggregate(
+            all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False), default=Value([])),
+            all_categories=ArrayAgg("category", distinct=True, filter=Q(category__isnull=False), default=Value([])),
+            all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False), default=Value([])),
+        )
+        related_resources = related_resources.exclude(pk=resource.pk)  # Exclude the current resource for related_resources
+
+        # Set related_X fields for this resource
+        resource.related_resources.set(related_resources)
+        resource.related_citations.set(related_aggregates["all_citations"])
+        resource.related_categories.set(related_aggregates["all_categories"])
+        resource.related_subjects.set(related_aggregates["all_subjects"])
+    else:
         # Set related_X to contain only the X objects in the individual resource.
         # We must do this for filtering purposes when `group_resources=true` on resource endpoints.
         resource.related_resources.clear()
         resource.related_citations.set(resource.cfr_citations.all())
         resource.related_categories.set([resource.category] if resource.category else [])
         resource.related_subjects.set(resource.subjects.all())
-        return
 
     if first:
-        # Set the parent of each group (most recent by date at the top of each group's hierarchy)
-        AbstractResource.objects.filter(resource_groups__in=groups).update(group_parent=False)
-        for group in groups:
-            group.resources.filter(pk=group.resources.order_by("-date").first().pk).update(group_parent=True)
-
-    # Compute the related resources, citations, categories, and subjects
-    # Except for related_resources, these lists are inclusive of the resource we are processing
-    related_resources = AbstractResource.objects.filter(resource_groups__in=groups)
-    related_aggregates = related_resources.aggregate(
-        all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False), default=Value([])),
-        all_categories=ArrayAgg("category", distinct=True, filter=Q(category__isnull=False), default=Value([])),
-        all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False), default=Value([])),
-    )
-    related_resources = related_resources.exclude(pk=resource.pk)  # Exclude the current resource for related_resources
-
-    # Set related_X for this resource
-    resource.related_resources.set(related_resources)
-    resource.related_citations.set(related_aggregates["all_citations"])
-    resource.related_categories.set(related_aggregates["all_categories"])
-    resource.related_subjects.set(related_aggregates["all_subjects"])
-
-    if first:
-        # For the first resource processed, also update all of its related_resources
-        for related_resource in related_resources:
-            update_related_resources(related_resource, False)
+        # For the first resource processed, also update all affected resources (new and old)
+        for affected in AbstractResource.objects.filter(pk__in=all_resources):
+            update_related_resources(affected, False)
 
 
 @receiver(post_save, sender=ResourceGroup)
