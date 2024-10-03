@@ -121,6 +121,11 @@
             }
 
             .v-field__field {
+                label {
+                    color: $primary_text_color;
+                    opacity: 1;
+                }
+
                 .v-field__input {
                     padding-inline: 4px;
                     min-height: 30px;
