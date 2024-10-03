@@ -30,7 +30,6 @@ jobs:
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-username: noVal # required variable for package but not for Enterprise Jira
-          jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'
