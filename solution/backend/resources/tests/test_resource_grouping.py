@@ -159,6 +159,47 @@ class TestResourceGrouping(TestCase):
         self.assertCountEqual(link.related_subjects_set, [6])
         self.assertCountEqual(link.related_citations_set, [6, 7])
 
+    def test_update_group(self):
+        group = ResourceGroup.objects.get(id=0)
+        group.resources.set([2, 4])
+        group.save()
+
+        links = FederalRegisterLink.objects.filter(resource_groups__isnull=False).order_by("id").annotate(
+            related_resources_set=distinct_array_agg("related_resources"),
+            related_categories_set=distinct_array_agg("related_categories"),
+            related_subjects_set=distinct_array_agg("related_subjects"),
+            related_citations_set=distinct_array_agg("related_citations"),
+        ).distinct()
+
+        [self.assertEqual(links[i].group_parent, True) for i in [0, 2, 1]]
+        [self.assertEqual(links[i].group_parent, False) for i in [3, 4, 5]]
+
+        expected = [
+            [3, 5],
+            [3],
+            [4],
+            [0, 5, 1],
+            [2],
+            [0, 3],
+        ]
+
+        for i in range(len(links)):
+            self.assertCountEqual(
+                links[i].related_resources_set,
+                expected[i],
+                msg=f"related_resources for resource {i} is incorrect!",
+            )
+            self.assertCountEqual(
+                links[i].related_categories_set,
+                expected[i] + [i],
+                msg=f"related_categories for resource {i} is incorrect!",
+            )
+            self.assertCountEqual(
+                links[i].related_subjects_set,
+                expected[i] + [i],
+                msg=f"related_subjects for resource {i} is incorrect!",
+            )
+
     # Test that a resource's related_X fields are cleared when removed from a group
     #
     # Test config looks like:

@@ -101,8 +101,9 @@ def update_related_resources(resource, first=True):
 
 @receiver(post_save, sender=ResourceGroup)
 def update_resource_group(sender, instance, **kwargs):
-    for resource in instance.resources.all():
-        update_related_resources(resource)
+    resources = instance.resources.all()
+    if resources:
+        update_related_resources(resources.first())
 
 
 @receiver(post_save, sender=AbstractResource)
