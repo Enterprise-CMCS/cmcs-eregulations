@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, provide, reactive, ref, watch } from "vue";
+import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import useSearchResults from "composables/searchResults";
@@ -9,8 +9,6 @@ import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
-
-import { getSubjectName } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
