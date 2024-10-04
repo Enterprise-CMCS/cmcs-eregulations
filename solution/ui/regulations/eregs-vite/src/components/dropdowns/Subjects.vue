@@ -26,7 +26,7 @@ const props = defineProps({
 <template>
     <GenericDropdown
         class="filter__select--subjects"
-        data-testid="subjects-select"
+        data-testid="subject-select"
         label="Choose Subject"
         :loading="loading"
         :items="list"

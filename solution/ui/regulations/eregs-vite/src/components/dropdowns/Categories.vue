@@ -182,6 +182,7 @@ const onMenuUpdate = () => {
     <GenericDropdown
         v-model="selectedId"
         class="filter__select--category"
+        data-testid="category-select"
         item-type="CategoriesItem"
         label="Choose Category"
         :loading="loading"
