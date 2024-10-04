@@ -148,36 +148,7 @@ const getPartsLastUpdated = async () => {
 
 const { policyDocList, getDocList, clearDocList } = useSearchResults();
 
-// use "reactive" method to make urlParams reactive when provided/injected
-// selectedParams.paramString is used as the reactive prop
-const selectedParams = reactive({
-    paramString: "",
-    paramsArray: [],
-});
-
-// method to add selected params
-const addSelectedParams = (paramArgs) => {
-    const { id, name, type } = paramArgs;
-
-    // update paramString that is used as reactive prop for watch
-    if (selectedParams.paramString) {
-        selectedParams.paramString += `&${type}=${id}`;
-    } else {
-        selectedParams.paramString = `?${type}=${id}`;
-    }
-
-    // create new selectedParams key for array of objects for selections
-    selectedParams.paramsArray.push({ id, name, type });
-};
-
-const clearSelectedParams = () => {
-    selectedParams.paramString = "";
-    selectedParams.paramsArray = [];
-};
-
-provide("selectedParams", selectedParams);
-
-const setSelectedParams = (subjectsListRef) => (param) => {
+const setSelectedParams = (param) => {
     const [paramType, paramValue] = param;
 
     if (commonRemoveList.includes(paramType)) {
@@ -188,21 +159,6 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         searchQuery.value = paramValue;
         return;
     }
-
-    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
-    paramList.forEach((paramId) => {
-        const subject = subjectsListRef.value.results.filter(
-            (subjectObj) => paramId === subjectObj.id.toString()
-        )[0];
-
-        if (subject) {
-            addSelectedParams({
-                type: paramType,
-                id: paramId,
-                name: getSubjectName(subject),
-            });
-        }
-    });
 };
 
 // policyDocSubjects fetch for subject selector
@@ -217,7 +173,29 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-// called on load
+getDocsOnLoad = async () => {
+    if (!$route.query.q) {
+        clearDocList();
+        return;
+    }
+
+    // wipe everything clean to start
+    clearSearchQuery();
+
+    // now that everything is cleaned, iterate over new query params
+    Object.entries($route.query).forEach((param) => {
+        setSelectedParams(param);
+    });
+
+    getDocList({
+        apiUrl,
+        pageSize,
+        requestParamString: getRequestParams({ queryParams: $route.query }),
+        query: $route.query.q,
+        type: $route.query.type,
+    });
+};
+
 const getDocSubjects = async () => {
     try {
         const subjectsResponse = await getSubjects({
@@ -229,28 +207,6 @@ const getDocSubjects = async () => {
         console.error(error);
     } finally {
         policyDocSubjects.value.loading = false;
-
-        if (!$route.query.q) {
-            clearDocList();
-            return;
-        }
-
-        // wipe everything clean to start
-        clearSelectedParams();
-        clearSearchQuery();
-
-        // now that everything is cleaned, iterate over new query params
-        Object.entries($route.query).forEach((param) => {
-            setSelectedParams(policyDocSubjects)(param);
-        });
-
-        getDocList({
-            apiUrl,
-            pageSize,
-            requestParamString: getRequestParams({ queryParams: $route.query }),
-            query: $route.query.q,
-            type: $route.query.type,
-        });
     }
 };
 
@@ -273,7 +229,6 @@ watch(
         setShowDropdowns(type);
 
         // wipe everything clean to start
-        clearSelectedParams();
         clearSearchQuery();
 
         // set document title
@@ -298,9 +253,7 @@ watch(
         }
 
         // now that everything is cleaned, iterate over new query params
-        Object.entries(newQueryParams).forEach(
-            setSelectedParams(policyDocSubjects)
-        );
+        Object.entries(newQueryParams).forEach(setSelectedParams);
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
@@ -319,6 +272,7 @@ watch(
 
 // fetches on page load
 getPartsLastUpdated();
+getDocsOnLoad();
 getDocSubjects();
 </script>
 

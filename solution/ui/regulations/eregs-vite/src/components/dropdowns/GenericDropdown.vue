@@ -13,7 +13,6 @@ defineProps({
 
 <template>
     <v-select
-        menu
         class="filter__select"
         variant="outlined"
         clearable
