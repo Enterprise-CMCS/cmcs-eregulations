@@ -9,6 +9,23 @@
     margin-bottom: 1em;
 }
 
+.v-overlay__content {
+    .subjects__select-container {
+        &--menu {
+            background-color: white;
+            max-height: 300px;
+            overflow-y: scroll;
+
+            .subjects__list-container {
+                form {
+                    position: sticky;
+                    top: 0px;
+                }
+            }
+        }
+    }
+}
+
 .search-page {
     #searchApp.search-view {
         @include eds-gutters;

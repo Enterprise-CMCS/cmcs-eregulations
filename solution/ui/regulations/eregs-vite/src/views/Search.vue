@@ -272,8 +272,8 @@ watch(
 
 // fetches on page load
 getPartsLastUpdated();
-getDocsOnLoad();
 getDocSubjects();
+getDocsOnLoad();
 </script>
 
 <template>
@@ -330,13 +330,7 @@ getDocSubjects();
                     <div class="search__fieldset--dropdowns">
                         <SubjectsDropdown
                             v-show="showDropdownsRef"
-                            :list="policyDocSubjects.results"
-                            :error="policyDocSubjects.error"
-                            :loading="
-                                policyDocList.loading ||
-                                policyDocSubjects.loading
-                            "
-                            parent="search"
+                            :list="policyDocSubjects"
                         />
                         <FetchCategoriesContainer
                             v-slot="slotProps"

@@ -4,10 +4,14 @@ import SubjectsItem from "./SubjectsItem.vue";
 
 const itemTypes = { CategoriesItem, SubjectsItem };
 
-defineProps({
+const props = defineProps({
     itemType: {
         type: String,
         default: undefined,
+    },
+    isAutocomplete: {
+        type: Boolean,
+        default: false,
     },
 });
 </script>

@@ -16,6 +16,14 @@ const props = defineProps({
         type: Object,
         default: () => ({ results: [], loading: true }),
     },
+    componentType: {
+        type: String,
+        default: "default",
+    },
+    parent: {
+        type: String,
+        default: "subjects",
+    },
 });
 
 const $router = useRouter();
@@ -27,6 +35,10 @@ const state = reactive({
     filter: "",
     subjects: [],
 });
+
+if (!props.policyDocSubjects.loading) {
+    state.subjects = props.policyDocSubjects.results;
+}
 
 watch(
     () => props.policyDocSubjects.loading,
@@ -107,7 +119,7 @@ const subjectClick = (event) => {
     });
 
     $router.push({
-        name: "subjects",
+        name: props.parent,
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
@@ -139,7 +151,7 @@ const filterResetClick = () => {
 
 <template>
     <div class="subjects__select-container">
-        <h3>By Subject</h3>
+        <h3 v-if="parent === 'subjects'">By Subject</h3>
         <div class="subjects__list-container">
             <template v-if="props.policyDocSubjects.loading">
                 <div class="subjects__loading">

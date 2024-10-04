@@ -71,7 +71,8 @@
 }
 
 .filter__select {
-    &--category, &--subjects {
+    &--category,
+    &--subjects {
         width: 214px;
 
         &.v-input {

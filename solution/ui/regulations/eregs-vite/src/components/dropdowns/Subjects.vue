@@ -3,43 +3,28 @@ import { computed, ref } from "vue";
 
 import { getSubjectName } from "utilities/filters";
 
-import GenericDropdown from "./GenericDropdown.vue";
+import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 
 const props = defineProps({
-    error: {
-        type: Object,
-        default: () => {},
-    },
     list: {
-        type: Array,
+        type: Object,
         required: true,
     },
-    loading: {
-        type: Boolean,
-        default: true,
-    },
-    parent: {
-        type: String,
-        default: "subjects",
-    },
-});
-
-const itemProps = (item) => ({
-    value: item.id,
-    title: getSubjectName(item),
 });
 </script>
 
 <template>
-    <GenericDropdown
-        class="filter__select--subjects"
-        data-testid="subject-select"
-        item-type="SubjectsItem"
-        label="Choose Subject"
-        :loading="loading"
-        :items="list"
-        :item-props="itemProps"
-    />
+    <v-btn id="subjects-activator" variant="outlined" density="compact" flat
+        ><span>Test</span></v-btn
+    >
+    <v-menu activator="#subjects-activator">
+        <SubjectSelector
+            :policy-doc-subjects="list"
+            class="subjects__select-container--menu"
+            component-type="dropdown"
+            parent="search"
+        />
+    </v-menu>
 </template>
 
 <style></style>
