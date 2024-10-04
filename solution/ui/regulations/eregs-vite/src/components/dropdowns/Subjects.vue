@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue";
 
+import { getSubjectName } from "utilities/filters";
+
 import GenericDropdown from "./GenericDropdown.vue";
 
 const props = defineProps({
@@ -21,17 +23,22 @@ const props = defineProps({
         default: "subjects",
     },
 });
+
+const itemProps = (item) => ({
+    value: item.id,
+    title: getSubjectName(item),
+});
 </script>
 
 <template>
     <GenericDropdown
         class="filter__select--subjects"
         data-testid="subject-select"
+        item-type="SubjectsItem"
         label="Choose Subject"
         :loading="loading"
         :items="list"
-        item-title="full_name"
-        item-value="id"
+        :item-props="itemProps"
     />
 </template>
 

@@ -1,7 +1,8 @@
 <script setup>
 import CategoriesItem from "./CategoriesItem.vue";
+import SubjectsItem from "./SubjectsItem.vue";
 
-const itemTypes = { CategoriesItem };
+const itemTypes = { CategoriesItem, SubjectsItem };
 
 defineProps({
     itemType: {

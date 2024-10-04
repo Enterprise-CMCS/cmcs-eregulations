@@ -1,22 +1,33 @@
 <script setup>
 import { computed, ref } from "vue";
 
-const props = defineProps({
-    prop1: {
-        type: String,
-        required: true,
-    },
-    prop2: {
+import { getSubjectName } from "utilities/filters";
+
+defineProps({
+    item: {
         type: Object,
-        required: true,
+        default: () => ({}),
+    },
+    scopedProps: {
+        type: Object,
+        default: () => ({}),
     },
 });
 
+const getCounts = (item) =>
+    item.raw.public_resources + item.raw.internal_resources;
+
+const getTitle = (item) => getSubjectName(item.raw);
 </script>
 
 <template>
-    <div class="skeleton"></div>
+    <v-list-item
+        v-bind="scopedProps"
+        :title="getTitle(item)"
+        :value="item.raw.id"
+    >
+        <template #append>({{ getCounts(item) }})</template>
+    </v-list-item>
 </template>
 
 <style></style>
-
