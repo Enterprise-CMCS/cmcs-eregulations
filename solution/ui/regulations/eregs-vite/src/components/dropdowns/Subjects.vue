@@ -14,6 +14,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    loading: {
+        type: Boolean,
+        default: true,
+    },
     parent: {
         type: String,
         default: "search",
@@ -44,7 +48,7 @@ const menuItemClick = (event) => {
     }
 };
 
-const removeClick = () => {
+const clearClick = () => {
     const routeClone = { ...$route.query };
 
     const cleanedRoute = useRemoveList({
@@ -62,12 +66,19 @@ const removeClick = () => {
 </script>
 
 <template>
-    <v-btn-toggle>
-        <v-btn id="subjects-activator" variant="outlined" density="compact" flat
-            ><span>{{ buttonTitle ?? "Choose Subject" }}</span>
-        </v-btn>
-        <v-btn v-if="buttonTitle" icon="mdi-close" @click="removeClick" />
-    </v-btn-toggle>
+    <v-btn
+        id="subjects-activator"
+        :disabled="loading"
+        class="filter__select--subjects"
+        variant="outlined"
+        density="compact"
+        flat
+        :ripple="false"
+        ><span>{{ buttonTitle ?? "Choose Subject" }}</span>
+        <template #append>
+            <v-icon class="subjects__append-icon" icon="mdi-menu-swap"></v-icon>
+        </template>
+    </v-btn>
     <v-menu
         v-model="menuToggleModel"
         activator="#subjects-activator"

@@ -329,6 +329,10 @@ getDocsOnLoad();
                         <SubjectsDropdown
                             v-show="showDropdownsRef"
                             :list="policyDocSubjects"
+                            :loading="
+                                policyDocSubjects.loading ||
+                                policyDocList.loading
+                            "
                             parent="search"
                         />
                         <FetchCategoriesContainer

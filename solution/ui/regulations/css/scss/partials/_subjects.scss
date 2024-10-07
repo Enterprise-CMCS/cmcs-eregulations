@@ -80,10 +80,49 @@
         }
     }
 
+    &--subjects {
+        height: 30px !important;
+        padding: 0 0 0 var(--spacer-1);
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid $border_color;
+
+        .v-btn__content {
+            letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .v-btn__append {
+            margin: 0 -2px 0 0;
+
+            & > .v-icon.subjects__append-icon {
+                min-width: 18px;
+                font-size: 30px;
+                opacity: 1;
+                transition: none;
+            }
+        }
+
+        .v-btn__overlay {
+            opacity: 0 !important;
+        }
+
+        &::after {
+            box-sizing: border-box;
+            border: 2px solid $secondary_border_color !important;
+        }
+
+        &[aria-expanded="true"]::after,
+        &:focus-visible::after {
+            opacity: 1;
+        }
+    }
+
     .v-input__control {
         .v-field {
             &--appended {
-                padding-inline-end: 4px;
+                padding-inline-end: var(--spacer-1);
             }
 
             &.v-field--variant-outlined.v-field--focused {
