@@ -89,14 +89,30 @@
         border: 1px solid $border_color;
 
         .v-btn__content {
+            justify-content: start;
             letter-spacing: 0;
             text-transform: none;
+
+            .subjects-select__label {
+                &--selected {
+                    width: calc(100% - 30px);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .subjects-select__clear {
+                opacity: 0.6;
+                position: absolute;
+                right: 30px;
+            }
         }
 
         .v-btn__append {
             margin: 0 -2px 0 0;
 
-            & > .v-icon.subjects__append-icon {
+            & > .v-icon.subjects-select__append-icon {
                 min-width: 18px;
                 font-size: 30px;
                 opacity: 1;

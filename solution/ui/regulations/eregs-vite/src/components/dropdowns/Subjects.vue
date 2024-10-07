@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
@@ -35,6 +35,11 @@ const menuToggleModel = defineModel({
 
 const buttonTitle = ref();
 
+const labelClasses = computed(() => ({
+    "subjects-select__label": true,
+    "subjects-select__label--selected": buttonTitle.value,
+}));
+
 const menuItemClick = (event) => {
     const menuItemClicked =
         event.target.className.includes("sidebar-li__button");
@@ -48,7 +53,8 @@ const menuItemClick = (event) => {
     }
 };
 
-const clearClick = () => {
+const clearClick = (event) => {
+    event.stopImmediatePropagation();
     const routeClone = { ...$route.query };
 
     const cleanedRoute = useRemoveList({
@@ -74,9 +80,24 @@ const clearClick = () => {
         density="compact"
         flat
         :ripple="false"
-        ><span>{{ buttonTitle ?? "Choose Subject" }}</span>
+    >
+        <template #default>
+            <span :class="labelClasses">{{
+                buttonTitle ?? "Choose Subject"
+            }}</span>
+            <v-icon
+                v-if="buttonTitle"
+                class="subjects-select__clear"
+                icon="mdi-close"
+                size="x-large"
+                @click="clearClick"
+            />
+        </template>
         <template #append>
-            <v-icon class="subjects__append-icon" icon="mdi-menu-swap"></v-icon>
+            <v-icon
+                class="subjects-select__append-icon"
+                icon="mdi-menu-swap"
+            ></v-icon>
         </template>
     </v-btn>
     <v-menu
