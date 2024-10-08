@@ -24,6 +24,10 @@ const props = defineProps({
         type: String,
         default: "subjects",
     },
+    placeholder: {
+        type: String,
+        default: "Filter the subject list",
+    },
 });
 
 const $router = useRouter();
@@ -176,8 +180,8 @@ const filterResetClick = () => {
                     <input
                         id="subjectReduce"
                         v-model="state.filter"
-                        aria-label="Filter the subject list"
-                        placeholder="Filter the subject list"
+                        :aria-label="placeholder"
+                        :placeholder="placeholder"
                         type="text"
                     />
                     <button

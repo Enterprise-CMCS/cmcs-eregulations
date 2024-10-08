@@ -129,6 +129,7 @@ watchEffect(() => {
             :policy-doc-subjects="list"
             class="subjects__select-container--menu"
             component-type="dropdown"
+            placeholder="Type to filter the subject list"
             :parent
         />
     </v-menu>
