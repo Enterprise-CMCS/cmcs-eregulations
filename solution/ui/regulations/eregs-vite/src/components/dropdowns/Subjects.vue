@@ -57,10 +57,10 @@ const menuItemClick = (event) => {
 
 const clearClick = (event) => {
     // don't let click fall through to menu activator
-    event.stopImmediatePropagation();
+    event.stopPropagation();
 
     // if menu is open, close it
-    if (menuToggleModel.value) menuToggleModel.value = !menuToggleModel.value;
+    if (menuToggleModel.value === true) menuToggleModel.value = false;
 
     // remove subjects from query
     const routeClone = { ...$route.query };
@@ -117,6 +117,7 @@ watchEffect(() => {
                 icon="mdi-close"
                 size="x-large"
                 @click="clearClick"
+                @keydown.enter.prevent="clearClick"
             />
         </template>
         <template #append>
@@ -131,6 +132,7 @@ watchEffect(() => {
         activator="#subjects-activator"
         :close-on-content-click="false"
         @click="menuItemClick"
+        @keydown.enter="menuItemClick"
     >
         <SubjectSelector
             :policy-doc-subjects="list"

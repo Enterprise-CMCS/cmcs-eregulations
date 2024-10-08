@@ -206,6 +206,7 @@ const filterResetClick = () => {
                             :data-testid="`add-subject-${subject.id}`"
                             :title="subject.full_name"
                             @click="subjectClick"
+                            @keydown.enter="subjectClick"
                             v-html="
                                 subject.displayName || getSubjectName(subject)
                             "
