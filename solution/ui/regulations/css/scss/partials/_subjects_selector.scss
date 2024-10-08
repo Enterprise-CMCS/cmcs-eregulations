@@ -127,17 +127,22 @@
 
     // --menu denotes component is in dropdown menu
     &--menu {
+        @include filter-borders;
+
+        border-width: 1px;
         margin-top: var(--spacer-2);
 
         .subjects__list-container {
+            border: 0;
             margin-block-start: 0;
             margin-block-end: 0;
             padding: var(--spacer-2);
-            border: 1px solid $border_color;
 
             form {
                 input#subjectReduce {
+                    font-size: $font_size_sm;
                     margin: 0 0 var(--spacer-4) 0;
+                    padding-right: var(--spacer-2);
 
                     &::placeholder {
                         text-align: center;
@@ -146,6 +151,14 @@
 
                 button.subjects__filter-reset {
                     top: calc(50% - 1.125rem);
+                }
+            }
+
+            .subjects__list {
+                .subjects__li {
+                    font-size: $font_size_sm;
+                    line-height: 22px;
+                    margin-bottom: var(--spacer-2);
                 }
             }
         }
