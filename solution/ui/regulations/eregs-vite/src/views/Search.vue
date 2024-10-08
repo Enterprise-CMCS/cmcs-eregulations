@@ -68,7 +68,7 @@ setShowDropdowns($route.query.type);
 provide("currentRouteName", $route.name);
 
 // provide router query params to remove on child component change
-const commonRemoveList = ["page", "categories", "intcategories"];
+const commonRemoveList = ["page", "categories", "intcategories", "subjects"];
 const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
 provide("commonRemoveList", commonRemoveList);
