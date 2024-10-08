@@ -161,7 +161,8 @@ const filterResetClasses = computed(() => ({
     "subjects__filter-reset--hidden": !state.filter,
 }));
 
-const filterResetClick = () => {
+const filterResetClick = (event) => {
+    event.stopPropagation();
     state.filter = "";
 };
 </script>
@@ -191,6 +192,7 @@ const filterResetClick = () => {
                         :class="filterResetClasses"
                         class="mdi mdi-close"
                         @click="filterResetClick"
+                        @keydown.enter="filterResetClick"
                     ></button>
                 </form>
                 <ul tabindex="-1" class="subjects__list">
