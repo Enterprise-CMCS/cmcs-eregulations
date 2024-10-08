@@ -1,6 +1,8 @@
 <script setup>
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
+import { getSubjectName } from "utilities/filters";
 
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 
@@ -69,6 +71,23 @@ const clearClick = (event) => {
         },
     });
 };
+
+watchEffect(() => {
+    if ($route.query?.subjects === undefined) {
+        buttonTitle.value = undefined;
+
+        return;
+    }
+
+    if (props.list.loading === false && $route.query.subjects) {
+        const subjectId = $route.query.subjects;
+        const subject = props.list.results.find(
+            (subject) => subject.id == subjectId
+        );
+
+        buttonTitle.value = getSubjectName(subject);
+    }
+});
 </script>
 
 <template>
