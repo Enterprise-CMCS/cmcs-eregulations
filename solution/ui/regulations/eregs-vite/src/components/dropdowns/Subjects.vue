@@ -56,7 +56,13 @@ const menuItemClick = (event) => {
 };
 
 const clearClick = (event) => {
+    // don't let click fall through to menu activator
     event.stopImmediatePropagation();
+
+    // if menu is open, close it
+    if (menuToggleModel.value) menuToggleModel.value = !menuToggleModel.value;
+
+    // remove subjects from query
     const routeClone = { ...$route.query };
 
     const cleanedRoute = useRemoveList({
@@ -64,6 +70,7 @@ const clearClick = (event) => {
         removeList,
     });
 
+    // push new route
     $router.push({
         name: props.parent,
         query: {
