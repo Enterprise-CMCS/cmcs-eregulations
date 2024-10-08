@@ -325,9 +325,11 @@ getDocsOnLoad();
                             policyDocList.loading || partsLastUpdated.loading
                         "
                     />
-                    <div class="search__fieldset--dropdowns">
+                    <div
+                        v-show="showDropdownsRef"
+                        class="search__fieldset--dropdowns"
+                    >
                         <SubjectsDropdown
-                            v-show="showDropdownsRef"
                             :list="policyDocSubjects"
                             :loading="
                                 policyDocSubjects.loading ||
@@ -340,7 +342,6 @@ getDocsOnLoad();
                             :categories-capture-function="setCategories"
                         >
                             <CategoriesDropdown
-                                v-show="showDropdownsRef"
                                 :list="slotProps.data"
                                 :error="slotProps.error"
                                 :loading="
