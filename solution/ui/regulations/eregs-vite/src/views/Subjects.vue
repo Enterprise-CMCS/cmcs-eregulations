@@ -370,7 +370,7 @@ getDocSubjects();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
+                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks :statutes-url="statutesUrl" />

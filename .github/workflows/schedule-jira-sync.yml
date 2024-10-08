@@ -5,6 +5,7 @@ on:
     - cron: "25 1 * * *" # daily at 6:25 am EST
 permissions:
   id-token: write
+  contents: read
 jobs:
   sync:
     strategy:
@@ -25,11 +26,10 @@ jobs:
           aws-region: us-east-1
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       - name: Sync Security Hub and Jira
-        uses: Enterprise-CMCS/security-hub-visibility@v1.0.5
+        uses: Enterprise-CMCS/mac-fc-security-hub-visibility@v2.0.9
         with:
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-username: noVal # required variable for package but not for Enterprise Jira
-          jira-host: ${{secrets.JIRA_HOST}}
           jira-project-key: EREGCSC
           jira-ignore-statuses: Done, Closed, Canceled
           jira-custom-fields: '{ "customfield_10100": "EREGCSC-1989" }'

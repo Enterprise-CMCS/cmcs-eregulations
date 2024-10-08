@@ -2,12 +2,18 @@
 import { ref, inject, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
+import useCounts from "composables/counts";
+
 import _isArray from "lodash/isArray";
 import _intersection from "lodash/intersection";
 import _isEmpty from "lodash/isEmpty";
 import _isUndefined from "lodash/isUndefined";
 
-import { DOCUMENT_TYPES, DOCUMENT_TYPES_MAP } from "utilities/utils";
+import {
+    COUNT_TYPES_MAP,
+    DOCUMENT_TYPES,
+    DOCUMENT_TYPES_MAP,
+} from "utilities/utils";
 
 const props = defineProps({
     parent: {
@@ -25,6 +31,7 @@ const $router = useRouter();
 
 const { type: typeParams } = $route.query;
 
+const apiUrl = inject("apiUrl");
 const isAuthenticated = inject("isAuthenticated");
 
 let docTypesArr = DOCUMENT_TYPES;
@@ -34,6 +41,10 @@ if (props.parent !== "search")
 
 if (!isAuthenticated)
     docTypesArr = docTypesArr.filter((type) => type !== "internal");
+
+const { counts, fetchCounts } = useCounts();
+
+fetchCounts({ apiUrl, queryParams: $route.query });
 
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
@@ -59,7 +70,10 @@ const onCheckboxChange = (event) => {
     }
 
     // if only Regulations is checked, remove categories from route
-    if (checkedBoxes.value.length === 1 && checkedBoxes.value[0] === "regulations") {
+    if (
+        checkedBoxes.value.length === 1 &&
+        checkedBoxes.value[0] === "regulations"
+    ) {
         $router.push({
             name: props.parent,
             query: {
@@ -87,15 +101,20 @@ const onCheckboxChange = (event) => {
     });
 };
 
-watch(() => $route.query, (newQuery) => {
-    const { type: typeParams } = newQuery;
+watch(
+    () => $route.query,
+    (newQuery) => {
+        const { type: typeParams } = newQuery;
 
-    if (_isUndefined(typeParams) || typeParams.includes("all")) {
-        checkedBoxes.value = [];
-    } else {
-        checkedBoxes.value = typeParams.split(",");
+        fetchCounts({ apiUrl, queryParams: newQuery });
+
+        if (_isUndefined(typeParams) || typeParams.includes("all")) {
+            checkedBoxes.value = [];
+        } else {
+            checkedBoxes.value = typeParams.split(",");
+        }
     }
-});
+);
 
 const onPopState = (event) => {
     const currentPopState = event?.state?.current ?? "";
@@ -107,6 +126,22 @@ const onPopState = (event) => {
 
         checkedBoxes.value = type ? type.split(",") : [];
     }
+};
+
+const makeLabel = ({ type }) => {
+    return `${DOCUMENT_TYPES_MAP[type]}${
+        type !== "regulations" ? " Resources" : ""
+    }`;
+};
+
+const makeCount = ({ type }) => {
+    if (props.loading) return "";
+
+    const mappedType = COUNT_TYPES_MAP[type];
+
+    return _isUndefined(counts.value.results[mappedType])
+        ? ""
+        : `(${counts.value.results[mappedType]})`;
 };
 
 onMounted(() => {
@@ -138,12 +173,12 @@ onUnmounted(() => {
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
                         >
-                            <span class=""
-                                >{{ DOCUMENT_TYPES_MAP[type]
-                                }}<span v-if="type !== 'regulations'">
-                                    Resources</span
-                                ></span
-                            >
+                            <span class="label__span">{{
+                                makeLabel({ type })
+                            }}</span>
+                            <span class="count__span">{{
+                                makeCount({ type })
+                            }}</span>
                         </label>
                     </div>
                 </div>

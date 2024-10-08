@@ -63,4 +63,5 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     return { policyDocList, getDocList, clearDocList };
 }
 
-export default () => useSearchResults({ getCombinedContent, getContentWithoutQuery });
+export default () =>
+    useSearchResults({ getCombinedContent, getContentWithoutQuery });

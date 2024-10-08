@@ -54,6 +54,17 @@
                 margin: 0;
                 font-size: 14px;
                 line-height: 22px;
+
+                .count__span {
+                    min-width: var(--spacer-4);
+                    padding-left: var(--spacer-2);
+                    display: flex;
+                    justify-content: end;
+
+                    @media (max-width: $eds-width-sm) {
+                        min-width: var(--spacer-6);
+                    }
+                }
             }
         }
     }
@@ -310,6 +321,10 @@
                     }
                 }
             }
+        }
+
+        .subjects__select-container {
+            margin-top: var(--spacer-4);
         }
 
         .subjects__list-container {

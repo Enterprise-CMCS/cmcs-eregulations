@@ -330,7 +330,7 @@ getDocSubjects();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
+                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -369,7 +369,7 @@ getDocSubjects();
                     @execute-search="executeSearch"
                     @clear-form="resetSearch"
                 />
-                <fieldset class="search__fieldset" v-if="$route.query.q">
+                <fieldset v-if="$route.query.q" class="search__fieldset">
                     <DocumentTypeSelector
                         parent="search"
                         :loading="
