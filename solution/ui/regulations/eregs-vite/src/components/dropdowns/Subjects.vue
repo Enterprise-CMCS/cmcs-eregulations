@@ -129,7 +129,7 @@ watchEffect(() => {
             :policy-doc-subjects="list"
             class="subjects__select-container--menu"
             component-type="dropdown"
-            parent
+            :parent
         />
     </v-menu>
 </template>

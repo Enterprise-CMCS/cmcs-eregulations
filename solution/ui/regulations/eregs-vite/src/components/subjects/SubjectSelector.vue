@@ -113,6 +113,19 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
+    let filteredTypes;
+
+    if (props.parent === "search") {
+        const type = routeClone?.type;
+        const typesArr = type ? type.split(",") : [];
+
+        const filteredTypesArr = typesArr.filter(
+            (item) => item !== "regulations"
+        );
+
+        filteredTypes = filteredTypesArr.join(",");
+    }
+
     const cleanedRoute = useRemoveList({
         route: routeClone,
         removeList,
@@ -123,7 +136,7 @@ const subjectClick = (event) => {
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
-            type: undefined,
+            type: filteredTypes,
         },
     });
 };
