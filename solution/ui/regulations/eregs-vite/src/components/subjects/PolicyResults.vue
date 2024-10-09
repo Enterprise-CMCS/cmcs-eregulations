@@ -245,7 +245,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <a
                     v-if="hasEditableJobCode && doc.id"
                     class="edit-button"
-                    :href="`${apiUrl}resources/${doc.id}/edit'`"
+                    :href="`${apiUrl}resources/${doc.id}/edit`"
                 >
                     Edit
                     <i class="fas fa-edit"></i>
