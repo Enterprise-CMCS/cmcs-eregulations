@@ -165,6 +165,55 @@ const filterResetClick = (event) => {
     event.stopPropagation();
     state.filter = "";
 };
+
+const inputUpArrowPress = (event) => {
+    if (event.key === "ArrowUp") {
+        const lastSubject = document.querySelector(
+            ".subjects__li:last-child button"
+        );
+
+        if (lastSubject) {
+            lastSubject.focus();
+        }
+    }
+};
+
+const inputDownArrowPress = (event) => {
+    if (event.key === "ArrowDown") {
+        const firstSubject = document.querySelector(".subjects__li");
+
+        if (firstSubject) {
+            firstSubject.querySelector("button").focus();
+        }
+    }
+};
+
+const liUpArrowPress = (event) => {
+    if (event.key === "ArrowUp") {
+        const currentSubject = event.currentTarget;
+        const previousSubject =
+            currentSubject.parentNode.previousElementSibling;
+
+        if (previousSubject) {
+            previousSubject.querySelector("button").focus();
+        } else {
+            document.querySelector("input#subjectReduce").focus();
+        }
+    }
+};
+
+const liDownArrowPress = (event) => {
+    if (event.key === "ArrowDown") {
+        const currentSubject = event.currentTarget;
+        const nextSubject = currentSubject.parentNode.nextElementSibling;
+
+        if (nextSubject) {
+            nextSubject.querySelector("button").focus();
+        } else {
+            document.querySelector("input#subjectReduce").focus();
+        }
+    }
+};
 </script>
 
 <template>
@@ -184,6 +233,8 @@ const filterResetClick = (event) => {
                         :aria-label="placeholder"
                         :placeholder="placeholder"
                         type="text"
+                        @keydown.up.prevent="inputUpArrowPress"
+                        @keydown.down.prevent="inputDownArrowPress"
                     />
                     <button
                         aria-label="Clear subject list filter"
@@ -191,8 +242,8 @@ const filterResetClick = (event) => {
                         type="reset"
                         :class="filterResetClasses"
                         class="mdi mdi-close"
-                        @click="filterResetClick"
                         @keydown.enter="filterResetClick"
+                        @click="filterResetClick"
                     ></button>
                 </form>
                 <ul tabindex="-1" class="subjects__list">
@@ -207,8 +258,10 @@ const filterResetClick = (event) => {
                             :data-id="subject.id"
                             :data-testid="`add-subject-${subject.id}`"
                             :title="subject.full_name"
-                            @click="subjectClick"
                             @keydown.enter="subjectClick"
+                            @keydown.up.prevent="liUpArrowPress"
+                            @keydown.down.prevent="liDownArrowPress"
+                            @click="subjectClick"
                             v-html="
                                 subject.displayName || getSubjectName(subject)
                             "
