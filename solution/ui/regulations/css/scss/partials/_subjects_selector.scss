@@ -137,6 +137,7 @@
             margin-block-start: 0;
             margin-block-end: 0;
             padding: var(--spacer-2);
+            max-height: calc(300px - 2 * var(--spacer-2));
 
             form {
                 input#subjectReduce {
