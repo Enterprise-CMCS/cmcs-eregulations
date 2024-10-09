@@ -315,5 +315,4 @@ resources:
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
-  - serverless-go-plugin
   - serverless-associate-waf
