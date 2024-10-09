@@ -1,9 +1,0 @@
-{
-  "name": "regulations-core-serverless",
-  "version": "0.0.0",
-  "description": "Serverless config for eRegs core",
-  "private": true,
-  "devDependencies": {
-    "serverless-go-plugin": "^2.4.1"
-  }
-}
