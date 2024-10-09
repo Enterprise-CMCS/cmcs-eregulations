@@ -17,7 +17,9 @@ import { useRoute, useRouter } from "vue-router";
 
 import GenericDropdown from "./GenericDropdown.vue";
 
-const removeList = inject("commonRemoveList", []);
+const commonRemoveList = inject("commonRemoveList", []);
+
+const removeList = commonRemoveList.concat(["categories", "intcategories"]);
 
 const catTypeDict = {
     categories: "external",
