@@ -80,6 +80,7 @@ const onCheckboxChange = (event) => {
                 ...queryClone,
                 type: "regulations",
                 categories: undefined,
+                subjects: undefined,
                 page: undefined,
             },
         });

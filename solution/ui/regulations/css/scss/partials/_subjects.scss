@@ -71,18 +71,74 @@
 }
 
 .filter__select {
-    &--category {
-        width: 225px;
+    &--category,
+    &--subjects {
+        width: 214px;
 
         &.v-input {
             flex: unset;
         }
     }
 
+    &--subjects {
+        height: 30px !important;
+        padding: 0 0 0 var(--spacer-1);
+        box-sizing: border-box;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid $border_color;
+
+        .v-btn__content {
+            justify-content: start;
+            letter-spacing: 0;
+            text-transform: none;
+
+            .subjects-select__label {
+                &--selected {
+                    max-width: 150px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+
+            .subjects-select__clear {
+                opacity: 0.6;
+                position: absolute;
+                right: 30px;
+            }
+        }
+
+        .v-btn__append {
+            margin: 0 -2px 0 0;
+
+            & > .v-icon.subjects-select__append-icon {
+                min-width: 18px;
+                font-size: 30px;
+                opacity: 1;
+                transition: none;
+            }
+        }
+
+        .v-btn__overlay {
+            opacity: 0 !important;
+        }
+
+        &::after {
+            box-sizing: border-box;
+            border: 2px solid $secondary_border_color !important;
+        }
+
+        &[aria-expanded="true"]::after,
+        &:focus-visible::after {
+            opacity: 1;
+        }
+    }
+
     .v-input__control {
         .v-field {
             &--appended {
-                padding-inline-end: 4px;
+                padding-inline-end: var(--spacer-1);
             }
 
             &.v-field--variant-outlined.v-field--focused {
@@ -121,6 +177,11 @@
             }
 
             .v-field__field {
+                label {
+                    color: $primary_text_color;
+                    opacity: 1;
+                }
+
                 .v-field__input {
                     padding-inline: 4px;
                     min-height: 30px;
@@ -282,19 +343,6 @@
         margin-bottom: 1rem;
         width: 100%;
 
-        @mixin filter-borders {
-            border: 2px solid $border_color;
-            border-radius: 4px;
-        }
-
-        @mixin filter-container-styles {
-            @include filter-borders;
-
-            padding: 0.75rem 1rem;
-            margin-block-start: 1rem;
-            margin-block-end: 1rem;
-        }
-
         .selections__container {
             .selections__list {
                 list-style: none;
@@ -323,106 +371,6 @@
             }
         }
 
-        .subjects__select-container {
-            margin-top: var(--spacer-4);
-        }
-
-        .subjects__list-container {
-            @include filter-container-styles;
-
-            display: flex;
-            flex-direction: column;
-            min-height: 200px;
-
-            .subjects__loading {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex: 1;
-            }
-
-            form {
-                display: flex;
-                flex-direction: column;
-                position: relative;
-
-                input#subjectReduce {
-                    @include filter-borders;
-
-                    flex: 1;
-                    height: 1.5rem;
-                    margin: 12px 0;
-                    padding: 4px 24px 4px 4px;
-                    box-sizing: content-box !important; // thanks, Vuetify
-
-                    &:focus,
-                    &:focus-visible,
-                    &:focus-within,
-                    &:active {
-                        outline: none !important;
-                        border: 2px solid $secondary_border_color !important;
-                    }
-                }
-
-                .subjects__filter-reset {
-                    @include common-remove-btn-styles;
-
-                    top: calc(50% - 0.625rem);
-                    right: -3px;
-                    transform: translate(-50%);
-                    position: absolute;
-                    width: 20px;
-                    height: 20px;
-
-                    &--hidden {
-                        display: none;
-                    }
-                }
-            }
-        }
-
-        .subjects__list {
-            height: 300px;
-            overflow: scroll;
-            padding: 0;
-            margin: 0;
-
-            .subjects__li {
-                margin-bottom: 0.75rem;
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
-
-                .sidebar-li__button {
-                    text-align: left;
-                    color: #000;
-                    width: 100%;
-
-                    .match__container {
-                        @include font-bold-keep-width;
-
-                        .match {
-                            @include font-bold-keep-width-reset;
-                        }
-                    }
-
-                    &--selected {
-                        @include font-bold-keep-width;
-
-                        pointer-events: none;
-                    }
-
-                    &:hover,
-                    &:focus,
-                    &:active {
-                        @include font-bold-keep-width;
-
-                        cursor: pointer;
-                    }
-                }
-            }
-        }
     }
 
     .loading__span {
