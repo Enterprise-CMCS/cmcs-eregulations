@@ -335,6 +335,7 @@ getDocsOnLoad();
                         class="search__fieldset--dropdowns"
                     >
                         <SubjectsDropdown
+                            v-if="false"
                             :list="policyDocSubjects"
                             :loading="
                                 policyDocSubjects.loading ||
