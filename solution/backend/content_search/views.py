@@ -1,5 +1,5 @@
 
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, F, Prefetch, Q
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -264,12 +264,30 @@ class ContentCountViewSet(viewsets.ViewSet):
         if search_query:
             query = query.search(search_query)
 
+        # Retrieve the primary keys of the filtered results to speed up the following queries
+        pks = list(query.values_list("pk", flat=True))
+
         # Aggregate the counts of internal, public, and reg text
-        query = query.aggregate(
+        aggregates = ContentIndex.objects.filter(pk__in=pks).aggregate(
             internal_resource_count=Count("resource", filter=Q(resource__abstractinternalresource__isnull=False)),
             public_resource_count=Count("resource", filter=Q(resource__abstractpublicresource__isnull=False)),
             regulation_text_count=Count("reg_text"),
         )
 
+        aggregates["subjects"] = AbstractResource.objects \
+            .filter(index__pk__in=pks) \
+            .exclude(subjects__isnull=True) \
+            .values("subjects") \
+            .annotate(subject=F("subjects"), count=Count("subjects")) \
+            .values("subject", "count") \
+            .order_by("-count", "subject")
+
+        aggregates["categories"] = AbstractResource.objects \
+            .filter(index__pk__in=pks) \
+            .exclude(category__isnull=True) \
+            .values("category") \
+            .annotate(count=Count("category")) \
+            .order_by("-count", "category")
+
         # Serialize and return the results
-        return Response(ContentCountSerializer(query).data)
+        return Response(ContentCountSerializer(aggregates).data)

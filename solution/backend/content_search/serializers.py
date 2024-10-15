@@ -23,7 +23,20 @@ class ContentSearchSerializer(serializers.Serializer):
     reg_text = IndexedRegulationTextSerializer()
 
 
+class SubjectCountSerializer(serializers.Serializer):
+    subject = serializers.IntegerField()
+    count = serializers.IntegerField()
+
+
+class CategoryCountSerializer(serializers.Serializer):
+    category = serializers.IntegerField()
+    count = serializers.IntegerField()
+
+
 class ContentCountSerializer(serializers.Serializer):
     internal_resource_count = serializers.IntegerField()
     public_resource_count = serializers.IntegerField()
     regulation_text_count = serializers.IntegerField()
+
+    subjects = SubjectCountSerializer(many=True)
+    categories = CategoryCountSerializer(many=True)
