@@ -274,6 +274,7 @@ class ContentCountViewSet(viewsets.ViewSet):
             regulation_text_count=Count("reg_text"),
         )
 
+        # List of subjects that are in the results and the number of resources in the result set that are associated with them
         aggregates["subjects"] = AbstractResource.objects \
             .filter(index__pk__in=pks) \
             .exclude(subjects__isnull=True) \
@@ -282,6 +283,8 @@ class ContentCountViewSet(viewsets.ViewSet):
             .values("subject", "count") \
             .order_by("-count", "subject")
 
+        # List of categories that are in the results and the number of resources in the result set that are associated with them
+        # Note that resources are already filtered by user visibility, so by extension, we don't need to filter categories
         aggregates["categories"] = AbstractResource.objects \
             .filter(index__pk__in=pks) \
             .exclude(category__isnull=True) \
