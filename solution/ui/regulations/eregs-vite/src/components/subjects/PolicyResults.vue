@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { formatDate, locationUrl } from "utilities/filters";
+import { formatDate } from "utilities/filters";
 import {
     createRegResultLink,
     deserializeResult,
@@ -175,19 +175,19 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-        ? createRegResultLink(
-              {
-                  date: doc.date,
-                  headline: doc.content_headline,
-                  part_number: doc.part_number,
-                  section_number: doc.node_id,
-                  section_title: doc.title,
-                  title: doc.reg_title,
-              },
-              homeUrl,
-              $route.query?.q
-          )
-        : doc.url;
+          ? createRegResultLink(
+                {
+                    date: doc.date,
+                    headline: doc.content_headline,
+                    part_number: doc.part_number,
+                    section_number: doc.node_id,
+                    section_title: doc.title,
+                    title: doc.reg_title,
+                },
+                homeUrl,
+                $route.query?.q
+            )
+          : doc.url;
 
 const needsBar = (item) => item.date && item.document_id;
 

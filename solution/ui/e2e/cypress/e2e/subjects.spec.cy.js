@@ -301,13 +301,13 @@ describe("Find by Subjects", () => {
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=2&type=all&q=test");
+        cy.url().should("include", "/subjects?subjects=2&q=test");
 
         cy.get(`button[data-testid=remove-subject-2]`).click({
             force: true,
         });
         cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-        cy.url().should("include", "/subjects?type=all&q=test");
+        cy.url().should("include", "/subjects?q=test");
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
@@ -382,7 +382,7 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=3&type=all");
+        cy.url().should("include", "/subjects?subjects=3");
         cy.get("input#main-content")
             .should("be.visible")
             .type("test search", { force: true });
@@ -391,7 +391,7 @@ describe("Find by Subjects", () => {
         });
         cy.url().should(
             "include",
-            "/subjects?subjects=3&type=all&q=test+search"
+            "/subjects?subjects=3&q=test+search"
         );
         cy.get(".search-form .form-helper-text .search-suggestion").should(
             "not.exist"
@@ -792,7 +792,7 @@ describe("Find by Subjects", () => {
             .should("not.be.visible");
         cy.url().should(
             "include",
-            "/subjects?subjects=1&type=external&categories=1"
+            "/subjects?subjects=1&categories=1&type=external"
         );
 
         // Add text query and submit
