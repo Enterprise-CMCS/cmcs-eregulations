@@ -127,7 +127,10 @@ const subjectClick = (event) => {
             (item) => item !== "regulations"
         );
 
-        filteredTypes = filteredTypesArr.join(",");
+        filteredTypes =
+            filteredTypesArr.length > 0
+                ? filteredTypesArr.join(",")
+                : undefined;
     }
 
     const cleanedRoute = useRemoveList({
