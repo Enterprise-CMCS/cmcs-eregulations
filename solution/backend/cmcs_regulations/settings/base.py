@@ -153,6 +153,7 @@ TEMPLATES = [
                 "cmcs_regulations.context_processors.custom_url",
                 "cmcs_regulations.context_processors.survey_url",
                 "cmcs_regulations.context_processors.signup_url",
+                "cmcs_regulations.context_processors.demo_video_url",
                 "cmcs_regulations.context_processors.deploy_number",
                 "cmcs_regulations.context_processors.automated_testing",
                 'cmcs_regulations.context_processors.api_base',
@@ -224,6 +225,10 @@ SURVEY_URL = os.environ.get(
 SIGNUP_URL = os.environ.get(
     "SIGNUP_URL",
     "https://docs.google.com/forms/d/e/1FAIpQLSdcG9mfTz6Kebdni8YSacl27rIwpGy2a7GsMGO0kb_T7FSNxg/viewform?embedded=true"
+)
+DEMO_VIDEO_URL = os.environ.get(
+    "DEMO_VIDEO_URL",
+    "https://www.youtube.com/watch?v=PMMoJWHUtZM"
 )
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
