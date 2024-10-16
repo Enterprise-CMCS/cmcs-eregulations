@@ -182,7 +182,10 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     description="Retrieve the number of results for a given set of filters. "
                 "This endpoint allows you to get the number of results per type (public, internal, reg-text) "
                 "without retrieving the actual content. Useful for pagination and displaying the number of results. "
-                "Note that internal resources are only counted if the user is authenticated.",
+                "Note that internal resources are only counted if the user is authenticated. "
+                "This endpoint also displays the number of resources found within each subject and category that have results. "
+                "Subjects and categories are listed only by PK. To retrieve more metadata about these types, use the subjects "
+                "and categories endpoints available within the Resources app.",
     responses={200: ContentCountSerializer},
     parameters=[
         OpenApiParameter(
