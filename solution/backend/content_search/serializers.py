@@ -30,6 +30,7 @@ class SubjectCountSerializer(serializers.Serializer):
 
 class CategoryCountSerializer(serializers.Serializer):
     category = serializers.IntegerField()
+    parent = serializers.IntegerField()
     count = serializers.IntegerField()
 
 

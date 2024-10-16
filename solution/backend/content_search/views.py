@@ -289,7 +289,7 @@ class ContentCountViewSet(viewsets.ViewSet):
             .filter(index__pk__in=pks) \
             .exclude(category__isnull=True) \
             .values("category") \
-            .annotate(count=Count("category")) \
+            .annotate(parent=F("category__parent"), count=Count("category")) \
             .order_by("-count", "category")
 
         # Serialize and return the results
