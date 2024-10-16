@@ -29,10 +29,12 @@ def survey_url(request):
         "SURVEY_URL": settings.SURVEY_URL
     }
 
+
 def demo_video_url(request):
     return {
         "DEMO_VIDEO_URL": settings.DEMO_VIDEO_URL
     }
+
 
 def signup_url(request):
     return {
