@@ -44,6 +44,5 @@ jobs:
         run: |
           pushd serverless
           npm install serverless@">=3.38.0 <4" -g
-          npm install
           serverless remove --config ./serverless-parser.yml
           popd
