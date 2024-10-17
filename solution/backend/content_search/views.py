@@ -1,5 +1,5 @@
 
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, F, Prefetch, Q
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -182,7 +182,10 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
     description="Retrieve the number of results for a given set of filters. "
                 "This endpoint allows you to get the number of results per type (public, internal, reg-text) "
                 "without retrieving the actual content. Useful for pagination and displaying the number of results. "
-                "Note that internal resources are only counted if the user is authenticated.",
+                "Note that internal resources are only counted if the user is authenticated. "
+                "This endpoint also displays the number of resources found within each subject and category that have results. "
+                "Subjects and categories are listed only by PK. To retrieve more metadata about these types, use the subjects "
+                "and categories endpoints available within the Resources app.",
     responses={200: ContentCountSerializer},
     parameters=[
         OpenApiParameter(
@@ -264,12 +267,33 @@ class ContentCountViewSet(viewsets.ViewSet):
         if search_query:
             query = query.search(search_query)
 
+        # Retrieve the primary keys of the filtered results to speed up the following queries
+        pks = list(query.values_list("pk", flat=True))
+
         # Aggregate the counts of internal, public, and reg text
-        query = query.aggregate(
+        aggregates = ContentIndex.objects.filter(pk__in=pks).aggregate(
             internal_resource_count=Count("resource", filter=Q(resource__abstractinternalresource__isnull=False)),
             public_resource_count=Count("resource", filter=Q(resource__abstractpublicresource__isnull=False)),
             regulation_text_count=Count("reg_text"),
         )
 
+        # List of subjects that are in the results and the number of resources in the result set that are associated with them
+        aggregates["subjects"] = AbstractResource.objects \
+            .filter(index__pk__in=pks) \
+            .exclude(subjects__isnull=True) \
+            .values("subjects") \
+            .annotate(subject=F("subjects"), count=Count("subjects")) \
+            .values("subject", "count") \
+            .order_by("-count", "subject")
+
+        # List of categories that are in the results and the number of resources in the result set that are associated with them
+        # Note that resources are already filtered by user visibility, so by extension, we don't need to filter categories
+        aggregates["categories"] = AbstractResource.objects \
+            .filter(index__pk__in=pks) \
+            .exclude(category__isnull=True) \
+            .values("category") \
+            .annotate(parent=F("category__parent"), count=Count("category")) \
+            .order_by("-count", "category")
+
         # Serialize and return the results
-        return Response(ContentCountSerializer(query).data)
+        return Response(ContentCountSerializer(aggregates).data)
