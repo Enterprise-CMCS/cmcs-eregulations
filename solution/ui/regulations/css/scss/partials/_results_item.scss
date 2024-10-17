@@ -115,10 +115,19 @@
 
     .collapsible-title {
         font-size: $font-size-sm;
+        line-height: 22px;
         font-weight: 400;
         width: auto;
-    }
 
+        &.visible {
+            color: $primary_link_color;
+        }
+
+        i {
+            font-size: $font-size-xs;
+            margin: auto 0 auto var(--spacer-1);
+        }
+    }
 }
 
 .related-sections {

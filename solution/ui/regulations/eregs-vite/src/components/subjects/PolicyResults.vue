@@ -358,8 +358,14 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     state="collapsed"
                     class="related-citations__btn--collapse"
                 >
-                    <template #expanded>Hide Related Citations</template>
-                    <template #collapsed>Show Related Citations</template>
+                    <template #expanded
+                        >Hide Related Citations
+                        <i class="fa fa-chevron-up"></i>
+                    </template>
+                    <template #collapsed
+                        >Show Related Citations
+                        <i class="fa fa-chevron-down"></i>
+                    </template>
                 </CollapseButton>
                 <Collapsible
                     :name="getCollapseName(doc)"
