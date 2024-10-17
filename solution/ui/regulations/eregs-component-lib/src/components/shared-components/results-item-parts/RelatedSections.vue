@@ -63,8 +63,8 @@ const groupedLocations = _groupBy(filteredLocations, "title");
                     </span>
                 </template>
                 <span
-                    :key="i + title + i"
                     v-if="i + 1 != Object.keys(groupedLocations).length"
+                    :key="i + title + i"
                     class="pipe-separator"
                 >
                     |
