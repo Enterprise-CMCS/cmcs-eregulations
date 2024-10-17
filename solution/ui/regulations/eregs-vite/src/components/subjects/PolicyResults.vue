@@ -111,7 +111,8 @@ const getResultSnippet = (item) => {
 
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
-const getCollapseName = (doc) => `related-citations-${doc.node_id}`;
+const getCollapseName = (doc) =>
+    `related citations collapsible ${doc.id ?? doc.node_id}`;
 
 const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
     const regCitations = doc.cfr_citations
@@ -378,7 +379,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                         :base="homeUrl"
                         :item="doc"
                         :parts-last-updated="partsLastUpdated"
-                        label="Regulation"
+                        label="Regulations"
                     />
                 </Collapsible>
             </template>

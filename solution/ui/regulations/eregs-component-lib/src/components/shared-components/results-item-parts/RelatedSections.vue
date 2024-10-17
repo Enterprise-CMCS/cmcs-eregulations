@@ -35,9 +35,7 @@ const groupedLocations = _groupBy(filteredLocations, "title");
 
 <template>
     <div class="related-sections">
-        <span class="related-sections-title">
-            {{ label }}<span v-if="locationsCount !== 1">s</span>:
-        </span>
+        <span class="related-sections-title"> {{ label }}: </span>
         <template v-if="locationsCount > 0">
             <template
                 v-for="(locations, title, i) in groupedLocations"

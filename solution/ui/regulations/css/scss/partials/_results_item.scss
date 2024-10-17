@@ -118,6 +118,7 @@
         line-height: 22px;
         font-weight: 400;
         width: auto;
+        margin-top: var(--spacer-2);
 
         &.visible {
             color: $primary_link_color;
