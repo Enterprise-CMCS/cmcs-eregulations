@@ -63,7 +63,7 @@ class SearchTest(TestCase):
                 file = FederalRegisterLink.objects.create(**data)
                 if i == 0:
                     file.cfr_citations.set([self.cfr_citations2])
-                    file.subjects.set([self.subject2])
+                    file.subjects.set([self.subject1, self.subject2])
                     file.category = self.public_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
@@ -79,7 +79,7 @@ class SearchTest(TestCase):
                 if i == 0:
                     file.cfr_citations.set([self.cfr_citations2])
                     file.subjects.set([self.subject2])
-                    file.category = self.public_category
+                    file.category = self.internal_category
                     file.save()
                 elif i == 1:  # Assign internal category for another item
                     file.cfr_citations.set([self.cfr_citations1])
@@ -92,16 +92,52 @@ class SearchTest(TestCase):
 
     def test_counts_logged_in(self):
         self.login()
+
+        # Test counts API
         data = self.client.get("/v3/content-search/counts?q=test").data
         self.assertEqual(data["internal_resource_count"], 1)
         self.assertEqual(data["public_resource_count"], 2)
+        self.assertEqual(len(data["subjects"]), 2)
+
+        # Test subject counts
+        self.assertEqual(data["subjects"][0]["subject"], self.subject2.id)
+        self.assertEqual(data["subjects"][0]["count"], 3)
+        self.assertEqual(data["subjects"][1]["subject"], self.subject1.id)
+        self.assertEqual(data["subjects"][1]["count"], 1)
+
+        # Test category counts (internal and public)
+        self.assertEqual(len(data["categories"]), 2)
+        self.assertEqual(data["categories"][0]["category"], self.public_category.id)
+        self.assertEqual(data["categories"][0]["parent"], None)
+        self.assertEqual(data["categories"][0]["count"], 2)
+        self.assertEqual(data["categories"][1]["category"], self.internal_category.id)
+        self.assertEqual(data["categories"][1]["parent"], None)
+        self.assertEqual(data["categories"][1]["count"], 1)
+
+        # Test search results
         data = self.client.get("/v3/content-search/?q=test").data
         self.assertEqual(data["count"], 3)
 
     def test_counts_logged_out(self):
+        # Test counts API (logged out)
         data = self.client.get("/v3/content-search/counts?q=test").data
         self.assertEqual(data["internal_resource_count"], 0)
         self.assertEqual(data["public_resource_count"], 2)
+
+        # Test subject counts
+        self.assertEqual(len(data["subjects"]), 2)
+        self.assertEqual(data["subjects"][0]["subject"], self.subject2.id)
+        self.assertEqual(data["subjects"][0]["count"], 2)
+        self.assertEqual(data["subjects"][1]["subject"], self.subject1.id)
+        self.assertEqual(data["subjects"][1]["count"], 1)
+
+        # Test category counts (only public)
+        self.assertEqual(len(data["categories"]), 1)
+        self.assertEqual(data["categories"][0]["category"], self.public_category.id)
+        self.assertEqual(data["categories"][0]["parent"], None)
+        self.assertEqual(data["categories"][0]["count"], 2)
+
+        # Test search results
         data = self.client.get("/v3/content-search/?q=test").data
         self.assertEqual(data["count"], 2)
 
