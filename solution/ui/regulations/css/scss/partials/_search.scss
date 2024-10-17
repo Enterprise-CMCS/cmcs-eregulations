@@ -9,6 +9,23 @@
     margin-bottom: 1em;
 }
 
+.v-overlay__content {
+    .subjects__select-container {
+        &--menu {
+            background-color: white;
+            max-height: 300px;
+            overflow-y: scroll;
+
+            .subjects__list-container {
+                form {
+                    position: sticky;
+                    top: 0px;
+                }
+            }
+        }
+    }
+}
+
 .search-page {
     #searchApp.search-view {
         @include eds-gutters;
@@ -40,6 +57,12 @@
 
             .doc-type__toggle fieldset {
                 flex-wrap: wrap;
+            }
+
+            &--dropdowns {
+                display: flex;
+                flex-wrap: wrap;
+                gap: var(--spacer-2);
             }
         }
 
@@ -216,11 +239,11 @@
 
         .row__title {
             display: inline-block;
-            flex: 0 0  280px;
+            flex: 0 0 280px;
             margin-right: var(--spacer-6);
 
             @media (max-width: $eds-width-sm) {
-                flex: 0 0  135px;
+                flex: 0 0 135px;
             }
         }
 

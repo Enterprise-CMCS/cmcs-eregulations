@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, provide, reactive, ref, watch } from "vue";
+import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import useSearchResults from "composables/searchResults";
@@ -8,13 +8,7 @@ import useRemoveList from "composables/removeList";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import {
-    getLastUpdatedDates,
-    getInternalSubjects,
-    getTitles,
-} from "utilities/api";
-
-import { getSubjectName } from "utilities/filters";
+import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
@@ -32,6 +26,7 @@ import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInLink from "@/components/SignInLink.vue";
+import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -52,29 +47,34 @@ const $router = useRouter();
 const pageSize = 50;
 
 // show/hide categories dropdown
-const showCategoriesRef = ref();
+const showDropdownsRef = ref();
 
-const setShowCategories = (type) => {
+const setShowDropdowns = (type) => {
     // hide categories dropdown if only regulations are selected
     if (
         type &&
         type.split(",").length === 1 &&
         type.split(",")[0] === "regulations"
     ) {
-        showCategoriesRef.value = false;
+        showDropdownsRef.value = false;
     } else {
-        showCategoriesRef.value = true;
+        showDropdownsRef.value = true;
     }
 };
 
-setShowCategories($route.query.type);
+setShowDropdowns($route.query.type);
 
 // provide Django template variables
 provide("currentRouteName", $route.name);
 
 // provide router query params to remove on child component change
-const commonRemoveList = ["page", "categories", "intcategories"];
-const searchInputRemoveList = commonRemoveList.concat(["q"]);
+const commonRemoveList = ["page"];
+const searchInputRemoveList = commonRemoveList.concat([
+    "q",
+    "subjects",
+    "categories",
+    "intcategories",
+]);
 
 provide("commonRemoveList", commonRemoveList);
 
@@ -151,36 +151,7 @@ const getPartsLastUpdated = async () => {
 
 const { policyDocList, getDocList, clearDocList } = useSearchResults();
 
-// use "reactive" method to make urlParams reactive when provided/injected
-// selectedParams.paramString is used as the reactive prop
-const selectedParams = reactive({
-    paramString: "",
-    paramsArray: [],
-});
-
-// method to add selected params
-const addSelectedParams = (paramArgs) => {
-    const { id, name, type } = paramArgs;
-
-    // update paramString that is used as reactive prop for watch
-    if (selectedParams.paramString) {
-        selectedParams.paramString += `&${type}=${id}`;
-    } else {
-        selectedParams.paramString = `?${type}=${id}`;
-    }
-
-    // create new selectedParams key for array of objects for selections
-    selectedParams.paramsArray.push({ id, name, type });
-};
-
-const clearSelectedParams = () => {
-    selectedParams.paramString = "";
-    selectedParams.paramsArray = [];
-};
-
-provide("selectedParams", selectedParams);
-
-const setSelectedParams = (subjectsListRef) => (param) => {
+const setSelectedParams = (param) => {
     const [paramType, paramValue] = param;
 
     if (commonRemoveList.includes(paramType)) {
@@ -191,21 +162,6 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         searchQuery.value = paramValue;
         return;
     }
-
-    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
-    paramList.forEach((paramId) => {
-        const subject = subjectsListRef.value.results.filter(
-            (subjectObj) => paramId === subjectObj.id.toString()
-        )[0];
-
-        if (subject) {
-            addSelectedParams({
-                type: paramType,
-                id: paramId,
-                name: getSubjectName(subject),
-            });
-        }
-    });
 };
 
 // policyDocSubjects fetch for subject selector
@@ -220,10 +176,32 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-// called on load
+getDocsOnLoad = async () => {
+    if (!$route.query.q) {
+        clearDocList();
+        return;
+    }
+
+    // wipe everything clean to start
+    clearSearchQuery();
+
+    // now that everything is cleaned, iterate over new query params
+    Object.entries($route.query).forEach((param) => {
+        setSelectedParams(param);
+    });
+
+    getDocList({
+        apiUrl,
+        pageSize,
+        requestParamString: getRequestParams({ queryParams: $route.query }),
+        query: $route.query.q,
+        type: $route.query.type,
+    });
+};
+
 const getDocSubjects = async () => {
     try {
-        const subjectsResponse = await getInternalSubjects({
+        const subjectsResponse = await getSubjects({
             apiUrl,
         });
 
@@ -232,28 +210,6 @@ const getDocSubjects = async () => {
         console.error(error);
     } finally {
         policyDocSubjects.value.loading = false;
-
-        if (!$route.query.q) {
-            clearDocList();
-            return;
-        }
-
-        // wipe everything clean to start
-        clearSelectedParams();
-        clearSearchQuery();
-
-        // now that everything is cleaned, iterate over new query params
-        Object.entries($route.query).forEach((param) => {
-            setSelectedParams(policyDocSubjects)(param);
-        });
-
-        getDocList({
-            apiUrl,
-            pageSize,
-            requestParamString: getRequestParams({ queryParams: $route.query }),
-            query: $route.query.q,
-            type: $route.query.type,
-        });
     }
 };
 
@@ -273,10 +229,9 @@ watch(
     async (newQueryParams) => {
         const { q, type } = newQueryParams;
 
-        setShowCategories(type);
+        setShowDropdowns(type);
 
         // wipe everything clean to start
-        clearSelectedParams();
         clearSearchQuery();
 
         // set document title
@@ -301,9 +256,7 @@ watch(
         }
 
         // now that everything is cleaned, iterate over new query params
-        Object.entries(newQueryParams).forEach(
-            setSelectedParams(policyDocSubjects)
-        );
+        Object.entries(newQueryParams).forEach(setSelectedParams);
 
         // parse $route.query to return `${key}=${value}` string
         // and provide to getDocList
@@ -323,6 +276,7 @@ watch(
 // fetches on page load
 getPartsLastUpdated();
 getDocSubjects();
+getDocsOnLoad();
 </script>
 
 <template>
@@ -376,20 +330,33 @@ getDocSubjects();
                             policyDocList.loading || partsLastUpdated.loading
                         "
                     />
-                    <FetchCategoriesContainer
-                        v-slot="slotProps"
-                        :categories-capture-function="setCategories"
+                    <div
+                        v-show="showDropdownsRef"
+                        class="search__fieldset--dropdowns"
                     >
-                        <CategoriesDropdown
-                            v-show="showCategoriesRef"
-                            :list="slotProps.data"
-                            :error="slotProps.error"
+                        <SubjectsDropdown
+                            v-if="false"
+                            :list="policyDocSubjects"
                             :loading="
-                                slotProps.loading || policyDocList.loading
+                                policyDocSubjects.loading ||
+                                policyDocList.loading
                             "
                             parent="search"
                         />
-                    </FetchCategoriesContainer>
+                        <FetchCategoriesContainer
+                            v-slot="slotProps"
+                            :categories-capture-function="setCategories"
+                        >
+                            <CategoriesDropdown
+                                :list="slotProps.data"
+                                :error="slotProps.error"
+                                :loading="
+                                    slotProps.loading || policyDocList.loading
+                                "
+                                parent="search"
+                            />
+                        </FetchCategoriesContainer>
+                    </div>
                 </fieldset>
             </section>
             <section class="search-results">
