@@ -228,7 +228,7 @@ SIGNUP_URL = os.environ.get(
 )
 DEMO_VIDEO_URL = os.environ.get(
     "DEMO_VIDEO_URL",
-    "https://www.youtube.com/watch?v=PMMoJWHUtZM"
+    "https://www.youtube.com/@CMSHHSgov"
 )
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
