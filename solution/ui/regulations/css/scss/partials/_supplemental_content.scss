@@ -170,17 +170,17 @@
 
 .supplemental-content-container
     .supplemental-content-category
-    .category-content:not(.show-more-content),
+    .collapse-content:not(.show-more-content),
 .internal-docs__container
     .supplemental-content-category
-    .category-content:not(.show-more-content) {
+    .collapse-content:not(.show-more-content) {
     margin-left: 10px;
     margin-right: 20px;
 }
 
 .supplemental-content-container
     .supplemental-content-category
-    .category-content.additional-rules {
+    .collapse-content.additional-rules {
     margin: inherit;
 }
 
@@ -203,12 +203,12 @@
         display: table-cell;
     }
 
-    .category-content {
+    .collapse-content {
         margin-top: 1em;
     }
 }
 
-.category-content {
+.collapse-content {
     &.additional-rules .related-rule:first-child {
         padding: 0;
     }

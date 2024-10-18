@@ -1,9 +1,9 @@
 <template>
     <div
         ref="target"
-        v-bind:data-test="dataName"
-        v-bind:class="{ invisible: !visible }"
-        v-bind:style="[styles]"
+        :data-test="dataName"
+        :class="{ invisible: !visible }"
+        :style="[styles]"
     >
         <slot></slot>
     </div>
@@ -13,7 +13,7 @@
 import eventbus from "../eventbus";
 
 export default {
-    name: "collapsible",
+    name: "Collapsible",
 
     created: function () {
         requestAnimationFrame(() => {
@@ -30,7 +30,7 @@ export default {
         window.addEventListener("transitionend", this.toggleDisplay);
     },
 
-    destroyed: function () {
+    unmounted: function () {
         window.removeEventListener("resize", this.resize);
         window.removeEventListener("transitionend", this.toggleDisplay);
     },
@@ -70,10 +70,10 @@ export default {
     },
 
     methods: {
-        resize: function (e) {
+        resize: function () {
             this.computeHeight();
         },
-        toggleDisplay: function (e) {
+        toggleDisplay: function () {
             if (this.visible) {
                 this.$refs.target.style.height = "auto";
                 if (this.state === "collapsed" && this.overflow) {

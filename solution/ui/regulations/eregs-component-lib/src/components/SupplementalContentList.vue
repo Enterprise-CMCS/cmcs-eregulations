@@ -36,7 +36,7 @@
         <collapsible
             :name="innerName"
             state="collapsed"
-            class="category-content show-more-content"
+            class="collapse-content show-more-content"
         >
             <supplemental-content-object
                 v-for="(content, index) in additionalContent"

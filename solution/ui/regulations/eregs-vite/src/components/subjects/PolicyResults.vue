@@ -13,6 +13,9 @@ import {
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
+import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue";
+import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
+
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
@@ -108,6 +111,20 @@ const getResultSnippet = (item) => {
 
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
+const getCollapseName = (doc) =>
+    `related citations collapsible ${doc.id ?? doc.node_id}`;
+
+const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
+    const regCitations = doc.cfr_citations
+        ? doc.cfr_citations.filter((location) => {
+              const { part } = location;
+              return partsLastUpdated[part];
+          })
+        : [];
+
+    return regCitations.length > 0;
+};
+
 export default {
     addSurroundingEllipses,
     getParentCategoryName,
@@ -115,6 +132,8 @@ export default {
     getResultSnippet,
     partDocumentTitleLabel,
     showResultSnippet,
+    getCollapseName,
+    hasRegulationCitations,
 };
 </script>
 
@@ -331,13 +350,38 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 </div>
             </template>
             <template #sections>
-                <RelatedSections
-                    v-if="doc.type !== 'reg_text'"
-                    :base="homeUrl"
-                    :item="doc"
-                    :parts-last-updated="partsLastUpdated"
-                    label="Related Regulation Citation"
-                />
+                <CollapseButton
+                    v-if="
+                        doc.type !== 'reg_text' &&
+                        hasRegulationCitations({ doc, partsLastUpdated })
+                    "
+                    :name="getCollapseName(doc)"
+                    state="collapsed"
+                    class="related-citations__btn--collapse"
+                >
+                    <template #expanded
+                        >Hide Related Citations
+                        <i class="fa fa-chevron-up"></i>
+                    </template>
+                    <template #collapsed
+                        >Show Related Citations
+                        <i class="fa fa-chevron-down"></i>
+                    </template>
+                </CollapseButton>
+                <Collapsible
+                    :name="getCollapseName(doc)"
+                    state="collapsed"
+                    class="collapse-content"
+                    overflow
+                >
+                    <RelatedSections
+                        v-if="doc.type !== 'reg_text'"
+                        :base="homeUrl"
+                        :item="doc"
+                        :parts-last-updated="partsLastUpdated"
+                        label="Regulations"
+                    />
+                </Collapsible>
             </template>
         </ResultsItem>
     </div>

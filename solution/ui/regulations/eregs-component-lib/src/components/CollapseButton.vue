@@ -23,7 +23,7 @@ export default {
     name: "CollapseButton",
 
     inject: {
-        getStateOverride: { default: null, },
+        getStateOverride: { default: null },
     },
 
     props: {
@@ -36,7 +36,7 @@ export default {
             type: String,
             required: true,
         },
-        "keep-contents-on-toggle": {
+        keepContentsOnToggle: {
             type: Boolean,
             required: false,
             default: false,
@@ -73,7 +73,7 @@ export default {
         eventbus.on("collapse-toggle", this.toggle);
     },
 
-    beforeDestroy() {
+    beforeUnmount() {
         eventbus.off("collapse-toggle", this.toggle);
     },
 
