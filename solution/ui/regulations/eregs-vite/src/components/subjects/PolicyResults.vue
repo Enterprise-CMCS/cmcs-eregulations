@@ -371,7 +371,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <Collapsible
                     :name="getCollapseName(doc)"
                     state="collapsed"
-                    class="category-content"
+                    class="collapse-content"
                     overflow
                 >
                     <RelatedSections
