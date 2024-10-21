@@ -14,7 +14,7 @@ import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
-import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
+import FetchCategoriesContainer from "@/components/dropdowns/FetchCategoriesContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -335,7 +335,6 @@ getDocsOnLoad();
                         class="search__fieldset--dropdowns"
                     >
                         <SubjectsDropdown
-                            v-if="false"
                             :list="policyDocSubjects"
                             :loading="
                                 policyDocSubjects.loading ||
