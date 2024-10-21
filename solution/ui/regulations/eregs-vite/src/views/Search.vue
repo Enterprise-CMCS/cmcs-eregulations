@@ -8,13 +8,13 @@ import useRemoveList from "composables/removeList";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
+import { getLastUpdatedDates, getTitles } from "utilities/api";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
-import FetchCategoriesContainer from "@/components/dropdowns/FetchCategoriesContainer.vue";
+import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -199,20 +199,6 @@ getDocsOnLoad = async () => {
     });
 };
 
-const getDocSubjects = async () => {
-    try {
-        const subjectsResponse = await getSubjects({
-            apiUrl,
-        });
-
-        policyDocSubjects.value.results = subjectsResponse.results;
-    } catch (error) {
-        console.error(error);
-    } finally {
-        policyDocSubjects.value.loading = false;
-    }
-};
-
 const sanitizeQueryParams = (queryParams) =>
     Object.entries(queryParams).filter(([key]) => PARAM_VALIDATION_DICT[key]);
 
@@ -275,7 +261,6 @@ watch(
 
 // fetches on page load
 getPartsLastUpdated();
-getDocSubjects();
 getDocsOnLoad();
 </script>
 
@@ -334,16 +319,21 @@ getDocsOnLoad();
                         v-show="showDropdownsRef"
                         class="search__fieldset--dropdowns"
                     >
-                        <SubjectsDropdown
-                            :list="policyDocSubjects"
-                            :loading="
-                                policyDocSubjects.loading ||
-                                policyDocList.loading
-                            "
-                            parent="search"
-                        />
-                        <FetchCategoriesContainer
+                        <FetchItemsContainer
                             v-slot="slotProps"
+                            items-to-fetch="subjects"
+                        >
+                            <SubjectsDropdown
+                                :list="slotProps"
+                                :loading="
+                                    slotProps.loading || policyDocList.loading
+                                "
+                                parent="search"
+                            />
+                        </FetchItemsContainer>
+                        <FetchItemsContainer
+                            v-slot="slotProps"
+                            items-to-fetch="categories"
                             :categories-capture-function="setCategories"
                         >
                             <CategoriesDropdown
@@ -354,7 +344,7 @@ getDocsOnLoad();
                                 "
                                 parent="search"
                             />
-                        </FetchCategoriesContainer>
+                        </FetchItemsContainer>
                     </div>
                 </fieldset>
             </section>

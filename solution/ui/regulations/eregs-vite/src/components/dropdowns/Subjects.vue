@@ -44,7 +44,8 @@ const labelClasses = computed(() => ({
 
 const menuItemClick = (event) => {
     const menuItemClicked =
-        event.target.className.includes("sidebar-li__button") || event.target.className.includes("match__container");
+        event.target.className.includes("sidebar-li__button") ||
+        event.target.className.includes("match__container");
 
     if (event.target.dataset.name) {
         buttonTitle.value = event.target.dataset.name;
@@ -88,12 +89,19 @@ watchEffect(() => {
 
     if (props.list.loading === false && $route.query.subjects) {
         const subjectId = $route.query.subjects;
-        const subject = props.list.results.find(
+        const subject = props.list.data.find(
             (subject) => subject.id == subjectId
         );
 
         buttonTitle.value = getSubjectName(subject);
     }
+});
+
+const transformedList = computed(() => {
+    const list = { ...props.list };
+    list.results = list.data;
+    delete list.data;
+    return list;
 });
 </script>
 
@@ -135,7 +143,7 @@ watchEffect(() => {
         @keydown.enter="menuItemClick"
     >
         <SubjectSelector
-            :policy-doc-subjects="list"
+            :policy-doc-subjects="transformedList"
             class="subjects__select-container--menu"
             component-type="dropdown"
             placeholder="Type to filter the subject list"
