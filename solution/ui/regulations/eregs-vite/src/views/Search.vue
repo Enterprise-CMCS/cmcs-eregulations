@@ -322,9 +322,11 @@ getDocsOnLoad();
                         <FetchItemsContainer
                             v-slot="slotProps"
                             items-to-fetch="subjects"
+                            include-counts
                         >
                             <SubjectsDropdown
-                                :list="slotProps"
+                                :list="slotProps.data"
+                                :counts="slotProps.counts"
                                 :loading="
                                     slotProps.loading || policyDocList.loading
                                 "
@@ -334,7 +336,7 @@ getDocsOnLoad();
                         <FetchItemsContainer
                             v-slot="slotProps"
                             items-to-fetch="categories"
-                            :categories-capture-function="setCategories"
+                            :items-capture-function="setCategories"
                         >
                             <CategoriesDropdown
                                 :list="slotProps.data"

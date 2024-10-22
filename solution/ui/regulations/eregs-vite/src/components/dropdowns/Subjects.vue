@@ -16,6 +16,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    counts: {
+        type: Object,
+        default: () => ({}),
+    },
     loading: {
         type: Boolean,
         default: true,
@@ -80,28 +84,41 @@ const clearClick = (event) => {
     });
 };
 
+const transformedList = ref({});
+
 watchEffect(() => {
+    if (props.loading === false) {
+        const clonedCounts = [...props.counts];
+
+        const sortedCountList = clonedCounts.map((item) => {
+            const subject = props.list.find(
+                (subject) => subject.id == item.subject
+            );
+
+            return {
+                ...subject,
+                count: item.count,
+            };
+        });
+
+        transformedList.value = {
+            results: sortedCountList,
+            loading: props.loading,
+        }
+    }
+
     if ($route.query?.subjects === undefined) {
         buttonTitle.value = undefined;
 
         return;
     }
 
-    if (props.list.loading === false && $route.query.subjects) {
+    if (props.loading === false && $route.query.subjects) {
         const subjectId = $route.query.subjects;
-        const subject = props.list.data.find(
-            (subject) => subject.id == subjectId
-        );
+        const subject = props.list.find((subject) => subject.id == subjectId);
 
         buttonTitle.value = getSubjectName(subject);
     }
-});
-
-const transformedList = computed(() => {
-    const list = { ...props.list };
-    list.results = list.data;
-    delete list.data;
-    return list;
 });
 </script>
 
