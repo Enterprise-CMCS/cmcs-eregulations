@@ -44,8 +44,7 @@ const MOCK_RESULTS = [
             document_id: "",
             title: "",
             date: "2021-06-28",
-            url:
-                "https://innovation.cms.gov/data-and-reports/2021/sim-rd2-test-final-appendix",
+            url: "https://innovation.cms.gov/data-and-reports/2021/sim-rd2-test-final-appendix",
             related_resources: null,
         },
         reg_text: null,
@@ -64,8 +63,7 @@ const MOCK_RESULTS = [
             document_id: "",
             title: "",
             date: "2021-06-28",
-            url:
-                "https://innovation.cms.gov/data-and-reports/2021/sim-rd2-test-final-appendix",
+            url: "https://innovation.cms.gov/data-and-reports/2021/sim-rd2-test-final-appendix",
             related_resources: null,
         },
         reg_text: null,
@@ -349,5 +347,73 @@ describe("showResultSnippet", () => {
 
     it("/content-search external and does NOT have a content_headline", async () => {
         expect(PolicyResults.showResultSnippet(cs_external_2)).toBe(false);
+    });
+});
+
+describe("getCollapseName", () => {
+    const doc1 = {
+        node_id: "doc1-node_id",
+        id: "doc1-id",
+    };
+
+    it("returns the id if id exists", async () => {
+        expect(PolicyResults.getCollapseName(doc1)).toBe(
+            "related citations collapsible doc1-id"
+        );
+    });
+
+    const doc2 = {
+        node_id: "doc2-node_id",
+    };
+
+    it("returns the node_id if no id", async () => {
+        expect(PolicyResults.getCollapseName(doc2)).toBe(
+            "related citations collapsible doc2-node_id"
+        );
+    });
+});
+
+describe("hasRegulationCitations", () => {
+    const partsLastUpdated = {
+        438: "2024-07-09",
+    };
+
+    const doc1 = {
+        cfr_citations: [{ title: "42", part: "438" }],
+    };
+
+    it("returns true if the document has cfr_citations with an updated part", async () => {
+        expect(
+            PolicyResults.hasRegulationCitations({
+                doc: doc1,
+                partsLastUpdated,
+            })
+        ).toBe(true);
+    });
+
+    const doc2 = {
+        cfr_citations: [{ title: "42", part: "439" }],
+    };
+
+    it("returns false if the document has cfr_citations with an unknown part", async () => {
+        expect(
+            PolicyResults.hasRegulationCitations({
+                doc: doc2,
+                partsLastUpdated,
+            })
+        ).toBe(false);
+    });
+
+    const doc3 = {
+        cfr_citations: [],
+    };
+
+    it("returns false if the document has no cfr_citations", async () => {
+        expect(
+            PolicyResults.hasRegulationCitations({
+                doc: doc3,
+                partsLastUpdated,
+            })
+        ).toBe(false);
     });
 });

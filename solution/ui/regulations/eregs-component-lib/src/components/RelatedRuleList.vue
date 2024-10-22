@@ -47,7 +47,7 @@
         <collapsible
             :name="innerName"
             state="collapsed"
-            class="category-content additional-rules"
+            class="collapse-content additional-rules"
             overflow
         >
             <template v-for="(rule, i) in additionalRules" :key="i">
