@@ -14,7 +14,7 @@ import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 const props = defineProps({
     policyDocSubjects: {
         type: Object,
-        default: () => ({ results: [], loading: true }),
+        default: () => ({ results: [], loading: true, totalCount: 0 }),
     },
     componentType: {
         type: String,
@@ -29,6 +29,8 @@ const props = defineProps({
         default: "Filter the subject list",
     },
 });
+
+const emit = defineEmits(["allSubjectsClick"]);
 
 const $router = useRouter();
 const $route = useRoute();
@@ -173,6 +175,10 @@ const filterResetClick = (event) => {
     state.filter = "";
 };
 
+const allSubjectsClick = () => {
+    emit("allSubjectsClick");
+};
+
 const inputUpArrowPress = (event) => {
     if (event.key === "ArrowUp") {
         const lastSubject = document.querySelector(
@@ -254,6 +260,23 @@ const liDownArrowPress = (event) => {
                     ></button>
                 </form>
                 <ul tabindex="-1" class="subjects__list">
+                    <li
+                        v-if="policyDocSubjects.totalCount"
+                        class="subjects__li sidebar__li"
+                    >
+                        <button
+                            class="sidebar-li__button"
+                            @keydown.enter="allSubjectsClick"
+                            @keydown.up.prevent="liUpArrowPress"
+                            @keydown.down.prevent="liDownArrowPress"
+                            @click="allSubjectsClick"
+                        >
+                            All Subjects
+                            <span class="count"
+                                >({{ policyDocSubjects.totalCount }})</span
+                            >
+                        </button>
+                    </li>
                     <li
                         v-for="subject in state.subjects"
                         :key="subject.id"

@@ -62,7 +62,7 @@ const menuItemClick = (event) => {
 
 const clearClick = (event) => {
     // don't let click fall through to menu activator
-    event.stopPropagation();
+    if (event) event.stopPropagation();
 
     // if menu is open, close it
     if (menuToggleModel.value === true) menuToggleModel.value = false;
@@ -104,7 +104,11 @@ watchEffect(() => {
         transformedList.value = {
             results: sortedCountList,
             loading: props.loading,
-        }
+            totalCount: sortedCountList.reduce(
+                (acc, item) => acc + item.count,
+                0
+            ),
+        };
     }
 
     if ($route.query?.subjects === undefined) {
@@ -165,6 +169,7 @@ watchEffect(() => {
             component-type="dropdown"
             placeholder="Type to filter the subject list"
             :parent
+            @all-subjects-click="clearClick"
         />
     </v-menu>
 </template>
