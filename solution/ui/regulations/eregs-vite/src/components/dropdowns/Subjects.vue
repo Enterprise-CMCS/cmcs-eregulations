@@ -169,7 +169,6 @@ watchEffect(() => {
             component-type="dropdown"
             placeholder="Type to filter the subject list"
             :parent
-            @all-subjects-click="clearClick"
         />
     </v-menu>
 </template>
