@@ -47,7 +47,7 @@ async function main() {
   app.synth();
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Error during deployment:', error);
   process.exit(1);
 });
