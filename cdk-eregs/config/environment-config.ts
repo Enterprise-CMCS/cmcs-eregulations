@@ -1,102 +1,291 @@
+
+// import * as cdk from 'aws-cdk-lib';
+// import * as ssm from 'aws-cdk-lib/aws-ssm';
+// import { Construct } from 'constructs';
+// import { IamPathAspect } from '../lib/constructs/iam-path';
+// import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
+
+// export interface EnvironmentConfig {
+//   stackPrefix: string;
+//   accountId: string;
+//   region: string;
+//   stage: string;
+//   isExperimental: boolean;
+// }
+
+// export interface SsmParameters {
+//   vpcId: string;
+//   iamPath: string;
+//   permissionsBoundaryPolicy: string;
+//   logLevel: string;
+//   httpUser: string;
+//   httpPassword: string;
+//   acmCertArn: string;
+// }
+
+// export class EnvironmentStack extends cdk.Stack {
+//   public readonly config: EnvironmentConfig;
+//   public readonly ssmParameters: SsmParameters;
+
+//   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+//     super(scope, id, props);
+
+//     // Initialize environment configuration
+//     this.config = this.initializeConfig();
+    
+//     // Fetch SSM parameters
+//     this.ssmParameters = this.fetchSsmParameters();
+
+//     // Apply global aspects
+//     this.applyGlobalAspects(scope);
+//   }
+
+//   private initializeConfig(): EnvironmentConfig {
+//     const branchName = process.env.GITHUB_REF_NAME || 'main';
+//     const prNumber = process.env.GITHUB_EVENT_NUMBER;
+//     const isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
+//     const stage = this.getStageFromBranch(branchName);
+//     const { accountId, region } = this.getAccountAndRegion(stage);
+
+//     return {
+//       stackPrefix: isExperimental ? `PR-${prNumber}` : stage,
+//       accountId,
+//       region,
+//       stage,
+//       isExperimental
+//     };
+//   }
+
+//   private fetchSsmParameters(): SsmParameters {
+//     return {
+//       vpcId: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/account_vars/vpc/id'
+//       ),
+//       iamPath: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/account_vars/iam/path'
+//       ),
+//       permissionsBoundaryPolicy: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/account_vars/iam/permissions_boundary_policy'
+//       ),
+//       logLevel: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/eregulations/text_extractor/log_level'
+//       ),
+//       httpUser: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/eregulations/http/user'
+//       ),
+//       httpPassword: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/eregulations/http/password'
+//       ),
+//       acmCertArn: ssm.StringParameter.valueForStringParameter(
+//         this,
+//         '/eregulations/acm-cert-arn'
+//       )
+//     };
+//   }
+
+//   private getStageFromBranch(branchName: string): string {
+//     const stageMap: { [key: string]: string } = {
+//       main: 'dev',
+//       val: 'val',
+//       prod: 'prod',
+//       dev: 'dev'
+//     };
+//     return stageMap[branchName.toLowerCase()] || 'dev';
+//   }
+
+//   private getAccountAndRegion(stage: string): { accountId: string; region: string } {
+//     const environments: { [key: string]: { accountId: string; region: string } } = {
+//       dev: { accountId: '009160033411', region: 'us-east-1' },
+//       val: { accountId: '222222222222', region: 'us-east-1' },
+//       prod: { accountId: '333333333333', region: 'us-east-1' }
+//     };
+//     return environments[stage] || environments.dev;
+//   }
+
+//   private applyGlobalAspects(scope: Construct): void {
+//     const permissionsBoundaryArn = `arn:aws:iam::${this.config.accountId}:policy${this.ssmParameters.permissionsBoundaryPolicy}`;
+//     cdk.Aspects.of(scope).add(new IamPermissionsBoundaryAspect(permissionsBoundaryArn));
+//     cdk.Aspects.of(scope).add(new IamPathAspect(this.ssmParameters.iamPath));
+//   }
+
+//   // Helper methods for stack configuration
+//   public getLambdaConfig() {
+//     return {
+//       memorySize: this.config.isExperimental ? 128 : 256,
+//       timeout: cdk.Duration.seconds(this.config.isExperimental ? 30 : 60),
+//       environment: {
+//         STAGE: this.config.stage,
+//         LOG_LEVEL: this.ssmParameters.logLevel
+//       }
+//     };
+//   }
+
+//   public getApiGatewayConfig() {
+//     return {
+//       deployOptions: {
+//         stageName: this.config.isExperimental ? 'exp' : this.config.stage,
+//         tracingEnabled: !this.config.isExperimental,
+//         loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
+//         dataTraceEnabled: true,
+//         metricsEnabled: true
+//       }
+//     };
+//   }
+// }
+// import * as cdk from 'aws-cdk-lib';
+// import * as ssm from 'aws-cdk-lib/aws-ssm';
+// import { Construct } from 'constructs';
+// import { IamPathAspect } from '../lib/constructs/iam-path';
+// import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
+
+// export interface EnvironmentConfig {
+//   stackPrefix: string;
+//   accountId: string;
+//   region: string;
+//   stage: string;
+//   isExperimental: boolean;
+// }
+
+// export interface SsmParameters {
+//   vpcId: string;
+//   iamPath: string;
+//   permissionsBoundaryPolicy: string;
+//   logLevel: string;
+//   httpUser: string;
+//   httpPassword: string;
+//   acmCertArn: string;
+// }
+
+// export class EnvironmentStack extends cdk.Stack {
+//   public readonly config: EnvironmentConfig;
+//   public readonly ssmParameterOutputs: Record<string, cdk.CfnOutput>;
+
+//   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+//     super(scope, id, props);
+
+//     // Initialize environment configuration
+//     this.config = this.initializeConfig();
+    
+//     // Create outputs for SSM parameters
+//     this.ssmParameterOutputs = this.createSsmParameterOutputs();
+
+//     // Apply global aspects
+//     this.applyGlobalAspects(scope);
+//   }
+
+//   private initializeConfig(): EnvironmentConfig {
+//     const branchName = process.env.GITHUB_REF_NAME || 'main';
+//     const prNumber = process.env.GITHUB_EVENT_NUMBER;
+//     const isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
+//     const stage = this.getStageFromBranch(branchName);
+//     const { accountId, region } = this.getAccountAndRegion(stage);
+
+//     return {
+//       stackPrefix: isExperimental ? `PR-${prNumber}` : stage,
+//       accountId,
+//       region,
+//       stage,
+//       isExperimental
+//     };
+//   }
+
+//   private createSsmParameterOutputs(): Record<string, cdk.CfnOutput> {
+//     const parameterMap = {
+//       vpcId: '/account_vars/vpc/id',
+//       iamPath: '/account_vars/iam/path',
+//       permissionsBoundaryPolicy: '/account_vars/iam/permissions_boundary_policy',
+//       logLevel: '/eregulations/text_extractor/log_level',
+//       httpUser: '/eregulations/http/user',
+//       httpPassword: '/eregulations/http/password',
+//       acmCertArn: '/eregulations/acm-cert-arn'
+//     };
+
+//     const outputs: Record<string, cdk.CfnOutput> = {};
+
+//     for (const [key, paramPath] of Object.entries(parameterMap)) {
+//       const paramValue = ssm.StringParameter.valueForStringParameter(this, paramPath);
+//       outputs[key] = new cdk.CfnOutput(this, `SSMOutput${key}`, {
+//         value: paramValue,
+//         exportName: `${this.config.stackPrefix}-${key}`
+//       });
+//     }
+
+//     return outputs;
+//   }
+
+//   private getStageFromBranch(branchName: string): string {
+//     const stageMap: { [key: string]: string } = {
+//       main: 'dev',
+//       val: 'val',
+//       prod: 'prod',
+//       dev: 'dev'
+//     };
+//     return stageMap[branchName.toLowerCase()] || 'dev';
+//   }
+
+//   private getAccountAndRegion(stage: string): { accountId: string; region: string } {
+//     const environments: { [key: string]: { accountId: string; region: string } } = {
+//       dev: { accountId: '009160033411', region: 'us-east-1' },
+//       val: { accountId: '222222222222', region: 'us-east-1' },
+//       prod: { accountId: '333333333333', region: 'us-east-1' }
+//     };
+//     return environments[stage] || environments.dev;
+//   }
+
+//   private applyGlobalAspects(scope: Construct): void {
+//     cdk.Aspects.of(scope).add(
+//       new IamPermissionsBoundaryAspect(
+//         `arn:aws:iam::${this.config.accountId}:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy`
+//       )
+//     );
+//     cdk.Aspects.of(scope).add(new IamPathAspect('/delegatedadmin/developer/'));
+//   }
+
+//   public getSsmValue(key: keyof SsmParameters): string {
+//     return cdk.Fn.importValue(`${this.config.stackPrefix}-${key}`);
+//   }
+// }
 import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';  
 import * as ssm from 'aws-cdk-lib/aws-ssm';
-import { IamPathAspect } from '../lib/constructs/iam-path';
-import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
+import { Construct } from 'constructs';
 
-export class EnvironmentConfig {
-  public readonly stackPrefix: string;
-  public readonly isExperimental: boolean;
-  public readonly accountId: string;
-  public readonly region: string;
-  public readonly iamPermissionsBoundaryArn: string;
-  public readonly iamPath: string;
-  public readonly vpcId: string;
+interface EnvironmentConfigProps extends cdk.StackProps {
+  environment: string;
+}
 
-  constructor(
-    scope: Construct,  // Accept scope here
-    public readonly branchName: string,
-    public readonly prNumber?: string
-  ) {
-    // Determine if this is an experimental (PR) environment
-    this.isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
-    // Fetch VPC ID from SSM parameter store
-    this.vpcId = ssm.StringParameter.valueForStringParameter(scope, '/account_vars/vpc/id');
-    // Set the stack prefix based on whether it's experimental or not
-    this.stackPrefix = this.isExperimental ? `PR-${prNumber}` : this.getEnvironmentFromBranch();
+export class EnvironmentConfigStack extends cdk.Stack {
+  public readonly config: { [key: string]: any };
 
-    // Get account ID and region based on the environment
-    const { accountId, region } = this.getAccountAndRegion();
-    this.accountId = accountId;
-    this.region = region;
+  constructor(scope: Construct, id: string, props: EnvironmentConfigProps) {
+    super(scope, id, props);
 
-    // Set IAM path and permissions boundary ARN based on the environment
-    this.iamPath = this.isExperimental ? '/delegatedadmin/developer/' : '/delegatedadmin/developer/';
-    this.iamPermissionsBoundaryArn = this.isExperimental
-      ? 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy'
-      : 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy';
+    const { environment } = props;
+
+    // Load configuration from Parameter Store
+    this.config = this.loadConfigFromParameterStore(environment);
   }
 
-  // Determine the environment based on the branch name
-  private getEnvironmentFromBranch(): string {
-    switch (this.branchName.toLowerCase()) {
-      case 'main':
-        return 'dev';
-      case 'val':
-        return 'val';
-      case 'prod':
-        return 'prod';
-      case 'dev':
-        return 'dev';
-      default:
-        // If the branch name does not match any of the known environments, default to 'dev'
-        return 'dev';
-    }
-  }
-  // Get the AWS account ID and region for the current environment
-  private getAccountAndRegion(): { accountId: string; region: string } {
-    switch (this.getEnvironmentFromBranch()) {
-      case 'dev':
-        return { accountId: '009160033411', region: 'us-east-1' };
-      case 'val':
-        return { accountId: '222222222222', region: 'us-east-1' };
-      case 'prod':
-        return { accountId: '333333333333', region: 'us-east-1' };
-      default:
-        // Experimental environments use dev account by default
-        return { accountId: '111111111111', region: 'us-east-1' };
-    }
-  }
+  private loadConfigFromParameterStore(environment: string): { [key: string]: any } {
+    const parameters: { [key: string]: any } = {};
 
-  // Lambda function configuration
-  get lambdaConfig() {
-    return {
-      memorySize: this.isExperimental ? 128 : 256,
-      timeout: cdk.Duration.seconds(this.isExperimental ? 30 : 60),
-    };
-  }
+    // List of parameter keys that are needed for the environment
+    const parameterKeys = [
+      '/account_vars/vpc/id',
+    //   `/app/config/${environment}/api-endpoint`,
+    //   `/app/config/${environment}/feature-toggle`,
+    ];
 
-  // API Gateway configuration
-  get apiGatewayConfig() {
-    return {
-      deployOptions: {
-        stageName: this.isExperimental ? 'exp' : 'prod',
-        tracingEnabled: !this.isExperimental,
-      },
-    };
-  }
+    parameterKeys.forEach((paramKey) => {
+      const paramValue = ssm.StringParameter.valueForStringParameter(this, paramKey);
+      parameters[paramKey] = paramValue;
+    });
 
-  // IAM configuration
-  get iamConfig() {
-    return {
-      path: this.iamPath,
-      permissionsBoundary: this.iamPermissionsBoundaryArn,
-    };
-  }
-
-  // Add Aspects to the application
-  public applyAspects(app: cdk.App) {
-    cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(this.iamPermissionsBoundaryArn));
-    cdk.Aspects.of(app).add(new IamPathAspect(this.iamPath));
+    return parameters;
   }
 }
