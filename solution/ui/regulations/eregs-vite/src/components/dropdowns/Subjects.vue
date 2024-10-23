@@ -17,8 +17,8 @@ const props = defineProps({
         required: true,
     },
     counts: {
-        type: Object,
-        default: () => ({}),
+        type: Array,
+        default: () => [],
     },
     loading: {
         type: Boolean,

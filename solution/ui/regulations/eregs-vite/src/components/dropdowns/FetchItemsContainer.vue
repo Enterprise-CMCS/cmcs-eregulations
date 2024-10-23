@@ -66,7 +66,6 @@ watch(
             fetchCounts({
                 apiUrl,
                 queryParams: { q },
-                fieldName: props.itemsToFetch,
             });
         }
     },
@@ -83,7 +82,7 @@ watchEffect(() => {
 <template>
     <slot
         :data="results.data"
-        :counts="counts.results"
+        :counts="counts.results[itemsToFetch] || []"
         :error="results.error || counts.error"
         :loading="isLoading()"
     ></slot>

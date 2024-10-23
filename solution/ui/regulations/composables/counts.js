@@ -11,7 +11,7 @@ export default function useCounts() {
         error: false,
     });
 
-    const fetchCounts = async ({ apiUrl, queryParams, fieldName }) => {
+    const fetchCounts = async ({ apiUrl, queryParams }) => {
         counts.value.loading = true;
         counts.value.error = false;
 
@@ -21,7 +21,7 @@ export default function useCounts() {
                 requestParams: getRequestParams({ queryParams }),
             });
 
-            counts.value.results = response[fieldName] ?? response;
+            counts.value.results = response;
         } catch (error) {
             counts.value.error = true;
             counts.value.results = {};
