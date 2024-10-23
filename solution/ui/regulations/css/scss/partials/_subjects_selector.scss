@@ -160,6 +160,15 @@
                     font-size: $font_size_sm;
                     line-height: 22px;
                     margin-bottom: var(--spacer-2);
+
+                    .sidebar-li__button {
+                        display: flex;
+                        justify-content: space-between;
+
+                        span {
+                            line-height: 22px;
+                        }
+                    }
                 }
             }
         }

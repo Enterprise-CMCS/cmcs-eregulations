@@ -56,6 +56,10 @@ watch(
     }
 );
 
+const getDisplayCount = (subject) => {
+    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+};
+
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {
         state.subjects = props.policyDocSubjects.results;
@@ -266,7 +270,9 @@ const liDownArrowPress = (event) => {
                             @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
                             v-html="
-                                subject.displayName || getSubjectName(subject)
+                                (subject.displayName ||
+                                    getSubjectName(subject)) +
+                                getDisplayCount(subject)
                             "
                         ></button>
                     </li>
