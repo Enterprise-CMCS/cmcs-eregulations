@@ -1,0 +1,177 @@
+# .github/workflows/experimental-deploy.yml
+name: Experimental CDK Deployment
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened, closed]
+
+env:
+  AWS_REGION: us-east-1
+  STAGE: dev  # Experimental deployments always go to dev environment
+  NODE_VERSION: '18'
+
+jobs:
+  deploy:
+    name: Experimental Deployment
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          # Remove cache config since we'll handle it manually
+          
+      # Add explicit npm cache handling
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # First create package-lock.json if it doesn't exist
+      - name: Create package-lock.json
+        run: npm i --package-lock-only
+
+      # Then install dependencies
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g aws-cdk
+
+      - name: Build project
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy CDK Stack
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          cd cdk-eregs
+          echo "Deploying experimental stack for PR #${PR_NUMBER}"
+          cdk deploy --require-approval never
+
+      - name: Comment PR with Stack Info
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const stackName = `pr-${process.env.PR_NUMBER}-redirect-stack`;
+            const comment = `
+            🚀 Experimental Stack Deployed!
+            
+            Stack Name: \`${stackName}\`
+            Region: \`${process.env.AWS_REGION}\`
+            
+            You can check the status and outputs in the AWS Console:
+            https://console.aws.amazon.com/cloudformation/home?region=${process.env.AWS_REGION}#/stacks/
+            
+            This stack will be automatically destroyed when the PR is closed.
+            `;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              issue_number: process.env.PR_NUMBER,
+              body: comment
+            });
+
+  cleanup:
+    name: Cleanup Experimental Stack
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Same cache handling for cleanup job
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Create package-lock.json if it doesn't exist
+      - name: Create package-lock.json
+        run: npm i --package-lock-only
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g aws-cdk
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Destroy CDK Stack
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          echo "Destroying experimental stack for PR #${PR_NUMBER}"
+          cdk destroy --force
+
+      - name: Comment PR about Cleanup
+        uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        with:
+          script: |
+            const stackName = `pr-${process.env.PR_NUMBER}-redirect-stack`;
+            const comment = `
+            🧹 Experimental Stack Destroyed
+            
+            Stack \`${stackName}\` has been successfully destroyed.
+            `;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              issue_number: process.env.PR_NUMBER,
+              body: comment
+            });
+

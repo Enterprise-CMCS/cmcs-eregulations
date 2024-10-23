@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.158.0",
+    "aws-sdk": "^2.1691.0",
     "constructs": "^10.4.1",
     "path": "^0.12.7",
     "source-map-support": "^0.5.21"

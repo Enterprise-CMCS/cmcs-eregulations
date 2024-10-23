@@ -1,102 +1,58 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';  
-import * as ssm from 'aws-cdk-lib/aws-ssm';
-import { IamPathAspect } from '../lib/constructs/iam-path';
-import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
+// config-manager.ts
+import { DeploymentConfig, Environment } from '../config/types/config-types';
+import { getParameterValue } from './parameter-store';
 
-export class EnvironmentConfig {
-  public readonly stackPrefix: string;
-  public readonly isExperimental: boolean;
-  public readonly accountId: string;
-  public readonly region: string;
-  public readonly iamPermissionsBoundaryArn: string;
-  public readonly iamPath: string;
-  public readonly vpcId: string;
+export class ConfigManager {
+  /**
+   * Validates environment variables and returns deployment config
+   */
+  static async getConfig(): Promise<DeploymentConfig> {
+    // Validate required env vars
+    const project = this.validateEnvVar('PROJECT');
+    const stage = this.validateEnvVar('STAGE') as Environment;
+    const prNumber = process.env.PR_NUMBER;
 
-  constructor(
-    scope: Construct,  // Accept scope here
-    public readonly branchName: string,
-    public readonly prNumber?: string
-  ) {
-    // Determine if this is an experimental (PR) environment
-    this.isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
-    // Fetch VPC ID from SSM parameter store
-    this.vpcId = ssm.StringParameter.valueForStringParameter(scope, '/account_vars/vpc/id');
-    // Set the stack prefix based on whether it's experimental or not
-    this.stackPrefix = this.isExperimental ? `PR-${prNumber}` : this.getEnvironmentFromBranch();
-
-    // Get account ID and region based on the environment
-    const { accountId, region } = this.getAccountAndRegion();
-    this.accountId = accountId;
-    this.region = region;
-
-    // Set IAM path and permissions boundary ARN based on the environment
-    this.iamPath = this.isExperimental ? '/delegatedadmin/developer/' : '/delegatedadmin/developer/';
-    this.iamPermissionsBoundaryArn = this.isExperimental
-      ? 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy'
-      : 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy';
-  }
-
-  // Determine the environment based on the branch name
-  private getEnvironmentFromBranch(): string {
-    switch (this.branchName.toLowerCase()) {
-      case 'main':
-        return 'dev';
-      case 'val':
-        return 'val';
-      case 'prod':
-        return 'prod';
-      case 'dev':
-        return 'dev';
-      default:
-        // If the branch name does not match any of the known environments, default to 'dev'
-        return 'dev';
+    // Validate stage value
+    if (!['dev', 'val', 'prod'].includes(stage)) {
+      throw new Error(`Invalid stage: ${stage}. Must be one of: dev, val, prod`);
     }
-  }
-  // Get the AWS account ID and region for the current environment
-  private getAccountAndRegion(): { accountId: string; region: string } {
-    switch (this.getEnvironmentFromBranch()) {
-      case 'dev':
-        return { accountId: '009160033411', region: 'us-east-1' };
-      case 'val':
-        return { accountId: '222222222222', region: 'us-east-1' };
-      case 'prod':
-        return { accountId: '333333333333', region: 'us-east-1' };
-      default:
-        // Experimental environments use dev account by default
-        return { accountId: '111111111111', region: 'us-east-1' };
+
+    // Validate PR deployments only in dev
+    if (prNumber && stage !== 'dev') {
+      throw new Error('PR deployments are only allowed in dev environment');
+    }
+
+    try {
+      // Fetch configs from SSM
+      const [synthConfig, iamConfig] = await Promise.all([
+        getParameterValue('/cms/cloud/cdkSynthesizerConfig'),
+        getParameterValue('/cms/cloud/iamConfig')
+      ]);
+
+      return {
+        project,
+        stage,
+        prNumber,
+        isExperimental: Boolean(prNumber),
+        ...JSON.parse(iamConfig),
+        synthesizerConfig: JSON.parse(synthConfig)
+      };
+    } catch (error) {
+      throw new Error(`Failed to load configuration: ${error.message}`);
     }
   }
 
-  // Lambda function configuration
-  get lambdaConfig() {
-    return {
-      memorySize: this.isExperimental ? 128 : 256,
-      timeout: cdk.Duration.seconds(this.isExperimental ? 30 : 60),
-    };
-  }
-
-  // API Gateway configuration
-  get apiGatewayConfig() {
-    return {
-      deployOptions: {
-        stageName: this.isExperimental ? 'exp' : 'prod',
-        tracingEnabled: !this.isExperimental,
-      },
-    };
-  }
-
-  // IAM configuration
-  get iamConfig() {
-    return {
-      path: this.iamPath,
-      permissionsBoundary: this.iamPermissionsBoundaryArn,
-    };
-  }
-
-  // Add Aspects to the application
-  public applyAspects(app: cdk.App) {
-    cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(this.iamPermissionsBoundaryArn));
-    cdk.Aspects.of(app).add(new IamPathAspect(this.iamPath));
+  /**
+   * Validates existence of required environment variables
+   * @param name Environment variable name
+   * @returns Environment variable value
+   * @throws Error if environment variable is not set
+   */
+  private static validateEnvVar(name: string): string {
+    const value = process.env[name];
+    if (!value) {
+      throw new Error(`Required environment variable ${name} is not set`);
+    }
+    return value;
   }
 }
