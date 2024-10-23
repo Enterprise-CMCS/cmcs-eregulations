@@ -14,6 +14,7 @@ export class SsmParameterStack extends cdk.Stack {
     super(scope, id, props);
 
     this.ssmParameters = {
+      vpcId: ssm.StringParameter.valueForStringParameter(this, `/account_vars/vpc/id`),
       iamPath: ssm.StringParameter.valueForStringParameter(this, '/account_vars/iam/path'),
       permissionsBoundaryPolicy: ssm.StringParameter.valueForStringParameter(
         this,

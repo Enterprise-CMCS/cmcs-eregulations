@@ -1,0 +1,8 @@
+cmcs-eregs-fr-parser-dev
+cmcs-eregs-parser-dev1448
+cmcs-eregs-static-assets-dev1448
+text-extractor-dev
+cmcs-eregs-site-dev1446
+maintenance-api-dev
+redirect-api-dev
+arn:aws:acm:us-east-1:910670052382:certificate/b7045ab5-2598-4a59-be48-bad4c925162b

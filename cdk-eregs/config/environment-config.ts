@@ -1,4 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';  
+import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { IamPathAspect } from '../lib/constructs/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
 
@@ -9,14 +11,17 @@ export class EnvironmentConfig {
   public readonly region: string;
   public readonly iamPermissionsBoundaryArn: string;
   public readonly iamPath: string;
+  public readonly vpcId: string;
 
   constructor(
+    scope: Construct,  // Accept scope here
     public readonly branchName: string,
     public readonly prNumber?: string
   ) {
     // Determine if this is an experimental (PR) environment
     this.isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
-
+    // Fetch VPC ID from SSM parameter store
+    this.vpcId = ssm.StringParameter.valueForStringParameter(scope, '/account_vars/vpc/id');
     // Set the stack prefix based on whether it's experimental or not
     this.stackPrefix = this.isExperimental ? `PR-${prNumber}` : this.getEnvironmentFromBranch();
 
