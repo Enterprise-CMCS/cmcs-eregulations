@@ -65,7 +65,7 @@ watch(
         if (q && props.includeCounts) {
             fetchCounts({
                 apiUrl,
-                queryParams: newQueryParams,
+                queryParams: { q },
                 fieldName: props.itemsToFetch,
             });
         }
