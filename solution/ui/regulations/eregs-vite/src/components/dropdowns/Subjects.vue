@@ -104,10 +104,6 @@ watchEffect(() => {
         transformedList.value = {
             results: sortedCountList,
             loading: props.loading,
-            totalCount: sortedCountList.reduce(
-                (acc, item) => acc + item.count,
-                0
-            ),
         };
     }
 

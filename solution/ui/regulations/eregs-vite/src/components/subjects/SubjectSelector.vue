@@ -14,7 +14,7 @@ import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 const props = defineProps({
     policyDocSubjects: {
         type: Object,
-        default: () => ({ results: [], loading: true, totalCount: 0 }),
+        default: () => ({ results: [], loading: true }),
     },
     componentType: {
         type: String,
