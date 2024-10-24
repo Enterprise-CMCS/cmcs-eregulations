@@ -5,7 +5,7 @@ const getDisplayCount = (subject) => {
 
 export default {
     getDisplayCount,
-}
+};
 </script>
 
 <script setup>
