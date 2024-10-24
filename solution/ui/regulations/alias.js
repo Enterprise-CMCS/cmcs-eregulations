@@ -4,6 +4,7 @@ const r = (p) => resolve(__dirname, p);
 
 export default {
     "@": r("src"),
+    composables: r("./composables"),
     cypress: r("../e2e/cypress"),
     eregsComponentLib: r("../regulations/eregs-component-lib"),
     legacy: r("../../regulations"),

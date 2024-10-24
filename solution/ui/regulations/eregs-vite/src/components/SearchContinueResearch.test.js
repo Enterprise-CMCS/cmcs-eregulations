@@ -5,9 +5,7 @@ import SearchContinueResearch from "./SearchContinueResearch.vue";
 describe("Search Continue Research", () => {
     it("correctly determines if a query string has spaces", () => {
         expect(SearchContinueResearch.hasSpaces("test")).toBe(false);
-        expect(SearchContinueResearch.hasSpaces("test query")).toBe(
-            true
-        );
+        expect(SearchContinueResearch.hasSpaces("test query")).toBe(true);
     });
 
     it("correctly determines if a query has quotes", () => {

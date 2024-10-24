@@ -1,5 +1,36 @@
 {
     "internal_resource_count": 1,
     "public_resource_count": 2,
-    "regulation_text_count": 3
+    "regulation_text_count": 3,
+    "subjects": [
+        {
+            "subject": 1,
+            "count": 41
+        },
+        {
+            "subject": 2,
+            "count": 15
+        },
+        {
+            "subject": 3,
+            "count": 6
+        }
+    ],
+    "categories": [
+        {
+            "category": 2,
+            "parent": null,
+            "count": 100
+        },
+        {
+            "category": 4,
+            "parent": 3,
+            "count": 20
+        },
+        {
+            "category": 5,
+            "parent": 3,
+            "count": 13
+        }
+    ]
 }

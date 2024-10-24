@@ -1,3 +1,13 @@
+<script>
+const getDisplayCount = (subject) => {
+    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+};
+
+export default {
+    getDisplayCount,
+};
+</script>
+
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -266,7 +276,9 @@ const liDownArrowPress = (event) => {
                             @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
                             v-html="
-                                subject.displayName || getSubjectName(subject)
+                                (subject.displayName ||
+                                    getSubjectName(subject)) +
+                                getDisplayCount(subject)
                             "
                         ></button>
                     </li>

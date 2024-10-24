@@ -541,11 +541,11 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("label")
-            .should("have.text", "Public Resources");
+            .should("include.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("include.text", "Internal Resources");
 
         // Remove subject
         cy.get("button[data-testid=remove-subject-63]").click({ force: true });
@@ -566,11 +566,11 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("label")
-            .should("have.text", "Public Resources");
+            .should("include.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("include.text", "Internal Resources");
 
         // Clear search
         cy.get("form.search-form .v-field__clearable i").click({
