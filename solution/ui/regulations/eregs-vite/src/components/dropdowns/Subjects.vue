@@ -125,6 +125,7 @@ watchEffect(() => {
 <template>
     <v-btn
         id="subjects-activator"
+        data-testid="subjects-activator"
         :disabled="loading"
         class="filter__select--subjects"
         variant="outlined"

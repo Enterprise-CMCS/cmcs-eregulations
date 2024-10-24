@@ -41,6 +41,11 @@ describe("Search flow", () => {
         cy.intercept("**/v3/resources/public/categories**", {
             fixture: "categories.json",
         }).as("categories");
+
+        cy.intercept(`**/v3/content-search/counts**`, {
+            fixture: "counts.json",
+        }).as("counts");
+
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -161,10 +166,6 @@ describe("Search flow", () => {
     });
 
     it("should not show internal checkbox when not logged in", () => {
-        cy.intercept(`**/v3/content-search/counts**`, {
-            fixture: "counts.json",
-        }).as("counts");
-
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".doc-type__toggle fieldset > div")
@@ -196,7 +197,7 @@ describe("Search flow", () => {
             .should("have.text", "Internal Resources(1)");
     });
 
-    it("should not show the categories dropdown when only regulations are selected", () => {
+    it("should not show the categories or subjects dropdowns when only regulations are selected", () => {
         cy.viewport("macbook-15");
 
         cy.eregsLogin({
@@ -207,16 +208,20 @@ describe("Search flow", () => {
 
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get("div[data-testid='category-select']").should("be.visible");
+        cy.get("button[data-testid='subjects-activator']").should("be.visible");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
             .check({ force: true });
         cy.get("div[data-testid='category-select']").should("not.be.visible");
+        cy.get("button[data-testid='subjects-activator']").should("not.be.visible");
+        cy.get(".doc-type__toggle fieldset > div")
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
             .check({ force: true });
         cy.get("div[data-testid='category-select']").should("be.visible");
+        cy.get("button[data-testid='subjects-activator']").should("be.visible");
     });
 
     it("has the correct type params in URL for each doc type combination", () => {
