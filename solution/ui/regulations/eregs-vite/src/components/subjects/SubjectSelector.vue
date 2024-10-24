@@ -1,3 +1,13 @@
+<script>
+const getDisplayCount = (subject) => {
+    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+};
+
+export default {
+    getDisplayCount,
+}
+</script>
+
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -55,10 +65,6 @@ watch(
         state.subjects = props.policyDocSubjects.results;
     }
 );
-
-const getDisplayCount = (subject) => {
-    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
-};
 
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {

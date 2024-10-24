@@ -1,15 +1,6 @@
 <script>
 // https://stackoverflow.com/a/70947352
 // https://vuejs.org/api/sfc-script-setup.html#usage-alongside-normal-script
-import { inject, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
-
-import { getSubjects } from "utilities/api";
-
-import useCategories from "composables/categories";
-import useCounts from "composables/counts";
-import useFetch from "composables/fetch";
-
 const itemTypes = {
     categories: useCategories,
     subjects: (paramsObj) => useFetch({ method: getSubjects, ...paramsObj }),
@@ -19,6 +10,15 @@ export default {};
 </script>
 
 <script setup>
+import { inject, watch, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+
+import { getSubjects } from "utilities/api";
+
+import useCategories from "composables/categories";
+import useCounts from "composables/counts";
+import useFetch from "composables/fetch";
+
 const props = defineProps({
     itemsToFetch: {
         validator: (value) => {
