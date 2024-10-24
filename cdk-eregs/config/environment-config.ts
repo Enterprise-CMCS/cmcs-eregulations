@@ -1,291 +1,298 @@
 
-// import * as cdk from 'aws-cdk-lib';
-// import * as ssm from 'aws-cdk-lib/aws-ssm';
-// import { Construct } from 'constructs';
-// import { IamPathAspect } from '../lib/constructs/iam-path';
-// import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
 
-// export interface EnvironmentConfig {
-//   stackPrefix: string;
-//   accountId: string;
-//   region: string;
-//   stage: string;
-//   isExperimental: boolean;
-// }
-
-// export interface SsmParameters {
-//   vpcId: string;
-//   iamPath: string;
-//   permissionsBoundaryPolicy: string;
-//   logLevel: string;
-//   httpUser: string;
-//   httpPassword: string;
-//   acmCertArn: string;
-// }
-
-// export class EnvironmentStack extends cdk.Stack {
-//   public readonly config: EnvironmentConfig;
-//   public readonly ssmParameters: SsmParameters;
-
-//   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-//     super(scope, id, props);
-
-//     // Initialize environment configuration
-//     this.config = this.initializeConfig();
-    
-//     // Fetch SSM parameters
-//     this.ssmParameters = this.fetchSsmParameters();
-
-//     // Apply global aspects
-//     this.applyGlobalAspects(scope);
-//   }
-
-//   private initializeConfig(): EnvironmentConfig {
-//     const branchName = process.env.GITHUB_REF_NAME || 'main';
-//     const prNumber = process.env.GITHUB_EVENT_NUMBER;
-//     const isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
-//     const stage = this.getStageFromBranch(branchName);
-//     const { accountId, region } = this.getAccountAndRegion(stage);
-
-//     return {
-//       stackPrefix: isExperimental ? `PR-${prNumber}` : stage,
-//       accountId,
-//       region,
-//       stage,
-//       isExperimental
-//     };
-//   }
-
-//   private fetchSsmParameters(): SsmParameters {
-//     return {
-//       vpcId: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/account_vars/vpc/id'
-//       ),
-//       iamPath: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/account_vars/iam/path'
-//       ),
-//       permissionsBoundaryPolicy: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/account_vars/iam/permissions_boundary_policy'
-//       ),
-//       logLevel: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/eregulations/text_extractor/log_level'
-//       ),
-//       httpUser: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/eregulations/http/user'
-//       ),
-//       httpPassword: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/eregulations/http/password'
-//       ),
-//       acmCertArn: ssm.StringParameter.valueForStringParameter(
-//         this,
-//         '/eregulations/acm-cert-arn'
-//       )
-//     };
-//   }
-
-//   private getStageFromBranch(branchName: string): string {
-//     const stageMap: { [key: string]: string } = {
-//       main: 'dev',
-//       val: 'val',
-//       prod: 'prod',
-//       dev: 'dev'
-//     };
-//     return stageMap[branchName.toLowerCase()] || 'dev';
-//   }
-
-//   private getAccountAndRegion(stage: string): { accountId: string; region: string } {
-//     const environments: { [key: string]: { accountId: string; region: string } } = {
-//       dev: { accountId: '009160033411', region: 'us-east-1' },
-//       val: { accountId: '222222222222', region: 'us-east-1' },
-//       prod: { accountId: '333333333333', region: 'us-east-1' }
-//     };
-//     return environments[stage] || environments.dev;
-//   }
-
-//   private applyGlobalAspects(scope: Construct): void {
-//     const permissionsBoundaryArn = `arn:aws:iam::${this.config.accountId}:policy${this.ssmParameters.permissionsBoundaryPolicy}`;
-//     cdk.Aspects.of(scope).add(new IamPermissionsBoundaryAspect(permissionsBoundaryArn));
-//     cdk.Aspects.of(scope).add(new IamPathAspect(this.ssmParameters.iamPath));
-//   }
-
-//   // Helper methods for stack configuration
-//   public getLambdaConfig() {
-//     return {
-//       memorySize: this.config.isExperimental ? 128 : 256,
-//       timeout: cdk.Duration.seconds(this.config.isExperimental ? 30 : 60),
-//       environment: {
-//         STAGE: this.config.stage,
-//         LOG_LEVEL: this.ssmParameters.logLevel
-//       }
-//     };
-//   }
-
-//   public getApiGatewayConfig() {
-//     return {
-//       deployOptions: {
-//         stageName: this.config.isExperimental ? 'exp' : this.config.stage,
-//         tracingEnabled: !this.config.isExperimental,
-//         loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-//         dataTraceEnabled: true,
-//         metricsEnabled: true
-//       }
-//     };
-//   }
-// }
-// import * as cdk from 'aws-cdk-lib';
-// import * as ssm from 'aws-cdk-lib/aws-ssm';
-// import { Construct } from 'constructs';
-// import { IamPathAspect } from '../lib/constructs/iam-path';
-// import { IamPermissionsBoundaryAspect } from '../lib/constructs/iam-permissions-boundary-aspect';
-
-// export interface EnvironmentConfig {
-//   stackPrefix: string;
-//   accountId: string;
-//   region: string;
-//   stage: string;
-//   isExperimental: boolean;
-// }
-
-// export interface SsmParameters {
-//   vpcId: string;
-//   iamPath: string;
-//   permissionsBoundaryPolicy: string;
-//   logLevel: string;
-//   httpUser: string;
-//   httpPassword: string;
-//   acmCertArn: string;
-// }
-
-// export class EnvironmentStack extends cdk.Stack {
-//   public readonly config: EnvironmentConfig;
-//   public readonly ssmParameterOutputs: Record<string, cdk.CfnOutput>;
-
-//   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-//     super(scope, id, props);
-
-//     // Initialize environment configuration
-//     this.config = this.initializeConfig();
-    
-//     // Create outputs for SSM parameters
-//     this.ssmParameterOutputs = this.createSsmParameterOutputs();
-
-//     // Apply global aspects
-//     this.applyGlobalAspects(scope);
-//   }
-
-//   private initializeConfig(): EnvironmentConfig {
-//     const branchName = process.env.GITHUB_REF_NAME || 'main';
-//     const prNumber = process.env.GITHUB_EVENT_NUMBER;
-//     const isExperimental = branchName.startsWith('pr-') || branchName.startsWith('PR-');
-//     const stage = this.getStageFromBranch(branchName);
-//     const { accountId, region } = this.getAccountAndRegion(stage);
-
-//     return {
-//       stackPrefix: isExperimental ? `PR-${prNumber}` : stage,
-//       accountId,
-//       region,
-//       stage,
-//       isExperimental
-//     };
-//   }
-
-//   private createSsmParameterOutputs(): Record<string, cdk.CfnOutput> {
-//     const parameterMap = {
-//       vpcId: '/account_vars/vpc/id',
-//       iamPath: '/account_vars/iam/path',
-//       permissionsBoundaryPolicy: '/account_vars/iam/permissions_boundary_policy',
-//       logLevel: '/eregulations/text_extractor/log_level',
-//       httpUser: '/eregulations/http/user',
-//       httpPassword: '/eregulations/http/password',
-//       acmCertArn: '/eregulations/acm-cert-arn'
-//     };
-
-//     const outputs: Record<string, cdk.CfnOutput> = {};
-
-//     for (const [key, paramPath] of Object.entries(parameterMap)) {
-//       const paramValue = ssm.StringParameter.valueForStringParameter(this, paramPath);
-//       outputs[key] = new cdk.CfnOutput(this, `SSMOutput${key}`, {
-//         value: paramValue,
-//         exportName: `${this.config.stackPrefix}-${key}`
-//       });
-//     }
-
-//     return outputs;
-//   }
-
-//   private getStageFromBranch(branchName: string): string {
-//     const stageMap: { [key: string]: string } = {
-//       main: 'dev',
-//       val: 'val',
-//       prod: 'prod',
-//       dev: 'dev'
-//     };
-//     return stageMap[branchName.toLowerCase()] || 'dev';
-//   }
-
-//   private getAccountAndRegion(stage: string): { accountId: string; region: string } {
-//     const environments: { [key: string]: { accountId: string; region: string } } = {
-//       dev: { accountId: '009160033411', region: 'us-east-1' },
-//       val: { accountId: '222222222222', region: 'us-east-1' },
-//       prod: { accountId: '333333333333', region: 'us-east-1' }
-//     };
-//     return environments[stage] || environments.dev;
-//   }
-
-//   private applyGlobalAspects(scope: Construct): void {
-//     cdk.Aspects.of(scope).add(
-//       new IamPermissionsBoundaryAspect(
-//         `arn:aws:iam::${this.config.accountId}:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy`
-//       )
-//     );
-//     cdk.Aspects.of(scope).add(new IamPathAspect('/delegatedadmin/developer/'));
-//   }
-
-//   public getSsmValue(key: keyof SsmParameters): string {
-//     return cdk.Fn.importValue(`${this.config.stackPrefix}-${key}`);
-//   }
-// }
-import * as cdk from 'aws-cdk-lib';
+// config/environment-config.ts
 import * as ssm from 'aws-cdk-lib/aws-ssm';
+import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import {
+  BaseConfig,
+  VpcConfig,
+  IamConfig,
+  CommonConfig,
+  ParserConfig,
+  RedirectConfig,
+  StaticAssetsConfig,
+  MaintenanceConfig,
+  Environment
+} from './types/config-types';
 
-interface EnvironmentConfigProps extends cdk.StackProps {
-  environment: string;
+export interface EnvironmentStackProps extends cdk.StackProps {
+  stage?: string;
 }
 
 export class EnvironmentConfigStack extends cdk.Stack {
-  public readonly config: { [key: string]: any };
+  public readonly baseConfig: BaseConfig;
+  public readonly vpcConfig: VpcConfig;
+  public readonly iamConfig: IamConfig;
+  public readonly commonConfig: CommonConfig;
+  public readonly parserConfig: ParserConfig;
+  public readonly redirectConfig: RedirectConfig;
+  public readonly staticAssetsConfig: StaticAssetsConfig;
+  public readonly maintenanceConfig: MaintenanceConfig;
 
-  constructor(scope: Construct, id: string, props: EnvironmentConfigProps) {
+  private ssmCache: Map<string, string> = new Map();
+
+  constructor(scope: Construct, id: string, props?: EnvironmentStackProps) {
     super(scope, id, props);
 
-    const { environment } = props;
+    const branchName = process.env.GIT_BRANCH || 'dev';
+    const environment = this.getEnvironmentFromBranch(branchName);
+    const isExperimental = environment === 'experimental';
 
-    // Load configuration from Parameter Store
-    this.config = this.loadConfigFromParameterStore(environment);
+    this.baseConfig = this.initializeBaseConfig(environment, isExperimental);
+    this.vpcConfig = this.loadVpcConfig();
+    this.iamConfig = this.loadIamConfig();
+    this.commonConfig = this.loadCommonConfig();
+    this.parserConfig = this.loadParserConfig(isExperimental);
+    this.redirectConfig = this.loadRedirectConfig(environment);
+    this.staticAssetsConfig = this.loadStaticAssetsConfig();
+    this.maintenanceConfig = this.loadMaintenanceConfig(environment);
+
+    // Export configurations as CloudFormation outputs
+    this.createOutputs();
   }
 
-  private loadConfigFromParameterStore(environment: string): { [key: string]: any } {
-    const parameters: { [key: string]: any } = {};
+//   private getEnvironmentFromBranch(branch: string): Environment {
+//     if (branch === 'main') return 'dev';
+//     if (branch === 'val') return 'val';
+//     if (branch === 'production') return 'prod';
+//     return 'experimental';
+//   }
+  private getSsmParameter(path: string, defaultValue?: string): string {
+    // Check cache first
+    if (this.ssmCache.has(path)) {
+      return this.ssmCache.get(path)!;
+    }
+  
+    try {
+      const value = ssm.StringParameter.valueForStringParameter(this, path);
+      this.ssmCache.set(path, value);
+      return value;
+    } catch (error) {
+      if (defaultValue === undefined) {
+        throw new Error(`Required SSM parameter not found: ${path}`);
+      }
+      console.warn(`Parameter ${path} not found, using default value: ${defaultValue}`);
+      return defaultValue;
+    }
+  }
+  
+  // Then the maintenance config can remain unchanged:
+  private loadMaintenanceConfig(environment: string): MaintenanceConfig {
+    return {
+      allowedIps: this.getSsmParameter(
+        `/eregulations/${environment}/maintenance/allowed_ips`,
+        '[]'
+      ).split(',').filter(ip => ip.trim()),
+      
+      maintenanceWindow: this.getSsmParameter(
+        `/eregulations/${environment}/maintenance/window`,
+        '0 0 * * 0'  // Default to midnight on Sundays
+      ),
+      
+      notification: {
+        enabled: !this.baseConfig.isExperimental,
+        snsTopicArn: this.getSsmParameter(
+          `/eregulations/${environment}/maintenance/notification_topic`,
+          ''
+        ),
+        reminderHours: 24,
+      },
+      
+      backup: {
+        enabled: !this.baseConfig.isExperimental,
+        retentionDays: this.baseConfig.isExperimental ? 1 : 30,
+        schedule: this.baseConfig.isExperimental ? 'rate(1 day)' : 'rate(6 hours)',
+      },
+      
+      monitoring: {
+        metrics: {
+          enabled: !this.baseConfig.isExperimental,
+          namespace: 'Maintenance',
+          dimensions: {
+            Environment: environment,
+            Service: 'eRegulations',
+          },
+        },
+        alarms: {
+          enabled: !this.baseConfig.isExperimental,
+          errorThreshold: this.baseConfig.isExperimental ? 5 : 2,
+          evaluationPeriods: this.baseConfig.isExperimental ? 1 : 3,
+        },
+      },
+    };
+  }
 
-    // List of parameter keys that are needed for the environment
-    const parameterKeys = [
-      '/account_vars/vpc/id',
-    //   `/app/config/${environment}/api-endpoint`,
-    //   `/app/config/${environment}/feature-toggle`,
-    ];
+  private initializeBaseConfig(environment: Environment, isExperimental: boolean): BaseConfig {
+    const accountIds = {
+      dev: '009160033411',
+      val: '222222222222',
+      prod: '333333333333',
+      experimental: '009160033411'
+    };
 
-    parameterKeys.forEach((paramKey) => {
-      const paramValue = ssm.StringParameter.valueForStringParameter(this, paramKey);
-      parameters[paramKey] = paramValue;
+    return {
+      environment,
+      stackPrefix: isExperimental ? 'exp' : environment,
+      accountId: accountIds[environment],
+      region: 'us-east-1',
+      isExperimental,
+      tags: {
+        Environment: environment,
+        Project: 'eregulations',
+        ManagedBy: 'CDK'
+      }
+    };
+  }
+
+  private loadVpcConfig(): VpcConfig {
+    return {
+      vpcId: this.getSsmParameter('/account_vars/vpc/id'),
+      privateSubnetIds: [
+        this.getSsmParameter('/account_vars/vpc/subnets/private/a/id'),
+        this.getSsmParameter('/account_vars/vpc/subnets/private/b/id')
+      ],
+      publicSubnetIds: [
+        this.getSsmParameter('/account_vars/vpc/subnets/public/a/id'),
+        this.getSsmParameter('/account_vars/vpc/subnets/public/b/id')
+      ]
+    };
+  }
+  private loadIamConfig(): IamConfig {
+    return {
+        path: this.getSsmParameter('/account_vars/iam/path'),
+        permissionsBoundaryPolicy: this.getSsmParameter('/account_vars/iam/permissions_boundary_policy')
+
+    }
+  }
+  private loadCommonConfig(): CommonConfig {
+    const { environment } = this.baseConfig;
+    
+    // Load required parameters
+    const commonConfig: CommonConfig = {
+      stage: this.getSsmParameter(`/eregulations/${environment}/stage`, environment),
+      logLevel: this.getSsmParameter(`/eregulations/${environment}/log_level`, 'INFO'),
+      fismaTag: this.getSsmParameter('cms-cloud-cdm-support-fisma-tag', 'LOW'),
+      loggingAppName: this.getSsmParameter('cms-cloud-logging-application-name', 'eregulations'),
+      httpEndpoint: this.getSsmParameter(`/eregulations/${environment}/http_endpoint`, ''),
+      // Add default retention settings
+      retentionDays: this.baseConfig.isExperimental ? 1 : 14,
+      // Add monitoring settings
+      monitoring: {
+        enabled: !this.baseConfig.isExperimental,
+        alarmTopicArn: this.getSsmParameter(`/eregulations/${environment}/alarm_topic_arn`, ''),
+      }
+    };
+  
+    return commonConfig;
+  }
+  
+  private loadParserConfig(isExperimental: boolean): ParserConfig {
+    const baseMemory = isExperimental ? 512 : 1024;
+    const baseTimeout = isExperimental ? 150 : 300;
+  
+    return {
+      memorySize: baseMemory,
+      timeout: baseTimeout,
+      queueRetentionDays: isExperimental ? 1 : 14,
+      queueVisibilityTimeout: baseTimeout,
+      batchSize: isExperimental ? 1 : 10,
+      concurrentExecutions: isExperimental ? 2 : 5,
+      retryAttempts: isExperimental ? 1 : 3,
+      dockerOptions: {
+        maxConcurrency: isExperimental ? 2 : 4,
+        memoryReservation: baseMemory,
+      },
+      cacheSettings: {
+        enabled: !isExperimental,
+        ttlMinutes: isExperimental ? 5 : 60,
+      },
+      monitoring: {
+        enabled: !isExperimental,
+        errorThreshold: isExperimental ? 5 : 3,
+        warningThreshold: isExperimental ? 3 : 1,
+      }
+    };
+  }
+  
+  private loadRedirectConfig(environment: string): RedirectConfig {
+    return {
+      httpUser: this.getSsmParameter(`/eregulations/${environment}/http_user`),
+      httpPassword: this.getSsmParameter(`/eregulations/${environment}/http_password`),
+      apiStageName: this.baseConfig.isExperimental ? 'exp' : environment,
+      rateLimiting: {
+        enabled: !this.baseConfig.isExperimental,
+        rateLimit: this.baseConfig.isExperimental ? 100 : 1000,
+        burstLimit: this.baseConfig.isExperimental ? 50 : 500,
+      },
+      caching: {
+        enabled: !this.baseConfig.isExperimental,
+        ttlSeconds: this.baseConfig.isExperimental ? 60 : 3600,
+      },
+      cors: {
+        enabled: true,
+        allowedOrigins: ['*'],
+        allowedMethods: ['GET', 'POST', 'OPTIONS'],
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        maxAge: 3600,
+      },
+      logging: {
+        level: this.baseConfig.isExperimental ? 'DEBUG' : 'INFO',
+        retention: this.baseConfig.isExperimental ? 3 : 30,
+      }
+    };
+  }
+  
+  private loadStaticAssetsConfig(): StaticAssetsConfig {
+    const { environment, stackPrefix, isExperimental } = this.baseConfig;
+    
+    return {
+      buckets: {
+        assets: {
+          name: `eregs-${stackPrefix}-site-assets`,
+          versioned: !isExperimental,
+          retentionDays: isExperimental ? 7 : 365,
+          noncurrentVersionRetentionDays: isExperimental ? 1 : 90,
+        },
+        logs: {
+          name: `eregs-${stackPrefix}-cloudfront-logs`,
+          retentionDays: isExperimental ? 7 : 90,
+        },
+      },
+      cloudfront: {
+        enabled: true,
+        priceClass: isExperimental ? 'PRICE_CLASS_100' : 'PRICE_CLASS_ALL',
+        ttl: {
+          default: isExperimental ? 60 : 3600,
+          min: 0,
+          max: isExperimental ? 300 : 86400,
+        },
+        enableCompression: true,
+        enableLogging: true,
+        logFilePrefix: 'cf-logs/',
+      },
+      waf: {
+        enabled: true,
+        rateLimitThreshold: isExperimental ? 100 : 2000,
+        allowedCountries: ['GU', 'PR', 'US', 'UM', 'VI', 'MP', 'AS'],
+      },
+      deployment: {
+        memoryLimit: isExperimental ? 512 : 1024,
+        prune: true,
+      },
+    };
+  }
+ 
+  // ... (implement other load methods)
+
+  private createOutputs(): void {
+    // Create outputs for cross-stack references
+    Object.entries(this.baseConfig).forEach(([key, value]) => {
+      new cdk.CfnOutput(this, `BaseConfig${key}`, {
+        value: value.toString(),
+        exportName: `${this.baseConfig.stackPrefix}-${key}`
+      });
     });
-
-    return parameters;
+    // ... create outputs for other configs
   }
 }

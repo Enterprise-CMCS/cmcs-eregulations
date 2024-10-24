@@ -1,78 +1,73 @@
-// lib/stacks/fr-stack.ts
-
 import * as cdk from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as ecr_assets from 'aws-cdk-lib/aws-ecr-assets';
 import { Construct } from 'constructs';
-import { EnvironmentConfig } from '../../config/environment-config';
+import { EnvironmentConfigStack } from '../../config/environment-config';
 
 interface FrStackProps extends cdk.StackProps {
-  config: EnvironmentConfig;
-  vpc: ec2.IVpc;
+  envStack: EnvironmentConfigStack;
 }
 
 export class FrStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: FrStackProps) {
     super(scope, id, props);
 
-    const { config, vpc } = props;
+    const { envStack } = props;
+    const { baseConfig, parserConfig, vpcConfig } = envStack;
 
     // Create SQS Queue
     const queue = new sqs.Queue(this, 'FrQueue', {
-      queueName: `${config.stackPrefix}-fr-queue`,
-      visibilityTimeout: cdk.Duration.seconds(300),
-      retentionPeriod: cdk.Duration.days(5),
+      queueName: `${baseConfig.stackPrefix}-fr-queue`,
+      visibilityTimeout: cdk.Duration.seconds(parserConfig.queueVisibilityTimeout),
+      retentionPeriod: cdk.Duration.days(parserConfig.queueRetentionDays),
     });
 
-    // Create IAM Role for Lambda
+    // Create Lambda Role
     const lambdaRole = new iam.Role(this, 'FrLambdaRole', {
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+      path: envStack.iamConfig.path,
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
       ],
+      permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+        this,
+        'PermissionsBoundary',
+        `arn:aws:iam::${this.account}:policy${envStack.iamConfig.permissionsBoundaryPolicy}`
+      ),
     });
 
-    // Add policies to the role for accessing SQS and logging
-    lambdaRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['sqs:ReceiveMessage', 'sqs:DeleteMessage', 'sqs:GetQueueAttributes'],
-      resources: [queue.queueArn],
-    }));
+    // Add Lambda permissions
+    lambdaRole.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['sqs:*'],
+        resources: [queue.queueArn],
+      })
+    );
 
-    lambdaRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-      resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
-    }));
-
-    // // Docker Image Asset for Lambda
-    // const dockerImageAsset = new ecr_assets.DockerImageAsset(this, 'FrDockerImage', {
-    //   directory: '../solution/fr', // Adjust this path to where the Dockerfile is located
-    // });
-
-    // Create Lambda Function using Docker Image
-    const frLambda = new lambda.DockerImageFunction(this, 'FrFunction', {
-        functionName: `${config.stackPrefix}-fr-function`,
-        code: lambda.DockerImageCode.fromImageAsset('../../../solution/parser/fr-parser'), // Specify the path where Dockerfile is located
-        timeout: cdk.Duration.seconds(300),
-        memorySize: 1024,
-        vpc,
-        role: lambdaRole,
-        environment: {
-          STAGE: config.stackPrefix,
-        },
-      });
-
-    // Outputs
-    new cdk.CfnOutput(this, 'FrQueueUrl', {
-      value: queue.queueUrl,
-      exportName: `${config.stackPrefix}-FrQueueUrl`,
+    // Create Lambda Function
+    const parser = new lambda.DockerImageFunction(this, 'FrFunction', {
+      functionName: `${baseConfig.stackPrefix}-fr-function`,
+      code: lambda.DockerImageCode.fromImageAsset('../../../solution/parser/fr-parser'),
+      timeout: cdk.Duration.seconds(parserConfig.timeout),
+      memorySize: parserConfig.memorySize,
+      vpc: ec2.Vpc.fromVpcAttributes(this, 'ImportedVpc', {
+        vpcId: vpcConfig.vpcId,
+        availabilityZones: ['us-east-1a', 'us-east-1b'],
+        privateSubnetIds: vpcConfig.privateSubnetIds,
+      }),
+      role: lambdaRole,
+      environment: {
+        STAGE: baseConfig.environment,
+        QUEUE_URL: queue.queueUrl,
+      },
     });
 
-    new cdk.CfnOutput(this, 'FrFunctionArn', {
-      value: frLambda.functionArn,
-      exportName: `${config.stackPrefix}-FrFunctionArn`,
+    // Add stack tags
+    Object.entries(baseConfig.tags).forEach(([key, value]) => {
+      cdk.Tags.of(this).add(key, value);
     });
   }
 }

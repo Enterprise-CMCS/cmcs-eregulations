@@ -1,76 +1,69 @@
-// lib/stacks/maintenance-lambda-stack.ts
+// // lib/stacks/maintenance-lambda-stack.ts
+// import * as cdk from 'aws-cdk-lib';
+// import * as lambda from 'aws-cdk-lib/aws-lambda';
+// import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+// import * as iam from 'aws-cdk-lib/aws-iam';
+// import * as path from 'path';
+// import { Construct } from 'constructs';
+// import { EnvironmentConfigStack } from '../../config/environment-config';
 
-import * as cdk from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as apigateway from 'aws-cdk-lib/aws-apigateway';
-import * as iam from 'aws-cdk-lib/aws-iam';
-import * as ssm from 'aws-cdk-lib/aws-ssm';
-import * as path from 'path';
-import { Construct } from 'constructs';
+// interface MaintenanceLambdaStackProps extends cdk.StackProps {
+//   envStack: EnvironmentConfigStack;
+// }
 
-interface MaintenanceLambdaStackProps extends cdk.StackProps {
-  stage: string;
-}
+// export class MaintenanceLambdaStack extends cdk.Stack {
+//   constructor(scope: Construct, id: string, props: MaintenanceLambdaStackProps) {
+//     super(scope, id, props);
 
-export class MaintenanceLambdaStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: MaintenanceLambdaStackProps) {
-    super(scope, id, props);
+//     const { envStack } = props;
+//     const { baseConfig, maintenanceConfig, iamConfig } = envStack;
 
-    const { stage } = props;
+//     // Create Lambda Role
+//     const lambdaRole = new iam.Role(this, 'MaintenanceLambdaRole', {
+//       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+//       path: iamConfig.path,
+//       managedPolicies: [
+//         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+//       ],
+//       permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+//         this,
+//         'PermissionsBoundary',
+//         `arn:aws:iam::${this.account}:policy${iamConfig.permissionsBoundaryPolicy}`
+//       ),
+//     });
 
-    // IAM Role for the Lambda function
-    const lambdaRole = new iam.Role(this, 'MaintenanceLambdaRole', {
-      assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-      ],
-    });
+//     // Create Maintenance Lambda
+//     const maintenanceLambda = new lambda.Function(this, 'MaintenanceFunction', {
+//       runtime: lambda.Runtime.PYTHON_3_9,
+//       handler: 'maintenance.handler',
+//       code: lambda.Code.fromAsset(path.join(__dirname, '../../../solution/backend/')),
+//       functionName: `${baseConfig.stackPrefix}-maintenance`,
+//       timeout: cdk.Duration.seconds(30),
+//       memorySize: 128,
+//       role: lambdaRole,
+//       environment: {
+//         STAGE: baseConfig.environment,
+//         MAINTENANCE_WINDOW: maintenanceConfig.maintenanceWindow,
+//         ALLOWED_IPS: JSON.stringify(maintenanceConfig.allowedIps),
+//       },
+//     });
 
-    // Add SSM Parameter for permissions boundary if needed
-    const permissionsBoundaryArn = ssm.StringParameter.valueForStringParameter(this, '/account_vars/iam/permissions_boundary_policy');
-    lambdaRole.addManagedPolicy(
-      iam.ManagedPolicy.fromManagedPolicyArn(this, 'PermissionsBoundary', permissionsBoundaryArn),
-    );
+//     // Create API Gateway
+//     const api = new apigateway.RestApi(this, 'MaintenanceApi', {
+//       restApiName: `${baseConfig.stackPrefix}-maintenance-api`,
+//       deployOptions: {
+//         stageName: baseConfig.environment,
+//         tracingEnabled: true,
+//         metricsEnabled: true,
+//         loggingLevel: apigateway.MethodLoggingLevel.INFO,
+//       },
+//     });
 
-    // Lambda Function for Maintenance
-    const maintenanceLambda = new lambda.Function(this, 'MaintenanceLambdaFunction', {
-      runtime: lambda.Runtime.PYTHON_3_9, // Adjust as needed
-      handler: 'maintenance.handler', // Match your handler in the Lambda function code
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../../solution/backend/')), // Assuming lambda code is in `lambda/maintenance`
-      functionName: `MaintenanceLambda-${stage}`,
-      timeout: cdk.Duration.seconds(60),
-      memorySize: 256,
-      role: lambdaRole,
-      environment: {
-        STAGE: stage,
-      },
-    });
+//     // Add resource and method
+//     const maintenance = api.root.addResource('maintenance');
+//     maintenance.addMethod('GET', new apigateway.LambdaIntegration(maintenanceLambda));
 
-    // API Gateway REST API for Maintenance Endpoint
-    const api = new apigateway.RestApi(this, 'MaintenanceApi', {
-      restApiName: `MaintenanceAPI-${stage}`,
-      description: `API Gateway for Maintenance Lambda in ${stage} environment`,
-      deployOptions: {
-        stageName: stage,
-        loggingLevel: apigateway.MethodLoggingLevel.INFO,
-        metricsEnabled: true,
-      },
-    });
-
-    // Connect API Gateway to the Lambda
-    const maintenanceResource = api.root.addResource('maintenance');
-    const lambdaIntegration = new apigateway.LambdaIntegration(maintenanceLambda);
-    maintenanceResource.addMethod('GET', lambdaIntegration); // Assuming GET method for maintenance endpoint
-
-    // Outputs
-    new cdk.CfnOutput(this, 'MaintenanceLambdaFunctionArn', {
-      value: maintenanceLambda.functionArn,
-      description: 'ARN of the Maintenance Lambda function',
-    });
-
-    new cdk.CfnOutput(this, 'MaintenanceApiUrl', {
-      value: api.url,
-      description: 'URL of the Maintenance API Gateway',
-    });
-  }
-}
+//     // Add stack tags
+//     Object.entries(baseConfig.tags).forEach(([key, value]) => {
+//       cdk.Tags.of(this).add(key, value);
+//     });
