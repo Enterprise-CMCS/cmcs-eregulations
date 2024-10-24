@@ -141,6 +141,7 @@ watchEffect(() => {
                 class="subjects-select__clear"
                 icon="mdi-close"
                 size="x-large"
+                aria-label="Clear Choose Subject"
                 @click="clearClick"
                 @keydown.enter.prevent="clearClick"
             />
