@@ -442,7 +442,8 @@ getDocSubjects();
                             <DocumentTypeSelector v-if="isAuthenticated" />
                             <FetchItemsContainer
                                 v-slot="slotProps"
-                                :categories-capture-function="setCategories"
+                                items-to-fetch="categories"
+                                :items-capture-function="setCategories"
                             >
                                 <CategoriesDropdown
                                     :list="slotProps.data"
