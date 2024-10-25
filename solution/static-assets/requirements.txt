@@ -1,6 +1,5 @@
 cryptography>=42.0.2
 pyopenssl>=24,<25
-Werkzeug==3.0.6
 boto3
 django-debug-toolbar
 django>=5.1
