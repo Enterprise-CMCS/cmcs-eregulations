@@ -140,6 +140,7 @@ watchEffect(() => {
             <v-icon
                 v-if="buttonTitle"
                 class="subjects-select__clear"
+                data-testid="subjects-select-clear"
                 icon="mdi-close"
                 size="x-large"
                 aria-label="Clear Choose Subject"

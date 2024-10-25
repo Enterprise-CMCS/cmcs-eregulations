@@ -358,6 +358,35 @@ describe("Search flow", () => {
         cy.url().should("include", "subjects=3").and("include", "categories=1");
     });
 
+    it("subjects can be cleared by clicking the clear button", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}`);
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+
+        cy.url().should("include", "subjects=3");
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+
+        cy.get("i[data-testid='subjects-select-clear']").click({ force: true });
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Choose Subject");
+
+        cy.url().should("not.include", "subjects=3");
+
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
