@@ -427,14 +427,14 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
         cy.get("button[data-testid=add-subject-63]").should(
             "not.have.class",
-            "sidebar-li__button--selected"
+            "subjects-li__button--selected"
         );
         cy.get("button[data-testid=add-subject-63]").click({
             force: true,
         });
         cy.get("button[data-testid=add-subject-63]").should(
             "have.class",
-            "sidebar-li__button--selected"
+            "subjects-li__button--selected"
         );
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("not.exist");

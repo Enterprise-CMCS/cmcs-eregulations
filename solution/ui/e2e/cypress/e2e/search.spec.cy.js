@@ -287,7 +287,7 @@ describe("Search flow", () => {
 
         cy.get("button[data-testid=add-subject-2]").should(
             "have.class",
-            "sidebar-li__button--selected",
+            "subjects-li__button--selected",
         );
     });
 
@@ -302,7 +302,7 @@ describe("Search flow", () => {
             .click({ force: true });
 
         cy.get("button[data-testid=add-subject-3]")
-            .should("not.have.class", "sidebar-li__button--selected")
+            .should("not.have.class", "subjects-li__button--selected")
             .find(".count")
             .should("have.text", "(15)");
 
@@ -316,12 +316,12 @@ describe("Search flow", () => {
 
         cy.get("button[data-testid=add-subject-2]").should(
             "not.have.class",
-            "sidebar-li__button--selected",
+            "subjects-li__button--selected",
         );
 
         cy.get("button[data-testid=add-subject-3]").should(
             "have.class",
-            "sidebar-li__button--selected",
+            "subjects-li__button--selected",
         );
 
         cy.url().should("include", "subjects=3");

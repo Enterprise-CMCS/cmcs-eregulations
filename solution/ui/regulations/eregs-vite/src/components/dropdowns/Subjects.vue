@@ -48,7 +48,7 @@ const labelClasses = computed(() => ({
 
 const menuItemClick = (event) => {
     const menuItemClicked =
-        event.target.className.includes("sidebar-li__button") ||
+        event.target.className.includes("subjects-li__button") ||
         event.target.className.includes("match__container");
 
     if (event.target.dataset.name) {

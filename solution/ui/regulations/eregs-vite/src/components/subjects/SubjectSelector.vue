@@ -164,8 +164,10 @@ const subjectClasses = (subjectId) => {
         : [$route.query.subjects];
 
     return {
-        "sidebar-li__button": true,
-        "sidebar-li__button--selected": routeArr.includes(subjectId.toString()),
+        "subjects-li__button": true,
+        "subjects-li__button--selected": routeArr.includes(
+            subjectId.toString()
+        ),
     };
 };
 
