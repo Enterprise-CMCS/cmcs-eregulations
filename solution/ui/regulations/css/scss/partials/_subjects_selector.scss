@@ -92,14 +92,6 @@
                 color: #000;
                 width: 100%;
 
-                .match__container {
-                    @include font-bold-keep-width;
-
-                    .match {
-                        @include font-bold-keep-width-reset;
-                    }
-                }
-
                 &--selected {
                     @include font-bold-keep-width;
 
@@ -112,6 +104,18 @@
                     @include font-bold-keep-width;
 
                     cursor: pointer;
+                }
+
+                .match__container {
+                    @include font-bold-keep-width;
+
+                    .match {
+                        @include font-bold-keep-width-reset;
+                    }
+                }
+
+                .count {
+                    margin-left: var(--spacer-1);
                 }
             }
         }
