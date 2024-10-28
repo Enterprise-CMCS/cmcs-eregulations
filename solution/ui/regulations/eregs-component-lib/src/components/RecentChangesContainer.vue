@@ -48,7 +48,7 @@ export default {
 
     provide() {
         return {
-            itemTitleLineLimit: 3,
+            itemTitleLineLimit: 9,
         };
     },
 
