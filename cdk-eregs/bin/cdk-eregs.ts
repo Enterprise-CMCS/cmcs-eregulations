@@ -1,114 +1,78 @@
-// bin/main-app.ts
+#!/usr/bin/env node
+import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { RedirectStack } from '../lib/stacks/redirect-stack';
-import { StaticAssetsStack } from '../lib/stacks/static-asset-construct';
-//import { MaintenanceLambdaStack } from '../lib/stacks/maintenance-lamba-stack';
-import { EcfrStack } from '../lib/stacks/ecfr-stack';
-import { FrStack } from '../lib/stacks/fr-stack';
-import { EnvironmentConfigStack } from '../config/environment-config';
-import { Environment } from '../config/types/config-types';
+import { Environment, EnvironmentConfig, StackUtils } from '../config/types/config-types';
+import { ENVIRONMENT_CONFIGS } from '../config/environment-config';
+import { SynthesizerManager } from '../config/sythesizer-manager';
 
-class MainApp {
+
+class App {
   private readonly app: cdk.App;
-  private readonly environment: Environment;
-  private readonly envConfigStack: EnvironmentConfigStack;
+  private readonly stage: Environment;
+  private readonly prNumber?: string;
 
   constructor() {
-    // Initialize CDK app with custom synthesizer
-    this.app = new cdk.App({
-      defaultStackSynthesizer: this.createSynthesizer(),
-    });
+    // Get deployment configuration
+    this.stage = this.getStage();
+    this.prNumber = process.env.PR_NUMBER;
 
-    // Determine environment
-    this.environment = this.determineEnvironment();
+    // Validate deployment
+    this.validateDeployment();
 
-    // Create environment configuration stack
-    this.envConfigStack = this.createEnvironmentStack();
+    // Initialize app with custom synthesizer
+    this.app = this.createApp();
 
-    // Deploy application stacks
-    this.deployStacks();
+    // Create stacks
+    this.createStacks();
   }
 
-  private createSynthesizer(): cdk.DefaultStackSynthesizer {
-    const accountId = '009160033411';
-    const basePath = 'delegatedadmin/developer';
-    
-    return new cdk.DefaultStackSynthesizer({
-      qualifier: 'one',
-      cloudFormationExecutionRole: `arn:aws:iam::${accountId}:role/${basePath}/cdk-one-cfn-exec-role-${accountId}-us-east-1`,
-      deployRoleArn: `arn:aws:iam::${accountId}:role/${basePath}/cdk-one-deploy-role-${accountId}-us-east-1`,
-      fileAssetPublishingRoleArn: `arn:aws:iam::${accountId}:role/${basePath}/cdk-one-file-publishing-role-${accountId}-us-east-1`,
-      imageAssetPublishingRoleArn: `arn:aws:iam::${accountId}:role/${basePath}/cdk-one-image-publishing-role-${accountId}-us-east-1`,
-      lookupRoleArn: `arn:aws:iam::${accountId}:role/${basePath}/cdk-one-lookup-role-${accountId}-us-east-1`,
-    });
+  private getStage(): Environment {
+    const stage = (
+      process.env.STAGE || 
+      process.env.CDK_DEFAULT_STAGE || 
+      'dev'
+    ) as Environment;
+
+    if (!['dev', 'val', 'prod'].includes(stage)) {
+      throw new Error(`Invalid stage: ${stage}`);
+    }
+
+    return stage;
   }
 
-  private determineEnvironment(): Environment {
-    const gitBranch = process.env.GIT_BRANCH || 'dev';
-    
-    switch (gitBranch) {
-      case 'main':
-        return 'dev';
-      case 'val':
-        return 'val';
-      case 'production':
-        return 'prod';
-      default:
-        return 'experimental';
+  private validateDeployment(): void {
+    if (this.prNumber && this.stage !== 'dev') {
+      throw new Error('Experimental deployments are only allowed in dev stage');
     }
   }
 
-  private createEnvironmentStack(): EnvironmentConfigStack {
-    return new EnvironmentConfigStack(this.app, `EnvironmentConfigStack-${this.environment}`, {
+  private createApp(): cdk.App {
+    const tempApp = new cdk.App();
+    const synthesizerManager = new SynthesizerManager(tempApp);
+    const synthesizer = synthesizerManager.getSynthesizer(this.stage);
+
+    return new cdk.App({
+      defaultStackSynthesizer: synthesizer
+    });
+  }
+
+  private createStacks(): void {
+    const envConfig = ENVIRONMENT_CONFIGS[this.stage];
+    const isExperimental = StackUtils.isExperimentalDeployment(this.prNumber);
+    const stackPrefix = StackUtils.getStackPrefix(this.stage, this.prNumber);
+
+    new RedirectStack(this.app, `${stackPrefix}-redirect-stack`, {
+      stage: this.stage,
+      prNumber: this.prNumber,
       env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
-      }
+        account: envConfig.account,
+        region: envConfig.region,
+      },
+      description: `Redirect API Stack - ${this.stage.toUpperCase()}${
+        isExperimental ? ` (PR #${this.prNumber})` : ''
+      }`,
     });
-  }
-
-  private deployStacks(): void {
-    const { baseConfig } = this.envConfigStack;
-    const defaultEnv = {
-      account: baseConfig.accountId,
-      region: baseConfig.region
-    };
-
-    // Deploy RedirectStack
-    new RedirectStack(this.app, `${baseConfig.stackPrefix}-RedirectStack`, {
-      env: defaultEnv,
-      envStack: this.envConfigStack
-    });
-
-    // Deploy StaticAssetsStack
-    // new StaticAssetsStack(this.app, `${baseConfig.stackPrefix}-StaticAssets`, {
-    //   env: defaultEnv,
-    //   envStack: this.envConfigStack
-    // });
-
-    // Deploy MaintenanceLambdaStack
-    // new MaintenanceLambdaStack(this.app, `${baseConfig.stackPrefix}-MaintenanceLambda`, {
-    //   env: defaultEnv,
-    //   envStack: this.envConfigStack
-    // });
-
-    // Deploy Parser Stacks
-    new EcfrStack(this.app, `${baseConfig.stackPrefix}-Ecfr`, {
-      env: defaultEnv,
-      envStack: this.envConfigStack
-    });
-
-    new FrStack(this.app, `${baseConfig.stackPrefix}-Fr`, {
-      env: defaultEnv,
-      envStack: this.envConfigStack
-    });
-
-    // Add stack dependencies
-    this.addStackDependencies();
-  }
-
-  private addStackDependencies(): void {
-    // Add any necessary stack dependencies here
   }
 
   public synth(): void {
@@ -116,11 +80,4 @@ class MainApp {
   }
 }
 
-// Execute the deployment
-try {
-  const app = new MainApp();
-  app.synth();
-} catch (error) {
-  console.error('Error during deployment:', error);
-  process.exit(1);
-}
+

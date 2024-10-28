@@ -1,86 +1,63 @@
-// config/types/config-types.ts
+// src/types/config-types.ts\
 import * as cdk from 'aws-cdk-lib';
+export type Environment = 'dev' | 'val' | 'prod';
 
-export type Environment = 'dev' | 'val' | 'prod' | 'experimental';
-
-export interface BaseConfig {
-  environment: Environment;
-  stackPrefix: string;
-  accountId: string;
+export interface EnvironmentConfig {
+  account: string;
   region: string;
+}
+
+/**
+ * Base configuration for all stacks
+ */
+export interface BaseStackConfig {
+  /** Stack name */
+  name: string;
+  /** Deployment stage */
+  stage: Environment;
+  /** PR number for experimental deployments */
+  prNumber?: string;
+  /** Whether this is an experimental deployment */
   isExperimental: boolean;
-  tags: Record<string, string>;
 }
 
-export interface VpcConfig {
-  vpcId: string;
-  privateSubnetIds: string[];
-  publicSubnetIds: string[];
-}
+// src/utils/stack-utils.ts
 
-export interface IamConfig {
-  path: string;
-  permissionsBoundaryPolicy: string;
-}
+export class StackUtils {
+  /**
+   * Determines if a deployment is experimental based on PR number
+   */
+  static isExperimentalDeployment(prNumber?: string): boolean {
+    return !!prNumber;
+  }
 
-export interface CommonConfig {
-  stage: string;
-  logLevel: string;
-  fismaTag: string;
-  loggingAppName: string;
-}
+  /**
+   * Gets stack prefix based on deployment type
+   */
+  static getStackPrefix(stage: Environment, prNumber?: string): string {
+    return prNumber ? `pr-${prNumber}` : stage;
+  }
 
-export interface ParserConfig {
-  memorySize: number;
-  timeout: number;
-  queueRetentionDays: number;
-  queueVisibilityTimeout: number;
-}
+  /**
+   * Gets stack removal policy based on deployment type
+   */
+  static getRemovalPolicy(isExperimental: boolean): cdk.RemovalPolicy {
+    return isExperimental ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN;
+  }
 
-export interface RedirectConfig {
-  httpUser: string;
-  httpPassword: string;
-  apiStageName: string;
-}
-
-
-
-export interface MaintenanceConfig {
-  allowedIps: string[];
-  maintenanceWindow: string;
-}
-export interface StaticAssetsConfig {
-  buckets: {
-    assets: {
-      name: string;
-      versioned: boolean;
-      retentionDays: number;
-      noncurrentVersionRetentionDays: number;
+  /**
+   * Gets common tags for all resources
+   */
+  static getCommonTags(config: BaseStackConfig): { [key: string]: string } {
+    return {
+      Environment: config.stage,
+      Service: config.name,
+      ManagedBy: 'CDK',
+      ...(config.isExperimental && {
+        PR: config.prNumber!,
+        Temporary: 'true',
+        ExperimentalDeployment: 'true',
+      }),
     };
-    logs: {
-      name: string;
-      retentionDays: number;
-    };
-  };
-  cloudfront: {
-    enabled: boolean;
-    priceClass: 'PRICE_CLASS_100' | 'PRICE_CLASS_200' | 'PRICE_CLASS_ALL';
-    ttl: {
-      default: number;
-      min: number;
-      max: number;
-    };
-    enableCompression: boolean;
-    enableLogging: boolean;
-    logFilePrefix: string;
-  };
-  waf: {
-    enabled: boolean;
-    rateLimitThreshold: number;
-    allowedCountries: string[];
-  };
-  deployment: {
-    memoryLimit: number;
-    prune: boolean;
-  };
+  }
 }

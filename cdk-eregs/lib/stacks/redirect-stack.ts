@@ -1,105 +1,129 @@
-// lib/stacks/redirect-stack.ts
+// src/stacks/redirect/redirect-stack.ts
 import * as cdk from 'aws-cdk-lib';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as path from 'path';
 import { Construct } from 'constructs';
-import { EnvironmentConfigStack } from '../../config/environment-config';
-
-interface RedirectStackProps extends cdk.StackProps {
-  envStack: EnvironmentConfigStack;
+import * as logs from 'aws-cdk-lib/aws-logs';
+import { BaseStack } from './base-stack';
+import { Environment, StackUtils } from '../../config/types/config-types';
+export interface RedirectStackProps extends cdk.StackProps {
+  stage: Environment;
+  prNumber?: string;
 }
 
-export class RedirectStack extends cdk.Stack {
+/**
+ * Redirect API Stack implementation
+ * Can be used as a template for other API stacks
+ */
+export class RedirectStack extends BaseStack {
+  private lambdaFunction?: lambda.Function;
+  private api?: apigateway.RestApi;
+
   constructor(scope: Construct, id: string, props: RedirectStackProps) {
-    super(scope, id, props);
+    super(scope, id, {
+      name: 'redirect',
+      stage: props.stage,
+      prNumber: props.prNumber,
+      isExperimental: StackUtils.isExperimentalDeployment(props.prNumber),
+    }, props);
 
-    const { envStack } = props;
-    const { baseConfig, iamConfig, redirectConfig, commonConfig } = envStack;
+    this.createResources();
+    this.addOutputs();
+  }
 
-    // Create IAM Role for Lambda
-    const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+  protected createResources(): void {
+    this.createLambdaFunction();
+    this.createApiGateway();
+  }
+
+  private createLambdaFunction(): void {
+    const role = new iam.Role(this, 'LambdaRole', {
+      roleName: this.getResourceName('role', 'redirect'),
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-      path: iamConfig.path,
-      managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
-      ],
+      path: this.parameterStore.getParameter('BASE', 'IAM_PATH'),
       permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
         this,
         'PermissionsBoundary',
-        `arn:aws:iam::${this.account}:policy${iamConfig.permissionsBoundaryPolicy}`
+        this.parameterStore.getParameter('BASE', 'PERMISSIONS_BOUNDARY')
       ),
-    });
-
-    // Add CloudWatch Logs permissions
-    lambdaRole.addToPolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-        resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
-      })
-    );
-
-    // Create Lambda Function
-    const redirectLambda = new lambda.Function(this, 'RedirectFunction', {
-      functionName: `${baseConfig.stackPrefix}-redirectFunction`,
-      runtime: lambda.Runtime.PYTHON_3_9,
-      handler: 'redirect_lambda.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../../solution/backend/')),
-      timeout: cdk.Duration.seconds(baseConfig.isExperimental ? 30 : 60),
-      memorySize: baseConfig.isExperimental ? 128 : 256,
-      environment: {
-        STAGE: commonConfig.stage,
-        LOG_LEVEL: commonConfig.logLevel,
-        HTTP_USER: redirectConfig.httpUser,
-        HTTP_PASSWORD: redirectConfig.httpPassword,
-      },
-      role: lambdaRole,
-      tracing: lambda.Tracing.ACTIVE,
-    });
-
-    // Create CloudWatch Role for API Gateway
-    const apiGatewayCloudWatchRole = new iam.Role(this, 'ApiGatewayCloudWatchRole', {
-      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
-      path: iamConfig.path,
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AmazonAPIGatewayPushToCloudWatchLogs'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          'service-role/AWSLambdaBasicExecutionRole'
+        ),
       ],
     });
 
-    // Create API Gateway Account settings
-    new apigateway.CfnAccount(this, 'ApiGatewayAccount', {
-      cloudWatchRoleArn: apiGatewayCloudWatchRole.roleArn,
+    this.lambdaFunction = new lambda.Function(this, 'RedirectFunction', {
+      functionName: this.getResourceName('function', 'redirect'),
+      runtime: lambda.Runtime.PYTHON_3_12,
+      handler: 'redirect_lambda.handler',
+      code: lambda.Code.fromAsset('../lambda/redirect'),
+      memorySize: 128,
+      timeout: cdk.Duration.seconds(30),
+      environment: {
+        STAGE: this.stackPrefix,
+      },
+      role,
+      tracing: lambda.Tracing.ACTIVE,
     });
 
-    // Create API Gateway
-    const api = new apigateway.RestApi(this, 'RedirectApi', {
+    new logs.LogGroup(this, 'LambdaLogGroup', {
+      logGroupName: `/aws/lambda/${this.lambdaFunction.functionName}`,
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: this.removalPolicy,
+    });
+  }
+
+  private createApiGateway(): void {
+    this.api = new apigateway.RestApi(this, 'RedirectApi', {
+      restApiName: this.getResourceName('api', 'redirect'),
+      description: 'Redirect API Service',
       deployOptions: {
-        stageName: redirectConfig.apiStageName,
+        stageName: this.config.stage,
         tracingEnabled: true,
         loggingLevel: apigateway.MethodLoggingLevel.INFO,
         dataTraceEnabled: true,
         metricsEnabled: true,
       },
-      binaryMediaTypes: ['multipart/form-data', 'application/pdf'],
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+        ],
+      },
+      binaryMediaTypes: [
+        'multipart/form-data',
+        'application/pdf',
+      ],
     });
 
-    // Add proxy resource to API Gateway
-    api.root.addProxy({
-      defaultIntegration: new apigateway.LambdaIntegration(redirectLambda),
+    this.api.root.addProxy({
+      defaultIntegration: new apigateway.LambdaIntegration(this.lambdaFunction!),
       anyMethod: true,
     });
+  }
 
-    // Add stack tags
-    Object.entries(baseConfig.tags).forEach(([key, value]) => {
-      cdk.Tags.of(this).add(key, value);
-    });
+  private addOutputs(): void {
+    if (this.lambdaFunction) {
+      new cdk.CfnOutput(this, 'LambdaArn', {
+        value: this.lambdaFunction.functionArn,
+        description: 'Redirect Lambda Function ARN',
+        exportName: `${this.stackPrefix}-redirect-lambda-arn`,
+      });
+    }
 
-    // Outputs
-    new cdk.CfnOutput(this, 'ApiEndpoint', {
-      value: api.url,
-      description: 'API Gateway endpoint URL',
-    });
+    if (this.api) {
+      new cdk.CfnOutput(this, 'ApiUrl', {
+        value: this.api.url,
+        description: 'Redirect API Gateway URL',
+        exportName: `${this.stackPrefix}-redirect-api-url`,
+      });
+    }
   }
 }
