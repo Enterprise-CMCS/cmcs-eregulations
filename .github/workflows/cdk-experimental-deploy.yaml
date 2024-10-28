@@ -69,6 +69,7 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
+          cd cdk-eregs
           echo "Deploying experimental stack for PR #${PR_NUMBER}"
           cdk deploy --require-approval never
 
