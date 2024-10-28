@@ -75,7 +75,8 @@
     }
 
     ul.subjects__list {
-        overflow: scroll;
+        height: 300px;
+        overflow-y: scroll;
         padding: 0;
         margin: 0;
 
