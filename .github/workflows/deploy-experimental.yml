@@ -106,6 +106,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
         run: |
           pushd cdk-test
+          npm install -g aws-cdk
           npm install
           npm run build
           DEPLOY_STAGE=dev${PR} cdk synth
