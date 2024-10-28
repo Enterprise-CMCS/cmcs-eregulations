@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
@@ -135,7 +135,7 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
@@ -197,7 +197,7 @@ jobs:
           submodules: true
       # setup Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -234,7 +234,7 @@ jobs:
           node-version:
             18.14
             # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
