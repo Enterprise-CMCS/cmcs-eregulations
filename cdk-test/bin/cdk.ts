@@ -31,7 +31,7 @@ const stack = new HelloWorldStack(app, 'HelloWorldStack', stage, {
   permissionsBoundary: cdk.PermissionsBoundary.fromArn(cdk.Arn.format({
     partition: 'aws',
     service: 'iam',
-    region: region,
+    region: "",
     account: account,
     resource: 'policy',
     resourceName: 'cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy',
