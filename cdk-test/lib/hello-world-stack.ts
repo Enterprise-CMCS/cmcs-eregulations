@@ -13,8 +13,8 @@ export class HelloWorldStack extends cdk.Stack {
 
     const helloWorldLambda = new lambda.Function(this, `cmcs-eregs-${stage}-HelloWorldLambda`, {
       runtime: lambda.Runtime.NODEJS_20_X,
-      handler: 'hello.handler',
-      code: lambda.Code.fromAsset('lambda')
+      handler: 'hello-world.handler',
+      code: lambda.Code.fromAsset('lambda'),
     });
 
     const apiGateway = new apigateway.LambdaRestApi(this, `cmcs-eregs-${stage}-HelloWorldAPI`, {
