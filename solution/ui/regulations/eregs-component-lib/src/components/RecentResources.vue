@@ -11,6 +11,11 @@ export default {
             type: String,
             required: true,
         },
+        homeUrl: {
+            type: String,
+            required: false,
+            default: "/",
+        },
     },
 
     async created() {
@@ -54,6 +59,7 @@ export default {
             <v-window-item>
                 <RecentChangesContainer
                     :api-url="apiUrl"
+                    :home-url="homeUrl"
                     :categories="categories"
                     type="supplemental"
                     class="recent-supplemental-content"
