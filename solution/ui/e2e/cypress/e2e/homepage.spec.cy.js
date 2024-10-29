@@ -13,6 +13,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             "**/v3/resources/public/federal_register_links?page=1&page_size=5**",
             { fixture: "frdocs.json" },
         ).as("frdocs");
+        cy.intercept("**v3/resources/public/links?page=1&page_size=5", {
+            fixture: "recent-guidance.json",
+        }).as("recentGuidance");
     });
 
     it("loads the homepage", () => {
@@ -285,7 +288,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         );
     });
 
-    it("has Recent Subregulatory Guidance tab and results", () => {
+    it("has Recent Subregulatory Guidance tab and results with clickable subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
@@ -294,6 +297,19 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container")
             .contains("View More Guidance")
             .should("not.exist");
+        cy.get(".document__subjects a")
+            .eq(0)
+            .should("have.text", "Administrative Claiming");
+        cy.get(".document__subjects a")
+            .eq(1)
+            .should("have.text", "Cost Allocation");
+        cy.get(`a[data-testid=add-subject-chip-157]`)
+            .should("have.attr", "title")
+            .and("include", "Public Assistance Cost Allocation");
+        cy.get(`a[data-testid=add-subject-chip-157]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/subjects/?subjects=157");
     });
 
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {
