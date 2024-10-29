@@ -7,8 +7,8 @@ import * as cdk from 'aws-cdk-lib';
 import { HelloWorldStack } from '../lib/hello-world-stack';
 
 const app = new cdk.App();
-const account = process.env.CDK_DEFAULT_ACCOUNT;
-const region = process.env.CDK_DEFAULT_REGION;
+const account = process.env.AWS_ACCOUNT_ID;
+const region = process.env.AWS_DEFAULT_REGION;
 const stage = process.env.DEPLOY_STAGE ? process.env.DEPLOY_STAGE : 'undefined';
 
 const customSynthesizer = new cdk.DefaultStackSynthesizer({
