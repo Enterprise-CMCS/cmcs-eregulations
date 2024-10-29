@@ -112,7 +112,7 @@ jobs:
           npm install
           npm run build
           DEPLOY_STAGE=dev${PR} cdk synth
-          cdk deploy --require-approval never
+          DEPLOY_STAGE=dev${PR} cdk deploy --require-approval never
           popd
   deploy-text-extractor:
     environment:
