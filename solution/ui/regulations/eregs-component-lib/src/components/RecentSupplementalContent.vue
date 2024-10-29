@@ -1,12 +1,14 @@
 <script>
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
+import SubjectChips from "../../../eregs-vite/src/components/subjects/SubjectChips.vue";
 
 export default {
     name: "RecentSupplementalContent",
 
     components: {
         CategoryLabel,
+        SubjectChips,
         SupplementalContentObject,
     },
 
@@ -46,6 +48,7 @@ export default {
                 :url="content.url"
             >
             </SupplementalContentObject>
+            <SubjectChips :subjects="content.subjects" />
         </template>
     </div>
 </template>

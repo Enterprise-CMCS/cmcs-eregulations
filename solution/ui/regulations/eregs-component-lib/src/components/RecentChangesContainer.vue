@@ -21,6 +21,11 @@ export default {
             type: String,
             required: true,
         },
+        homeUrl: {
+            type: String,
+            required: false,
+            default: "/",
+        },
         type: {
             type: String,
             required: false,
@@ -48,7 +53,9 @@ export default {
 
     provide() {
         return {
+            homeUrl: this.homeUrl,
             itemTitleLineLimit: 9,
+            currentRouteName: "homepage",
         };
     },
 

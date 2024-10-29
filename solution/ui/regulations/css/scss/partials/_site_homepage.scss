@@ -510,18 +510,26 @@
                         font-weight: 400;
                     }
 
-                    .supplemental-content-date {
-                        color: $mid_gray;
-                        font-weight: 400;
-                        padding-right: $spacer-1;
-                        margin-right: $spacer-1;
-                        font-size: $font-size-sm;
+                    .supplemental-content {
+                        margin-bottom: unset;
+
+                        .supplemental-content-date {
+                            color: $mid_gray;
+                            font-weight: 400;
+                            padding-right: $spacer-1;
+                            margin-right: $spacer-1;
+                            font-size: $font-size-sm;
+                        }
+
+                        .supplemental-content-title {
+                            color: $mid_gray;
+                            font-weight: 400;
+                            font-size: $font-size-sm;
+                        }
                     }
 
-                    .supplemental-content-title {
-                        color: $mid_gray;
-                        font-weight: 400;
-                        font-size: $font-size-sm;
+                    .document__subjects {
+                        margin-bottom: var(--spacer-4);
                     }
                 }
 
