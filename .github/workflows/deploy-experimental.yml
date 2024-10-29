@@ -105,6 +105,7 @@ jobs:
           PR: ${{ steps.findPr.outputs.pr }}
           RUN_ID: ${{ github.run_id }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
           pushd cdk-test
           npm install -g aws-cdk
