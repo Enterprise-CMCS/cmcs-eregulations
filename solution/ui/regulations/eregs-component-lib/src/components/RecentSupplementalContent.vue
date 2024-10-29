@@ -1,7 +1,7 @@
 <script>
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
-import SubjectChips from "../../../eregs-vite/src/components/subjects/SubjectChips.vue";
+import SubjectChips from "spaComponents/subjects/SubjectChips.vue";
 
 export default {
     name: "RecentSupplementalContent",
