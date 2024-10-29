@@ -76,7 +76,7 @@
 
     ul.subjects__list {
         height: 300px;
-        overflow: scroll;
+        overflow-y: auto;
         padding: 0;
         margin: 0;
 
@@ -87,18 +87,10 @@
                 margin-bottom: 0;
             }
 
-            .sidebar-li__button {
+            .subjects-li__button {
                 text-align: left;
                 color: #000;
                 width: 100%;
-
-                .match__container {
-                    @include font-bold-keep-width;
-
-                    .match {
-                        @include font-bold-keep-width-reset;
-                    }
-                }
 
                 &--selected {
                     @include font-bold-keep-width;
@@ -112,6 +104,18 @@
                     @include font-bold-keep-width;
 
                     cursor: pointer;
+                }
+
+                .match__container {
+                    @include font-bold-keep-width;
+
+                    .match {
+                        @include font-bold-keep-width-reset;
+                    }
+                }
+
+                .count {
+                    margin-left: var(--spacer-1);
                 }
             }
         }
@@ -160,6 +164,12 @@
                     font-size: $font_size_sm;
                     line-height: 22px;
                     margin-bottom: var(--spacer-2);
+
+                    .subjects-li__button {
+                        display: flex;
+                        justify-content: space-between;
+                        line-height: 22px;
+                    }
                 }
             }
         }

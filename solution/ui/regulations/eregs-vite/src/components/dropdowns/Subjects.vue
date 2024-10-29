@@ -16,6 +16,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    counts: {
+        type: Array,
+        default: () => [],
+    },
     loading: {
         type: Boolean,
         default: true,
@@ -44,7 +48,8 @@ const labelClasses = computed(() => ({
 
 const menuItemClick = (event) => {
     const menuItemClicked =
-        event.target.className.includes("sidebar-li__button") || event.target.className.includes("match__container");
+        event.target.className.includes("subjects-li__button") ||
+        event.target.className.includes("match__container");
 
     if (event.target.dataset.name) {
         buttonTitle.value = event.target.dataset.name;
@@ -57,7 +62,7 @@ const menuItemClick = (event) => {
 
 const clearClick = (event) => {
     // don't let click fall through to menu activator
-    event.stopPropagation();
+    if (event) event.stopPropagation();
 
     // if menu is open, close it
     if (menuToggleModel.value === true) menuToggleModel.value = false;
@@ -79,18 +84,38 @@ const clearClick = (event) => {
     });
 };
 
+const transformedList = ref({});
+
 watchEffect(() => {
+    if (props.loading === false) {
+        const clonedCounts = [...props.counts];
+
+        const sortedCountList = clonedCounts.map((item) => {
+            const subject = props.list.find(
+                (subject) => subject.id == item.subject
+            );
+
+            return {
+                ...subject,
+                count: item.count,
+            };
+        });
+
+        transformedList.value = {
+            results: sortedCountList,
+            loading: props.loading,
+        };
+    }
+
     if ($route.query?.subjects === undefined) {
         buttonTitle.value = undefined;
 
         return;
     }
 
-    if (props.list.loading === false && $route.query.subjects) {
+    if (props.loading === false && $route.query.subjects) {
         const subjectId = $route.query.subjects;
-        const subject = props.list.results.find(
-            (subject) => subject.id == subjectId
-        );
+        const subject = props.list.find((subject) => subject.id == subjectId);
 
         buttonTitle.value = getSubjectName(subject);
     }
@@ -100,6 +125,7 @@ watchEffect(() => {
 <template>
     <v-btn
         id="subjects-activator"
+        data-testid="subjects-activator"
         :disabled="loading"
         class="filter__select--subjects"
         variant="outlined"
@@ -114,8 +140,10 @@ watchEffect(() => {
             <v-icon
                 v-if="buttonTitle"
                 class="subjects-select__clear"
+                data-testid="subjects-select-clear"
                 icon="mdi-close"
                 size="x-large"
+                aria-label="Clear Choose Subject"
                 @click="clearClick"
                 @keydown.enter.prevent="clearClick"
             />
@@ -135,7 +163,7 @@ watchEffect(() => {
         @keydown.enter="menuItemClick"
     >
         <SubjectSelector
-            :policy-doc-subjects="list"
+            :policy-doc-subjects="transformedList"
             class="subjects__select-container--menu"
             component-type="dropdown"
             placeholder="Type to filter the subject list"

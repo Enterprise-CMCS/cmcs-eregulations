@@ -16,7 +16,7 @@ import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
-import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
+import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -440,9 +440,10 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
-                            <FetchCategoriesContainer
+                            <FetchItemsContainer
                                 v-slot="slotProps"
-                                :categories-capture-function="setCategories"
+                                items-to-fetch="categories"
+                                :items-capture-function="setCategories"
                             >
                                 <CategoriesDropdown
                                     :list="slotProps.data"
@@ -453,7 +454,7 @@ getDocSubjects();
                                     "
                                     parent="subjects"
                                 />
-                            </FetchCategoriesContainer>
+                            </FetchItemsContainer>
                         </div>
                         <template
                             v-if="

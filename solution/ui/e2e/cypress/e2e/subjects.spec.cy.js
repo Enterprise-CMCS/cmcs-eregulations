@@ -427,14 +427,14 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
         cy.get("button[data-testid=add-subject-63]").should(
             "not.have.class",
-            "sidebar-li__button--selected"
+            "subjects-li__button--selected"
         );
         cy.get("button[data-testid=add-subject-63]").click({
             force: true,
         });
         cy.get("button[data-testid=add-subject-63]").should(
             "have.class",
-            "sidebar-li__button--selected"
+            "subjects-li__button--selected"
         );
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("not.exist");
@@ -541,11 +541,11 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("label")
-            .should("have.text", "Public Resources");
+            .should("include.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("include.text", "Internal Resources");
 
         // Remove subject
         cy.get("button[data-testid=remove-subject-63]").click({ force: true });
@@ -566,11 +566,11 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("label")
-            .should("have.text", "Public Resources");
+            .should("include.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("label")
-            .should("have.text", "Internal Resources");
+            .should("include.text", "Internal Resources");
 
         // Clear search
         cy.get("form.search-form .v-field__clearable i").click({

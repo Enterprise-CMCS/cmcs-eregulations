@@ -187,7 +187,6 @@ const onMenuUpdate = () => {
         data-testid="category-select"
         item-type="CategoriesItem"
         label="Choose Category"
-        :loading="loading"
         :disabled="loading"
         :items="list"
         :item-props="itemProps"
