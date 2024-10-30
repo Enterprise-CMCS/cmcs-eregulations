@@ -510,6 +510,12 @@
                         font-weight: 400;
                     }
 
+                    .supplemental-content-list {
+                        .spacer {
+                            margin-top: var(--spacer-5);
+                        }
+                    }
+
                     .supplemental-content {
                         margin-bottom: unset;
 
@@ -529,7 +535,7 @@
                     }
 
                     .document__subjects {
-                        margin-bottom: var(--spacer-4);
+                        margin-top: var(--spacer-1);
                     }
                 }
 

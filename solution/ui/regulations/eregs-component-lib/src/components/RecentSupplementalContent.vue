@@ -49,6 +49,7 @@ export default {
             >
             </SupplementalContentObject>
             <SubjectChips :subjects="content.subjects" />
+            <div class="spacer"></div>
         </template>
     </div>
 </template>
