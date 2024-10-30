@@ -6,7 +6,7 @@
             clearable
             variant="outlined"
             density="compact"
-            :placeholder="label"
+            :label="label"
             :aria-label="label"
             type="input"
             class="search-field"
