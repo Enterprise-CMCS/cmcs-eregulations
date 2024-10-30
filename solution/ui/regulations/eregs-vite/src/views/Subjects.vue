@@ -290,6 +290,18 @@ const setSelectedSubjectParts = () => {
     }
 };
 
+const getSearchInputLabel = (selectedSubjectParts) => {
+    if (policyDocSubjects.value.loading) {
+        return "Loading...";
+    }
+
+    if (selectedSubjectParts.length) {
+        return `Search within ${selectedSubjectParts[0][0] || selectedSubjectParts[1][0]}`;
+    }
+
+    return "Search for a document";
+};
+
 watch(
     () => policyDocSubjects.value.loading,
     async (newLoading) => {
@@ -408,16 +420,6 @@ getDocSubjects();
                         <template #selections>
                             <PolicySelections />
                         </template>
-                        <template #search>
-                            <SearchInput
-                                form-class="search-form"
-                                label="Search for a document"
-                                parent="subjects"
-                                :search-query="searchQuery"
-                                @execute-search="executeSearch"
-                                @clear-form="clearSearchInput"
-                            />
-                        </template>
                         <template #filters>
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
@@ -460,14 +462,18 @@ getDocSubjects();
                                 />
                             </FetchItemsContainer>
                         </div>
-                        <SearchInput
-                            form-class="search-form"
-                            label="Search for a document"
-                            parent="search"
-                            :search-query="searchQuery"
-                            @execute-search="executeSearch"
-                            @clear-form="clearSearchInput"
-                        />
+                        <div class="subject__search--row">
+                            <SearchInput
+                                form-class="search-form"
+                                :label="
+                                    getSearchInputLabel(selectedSubjectParts)
+                                "
+                                parent="search"
+                                :search-query="searchQuery"
+                                @execute-search="executeSearch"
+                                @clear-form="clearSearchInput"
+                            />
+                        </div>
                         <template
                             v-if="
                                 policyDocList.loading ||
