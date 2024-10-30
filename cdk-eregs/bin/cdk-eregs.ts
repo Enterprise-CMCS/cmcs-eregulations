@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { RedirectStack } from '../lib/stacks/redirect-stack';
+//import { RedirectStack } from '../lib/stacks/redirect-stack';
+import { HelloWorldStack } from '../lib/stacks/hello-world-stack';
 import { Environment, EnvironmentConfig, StackUtils } from '../config/types/config-types';
 import { ENVIRONMENT_CONFIGS } from '../config/environment-config';
 import { SynthesizerManager } from '../config/sythesizer-manager';
@@ -62,17 +63,29 @@ class App {
     const isExperimental = StackUtils.isExperimentalDeployment(this.prNumber);
     const stackPrefix = StackUtils.getStackPrefix(this.stage, this.prNumber);
 
-    new RedirectStack(this.app, `${stackPrefix}-redirect-stack`, {
+    new HelloWorldStack(this.app, `${stackPrefix}-hello-stack`, {
       stage: this.stage,
       prNumber: this.prNumber,
       env: {
         account: envConfig.account,
         region: envConfig.region,
       },
-      description: `Redirect API Stack - ${this.stage.toUpperCase()}${
+      description: `Hello World API Stack - ${this.stage.toUpperCase()}${
         isExperimental ? ` (PR #${this.prNumber})` : ''
       }`,
     });
+
+    // new RedirectStack(this.app, `${stackPrefix}-redirect-stack`, {
+    //   stage: this.stage,
+    //   prNumber: this.prNumber,
+    //   env: {
+    //     account: envConfig.account,
+    //     region: envConfig.region,
+    //   },
+    //   description: `Redirect API Stack - ${this.stage.toUpperCase()}${
+    //     isExperimental ? ` (PR #${this.prNumber})` : ''
+    //   }`,
+    // });
   }
 
   public synth(): void {
