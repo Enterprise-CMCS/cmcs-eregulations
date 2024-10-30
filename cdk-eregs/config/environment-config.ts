@@ -28,8 +28,8 @@ export class EnvironmentConfig {
     // Set IAM path and permissions boundary ARN based on the environment
     this.iamPath = this.isExperimental ? '/delegatedadmin/developer/' : '/delegatedadmin/developer/';
     this.iamPermissionsBoundaryArn = this.isExperimental
-      ? 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy'
-      : 'arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy';
+      ? 'arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy'
+      : 'arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy';
   }
 
   // Determine the environment based on the branch name
@@ -52,7 +52,7 @@ export class EnvironmentConfig {
   private getAccountAndRegion(): { accountId: string; region: string } {
     switch (this.getEnvironmentFromBranch()) {
       case 'dev':
-        return { accountId: '009160033411', region: 'us-east-1' };
+        return { accountId: '910670052382', region: 'us-east-1' };
       case 'val':
         return { accountId: '222222222222', region: 'us-east-1' };
       case 'prod':

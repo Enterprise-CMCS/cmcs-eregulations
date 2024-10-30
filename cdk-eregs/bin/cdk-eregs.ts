@@ -14,15 +14,15 @@ async function main() {
   const customSynthesizer = new cdk.DefaultStackSynthesizer({
     qualifier: 'one',
     cloudFormationExecutionRole:
-      'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-cfn-exec-role-009160033411-us-east-1',
+      'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-cfn-exec-role-910670052382-us-east-1',
     deployRoleArn:
-      'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-deploy-role-009160033411-us-east-1',
+      'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-deploy-role-910670052382-us-east-1',
     fileAssetPublishingRoleArn:
-      'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-file-publishing-role-009160033411-us-east-1',
+      'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-file-publishing-role-910670052382-us-east-1',
     imageAssetPublishingRoleArn:
-      'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-image-publishing-role-009160033411-us-east-1',
+      'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-image-publishing-role-910670052382-us-east-1',
     lookupRoleArn:
-      'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-lookup-role-009160033411-us-east-1',
+      'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-lookup-role-910670052382-us-east-1',
   });
 
   const app = new cdk.App({
@@ -69,11 +69,11 @@ main().catch(error => {
 // // Create custom synthesizer for roles and asset management
 // const customSynthesizer = new cdk.DefaultStackSynthesizer({
 //   qualifier: 'one',
-//   cloudFormationExecutionRole: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-cfn-exec-role-009160033411-us-east-1',
-//   deployRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-deploy-role-009160033411-us-east-1',
-//   fileAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-file-publishing-role-009160033411-us-east-1',
-//   imageAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-image-publishing-role-009160033411-us-east-1',
-//   lookupRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-lookup-role-009160033411-us-east-1',
+//   cloudFormationExecutionRole: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-cfn-exec-role-910670052382-us-east-1',
+//   deployRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-deploy-role-910670052382-us-east-1',
+//   fileAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-file-publishing-role-910670052382-us-east-1',
+//   imageAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-image-publishing-role-910670052382-us-east-1',
+//   lookupRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-lookup-role-910670052382-us-east-1',
 // });
 
 // // Initialize the CDK App
@@ -81,7 +81,7 @@ main().catch(error => {
 
 // // Set up IAM aspects for permissions boundary and path
 // cdk.Aspects.of(app).add(
-//   new IamPermissionsBoundaryAspect('arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
+//   new IamPermissionsBoundaryAspect('arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
 // );
 // cdk.Aspects.of(app).add(new IamPathAspect('/delegatedadmin/developer/'));
 
@@ -115,11 +115,11 @@ main().catch(error => {
 // // Create custom synthesizer for roles and asset management
 // const customSynthesizer = new cdk.DefaultStackSynthesizer({
 //   qualifier: 'one',
-//   cloudFormationExecutionRole: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-cfn-exec-role-009160033411-us-east-1',
-//   deployRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-deploy-role-009160033411-us-east-1',
-//   fileAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-file-publishing-role-009160033411-us-east-1',
-//   imageAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-image-publishing-role-009160033411-us-east-1',
-//   lookupRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-lookup-role-009160033411-us-east-1',
+//   cloudFormationExecutionRole: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-cfn-exec-role-910670052382-us-east-1',
+//   deployRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-deploy-role-910670052382-us-east-1',
+//   fileAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-file-publishing-role-910670052382-us-east-1',
+//   imageAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-image-publishing-role-910670052382-us-east-1',
+//   lookupRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-lookup-role-910670052382-us-east-1',
 // });
 
 // // Initialize the CDK App
@@ -127,7 +127,7 @@ main().catch(error => {
 
 // // Set up IAM aspects for permissions boundary and path
 // cdk.Aspects.of(app).add(
-//   new IamPermissionsBoundaryAspect('arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
+//   new IamPermissionsBoundaryAspect('arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
 // );
 // cdk.Aspects.of(app).add(new IamPathAspect('/delegatedadmin/developer/'));
 
@@ -158,16 +158,16 @@ main().catch(error => {
 // //const stage = app.node.tryGetContext('stage') || 'dev';
 // const customSynthesizer = new cdk.DefaultStackSynthesizer({
 //   qualifier: 'one',
-//   cloudFormationExecutionRole: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-cfn-exec-role-009160033411-us-east-1',
-//   deployRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-deploy-role-009160033411-us-east-1',
-//   fileAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-file-publishing-role-009160033411-us-east-1',
-//   imageAssetPublishingRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-image-publishing-role-009160033411-us-east-1',
-//   lookupRoleArn: 'arn:aws:iam::009160033411:role/delegatedadmin/developer/cdk-one-lookup-role-009160033411-us-east-1',
+//   cloudFormationExecutionRole: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-cfn-exec-role-910670052382-us-east-1',
+//   deployRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-deploy-role-910670052382-us-east-1',
+//   fileAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-file-publishing-role-910670052382-us-east-1',
+//   imageAssetPublishingRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-image-publishing-role-910670052382-us-east-1',
+//   lookupRoleArn: 'arn:aws:iam::910670052382:role/delegatedadmin/developer/cdk-one-lookup-role-910670052382-us-east-1',
 // });
 // const app = new cdk.App({defaultStackSynthesizer: customSynthesizer});
 // //he permissions boundary aspect
 // cdk.Aspects.of(app).add(
-//   new IamPermissionsBoundaryAspect('arn:aws:iam::009160033411:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
+//   new IamPermissionsBoundaryAspect('arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy')
 // );
 // cdk.Aspects.of(app).add(new IamPathAspect('/delegatedadmin/developer/'));
 // app.synth();
