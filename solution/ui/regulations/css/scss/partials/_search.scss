@@ -141,17 +141,12 @@
 .search-field {
     background-color: #fff;
 
-    .v-field__input {
-        padding-left: 12px;
+    label.v-field-label {
+        margin-inline-start: var(--spacer-2);
+    }
 
-        &::placeholder {
-            letter-spacing: normal;
-            position: absolute;
-            top: calc(50% + 0.5px);
-            transform: translateY(-50%);
-            opacity: 1;
-            color: #0009;
-        }
+    .v-field__input {
+        padding-left: var(--spacer-2);
     }
 
     .v-field__append-inner i,
