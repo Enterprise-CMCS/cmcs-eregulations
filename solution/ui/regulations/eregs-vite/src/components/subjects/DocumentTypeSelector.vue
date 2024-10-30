@@ -44,8 +44,6 @@ if (!isAuthenticated)
 
 const { counts, fetchCounts } = useCounts();
 
-fetchCounts({ apiUrl, queryParams: $route.query });
-
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
 
@@ -105,16 +103,25 @@ const onCheckboxChange = (event) => {
 watch(
     () => $route.query,
     (newQuery) => {
-        const { type: typeParams, q } = newQuery;
+        const { type: typeParams, subjects, q } = newQuery;
 
-        fetchCounts({ apiUrl, queryParams: { q } });
+        if (props.parent === "search") {
+            fetchCounts({ apiUrl, queryParams: { q } });
+        } else {
+            if (q) {
+                fetchCounts({ apiUrl, queryParams: { q } });
+            } else {
+                fetchCounts({ apiUrl, queryParams: { subjects } });
+            }
+        }
 
         if (_isUndefined(typeParams) || typeParams.includes("all")) {
             checkedBoxes.value = [];
         } else {
             checkedBoxes.value = typeParams.split(",");
         }
-    }
+    },
+    { immediate: true }
 );
 
 const onPopState = (event) => {
@@ -136,7 +143,7 @@ const makeLabel = ({ type }) => {
 };
 
 const makeCount = ({ type }) => {
-    if (props.loading) return "";
+    if (props.loading || counts.value.loading) return "";
 
     const mappedType = COUNT_TYPES_MAP[type];
 
