@@ -64,7 +64,11 @@ provide("FilterTypesDict", FilterTypesDict);
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
 const policySelectionsRemoveList = ["subjects"];
-const searchInputRemoveList = commonRemoveList.concat(["q"]);
+const searchInputRemoveList = commonRemoveList.concat([
+    "q",
+    "type",
+    "categories",
+]);
 
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
@@ -105,7 +109,7 @@ const executeSearch = (payload) => {
     });
 
     $router.push({
-        name: "subjects",
+        name: "search",
         query: {
             ...cleanedRoute,
             q: payload.query,
@@ -456,6 +460,14 @@ getDocSubjects();
                                 />
                             </FetchItemsContainer>
                         </div>
+                        <SearchInput
+                            form-class="search-form"
+                            label="Search for a document"
+                            parent="search"
+                            :search-query="searchQuery"
+                            @execute-search="executeSearch"
+                            @clear-form="clearSearchInput"
+                        />
                         <template
                             v-if="
                                 policyDocList.loading ||
