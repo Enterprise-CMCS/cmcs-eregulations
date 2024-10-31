@@ -39,16 +39,22 @@ const _beforePaginate = () => {
         "**/v3/resources/public?show_regulations=false&show_internal=false**",
         {
             fixture: "policy-docs-50-p1.json",
-        }
+        },
     ).as("initialPage");
 
-    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=1**", {
-        fixture: "policy-docs-50-p1.json",
-    }).as("page1");
+    cy.intercept(
+        "**/v3/resources/public?show_regulations=false&show_internal=false&page=1**",
+        {
+            fixture: "policy-docs-50-p1.json",
+        },
+    ).as("page1");
 
-    cy.intercept("**/v3/resources/public?show_regulations=false&show_internal=false&page=2**", {
-        fixture: "policy-docs-50-p2.json",
-    }).as("page2");
+    cy.intercept(
+        "**/v3/resources/public?show_regulations=false&show_internal=false&page=2**",
+        {
+            fixture: "policy-docs-50-p2.json",
+        },
+    ).as("page2");
 };
 
 Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
@@ -69,17 +75,13 @@ describe("Find by Subjects", () => {
 
     it("redirects /policy-repository to /subjects", () => {
         cy.viewport("macbook-15");
-        cy.visit("/policy-repository?subjects=2&q=test");
+        cy.visit("/policy-repository?subjects=2");
         cy.url().should("not.include", "/policy-repository");
-        cy.url()
-            .should("include", "/subjects/")
-            .and("include", "subjects=2")
-            .and("include", "q=test");
+        cy.url().should("include", "/subjects/").and("include", "subjects=2");
         cy.get(".div__login-sidebar a")
             .should("have.attr", "href")
             .and("include", "next")
             .and("include", "subjects/")
-            .and("include", "q=test")
             .and("include", "subjects=2");
     });
 
@@ -92,6 +94,14 @@ describe("Find by Subjects", () => {
             .should("have.attr", "href")
             .and("include", "next")
             .and("include", "subjects/")
+            .and("not.include", "q=test");
+    });
+
+    it("strips the q parameter out of the URL if it is included in the URL on load", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects/?subjects=2&q=test");
+        cy.url()
+            .should("include", "/subjects?subjects=2")
             .and("not.include", "q=test");
     });
 
@@ -123,15 +133,15 @@ describe("Find by Subjects", () => {
         cy.checkAccessibility();
 
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
         ).scrollIntoView();
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
+            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count",
         )
             .should("be.visible")
             .and("have.text", "1 public resource");
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
@@ -159,19 +169,19 @@ describe("Find by Subjects", () => {
         cy.visit("/subjects");
         cy.url().should("include", "/subjects/");
         cy.get("button[data-testid='user-account-button']").should(
-            "be.visible"
+            "be.visible",
         );
         cy.get(".subject__heading").should("not.exist");
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
         ).scrollIntoView();
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count"
+            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count",
         )
             .should("be.visible")
             .and("have.text", "1 public and 0 internal resources");
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
@@ -186,27 +196,44 @@ describe("Find by Subjects", () => {
         cy.url().should("include", "/subjects?subjects=2");
     });
 
-    it("should display the appropriate results column header whether viewing keyword search results or viewing the items within a subject.", () => {
+    it("should redirect to the Search page with the correct selected subject when a search term is entered", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/subjects");
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+        cy.get("input#main-content").type("mock", { force: true });
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+        cy.url()
+            .should("include", "/search")
+            .and("include", "q=mock")
+            .and("include", "subjects=3");
+    });
+
+    it("should display the appropriate results column header when viewing the items within a subject.", () => {
         cy.intercept("**/v3/content-search/**", {
             fixture: "policy-docs-search.json",
         });
-        cy.intercept(
-            "**/v3/resources/?&page_size=50&group_resources=false",
-            {
-                fixture: "policy-docs-subjects.json",
-            }
-        );
+        cy.intercept("**/v3/resources/?&page_size=50&group_resources=false", {
+            fixture: "policy-docs-subjects.json",
+        });
         cy.intercept(
             "**/v3/resources/?subjects=3&show_regulations=false&page_size=50&group_resources=false",
             {
                 fixture: "policy-docs-subjects.json",
-            }
+            },
         );
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/subjects");
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
             .should("have.text", "Access to Services")
@@ -218,26 +245,7 @@ describe("Find by Subjects", () => {
         cy.get("search-results__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
-            "1 - 3 of 3 documents"
-        );
-        cy.get("input#main-content").type("mock", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
-        cy.get(".subject__heading").should("not.exist");
-        cy.get(".search-results__heading")
-            .should("exist")
-            .and("have.text", " Search Results ");
-        cy.get(".search-results-count").should(
-            "have.text",
-            "1 - 4 of 4 results for mock within Access to Services"
-        );
-        cy.get(`button[data-testid=remove-subject-3]`).click({
-            force: true,
-        });
-        cy.get(".search-results-count").should(
-            "have.text",
-            "1 - 4 of 4 results for mock"
+            "1 - 3 of 3 documents",
         );
     });
 
@@ -301,13 +309,13 @@ describe("Find by Subjects", () => {
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=2&q=test");
+        cy.url().should("include", "/subjects?subjects=2");
 
         cy.get(`button[data-testid=remove-subject-2]`).click({
             force: true,
         });
         cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-        cy.url().should("include", "/subjects?q=test");
+        cy.url().should("include", "/subjects");
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
@@ -326,13 +334,13 @@ describe("Find by Subjects", () => {
             .find("a")
             .should("not.have.class", "external")
             .find(
-                "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]"
+                "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]",
             )
             .should("include.text", "Download MSG");
         cy.get(".result__link") // regulations link
             .eq(1)
             .find("a")
-            .should("not.include.text", "Download")
+            .should("not.include.text", "Download");
         cy.get(".result__link") // internal_link
             .eq(2)
             .find("a")
@@ -389,22 +397,15 @@ describe("Find by Subjects", () => {
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
-        cy.url().should(
-            "include",
-            "/subjects?subjects=3&q=test+search"
-        );
+        cy.url().should("include", "/subjects?subjects=3&q=test+search");
         cy.get(".search-form .form-helper-text .search-suggestion").should(
-            "not.exist"
+            "not.exist",
         );
-        cy.get(".document__subjects a")
-            .eq(0)
-            .should("have.text", "FMAP");
+        cy.get(".document__subjects a").eq(0).should("have.text", "FMAP");
         cy.get(".document__subjects a")
             .eq(1)
             .should("have.text", "Preventive Services");
-        cy.get(".document__subjects a")
-            .eq(2)
-            .should("have.text", "VIII group");
+        cy.get(".document__subjects a").eq(2).should("have.text", "VIII group");
         cy.get(`a[data-testid=add-subject-chip-167]`)
             .should("have.attr", "title")
             .and("include", "New Adult Group");
@@ -427,14 +428,14 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=remove-subject-77]`).should("exist");
         cy.get("button[data-testid=add-subject-63]").should(
             "not.have.class",
-            "subjects-li__button--selected"
+            "subjects-li__button--selected",
         );
         cy.get("button[data-testid=add-subject-63]").click({
             force: true,
         });
         cy.get("button[data-testid=add-subject-63]").should(
             "have.class",
-            "subjects-li__button--selected"
+            "subjects-li__button--selected",
         );
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("not.exist");
@@ -455,10 +456,10 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=remove-subject-1]`).should("not.exist");
         cy.get(`button[data-testid=add-subject-1]`).should(
             "include.text",
-            "Cures Act"
+            "Cures Act",
         );
         cy.get(`button[data-testid=clear-subject-filter]`).should(
-            "not.be.visible"
+            "not.be.visible",
         );
 
         cy.checkAccessibility();
@@ -473,7 +474,7 @@ describe("Find by Subjects", () => {
         cy.get(".subjects__list li").should("have.length", 1);
         cy.get(`button[data-testid=add-subject-1]`).should(
             "include.text",
-            "21st Century Cures Act"
+            "21st Century Cures Act",
         );
         cy.get(`button[data-testid=add-subject-1]`).click({
             force: true,
@@ -495,28 +496,7 @@ describe("Find by Subjects", () => {
         cy.get(".subjects__list li").should("have.length", 78);
     });
 
-    it("should display and fetch the correct search query on load if it is included in URL", () => {
-        cy.intercept(
-            "**/v3/content-search/?q=streamlined%20modular%20certification**"
-        ).as("qFiles");
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/subjects/",
-        });
-        cy.visit("/subjects/?q=streamlined%20modular%20certification");
-        cy.wait("@qFiles").then((interception) => {
-            expect(interception.response.statusCode).to.eq(200);
-        });
-        cy.get("input#main-content").should(
-            "have.value",
-            "streamlined modular certification"
-        );
-        cy.get(".subject__heading").should("not.exist");
-    });
-
-    it("should have a Documents to Show checkbox list only when a subject is selected or text is searched", () => {
+    it("should have a Documents to Show checkbox list only when a subject or category is selected", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -530,7 +510,7 @@ describe("Find by Subjects", () => {
 
         // select a subject fro ToC
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
@@ -553,13 +533,9 @@ describe("Find by Subjects", () => {
         // doc type checkboxes should no longer be visible
         cy.get(".doc-type__toggle fieldset").should("not.exist");
 
-        // search for a term
-        cy.get("input#main-content")
-            .should("be.visible")
-            .type("test", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
+        // Select a category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
 
         // doc type checkboxes should be visible now
         cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
@@ -572,10 +548,10 @@ describe("Find by Subjects", () => {
             .find("label")
             .should("include.text", "Internal Resources");
 
-        // Clear search
-        cy.get("form.search-form .v-field__clearable i").click({
-            force: true,
-        });
+        // Clear category
+        cy.get("div[data-testid='category-select']")
+            .find("i.mdi-close")
+            .click();
 
         // doc type checkboxes should no longer be visible
         cy.get(".doc-type__toggle fieldset").should("not.exist");
@@ -690,7 +666,7 @@ describe("Find by Subjects", () => {
 
         // Select subject
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
@@ -722,7 +698,7 @@ describe("Find by Subjects", () => {
 
         // Select a subject
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a"
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
         cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
             .should("have.text", "Managed Care")
@@ -761,7 +737,7 @@ describe("Find by Subjects", () => {
 
         cy.url().should(
             "include",
-            "/subjects?subjects=63&categories=1&type=external"
+            "/subjects?subjects=63&categories=1&type=external",
         );
 
         // Select a different subject
@@ -792,7 +768,7 @@ describe("Find by Subjects", () => {
             .should("not.be.visible");
         cy.url().should(
             "include",
-            "/subjects?subjects=1&categories=1&type=external"
+            "/subjects?subjects=1&categories=1&type=external",
         );
 
         // Add text query and submit
@@ -872,12 +848,12 @@ describe("Subjects Page -- Pagination", () => {
         cy.get(".current-page.selected").contains("1");
         cy.get(".pagination-control.left-control > .back-btn").should(
             "have.class",
-            "disabled"
+            "disabled",
         );
         cy.wait("@initialPage").then((interception) => {
             const count = interception.response.body.count;
             cy.get(".search-results-count").contains(
-                `1 - 50 of ${count} documents`
+                `1 - 50 of ${count} documents`,
             );
         });
         cy.get(".pagination-control.right-control")
@@ -887,7 +863,7 @@ describe("Subjects Page -- Pagination", () => {
             const count = interception.response.body.count;
             cy.url().should("include", "page=2");
             cy.get(".search-results-count").contains(
-                `51 - 100 of ${count} documents`
+                `51 - 100 of ${count} documents`,
             );
             cy.get(".current-page.selected").contains("2");
         });
@@ -905,7 +881,7 @@ describe("Subjects Page -- Pagination", () => {
             const count = interception.response.body.count;
             cy.url().should("include", "page=2");
             cy.get(".search-results-count").contains(
-                `51 - 100 of ${count} documents`
+                `51 - 100 of ${count} documents`,
             );
             cy.get(".current-page.selected").contains("2");
         });
@@ -918,7 +894,7 @@ describe("Subjects Page -- Pagination", () => {
         cy.wait("@page2").then((interception) => {
             const count = interception.response.body.count;
             cy.get(".search-results-count").contains(
-                `51 - 100 of ${count} documents`
+                `51 - 100 of ${count} documents`,
             );
             cy.get(".current-page.selected").contains("2");
         });
@@ -931,12 +907,12 @@ describe("Subjects Page -- Pagination", () => {
         cy.wait("@page2").then((interception) => {
             const count = interception.response.body.count;
             cy.get(".search-results-count").contains(
-                `51 - 100 of ${count} documents`
+                `51 - 100 of ${count} documents`,
             );
             cy.get(".current-page.selected").contains("2");
             cy.url().should(
                 "include",
-                "/subjects/?type=external&page=2&categories=3"
+                "/subjects/?type=external&page=2&categories=3",
             );
         });
     });
