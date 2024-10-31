@@ -143,6 +143,8 @@
 
     label.v-field-label {
         margin-inline-start: var(--spacer-2);
+        color: $secondary_text_color;
+        opacity: 1;
     }
 
     .v-field__input {

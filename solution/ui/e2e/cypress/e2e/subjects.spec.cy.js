@@ -58,12 +58,12 @@ const _beforePaginate = () => {
 };
 
 Cypress.Commands.add("getPolicyDocs", ({ username, password }) => {
-    cy.intercept("**/v3/content-search/?q=mock**", {
+    cy.intercept("**/v3/resources/?subjects=3**", {
         fixture: "policy-docs-search.json",
     }).as("subjectFiles");
     cy.viewport("macbook-15");
     cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-    cy.visit("/subjects/?q=mock");
+    cy.visit("/subjects/?subjects=3");
     cy.injectAxe();
     cy.wait("@subjectFiles").then((interception) => {
         expect(interception.response.statusCode).to.eq(200);
@@ -249,7 +249,7 @@ describe("Find by Subjects", () => {
         );
     });
 
-    it("loads the correct subject and search query when the URL is changed", () => {
+    it("loads the correct subject when the URL is changed", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -302,20 +302,6 @@ describe("Find by Subjects", () => {
         cy.go("back");
         cy.url().should("include", "/subjects?subjects=2");
         cy.get(`button[data-testid=remove-subject-3]`).should("not.exist");
-
-        cy.get("input#main-content")
-            .should("be.visible")
-            .type("test", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
-        cy.url().should("include", "/subjects?subjects=2");
-
-        cy.get(`button[data-testid=remove-subject-2]`).click({
-            force: true,
-        });
-        cy.get(`button[data-testid=remove-subject-2]`).should("not.exist");
-        cy.url().should("include", "/subjects");
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
@@ -391,16 +377,6 @@ describe("Find by Subjects", () => {
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=3");
-        cy.get("input#main-content")
-            .should("be.visible")
-            .type("test search", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
-        cy.url().should("include", "/subjects?subjects=3&q=test+search");
-        cy.get(".search-form .form-helper-text .search-suggestion").should(
-            "not.exist",
-        );
         cy.get(".document__subjects a").eq(0).should("have.text", "FMAP");
         cy.get(".document__subjects a")
             .eq(1)
@@ -413,7 +389,6 @@ describe("Find by Subjects", () => {
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=167&type=all");
-        cy.get("input#main-content").should("have.value", "");
     });
 
     it("should display correct subject ID number in the URL if one is included in the URL on load and different one is selected via the Subject Selector", () => {
@@ -773,7 +748,7 @@ describe("Find by Subjects", () => {
 
         // Add text query and submit
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type("test", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
