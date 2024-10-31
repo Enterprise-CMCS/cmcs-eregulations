@@ -217,9 +217,6 @@ describe("Find by Subjects", () => {
     });
 
     it("should display the appropriate results column header when viewing the items within a subject.", () => {
-        cy.intercept("**/v3/content-search/**", {
-            fixture: "policy-docs-search.json",
-        });
         cy.intercept("**/v3/resources/?&page_size=50&group_resources=false", {
             fixture: "policy-docs-subjects.json",
         });
@@ -362,7 +359,7 @@ describe("Find by Subjects", () => {
     });
 
     it("should update the URL when a subject chip is clicked", () => {
-        cy.intercept("**/v3/content-search/**", {
+        cy.intercept("**/v3/resources/?subjects=3**", {
             fixture: "policy-docs-search.json",
         }).as("subjectFiles");
         cy.viewport("macbook-15");
@@ -483,7 +480,7 @@ describe("Find by Subjects", () => {
         // doc type checkboxes should not be visible on load
         cy.get(".doc-type__toggle fieldset").should("not.exist");
 
-        // select a subject fro ToC
+        // select a subject from ToC
         cy.get(
             ".subj-toc__list li[data-testid=subject-toc-li-63] a",
         ).scrollIntoView();
@@ -508,9 +505,13 @@ describe("Find by Subjects", () => {
         // doc type checkboxes should no longer be visible
         cy.get(".doc-type__toggle fieldset").should("not.exist");
 
-        // Select a category
-        cy.get("div[data-testid='category-select']").click();
-        cy.get("div[data-testid='external-0']").click({ force: true });
+        // select a subject from ToC once again
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+            .should("have.text", "Managed Care")
+            .click({ force: true });
 
         // doc type checkboxes should be visible now
         cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
@@ -523,13 +524,23 @@ describe("Find by Subjects", () => {
             .find("label")
             .should("include.text", "Internal Resources");
 
-        // Clear category
-        cy.get("div[data-testid='category-select']")
-            .find("i.mdi-close")
-            .click();
+        // Select a category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
 
-        // doc type checkboxes should no longer be visible
-        cy.get(".doc-type__toggle fieldset").should("not.exist");
+        // remove subject
+        cy.get("button[data-testid=remove-subject-63]").click({ force: true });
+
+        // doc type checkboxes should still be visible
+        cy.get(".doc-type__toggle fieldset > div").should("have.length", 2);
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("label")
+            .should("include.text", "Public Resources");
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("label")
+            .should("include.text", "Internal Resources");
     });
 
     it("should show only the Table of Contents if both or neither checkboxes are checked", () => {
@@ -589,7 +600,7 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
 
         // Visit without authenticating
-        cy.visit("/subjects?q=test");
+        cy.visit("/subjects?subjects=3");
 
         // Assert that category select label is visible
         cy.get("div[data-testid='category-select']")
@@ -610,7 +621,7 @@ describe("Find by Subjects", () => {
 
         // Log in and visit the same page
         cy.eregsLogin({ username, password, landingPage: "/subjects/" });
-        cy.visit("/subjects?q=test");
+        cy.visit("/subjects?subjects=3");
 
         // Open category select dropdown and assert that
         // Doc Type label is visible
@@ -745,24 +756,6 @@ describe("Find by Subjects", () => {
             "include",
             "/subjects?subjects=1&categories=1&type=external",
         );
-
-        // Add text query and submit
-        cy.get("input#main-content")
-            .should("exist")
-            .type("test", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
-
-        // Assert that category is removed from URL and
-        // category select label is reset
-        cy.url().should("include", "/subjects?subjects=1&type=external&q=test");
-        cy.url().should("not.include", "&categories=3");
-        cy.get("div[data-testid='category-select']")
-            .should("exist")
-            .find("label")
-            .should("have.text", "Choose Category")
-            .and("be.visible");
     });
 
     it("goes to another SPA page from the subjects page", () => {
@@ -779,14 +772,6 @@ describe("Find by Subjects", () => {
             screen: "wide",
         });
         cy.url().should("include", "/statutes");
-    });
-
-    it("should have the correct labels for public and internal documents", () => {
-        cy.checkPolicyDocs({
-            username,
-            password,
-            landingPage: "/subjects/",
-        });
     });
 
     it("should not show document type selector after you log out", () => {
