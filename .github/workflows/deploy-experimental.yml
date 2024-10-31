@@ -112,7 +112,7 @@ jobs:
           npm install
           STAGE=dev${PR_NUMBER} cdk synth -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
           STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-            dev-RedirectStack --require-approval never
+            dev${PR_NUMBER}-RedirectStack --require-approval never
           popd
   deploy-text-extractor:
     environment:
