@@ -396,7 +396,6 @@ getDocsOnLoad();
                         :has-editable-job-code="hasEditableJobCode"
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
-                        view="search"
                     />
                     <div class="pagination-expand-row">
                         <div class="pagination-expand-container">
@@ -405,7 +404,6 @@ getDocsOnLoad();
                                 :count="policyDocList.count"
                                 :page="parseInt($route.query.page, 10) || 1"
                                 :page-size="pageSize"
-                                view="search"
                             />
                         </div>
                     </div>

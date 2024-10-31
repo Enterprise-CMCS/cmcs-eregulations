@@ -47,7 +47,7 @@ router.beforeEach((to) => {
         }
 
         // strip out q param if it exists; it's not needed for subjects
-        const { q, ...qlessQuery} = to.query;
+        const { q, ...qlessQuery } = to.query;
 
         if (isAuthenticated === "False" && to.query?.type) {
             const { type, ...typelessQuery } = qlessQuery;
