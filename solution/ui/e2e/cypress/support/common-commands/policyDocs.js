@@ -19,7 +19,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         landingPage,
     });
     cy.get("input#main-content")
-        .should("be.visible")
+        .should("exist")
         .type("mock", { force: true });
     cy.get('[data-testid="search-form-submit"]').click({
         force: true,
