@@ -46,9 +46,16 @@ router.beforeEach((to) => {
             document.title = pageTitle;
         }
 
+        // strip out q param if it exists; it's not needed for subjects
+        const { q, ...qlessQuery} = to.query;
+
         if (isAuthenticated === "False" && to.query?.type) {
-            const { type, ...typelessQuery } = to.query;
+            const { type, ...typelessQuery } = qlessQuery;
             return { name: "subjects", query: typelessQuery };
+        }
+
+        if (q) {
+            return { name: "subjects", query: qlessQuery };
         }
     }
 

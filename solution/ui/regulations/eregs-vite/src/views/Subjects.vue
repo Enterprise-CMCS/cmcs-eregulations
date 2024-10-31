@@ -63,7 +63,7 @@ provide("FilterTypesDict", FilterTypesDict);
 
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
-const policySelectionsRemoveList = ["subjects"];
+const policySelectionsRemoveList = ["subjects", "q"];
 const searchInputRemoveList = commonRemoveList.concat([
     "q",
     "type",
@@ -92,12 +92,6 @@ const allDocTypesOnly = (queryParams) => {
     }
 
     return false;
-};
-
-// search query refs and methods
-const searchQuery = ref($route.query.q || "");
-const clearSearchQuery = () => {
-    searchQuery.value = "";
 };
 
 const executeSearch = (payload) => {
@@ -191,11 +185,6 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         return;
     }
 
-    if (paramType === "q") {
-        searchQuery.value = paramValue;
-        return;
-    }
-
     const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
     paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
@@ -252,7 +241,6 @@ const getDocSubjects = async () => {
         if (!allDocTypesOnly($route.query)) {
             // wipe everything clean to start
             clearSelectedParams();
-            clearSearchQuery();
 
             // now that everything is cleaned, iterate over new query params
             Object.entries($route.query).forEach((param) => {
@@ -335,7 +323,6 @@ watch(
 
         // wipe everything clean to start
         clearSelectedParams();
-        clearSearchQuery();
 
         const sanitizedQueryParams = Object.entries(newQueryParams).filter(
             ([key]) => PARAM_VALIDATION_DICT[key]
@@ -437,7 +424,7 @@ getDocSubjects();
                     />
                     <template v-else>
                         <div
-                            v-if="selectedSubjectParts.length && !searchQuery"
+                            v-if="selectedSubjectParts.length"
                             class="subject__heading"
                         >
                             <SelectedSubjectHeading
@@ -469,7 +456,6 @@ getDocSubjects();
                                     getSearchInputLabel(selectedSubjectParts)
                                 "
                                 parent="search"
-                                :search-query="searchQuery"
                                 @execute-search="executeSearch"
                                 @clear-form="clearSearchInput"
                             />
@@ -485,16 +471,12 @@ getDocSubjects();
                         <template v-else-if="policyDocList.error">
                             <div class="doc__list">
                                 <h2
-                                    v-if="
-                                        !selectedSubjectParts.length ||
-                                        searchQuery
-                                    "
+                                    v-if="!selectedSubjectParts.length"
                                     class="search-results__heading"
                                 >
                                     Search Results
                                 </h2>
                                 <SearchErrorMsg
-                                    :search-query="searchQuery"
                                     show-apology
                                     :survey-url="surveyUrl"
                                 />
@@ -509,7 +491,6 @@ getDocSubjects();
                                 :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
-                                :search-query="searchQuery"
                                 :selected-subject-parts="selectedSubjectParts"
                             />
                             <div class="pagination-expand-row">

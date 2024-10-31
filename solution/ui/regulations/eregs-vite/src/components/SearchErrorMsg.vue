@@ -18,10 +18,10 @@ const props = defineProps({
 <template>
     <div class="error-msg__container">
         <span class="error__msg" data-testid="error__msg">
-            <span class="error__msg--apology" v-if="showApology"
+            <span v-if="showApology" class="error__msg--apology"
                 >Sorry, we’re unable to display results<span
-                    class="error__msg--query"
                     v-if="searchQuery"
+                    class="error__msg--query"
                 >
                     for <strong>{{ searchQuery }}</strong></span
                 >
