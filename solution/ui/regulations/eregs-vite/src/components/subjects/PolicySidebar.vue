@@ -1,5 +1,5 @@
 <script setup>
-import { inject} from "vue";
+import { inject } from "vue";
 import { useRoute } from "vue-router";
 import useLoginRedirectUrl from "composables/login";
 
@@ -9,8 +9,11 @@ const isAuthenticated = inject("isAuthenticated");
 
 const $route = useRoute();
 
-const loginUrl = useLoginRedirectUrl({ customLoginUrl, homeUrl, route: $route });
-
+const loginUrl = useLoginRedirectUrl({
+    customLoginUrl,
+    homeUrl,
+    route: $route,
+});
 </script>
 
 <template>
@@ -20,7 +23,6 @@ const loginUrl = useLoginRedirectUrl({ customLoginUrl, homeUrl, route: $route })
         </slot>
         <div class="sidebar-filters__container">
             <slot name="selections"> </slot>
-            <slot name="search"> </slot>
             <template v-if="!isAuthenticated">
                 <div class="div__login-sidebar">
                     CMCS staff participating in the Policy Repository pilot can
