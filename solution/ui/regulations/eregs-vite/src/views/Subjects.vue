@@ -102,29 +102,9 @@ const executeSearch = (payload) => {
         removeList: searchInputRemoveList,
     });
 
-    $router.push({
-        name: "search",
-        query: {
-            ...cleanedRoute,
-            q: payload.query,
-        },
-    });
-};
-
-const clearSearchInput = () => {
-    const routeClone = { ...$route.query };
-
-    const cleanedRoute = useRemoveList({
-        route: routeClone,
-        removeList: searchInputRemoveList,
-    });
-
-    $router.push({
-        name: "subjects",
-        query: {
-            ...cleanedRoute,
-        },
-    });
+    const redirectParams = new URLSearchParams(cleanedRoute);
+    const redirectPath = `${homeUrl}search/?${redirectParams.toString() ? redirectParams.toString() + "&" : ""}q=${payload.query}`;
+    window.location.assign(redirectPath);
 };
 
 // partsLastUpdated fetch for related regulations citations filtering
@@ -457,7 +437,6 @@ getDocSubjects();
                                 "
                                 parent="search"
                                 @execute-search="executeSearch"
-                                @clear-form="clearSearchInput"
                             />
                         </div>
                         <template
