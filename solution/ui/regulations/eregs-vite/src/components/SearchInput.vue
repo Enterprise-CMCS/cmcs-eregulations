@@ -13,7 +13,7 @@
             clear-icon="mdi-close"
             hide-details
             single-line
-            @update:modelValue="updateSearchValue"
+            @update:model-value="updateSearchValue"
         >
             <template #clear>
                 <v-icon
