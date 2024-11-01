@@ -39,6 +39,18 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+      - name: remove hello world cdk stack
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk
+          npm install
+          STAGE=dev${PR_NUMBER} cdk destroy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
+            dev${PR_NUMBER}-HelloWorldStack --require-approval never
+          popd
       # Remove parsers
       - name: remove parsers
         env:
