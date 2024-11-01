@@ -2,6 +2,7 @@
     <form ref="formRef" :class="formClass" @submit.prevent="submitForm">
         <v-text-field
             id="main-content"
+            ref="searchInput"
             v-model="searchInputValue"
             clearable
             variant="outlined"
@@ -103,10 +104,16 @@ export default {
             type: Boolean,
             default: false,
         },
+        redirectTo: {
+            type: String,
+            default: undefined,
+        },
     },
 
     created() {
-        this.searchInputValue = this.searchQuery;
+        if (this.parent !== "subjects") {
+            this.searchInputValue = this.searchQuery;
+        }
     },
     data() {
         return {
@@ -129,6 +136,10 @@ export default {
     methods: {
         submitForm() {
             this.$emit("execute-search", { query: this.searchInputValue });
+
+            // clear search input so input is clear if user clicks back button
+            // to return to this page
+            this.$refs.searchInput.reset();
         },
         clearForm() {
             this.searchInputValue = undefined;
@@ -139,7 +150,7 @@ export default {
         },
         synonymLink(synonym) {
             this.$router.push({
-                name: this.parent,
+                name: this.redirectTo || this.parent,
                 query: {
                     ...this.queryParams,
                     page: undefined,
@@ -149,7 +160,7 @@ export default {
         },
         quotedLink() {
             this.$router.push({
-                name: this.parent,
+                name: this.redirectTo || this.parent,
                 query: {
                     ...this.queryParams,
                     page: undefined,

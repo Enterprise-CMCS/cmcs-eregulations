@@ -435,7 +435,8 @@ getDocSubjects();
                                 :label="
                                     getSearchInputLabel(selectedSubjectParts)
                                 "
-                                parent="search"
+                                parent="subjects"
+                                redirect-to="search"
                                 @execute-search="executeSearch"
                             />
                         </div>
