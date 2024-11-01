@@ -216,6 +216,46 @@ describe("Find by Subjects", () => {
             .and("include", "subjects=3");
     });
 
+    it("clearing the search input should not reload the page", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/subjects");
+
+        // select subject
+        cy.get(
+            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
+        ).scrollIntoView();
+        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+
+        // select category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            "/subjects?subjects=3&categories=1&type=external",
+        );
+
+        cy.get("input#main-content").invoke("val").should("eq", "");
+
+        cy.get("input#main-content").type("mock", { force: true });
+
+        cy.get("input#main-content").invoke("val").should("eq", "mock");
+
+        cy.get(".search-field")
+            .find(".v-field__clearable i")
+            .click({ force: true });
+
+        cy.get("input#main-content").invoke("val").should("eq", "");
+
+        cy.url().should(
+            "include",
+            "/subjects?subjects=3&categories=1&type=external",
+        );
+    });
+
     it("should display the appropriate results column header when viewing the items within a subject.", () => {
         cy.intercept("**/v3/resources/?&page_size=50&group_resources=false", {
             fixture: "policy-docs-subjects.json",
