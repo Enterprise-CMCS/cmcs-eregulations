@@ -476,6 +476,20 @@
         gap: 1rem;
         align-items: center;
         margin-bottom: 1rem;
+
+        .doc-type__toggle fieldset {
+            @media (max-width: 475px) {
+                flex-direction: column;
+            }
+        }
+
+        .ds-c-choice-wrapper label {
+            @media (max-width: 475px) {
+                width: calc(100% - 28px);
+                display: flex;
+                justify-content: space-between;
+            }
+        }
     }
 
     .subject__search--row {
