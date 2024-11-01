@@ -49,7 +49,7 @@ jobs:
           npm install -g aws-cdk
           npm install
           STAGE=dev${PR_NUMBER} cdk destroy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-            dev${PR_NUMBER}-HelloWorldStack --require-approval never
+            dev${PR_NUMBER}-HelloWorldStack --force
           popd
       # Remove parsers
       - name: remove parsers
