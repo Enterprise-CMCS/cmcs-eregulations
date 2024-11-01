@@ -307,6 +307,11 @@
         padding-left: 0px;
         padding-right: 0px;
 
+        @media (max-width: 543px) {
+            padding-left: var(--spacer-6);
+            padding-right: var(--spacer-6);
+        }
+
         @include screen-md {
             padding-right: 1rem;
             border-right: 2px solid $border_color;
