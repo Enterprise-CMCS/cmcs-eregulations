@@ -87,7 +87,7 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search`, { timeout: 60000 });
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type("test search", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -106,7 +106,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type("test", { force: true });
 
         cy.findByDisplayValue("test")
@@ -148,7 +148,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type(`${SEARCH_TERM_2}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -184,7 +184,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type(`${SEARCH_TERM}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,

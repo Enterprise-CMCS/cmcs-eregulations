@@ -175,10 +175,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    view: {
-        type: String,
-        default: undefined,
-    },
 });
 
 const $route = useRoute();
@@ -228,12 +224,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 
 <template>
     <div class="doc__list">
-        <h2
-            v-if="view !== 'search' && searchQuery"
-            class="search-results__heading"
-        >
-            Search Results
-        </h2>
         <div class="search-results-count">
             <span v-if="results.length > 0"
                 >{{ currentPageResultsRange[0] }} -
@@ -242,17 +232,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             {{ resultsCount }} <span v-if="searchQuery">result</span
             ><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
-            <template v-if="view !== 'search'">
-                <span v-if="searchQuery">
-                    for
-                    <span class="search-query__span">{{
-                        searchQuery
-                    }}</span></span
-                >
-                <span v-if="searchQuery && selectedSubjectParts[0]">
-                    within {{ selectedSubjectParts[1][0] }}</span
-                >
-            </template>
         </div>
         <slot name="empty-state"></slot>
         <ResultsItem

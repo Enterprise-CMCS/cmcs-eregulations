@@ -307,6 +307,11 @@
         padding-left: 0px;
         padding-right: 0px;
 
+        @media (max-width: 543px) {
+            padding-left: var(--spacer-6);
+            padding-right: var(--spacer-6);
+        }
+
         @include screen-md {
             padding-right: 1rem;
             border-right: 2px solid $border_color;
@@ -471,6 +476,29 @@
         gap: 1rem;
         align-items: center;
         margin-bottom: 1rem;
+
+        .doc-type__toggle fieldset {
+            @media (max-width: 475px) {
+                flex-direction: column;
+            }
+        }
+
+        .ds-c-choice-wrapper label {
+            @media (max-width: 475px) {
+                width: calc(100% - 28px);
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+
+    .subject__search--row {
+        padding: 0 var(--spacer-4);
+        margin-bottom: var(--spacer-4);
+
+        .search-field {
+            width: 320px;
+        }
     }
 
     .doc__list {
