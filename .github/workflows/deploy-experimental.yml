@@ -379,7 +379,7 @@ jobs:
           node-version: 18.14
       # Run the cypress tests
       - name: end-to-end tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           working-directory: solution/ui/e2e
           config: baseUrl=${{ needs.deploy-django.outputs.url }}
