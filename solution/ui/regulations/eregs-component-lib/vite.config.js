@@ -2,7 +2,7 @@ import path from "path";
 import fg from "fast-glob";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import vuetify from 'vite-plugin-vuetify';
+import vuetify from "vite-plugin-vuetify";
 
 // https://www.raulmelo.dev/blog/build-javascript-library-with-multiple-entry-points-using-vite-3
 const config = {
@@ -40,6 +40,10 @@ export default defineConfig({
             sharedComponents: path.resolve(
                 __dirname,
                 "./src/components/shared-components"
+            ),
+            spaComponents: path.resolve(
+                __dirname,
+                "../eregs-vite/src/components"
             ),
             utilities: path.resolve(__dirname, "../utilities"),
         },

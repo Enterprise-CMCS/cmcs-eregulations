@@ -411,7 +411,7 @@ describe("Find by Subjects", () => {
         cy.get(`a[data-testid=add-subject-chip-167]`).click({
             force: true,
         });
-        cy.url().should("include", "/subjects?subjects=167&type=all");
+        cy.url().should("include", "/subjects?subjects=167");
         cy.get("input#main-content").should("have.value", "");
     });
 

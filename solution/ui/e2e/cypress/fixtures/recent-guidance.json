@@ -1,0 +1,551 @@
+{
+  "count_url": "http://localhost:8000/v3/content-search/counts?categories=10",
+  "next": "http://localhost:8000/v3/resources/public/links?categories=4&categories=5&categories=6&categories=7&categories=8&categories=9&categories=10&page=2&page_size=5",
+  "previous": null,
+  "count": 822,
+  "results": [
+    {
+      "type": "",
+      "id": 523,
+      "created_at": "2024-07-18 10:22:05.343123",
+      "updated_at": "2024-07-18 10:22:05.354021",
+      "approved": true,
+      "category": {
+        "id": 6,
+        "name": "CMCS Informational Bulletin (CIB)",
+        "description": "",
+        "order": 300,
+        "show_if_empty": false,
+        "is_fr_link_category": false,
+        "type": "public_subcategory",
+        "parent": 3
+      },
+      "cfr_citations": [
+        {
+          "id": 234,
+          "title": 42,
+          "part": 433,
+          "type": "section",
+          "section_id": 15
+        },
+        {
+          "id": 263,
+          "title": 42,
+          "part": 433,
+          "type": "section",
+          "section_id": 112
+        },
+        {
+          "id": 266,
+          "title": 42,
+          "part": 433,
+          "type": "section",
+          "section_id": 116
+        },
+        {
+          "id": 1794,
+          "title": 45,
+          "part": 75,
+          "type": "section",
+          "section_id": 2
+        },
+        {
+          "id": 1892,
+          "title": 45,
+          "part": 75,
+          "type": "section",
+          "section_id": 413
+        },
+        {
+          "id": 2021,
+          "title": 45,
+          "part": 95,
+          "type": "section",
+          "section_id": 631
+        },
+        {
+          "id": 2315,
+          "title": 45,
+          "part": 170,
+          "type": "subpart",
+          "subpart_id": "B"
+        }
+      ],
+      "subjects": [
+        {
+          "id": 36,
+          "full_name": "Telemedicine/Telehealth",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 58,
+          "full_name": "Federal Financial Participation",
+          "short_name": "",
+          "abbreviation": "FFP",
+          "description": ""
+        },
+        {
+          "id": 128,
+          "full_name": "Substance Use Disorder",
+          "short_name": "",
+          "abbreviation": "SUD",
+          "description": ""
+        },
+        {
+          "id": 140,
+          "full_name": "Electronic Health Information",
+          "short_name": "",
+          "abbreviation": "EHI",
+          "description": ""
+        },
+        {
+          "id": 157,
+          "full_name": "Public Assistance Cost Allocation",
+          "short_name": "Cost Allocation",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 174,
+          "full_name": "Data and Systems",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 177,
+          "full_name": "Administrative Claiming",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 214,
+          "full_name": "Mental Health Services",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        }
+      ],
+      "document_id": "",
+      "title": "Accessing Enhanced Federal Medicaid Matching Rates for State Information Technology Expenditures to Improve Access to Mental Health and Substance Use Disorder Treatment and Care Coordination",
+      "date": "2024-06-14",
+      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib06142024.pdf",
+      "related_resources": []
+    },
+    {
+      "type": "",
+      "id": 526,
+      "created_at": "2024-07-18 10:22:05.388142",
+      "updated_at": "2024-07-18 10:22:05.399109",
+      "approved": true,
+      "category": {
+        "id": 7,
+        "name": "Frequently Asked Questions (FAQs)",
+        "description": "",
+        "order": 400,
+        "show_if_empty": false,
+        "is_fr_link_category": false,
+        "type": "public_subcategory",
+        "parent": 3
+      },
+      "cfr_citations": [
+        {
+          "id": 781,
+          "title": 42,
+          "part": 440,
+          "type": "section",
+          "section_id": 130
+        },
+        {
+          "id": 1414,
+          "title": 42,
+          "part": 457,
+          "type": "section",
+          "section_id": 402
+        }
+      ],
+      "subjects": [
+        {
+          "id": 34,
+          "full_name": "Provider Qualifications",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 83,
+          "full_name": "Care Coordination",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 108,
+          "full_name": "Preventive Services",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 116,
+          "full_name": "Peer Support",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 128,
+          "full_name": "Substance Use Disorder",
+          "short_name": "",
+          "abbreviation": "SUD",
+          "description": ""
+        },
+        {
+          "id": 149,
+          "full_name": "Rehabilitative Services",
+          "short_name": "Rehab",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 208,
+          "full_name": "Supervision",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 214,
+          "full_name": "Mental Health Services",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        }
+      ],
+      "document_id": "",
+      "title": "Medicaid and CHIP Coverage of Peer Support Services",
+      "date": "2024-06-05",
+      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/faq06052024.pdf",
+      "related_resources": []
+    },
+    {
+      "type": "",
+      "id": 527,
+      "created_at": "2024-07-18 10:22:05.403240",
+      "updated_at": "2024-07-18 10:22:05.414131",
+      "approved": true,
+      "category": {
+        "id": 5,
+        "name": "State Health Official (SHO) Letter",
+        "description": "",
+        "order": 200,
+        "show_if_empty": false,
+        "is_fr_link_category": false,
+        "type": "public_subcategory",
+        "parent": 3
+      },
+      "cfr_citations": [
+        {
+          "id": 615,
+          "title": 42,
+          "part": 437,
+          "type": "section",
+          "section_id": 10
+        },
+        {
+          "id": 616,
+          "title": 42,
+          "part": 437,
+          "type": "section",
+          "section_id": 15
+        },
+        {
+          "id": 1466,
+          "title": 42,
+          "part": 457,
+          "type": "section",
+          "section_id": 770
+        }
+      ],
+      "subjects": [
+        {
+          "id": 19,
+          "full_name": "Reports and Evaluations",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 134,
+          "full_name": "Quality Measures",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 194,
+          "full_name": "Behavioral Health",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        }
+      ],
+      "document_id": "SHO # 24-001",
+      "title": "RE: 2025 Updates to the Child and Adult Core Health Care Quality Measurement Sets and Mandatory Reporting Guidance",
+      "date": "2024-05-30",
+      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/sho24001.pdf",
+      "related_resources": []
+    },
+    {
+      "type": "",
+      "id": 528,
+      "created_at": "2024-07-18 10:22:05.418528",
+      "updated_at": "2024-07-18 10:22:05.429791",
+      "approved": true,
+      "category": {
+        "id": 5,
+        "name": "State Health Official (SHO) Letter",
+        "description": "",
+        "order": 200,
+        "show_if_empty": false,
+        "is_fr_link_category": false,
+        "type": "public_subcategory",
+        "parent": 3
+      },
+      "cfr_citations": [
+        {
+          "id": 23,
+          "title": 42,
+          "part": 430,
+          "type": "section",
+          "section_id": 3
+        },
+        {
+          "id": 24,
+          "title": 42,
+          "part": 430,
+          "type": "section",
+          "section_id": 5
+        },
+        {
+          "id": 44,
+          "title": 42,
+          "part": 430,
+          "type": "section",
+          "section_id": 49
+        },
+        {
+          "id": 478,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 916
+        },
+        {
+          "id": 485,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 927
+        },
+        {
+          "id": 486,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 928
+        },
+        {
+          "id": 2146,
+          "title": 45,
+          "part": 155,
+          "type": "section",
+          "section_id": 1200
+        }
+      ],
+      "subjects": [
+        {
+          "id": 19,
+          "full_name": "Reports and Evaluations",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 57,
+          "full_name": "State-based Exchange",
+          "short_name": "",
+          "abbreviation": "SBE",
+          "description": ""
+        },
+        {
+          "id": 62,
+          "full_name": "Appeals and Fair Hearings",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 168,
+          "full_name": "Renewals",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 169,
+          "full_name": "Unwinding",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 174,
+          "full_name": "Data and Systems",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 184,
+          "full_name": "Enrollment",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 242,
+          "full_name": "Transformed Medicaid Statistical Information System",
+          "short_name": "",
+          "abbreviation": "T-MSIS",
+          "description": ""
+        }
+      ],
+      "document_id": "SHO# 24-002",
+      "title": "RE: Continuation of Certain Medicaid and CHIP Eligibility Processing Data Reporting",
+      "date": "2024-05-30",
+      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/sho24002.pdf",
+      "related_resources": []
+    },
+    {
+      "type": "",
+      "id": 529,
+      "created_at": "2024-07-18 10:22:05.434367",
+      "updated_at": "2024-07-18 10:22:05.446096",
+      "approved": true,
+      "category": {
+        "id": 6,
+        "name": "CMCS Informational Bulletin (CIB)",
+        "description": "",
+        "order": 300,
+        "show_if_empty": false,
+        "is_fr_link_category": false,
+        "type": "public_subcategory",
+        "parent": 3
+      },
+      "cfr_citations": [
+        {
+          "id": 360,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 120
+        },
+        {
+          "id": 391,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 217
+        },
+        {
+          "id": 438,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 602
+        },
+        {
+          "id": 447,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 700
+        },
+        {
+          "id": 449,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 726
+        },
+        {
+          "id": 451,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 735
+        },
+        {
+          "id": 454,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 811
+        },
+        {
+          "id": 456,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 831
+        },
+        {
+          "id": 457,
+          "title": 42,
+          "part": 435,
+          "type": "section",
+          "section_id": 832
+        }
+      ],
+      "subjects": [
+        {
+          "id": 13,
+          "full_name": "Special Income Level",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 65,
+          "full_name": "Income and Resources",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 158,
+          "full_name": "Spousal Impoverishment",
+          "short_name": "",
+          "abbreviation": "",
+          "description": ""
+        },
+        {
+          "id": 244,
+          "full_name": "Supplemental Security Income",
+          "short_name": "",
+          "abbreviation": "SSI",
+          "description": ""
+        }
+      ],
+      "document_id": "",
+      "title": "Updated 2024 SSI and Spousal Impoverishment Standards",
+      "date": "2024-05-22",
+      "url": "https://www.medicaid.gov/federal-policy-guidance/downloads/cib05222024.pdf",
+      "related_resources": []
+    }
+  ]
+}

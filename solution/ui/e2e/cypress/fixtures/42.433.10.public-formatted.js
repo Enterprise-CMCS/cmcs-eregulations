@@ -216,7 +216,7 @@ export default [
         description: "SMDLs, SHOs, CIBs, FAQs, SMM",
         id: 4,
         is_fr_link_category: false,
-        name: "Subregulatory Test Guidance",
+        name: "Subregulatory Guidance",
         order: 400,
         show_if_empty: true,
         subcategories: [
