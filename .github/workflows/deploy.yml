@@ -161,7 +161,7 @@ jobs:
             /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
           withDecryption: "true" # defaults to true
       - name: end-to-end tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           working-directory: solution/ui/e2e
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
