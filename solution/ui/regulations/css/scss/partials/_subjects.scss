@@ -554,28 +554,26 @@
     .error-msg__container {
         padding: 0 1rem;
     }
+}
 
-    .doc-list__document {
-        .document__subjects {
-            margin-top: 0.75rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
+.document__subjects {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
 
-            .subject__chip {
-                @include common-chip-styles;
+    .subject__chip {
+        @include common-chip-styles;
 
-                text-decoration: none;
-                font-size: 11px;
-                line-height: 18px;
-                height: unset;
-                padding: 2px 8px;
+        text-decoration: none;
+        font-size: 11px;
+        line-height: 18px;
+        height: unset;
+        padding: 2px 8px;
 
-                &:hover,
-                &:focus {
-                    background-color: #e7f4fa;
-                }
-            }
+        &:hover,
+        &:focus {
+            background-color: #e7f4fa;
         }
     }
 }

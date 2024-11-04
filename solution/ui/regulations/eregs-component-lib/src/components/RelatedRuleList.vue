@@ -10,7 +10,11 @@
                 :html_url="html_url(rule)"
                 :action="rule.action"
             />
-            <template v-if="rule.related_resources && rule.related_resources.length > 0">
+            <template
+                v-if="
+                    rule.related_resources && rule.related_resources.length > 0
+                "
+            >
                 <related-rule
                     v-for="(related_resource, ii) in rule.related_resources"
                     :key="ii + 'grouped' + related_resource.document_number"
@@ -62,7 +66,10 @@
                 >
                 </related-rule>
                 <template
-                    v-if="rule.related_resources && rule.related_resources.length > 0"
+                    v-if="
+                        rule.related_resources &&
+                        rule.related_resources.length > 0
+                    "
                 >
                     <related-rule
                         v-for="(related_resource, ii) in rule.related_resources"
