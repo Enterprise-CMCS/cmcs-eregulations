@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "availability-zones:account=009160033411:region=us-east-1": [
+=======
+  "availability-zones:account=910670052382:region=us-east-1": [
+>>>>>>> main
     "us-east-1a",
     "us-east-1b",
     "us-east-1c",
@@ -7,10 +11,17 @@
     "us-east-1e",
     "us-east-1f"
   ],
+<<<<<<< HEAD
   "vpc-provider:account=009160033411:filter.tag:Name=macfcee-east-dev:region=us-east-1:returnAsymmetricSubnets=true": {
     "vpcId": "vpc-024f6f61699e6cd45",
     "vpcCidrBlock": "10.152.48.0/23",
     "ownerAccountId": "009160033411",
+=======
+  "vpc-provider:account=910670052382:filter.tag:Name=macfcee-east-dev:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-024f6f61699e6cd45",
+    "vpcCidrBlock": "10.152.48.0/23",
+    "ownerAccountId": "910670052382",
+>>>>>>> main
     "availabilityZones": [],
     "subnetGroups": [
       {

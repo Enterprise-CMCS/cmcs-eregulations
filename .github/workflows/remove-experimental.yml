@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 18.14
       # Setup Python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       # Configure AWS credentials for GitHub Actions
@@ -39,6 +39,18 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+      - name: remove hello world cdk stack
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk
+          npm install
+          STAGE=dev${PR_NUMBER} cdk destroy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
+            dev${PR_NUMBER}-HelloWorldStack --force
+          popd
       # Remove parsers
       - name: remove parsers
         env:
@@ -46,7 +58,6 @@ jobs:
         run: |
           pushd solution/parser
           npm install serverless@">=3.38.0 <4" -g
-          npm install
           chmod +x ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh 
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-parser-dev${PR} $PR "./serverless-ecfr.yml"
           ~/work/cmcs-eregulations/cmcs-eregulations/.github/workflows/delete_cloudformation_stacks.sh cmcs-eregs-fr-parser-dev${PR} $PR "./serverless-fr.yml"

@@ -43,7 +43,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.14
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -62,7 +62,7 @@ jobs:
           python manage.py collectstatic --noinput
           cd ..
           popd
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Configure AWS credentials for GitHub Actions
@@ -70,6 +70,19 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+      - name: deploy hello world CDK stack
+        env:
+          STAGE: ${{ matrix.environment }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk
+          npm install
+          cdk synth -c stage=${STAGE} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
+          cdk deploy -c stage=${STAGE} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
+            ${STAGE}-HelloWorldStack --require-approval never
+          popd
       - name: deploy static assets
         run: |
           pushd solution/static-assets
@@ -161,7 +174,7 @@ jobs:
             /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
           withDecryption: "true" # defaults to true
       - name: end-to-end tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           working-directory: solution/ui/e2e
           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}

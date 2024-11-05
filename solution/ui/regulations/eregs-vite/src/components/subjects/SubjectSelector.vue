@@ -1,3 +1,13 @@
+<script>
+const getDisplayCount = (subject) => {
+    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+};
+
+export default {
+    getDisplayCount,
+};
+</script>
+
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -16,6 +26,18 @@ const props = defineProps({
         type: Object,
         default: () => ({ results: [], loading: true }),
     },
+    componentType: {
+        type: String,
+        default: "default",
+    },
+    parent: {
+        type: String,
+        default: "subjects",
+    },
+    placeholder: {
+        type: String,
+        default: "Filter the subject list",
+    },
 });
 
 const $router = useRouter();
@@ -27,6 +49,10 @@ const state = reactive({
     filter: "",
     subjects: [],
 });
+
+if (!props.policyDocSubjects.loading) {
+    state.subjects = props.policyDocSubjects.results;
+}
 
 watch(
     () => props.policyDocSubjects.loading,
@@ -101,17 +127,33 @@ const subjectClick = (event) => {
 
     if (subjectsArray.includes(subjectToAdd)) return;
 
+    let filteredTypes;
+
+    if (props.parent === "search") {
+        const type = routeClone?.type;
+        const typesArr = type ? type.split(",") : [];
+
+        const filteredTypesArr = typesArr.filter(
+            (item) => item !== "regulations"
+        );
+
+        filteredTypes =
+            filteredTypesArr.length > 0
+                ? filteredTypesArr.join(",")
+                : undefined;
+    }
+
     const cleanedRoute = useRemoveList({
         route: routeClone,
         removeList,
     });
 
     $router.push({
-        name: "subjects",
+        name: props.parent,
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
-            type: ["all"],
+            type: filteredTypes,
         },
     });
 };
@@ -122,8 +164,10 @@ const subjectClasses = (subjectId) => {
         : [$route.query.subjects];
 
     return {
-        "sidebar-li__button": true,
-        "sidebar-li__button--selected": routeArr.includes(subjectId.toString()),
+        "subjects-li__button": true,
+        "subjects-li__button--selected": routeArr.includes(
+            subjectId.toString()
+        ),
     };
 };
 
@@ -132,14 +176,64 @@ const filterResetClasses = computed(() => ({
     "subjects__filter-reset--hidden": !state.filter,
 }));
 
-const filterResetClick = () => {
+const filterResetClick = (event) => {
+    event.stopPropagation();
     state.filter = "";
+};
+
+const inputUpArrowPress = (event) => {
+    if (event.key === "ArrowUp") {
+        const lastSubject = document.querySelector(
+            ".subjects__li:last-child button"
+        );
+
+        if (lastSubject) {
+            lastSubject.focus();
+        }
+    }
+};
+
+const inputDownArrowPress = (event) => {
+    if (event.key === "ArrowDown") {
+        const firstSubject = document.querySelector(".subjects__li");
+
+        if (firstSubject) {
+            firstSubject.querySelector("button").focus();
+        }
+    }
+};
+
+const liUpArrowPress = (event) => {
+    if (event.key === "ArrowUp") {
+        const currentSubject = event.currentTarget;
+        const previousSubject =
+            currentSubject.parentNode.previousElementSibling;
+
+        if (previousSubject) {
+            previousSubject.querySelector("button").focus();
+        } else {
+            document.querySelector("input#subjectReduce").focus();
+        }
+    }
+};
+
+const liDownArrowPress = (event) => {
+    if (event.key === "ArrowDown") {
+        const currentSubject = event.currentTarget;
+        const nextSubject = currentSubject.parentNode.nextElementSibling;
+
+        if (nextSubject) {
+            nextSubject.querySelector("button").focus();
+        } else {
+            document.querySelector("input#subjectReduce").focus();
+        }
+    }
 };
 </script>
 
 <template>
     <div class="subjects__select-container">
-        <h3>By Subject</h3>
+        <h3 v-if="parent === 'subjects'">By Subject</h3>
         <div class="subjects__list-container">
             <template v-if="props.policyDocSubjects.loading">
                 <div class="subjects__loading">
@@ -151,9 +245,11 @@ const filterResetClick = () => {
                     <input
                         id="subjectReduce"
                         v-model="state.filter"
-                        aria-label="Filter the subject list"
-                        placeholder="Filter the subject list"
+                        :aria-label="placeholder"
+                        :placeholder="placeholder"
                         type="text"
+                        @keydown.up.prevent="inputUpArrowPress"
+                        @keydown.down.prevent="inputDownArrowPress"
                     />
                     <button
                         aria-label="Clear subject list filter"
@@ -161,6 +257,7 @@ const filterResetClick = () => {
                         type="reset"
                         :class="filterResetClasses"
                         class="mdi mdi-close"
+                        @keydown.enter="filterResetClick"
                         @click="filterResetClick"
                     ></button>
                 </form>
@@ -176,9 +273,14 @@ const filterResetClick = () => {
                             :data-id="subject.id"
                             :data-testid="`add-subject-${subject.id}`"
                             :title="subject.full_name"
+                            @keydown.enter="subjectClick"
+                            @keydown.up.prevent="liUpArrowPress"
+                            @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
                             v-html="
-                                subject.displayName || getSubjectName(subject)
+                                (subject.displayName ||
+                                    getSubjectName(subject)) +
+                                getDisplayCount(subject)
                             "
                         ></button>
                     </li>

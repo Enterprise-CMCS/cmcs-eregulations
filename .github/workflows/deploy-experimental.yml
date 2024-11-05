@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
@@ -116,22 +116,7 @@ jobs:
           STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
             dev${PR_NUMBER}-HelloWorldStack --require-approval never
           popd
-      - name: Deploy Redirect Lambda via CDK
-        id: deploy-redirect-api
-        if: success() && steps.findPr.outputs.number
-        env:
-            PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-            RUN_ID: ${{ github.run_id }}
-            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-            pushd cdk-eregs
-            npm install -g aws-cdk
-            npm install
-            STAGE=dev${PR_NUMBER} cdk synth -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
-            STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-              dev${PR_NUMBER}-HelloWorldStack --require-approval never
-            popd
+      
   deploy-Redirect-Api-CDK:
     environment:
       name: "dev"
@@ -237,7 +222,7 @@ jobs:
         with:
           node-version: 18.14
       # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
@@ -299,7 +284,7 @@ jobs:
           submodules: true
       # setup Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: Install dependencies
@@ -336,7 +321,7 @@ jobs:
           node-version:
             18.14
             # setup python
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
@@ -481,7 +466,7 @@ jobs:
           node-version: 18.14
       # Run the cypress tests
       - name: end-to-end tests
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v6
         with:
           working-directory: solution/ui/e2e
           config: baseUrl=${{ needs.deploy-django.outputs.url }}
