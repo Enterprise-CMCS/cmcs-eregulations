@@ -12,7 +12,8 @@ import { StackFactory } from '../lib/factories/stack-factory';
 import { getStackConfigs } from '../config/stack-definition';
 async function main() {
     // Initialize CDK App with synthesizer configuration
-    const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
+    // const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
+      const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
