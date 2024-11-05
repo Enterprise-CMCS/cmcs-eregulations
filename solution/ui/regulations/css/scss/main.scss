@@ -13,6 +13,7 @@
 @import '@cmsgov/design-system/dist/css/core-theme.css';
 
 $fa-font-path: "../fonts/webfonts" !default;
+$additional-font-path: "../fonts" !default;
 @import '@fortawesome/fontawesome-free/scss/fontawesome';
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
 @import "@fortawesome/fontawesome-free/scss/brands.scss";

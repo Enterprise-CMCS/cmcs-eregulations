@@ -192,7 +192,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Open Sans";
     font-style: italic;
     font-weight: 700;
-    src: url(".fonts/OpenSans-BoldItalic.ttf")
+    src: url("#{$additional-font-path}/OpenSans-BoldItalic.ttf")
         format("truetype");
 }
 
@@ -200,7 +200,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Merriweather";
     font-style: normal;
     font-weight: 400;
-    src: url(".fonts/Merriweather-Regular.ttf")
+    src: url("#{$additional-font-path}/Merriweather-Regular.ttf")
         format("truetype");
 }
 
@@ -208,7 +208,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Merriweather";
     font-style: bold;
     font-weight: 700;
-    src: url(".fonts/Merriweather-Bold.ttf")
+    src: url("#{$additional-font-path}/Merriweather-Bold.ttf")
         format("truetype");
 }
 
