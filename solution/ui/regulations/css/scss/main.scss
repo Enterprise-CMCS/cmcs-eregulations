@@ -9,8 +9,8 @@
 @import 'normalize';
 
 // CMS Design System
-@import '@cmsgov/design-system/dist/css/index.css';
-@import '@cmsgov/design-system/dist/css/core-theme.css';
+@import '@cmsgov/design-system/dist/css/index';
+@import '@cmsgov/design-system/dist/css/core-theme';
 
 $fa-font-path: "../fonts/webfonts" !default;
 $additional-font-path: "../fonts" !default;
