@@ -12,6 +12,7 @@ export class EnvironmentConfig {
 
   constructor(
     public readonly branchName: string,
+    public readonly account?: string,
     public readonly prNumber?: string
   ) {
     // Determine if this is an experimental (PR) environment
@@ -28,8 +29,8 @@ export class EnvironmentConfig {
     // Set IAM path and permissions boundary ARN based on the environment
     this.iamPath = this.isExperimental ? '/delegatedadmin/developer/' : '/delegatedadmin/developer/';
     this.iamPermissionsBoundaryArn = this.isExperimental
-      ? 'arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy'
-      : 'arn:aws:iam::910670052382:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy';
+      ? `arn:aws:iam::${account}:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy`
+      : `arn:aws:iam::${account}:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy`;
   }
 
   // Determine the environment based on the branch name

@@ -13,7 +13,7 @@ async function main() {
   const region = process.env.AWS_DEFAULT_REGION;
   const stage = process.env.STAGE;
 
-  const config = new EnvironmentConfig(branchName, prNumber);
+  const config = new EnvironmentConfig(branchName, account, prNumber);
 
   const customSynthesizer = new cdk.DefaultStackSynthesizer({
     qualifier: 'one',
