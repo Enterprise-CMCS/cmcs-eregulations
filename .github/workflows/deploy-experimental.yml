@@ -158,7 +158,7 @@ jobs:
             npm install -g aws-cdk @aws-sdk/client-ssm
             npm install
              npx cdk deploy "*redirect-api" \
-            -c environment=${{ env.ENVIRONMENT_NAME }}\
+            -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never
             popd              
   deploy-text-extractor:
