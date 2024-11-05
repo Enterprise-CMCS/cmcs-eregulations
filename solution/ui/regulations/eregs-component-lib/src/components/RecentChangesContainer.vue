@@ -21,6 +21,11 @@ export default {
             type: String,
             required: true,
         },
+        homeUrl: {
+            type: String,
+            required: false,
+            default: "/",
+        },
         type: {
             type: String,
             required: false,
@@ -48,7 +53,9 @@ export default {
 
     provide() {
         return {
-            itemTitleLineLimit: 3,
+            homeUrl: this.homeUrl,
+            itemTitleLineLimit: 9,
+            currentRouteName: "homepage",
         };
     },
 
@@ -56,7 +63,7 @@ export default {
         async getRules(catsObj = {}) {
             const args = {
                 page: 1,
-                pageSize: 3,
+                pageSize: 5,
                 type: this.type,
                 ...catsObj,
             };
@@ -86,6 +93,7 @@ export default {
         <RecentSupplementalContent
             v-if="!loading && type == 'supplemental'"
             :supplemental-content="rules"
+            :limit="5"
         />
     </div>
 </template>

@@ -10,9 +10,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
-            "**/v3/resources/public/federal_register_links?page=1&page_size=3**",
-            { fixture: "frdocs.json" }
+            "**/v3/resources/public/federal_register_links?page=1&page_size=5**",
+            { fixture: "frdocs.json" },
         ).as("frdocs");
+        cy.intercept("**/v3/resources/public/links?page=1&page_size=5**", {
+            fixture: "recent-guidance.json",
+        }).as("recentGuidance");
     });
 
     it("loads the homepage", () => {
@@ -59,6 +62,14 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container .v-tabs")
             .contains("Recent Rules")
             .click({ force: true });
+
+        cy.get(".recent-rules-descriptive-text")
+            .first()
+            .should(($el) => {
+                expect($el.text().trim()).to.equal(
+                    "Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 95, 155-156",
+                );
+            });
 
         cy.get(".related-rule").should("have.length", 7);
         cy.get(".related-rule.ungrouped").then(($els) => {
@@ -235,7 +246,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
 
         cy.url().should("eq", Cypress.config().baseUrl + "/45/95/");
         cy.contains(
-            "General Administration—Grant Programs (Public Assistance, Medical Assistance and State Children's Health Insurance Programs)"
+            "General Administration—Grant Programs (Public Assistance, Medical Assistance and State Children's Health Insurance Programs)",
         );
     });
 
@@ -250,7 +261,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".cta .about-text__container p").should(($el) => {
             expect($el.text().replace(/\s+/g, " ").trim()).to.equal(
-                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials."
+                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials.",
             );
         });
     });
@@ -273,25 +284,32 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/search/?q=%22public%20health%20emergency%22`
+                `/search/?q=%22public%20health%20emergency%22`,
         );
     });
 
-    it("has Recent Subregulatory Guidance tab and results", () => {
+    it("has Recent Subregulatory Guidance tab and results with clickable subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
         cy.wait("@categories");
-        cy.get(".recent-rules-descriptive-text")
-            .first()
-            .should(($el) => {
-                expect($el.text().trim()).to.equal(
-                    "Includes 42 CFR 400, 430-460, 600, and 45 CFR 95"
-                );
-            });
+        cy.get(".recent-rules-descriptive-text").should("not.exist");
         cy.get(".resources__container")
             .contains("View More Guidance")
             .should("not.exist");
+        cy.get(".document__subjects a")
+            .eq(0)
+            .should("have.text", "Administrative Claiming Fixture Value");
+        cy.get(".document__subjects a")
+            .eq(1)
+            .should("have.text", "Cost Allocation");
+        cy.get(`a[data-testid=add-subject-chip-157]`)
+            .should("have.attr", "title")
+            .and("include", "Public Assistance Cost Allocation");
+        cy.get(`a[data-testid=add-subject-chip-157]`).click({
+            force: true,
+        });
+        cy.url().should("include", "/subjects/?subjects=157");
     });
 
     it("loads the last parser success date from the API endpoint and displays it in footer", () => {

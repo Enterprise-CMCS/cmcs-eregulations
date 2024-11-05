@@ -435,7 +435,7 @@
                     flex: 2;
 
                     .rules-container {
-                        margin: 12px 0;
+                        margin: 16px 0 0;
 
                         .related-rule-list {
                             margin-top: 20px;
@@ -510,18 +510,32 @@
                         font-weight: 400;
                     }
 
-                    .supplemental-content-date {
-                        color: $mid_gray;
-                        font-weight: 400;
-                        padding-right: $spacer-1;
-                        margin-right: $spacer-1;
-                        font-size: $font-size-sm;
+                    .supplemental-content-list {
+                        .spacer {
+                            margin-top: var(--spacer-5);
+                        }
                     }
 
-                    .supplemental-content-title {
-                        color: $mid_gray;
-                        font-weight: 400;
-                        font-size: $font-size-sm;
+                    .supplemental-content {
+                        margin-bottom: unset;
+
+                        .supplemental-content-date {
+                            color: $mid_gray;
+                            font-weight: 400;
+                            padding-right: $spacer-1;
+                            margin-right: $spacer-1;
+                            font-size: $font-size-sm;
+                        }
+
+                        .supplemental-content-title {
+                            color: $mid_gray;
+                            font-weight: 400;
+                            font-size: $font-size-sm;
+                        }
+                    }
+
+                    .document__subjects {
+                        margin-top: var(--spacer-1);
                     }
                 }
 

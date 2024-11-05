@@ -39,6 +39,7 @@ provider:
     CUSTOM_URL: ${ssm:/eregulations/custom_url}
     SURVEY_URL: ${ssm:/eregulations/survey_url}
     SIGNUP_URL: ${ssm:/eregulations/signup_url}
+    DEMO_VIDEO_URL: ${ssm:/eregulations/demo_video_url}
     OIDC_RP_CLIENT_ID:  ${ssm:/eregulations/oidc/client_id}
     OIDC_RP_CLIENT_SECRET: ${ssm:/eregulations/oidc/client_secret}
     OIDC_OP_AUTHORIZATION_ENDPOINT: ${ssm:/eregulations/oidc/authorization_endpoint}

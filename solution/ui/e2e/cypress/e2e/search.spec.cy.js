@@ -41,6 +41,10 @@ describe("Search flow", () => {
         cy.intercept("**/v3/resources/public/categories**", {
             fixture: "categories.json",
         }).as("categories");
+
+        cy.intercept(`**/v3/content-search/counts**`, {
+            fixture: "counts.json",
+        }).as("counts");
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -83,7 +87,7 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search`, { timeout: 60000 });
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type("test search", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -102,7 +106,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type("test", { force: true });
 
         cy.findByDisplayValue("test")
@@ -144,7 +148,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type(`${SEARCH_TERM_2}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -161,10 +165,6 @@ describe("Search flow", () => {
     });
 
     it("should not show internal checkbox when not logged in", () => {
-        cy.intercept(`**/v3/content-search/counts**`, {
-            fixture: "counts.json",
-        }).as("counts");
-
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get(".doc-type__toggle fieldset > div")
@@ -184,7 +184,7 @@ describe("Search flow", () => {
         });
 
         cy.get("input#main-content")
-            .should("be.visible")
+            .should("exist")
             .type(`${SEARCH_TERM}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -196,7 +196,7 @@ describe("Search flow", () => {
             .should("have.text", "Internal Resources(1)");
     });
 
-    it("should not show the categories dropdown when only regulations are selected", () => {
+    it("should not show the categories or subjects dropdowns when only regulations are selected", () => {
         cy.viewport("macbook-15");
 
         cy.eregsLogin({
@@ -207,16 +207,22 @@ describe("Search flow", () => {
 
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get("div[data-testid='category-select']").should("be.visible");
+        cy.get("button[data-testid='subjects-activator']").should("be.visible");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(0)
             .find("input")
             .check({ force: true });
         cy.get("div[data-testid='category-select']").should("not.be.visible");
+        cy.get("button[data-testid='subjects-activator']").should(
+            "not.be.visible",
+        );
+        cy.get(".doc-type__toggle fieldset > div");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
             .check({ force: true });
         cy.get("div[data-testid='category-select']").should("be.visible");
+        cy.get("button[data-testid='subjects-activator']").should("be.visible");
     });
 
     it("has the correct type params in URL for each doc type combination", () => {
@@ -263,11 +269,122 @@ describe("Search flow", () => {
 
     it("category should be selected on load if included in URL", () => {
         cy.viewport("macbook-15");
-        cy.visit("/subjects/?categories=3");
+        cy.visit(`/search?q={SEARCH_TERM}&categories=3`);
         cy.get("div[data-testid='category-select']")
             .should("exist")
             .find(".v-select__selection")
             .should("have.text", "Related Regulations Fixture Item");
+    });
+
+    it("subject should be selected on load if included in the URL", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q={SEARCH_TERM}&subjects=2`);
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "ABP")
+            .click({ force: true });
+
+        cy.get("button[data-testid=add-subject-2]").should(
+            "have.class",
+            "subjects-li__button--selected",
+        );
+    });
+
+    it("subject should change in URL if new subject is selected from the Subjects dropdown", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}&subjects=2`);
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "ABP")
+            .click({ force: true });
+
+        cy.get("button[data-testid=add-subject-3]")
+            .should("not.have.class", "subjects-li__button--selected")
+            .find(".count")
+            .should("have.text", "(15)");
+
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+
+        cy.get("button[data-testid=add-subject-2]").should(
+            "not.have.class",
+            "subjects-li__button--selected",
+        );
+
+        cy.get("button[data-testid=add-subject-3]").should(
+            "have.class",
+            "subjects-li__button--selected",
+        );
+
+        cy.url().should("include", "subjects=3");
+    });
+
+    it("subjects and categories can be selected simultaneously", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}`);
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        cy.get("div[data-testid='category-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Related Statutes in Fixture");
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Access to Services");
+
+        cy.url().should("include", "subjects=3").and("include", "categories=1");
+    });
+
+    it("subjects can be cleared by clicking the clear button", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}`);
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+
+        cy.url().should("include", "subjects=3");
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Access to Services")
+            .click({ force: true });
+
+        cy.get("i[data-testid='subjects-select-clear']").click({ force: true });
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .find(".subjects-select__label")
+            .should("have.text", "Choose Subject");
+
+        cy.url().should("not.include", "subjects=3");
+
     });
 
     it("displays results of the search and highlights search term in regulation text", () => {

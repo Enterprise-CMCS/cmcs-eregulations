@@ -36,7 +36,7 @@
             <collapsible
                 :name="name"
                 state="collapsed"
-                class="category-content"
+                class="collapse-content"
                 overflow
             >
                 <supplemental-content-category

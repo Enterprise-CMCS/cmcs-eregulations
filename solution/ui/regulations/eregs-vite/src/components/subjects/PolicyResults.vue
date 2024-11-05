@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 
 import _isEmpty from "lodash/isEmpty";
 
-import { formatDate, locationUrl } from "utilities/filters";
+import { formatDate } from "utilities/filters";
 import {
     createRegResultLink,
     deserializeResult,
@@ -12,6 +12,9 @@ import {
     getFileTypeButton,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
+
+import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue";
+import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
@@ -108,6 +111,20 @@ const getResultSnippet = (item) => {
 
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
+const getCollapseName = (doc) =>
+    `related citations collapsible ${doc.id ?? doc.node_id}`;
+
+const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
+    const regCitations = doc.cfr_citations
+        ? doc.cfr_citations.filter((location) => {
+              const { part } = location;
+              return partsLastUpdated[part];
+          })
+        : [];
+
+    return regCitations.length > 0;
+};
+
 export default {
     addSurroundingEllipses,
     getParentCategoryName,
@@ -115,6 +132,8 @@ export default {
     getResultSnippet,
     partDocumentTitleLabel,
     showResultSnippet,
+    getCollapseName,
+    hasRegulationCitations,
 };
 </script>
 
@@ -156,10 +175,6 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    view: {
-        type: String,
-        default: undefined,
-    },
 });
 
 const $route = useRoute();
@@ -175,19 +190,19 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-        ? createRegResultLink(
-              {
-                  date: doc.date,
-                  headline: doc.content_headline,
-                  part_number: doc.part_number,
-                  section_number: doc.node_id,
-                  section_title: doc.title,
-                  title: doc.reg_title,
-              },
-              homeUrl,
-              $route.query?.q
-          )
-        : doc.url;
+          ? createRegResultLink(
+                {
+                    date: doc.date,
+                    headline: doc.content_headline,
+                    part_number: doc.part_number,
+                    section_number: doc.node_id,
+                    section_title: doc.title,
+                    title: doc.reg_title,
+                },
+                homeUrl,
+                $route.query?.q
+            )
+          : doc.url;
 
 const needsBar = (item) => item.date && item.document_id;
 
@@ -209,12 +224,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 
 <template>
     <div class="doc__list">
-        <h2
-            v-if="view !== 'search' && searchQuery"
-            class="search-results__heading"
-        >
-            Search Results
-        </h2>
         <div class="search-results-count">
             <span v-if="results.length > 0"
                 >{{ currentPageResultsRange[0] }} -
@@ -223,17 +232,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             {{ resultsCount }} <span v-if="searchQuery">result</span
             ><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
-            <template v-if="view !== 'search'">
-                <span v-if="searchQuery">
-                    for
-                    <span class="search-query__span">{{
-                        searchQuery
-                    }}</span></span
-                >
-                <span v-if="searchQuery && selectedSubjectParts[0]">
-                    within {{ selectedSubjectParts[1][0] }}</span
-                >
-            </template>
         </div>
         <slot name="empty-state"></slot>
         <ResultsItem
@@ -331,13 +329,38 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 </div>
             </template>
             <template #sections>
-                <RelatedSections
-                    v-if="doc.type !== 'reg_text'"
-                    :base="homeUrl"
-                    :item="doc"
-                    :parts-last-updated="partsLastUpdated"
-                    label="Related Regulation Citation"
-                />
+                <CollapseButton
+                    v-if="
+                        doc.type !== 'reg_text' &&
+                        hasRegulationCitations({ doc, partsLastUpdated })
+                    "
+                    :name="getCollapseName(doc)"
+                    state="collapsed"
+                    class="related-citations__btn--collapse"
+                >
+                    <template #expanded
+                        >Hide Related Citations
+                        <i class="fa fa-chevron-up"></i>
+                    </template>
+                    <template #collapsed
+                        >Show Related Citations
+                        <i class="fa fa-chevron-down"></i>
+                    </template>
+                </CollapseButton>
+                <Collapsible
+                    :name="getCollapseName(doc)"
+                    state="collapsed"
+                    class="collapse-content"
+                    overflow
+                >
+                    <RelatedSections
+                        v-if="doc.type !== 'reg_text'"
+                        :base="homeUrl"
+                        :item="doc"
+                        :parts-last-updated="partsLastUpdated"
+                        label="Regulations"
+                    />
+                </Collapsible>
             </template>
         </ResultsItem>
     </div>

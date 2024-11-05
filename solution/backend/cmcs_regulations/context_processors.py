@@ -30,6 +30,12 @@ def survey_url(request):
     }
 
 
+def demo_video_url(request):
+    return {
+        "DEMO_VIDEO_URL": settings.DEMO_VIDEO_URL
+    }
+
+
 def signup_url(request):
     return {
         "SIGNUP_URL": settings.SIGNUP_URL

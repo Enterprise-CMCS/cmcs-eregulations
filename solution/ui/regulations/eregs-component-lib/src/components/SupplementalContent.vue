@@ -168,10 +168,10 @@ export default {
         });
         this.categories = getDefaultCategories();
     },
-    beforeDestroy() {
+    beforeUnmount() {
         eventbus.off(EventCodes.SetSection);
     },
-    destroyed() {
+    unmounted() {
         window.removeEventListener("hashchange", this.handleHashChange);
     },
 

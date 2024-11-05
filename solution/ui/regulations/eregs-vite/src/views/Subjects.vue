@@ -8,11 +8,7 @@ import useRemoveList from "composables/removeList";
 import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
-import {
-    getLastUpdatedDates,
-    getInternalSubjects,
-    getTitles,
-} from "utilities/api";
+import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
@@ -20,7 +16,7 @@ import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
-import FetchCategoriesContainer from "@/components/dropdowns/fetchCategoriesContainer.vue";
+import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -67,8 +63,12 @@ provide("FilterTypesDict", FilterTypesDict);
 
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
-const policySelectionsRemoveList = ["subjects"];
-const searchInputRemoveList = commonRemoveList.concat(["q"]);
+const policySelectionsRemoveList = ["subjects", "q"];
+const searchInputRemoveList = commonRemoveList.concat([
+    "q",
+    "type",
+    "categories",
+]);
 
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
@@ -94,12 +94,6 @@ const allDocTypesOnly = (queryParams) => {
     return false;
 };
 
-// search query refs and methods
-const searchQuery = ref($route.query.q || "");
-const clearSearchQuery = () => {
-    searchQuery.value = "";
-};
-
 const executeSearch = (payload) => {
     const routeClone = { ...$route.query };
 
@@ -108,29 +102,9 @@ const executeSearch = (payload) => {
         removeList: searchInputRemoveList,
     });
 
-    $router.push({
-        name: "subjects",
-        query: {
-            ...cleanedRoute,
-            q: payload.query,
-        },
-    });
-};
-
-const clearSearchInput = () => {
-    const routeClone = { ...$route.query };
-
-    const cleanedRoute = useRemoveList({
-        route: routeClone,
-        removeList: searchInputRemoveList,
-    });
-
-    $router.push({
-        name: "subjects",
-        query: {
-            ...cleanedRoute,
-        },
-    });
+    const redirectParams = new URLSearchParams(cleanedRoute);
+    const redirectPath = `${homeUrl}search/?${redirectParams.toString() ? redirectParams.toString() + "&" : ""}q=${payload.query}`;
+    window.location.assign(redirectPath);
 };
 
 // partsLastUpdated fetch for related regulations citations filtering
@@ -191,11 +165,6 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         return;
     }
 
-    if (paramType === "q") {
-        searchQuery.value = paramValue;
-        return;
-    }
-
     const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
     paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
@@ -230,7 +199,7 @@ const setDocumentTitle = (subjectId, subjectList) => {
 // called on load
 const getDocSubjects = async () => {
     try {
-        const subjectsResponse = await getInternalSubjects({
+        const subjectsResponse = await getSubjects({
             apiUrl,
         });
 
@@ -252,7 +221,6 @@ const getDocSubjects = async () => {
         if (!allDocTypesOnly($route.query)) {
             // wipe everything clean to start
             clearSelectedParams();
-            clearSearchQuery();
 
             // now that everything is cleaned, iterate over new query params
             Object.entries($route.query).forEach((param) => {
@@ -290,6 +258,18 @@ const setSelectedSubjectParts = () => {
     }
 };
 
+const getSearchInputLabel = (selectedSubjectParts) => {
+    if (policyDocSubjects.value.loading) {
+        return "Loading...";
+    }
+
+    if (selectedSubjectParts.length) {
+        return `Search within ${selectedSubjectParts[0][0] || selectedSubjectParts[1][0]}`;
+    }
+
+    return "Search for a document";
+};
+
 watch(
     () => policyDocSubjects.value.loading,
     async (newLoading) => {
@@ -323,7 +303,6 @@ watch(
 
         // wipe everything clean to start
         clearSelectedParams();
-        clearSearchQuery();
 
         const sanitizedQueryParams = Object.entries(newQueryParams).filter(
             ([key]) => PARAM_VALIDATION_DICT[key]
@@ -408,16 +387,6 @@ getDocSubjects();
                         <template #selections>
                             <PolicySelections />
                         </template>
-                        <template #search>
-                            <SearchInput
-                                form-class="search-form"
-                                label="Search for a document"
-                                parent="subjects"
-                                :search-query="searchQuery"
-                                @execute-search="executeSearch"
-                                @clear-form="clearSearchInput"
-                            />
-                        </template>
                         <template #filters>
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
@@ -435,7 +404,7 @@ getDocSubjects();
                     />
                     <template v-else>
                         <div
-                            v-if="selectedSubjectParts.length && !searchQuery"
+                            v-if="selectedSubjectParts.length"
                             class="subject__heading"
                         >
                             <SelectedSubjectHeading
@@ -444,9 +413,10 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
-                            <FetchCategoriesContainer
+                            <FetchItemsContainer
                                 v-slot="slotProps"
-                                :categories-capture-function="setCategories"
+                                items-to-fetch="categories"
+                                :items-capture-function="setCategories"
                             >
                                 <CategoriesDropdown
                                     :list="slotProps.data"
@@ -457,7 +427,18 @@ getDocSubjects();
                                     "
                                     parent="subjects"
                                 />
-                            </FetchCategoriesContainer>
+                            </FetchItemsContainer>
+                        </div>
+                        <div class="subject__search--row">
+                            <SearchInput
+                                form-class="search-form"
+                                :label="
+                                    getSearchInputLabel(selectedSubjectParts)
+                                "
+                                parent="subjects"
+                                redirect-to="search"
+                                @execute-search="executeSearch"
+                            />
                         </div>
                         <template
                             v-if="
@@ -470,16 +451,12 @@ getDocSubjects();
                         <template v-else-if="policyDocList.error">
                             <div class="doc__list">
                                 <h2
-                                    v-if="
-                                        !selectedSubjectParts.length ||
-                                        searchQuery
-                                    "
+                                    v-if="!selectedSubjectParts.length"
                                     class="search-results__heading"
                                 >
                                     Search Results
                                 </h2>
                                 <SearchErrorMsg
-                                    :search-query="searchQuery"
                                     show-apology
                                     :survey-url="surveyUrl"
                                 />
@@ -494,7 +471,6 @@ getDocSubjects();
                                 :page-size="pageSize"
                                 :parts-last-updated="partsLastUpdated.results"
                                 :has-editable-job-code="hasEditableJobCode"
-                                :search-query="searchQuery"
                                 :selected-subject-parts="selectedSubjectParts"
                             />
                             <div class="pagination-expand-row">
