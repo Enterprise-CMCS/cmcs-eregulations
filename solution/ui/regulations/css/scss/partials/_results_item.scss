@@ -6,7 +6,7 @@
 
 @mixin common-context-related-sections {
     color: $mid_gray;
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     font-weight: 400;
     line-height: 22px;
 }
@@ -84,7 +84,7 @@
     }
 
     &__link {
-        font-size: $font-size-md;
+        font-size: var(--font-size-md);
         margin-bottom: 8px;
 
         a {
@@ -106,7 +106,7 @@
     }
 
     &__snippet {
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
     }
 
     .search-highlight {
@@ -114,7 +114,7 @@
     }
 
     .collapsible-title {
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
         line-height: 22px;
         font-weight: 400;
         width: auto;

@@ -82,11 +82,11 @@ header {
         }
 
         @mixin header--brand-type {
-            font-size: $font-size-lg;
+            font-size: var(--font-size-lg);
             line-height: 36px;
 
             @include custom-max(($eds-width-sm - 1) / 1px) {
-                font-size: $font-size-sm;
+                font-size: var(--font-size-sm);
                 line-height: 18px;
             }
         }
@@ -199,7 +199,7 @@ header {
                             }
 
                             .header--links__anchor {
-                                font-size: $font-size-md;
+                                font-size: var(--font-size-md);
                                 line-height: 22px;
                                 color: $mid-gray;
                                 text-decoration: none;
@@ -278,7 +278,7 @@ header {
                     height: $header_input_height_wide;
                     width: 100%;
                     max-width: 320px;
-                    padding: $spacer-1 0 $spacer-1 $spacer-2;
+                    padding: var(--spacer-1) 0 var(--spacer-1) var(--spacer-2);
                     border: 1px solid $light_gray;
                     border-right: none;
                     border-radius: 3px 0 0 3px;
@@ -448,7 +448,7 @@ header {
                                 flex-grow: 1;
                                 width: 0;
                                 margin: 0.25rem 0;
-                                font-size: $font-size-sm;
+                                font-size: var(--font-size-sm);
                             }
                         }
 

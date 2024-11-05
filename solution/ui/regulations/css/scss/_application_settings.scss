@@ -192,7 +192,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Open Sans";
     font-style: italic;
     font-weight: 700;
-    src: url("#{$additional-font-path}/OpenSans-BoldItalic.ttf")
+    src: url(".fonts/OpenSans-BoldItalic.ttf")
         format("truetype");
 }
 
@@ -200,7 +200,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Merriweather";
     font-style: normal;
     font-weight: 400;
-    src: url("#{$additional-font-path}/Merriweather-Regular.ttf")
+    src: url(".fonts/Merriweather-Regular.ttf")
         format("truetype");
 }
 
@@ -208,11 +208,11 @@ $policy_subject_close_background_hover: $mid_gray_3;
     font-family: "Merriweather";
     font-style: bold;
     font-weight: 700;
-    src: url("#{$additional-font-path}/Merriweather-Bold.ttf")
+    src: url(".fonts/Merriweather-Bold.ttf")
         format("truetype");
 }
 
-$primary_site_font: $font-sans; // Open Sans
+$primary_site_font: var(--font-sans); // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xxs: 10px;
 $font_size_xs: 12px;
@@ -240,15 +240,16 @@ $font_size_hero_h1_tablet: 20px;
 
 // Uses CMS Design System + a larger screen size
 
-// Custom maxes
-$iphoneSE-max: $width-xs - 1; // 374px
-$mobile-max: $width-md - 1; // 767px
-$tablet-max: $width-lg - 1; // 1023px
-
 $hero-tablet-max: 1080px;
 
 $width-xxs: 320px;
 $width-xs: 375px;
+
+// Custom maxes
+$iphoneSE-max: $width-xs - 1; // 374px
+$mobile-max: var(--width-md) - 1; // 767px
+$tablet-max: var(--width-lg) - 1; // 1023px
+
 
 $width-xxl: 1440px;
 $width-3xl: 1920px; // The largest the site container will get
@@ -276,14 +277,14 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 544px
 @mixin screen-sm {
-    @media (min-width: #{$width-sm}) {
+    @media (min-width: var(--width-sm)) {
         @content;
     }
 }
 
 // 768px
 @mixin screen-md {
-    @media (min-width: #{$width-md}) {
+    @media (min-width: --var(width-md)) {
         @content;
     }
 }
@@ -297,14 +298,14 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 1024px
 @mixin screen-lg {
-    @media (min-width: #{$width-lg}) {
+    @media (min-width: var(--width-lg)) {
         @content;
     }
 }
 
 // 1024px
 @mixin screen-eds-md {
-    @media (min-width: #{$eds-width-md}) {
+    @media (min-width: var(--width-md)) {
         @content;
     }
 }
@@ -318,7 +319,7 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 1280px
 @mixin screen-xl {
-    @media (min-width: #{$width-xl}) {
+    @media (min-width: #{var(--width-xl)}) {
         @content;
     }
 }
@@ -375,7 +376,7 @@ $width-3xl: 1920px; // The largest the site container will get
     color: $primary_indicator_text;
     font-size: 11px;
     padding: 2px 0;
-    border-radius: $border-radius;
+    border-radius: var(--border-radius);
     margin-right: 7px !important;
     display: inline-block;
     width: 42px;
@@ -485,7 +486,7 @@ a {
 // General Settings
 // -------------------------
 
-// For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. $spacer-2)
+// For margins and padding: From the CMS Design System, default to $spacer-* where * is a number between 1–7 (i.e. var(--spacer-2))
 
 $header_height: 104px; // Update if header height changes
 $header_height_mobile: 104px;

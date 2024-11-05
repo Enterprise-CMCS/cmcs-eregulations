@@ -319,7 +319,7 @@
         .top-container {
             width: 100%;
             margin: 0 auto;
-            padding: $spacer-3;
+            padding: var(--spacer-3);
             box-sizing: border-box;
 
             @include screen-lg {
@@ -327,7 +327,7 @@
             }
 
             @include screen-xl {
-                max-width: $width-xl;
+                max-width: var(--width-xl);
             }
 
             @include screen-xxl {
@@ -348,7 +348,7 @@
 
                     .resources__container {
                         margin-right: 0;
-                        padding-bottom: $spacer-3;
+                        padding-bottom: var(--spacer-3);
 
                         .content-tabs {
                             padding-right: 12px;
@@ -522,15 +522,15 @@
                         .supplemental-content-date {
                             color: $mid_gray;
                             font-weight: 400;
-                            padding-right: $spacer-1;
-                            margin-right: $spacer-1;
-                            font-size: $font-size-sm;
+                            padding-right: var(--spacer-1);
+                            margin-right: var(--spacer-1);
+                            font-size: var(--font-size-sm);
                         }
 
                         .supplemental-content-title {
                             color: $mid_gray;
                             font-weight: 400;
-                            font-size: $font-size-sm;
+                            font-size: var(--font-size-sm);
                         }
                     }
 

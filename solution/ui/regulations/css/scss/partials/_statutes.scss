@@ -13,10 +13,10 @@
     }
 
     .statute__container {
-        padding: 0 $spacer-5;
+        padding: 0 var(--spacer-5);
 
         @include screen-xl {
-            padding-left: $spacer-4;
+            padding-left: var(--spacer-4);
         }
 
         .content {

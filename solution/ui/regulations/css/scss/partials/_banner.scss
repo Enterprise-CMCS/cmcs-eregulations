@@ -7,15 +7,15 @@
 .nav-container {
     overflow: auto;
     background: $main_background_color;
-    padding: 0 $spacer-5;
+    padding: 0 var(--spacer-5);
 
     @include screen-xl {
-        padding: 0 $spacer-4;
+        padding: 0 var(--spacer-4);
     }
 
     .content {
         margin: 0 auto;
-        max-width: $text-max-width;
+        max-width: var(--text-max-width);
 
         h1 {
             margin-top: 45px;

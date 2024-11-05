@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 .error-msg__container {
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     margin-bottom: 1em;
 }
 
@@ -68,7 +68,7 @@
         .search-form {
             .search-suggestion {
                 margin: 0px;
-                font-size: $font-size-sm;
+                font-size: var(--font-size-sm);
             }
         }
 
@@ -87,7 +87,7 @@
                     display: block;
                     margin-top: var(--spacer-4);
                     margin-bottom: var(--spacer-5);
-                    font-size: $font-size-lg;
+                    font-size: var(--font-size-lg);
                     line-height: 1.5rem;
                 }
                 .result {
@@ -218,7 +218,7 @@
     .research__title {
         display: flex;
         align-items: center;
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         line-height: 1.5rem;
         font-weight: bold;
         text-transform: capitalize;
@@ -229,7 +229,7 @@
 
     .research__row {
         display: flex;
-        font-size: $font-size-md;
+        font-size: var(--font-size-md);
         border: 1px solid $light_gray;
         border-top: unset;
 

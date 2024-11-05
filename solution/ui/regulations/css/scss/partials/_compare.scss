@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     min-height: $view_compare_height;
-    padding: $spacer-2 $spacer-4;
+    padding: var(--spacer-2) var(--spacer-4);
     background-color: $secondary_color;
     color: $reverse_text_color;
     position: sticky;
@@ -34,8 +34,8 @@
     .view-title {
         font-weight: bold;
         border-right: 1px solid $border_color;
-        padding-right: $spacer-4;
-        margin-right: $spacer-4;
+        padding-right: var(--spacer-4);
+        margin-right: var(--spacer-4);
     }
 
     .view-select {
@@ -44,14 +44,14 @@
 
         select {
             border: none;
-            padding: 0.8em $spacer-4 0.8em $spacer-3;
+            padding: 0.8em var(--spacer-4) 0.8em var(--spacer-3);
             border-radius: 0;
         }
     }
 
     .close-button {
         position: absolute;
-        right: $spacer-4;
+        right: var(--spacer-4);
         cursor: pointer;
         border: none;
         background: none;

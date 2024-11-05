@@ -16,7 +16,7 @@ form .jump-to-input {
     }
 
     .dot {
-        font-size: $font-size-2xl;
+        font-size: var(--font-size-2xl);
         line-height: 1;
         padding: 0 4px;
     }
@@ -34,10 +34,10 @@ form .jump-to-input {
         &.submit {
             display: inline-block;
             line-height: 1;
-            padding: $spacer-1 $spacer-2;
+            padding: var(--spacer-1) var(--spacer-2);
             border: 1px solid $jump_to_submit_disabled;
             color: $jump_to_submit_disabled;
-            border-radius: $border-radius;
+            border-radius: var(--border-radius);
             cursor: not-allowed;
 
             &:hover,
@@ -62,14 +62,14 @@ form .jump-to-input {
 
     label {
         font-weight: 600;
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
     }
 
     select#jumpToTitle,
     select#jumpToPart,
     input#jumpToSection,
     input#jumpBtn {
-        font-size: $font-size_md;
+        font-size: var(--font-size-md);
         font-weight: 700;
         margin-top: 0px;
         margin-bottom: 0px;

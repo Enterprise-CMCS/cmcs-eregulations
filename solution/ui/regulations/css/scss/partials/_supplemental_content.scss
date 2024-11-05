@@ -35,19 +35,19 @@
 }
 
 .related-rule-header {
-    margin-bottom: $spacer-1;
-    font-size: $font-size-sm;
+    margin-bottom: var(--spacer-1);
+    font-size: var(--font-size-sm);
 
     @include screen-xxl {
-        font-size: $font-size-md;
+        font-size: var(--font-size-md);
     }
 }
 
 .related-rule-date {
     color: $primary_link_color;
     font-weight: bold;
-    padding-right: $spacer-1;
-    margin-right: $spacer-1;
+    padding-right: var(--spacer-1);
+    margin-right: var(--spacer-1);
     border-right: 1px solid $title-color;
 }
 
@@ -58,7 +58,7 @@
 
 .related-rule-title {
     text-decoration: none;
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
 
     &:link .link-heading::after {
         @include external-link;
@@ -79,14 +79,14 @@
 
     .related-rule-list {
         .related-rule {
-            margin-bottom: $spacer-3;
+            margin-bottom: var(--spacer-3);
         }
     }
 }
 
 .recent-change {
-    padding: $spacer-2 0 0;
-    font-size: $font-size-sm;
+    padding: var(--spacer-2) 0 0;
+    font-size: var(--font-size-sm);
 
     a {
         text-decoration: none;
@@ -119,15 +119,15 @@
     .supplemental-content-date {
         color: $primary_link_color;
         font-weight: bold;
-        padding-right: $spacer-1;
-        margin-right: $spacer-1;
-        font-size: $font-size-sm;
+        padding-right: var(--spacer-1);
+        margin-right: var(--spacer-1);
+        font-size: var(--font-size-sm);
     }
 
     .result__context--division {
         text-transform: none;
         color: $primary_link_color;
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
         font-weight: bold;
 
         &--bar {
@@ -143,13 +143,13 @@
     .supplemental-content-title {
         color: $primary_link_color;
         font-weight: bold;
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
     }
 
     .supplemental-content-description {
         color: $primary_link_color;
         text-decoration: none;
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
     }
 
     .supplemental-content-external-link {
@@ -194,9 +194,9 @@
     }
 
     .category-description {
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
         font-weight: normal;
-        padding-right: $spacer-4;
+        padding-right: var(--spacer-4);
     }
 
     .category-toggle-container {

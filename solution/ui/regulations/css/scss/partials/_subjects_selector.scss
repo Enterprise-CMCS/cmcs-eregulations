@@ -145,7 +145,7 @@
 
             form {
                 input#subjectReduce {
-                    font-size: $font_size_sm;
+                    font-size: var(--font-size-sm);
                     margin: 0 0 var(--spacer-4) 0;
                     padding-right: var(--spacer-2);
 
@@ -161,7 +161,7 @@
 
             .subjects__list {
                 .subjects__li {
-                    font-size: $font_size_sm;
+                    font-size: var(--font-size-sm);
                     line-height: 22px;
                     margin-bottom: var(--spacer-2);
 

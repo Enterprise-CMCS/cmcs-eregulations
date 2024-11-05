@@ -64,7 +64,7 @@ $left-right-padding: 40px;
                 height: 100%;
                 border-right: 1px solid $light_gray;
                 padding-left: 0px;
-                font-size: $font-size-sm;
+                font-size: var(--font-size-sm);
                 line-height: 18px;
             }
 
@@ -84,7 +84,7 @@ $left-right-padding: 40px;
             display: block;
             background: transparent;
             color: $mid_blue;
-            font-size: $font-size-md * $ratio;
+            font-size: calc(var(--font-size-md) * $ratio);
             font-weight: bold;
             padding: 0 $left-right-padding;
 
@@ -172,7 +172,7 @@ $left-right-padding: 40px;
             }
 
             h2 {
-                font-size: $font-size-2xl * $ratio;
+                font-size: calc(var(--font-size-2xl) * $ratio);
             }
 
             .up-to-date {
@@ -212,7 +212,7 @@ $left-right-padding: 40px;
                 }
 
                 .footnote-section {
-                    font-size: $font_size_sm * $ratio;
+                    font-size: calc(var(--font-size-sm) * $ratio);
                     line-height: 1.5;
                 }
 
@@ -225,7 +225,7 @@ $left-right-padding: 40px;
                         table {
                             th,
                             td {
-                                font-size: $font-size-sm * $ratio;
+                                font-size: calc(var(--font-size-sm) * $ratio);
                             }
 
                             th {
@@ -246,7 +246,7 @@ $left-right-padding: 40px;
 
         .print-footer {
             display: block;
-            font-size: $font-size-md * $ratio;
+            font-size: calc(var(--font-size-md) * $ratio);
         }
     }
 }
