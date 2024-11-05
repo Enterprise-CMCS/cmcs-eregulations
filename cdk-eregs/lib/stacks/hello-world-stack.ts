@@ -19,7 +19,7 @@ export class HelloWorldStack extends cdk.Stack {
     const ssmStack = new SsmParameterStack(this, 'SsmParameterStack', { stage });
 
     // Create the EnvironmentConfig with SSM values
-    const config = new EnvironmentConfig(stage, undefined);
+    const config = new EnvironmentConfig(stage, account, undefined);
     // config.iamPath = ssmStack.ssmParameters.iamPath;
     // config.permissionsBoundaryPolicy = ssmStack.ssmParameters.permissionsBoundaryPolicy;
 
