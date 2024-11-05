@@ -13,7 +13,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             "**/v3/resources/public/federal_register_links?page=1&page_size=5**",
             { fixture: "frdocs.json" },
         ).as("frdocs");
-        cy.intercept("**v3/resources/public/links?page=1&page_size=5", {
+        cy.intercept("**/v3/resources/public/links?page=1&page_size=5**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
     });
@@ -299,7 +299,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .should("not.exist");
         cy.get(".document__subjects a")
             .eq(0)
-            .should("have.text", "Administrative Claiming");
+            .should("have.text", "Administrative Claiming Fixture Value");
         cy.get(".document__subjects a")
             .eq(1)
             .should("have.text", "Cost Allocation");
