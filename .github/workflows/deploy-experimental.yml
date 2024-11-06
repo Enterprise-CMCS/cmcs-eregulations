@@ -152,7 +152,7 @@ jobs:
             ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
             pushd cdk-eregs
-            npm install -g aws-cdk @aws-sdk/client-ssm
+            npm install -g aws-cdk@latest @aws-sdk/client-ssm
             npm install
              npx cdk deploy "*redirect-api" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
