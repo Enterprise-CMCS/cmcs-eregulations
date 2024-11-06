@@ -154,7 +154,7 @@ jobs:
             pushd cdk-eregs
             npm install -g aws-cdk@latest @aws-sdk/client-ssm
             npm install
-             npx cdk deploy "*redirect-api" \
+            cdk deploy "*redirect-api" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never
             popd   
