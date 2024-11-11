@@ -11,7 +11,7 @@
     "build": "npm run build:components && npm run build:main"
   },
   "dependencies": {
-    "chokidar": "^3.6.0",
+    "chokidar": "^4.0.1",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
