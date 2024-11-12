@@ -21,6 +21,17 @@ form .jump-to-input {
         padding: 0 4px;
     }
 
+    select {
+        background-image: url("../images/arrow-both.svg");
+        background-repeat: no-repeat;
+        background-position-x: calc(100% - 8px);
+        background-position-y: 50%;
+
+        &:disabled {
+            background-position-x: calc(100% - 7px);
+        }
+    }
+
     input,
     select {
         background-color: #fff;
@@ -76,7 +87,7 @@ form .jump-to-input {
         padding: 5px 8px;
 
         &:disabled {
-            padding: 4px 7px;
+          padding: 4px 7px;
         }
     }
 
