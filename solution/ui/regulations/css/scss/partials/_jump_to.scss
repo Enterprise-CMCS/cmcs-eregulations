@@ -23,12 +23,12 @@ form .jump-to-input {
 
     input,
     select {
+        background-color: #fff;
         border: 1px solid $light_gray;
         height: 2rem;
     }
 
     input {
-        background-color: #fff;
         color: #000;
 
         &.submit {
@@ -74,6 +74,10 @@ form .jump-to-input {
         margin-top: 0px;
         margin-bottom: 0px;
         padding: 5px 8px;
+
+        &:disabled {
+            padding: 4px 7px;
+        }
     }
 
     select#jumpToTitle {
