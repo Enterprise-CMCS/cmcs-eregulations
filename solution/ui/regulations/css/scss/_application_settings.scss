@@ -212,7 +212,7 @@ $policy_subject_close_background_hover: $mid_gray_3;
         format("truetype");
 }
 
-$primary_site_font: var(--font-sans); // Open Sans
+$primary_site_font: var(--font-family-body); // Open Sans
 $secondary_site_font: "Merriweather", Georgia, serif;
 $font_size_xxs: 10px;
 $font_size_xs: 12px;
