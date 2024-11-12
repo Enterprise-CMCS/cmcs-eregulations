@@ -97,11 +97,9 @@ header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: calc(100% - 4rem);
-
-            @include custom-max(($eds-width-md - 1) / 1px) {
-                width: calc(100% - 2rem);
-            }
+            width: -webkit-fill-available;
+            width: -moz-available;
+            width: stretch;
 
             &--first {
                 height: 56px;
@@ -209,7 +207,9 @@ header {
 
                     &.links__list--wide {
                         display: flex;
+                        flex-direction: row;
                         align-items: center;
+                        margin-block: 0px;
 
                         @include custom-max(($eds-width-sm - 1) / 1px) {
                             display: none;
@@ -283,6 +283,7 @@ header {
                     border-right: none;
                     border-radius: 3px 0 0 3px;
                     outline: none;
+                    margin-block: 0;
 
                     &.hidden {
                         @include custom-max(($eds-width-sm - 1) / 1px) {
