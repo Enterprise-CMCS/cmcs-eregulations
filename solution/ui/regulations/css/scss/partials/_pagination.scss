@@ -1,0 +1,130 @@
+//-----------------------------
+// Pagination
+//-----------------------------
+
+@import "../application_settings";
+
+nav.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    a {
+        text-decoration: none;
+    }
+
+    .pagination-control {
+        min-width: 85px;
+    }
+
+    .left-control .icon {
+        margin-left: 0;
+    }
+
+    .right-control {
+        display: flex;
+        justify-content: end;
+
+        .icon {
+            margin-right: 0;
+        }
+    }
+
+  li {
+      list-style: none;
+      display: inline-block;
+
+      &.page-number-li {
+          width: 44px;
+          text-align: center;
+
+          a {
+              text-decoration: none;
+
+              &:visited {
+                  color: $mid_blue;
+              }
+          }
+
+          min-width: 44px;
+
+          &.selected {
+              font-weight: bold;
+          }
+      }
+
+      &.ellipses {
+          width: 20px;
+          text-align: center;
+      }
+  }
+
+  .list-container ul.pages {
+      padding-left: 0;
+  }
+
+  .desktop-list {
+      @include custom-max($eds-xs-max / 1px) {
+          display: none;
+      }
+  }
+
+  .mobile-list {
+      @include screen-eds-sm {
+          display: none;
+      }
+
+      .mobile-page-number {
+          font-weight: bold;
+      }
+  }
+
+  .direction-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: $mid_blue;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 14px;
+      padding: 12px 0;
+
+      .label {
+          font-weight: 400;
+      }
+
+      .icon {
+          margin: 0 10px -2px;
+      }
+
+      &.disabled {
+          color: $mid_gray_3;
+          cursor: default;
+      }
+  }
+
+  .forward-btn {
+      flex-direction: row;
+
+      .icon {
+          margin-right: 0px;
+      }
+
+      .label {
+          padding-left: 10px;
+      }
+  }
+
+  .back-btn {
+      flex-direction: row-reverse;
+
+      .icon {
+          margin-left: 0px;
+      }
+
+      .label {
+          padding-right: 10px;
+      }
+  }
+}

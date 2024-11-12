@@ -66,24 +66,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-li.page-number-li {
-    width: 44px;
-    text-align: center;
-
-    a {
-        text-decoration: none;
-
-        &:visited {
-            color: $mid_blue;
-        }
-    }
-
-    min-width: 44px;
-
-    &.selected {
-        font-weight: bold;
-    }
-}
-</style>

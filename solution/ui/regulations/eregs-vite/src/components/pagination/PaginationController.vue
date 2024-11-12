@@ -93,32 +93,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-nav.pagination-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    a {
-        text-decoration: none;
-    }
-
-    .pagination-control {
-        min-width: 85px;
-    }
-
-    .left-control .icon {
-        margin-left: 0;
-    }
-
-    .right-control {
-        display: flex;
-        justify-content: end;
-
-        .icon {
-            margin-right: 0;
-        }
-    }
-}
-</style>

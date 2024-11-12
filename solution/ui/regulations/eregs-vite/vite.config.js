@@ -6,13 +6,6 @@ import vuetify from "vite-plugin-vuetify";
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vuetify({ autoImport: true })],
-    css: {
-        preprocessorOptions: {
-            scss: {
-                additionalData: `@import "../css/scss/main.scss";`,
-            },
-        },
-    },
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "src"),

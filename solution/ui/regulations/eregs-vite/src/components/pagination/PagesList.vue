@@ -109,35 +109,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss" scoped>
-li {
-    list-style: none;
-    display: inline-block;
-
-    &.ellipses {
-        width: 20px;
-        text-align: center;
-    }
-}
-
-.list-container ul.pages {
-    padding-left: 0;
-}
-
-.desktop-list {
-    @include custom-max($eds-xs-max / 1px) {
-        display: none;
-    }
-}
-
-.mobile-list {
-    @include screen-eds-sm {
-        display: none;
-    }
-
-    .mobile-page-number {
-        font-weight: bold;
-    }
-}
-</style>
