@@ -184,6 +184,7 @@ aside.left-sidebar {
         &:hover,
         &:focus {
             color: $reverse_link_hover;
+            background: $reverse_background_lighter;
         }
 
         &.subpart-info {
