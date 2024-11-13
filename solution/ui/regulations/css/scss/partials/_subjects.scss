@@ -34,6 +34,7 @@
 
         .ds-c-choice-wrapper {
             padding: 8px;
+            margin-top: 0;
             border: 1px solid $secondary_border_color;
             border-radius: 4px;
 
@@ -50,7 +51,12 @@
                 border-color: $secondary_border_color;
             }
 
+            input {
+                margin-top: 1px;
+            }
+
             label {
+                display: flex;
                 margin: 0;
                 font-size: 14px;
                 line-height: 22px;
