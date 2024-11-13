@@ -22,6 +22,14 @@ label {
     margin-block-start: 0 !important;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 700;
+}
+
 h2,
 h5,
 h6,
@@ -47,6 +55,7 @@ h5 {
 
     ul,
     ol {
+        gap: 0;
         padding-left: 24px;
     }
 }

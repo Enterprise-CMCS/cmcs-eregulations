@@ -35,6 +35,9 @@ $eds-width-header-links: 1240px;
     --eds-spacer-4: 1rem; // 16px
     --eds-spacer-5: 1.5rem; // 24px
     --eds-spacer-6: 2rem; // 32px
+
+    // From CMS Design System v2
+    --text-max-width: 53rem;
 }
 
 @mixin eds-gutters {
