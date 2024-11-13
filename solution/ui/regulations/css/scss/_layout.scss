@@ -22,11 +22,11 @@ body {
     display: block;
     margin: 0 auto;
     position: relative;
-    padding: var(--eds-spacer-3) var(--eds-spacer-5);
+    padding: var(--spacer-3) var(--spacer-5);
 
     @include screen-xl {
         max-width: var(--media-width-xl);
-        padding: var(--eds-spacer-4);
+        padding: var(--spacer-4);
     }
 
     @include screen-xxl {
@@ -83,11 +83,11 @@ aside {
     }
 
     &.right-sidebar {
-        padding: var(--eds-spacer-2);
+        padding: var(--spacer-2);
         border-left: 1px solid $border_color;
 
         @include screen-xl {
-            padding: var(--eds-spacer-2) var(--eds-spacer-4);
+            padding: var(--spacer-2) var(--spacer-4);
         }
 
         @include custom-max($mobile-max / 1px) {
@@ -96,11 +96,11 @@ aside {
     }
 
     & + .match-middle {
-        padding: 0 var(--eds-spacer-2);
+        padding: 0 var(--spacer-2);
         flex: 1;
 
         @include screen-lg {
-            padding: 0 var(--eds-spacer-4);
+            padding: 0 var(--spacer-4);
         }
     }
 
@@ -134,7 +134,7 @@ aside {
 
             @include screen-xl {
                 width: calc(100% - 400px - #{$collapsed-sidebar-width});
-                padding: 0 var(--eds-spacer-6);
+                padding: 0 var(--spacer-6);
             }
 
             @include screen-3xl {

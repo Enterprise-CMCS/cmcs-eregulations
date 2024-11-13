@@ -6,16 +6,16 @@
 
 aside.right-sidebar {
     box-sizing: content-box;
-    padding-top: var(--eds-spacer-5);
-    padding-bottom: var(--eds-spacer-5);
+    padding-top: var(--spacer-5);
+    padding-bottom: var(--spacer-5);
     max-width: 400px;
     position: sticky;
-    height: calc(100vh - #{$header_height_mobile} - #{var(--eds-spacer-5)});
+    height: calc(100vh - #{$header_height_mobile} - #{var(--spacer-5)});
     overflow-y: scroll;
     overflow-x: auto;
 
     @include screen-lg {
-        height: calc(100vh - #{$header_height} - #{var(--eds-spacer-5)});
+        height: calc(100vh - #{$header_height} - #{var(--spacer-5)});
     }
 
     h1 {
@@ -48,9 +48,9 @@ aside.right-sidebar {
         border: 1px solid $primary_link_color;
         text-align: left;
         background: none;
-        padding: var(--eds-spacer-2) var(--eds-spacer-3);
+        padding: var(--spacer-2) var(--spacer-3);
         border-radius: var(--border-radius);
-        margin: 0 auto var(--eds-spacer-2) auto;
+        margin: 0 auto var(--spacer-2) auto;
         width: 100%;
 
         svg {
@@ -130,7 +130,7 @@ aside.right-sidebar {
 
     ul {
         list-style: none;
-        padding: 0 0 var(--eds-spacer-2) 0;
+        padding: 0 0 var(--spacer-2) 0;
 
         li {
             font-size: var(--font-size-sm);
@@ -157,7 +157,7 @@ button.collapsible-title {
     background: none;
     border: none;
     color: $primary_link_color;
-    margin-top: var(--eds-spacer-2);
+    margin-top: var(--spacer-2);
     display: flex;
     border-radius: var(--border-radius);
     text-align: left;
@@ -168,7 +168,7 @@ button.collapsible-title {
     &.subcategory {
         font-size: var(--font-size-sm);
         margin-top: 0;
-        margin-bottom: var(--eds-spacer-2);
+        margin-bottom: var(--spacer-2);
     }
 
     &.visible {
@@ -181,7 +181,7 @@ button.collapsible-title {
 
     &.show-more {
         margin-top: 0;
-        padding-top: var(--eds-spacer-2);
+        padding-top: var(--spacer-2);
     }
 
     .fa {
@@ -201,7 +201,7 @@ button.collapsible-title {
     cursor: pointer;
     width: 100%;
     text-align: left;
-    margin-bottom: var(--eds-spacer-2);
+    margin-bottom: var(--spacer-2);
 
     i {
         float: right;
@@ -211,7 +211,7 @@ button.collapsible-title {
 .show-more-inactive {
     color: $secondary_text_color;
     font-size: var(--font-size-sm);
-    margin-top: var(--eds-spacer-2);
+    margin-top: var(--spacer-2);
 }
 
 .view-all__container {
