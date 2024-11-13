@@ -275,6 +275,7 @@
                     font-weight: 700;
                     font-size: 18px;
                     line-height: 24px;
+                    margin-top: 0px;
                     margin-bottom: 12px;
                 }
 
@@ -428,6 +429,7 @@
                     label {
                         font-size: 12px;
                         color: $mid_gray;
+                        padding-top: var(--eds-spacer-1);
                     }
                 }
 
@@ -683,6 +685,7 @@
             h4 {
                 font-size: 18px;
                 line-height: 24px;
+                margin-block-start: 0px;
             }
 
             p {
