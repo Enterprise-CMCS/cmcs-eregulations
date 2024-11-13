@@ -158,6 +158,24 @@ jobs:
             -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never
             popd   
+      - name: Deploy Maintenance-api Lambda via CDK
+        id: deploy-maintenance-api
+        if: success() && steps.findPr.outputs.number
+        env:
+            PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+            RUN_ID: ${{ github.run_id }}
+            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+            CDK_DEBUG: true
+            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+        run: |
+            pushd cdk-eregs
+            npm install -g aws-cdk@latest @aws-sdk/client-ssm
+            npm install
+            cdk deploy "*maintenance-api" \
+            -c environment=${{ env.ENVIRONMENT_NAME }} \
+            --require-approval never
+            popd   
   deploy-text-extractor:
     environment:
       name: "dev"
