@@ -73,11 +73,11 @@ aside.left-sidebar {
 
     .toc-titles {
         border-radius: var(--border-radius);
-        padding: var(--spacer-1) 0;
-        margin: 0 var(--spacer-2);
+        padding: var(--eds-spacer-1) 0;
+        margin: 0 var(--eds-spacer-2);
 
         h3 {
-            margin: var(--spacer-1) var(--spacer-1) var(--spacer-1) var(--spacer-2) !important;
+            margin: var(--eds-spacer-1) var(--eds-spacer-1) var(--eds-spacer-1) var(--eds-spacer-2) !important;
         }
     }
 
@@ -90,7 +90,7 @@ aside.left-sidebar {
         font-size: var(--font-size-sm);
         font-weight: normal;
         color: $reverse_text_color;
-        padding-right: var(--spacer-4);
+        padding-right: var(--eds-spacer-4);
     }
 
     .toc-subgroup-list {
@@ -98,8 +98,8 @@ aside.left-sidebar {
     }
 
     h3.toc-subgroup-name {
-        margin-left: var(--spacer-4);
-        margin-right: var(--spacer-2);
+        margin-left: var(--eds-spacer-4);
+        margin-right: var(--eds-spacer-2);
         font-size: var(--font-size-md);
         margin-block-start: 1em !important;
         margin-block-end: 1em !important;
@@ -134,15 +134,15 @@ aside.left-sidebar {
         cursor: pointer;
         display: flex;
         justify-content: center;
-        padding: var(--spacer-3) var(--spacer-2) var(--spacer-2); // Helps users by making the toggle target bigger, ~42px square
-        margin-right: var(--spacer-2);
+        padding: var(--eds-spacer-3) var(--eds-spacer-2) var(--eds-spacer-2); // Helps users by making the toggle target bigger, ~42px square
+        margin-right: var(--eds-spacer-2);
         border-radius: var(--border-radius);
     }
 
     // Ridiculous Nested Lists and Links
 
     ul {
-        padding: 0 0 var(--spacer-2) 0 !important;
+        padding: 0 0 var(--eds-spacer-2) 0 !important;
 
         margin-block-start: 1em !important;
         margin-block-end: 1em !important;
@@ -166,8 +166,8 @@ aside.left-sidebar {
 
             &.orphan {
                 .menu-section {
-                    margin-left: var(--spacer-2);
-                    padding-left: var(--spacer-2);
+                    margin-left: var(--eds-spacer-2);
+                    padding-left: var(--eds-spacer-2);
                 }
             }
 
@@ -201,12 +201,12 @@ aside.left-sidebar {
 
     .menu-section {
         display: block;
-        margin: 0 var(--spacer-2);
+        margin: 0 var(--eds-spacer-2);
         border-radius: var(--border-radius);
         padding: 0.25em 1.6em;
 
         @include screen-xl {
-            padding: var(--spacer-1) var(--spacer-4);
+            padding: var(--eds-spacer-1) var(--eds-spacer-4);
         }
 
         &:not(li.active ul a.menu-section) {
@@ -223,7 +223,7 @@ aside.left-sidebar {
         }
 
         li {
-            padding: 0 var(--spacer-2);
+            padding: 0 var(--eds-spacer-2);
         }
     }
 
@@ -269,7 +269,7 @@ aside.left-sidebar {
         cursor: pointer;
         text-transform: uppercase;
         font-weight: 600;
-        padding: var(--spacer-2);
+        padding: var(--eds-spacer-2);
         border-radius: 0;
         line-height: 1.2;
 
@@ -296,7 +296,7 @@ aside.left-sidebar {
         }
 
         &[data-set-state="collapsed"] {
-            padding-left: var(--spacer-3) + var(--spacer-2);
+            padding-left: var(--eds-spacer-3) + var(--eds-spacer-2);
         }
 
         &[data-set-state="expanded"] {

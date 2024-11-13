@@ -115,7 +115,7 @@
 
     .part-title {
         max-width: var(--text-max-width);
-        margin: var(--spacer-5) 0 var(--spacer-3);
+        margin: var(--eds-spacer-5) 0 var(--eds-spacer-3);
     }
 
     h2 {
@@ -267,7 +267,7 @@
     .up-to-date {
         box-sizing: unset;
         max-width: var(--text-max-width);
-        margin: var(--spacer-5) auto 10px !important;
+        margin: var(--eds-spacer-5) auto 10px !important;
         font-size: var(--font-size-sm);
         color: $mid_gray;
 
@@ -275,7 +275,7 @@
             padding: 0 0 0 10px;
 
             &.subpart {
-                padding: 0 var(--spacer-6);
+                padding: 0 var(--eds-spacer-6);
 
                 b {
                     padding-left: 5px;
@@ -283,16 +283,16 @@
             }
 
             & + .part-title {
-                margin: 0 var(--spacer-6);
+                margin: 0 var(--eds-spacer-6);
             }
         }
 
         & + article {
-            margin: 0 auto var(--spacer-5);
+            margin: 0 auto var(--eds-spacer-5);
         }
 
         & + .part-title {
-            margin: 0 auto var(--spacer-3);
+            margin: 0 auto var(--eds-spacer-3);
         }
     }
 }
@@ -300,12 +300,12 @@
 article {
     box-sizing: unset;
     max-width: var(--text-max-width);
-    margin-top: var(--spacer-5);
-    margin-bottom: var(--spacer-4);
+    margin-top: var(--eds-spacer-5);
+    margin-bottom: var(--eds-spacer-4);
 
     @include screen-xxl {
-        margin: var(--spacer-5) auto;
-        padding: 0 var(--spacer-6);
+        margin: var(--eds-spacer-5) auto;
+        padding: 0 var(--eds-spacer-6);
     }
 
     i {
@@ -314,11 +314,11 @@ article {
 
     p,
     section {
-        padding: 0 var(--spacer-3) 0 var(--spacer-3);
+        padding: 0 var(--eds-spacer-3) 0 var(--eds-spacer-3);
 
         @for $i from 1 through 10 {
             &.depth-#{$i} {
-                $left-indent: calc(var(--spacer-3) + var(--spacer-3) * ($i - 1));
+                $left-indent: calc(var(--eds-spacer-3) + var(--eds-spacer-3) * ($i - 1));
 
                 padding-left: $left-indent;
 
@@ -381,7 +381,7 @@ article {
 
 .next-previous {
     display: flex;
-    margin: var(--spacer-7) auto;
+    margin: var(--eds-spacer-7) auto;
 
     .next-prev {
         direction: table-cell;

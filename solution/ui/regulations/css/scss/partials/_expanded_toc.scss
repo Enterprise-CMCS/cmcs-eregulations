@@ -14,7 +14,7 @@ ul.table-of-contents {
 
     h3 {
         margin: 1em 0 1em 0 !important;
-        margin-bottom: var(--spacer-2) !important;
+        margin-bottom: var(--eds-spacer-2) !important;
         margin-block-start: 1em !important;
         margin-block-end: 1em !important;
     }
@@ -22,7 +22,7 @@ ul.table-of-contents {
     li {
         list-style: none;
         color: $secondary_text_color;
-        margin: var(--spacer-3) 0;
+        margin: var(--eds-spacer-3) 0;
 
         .subpart-name {
             font-weight: normal;
@@ -34,11 +34,11 @@ ul.table-of-contents {
         padding-left: 0;
 
         li {
-            margin: 0 0 var(--spacer-1) var(--spacer-2);
+            margin: 0 0 var(--eds-spacer-1) var(--eds-spacer-2);
 
             p {
-                margin-top: var(--spacer-3);
-                margin-bottom: var(--spacer-1);
+                margin-top: var(--eds-spacer-3);
+                margin-bottom: var(--eds-spacer-1);
             }
         }
     }
@@ -59,7 +59,7 @@ ul.table-of-contents {
 
     .toc-section-name {
         flex: 1;
-        margin-left: var(--spacer-2);
+        margin-left: var(--eds-spacer-2);
     }
 
 }

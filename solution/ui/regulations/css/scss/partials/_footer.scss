@@ -16,16 +16,19 @@ footer {
         color: $secondary_text_color;
     }
 
+    h4, h5 {
+        font-family: $secondary_site_font !important;
+        color: $secondary_text_color !important;
+        font-weight: 700 !important;
+        line-height: 1.5 !important;
+    }
+
     h4 {
-        font-family: $secondary_site_font;
-        color: $secondary_text_color;
         margin-top: 0 !important;
         margin-bottom: var(--spacer-2) !important;
     }
 
     h5 {
-        font-family: $secondary_site_font;
-        color: $secondary_text_color;
         margin: 0 !important;
         font-size: var(--font-size-sm);
     }
@@ -100,6 +103,7 @@ footer {
     }
 
     .footer-right {
+        box-sizing: content-box;
         padding: 0 var(--spacer-2);
 
         @include screen-xl {

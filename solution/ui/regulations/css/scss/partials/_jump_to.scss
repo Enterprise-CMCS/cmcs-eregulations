@@ -45,7 +45,7 @@ form .jump-to-input {
         &.submit {
             display: inline-block;
             line-height: 1;
-            padding: var(--spacer-1) var(--spacer-2);
+            padding: var(--eds-spacer-1) var(--eds-spacer-2);
             border: 1px solid $jump_to_submit_disabled;
             color: $jump_to_submit_disabled;
             border-radius: var(--border-radius);

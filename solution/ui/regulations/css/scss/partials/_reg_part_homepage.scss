@@ -5,21 +5,21 @@
 @import "../application_settings";
 
 .reg-part-homepage {
-    margin: var(--spacer-3);
+    margin: var(--eds-spacer-3);
 
     @include screen-lg {
-        margin: var(--spacer-5) 0 var(--spacer-4) var(--spacer-4);
+        margin: var(--eds-spacer-5) 0 var(--eds-spacer-4) var(--eds-spacer-4);
     }
 
     @include screen-xxl {
-        margin: var(--spacer-5) var(--spacer-6);
+        margin: var(--eds-spacer-5) var(--eds-spacer-6);
     }
 
     h1 {
         color: $primary_text_color;
         font-size: calc(var(--font-size-base) * 1.5);
         line-height: 1.4;
-        margin-bottom: var(--spacer-4) !important;
+        margin-bottom: var(--eds-spacer-4) !important;
 
         @include screen-xxl {
             font-size: calc(var(--font-size-base) * 1.9);
@@ -32,7 +32,7 @@
     }
 
     .last-updated {
-        margin-bottom: var(--spacer-4) !important;
+        margin-bottom: var(--eds-spacer-4) !important;
         font-style: italic;
         font-weight: 600;
     }

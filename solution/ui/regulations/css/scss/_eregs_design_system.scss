@@ -14,6 +14,8 @@ $eds-width-header-links: 1240px;
 
 // CSS custom properties
 :root {
+    font-size: 16px;
+
     // Breakpoints
     --eds-width-xs: 320px;
     --eds-width-sm: 780px;
@@ -27,12 +29,12 @@ $eds-width-header-links: 1240px;
     --grid-margin-lg: 2rem;
 
     // Spacing
-    --spacer-1: 0.25rem; // 4px
-    --spacer-2: 0.5rem; // 8px
-    --spacer-3: 0.75rem; // 12px
-    --spacer-4: 1rem; // 16px
-    --spacer-5: 1.5rem; // 24px
-    --spacer-6: 2rem; // 32px
+    --eds-spacer-1: 0.25rem; // 4px
+    --eds-spacer-2: 0.5rem; // 8px
+    --eds-spacer-3: 0.75rem; // 12px
+    --eds-spacer-4: 1rem; // 16px
+    --eds-spacer-5: 1.5rem; // 24px
+    --eds-spacer-6: 2rem; // 32px
 }
 
 @mixin eds-gutters {

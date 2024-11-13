@@ -18,7 +18,7 @@
 }
 
 .subjects__select-container {
-    margin-top: var(--spacer-4);
+    margin-top: var(--eds-spacer-4);
 
     .subjects__list-container {
         @include filter-container-styles;
@@ -115,7 +115,7 @@
                 }
 
                 .count {
-                    margin-left: var(--spacer-1);
+                    margin-left: var(--eds-spacer-1);
                 }
             }
         }
@@ -127,27 +127,27 @@
 //-----------------------------
 
 .subjects__select-container {
-    margin-top: var(--spacer-4);
+    margin-top: var(--eds-spacer-4);
 
     // --menu denotes component is in dropdown menu
     &--menu {
         @include filter-borders;
 
         border-width: 1px;
-        margin-top: var(--spacer-2);
+        margin-top: var(--eds-spacer-2);
 
         .subjects__list-container {
             border: 0;
             margin-block-start: 0;
             margin-block-end: 0;
-            padding: var(--spacer-2);
-            max-height: calc(300px - 2 * var(--spacer-2));
+            padding: var(--eds-spacer-2);
+            max-height: calc(300px - 2 * var(--eds-spacer-2));
 
             form {
                 input#subjectReduce {
                     font-size: var(--font-size-sm);
-                    margin: 0 0 var(--spacer-4) 0;
-                    padding-right: var(--spacer-2);
+                    margin: 0 0 var(--eds-spacer-4) 0;
+                    padding-right: var(--eds-spacer-2);
 
                     &::placeholder {
                         text-align: center;
@@ -163,7 +163,7 @@
                 .subjects__li {
                     font-size: var(--font-size-sm);
                     line-height: 22px;
-                    margin-bottom: var(--spacer-2);
+                    margin-bottom: var(--eds-spacer-2);
 
                     .subjects-li__button {
                         display: flex;

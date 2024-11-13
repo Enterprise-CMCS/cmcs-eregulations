@@ -244,15 +244,17 @@ $hero-tablet-max: 1080px;
 
 $width-xxs: 320px;
 $width-xs: 375px;
+$width-sm: 544px;
+$width-md: 768px;
+$width-lg: 1024px;
+$width-xl: 1280px;
+$width-xxl: 1440px;
+$width-3xl: 1920px; // The largest the site container will get
 
 // Custom maxes
 $iphoneSE-max: $width-xs - 1; // 374px
-$mobile-max: var(--width-md) - 1; // 767px
-$tablet-max: var(--width-lg) - 1; // 1023px
-
-
-$width-xxl: 1440px;
-$width-3xl: 1920px; // The largest the site container will get
+$mobile-max: $width-md - 1; // 767px
+$tablet-max: $width-lg - 1; // 1023px
 
 // 320px, or iPhone 5/iPhone SE (1st gen)
 @mixin screen-xxs {
@@ -277,14 +279,14 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 544px
 @mixin screen-sm {
-    @media (min-width: var(--width-sm)) {
+    @media (min-width: #{$width-sm}) {
         @content;
     }
 }
 
 // 768px
 @mixin screen-md {
-    @media (min-width: --var(width-md)) {
+    @media (min-width: #{$width-md}) {
         @content;
     }
 }
@@ -298,14 +300,14 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 1024px
 @mixin screen-lg {
-    @media (min-width: var(--width-lg)) {
+    @media (min-width: #{$width-lg}) {
         @content;
     }
 }
 
 // 1024px
 @mixin screen-eds-md {
-    @media (min-width: var(--width-md)) {
+    @media (min-width: #{$eds-width-md}) {
         @content;
     }
 }
@@ -319,7 +321,7 @@ $width-3xl: 1920px; // The largest the site container will get
 
 // 1280px
 @mixin screen-xl {
-    @media (min-width: #{var(--width-xl)}) {
+    @media (min-width: #{$width-xl}) {
         @content;
     }
 }

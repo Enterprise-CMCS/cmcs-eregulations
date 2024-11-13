@@ -7,10 +7,10 @@
 .nav-container {
     overflow: auto;
     background: $main_background_color;
-    padding: 0 var(--spacer-5);
+    padding: 0 var(--eds-spacer-5);
 
     @include screen-xl {
-        padding: 0 var(--spacer-4);
+        padding: 0 var(--eds-spacer-4);
     }
 
     .content {
