@@ -35,7 +35,7 @@
 }
 
 .related-rule-header {
-    margin-bottom: var(--eds-spacer-1);
+    margin-bottom: var(--spacer-1);
     font-size: var(--font-size-sm);
 
     @include screen-xxl {
@@ -46,8 +46,8 @@
 .related-rule-date {
     color: $primary_link_color;
     font-weight: bold;
-    padding-right: var(--eds-spacer-1);
-    margin-right: var(--eds-spacer-1);
+    padding-right: var(--spacer-1);
+    margin-right: var(--spacer-1);
     border-right: 1px solid $title-color;
 }
 
@@ -79,13 +79,13 @@
 
     .related-rule-list {
         .related-rule {
-            margin-bottom: var(--eds-spacer-3);
+            margin-bottom: var(--spacer-3);
         }
     }
 }
 
 .recent-change {
-    padding: var(--eds-spacer-2) 0 0;
+    padding: var(--spacer-2) 0 0;
     font-size: var(--font-size-sm);
 
     a {
@@ -119,8 +119,8 @@
     .supplemental-content-date {
         color: $primary_link_color;
         font-weight: bold;
-        padding-right: var(--eds-spacer-1);
-        margin-right: var(--eds-spacer-1);
+        padding-right: var(--spacer-1);
+        margin-right: var(--spacer-1);
         font-size: var(--font-size-sm);
     }
 
@@ -196,7 +196,7 @@
     .category-description {
         font-size: var(--font-size-sm);
         font-weight: normal;
-        padding-right: var(--eds-spacer-4);
+        padding-right: var(--spacer-4);
     }
 
     .category-toggle-container {

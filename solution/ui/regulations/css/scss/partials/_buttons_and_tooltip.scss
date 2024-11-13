@@ -59,6 +59,7 @@
 
     > svg {
         padding-right: 5px;
+        box-sizing: content-box;
     }
 
     path {
@@ -101,6 +102,7 @@
 
     z-index: 3;
     position: absolute;
+    box-sizing: content-box;
 
     p {
         color: $dark_gray;
@@ -241,6 +243,7 @@
                         flex-wrap: wrap;
                         flex-direction: column;
                         padding: 10px 10px 0;
+                        box-sizing: content-box;
 
                         @include screen-sm {
                             height: 180px;
