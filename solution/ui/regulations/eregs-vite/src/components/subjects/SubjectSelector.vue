@@ -233,7 +233,9 @@ const liDownArrowPress = (event) => {
 
 <template>
     <div class="subjects__select-container">
-        <h3 v-if="parent === 'subjects'">By Subject</h3>
+        <h3 v-if="parent === 'subjects'" class="ds-text-heading--lg">
+            By Subject
+        </h3>
         <div class="subjects__list-container">
             <template v-if="props.policyDocSubjects.loading">
                 <div class="subjects__loading">
