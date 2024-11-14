@@ -29,7 +29,7 @@ $left-right-padding: 40px;
     .trigger-btn-container,
     .reg-text .section-info-row,
     .view-resources-link {
-        display: none;
+        display: none !important;
     }
 
     header {
@@ -44,6 +44,10 @@ $left-right-padding: 40px;
             box-shadow: none;
             -webkit-box-shadow: none;
             -moz-box-shadow: none;
+        }
+
+        .header--sign-in {
+            display: none;
         }
 
         .flexbox {
