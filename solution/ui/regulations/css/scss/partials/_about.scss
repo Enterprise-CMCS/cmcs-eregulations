@@ -6,11 +6,11 @@
 
 main.about {
     display: block;
-    margin: var(--eds-spacer-3) auto var(--eds-spacer-7);
+    margin: var(--spacer-3) auto var(--spacer-7);
     max-width: var(--text-max-width);
 
     section {
-        margin-top: var(--spacer-3);
+        margin-top: var(--spacer-5);
         clear: both;
     }
 
@@ -18,7 +18,7 @@ main.about {
         padding: 0;
 
         img {
-            margin-top: var(--spacer-1);
+            margin-top: var(--spacer-2);
         }
     }
 

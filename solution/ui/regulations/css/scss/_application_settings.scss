@@ -50,8 +50,16 @@ h5 {
     margin: 1.67em 0 1.67em 0 !important;
 }
 
+ul,
+ol {
+    gap: 0;
+}
+
 .v-application {
-    font-family: Open Sans, Helvetica, sans-serif;
+    font-family:
+        Open Sans,
+        Helvetica,
+        sans-serif;
 
     .v-application__wrap {
         min-height: unset;
@@ -59,7 +67,6 @@ h5 {
 
     ul,
     ol {
-        gap: 0;
         padding-left: 24px;
     }
 }
@@ -239,10 +246,14 @@ $font_size_hero_h1: 26px;
 $font_size_hero_h1_tablet: 20px;
 
 @mixin font-bold-keep-width {
-    text-shadow: -0.06ex 0 0 currentColor, 0.06ex 0 0 currentColor;
+    text-shadow:
+        -0.06ex 0 0 currentColor,
+        0.06ex 0 0 currentColor;
 
     @supports (-webkit-text-stroke-width: 0.04ex) {
-        text-shadow: -0.03ex 0 0 currentColor, 0.03ex 0 0 currentColor;
+        text-shadow:
+            -0.03ex 0 0 currentColor,
+            0.03ex 0 0 currentColor;
         -webkit-text-stroke-width: 0.1ex;
     }
 }
@@ -537,7 +548,9 @@ select {
     cursor: pointer;
 
     &:focus-visible {
-        box-shadow: 0 0 3px #3e94cf, 0 0 7px #3e94cf;
+        box-shadow:
+            0 0 3px #3e94cf,
+            0 0 7px #3e94cf;
     }
 }
 

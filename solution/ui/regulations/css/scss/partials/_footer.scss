@@ -14,6 +14,7 @@ footer {
         margin: 0 !important;
         font-size: $font-size-xs;
         color: $secondary_text_color;
+        box-sizing: content-box;
     }
 
     h4,
