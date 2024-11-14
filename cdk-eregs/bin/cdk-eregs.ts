@@ -8,6 +8,8 @@ import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
+
 // import { StackFactory } from '../lib/factories/stack-factory';
 // import { getStackConfigs } from '../config/stack-definition';
 async function main() {
@@ -88,6 +90,17 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
+  new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
+    lambdaConfig: {
+      runtime: lambda.Runtime.PYTHON_3_12,
+      memorySize: 1024,
+      timeout: 30,
+    },
+    apiConfig: {
+      loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
+    },
+  }, stageConfig);
+  // Example deployment in app.ts
 
   // Apply aspects
   await applyGlobalAspects(app, stageConfig);

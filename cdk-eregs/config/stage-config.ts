@@ -13,6 +13,7 @@ const AWS_SERVICES = {
   SNS: 'sns',
   SQS: 'sqs',
   EVENTS: 'events',
+  TEXTRACT: 'textract',
 } as const;
 
 /**
