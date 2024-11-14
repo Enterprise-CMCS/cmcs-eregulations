@@ -16,7 +16,8 @@ footer {
         color: $secondary_text_color;
     }
 
-    h4, h5 {
+    h4,
+    h5 {
         font-family: $secondary_site_font !important;
         color: $secondary_text_color !important;
         font-weight: 700 !important;
@@ -51,14 +52,14 @@ footer {
     }
 
     .footer-left {
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             flex: none;
         }
 
         & > * {
             padding: 0 var(--spacer-3) 0 var(--spacer-4);
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max(calc($tablet-max / 1px)) {
                 padding: 0 var(--spacer-4);
             }
         }
@@ -87,7 +88,7 @@ footer {
         & > * {
             padding: 0;
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max(calc($tablet-max / 1px)) {
                 padding: 0 var(--spacer-4);
             }
 
@@ -97,7 +98,7 @@ footer {
             }
         }
 
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             padding: var(--spacer-4) 0;
         }
     }
@@ -110,7 +111,7 @@ footer {
             padding: 0 var(--spacer-4) 0 0;
         }
 
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             flex: none;
             padding: 0;
         }
@@ -118,7 +119,7 @@ footer {
         & > * {
             padding: 0 var(--spacer-5) 0 0;
 
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max(calc($tablet-max / 1px)) {
                 padding: 0 var(--spacer-4);
                 margin-left: 0;
             }
@@ -144,7 +145,7 @@ footer {
 
     // divide to strip unit (px)
     // https://css-tricks.com/snippets/sass/strip-unit-function/
-    @include custom-max($tablet-max / 1px) {
+    @include custom-max(calc($tablet-max / 1px)) {
         & > div {
             // stack footer elements on narrow screens
             flex-direction: column;

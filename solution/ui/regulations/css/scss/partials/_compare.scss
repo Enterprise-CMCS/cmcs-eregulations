@@ -12,7 +12,7 @@
 
     top: $header_height_mobile;
 
-    @include custom-min($eds-width-sm / 1px) {
+    @include custom-min(calc($eds-width-sm / 1px)) {
         top: $header_height;
     }
 

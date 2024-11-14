@@ -30,101 +30,100 @@ nav.pagination-controls {
         }
     }
 
-  li {
-      list-style: none;
-      display: inline-block;
+    li {
+        list-style: none;
+        display: inline-block;
 
-      &.page-number-li {
-          width: 44px;
-          text-align: center;
+        &.page-number-li {
+            width: 44px;
+            text-align: center;
+            min-width: 44px;
 
-          a {
-              text-decoration: none;
+            a {
+                text-decoration: none;
 
-              &:visited {
-                  color: $mid_blue;
-              }
-          }
+                &:visited {
+                    color: $mid_blue;
+                }
+            }
 
-          min-width: 44px;
+            &.selected {
+                font-weight: bold;
+            }
+        }
 
-          &.selected {
-              font-weight: bold;
-          }
-      }
+        &.ellipses {
+            width: 20px;
+            text-align: center;
+        }
+    }
 
-      &.ellipses {
-          width: 20px;
-          text-align: center;
-      }
-  }
+    .list-container ul.pages {
+        padding-left: 0;
+    }
 
-  .list-container ul.pages {
-      padding-left: 0;
-  }
+    .desktop-list {
+        @include custom-max(calc($eds-xs-max / 1px)) {
+            display: none;
+        }
+    }
 
-  .desktop-list {
-      @include custom-max($eds-xs-max / 1px) {
-          display: none;
-      }
-  }
+    .mobile-list {
+        @include screen-eds-sm {
+            display: none;
+        }
 
-  .mobile-list {
-      @include screen-eds-sm {
-          display: none;
-      }
+        .mobile-page-number {
+            font-weight: bold;
+        }
+    }
 
-      .mobile-page-number {
-          font-weight: bold;
-      }
-  }
+    .direction-btn {
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: $mid_blue;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        font-size: 14px;
+        padding: 12px 0;
 
-  .direction-btn {
-      border: none;
-      background: none;
-      cursor: pointer;
-      color: $mid_blue;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      font-size: 14px;
-      padding: 12px 0;
+        .label {
+            font-weight: 400;
+        }
 
-      .label {
-          font-weight: 400;
-      }
+        .icon {
+            margin: 0 10px -2px;
+        }
 
-      .icon {
-          margin: 0 10px -2px;
-      }
+        &.disabled {
+            color: $mid_gray_3;
+            cursor: default;
+        }
+    }
 
-      &.disabled {
-          color: $mid_gray_3;
-          cursor: default;
-      }
-  }
+    .forward-btn {
+        flex-direction: row;
 
-  .forward-btn {
-      flex-direction: row;
+        .icon {
+            margin-right: 0px;
+        }
 
-      .icon {
-          margin-right: 0px;
-      }
+        .label {
+            padding-left: 10px;
+        }
+    }
 
-      .label {
-          padding-left: 10px;
-      }
-  }
+    .back-btn {
+        flex-direction: row-reverse;
 
-  .back-btn {
-      flex-direction: row-reverse;
+        .icon {
+            margin-left: 0px;
+        }
 
-      .icon {
-          margin-left: 0px;
-      }
-
-      .label {
-          padding-right: 10px;
-      }
-  }
+        .label {
+            padding-right: 10px;
+        }
+    }
 }

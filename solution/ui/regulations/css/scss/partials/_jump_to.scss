@@ -87,7 +87,7 @@ form .jump-to-input {
         padding: 5px 8px;
 
         &:disabled {
-          padding: 4px 7px;
+            padding: 4px 7px;
         }
     }
 
@@ -99,11 +99,11 @@ form .jump-to-input {
     select#jumpToPart {
         width: 80px;
 
-        @include custom-max(($eds-width-md - 1) / 1px) {
+        @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
             width: 70px;
         }
 
-        @include custom-max(($eds-width-sm - 1) / 1px) {
+        @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
             width: 65px;
         }
     }
@@ -112,11 +112,11 @@ form .jump-to-input {
         margin-right: 4px;
         width: 65px;
 
-        @include custom-max(($eds-width-sm - 1) / 1px) {
+        @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
             width: 60px;
         }
 
-        @include custom-max(($eds-width-sm - 1) / 1px) {
+        @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
             width: 45px;
         }
     }

@@ -59,14 +59,14 @@
             }
 
             .subjects__filter-reset {
-                @include common-remove-btn-styles;
-
                 top: calc(50% - 0.625rem);
                 right: -3px;
                 transform: translate(-50%);
                 position: absolute;
                 width: 20px;
                 height: 20px;
+
+                @include common-remove-btn-styles;
 
                 &--hidden {
                     display: none;
@@ -94,17 +94,17 @@
                 width: 100%;
 
                 &--selected {
-                    @include font-bold-keep-width;
-
                     pointer-events: none;
+
+                    @include font-bold-keep-width;
                 }
 
                 &:hover,
                 &:focus,
                 &:active {
-                    @include font-bold-keep-width;
-
                     cursor: pointer;
+
+                    @include font-bold-keep-width;
                 }
 
                 .match__container {

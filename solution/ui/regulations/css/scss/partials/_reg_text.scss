@@ -87,7 +87,7 @@
             display: inline;
         }
 
-        @include custom-max($mobile-max / 1px) {
+        @include custom-max(calc($mobile-max / 1px)) {
             > div:first-child {
                 display: none;
             }

@@ -21,7 +21,7 @@ aside.left-sidebar {
     transition: flex-basis 0.25s ease-out;
 
     &[data-state="expanded"] {
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             + .reg-text .tooltip {
                 z-index: 0;
             }
@@ -77,7 +77,8 @@ aside.left-sidebar {
         margin: 0 var(--spacer-2);
 
         h3 {
-            margin: var(--spacer-1) var(--spacer-1) var(--spacer-1) var(--spacer-2) !important;
+            margin: var(--spacer-1) var(--spacer-1) var(--spacer-1)
+                var(--spacer-2) !important;
         }
     }
 
@@ -121,22 +122,22 @@ aside.left-sidebar {
         width: $toc_toggles_width;
         box-sizing: border-box;
 
-        &:hover,
-        &:focus {
-            color: $reverse_link_hover;
-            background: $reverse_background_lighter;
-            @include transition;
-        }
-
         background: none;
         border: none;
-        color: #CCF2FF;
+        color: #ccf2ff;
         cursor: pointer;
         display: flex;
         justify-content: center;
         padding: var(--spacer-3) var(--spacer-2) var(--spacer-2); // Helps users by making the toggle target bigger, ~42px square
         margin-right: var(--spacer-2);
         border-radius: var(--border-radius);
+
+        &:hover,
+        &:focus {
+            color: $reverse_link_hover;
+            background: $reverse_background_lighter;
+            @include transition;
+        }
     }
 
     // Ridiculous Nested Lists and Links
@@ -179,7 +180,7 @@ aside.left-sidebar {
     }
 
     a {
-        color: #CCF2FF;
+        color: #ccf2ff;
 
         &:hover,
         &:focus {
@@ -265,7 +266,7 @@ aside.left-sidebar {
 
     button {
         outline: none;
-        color: #CCF2FF;
+        color: #ccf2ff;
         border: none;
         background: none;
         cursor: pointer;

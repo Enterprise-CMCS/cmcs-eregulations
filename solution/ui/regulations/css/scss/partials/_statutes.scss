@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 .statute-page #statuteApp {
-    @include custom-max(($eds-width-md - 1) / 1px) {
+    @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
         h1 {
             font-size: 36px;
             margin-top: 24px;
@@ -25,7 +25,7 @@
             padding-top: 30px;
             padding-bottom: 30px;
 
-            @include custom-max(($eds-width-md - 1) / 1px) {
+            @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 flex-direction: column;
             }
 

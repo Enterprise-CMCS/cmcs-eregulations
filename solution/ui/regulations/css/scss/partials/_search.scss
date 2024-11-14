@@ -27,8 +27,6 @@
 
 .search-page {
     #searchApp.search-view {
-        @include eds-gutters;
-
         margin-top: var(--spacer-3);
         margin-bottom: var(--spacer-3);
         display: flex;
@@ -36,6 +34,8 @@
         min-height: 300px;
         max-width: var(--eds-width-md);
         box-sizing: content-box;
+
+        @include eds-gutters;
 
         h1 {
             margin-bottom: var(--spacer-2);
