@@ -45,6 +45,13 @@ resources:
         DelaySeconds: 0
         MessageRetentionPeriod: 345600 # 4 days
         VisibilityTimeout: 900
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt DeadLetterQueue.Arn
+          maxReceiveCount: 5 # retry 5 times before moving to dead-letter queue
+    DeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.stage}-text-extractor-dl-queue
     LambdaFunctionRole:
       Type: AWS::IAM::Role
       Properties:
