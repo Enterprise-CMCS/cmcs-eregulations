@@ -13,7 +13,6 @@ class PdfExtractor(Extractor):
     file_types = ("pdf",)
     max_pages = 50
     output_file_type = "jpeg"
-    
 
     def __init__(self, file_type: str, config: dict, *args, **kwargs):
         super().__init__(file_type, config)
