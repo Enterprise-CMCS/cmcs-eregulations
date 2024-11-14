@@ -5,7 +5,6 @@ from unittest.mock import patch
 from extractors import Extractor
 
 
-
 logging.disable(logging.CRITICAL)
 
 
