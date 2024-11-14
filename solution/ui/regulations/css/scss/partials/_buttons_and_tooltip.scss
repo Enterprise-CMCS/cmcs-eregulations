@@ -218,12 +218,12 @@
         &.reg-history-link-container {
             .tooltip.clicked {
                 width: calc(
-                    80% - var(--eds-spacer-2) - var(--eds-spacer-2) - $collapsed-sidebar-width -
+                    80% - var(--spacer-1) - var(--spacer-1) - $collapsed-sidebar-width -
                         40px
                 );
 
                 @include screen-sm {
-                    width: calc(100% - var(--eds-spacer-2) - var(--eds-spacer-2));
+                    width: calc(100% - var(--spacer-1) - var(--spacer-1));
                     max-width: 435px;
                 }
 

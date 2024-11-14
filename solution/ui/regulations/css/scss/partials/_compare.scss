@@ -4,7 +4,7 @@
     display: flex;
     justify-content: center;
     min-height: $view_compare_height;
-    padding: var(--eds-spacer-2) var(--eds-spacer-4);
+    padding: var(--spacer-1) var(--spacer-2);
     background-color: $secondary_color;
     color: $reverse_text_color;
     position: sticky;
@@ -34,8 +34,8 @@
     .view-title {
         font-weight: bold;
         border-right: 1px solid $border_color;
-        padding-right: var(--eds-spacer-4);
-        margin-right: var(--eds-spacer-4);
+        padding-right: var(--spacer-2);
+        margin-right: var(--spacer-2);
     }
 
     .view-select {
@@ -44,14 +44,14 @@
 
         select {
             border: none;
-            padding: 0.8em var(--eds-spacer-4) 0.8em var(--eds-spacer-3);
+            padding: 0.8em var(--spacer-2) 0.8em var(--spacer-1-5);
             border-radius: 0;
         }
     }
 
     .close-button {
         position: absolute;
-        right: var(--eds-spacer-4);
+        right: var(--spacer-2);
         cursor: pointer;
         border: none;
         background: none;

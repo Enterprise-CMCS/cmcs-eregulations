@@ -24,26 +24,17 @@ $eds-width-header-links: 1240px;
 
     --cms-ds-width-sm: 544px;
 
-    // Margins
-    --grid-margin-sm: 1rem;
-    --grid-margin-lg: 2rem;
-
-    // Spacing
-    --eds-spacer-1: 0.25rem; // 4px
-    --eds-spacer-2: 0.5rem; // 8px
-    --eds-spacer-3: 0.75rem; // 12px
-    --eds-spacer-4: 1rem; // 16px
-    --eds-spacer-5: 1.5rem; // 24px
-    --eds-spacer-6: 2rem; // 32px
+    // Custom Spacing
+    --spacer-1-5: 0.75rem; // 12px
 
     // From CMS Design System v2
     --text-max-width: 53rem;
 }
 
 @mixin eds-gutters {
-    padding: 0 var(--grid-margin-sm);
+    padding: 0 var(--grid-form-gutter-width);
 
     @media (min-width: $eds-width-md) {
-        padding: 0 var(--grid-margin-lg);
+        padding: 0 var(--grid-gutter-width);
     }
 }
