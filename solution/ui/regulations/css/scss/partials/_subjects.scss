@@ -486,15 +486,16 @@
 
         .doc-type__toggle fieldset {
             @media (max-width: 475px) {
-                flex-direction: column;
+                flex-wrap: wrap;
             }
         }
 
-        .ds-c-choice-wrapper label {
-            @media (max-width: 475px) {
-                width: calc(100% - 28px);
-                display: flex;
-                justify-content: space-between;
+        .ds-c-choice-wrapper {
+            label {
+                @media (max-width: 475px) {
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
         }
     }
