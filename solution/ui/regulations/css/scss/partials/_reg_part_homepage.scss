@@ -5,10 +5,10 @@
 @import "../application_settings";
 
 .reg-part-homepage {
-    margin: var(--spacer-1-5);
+    margin: var(--spacer-3);
 
     @include screen-lg {
-        margin: var(--spacer-3) 0 var(--spacer-2) var(--spacer-2);
+        margin: var(--spacer-5) 0 var(--spacer-4) var(--spacer-4);
     }
 
     @include screen-xxl {
@@ -19,7 +19,7 @@
         color: $primary_text_color;
         font-size: calc(var(--font-size-base) * 1.5);
         line-height: 1.4;
-        margin-bottom: var(--spacer-2) !important;
+        margin-bottom: var(--spacer-4) !important;
 
         @include screen-xxl {
             font-size: calc(var(--font-size-base) * 1.9);
@@ -32,7 +32,7 @@
     }
 
     .last-updated {
-        margin-bottom: var(--spacer-2) !important;
+        margin-bottom: var(--spacer-4) !important;
         font-style: italic;
         font-weight: 600;
     }
