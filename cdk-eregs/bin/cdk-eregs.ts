@@ -9,6 +9,7 @@ import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-bou
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
+
 // import { StackFactory } from '../lib/factories/stack-factory';
 // import { getStackConfigs } from '../config/stack-definition';
 async function main() {
@@ -99,6 +100,8 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
+  // Example deployment in app.ts
+
   // Apply aspects
   await applyGlobalAspects(app, stageConfig);
 

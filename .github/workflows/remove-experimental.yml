@@ -138,7 +138,7 @@ jobs:
           npm install
           
           # Generate the exact stack name for this PR
-          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance--api"
+          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
           
           echo "Destroying PR-specific stack: ${STACK_NAME}"
           cdk destroy "${STACK_NAME}" \
