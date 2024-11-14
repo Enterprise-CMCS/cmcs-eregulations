@@ -63,6 +63,9 @@ nav.pagination-controls {
     }
 
     .desktop-list {
+        flex-direction: row;
+        margin-block-end: var(--spacer-2);
+
         @include custom-max(calc($eds-xs-max / 1px)) {
             display: none;
         }
