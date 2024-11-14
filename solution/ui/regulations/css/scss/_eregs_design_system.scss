@@ -29,6 +29,9 @@ $eds-width-header-links: 1240px;
 
     // From CMS Design System v2
     --text-max-width: 53rem;
+
+    --text-input__border-width: 1px;
+    --text-input__border-width--disabled: 1px;
 }
 
 @mixin eds-gutters {
