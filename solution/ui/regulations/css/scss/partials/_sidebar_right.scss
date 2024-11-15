@@ -49,7 +49,7 @@ aside.right-sidebar {
         text-align: left;
         background: none;
         padding: var(--spacer-2) var(--spacer-3);
-        border-radius: var(--border-radius);
+        border-radius: var(--radius-default);
         margin: 0 auto var(--spacer-2) auto;
         width: 100%;
 
@@ -159,7 +159,7 @@ button.collapsible-title {
     color: $primary_link_color;
     margin-top: var(--spacer-2);
     display: flex;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius-default);
     text-align: left;
     width: 100%;
     justify-content: space-between;

@@ -406,7 +406,7 @@ $tablet-max: $width-lg - 1; // 1023px
     color: $primary_indicator_text;
     font-size: 11px;
     padding: 2px 0;
-    border-radius: var(--border-radius);
+    border-radius: var(--radius-default);
     margin-right: 7px !important;
     display: inline-block;
     width: 42px;

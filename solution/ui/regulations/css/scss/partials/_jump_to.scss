@@ -48,7 +48,7 @@ form .jump-to-input {
             padding: var(--spacer-half) var(--spacer-1);
             border: 1px solid $jump_to_submit_disabled;
             color: $jump_to_submit_disabled;
-            border-radius: var(--border-radius);
+            border-radius: var(--radius-default);
             cursor: not-allowed;
 
             &:hover,
