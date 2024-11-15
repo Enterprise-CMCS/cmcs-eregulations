@@ -30,8 +30,13 @@ $eds-width-header-links: 1240px;
     // From CMS Design System v2
     --text-max-width: 53rem;
 
+    // ---- CMS Design System Overrides ----
+    // Border overrides
     --text-input__border-width: 1px;
     --text-input__border-width--disabled: 1px;
+
+    // Color overrides
+    --color-focus-dark: #005fcc;
 }
 
 @mixin eds-gutters {
