@@ -70,19 +70,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      - name: deploy hello world CDK stack
-        env:
-          STAGE: ${{ matrix.environment }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-          pushd cdk-eregs
-          npm install -g aws-cdk
-          npm install
-          cdk synth -c stage=${STAGE} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
-          cdk deploy -c stage=${STAGE} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-            ${STAGE}-HelloWorldStack --require-approval never
-          popd
       - name: deploy static assets
         run: |
           pushd solution/static-assets
