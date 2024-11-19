@@ -382,15 +382,16 @@ getDocSubjects();
                     <button class="sidebar-toggle__button">Open/Close</button>
                     <PolicySidebar>
                         <template #title>
-                            <h2>Find Policy Documents</h2>
-                        </template>
-                        <template #selections>
-                            <PolicySelections />
+                            <h2>Research a Subject</h2>
                         </template>
                         <template #filters>
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
-                            />
+                            >
+                                <template #selection>
+                                    <PolicySelections />
+                                </template>
+                            </SubjectSelector>
                         </template>
                     </PolicySidebar>
                 </div>

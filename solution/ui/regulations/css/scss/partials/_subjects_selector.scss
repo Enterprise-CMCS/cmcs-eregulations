@@ -21,8 +21,6 @@
     margin-top: var(--spacer-2);
 
     .subjects__list-container {
-        @include filter-container-styles;
-
         display: flex;
         flex-direction: column;
         min-height: 200px;
@@ -84,6 +82,19 @@
         .subjects__li {
             margin-bottom: 0.75rem;
 
+            &.sidebar__li {
+                font-size: var(--font-size-sm);
+                line-height: var(--line-height-sm);
+                padding: var(--spacer-1);
+                margin-bottom: 0;
+
+                border-bottom: 1px solid $border_color;
+
+                .subtitle {
+                    display: block;
+                }
+            }
+
             &:last-child {
                 margin-bottom: 0;
             }
@@ -105,6 +116,23 @@
                     cursor: pointer;
 
                     @include font-bold-keep-width;
+                }
+
+                .subjects-li__button-text {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    width: 100%;
+
+                    &--sidebar {
+                        @include font-bold-keep-width;
+
+                        color: $primary_link_color;
+                    }
+                }
+
+                .subjects-li__button-subtitle {
+                    color: $primary_link_color;
                 }
 
                 .match__container {

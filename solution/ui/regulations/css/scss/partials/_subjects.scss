@@ -341,6 +341,9 @@
         }
 
         .sidebar-filters__container {
+            position: sticky;
+            top: $header_height;
+
             @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 &--hidden {
                     display: none;

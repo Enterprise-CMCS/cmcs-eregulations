@@ -17,7 +17,7 @@ import useRemoveList from "composables/removeList";
 import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";
 
-import { getSubjectName } from "utilities/filters";
+import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 
@@ -36,7 +36,7 @@ const props = defineProps({
     },
     placeholder: {
         type: String,
-        default: "Filter the subject list",
+        default: "Find a subject",
     },
 });
 
@@ -158,6 +158,14 @@ const subjectClick = (event) => {
     });
 };
 
+const listItemClasses = computed(() => ({
+    sidebar__li: props.parent === "subjects",
+}));
+
+const buttonTextClasses = computed(() => ({
+    "subjects-li__button-text--sidebar": props.parent === "subjects",
+}));
+
 const subjectClasses = (subjectId) => {
     const routeArr = _isArray($route.query.subjects)
         ? $route.query.subjects
@@ -233,9 +241,6 @@ const liDownArrowPress = (event) => {
 
 <template>
     <div class="subjects__select-container">
-        <h3 v-if="parent === 'subjects'" class="ds-text-heading--lg">
-            By Subject
-        </h3>
         <div class="subjects__list-container">
             <template v-if="props.policyDocSubjects.loading">
                 <div class="subjects__loading">
@@ -263,11 +268,13 @@ const liDownArrowPress = (event) => {
                         @click="filterResetClick"
                     ></button>
                 </form>
+                <slot name="selection"></slot>
                 <ul tabindex="-1" class="subjects__list">
                     <li
                         v-for="subject in state.subjects"
                         :key="subject.id"
-                        class="subjects__li sidebar__li"
+                        class="subjects__li"
+                        :class="listItemClasses"
                     >
                         <button
                             :class="subjectClasses(subject.id)"
@@ -279,12 +286,27 @@ const liDownArrowPress = (event) => {
                             @keydown.up.prevent="liUpArrowPress"
                             @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
-                            v-html="
-                                (subject.displayName ||
-                                    getSubjectName(subject)) +
-                                getDisplayCount(subject)
-                            "
-                        ></button>
+                        >
+                            <span
+                                class="subjects-li__button-text"
+                                :class="buttonTextClasses"
+                                v-html="
+                                    (subject.displayName ||
+                                        getSubjectName(subject)) +
+                                    getDisplayCount(subject)
+                                "
+                            ></span>
+                            <span
+                                v-if="
+                                    parent === 'subjects' &&
+                                    !subject.displayName &&
+                                    getSubjectNameParts(subject)[0][1]
+                                "
+                                class="subjects-li__button-subtitle"
+                            >
+                                {{ getSubjectNameParts(subject)[1][0] }}
+                            </span>
+                        </button>
                     </li>
                 </ul>
             </template>
