@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         # environment: ["dev", "val", "prod"]
-        environment: ["dev"]
+        environment: ["dev", "val"]
 
     runs-on: ubuntu-latest
 
