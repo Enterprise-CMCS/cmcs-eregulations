@@ -15,11 +15,15 @@ permissions:
 
 jobs:
   update-cdk-bootstrap:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         # environment: ["dev", "val", "prod"]
         environment: ["dev"]
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: ${{ matrix.environment }}
 
     steps:
       - name: Checkout repository
