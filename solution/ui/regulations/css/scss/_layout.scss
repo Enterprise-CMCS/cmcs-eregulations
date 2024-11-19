@@ -8,6 +8,7 @@ $collapsed-sidebar-width: 32px; // Update here if the left sidebar collapsed wid
 
 html {
     height: 100%;
+    font-size: 16px;
 }
 
 body {
@@ -21,11 +22,11 @@ body {
     display: block;
     margin: 0 auto;
     position: relative;
-    padding: $spacer-3 $spacer-5;
+    padding: var(--spacer-3) var(--spacer-5);
 
     @include screen-xl {
-        max-width: $width-xl;
-        padding: $spacer-4;
+        max-width: var(--media-width-xl);
+        padding: var(--spacer-4);
     }
 
     @include screen-xxl {
@@ -34,7 +35,7 @@ body {
 }
 
 .container {
-    max-width: $text-max-width;
+    max-width: var(--text-max-width);
     display: block;
     margin: 0 auto;
 }
@@ -82,38 +83,38 @@ aside {
     }
 
     &.right-sidebar {
-        padding: $spacer-2;
+        padding: var(--spacer-2);
         border-left: 1px solid $border_color;
 
         @include screen-xl {
-            padding: $spacer-2 $spacer-4;
+            padding: var(--spacer-2) var(--spacer-4);
         }
 
-        @include custom-max($mobile-max / 1px) {
+        @include custom-max(calc($mobile-max / 1px)) {
             display: none;
         }
     }
 
     & + .match-middle {
-        padding: 0 $spacer-2;
+        padding: 0 var(--spacer-2);
         flex: 1;
 
         @include screen-lg {
-            padding: 0 $spacer-4;
+            padding: 0 var(--spacer-4);
         }
     }
 
     &[data-state="expanded"] {
-        @include custom-max($mobile-max / 1px) {
+        @include custom-max(calc($mobile-max / 1px)) {
             flex: 0 0 100%;
         }
 
-        @include custom-range($width-md / 1px, $tablet-max / 1px) {
+        @include custom-range(calc(var(--media-width-md) / 1px), calc($tablet-max / 1px)) {
             flex: 0 0 400px;
         }
 
         & + .match-middle {
-            @include custom-max($tablet-max / 1px) {
+            @include custom-max(calc($tablet-max / 1px)) {
                 margin-left: calc((308px + #{$collapsed-sidebar-width}) * (-1));
             }
         }
@@ -133,7 +134,7 @@ aside {
 
             @include screen-xl {
                 width: calc(100% - 400px - #{$collapsed-sidebar-width});
-                padding: 0 $spacer-6;
+                padding: 0 var(--spacer-6);
             }
 
             @include screen-3xl {

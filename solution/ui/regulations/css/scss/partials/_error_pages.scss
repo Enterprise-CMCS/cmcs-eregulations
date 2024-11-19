@@ -16,7 +16,7 @@ main.error-page {
     div.error-left {
         flex: auto;
         margin: auto;
-        padding-right: $spacer-3;
+        padding-right: var(--spacer-1-5);
     
         p {
             font-family: $primary_site_font;

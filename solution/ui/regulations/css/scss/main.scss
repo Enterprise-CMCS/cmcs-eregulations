@@ -5,14 +5,14 @@
 
 @charset "UTF-8";
 
-// Normalize
-@import 'normalize';
-
-// CMS Design System
-@import '@cmsgov/design-system/dist/scss/index';
-
 $fa-font-path: "../fonts/webfonts" !default;
 $additional-font-path: "../fonts" !default;
+
+// CMS Design System
+@import '@cmsgov/design-system/dist/css/index';
+@import '@cmsgov/design-system/dist/css/core-theme';
+
+// Font Awesome
 @import '@fortawesome/fontawesome-free/scss/fontawesome';
 @import "@fortawesome/fontawesome-free/scss/solid.scss";
 @import "@fortawesome/fontawesome-free/scss/brands.scss";
@@ -45,4 +45,5 @@ $eregs-image-path: "../images" !default;
 @import "partials/subjects";
 @import "partials/banner";
 @import "partials/subjects_selector";
+@import "partials/pagination";
 @import 'print';

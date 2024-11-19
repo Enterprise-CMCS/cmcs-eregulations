@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 footer {
-    padding: $spacer-4 0;
+    padding: var(--spacer-4) 0;
     border-top: 1px solid $border_color;
     background: $teritary_background_color;
     box-sizing: unset !important;
@@ -14,55 +14,60 @@ footer {
         margin: 0 !important;
         font-size: $font-size-xs;
         color: $secondary_text_color;
+        box-sizing: content-box;
+    }
+
+    h4,
+    h5 {
+        font-family: $secondary_site_font !important;
+        color: $secondary_text_color !important;
+        font-weight: 700 !important;
+        line-height: 1.5 !important;
     }
 
     h4 {
-        font-family: $secondary_site_font;
-        color: $secondary_text_color;
         margin-top: 0 !important;
-        margin-bottom: $spacer-2 !important;
+        margin-bottom: var(--spacer-2) !important;
     }
 
     h5 {
-        font-family: $secondary_site_font;
-        color: $secondary_text_color;
         margin: 0 !important;
-        font-size: $font-size-sm;
+        font-size: var(--font-size-sm);
     }
 
     .address {
-        margin-bottom: $spacer-3;
+        margin-bottom: var(--spacer-3);
         font-size: $font-size-xs;
     }
 
     .last-update-footer {
         font-family: $secondary_site_font;
         font-weight: 600;
-        font-size: $font-size-sm;
-        margin-bottom: $spacer-2;
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacer-2);
     }
 
     .about-footer {
-        font-size: $font-size-sm;
-        margin-bottom: $spacer-2;
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacer-2);
     }
 
     .footer-left {
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             flex: none;
         }
 
         & > * {
-            padding: 0 $spacer-3 0 $spacer-4;
+            padding: 0 var(--spacer-3) 0 var(--spacer-4);
 
-            @include custom-max($tablet-max / 1px) {
-                padding: 0 $spacer-4;
+            @include custom-max(calc($tablet-max / 1px)) {
+                padding: 0 var(--spacer-4);
             }
         }
 
         a {
             img {
-                margin-bottom: $spacer-2;
+                margin-bottom: var(--spacer-2);
             }
 
             &:hover {
@@ -84,38 +89,39 @@ footer {
         & > * {
             padding: 0;
 
-            @include custom-max($tablet-max / 1px) {
-                padding: 0 $spacer-4;
+            @include custom-max(calc($tablet-max / 1px)) {
+                padding: 0 var(--spacer-4);
             }
 
             @include screen-lg {
-                max-width: calc(90% - #{$spacer-3});
-                padding-left: $spacer-3;
+                max-width: calc(90% - #{var(--spacer-3)});
+                padding-left: var(--spacer-3);
             }
         }
 
-        @include custom-max($tablet-max / 1px) {
-            padding: $spacer-4 0;
+        @include custom-max(calc($tablet-max / 1px)) {
+            padding: var(--spacer-4) 0;
         }
     }
 
     .footer-right {
-        padding: 0 $spacer-2;
+        box-sizing: content-box;
+        padding: 0 var(--spacer-2);
 
         @include screen-xl {
-            padding: 0 $spacer-4 0 0;
+            padding: 0 var(--spacer-4) 0 0;
         }
 
-        @include custom-max($tablet-max / 1px) {
+        @include custom-max(calc($tablet-max / 1px)) {
             flex: none;
             padding: 0;
         }
 
         & > * {
-            padding: 0 $spacer-5 0 0;
+            padding: 0 var(--spacer-5) 0 0;
 
-            @include custom-max($tablet-max / 1px) {
-                padding: 0 $spacer-4;
+            @include custom-max(calc($tablet-max / 1px)) {
+                padding: 0 var(--spacer-4);
                 margin-left: 0;
             }
         }
@@ -124,7 +130,7 @@ footer {
             font-size: 30px;
             line-height: 34px;
             color: $primary_link_color;
-            padding-right: $spacer-2;
+            padding-right: var(--spacer-2);
 
             &:hover {
                 color: $primary_link_hover;
@@ -140,7 +146,7 @@ footer {
 
     // divide to strip unit (px)
     // https://css-tricks.com/snippets/sass/strip-unit-function/
-    @include custom-max($tablet-max / 1px) {
+    @include custom-max(calc($tablet-max / 1px)) {
         & > div {
             // stack footer elements on narrow screens
             flex-direction: column;

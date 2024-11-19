@@ -34,6 +34,7 @@
 
         .ds-c-choice-wrapper {
             padding: 8px;
+            margin-top: 0;
             border: 1px solid $secondary_border_color;
             border-radius: 4px;
 
@@ -50,19 +51,24 @@
                 border-color: $secondary_border_color;
             }
 
+            input {
+                margin-top: 1px;
+            }
+
             label {
+                display: flex;
                 margin: 0;
                 font-size: 14px;
                 line-height: 22px;
 
                 .count__span {
-                    min-width: var(--spacer-4);
-                    padding-left: var(--spacer-2);
+                    min-width: var(--spacer-2);
+                    padding-left: var(--spacer-1);
                     display: flex;
                     justify-content: end;
 
                     @media (max-width: $eds-width-sm) {
-                        min-width: var(--spacer-6);
+                        min-width: var(--spacer-4);
                     }
                 }
             }
@@ -82,7 +88,7 @@
 
     &--subjects {
         height: 30px !important;
-        padding: 0 0 0 var(--spacer-1);
+        padding: 0 0 0 var(--spacer-half);
         box-sizing: border-box;
         display: flex;
         justify-content: space-between;
@@ -138,7 +144,7 @@
     .v-input__control {
         .v-field {
             &--appended {
-                padding-inline-end: var(--spacer-1);
+                padding-inline-end: var(--spacer-half);
             }
 
             &.v-field--variant-outlined.v-field--focused {
@@ -308,8 +314,8 @@
         padding-right: 0px;
 
         @media (max-width: 543px) {
-            padding-left: var(--spacer-6);
-            padding-right: var(--spacer-6);
+            padding-left: var(--spacer-4);
+            padding-right: var(--spacer-4);
         }
 
         @include screen-md {
@@ -335,7 +341,7 @@
         }
 
         .sidebar-filters__container {
-            @include custom-max(($eds-width-md - 1) / 1px) {
+            @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 &--hidden {
                     display: none;
                 }
@@ -364,6 +370,7 @@
                     color: $policy_subject_selected_chip_text;
                     border-radius: 4px;
                     padding: 4px 8px;
+                    width: fit-content;
 
                     button {
                         width: 16px;
@@ -479,22 +486,23 @@
 
         .doc-type__toggle fieldset {
             @media (max-width: 475px) {
-                flex-direction: column;
+                flex-wrap: wrap;
             }
         }
 
-        .ds-c-choice-wrapper label {
-            @media (max-width: 475px) {
-                width: calc(100% - 28px);
-                display: flex;
-                justify-content: space-between;
+        .ds-c-choice-wrapper {
+            label {
+                @media (max-width: 475px) {
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
         }
     }
 
     .subject__search--row {
-        padding: 0 var(--spacer-4);
-        margin-bottom: var(--spacer-4);
+        padding: 0 var(--spacer-2);
+        margin-bottom: var(--spacer-2);
 
         .search-field {
             width: 320px;
@@ -543,7 +551,7 @@
                 }
 
                 &--view {
-                    font-size: $font-size-sm;
+                    font-size: var(--font-size-sm);
                 }
             }
         }

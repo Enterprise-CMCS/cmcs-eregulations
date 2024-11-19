@@ -27,7 +27,7 @@
 
 .action-btn {
     font-family: $primary_site_font;
-    font-size: $font-size-sm;
+    font-size: var(--font-size-sm);
     line-height: 18px;
     font-weight: 600;
     border: none;
@@ -59,6 +59,7 @@
 
     > svg {
         padding-right: 5px;
+        box-sizing: content-box;
     }
 
     path {
@@ -101,6 +102,7 @@
 
     z-index: 3;
     position: absolute;
+    box-sizing: content-box;
 
     p {
         color: $dark_gray;
@@ -149,7 +151,7 @@
 
         .tooltip-title {
             font-family: $secondary_site_font;
-            font-size: $font_size_md;
+            font-size: var(--font-size-md);
             line-height: 24px;
             font-weight: 700;
             margin: 0 0 18px 0 !important;
@@ -216,12 +218,12 @@
         &.reg-history-link-container {
             .tooltip.clicked {
                 width: calc(
-                    80% - $spacer-2 - $spacer-2 - $collapsed-sidebar-width -
+                    80% - var(--spacer-1) - var(--spacer-1) - $collapsed-sidebar-width -
                         40px
                 );
 
                 @include screen-sm {
-                    width: calc(100% - $spacer-2 - $spacer-2);
+                    width: calc(100% - var(--spacer-1) - var(--spacer-1));
                     max-width: 435px;
                 }
 
@@ -241,6 +243,7 @@
                         flex-wrap: wrap;
                         flex-direction: column;
                         padding: 10px 10px 0;
+                        box-sizing: content-box;
 
                         @include screen-sm {
                             height: 180px;
@@ -260,7 +263,7 @@
                 }
 
                 .gov-info-source {
-                    font-size: $font_size_sm;
+                    font-size: var(--font-size-sm);
                     font-weight: 400;
                     line-height: 20px;
                     color: $secondary_text_color;
@@ -278,7 +281,7 @@
             }
 
             &.reg-history-link {
-                font-size: $font_size_sm;
+                font-size: var(--font-size-sm);
                 font-weight: 600;
             }
 

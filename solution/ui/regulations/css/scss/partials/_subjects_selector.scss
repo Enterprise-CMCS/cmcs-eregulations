@@ -18,7 +18,7 @@
 }
 
 .subjects__select-container {
-    margin-top: var(--spacer-4);
+    margin-top: var(--spacer-2);
 
     .subjects__list-container {
         @include filter-container-styles;
@@ -46,6 +46,7 @@
                 height: 1.5rem;
                 margin: 12px 0;
                 padding: 4px 24px 4px 4px;
+                line-height: 1.2;
                 box-sizing: content-box !important; // thanks, Vuetify
 
                 &:focus,
@@ -58,14 +59,14 @@
             }
 
             .subjects__filter-reset {
-                @include common-remove-btn-styles;
-
                 top: calc(50% - 0.625rem);
                 right: -3px;
                 transform: translate(-50%);
                 position: absolute;
                 width: 20px;
                 height: 20px;
+
+                @include common-remove-btn-styles;
 
                 &--hidden {
                     display: none;
@@ -93,17 +94,17 @@
                 width: 100%;
 
                 &--selected {
-                    @include font-bold-keep-width;
-
                     pointer-events: none;
+
+                    @include font-bold-keep-width;
                 }
 
                 &:hover,
                 &:focus,
                 &:active {
-                    @include font-bold-keep-width;
-
                     cursor: pointer;
+
+                    @include font-bold-keep-width;
                 }
 
                 .match__container {
@@ -115,7 +116,7 @@
                 }
 
                 .count {
-                    margin-left: var(--spacer-1);
+                    margin-left: var(--spacer-half);
                 }
             }
         }
@@ -127,27 +128,27 @@
 //-----------------------------
 
 .subjects__select-container {
-    margin-top: var(--spacer-4);
+    margin-top: var(--spacer-2);
 
     // --menu denotes component is in dropdown menu
     &--menu {
         @include filter-borders;
 
         border-width: 1px;
-        margin-top: var(--spacer-2);
+        margin-top: var(--spacer-1);
 
         .subjects__list-container {
             border: 0;
             margin-block-start: 0;
             margin-block-end: 0;
-            padding: var(--spacer-2);
-            max-height: calc(300px - 2 * var(--spacer-2));
+            padding: var(--spacer-1);
+            max-height: calc(300px - 2 * var(--spacer-1));
 
             form {
                 input#subjectReduce {
-                    font-size: $font_size_sm;
-                    margin: 0 0 var(--spacer-4) 0;
-                    padding-right: var(--spacer-2);
+                    font-size: var(--font-size-sm);
+                    margin: 0 0 var(--spacer-2) 0;
+                    padding-right: var(--spacer-1);
 
                     &::placeholder {
                         text-align: center;
@@ -161,9 +162,9 @@
 
             .subjects__list {
                 .subjects__li {
-                    font-size: $font_size_sm;
+                    font-size: var(--font-size-sm);
                     line-height: 22px;
-                    margin-bottom: var(--spacer-2);
+                    margin-bottom: var(--spacer-1);
 
                     .subjects-li__button {
                         display: flex;

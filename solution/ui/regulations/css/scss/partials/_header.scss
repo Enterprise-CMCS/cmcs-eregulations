@@ -45,7 +45,7 @@ header {
             aside {
                 top: $header_height_mobile;
 
-                @include custom-min($eds-width-sm / 1px) {
+                @include custom-min(calc($eds-width-sm / 1px)) {
                     top: $header_height;
                 }
             }
@@ -82,26 +82,24 @@ header {
         }
 
         @mixin header--brand-type {
-            font-size: $font-size-lg;
+            font-size: var(--font-size-lg);
             line-height: 36px;
 
-            @include custom-max(($eds-width-sm - 1) / 1px) {
-                font-size: $font-size-sm;
+            @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                font-size: var(--font-size-sm);
                 line-height: 18px;
             }
         }
 
         .header__row {
-            @include eds-gutters;
-
             display: flex;
             align-items: center;
             justify-content: space-between;
-            width: calc(100% - 4rem);
+            width: -webkit-fill-available;
+            width: -moz-available;
+            width: stretch;
 
-            @include custom-max(($eds-width-md - 1) / 1px) {
-                width: calc(100% - 2rem);
-            }
+            @include eds-gutters;
 
             &--first {
                 height: 56px;
@@ -114,16 +112,16 @@ header {
         }
 
         .header--brand {
-            @include header--brand-type;
-
             display: flex;
             align-items: center;
+
+            @include header--brand-type;
 
             a {
                 @include header__anchor--bold;
 
                 br {
-                    @include custom-min($eds-width-sm / 1px) {
+                    @include custom-min(calc($eds-width-sm / 1px)) {
                         display: none;
                     }
                 }
@@ -141,7 +139,7 @@ header {
             justify-content: flex-end;
             align-items: center;
 
-            @include custom-max(($eds-width-sm - 1) / 1px) {
+            @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
                 border: none;
                 margin-right: 0;
             }
@@ -149,7 +147,9 @@ header {
             .links--container {
                 position: relative;
 
-                @include custom-max(($eds-width-header-links - 1) / 1px) {
+                @include custom-max(
+                    calc((calc($eds-width-header-links - 1px)) / 1px)
+                ) {
                     display: flex;
                 }
 
@@ -162,11 +162,13 @@ header {
                     align-items: center;
                     padding: 0 12px;
 
-                    @include custom-min($eds-width-sm / 1px) {
+                    @include custom-min(calc($eds-width-sm / 1px)) {
                         display: none;
                     }
 
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                    @include custom-max(
+                        calc((calc($eds-width-sm - 1px)) / 1px)
+                    ) {
                         border: none;
                         padding: 0 10px;
                     }
@@ -181,7 +183,7 @@ header {
                 }
 
                 .more--dropdown-menu {
-                    @include custom-min($eds-width-sm / 1px) {
+                    @include custom-min(calc($eds-width-sm / 1px)) {
                         display: none;
                     }
                 }
@@ -199,7 +201,7 @@ header {
                             }
 
                             .header--links__anchor {
-                                font-size: $font-size-md;
+                                font-size: var(--font-size-md);
                                 line-height: 22px;
                                 color: $mid-gray;
                                 text-decoration: none;
@@ -209,15 +211,19 @@ header {
 
                     &.links__list--wide {
                         display: flex;
+                        flex-direction: row;
+                        gap: 1.5rem;
                         align-items: center;
+                        margin-block: 0px;
 
-                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        @include custom-max(
+                            calc(calc($eds-width-sm - 1px) / 1px)
+                        ) {
                             display: none;
                         }
 
                         li {
                             display: inline-block;
-                            padding-left: 1.5rem;
 
                             .header--links__anchor {
                                 @include header__anchor--bold;
@@ -250,7 +256,7 @@ header {
                 justify-content: flex-end;
                 width: 100%;
 
-                @include custom-max(($eds-width-sm - 1) / 1px) {
+                @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
                     background-color: #fff;
                     left: 10px;
                     display: flex;
@@ -267,9 +273,10 @@ header {
 
                     width: 40px;
                     height: $header_input_height_narrow;
+                    padding-top: 2px;
                     padding-right: 7px;
 
-                    @include custom-min($eds-width-sm / 1px) {
+                    @include custom-min(calc($eds-width-sm / 1px)) {
                         display: none;
                     }
                 }
@@ -278,20 +285,25 @@ header {
                     height: $header_input_height_wide;
                     width: 100%;
                     max-width: 320px;
-                    padding: $spacer-1 0 $spacer-1 $spacer-2;
+                    padding: var(--spacer-1) 0 var(--spacer-1) var(--spacer-2);
                     border: 1px solid $light_gray;
                     border-right: none;
                     border-radius: 3px 0 0 3px;
                     outline: none;
+                    margin-block: 0;
 
                     &.hidden {
-                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        @include custom-max(
+                            calc((calc($eds-width-sm - 1px)) / 1px)
+                        ) {
                             display: none;
                         }
                     }
 
                     &.visible--mobile {
-                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        @include custom-max(
+                            calc((calc($eds-width-sm - 1px)) / 1px)
+                        ) {
                             max-width: unset;
                         }
                     }
@@ -301,7 +313,9 @@ header {
                         margin-left: 6px;
                     }
 
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                    @include custom-max(
+                        calc((calc($eds-width-sm - 1px)) / 1px)
+                    ) {
                         height: $header_input_height_narrow;
                         width: calc(100vw - 100px);
                         margin-left: 0px;
@@ -324,12 +338,16 @@ header {
                     border-radius: 0 3px 3px 0;
 
                     &.hidden {
-                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        @include custom-max(
+                            calc((calc($eds-width-sm - 1px)) / 1px)
+                        ) {
                             display: none;
                         }
                     }
 
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                    @include custom-max(
+                        calc((calc($eds-width-sm - 1px)) / 1px)
+                    ) {
                         height: $header_input_height_narrow;
                     }
 
@@ -343,13 +361,15 @@ header {
                         font-size: 16px;
                         color: $primary_link_color;
 
-                        @include custom-max(($eds-width-sm - 1) / 1px) {
+                        @include custom-max(
+                            calc((calc($eds-width-sm - 1px)) / 1px)
+                        ) {
                             display: none;
                         }
                     }
 
                     svg {
-                        @include custom-min($eds-width-sm / 1px) {
+                        @include custom-min(calc($eds-width-sm / 1px)) {
                             display: none;
                         }
                     }
@@ -426,7 +446,9 @@ header {
                     right: 2rem;
                     white-space: normal;
 
-                    @include custom-max(($eds-width-sm - 1) / 1px) {
+                    @include custom-max(
+                        calc((calc($eds-width-sm - 1px)) / 1px)
+                    ) {
                         right: 1rem;
                     }
 
@@ -448,7 +470,7 @@ header {
                                 flex-grow: 1;
                                 width: 0;
                                 margin: 0.25rem 0;
-                                font-size: $font-size-sm;
+                                font-size: var(--font-size-sm);
                             }
                         }
 

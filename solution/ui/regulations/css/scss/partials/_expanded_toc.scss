@@ -5,16 +5,17 @@
 @import "../application_settings";
 
 ul.table-of-contents {
+    display: block;
     margin-left: 0;
     padding-left: 0;
-    max-width: $text-max-width;
+    max-width: var(--text-max-width);
 
     margin-block-start: 1em !important;
     margin-block-end: 1em !important;
 
     h3 {
         margin: 1em 0 1em 0 !important;
-        margin-bottom: $spacer-2 !important;
+        margin-bottom: var(--spacer-2) !important;
         margin-block-start: 1em !important;
         margin-block-end: 1em !important;
     }
@@ -22,7 +23,7 @@ ul.table-of-contents {
     li {
         list-style: none;
         color: $secondary_text_color;
-        margin: $spacer-3 0;
+        margin: var(--spacer-3) 0;
 
         .subpart-name {
             font-weight: normal;
@@ -30,15 +31,16 @@ ul.table-of-contents {
     }
 
     ul {
+        display: block;
         margin-left: 0;
         padding-left: 0;
 
         li {
-            margin: 0 0 $spacer-1 $spacer-2;
+            margin: 0 0 var(--spacer-1) var(--spacer-2);
 
             p {
-                margin-top: $spacer-3;
-                margin-bottom: $spacer-1;
+                margin-top: var(--spacer-1-5);
+                margin-bottom: var(--spacer-half);
             }
         }
     }
@@ -49,7 +51,7 @@ ul.table-of-contents {
 
     .menu-section {
         text-decoration: none;
-        font-size: $font-size-md;
+        font-size: var(--font-size-md);
     }
 
     .toc-section-number {
@@ -59,7 +61,7 @@ ul.table-of-contents {
 
     .toc-section-name {
         flex: 1;
-        margin-left: $spacer-2;
+        margin-left: var(--spacer-2);
     }
 
 }

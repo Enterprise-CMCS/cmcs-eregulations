@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 .error-msg__container {
-    font-size: $font-size-lg;
+    font-size: var(--font-size-lg);
     margin-bottom: 1em;
 }
 
@@ -27,32 +27,33 @@
 
 .search-page {
     #searchApp.search-view {
-        @include eds-gutters;
-
-        margin-top: var(--spacer-5);
-        margin-bottom: var(--spacer-5);
+        margin-top: var(--spacer-3);
+        margin-bottom: var(--spacer-3);
         display: flex;
         flex-direction: column;
         min-height: 300px;
         max-width: var(--eds-width-md);
+        box-sizing: content-box;
+
+        @include eds-gutters;
 
         h1 {
-            margin-bottom: var(--spacer-4);
+            margin-bottom: var(--spacer-2);
         }
 
         .query-filters__section {
-            margin-bottom: var(--spacer-4);
+            margin-bottom: var(--spacer-2);
         }
 
         .search__fieldset {
-            margin-top: var(--spacer-4);
+            margin-top: var(--spacer-2);
             border: unset;
             padding: unset;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             align-items: center;
-            gap: var(--spacer-4);
+            gap: var(--spacer-2);
 
             .doc-type__toggle fieldset {
                 flex-wrap: wrap;
@@ -61,33 +62,33 @@
             &--dropdowns {
                 display: flex;
                 flex-wrap: wrap;
-                gap: var(--spacer-2);
+                gap: var(--spacer-1);
             }
         }
 
         .search-form {
             .search-suggestion {
                 margin: 0px;
-                font-size: $font-size-sm;
+                font-size: var(--font-size-sm);
             }
         }
 
         .search-results {
             .loading__span {
                 display: block;
-                margin-bottom: calc(100px + var(--spacer-6));
+                margin-bottom: calc(100px + var(--spacer-4));
             }
 
             &-count {
-                margin-bottom: var(--spacer-6);
+                margin-bottom: var(--spacer-4);
             }
 
             .doc__list {
                 .no-results__span {
                     display: block;
-                    margin-top: var(--spacer-4);
-                    margin-bottom: var(--spacer-5);
-                    font-size: $font-size-lg;
+                    margin-top: var(--spacer-2);
+                    margin-bottom: var(--spacer-3);
+                    font-size: var(--font-size-lg);
                     line-height: 1.5rem;
                 }
                 .result {
@@ -141,14 +142,18 @@
 .search-field {
     background-color: #fff;
 
+    input {
+        margin-block-start: 0;
+    }
+
     label.v-field-label {
-        margin-inline-start: var(--spacer-2);
+        margin-inline-start: var(--spacer-1);
         color: $secondary_text_color;
         opacity: 1;
     }
 
     .v-field__input {
-        padding-left: var(--spacer-2);
+        padding-left: var(--spacer-1);
     }
 
     .v-field__append-inner i,
@@ -204,21 +209,21 @@
 
 .research__container {
     > * {
-        padding: var(--spacer-4);
+        padding: var(--spacer-2);
     }
 
     &--results {
-        margin-top: var(--spacer-6);
+        margin-top: var(--spacer-4);
     }
 
     &--no-results {
-        margin-bottom: var(--spacer-6);
+        margin-bottom: var(--spacer-4);
     }
 
     .research__title {
         display: flex;
         align-items: center;
-        font-size: $font-size-lg;
+        font-size: var(--font-size-lg);
         line-height: 1.5rem;
         font-weight: bold;
         text-transform: capitalize;
@@ -229,14 +234,14 @@
 
     .research__row {
         display: flex;
-        font-size: $font-size-md;
+        font-size: var(--font-size-md);
         border: 1px solid $light_gray;
         border-top: unset;
 
         .row__title {
             display: inline-block;
             flex: 0 0 280px;
-            margin-right: var(--spacer-6);
+            margin-right: var(--spacer-4);
 
             @media (max-width: $eds-width-sm) {
                 flex: 0 0 135px;
@@ -246,12 +251,13 @@
         .row__content {
             &--list {
                 display: flex;
+                flex-direction: row;
                 flex-wrap: wrap;
                 align-content: flex-start;
                 margin: 0;
                 padding: 0;
                 list-style-type: none;
-                gap: var(--spacer-3);
+                gap: var(--spacer-1-5);
             }
         }
     }
