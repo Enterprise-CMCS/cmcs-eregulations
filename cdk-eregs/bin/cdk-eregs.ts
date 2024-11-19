@@ -29,9 +29,9 @@ async function main() {
       region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
     };
 
-    if (!env.account || !env.region) {
-      throw new Error('Environment account and region must be specified');
-    }
+    // if (!env.account || !env.region) {
+    //   throw new Error('Environment account and region must be specified');
+    // }
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });

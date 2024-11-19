@@ -226,8 +226,8 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1           
-      - name: Deploy Maintenance-api Lambda via CDK
-        id: deploy-maintenance-api
+      - name: Deploy Text extract via CDK
+        id: deploy-text-extract
         if: success() && steps.findPr.outputs.number
         env:
             PR_NUMBER: ${{ steps.findPr.outputs.pr }}
