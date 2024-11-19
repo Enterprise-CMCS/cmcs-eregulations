@@ -273,7 +273,16 @@ const liDownArrowPress = (event) => {
                             @click="filterResetClick"
                         ></button>
                     </form>
-                    <slot name="selection"></slot>
+                    <slot
+                        name="selection"
+                        :selected-subject="
+                            props.policyDocSubjects.results.find(
+                                (subject) =>
+                                    $route.query.subjects ===
+                                    subject.id.toString()
+                            )
+                        "
+                    ></slot>
                 </div>
                 <ul tabindex="-1" class="subjects__list">
                     <li

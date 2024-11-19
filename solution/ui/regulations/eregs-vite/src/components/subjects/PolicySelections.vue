@@ -7,12 +7,18 @@ import useRemoveList from "composables/removeList";
 const $router = useRouter();
 const $route = useRoute();
 
-const selectedParams = inject("selectedParams");
-const FilterTypesDict = inject("FilterTypesDict");
-
 const commonRemoveList = inject("commonRemoveList", []);
 const additionalRemoveList = inject("policySelectionsRemoveList", []);
 const removeList = commonRemoveList.concat(additionalRemoveList);
+
+const props = defineProps({
+    selectedSubject: {
+        type: Object,
+        default: () => ({}),
+    },
+});
+
+console.log("props.selectedSubject", props.selectedSubject);
 
 const removeClick = () => {
     const routeClone = { ...$route.query };
@@ -29,48 +35,18 @@ const removeClick = () => {
         },
     });
 };
-
-const selections = ref([]);
-
-watch(
-    () => selectedParams.paramString,
-    async () => {
-        selections.value = selectedParams.paramsArray
-            .filter((param) => FilterTypesDict[param.type])
-            .map((param) => ({
-                label: FilterTypesDict[param.type],
-                id: param.id,
-                type: param.type,
-                name: param.name,
-            }))
-            .sort((a, b) => {
-                // sort by label and then by name
-                if (a.label < b.label) return -1;
-                if (a.label > b.label) return 1;
-                if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
-                if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
-                return 0;
-            });
-    }
-);
 </script>
 
 <template>
     <div class="selections__container">
-        <ul v-if="selections.length > 0" class="selections__list">
-            <li
-                v-for="selection in selections"
-                :key="selection.id"
-                class="selections__li"
-            >
-                {{ selection.label }}: {{ selection.name }}
+        <ul v-if="selectedSubject.id" class="selections__list">
+            <li :key="selectedSubject.id" class="selections__li">
+                {{ selectedSubject }}
                 <button
-                    :aria-label="`Remove ${selection.name} results`"
-                    :data-id="selection.id"
-                    :data-testid="`remove-${selection.label.toLowerCase()}-${
-                        selection.id
-                    }`"
-                    :data-type="selection.type"
+                    :aria-label="`Remove ${selectedSubject.name} results`"
+                    :data-id="selectedSubject.id"
+                    :data-testid="`remove-subject-${selectedSubject.id}`"
+                    :data-type="selectedSubject.type"
                     @click="removeClick"
                 >
                     <i class="mdi mdi-close"></i>

@@ -388,8 +388,10 @@ getDocSubjects();
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
                             >
-                                <template #selection>
-                                    <PolicySelections />
+                                <template #selection="{ selectedSubject }">
+                                    <PolicySelections
+                                        :selected-subject="selectedSubject"
+                                    />
                                 </template>
                             </SubjectSelector>
                         </template>
