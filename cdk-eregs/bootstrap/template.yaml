@@ -278,7 +278,7 @@ Resources:
             Principal:
               AWS:
                 - Ref: AWS::AccountId
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-macfcee-developer-admin
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-eregs-application-admin
           - Fn::If:
               - HasTrustedAccounts
               - Action: sts:AssumeRole
@@ -312,7 +312,7 @@ Resources:
                 Principal:
                   AWS:
                     - Ref: TrustedAccounts
-                    - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-macfcee-developer-admin
+                    - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-eregs-application-admin
               - Ref: AWS::NoValue
       RoleName:
         Fn::Sub: cdk-${Qualifier}-image-publishing-role-${AWS::AccountId}-${AWS::Region}
@@ -332,7 +332,7 @@ Resources:
             Principal:
               AWS:
                 - Ref: AWS::AccountId
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-macfcee-developer-admin
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-eregs-application-admin
           - Fn::If:
               - HasTrustedAccountsForLookup
               - Action: sts:AssumeRole
@@ -440,7 +440,7 @@ Resources:
             Principal:
               AWS:
                 - Ref: AWS::AccountId
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-macfcee-developer-admin
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ct-ado-eregs-application-admin
           - Fn::If:
               - HasTrustedAccounts
               - Action: sts:AssumeRole
