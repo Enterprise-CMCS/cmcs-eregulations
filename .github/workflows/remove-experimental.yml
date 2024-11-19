@@ -103,7 +103,7 @@ jobs:
           npm install
           serverless remove --stage dev${PR}
           popd
-      - name: Destroy PR-Specific Stack
+      - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -138,7 +138,29 @@ jobs:
           npm install
           
           # Generate the exact stack name for this PR
-          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance--api"
+          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
+          
+          echo "Destroying PR-specific stack: ${STACK_NAME}"
+          cdk destroy "${STACK_NAME}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force
+          
+          echo "Cleanup completed for stack: ${STACK_NAME}"
+          popd
+      - name: Destroy PR-Text-extract Stack
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Generate the exact stack name for this PR
+          STACK_NAME="cms-eregs-eph-${PR_NUMBER}-text-extractor"
           
           echo "Destroying PR-specific stack: ${STACK_NAME}"
           cdk destroy "${STACK_NAME}" \
