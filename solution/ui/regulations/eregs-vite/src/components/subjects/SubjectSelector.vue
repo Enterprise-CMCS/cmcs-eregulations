@@ -158,6 +158,10 @@ const subjectClick = (event) => {
     });
 };
 
+const inputContainerClasses = computed(() => ({
+    "subjects__input--sidebar": props.parent === "subjects",
+}));
+
 const listItemClasses = computed(() => ({
     sidebar__li: props.parent === "subjects",
 }));
@@ -248,27 +252,29 @@ const liDownArrowPress = (event) => {
                 </div>
             </template>
             <template v-else>
-                <form @submit.prevent>
-                    <input
-                        id="subjectReduce"
-                        v-model="state.filter"
-                        :aria-label="placeholder"
-                        :placeholder="placeholder"
-                        type="text"
-                        @keydown.up.prevent="inputUpArrowPress"
-                        @keydown.down.prevent="inputDownArrowPress"
-                    />
-                    <button
-                        aria-label="Clear subject list filter"
-                        data-testid="clear-subject-filter"
-                        type="reset"
-                        :class="filterResetClasses"
-                        class="mdi mdi-close"
-                        @keydown.enter="filterResetClick"
-                        @click="filterResetClick"
-                    ></button>
-                </form>
-                <slot name="selection"></slot>
+                <div :class="inputContainerClasses">
+                    <form @submit.prevent>
+                        <input
+                            id="subjectReduce"
+                            v-model="state.filter"
+                            :aria-label="placeholder"
+                            :placeholder="placeholder"
+                            type="text"
+                            @keydown.up.prevent="inputUpArrowPress"
+                            @keydown.down.prevent="inputDownArrowPress"
+                        />
+                        <button
+                            aria-label="Clear subject list filter"
+                            data-testid="clear-subject-filter"
+                            type="reset"
+                            :class="filterResetClasses"
+                            class="mdi mdi-close"
+                            @keydown.enter="filterResetClick"
+                            @click="filterResetClick"
+                        ></button>
+                    </form>
+                    <slot name="selection"></slot>
+                </div>
                 <ul tabindex="-1" class="subjects__list">
                     <li
                         v-for="subject in state.subjects"

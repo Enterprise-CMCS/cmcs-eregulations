@@ -25,6 +25,12 @@
         flex-direction: column;
         min-height: 200px;
 
+        .subjects__input--sidebar {
+            background-color: white;
+            position: sticky;
+            top: $header_height;
+        }
+
         .subjects__loading {
             display: flex;
             align-items: center;
@@ -42,7 +48,7 @@
 
                 flex: 1;
                 height: 1.5rem;
-                margin: 12px 0;
+                margin: 0 0 12px 0;
                 padding: 4px 24px 4px 4px;
                 line-height: 1.2;
                 box-sizing: content-box !important; // thanks, Vuetify
@@ -57,7 +63,7 @@
             }
 
             .subjects__filter-reset {
-                top: calc(50% - 0.625rem);
+                top: calc(50% - 1rem);
                 right: -3px;
                 transform: translate(-50%);
                 position: absolute;
@@ -74,10 +80,13 @@
     }
 
     ul.subjects__list {
-        height: 300px;
-        overflow-y: auto;
         padding: 0;
         margin: 0;
+
+        @media (max-width: $width-md) {
+            max-height: 300px;
+            overflow-y: auto;
+        }
 
         .subjects__li {
             margin-bottom: 0.75rem;
@@ -125,9 +134,9 @@
                     width: 100%;
 
                     &--sidebar {
-                        @include font-bold-keep-width;
-
                         color: $primary_link_color;
+
+                        @include font-bold-keep-width;
                     }
                 }
 
@@ -189,6 +198,9 @@
             }
 
             .subjects__list {
+                height: 300px;
+                overflow-y: auto;
+
                 .subjects__li {
                     font-size: var(--font-size-sm);
                     line-height: 22px;
