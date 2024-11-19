@@ -1,0 +1,53 @@
+name: Update CDK Bootstrap
+
+# on:
+#   schedule:
+#     - cron: '0 0 * * 0' # Runs every Sunday at midnight
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  update-cdk-bootstrap:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # environment: ["dev", "val", "prod"]
+        environment: ["dev"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+
+      - name: Install AWS CDK
+        run: npm install -g aws-cdk
+
+      - name: Update CDK Bootstrap
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        run: |
+          pushd cdk-eregs/bootstrap
+          cdk init app --language=typescript
+          cdk bootstrap --template template.yaml \
+              --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/ADO-Restriction-Policy,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/CMSApprovedAWSServices \
+              --custom-permissions-boundary ct-ado-poweruser-permissions-boundary-policy \
+              --qualifier one
+          popd
