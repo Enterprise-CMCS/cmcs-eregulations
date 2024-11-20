@@ -1,6 +1,8 @@
 <script setup>
-import { inject, ref, watch } from "vue";
+import { inject } from "vue";
 import { useRouter, useRoute } from "vue-router";
+
+import SelectedSubjectChip from "./SelectedSubjectChip.vue";
 
 import useRemoveList from "composables/removeList";
 
@@ -17,8 +19,6 @@ const props = defineProps({
         default: () => ({}),
     },
 });
-
-console.log("props.selectedSubject", props.selectedSubject);
 
 const removeClick = () => {
     const routeClone = { ...$route.query };
@@ -41,7 +41,9 @@ const removeClick = () => {
     <div class="selections__container">
         <ul v-if="selectedSubject.id" class="selections__list">
             <li :key="selectedSubject.id" class="selections__li">
-                {{ selectedSubject }}
+                <div class="selections__li--label">
+                    <SelectedSubjectChip :subject="selectedSubject" />
+                </div>
                 <button
                     :aria-label="`Remove ${selectedSubject.name} results`"
                     :data-id="selectedSubject.id"

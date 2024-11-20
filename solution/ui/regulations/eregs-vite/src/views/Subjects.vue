@@ -73,6 +73,8 @@ const searchInputRemoveList = commonRemoveList.concat([
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
+provide("parent", "subjects");
+
 const categoriesRef = ref([]);
 const setCategories = (categories) => {
     categoriesRef.value = categories;
@@ -428,7 +430,6 @@ getDocSubjects();
                                         slotProps.loading ||
                                         policyDocList.loading
                                     "
-                                    parent="subjects"
                                 />
                             </FetchItemsContainer>
                         </div>

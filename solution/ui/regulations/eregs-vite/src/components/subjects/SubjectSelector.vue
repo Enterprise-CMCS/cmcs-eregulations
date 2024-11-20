@@ -1,13 +1,3 @@
-<script>
-const getDisplayCount = (subject) => {
-    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
-};
-
-export default {
-    getDisplayCount,
-};
-</script>
-
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -19,6 +9,7 @@ import _isArray from "lodash/isArray";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
+import SelectedSubjectChip from "./SelectedSubjectChip.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 
 const props = defineProps({
@@ -30,10 +21,6 @@ const props = defineProps({
         type: String,
         default: "default",
     },
-    parent: {
-        type: String,
-        default: "subjects",
-    },
     placeholder: {
         type: String,
         default: "Find a subject",
@@ -44,6 +31,7 @@ const $router = useRouter();
 const $route = useRoute();
 
 const removeList = inject("commonRemoveList", []);
+const parent = inject("parent", "subjects");
 
 const state = reactive({
     filter: "",
@@ -129,7 +117,7 @@ const subjectClick = (event) => {
 
     let filteredTypes;
 
-    if (props.parent === "search") {
+    if (parent === "search") {
         const type = routeClone?.type;
         const typesArr = type ? type.split(",") : [];
 
@@ -149,7 +137,7 @@ const subjectClick = (event) => {
     });
 
     $router.push({
-        name: props.parent,
+        name: parent,
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
@@ -159,15 +147,11 @@ const subjectClick = (event) => {
 };
 
 const inputContainerClasses = computed(() => ({
-    "subjects__input--sidebar": props.parent === "subjects",
+    "subjects__input--sidebar": parent === "subjects",
 }));
 
 const listItemClasses = computed(() => ({
-    sidebar__li: props.parent === "subjects",
-}));
-
-const buttonTextClasses = computed(() => ({
-    "subjects-li__button-text--sidebar": props.parent === "subjects",
+    sidebar__li: parent === "subjects",
 }));
 
 const subjectClasses = (subjectId) => {
@@ -302,25 +286,7 @@ const liDownArrowPress = (event) => {
                             @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
                         >
-                            <span
-                                class="subjects-li__button-text"
-                                :class="buttonTextClasses"
-                                v-html="
-                                    (subject.displayName ||
-                                        getSubjectName(subject)) +
-                                    getDisplayCount(subject)
-                                "
-                            ></span>
-                            <span
-                                v-if="
-                                    parent === 'subjects' &&
-                                    !subject.displayName &&
-                                    getSubjectNameParts(subject)[0][1]
-                                "
-                                class="subjects-li__button-subtitle"
-                            >
-                                {{ getSubjectNameParts(subject)[1][0] }}
-                            </span>
+                            <SelectedSubjectChip :subject="subject" />
                         </button>
                     </li>
                 </ul>
