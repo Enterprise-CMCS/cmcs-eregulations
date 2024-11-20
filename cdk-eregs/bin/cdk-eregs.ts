@@ -83,29 +83,29 @@ async function main() {
     cdk.Tags.of(app).add(key, value);
   });
 
-  // Create RedirectApiStack
-  const redirectStack = new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
-    lambdaConfig: {
-      runtime: lambda.Runtime.PYTHON_3_12,
-      memorySize: 1024,
-      timeout: 30,
-    },
-    apiConfig: {
-      loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-    },
-  }, stageConfig);
-  const maintenanceStack = new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
-    lambdaConfig: {
-      runtime: lambda.Runtime.PYTHON_3_12,
-      memorySize: 1024,
-      timeout: 30,
-    },
-    apiConfig: {
-      loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-    },
-  }, stageConfig);
-  cdk.Tags.of(redirectStack).add('lambda-type', 'zip');
-  cdk.Tags.of(maintenanceStack).add('lambda-type', 'zip');
+  // // Create RedirectApiStack
+  // const redirectStack = new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
+  //   lambdaConfig: {
+  //     runtime: lambda.Runtime.PYTHON_3_12,
+  //     memorySize: 1024,
+  //     timeout: 30,
+  //   },
+  //   apiConfig: {
+  //     loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
+  //   },
+  // }, stageConfig);
+  // const maintenanceStack = new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
+  //   lambdaConfig: {
+  //     runtime: lambda.Runtime.PYTHON_3_12,
+  //     memorySize: 1024,
+  //     timeout: 30,
+  //   },
+  //   apiConfig: {
+  //     loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
+  //   },
+  // }, stageConfig);
+  // cdk.Tags.of(redirectStack).add('lambda-type', 'zip');
+  // cdk.Tags.of(maintenanceStack).add('lambda-type', 'zip');
   const textExtractorStack = new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
     env,
     lambdaConfig: {

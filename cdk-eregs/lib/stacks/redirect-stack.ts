@@ -109,9 +109,8 @@ export class RedirectApiStack extends cdk.Stack {
       description: `Redirect API Lambda function for ${this.stageConfig.environment} stage`,
       runtime: config.runtime,
       handler: config.handler ?? 'redirect_lambda.handler',
-      code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/', {
-        exclude: ['__pycache__', '*.pyc', '.git', '*.egg-info']
-      }),
+      code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
+      
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
       role,
