@@ -156,7 +156,7 @@ jobs:
             npm install
             cdk deploy "*redirect-api" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never
+            --require-approval never  --tags lambda-type=zip 
             popd    
   deploy-Maintenance-Api-CDK:
     environment:
@@ -199,7 +199,7 @@ jobs:
             npm install
             cdk deploy "*maintenance-api" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never
+            --require-approval never  --tags lambda-type=zip 
             popd    
   deploy-Text-extract-CDK:
     environment:
@@ -242,7 +242,7 @@ jobs:
             npm install
             cdk deploy "*-text-extractor" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never
+            --require-approval never --tags lambda-type=docker
             popd
   deploy-text-extractor:
     environment:

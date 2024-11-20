@@ -31,7 +31,8 @@ async function main() {
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });
-  
+    // Get bundling type from context
+    const bundlingType = app.node.tryGetContext('bundling');
     const environment = app.node.tryGetContext('environment') || 
   process.env.DEPLOY_ENV || 
   process.env.GITHUB_JOB_ENVIRONMENT || 
@@ -82,16 +83,8 @@ async function main() {
     cdk.Tags.of(app).add(key, value);
   });
 
-  // // Create and configure stacks
-  // const stackFactory = new StackFactory(app, stageConfig);
-  // const stackConfigs = getStackConfigs(environment, stageConfig.isEphemeral());
-  
-  // const stacks = stackConfigs
-  //   .filter(config => config.enabled)
-  //   .map(config => stackFactory.createStack(config))
-  //   .filter((stack): stack is cdk.Stack => stack !== null);
   // Create RedirectApiStack
-  new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
+  const redirectStack = new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -101,7 +94,7 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
+  const maintenanceStack = new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -111,7 +104,9 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+  cdk.Tags.of(redirectStack).add('lambda-type', 'zip');
+  cdk.Tags.of(maintenanceStack).add('lambda-type', 'zip');
+  const textExtractorStack = new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
     env,
     lambdaConfig: {
       memorySize: 1024,
@@ -125,7 +120,8 @@ async function main() {
       httpPassword,
     }
   }, stageConfig);
-  // Example deployment in app.ts
+  cdk.Tags.of(textExtractorStack).add('lambda-type', 'docker');
+  
 
   // Apply aspects
   await applyGlobalAspects(app, stageConfig);
