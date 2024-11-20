@@ -104,8 +104,7 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  cdk.Tags.of(redirectStack).add('lambda-type', 'zip');
-  cdk.Tags.of(maintenanceStack).add('lambda-type', 'zip');
+ 
   const textExtractorStack = new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
     env,
     lambdaConfig: {
@@ -120,8 +119,6 @@ async function main() {
       httpPassword,
     }
   }, stageConfig);
-  cdk.Tags.of(textExtractorStack).add('lambda-type', 'docker');
-  
 
   // Apply aspects
   await applyGlobalAspects(app, stageConfig);
