@@ -597,17 +597,22 @@ select {
 // -------------------------
 
 // Blue chips used for Resources selections and Policy Doc subjects
+@mixin common-chip-colors {
+    background: $lightest_blue;
+    color: $mid_blue;
+    border: 1px solid #c0eaf8;
+}
+
 @mixin common-chip-styles {
     display: inline-flex;
     align-items: center;
-    color: $mid_blue;
     font-size: 15px;
     font-weight: 600;
-    background: $lightest_blue;
-    border: 1px solid #c0eaf8;
     border-radius: 16px;
     height: 32px;
     padding: 0 12px;
+
+    @include common-chip-colors;
 }
 
 .div__login-sidebar {

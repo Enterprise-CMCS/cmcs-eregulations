@@ -360,17 +360,17 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 4px;
-                margin: 0 0 1rem;
+                margin: 0 0 var(--spacer-1-5);
                 padding-left: 0;
 
                 .selections__li {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    background-color: $policy_subject_selected_chip_background;
-                    color: $policy_subject_selected_chip_text;
                     border-radius: 4px;
                     padding: 4px 8px;
+
+                    @include common-chip-colors;
 
                     &--label {
                         display: flex;
