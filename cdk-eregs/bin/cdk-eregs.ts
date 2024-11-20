@@ -84,7 +84,7 @@ async function main() {
   });
 
   // Create RedirectApiStack
-  const redirectStack = new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
+ new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -94,7 +94,7 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  const maintenanceStack = new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
+ new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -105,7 +105,7 @@ async function main() {
     },
   }, stageConfig);
  
-  const textExtractorStack = new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+  new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
     env,
     lambdaConfig: {
       memorySize: 1024,
