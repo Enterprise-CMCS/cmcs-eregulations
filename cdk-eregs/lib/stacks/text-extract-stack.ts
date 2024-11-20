@@ -175,13 +175,13 @@ export class TextExtractorStack extends cdk.Stack {
     vpc: ec2.IVpc,
     securityGroup: ec2.SecurityGroup,
   ): lambda.Function {
-    const dockerContextPath = path.resolve(__dirname, '../../../solution/text-extractor/');
+    const dockerContextPath = path.resolve(__dirname, '../../../solution/');
     console.log('Docker context path:', dockerContextPath);
 
     return new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
       functionName: this.stageConfig.getResourceName('text-extractor'),
       code: lambda.DockerImageCode.fromImageAsset(dockerContextPath, {
-        file: 'Dockerfile',
+        file: 'text-extractor/Dockerfile',
       }),
       vpc,
       securityGroups: [securityGroup],
