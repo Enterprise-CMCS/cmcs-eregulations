@@ -201,7 +201,7 @@ jobs:
             -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never  
             popd    
-  deploy-Text-extract-CDK:
+  deploy-Text-extractor-CDK:
     environment:
       name: "dev"
     env:
@@ -227,7 +227,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1           
       - name: Deploy Text extract via CDK
-        id: deploy-text-extract
+        id: deploy-text-extractor
         if: success() && steps.findPr.outputs.number
         env:
             PR_NUMBER: ${{ steps.findPr.outputs.pr }}
