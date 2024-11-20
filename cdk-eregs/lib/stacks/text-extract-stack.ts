@@ -142,7 +142,7 @@ export class TextExtractorStack extends cdk.Stack {
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
 
     // Create Lambda function
-    this.lambda = this.createLambdaFunction(
+    this.lambda = this.createTextExtractorLambdaFunction(
       props.lambdaConfig,
       props.environmentConfig,
       lambdaRole,
@@ -168,7 +168,7 @@ export class TextExtractorStack extends cdk.Stack {
    * @returns Configured Lambda function
    * @private
    */
-  private createLambdaFunction(
+  private createTextExtractorLambdaFunction(
     config: LambdaConfig,
     envConfig: EnvironmentConfig,
     role: iam.Role,
