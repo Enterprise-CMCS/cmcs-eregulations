@@ -1,6 +1,12 @@
 <script>
+const getCount = (subject) => {
+    return (
+        subject.count ??
+        (subject.public_resources ?? 0) + (subject.internal_resources ?? 0)
+    );
+};
 const getDisplayCount = (subject) => {
-    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+    return `<span class="count">(${getCount(subject)})</span>`;
 };
 
 export default {

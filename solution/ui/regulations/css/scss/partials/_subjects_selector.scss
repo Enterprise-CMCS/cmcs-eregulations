@@ -159,7 +159,11 @@
                 }
 
                 .count {
+                    font-size: $font-size-xs;
+                    color: $secondary_text_color;
                     margin-left: var(--spacer-half);
+
+                    @include font-bold-keep-width-reset;
                 }
             }
         }
@@ -217,6 +221,12 @@
                         display: flex;
                         justify-content: space-between;
                         line-height: 22px;
+
+                        .count {
+                            font-size: unset;
+                            font-weight: unset;
+                            color: unset;
+                        }
                     }
                 }
             }
