@@ -78,6 +78,8 @@ const searchInputRemoveList = commonRemoveList.concat([
 
 provide("commonRemoveList", commonRemoveList);
 
+provide("parent", "search");
+
 const categoriesRef = ref([]);
 const setCategories = (categories) => {
     categoriesRef.value = categories;
