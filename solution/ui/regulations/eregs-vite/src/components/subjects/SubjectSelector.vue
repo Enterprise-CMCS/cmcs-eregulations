@@ -7,7 +7,7 @@ import useRemoveList from "composables/removeList";
 import _debounce from "lodash/debounce";
 import _isArray from "lodash/isArray";
 
-import { getSubjectName, getSubjectNameParts } from "utilities/filters";
+import { getSubjectName } from "utilities/filters";
 
 import SelectedSubjectChip from "./SelectedSubjectChip.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
@@ -50,7 +50,22 @@ watch(
             return;
         }
 
-        state.subjects = props.policyDocSubjects.results;
+        if ($route.query.subjects) {
+            state.subjects = props.policyDocSubjects.results.filter(
+                (subject) => $route.query.subjects !== subject.id.toString()
+            );
+        } else {
+            state.subjects = props.policyDocSubjects.results;
+        }
+    }
+);
+
+watch(
+    () => $route.query.subjects,
+    () => {
+        state.subjects = props.policyDocSubjects.results.filter(
+            (subject) => $route.query.subjects !== subject.id.toString()
+        );
     }
 );
 
@@ -60,46 +75,52 @@ const getFilteredSubjects = (filter) => {
         return;
     }
 
-    state.subjects = props.policyDocSubjects.results.reduce((acc, subject) => {
-        const shortNameMatch = subject.short_name
-            ? subject.short_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const abbreviationMatch = subject.abbreviation
-            ? subject.abbreviation.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const fullNameMatch = subject.full_name
-            ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
+    state.subjects = props.policyDocSubjects.results
+        .filter((subject) => $route.query.subjects !== subject.id.toString())
+        .reduce((acc, subject) => {
+            const shortNameMatch = subject.short_name
+                ? subject.short_name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const abbreviationMatch = subject.abbreviation
+                ? subject.abbreviation
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const fullNameMatch = subject.full_name
+                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+                : false;
 
-        if (shortNameMatch || abbreviationMatch || fullNameMatch) {
-            let displayName;
+            if (shortNameMatch || abbreviationMatch || fullNameMatch) {
+                let displayName;
 
-            if (shortNameMatch) {
-                displayName = subject.short_name;
-            } else if (abbreviationMatch) {
-                displayName = subject.abbreviation;
-            } else if (fullNameMatch) {
-                displayName = subject.full_name;
+                if (shortNameMatch) {
+                    displayName = subject.short_name;
+                } else if (abbreviationMatch) {
+                    displayName = subject.abbreviation;
+                } else if (fullNameMatch) {
+                    displayName = subject.full_name;
+                }
+
+                displayName =
+                    "<span class='match__container'>" +
+                    displayName.replace(
+                        new RegExp(filter, "gi"),
+                        (match) => `<span class="match">${match}</span>`
+                    ) +
+                    "</span>";
+
+                const newSubject = {
+                    ...subject,
+                    displayName,
+                };
+
+                return [...acc, newSubject];
             }
 
-            displayName =
-                "<span class='match__container'>" +
-                displayName.replace(
-                    new RegExp(filter, "gi"),
-                    (match) => `<span class="match">${match}</span>`
-                ) +
-                "</span>";
-
-            const newSubject = {
-                ...subject,
-                displayName,
-            };
-
-            return [...acc, newSubject];
-        }
-
-        return acc;
-    }, []);
+            return acc;
+        }, []);
 };
 
 const debouncedFilter = _debounce(getFilteredSubjects, 100);
