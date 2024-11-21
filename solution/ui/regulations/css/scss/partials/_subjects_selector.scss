@@ -41,7 +41,10 @@
     .subjects__list-container {
         display: flex;
         flex-direction: column;
-        min-height: 500px;
+
+        @include screen-md {
+            min-height: 500px;
+        }
 
         .subjects__input--sidebar {
             background-color: white;

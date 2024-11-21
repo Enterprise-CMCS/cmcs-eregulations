@@ -322,6 +322,7 @@
             padding-right: 1rem;
             border-right: 2px solid $border_color;
             border-bottom: none;
+            max-width: var(--eds-width-xs);
         }
 
         h2 {
