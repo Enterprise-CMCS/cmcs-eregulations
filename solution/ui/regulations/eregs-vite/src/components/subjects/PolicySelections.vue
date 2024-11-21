@@ -45,7 +45,7 @@ const removeClick = () => {
                     <SelectedSubjectChip :subject="selectedSubject" />
                 </div>
                 <button
-                    :aria-label="`Remove ${selectedSubject.name} results`"
+                    :aria-label="`Remove ${selectedSubject.full_name} results`"
                     :data-id="selectedSubject.id"
                     :data-testid="`remove-subject-${selectedSubject.id}`"
                     :data-type="selectedSubject.type"
