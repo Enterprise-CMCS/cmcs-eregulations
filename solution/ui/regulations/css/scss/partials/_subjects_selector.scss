@@ -41,7 +41,7 @@
     .subjects__list-container {
         display: flex;
         flex-direction: column;
-        min-height: 200px;
+        min-height: 500px;
 
         .subjects__input--sidebar {
             background-color: white;
@@ -182,6 +182,7 @@
             margin-block-start: 0;
             margin-block-end: 0;
             padding: var(--spacer-1);
+            min-height: unset;
             max-height: calc(300px - 2 * var(--spacer-1));
 
             form {
