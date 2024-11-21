@@ -308,21 +308,20 @@
     .sidebar__container {
         position: relative;
         display: flex;
-        border-right: none;
-        border-bottom: 2px solid $border_color;
+        border-right: 2px solid $border_color;
         padding-left: 0px;
-        padding-right: 0px;
+        padding-right: var(--spacer-2);
 
-        @media (max-width: 543px) {
-            padding-left: var(--spacer-4);
-            padding-right: var(--spacer-4);
+        @media (max-width: $mobile-max) {
+            border-right: none;
+            border-bottom: 2px solid $border_color;
+            padding-bottom: var(--spacer-2);
+            padding-right: 0px;
         }
 
-        @include screen-md {
-            padding-right: 1rem;
-            border-right: 2px solid $border_color;
-            border-bottom: none;
-            max-width: var(--eds-width-xs);
+        @media (max-width: calc($width-sm - 1px)) {
+            padding-left: var(--spacer-4);
+            padding-right: var(--spacer-4);
         }
 
         h2 {
@@ -352,8 +351,14 @@
 
     .sidebar__filters {
         flex: 1;
-        margin-bottom: 1rem;
         width: 100%;
+
+        @include screen-md {
+            position: sticky;
+            top: calc($header_height + var(--spacer-3));
+            height: calc(100vh - $header_height - var(--spacer-3));
+            overflow-y: auto;
+        }
 
         .selections__container {
             .selections__list {
@@ -396,7 +401,13 @@
     }
 
     .subj-toc__container {
-        padding-left: 16px;
+        @include screen-md {
+            padding-left: 16px;
+        }
+
+        @media (max-width: calc($width-md - 1px)) {
+            padding-top: var(--spacer-2);
+        }
 
         h1 {
             font-size: 2.25rem;
