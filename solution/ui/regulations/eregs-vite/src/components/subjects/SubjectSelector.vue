@@ -42,6 +42,12 @@ if (!props.policyDocSubjects.loading) {
     state.subjects = props.policyDocSubjects.results;
 }
 
+const getUnselectedSubjects = () => {
+    return props.policyDocSubjects.results.filter(
+        (subject) => $route.query.subjects !== subject.id.toString()
+    );
+};
+
 watch(
     () => props.policyDocSubjects.loading,
     (loading) => {
@@ -51,9 +57,7 @@ watch(
         }
 
         if ($route.query.subjects) {
-            state.subjects = props.policyDocSubjects.results.filter(
-                (subject) => $route.query.subjects !== subject.id.toString()
-            );
+            state.subjects = getUnselectedSubjects();
         } else {
             state.subjects = props.policyDocSubjects.results;
         }
@@ -63,15 +67,13 @@ watch(
 watch(
     () => $route.query.subjects,
     () => {
-        state.subjects = props.policyDocSubjects.results.filter(
-            (subject) => $route.query.subjects !== subject.id.toString()
-        );
+        state.subjects = getUnselectedSubjects();
     }
 );
 
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {
-        state.subjects = props.policyDocSubjects.results;
+        state.subjects = getUnselectedSubjects();
         return;
     }
 
