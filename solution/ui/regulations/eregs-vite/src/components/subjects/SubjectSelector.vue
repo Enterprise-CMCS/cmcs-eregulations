@@ -5,7 +5,37 @@ const getUnselectedSubjects = ({ subjectsList, subjectId }) => {
     );
 };
 
+const getInputContainerClasses = ({ parent }) => ({
+    "subjects__input--sidebar": parent === "subjects",
+});
+
+const getListItemClasses = ({ parent }) => ({
+    sidebar__li: parent === "subjects",
+});
+
+const getSubjectClasses = ({ subjectId, subjectQueryParam }) => {
+    const routeArr = _isArray(subjectQueryParam)
+        ? subjectQueryParam
+        : [subjectQueryParam];
+
+    return {
+        "subjects-li__button": true,
+        "subjects-li__button--selected": routeArr.includes(
+            subjectId.toString()
+        ),
+    };
+};
+
+const getFilterResetClasses = ({ filter }) => ({
+    "subjects__filter-reset": true,
+    "subjects__filter-reset--hidden": !filter,
+});
+
 export default {
+    getInputContainerClasses,
+    getListItemClasses,
+    getSubjectClasses,
+    getFilterResetClasses,
     getUnselectedSubjects,
 };
 </script>
@@ -186,31 +216,15 @@ const subjectClick = (event) => {
     });
 };
 
-const inputContainerClasses = computed(() => ({
-    "subjects__input--sidebar": parent === "subjects",
-}));
+const inputContainerClasses = computed(() =>
+    getInputContainerClasses({ parent })
+);
 
-const listItemClasses = computed(() => ({
-    sidebar__li: parent === "subjects",
-}));
+const listItemClasses = computed(() => getListItemClasses({ parent }));
 
-const subjectClasses = (subjectId) => {
-    const routeArr = _isArray($route.query.subjects)
-        ? $route.query.subjects
-        : [$route.query.subjects];
-
-    return {
-        "subjects-li__button": true,
-        "subjects-li__button--selected": routeArr.includes(
-            subjectId.toString()
-        ),
-    };
-};
-
-const filterResetClasses = computed(() => ({
-    "subjects__filter-reset": true,
-    "subjects__filter-reset--hidden": !state.filter,
-}));
+const filterResetClasses = computed(() =>
+    getFilterResetClasses({ filter: state.filter })
+);
 
 const filterResetClick = (event) => {
     event.stopPropagation();
@@ -316,7 +330,12 @@ const liDownArrowPress = (event) => {
                         :class="listItemClasses"
                     >
                         <button
-                            :class="subjectClasses(subject.id)"
+                            :class="
+                                getSubjectClasses({
+                                    subjectId: subject.id,
+                                    subjectQueryParam: $route.query.subjects,
+                                })
+                            "
                             :data-name="getSubjectName(subject)"
                             :data-id="subject.id"
                             :data-testid="`add-subject-${subject.id}`"
