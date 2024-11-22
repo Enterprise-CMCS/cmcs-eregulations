@@ -1,3 +1,15 @@
+<script>
+const getUnselectedSubjects = ({ subjectsList, subjectId }) => {
+    return subjectsList.filter(
+        (subject) => subjectId !== subject.id.toString()
+    );
+};
+
+export default {
+    getUnselectedSubjects,
+};
+</script>
+
 <script setup>
 import { computed, inject, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -42,12 +54,6 @@ if (!props.policyDocSubjects.loading) {
     state.subjects = props.policyDocSubjects.results;
 }
 
-const getUnselectedSubjects = () => {
-    return props.policyDocSubjects.results.filter(
-        (subject) => $route.query.subjects !== subject.id.toString()
-    );
-};
-
 watch(
     () => props.policyDocSubjects.loading,
     (loading) => {
@@ -57,7 +63,10 @@ watch(
         }
 
         if ($route.query.subjects) {
-            state.subjects = getUnselectedSubjects();
+            state.subjects = getUnselectedSubjects({
+                subjectsList: props.policyDocSubjects.results,
+                subjectId: $route.query.subjects,
+            });
         } else {
             state.subjects = props.policyDocSubjects.results;
         }
@@ -67,13 +76,19 @@ watch(
 watch(
     () => $route.query.subjects,
     () => {
-        state.subjects = getUnselectedSubjects();
+        state.subjects = getUnselectedSubjects({
+            subjectsList: props.policyDocSubjects.results,
+            subjectId: $route.query.subjects,
+        });
     }
 );
 
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {
-        state.subjects = getUnselectedSubjects();
+        state.subjects = getUnselectedSubjects({
+            subjectsList: props.policyDocSubjects.results,
+            subjectId: $route.query.subjects,
+        });
         return;
     }
 
