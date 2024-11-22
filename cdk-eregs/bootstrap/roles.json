@@ -1,0 +1,27 @@
+[
+    {
+        "name": "FilePublishingRole",
+        "nested_policy": false,
+        "update_policy": true
+    },
+    {
+        "name": "DeploymentActionRole",
+        "nested_policy": false,
+        "update_policy": true
+    },
+    {
+        "name": "LookupRole",
+        "nested_policy": false,
+        "update_policy": true
+    },
+    {
+        "name": "ImagePublishingRole",
+        "nested_policy": true,
+        "update_policy": true
+    },
+    {
+        "name": "CloudFormationExecutionRole",
+        "nested_policy": false,
+        "update_policy": false
+    }
+]
