@@ -1,15 +1,27 @@
 <script>
 const getCount = (subject) => {
-    return (
-        subject.count ??
-        (subject.public_resources ?? 0) + (subject.internal_resources ?? 0)
-    );
+    if (subject.count) {
+        return subject.count;
+    }
+
+    if (subject.public_resources || subject.internal_resources) {
+        return (
+            (subject.public_resources ?? 0) + (subject.internal_resources ?? 0)
+        );
+    }
+
+    return "";
 };
 const getDisplayCount = (subject) => {
-    return `<span class="count">(${getCount(subject)})</span>`;
+    if (getCount(subject)) {
+        return `<span class="count">(${getCount(subject)})</span>`;
+    }
+
+    return "";
 };
 
 export default {
+    getCount,
     getDisplayCount,
 };
 </script>
