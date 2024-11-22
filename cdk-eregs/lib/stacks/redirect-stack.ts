@@ -110,6 +110,7 @@ export class RedirectApiStack extends cdk.Stack {
       runtime: config.runtime,
       handler: config.handler ?? 'redirect_lambda.handler',
       code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
+      
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
       role,
