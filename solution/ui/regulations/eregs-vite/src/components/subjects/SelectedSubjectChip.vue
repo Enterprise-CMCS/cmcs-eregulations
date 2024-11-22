@@ -1,4 +1,10 @@
 <script>
+const getButtonTextClasses = (parent) => {
+    return {
+        "subjects-li__button-text--sidebar": parent === "subjects",
+    };
+};
+
 const getCount = (subject) => {
     if (subject.count) {
         return subject.count;
@@ -21,6 +27,7 @@ const getDisplayCount = (subject) => {
 };
 
 export default {
+    getButtonTextClasses,
     getCount,
     getDisplayCount,
 };
@@ -40,9 +47,7 @@ const props = defineProps({
 
 const parent = inject("parent");
 
-const buttonTextClasses = computed(() => ({
-    "subjects-li__button-text--sidebar": parent === "subjects",
-}));
+const buttonTextClasses = computed(() => getButtonTextClasses(parent));
 </script>
 
 <template>

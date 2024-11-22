@@ -3,6 +3,22 @@ import { describe, it, expect } from "vitest";
 import SelectedSubjectChip from "./SelectedSubjectChip.vue";
 
 describe("SelectedSubjectChip", () => {
+    it("gets the correct Button Text classes", () => {
+        const parent1 = "subjects";
+        expect(SelectedSubjectChip.getButtonTextClasses(parent1)).toStrictEqual(
+            {
+                "subjects-li__button-text--sidebar": true,
+            }
+        );
+
+        const parent2 = "search";
+        expect(SelectedSubjectChip.getButtonTextClasses(parent2)).toStrictEqual(
+            {
+                "subjects-li__button-text--sidebar": false,
+            }
+        );
+    });
+
     it("returns the correct display count", () => {
         const subject1 = {
             count: 1,
