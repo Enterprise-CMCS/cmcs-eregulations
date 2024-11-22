@@ -130,6 +130,8 @@ const debouncedFilter = _debounce(getFilteredSubjects, 100);
 watch(() => state.filter, debouncedFilter);
 
 const subjectClick = (event) => {
+    state.filter = "";
+
     const routeClone = { ...$route.query };
 
     const subjects = routeClone?.subjects ?? [];
