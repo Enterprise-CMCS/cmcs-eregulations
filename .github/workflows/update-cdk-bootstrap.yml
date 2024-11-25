@@ -16,10 +16,9 @@ permissions:
 jobs:
   update-cdk-bootstrap:
     strategy:
+      max-parallel: 1
       matrix:
-        # environment: ["dev", "val", "prod"]
-        # environment: ["dev", "val"]
-        environment: ["dev"]
+        environment: ["dev", "val", "prod"]
 
     runs-on: ubuntu-latest
 
