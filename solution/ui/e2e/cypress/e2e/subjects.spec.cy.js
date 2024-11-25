@@ -456,10 +456,10 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
         cy.get("input#subjectReduce").should("have.value", "21");
         cy.get(".subjects__list li").should("have.length", 1);
-        cy.get(`button[data-testid=add-subject-1]`).should(
-            "include.text",
-            "21st Century Cures Act",
-        );
+        cy.get(`button[data-testid=add-subject-1]`)
+            .should("include.text", "21st Century Cures Act")
+            .find("span.count")
+            .should("include.text", "(1)");
         cy.get(`button[data-testid=add-subject-1]`).click({
             force: true,
         });
