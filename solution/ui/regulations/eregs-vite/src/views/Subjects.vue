@@ -379,7 +379,7 @@ getDocSubjects();
         <div id="subjectsApp" class="repository-view ds-l-container">
             <div class="ds-l-row">
                 <div
-                    class="ds-l-col--12 ds-l-md-col--3 ds-l-lg-col--3 ds-l-xl-col--2 sidebar__container"
+                    class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
                     <button class="sidebar-toggle__button">Open/Close</button>
                     <PolicySidebar>
@@ -399,9 +399,7 @@ getDocSubjects();
                         </template>
                     </PolicySidebar>
                 </div>
-                <div
-                    class="ds-l-col--12 ds-l-md-col--9 ds-l-lg-col--9 ds-l-xl-col--10"
-                >
+                <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
                     <SubjectTOC
                         v-if="
                             allDocTypesOnly($route.query) ||
