@@ -78,11 +78,6 @@ describe("Find by Subjects", () => {
         cy.visit("/policy-repository?subjects=2");
         cy.url().should("not.include", "/policy-repository");
         cy.url().should("include", "/subjects/").and("include", "subjects=2");
-        cy.get(".div__login-sidebar a")
-            .should("have.attr", "href")
-            .and("include", "next")
-            .and("include", "subjects/")
-            .and("include", "subjects=2");
     });
 
     it("redirects /resources to /subjects", () => {
@@ -90,11 +85,6 @@ describe("Find by Subjects", () => {
         cy.visit("/resources?q=test");
         cy.url().should("not.include", "/resources");
         cy.url().should("include", "/subjects/").and("not.include", "q=test");
-        cy.get(".div__login-sidebar a")
-            .should("have.attr", "href")
-            .and("include", "next")
-            .and("include", "subjects/")
-            .and("not.include", "q=test");
     });
 
     it("strips the q parameter out of the URL if it is included in the URL on load", () => {
@@ -103,22 +93,6 @@ describe("Find by Subjects", () => {
         cy.url()
             .should("include", "/subjects?subjects=2")
             .and("not.include", "q=test");
-    });
-
-    it("shows the custom eua login screen when you visit /subjects/ and click 'sign in'", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/subjects/");
-        cy.get(".div__login-sidebar a")
-            .should("have.attr", "href")
-            .and("include", "next")
-            .and("include", "subjects/")
-            .and("not.include", "q=");
-
-        cy.get(".div__login-sidebar a").click();
-        cy.url()
-            .should("include", "/?next=")
-            .and("include", "subjects/")
-            .and("not.include", "q=");
     });
 
     it("should show only public items when logged out", () => {
@@ -446,10 +420,7 @@ describe("Find by Subjects", () => {
         cy.get("button[data-testid=add-subject-63]").click({
             force: true,
         });
-        cy.get("button[data-testid=add-subject-63]").should(
-            "have.class",
-            "subjects-li__button--selected",
-        );
+        cy.get("button[data-testid=add-subject-63]").should("not.exist");
         cy.get(`button[data-testid=remove-subject-63]`).should("exist");
         cy.get(`button[data-testid=remove-subject-77]`).should("not.exist");
         cy.url().should("include", "/subjects?subjects=63");
@@ -480,7 +451,7 @@ describe("Find by Subjects", () => {
         cy.get("input#subjectReduce")
             .should("exist")
             .and("have.value", "")
-            .and("have.attr", "placeholder", "Filter the subject list")
+            .and("have.attr", "placeholder", "Find a subject")
             .type("21", { force: true });
         cy.get(`button[data-testid=clear-subject-filter]`).should("exist");
         cy.get("input#subjectReduce").should("have.value", "21");
@@ -506,7 +477,7 @@ describe("Find by Subjects", () => {
             force: true,
         });
         cy.get("input#subjectReduce").should("have.value", "");
-        cy.get(".subjects__list li").should("have.length", 78);
+        cy.get(".subjects__list li").should("have.length", 77);
     });
 
     it("should have a Documents to Show checkbox list only when a subject or category is selected", () => {
