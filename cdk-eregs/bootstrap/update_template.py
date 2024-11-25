@@ -23,7 +23,7 @@ def update_role_properties(properties: dict):
 
 
 # Check if the statement matches the expected format for adding the role
-def statement_matchs(statement: dict):
+def statement_matches(statement: dict):
     return all([
         statement.get("Action") == "sts:AssumeRole",
         statement.get("Effect") == "Allow",
@@ -48,10 +48,10 @@ def update_policy_doc_statements(yaml_statements: type[list | dict], nested: boo
         if nested and i.get("Fn::If"):
             ifs = [i["Fn::If"]] if type(i["Fn::If"]) is not list else i["Fn::If"]
             for j in [statement for statement in ifs if type(statement) is dict]:
-                if statement_matchs(j):
+                if statement_matches(j):
                     j["Principal"] = update_principal(j["Principal"])
                     return statements
-        elif not nested and statement_matchs(i):
+        elif not nested and statement_matches(i):
             i["Principal"] = update_principal(i["Principal"])
             return statements
     return yaml_statements
