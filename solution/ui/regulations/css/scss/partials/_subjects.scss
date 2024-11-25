@@ -310,7 +310,7 @@
         display: flex;
         border-right: 2px solid $border_color;
         padding-left: 0px;
-        padding-right: var(--spacer-2);
+        padding-right: 0px;
 
         @media (max-width: $mobile-max) {
             border-right: none;
@@ -352,6 +352,7 @@
     .sidebar__filters {
         flex: 1;
         width: 100%;
+        padding-right: var(--spacer-2);
 
         @include screen-md {
             position: sticky;
