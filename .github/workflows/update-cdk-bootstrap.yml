@@ -18,7 +18,8 @@ jobs:
     strategy:
       matrix:
         # environment: ["dev", "val", "prod"]
-        environment: ["dev", "val"]
+        # environment: ["dev", "val"]
+        environment: ["dev"]
 
     runs-on: ubuntu-latest
 
@@ -48,13 +49,20 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
-          pushd cdk-eregs/bootstrap; mkdir temp; pushd temp
+          pushd cdk-eregs/bootstrap
+
+          echo "Downloading latest bootstrap template..."
+          curl "https://raw.githubusercontent.com/aws/aws-cdk/refs/heads/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml" -o latest-template.yaml > /dev/null
+
+          echo "Applying CMS-specific changes to the template..."
+          ./update_template.py roles.json latest-template.yaml template.yaml
 
           echo "Creating temporary CDK app for bootstrap update..."
+          mkdir temp; pushd temp
           cdk init app --language=typescript > /dev/null
-
-          echo "Performing bootstrap update..."
           cp ../template.yaml .
+
+          echo "Bootstrapping CDK environment..."
           cdk bootstrap --template template.yaml \
               --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/ADO-Restriction-Policy,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/CMSApprovedAWSServices \
               --custom-permissions-boundary ct-ado-poweruser-permissions-boundary-policy \
