@@ -261,7 +261,7 @@
         &:focus-visible,
         &.v-list-item--active {
             .v-list-item-title {
-                @include font-bold-keep-width;
+                font-weight: 700;
             }
         }
     }
@@ -386,8 +386,7 @@
                         .count {
                             color: $secondary_text_color;
                             font-size: $font-size-xs;
-
-                            @include font-bold-keep-width-reset;
+                            font-weight: 400;
                         }
                     }
 

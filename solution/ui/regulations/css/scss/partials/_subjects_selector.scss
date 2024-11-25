@@ -107,9 +107,8 @@
         width: 100%;
 
         &--sidebar {
+            font-weight: 700;
             color: $primary_link_color;
-
-            @include font-bold-keep-width;
         }
     }
 
@@ -134,16 +133,14 @@
 
                 &--selected {
                     pointer-events: none;
-
-                    @include font-bold-keep-width;
+                    font-weight: 700;
                 }
 
                 &:hover,
                 &:focus,
                 &:active {
                     cursor: pointer;
-
-                    @include font-bold-keep-width;
+                    font-weight: 700;
                 }
 
                 .subjects-li__button-subtitle {
@@ -151,10 +148,10 @@
                 }
 
                 .match__container {
-                    @include font-bold-keep-width;
+                    font-weight: 700;
 
                     .match {
-                        @include font-bold-keep-width-reset;
+                        font-weight: 400;
                     }
                 }
 
@@ -162,8 +159,7 @@
                     font-size: $font-size-xs;
                     color: $secondary_text_color;
                     margin-left: var(--spacer-half);
-
-                    @include font-bold-keep-width-reset;
+                    font-weight: 400;
                 }
             }
         }
