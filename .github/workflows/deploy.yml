@@ -119,7 +119,7 @@ jobs:
           pushd solution/static-assets
           serverless deploy --stage ${{ matrix.environment }}
           popd
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v5
         with:
           go-version: "^1.16" # The Go version to download (if necessary) and use.
       - name: deploy and run eCFR parser
