@@ -69,7 +69,7 @@ describe("Subject Selector", () => {
         });
     });
 
-    it("removes selected subject from subjects list", () => {
+    it("removes selected subject from subjects list if not on search page", () => {
         const subjectsList = [
             {
                 id: 20,
@@ -86,10 +86,18 @@ describe("Subject Selector", () => {
                 description: "",
             },
         ];
+
         const subjectId = "20";
         expect(
             SubjectSelector.getUnselectedSubjects({ subjectsList, subjectId })
         ).toStrictEqual(subjectsList.slice(1));
+        expect(
+            SubjectSelector.getUnselectedSubjects({
+                parent: "search",
+                subjectsList,
+                subjectId,
+            })
+        ).toStrictEqual(subjectsList);
 
         const subjectId2 = "24";
         expect(

@@ -1,5 +1,11 @@
 <script>
-const getUnselectedSubjects = ({ subjectsList, subjectId }) => {
+const getUnselectedSubjects = ({
+    parent = "subjects",
+    subjectsList,
+    subjectId,
+}) => {
+    if (parent === "search") return subjectsList;
+
     return subjectsList.filter(
         (subject) => subjectId !== subject.id.toString()
     );
@@ -94,6 +100,7 @@ watch(
 
         if ($route.query.subjects) {
             state.subjects = getUnselectedSubjects({
+                parent,
                 subjectsList: props.policyDocSubjects.results,
                 subjectId: $route.query.subjects,
             });
@@ -107,6 +114,7 @@ watch(
     () => $route.query.subjects,
     () => {
         state.subjects = getUnselectedSubjects({
+            parent,
             subjectsList: props.policyDocSubjects.results,
             subjectId: $route.query.subjects,
         });
@@ -116,6 +124,7 @@ watch(
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {
         state.subjects = getUnselectedSubjects({
+            parent,
             subjectsList: props.policyDocSubjects.results,
             subjectId: $route.query.subjects,
         });
