@@ -9,7 +9,7 @@ import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-bou
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
-
+import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 // import { StackFactory } from '../lib/factories/stack-factory';
 // import { getStackConfigs } from '../config/stack-definition';
 async function main() {
@@ -17,10 +17,22 @@ async function main() {
     // const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
+    const [vpcId, logLevel, httpUser, httpPassword] = await Promise.all([
+      getParameterValue('/account_vars/vpc/id'),
+      getParameterValue('/eregulations/text_extractor/log_level'),
+      getParameterValue('/eregulations/http/user'),
+      getParameterValue('/eregulations/http/password'),
+    ]);
+     // Get environment configuration
+     const env = { 
+      account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
+      region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
+    };
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });
-  
+    // Get bundling type from context
+    const bundlingType = app.node.tryGetContext('bundling');
     const environment = app.node.tryGetContext('environment') || 
   process.env.DEPLOY_ENV || 
   process.env.GITHUB_JOB_ENVIRONMENT || 
@@ -71,16 +83,8 @@ async function main() {
     cdk.Tags.of(app).add(key, value);
   });
 
-  // // Create and configure stacks
-  // const stackFactory = new StackFactory(app, stageConfig);
-  // const stackConfigs = getStackConfigs(environment, stageConfig.isEphemeral());
-  
-  // const stacks = stackConfigs
-  //   .filter(config => config.enabled)
-  //   .map(config => stackFactory.createStack(config))
-  //   .filter((stack): stack is cdk.Stack => stack !== null);
   // Create RedirectApiStack
-  new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
+ new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -90,7 +94,7 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
+ new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
     lambdaConfig: {
       runtime: lambda.Runtime.PYTHON_3_12,
       memorySize: 1024,
@@ -100,7 +104,21 @@ async function main() {
       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
     },
   }, stageConfig);
-  // Example deployment in app.ts
+ 
+  new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+    env,
+    lambdaConfig: {
+      memorySize: 1024,
+      timeout: 900,
+      reservedConcurrentExecutions: 10,
+    },
+    environmentConfig: {
+      vpcId,
+      logLevel,
+      httpUser,
+      httpPassword,
+    }
+  }, stageConfig);
 
   // Apply aspects
   await applyGlobalAspects(app, stageConfig);
