@@ -88,12 +88,18 @@ if __name__ == '__main__':
     # Parse command line arguments
     parser = argparse.ArgumentParser(
         description='Utility to update the default CDK bootstrapping YAML file with CMS-specific role properties.',
-        epilog='Note that any errors during processing will result in the script exiting with a non-zero status code. '
+        epilog='Note that ANY errors during processing will result in the script exiting with a non-zero status code. '
                'This is intentional to prevent a bad bootstrapping attempt if the template is not updated correctly.',
     )
-    parser.add_argument('role_file', type=str, help='JSON file containing the role information as a list of dictionaries')
-    parser.add_argument('input_template', type=str, help='YAML file containing the default CDK bootstrapping template')
-    parser.add_argument('output_template', type=str, help='YAML file to write the updated CDK bootstrapping template to')
+
+    parser.add_argument(
+        'role_file', type=str,
+        help='JSON file containing the role information as a list of dictionaries. Each entry must contain the following '
+             'keys: "name" is the name of the role, "update_policy" is a bool indicating whether to update the policy '
+             'document, and "nested_policy" is a bool indicating whether the document to update is nested in an Fn::If block.',
+    )
+    parser.add_argument('input_template', type=str, help='YAML file containing the default CDK bootstrapping template.')
+    parser.add_argument('output_template', type=str, help='YAML file to write the updated CDK bootstrapping template to.')
     parser.add_argument('--boundary-policy-arn', type=str, default=BOUNDARY_POLICY_ARN,
                         help=f'ARN of the permissions boundary policy to attach to the roles. Default: "{BOUNDARY_POLICY_ARN}".')
     parser.add_argument('--role-to-assume-arn', type=str, default=ROLE_TO_ASSUME_ARN,
