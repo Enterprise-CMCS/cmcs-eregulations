@@ -1,12 +1,8 @@
 name: Update CDK Bootstrap
 
-# on:
-#   schedule:
-#     - cron: '0 0 * * 0' # Runs every Sunday at midnight
-
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '0 0 * * 1' # Runs every Monday 
 
 permissions:
   id-token: write
