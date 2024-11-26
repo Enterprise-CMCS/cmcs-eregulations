@@ -1,10 +1,48 @@
 <script>
-const getDisplayCount = (subject) => {
-    return subject.count ? `<span class="count">(${subject.count})</span>` : "";
+const getUnselectedSubjects = ({
+    parent = "subjects",
+    subjectsList,
+    subjectId,
+}) => {
+    if (parent === "search") return subjectsList;
+
+    return subjectsList.filter(
+        (subject) => subjectId !== subject.id.toString()
+    );
 };
 
+const getInputContainerClasses = ({ parent }) => ({
+    "subjects__input--sidebar": parent === "subjects",
+});
+
+const getListItemClasses = ({ parent }) => ({
+    sidebar__li: parent === "subjects",
+});
+
+const getSubjectClasses = ({ subjectId, subjectQueryParam }) => {
+    const routeArr = _isArray(subjectQueryParam)
+        ? subjectQueryParam
+        : [subjectQueryParam];
+
+    return {
+        "subjects-li__button": true,
+        "subjects-li__button--selected": routeArr.includes(
+            subjectId.toString()
+        ),
+    };
+};
+
+const getFilterResetClasses = ({ filter }) => ({
+    "subjects__filter-reset": true,
+    "subjects__filter-reset--hidden": !filter,
+});
+
 export default {
-    getDisplayCount,
+    getInputContainerClasses,
+    getListItemClasses,
+    getSubjectClasses,
+    getFilterResetClasses,
+    getUnselectedSubjects,
 };
 </script>
 
@@ -19,6 +57,7 @@ import _isArray from "lodash/isArray";
 
 import { getSubjectName } from "utilities/filters";
 
+import SelectedSubjectChip from "./SelectedSubjectChip.vue";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 
 const props = defineProps({
@@ -30,13 +69,9 @@ const props = defineProps({
         type: String,
         default: "default",
     },
-    parent: {
-        type: String,
-        default: "subjects",
-    },
     placeholder: {
         type: String,
-        default: "Filter the subject list",
+        default: "Find a subject",
     },
 });
 
@@ -44,6 +79,7 @@ const $router = useRouter();
 const $route = useRoute();
 
 const removeList = inject("commonRemoveList", []);
+const parent = inject("parent", "subjects");
 
 const state = reactive({
     filter: "",
@@ -62,56 +98,85 @@ watch(
             return;
         }
 
-        state.subjects = props.policyDocSubjects.results;
+        if ($route.query.subjects) {
+            state.subjects = getUnselectedSubjects({
+                parent,
+                subjectsList: props.policyDocSubjects.results,
+                subjectId: $route.query.subjects,
+            });
+        } else {
+            state.subjects = props.policyDocSubjects.results;
+        }
+    }
+);
+
+watch(
+    () => $route.query.subjects,
+    () => {
+        state.subjects = getUnselectedSubjects({
+            parent,
+            subjectsList: props.policyDocSubjects.results,
+            subjectId: $route.query.subjects,
+        });
     }
 );
 
 const getFilteredSubjects = (filter) => {
     if (!filter || filter.length < 1) {
-        state.subjects = props.policyDocSubjects.results;
+        state.subjects = getUnselectedSubjects({
+            parent,
+            subjectsList: props.policyDocSubjects.results,
+            subjectId: $route.query.subjects,
+        });
         return;
     }
 
-    state.subjects = props.policyDocSubjects.results.reduce((acc, subject) => {
-        const shortNameMatch = subject.short_name
-            ? subject.short_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const abbreviationMatch = subject.abbreviation
-            ? subject.abbreviation.toLowerCase().includes(filter.toLowerCase())
-            : false;
-        const fullNameMatch = subject.full_name
-            ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
-            : false;
+    state.subjects = props.policyDocSubjects.results
+        .filter((subject) => $route.query.subjects !== subject.id.toString())
+        .reduce((acc, subject) => {
+            const shortNameMatch = subject.short_name
+                ? subject.short_name
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const abbreviationMatch = subject.abbreviation
+                ? subject.abbreviation
+                      .toLowerCase()
+                      .includes(filter.toLowerCase())
+                : false;
+            const fullNameMatch = subject.full_name
+                ? subject.full_name.toLowerCase().includes(filter.toLowerCase())
+                : false;
 
-        if (shortNameMatch || abbreviationMatch || fullNameMatch) {
-            let displayName;
+            if (shortNameMatch || abbreviationMatch || fullNameMatch) {
+                let displayName;
 
-            if (shortNameMatch) {
-                displayName = subject.short_name;
-            } else if (abbreviationMatch) {
-                displayName = subject.abbreviation;
-            } else if (fullNameMatch) {
-                displayName = subject.full_name;
+                if (shortNameMatch) {
+                    displayName = subject.short_name;
+                } else if (abbreviationMatch) {
+                    displayName = subject.abbreviation;
+                } else if (fullNameMatch) {
+                    displayName = subject.full_name;
+                }
+
+                displayName =
+                    "<span class='match__container'>" +
+                    displayName.replace(
+                        new RegExp(filter, "gi"),
+                        (match) => `<span class="match">${match}</span>`
+                    ) +
+                    "</span>";
+
+                const newSubject = {
+                    ...subject,
+                    displayName,
+                };
+
+                return [...acc, newSubject];
             }
 
-            displayName =
-                "<span class='match__container'>" +
-                displayName.replace(
-                    new RegExp(filter, "gi"),
-                    (match) => `<span class="match">${match}</span>`
-                ) +
-                "</span>";
-
-            const newSubject = {
-                ...subject,
-                displayName,
-            };
-
-            return [...acc, newSubject];
-        }
-
-        return acc;
-    }, []);
+            return acc;
+        }, []);
 };
 
 const debouncedFilter = _debounce(getFilteredSubjects, 100);
@@ -119,6 +184,8 @@ const debouncedFilter = _debounce(getFilteredSubjects, 100);
 watch(() => state.filter, debouncedFilter);
 
 const subjectClick = (event) => {
+    state.filter = "";
+
     const routeClone = { ...$route.query };
 
     const subjects = routeClone?.subjects ?? [];
@@ -129,7 +196,7 @@ const subjectClick = (event) => {
 
     let filteredTypes;
 
-    if (props.parent === "search") {
+    if (parent === "search") {
         const type = routeClone?.type;
         const typesArr = type ? type.split(",") : [];
 
@@ -149,7 +216,7 @@ const subjectClick = (event) => {
     });
 
     $router.push({
-        name: props.parent,
+        name: parent,
         query: {
             ...cleanedRoute,
             subjects: subjectToAdd,
@@ -158,23 +225,15 @@ const subjectClick = (event) => {
     });
 };
 
-const subjectClasses = (subjectId) => {
-    const routeArr = _isArray($route.query.subjects)
-        ? $route.query.subjects
-        : [$route.query.subjects];
+const inputContainerClasses = computed(() =>
+    getInputContainerClasses({ parent })
+);
 
-    return {
-        "subjects-li__button": true,
-        "subjects-li__button--selected": routeArr.includes(
-            subjectId.toString()
-        ),
-    };
-};
+const listItemClasses = computed(() => getListItemClasses({ parent }));
 
-const filterResetClasses = computed(() => ({
-    "subjects__filter-reset": true,
-    "subjects__filter-reset--hidden": !state.filter,
-}));
+const filterResetClasses = computed(() =>
+    getFilterResetClasses({ filter: state.filter })
+);
 
 const filterResetClick = (event) => {
     event.stopPropagation();
@@ -233,9 +292,6 @@ const liDownArrowPress = (event) => {
 
 <template>
     <div class="subjects__select-container">
-        <h3 v-if="parent === 'subjects'" class="ds-text-heading--lg">
-            By Subject
-        </h3>
         <div class="subjects__list-container">
             <template v-if="props.policyDocSubjects.loading">
                 <div class="subjects__loading">
@@ -243,34 +299,52 @@ const liDownArrowPress = (event) => {
                 </div>
             </template>
             <template v-else>
-                <form @submit.prevent>
-                    <input
-                        id="subjectReduce"
-                        v-model="state.filter"
-                        :aria-label="placeholder"
-                        :placeholder="placeholder"
-                        type="text"
-                        @keydown.up.prevent="inputUpArrowPress"
-                        @keydown.down.prevent="inputDownArrowPress"
-                    />
-                    <button
-                        aria-label="Clear subject list filter"
-                        data-testid="clear-subject-filter"
-                        type="reset"
-                        :class="filterResetClasses"
-                        class="mdi mdi-close"
-                        @keydown.enter="filterResetClick"
-                        @click="filterResetClick"
-                    ></button>
-                </form>
+                <div :class="inputContainerClasses">
+                    <form @submit.prevent>
+                        <input
+                            id="subjectReduce"
+                            v-model="state.filter"
+                            :aria-label="placeholder"
+                            :placeholder="placeholder"
+                            type="text"
+                            @keydown.up.prevent="inputUpArrowPress"
+                            @keydown.down.prevent="inputDownArrowPress"
+                        />
+                        <button
+                            aria-label="Clear subject list filter"
+                            data-testid="clear-subject-filter"
+                            type="reset"
+                            :class="filterResetClasses"
+                            class="mdi mdi-close"
+                            @keydown.enter="filterResetClick"
+                            @click="filterResetClick"
+                        ></button>
+                    </form>
+                    <slot
+                        name="selection"
+                        :selected-subject="
+                            props.policyDocSubjects.results.find(
+                                (subject) =>
+                                    $route.query.subjects ===
+                                    subject.id.toString()
+                            )
+                        "
+                    ></slot>
+                </div>
                 <ul tabindex="-1" class="subjects__list">
                     <li
                         v-for="subject in state.subjects"
                         :key="subject.id"
-                        class="subjects__li sidebar__li"
+                        class="subjects__li"
+                        :class="listItemClasses"
                     >
                         <button
-                            :class="subjectClasses(subject.id)"
+                            :class="
+                                getSubjectClasses({
+                                    subjectId: subject.id,
+                                    subjectQueryParam: $route.query.subjects,
+                                })
+                            "
                             :data-name="getSubjectName(subject)"
                             :data-id="subject.id"
                             :data-testid="`add-subject-${subject.id}`"
@@ -279,12 +353,9 @@ const liDownArrowPress = (event) => {
                             @keydown.up.prevent="liUpArrowPress"
                             @keydown.down.prevent="liDownArrowPress"
                             @click="subjectClick"
-                            v-html="
-                                (subject.displayName ||
-                                    getSubjectName(subject)) +
-                                getDisplayCount(subject)
-                            "
-                        ></button>
+                        >
+                            <SelectedSubjectChip :subject="subject" />
+                        </button>
                     </li>
                 </ul>
             </template>

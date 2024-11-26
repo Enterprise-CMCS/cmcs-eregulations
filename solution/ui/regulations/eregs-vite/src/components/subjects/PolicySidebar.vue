@@ -19,17 +19,9 @@ const loginUrl = useLoginRedirectUrl({
 <template>
     <div class="sidebar__filters">
         <slot name="title">
-            <h2>Find Policy Documents</h2>
+            <h2>Research a Subject</h2>
         </slot>
         <div class="sidebar-filters__container">
-            <slot name="selections"> </slot>
-            <template v-if="!isAuthenticated">
-                <div class="div__login-sidebar">
-                    CMCS staff participating in the Policy Repository pilot can
-                    <a :href="loginUrl" rel="noopener noreferrer">sign in</a>
-                    to see internal resources.
-                </div>
-            </template>
             <slot name="filters"></slot>
         </div>
     </div>

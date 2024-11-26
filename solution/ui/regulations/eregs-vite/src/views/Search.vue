@@ -78,6 +78,8 @@ const searchInputRemoveList = commonRemoveList.concat([
 
 provide("commonRemoveList", commonRemoveList);
 
+provide("parent", "search");
+
 const categoriesRef = ref([]);
 const setCategories = (categories) => {
     categoriesRef.value = categories;
@@ -163,13 +165,6 @@ const setSelectedParams = (param) => {
         return;
     }
 };
-
-// policyDocSubjects fetch for subject selector
-// fetch here so we have it in context; pass down to selector via props
-const policyDocSubjects = ref({
-    results: [],
-    loading: true,
-});
 
 const setTitle = (query) => {
     const querySubString = query ? `for ${query} ` : "";

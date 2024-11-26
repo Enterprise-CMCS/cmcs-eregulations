@@ -73,6 +73,8 @@ const searchInputRemoveList = commonRemoveList.concat([
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
 
+provide("parent", "subjects");
+
 const categoriesRef = ref([]);
 const setCategories = (categories) => {
     categoriesRef.value = categories;
@@ -382,15 +384,18 @@ getDocSubjects();
                     <button class="sidebar-toggle__button">Open/Close</button>
                     <PolicySidebar>
                         <template #title>
-                            <h2>Find Policy Documents</h2>
-                        </template>
-                        <template #selections>
-                            <PolicySelections />
+                            <h2>Research a Subject</h2>
                         </template>
                         <template #filters>
                             <SubjectSelector
                                 :policy-doc-subjects="policyDocSubjects"
-                            />
+                            >
+                                <template #selection="{ selectedSubject }">
+                                    <PolicySelections
+                                        :selected-subject="selectedSubject"
+                                    />
+                                </template>
+                            </SubjectSelector>
                         </template>
                     </PolicySidebar>
                 </div>
@@ -425,7 +430,6 @@ getDocSubjects();
                                         slotProps.loading ||
                                         policyDocList.loading
                                     "
-                                    parent="subjects"
                                 />
                             </FetchItemsContainer>
                         </div>

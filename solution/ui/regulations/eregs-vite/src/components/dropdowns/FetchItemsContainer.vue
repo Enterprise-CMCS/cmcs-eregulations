@@ -51,10 +51,10 @@ const results = itemTypes[props.itemsToFetch]({
 
 const isLoading = () => {
     if (props.includeCounts) {
-        return results.value.isLoading || counts.value.isLoading;
+        return results.value.loading || counts.value.loading;
     }
 
-    return results.value.isLoading;
+    return results.value.loading;
 };
 
 watch(

@@ -245,27 +245,6 @@ $font_size_xxl: 30px; // Aligns with the CMS Design System, but their variable i
 $font_size_hero_h1: 26px;
 $font_size_hero_h1_tablet: 20px;
 
-@mixin font-bold-keep-width {
-    text-shadow:
-        -0.06ex 0 0 currentColor,
-        0.06ex 0 0 currentColor;
-
-    @supports (-webkit-text-stroke-width: 0.04ex) {
-        text-shadow:
-            -0.03ex 0 0 currentColor,
-            0.03ex 0 0 currentColor;
-        -webkit-text-stroke-width: 0.1ex;
-    }
-}
-
-@mixin font-bold-keep-width-reset {
-    text-shadow: none;
-
-    @supports (-webkit-text-stroke-width: 0.04ex) {
-        -webkit-text-stroke-width: 0;
-    }
-}
-
 // Uses CMS Design System + a larger screen size
 
 $hero-tablet-max: 1080px;
@@ -597,17 +576,22 @@ select {
 // -------------------------
 
 // Blue chips used for Resources selections and Policy Doc subjects
+@mixin common-chip-colors {
+    background: $lightest_blue;
+    color: $mid_blue;
+    border: 1px solid #c0eaf8;
+}
+
 @mixin common-chip-styles {
     display: inline-flex;
     align-items: center;
-    color: $mid_blue;
     font-size: 15px;
     font-weight: 600;
-    background: $lightest_blue;
-    border: 1px solid #c0eaf8;
     border-radius: 16px;
     height: 32px;
     padding: 0 12px;
+
+    @include common-chip-colors;
 }
 
 .div__login-sidebar {

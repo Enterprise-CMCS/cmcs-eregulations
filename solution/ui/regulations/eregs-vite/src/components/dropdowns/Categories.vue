@@ -41,13 +41,10 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
-    parent: {
-        type: String,
-        default: "subjects",
-    },
 });
 
 const isAuthenticated = inject("isAuthenticated");
+const parent = inject("parent");
 
 const $route = useRoute();
 const $router = useRouter();
@@ -101,7 +98,7 @@ watch(
         });
 
         $router.push({
-            name: props.parent,
+            name: parent,
             query: {
                 ...cleanedRoute,
                 ...categoriesObj,

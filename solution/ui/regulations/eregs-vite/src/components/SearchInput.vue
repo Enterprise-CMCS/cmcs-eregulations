@@ -77,7 +77,11 @@
 export default {
     name: "DefaultName",
 
-    components: {},
+    inject: {
+        parent: {
+            default: "search",
+        },
+    },
 
     props: {
         formClass: {
@@ -85,10 +89,6 @@ export default {
             required: true,
         },
         label: {
-            type: String,
-            required: true,
-        },
-        parent: {
             type: String,
             required: true,
         },

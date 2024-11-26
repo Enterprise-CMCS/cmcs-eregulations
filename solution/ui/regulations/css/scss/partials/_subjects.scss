@@ -261,7 +261,7 @@
         &:focus-visible,
         &.v-list-item--active {
             .v-list-item-title {
-                @include font-bold-keep-width;
+                font-weight: 700;
             }
         }
     }
@@ -308,20 +308,20 @@
     .sidebar__container {
         position: relative;
         display: flex;
-        border-right: none;
-        border-bottom: 2px solid $border_color;
+        border-right: 2px solid $border_color;
         padding-left: 0px;
         padding-right: 0px;
 
-        @media (max-width: 543px) {
-            padding-left: var(--spacer-4);
-            padding-right: var(--spacer-4);
+        @media (max-width: $mobile-max) {
+            border-right: none;
+            border-bottom: 2px solid $border_color;
+            padding-bottom: var(--spacer-2);
+            padding-right: 0px;
         }
 
-        @include screen-md {
-            padding-right: 1rem;
-            border-right: 2px solid $border_color;
-            border-bottom: none;
+        @media (max-width: calc($width-sm - 1px)) {
+            padding-left: var(--spacer-4);
+            padding-right: var(--spacer-4);
         }
 
         h2 {
@@ -351,8 +351,15 @@
 
     .sidebar__filters {
         flex: 1;
-        margin-bottom: 1rem;
         width: 100%;
+        padding-right: var(--spacer-2);
+
+        @include screen-md {
+            position: sticky;
+            top: calc($header_height + var(--spacer-3));
+            height: calc(100vh - $header_height - var(--spacer-3));
+            overflow-y: auto;
+        }
 
         .selections__container {
             .selections__list {
@@ -360,22 +367,35 @@
                 display: flex;
                 flex-wrap: wrap;
                 gap: 4px;
-                margin: 0 0 1rem;
+                margin: 0 0 var(--spacer-1-5);
                 padding-left: 0;
 
                 .selections__li {
                     display: flex;
-                    align-items: center;
-                    background-color: $policy_subject_selected_chip_background;
-                    color: $policy_subject_selected_chip_text;
+                    align-items: flex-start;
+                    justify-content: space-between;
                     border-radius: 4px;
                     padding: 4px 8px;
-                    width: fit-content;
+
+                    @include common-chip-colors;
+
+                    &--label {
+                        display: flex;
+                        flex: 1;
+                        flex-direction: column;
+
+                        .count {
+                            color: $secondary_text_color;
+                            font-size: $font-size-xs;
+                            font-weight: 400;
+                        }
+                    }
 
                     button {
-                        width: 16px;
-                        height: 16px;
+                        width: 20px;
+                        height: 20px;
                         margin-left: 8px;
+                        font-size: 18px;
 
                         @include common-remove-btn-styles;
                     }
@@ -389,7 +409,13 @@
     }
 
     .subj-toc__container {
-        padding-left: 16px;
+        @include screen-md {
+            padding-left: 16px;
+        }
+
+        @media (max-width: calc($width-md - 1px)) {
+            padding-top: var(--spacer-2);
+        }
 
         h1 {
             font-size: 2.25rem;
