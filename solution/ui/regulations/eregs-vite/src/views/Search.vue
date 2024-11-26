@@ -166,13 +166,6 @@ const setSelectedParams = (param) => {
     }
 };
 
-// policyDocSubjects fetch for subject selector
-// fetch here so we have it in context; pass down to selector via props
-const policyDocSubjects = ref({
-    results: [],
-    loading: true,
-});
-
 const setTitle = (query) => {
     const querySubString = query ? `for ${query} ` : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
