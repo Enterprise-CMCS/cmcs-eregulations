@@ -7,9 +7,10 @@ import argparse
 
 
 # Default values for the permissions boundary policy, role to assume, and role path
+# You can use CLI flags to change these values; run the script with "-h" for more information
 BOUNDARY_POLICY_ARN = "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/cms-cloud-admin/"\
                       "ct-ado-poweruser-permissions-boundary-policy"
-ROLE_TO_ASSUME_ARN = "arn:aws:iam::${AWS::AccountId}:role/ct-ado-eregs-application-admin"
+ROLE_TO_ASSUME_ARN = "arn:aws:iam::${AWS::AccountId}:role/ct-ado-macfcee-developer-admin"
 ROLE_PATH = "/delegatedadmin/developer/"
 
 
