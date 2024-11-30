@@ -99,7 +99,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Deploy Redirect and Maintenance APIs
+      - name: Deploy Redirect API
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -110,12 +110,33 @@ jobs:
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
-          # Deploy zip-based Lambdas
-          cdk deploy \
-          "*redirect-api" \
-          "*maintenance-api" \
+          
+          # Get exact stack name
+          REDIRECT_STACK="cms-eregs-eph-${PR_NUMBER}-redirect-api"
+          
+          # Deploy Redirect API separately
+          cdk deploy ${REDIRECT_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --require-approval never
+          --require-approval never \
+          --exclusively
+          popd
+
+      - name: Deploy Maintenance API
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          MAINTENANCE_STACK="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
+          
+          # Deploy Maintenance API separately
+          cdk deploy ${MAINTENANCE_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively
           popd
 
   # Docker-based Lambda deployments after ZIP-based ones complete
@@ -156,15 +177,33 @@ jobs:
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
-          # Deploy Docker-based Lambdas separately to maintain clean build context
-          cdk deploy \
-          "*-text-extractor" \
-          "*-fr-parser" \
-          "*-ecfr-parser" \
+          
+          # Get exact stack names
+          TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
+          FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
+          ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
+          
+          # Deploy each Docker-based Lambda separately
+          echo "Deploying Text Extractor..."
+          cdk deploy ${TEXT_EXTRACTOR_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively
+          
+          echo "Deploying FR Parser..."
+          cdk deploy ${FR_PARSER_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively
+          
+          echo "Deploying ECFR Parser..."
+          cdk deploy ${ECFR_PARSER_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively
+          
           popd
+
   # deployment-status:
   #   needs: [setup, deploy-zip-lambdas, deploy-docker-lambdas]
   #   if: always()
