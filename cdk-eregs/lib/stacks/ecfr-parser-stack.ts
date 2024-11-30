@@ -62,8 +62,8 @@ export class EcfrParserStack extends cdk.Stack {
     // Create Lambda function
     this.lambda = new lambda.DockerImageFunction(this, 'EcfrParserFunction', {
       functionName: stageConfig.getResourceName('ecfr-parser'),
-      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/'), {
-        file: 'parser/ecfr-parser/Dockerfile',
+      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/ecfr-parser'), {
+        file: 'Dockerfile',
         
       }),
       vpc,
