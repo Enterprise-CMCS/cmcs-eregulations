@@ -63,7 +63,7 @@ export class FrParserStack extends cdk.Stack {
     this.lambda = new lambda.DockerImageFunction(this, 'FrParserFunction', {
       functionName: stageConfig.getResourceName('fr-parser'),
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/'), {
-        file: '/parser/fr-parser/Dockerfile',
+        file: 'parser/fr-parser/Dockerfile',
       }),
       vpc,
       securityGroups: [securityGroup],
