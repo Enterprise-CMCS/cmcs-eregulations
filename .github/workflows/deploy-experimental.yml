@@ -177,27 +177,7 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
-  # deployment-status:
-  #   needs: [setup, deploy-zip-lambdas, deploy-docker-lambdas]
-  #   if: always()
-  #   runs-on: ubuntu-22.04
-  #   environment: "dev"
-  #   steps:
-  #     - name: Deployment/Cleanup Status Summary
-  #       run: |
-  #         if [[ "${{ github.event.action }}" == "closed" ]]; then
-  #           echo "PR Cleanup Summary"
-  #           echo "Docker-based Stacks Cleanup: ${{ needs.cleanup-pr-stacks.result == 'success' && '✅' || '❌' }}"
-  #         else
-  #           echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
-  #           echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas.result == 'success' && '✅' || '❌' }}"
-  #           echo "   - Redirect API"
-  #           echo "   - Maintenance API"
-  #           echo "2. Docker-based Lambdas: ${{ needs.deploy-docker-lambdas.result == 'success' && '✅' || '❌' }}"
-  #           echo "   - Text Extractor"
-  #           echo "   - FR Parser"
-  #           echo "   - ECFR Parser"
-  #         fi  
+
   # deploy-hello-world-cdk:
   #   environment:
   #     name: "dev"
