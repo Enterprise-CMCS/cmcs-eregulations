@@ -74,6 +74,158 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
+  setup:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    outputs:
+      pr_number: ${{ steps.findPr.outputs.number }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install CDK dependencies
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          popd
+
+      - name: Cache CDK dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            cdk-eregs/node_modules
+          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
+
+  # ZIP-based Lambda deployments first
+  deploy-zip-lambdas:
+    needs: setup
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Restore CDK dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            cdk-eregs/node_modules
+          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
+
+      - name: Deploy Redirect and Maintenance APIs
+        env:
+          PR_NUMBER: ${{ needs.setup.outputs.pr_number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          # Deploy zip-based Lambdas
+          cdk deploy \
+          "*redirect-api" \
+          "*maintenance-api" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never
+          popd
+
+  # Docker-based Lambda deployments after ZIP-based ones complete
+  deploy-docker-lambdas:
+    needs: [setup, deploy-zip-lambdas]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Restore CDK dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            cdk-eregs/node_modules
+          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
+
+      - name: Deploy Docker-based Lambdas
+        env:
+          PR_NUMBER: ${{ needs.setup.outputs.pr_number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          # Deploy Docker-based Lambdas separately to maintain clean build context
+          cdk deploy \
+          "*-text-extractor" \
+          "*-fr-parser" \
+          "*-ecfr-parser" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively
+          popd
+
+
+  # deployment-status:
+  #   needs: [setup, deploy-zip-lambdas, deploy-docker-lambdas]
+  #   if: always()
+  #   runs-on: ubuntu-22.04
+  #   environment: "dev"
+  #   steps:
+  #     - name: Deployment/Cleanup Status Summary
+  #       run: |
+  #         if [[ "${{ github.event.action }}" == "closed" ]]; then
+  #           echo "PR Cleanup Summary"
+  #           echo "Docker-based Stacks Cleanup: ${{ needs.cleanup-pr-stacks.result == 'success' && '✅' || '❌' }}"
+  #         else
+  #           echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
+  #           echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas.result == 'success' && '✅' || '❌' }}"
+  #           echo "   - Redirect API"
+  #           echo "   - Maintenance API"
+  #           echo "2. Docker-based Lambdas: ${{ needs.deploy-docker-lambdas.result == 'success' && '✅' || '❌' }}"
+  #           echo "   - Text Extractor"
+  #           echo "   - FR Parser"
+  #           echo "   - ECFR Parser"
+  #         fi  
   # deploy-hello-world-cdk:
   #   environment:
   #     name: "dev"
@@ -114,140 +266,140 @@ jobs:
   #         STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
   #           dev${PR_NUMBER}-HelloWorldStack --require-approval never
   #         popd
-  deploy-Redirect-Api-CDK:
-    environment:
-      name: "dev"
-    env:
-      ENVIRONMENT_NAME: "dev"
-    runs-on: ubuntu-22.04
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
+  # deploy-Redirect-Api-CDK:
+  #   environment:
+  #     name: "dev"
+  #   env:
+  #     ENVIRONMENT_NAME: "dev"
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     # Checkout the code
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
+  #     # Find the PR number.  This is not always trivial which is why this uses an existign action
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         # Can be "open", "closed", or "all".  Defaults to "open".
+  #         state: open
+  #     # Configure AWS credentials for GitHub Actions
+  #     - name: Configure AWS credentials for GitHub Actions
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1
      
-      - name: Deploy Redirect Lambda via CDK
-        id: deploy-redirect-api
-        if: success() && steps.findPr.outputs.number
-        env:
-            PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-            RUN_ID: ${{ github.run_id }}
-            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-            CDK_DEBUG: true
-            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-            pushd cdk-eregs
-            npm install -g aws-cdk@latest @aws-sdk/client-ssm
-            npm install
-            cdk deploy "*redirect-api" \
-            -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never  
-            popd    
-  deploy-Maintenance-Api-CDK:
-    environment:
-      name: "dev"
-    env:
-      ENVIRONMENT_NAME: "dev"
-    runs-on: ubuntu-22.04
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1           
-      - name: Deploy Maintenance-api Lambda via CDK
-        id: deploy-maintenance-api
-        if: success() && steps.findPr.outputs.number
-        env:
-            PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-            RUN_ID: ${{ github.run_id }}
-            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-            CDK_DEBUG: true
-            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-            pushd cdk-eregs
-            npm install -g aws-cdk@latest @aws-sdk/client-ssm
-            npm install
-            cdk deploy "*maintenance-api" \
-            -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never  
-            popd    
-  deploy-Docker-Lambdas-CDK:
-    needs: [deploy-Redirect-Api-CDK, deploy-Maintenance-Api-CDK]  # Wait for both ZIP-based deployments
-    environment:
-      name: "dev"
-    env:
-      ENVIRONMENT_NAME: "dev"
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
+  #     - name: Deploy Redirect Lambda via CDK
+  #       id: deploy-redirect-api
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #           RUN_ID: ${{ github.run_id }}
+  #           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #           CDK_DEBUG: true
+  #           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+  #       run: |
+  #           pushd cdk-eregs
+  #           npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #           npm install
+  #           cdk deploy "*redirect-api" \
+  #           -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #           --require-approval never  
+  #           popd    
+  # deploy-Maintenance-Api-CDK:
+  #   environment:
+  #     name: "dev"
+  #   env:
+  #     ENVIRONMENT_NAME: "dev"
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     # Checkout the code
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
+  #     # Find the PR number.  This is not always trivial which is why this uses an existign action
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         # Can be "open", "closed", or "all".  Defaults to "open".
+  #         state: open
+  #     # Configure AWS credentials for GitHub Actions
+  #     - name: Configure AWS credentials for GitHub Actions
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1           
+  #     - name: Deploy Maintenance-api Lambda via CDK
+  #       id: deploy-maintenance-api
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #           RUN_ID: ${{ github.run_id }}
+  #           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #           CDK_DEBUG: true
+  #           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+  #       run: |
+  #           pushd cdk-eregs
+  #           npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #           npm install
+  #           cdk deploy "*maintenance-api" \
+  #           -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #           --require-approval never  
+  #           popd    
+  # deploy-Docker-Lambdas-CDK:
+  #   needs: [deploy-Redirect-Api-CDK, deploy-Maintenance-Api-CDK]  # Wait for both ZIP-based deployments
+  #   environment:
+  #     name: "dev"
+  #   env:
+  #     ENVIRONMENT_NAME: "dev"
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
           
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          state: open
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         state: open
           
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1           
+  #     - name: Configure AWS credentials for GitHub Actions
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1           
           
-      - name: Deploy Docker-based Lambdas via CDK
-        id: deploy-docker-lambdas
-        if: success() && steps.findPr.outputs.number
-        env:
-            PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-            RUN_ID: ${{ github.run_id }}
-            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-            CDK_DEBUG: true
-            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-            pushd cdk-eregs
-            npm install -g aws-cdk@latest @aws-sdk/client-ssm
-            npm install
-            # Deploy all Docker-based Lambdas together
-            cdk deploy \
-            "*-text-extractor" \
-            "*-fr-parser" \
-            "*-ecfr-parser" \
-            -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --require-approval never 
-            popd
+  #     - name: Deploy Docker-based Lambdas via CDK
+  #       id: deploy-docker-lambdas
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #           RUN_ID: ${{ github.run_id }}
+  #           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #           CDK_DEBUG: true
+  #           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+  #       run: |
+  #           pushd cdk-eregs
+  #           npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #           npm install
+  #           # Deploy all Docker-based Lambdas together
+  #           cdk deploy \
+  #           "*-text-extractor" \
+  #           "*-fr-parser" \
+  #           "*-ecfr-parser" \
+  #           -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #           --require-approval never 
+  #           popd
   # deploy-Text-extractor-CDK:
   #   environment:
   #     name: "dev"
