@@ -74,7 +74,7 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
-  deploy-zip-lambdas:
+  deploy-zip-lambdas-cdk:
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -123,7 +123,7 @@ jobs:
           popd
 
   deploy-text-extractor-cdk:
-    needs: deploy-zip-lambdas
+    needs: deploy-zip-lambdas-cdk
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -169,8 +169,8 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
-  deploy-fr-parser:
-    needs: [deploy-zip-lambdas, deploy-text-extractor]
+  deploy-fr-parser-cdk:
+    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -216,8 +216,8 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
-  deploy-ecfr-parser:
-    needs: [deploy-zip-lambdas, deploy-text-extractor, deploy-fr-parser]
+  deploy-ecfr-parser-cdk:
+    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -263,8 +263,8 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
-  deployment-status:
-    needs: [deploy-zip-lambdas, deploy-text-extractor, deploy-fr-parser, deploy-ecfr-parser]
+  deployment-status-cdk:
+    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk, deploy-ecfr-parser-cdk]
     if: always()
     runs-on: ubuntu-22.04
     environment: "dev"
@@ -272,10 +272,10 @@ jobs:
       - name: Deployment Status Summary
         run: |
           echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
-          echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas.result == 'success' && '✅' || '❌' }}"
-          echo "2. Text Extractor: ${{ needs.deploy-text-extractor.result == 'success' && '✅' || '❌' }}"
-          echo "3. FR Parser: ${{ needs.deploy-fr-parser.result == 'success' && '✅' || '❌' }}"
-          echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser.result == 'success' && '✅' || '❌' }}"
+          echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas-cdk.result == 'success' && '✅' || '❌' }}"
+          echo "2. Text Extractor: ${{ needs.deploy-text-extractor-cdk.result == 'success' && '✅' || '❌' }}"
+          echo "3. FR Parser: ${{ needs.deploy-fr-parser-cdk.result == 'success' && '✅' || '❌' }}"
+          echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser-cdk.result == 'success' && '✅' || '❌' }}"
   # deploy-hello-world-cdk:
   #   environment:
   #     name: "dev"
