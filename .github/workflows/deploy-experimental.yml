@@ -122,7 +122,7 @@ jobs:
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
-  deploy-text-extractor:
+  deploy-text-extractor-cdk:
     needs: deploy-zip-lambdas
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
