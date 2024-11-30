@@ -74,15 +74,13 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
-  setup:
+  deploy-zip-lambdas:
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
       name: "dev"
     env:
       ENVIRONMENT_NAME: "dev"
-    outputs:
-      pr_number: ${{ steps.findPr.outputs.number }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -95,61 +93,23 @@ jobs:
         with:
           state: open
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install CDK dependencies
-        run: |
-          pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
-          npm install
-          popd
-
-      - name: Cache CDK dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            cdk-eregs/node_modules
-          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
-
-  # ZIP-based Lambda deployments first
-  deploy-zip-lambdas:
-    needs: setup
-    if: github.event.action != 'closed'
-    runs-on: ubuntu-22.04
-    environment:
-      name: "dev"
-    env:
-      ENVIRONMENT_NAME: "dev"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Restore CDK dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            cdk-eregs/node_modules
-          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
-
       - name: Deploy Redirect and Maintenance APIs
+        if: success() && steps.findPr.outputs.number
         env:
-          PR_NUMBER: ${{ needs.setup.outputs.pr_number }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
           # Deploy zip-based Lambdas
           cdk deploy \
           "*redirect-api" \
@@ -160,7 +120,7 @@ jobs:
 
   # Docker-based Lambda deployments after ZIP-based ones complete
   deploy-docker-lambdas:
-    needs: [setup, deploy-zip-lambdas]
+    needs: deploy-zip-lambdas
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -173,27 +133,29 @@ jobs:
         with:
           submodules: true
 
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Restore CDK dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            cdk-eregs/node_modules
-          key: ${{ runner.os }}-cdk-${{ hashFiles('cdk-eregs/package-lock.json') }}
-
       - name: Deploy Docker-based Lambdas
+        if: success() && steps.findPr.outputs.number
         env:
-          PR_NUMBER: ${{ needs.setup.outputs.pr_number }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
           # Deploy Docker-based Lambdas separately to maintain clean build context
           cdk deploy \
           "*-text-extractor" \
@@ -203,8 +165,6 @@ jobs:
           --require-approval never \
           --exclusively
           popd
-
-
   # deployment-status:
   #   needs: [setup, deploy-zip-lambdas, deploy-docker-lambdas]
   #   if: always()
