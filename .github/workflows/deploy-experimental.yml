@@ -201,33 +201,33 @@ jobs:
             -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never  
             popd    
-  deploy-Text-extractor-CDK:
+  deploy-Docker-Lambdas-CDK:
+    needs: [deploy-Redirect-Api-CDK, deploy-Maintenance-Api-CDK]  # Wait for both ZIP-based deployments
     environment:
       name: "dev"
     env:
       ENVIRONMENT_NAME: "dev"
     runs-on: ubuntu-22.04
     steps:
-      # Checkout the code
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
+          
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      # Configure AWS credentials for GitHub Actions
+          
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1           
-      - name: Deploy Text extract via CDK
-        id: deploy-text-extractor
+          
+      - name: Deploy Docker-based Lambdas via CDK
+        id: deploy-docker-lambdas
         if: success() && steps.findPr.outputs.number
         env:
             PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -240,10 +240,57 @@ jobs:
             pushd cdk-eregs
             npm install -g aws-cdk@latest @aws-sdk/client-ssm
             npm install
-            cdk deploy "*-text-extractor" \
+            # Deploy all Docker-based Lambdas together
+            cdk deploy \
+            "*-text-extractor" \
+            "*-fr-parser" \
+            "*-ecfr-parser" \
             -c environment=${{ env.ENVIRONMENT_NAME }} \
             --require-approval never 
             popd
+  # deploy-Text-extractor-CDK:
+  #   environment:
+  #     name: "dev"
+  #   env:
+  #     ENVIRONMENT_NAME: "dev"
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     # Checkout the code
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
+  #     # Find the PR number.  This is not always trivial which is why this uses an existign action
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         # Can be "open", "closed", or "all".  Defaults to "open".
+  #         state: open
+  #     # Configure AWS credentials for GitHub Actions
+  #     - name: Configure AWS credentials for GitHub Actions
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1           
+  #     - name: Deploy Text extract via CDK
+  #       id: deploy-text-extractor
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #           RUN_ID: ${{ github.run_id }}
+  #           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #           CDK_DEBUG: true
+  #           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+  #       run: |
+  #           pushd cdk-eregs
+  #           npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #           npm install
+  #           cdk deploy "*-text-extractor" \
+  #           -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #           --require-approval never 
+  #           popd
   deploy-text-extractor:
     environment:
       name: "dev"

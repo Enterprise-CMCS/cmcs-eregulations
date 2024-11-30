@@ -10,6 +10,10 @@ import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspe
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
 import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
+import { FrParserStack } from '../lib/stacks/fr-parser-stack';
+import { S3ImportStack } from '../lib/stacks/s3-import';
+import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+
 // import { StackFactory } from '../lib/factories/stack-factory';
 // import { getStackConfigs } from '../config/stack-definition';
 async function main() {
@@ -17,12 +21,21 @@ async function main() {
     // const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
-    const [vpcId, logLevel, httpUser, httpPassword] = await Promise.all([
+    // Fetch all required SSM parameters
+    const [
+      vpcId, 
+      logLevel, 
+      httpUser, 
+      httpPassword,
+      eregsApiUrl
+    ] = await Promise.all([
       getParameterValue('/account_vars/vpc/id'),
       getParameterValue('/eregulations/text_extractor/log_level'),
       getParameterValue('/eregulations/http/user'),
       getParameterValue('/eregulations/http/password'),
+      getParameterValue('/eregulations/custom_url'),
     ]);
+  
      // Get environment configuration
      const env = { 
       account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
@@ -111,6 +124,40 @@ async function main() {
       memorySize: 1024,
       timeout: 900,
       reservedConcurrentExecutions: 10,
+    },
+    environmentConfig: {
+      vpcId,
+      logLevel,
+      httpUser,
+      httpPassword,
+    }
+  }, stageConfig);
+
+  new S3ImportStack(app, 'S3ImportStack', {
+    bucketName: process.env.BUCKET_NAME || '',
+    env: {
+      account: process.env.CDK_DEFAULT_ACCOUNT,
+      region: process.env.CDK_DEFAULT_REGION,
+    },
+  });
+  
+  new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
+    env,
+    lambdaConfig: {
+      timeout: 900,
+    },
+    environmentConfig: {
+      vpcId,
+      logLevel,
+      httpUser,
+      httpPassword,
+    }
+  }, stageConfig);
+  
+  new EcfrParserStack(app, stageConfig.getResourceName('ecfr-parser'), {
+    env,
+    lambdaConfig: {
+      timeout: 900,
     },
     environmentConfig: {
       vpcId,
