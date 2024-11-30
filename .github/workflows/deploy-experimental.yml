@@ -112,10 +112,9 @@ jobs:
           npm install
           
           # Get exact stack names
-          REDIRECT_STACK="cms-eregs-eph-${PR_NUMBER}-redirect-api"
-          MAINTENANCE_STACK="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
+          REDIRECT_STACK="cms-eregs-eph-$PR_NUMBER-redirect-api"
+          MAINTENANCE_STACK="cms-eregs-eph-$PR_NUMBER-maintenance-api"
           
-          # Deploy using ZIP-specific entry point
           cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
@@ -123,8 +122,7 @@ jobs:
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
-  # Docker-based Lambda deployments after ZIP-based ones complete
-  deploy-docker-lambdas:
+  deploy-text-extractor:
     needs: deploy-zip-lambdas
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
@@ -150,7 +148,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Deploy Docker-based Lambdas
+      - name: Deploy Text Extractor
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -162,22 +160,122 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
-          # Get exact stack names
-          TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
-          FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
-          ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
+          TEXT_EXTRACTOR_STACK="cms-eregs-eph-$PR_NUMBER-text-extractor"
           
-          # Deploy using Docker-specific entry point
-          cdk deploy \
-          ${TEXT_EXTRACTOR_STACK} \
-          ${FR_PARSER_STACK} \
-          ${ECFR_PARSER_STACK} \
+          cdk deploy $TEXT_EXTRACTOR_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+  deploy-fr-parser:
+    needs: [deploy-zip-lambdas, deploy-text-extractor]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy FR Parser
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          FR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-fr-parser"
+          
+          cdk deploy $FR_PARSER_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deploy-ecfr-parser:
+    needs: [deploy-zip-lambdas, deploy-text-extractor, deploy-fr-parser]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy ECFR Parser
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          ECFR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-ecfr-parser"
+          
+          cdk deploy $ECFR_PARSER_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deployment-status:
+    needs: [deploy-zip-lambdas, deploy-text-extractor, deploy-fr-parser, deploy-ecfr-parser]
+    if: always()
+    runs-on: ubuntu-22.04
+    environment: "dev"
+    steps:
+      - name: Deployment Status Summary
+        run: |
+          echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
+          echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas.result == 'success' && '✅' || '❌' }}"
+          echo "2. Text Extractor: ${{ needs.deploy-text-extractor.result == 'success' && '✅' || '❌' }}"
+          echo "3. FR Parser: ${{ needs.deploy-fr-parser.result == 'success' && '✅' || '❌' }}"
+          echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser.result == 'success' && '✅' || '❌' }}"
   # deploy-hello-world-cdk:
   #   environment:
   #     name: "dev"
