@@ -99,7 +99,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Deploy Redirect API
+      - name: Deploy ZIP-based Lambdas
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -111,32 +111,16 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
-          # Get exact stack name
+          # Get exact stack names
           REDIRECT_STACK="cms-eregs-eph-${PR_NUMBER}-redirect-api"
-          
-          # Deploy Redirect API separately
-          cdk deploy ${REDIRECT_STACK} \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --require-approval never \
-          --exclusively
-          popd
-
-      - name: Deploy Maintenance API
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
-        run: |
-          pushd cdk-eregs
           MAINTENANCE_STACK="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
           
-          # Deploy Maintenance API separately
-          cdk deploy ${MAINTENANCE_STACK} \
+          # Deploy using ZIP-specific entry point
+          cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
-          --exclusively
+          --exclusively \
+          --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
   # Docker-based Lambda deployments after ZIP-based ones complete
@@ -183,27 +167,16 @@ jobs:
           FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
           ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
           
-          # Deploy each Docker-based Lambda separately
-          echo "Deploying Text Extractor..."
-          cdk deploy ${TEXT_EXTRACTOR_STACK} \
+          # Deploy using Docker-specific entry point
+          cdk deploy \
+          ${TEXT_EXTRACTOR_STACK} \
+          ${FR_PARSER_STACK} \
+          ${ECFR_PARSER_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
-          --exclusively
-          
-          echo "Deploying FR Parser..."
-          cdk deploy ${FR_PARSER_STACK} \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --require-approval never \
-          --exclusively
-          
-          echo "Deploying ECFR Parser..."
-          cdk deploy ${ECFR_PARSER_STACK} \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --require-approval never \
-          --exclusively
-          
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
           popd
-
   # deployment-status:
   #   needs: [setup, deploy-zip-lambdas, deploy-docker-lambdas]
   #   if: always()
