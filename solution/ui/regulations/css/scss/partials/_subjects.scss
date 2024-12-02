@@ -408,7 +408,7 @@
         padding: 0 1rem;
     }
 
-    .subj-toc__container {
+    .subj-landing__container {
         @include screen-md {
             padding-left: 16px;
         }
@@ -416,62 +416,19 @@
         @media (max-width: calc($width-md - 1px)) {
             padding-top: var(--spacer-2);
         }
+        
+        > * {
+          padding-bottom: var(--spacer-2);
+        }
 
         h1 {
             font-size: 2.25rem;
             margin-bottom: 0px;
         }
 
-        ul.subj-toc__list {
-            padding: 0;
-
-            li.subj-toc__li {
-                list-style: none;
-                padding: 1rem 0.25rem;
-                border-bottom: 1px solid $border_color;
-
-                &:last-child {
-                    margin-bottom: 0;
-                    border-bottom: none;
-                }
-
-                a {
-                    text-decoration: none;
-
-                    &:hover,
-                    &:focus,
-                    &:active {
-                        cursor: pointer;
-                    }
-
-                    .subj-toc-li__div {
-                        display: inline-block;
-                        font-size: 1rem;
-                        line-height: 1.25rem;
-
-                        &--bold {
-                            font-weight: 700;
-                        }
-
-                        &.subj-toc-li__abbr {
-                            padding-right: 5px;
-                            margin-right: 5px;
-                            border-right: 1px solid $secondary_text_color;
-                        }
-                    }
-                }
-
-                .subj-toc-li__count {
-                    margin-top: 4px;
-                    font-size: 0.875rem;
-                    line-height: 1.25rem;
-                    color: $secondary_text_color;
-
-                    .subj-doc__count {
-                        font-weight: 700;
-                    }
-                }
-            }
+        ul {
+            margin-top: 0px;
+            padding-bottom: 0px;
         }
     }
 
