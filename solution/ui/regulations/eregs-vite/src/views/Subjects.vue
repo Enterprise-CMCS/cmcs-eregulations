@@ -31,7 +31,7 @@ import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
-import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
+import SubjectLanding from "@/components/subjects/SubjectLanding.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -400,7 +400,7 @@ getDocSubjects();
                     </PolicySidebar>
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
-                    <SubjectTOC
+                    <SubjectLanding
                         v-if="
                             allDocTypesOnly($route.query) ||
                             _isEmpty($route.query)
