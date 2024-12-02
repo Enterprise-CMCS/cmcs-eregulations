@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from "vue";
-
 import useDropdownMenu from "composables/dropdownMenu";
 
 import HeaderChevronUp from "../svgs/header-chevron-up.vue";
@@ -17,6 +15,8 @@ const props = defineProps({
         required: true,
     },
 });
+
+const emit = defineEmits(["link-clicked"]);
 
 const links = [
     {
@@ -45,6 +45,7 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
                     class="header--links__anchor"
                     :class="{ active: link.active }"
                     :href="link.href"
+                    @click="$emit(`link-clicked`, link.name)"
                 >
                     <span class="anchor__span">{{ link.label }}</span>
                 </a>

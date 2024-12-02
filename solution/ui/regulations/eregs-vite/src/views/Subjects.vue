@@ -44,7 +44,7 @@ const statutesUrl = inject("statutesUrl");
 const surveyUrl = inject("surveyUrl");
 const username = inject("username");
 
-// Router and Route
+// Route and router
 const $route = useRoute();
 const $router = useRouter();
 
@@ -156,6 +156,15 @@ const addSelectedParams = (paramArgs) => {
 const clearSelectedParams = () => {
     selectedParams.paramString = "";
     selectedParams.paramsArray = [];
+};
+
+const resetSubjects = (linkName) => {
+    if (linkName === "subjects") {
+        $router.push({
+            name: "subjects",
+            query: {},
+        });
+    }
 };
 
 provide("selectedParams", selectedParams);
@@ -354,7 +363,10 @@ getDocSubjects();
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        @link-clicked="resetSubjects"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />

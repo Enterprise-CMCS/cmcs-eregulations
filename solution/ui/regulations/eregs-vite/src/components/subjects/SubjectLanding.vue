@@ -1,7 +1,5 @@
 <script setup>
-import { computed, inject } from "vue";
-
-import { getSubjectNameParts } from "utilities/filters";
+import { inject } from "vue";
 
 const aboutUrl = inject("aboutUrl");
 const isAuthenticated = inject("isAuthenticated");
@@ -12,8 +10,6 @@ const props = defineProps({
         default: () => ({ results: [], loading: true }),
     },
 });
-
-const subjectsLength = computed(() => props.policyDocSubjects.results.length);
 </script>
 
 <template>
