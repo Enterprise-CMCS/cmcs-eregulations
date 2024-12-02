@@ -94,6 +94,10 @@
         justify-content: space-between;
         border: 1px solid $border_color;
 
+        &:focus-visible {
+            outline: none;
+        }
+
         .v-btn__content {
             justify-content: start;
             letter-spacing: 0;
@@ -249,6 +253,10 @@
 
         &::after {
             opacity: 0;
+        }
+
+        &:focus-visible {
+            outline: 1px solid var(--color-focus-dark);
         }
 
         &:hover > .v-list-item__overlay,
@@ -416,9 +424,9 @@
         @media (max-width: calc($width-md - 1px)) {
             padding-top: var(--spacer-2);
         }
-        
+
         > * {
-          padding-bottom: var(--spacer-2);
+            padding-bottom: var(--spacer-2);
         }
 
         h1 {
