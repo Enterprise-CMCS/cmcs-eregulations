@@ -46,8 +46,10 @@
     border-color: rgba(0, 0, 0, 0);
 
     &:hover,
-    &:focus {
+    &:focus,
+    &:focus:visited {
         background: $mid-dark-blue;
+        background-color: $mid-dark-blue;
     }
 }
 
