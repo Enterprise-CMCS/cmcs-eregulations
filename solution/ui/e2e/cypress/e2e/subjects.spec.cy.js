@@ -429,6 +429,15 @@ describe("Find by Subjects", () => {
         cy.get(".subjects__list li").should("have.length", 77);
     });
 
+    it("should not add bold styling to Subject Selector list item when focused", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects");
+        cy.get(".subjects__list .subjects__li button").first().focus();
+        cy.focused()
+            .find(".subjects-li__button-subtitle")
+            .should("have.css", "font-weight", "400");
+    });
+
     it("should have a Documents to Show checkbox list only when a subject or category is selected", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
@@ -517,6 +526,21 @@ describe("Find by Subjects", () => {
             .should("have.text", "Find Policy Documents");
         cy.get(".doc-type__toggle fieldset").should("not.exist");
         cy.url().should("include", "/subjects");
+    });
+
+    it("should clear URL params and show the Landing Page when the Research a Subject header link is clicked", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/subjects/",
+        });
+        cy.visit("/subjects?type=internal");
+        cy.get(".subj-landing__container").should("not.exist");
+        cy.get(
+            `header .header--links .links--container > ul.links__list li a[data-testid=subjects]`,
+        ).click({ force: true });
+        cy.get(".subj-landing__container").should("exist");
     });
 
     it("should have a link to the About page in the Landing message", () => {
