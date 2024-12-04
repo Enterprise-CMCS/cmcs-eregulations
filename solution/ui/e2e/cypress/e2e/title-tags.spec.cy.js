@@ -21,7 +21,7 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         cy.visit("/statutes/");
         cy.title().should(
             "eq",
-            "Statute Reference | Medicaid & CHIP eRegulations"
+            "Statute Reference | Medicaid & CHIP eRegulations",
         );
     });
 
@@ -30,21 +30,21 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         cy.visit("/subjects/");
         cy.title().should(
             "eq",
-            "Find by Subject | Medicaid & CHIP eRegulations"
+            "Find by Subject | Medicaid & CHIP eRegulations",
         );
 
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
         cy.title().should(
             "eq",
-            "Managed Care | Find by Subject | Medicaid & CHIP eRegulations"
+            "Managed Care | Find by Subject | Medicaid & CHIP eRegulations",
         );
 
         cy.go("back");
         cy.title().should(
             "eq",
-            "Find by Subject | Medicaid & CHIP eRegulations"
+            "Find by Subject | Medicaid & CHIP eRegulations",
         );
     });
 
@@ -53,19 +53,19 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         cy.visit("/subjects/");
         cy.title().should(
             "eq",
-            "Find by Subject | Medicaid & CHIP eRegulations"
+            "Find by Subject | Medicaid & CHIP eRegulations",
         );
 
         cy.visit("/subjects/?subjects=1");
         cy.title().should(
             "eq",
-            "Cures Act | Find by Subject | Medicaid & CHIP eRegulations"
+            "Cures Act | Find by Subject | Medicaid & CHIP eRegulations",
         );
 
         cy.visit("/subjects/?subjects=18");
         cy.title().should(
             "eq",
-            "Collateral Contacts | Find by Subject | Medicaid & CHIP eRegulations"
+            "Collateral Contacts | Find by Subject | Medicaid & CHIP eRegulations",
         );
     });
 });

@@ -31,7 +31,7 @@ import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
-import SubjectTOC from "@/components/subjects/SubjectTOC.vue";
+import SubjectLanding from "@/components/subjects/SubjectLanding.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -44,7 +44,7 @@ const statutesUrl = inject("statutesUrl");
 const surveyUrl = inject("surveyUrl");
 const username = inject("username");
 
-// Router and Route
+// Route and router
 const $route = useRoute();
 const $router = useRouter();
 
@@ -156,6 +156,15 @@ const addSelectedParams = (paramArgs) => {
 const clearSelectedParams = () => {
     selectedParams.paramString = "";
     selectedParams.paramsArray = [];
+};
+
+const resetSubjects = (linkName) => {
+    if (linkName === "subjects") {
+        $router.push({
+            name: "subjects",
+            query: {},
+        });
+    }
 };
 
 provide("selectedParams", selectedParams);
@@ -354,7 +363,10 @@ getDocSubjects();
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        @link-clicked="resetSubjects"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -400,7 +412,7 @@ getDocSubjects();
                     </PolicySidebar>
                 </div>
                 <div class="ds-l-col--12 ds-l-md-col--8 ds-l-lg-col--9">
-                    <SubjectTOC
+                    <SubjectLanding
                         v-if="
                             allDocTypesOnly($route.query) ||
                             _isEmpty($route.query)
