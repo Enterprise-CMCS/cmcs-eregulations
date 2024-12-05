@@ -6,9 +6,8 @@
         <div class="category-labels" data-testid="results-item-categories">
             <slot name="labels"></slot>
         </div>
-        <div class="result__context">
-            <slot name="context">
-            </slot>
+        <div class="result__context" data-testid="results-item-context">
+            <slot name="context"></slot>
         </div>
         <div class="result__link">
             <slot name="link">
