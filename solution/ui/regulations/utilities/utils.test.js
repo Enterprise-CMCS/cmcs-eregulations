@@ -7,6 +7,7 @@ import {
     getCurrentPageResultsRange,
     getFileNameSuffix,
     getFileTypeButton,
+    getFrDocType,
     getRequestParams,
     getSectionsRecursive,
     PARAM_ENCODE_DICT,
@@ -351,6 +352,31 @@ describe("Utilities.js", () => {
             expect(
                 getFileTypeButton({ fileName: "index_four.pdf", url: "url" })
             ).toBe("");
+        });
+    });
+
+    describe("getFrDocType", () => {
+        it("returns the correct document type", async () => {
+            const doc1 = {
+                action_type: "Final",
+                correction: true,
+                withdrawal: true,
+            };
+            expect(getFrDocType(doc1)).toBe("WD");
+
+            const doc2 = {
+                action_type: "Final",
+                correction: true,
+                withdrawal: false,
+            };
+            expect(getFrDocType(doc2)).toBe("CORR");
+
+            const doc3 = {
+                action_type: "Final",
+                correction: false,
+                withdrawal: false,
+            };
+            expect(getFrDocType(doc3)).toBe("Final");
         });
     });
 
