@@ -384,6 +384,7 @@ $tablet-max: $width-lg - 1; // 1023px
     text-transform: uppercase;
     color: $primary_indicator_text;
     font-size: 11px;
+    line-height: var(--font-line-height-base);
     padding: 2px 0;
     border-radius: var(--radius-default);
     margin-right: 7px !important;

@@ -29,6 +29,7 @@
 
 <script>
 import { formatDate } from "utilities/utils";
+
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
 export default {
