@@ -7,11 +7,7 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <IndicatorLabel
-                    v-if="type !== ''"
-                    :grouped="grouped"
-                    :type="type"
-                />
+                <IndicatorLabel v-if="type" :grouped="grouped" :type="type" />
                 <span v-if="publication_date" class="recent-date">{{
                     formatPubDate(publication_date)
                 }}</span>
