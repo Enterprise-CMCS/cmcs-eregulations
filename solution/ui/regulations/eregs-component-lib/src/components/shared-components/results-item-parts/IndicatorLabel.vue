@@ -1,11 +1,24 @@
+<script>
+const getIndicatorClasses = (props) => {
+    if (props.type === "Final") {
+        return;
+    }
+
+    return {
+        "secondary-indicator": props.type !== "WD",
+        "tertiary-indicator": props.type === "WD",
+    };
+};
+
+export default {
+    getIndicatorClasses,
+};
+</script>
+
 <script setup>
 import { computed } from "vue";
 
 const props = defineProps({
-    grouped: {
-        type: Boolean,
-        default: false,
-    },
     type: {
         type: String,
         required: true,
@@ -13,14 +26,7 @@ const props = defineProps({
 });
 
 const indicatorClasses = computed(() => {
-    if (props.type === "WD") {
-        return {
-            "tertiary-indicator": props.type === "WD",
-        };
-    }
-    return {
-        "secondary-indicator": props.grouped || props.type !== "Final",
-    };
+    return getIndicatorClasses(props);
 });
 </script>
 
