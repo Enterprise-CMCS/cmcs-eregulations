@@ -112,6 +112,8 @@
 </template>
 
 <script>
+import { getFrDocType } from "utilities/utils";
+
 import RelatedRule from "./RelatedRule.vue";
 import ShowMoreButton from "./ShowMoreButton.vue";
 import CollapseButton from "./CollapseButton.vue";
@@ -172,13 +174,7 @@ export default {
             return rule.title || rule.description;
         },
         type(rule) {
-            if (rule.withdrawal) {
-                return "WD";
-            }
-            if (rule.correction) {
-                return "CORR";
-            }
-            return rule.action_type || rule.category?.name || rule.type;
+            return getFrDocType(rule);
         },
         citation(rule) {
             return rule.citation || rule.document_id;

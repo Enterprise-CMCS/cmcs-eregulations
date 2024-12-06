@@ -195,7 +195,7 @@
                         "type": "section"
                     }
                 ],
-                "correction": false,
+                "correction": true,
                 "created_at": "2024-07-18 10:22:35.320776",
                 "date": "2022-09-27",
                 "docket_numbers": ["CMS-9912-N"],
@@ -223,7 +223,7 @@
                 "type": "federal_register_link",
                 "updated_at": "2024-07-18 10:22:35.332593",
                 "url": "https://www.federalregister.gov/documents/2022/09/27/2022-20973/medicaid-program-temporary-increase-in-federal-medical-assistance-percentage-fmap-in-response-to-the",
-                "withdrawal": false
+                "withdrawal": true
             },
             "summary_headline": "Medicaid Program; Temporary Increase in Federal Medical Assistance Percentage (<span class='search-highlight'>FMAP</span>) in Response to the COVID-19 Public Health Emergency (PHE); Reopening of Public Comment Period"
         }

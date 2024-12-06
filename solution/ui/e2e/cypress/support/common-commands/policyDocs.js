@@ -113,6 +113,11 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .eq(2)
         .should("include.text", " Public");
 
+    cy.get('[data-testid="results-item-context"]')
+        .eq(2)
+        .find(".recent-flag")
+        .should("not.exist");
+
     cy.get('[data-testid="results-item-categories"] i')
         .eq(2)
         .should("have.class", "fa-users");
@@ -135,6 +140,11 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
         .eq(3)
         .should("include.text", " Public");
+
+    cy.get('[data-testid="results-item-context"]')
+        .eq(3)
+        .find(".recent-flag")
+        .should("include.text", "WD");
 
     cy.get('[data-testid="results-item-categories"] i')
         .eq(3)

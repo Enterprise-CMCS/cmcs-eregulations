@@ -644,15 +644,27 @@ const getFieldVal = ({ item, fieldName }) => {
     }
 };
 
+const getFrDocType = (doc) => {
+    if (doc?.withdrawal) {
+        return "WD";
+    }
+    if (doc?.correction) {
+        return "CORR";
+    }
+    return doc?.action_type || doc?.category?.name || doc?.type;
+};
+
 const deserializeResult = (obj) => {
     const returnObj = {};
 
+    returnObj.action_type = getFieldVal({ item: obj, fieldName: "action_type" });
     returnObj.category = getFieldVal({ item: obj, fieldName: "category" });
     returnObj.cfr_citations = getFieldVal({
         item: obj,
         fieldName: "cfr_citations",
     });
     returnObj.content_headline = obj.content_headline;
+    returnObj.correction = getFieldVal({ item: obj, fieldName: "correction" });
     returnObj.date = getFieldVal({ item: obj, fieldName: "date" });
     returnObj.document_id = getFieldVal({
         item: obj,
@@ -677,6 +689,7 @@ const deserializeResult = (obj) => {
         getFieldVal({ item: obj, fieldName: "type" }) ?? "reg_text";
     returnObj.uid = getFieldVal({ item: obj, fieldName: "uid" });
     returnObj.url = getFieldVal({ item: obj, fieldName: "url" });
+    returnObj.withdrawal = getFieldVal({ item: obj, fieldName: "withdrawal" });
 
     return returnObj;
 };
@@ -685,7 +698,6 @@ export {
     addMarks,
     createLastUpdatedDates,
     createRegResultLink,
-    consolidateToMap,
     COUNT_TYPES_MAP,
     createOneIndexedArray,
     delay,
@@ -693,7 +705,6 @@ export {
     DOCUMENT_TYPES,
     DOCUMENT_TYPES_MAP,
     EventCodes,
-    formatAmount,
     formatDate,
     formatResourceCategories,
     getActAbbr,
@@ -702,6 +713,7 @@ export {
     getFieldVal,
     getFileNameSuffix,
     getFileTypeButton,
+    getFrDocType,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,
