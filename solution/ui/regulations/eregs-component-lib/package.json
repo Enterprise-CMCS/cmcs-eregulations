@@ -17,7 +17,7 @@
     "mitt": "^3.0.1",
     "shelljs": "^0.8.5",
     "vue": "^3.5.11",
-    "vuetify": "^3.7.1"
+    "vuetify": "^3.7.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
