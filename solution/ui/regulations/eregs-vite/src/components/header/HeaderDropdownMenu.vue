@@ -1,6 +1,4 @@
 <script setup>
-import { computed, provide, ref } from "vue";
-
 const emit = defineEmits(["closeMenu"]);
 
 const outsideClick = () => {

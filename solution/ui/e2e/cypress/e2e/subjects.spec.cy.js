@@ -106,18 +106,13 @@ describe("Find by Subjects", () => {
 
         cy.checkAccessibility();
 
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
-        ).scrollIntoView();
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count",
-        )
+        cy.get(".subjects__list button[data-testid=add-subject-3] span.count")
             .should("be.visible")
-            .and("have.text", "1 public resource");
+            .and("have.text", "(1)");
         cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
+            ".subjects__list button[data-testid=add-subject-63]",
         ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
         cy.get(".doc-type__toggle fieldset").should("not.exist");
@@ -133,52 +128,12 @@ describe("Find by Subjects", () => {
         cy.url().should("not.include", "type");
     });
 
-    it("should show public and internal items when logged in", () => {
-        cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/subjects/",
-        });
-        cy.visit("/subjects");
-        cy.url().should("include", "/subjects/");
-        cy.get("button[data-testid='user-account-button']").should(
-            "be.visible",
-        );
-        cy.get(".subject__heading").should("not.exist");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
-        ).scrollIntoView();
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] div.subj-toc-li__count",
-        )
-            .should("be.visible")
-            .and("have.text", "1 public and 0 internal resources");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
-            .should("have.text", "Managed Care")
-            .click({ force: true });
-        cy.url().should("include", "/subjects?subjects=63");
-        cy.get(".subject__heading")
-            .should("exist")
-            .and("have.text", "Managed Care");
-        cy.get(`button[data-testid=add-subject-2]`).click({
-            force: true,
-        });
-        cy.url().should("include", "/subjects?subjects=2");
-    });
-
     it("should redirect to the Search page with the correct selected subject when a search term is entered", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/subjects");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
-            .should("have.text", "Access to Services")
+        cy.get(".subjects__list button[data-testid=add-subject-3]")
+            .should("have.text", "Access to Services(1)")
             .click({ force: true });
         cy.get("input#main-content").type("mock", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
@@ -196,11 +151,8 @@ describe("Find by Subjects", () => {
         cy.visit("/subjects");
 
         // select subject
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
-            .should("have.text", "Access to Services")
+        cy.get(".subjects__list button[data-testid=add-subject-3]")
+            .should("have.text", "Access to Services(1)")
             .click({ force: true });
 
         // select category
@@ -243,11 +195,8 @@ describe("Find by Subjects", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/subjects");
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-3] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-3] a")
-            .should("have.text", "Access to Services")
+        cy.get(".subjects__list button[data-testid=add-subject-3]")
+            .should("have.text", "Access to Services(1)")
             .click({ force: true });
         cy.url().should("include", "/subjects?subjects=3");
         cy.get(".subject__heading")
@@ -480,6 +429,15 @@ describe("Find by Subjects", () => {
         cy.get(".subjects__list li").should("have.length", 77);
     });
 
+    it("should not add bold styling to Subject Selector list item when focused", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects");
+        cy.get(".subjects__list .subjects__li button").first().focus();
+        cy.focused()
+            .find(".subjects-li__button-subtitle")
+            .should("have.css", "font-weight", "400");
+    });
+
     it("should have a Documents to Show checkbox list only when a subject or category is selected", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
@@ -493,10 +451,7 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset").should("not.exist");
 
         // select a subject from ToC
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
 
@@ -518,10 +473,7 @@ describe("Find by Subjects", () => {
         cy.get(".doc-type__toggle fieldset").should("not.exist");
 
         // select a subject from ToC once again
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
 
@@ -555,7 +507,7 @@ describe("Find by Subjects", () => {
             .should("include.text", "Internal Resources");
     });
 
-    it("should show only the Table of Contents if both or neither checkboxes are checked", () => {
+    it("should show only the Landing Page if both or neither checkboxes are checked", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({
             username,
@@ -563,14 +515,41 @@ describe("Find by Subjects", () => {
             landingPage: "/subjects/",
         });
         cy.visit("/subjects?type=internal");
-        cy.get(".subj-toc__container").should("not.exist");
+        cy.get(".subj-landing__container").should("not.exist");
         cy.get(".doc-type__toggle fieldset > div")
             .eq(1)
             .find("input")
             .uncheck({ force: true });
-        cy.get(".subj-toc__container").should("exist");
+        cy.get(".subj-landing__container")
+            .should("exist")
+            .find("h1")
+            .should("have.text", "Find Policy Documents");
         cy.get(".doc-type__toggle fieldset").should("not.exist");
         cy.url().should("include", "/subjects");
+    });
+
+    it("should clear URL params and show the Landing Page when the Research a Subject header link is clicked", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/subjects/",
+        });
+        cy.visit("/subjects?type=internal");
+        cy.get(".subj-landing__container").should("not.exist");
+        cy.get(
+            `header .header--links .links--container > ul.links__list li a[data-testid=subjects]`,
+        ).click({ force: true });
+        cy.get(".subj-landing__container").should("exist");
+    });
+
+    it("should have a link to the About page in the Landing message", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects");
+        cy.get(".subj-landing__container a")
+            .should("have.text", "Learn more about documents on eRegs.")
+            .and("have.attr", "href")
+            .and("include", "/about");
     });
 
     it("should not make a request to the content-search endpoint if both checkboxes are checked on load", () => {
@@ -663,10 +642,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']").should("not.exist");
 
         // Select subject
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
 
@@ -695,10 +671,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']").should("not.exist");
 
         // Select a subject
-        cy.get(
-            ".subj-toc__list li[data-testid=subject-toc-li-63] a",
-        ).scrollIntoView();
-        cy.get(".subj-toc__list li[data-testid=subject-toc-li-63] a")
+        cy.get(".subjects__list button[data-testid=add-subject-63]")
             .should("have.text", "Managed Care")
             .click({ force: true });
 

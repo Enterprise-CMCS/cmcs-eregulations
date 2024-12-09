@@ -10,6 +10,7 @@ import {
     deserializeResult,
     getCurrentPageResultsRange,
     getFileTypeButton,
+    getFrDocType,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
@@ -19,6 +20,7 @@ import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
+import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
@@ -279,6 +281,12 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 />
             </template>
             <template #context>
+                <IndicatorLabel
+                    v-if="
+                        doc.category?.is_fr_link_category && getFrDocType(doc)
+                    "
+                    :type="getFrDocType(doc)"
+                />
                 <span v-if="doc.part_title" class="result__context--date">{{
                     partDocumentTitleLabel(doc.part_title)
                 }}</span>
