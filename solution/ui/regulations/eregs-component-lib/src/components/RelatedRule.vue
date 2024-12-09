@@ -7,12 +7,7 @@
             rel="noopener noreferrer"
         >
             <span class="link-heading">
-                <span
-                    v-if="type !== ''"
-                    class="recent-flag indicator"
-                    :class="indicatorClasses"
-                    >{{ type }}</span
-                >
+                <IndicatorLabel v-if="type" :type="type" />
                 <span v-if="publication_date" class="recent-date">{{
                     formatPubDate(publication_date)
                 }}</span>
@@ -31,8 +26,14 @@
 <script>
 import { formatDate } from "utilities/utils";
 
+import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
+
 export default {
     name: "RelatedRule",
+
+    components: {
+        IndicatorLabel,
+    },
 
     inject: {
         itemTitleLineLimit: { default: 9 },
@@ -85,16 +86,6 @@ export default {
             return {
                 grouped: this.grouped,
                 ungrouped: !this.grouped,
-            };
-        },
-        indicatorClasses() {
-            if (this.type === "WD") {
-                return {
-                    "tertiary-indicator": this.type === "WD",
-                };
-            }
-            return {
-                "secondary-indicator": this.grouped || this.type !== "Final",
             };
         },
         citationClasses() {
