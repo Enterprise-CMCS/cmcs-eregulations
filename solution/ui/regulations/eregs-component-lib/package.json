@@ -24,7 +24,7 @@
     "eslint-plugin-vuetify": "^2.5.1",
     "fast-glob": "^3.2.12",
     "vite": "^6.0.3",
-    "vite-plugin-vuetify": "^2.0.3"
+    "vite-plugin-vuetify": "^2.0.4"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "^4.13.0"
