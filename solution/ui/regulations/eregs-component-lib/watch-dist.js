@@ -19,7 +19,7 @@ distWatcher
     })
     .on("unlink", (path) => {
         log(`File ${path} has been unlinked`);
-    })
+    });
 
 mainWatcher
     .on("add", (path) => {
@@ -32,4 +32,4 @@ mainWatcher
     })
     .on("unlink", (path) => {
         log(`File ${path} has been unlinked`);
-    })
+    });
