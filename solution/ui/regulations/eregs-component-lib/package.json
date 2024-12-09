@@ -23,7 +23,7 @@
     "@vitejs/plugin-vue": "^5.2.1",
     "eslint-plugin-vuetify": "^2.2.0",
     "fast-glob": "^3.2.12",
-    "vite": "^6.0.2",
+    "vite": "^6.0.3",
     "vite-plugin-vuetify": "^2.0.3"
   },
   "optionalDependencies": {
