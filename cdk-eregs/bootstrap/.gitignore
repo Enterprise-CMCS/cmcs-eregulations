@@ -2,4 +2,5 @@
 !update_template.py
 !roles.json
 !.gitignore
-
+!README.md
+!requirements.txt

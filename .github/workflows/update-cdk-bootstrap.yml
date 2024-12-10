@@ -50,8 +50,8 @@ jobs:
           curl -s "https://raw.githubusercontent.com/aws/aws-cdk/refs/heads/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml" -o latest-template.yaml > /dev/null
 
           echo "Applying CMS-specific changes to the template..."
-          ./update_template.py roles.json latest-template.yaml template.yaml \
-            --role-to-assume-arn "arn:aws:iam::\${AWS::AccountId}:role/ct-ado-eregs-application-admin"
+          pip install -r requirements.txt
+          ./update_template.py roles.json latest-template.yaml template.yaml ct-ado-eregs-application-admin
 
           echo "Creating temporary CDK app for bootstrap update..."
           mkdir temp; pushd temp
