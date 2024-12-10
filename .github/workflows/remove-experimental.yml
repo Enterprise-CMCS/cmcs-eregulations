@@ -39,18 +39,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      - name: remove hello world cdk stack
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-          pushd cdk-eregs
-          npm install -g aws-cdk
-          npm install
-          STAGE=dev${PR_NUMBER} cdk destroy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-            dev${PR_NUMBER}-HelloWorldStack --force
-          popd
+      
       # Remove parsers
       - name: remove parsers
         env:
@@ -103,7 +92,7 @@ jobs:
           npm install
           serverless remove --stage dev${PR}
           popd
-      - name: Destroy PR-Specific Stack
+      - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -185,25 +174,4 @@ jobs:
           echo "Cleanup completed for all Docker-based stacks"
           popd
 
-      # - name: Destroy PR-Text-extract Stack
-      #   env:
-      #     PR_NUMBER: ${{ github.event.number }}
-      #     AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      #     AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      #     CDK_DEBUG: true
-      #     ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-      #   run: |
-      #     pushd cdk-eregs
-      #     npm install -g aws-cdk@latest @aws-sdk/client-ssm
-      #     npm install
-          
-      #     # Generate the exact stack name for this PR
-      #     STACK_NAME="cms-eregs-eph-${PR_NUMBER}-text-extractor"
-          
-      #     echo "Destroying PR-specific stack: ${STACK_NAME}"
-      #     cdk destroy "${STACK_NAME}" \
-      #     -c environment=${{ env.ENVIRONMENT_NAME }} \
-      #     --force
-          
-      #     echo "Cleanup completed for stack: ${STACK_NAME}"
-      #     popd
+ 
