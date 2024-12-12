@@ -111,7 +111,6 @@ jobs:
           cdk destroy "${STACK_NAME}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
-          --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           
           echo "Cleanup completed for stack: ${STACK_NAME}"
@@ -135,7 +134,6 @@ jobs:
           cdk destroy "${STACK_NAME}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
-          --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           
           echo "Cleanup completed for stack: ${STACK_NAME}"
@@ -161,8 +159,7 @@ jobs:
           echo "Destroying PR-specific stack: ${TEXT_EXTRACTOR_STACK}"
           cdk destroy "${TEXT_EXTRACTOR_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force
-          --exclusively \
+          --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           
           # Destroy fr-parser stack
@@ -170,15 +167,13 @@ jobs:
           cdk destroy "${FR_PARSER_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
-          --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           
           # Destroy ecfr-parser stack
           echo "Destroying PR-specific stack: ${ECFR_PARSER_STACK}"
           cdk destroy "${ECFR_PARSER_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force
-          --exclusively \
+          --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           
           echo "Cleanup completed for all Docker-based stacks"
