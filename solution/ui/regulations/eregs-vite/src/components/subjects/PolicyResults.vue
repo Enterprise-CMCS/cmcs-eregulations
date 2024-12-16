@@ -1,6 +1,7 @@
 <script>
 import { computed, inject } from "vue";
 import { useRoute } from "vue-router";
+import DOMPurify from "dompurify";
 
 import _isEmpty from "lodash/isEmpty";
 
@@ -314,18 +315,20 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
                     v-html="
-                        getResultLinkText(doc) +
-                        getFileTypeButton({
-                            fileName: doc.file_name,
-                            uid: doc.uid,
-                        })
+                        DOMPurify.sanitize(
+                            getResultLinkText(doc) +
+                                getFileTypeButton({
+                                    fileName: doc.file_name,
+                                    uid: doc.uid,
+                                })
+                        )
                     "
                 ></a>
             </template>
             <template #snippet>
                 <div
                     v-if="showResultSnippet(doc)"
-                    v-html="getResultSnippet(doc)"
+                    v-html="DOMPurify.sanitize(getResultSnippet(doc))"
                 />
             </template>
             <template #chips>

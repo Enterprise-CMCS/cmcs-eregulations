@@ -1,9 +1,10 @@
 <template>
-    <section class="table-section" v-html="table">
-    </section>
+    <section class="table-section" v-html="table"></section>
 </template>
 
 <script>
+import DOMPurify from "dompurify";
+
 export default {
     name: "table-component",
 
@@ -11,15 +12,13 @@ export default {
         table_markup: {
             type: String,
             required: true,
-        }
-
+        },
     },
 
     computed: {
         table() {
-            return this.table_markup;
-        }
-
+            return DOMPurify.sanitize(this.table_markup);
+        },
     },
-}
+};
 </script>

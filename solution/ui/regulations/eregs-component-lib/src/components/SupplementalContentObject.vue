@@ -31,7 +31,7 @@
             >
                 <span
                     v-html="
-                        description +
+                        sanitizedDescription +
                         addFileTypeButton({
                             fileName,
                             uid,
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import DOMPurify from "dompurify";
+
 import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
 
 import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
@@ -98,6 +100,12 @@ export default {
         },
     },
 
+    computed: {
+        sanitizedDescription() {
+            return DOMPurify.sanitize(this.description);
+        },
+    },
+
     methods: {
         isBlank(str) {
             return !str || /^\s*$/.test(str);
@@ -107,10 +115,12 @@ export default {
                 return "";
             }
 
-            return getFileTypeButton({
-                fileName,
-                uid,
-            });
+            return DOMPurify.sanitize(
+                getFileTypeButton({
+                    fileName,
+                    uid,
+                })
+            );
         },
         formatDate(value) {
             const date = new Date(value);

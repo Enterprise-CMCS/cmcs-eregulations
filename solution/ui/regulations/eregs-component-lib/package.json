@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "chokidar": "^4.0.1",
+    "dompurify": "^3.2.3",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
