@@ -30,7 +30,7 @@
                 :class="getLinkClasses(docType)"
             >
                 <span
-                    v-html="
+                    v-sanitize-html="
                         description +
                         addFileTypeButton({
                             fileName,

@@ -54,6 +54,7 @@ import {
 } from "utilities/utils";
 
 import Clickaway from "directives/clickaway";
+import SanitizeHtml from "directives/sanitizeHtml";
 
 const customElementTags = [
     "su",
@@ -251,6 +252,7 @@ function main() {
     app.use(vuetify);
 
     app.directive("clickaway", Clickaway);
+    app.directive("sanitize-html", SanitizeHtml);
 
     app.mount("#vue-app");
 

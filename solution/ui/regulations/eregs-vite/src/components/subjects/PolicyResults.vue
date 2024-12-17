@@ -304,6 +304,13 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #link>
                 <a
+                    v-sanitize-html="
+                        getResultLinkText(doc) +
+                        getFileTypeButton({
+                            fileName: doc.file_name,
+                            uid: doc.uid,
+                        })
+                    "
                     :href="getUrl(doc)"
                     :target="doc.type === 'reg_text' ? undefined : '_blank'"
                     :rel="
@@ -313,19 +320,12 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
-                    v-html="
-                        getResultLinkText(doc) +
-                        getFileTypeButton({
-                            fileName: doc.file_name,
-                            uid: doc.uid,
-                        })
-                    "
                 ></a>
             </template>
             <template #snippet>
                 <div
                     v-if="showResultSnippet(doc)"
-                    v-html="getResultSnippet(doc)"
+                    v-sanitize-html="getResultSnippet(doc)"
                 />
             </template>
             <template #chips>

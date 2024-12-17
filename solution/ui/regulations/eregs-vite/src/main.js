@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
+import SanitizeHtml from "directives/sanitizeHtml";
 import vuetify from "./plugins/vuetify";
 
 import App from "./App.vue";
@@ -26,6 +27,7 @@ for (datum in mountEl.dataset) {
 }
 
 app.directive("clickaway", Clickaway);
+app.directive("sanitize-html", SanitizeHtml);
 
 const router = vueRouter({ customUrl, host });
 
