@@ -1,10 +1,8 @@
 <template>
-    <section class="table-section" v-html="table"></section>
+    <section v-sanitize-html="table" class="table-section"></section>
 </template>
 
 <script>
-import DOMPurify from "dompurify";
-
 export default {
     name: "table-component",
 
@@ -17,7 +15,7 @@ export default {
 
     computed: {
         table() {
-            return DOMPurify.sanitize(this.table_markup);
+            return this.table_markup;
         },
     },
 };

@@ -35,7 +35,6 @@ export default {
 
 <script setup>
 import { computed, inject } from "vue";
-import DOMPurify from "dompurify";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
@@ -53,14 +52,12 @@ const buttonTextClasses = computed(() => getButtonTextClasses(parent));
 
 <template>
     <span
+        v-sanitize-html="
+            (subject.displayName || getSubjectName(subject)) +
+            getDisplayCount(subject)
+        "
         class="subjects-li__button-text"
         :class="buttonTextClasses"
-        v-html="
-            DOMPurify.sanitize(
-                (subject.displayName || getSubjectName(subject)) +
-                    getDisplayCount(subject)
-            )
-        "
     ></span>
     <span
         v-if="
