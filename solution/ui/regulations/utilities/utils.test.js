@@ -11,6 +11,7 @@ import {
     getRequestParams,
     getSectionsRecursive,
     PARAM_ENCODE_DICT,
+    PARAM_VALIDATION_DICT,
     shapeTitlesResponse,
 } from "utilities/utils.js";
 
@@ -106,6 +107,52 @@ describe("Utilities.js", () => {
             456: "2021-03-01",
             457: "2023-08-31",
             460: "2023-08-04",
+        });
+    });
+
+    describe("PARAM_VALIDATION_DICT", () => {
+        it("subjects are properly validated as number", async () => {
+            expect(PARAM_VALIDATION_DICT.subjects(1)).toBe(true);
+            expect(PARAM_VALIDATION_DICT.subjects("1")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.subjects("one")).toBe(false);
+        });
+
+        it("q is properly validated as string", async () => {
+            expect(PARAM_VALIDATION_DICT.q("test")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.q(undefined)).toBe(true);
+            expect(PARAM_VALIDATION_DICT.q("")).toBe(false);
+            expect(PARAM_VALIDATION_DICT.q(1)).toBe(false);
+        });
+
+        it("type is properly validated as number", async () => {
+            expect(PARAM_VALIDATION_DICT.type("all")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.type("internal")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.type("regulations")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.type("external")).toBe(true);
+            expect(
+                PARAM_VALIDATION_DICT.type("regulations,external,internal")
+            ).toBe(true);
+            expect(PARAM_VALIDATION_DICT.type("public")).toBe(false);
+            expect(PARAM_VALIDATION_DICT.type("")).toBe(false);
+            expect(PARAM_VALIDATION_DICT.type(1)).toBe(false);
+        });
+
+        it("page is properly validated as number", async () => {
+            expect(PARAM_VALIDATION_DICT.page(1)).toBe(true);
+            expect(PARAM_VALIDATION_DICT.page("1")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.page("one")).toBe(false);
+        });
+
+        it("categories is properly validated as number", async () => {
+            expect(PARAM_VALIDATION_DICT.categories(1)).toBe(true);
+            expect(PARAM_VALIDATION_DICT.categories("1")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.categories("one")).toBe(false);
+        });
+
+        it("intcategories is properly validated as number", async () => {
+            expect(PARAM_VALIDATION_DICT.intcategories(1)).toBe(true);
+            expect(PARAM_VALIDATION_DICT.intcategories("1")).toBe(true);
+            expect(PARAM_VALIDATION_DICT.intcategories("one")).toBe(false);
         });
     });
 
@@ -235,6 +282,15 @@ describe("Utilities.js", () => {
         };
 
         expect(getRequestParams({ queryParams: query9 })).toBe("q=test");
+
+        const query9point5 = {
+            q: "test",
+            type: "external",
+        };
+
+        expect(getRequestParams({ queryParams: query9point5 })).toBe(
+            "q=test&show_regulations=false&show_internal=false"
+        );
 
         const query10 = {
             q: "test",
