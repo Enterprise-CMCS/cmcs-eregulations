@@ -244,16 +244,6 @@ const parseError = (err) => {
     }
 };
 
-const swallowError = (promise, fn = () => ({})) => {
-    try {
-        return Promise.resolve()
-            .then(() => promise)
-            .catch((err) => fn(err));
-    } catch (err) {
-        return fn(err);
-    }
-};
-
 // a promise friendly delay function
 const delay = (seconds) => {
     return new Promise((resolve) => {
@@ -726,5 +716,4 @@ export {
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,
-    swallowError,
 };
