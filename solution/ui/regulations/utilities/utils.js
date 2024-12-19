@@ -244,16 +244,6 @@ const parseError = (err) => {
     }
 };
 
-const swallowError = (promise, fn = () => ({})) => {
-    try {
-        return Promise.resolve()
-            .then(() => promise)
-            .catch((err) => fn(err));
-    } catch (err) {
-        return fn(err);
-    }
-};
-
 // a promise friendly delay function
 const delay = (seconds) => {
     return new Promise((resolve) => {
@@ -296,7 +286,10 @@ const createOneIndexedArray = (length) => {
  * @returns {string} - string with surrounding quotes removed
  */
 const stripQuotes = (string) => {
-    return string.replace(/(^")|("$)/g, "");
+    if (!string || typeof string !== "string") {
+        return string;
+    }
+    return string.replace(/^['"]|['"]$/g, "");
 };
 
 /**
@@ -445,7 +438,16 @@ const formatResourceCategories = ({
 };
 
 const formatDate = (value) => {
+    if (!value) {
+        return "Invalid Date";
+    }
+
     const date = new Date(value);
+
+    if (date.toString() === "Invalid Date") {
+        return date.toString();
+    }
+
     const options = {
         year: "numeric",
         month: "long",
@@ -640,7 +642,7 @@ const getFieldVal = ({ item, fieldName }) => {
     } else if (item?.reg_text) {
         return item.reg_text[fieldName];
     } else {
-        return item[fieldName];
+        return item?.[fieldName];
     }
 };
 
@@ -657,7 +659,10 @@ const getFrDocType = (doc) => {
 const deserializeResult = (obj) => {
     const returnObj = {};
 
-    returnObj.action_type = getFieldVal({ item: obj, fieldName: "action_type" });
+    returnObj.action_type = getFieldVal({
+        item: obj,
+        fieldName: "action_type",
+    });
     returnObj.category = getFieldVal({ item: obj, fieldName: "category" });
     returnObj.cfr_citations = getFieldVal({
         item: obj,
@@ -726,5 +731,4 @@ export {
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,
-    swallowError,
 };

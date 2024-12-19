@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
     <div class="table__caption">
         This table shows U.S. Code sections enacted by the Social Security Act.
