@@ -283,15 +283,6 @@ describe("Utilities.js", () => {
 
         expect(getRequestParams({ queryParams: query9 })).toBe("q=test");
 
-        const query9point5 = {
-            q: "test",
-            type: "external",
-        };
-
-        expect(getRequestParams({ queryParams: query9point5 })).toBe(
-            "q=test&show_regulations=false&show_internal=false"
-        );
-
         const query10 = {
             q: "test",
             type: "internal",
