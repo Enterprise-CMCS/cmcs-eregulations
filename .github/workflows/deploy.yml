@@ -150,7 +150,7 @@ jobs:
           pytest -vv
       # Get test user credentials from AWS Parameter Store
       - name: Get test user credentials
-        uses: dkershner6/aws-ssm-getparameters-action@v1
+        uses: dkershner6/aws-ssm-getparameters-action@v2
         with:
           parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
             /eregulations/http/password = CYPRESS_TEST_PASSWORD,
