@@ -9,7 +9,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Concat
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import escape, format_html
 
 from common.admin import CustomAdminMixin
 from common.filters import IndexPopulatedFilter
@@ -64,15 +64,15 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
         if auto_extract and (not change or field_changed(form, "url") or kwargs.pop("force_extract", False)):
             _, fail = call_text_extractor(request, [obj])
-            url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{str(obj)}</a>"
+            url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])
-                message = f"Failed to request text extraction for {obj._meta.verbose_name} \"{url}\". Please ensure the item "\
-                          f"has a valid URL or attached file, then {get_support_link('contact support')} "\
+                message = f"Failed to request text extraction for {escape(obj._meta.verbose_name)} \"{url}\". Please ensure "\
+                          f"the item has a valid URL or attached file, then {get_support_link('contact support')} "\
                           "for assistance if needed."
                 level = messages.WARNING
             else:
-                message = f"Text extraction requested for {obj._meta.verbose_name} \"{url}\"."
+                message = f"Text extraction requested for {escape(obj._meta.verbose_name)} \"{url}\"."
                 level = messages.SUCCESS
             self.message_user(request, format_html(message), level=level)
 
