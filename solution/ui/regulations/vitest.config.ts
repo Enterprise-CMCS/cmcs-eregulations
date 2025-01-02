@@ -15,6 +15,7 @@ export default defineConfig({
                 "**/directives/**/*",
                 "**/eregs-component-lib/src/**/*",
                 "**/eregs-vite/src/components/**/*",
+                "!**/eregs-vite/src/components/svgs/**/*",
                 "**/eregs-vite/src/views/**/*",
                 "**/test/**/*",
                 "**/utilities/**/*",
