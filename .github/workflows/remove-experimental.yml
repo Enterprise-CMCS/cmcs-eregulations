@@ -92,6 +92,29 @@ jobs:
           npm install
           serverless remove --stage dev${PR}
           popd
+      - name: Destroy PR-Specific Static-Asset Stack
+        env:
+            PR_NUMBER: ${{ github.event.number }}
+            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+            CDK_DEBUG: true
+            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+        run: |
+            pushd cdk-eregs
+            npm install -g aws-cdk@latest @aws-sdk/client-ssm
+            npm install
+            
+            # Generate the exact stack name for this PR
+            STACK_NAME="cms-eregs-eph-${PR_NUMBER}-static-assets"
+            
+            echo "Destroying PR-specific stack: ${STACK_NAME}"
+            cdk destroy "${STACK_NAME}" \
+            -c environment=${{ env.ENVIRONMENT_NAME }} \
+            --force \
+            --app "npx ts-node bin/zip-lambdas.ts"
+            
+            echo "Cleanup completed for stack: ${STACK_NAME}"
+            popd
       - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}

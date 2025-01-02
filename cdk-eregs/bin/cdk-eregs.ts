@@ -1,21 +1,22 @@
-// #!/usr/bin/env node
-// import * as cdk from 'aws-cdk-lib';
-// import { getParameterValue } from '../utils/parameter-store';
-// import { validateEnvironmentContext } from '../config/environment-config';
-// import { RedirectApiStack } from '../lib/stacks/redirect-stack';
-// import { StageConfig } from '../config/stage-config';
-// import { IamPathAspect } from '../lib/aspects/iam-path';
-// import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
-// import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-// import * as lambda from 'aws-cdk-lib/aws-lambda';
-// import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
-// import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
-// import { FrParserStack } from '../lib/stacks/fr-parser-stack';
-// import { S3ImportStack } from '../lib/stacks/s3-import';
-// import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+#!/usr/bin/env node
+import * as cdk from 'aws-cdk-lib';
+import { getParameterValue } from '../utils/parameter-store';
+import { validateEnvironmentContext } from '../config/environment-config';
+import { RedirectApiStack } from '../lib/stacks/redirect-stack';
+import { StageConfig } from '../config/stage-config';
+import { IamPathAspect } from '../lib/aspects/iam-path';
+import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
+import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
+import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
+import { FrParserStack } from '../lib/stacks/fr-parser-stack';
+import { S3ImportStack } from '../lib/stacks/s3-import';
+import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
 
-// // import { StackFactory } from '../lib/factories/stack-factory';
-// // import { getStackConfigs } from '../config/stack-definition';
+// import { StackFactory } from '../lib/factories/stack-factory';
+// import { getStackConfigs } from '../config/stack-definition';
 // async function main() {
 //     // Initialize CDK App with synthesizer configuration
 //     // const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');

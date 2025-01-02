@@ -74,7 +74,55 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
+  deploy-static-asset-cdk:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static-Asset
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Get exact stack names
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"
+         
+          
+          cdk deploy ${STATICASSET_STACK}  \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/zip-lambdas.ts"
+          popd
   deploy-zip-lambdas-cdk:
+    needs: deploy-static-asset-cdk
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -123,7 +171,7 @@ jobs:
           popd
 
   deploy-text-extractor-cdk:
-    needs: deploy-zip-lambdas-cdk
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -170,7 +218,7 @@ jobs:
           popd
 
   deploy-fr-parser-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
