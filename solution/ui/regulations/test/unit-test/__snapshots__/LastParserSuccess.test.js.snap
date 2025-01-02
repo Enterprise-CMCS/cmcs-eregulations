@@ -5,17 +5,49 @@ exports[`LastParserSuccessDate > Creates a snapshot of parserdate 1`] = `
   "baseElement": <body>
     <div>
       <span>
-        
-        Jun 28, 2023
-        
+        <span
+          class="spinner-span"
+        >
+          <div
+            class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
+          >
+            <span
+              class="ds-c-spinner ds-c-spinner--small"
+              role="status"
+              style="margin: 0px;"
+            >
+              <span
+                class="ds-u-visibility--screen-reader"
+              >
+                Loading
+              </span>
+            </span>
+          </div>
+        </span>
       </span>
     </div>
   </body>,
   "container": <div>
     <span>
-      
-      Jun 28, 2023
-      
+      <span
+        class="spinner-span"
+      >
+        <div
+          class="ds-u-display--flex ds-u-justify-content--center ds-u-align-items--center loading-spinner"
+        >
+          <span
+            class="ds-c-spinner ds-c-spinner--small"
+            role="status"
+            style="margin: 0px;"
+          >
+            <span
+              class="ds-u-visibility--screen-reader"
+            >
+              Loading
+            </span>
+          </span>
+        </div>
+      </span>
     </span>
   </div>,
   "debug": [Function],

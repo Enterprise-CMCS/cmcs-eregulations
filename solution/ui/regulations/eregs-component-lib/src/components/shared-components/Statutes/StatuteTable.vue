@@ -37,7 +37,6 @@ const tableSchema = computed(() => {
     }
 });
 
-
 // Get column dates from Django template
 const getColumnDates = () => {
     if (!document.getElementById("site_config")) return {};
@@ -47,7 +46,7 @@ const getColumnDates = () => {
     );
 
     return rawDates;
-}
+};
 
 const columnDates = getColumnDates();
 </script>

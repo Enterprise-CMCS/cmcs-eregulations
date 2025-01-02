@@ -3,7 +3,7 @@ import { partToc42, partToc45 } from "./part_toc.js";
 import { titles } from "./titles.js";
 import { subpartResources, sectionResources } from "./resources.js";
 import { subpartA } from "./subpartTOC.js";
-import { titleFourtyTwoSuccess } from "./parser_success.js";
+import { noEndCondition, titleFourtyTwoSuccess } from "./parser_success.js";
 import { history } from "./govInfoHistory.js";
 
 const handlers = [
@@ -26,8 +26,11 @@ const handlers = [
         }
         return HttpResponse.json(subpartResources);
     }),
-    http.get("*/ecfr_parser_result/42", () => {
-        HttpResponse.json(titleFourtyTwoSuccess);
+    http.get("**test/success/ecfr_parser_result/42", () => {
+        return HttpResponse.json(titleFourtyTwoSuccess);
+    }),
+    http.get("**/test/n/a/ecfr_parser_result/42", () => {
+        return HttpResponse.json(noEndCondition);
     }),
     http.get("*/title/42/part/431/history/section/10", () => {
         return HttpResponse.json(history);

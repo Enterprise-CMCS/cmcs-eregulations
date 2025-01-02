@@ -1,5 +1,28 @@
+<script>
+const getTitlesArray = async ({ apiUrl, titles }) => {
+    const titlesArray = await getTitles({ apiUrl });
+    const formattedTitleNamesArray = titlesArray.map(
+        (title) => `Title ${title}`
+    );
+    titles.value = formattedTitleNamesArray;
+};
+
+const getTOCs = async ({ apiUrl, titlesArr, TOCs }) => {
+    const tocArray = await Promise.all(
+        titlesArr.map(async (title) => {
+            const tocStruct = await getTOC({ title, apiUrl });
+            return tocStruct;
+        })
+    );
+
+    TOCs.value = tocArray;
+};
+
+export default { getTitlesArray, getTOCs };
+</script>
+
 <script setup>
-import { provide, reactive, ref, watch } from "vue";
+import { provide, ref, watch } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
@@ -21,37 +44,20 @@ provide("homeUrl", props.homeUrl);
 
 // Titles
 const titles = ref([]);
-const getTitlesArray = async () => {
-    const titlesArray = await getTitles({ apiUrl: props.apiUrl });
-    const formattedTitleNamesArray = titlesArray.map(
-        (title) => `Title ${title}`
-    );
-    titles.value = formattedTitleNamesArray;
-};
 
 // Table of Contents for each title
 const TOCs = ref([]);
-const getTOCs = async (titlesArr) => {
-    const tocArray = await Promise.all(
-        titlesArr.map(async (title) => {
-            const tocStruct = await getTOC({ title, apiUrl: props.apiUrl });
-            return tocStruct;
-        })
-    );
-
-    TOCs.value = tocArray;
-};
 
 watch(titles, (newArr) => {
     const unformattedTitles = newArr.map((title) => title.split(" ")[1]);
-    getTOCs(unformattedTitles);
+    getTOCs({ apiUrl: props.apiUrl, titlesArr: unformattedTitles, TOCs });
 });
 
 // tab state, etc
 const selectedTitle = ref(0);
 
 // On load
-getTitlesArray();
+getTitlesArray({ apiUrl: props.apiUrl, titles });
 </script>
 
 <template>
