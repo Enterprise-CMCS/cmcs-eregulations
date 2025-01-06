@@ -11,7 +11,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
 import { S3ImportStack } from '../lib/stacks/s3-import';
 import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
-
+import { APIStack } from '../lib/stacks/api-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -67,6 +67,39 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
       cdk.Tags.of(app).add(key, value);
     });
+     
+    const [
+      vpcId, 
+      privateSubnetAId, 
+      privateSubnetBId, 
+      httpUser, 
+      httpPassword
+    ] = await Promise.all([
+      getParameterValue('/account_vars/vpc/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/a/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/b/id'),
+      getParameterValue('/eregulations/http/user'),
+      getParameterValue('/eregulations/http/password'),
+    ]);
+
+    console.log('Subnet IDs:', { privateSubnetAId, privateSubnetBId });
+
+    // Create main API stack
+    new APIStack(app, stageConfig.getResourceName('api'), {
+      env,
+      description: `API Stack for ${stageConfig.getResourceName('site')}`,
+      lambdaConfig: {
+        memorySize: 4096,
+        timeout: 30,
+      },
+      environmentConfig: {
+        vpcId,
+        logLevel: process.env.LOG_LEVEL || 'INFO',
+        httpUser,
+        httpPassword,
+        subnetIds: [privateSubnetAId, privateSubnetBId], // Make sure both subnets are passed
+      }
+    }, stageConfig);
 
     // Create ZIP-based Lambda stacks
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
