@@ -1,248 +1,192 @@
 {% extends "regulations/base.html" %}
 {% load static %}
-
-{% block title_prefix %}About This Tool | {% endblock %}
-
+{% block title_prefix %}About This Tool |{% endblock title_prefix %}
 {% block header %}
     {% include "regulations/partials/header.html" %}
-{% endblock %}
-
+{% endblock header %}
 {% block body %}
-<div class="site-container">
-    <main class="about">
-        <h1>About This Tool</h1>
-
-        <section>
-            <p>
-                eRegulations organizes together regulations, subregulatory
-                guidance, and other related policy materials. Our team updates
-                content and functionality several times a week.
-            </p>
-        </section>
-
-        <section>
-            <h2>Contact</h2>
-            <p>
-                <b>Send questions and suggestions</b> about this website
-                (including bug reports), or schedule a presentation or training
-                for your group:
-                <a
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdoovq7qgVRYsgLeZ7TrXNmnTU42iHCvr1x06CgcWQectlVAw/viewform"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="external"
-                >contact the team</a>.
-            </p>
-            <p>
-                <b>Try new features</b> and help make them better:
-                <a
-                    href="https://docs.google.com/forms/d/e/1FAIpQLScesNzqS-Kgpcjq3AxESy1tP0zlcs3CdgkCVr3LBOiUTxxbvw/viewform"
-                    class="external"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >sign up for a session</a >.
-            </p>
-        </section>
-
-        <section id="automated-updates">
-            <h2>Automated Updates</h2>
-
-            <div class="ds-l-container">
-                <div class="ds-l-row">
-                    <div class="ds-l-col--6">
-                        <h3>Regulation Text</h3>
-                        <p>
-                            This tool displays regulation text from
-                            <a
-                                href="https://www.ecfr.gov/"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >eCFR</a
-                            >.
-                        </p>
-                        <p>
-                            When new rules (changes to regulations) become
-                            effective, the Office of the Federal Register
-                            incorporates them into eCFR
-                            <a
-                                href="https://www.ecfr.gov/reader-aids/understanding-the-ecfr/how-is-the-ecfr-updated"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >about two business days</a>
-                            after their effective date.
-                        </p>
-                        <p>
-                            This tool automatically syncs with eCFR
-                            <b>once a day</b>.
-                        </p>
-                        <p>
-                            So, it can take up to <b>three business days</b> for
-                            new rules to be incorporated into this tool.
-                        </p>
-                        <p class="note">
-                            Note: eCFR and this tool are
-                            <a
-                                href="https://www.ecfr.gov/reader-aids/understanding-the-ecfr/what-is-the-ecfr"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >not official legal editions</a
-                            >
-                            of the CFR.
-                        </p>
+    <div class="site-container">
+        <main class="about">
+            <h1>About This Tool</h1>
+            <section>
+                <p>
+                    eRegulations organizes together regulations, subregulatory
+                    guidance, and other related policy materials. Our team updates
+                    content and functionality several times a week.
+                </p>
+            </section>
+            <section>
+                <h2>Contact</h2>
+                <p>
+                    <b>Send questions and suggestions</b> about this website
+                    (including bug reports), or schedule a presentation or training
+                    for your group:
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdoovq7qgVRYsgLeZ7TrXNmnTU42iHCvr1x06CgcWQectlVAw/viewform"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="external">contact the team</a>.
+                </p>
+                <p>
+                    <b>Try new features</b> and help make them better:
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScesNzqS-Kgpcjq3AxESy1tP0zlcs3CdgkCVr3LBOiUTxxbvw/viewform"
+                       class="external"
+                       target="_blank"
+                       rel="noopener noreferrer">sign up for a session</a>.
+                </p>
+            </section>
+            <section id="automated-updates">
+                <h2>Automated Updates</h2>
+                <div class="ds-l-container">
+                    <div class="ds-l-row">
+                        <div class="ds-l-col--6">
+                            <h3>Regulation Text</h3>
+                            <p>
+                                This tool displays regulation text from
+                                <a href="https://www.ecfr.gov/"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">eCFR</a>.
+                            </p>
+                            <p>
+                                When new rules (changes to regulations) become
+                                effective, the Office of the Federal Register
+                                incorporates them into eCFR
+                                <a href="https://www.ecfr.gov/reader-aids/understanding-the-ecfr/how-is-the-ecfr-updated"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">about two business days</a>
+                                after their effective date.
+                            </p>
+                            <p>
+                                This tool automatically syncs with eCFR
+                                <b>once a day</b>.
+                            </p>
+                            <p>
+                                So, it can take up to <b>three business days</b> for
+                                new rules to be incorporated into this tool.
+                            </p>
+                            <p class="note">
+                                Note: eCFR and this tool are
+                                <a href="https://www.ecfr.gov/reader-aids/understanding-the-ecfr/what-is-the-ecfr"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">not official legal editions</a>
+                                of the CFR.
+                            </p>
+                        </div>
+                        <div class="ds-l-col--6">
+                            <img src="{% static 'images/about_automated_updates.svg' %}"
+                                 alt="Diagram showing eCFR information going to this website"
+                                 class="ecfr-graphic" />
+                        </div>
                     </div>
-                    <div class="ds-l-col--6">
-                        <img
-                            src="{% static 'images/about_automated_updates.svg' %}"
-                            alt="Diagram showing eCFR information going to this website"
-                            class="ecfr-graphic"
-                        />
-                    </div>
-                </div>
-
-                <div class="ds-l-row">
-                    <div class="ds-l-col--6">
-                        <h3>Links to Federal Register Rules</h3>
-                        <p>
-                            Rules from 1994–present are pulled automatically
-                            from the
-                            <a
-                                href="https://www.federalregister.gov/"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >Office of the Federal Register</a
-                            >
-                            once a day.
-                        </p>
-                        <p>
-                            Subject matter experts on our team use the
-                            <a
-                                href="https://www.govinfo.gov/app/collection/fr"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >GovInfo Federal Register archive</a
-                            >
-                            to add links to selected rules before 1994 that may
-                            be helpful for policy research.
-                        </p>
-                    </div>
-
-                    <div class="ds-l-col--6">
-                        <img
-                            src="{% static 'images/about_fr_rules.svg' %}"
-                            alt="Screenshot of Rules with Preambles in the right sidebar of this site"
-                        />
+                    <div class="ds-l-row">
+                        <div class="ds-l-col--6">
+                            <h3>Links to Federal Register Rules</h3>
+                            <p>
+                                Rules from 1994–present are pulled automatically
+                                from the
+                                <a href="https://www.federalregister.gov/"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">Office of the Federal Register</a>
+                                once a day.
+                            </p>
+                            <p>
+                                Subject matter experts on our team use the
+                                <a href="https://www.govinfo.gov/app/collection/fr"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">GovInfo Federal Register archive</a>
+                                to add links to selected rules before 1994 that may
+                                be helpful for policy research.
+                            </p>
+                        </div>
+                        <div class="ds-l-col--6">
+                            <img src="{% static 'images/about_fr_rules.svg' %}"
+                                 alt="Screenshot of Rules with Preambles in the right sidebar of this site" />
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section>
-            <h2>Subject Matter Expert Updates</h2>
-
-            <div class="ds-l-container">
-                <div class="ds-l-row">
-                    <div class="ds-l-col--6">
-                        <h3>Links to Additional Resources</h3>
-                        <p>
-                            Resource links include subregulatory guidance and
-                            implementation resources published by CMS, along
-                            with related documents referenced from
-                            <a
-                                href="https://www.medicaid.gov"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >Medicaid.gov</a
-                            >,
-                            <a
-                                href="https://www.cms.gov"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >CMS.gov</a
-                            >,
-                            and other official government sites as relevant.
-                            Subject matter experts on our team curate and
-                            update these links.
-                        </p>
-                        <p>
-                            For example, when Medicaid.gov publishes a new piece
-                            of subregulatory guidance in the
-                            <a
-                                href="https://www.medicaid.gov/new-notable/index.html"
-                                class="external"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                >New &amp; Notable Resource Center</a
-                            >, we add a link to display in the sidebar of each
-                            relevant section and subpart.
-                        </p>
-                        <p>
-                            CMCS staff may also add internal documents useful for 
-                            policy research, only visible to logged-in staff.
-                        </p>
-                    </div>
-                    <div class="ds-l-col--6">
-                        <img
-                            src="{% static 'images/about_additional_resources.svg' %}"
-                            alt="Screenshot of Subregulatory Guidance in the right sidebar of this site"
-                        />
+            </section>
+            <section>
+                <h2>Subject Matter Expert Updates</h2>
+                <div class="ds-l-container">
+                    <div class="ds-l-row">
+                        <div class="ds-l-col--6">
+                            <h3>Links to Additional Resources</h3>
+                            <p>
+                                Resource links include subregulatory guidance and
+                                implementation resources published by CMS, along
+                                with related documents referenced from
+                                <a href="https://www.medicaid.gov"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">Medicaid.gov</a>,
+                                <a href="https://www.cms.gov"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">CMS.gov</a>,
+                                and other official government sites as relevant.
+                                Subject matter experts on our team curate and
+                                update these links.
+                            </p>
+                            <p>
+                                For example, when Medicaid.gov publishes a new piece
+                                of subregulatory guidance in the
+                                <a href="https://www.medicaid.gov/new-notable/index.html"
+                                   class="external"
+                                   target="_blank"
+                                   rel="noopener noreferrer">New &amp; Notable Resource Center</a>, we add a link to display in the sidebar of each
+                                relevant section and subpart.
+                            </p>
+                            <p>
+                                CMCS staff may also add internal documents useful for
+                                policy research, only visible to logged-in staff.
+                            </p>
+                        </div>
+                        <div class="ds-l-col--6">
+                            <img src="{% static 'images/about_additional_resources.svg' %}"
+                                 alt="Screenshot of Subregulatory Guidance in the right sidebar of this site" />
+                        </div>
                     </div>
                 </div>
-            </div>
-
-        <section>
-            <h2>Technical Details</h2>
-            <p>
-                This tool has an
-                <a
-                    href="https://github.com/Enterprise-CMCS/cmcs-eregulations"
-                    class="external"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >open source code repository</a
-                >
-                available for reuse by other government teams.
-            </p>
-            <p>
-                It uses APIs maintained by the Office of the Federal Register
-                and the Government Publishing Office:
-            </p>
-            <ul>
-                <li>
-                    <a
-                        href="https://www.ecfr.gov/reader-aids/ecfr-developer-resources/rest-api-interactive-documentation"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >eCFR regulation text</a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="https://www.federalregister.gov/developers/documentation/api/v1"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >Federal Register rules</a
-                    >
-                </li>
-                <li>
-                    <a
-                        href="https://www.govinfo.gov/link-docs/"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >GovInfo links</a
-                    >
-                </li>
-            </ul>
-        </section>
-    </main>
-</div>
-{% endblock %}
+            </section>
+            <section>
+                <h2>Technical Details</h2>
+                <p>
+                    This tool has an
+                    <a href="https://github.com/Enterprise-CMCS/cmcs-eregulations"
+                       class="external"
+                       target="_blank"
+                       rel="noopener noreferrer">open source code repository</a>
+                    available for reuse by other government teams.
+                </p>
+                <p>
+                    It uses APIs maintained by the Office of the Federal Register
+                    and the Government Publishing Office:
+                </p>
+                <ul>
+                    <li>
+                        <a href="https://www.ecfr.gov/reader-aids/ecfr-developer-resources/rest-api-interactive-documentation"
+                           class="external"
+                           target="_blank"
+                           rel="noopener noreferrer">eCFR regulation text</a>
+                    </li>
+                    <li>
+                        <a href="https://www.federalregister.gov/developers/documentation/api/v1"
+                           class="external"
+                           target="_blank"
+                           rel="noopener noreferrer">Federal Register rules</a>
+                    </li>
+                    <li>
+                        <a href="https://www.govinfo.gov/link-docs/"
+                           class="external"
+                           target="_blank"
+                           rel="noopener noreferrer">GovInfo links</a>
+                    </li>
+                </ul>
+            </section>
+        </main>
+    </div>
+{% endblock body %}

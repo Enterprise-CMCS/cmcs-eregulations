@@ -1,1 +1,30 @@
-<h1>Hi</h1>
+{% extends "regulations/base.html" %}
+{% load static %}
+{% block title_prefix %}Get Account Access |{% endblock title_prefix %}
+{% block header %}
+    {% include "regulations/partials/header.html" %}
+{% endblock header %}
+{% block body %}
+    <div class="site-container">
+        <main class="get-account-access">
+            <h1>Get access to internal documents</h1>
+            <section>
+                <p>
+                    CMCS staff with policy-related responsibilities may
+                    request access to view and manage internal policy
+                    reference documents in eRegulations.
+                </p>
+                <p>
+                    These internal documents are <strong>only available
+                    to CMCS staff who sign into eRegulations through CMS
+                    IDM.</strong> Before signing in for the first time,
+                    CMCS staff need to request and be approved for an EUA
+                    job code for eRegulations.
+                </p>
+            </section>
+            <section>
+                <h2>Request access for CMCS staff</h2>
+            </section>
+        </main>
+    </div>
+{% endblock body %}
