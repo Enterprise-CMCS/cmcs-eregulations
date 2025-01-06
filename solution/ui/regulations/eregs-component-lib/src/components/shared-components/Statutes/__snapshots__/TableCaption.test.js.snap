@@ -1,0 +1,169 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Statute Table Caption > Creates a snapshot of the Statute Selector with default props 1`] = `
+{
+  "baseElement": <body>
+    <div>
+      <div
+        class="table__caption"
+      >
+         This table shows U.S. Code sections enacted by the Social Security Act. See also: 
+        <a
+          class="external"
+          href="https://uscode.house.gov/view.xhtml?req=granuleid%3AUSC-prelim-title42-chapter7&saved=%7CZ3JhbnVsZWlkOlVTQy1wcmVsaW0tdGl0bGU0Mi1jaGFwdGVyNy1mcm9udA%3D%3D%7C%7C%7C0%7Cfalse%7Cprelim&edition=prelim"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          full table of contents and text for 42 U.S.C. Chapter 7 (Social Security)
+        </a>
+        .
+        <br />
+         Learn about these sources: 
+        <a
+          class="external"
+          href="https://uscode.house.gov/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          US Code House.gov
+        </a>
+        , 
+        <a
+          class="external"
+          href="https://www.govinfo.gov/app/collection/comps/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Statute Compilation
+        </a>
+        , 
+        <a
+          class="external"
+          href="https://www.govinfo.gov/app/collection/uscode"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          US Code Annual
+        </a>
+        , 
+        <a
+          class="external"
+          href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          SSA.gov Compilation
+        </a>
+        . 
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="table__caption"
+    >
+       This table shows U.S. Code sections enacted by the Social Security Act. See also: 
+      <a
+        class="external"
+        href="https://uscode.house.gov/view.xhtml?req=granuleid%3AUSC-prelim-title42-chapter7&saved=%7CZ3JhbnVsZWlkOlVTQy1wcmVsaW0tdGl0bGU0Mi1jaGFwdGVyNy1mcm9udA%3D%3D%7C%7C%7C0%7Cfalse%7Cprelim&edition=prelim"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        full table of contents and text for 42 U.S.C. Chapter 7 (Social Security)
+      </a>
+      .
+      <br />
+       Learn about these sources: 
+      <a
+        class="external"
+        href="https://uscode.house.gov/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        US Code House.gov
+      </a>
+      , 
+      <a
+        class="external"
+        href="https://www.govinfo.gov/app/collection/comps/"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Statute Compilation
+      </a>
+      , 
+      <a
+        class="external"
+        href="https://www.govinfo.gov/app/collection/uscode"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        US Code Annual
+      </a>
+      , 
+      <a
+        class="external"
+        href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        SSA.gov Compilation
+      </a>
+      . 
+    </div>
+  </div>,
+  "debug": [Function],
+  "emitted": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "html": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

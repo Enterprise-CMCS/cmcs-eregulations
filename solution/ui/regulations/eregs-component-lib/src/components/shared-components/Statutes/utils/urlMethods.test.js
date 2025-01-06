@@ -21,6 +21,13 @@ describe("Statute Table URL methods", () => {
     });
 
     describe("statuteCompilationUrl", () => {
+        it("returns null if source_url is undefined", async () => {
+            const undefinedSourceUrl = { source_url: undefined };
+            const computedUndefinedUrl =
+                statuteCompilationUrl(undefinedSourceUrl);
+            expect(computedUndefinedUrl).toBeNull();
+        });
+
         it("returns expected URL string if source_url is valid", async () => {
             const statuteItem = statutesFixture[0];
             const computedUrl = statuteCompilationUrl(statuteItem);

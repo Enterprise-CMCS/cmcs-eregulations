@@ -1,0 +1,3 @@
+const countsResponse = {};
+
+export { countsResponse };

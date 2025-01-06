@@ -3,15 +3,30 @@
  * @returns {string} - a date string in Month D/DD, YYYY format
  */
 const formatDate = (dateString) => {
+    if (!dateString || typeof dateString !== "string") {
+        return "Invalid Date";
+    }
+
+    if (dateString.includes("/")) {
+        return dateString;
+    }
+
     const date = new Date(dateString);
+
+    if (date.toString() === "Invalid Date") {
+        return date.toString();
+    }
+
     let options = { year: "numeric", timeZone: "UTC" };
     const raw_date = dateString.split("-");
+
     if (raw_date.length > 1) {
         options.month = "long";
     }
     if (raw_date.length > 2) {
         options.day = "numeric";
     }
+
     const format = new Intl.DateTimeFormat("en-US", options);
     return format.format(date);
 };
@@ -19,7 +34,6 @@ const formatDate = (dateString) => {
 /**
  *
  * @param {Object} location - a Subpart or Section of the Regs
- * @param {string} location.title - the title number of the location (ex: 42)
  * @param {string} location.type - the type of location (ex: Subpart, Section)
  * @param {string} location.part - the part number for the location
  * @param {?string} location.section_id - the section number
@@ -27,7 +41,10 @@ const formatDate = (dateString) => {
  * @returns {string} - a properly formatted label
  */
 const locationLabel = ({ type, part, section_id, subpart_id }) => {
-    return type.toLowerCase() === "section"
+    if (!type || typeof type !== "string") {
+        return "Invalid Location";
+    }
+    return type?.toLowerCase() === "section"
         ? `${part}.${section_id}`
         : `${part} Subpart ${subpart_id}`;
 };
