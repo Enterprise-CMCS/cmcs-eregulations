@@ -38,5 +38,11 @@
                 ></sign-in-link>
             {% endif %}
         </template>
+        <template #get-access>
+            <access-link
+                class="header__access-link"
+                href="{% url 'homepage' %}get-account-access/"
+            ></access-link>
+        </template>
     </header-component>
 </header>

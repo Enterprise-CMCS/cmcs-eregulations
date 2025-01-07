@@ -18,6 +18,7 @@ import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
 import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
+import HeaderLink from "@/components/header/HeaderLink.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";

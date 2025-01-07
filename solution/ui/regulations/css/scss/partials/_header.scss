@@ -81,6 +81,21 @@ header {
             border-bottom: 2px solid $dark_gray;
         }
 
+        @mixin header__anchor--complete {
+            @include header__anchor--bold;
+
+            color: $primary_link_color;
+            line-height: 24px;
+            text-decoration: none;
+
+            &:hover,
+            &:focus,
+            &.active {
+                @include header__anchor--active-bold;
+                padding: 0;
+            }
+        }
+
         @mixin header--brand-type {
             font-size: var(--font-size-lg);
             line-height: 36px;
@@ -132,6 +147,14 @@ header {
             display: flex;
             align-items: center;
             flex: unset;
+        }
+
+        .header__access-link {
+            &.header--links__anchor {
+                @include header__anchor--complete;
+            }
+
+            margin-left: 1.5rem;
         }
 
         .header--links {
@@ -226,18 +249,7 @@ header {
                             display: inline-block;
 
                             .header--links__anchor {
-                                @include header__anchor--bold;
-
-                                color: $primary_link_color;
-                                line-height: 24px;
-                                text-decoration: none;
-
-                                &:hover,
-                                &:focus,
-                                &.active {
-                                    @include header__anchor--active-bold;
-                                    padding: 0;
-                                }
+                                @include header__anchor--complete;
                             }
                         }
                     }

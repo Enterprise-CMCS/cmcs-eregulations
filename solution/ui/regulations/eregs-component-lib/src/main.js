@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import vuetify from "./plugins/vuetify";
 
 import {
+    AccessLink,
     ActionBtn,
     CollapseButton,
     Collapsible,
@@ -202,6 +203,7 @@ function main() {
 
     const app = createApp({
         components: {
+            AccessLink,
             ActionBtn,
             CollapseButton,
             Collapsible,
