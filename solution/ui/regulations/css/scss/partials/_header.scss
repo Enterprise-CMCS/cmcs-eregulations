@@ -85,6 +85,7 @@ header {
             @include header__anchor--bold;
 
             color: $primary_link_color;
+            height: 24px;
             line-height: 24px;
             text-decoration: none;
 
@@ -150,11 +151,11 @@ header {
         }
 
         .header__access-link {
+            margin-left: 1.5rem;
+
             &.header--links__anchor {
                 @include header__anchor--complete;
             }
-
-            margin-left: 1.5rem;
         }
 
         .header--links {
@@ -393,18 +394,6 @@ header {
             height: $header_input_height_wide;
             margin-left: 1rem;
 
-            &:has(> a),
-            &:has(> span.disabled) {
-                margin-top: auto;
-            }
-
-            &.active {
-                span.disabled {
-                    @include header__anchor--active-bold;
-                    padding: 0;
-                }
-            }
-
             span.disabled {
                 @include header__anchor--bold;
                 text-transform: capitalize;
@@ -535,6 +524,19 @@ header {
                     }
                 }
             }
+
+            &:has(> a),
+            &:has(> span.disabled) {
+                margin-top: auto;
+            }
+
+            &.active {
+                span.disabled {
+                    @include header__anchor--active-bold;
+                    padding: 0;
+                }
+            }
+
         }
 
         .header--search:has(.search__form--expanded) + .header--sign-in {
