@@ -297,8 +297,10 @@ header {
                 }
 
                 &--expanded {
-                    position: absolute;
-                    left: -19px;
+                    @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                        position: absolute;
+                        left: -19px;
+                    }
                 }
 
                 .form__button--toggle-mobile-search {
@@ -561,7 +563,9 @@ header {
 
         .header--search:has(.search__form--expanded) ~ .header--sign-in,
         .header--search:has(.search__form--expanded) ~ .header__access-link {
-            display: none;
+            @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                display: none;
+            }
         }
     }
 }
