@@ -1,12 +1,15 @@
 <script setup>
+import { computed } from "vue";
 import HeaderLink from "./header/HeaderLink.vue";
 
-defineProps({
-    href: {
+const props = defineProps({
+    base: {
         type: String,
         required: true,
     },
 });
+
+const getAccessUrl = computed(() => `${props.base}get-account-access/`);
 
 const isActive = window.location.pathname.includes("get-account-access");
 </script>
@@ -16,6 +19,6 @@ const isActive = window.location.pathname.includes("get-account-access");
         name="get-account-access"
         label="Get Account Access"
         :active="isActive"
-        :href="href"
+        :href="getAccessUrl"
     />
 </template>
