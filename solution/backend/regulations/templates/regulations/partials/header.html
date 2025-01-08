@@ -39,10 +39,12 @@
             {% endif %}
         </template>
         <template #get-access>
-            <access-link
-                class="header__access-link"
-                base="{% url 'homepage' %}"
-            ></access-link>
+            {% if not user.is_authenticated %}
+                <access-link
+                    class="header__access-link"
+                    base="{% url 'homepage' %}"
+                ></access-link>
+            {% endif %}
         </template>
     </header-component>
 </header>
