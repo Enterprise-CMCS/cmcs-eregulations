@@ -119,7 +119,7 @@ header {
 
             &--first {
                 height: 56px;
-                gap: 1rem;
+                gap: 1.5rem;
             }
 
             &--second {
@@ -152,7 +152,17 @@ header {
         }
 
         .header__access-link {
-            margin-left: 0.5rem;
+            &--wide {
+                @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                    display: none;
+                }
+            }
+
+            &--narrow {
+                @include custom-min(calc($eds-width-sm / 1px)) {
+                    display: none;
+                }
+            }
 
             &.header--links__anchor {
                 @include header__anchor--complete;
@@ -543,10 +553,10 @@ header {
                     padding: 0;
                 }
             }
-
         }
 
-        .header--search:has(.search__form--expanded) + .header--sign-in {
+        .header--search:has(.search__form--expanded) ~ .header--sign-in,
+        .header--search:has(.search__form--expanded) ~ .header__access-link {
             display: none;
         }
     }

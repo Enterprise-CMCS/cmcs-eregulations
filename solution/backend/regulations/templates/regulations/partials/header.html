@@ -40,10 +40,7 @@
         </template>
         <template #get-access>
             {% if not user.is_authenticated %}
-                <access-link
-                    class="header__access-link"
-                    base="{% url 'homepage' %}"
-                ></access-link>
+                <access-link base="{% url 'homepage' %}"></access-link>
             {% endif %}
         </template>
     </header-component>

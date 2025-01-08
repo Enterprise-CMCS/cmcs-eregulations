@@ -12,13 +12,23 @@ const props = defineProps({
 const getAccessUrl = computed(() => `${props.base}get-account-access/`);
 
 const isActive = window.location.pathname.includes("get-account-access");
+
+const propsObj = {
+    name: "get-account-access",
+    active: isActive,
+    href: getAccessUrl.value,
+};
 </script>
 
 <template>
     <HeaderLink
-        name="get-account-access"
+        v-bind="propsObj"
+        class="header__access-link header__access-link--narrow"
+        label="Get Access"
+    />
+    <HeaderLink
+        v-bind="propsObj"
+        class="header__access-link header__access-link--wide"
         label="Get Account Access"
-        :active="isActive"
-        :href="getAccessUrl"
     />
 </template>

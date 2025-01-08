@@ -388,11 +388,7 @@ getDocSubjects();
                     />
                 </template>
                 <template #get-access>
-                    <AccessLink
-                        v-if="!isAuthenticated"
-                        class="header__access-link"
-                        :base="homeUrl"
-                    />
+                    <AccessLink class="header__access-link" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>
