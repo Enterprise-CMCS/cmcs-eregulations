@@ -119,6 +119,7 @@ header {
 
             &--first {
                 height: 56px;
+                gap: 1rem;
             }
 
             &--second {
@@ -151,10 +152,15 @@ header {
         }
 
         .header__access-link {
-            margin-left: 1.5rem;
+            margin-left: 0.5rem;
 
             &.header--links__anchor {
                 @include header__anchor--complete;
+
+                &.active {
+                    cursor: default;
+                    pointer-events: none;
+                }
             }
         }
 
@@ -392,7 +398,6 @@ header {
 
         .header--sign-in {
             height: $header_input_height_wide;
-            margin-left: 1rem;
 
             span.disabled {
                 @include header__anchor--bold;
@@ -533,6 +538,8 @@ header {
             &.active {
                 span.disabled {
                     @include header__anchor--active-bold;
+
+                    cursor: default;
                     padding: 0;
                 }
             }
