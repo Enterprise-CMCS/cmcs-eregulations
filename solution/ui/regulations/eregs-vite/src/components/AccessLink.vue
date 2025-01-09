@@ -14,7 +14,6 @@ const getAccessUrl = computed(() => `${props.base}get-account-access/`);
 const isActive = window.location.pathname.includes("get-account-access");
 
 const propsObj = {
-    name: "get-account-access",
     active: isActive,
     href: getAccessUrl.value,
 };
@@ -23,11 +22,13 @@ const propsObj = {
 <template>
     <HeaderLink
         v-bind="propsObj"
+        name="get-account-access-narrow"
         class="header__access-link header__access-link--narrow"
         label="Get Access"
     />
     <HeaderLink
         v-bind="propsObj"
+        name="get-account-access-wide"
         class="header__access-link header__access-link--wide"
         label="Get Account Access"
     />

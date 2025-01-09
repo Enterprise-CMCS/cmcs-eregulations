@@ -5,7 +5,7 @@ defineProps({
         required: true,
     },
     label: {
-        type: Object,
+        type: String,
         required: true,
     },
     active: {
