@@ -292,7 +292,7 @@ resources:
         DBSubnetGroupName:
           Ref: DBSubnetGroup
         Engine: aurora-postgresql
-        EngineVersion: "15.2"
+        EngineVersion: "15.8"
         DatabaseName: 'eregs'
         BackupRetentionPeriod: 7
         DBClusterParameterGroupName:
@@ -306,7 +306,7 @@ resources:
         DBInstanceClass: db.r6g.large
         StorageEncrypted: true
         Engine: aurora-postgresql
-        EngineVersion: "15.2"
+        EngineVersion: "15.8"
         PubliclyAccessible: false
         DBParameterGroupName:
           Ref: AuroraRDSInstanceParameter15
