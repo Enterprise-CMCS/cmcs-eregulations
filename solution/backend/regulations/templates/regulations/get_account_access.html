@@ -18,6 +18,7 @@
                     is-authenticated="{{ user.is_authenticated }}"
                     link-label="Sign in through IDM"
                     location="{{ location }}"
+                    direct-link="{% url 'homepage' %}"
                 ></sign-in-link>.
             </aside>
             <section>
@@ -81,7 +82,15 @@
                         Click <strong>Finish</strong>.
                     </li>
                     <li>
-                        Your job code request may take several days to process. When approved, you will receive an email with an update, and can then <a href="{% url 'homepage' %}login/">sign in</a> to eRegulations. If you do not receive this email within 2 weeks, please contact Stephanie Boyd (<a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a>).
+                        Your job code request may take several days to process. When approved, you will receive an email with an update, and can then <sign-in-link
+                            custom-login-url="{% url 'custom_login' %}"
+                            home-url="{% url 'homepage' %}"
+                            is-authenticated="{{ user.is_authenticated }}"
+                            link-label="sign in"
+                            location="{{ location }}"
+                            direct-link="{% url 'homepage' %}"
+                        ></sign-in-link>.
+                        to eRegulations. If you do not receive this email within 2 weeks, please contact Stephanie Boyd (<a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a>).
                     </li>
                 </ol>
             </section>
