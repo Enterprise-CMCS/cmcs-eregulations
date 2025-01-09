@@ -30,20 +30,17 @@ describe("Get Account Access page", { scrollBehavior: "center" }, () => {
         cy.get("a[data-testid='get-account-access-wide']")
             .click();
         cy.url().should("include", "/get-account-access/");
-
         cy.get("a[data-testid='get-account-access-wide']")
             .should("be.visible")
             .and("have.text", "Get Account Access")
             .and("have.attr", "class")
             .and("match", /active/);
-
         cy.get("h1").contains("Get access to internal documents");
     });
 
     it("goes to the Get Account Access page from a SPA page like /subjects", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects");
-
         cy.get("a[data-testid='get-account-access-wide']")
             .click();
         cy.url().should("include", "/get-account-access/");
@@ -59,7 +56,6 @@ describe("Get Account Access page", { scrollBehavior: "center" }, () => {
             .and("have.text", "Get Access")
             .click();
         cy.url().should("include", "/get-account-access/");
-
         cy.get("h1").contains("Get access to internal documents");
     });
 
