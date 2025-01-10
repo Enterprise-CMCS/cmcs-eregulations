@@ -424,12 +424,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      # Execute the JavaScript tests
-      - name: run JS unit tests
+      - name: Install Front End dependencies
         if: success()
         working-directory: ./solution
         run: |
           make install-npm
+      # Execute the JavaScript tests
+      - name:Run JavaScript unit tests with Vitest
+        if: success()
+        working-directory: ./solution
+        run: |
           make test.vitest.coverage
   test-python:
     needs: [deploy-django]
