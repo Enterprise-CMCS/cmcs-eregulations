@@ -41,6 +41,7 @@ export { default as TocSubchapter } from "./shared-components/TOC/TocSubchapter.
 export { default as TocTitle } from "./shared-components/TOC/TocTitle.vue";
 
 // from Single Page App
+export { default as AccessLink } from "../../../eregs-vite/src/components/AccessLink.vue";
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";

@@ -27,12 +27,17 @@ const props = defineProps({
         type: String,
         default: undefined,
     },
+    directLink: {
+        type: String,
+        default: undefined,
+    },
 });
 
 const loginUrl = useLoginRedirectUrl({
     customLoginUrl: props.customLoginUrl,
     homeUrl: props.homeUrl,
     route: props.route,
+    directLink: props.directLink,
 });
 
 const linkClasses = computed(() => ({

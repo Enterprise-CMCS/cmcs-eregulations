@@ -11,6 +11,7 @@ import StatuteSelector from "eregsComponentLib/src/components/shared-components/
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
 import TableCaption from "eregsComponentLib/src/components/shared-components/Statutes/TableCaption.vue";
 
+import AccessLink from "@/components/AccessLink.vue";
 import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
@@ -165,6 +166,9 @@ getStatutesArray();
                         :is-authenticated="isAuthenticated"
                         :route="$route"
                     />
+                </template>
+                <template #get-access>
+                    <AccessLink class="header__access-link" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>

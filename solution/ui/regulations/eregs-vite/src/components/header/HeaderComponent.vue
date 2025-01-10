@@ -21,6 +21,7 @@ const isLoginPage = window.location.pathname.includes("login");
             <div class="header--sign-in" :class="{ active: isLoginPage }">
                 <slot name="sign-in"></slot>
             </div>
+            <slot name="get-access"></slot>
         </div>
         <div class="header__row header__row--second">
             <div class="header--jump-to">

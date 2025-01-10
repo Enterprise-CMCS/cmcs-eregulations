@@ -5,6 +5,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from regulations import converters
 from regulations.views.about import AboutView
 from regulations.views.cache import CacheView
+from regulations.views.get_account_access import GetAccountAccessView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.login import LoginView
@@ -29,6 +30,7 @@ register_converter(converters.VersionConverter, 'version')
 urlpatterns = [
     path('', HomepageView.as_view(), name='homepage'),
     path('about/', AboutView.as_view(), name='about'),
+    path('get-account-access/', GetAccountAccessView.as_view(), name='get_account_access'),
     path('login/', LoginView.as_view(), name='custom_login'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),

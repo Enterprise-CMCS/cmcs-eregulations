@@ -81,6 +81,22 @@ header {
             border-bottom: 2px solid $dark_gray;
         }
 
+        @mixin header__anchor--complete {
+            @include header__anchor--bold;
+
+            color: $primary_link_color;
+            height: 24px;
+            line-height: 24px;
+            text-decoration: none;
+
+            &:hover,
+            &:focus,
+            &.active {
+                @include header__anchor--active-bold;
+                padding: 0;
+            }
+        }
+
         @mixin header--brand-type {
             font-size: var(--font-size-lg);
             line-height: 36px;
@@ -103,6 +119,11 @@ header {
 
             &--first {
                 height: 56px;
+                gap: 1rem;
+
+                @include custom-min(calc($width-sm / 1px)) {
+                    gap: 1.5rem;
+                }
             }
 
             &--second {
@@ -132,6 +153,29 @@ header {
             display: flex;
             align-items: center;
             flex: unset;
+        }
+
+        .header__access-link {
+            &--wide {
+                @include custom-max(calc((calc($width-sm - 1px)) / 1px)) {
+                    display: none;
+                }
+            }
+
+            &--narrow {
+                @include custom-min(calc($width-sm / 1px)) {
+                    display: none;
+                }
+            }
+
+            &.header--links__anchor {
+                @include header__anchor--complete;
+
+                &.active {
+                    cursor: default;
+                    pointer-events: none;
+                }
+            }
         }
 
         .header--links {
@@ -226,18 +270,7 @@ header {
                             display: inline-block;
 
                             .header--links__anchor {
-                                @include header__anchor--bold;
-
-                                color: $primary_link_color;
-                                line-height: 24px;
-                                text-decoration: none;
-
-                                &:hover,
-                                &:focus,
-                                &.active {
-                                    @include header__anchor--active-bold;
-                                    padding: 0;
-                                }
+                                @include header__anchor--complete;
                             }
                         }
                     }
@@ -264,8 +297,10 @@ header {
                 }
 
                 &--expanded {
-                    position: absolute;
-                    left: -19px;
+                    @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                        position: absolute;
+                        left: -19px;
+                    }
                 }
 
                 .form__button--toggle-mobile-search {
@@ -379,19 +414,6 @@ header {
 
         .header--sign-in {
             height: $header_input_height_wide;
-            margin-left: 1rem;
-
-            &:has(> a),
-            &:has(> span.disabled) {
-                margin-top: auto;
-            }
-
-            &.active {
-                span.disabled {
-                    @include header__anchor--active-bold;
-                    padding: 0;
-                }
-            }
 
             span.disabled {
                 @include header__anchor--bold;
@@ -523,10 +545,27 @@ header {
                     }
                 }
             }
+
+            &:has(> a),
+            &:has(> span.disabled) {
+                margin-top: auto;
+            }
+
+            &.active {
+                span.disabled {
+                    @include header__anchor--active-bold;
+
+                    cursor: default;
+                    padding: 0;
+                }
+            }
         }
 
-        .header--search:has(.search__form--expanded) + .header--sign-in {
-            display: none;
+        .header--search:has(.search__form--expanded) ~ .header--sign-in,
+        .header--search:has(.search__form--expanded) ~ .header__access-link {
+            @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
+                display: none;
+            }
         }
     }
 }
