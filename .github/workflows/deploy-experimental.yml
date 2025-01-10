@@ -484,7 +484,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [test-javascript, deploy-django]
+    needs: deploy-django
     steps:
       # Checkout the code
       - name: Checkout
