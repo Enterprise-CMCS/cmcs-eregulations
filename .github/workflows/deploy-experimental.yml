@@ -429,7 +429,7 @@ jobs:
         if: success()
         working-directory: ./solution
         run: |
-          make regulations
+          make install-npm
           make test.vitest.coverage
   test-python:
     needs: [deploy-django]
@@ -480,7 +480,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: deploy-django
+    needs: [test-javascript, deploy-django]
     steps:
       # Checkout the code
       - name: Checkout

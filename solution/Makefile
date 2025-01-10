@@ -5,6 +5,9 @@ help: ## Show this help.
 regulations: ## Build regulations assets
 regulations: ui/regulations/node_modules static-assets/regulations/css/main.css ui/regulations/eregs-component-lib/node_modules static-assets/regulations/js/eregs-main.iife.js ui/regulations/eregs-vite/node_modules build-spa
 
+install-npm: ## Install npm dependencies
+install-npm: ui/regulations/node_modules ui/regulations/eregs-vite/node_modules ui/regulations/eregs-component-lib/node_modules
+
 ui/regulations/node_modules: ui/regulations/package.json
 	cd ui/regulations; \
 		npm install;
