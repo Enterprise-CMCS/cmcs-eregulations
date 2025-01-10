@@ -474,9 +474,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version:
-            18.14
-            # setup python
+          node-version: 18.14
+      # setup python
       - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
@@ -568,7 +567,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-22.04
-    needs: [deploy-go, deploy-django]
+    needs: build-and-deploy-vue
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -593,7 +592,6 @@ jobs:
       name: "dev"
     runs-on: ubuntu-22.04
     needs: [deploy-django, build-and-deploy-vue]
-    #needs: [deploy-go, deploy-django, build-and-deploy-vue]
     steps:
       # Checkout the code
       - name: Checkout

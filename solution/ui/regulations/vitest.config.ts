@@ -20,6 +20,7 @@ export default defineConfig({
                 "**/test/**/*",
                 "**/utilities/**/*",
             ],
+            reportOnFailure: true,
         },
     },
     resolve: {
