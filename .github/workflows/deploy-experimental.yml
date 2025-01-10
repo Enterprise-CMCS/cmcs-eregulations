@@ -430,7 +430,7 @@ jobs:
         run: |
           make install-npm
       # Execute the JavaScript tests
-      - name:Run JavaScript unit tests with Vitest
+      - name: Run JavaScript unit tests with Vitest
         if: success()
         working-directory: ./solution
         run: |
