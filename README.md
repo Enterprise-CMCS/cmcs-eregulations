@@ -5,7 +5,7 @@
 
 | Branch | Build Status                                                                                                     |
 | ------ | ---------------------------------------------------------------------------------------------------------------- |
-| master | ![deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)             |
+| main | ![deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)             |
 
 # About
 
