@@ -429,6 +429,7 @@ jobs:
         if: success()
         working-directory: ./solution
         run: |
+          make regulations
           make test.vitest.coverage
   test-python:
     needs: [deploy-django]
