@@ -1,6 +1,22 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 import SubjectSelector from "./SubjectSelector.vue";
+
+afterEach(() => {
+    vi.clearAllMocks();
+});
+
+const mockRoutePush = vi.fn();
+vi.mock("vue-router", async () => {
+    return {
+        RouterView: {},
+        useRouter: () => {
+            return {
+                push: mockRoutePush,
+            };
+        },
+    };
+});
 
 describe("Subject Selector", () => {
     it("gets the correct input container classes", () => {
