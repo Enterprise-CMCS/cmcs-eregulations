@@ -619,8 +619,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: build-and-deploy-vue
-    #needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    needs: [deploy-go, deploy-django, build-and-deploy-vue]
     steps:
       # Checkout the code
       - name: Checkout
