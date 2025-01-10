@@ -411,7 +411,6 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [deploy-django]
     #strategy:
     #fail-fast: true
     steps:
