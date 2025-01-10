@@ -591,7 +591,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-22.04
-    needs: [deploy-go, deploy-django, build-and-deploy-vue]
+    needs: [deploy-go, build-and-deploy-vue]
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
@@ -615,7 +615,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [deploy-django, build-and-deploy-vue]
+    needs: build-and-deploy-vue
     #needs: [deploy-go, deploy-django, build-and-deploy-vue]
     steps:
       # Checkout the code
