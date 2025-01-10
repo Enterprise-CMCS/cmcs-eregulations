@@ -11,8 +11,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   test-javascript:
-    environment:
-      name: "dev"
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: true
