@@ -199,6 +199,13 @@ jobs:
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           
+          # Destroy api-stack stack
+          echo "Destroying PR-specific stack: ${ECFR_PARSER_STACK}"
+          cdk destroy "${API_STACK}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          
           echo "Cleanup completed for all Docker-based stacks"
           popd
 

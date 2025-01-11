@@ -265,7 +265,7 @@ jobs:
           popd
 
   deploy-ecfr-parser-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk]
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -310,9 +310,55 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+  deploy-site-lambda-cdk:
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk,]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Site-Lambda
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          API_STACK="cms-eregs-eph-$PR_NUMBER-api"
+          
+          cdk deploy $API_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
 
   deployment-status-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk, deploy-ecfr-parser-cdk]
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk, deploy-ecfr-parser-cdk, deploy-site-lambda-cdk]
     if: always()
     runs-on: ubuntu-22.04
     environment: "dev"

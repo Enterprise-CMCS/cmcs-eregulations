@@ -101,7 +101,7 @@ export async function loadConfiguration(stageConfig: StageConfig): Promise<ApiCo
       DJANGO_ADMIN_PASSWORD: httpPassword,
       DJANGO_SETTINGS_MODULE: djangoSettings,
       ALLOWED_HOST: '.amazonaws.com',
-      STAGE_ENV: stageConfig.stage,
+      STAGE_ENV: stageConfig.environment,
       BASE_URL: baseUrl,
       CUSTOM_URL: customUrl,
       SURVEY_URL: surveyUrl,

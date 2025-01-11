@@ -68,25 +68,25 @@ async function main() {
       cdk.Tags.of(app).add(key, value);
     });
      
+    // Fetch required infrastructure parameters
     const [
-      vpcId, 
-      privateSubnetAId, 
-      privateSubnetBId, 
-      httpUser, 
-      httpPassword
+      vpcId,
+      privateSubnetAId,
+      privateSubnetBId,
+      iamPath
     ] = await Promise.all([
       getParameterValue('/account_vars/vpc/id'),
-      getParameterValue('/account_vars/vpc/subnets/private/a/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
       getParameterValue('/account_vars/vpc/subnets/private/b/id'),
-      getParameterValue('/eregulations/http/user'),
-      getParameterValue('/eregulations/http/password'),
+      getParameterValue('/account_vars/iam/path'),
     ]);
 
-    console.log('Subnet IDs:', { privateSubnetAId, privateSubnetBId });
-
-    // Create main API stack
-    new APIStack(app, stageConfig.getResourceName('api'), {
-      env,
+    // Create API stack
+    const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
+        region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
+      },
       description: `API Stack for ${stageConfig.getResourceName('site')}`,
       lambdaConfig: {
         memorySize: 4096,
@@ -95,9 +95,7 @@ async function main() {
       environmentConfig: {
         vpcId,
         logLevel: process.env.LOG_LEVEL || 'INFO',
-        httpUser,
-        httpPassword,
-        subnetIds: [privateSubnetAId, privateSubnetBId], // Make sure both subnets are passed
+        subnetIds: [privateSubnetAId, privateSubnetBId],
       }
     }, stageConfig);
 
