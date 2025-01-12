@@ -1,26 +1,54 @@
 import * as cdk from 'aws-cdk-lib';
-import { aws_wafv2 as wafv2, aws_logs as logs } from 'aws-cdk-lib';
+import {
+  aws_wafv2 as wafv2,
+  aws_logs as logs,
+  aws_apigateway as apigw,
+} from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+
+/**
+ * StageConfig is a placeholder interface/class. 
+ * Adapt it to fit your own project’s configuration needs.
+ *
+ * Example:
+ *   export interface StageConfig {
+ *     environment: string;
+ *     getResourceName(baseName: string): string;
+ *   }
+ */
 import { StageConfig } from '../../config/stage-config';
 
 export class WafConstruct extends Construct {
+  /** Publicly available WAFv2 Web ACL object */
   public readonly webAcl: wafv2.CfnWebACL;
+
+  /** Reference to the created CloudWatch Log Group */
   private readonly logGroup: logs.LogGroup;
 
   constructor(scope: Construct, id: string, stageConfig: StageConfig) {
     super(scope, id);
 
-    // First create the log group
+    // -------------------------------------------------------
+    // 1) CREATE THE LOG GROUP
+    // -------------------------------------------------------
     this.logGroup = new logs.LogGroup(this, 'WafLogGroup', {
       logGroupName: stageConfig.getResourceName('waf-logs'),
+      // 30 days retention; adjust for your compliance or cost needs
       retention: logs.RetentionDays.ONE_MONTH,
+      // Destroy log group when stack is removed; 
+      // if you need logs for forensic/historical reasons, switch to RETAIN
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // Create WAF ACL
+    // -------------------------------------------------------
+    // 2) CREATE THE WAFv2 WEB ACL
+    // -------------------------------------------------------
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
+      // Visible name in the WAF console
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
+      // Could also be set to { block: {} } for a default deny strategy
       defaultAction: { allow: {} },
+      // 'REGIONAL' for API Gateway, 'CLOUDFRONT' for distributions, etc.
       scope: 'REGIONAL',
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
@@ -28,7 +56,7 @@ export class WafConstruct extends Construct {
         sampledRequestsEnabled: true,
       },
       rules: [
-        // Geo restriction rule
+        // ---------- GeoMatch Example ----------
         {
           name: stageConfig.getResourceName('allow-usa-territories'),
           priority: 0,
@@ -44,13 +72,13 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
-        // Rate limiting rule
+        // ---------- Rate Limit Example ----------
         {
           name: stageConfig.getResourceName('rate-limit'),
           priority: 1,
           statement: {
             rateBasedStatement: {
-              limit: 2000,
+              limit: 2000, // requests per 5-minute period
               aggregateKeyType: 'IP',
             },
           },
@@ -61,7 +89,7 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
-        // AWS Managed Rule Sets
+        // ---------- AWS Managed Rule Sets ----------
         {
           name: 'AWSManagedRulesCommonRuleSet',
           priority: 2,
@@ -69,14 +97,14 @@ export class WafConstruct extends Construct {
           statement: {
             managedRuleGroupStatement: {
               vendorName: 'AWS',
-              name: 'AWSManagedRulesCommonRuleSet'
-            }
+              name: 'AWSManagedRulesCommonRuleSet',
+            },
           },
           visibilityConfig: {
             cloudWatchMetricsEnabled: true,
             metricName: 'AWSManagedRulesCommonRuleSetMetric',
-            sampledRequestsEnabled: true
-          }
+            sampledRequestsEnabled: true,
+          },
         },
         {
           name: 'AWSManagedRulesKnownBadInputsRuleSet',
@@ -85,58 +113,82 @@ export class WafConstruct extends Construct {
           statement: {
             managedRuleGroupStatement: {
               vendorName: 'AWS',
-              name: 'AWSManagedRulesKnownBadInputsRuleSet'
-            }
+              name: 'AWSManagedRulesKnownBadInputsRuleSet',
+            },
           },
           visibilityConfig: {
             cloudWatchMetricsEnabled: true,
             metricName: 'AWSManagedRulesKnownBadInputsRuleSetMetric',
-            sampledRequestsEnabled: true
-          }
-        }
-      ]
+            sampledRequestsEnabled: true,
+          },
+        },
+      ],
     });
 
-    // Create the properly formatted ARN for WAF logging
-    const stack = cdk.Stack.of(this);
-    const logGroupArnForWAF = cdk.Arn.format({
-      service: 'logs',
-      resource: 'log-group',
-      resourceName: this.logGroup.logGroupName,
-      region: stack.region,
-      account: stack.account,
-    }, stack);
-
-    // Configure WAF logging with properly formatted ARN
-    const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
-      logDestinationConfigs: [logGroupArnForWAF],
-      resourceArn: this.webAcl.attrArn
-    });
-
-    // Add explicit dependencies
+    // Make sure the Web ACL depends on the log group if needed for naming
+    // (Not strictly necessary if just referencing ARNs, but good practice)
     this.webAcl.node.addDependency(this.logGroup);
+
+    // -------------------------------------------------------
+    // 3) FORMAT A CLEAN ARN FOR WAF LOGGING
+    // -------------------------------------------------------
+    // WAF requires a colon between "log-group" and the log group name, 
+    // so we ensure no wildcards or slashes.
+    const stack = cdk.Stack.of(this);
+    const logGroupArnForWAF = cdk.Arn.format(
+      {
+        service: 'logs',
+        resource: 'log-group',
+        resourceName: this.logGroup.logGroupName,
+        arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
+      },
+      stack,
+    );
+
+    // -------------------------------------------------------
+    // 4) CREATE THE WAF LOGGING CONFIG
+    // -------------------------------------------------------
+    const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
+      // Must use the correct colon-based ARN (no wildcards)
+      logDestinationConfigs: [logGroupArnForWAF],
+      resourceArn: this.webAcl.attrArn, // Link to the WAF ACL
+    });
+
+    // Ensure logging setup depends on both the log group & WAF
     loggingConfig.node.addDependency(this.logGroup);
     loggingConfig.node.addDependency(this.webAcl);
 
-    // Add tags
+    // -------------------------------------------------------
+    // 5) TAGGING (OPTIONAL BUT RECOMMENDED)
+    // -------------------------------------------------------
+    // Apply consistent tagging to help track environment, usage, cost, etc.
     cdk.Tags.of(this).add('Name', `eregs-waf-${stageConfig.environment}`);
     cdk.Tags.of(this).add('Environment', stageConfig.environment);
     cdk.Tags.of(this).add('Service', 'eregs-waf');
   }
 
-  // Helper method to associate WAF with API Gateway
-  public associateWithApiGateway(apiGateway: cdk.aws_apigateway.RestApi): void {
+  /**
+   * Call this to associate your WAF with an API Gateway deployment.
+   * e.g. usage: wafConstruct.associateWithApiGateway(myRestApi);
+   */
+  public associateWithApiGateway(apiGateway: apigw.RestApi): void {
     new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
+      // REST API stage ARN format for WAF (REGIONAL)
       resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
-      webAclArn: this.webAcl.attrArn
+      webAclArn: this.webAcl.attrArn,
     });
   }
 
-  // Getter for log group ARN
+  /**
+   * If you need the raw ARN of the log group for other operations,
+   * you can retrieve it here. Note that it's the wildcard version (with :*),
+   * so be cautious if you use it for a WAF destination. 
+   */
   public getLogGroupArn(): string {
     return this.logGroup.logGroupArn;
   }
 }
+
 // import * as cdk from 'aws-cdk-lib';
 // import { aws_wafv2 as wafv2, aws_logs as logs } from 'aws-cdk-lib';
 // import { Construct } from 'constructs';
