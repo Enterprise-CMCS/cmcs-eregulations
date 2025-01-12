@@ -9,7 +9,7 @@ export class WafConstruct extends Construct {
   constructor(scope: Construct, id: string, stageConfig: StageConfig) {
     super(scope, id);
 
-    // Create WAF ACL matching serverless configuration
+    // Create WAF ACL
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
       defaultAction: { allow: {} },
@@ -89,27 +89,24 @@ export class WafConstruct extends Construct {
       ]
     });
 
-    // Create log group for WAF logs
+    // Create log group
     const logGroup = new logs.LogGroup(this, 'WafLogGroup', {
       logGroupName: stageConfig.getResourceName('waf-logs'),
       retention: logs.RetentionDays.ONE_MONTH,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // Get the region and account for the ARN
-    const region = cdk.Stack.of(this).region;
-    const account = cdk.Stack.of(this).account;
-
-    // Configure WAF logging with the correct log group ARN format
+    // Configure WAF logging with the correct log group ARN format including wildcard
     const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
       logDestinationConfigs: [
-        `arn:aws:logs:${region}:${account}:log-group:${logGroup.logGroupName}`
+        `${logGroup.logGroupArn}:*`  // Include :* at the end of the ARN
       ],
       resourceArn: this.webAcl.attrArn
     });
 
-    // Add explicit dependency to ensure log group exists before logging config
+    // Add explicit dependency
     loggingConfig.node.addDependency(logGroup);
+    loggingConfig.node.addDependency(this.webAcl);
 
     // Add tags
     cdk.Tags.of(this).add('Name', `eregs-waf-${stageConfig.environment}`);
@@ -125,7 +122,6 @@ export class WafConstruct extends Construct {
     });
   }
 }
-
 // import * as cdk from 'aws-cdk-lib';
 // import { aws_wafv2 as wafv2, aws_logs as logs } from 'aws-cdk-lib';
 // import { Construct } from 'constructs';
