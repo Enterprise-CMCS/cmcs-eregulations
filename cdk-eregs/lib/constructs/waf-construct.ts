@@ -5,11 +5,19 @@ import { StageConfig } from '../../config/stage-config';
 
 export class WafConstruct extends Construct {
   public readonly webAcl: wafv2.CfnWebACL;
+  private readonly logGroup: logs.LogGroup;
 
   constructor(scope: Construct, id: string, stageConfig: StageConfig) {
     super(scope, id);
 
-    // Create WAF ACL
+    // First, create the log group as it's needed by both WAF and logging config
+    this.logGroup = new logs.LogGroup(this, 'WafLogGroup', {
+      logGroupName: stageConfig.getResourceName('waf-logs'),
+      retention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    // Then create WAF ACL
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
       defaultAction: { allow: {} },
@@ -20,7 +28,6 @@ export class WafConstruct extends Construct {
         sampledRequestsEnabled: true,
       },
       rules: [
-        // Geo restriction rule
         {
           name: stageConfig.getResourceName('allow-usa-territories'),
           priority: 0,
@@ -36,7 +43,6 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
-        // Rate limiting rule
         {
           name: stageConfig.getResourceName('rate-limit'),
           priority: 1,
@@ -53,7 +59,6 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
-        // AWS Managed Rule Sets
         {
           name: 'AWSManagedRulesCommonRuleSet',
           priority: 2,
@@ -89,23 +94,17 @@ export class WafConstruct extends Construct {
       ]
     });
 
-    // Create log group
-    const logGroup = new logs.LogGroup(this, 'WafLogGroup', {
-      logGroupName: stageConfig.getResourceName('waf-logs'),
-      retention: logs.RetentionDays.ONE_MONTH,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
+    // Wait for both resources to be created before setting up logging
+    this.webAcl.node.addDependency(this.logGroup);
 
-    // Configure WAF logging with the correct log group ARN format including wildcard
+    // Finally, set up logging configuration
     const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
-      logDestinationConfigs: [
-        `${logGroup.logGroupArn}:*`  // Include :* at the end of the ARN
-      ],
+      logDestinationConfigs: [this.logGroup.logGroupArn],  // Use simple logGroupArn
       resourceArn: this.webAcl.attrArn
     });
 
-    // Add explicit dependency
-    loggingConfig.node.addDependency(logGroup);
+    // Add explicit dependencies
+    loggingConfig.node.addDependency(this.logGroup);
     loggingConfig.node.addDependency(this.webAcl);
 
     // Add tags
@@ -120,6 +119,11 @@ export class WafConstruct extends Construct {
       resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
       webAclArn: this.webAcl.attrArn
     });
+  }
+
+  // Getter for log group ARN
+  public getLogGroupArn(): string {
+    return this.logGroup.logGroupArn;
   }
 }
 // import * as cdk from 'aws-cdk-lib';
