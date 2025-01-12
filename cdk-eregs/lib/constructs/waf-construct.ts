@@ -10,14 +10,14 @@ export class WafConstruct extends Construct {
   constructor(scope: Construct, id: string, stageConfig: StageConfig) {
     super(scope, id);
 
-    // First, create the log group as it's needed by both WAF and logging config
+    // First create the log group
     this.logGroup = new logs.LogGroup(this, 'WafLogGroup', {
       logGroupName: stageConfig.getResourceName('waf-logs'),
       retention: logs.RetentionDays.ONE_MONTH,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // Then create WAF ACL
+    // Create WAF ACL
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
       defaultAction: { allow: {} },
@@ -28,6 +28,7 @@ export class WafConstruct extends Construct {
         sampledRequestsEnabled: true,
       },
       rules: [
+        // Geo restriction rule
         {
           name: stageConfig.getResourceName('allow-usa-territories'),
           priority: 0,
@@ -43,6 +44,7 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
+        // Rate limiting rule
         {
           name: stageConfig.getResourceName('rate-limit'),
           priority: 1,
@@ -59,6 +61,7 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
+        // AWS Managed Rule Sets
         {
           name: 'AWSManagedRulesCommonRuleSet',
           priority: 2,
@@ -94,16 +97,24 @@ export class WafConstruct extends Construct {
       ]
     });
 
-    // Wait for both resources to be created before setting up logging
-    this.webAcl.node.addDependency(this.logGroup);
+    // Create the properly formatted ARN for WAF logging
+    const stack = cdk.Stack.of(this);
+    const logGroupArnForWAF = cdk.Arn.format({
+      service: 'logs',
+      resource: 'log-group',
+      resourceName: this.logGroup.logGroupName,
+      region: stack.region,
+      account: stack.account,
+    }, stack);
 
-    // Finally, set up logging configuration
+    // Configure WAF logging with properly formatted ARN
     const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
-      logDestinationConfigs: [this.logGroup.logGroupArn],  // Use simple logGroupArn
+      logDestinationConfigs: [logGroupArnForWAF],
       resourceArn: this.webAcl.attrArn
     });
 
     // Add explicit dependencies
+    this.webAcl.node.addDependency(this.logGroup);
     loggingConfig.node.addDependency(this.logGroup);
     loggingConfig.node.addDependency(this.webAcl);
 
