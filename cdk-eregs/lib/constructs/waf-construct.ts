@@ -11,7 +11,7 @@ export class WafConstruct extends Construct {
 
     // Create WAF ACL matching serverless configuration
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
-      name: `APIGateway-eregs-allow-usa-plus-territories-${stageConfig.environment}`,
+      name: stageConfig.getResourceName(`APIGateway-eregs-allow-usa-plus-territories`),
       defaultAction: { allow: {} },
       scope: 'REGIONAL',
       visibilityConfig: {
