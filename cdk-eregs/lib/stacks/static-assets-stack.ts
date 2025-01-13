@@ -1,54 +1,28 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import { execSync } from 'child_process';
 import { StageConfig } from '../../config/stage-config';
 
-/**
- * Properties for the StaticAssetsStack
- * @interface StaticAssetsStackProps
- * @extends cdk.StackProps
- */
 export interface StaticAssetsStackProps extends cdk.StackProps {
-  /** Optional ACM certificate ARN for CloudFront HTTPS */
   certificateArn?: string;
-  /** Optional path to requirements.txt */
   requirementsPath?: string;
-  /** Optional layer version identifier for maintaining specific versions */
   layerVersionId?: string;
 }
 
-/**
- * AWS CDK Stack for managing static assets with CloudFront distribution
- * This stack creates:
- * - S3 bucket for static assets with proper security configurations
- * - CloudFront distribution with WAF protection
- * - Logging bucket for CloudFront
- * - Python Lambda layer for Django requirements
- * - Automated deployment of static assets
- */
 export class StaticAssetsStack extends cdk.Stack {
-  /** Stage-specific configuration for resource naming and tagging */
   private readonly stageConfig: StageConfig;
-  /** Expose the layer version for other stacks to reference */
   public readonly pythonLayer: lambda.LayerVersion;
   private readonly layerVersionId: string;
 
-  /**
-   * Creates a new StaticAssetsStack
-   * @param scope - Parent construct
-   * @param id - Stack identifier
-   * @param props - Stack properties including optional certificate ARN
-   * @param stageConfig - Stage-specific configuration
-   */
   constructor(
     scope: Construct,
     id: string,
@@ -60,15 +34,8 @@ export class StaticAssetsStack extends cdk.Stack {
     this.stageConfig = stageConfig;
     const { certificateArn } = props;
     
-    // Store layerVersionId for use in exports
     this.layerVersionId = props.layerVersionId || this.generateVersionId(props.requirementsPath);
 
-    /**
-     * S3 Bucket for storing static assets
-     * - Blocks all public access
-     * - Enables S3-managed encryption
-     * - Configures CORS for GET/HEAD requests
-     */
     const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
       bucketName: stageConfig.getResourceName('site-assets'),
       encryption: s3.BucketEncryption.S3_MANAGED,
@@ -84,10 +51,6 @@ export class StaticAssetsStack extends cdk.Stack {
       ],
     });
 
-    /**
-     * S3 Bucket for CloudFront access logs
-     * - Configures proper ownership and permissions for log delivery
-     */
     const loggingBucket = new s3.Bucket(this, 'CloudFrontLogsBucket', {
       bucketName: stageConfig.getResourceName('cloudfront-logs'),
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
@@ -95,11 +58,6 @@ export class StaticAssetsStack extends cdk.Stack {
       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
     });
 
-    /**
-     * WAF configuration for CloudFront
-     * - Restricts access to USA and territories
-     * - Enables monitoring and metrics
-     */
     const waf = new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
       defaultAction: { allow: {} },
       scope: 'CLOUDFRONT',
@@ -128,15 +86,8 @@ export class StaticAssetsStack extends cdk.Stack {
       ],
     });
 
-    // Create the Python layer with version support
     this.pythonLayer = this.createVersionedPythonLayer(props.requirementsPath);
 
-    /**
-     * CloudFront Distribution for serving static assets
-     * - Configures S3 origin with Origin Access Control
-     * - Enables HTTPS and modern security protocols
-     * - Integrates with WAF and logging
-     */
     const distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(assetsBucket),
@@ -152,15 +103,12 @@ export class StaticAssetsStack extends cdk.Stack {
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      domainNames: certificateArn ? [stageConfig.getResourceName('site-domain')] : undefined,
-      certificate: certificateArn ? acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn) : undefined
+      ...(certificateArn ? {
+        domainNames: [stageConfig.getResourceName('site-domain')],
+        certificate: acm.Certificate.fromCertificateArn(this, 'Certificate', certificateArn)
+      } : {})
     });
 
-    /**
-     * Automated deployment of static assets to S3
-     * - Excludes node_modules and nginx directories
-     * - Invalidates CloudFront cache after deployment
-     */
     new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
       sources: [
         s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations'), {
@@ -172,12 +120,10 @@ export class StaticAssetsStack extends cdk.Stack {
       distributionPaths: ['/*'],
     });
 
-    // Apply stage-specific tags to all resources
     Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
       cdk.Tags.of(this).add(key, value);
     });
 
-    // Export stack outputs
     this.exportStackOutputs(distribution);
     this.exportLayerArn();
   }
@@ -249,26 +195,24 @@ export class StaticAssetsStack extends cdk.Stack {
 
   private exportLayerArn() {
     // Keep the original export for backward compatibility
-    new cdk.CfnOutput(this, 'PythonLayerArnLegacy', {
-      value: this.pythonLayer.layerVersionArn,
-      description: 'ARN of the Python Lambda Layer (Legacy)',
-      exportName: this.stageConfig.getResourceName('python-layer-arn'),
-    });
-  
-    // Add the new versioned export
-    const versionedExportName = `${this.stageConfig.getResourceName('python-layer-arn')}-${this.layerVersionId}`;
-    
     new cdk.CfnOutput(this, 'PythonLayerArn', {
       value: this.pythonLayer.layerVersionArn,
-      description: `ARN of the Python Lambda Layer (Version: ${this.layerVersionId})`,
-      exportName: versionedExportName,
+      description: 'ARN of the Python Lambda Layer',
+      exportName: this.stageConfig.getResourceName('python-layer-arn'),
     });
-  
-    // Export the version ID
+
+    // Add version identifier output
     new cdk.CfnOutput(this, 'PythonLayerVersion', {
       value: this.layerVersionId,
       description: 'Version identifier of the Python Lambda Layer',
-      exportName: `${this.stageConfig.getResourceName('python-layer-version')}`,
+      exportName: this.stageConfig.getResourceName('python-layer-version'),
+    });
+
+    // Add versioned ARN output
+    new cdk.CfnOutput(this, 'PythonLayerVersionedArn', {
+      value: this.pythonLayer.layerVersionArn,
+      description: `ARN of the Python Lambda Layer (Version: ${this.layerVersionId})`,
+      exportName: `${this.stageConfig.getResourceName('python-layer-arn')}-${this.layerVersionId}`,
     });
   }
 
