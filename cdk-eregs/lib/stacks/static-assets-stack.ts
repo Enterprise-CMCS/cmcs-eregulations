@@ -33,17 +33,16 @@ export class StaticAssetsStack extends cdk.Stack {
 
    this.stageConfig = stageConfig;
    this.layerVersionId = props.layerVersionId || this.generateVersionId(props.requirementsPath);
-
-   // Get ACM certificate ARN from SSM if it exists
-   let certificateArn: string | undefined;
-   try {
-     certificateArn = ssm.StringParameter.valueForStringParameter(
-       this,
-       '/eregulations/acm-cert-arn'
-     );
-   } catch (error) {
-     console.log('No ACM certificate found in SSM, proceeding without custom domain');
-   }
+// Get ACM certificate ARN from SSM if it exists
+    let certificateArn: string | undefined;
+    try {
+    certificateArn = ssm.StringParameter.valueFromLookup(
+        this,
+        '/eregulations/acm-cert-arn'
+    );
+    } catch (error) {
+    console.log('No ACM certificate found in SSM, proceeding without custom domain');
+    }
 
    const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
      bucketName: stageConfig.getResourceName('site-assets'),
