@@ -130,13 +130,25 @@ const sensitiveParams = {
       description: 'SecurityGroup for Serverless Functions',
       allowAllOutbound: true,
     });
-
-    // Import Shared Resources
-    const pythonLayer = lambda.LayerVersion.fromLayerVersionArn(
-      this,
-      'SharedPythonLayer',
-      cdk.Fn.importValue(stageConfig.getResourceName('python-layer-arn')),
-    );
+    // Try to get the newest layer version, but fallback gracefully if not found
+    // First fix the layer import type and setup:
+    let pythonLayer: lambda.ILayerVersion;  // Change type to ILayerVersion
+    try {
+      // Get the version ID from exports
+      const layerVersionId = cdk.Fn.importValue(
+        stageConfig.getResourceName('python-layer-version')
+      );
+      
+      pythonLayer = lambda.LayerVersion.fromLayerVersionArn(
+        this,
+        'SharedPythonLayer',
+        cdk.Fn.importValue(`${stageConfig.getResourceName('python-layer-arn')}-${layerVersionId}`)
+      );
+    } catch (error) {
+      throw new Error(
+        'Python Layer not found. Please ensure the StaticAssetsStack is deployed first.'
+      );
+    }
 
     const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
       queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
