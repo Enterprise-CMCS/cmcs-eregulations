@@ -109,6 +109,9 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra
+
           npm install
           
           # Get exact stack names

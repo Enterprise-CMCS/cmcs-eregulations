@@ -16,3 +16,5 @@ solution/ui/regulations/dist
 solution/Dockerfile
 solution/ui/regulations/coverage/
 db_backup/
+solution/static-assets/python/
+solution/static-assets/python-django-layer.zip
