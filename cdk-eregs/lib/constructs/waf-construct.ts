@@ -5,17 +5,6 @@ import {
   aws_apigateway as apigw,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-
-/**
- * StageConfig is a placeholder interface/class. 
- * Adapt it to fit your own project’s configuration needs.
- *
- * Example:
- *   export interface StageConfig {
- *     environment: string;
- *     getResourceName(baseName: string): string;
- *   }
- */
 import { StageConfig } from '../../config/stage-config';
 
 export class WafConstruct extends Construct {
@@ -29,14 +18,12 @@ export class WafConstruct extends Construct {
     super(scope, id);
 
     // -------------------------------------------------------
-    // 1) CREATE THE LOG GROUP
+    // 1) CREATE THE LOG GROUP WITH REQUIRED PREFIX
     // -------------------------------------------------------
     this.logGroup = new logs.LogGroup(this, 'WafLogGroup', {
-      logGroupName: stageConfig.getResourceName('waf-logs'),
-      // 30 days retention; adjust for your compliance or cost needs
+      // Use required 'aws-waf-logs-' prefix for WAF logging
+      logGroupName: `aws-waf-logs-${stageConfig.getResourceName('waf')}`,
       retention: logs.RetentionDays.ONE_MONTH,
-      // Destroy log group when stack is removed; 
-      // if you need logs for forensic/historical reasons, switch to RETAIN
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
@@ -44,11 +31,8 @@ export class WafConstruct extends Construct {
     // 2) CREATE THE WAFv2 WEB ACL
     // -------------------------------------------------------
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
-      // Visible name in the WAF console
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
-      // Could also be set to { block: {} } for a default deny strategy
       defaultAction: { allow: {} },
-      // 'REGIONAL' for API Gateway, 'CLOUDFRONT' for distributions, etc.
       scope: 'REGIONAL',
       visibilityConfig: {
         cloudWatchMetricsEnabled: true,
@@ -56,7 +40,7 @@ export class WafConstruct extends Construct {
         sampledRequestsEnabled: true,
       },
       rules: [
-        // ---------- GeoMatch Example ----------
+        // ---------- GeoMatch Rule ----------
         {
           name: stageConfig.getResourceName('allow-usa-territories'),
           priority: 0,
@@ -72,13 +56,13 @@ export class WafConstruct extends Construct {
             sampledRequestsEnabled: true,
           },
         },
-        // ---------- Rate Limit Example ----------
+        // ---------- Rate Limit Rule ----------
         {
           name: stageConfig.getResourceName('rate-limit'),
           priority: 1,
           statement: {
             rateBasedStatement: {
-              limit: 2000, // requests per 5-minute period
+              limit: 2000,  // requests per 5-minute period
               aggregateKeyType: 'IP',
             },
           },
@@ -125,15 +109,12 @@ export class WafConstruct extends Construct {
       ],
     });
 
-    // Make sure the Web ACL depends on the log group if needed for naming
-    // (Not strictly necessary if just referencing ARNs, but good practice)
+    // Make sure WAF depends on log group
     this.webAcl.node.addDependency(this.logGroup);
 
     // -------------------------------------------------------
     // 3) FORMAT A CLEAN ARN FOR WAF LOGGING
     // -------------------------------------------------------
-    // WAF requires a colon between "log-group" and the log group name, 
-    // so we ensure no wildcards or slashes.
     const stack = cdk.Stack.of(this);
     const logGroupArnForWAF = cdk.Arn.format(
       {
@@ -149,46 +130,41 @@ export class WafConstruct extends Construct {
     // 4) CREATE THE WAF LOGGING CONFIG
     // -------------------------------------------------------
     const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
-      // Must use the correct colon-based ARN (no wildcards)
       logDestinationConfigs: [logGroupArnForWAF],
-      resourceArn: this.webAcl.attrArn, // Link to the WAF ACL
+      resourceArn: this.webAcl.attrArn,
     });
 
-    // Ensure logging setup depends on both the log group & WAF
+    // Add explicit dependencies
     loggingConfig.node.addDependency(this.logGroup);
     loggingConfig.node.addDependency(this.webAcl);
 
     // -------------------------------------------------------
-    // 5) TAGGING (OPTIONAL BUT RECOMMENDED)
+    // 5) ADD RESOURCE TAGS
     // -------------------------------------------------------
-    // Apply consistent tagging to help track environment, usage, cost, etc.
     cdk.Tags.of(this).add('Name', `eregs-waf-${stageConfig.environment}`);
     cdk.Tags.of(this).add('Environment', stageConfig.environment);
     cdk.Tags.of(this).add('Service', 'eregs-waf');
   }
 
   /**
-   * Call this to associate your WAF with an API Gateway deployment.
-   * e.g. usage: wafConstruct.associateWithApiGateway(myRestApi);
+   * Associate this WAF with an API Gateway deployment.
+   * @param apiGateway The API Gateway to associate with the WAF
    */
   public associateWithApiGateway(apiGateway: apigw.RestApi): void {
     new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
-      // REST API stage ARN format for WAF (REGIONAL)
       resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
       webAclArn: this.webAcl.attrArn,
     });
   }
 
   /**
-   * If you need the raw ARN of the log group for other operations,
-   * you can retrieve it here. Note that it's the wildcard version (with :*),
-   * so be cautious if you use it for a WAF destination. 
+   * Get the raw ARN of the log group
+   * Note: this returns the wildcard version with :*
    */
   public getLogGroupArn(): string {
     return this.logGroup.logGroupArn;
   }
 }
-
 // import * as cdk from 'aws-cdk-lib';
 // import { aws_wafv2 as wafv2, aws_logs as logs } from 'aws-cdk-lib';
 // import { Construct } from 'constructs';
