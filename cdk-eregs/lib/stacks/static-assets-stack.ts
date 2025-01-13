@@ -248,14 +248,23 @@ export class StaticAssetsStack extends cdk.Stack {
   }
 
   private exportLayerArn() {
-    const exportName = `${this.stageConfig.getResourceName('python-layer-arn')}-${this.layerVersionId}`;
+    // Keep the original export for backward compatibility
+    new cdk.CfnOutput(this, 'PythonLayerArnLegacy', {
+      value: this.pythonLayer.layerVersionArn,
+      description: 'ARN of the Python Lambda Layer (Legacy)',
+      exportName: this.stageConfig.getResourceName('python-layer-arn'),
+    });
+  
+    // Add the new versioned export
+    const versionedExportName = `${this.stageConfig.getResourceName('python-layer-arn')}-${this.layerVersionId}`;
     
     new cdk.CfnOutput(this, 'PythonLayerArn', {
       value: this.pythonLayer.layerVersionArn,
       description: `ARN of the Python Lambda Layer (Version: ${this.layerVersionId})`,
-      exportName: exportName,
+      exportName: versionedExportName,
     });
-
+  
+    // Export the version ID
     new cdk.CfnOutput(this, 'PythonLayerVersion', {
       value: this.layerVersionId,
       description: 'Version identifier of the Python Lambda Layer',

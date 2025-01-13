@@ -132,9 +132,9 @@ const sensitiveParams = {
     });
     // Try to get the newest layer version, but fallback gracefully if not found
     // First fix the layer import type and setup:
-    let pythonLayer: lambda.ILayerVersion;  // Change type to ILayerVersion
+    let pythonLayer: lambda.ILayerVersion;
     try {
-      // Get the version ID from exports
+      // Try to get the versioned layer first
       const layerVersionId = cdk.Fn.importValue(
         stageConfig.getResourceName('python-layer-version')
       );
@@ -145,9 +145,13 @@ const sensitiveParams = {
         cdk.Fn.importValue(`${stageConfig.getResourceName('python-layer-arn')}-${layerVersionId}`)
       );
     } catch (error) {
-      throw new Error(
-        'Python Layer not found. Please ensure the StaticAssetsStack is deployed first.'
+      // Fall back to the legacy layer reference if versioned one is not found
+      pythonLayer = lambda.LayerVersion.fromLayerVersionArn(
+        this,
+        'SharedPythonLayer',
+        cdk.Fn.importValue(stageConfig.getResourceName('python-layer-arn'))
       );
+      console.warn('Using legacy layer reference. Please update StaticAssetsStack first.');
     }
 
     const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
