@@ -10,6 +10,8 @@ import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspe
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
 import { S3ImportStack } from '../lib/stacks/s3-import';
+import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
+import { APIStack } from '../lib/stacks/api-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -65,6 +67,37 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
       cdk.Tags.of(app).add(key, value);
     });
+     
+    // Fetch required infrastructure parameters
+    const [
+      vpcId,
+      privateSubnetAId,
+      privateSubnetBId,
+      iamPath
+    ] = await Promise.all([
+      getParameterValue('/account_vars/vpc/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/b/id'),
+      getParameterValue('/account_vars/iam/path'),
+    ]);
+
+    // Create API stack
+    const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
+        region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
+      },
+      description: `API Stack for ${stageConfig.getResourceName('site')}`,
+      lambdaConfig: {
+        memorySize: 4096,
+        timeout: 30,
+      },
+      environmentConfig: {
+        vpcId,
+        logLevel: process.env.LOG_LEVEL || 'INFO',
+        subnetIds: [privateSubnetAId, privateSubnetBId],
+      }
+    }, stageConfig);
 
     // Create ZIP-based Lambda stacks
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
@@ -88,7 +121,62 @@ async function main() {
         loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
       },
     }, stageConfig);
+     // 8. Retrieve the Certificate ARN from SSM (or wherever it is stored)
+  const certificateArn = await getParameterValue('/eregulations/acm-cert-arn');
 
+  // 9. Create the StaticAssetsStack with the certificateArn
+  new StaticAssetsStack(
+    app,
+    stageConfig.getResourceName('static-assets'),  // the "id"
+    {
+      env,
+      description: `Static Assets Stack for ${stageConfig.getResourceName('site')}`,
+     
+    },
+    stageConfig // 4th param, passed separately
+  );
+
+   
+  //Create static assets stack
+
+ // Create static assets stack and initialize resources
+//  const staticAssetsStack = new StaticAssetsStack(app, stageConfig.getResourceName('static-assets'), {
+//   env,
+//   description: `Static Assets Stack for ${stageConfig.getResourceName('site')}`,
+// }, stageConfig);
+// // Explicit, forceful logging
+// console.error('Stack Creation Explicit Debug:', {
+//   stackName: stageConfig.getResourceName('static-assets'),
+//   env: JSON.stringify(env),
+//   siteAssetsName: stageConfig.getResourceName('site-assets'),
+//   stackConfig: {
+//     environment: stageConfig.environment,
+//     ephemeralId: stageConfig.ephemeralId,
+//     isEphemeral: stageConfig.isEphemeral()
+//   }
+// });
+  // Create the SimpleBucketStack
+ // Create the SimpleBucketStack
+ console.log('Creating SimpleBucketStack');
+    
+
+// Call create() to initialize the stack's resources
+
+    // Debug output for configuration
+    console.log('Configuration Debug:', {
+      environment: context.environment,
+      ephemeralId,
+      prNumber,
+      isEphemeral: stageConfig.isEphemeral(),
+      resourceExample: stageConfig.getResourceName('site-assets')
+    });
+    console.log('Configuration Debug:', {
+      determinedEnvironment: context.environment,
+      prNumber,
+      ephemeralId,
+      deployEnv: process.env.DEPLOY_ENV,
+      githubJobEnv: process.env.GITHUB_JOB_ENVIRONMENT
+    });
     new S3ImportStack(app, 'S3ImportStack', {
       bucketName: process.env.BUCKET_NAME || '',
       env: {

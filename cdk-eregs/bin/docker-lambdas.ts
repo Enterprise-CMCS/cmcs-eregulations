@@ -74,7 +74,21 @@ async function main() {
       });
     }
 
-    // Create Docker-based Lambda stacks
+    // // Create Docker-based Lambda stacks
+    // new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+    //   env,
+    //   lambdaConfig: {
+    //     memorySize: 1024,
+    //     timeout: 900,
+    //     reservedConcurrentExecutions: 10,
+    //   },
+    //   environmentConfig: {
+    //     vpcId,
+    //     logLevel,
+    //     httpUser,
+    //     httpPassword,
+    //   }
+    // }, stageConfig);
     new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
       env,
       lambdaConfig: {
@@ -83,13 +97,11 @@ async function main() {
         reservedConcurrentExecutions: 10,
       },
       environmentConfig: {
-        vpcId,
         logLevel,
         httpUser,
         httpPassword,
       }
     }, stageConfig);
-    
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
       env,
       lambdaConfig: {

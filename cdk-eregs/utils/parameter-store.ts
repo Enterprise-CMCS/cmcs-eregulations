@@ -11,7 +11,9 @@ export async function getParameterValue(path: string): Promise<string> {
     throw new Error("Parameter path is required");
   }
 
-  const ssm = new SSMClient({});
+  const ssm = new SSMClient({
+    maxAttempts: 3, // Retry up to 3 times
+  });
 
   try {
     const command = new GetParameterCommand({
