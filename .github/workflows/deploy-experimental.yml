@@ -21,7 +21,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -83,7 +83,7 @@ jobs:
       ENVIRONMENT_NAME: "dev"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -132,7 +132,7 @@ jobs:
       ENVIRONMENT_NAME: "dev"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -179,7 +179,7 @@ jobs:
       ENVIRONMENT_NAME: "dev"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -226,7 +226,7 @@ jobs:
       ENVIRONMENT_NAME: "dev"
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
 
@@ -283,7 +283,7 @@ jobs:
   #   steps:
   #     # Checkout the code
   #     - name: Checkout
-  #       uses: actions/checkout@v3
+  #       uses: actions/checkout@v4
   #       with:
   #         submodules: true
   #     # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -324,7 +324,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -362,7 +362,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -435,7 +435,7 @@ jobs:
     steps:
       # checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # setup Python
@@ -460,7 +460,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existing action
@@ -524,7 +524,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Find the PR number.  This is not always trivial which is why this uses an existign action
@@ -597,7 +597,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: true
       # Configure AWS credentials for GitHub Actions
