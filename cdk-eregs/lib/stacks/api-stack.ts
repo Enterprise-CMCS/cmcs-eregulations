@@ -104,17 +104,26 @@ const sensitiveParams = {
       ],
     });
 
+    // // VPC Configuration
+    // const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
+    //   vpcId: props.environmentConfig.vpcId,
+    // });
+
+    // const selectedSubnets: ec2.SubnetSelection = {
+    //   subnets: props.environmentConfig.subnetIds.map((subnetId, index) =>
+    //     ec2.Subnet.fromSubnetId(this, `PrivateSubnet${index}`, subnetId),
+    //   ),
+    // };
     // VPC Configuration
     const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
       vpcId: props.environmentConfig.vpcId,
     });
 
     const selectedSubnets: ec2.SubnetSelection = {
-      subnets: props.environmentConfig.subnetIds.map((subnetId, index) =>
-        ec2.Subnet.fromSubnetId(this, `PrivateSubnet${index}`, subnetId),
-      ),
+      subnets: [
+        ec2.Subnet.fromSubnetId(this, 'PrivateSubnet', props.environmentConfig.subnetIds[0])
+      ],
     };
-
     // Security Group
     const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
       vpc,
