@@ -16,5 +16,9 @@ solution/ui/regulations/dist
 solution/Dockerfile
 solution/ui/regulations/coverage/
 db_backup/
-solution/static-assets/python/
-solution/static-assets/python-django-layer.zip
+# Specific to CDK Lambda layer generation
+cdk-eregs/lib/stacks/layer-output-*/
+cdk-eregs/lib/stacks/layer-output-*/**
+
+# Zip files generated during layer creation
+*.zip
