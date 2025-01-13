@@ -131,7 +131,7 @@ async function main() {
     {
       env,
       description: `Static Assets Stack for ${stageConfig.getResourceName('site')}`,
-      certificateArn, // put certificateArn in props if you like
+     
     },
     stageConfig // 4th param, passed separately
   );
