@@ -4,6 +4,7 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderChevronUp from "../svgs/header-chevron-up.vue";
 import HeaderChevronDown from "../svgs/header-chevron-down.vue";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
+import HeaderLink from "./HeaderLink.vue";
 
 const props = defineProps({
     statutesUrl: {
@@ -40,15 +41,10 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
     <div class="links--container">
         <ul class="links__list links__list--wide">
             <li v-for="(link, index) in links" :key="index">
-                <a
-                    :data-testid="link.name"
-                    class="header--links__anchor"
-                    :class="{ active: link.active }"
-                    :href="link.href"
+                <HeaderLink
+                    v-bind="link"
                     @click="$emit(`link-clicked`, link.name)"
-                >
-                    <span class="anchor__span">{{ link.label }}</span>
-                </a>
+                />
             </li>
         </ul>
         <button class="more__button" @click="toggleClick">
@@ -64,14 +60,7 @@ const { menuExpanded, toggleClick, closeClick } = useDropdownMenu();
             <template #dropdown-menu-content>
                 <ul class="links__list links__list--dropdown">
                     <li v-for="(link, index) in links" :key="index">
-                        <a
-                            :data-testid="link.name"
-                            class="header--links__anchor"
-                            :class="{ active: link.active }"
-                            :href="link.href"
-                        >
-                            <span class="anchor__span">{{ link.label }}</span>
-                        </a>
+                        <HeaderLink v-bind="link" />
                     </li>
                 </ul>
             </template>

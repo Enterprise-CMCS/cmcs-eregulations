@@ -7,6 +7,12 @@ export default defineConfig({
     test: {
         globals: true,
         setupFiles: ["./test/configuration/setup-test.js"],
+        environment: "jsdom",
+        environmentOptions: {
+            jsdom: {
+                url: "http://mock-url.com",
+            },
+        },
         coverage: {
             reporter: ["text", "json", "html"],
             provider: "v8",
