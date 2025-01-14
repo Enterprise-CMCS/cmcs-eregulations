@@ -106,5 +106,6 @@
         ]
       }
     ]
-  }
+  },
+  "ssm:account=910670052382:parameterName=/eregulations/acm-cert-arn:region=us-east-1": "AQICAHjC9r5F8p4zyonSEut/EPzD/CzVVQyy4/7ShlE2El7OXAFYvcpwqFIAO6FrpEtWO0YHAAAAtTCBsgYJKoZIhvcNAQcGoIGkMIGhAgEAMIGbBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDHaC35/ptDSTh1SIbQIBEIBu7cUjRc0xUBammqbZPhXzZ/UfYjhfPsdXrgKNfVL7QcafpusShjR7cFSqth5vyYrFr5MyZKDAix67hzOl6o9mCXq8+ZccPmg0+hnJCJu3MFFDf61KCA2+PxtXLZ96vVMhj/pZdYgm6VASm1FRpHU="
 }
