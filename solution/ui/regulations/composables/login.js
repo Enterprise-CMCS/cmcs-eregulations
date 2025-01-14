@@ -9,8 +9,6 @@ export default function useLoginRedirectUrl({
 }) {
     const loginUrl = ref(customLoginUrl);
 
-    console.log("directLink", directLink);
-
     const setLoginUrl = () => {
         let basePath;
         let fullPath = "no-url-params";
