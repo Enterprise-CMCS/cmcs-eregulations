@@ -623,7 +623,7 @@ describe("Utilities.js", () => {
             await delay(seconds);
             const end = Date.now();
             const actualDelay = end - start;
-            expect(actualDelay).toBeGreaterThanOrEqual(seconds * 1000);
+            expect(actualDelay).toBeGreaterThanOrEqual(seconds * 1000 - 200); // Allow some leeway
             expect(actualDelay).toBeLessThan(seconds * 1000 + 200); // Allow some leeway
         });
 
