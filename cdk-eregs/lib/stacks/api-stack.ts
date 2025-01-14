@@ -56,36 +56,15 @@ export class APIStack extends cdk.Stack {
       euaFeatureFlag: ssm.StringParameter.valueForStringParameter(this, '/eregulations/eua/featureflag'),
     };
 
-    // For sensitive parameters
+    // For sensitive parameters paths
     const sensitiveParams = {
-      dbPassword: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'DbPassword', {
-        parameterName: '/eregulations/db/password',
-        version: 1,
-      }).parameterName,
-      httpUser: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'HttpUser', {
-        parameterName: '/eregulations/http/user',
-        version: 1,
-      }).parameterName,
-      httpPassword: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'HttpPassword', {
-        parameterName: '/eregulations/http/password',
-        version: 1,
-      }).parameterName,
-      readerUser: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'ReaderUser', {
-        parameterName: '/eregulations/http/reader_user',
-        version: 1,
-      }).parameterName,
-      readerPassword: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'ReaderPassword', {
-        parameterName: '/eregulations/http/reader_password',
-        version: 1,
-      }).parameterName,
-      oidcClientId: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'OidcClientId', {
-        parameterName: '/eregulations/oidc/client_id',
-        version: 1,
-      }).parameterName,
-      oidcClientSecret: ssm.StringParameter.fromSecureStringParameterAttributes(this, 'OidcClientSecret', {
-        parameterName: '/eregulations/oidc/client_secret',
-        version: 1,
-      }).parameterName,
+      dbPassword: `/eregulations/db/password`,
+      httpUser: `/eregulations/http/user`,
+      httpPassword: `/eregulations/http/password`,
+      readerUser: `/eregulations/http/reader_user`,
+      readerPassword: `/eregulations/http/reader_password`,
+      oidcClientId: `/eregulations/oidc/client_id`,
+      oidcClientSecret: `/eregulations/oidc/client_secret`,
     };
 
     // Create S3 Bucket
@@ -127,32 +106,32 @@ export class APIStack extends cdk.Stack {
       queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
     });
 
-    // Environment variables
+    // Environment variables with resolved SSM values
     const environmentVariables = {
       DB_NAME: 'eregs',
       DB_USER: 'eregsuser',
-      DB_PASSWORD: `\${SSM:${sensitiveParams.dbPassword}}`,
+      DB_PASSWORD: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.dbPassword),
       DB_HOST: ssmParams.dbHost,
       DB_PORT: ssmParams.dbPort,
       GA_ID: ssmParams.gaId,
-      HTTP_AUTH_USER: `\${SSM:${sensitiveParams.httpUser}}`,
-      HTTP_AUTH_PASSWORD: `\${SSM:${sensitiveParams.httpPassword}}`,
-      DJANGO_USERNAME: `\${SSM:${sensitiveParams.readerUser}}`,
-      DJANGO_PASSWORD: `\${SSM:${sensitiveParams.readerPassword}}`,
-      DJANGO_ADMIN_USERNAME: `\${SSM:${sensitiveParams.httpUser}}`,
-      DJANGO_ADMIN_PASSWORD: `\${SSM:${sensitiveParams.httpPassword}}`,
+      HTTP_AUTH_USER: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.httpUser),
+      HTTP_AUTH_PASSWORD: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.httpPassword),
+      DJANGO_USERNAME: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.readerUser),
+      DJANGO_PASSWORD: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.readerPassword),
+      DJANGO_ADMIN_USERNAME: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.httpUser),
+      DJANGO_ADMIN_PASSWORD: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.httpPassword),
       DJANGO_SETTINGS_MODULE: ssmParams.djangoSettingsModule,
       ALLOWED_HOST: '.amazonaws.com',
       STAGE_ENV: stageConfig.environment,
-      STATIC_URL: `https://${stageConfig.getResourceName('static-assets')}.s3.amazonaws.com/`,
+      STATIC_URL: cdk.Fn.importValue(stageConfig.getResourceName('static-url')) + '/',
       WORKING_DIR: '/var/task',
       BASE_URL: ssmParams.baseUrl,
       CUSTOM_URL: ssmParams.customUrl,
       SURVEY_URL: ssmParams.surveyUrl,
       SIGNUP_URL: ssmParams.signupUrl,
       DEMO_VIDEO_URL: ssmParams.demoVideoUrl,
-      OIDC_RP_CLIENT_ID: `\${SSM:${sensitiveParams.oidcClientId}}`,
-      OIDC_RP_CLIENT_SECRET: `\${SSM:${sensitiveParams.oidcClientSecret}}`,
+      OIDC_RP_CLIENT_ID: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.oidcClientId),
+      OIDC_RP_CLIENT_SECRET: ssm.StringParameter.valueForStringParameter(this, sensitiveParams.oidcClientSecret),
       OIDC_OP_AUTHORIZATION_ENDPOINT: ssmParams.oidcAuthEndpoint,
       OIDC_OP_TOKEN_ENDPOINT: ssmParams.oidcTokenEndpoint,
       OIDC_OP_JWKS_ENDPOINT: ssmParams.oidcJwksEndpoint,
@@ -341,7 +320,6 @@ export class APIStack extends cdk.Stack {
     });
   }
 }
-
 // import * as cdk from 'aws-cdk-lib';
 // import {
 //   aws_ec2 as ec2,
