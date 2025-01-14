@@ -116,6 +116,7 @@ import sys
 import logging
 import traceback
 import boto3
+import psycopg2
 from cmcs_regulations.wsgi import lambda_handler as wsgi_handler
 
 # Configure logging
@@ -158,21 +159,48 @@ def setup_environment():
     logger.debug("Setting up environment variables from SSM parameters")
     for env_var, param_name in ssm_params.items():
         try:
-            logger.debug(f"DB_PASSWORD length: {len(os.environ['DJANGO_USERNAME'])}")
-
-            os.environ[env_var] = get_ssm_parameter(param_name)
+            value = get_ssm_parameter(param_name)
+            os.environ[env_var] = value
+            if env_var == "DB_PASSWORD":
+                logger.debug(f"DB_PASSWORD length: {len(value)}")  # Log only the length
             logger.debug(f"Set environment variable: {env_var}")
         except Exception as e:
             logger.error(f"Failed to set {env_var}: {str(e)}")
             raise
 
-# Global environment setup
-setup_environment()
+def test_database_connection():
+    """Test database connection using environment variables"""
+    try:
+        db_host = os.environ.get('DB_HOST', 'localhost')
+        db_name = os.environ.get('DB_NAME', 'eregulations')
+        db_user = os.environ.get('DB_USER', 'eregsuser')
+        db_password = os.environ.get('DB_PASSWORD')
+
+        logger.debug(f"Testing database connection to host={db_host}, db={db_name}, user={db_user}")
+
+        conn = psycopg2.connect(
+            host=db_host,
+            database=db_name,
+            user=db_user,
+            password=db_password
+        )
+        logger.debug("Database connection successful!")
+        conn.close()
+    except psycopg2.OperationalError as e:
+        logger.error(f"Database connection failed: {str(e)}")
+    except Exception as e:
+        logger.error(f"Unexpected error during DB connection: {str(e)}")
 
 def lambda_handler(event, context):
     try:
         logger.debug(f"Lambda event: {event}")
         logger.debug(f"Lambda context: {vars(context)}")
+
+        # Setup environment variables from SSM
+        setup_environment()
+
+        # Test database connection
+        test_database_connection()
 
         # Log non-sensitive environment variables
         safe_env = {k: v for k, v in os.environ.items()
