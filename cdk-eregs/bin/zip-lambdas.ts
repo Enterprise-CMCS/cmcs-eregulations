@@ -81,24 +81,21 @@ async function main() {
       getParameterValue('/account_vars/iam/path'),
     ]);
 
-    // Create API stack
-    const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
-      env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
-        region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
-      },
-      description: `API Stack for ${stageConfig.getResourceName('site')}`,
-      lambdaConfig: {
-        memorySize: 4096,
-        timeout: 30,
-      },
-      environmentConfig: {
-        vpcId,
-        logLevel: process.env.LOG_LEVEL || 'INFO',
-        subnetIds: [privateSubnetAId, privateSubnetBId],
-      }
-    }, stageConfig);
-
+      // Create API stack with Docker-based Lambdas
+      const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
+        env,
+        description: `API Stack for ${stageConfig.getResourceName('site')}`,
+        lambdaConfig: {
+          memorySize: 4096,
+          timeout: 30,
+        },
+        environmentConfig: {
+          vpcId,
+          logLevel: process.env.LOG_LEVEL || 'INFO',
+          subnetIds: [privateSubnetAId, privateSubnetBId],
+        }
+      }, stageConfig);
+      
     // Create ZIP-based Lambda stacks
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
       lambdaConfig: {

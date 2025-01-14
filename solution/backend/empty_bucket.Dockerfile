@@ -28,4 +28,4 @@ COPY . ${LAMBDA_TASK_ROOT}/
 RUN chmod 777 /tmp
 
 # Use the Lambda runtime interface
-CMD [ "migratedb.handler" ]
+CMD [ "empty_bucket.handler" ]
