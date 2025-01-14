@@ -158,6 +158,8 @@ def setup_environment():
     logger.debug("Setting up environment variables from SSM parameters")
     for env_var, param_name in ssm_params.items():
         try:
+            logger.debug(f"DB_PASSWORD length: {len(os.environ['DJANGO_USERNAME'])}")
+
             os.environ[env_var] = get_ssm_parameter(param_name)
             logger.debug(f"Set environment variable: {env_var}")
         except Exception as e:
