@@ -7,7 +7,7 @@ describe("SelectedSubjectChip", () => {
         const parent1 = "subjects";
         expect(SelectedSubjectChip.getButtonTextClasses(parent1)).toStrictEqual(
             {
-                "subjects-li__button-text--sidebar": false,
+                "subjects-li__button-text--sidebar": true,
             }
         );
 
