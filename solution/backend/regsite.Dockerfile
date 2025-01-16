@@ -24,8 +24,8 @@ RUN pip install -r ${LAMBDA_TASK_ROOT}/requirements.txt
 # Copy function code
 COPY . ${LAMBDA_TASK_ROOT}/
 
-# Copy debug handler
-COPY debug_handler.py ${LAMBDA_TASK_ROOT}/handler.py
+# # Copy debug handler
+# COPY debug_handler.py ${LAMBDA_TASK_ROOT}/handler.py
 
 # Make sure Django can write to tmp
 RUN chmod 777 /tmp
