@@ -145,19 +145,17 @@ export class APIStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: stageConfig.getResourceName(`file-repo-eregs`),
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-
-      // Secret values - using unsafeUnwrap() since we cannot modify the handler
-      DB_PASSWORD: dbSecret.secretValueFromJson('password').unsafeUnwrap(),
-      HTTP_AUTH_USER: httpSecret.secretValueFromJson('username').unsafeUnwrap(),
-      HTTP_AUTH_PASSWORD: httpSecret.secretValueFromJson('password').unsafeUnwrap(),
-      DJANGO_USERNAME: djangoSecret.secretValueFromJson('username').unsafeUnwrap(),
-      DJANGO_PASSWORD: djangoSecret.secretValueFromJson('password').unsafeUnwrap(),
-      DJANGO_ADMIN_USERNAME: djangoSecret.secretValueFromJson('admin_username').unsafeUnwrap(),
-      DJANGO_ADMIN_PASSWORD: djangoSecret.secretValueFromJson('admin_password').unsafeUnwrap(),
-      OIDC_RP_CLIENT_ID: oidcSecret.secretValueFromJson('client_id').unsafeUnwrap(),
-      OIDC_RP_CLIENT_SECRET: oidcSecret.secretValueFromJson('client_secret').unsafeUnwrap(),
-      DJANGO_READER_USER: readerSecret.secretValueFromJson('username').unsafeUnwrap(),
-      DJANGO_READER_PASSWORD: readerSecret.secretValueFromJson('password').unsafeUnwrap(),
+      DB_PASSWORD: dbSecret.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
+      HTTP_AUTH_USER: httpSecret.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
+      HTTP_AUTH_PASSWORD: httpSecret.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
+      DJANGO_USERNAME: djangoSecret.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
+      DJANGO_PASSWORD: djangoSecret.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
+      DJANGO_ADMIN_USERNAME: djangoSecret.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
+      DJANGO_ADMIN_PASSWORD: djangoSecret.secretValueFromJson('DJANGO_ADMIN_PASSWORD').unsafeUnwrap(),
+      OIDC_RP_CLIENT_ID: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_ID').unsafeUnwrap(),
+      OIDC_RP_CLIENT_SECRET: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_SECRET').unsafeUnwrap(),
+      DJANGO_READER_USER: readerSecret.secretValueFromJson('DJANGO_READER_USER').unsafeUnwrap(),
+      DJANGO_READER_PASSWORD: readerSecret.secretValueFromJson('DJANGO_READER_PASSWORD').unsafeUnwrap(),
     };
 
     // Create Log Groups
