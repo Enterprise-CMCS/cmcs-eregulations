@@ -41,7 +41,6 @@ export class APIStack extends cdk.Stack {
       HTTP_CREDENTIALS: '/eregulations/http/credentials'
     };
 
-    // Create references to secrets
     const oidcSecret = secretsmanager.Secret.fromSecretNameV2(this, 'OidcSecret', SECRETS.OIDC_CREDENTIALS);
     const djangoSecret = secretsmanager.Secret.fromSecretNameV2(this, 'DjangoSecret', SECRETS.DJANGO_CREDENTIALS);
     const readerSecret = secretsmanager.Secret.fromSecretNameV2(this, 'ReaderSecret', SECRETS.READER_CREDENTIALS);
@@ -145,17 +144,23 @@ export class APIStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: stageConfig.getResourceName(`file-repo-eregs`),
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
+      // Secret values with correct keys
       DB_PASSWORD: dbSecret.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
       HTTP_AUTH_USER: httpSecret.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
       HTTP_AUTH_PASSWORD: httpSecret.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
-      DJANGO_USERNAME: djangoSecret.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
-      DJANGO_PASSWORD: djangoSecret.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
+      
+      // Django admin credentials
       DJANGO_ADMIN_USERNAME: djangoSecret.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
       DJANGO_ADMIN_PASSWORD: djangoSecret.secretValueFromJson('DJANGO_ADMIN_PASSWORD').unsafeUnwrap(),
+      
+      // Django reader credentials (used as regular Django credentials)
+      DJANGO_USERNAME: readerSecret.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
+      DJANGO_PASSWORD: readerSecret.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
+      
+      // OIDC credentials
       OIDC_RP_CLIENT_ID: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_ID').unsafeUnwrap(),
       OIDC_RP_CLIENT_SECRET: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_SECRET').unsafeUnwrap(),
-      DJANGO_READER_USER: readerSecret.secretValueFromJson('DJANGO_READER_USER').unsafeUnwrap(),
-      DJANGO_READER_PASSWORD: readerSecret.secretValueFromJson('DJANGO_READER_PASSWORD').unsafeUnwrap(),
+
     };
 
     // Create Log Groups
