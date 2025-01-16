@@ -11,7 +11,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
 import { S3ImportStack } from '../lib/stacks/s3-import';
 import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
-import { APIStack } from '../lib/stacks/api-stack';
+
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -68,34 +68,7 @@ async function main() {
       cdk.Tags.of(app).add(key, value);
     });
      
-    // Fetch required infrastructure parameters
-    const [
-      vpcId,
-      privateSubnetAId,
-      privateSubnetBId,
-      iamPath
-    ] = await Promise.all([
-      getParameterValue('/account_vars/vpc/id'),
-      getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
-      getParameterValue('/account_vars/vpc/subnets/private/b/id'),
-      getParameterValue('/account_vars/iam/path'),
-    ]);
-
-      // Create API stack with Docker-based Lambdas
-      const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
-        env,
-        description: `API Stack for ${stageConfig.getResourceName('site')}`,
-        lambdaConfig: {
-          memorySize: 4096,
-          timeout: 30,
-        },
-        environmentConfig: {
-          vpcId,
-          logLevel: process.env.LOG_LEVEL || 'INFO',
-          subnetIds: [privateSubnetAId, privateSubnetBId],
-        }
-      }, stageConfig);
-      
+ 
     // Create ZIP-based Lambda stacks
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
       lambdaConfig: {

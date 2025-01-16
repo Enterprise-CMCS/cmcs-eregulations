@@ -357,7 +357,7 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/zip-lambdas.ts"
+          --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
   deployment-status-cdk:
