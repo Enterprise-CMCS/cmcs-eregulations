@@ -1,4 +1,3 @@
-
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
@@ -7,47 +6,18 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as path from 'path';
+import { execSync } from 'child_process';
 import { StageConfig } from '../../config/stage-config';
 
-/**
- * Properties for the StaticAssetsStack
- * @interface StaticAssetsStackProps
- * @extends cdk.StackProps
- */
 export interface StaticAssetsStackProps extends cdk.StackProps {
-  /** Optional ACM certificate ARN for CloudFront HTTPS */
   certificateArn?: string;
+  prNumber?: string;
 }
 
-/**
- * AWS CDK Stack for managing static assets with CloudFront distribution
- * This stack creates:
- * - S3 bucket for static assets with proper security configurations
- * - CloudFront distribution with WAF protection
- * - Logging bucket for CloudFront
- * - Automated deployment of static assets
- * 
- * @example
- * ```typescript
- * const app = new cdk.App();
- * const stageConfig = new StageConfig({ stage: 'dev' });
- * 
- * new StaticAssetsStack(app, 'StaticAssets', {
- *   certificateArn: 'arn:aws:acm:...',  // optional
- * }, stageConfig);
- * ```
- */
 export class StaticAssetsStack extends cdk.Stack {
-  /** Stage-specific configuration for resource naming and tagging */
   private readonly stageConfig: StageConfig;
+  public readonly distribution: cloudfront.Distribution;
 
-  /**
-   * Creates a new StaticAssetsStack
-   * @param scope - Parent construct
-   * @param id - Stack identifier
-   * @param props - Stack properties including optional certificate ARN
-   * @param stageConfig - Stage-specific configuration
-   */
   constructor(
     scope: Construct,
     id: string,
@@ -57,14 +27,9 @@ export class StaticAssetsStack extends cdk.Stack {
     super(scope, id, props);
 
     this.stageConfig = stageConfig;
-    const { certificateArn } = props;
+    const { certificateArn, prNumber } = props;
 
-    /**
-     * S3 Bucket for storing static assets
-     * - Blocks all public access
-     * - Enables S3-managed encryption
-     * - Configures CORS for GET/HEAD requests
-     */
+    // Create S3 bucket for static assets
     const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
       bucketName: stageConfig.getResourceName('site-assets'),
       encryption: s3.BucketEncryption.S3_MANAGED,
@@ -80,10 +45,7 @@ export class StaticAssetsStack extends cdk.Stack {
       ],
     });
 
-    /**
-     * S3 Bucket for CloudFront access logs
-     * - Configures proper ownership and permissions for log delivery
-     */
+    // Create logging bucket
     const loggingBucket = new s3.Bucket(this, 'CloudFrontLogsBucket', {
       bucketName: stageConfig.getResourceName('cloudfront-logs'),
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
@@ -91,11 +53,7 @@ export class StaticAssetsStack extends cdk.Stack {
       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
     });
 
-    /**
-     * WAF configuration for CloudFront
-     * - Restricts access to USA and territories
-     * - Enables monitoring and metrics
-     */
+    // Create WAF
     const waf = new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
       defaultAction: { allow: {} },
       scope: 'CLOUDFRONT',
@@ -124,13 +82,8 @@ export class StaticAssetsStack extends cdk.Stack {
       ],
     });
 
-    /**
-     * CloudFront Distribution for serving static assets
-     * - Configures S3 origin with Origin Access Control
-     * - Enables HTTPS and modern security protocols
-     * - Integrates with WAF and logging
-     */
-    const distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
+    // Create CloudFront distribution
+    this.distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(assetsBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -145,14 +98,13 @@ export class StaticAssetsStack extends cdk.Stack {
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      domainNames: []
+      domainNames: certificateArn ? [] : undefined
     });
 
-    /**
-     * Automated deployment of static assets to S3
-     * - Excludes node_modules and nginx directories
-     * - Invalidates CloudFront cache after deployment
-     */
+    // Build static assets with CloudFront URL
+    this.buildStaticAssets(prNumber, this.distribution.domainName);
+
+    // Deploy static assets
     new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
       sources: [
         s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations'), {
@@ -160,30 +112,241 @@ export class StaticAssetsStack extends cdk.Stack {
         }),
       ],
       destinationBucket: assetsBucket,
-      distribution,
+      distribution: this.distribution,
       distributionPaths: ['/*'],
     });
 
-    // Apply stage-specific tags to all resources
+    // Apply tags
     Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
       cdk.Tags.of(this).add(key, value);
     });
 
-    /**
-     * Stack Outputs
-     * - CloudFront Distribution ID for management
-     * - Static assets URL for access
-     */
+    // Outputs
     new cdk.CfnOutput(this, 'CloudFrontDistributionId', {
-      value: distribution.distributionId,
+      value: this.distribution.distributionId,
       exportName: stageConfig.getResourceName('cloudfront-id'),
     });
     new cdk.CfnOutput(this, 'StaticURL', {
-      value: `https://${distribution.domainName}`,
+      value: `https://${this.distribution.domainName}`,
       exportName: stageConfig.getResourceName('static-url'),
     });
   }
+
+  private buildStaticAssets(prNumber?: string, cloudfrontDomain?: string): void {
+    try {
+      // Set environment variables using CloudFront domain
+      process.env.STATIC_URL = cloudfrontDomain ? `https://${cloudfrontDomain}/` : 'http://localhost:8888/';
+      process.env.STATIC_ROOT = '../static-assets/regulations';
+      process.env.VITE_ENV = prNumber ? `dev${prNumber}` : 'prod';
+
+      console.log(`Building static assets with STATIC_URL: ${process.env.STATIC_URL}`);
+
+      // Change directory and run collectstatic
+      const currentDir = process.cwd();
+      process.chdir(path.join(__dirname, '../../../solution/backend'));
+      
+      // Install Python dependencies
+      execSync('python -m pip install --upgrade pip', { stdio: 'inherit' });
+      execSync('pip install -r ../static-assets/requirements.txt', { stdio: 'inherit' });
+      
+      // Run collectstatic
+      execSync('python manage.py collectstatic --noinput', { stdio: 'inherit' });
+      
+      // Return to original directory
+      process.chdir(currentDir);
+      
+      console.log('Static assets built successfully');
+    } catch (error) {
+      console.error('Error building static assets:', error);
+      throw error;
+    }
+  }
 }
+// import * as cdk from 'aws-cdk-lib';
+// import { Construct } from 'constructs';
+// import * as s3 from 'aws-cdk-lib/aws-s3';
+// import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+// import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
+// import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
+// import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+// import * as path from 'path';
+// import { StageConfig } from '../../config/stage-config';
+
+// /**
+//  * Properties for the StaticAssetsStack
+//  * @interface StaticAssetsStackProps
+//  * @extends cdk.StackProps
+//  */
+// export interface StaticAssetsStackProps extends cdk.StackProps {
+//   /** Optional ACM certificate ARN for CloudFront HTTPS */
+//   certificateArn?: string;
+// }
+
+// /**
+//  * AWS CDK Stack for managing static assets with CloudFront distribution
+//  * This stack creates:
+//  * - S3 bucket for static assets with proper security configurations
+//  * - CloudFront distribution with WAF protection
+//  * - Logging bucket for CloudFront
+//  * - Automated deployment of static assets
+//  * 
+//  * @example
+//  * ```typescript
+//  * const app = new cdk.App();
+//  * const stageConfig = new StageConfig({ stage: 'dev' });
+//  * 
+//  * new StaticAssetsStack(app, 'StaticAssets', {
+//  *   certificateArn: 'arn:aws:acm:...',  // optional
+//  * }, stageConfig);
+//  * ```
+//  */
+// export class StaticAssetsStack extends cdk.Stack {
+//   /** Stage-specific configuration for resource naming and tagging */
+//   private readonly stageConfig: StageConfig;
+
+//   /**
+//    * Creates a new StaticAssetsStack
+//    * @param scope - Parent construct
+//    * @param id - Stack identifier
+//    * @param props - Stack properties including optional certificate ARN
+//    * @param stageConfig - Stage-specific configuration
+//    */
+//   constructor(
+//     scope: Construct,
+//     id: string,
+//     props: StaticAssetsStackProps,
+//     stageConfig: StageConfig 
+//   ) {
+//     super(scope, id, props);
+
+//     this.stageConfig = stageConfig;
+//     const { certificateArn } = props;
+
+//     /**
+//      * S3 Bucket for storing static assets
+//      * - Blocks all public access
+//      * - Enables S3-managed encryption
+//      * - Configures CORS for GET/HEAD requests
+//      */
+//     const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
+//       bucketName: stageConfig.getResourceName('site-assets'),
+//       encryption: s3.BucketEncryption.S3_MANAGED,
+//       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+//       enforceSSL: true,
+//       cors: [
+//         {
+//           allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+//           allowedOrigins: ['*'],
+//           allowedHeaders: ['*'],
+//           maxAge: 3000,
+//         },
+//       ],
+//     });
+
+//     /**
+//      * S3 Bucket for CloudFront access logs
+//      * - Configures proper ownership and permissions for log delivery
+//      */
+//     const loggingBucket = new s3.Bucket(this, 'CloudFrontLogsBucket', {
+//       bucketName: stageConfig.getResourceName('cloudfront-logs'),
+//       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
+//       enforceSSL: true,
+//       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
+//     });
+
+//     /**
+//      * WAF configuration for CloudFront
+//      * - Restricts access to USA and territories
+//      * - Enables monitoring and metrics
+//      */
+//     const waf = new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
+//       defaultAction: { allow: {} },
+//       scope: 'CLOUDFRONT',
+//       visibilityConfig: {
+//         sampledRequestsEnabled: true,
+//         cloudWatchMetricsEnabled: true,
+//         metricName: stageConfig.getResourceName('cloudfront-metric'),
+//       },
+//       name: stageConfig.getResourceName('cloudfront-acl'),
+//       rules: [
+//         {
+//           name: stageConfig.getResourceName('allow-usa-territories'),
+//           priority: 0,
+//           statement: {
+//             geoMatchStatement: {
+//               countryCodes: ['GU', 'PR', 'US', 'UM', 'VI', 'MP', 'AS'],
+//             },
+//           },
+//           action: { allow: {} },
+//           visibilityConfig: {
+//             sampledRequestsEnabled: true,
+//             cloudWatchMetricsEnabled: true,
+//             metricName: stageConfig.getResourceName('usa-territories-metric'),
+//           },
+//         },
+//       ],
+//     });
+
+//     /**
+//      * CloudFront Distribution for serving static assets
+//      * - Configures S3 origin with Origin Access Control
+//      * - Enables HTTPS and modern security protocols
+//      * - Integrates with WAF and logging
+//      */
+//     const distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
+//       defaultBehavior: {
+//         origin: origins.S3BucketOrigin.withOriginAccessControl(assetsBucket),
+//         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+//         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+//         compress: true,
+//       },
+//       comment: `CloudFront Distribution for ${this.stageConfig.getResourceName('site')}`,
+//       webAclId: waf.attrArn,
+//       logBucket: loggingBucket,
+//       logFilePrefix: 'cf-logs/',
+//       logIncludesCookies: false,
+//       defaultRootObject: 'index.html',
+//       httpVersion: cloudfront.HttpVersion.HTTP2,
+//       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+//       domainNames: []
+//     });
+
+//     /**
+//      * Automated deployment of static assets to S3
+//      * - Excludes node_modules and nginx directories
+//      * - Invalidates CloudFront cache after deployment
+//      */
+//     new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
+//       sources: [
+//         s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations'), {
+//           exclude: ['node_modules/**', 'nginx/**'],
+//         }),
+//       ],
+//       destinationBucket: assetsBucket,
+//       distribution,
+//       distributionPaths: ['/*'],
+//     });
+
+//     // Apply stage-specific tags to all resources
+//     Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
+//       cdk.Tags.of(this).add(key, value);
+//     });
+
+//     /**
+//      * Stack Outputs
+//      * - CloudFront Distribution ID for management
+//      * - Static assets URL for access
+//      */
+//     new cdk.CfnOutput(this, 'CloudFrontDistributionId', {
+//       value: distribution.distributionId,
+//       exportName: stageConfig.getResourceName('cloudfront-id'),
+//     });
+//     new cdk.CfnOutput(this, 'StaticURL', {
+//       value: `https://${distribution.domainName}`,
+//       exportName: stageConfig.getResourceName('static-url'),
+//     });
+//   }
+// }
 
 // import * as cdk from 'aws-cdk-lib';
 // import { Construct } from 'constructs';
