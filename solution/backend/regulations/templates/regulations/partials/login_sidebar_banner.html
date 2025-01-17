@@ -2,7 +2,7 @@
     {% if user.is_authenticated %}
         Resources you can access include policy documents internal to CMCS.
     {% else %}
-        CMCS staff participating in the Policy Repository pilot can
+        To see internal documents,
         <span data-testid="loginSidebar">
             <sign-in-link
                 custom-login-url="{% url 'custom_login' %}"
@@ -10,6 +10,6 @@
                 is-authenticated="{{ user.is_authenticated }}"
             ></sign-in-link>
         </span>
-        to see internal resources.
+        or <a href="{% url 'get_account_access' %}">learn how to get account access</a>.
     {% endif %}
 </div>
