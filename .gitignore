@@ -22,3 +22,13 @@ cdk-eregs/lib/stacks/layer-output-*/**
 
 # Zip files generated during layer creation
 *.zip
+# Django collected static
+staticfiles/
+static/
+solution/static-assets/regulations/
+solution/backend/staticfiles/
+solution/backend/static/
+
+# CDK assets
+.cdk.staging/
+cdk.out/

@@ -16,7 +16,6 @@ export interface StaticAssetsStackProps extends cdk.StackProps {
 
 export class StaticAssetsStack extends cdk.Stack {
   private readonly stageConfig: StageConfig;
-  public readonly distribution: cloudfront.Distribution;
 
   constructor(
     scope: Construct,
@@ -31,7 +30,7 @@ export class StaticAssetsStack extends cdk.Stack {
 
     // Create S3 bucket for static assets
     const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
-      bucketName: stageConfig.getResourceName('site-assets'),
+      bucketName: stageConfig.getResourceName(`file-repo-eregs`),
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
@@ -69,7 +68,7 @@ export class StaticAssetsStack extends cdk.Stack {
           priority: 0,
           statement: {
             geoMatchStatement: {
-              countryCodes: ['GU', 'PR', 'US', 'UM', 'VI', 'MP', 'AS'],
+              countryCodes: ['US', 'GU', 'PR', 'VI', 'MP', 'AS', 'UM'],
             },
           },
           action: { allow: {} },
@@ -83,7 +82,7 @@ export class StaticAssetsStack extends cdk.Stack {
     });
 
     // Create CloudFront distribution
-    this.distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
+    const distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(assetsBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -101,18 +100,16 @@ export class StaticAssetsStack extends cdk.Stack {
       domainNames: certificateArn ? [] : undefined
     });
 
-    // Build static assets with CloudFront URL
-    this.buildStaticAssets(prNumber, this.distribution.domainName);
+    // Run collectstatic with CloudFront domain
+    this.runCollectStatic(prNumber, distribution.domainName);
 
-    // Deploy static assets
+    // Deploy collected static files
     new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
       sources: [
-        s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations'), {
-          exclude: ['node_modules/**', 'nginx/**'],
-        }),
+        s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),
       ],
       destinationBucket: assetsBucket,
-      distribution: this.distribution,
+      distribution,
       distributionPaths: ['/*'],
     });
 
@@ -121,43 +118,41 @@ export class StaticAssetsStack extends cdk.Stack {
       cdk.Tags.of(this).add(key, value);
     });
 
-    // Outputs
+    // Stack outputs
     new cdk.CfnOutput(this, 'CloudFrontDistributionId', {
-      value: this.distribution.distributionId,
+      value: distribution.distributionId,
       exportName: stageConfig.getResourceName('cloudfront-id'),
     });
+    
     new cdk.CfnOutput(this, 'StaticURL', {
-      value: `https://${this.distribution.domainName}`,
+      value: `https://${distribution.domainName}`,
       exportName: stageConfig.getResourceName('static-url'),
     });
   }
 
-  private buildStaticAssets(prNumber?: string, cloudfrontDomain?: string): void {
+  private runCollectStatic(prNumber?: string, cloudfrontDomain?: string): void {
     try {
-      // Set environment variables using CloudFront domain
-      process.env.STATIC_URL = cloudfrontDomain ? `https://${cloudfrontDomain}/` : 'http://localhost:8888/';
+      // Set environment variables with CloudFront domain
+      process.env.STATIC_URL = `https://${cloudfrontDomain}/`;
       process.env.STATIC_ROOT = '../static-assets/regulations';
       process.env.VITE_ENV = prNumber ? `dev${prNumber}` : 'prod';
 
-      console.log(`Building static assets with STATIC_URL: ${process.env.STATIC_URL}`);
+      console.log(`Running collectstatic with STATIC_URL: ${process.env.STATIC_URL}`);
 
-      // Change directory and run collectstatic
-      const currentDir = process.cwd();
-      process.chdir(path.join(__dirname, '../../../solution/backend'));
-      
-      // Install Python dependencies
-      execSync('python -m pip install --upgrade pip', { stdio: 'inherit' });
-      execSync('pip install -r ../static-assets/requirements.txt', { stdio: 'inherit' });
-      
-      // Run collectstatic
-      execSync('python manage.py collectstatic --noinput', { stdio: 'inherit' });
-      
-      // Return to original directory
-      process.chdir(currentDir);
-      
-      console.log('Static assets built successfully');
+      // Execute collectstatic
+      execSync(`
+        pushd ${path.join(__dirname, '../../../solution/backend')} && \
+        python manage.py collectstatic --noinput && \
+        cd .. && \
+        popd
+      `, {
+        stdio: 'inherit',
+        shell: '/bin/bash'
+      });
+
+      console.log('collectstatic completed successfully');
     } catch (error) {
-      console.error('Error building static assets:', error);
+      console.error('Error running collectstatic:', error);
       throw error;
     }
   }

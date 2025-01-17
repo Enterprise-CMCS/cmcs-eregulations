@@ -9,8 +9,8 @@ import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspe
 import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
-import { PythonLayerStack} from '../lib/stacks/lambda-layer-stack';
 import { APIStack } from '../lib/stacks/api-stack';
+
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
@@ -156,9 +156,7 @@ async function main() {
           }
         }, stageConfig);
         
-    const layerStack = new PythonLayerStack(app, stageConfig.getResourceName(`python-layer`), {
-      
-    }, stageConfig);
+
     await applyGlobalAspects(app, stageConfig);
 
     app.synth();
