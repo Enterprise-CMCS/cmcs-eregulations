@@ -16,9 +16,7 @@
                     <input type="hidden" name="next" value="{{ next }}">
                     <button type="submit" class="action-btn default-btn">Continue to CMS IDM</button>
                 </form>
-                <p>
-                    New to signing in to eRegulations? <a href="{% url 'get_account_access' %}">Get account access</a>.
-                </p>
+                <p data-testid="new-user-msg">New to signing in to eRegulations? <a data-testid="new-user-link" href="{% url 'get_account_access' %}">Get account access</a>.</p>
             </section>
         </main>
     </div>
