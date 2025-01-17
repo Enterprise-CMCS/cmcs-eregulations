@@ -29,8 +29,6 @@ interface LambdaConfig {
  * Contains all the external configuration values needed for the stack.
  */
 interface EnvironmentConfig {
-  /** VPC ID where the Lambda function will be deployed */
-  vpcId: string;
   /** Log level for the Lambda function (e.g., DEBUG, INFO) */
   logLevel: string;
   /** HTTP basic auth username for API authentication */
@@ -110,18 +108,6 @@ export class TextExtractorStack extends cdk.Stack {
     super(scope, id, props);
     this.stageConfig = stageConfig;
 
-    // Create VPC reference
-    const vpc = ec2.Vpc.fromLookup(this, 'VPC', { 
-      vpcId: props.environmentConfig.vpcId 
-    });
-
-    // Create security group
-    const securityGroup = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-      vpc,
-      description: 'SecurityGroup for Serverless Functions',
-      allowAllOutbound: true,
-    });
-
     // Create DLQ
     this.deadLetterQueue = new sqs.Queue(this, 'DeadLetterQueue', {
       queueName: this.stageConfig.getResourceName('text-extractor-dl-queue'),
@@ -146,8 +132,6 @@ export class TextExtractorStack extends cdk.Stack {
       props.lambdaConfig,
       props.environmentConfig,
       lambdaRole,
-      vpc,
-      securityGroup
     );
 
     // Create event source mapping
@@ -163,8 +147,6 @@ export class TextExtractorStack extends cdk.Stack {
    * @param config - Lambda function configuration
    * @param envConfig - Environment-specific configuration
    * @param role - IAM role for the function
-   * @param vpc - VPC where the function will be deployed
-   * @param securityGroup - Security group for the function
    * @returns Configured Lambda function
    * @private
    */
@@ -172,8 +154,6 @@ export class TextExtractorStack extends cdk.Stack {
     config: LambdaConfig,
     envConfig: EnvironmentConfig,
     role: iam.Role,
-    vpc: ec2.IVpc,
-    securityGroup: ec2.SecurityGroup,
   ): lambda.Function {
     const dockerContextPath = path.resolve(__dirname, '../../../solution/');
     console.log('Docker context path:', dockerContextPath);
@@ -183,8 +163,6 @@ export class TextExtractorStack extends cdk.Stack {
       code: lambda.DockerImageCode.fromImageAsset(dockerContextPath, {
         file: 'text-extractor/Dockerfile',
       }),
-      vpc,
-      securityGroups: [securityGroup],
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
       reservedConcurrentExecutions: config.reservedConcurrentExecutions,
@@ -237,7 +215,7 @@ export class TextExtractorStack extends cdk.Stack {
         this.stageConfig.permissionsBoundaryArn
       ),
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
       inlinePolicies: {
         QueuePolicy: this.createQueuePolicy(),
