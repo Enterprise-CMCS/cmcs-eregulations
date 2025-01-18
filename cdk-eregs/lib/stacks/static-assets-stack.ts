@@ -172,8 +172,8 @@ export class StaticAssetsStack extends cdk.Stack {
         workingDirectory: backendPath,
         currentDirectory: process.cwd(),
         nodeVersion: process.version,
-        environmentVariables: {
-          ...process.env,
+        // Only log non-sensitive environment variables
+        relevantEnvironment: {
           STATIC_URL: env.STATIC_URL,
           STATIC_ROOT: env.STATIC_ROOT,
           VITE_ENV: env.VITE_ENV,
@@ -219,7 +219,6 @@ export class StaticAssetsStack extends cdk.Stack {
     });
   }
 }
-
 //import * as cdk from 'aws-cdk-lib';
 // import { Construct } from 'constructs';
 // import * as s3 from 'aws-cdk-lib/aws-s3';

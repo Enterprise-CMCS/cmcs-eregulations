@@ -92,13 +92,17 @@ jobs:
         id: findPr
         with:
           state: open
-
+      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-
+      - name: Install dependencies
+        run: |
+            python -m pip install --upgrade pip
+            pip install -r ./solution/static-assets/requirements.txt
+        # build the static assets for the website
       - name: Deploy Static-Asset
         if: success() && steps.findPr.outputs.number
         env:
@@ -373,47 +377,6 @@ jobs:
           echo "2. Text Extractor: ${{ needs.deploy-text-extractor-cdk.result == 'success' && '✅' || '❌' }}"
           echo "3. FR Parser: ${{ needs.deploy-fr-parser-cdk.result == 'success' && '✅' || '❌' }}"
           echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser-cdk.result == 'success' && '✅' || '❌' }}"
-  # deploy-hello-world-cdk:
-  #   environment:
-  #     name: "dev"
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     # Checkout the code
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         submodules: true
-  #     # Find the PR number.  This is not always trivial which is why this uses an existign action
-  #     - name: Find PR number
-  #       uses: jwalton/gh-find-current-pr@v1
-  #       id: findPr
-  #       with:
-  #         # Can be "open", "closed", or "all".  Defaults to "open".
-  #         state: open
-  #     # Configure AWS credentials for GitHub Actions
-  #     - name: Configure AWS credentials for GitHub Actions
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-  #         aws-region: us-east-1
-  #     # Deploy the text extractor lambda to AWS
-  #     - name: Deploy the hello world test lambda via CDK
-  #       id: deploy-redirect-api-test
-  #       if: success() && steps.findPr.outputs.number
-  #       env:
-  #         PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-  #         RUN_ID: ${{ github.run_id }}
-  #         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  #         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  #       run: |
-  #         pushd cdk-eregs
-  #         npm install -g aws-cdk
-  #         npm install
-  #         STAGE=dev${PR_NUMBER} cdk synth -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
-  #         STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-  #           dev${PR_NUMBER}-HelloWorldStack --require-approval never
-  #         popd
- 
   deploy-text-extractor:
     environment:
       name: "dev"
