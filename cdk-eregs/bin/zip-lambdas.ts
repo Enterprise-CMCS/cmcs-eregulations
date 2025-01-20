@@ -94,19 +94,15 @@ async function main() {
      // 8. Retrieve the Certificate ARN from SSM (or wherever it is stored)
   const certificateArn = await getParameterValue('/eregulations/acm-cert-arn');
 
-  // 9. Create the StaticAssetsStack with the certificateArn
-  new StaticAssetsStack(
-    app,
-    stageConfig.getResourceName('static-assets'),  // the "id"
-    {
-      env,
-      description: `Static Assets Stack for ${stageConfig.getResourceName('site')}`,
-     
+  // Deploy static assets stack
+  new StaticAssetsStack(app, `${stageConfig.getResourceName('static-assets')}`, {
+    prNumber,
+    env: {
+      account: process.env.CDK_DEFAULT_ACCOUNT,
+      region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
     },
-    stageConfig // 4th param, passed separately
-  );
-
-   
+    description: `Static assets stack for ${stageConfig.environment}`
+  }, stageConfig);
   //Create static assets stack
 
  // Create static assets stack and initialize resources

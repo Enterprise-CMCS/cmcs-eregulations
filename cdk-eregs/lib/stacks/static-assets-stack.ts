@@ -12,7 +12,7 @@ import { StageConfig } from '../../config/stage-config';
 export interface StaticAssetsStackProps extends cdk.StackProps {
   certificateArn?: string;
   prNumber?: string;
-  stageName: string;
+  // stageName: string;
 }
 
 export class StaticAssetsStack extends cdk.Stack {
@@ -40,13 +40,11 @@ export class StaticAssetsStack extends cdk.Stack {
     this.deployStaticAssets(props.prNumber);
     this.addStackOutputs();
   }
-
   private validateCertificateConfig(props: StaticAssetsStackProps): void {
-    if (props.stageName === 'prod' && !props.certificateArn) {
+    if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
       throw new Error('SSL Certificate ARN is required for production environment');
     }
   }
-
   private createAssetsBucket(): s3.Bucket {
     return new s3.Bucket(this, 'AssetsBucket', {
       bucketName: this.stageConfig.getResourceName(`file-repo-eregs`),
