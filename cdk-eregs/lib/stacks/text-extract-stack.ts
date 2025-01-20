@@ -113,13 +113,13 @@ export class TextExtractorStack extends cdk.Stack {
     envConfig: EnvironmentConfig,
     role: iam.Role,
   ): lambda.Function {
-    const dockerContextPath = path.resolve(__dirname, '../../../solution/text-extractor/');
+    const dockerContextPath = path.resolve(__dirname, '../../../solution/');
     console.log('Docker context path:', dockerContextPath);
 
     return new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
       functionName: this.stageConfig.getResourceName('text-extractor'),
       code: lambda.DockerImageCode.fromImageAsset(dockerContextPath, {
-        file: 'Dockerfile',
+        file: 'text-extractor/Dockerfile',
       }),
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
