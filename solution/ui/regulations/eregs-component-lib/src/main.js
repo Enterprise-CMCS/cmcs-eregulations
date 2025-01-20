@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import vuetify from "./plugins/vuetify";
 
 import {
+    AccessLink,
     ActionBtn,
     CollapseButton,
     Collapsible,
@@ -54,6 +55,7 @@ import {
 } from "utilities/utils";
 
 import Clickaway from "directives/clickaway";
+import SanitizeHtml from "directives/sanitizeHtml";
 
 const customElementTags = [
     "su",
@@ -201,6 +203,7 @@ function main() {
 
     const app = createApp({
         components: {
+            AccessLink,
             ActionBtn,
             CollapseButton,
             Collapsible,
@@ -251,6 +254,7 @@ function main() {
     app.use(vuetify);
 
     app.directive("clickaway", Clickaway);
+    app.directive("sanitize-html", SanitizeHtml);
 
     app.mount("#vue-app");
 

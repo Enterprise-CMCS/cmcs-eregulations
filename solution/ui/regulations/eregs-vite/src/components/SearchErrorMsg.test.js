@@ -16,9 +16,7 @@ describe("Search Error Message", () => {
 
         await flushPromises();
 
-        const errorTextEl = screen.getByTestId(
-            "error__msg"
-        );
+        const errorTextEl = screen.getByTestId("error__msg");
 
         expect(errorTextEl.textContent).toBe(
             "Sorry, we’re unable to display results for Search Query right now. Please try a different query, try again later, or let us know."
@@ -38,9 +36,7 @@ describe("Search Error Message", () => {
 
         await flushPromises();
 
-        const errorTextEl = screen.getByTestId(
-            "error__msg"
-        );
+        const errorTextEl = screen.getByTestId("error__msg");
 
         expect(errorTextEl.textContent).toBe(
             "Sorry, we’re unable to display results right now. Please try a different query, try again later, or let us know."
@@ -59,9 +55,7 @@ describe("Search Error Message", () => {
 
         await flushPromises();
 
-        const errorTextEl = screen.getByTestId(
-            "error__msg"
-        );
+        const errorTextEl = screen.getByTestId("error__msg");
 
         expect(errorTextEl.textContent).toBe(
             "Please try a different query, try again later, or let us know."

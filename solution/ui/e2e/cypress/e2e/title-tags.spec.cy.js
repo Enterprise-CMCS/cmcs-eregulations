@@ -16,6 +16,18 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         cy.title().should("eq", "Medicaid & CHIP eRegulations");
     });
 
+    it("About page title tags", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/about/");
+        cy.title().should("eq", "About This Tool | Medicaid & CHIP eRegulations");
+    });
+
+    it("Get Account Access page title tags", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/get-account-access/");
+        cy.title().should("eq", "Get Account Access | Medicaid & CHIP eRegulations");
+    });
+
     it("Statutes page title tags", () => {
         cy.viewport("macbook-15");
         cy.visit("/statutes/");

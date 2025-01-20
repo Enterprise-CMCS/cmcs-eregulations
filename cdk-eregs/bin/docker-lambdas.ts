@@ -122,7 +122,6 @@ async function main() {
         timeout: 900,
       },
       environmentConfig: {
-        vpcId,
         logLevel,
         httpUser,
         httpPassword,
@@ -135,7 +134,6 @@ async function main() {
         timeout: 900,
       },
       environmentConfig: {
-        vpcId,
         logLevel,
         httpUser,
         httpPassword,

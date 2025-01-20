@@ -14,6 +14,7 @@ import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
 import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
 
+import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
 import DocumentTypeSelector from "@/components/subjects/DocumentTypeSelector.vue";
 import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
@@ -385,6 +386,9 @@ getDocSubjects();
                         :is-authenticated="isAuthenticated"
                         :route="$route"
                     />
+                </template>
+                <template #get-access>
+                    <AccessLink class="header__access-link" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>

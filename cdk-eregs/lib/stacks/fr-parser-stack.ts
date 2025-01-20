@@ -17,7 +17,6 @@ interface LambdaConfig {
 }
 
 interface EnvironmentConfig {
-  vpcId: string;
   httpUser: string;
   httpPassword: string;
   logLevel: string;
@@ -39,20 +38,6 @@ export class FrParserStack extends cdk.Stack {
   ) {
     super(scope, id, props);
 
-    // Create VPC reference
-    const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
-      vpcId: props.environmentConfig.vpcId
-    });
-
-    // Create security group
-    const securityGroup = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-      vpc,
-      description: 'SecurityGroup for Serverless Functions',
-      allowAllOutbound: true,
-    });
-
-    Tags.of(securityGroup).add('Name', 'ServerlessSecurityGroup');
-
     // Create Lambda infrastructure
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig);
 
@@ -65,8 +50,6 @@ export class FrParserStack extends cdk.Stack {
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/'), {
         file: 'fr-parser/Dockerfile',
       }),
-      vpc,
-      securityGroups: [securityGroup],
       timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
       environment: {
         PARSER_ON_LAMBDA: 'true',
@@ -106,7 +89,7 @@ export class FrParserStack extends cdk.Stack {
         stageConfig.permissionsBoundaryArn
       ),
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
       inlinePolicies: {
         LambdaPolicy: this.createLambdaPolicy(),

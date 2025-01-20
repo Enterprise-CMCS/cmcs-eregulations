@@ -158,6 +158,7 @@ export class TextExtractorStack extends cdk.Stack {
       ),
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
       inlinePolicies: {
         QueuePolicy: this.createQueuePolicy(),

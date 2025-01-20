@@ -1,0 +1,39 @@
+name: "JavaScript Unit Tests with Vitest"
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  test-javascript:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+      # Setup node environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      # Install Front End dependencies
+      - name: Install Front End dependencies
+        if: success()
+        working-directory: ./solution
+        run: |
+          make install-npm
+      # Execute the JavaScript tests
+      - name: Run JavaScript unit tests with Vitest
+        if: success()
+        working-directory: ./solution
+        run: |
+          make test.vitest.coverage

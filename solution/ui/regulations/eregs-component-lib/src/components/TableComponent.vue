@@ -1,6 +1,5 @@
 <template>
-    <section class="table-section" v-html="table">
-    </section>
+    <section v-sanitize-html="table" class="table-section"></section>
 </template>
 
 <script>
@@ -11,15 +10,13 @@ export default {
         table_markup: {
             type: String,
             required: true,
-        }
-
+        },
     },
 
     computed: {
         table() {
             return this.table_markup;
-        }
-
+        },
     },
-}
+};
 </script>

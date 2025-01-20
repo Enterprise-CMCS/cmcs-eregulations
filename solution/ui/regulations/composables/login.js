@@ -5,18 +5,21 @@ export default function useLoginRedirectUrl({
     customLoginUrl,
     homeUrl,
     route,
+    directLink = undefined,
 }) {
     const loginUrl = ref(customLoginUrl);
 
     const setLoginUrl = () => {
         let basePath;
-        let fullPath;
+        let fullPath = "no-url-params";
         let redirectUrl;
 
         if (route) {
             basePath = route.path.substring(1);
             fullPath = route.fullPath;
             redirectUrl = `${customLoginUrl}?next=${homeUrl}${basePath}`;
+        } else if (directLink) {
+            redirectUrl = `${customLoginUrl}?next=${directLink}`;
         } else {
             basePath = window.location.pathname;
             fullPath = window.location.href;

@@ -52,12 +52,12 @@ const buttonTextClasses = computed(() => getButtonTextClasses(parent));
 
 <template>
     <span
-        class="subjects-li__button-text"
-        :class="buttonTextClasses"
-        v-html="
+        v-sanitize-html="
             (subject.displayName || getSubjectName(subject)) +
             getDisplayCount(subject)
         "
+        class="subjects-li__button-text"
+        :class="buttonTextClasses"
     ></span>
     <span
         v-if="
