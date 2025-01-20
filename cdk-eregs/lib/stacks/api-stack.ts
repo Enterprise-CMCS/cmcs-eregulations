@@ -173,7 +173,7 @@ export class APIStack extends cdk.Stack {
     const createDockerLambda = (name: string, dockerFile: string, handler: string, timeout: number = 300) => {
       const lambdaFunction = new lambda.DockerImageFunction(this, `${name}Lambda`, {
         functionName: stageConfig.getResourceName(name.toLowerCase()),
-        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/'), {
+        code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/backend/'), {
           file: dockerFile,
           cmd: [handler]
         }),
@@ -197,12 +197,12 @@ export class APIStack extends cdk.Stack {
     };
 
     // Create Lambda functions
-    const regSiteLambda = createDockerLambda('RegSite', 'backend/regsite.Dockerfile', 'handler.lambda_handler', 30);
-    const migrateLambda = createDockerLambda('Migrate', 'backend/migrate.Dockerfile', 'migrate.handler', 900);
-    const createDbLambda = createDockerLambda('CreateDb', 'backend/createdb.Dockerfile', 'createdb.handler');
-    const dropDbLambda = createDockerLambda('DropDb', 'backend/dropdb.Dockerfile', 'dropdb.handler');
-    const emptyBucketLambda = createDockerLambda('EmptyBucket', 'backend/empty_bucket.Dockerfile', 'empty_bucket.handler', 900);
-    const createSuLambda = createDockerLambda('CreateSu', 'backend/createsu.Dockerfile', 'createsu.handler');
+    const regSiteLambda = createDockerLambda('RegSite', 'regsite.Dockerfile', 'handler.lambda_handler', 30);
+    const migrateLambda = createDockerLambda('Migrate', 'migrate.Dockerfile', 'migrate.handler', 900);
+    const createDbLambda = createDockerLambda('CreateDb', 'createdb.Dockerfile', 'createdb.handler');
+    const dropDbLambda = createDockerLambda('DropDb', 'dropdb.Dockerfile', 'dropdb.handler');
+    const emptyBucketLambda = createDockerLambda('EmptyBucket', 'empty_bucket.Dockerfile', 'empty_bucket.handler', 900);
+    const createSuLambda = createDockerLambda('CreateSu', 'createsu.Dockerfile', 'createsu.handler');
 
     // Create API Gateway
     const api = new ApiConstruct(this, 'Api', {
