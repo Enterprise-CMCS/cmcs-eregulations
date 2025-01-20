@@ -121,7 +121,16 @@ jobs:
           # Get exact stack names
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"
          
-          
+          # Destroy api-stack stack
+          API_STACK="cms-eregs-eph-$PR_NUMBER-*"
+          cdk destroy "${API_STACK}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/zip-lambdas.ts"
+          cdk destroy "${API_STACK}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/docker-lambdas.ts
           cdk deploy ${STATICASSET_STACK}  \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
