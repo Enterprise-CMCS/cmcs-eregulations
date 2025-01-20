@@ -116,12 +116,32 @@ jobs:
           npm install fs-extra
           npm install --save-dev @types/fs-extra       
           # Get exact stack names
-          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"       
-          cdk deploy ${STATICASSET_STACK}  \
+          STACK_NAME="cms-eregs-eph-1521-*"
+          
+          echo "Destroying PR-specific stack: ${STACK_NAME}"
+          cdk destroy "${STACK_NAME}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/static-assets.ts"
+          --force \
+          --app "npx ts-node bin/zip-lambdas.ts"
+          STACK_NAMEE="cms-eregs-eph-1521-*"
+          
+          echo "Destroying PR-specific stack: ${STACK_NAMEE}"
+          cdk destroy "${STACK_NAME}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          STACK_NAMEEE="cms-eregs-eph-1521-*"
+          cdk destroy "${STACK_NAMEEE}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/text-extractor.ts"
+
+          # STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"       
+          # cdk deploy ${STATICASSET_STACK}  \
+          # -c environment=${{ env.ENVIRONMENT_NAME }} \
+          # --require-approval never \
+          # --exclusively \
+          # --app "npx ts-node bin/static-assets.ts"
           popd
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
