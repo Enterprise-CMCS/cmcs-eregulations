@@ -89,7 +89,7 @@ export class APIStack extends cdk.Stack {
     // CREATE S3 BUCKET (Least Privilege, Secure by Default)
     // ================================
     const storageBucket = new s3.Bucket(this, 'StorageBucket', {
-      bucketName: stageConfig.getResourceName(`file-repo-eregs-test`),
+      bucketName: stageConfig.getResourceName(`file-repo-eregs`),
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
@@ -164,7 +164,6 @@ export class APIStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: stageConfig.getResourceName(`file-repo-eregs`),
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-      // Secrets (unsafeUnwrap for demonstration; consider safer approaches at runtime)
       DB_PASSWORD: dbSecret.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
       HTTP_AUTH_USER: httpSecret.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
       HTTP_AUTH_PASSWORD: httpSecret.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
@@ -241,6 +240,18 @@ export class APIStack extends cdk.Stack {
     const emptyBucketLambda = createDockerLambda('EmptyBucket', 'empty_bucket.Dockerfile', 'empty_bucket.handler', 900);
     const createSuLambda = createDockerLambda('CreateSu', 'createsu.Dockerfile', 'createsu.handler');
 
+
+    // Create authorizer Lambda for non-prod environments
+    let authorizerLambda;
+    if (stageConfig.environment !== 'prod') {
+      authorizerLambda = createDockerLambda(
+        'Authorizer',
+        'authorizer.Dockerfile',  // Your existing authorizer Dockerfile
+        'authorizer.handler',
+        30
+      );
+    }
+
     // ================================
     // CREATE API GATEWAY CONSTRUCT
     // ================================
@@ -254,6 +265,7 @@ export class APIStack extends cdk.Stack {
       stageConfig,
       vpcSubnets: selectedSubnets,
       lambda: regSiteLambda,
+      authorizerLambda: authorizerLambda, 
     });
 
     // ================================
