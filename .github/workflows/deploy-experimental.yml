@@ -119,7 +119,7 @@ jobs:
           npm install
           
           # Get exact stack names
-          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"
+          # STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"
          
           # Destroy api-stack stack
           API_STACK="cms-eregs-eph-1516-*"
@@ -127,16 +127,16 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/zip-lambdas.ts"
-          cdk destroy "${API_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts
+          # cdk destroy "${API_STACK}" \
+          # -c environment=${{ env.ENVIRONMENT_NAME }} \
+          # --force \
+          # --app "npx ts-node bin/docker-lambdas.ts
           # cdk deploy ${STATICASSET_STACK}  \
           # -c environment=${{ env.ENVIRONMENT_NAME }} \
           # --require-approval never \
           # --exclusively \
           # --app "npx ts-node bin/zip-lambdas.ts"
-          # popd
+          popd
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
     if: github.event.action != 'closed'
