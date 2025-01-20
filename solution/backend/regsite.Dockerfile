@@ -7,7 +7,8 @@ ENV LAMBDA_TASK_ROOT=/var/task
 ENV DJANGO_CONFIGURATION=Production
 ENV PYTHONUNBUFFERED=1
 ENV AWS_LAMBDA_LOG_LEVEL=DEBUG
-
+ARG BUILD_ID=env
+RUN echo "BUILD_ID is: ${BUILD_ID}"
 # Install system dependencies
 RUN dnf install -y \
     gcc \

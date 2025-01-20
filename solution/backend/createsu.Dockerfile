@@ -22,7 +22,9 @@ RUN pip install -r ${LAMBDA_TASK_ROOT}/requirements.txt
 COPY . ${LAMBDA_TASK_ROOT}/
 
 
-
+ARG BUILD_ID=env
+RUN echo "BUILD_ID is: ${BUILD_ID}"
+# Install system dependencies
 
 # Make sure Django can write to tmp
 RUN chmod 777 /tmp
