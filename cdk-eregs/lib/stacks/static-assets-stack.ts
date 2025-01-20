@@ -153,7 +153,7 @@ export class StaticAssetsStack extends cdk.Stack {
 
       execSync(`
         pushd ${backendPath} && \
-        python manage.py collectstatic --noinput && \
+        python3 manage.py collectstatic --noinput && \
         cd .. && \
         popd
       `, {
