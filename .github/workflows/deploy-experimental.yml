@@ -124,7 +124,7 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/zip-lambdas.ts"
+          --app "npx ts-node bin/static-assets.ts"
           popd
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
