@@ -219,7 +219,7 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          --app "npx ts-node bin/text-extractor.ts"
           popd
 
   deploy-fr-parser-cdk:
