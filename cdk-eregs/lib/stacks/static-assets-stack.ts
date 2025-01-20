@@ -47,7 +47,7 @@ export class StaticAssetsStack extends cdk.Stack {
   }
   private createAssetsBucket(): s3.Bucket {
     return new s3.Bucket(this, 'AssetsBucket', {
-      bucketName: this.stageConfig.getResourceName(`file-repo-eregs`),
+      bucketName: this.stageConfig.getResourceName(`site-assets`),
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,

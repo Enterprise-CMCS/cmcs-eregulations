@@ -89,7 +89,7 @@ export class APIStack extends cdk.Stack {
     // CREATE S3 BUCKET (Least Privilege, Secure by Default)
     // ================================
     const storageBucket = new s3.Bucket(this, 'StorageBucket', {
-      bucketName: stageConfig.getResourceName(`file-repo-eregs`),
+      bucketName: stageConfig.getResourceName(`file-repo-eregs-test`),
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,

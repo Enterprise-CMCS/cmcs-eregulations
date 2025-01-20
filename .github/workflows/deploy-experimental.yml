@@ -114,30 +114,14 @@ jobs:
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install fs-extra
-          npm install --save-dev @types/fs-extra
-
-          npm install
-          STATICASSET_STACK="cms-eregs-eph-1521-static-assets"       
-          cdk destroy "${STATICASSET_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/static-assets.ts"
-
-          cdk destroy "${STATICASSET_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/static-assets.ts"
-          cdk destroy "cms-eregs-eph-*" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/zip-lambdas.ts"
+          npm install --save-dev @types/fs-extra       
           # Get exact stack names
-          # STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"       
-          # cdk deploy ${STATICASSET_STACK}  \
-          # -c environment=${{ env.ENVIRONMENT_NAME }} \
-          # --require-approval never \
-          # --exclusively \
-          # --app "npx ts-node bin/static-assets.ts"
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"       
+          cdk deploy ${STATICASSET_STACK}  \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts"
           popd
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
