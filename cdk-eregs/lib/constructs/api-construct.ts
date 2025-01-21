@@ -44,9 +44,13 @@ export class ApiConstruct extends Construct {
     // Use getResourceName to get the correct stage name
     // This will automatically handle both ephemeral and regular environments
     // Determine stage name based on environment type
+    // const stageName = props.stageConfig.isEphemeral() 
+    // ? props.stageConfig.getResourceName('').split('-').slice(0, 2).join('-') // Gets 'eph-123' from 'cms-eregs-eph-123-'
+    // : props.stageConfig.environment; // Gets 'dev', 'val', or 'prod'
+    // Determine stage name based on environment type
     const stageName = props.stageConfig.isEphemeral() 
-    ? props.stageConfig.getResourceName('').split('-').slice(0, 2).join('-') // Gets 'eph-123' from 'cms-eregs-eph-123-'
-    : props.stageConfig.environment; // Gets 'dev', 'val', or 'prod'
+    ? props.stageConfig.getResourceName('').replace(`${StageConfig.projectName}-`, '').split('-resource')[0] // Extract just the ephemeral part
+    : props.stageConfig.environment;
 
     // Create authorizer if Lambda is provided (non-prod environments)
     let authorizer: apigateway.IAuthorizer | undefined;
