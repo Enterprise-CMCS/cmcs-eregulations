@@ -43,7 +43,12 @@ export class FrParserStack extends cdk.Stack {
 
     // Get the site stack endpoint using stageConfig
     // const siteEndpoint = cdk.Fn.importValue(`${stageConfig.getResourceName('site')}-ServiceEndpoint`);
-    const siteEndpoint = 'https://dev-site.cms.gov';
+    // const siteEndpoint = 'https://dev-site.cms.gov';
+
+  // Get the API Gateway endpoint from stack outputs
+    const siteEndpoint = cdk.Fn.importValue(
+      stageConfig.getResourceName('api-endpoint')
+    ).replace(/\/$/, '');
     // Create Lambda function
     this.lambda = new lambda.DockerImageFunction(this, 'FrParserFunction', {
       functionName: stageConfig.getResourceName('fr-parser'),
