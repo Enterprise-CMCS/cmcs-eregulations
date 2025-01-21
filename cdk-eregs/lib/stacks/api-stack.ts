@@ -206,9 +206,6 @@ export class APIStack extends cdk.Stack {
             buildArgs: {
               BUILD_ID: buildId,
             },
-            // Optionally ensure new asset hash each time buildId changes:
-            // assetHashType: cdk.AssetHashType.OUTPUT,
-            // extraHash: buildId,
           },
         ),
         vpc,
