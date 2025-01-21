@@ -10,51 +10,54 @@ import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 
 /**
-* Props for the ApiConstruct
+* Properties for the API Gateway construct
 * @interface ApiConstructProps
 */
 export interface ApiConstructProps {
  /** VPC configuration */
  vpc: ec2.IVpc;
- /** Security group for the API */
+ /** Security group for API resources */
  securityGroup: ec2.SecurityGroup;
  /** Environment variables for Lambda functions */
  environmentVariables: Record<string, string>;
- /** S3 bucket name for storage */
+ /** Name of the S3 bucket for storage */
  storageBucketName: string;
- /** SQS queue URL */
+ /** URL of the SQS queue */
  queueUrl: string;
- /** Lambda function configuration */
+ /** Configuration for Lambda functions */
  lambdaConfig: {
+   /** Memory size in MB */
    memorySize: number;
+   /** Timeout in seconds */
    timeout: number;
+   /** Optional concurrent execution limit */
    reservedConcurrentExecutions?: number;
  };
- /** Stage configuration object */
+ /** Stage configuration */
  stageConfig: StageConfig;
  /** VPC subnet selection */
  vpcSubnets: ec2.SubnetSelection;
- /** Main Lambda function */
+ /** Main Lambda function for API */
  lambda: lambda.Function;
  /** Optional authorizer Lambda function */
  authorizerLambda?: lambda.Function;
 }
 
 /**
-* Construct for API Gateway with Lambda integration and optional authorization
+* Construct that creates an API Gateway with Lambda integration and optional authorization
 * @class ApiConstruct
 */
 export class ApiConstruct extends Construct {
- /** The API Gateway REST API */
+ /** The created API Gateway REST API */
  public readonly api: apigateway.RestApi;
  /** The main Lambda function */
  public readonly lambda: lambda.Function;
 
  /**
   * Creates a new API Gateway construct
-  * @param scope The scope of the construct
-  * @param id The ID of the construct
-  * @param props The properties for the construct
+  * @param {Construct} scope - The parent construct
+  * @param {string} id - The construct's unique id
+  * @param {ApiConstructProps} props - Configuration properties
   */
  constructor(scope: Construct, id: string, props: ApiConstructProps) {
    super(scope, id);
@@ -74,32 +77,6 @@ export class ApiConstruct extends Construct {
          .split('-resource')[0]
          .replace(/-$/, '')
      : props.stageConfig.environment;
-
-   // Create request authorizer if Lambda is provided (non-prod environments)
-   let authorizer: apigateway.IAuthorizer | undefined;
-   if (props.authorizerLambda) {
-     authorizer = new apigateway.RequestAuthorizer(this, 'ApiGatewayAuthorizer', {
-       handler: props.authorizerLambda,
-       identitySources: [apigateway.IdentitySource.header('Authorization')],
-       authorizerName: props.stageConfig.getResourceName('authorizer'),
-       resultsCacheTtl: cdk.Duration.seconds(0),
-     });
-
-     // Add permission for API Gateway to invoke the authorizer
-     props.authorizerLambda.addPermission('ApiGatewayInvoke', {
-       principal: new iam.ServicePrincipal('apigateway.amazonaws.com'),
-       sourceArn: cdk.Fn.join(':', [
-         'arn:aws:execute-api',
-         cdk.Stack.of(this).region,
-         cdk.Stack.of(this).account,
-         `${this.api.restApiId}/authorizers/*`
-       ])
-     });
-
-     // Add required environment variables to the authorizer
-     props.authorizerLambda.addEnvironment('HTTP_AUTH_USER', props.environmentVariables.HTTP_AUTH_USER);
-     props.authorizerLambda.addEnvironment('HTTP_AUTH_PASSWORD', props.environmentVariables.HTTP_AUTH_PASSWORD);
-   }
 
    // Create API Gateway
    this.api = new apigateway.RestApi(this, 'API', {
@@ -123,13 +100,39 @@ export class ApiConstruct extends Construct {
      ],
    });
 
-   // Add Lambda integration
+   // Create request authorizer if Lambda is provided (non-prod environments)
+   let authorizer: apigateway.IAuthorizer | undefined;
+   if (props.authorizerLambda) {
+     authorizer = new apigateway.RequestAuthorizer(this, 'ApiGatewayAuthorizer', {
+       handler: props.authorizerLambda,
+       identitySources: [apigateway.IdentitySource.header('Authorization')],
+       authorizerName: props.stageConfig.getResourceName('authorizer'),
+       resultsCacheTtl: cdk.Duration.seconds(0),
+     });
+
+     // Grant API Gateway permission to invoke the authorizer
+     props.authorizerLambda.addPermission('ApiGatewayInvoke', {
+       principal: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+       sourceArn: cdk.Fn.join(':', [
+         'arn:aws:execute-api',
+         cdk.Stack.of(this).region,
+         cdk.Stack.of(this).account,
+         `${this.api.restApiId}/authorizers/*`
+       ])
+     });
+
+     // Set environment variables for the authorizer
+     props.authorizerLambda.addEnvironment('HTTP_AUTH_USER', props.environmentVariables.HTTP_AUTH_USER);
+     props.authorizerLambda.addEnvironment('HTTP_AUTH_PASSWORD', props.environmentVariables.HTTP_AUTH_PASSWORD);
+   }
+
+   // Create Lambda integration
    const integration = new apigateway.LambdaIntegration(this.lambda, {
      proxy: true,
      allowTestInvoke: true,
    });
 
-   // Configure method options based on whether auth is required
+   // Configure method options
    const methodOptions: apigateway.MethodOptions = {
      apiKeyRequired: false,
      authorizer: authorizer,
@@ -138,34 +141,34 @@ export class ApiConstruct extends Construct {
        : apigateway.AuthorizationType.NONE,
    };
 
-   // Add root path with conditional auth
+   // Add API methods
    this.api.root.addMethod('ANY', integration, methodOptions);
 
-   // Add proxy path for all other routes with conditional auth
+   // Add proxy for all other routes
    this.api.root.addProxy({
      defaultIntegration: integration,
      defaultMethodOptions: methodOptions,
      anyMethod: true,
    });
 
-// Add customized 401 response
-new apigateway.GatewayResponse(this, 'UnauthorizedResponse', {
-  restApi: this.api,
-  type: apigateway.ResponseType.UNAUTHORIZED,
-  responseHeaders: {  // Changed from responseParameters
-    'gatewayresponse.header.WWW-Authenticate': "'Basic'",
-    'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
-  },
-  statusCode: '401',
-});
+   // Add unauthorized response configuration
+   new apigateway.GatewayResponse(this, 'UnauthorizedResponse', {
+     restApi: this.api,
+     type: apigateway.ResponseType.UNAUTHORIZED,
+     responseHeaders: {
+       'gatewayresponse.header.WWW-Authenticate': "'Basic'",
+       'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+     },
+     statusCode: '401',
+   });
 
-   // Add CORS support
+   // Add CORS configuration
    this.addCorsOptions(this.api.root);
  }
 
  /**
   * Adds CORS options to an API resource
-  * @param apiResource The API resource to add CORS options to
+  * @param {apigateway.IResource} apiResource - The API resource to add CORS options to
   * @private
   */
  private addCorsOptions(apiResource: apigateway.IResource) {
