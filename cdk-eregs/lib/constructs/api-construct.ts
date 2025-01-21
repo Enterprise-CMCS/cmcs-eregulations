@@ -87,6 +87,7 @@ export class ApiConstruct extends Construct {
 
     // Configure method options based on whether auth is required
     const methodOptions: apigateway.MethodOptions = {
+      apiKeyRequired: false, 
       authorizer: authorizer,
       authorizationType: props.authorizerLambda 
         ? apigateway.AuthorizationType.CUSTOM 
