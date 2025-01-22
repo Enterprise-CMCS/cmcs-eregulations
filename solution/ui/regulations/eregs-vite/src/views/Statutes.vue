@@ -168,7 +168,7 @@ getStatutesArray();
                     />
                 </template>
                 <template #get-access>
-                    <AccessLink class="header__access-link" :base="homeUrl" />
+                    <AccessLink v-if="!isAuthenticated" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>
