@@ -229,6 +229,7 @@ jobs:
         run: |
           cd solution/ui/regulations/eregs-vite
           npm install
+          npm install dompurify
           npm run build
 
       - name: Run make regulations
