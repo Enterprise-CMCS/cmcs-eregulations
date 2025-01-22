@@ -229,9 +229,12 @@ jobs:
         run: |
           cd solution/ui/regulations/eregs-vite
           npm install
-          npm install dompurify
+          npm install isomorphic-dompurify
+          # Update the import in sanitizeHtml.js
+          if [ -f ../directives/sanitizeHtml.js ]; then
+            sed -i 's/import DOMPurify from "dompurify"/import DOMPurify from "isomorphic-dompurify"/' ../directives/sanitizeHtml.js
+          fi
           npm run build
-
       - name: Run make regulations
         if: success() && steps.findPr.outputs.number
         env:
