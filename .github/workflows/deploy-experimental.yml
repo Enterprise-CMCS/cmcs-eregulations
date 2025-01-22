@@ -33,7 +33,7 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.14
       # setup python
@@ -374,7 +374,7 @@ jobs:
           state: open
       # should build first and save the artifact
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.14
       # setup python
@@ -472,7 +472,7 @@ jobs:
           state: open
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.14
       # setup python
@@ -615,7 +615,7 @@ jobs:
           withDecryption: "true" # defaults to true
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18.14
       # Run the cypress tests

@@ -22,7 +22,7 @@ jobs:
           submodules: true
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       # Install Front End dependencies
