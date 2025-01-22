@@ -117,13 +117,23 @@ jobs:
           npm install --save-dev @types/fs-extra       
           # Get exact stack names        
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
-              
+
           cdk deploy ${STATICASSET_STACK}  \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/static-assets.ts"
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
           popd
+      - name: Get Static URL
+        id: get-static-url
+        run: |
+          pushd cdk-eregs
+          STATIC_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-static-assets"
+          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+          popd
+
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
     if: github.event.action != 'closed'
@@ -172,7 +182,88 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
+  build-and-bundle-frontend:
+    needs: [deploy-site-lambda-cdk]
+    if: github.event.action != 'closed'
+    environment:
+      name: "dev"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Make envfile for Vue
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_VITE_API_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Build Vite frontend
+        if: success() && steps.findPr.outputs.number
+        env:
+          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+        run: |
+          cd solution/ui/regulations/eregs-vite
+          npm install
+          npm run build
+
+      - name: Run make regulations
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: http://localhost:8888/
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+        run: |
+          cd solution
+          make regulations
+          cd ..
+      - name: Deploy Static-Asset
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra       
+          # Get exact stack names        
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+
+          cdk deploy ${STATICASSET_STACK}  \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+      
   deploy-text-extractor-cdk:
     needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
     if: github.event.action != 'closed'
@@ -358,22 +449,19 @@ jobs:
           -c buildId="${GITHUB_RUN_ID}" \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          --app "npx ts-node bin/docker-lambdas.ts" \
+          --outputs-file api-outputs.json
+          popd
+      - name: Get API URL
+        id: get-api-url
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
 
-  deployment-status-cdk:
-    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk, deploy-ecfr-parser-cdk, deploy-site-lambda-cdk]
-    if: always()
-    runs-on: ubuntu-22.04
-    environment: "dev"
-    steps:
-      - name: Deployment Status Summary
-        run: |
-          echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
-          echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "2. Text Extractor: ${{ needs.deploy-text-extractor-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "3. FR Parser: ${{ needs.deploy-fr-parser-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser-cdk.result == 'success' && '✅' || '❌' }}"
+
   deploy-text-extractor:
     environment:
       name: "dev"
