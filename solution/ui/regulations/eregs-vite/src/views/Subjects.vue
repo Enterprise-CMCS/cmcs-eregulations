@@ -30,10 +30,12 @@ import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
+import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectLanding from "@/components/subjects/SubjectLanding.vue";
 
+const accessUrl = inject("accessUrl");
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
@@ -434,6 +436,22 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
+                            <SignInCTA
+                                v-else
+                                class="div__login-cta--subjects-results"
+                                :access-url="accessUrl"
+                                :is-authenticated="isAuthenticated"
+                                test-id="loginSubjectsResults"
+                            >
+                                <template #sign-in-link>
+                                    <SignInLink
+                                        :custom-login-url="customLoginUrl"
+                                        :home-url="homeUrl"
+                                        :is-authenticated="isAuthenticated"
+                                        :route="$route"
+                                    />
+                                </template>
+                            </SignInCTA>
                             <FetchItemsContainer
                                 v-slot="slotProps"
                                 items-to-fetch="categories"

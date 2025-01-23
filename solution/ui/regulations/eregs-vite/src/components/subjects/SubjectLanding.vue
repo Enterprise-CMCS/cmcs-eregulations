@@ -37,7 +37,7 @@ const $route = useRoute();
             <SignInCTA
                 :access-url="accessUrl"
                 :is-authenticated="isAuthenticated"
-                test-id="loginSubectsLanding"
+                test-id="loginSubjectsLanding"
             >
                 <template #sign-in-link>
                     <SignInLink

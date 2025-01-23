@@ -475,6 +475,12 @@
         align-items: center;
         margin-bottom: 1rem;
 
+        .div__login-cta--subjects-results {
+            font-size: var(--font-size-sm);
+            padding: var(--spacer-half);
+            margin: 0;
+        }
+
         .doc-type__toggle fieldset {
             @media (max-width: 475px) {
                 flex-wrap: wrap;
