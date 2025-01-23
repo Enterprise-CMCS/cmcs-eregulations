@@ -141,7 +141,7 @@ export class APIStack extends cdk.Stack {
       GA_ID: ssmParams.gaId,
       DJANGO_SETTINGS_MODULE: ssmParams.djangoSettingsModule,
       ALLOWED_HOST: '.amazonaws.com',
-      STAGE_ENV: stageConfig.environment,
+      STAGE_ENV: stageConfig.stageName,
       STATIC_URL: cdk.Fn.importValue(stageConfig.getResourceName('static-url')) + '/',
       WORKING_DIR: '/var/task',
       BASE_URL: ssmParams.baseUrl,
