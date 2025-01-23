@@ -234,6 +234,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             {{ resultsCount }} <span v-if="searchQuery">result</span
             ><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
+            <slot name="sign-in-cta"></slot>
         </div>
         <slot name="empty-state"></slot>
         <ResultsItem

@@ -599,6 +599,6 @@ select {
     background-color: $secondary_background_color;
     border: 1px solid $border_color;
     border-radius: 0.25rem;
-    padding: 0.5rem;
-    margin: 1rem 0;
+    font-size: var(--font-size-sm);
+    padding: var(--spacer-half) var(--spacer-1);
 }
