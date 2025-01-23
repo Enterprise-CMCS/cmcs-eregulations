@@ -215,43 +215,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./solution/backend/requirements.txt
 
-      - name: Make envfile for Vue
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_VITE_API_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
-          directory: solution/ui/regulations/eregs-vite
-          file_name: .env
-
-      - name: Build Vite frontend
-        if: success() && steps.findPr.outputs.number
-        env:
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+      - name: Create Vue env file
         run: |
-          cd solution/ui/regulations
-          npm install isomorphic-dompurify
-          cd eregs-vite
-          npm install
-          # Create vite.config.js with proper resolve configuration
-          echo 'import { defineConfig } from "vite";
-          export default defineConfig({
-            resolve: {
-              alias: {
-                "isomorphic-dompurify": "../node_modules/isomorphic-dompurify"
-              }
-            }
-          });' > vite.config.js
-          npm run build
+          echo "VITE_API_URL=${{ needs.deploy-site-lambda-cdk.outputs.api_url }}" > solution/ui/regulations/eregs-vite/.env
+          cat solution/ui/regulations/eregs-vite/.env
 
-      - name: Run make regulations
+      - name: Build static assets
         if: success() && steps.findPr.outputs.number
         env:
           STATIC_URL: http://localhost:8888/
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: dev${{ steps.findPr.outputs.pr }}
         run: |
-          cd solution
+          pushd solution
           make regulations
-          cd ..
+          popd
+
       - name: Deploy Static-Asset
         if: success() && steps.findPr.outputs.number
         env:
