@@ -71,7 +71,7 @@ describe("Part View", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/51");
 
-        cy.get(".div__login-sidebar").contains(
+        cy.get(".div__login-cta--sidebar").contains(
             "CMCS staff participating in the Policy Repository pilot can sign in to see internal resources."
         );
 
@@ -95,7 +95,7 @@ describe("Part View", () => {
         cy.eregsLogin({ username, password });
         cy.visit("/42/431/10");
 
-        cy.get(".div__login-sidebar").contains(
+        cy.get(".div__login-cta--sidebar").contains(
             "Resources you can access include policy documents internal to CMCS."
         );
         cy.get("button[data-testid='user-account-button']").should(
