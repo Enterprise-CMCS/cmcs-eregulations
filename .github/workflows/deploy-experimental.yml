@@ -238,6 +238,7 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
+          AWS_REGION: us-east-1
         run: |
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
