@@ -42,7 +42,7 @@ export class FrParserStack extends cdk.Stack {
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig);
     const siteEndpoint = cdk.Fn.importValue(
       stageConfig.getResourceName('api-endpoint')
-    ).replace(/\/+$/, '');
+    ).replace(/\/+$/, '');  
 
     this.lambda = new lambda.DockerImageFunction(this, 'FrParserFunction', {
       functionName: stageConfig.getResourceName('fr-parser'),
