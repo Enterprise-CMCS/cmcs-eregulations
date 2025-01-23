@@ -219,7 +219,11 @@ jobs:
         run: |
           echo "VITE_API_URL=${{ needs.deploy-site-lambda-cdk.outputs.api_url }}" > solution/ui/regulations/eregs-vite/.env
           cat solution/ui/regulations/eregs-vite/.env
-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
       - name: Build static assets
         if: success() && steps.findPr.outputs.number
         env:
@@ -238,7 +242,6 @@ jobs:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
-          AWS_REGION: us-east-1
         run: |
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
