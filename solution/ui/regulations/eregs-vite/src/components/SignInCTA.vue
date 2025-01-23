@@ -4,10 +4,6 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    isAuthenticated: {
-        type: Boolean,
-        required: true,
-    },
     testId: {
         type: String,
         default: "loginSpa",

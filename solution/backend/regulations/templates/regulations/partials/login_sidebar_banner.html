@@ -1,15 +1,19 @@
-<div class="div__login-cta div__login-cta--sidebar">
-    {% if user.is_authenticated %}
+
+{% if user.is_authenticated %}
+    <div class="div__login-cta div__login-cta--sidebar">
         Resources you can access include policy documents internal to CMCS.
-    {% else %}
-        To see internal documents,
-        <span data-testid="loginSidebar">
+    </div>
+{% else %}
+    <sign-in-cta
+        access-url="{% url 'get_account_access' %}"
+        test-id="loginSidebar"
+    >
+        <template #sign-in-link>
             <sign-in-link
                 custom-login-url="{% url 'custom_login' %}"
                 home-url="{% url 'homepage' %}"
                 is-authenticated="{{ user.is_authenticated }}"
             ></sign-in-link>
-        </span>
-        or <a href="{% url 'get_account_access' %}">learn how to get account access</a>.
-    {% endif %}
-</div>
+        </template>
+    </sign-in-cta>
+{% endif %}
