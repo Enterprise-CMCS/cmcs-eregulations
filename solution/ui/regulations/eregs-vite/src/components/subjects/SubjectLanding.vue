@@ -1,7 +1,14 @@
 <script setup>
 import { inject } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
+import SignInCTA from "@/components/SignInCTA.vue";
+import SignInLink from "@/components/SignInLink.vue";
 
 const aboutUrl = inject("aboutUrl");
+const accessUrl = inject("accessUrl");
+const customLoginUrl = inject("customLoginUrl");
+const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
 
 const props = defineProps({
@@ -10,6 +17,8 @@ const props = defineProps({
         default: () => ({ results: [], loading: true }),
     },
 });
+
+const $route = useRoute();
 </script>
 
 <template>
@@ -23,6 +32,22 @@ const props = defineProps({
                 <li>Technical Assistance</li>
                 <li>OIG and GAO Reports</li>
             </ul>
+        </section>
+        <section v-if="!isAuthenticated">
+            <SignInCTA
+                :access-url="accessUrl"
+                :is-authenticated="isAuthenticated"
+                test-id="loginSubectsLanding"
+            >
+                <template #sign-in-link>
+                    <SignInLink
+                        :custom-login-url="customLoginUrl"
+                        :home-url="homeUrl"
+                        :is-authenticated="isAuthenticated"
+                        :route="$route"
+                    />
+                </template>
+            </SignInCTA>
         </section>
         <a :href="aboutUrl">Learn more about documents on eRegs.</a>
     </div>
