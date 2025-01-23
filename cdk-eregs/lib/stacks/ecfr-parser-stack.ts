@@ -61,7 +61,7 @@ export class EcfrParserStack extends cdk.Stack {
         EREGS_USERNAME: props.environmentConfig.httpUser,
         EREGS_PASSWORD: props.environmentConfig.httpPassword,
         EREGS_API_URL_V3: `${siteEndpoint}/v3/`,
-        STAGE_ENV: stageConfig.environment,
+        STAGE_ENV: stageConfig.stageName,
         LOG_LEVEL: props.environmentConfig.logLevel,
       },
       role: lambdaRole,
