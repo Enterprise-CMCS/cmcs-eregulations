@@ -130,6 +130,66 @@ describe("Search flow", () => {
         cy.url().should("not.include", "test");
     });
 
+    it("shows the sign in Call to Action when there are search results", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".doc__list > .login-cta__div--search-no-results").should(
+            "not.exist",
+        );
+        cy.get(
+            ".search-results-count .login-cta__div--search-results",
+        ).contains(
+            "To see internal documents, sign in or learn how to get account access.",
+        );
+        cy.get("span[data-testid=loginSearchResults] a")
+            .should("have.attr", "href")
+            .and("include", "/login/?next=")
+            .and("include", `${encodeURI(SEARCH_TERM)}`);
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".search-results-count .login-cta__div--search-results").should(
+            "not.exist",
+        );
+    });
+
+    it("shows the sign in Call to Action when there are no search results", () => {
+        cy.intercept(`**/v3/content-search/**`, {
+            next: null,
+            previous: null,
+            count: 0,
+            results: [],
+        }).as("noResults");
+
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(".search-results-count .login-cta__div--search-results").should(
+            "not.exist",
+        );
+        cy.get(".doc__list .login-cta__div--search-no-results").contains(
+            "To see internal documents, sign in or learn how to get account access.",
+        );
+        cy.get("span[data-testid=loginSearchNoResults] a")
+            .should("have.attr", "href")
+            .and("include", "/login/?next=")
+            .and("include", `${encodeURI(NO_RESULTS_SEARCH_TERM)}`);
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+        cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
+        cy.get(".doc__list .login-cta__div--search-no-results").should(
+            "not.exist",
+        );
+    });
+
     it("should have the correct labels for public, regulations, and internal documents", () => {
         cy.checkPolicyDocs({
             username,
@@ -384,7 +444,6 @@ describe("Search flow", () => {
             .should("have.text", "Choose Subject");
 
         cy.url().should("not.include", "subjects=3");
-
     });
 
     it("displays results of the search and highlights search term in regulation text", () => {
@@ -418,15 +477,6 @@ describe("Search flow", () => {
 
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
-
-        cy.get(".doc__list .login-cta__div--search-no-results").contains(
-            "To see internal documents, sign in or learn how to get account access.",
-        );
-
-        cy.get("span[data-testid=loginSearchNoResults] a")
-            .should("have.attr", "href")
-            .and("include", "/login/?next=")
-            .and("include", `${encodeURI(NO_RESULTS_SEARCH_TERM)}`);
 
         cy.get(".no-results__span").should(
             "have.text",
