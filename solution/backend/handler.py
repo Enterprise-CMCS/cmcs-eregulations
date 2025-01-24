@@ -43,7 +43,7 @@ def lambda_handler(event, context):
     handler = Mangum(
         django_asgi_app,
         lifespan="off",
-        api_gateway_base_path="",  # keep the full path
+        api_gateway_base_path=base_path,  # keep the full path
     )
     
     # 4) Invoke Mangum
