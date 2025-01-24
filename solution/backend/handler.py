@@ -54,6 +54,46 @@
 #         print(f"Error handling request: {e}")
 #         # Re-raise so Lambda logs the error stack trace
 #         raise
+# import os
+# import json
+# from django.core.asgi import get_asgi_application
+# from mangum import Mangum
+
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+
+# django_asgi_app = get_asgi_application()
+
+# def lambda_handler(event, context):
+#     # For debugging
+#     print("=== EVENT ===")
+#     print(json.dumps(event))
+    
+#     stage_env = os.environ.get('STAGE_ENV', '')
+#     # Check what's actually in the request context
+#     stage_from_event = event.get('requestContext', {}).get('stage', '')
+#     print(f"Lambda Env STAGE_ENV: {stage_env}")
+#     print(f"API Gateway Stage: {stage_from_event}")
+
+#     if stage_env:
+#         base_path = f"/{stage_env}"
+#     elif stage_from_event:
+#         base_path = f"/{stage_from_event}"
+#     else:
+#         base_path = ""
+
+#     # Force Django to use that path for reversed URLs
+#     os.environ["FORCE_SCRIPT_NAME"] = base_path
+#     print(f"Setting FORCE_SCRIPT_NAME to: {base_path}")
+
+#     # By passing api_gateway_base_path=base_path,
+#     # Mangum will strip that segment from the incoming path
+#     handler = Mangum(
+#         django_asgi_app,
+#         lifespan="off",
+#         api_gateway_base_path=base_path
+#     )
+
+#     return handler(event, context)
 import os
 import json
 from django.core.asgi import get_asgi_application
@@ -64,29 +104,19 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
 django_asgi_app = get_asgi_application()
 
 def lambda_handler(event, context):
-    # For debugging
+    # For debugging (optional):
     print("=== EVENT ===")
     print(json.dumps(event))
-    
-    stage_env = os.environ.get('STAGE_ENV', '')
-    # Check what's actually in the request context
-    stage_from_event = event.get('requestContext', {}).get('stage', '')
-    print(f"Lambda Env STAGE_ENV: {stage_env}")
-    print(f"API Gateway Stage: {stage_from_event}")
 
-    if stage_env:
-        base_path = f"/{stage_env}"
-    elif stage_from_event:
-        base_path = f"/{stage_from_event}"
-    else:
-        base_path = ""
+    # Read the stage from the Lambda environment
+    # which is set in CDK to something like "dev", "eph-1522", etc.
+    stage_env = os.environ.get("STAGE_ENV", "")
 
-    # Force Django to use that path for reversed URLs
-    os.environ["FORCE_SCRIPT_NAME"] = base_path
-    print(f"Setting FORCE_SCRIPT_NAME to: {base_path}")
+    # Build the base path. If stage_env == 'dev', base_path = '/dev'
+    base_path = f"/{stage_env}" if stage_env else ""
 
-    # By passing api_gateway_base_path=base_path,
-    # Mangum will strip that segment from the incoming path
+    # Create Mangum handler, stripping that base path from the URL
+    # so Django won't see '/dev' or '/eph-1522'
     handler = Mangum(
         django_asgi_app,
         lifespan="off",
