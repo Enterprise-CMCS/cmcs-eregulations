@@ -12,12 +12,14 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="div__login-cta">
+    <div class="login-cta__div">
         <span :data-testid="testId"
             >To see internal documents,
             <slot name="sign-in-link">sign in</slot></span
         >
         or
-        <a :href="accessUrl">learn how to get account access</a>.
+        <a class="access__anchor" :href="accessUrl"
+            >learn how to get account access</a
+        >.
     </div>
 </template>

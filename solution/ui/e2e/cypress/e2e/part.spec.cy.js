@@ -71,7 +71,7 @@ describe("Part View", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/51");
 
-        cy.get(".div__login-cta--sidebar").contains(
+        cy.get(".login-cta__div--sidebar").contains(
             "To see internal documents, sign in or learn how to get account access.",
         );
 
@@ -79,13 +79,6 @@ describe("Part View", () => {
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/42/433/Subpart-B/");
-
-        cy.eregsLogin({ username, password });
-        cy.visit("/42/433/51");
-
-        cy.get(".div__login-cta--sidebar").contains(
-            "Resources you can access include policy documents internal to CMCS.",
-        );
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
@@ -102,7 +95,7 @@ describe("Part View", () => {
         cy.eregsLogin({ username, password });
         cy.visit("/42/431/10");
 
-        cy.get(".div__login-cta--sidebar").contains(
+        cy.get(".login-cta__div--sidebar").contains(
             "Resources you can access include policy documents internal to CMCS.",
         );
         cy.get("button[data-testid='user-account-button']").should(

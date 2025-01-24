@@ -438,7 +438,7 @@ getDocSubjects();
                             <DocumentTypeSelector v-if="isAuthenticated" />
                             <SignInCTA
                                 v-else
-                                class="div__login-cta--subjects-results"
+                                class="login-cta__div--subjects-results"
                                 :access-url="accessUrl"
                                 :is-authenticated="isAuthenticated"
                                 test-id="loginSubjectsResults"

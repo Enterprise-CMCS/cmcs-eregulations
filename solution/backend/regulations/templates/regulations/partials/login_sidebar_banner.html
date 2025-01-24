@@ -1,12 +1,12 @@
 
 {% if user.is_authenticated %}
-    <div class="div__login-cta div__login-cta--sidebar">
+    <div class="login-cta__div login-cta__div--sidebar">
         Resources you can access include policy documents internal to CMCS.
     </div>
 {% else %}
     <sign-in-cta
         access-url="{% url 'get_account_access' %}"
-        class="div__login-cta--sidebar"
+        class="login-cta__div--sidebar"
         test-id="loginSidebar"
     >
         <template #sign-in-link>

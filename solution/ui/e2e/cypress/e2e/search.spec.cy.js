@@ -419,6 +419,15 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
 
+        cy.get(".doc__list .login-cta__div--search-no-results").contains(
+            "To see internal documents, sign in or learn how to get account access.",
+        );
+
+        cy.get("span[data-testid=loginSearchNoResults] a")
+            .should("have.attr", "href")
+            .and("include", "/login/?next=")
+            .and("include", `${NO_RESULTS_SEARCH_TERM}`);
+
         cy.get(".no-results__span").should(
             "have.text",
             `Your search for ${NO_RESULTS_SEARCH_TERM} did not match any results on eRegulations.`,

@@ -373,7 +373,7 @@ getDocsOnLoad();
                     <div class="doc__list">
                         <SignInCTA
                             v-if="!isAuthenticated"
-                            class="div__login-cta--search-no-results"
+                            class="login-cta__div--search-no-results"
                             :access-url="accessUrl"
                             :is-authenticated="isAuthenticated"
                             test-id="loginSearchNoResults"
@@ -417,7 +417,7 @@ getDocsOnLoad();
                         <template #sign-in-cta>
                             <SignInCTA
                                 v-if="!isAuthenticated"
-                                class="div__login-cta--search-results"
+                                class="login-cta__div--search-results"
                                 :access-url="accessUrl"
                                 :is-authenticated="isAuthenticated"
                                 test-id="loginSearchResults"
