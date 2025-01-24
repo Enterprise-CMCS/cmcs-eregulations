@@ -108,6 +108,9 @@ describe("Find by Subjects", () => {
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/subjects/");
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
 
         cy.eregsLogin({
             username,
@@ -129,6 +132,9 @@ describe("Find by Subjects", () => {
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/subjects/?subjects=77");
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
 
         cy.eregsLogin({
             username,

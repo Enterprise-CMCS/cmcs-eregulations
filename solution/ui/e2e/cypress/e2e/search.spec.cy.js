@@ -145,6 +145,9 @@ describe("Search flow", () => {
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", `${encodeURI(SEARCH_TERM)}`);
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
 
         cy.eregsLogin({
             username,
@@ -178,6 +181,9 @@ describe("Search flow", () => {
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", `${encodeURI(NO_RESULTS_SEARCH_TERM)}`);
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
 
         cy.eregsLogin({
             username,
