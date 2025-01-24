@@ -49,7 +49,9 @@ const $route = useRoute();
                 </template>
             </SignInCTA>
         </section>
-        <a :href="aboutUrl">Learn more about documents on eRegs.</a>
+        <a class="about__anchor" :href="aboutUrl"
+            >Learn more about documents on eRegs.</a
+        >
     </div>
 </template>
 

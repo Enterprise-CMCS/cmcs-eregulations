@@ -596,7 +596,7 @@ describe("Find by Subjects", () => {
     it("should have a link to the About page in the Landing message", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects");
-        cy.get(".subj-landing__container a")
+        cy.get(".subj-landing__container a.about__anchor")
             .should("have.text", "Learn more about documents on eRegs.")
             .and("have.attr", "href")
             .and("include", "/about");
