@@ -5,15 +5,21 @@
 
 version: 2
 updates:
-    # Enable version updates for npm
+    # Enable version updates for npm dependencies in root of front end project
     - package-ecosystem: "npm"
-      # Look for `package.json` and `lock` files in the `root` directory
-      directory: "/"
+      # Look for `package.json` and `lock` files
+      directories:
+        - "/solution/ui/e2e" # Cypress tests
+        - "/solution/ui/regulations" # Vitest, bundling
+        - "/solution/ui/regulations/eregs-component-lib" # Django template components
+        - "/solution/ui/regulations/eregs-vite" # Single Page App dependencies
       # Check the npm registry for updates every day (weekdays)
       schedule:
           interval: "daily"
       # Limit the number of open pull requests to 1
       open-pull-requests-limit: 2
+      # Increase the minimum version for all npm dependencies
+      versioning-strategy: "increase"
       groups:
           vite:
             patterns:
