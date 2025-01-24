@@ -94,33 +94,33 @@
 #     )
 
 #     return handler(event, context)
+"""
+WSGI config for cmcs_regulations project.
+
+It exposes the WSGI callable as a module-level variable named ``application``.
+
+For more information on this file, see:
+https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
+"""
+
 import os
-import json
-from django.core.asgi import get_asgi_application
+from django.core.wsgi import get_wsgi_application
 from mangum import Mangum
 
+# 1) Point to Django settings if not already set
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
 
-django_asgi_app = get_asgi_application()
+# 2) Read the stage name from the environment (passed by CDK, etc.)
+stage_env = os.environ.get("STAGE_ENV", "")  # e.g. "dev", "eph-1522", "prod"
 
-def lambda_handler(event, context):
-    # For debugging (optional):
-    print("=== EVENT ===")
-    print(json.dumps(event))
+# 3) If we have a stage, build the path ("/dev", "/eph-1522", etc.)
+base_path = f"/{stage_env}" if stage_env else ""
 
-    # Read the stage from the Lambda environment
-    # which is set in CDK to something like "dev", "eph-1522", etc.
-    stage_env = os.environ.get("STAGE_ENV", "")
+# 4) Tell Django to include the base path in absolute URLs or redirects
+os.environ["FORCE_SCRIPT_NAME"] = base_path
 
-    # Build the base path. If stage_env == 'dev', base_path = '/dev'
-    base_path = f"/{stage_env}" if stage_env else ""
+# 5) Load the standard Django WSGI application
+application = get_wsgi_application()
 
-    # Create Mangum handler, stripping that base path from the URL
-    # so Django won't see '/dev' or '/eph-1522'
-    handler = Mangum(
-        django_asgi_app,
-        lifespan="off",
-        api_gateway_base_path=base_path
-    )
-
-    return handler(event, context)
+# 6) Wrap the Django WSGI app with Mangum, stripping the same base path on inbound requests
+lambda_handler = Mangum(application, lifespan="off", api_gateway_base_path=base_path)
