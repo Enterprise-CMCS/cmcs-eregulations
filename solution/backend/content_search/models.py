@@ -66,7 +66,7 @@ class ContentIndexQuerySet(models.QuerySet):
             RawSQL("vector_column", [], output_field=SearchVectorField()),
             self._get_search_query_object(search_query), cover_density=cover_density))\
             .filter(rank__gt=rank_filter)\
-            .order_by('-rank')
+            .order_by('-rank', '-id')
 
     def generate_headlines(self, search_query):
         query_object = self._get_search_query_object(search_query)
