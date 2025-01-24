@@ -426,7 +426,7 @@ describe("Search flow", () => {
         cy.get("span[data-testid=loginSearchNoResults] a")
             .should("have.attr", "href")
             .and("include", "/login/?next=")
-            .and("include", `${NO_RESULTS_SEARCH_TERM}`);
+            .and("include", `${encodeURI(NO_RESULTS_SEARCH_TERM)}`);
 
         cy.get(".no-results__span").should(
             "have.text",
