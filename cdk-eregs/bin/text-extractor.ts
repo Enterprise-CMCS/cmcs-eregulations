@@ -2,16 +2,11 @@
 import * as cdk from 'aws-cdk-lib';
 import { getParameterValue } from '../utils/parameter-store';
 import { validateEnvironmentContext } from '../config/environment-config';
-import { RedirectApiStack } from '../lib/stacks/redirect-stack';
 import { StageConfig } from '../config/stage-config';
 import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
-import { S3ImportStack } from '../lib/stacks/s3-import';
-
-
+import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -25,7 +20,19 @@ async function main() {
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });
-
+    const [
+     
+      logLevel, 
+      httpUser, 
+      httpPassword,
+      eregsApiUrl
+    ] = await Promise.all([
+     
+      getParameterValue('/eregulations/text_extractor/log_level'),
+      getParameterValue('/eregulations/http/user'),
+      getParameterValue('/eregulations/http/password'),
+      getParameterValue('/eregulations/custom_url'),
+    ]);
     const environment = app.node.tryGetContext('environment') || 
       process.env.DEPLOY_ENV || 
       process.env.GITHUB_JOB_ENVIRONMENT || 
@@ -67,58 +74,20 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
       cdk.Tags.of(app).add(key, value);
     });
-     
- 
-    // Create ZIP-based Lambda stacks
-    new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
+
+    new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+      env,
       lambdaConfig: {
-        runtime: lambda.Runtime.PYTHON_3_12,
         memorySize: 1024,
-        timeout: 30,
+        timeout: 900,
+        reservedConcurrentExecutions: 10,
       },
-      apiConfig: {
-        loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-      },
+      environmentConfig: {
+        logLevel,
+        httpUser,
+        httpPassword,
+      }
     }, stageConfig);
-
-    new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
-      lambdaConfig: {
-        runtime: lambda.Runtime.PYTHON_3_12,
-        memorySize: 1024,
-        timeout: 30,
-      },
-      apiConfig: {
-        loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-      },
-    }, stageConfig);
-   
-
-    
-
-// Call create() to initialize the stack's resources
-
-    // Debug output for configuration
-    console.log('Configuration Debug:', {
-      environment: context.environment,
-      ephemeralId,
-      prNumber,
-      isEphemeral: stageConfig.isEphemeral(),
-      resourceExample: stageConfig.getResourceName('site-assets')
-    });
-    console.log('Configuration Debug:', {
-      determinedEnvironment: context.environment,
-      prNumber,
-      ephemeralId,
-      deployEnv: process.env.DEPLOY_ENV,
-      githubJobEnv: process.env.GITHUB_JOB_ENVIRONMENT
-    });
-    new S3ImportStack(app, 'S3ImportStack', {
-      bucketName: process.env.BUCKET_NAME || '',
-      env: {
-        account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION,
-      },
-    });
 
     await applyGlobalAspects(app, stageConfig);
 
