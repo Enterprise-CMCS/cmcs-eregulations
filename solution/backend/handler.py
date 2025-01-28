@@ -96,7 +96,12 @@ def lambda_handler(event, context):
         api_gateway_base_path=base_path
     )
 
-    return handler(event, context)
+    response = handler(event, context)
+
+    print("=== RESPONSE ===")
+    print(json.dumps(response))
+
+    return response
 # """
 # WSGI config for cmcs_regulations project.
 
