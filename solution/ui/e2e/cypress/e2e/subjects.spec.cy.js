@@ -95,6 +95,56 @@ describe("Find by Subjects", () => {
             .and("not.include", "q=test");
     });
 
+    it("shows the sign in Call to Action on landing page when not logged in and no subjects are selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects", { timeout: 60000 });
+        cy.get(
+            ".subject__filters--row .login-cta__div--subjects-results",
+        ).should("not.exist");
+        cy.get(".subj-landing__container .login-cta__div").contains(
+            "To see internal documents, sign in or learn how to get account access.",
+        );
+        cy.get("span[data-testid=loginSubjectsLanding] a")
+            .should("have.attr", "href")
+            .and("include", "/login/?next=")
+            .and("include", "/subjects/");
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+        cy.visit("/subjects");
+        cy.get(".subj-landing__container .login-cta__div").should("not.exist");
+    });
+
+    it("shows the sign in Call to Action when not logged in and a subject is selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/subjects?subjects=77");
+        cy.get(".subj-landing__container .login-cta__div").should("not.exist");
+        cy.get(".subject__filters--row .login-cta__div--subjects-results").contains(
+            "To see internal documents, sign in or learn how to get account access.",
+        );
+        cy.get("span[data-testid=loginSubjectsResults] a")
+            .should("have.attr", "href")
+            .and("include", "/login/?next=")
+            .and("include", "/subjects/?subjects=77");
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
+
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+        cy.visit("/subjects?subjects=77");
+        cy.get(".subject__filters--row .login-cta__div--subjects-results").should("not.exist");
+    });
+
     it("should show only public items when logged out", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects/");
@@ -546,7 +596,7 @@ describe("Find by Subjects", () => {
     it("should have a link to the About page in the Landing message", () => {
         cy.viewport("macbook-15");
         cy.visit("/subjects");
-        cy.get(".subj-landing__container a")
+        cy.get(".subj-landing__container a.about__anchor")
             .should("have.text", "Learn more about documents on eRegs.")
             .and("have.attr", "href")
             .and("include", "/about");
