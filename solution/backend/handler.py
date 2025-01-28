@@ -59,12 +59,15 @@ import json
 from django.core.asgi import get_asgi_application
 from mangum import Mangum
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
-    # Force Django to use that path for reversed URLs
-os.environ["FORCE_SCRIPT_NAME"] = "/eph-1522"
-django_asgi_app = get_asgi_application()
 
 def lambda_handler(event, context):
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
+        # Force Django to use that path for reversed URLs
+    if "amazonaws.com" in event.get("headers", {}).get("Host", ""):
+        os.environ["FORCE_SCRIPT_NAME"] = "/eph-1522"
+    django_asgi_app = get_asgi_application()
+
+
     # For debugging
     print("=== EVENT ===")
     print(json.dumps(event))
