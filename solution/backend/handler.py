@@ -60,7 +60,8 @@ from django.core.asgi import get_asgi_application
 from mangum import Mangum
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings")
-
+    # Force Django to use that path for reversed URLs
+os.environ["FORCE_SCRIPT_NAME"] = "/eph-1522"
 django_asgi_app = get_asgi_application()
 
 def lambda_handler(event, context):
@@ -81,8 +82,7 @@ def lambda_handler(event, context):
     else:
         base_path = ""
 
-    # Force Django to use that path for reversed URLs
-    os.environ["FORCE_SCRIPT_NAME"] = base_path
+
     print(f"Setting FORCE_SCRIPT_NAME to: {base_path}")
 
     # By passing api_gateway_base_path=base_path,
