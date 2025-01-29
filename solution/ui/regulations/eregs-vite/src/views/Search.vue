@@ -350,7 +350,7 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
-                <template v-if="!searchQuery"></template>
+                <template v-if="!searchQuery" />
                 <template
                     v-else-if="
                         policyDocList.loading || partsLastUpdated.loading
@@ -369,14 +369,10 @@ getDocsOnLoad();
                 </template>
                 <template v-else-if="policyDocList.results.length == 0">
                     <div class="doc__list">
-                        <span class="no-results__span"
-                            >Your search for
+                        <span class="no-results__span">Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
                             results
-                            <span v-if="hasActiveFilters"
-                                >with the selected filters</span
-                            ><span v-else>on eRegulations</span>.</span
-                        >
+                            <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"

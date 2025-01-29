@@ -397,7 +397,9 @@ getDocSubjects();
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
-                    <button class="sidebar-toggle__button">Open/Close</button>
+                    <button class="sidebar-toggle__button">
+                        Open/Close
+                    </button>
                     <PolicySidebar>
                         <template #title>
                             <h2>Research a Subject</h2>
@@ -419,7 +421,7 @@ getDocSubjects();
                     <SubjectLanding
                         v-if="
                             allDocTypesOnly($route.query) ||
-                            _isEmpty($route.query)
+                                _isEmpty($route.query)
                         "
                         :policy-doc-subjects="policyDocSubjects"
                     />
@@ -444,7 +446,7 @@ getDocSubjects();
                                     :error="slotProps.error"
                                     :loading="
                                         slotProps.loading ||
-                                        policyDocList.loading
+                                            policyDocList.loading
                                     "
                                 />
                             </FetchItemsContainer>
@@ -463,7 +465,7 @@ getDocSubjects();
                         <template
                             v-if="
                                 policyDocList.loading ||
-                                partsLastUpdated.loading
+                                    partsLastUpdated.loading
                             "
                         >
                             <span class="loading__span">Loading...</span>
