@@ -1,6 +1,5 @@
 // eslint.config.js
 import pluginVue from "eslint-plugin-vue";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
 
 export default [
     ...pluginVue.configs["flat/recommended"],
@@ -28,7 +27,17 @@ export default [
             "vue/multi-word-component-names": "off",
             "vue/no-multiple-template-root": "off",
             "vue/no-v-html": "off",
+            "vue/html-indent": [
+                "error",
+                4,
+                {
+                    attribute: 1,
+                    baseIndent: 1,
+                    closeBracket: 0,
+                    alignAttributesVertically: false,
+                    ignores: [],
+                },
+            ],
         },
     },
-    eslintPluginPrettierRecommended,
 ];
