@@ -311,7 +311,7 @@ jobs:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [deploy-django, deploy-static-asset-cdk]
+    needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
