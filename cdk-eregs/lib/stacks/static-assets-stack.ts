@@ -11,6 +11,7 @@ import { StageConfig } from '../../config/stage-config';
 export interface StaticAssetsStackProps extends cdk.StackProps {
   certificateArn?: string;
   prNumber?: string;
+  deploymentType: 'infrastructure' | 'content'; 
 }
 
 export class StaticAssetsStack extends cdk.Stack {
@@ -132,6 +133,10 @@ export class StaticAssetsStack extends cdk.Stack {
   }
 
   private deployStaticAssets(): void {
+    if (this.node.tryGetContext('deploymentType') === 'infrastructure') {
+      // Infrastructure only - no file deployment or invalidation
+      return;
+    }
     new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
       sources: [
         s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),

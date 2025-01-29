@@ -110,6 +110,7 @@ jobs:
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
           cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=infrastructure \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
@@ -255,6 +256,7 @@ jobs:
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
           cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=content \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
