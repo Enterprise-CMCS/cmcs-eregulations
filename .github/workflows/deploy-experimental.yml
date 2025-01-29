@@ -307,7 +307,7 @@ jobs:
   #         --app "npx ts-node bin/static-assets.ts" \
   #         --outputs-file static-outputs.json
   #         popd
-  build-and-deploy-vue:
+  build-and-deploy-vue-cdk:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
