@@ -382,6 +382,9 @@ jobs:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra   
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
           cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
