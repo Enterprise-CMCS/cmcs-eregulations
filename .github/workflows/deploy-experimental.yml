@@ -75,12 +75,11 @@ jobs:
           serverless deploy --stage dev${PR}
           popd
   deploy-static-asset-cdk:
-    if: github.event.action != 'closed'
-    runs-on: ubuntu-22.04
     environment:
       name: "dev"
-    env:
-      ENVIRONMENT_NAME: "dev"
+    runs-on: ubuntu-22.04
+    outputs:
+      static_url: ${{ steps.get-static-url.outputs.static_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -92,51 +91,23 @@ jobs:
         id: findPr
         with:
           state: open
-      
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - uses: actions/setup-python@v5
-        if: success() && steps.findPr.outputs.number
-        with:
-          python-version: "3.12"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
-
-      - name: Build static assets
-        if: success() && steps.findPr.outputs.number
-        env:
-          STATIC_URL: http://localhost:8888/
-          STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
-        run: |
-          pushd solution/backend
-          python manage.py collectstatic --noinput
-          cd ..
-          popd
-
-      - name: Deploy Static-Asset
+      - name: Deploy Static-Asset Infrastructure
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
         run: |
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install fs-extra
           npm install --save-dev @types/fs-extra       
-          
-          # Get exact stack names        
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
-
           cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
@@ -261,12 +232,86 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
-  build-and-bundle-frontend:
-    needs: [deploy-site-lambda-cdk]
-    if: github.event.action != 'closed'
+  # build-and-bundle-frontend:
+  #   needs: [deploy-site-lambda-cdk]
+  #   if: github.event.action != 'closed'
+  #   environment:
+  #     name: "dev"
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
+
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         state: open
+
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18.14
+
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.12"
+
+  #     - name: Install Python dependencies
+  #       run: |
+  #         python -m pip install --upgrade pip
+  #         pip install -r ./solution/backend/requirements.txt
+
+  #     - name: Create Vue env file
+  #       run: |
+  #         echo "VITE_API_URL=${{ needs.deploy-site-lambda-cdk.outputs.api_url }}" > solution/ui/regulations/eregs-vite/.env
+  #         cat solution/ui/regulations/eregs-vite/.env
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1
+  #     - name: Build static assets
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #         STATIC_URL: http://localhost:8888/
+  #         STATIC_ROOT: ../static-assets/regulations
+  #         VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+  #       run: |
+  #         pushd solution
+  #         make regulations
+  #         popd
+
+  #     - name: Deploy Static-Asset
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #         PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #         CDK_DEBUG: true
+  #       run: |
+  #         pushd cdk-eregs
+  #         npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #         npm install fs-extra
+  #         npm install --save-dev @types/fs-extra       
+  #         # Get exact stack names        
+  #         STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+
+  #         cdk deploy ${STATICASSET_STACK}  \
+  #         -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #         --require-approval never \
+  #         --exclusively \
+  #         --app "npx ts-node bin/static-assets.ts" \
+  #         --outputs-file static-outputs.json
+  #         popd
+  build-and-deploy-vue:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
+    needs: [deploy-django, deploy-static-asset-cdk]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -284,29 +329,40 @@ jobs:
         with:
           node-version: 18.14
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
+        if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
           pip install -r ./solution/backend/requirements.txt
 
-      - name: Create Vue env file
-        run: |
-          echo "VITE_API_URL=${{ needs.deploy-site-lambda-cdk.outputs.api_url }}" > solution/ui/regulations/eregs-vite/.env
-          cat solution/ui/regulations/eregs-vite/.env
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
         with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      - name: Build static assets
+          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Run collectstatic
         if: success() && steps.findPr.outputs.number
         env:
-          STATIC_URL: http://localhost:8888/
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
+
+      - name: Build Vite assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: dev${{ steps.findPr.outputs.pr }}
         run: |
@@ -314,29 +370,26 @@ jobs:
           make regulations
           popd
 
-      - name: Deploy Static-Asset
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static Assets
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
-          npm install fs-extra
-          npm install --save-dev @types/fs-extra       
-          # Get exact stack names        
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
-
-          cdk deploy ${STATICASSET_STACK}  \
+          cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
           --outputs-file static-outputs.json
-          popd
-      
+          popd    
   deploy-text-extractor-cdk:
     needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
     if: github.event.action != 'closed'
