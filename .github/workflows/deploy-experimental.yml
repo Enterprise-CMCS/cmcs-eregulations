@@ -99,29 +99,27 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
+      - uses: actions/setup-python@v5
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: "3.12"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
-          pip install -r ./solution/backend/requirements.txt
 
       - name: Build static assets
         if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: http://localhost:8888/
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
         run: |
-          cd solution/backend
-          
-          
-          echo "Building static assets with configuration:"
-          echo "STATIC_ROOT: ../static-assets/regulations"
-          echo "VITE_ENV: dev${{ steps.findPr.outputs.pr }}"
-          
-          python manage.py collectstatic --noinput \
-            --settings=config.settings \
-            STATIC_URL="http://localhost:8888/" \
-            STATIC_ROOT="../static-assets/regulations"
-          
-          echo "Generated static files:"
-          ls -la ../static-assets/regulations
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
 
       - name: Deploy Static-Asset
         if: success() && steps.findPr.outputs.number
