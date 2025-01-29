@@ -98,11 +98,31 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
+
       - name: Install dependencies
         run: |
-            python -m pip install --upgrade pip
-            pip install -r ./solution/static-assets/requirements.txt
-        # build the static assets for the website
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Build static assets
+        if: success() && steps.findPr.outputs.number
+        run: |
+          cd solution/backend
+          
+          
+          echo "Building static assets with configuration:"
+          echo "STATIC_ROOT: ../static-assets/regulations"
+          echo "VITE_ENV: dev${{ steps.findPr.outputs.pr }}"
+          
+          python manage.py collectstatic --noinput \
+            --settings=config.settings \
+            STATIC_URL="http://localhost:8888/" \
+            STATIC_ROOT="../static-assets/regulations"
+          
+          echo "Generated static files:"
+          ls -la ../static-assets/regulations
+
       - name: Deploy Static-Asset
         if: success() && steps.findPr.outputs.number
         env:
@@ -115,16 +135,18 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install fs-extra
           npm install --save-dev @types/fs-extra       
+          
           # Get exact stack names        
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
 
-          cdk deploy ${STATICASSET_STACK}  \
+          cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
           --outputs-file static-outputs.json
           popd
+
       - name: Get Static URL
         id: get-static-url
         run: |
@@ -133,7 +155,66 @@ jobs:
           STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
           echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
           popd
+  # deploy-static-asset-cdk:
+  #   if: github.event.action != 'closed'
+  #   runs-on: ubuntu-22.04
+  #   environment:
+  #     name: "dev"
+  #   env:
+  #     ENVIRONMENT_NAME: "dev"
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         submodules: true
 
+  #     - name: Find PR number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
+  #       with:
+  #         state: open
+      
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+  #         aws-region: us-east-1
+  #     - name: Install dependencies
+  #       run: |
+  #           python -m pip install --upgrade pip
+  #           pip install -r ./solution/static-assets/requirements.txt
+  #       # build the static assets for the website
+  #     - name: Deploy Static-Asset
+  #       if: success() && steps.findPr.outputs.number
+  #       env:
+  #         PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+  #         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  #         CDK_DEBUG: true
+  #       run: |
+  #         pushd cdk-eregs
+  #         npm install -g aws-cdk@latest @aws-sdk/client-ssm
+  #         npm install fs-extra
+  #         npm install --save-dev @types/fs-extra       
+  #         # Get exact stack names        
+  #         STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+
+  #         cdk deploy ${STATICASSET_STACK}  \
+  #         -c environment=${{ env.ENVIRONMENT_NAME }} \
+  #         --require-approval never \
+  #         --exclusively \
+  #         --app "npx ts-node bin/static-assets.ts" \
+  #         --outputs-file static-outputs.json
+  #         popd
+  #     - name: Get Static URL
+  #       id: get-static-url
+  #       run: |
+  #         pushd cdk-eregs
+  #         STATIC_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-static-assets"
+  #         STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+  #         echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+  #         popd
+  
   deploy-zip-lambdas-cdk:
     needs: deploy-static-asset-cdk
     if: github.event.action != 'closed'
