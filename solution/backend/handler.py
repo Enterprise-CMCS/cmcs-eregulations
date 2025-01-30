@@ -1,21 +1,26 @@
 #!/usr/bin/env python
 
+"""
+This module converts an AWS API Gateway proxied request to a WSGI request.
+
+This is a simplified version of Logan Raarup's implementation from here:
+https://github.com/logandk/serverless-wsgi/blob/master/serverless_wsgi.py
+
+The main difference is that this version has all non-Django functionality stripped out to make it easier to maintain.
+"""
+
 import base64
 import io
-import json
 import os
 import sys
-from urllib.parse import urlencode, unquote, unquote_plus
-
-from werkzeug.datastructures import Headers, iter_multi_items
-from werkzeug.http import HTTP_STATUS_CODES
-from werkzeug.wrappers import Response
+from urllib.parse import unquote, urlencode
 
 from django.core.wsgi import get_wsgi_application
+from werkzeug.datastructures import Headers
+from werkzeug.wrappers import Response
 
-
-# List of MIME types that should not be base64 encoded. MIME types within `text/*`
-# are included by default.
+# List of MIME types that should not be base64 encoded.
+# MIME types within `text/*` are included by default.
 TEXT_MIME_TYPES = [
     "application/json",
     "application/javascript",
@@ -25,6 +30,8 @@ TEXT_MIME_TYPES = [
 ]
 
 
+# Determine if a "stage name" path should be prepended to all requests.
+# This is necessary for API Gateway requests that are not on a custom domain.
 def get_script_name(headers, request_context):
     stage = os.environ.get("STAGE_ENV") or request_context.get("stage")
     if stage and "amazonaws.com" in headers.get("Host", ""):
@@ -32,6 +39,7 @@ def get_script_name(headers, request_context):
     return ""
 
 
+# Get the body of the request, base64 decoded if necessary.
 def get_body_bytes(event, body):
     if event.get("isBase64Encoded", False):
         return base64.b64decode(body)
@@ -40,6 +48,7 @@ def get_body_bytes(event, body):
     return body
 
 
+# Set up the WSGI environment dictionary.
 def setup_environment(headers, environment):
     for key, value in environment.items():
         if isinstance(value, str):
@@ -51,6 +60,7 @@ def setup_environment(headers, environment):
     return environment
 
 
+# Generate all possible case permutations of a string.
 def all_casings(input_string):
     if not input_string:
         yield ""
@@ -65,6 +75,8 @@ def all_casings(input_string):
                 yield first.upper() + sub_casing
 
 
+# If there are multiple occurances of the same header, create case-mutated variations
+# to pass them through to API Gateway.
 def split_headers(headers):
     new_headers = {}
     for key in headers.keys():
@@ -77,6 +89,7 @@ def split_headers(headers):
     return new_headers
 
 
+# If there are multiple occurances of the same header, group them together.
 def group_headers(headers):
     new_headers = {}
     for key in headers.keys():
@@ -84,6 +97,7 @@ def group_headers(headers):
     return new_headers
 
 
+# Generate the Lambda response dictionary from the WSGI response.
 def generate_response(response, event):
     returndict = {"statusCode": response.status_code}
 
@@ -91,7 +105,7 @@ def generate_response(response, event):
         returndict["multiValueHeaders"] = group_headers(response.headers)
     else:
         returndict["headers"] = split_headers(response.headers)
-    
+
     if response.data:
         mimetype = response.mimetype or "text/plain"
         if all([
@@ -103,25 +117,28 @@ def generate_response(response, event):
         else:
             returndict["body"] = base64.b64encode(response.data).decode("utf-8")
             returndict["isBase64Encoded"] = True
-    
+
     return returndict
 
 
+# Encode the query string parameters.
 def encode_query_string(event):
     params = event.get("multiValueQueryStringParameters") or event.get("queryStringParameters") or event.get("query") or ""
     return urlencode(params, doseq=True)
 
 
 def handler(event, context):
+    # Retrieve headers either from multiValueHeaders or headers, depending on the request format.
     if "multiValueHeaders" in event and event["multiValueHeaders"]:
         headers = Headers(event["multiValueHeaders"])
     else:
         headers = Headers(event["headers"])
-    
+
     script_name = get_script_name(headers, event.get("requestContext", {}))
     path_info = event["path"]
     body = get_body_bytes(event, event.get("body") or "")
 
+    # Set up the initial WSGI environment.
     environment = setup_environment(headers, {
         "CONTENT_LENGTH": str(len(body)),
         "CONTENT_TYPE": headers.get("Content-Type", ""),
@@ -146,8 +163,10 @@ def handler(event, context):
         "serverless.context": context,
     })
 
+    # Load Django as a WSGI application.
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     django_app = get_wsgi_application()
 
+    # Forward the request to Django and generate a response.
     response = Response.from_app(django_app, environment)
     return generate_response(response, event)
