@@ -51,7 +51,7 @@ const removeClick = () => {
                     :data-type="selectedSubject.type"
                     @click="removeClick"
                 >
-                    <i class="mdi mdi-close"></i>
+                    <i class="mdi mdi-close" />
                 </button>
             </li>
         </ul>

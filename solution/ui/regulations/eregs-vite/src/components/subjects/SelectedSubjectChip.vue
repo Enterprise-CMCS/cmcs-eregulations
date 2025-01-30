@@ -54,16 +54,16 @@ const buttonTextClasses = computed(() => getButtonTextClasses(parent));
     <span
         v-sanitize-html="
             (subject.displayName || getSubjectName(subject)) +
-            getDisplayCount(subject)
+                getDisplayCount(subject)
         "
         class="subjects-li__button-text"
         :class="buttonTextClasses"
-    ></span>
+    />
     <span
         v-if="
             parent === 'subjects' &&
-            !subject.displayName &&
-            getSubjectNameParts(subject)[0][1]
+                !subject.displayName &&
+                getSubjectNameParts(subject)[0][1]
         "
         class="subjects-li__button-subtitle"
     >

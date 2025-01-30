@@ -309,7 +309,7 @@ const liDownArrowPress = (event) => {
                             type="text"
                             @keydown.up.prevent="inputUpArrowPress"
                             @keydown.down.prevent="inputDownArrowPress"
-                        />
+                        >
                         <button
                             aria-label="Clear subject list filter"
                             data-testid="clear-subject-filter"
@@ -318,7 +318,7 @@ const liDownArrowPress = (event) => {
                             class="mdi mdi-close"
                             @keydown.enter="filterResetClick"
                             @click="filterResetClick"
-                        ></button>
+                        />
                     </form>
                     <slot
                         name="selection"
@@ -329,7 +329,7 @@ const liDownArrowPress = (event) => {
                                     subject.id.toString()
                             )
                         "
-                    ></slot>
+                    />
                 </div>
                 <ul tabindex="-1" class="subjects__list">
                     <li
