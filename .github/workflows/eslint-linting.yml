@@ -23,9 +23,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      # Execute the JavaScript tests
-      - name: Run ESLint
+      # Execute linting
+      - name: Run ESLint on front end
         if: success()
-        working-directory: ./solution
+        working-directory: .solution
         run: |
           make eslint
+      - name: Run ESLint on CDK TS files
+        if: success()
+        working-directory: .
+        run: |
+          cd cdk-eregs
+          npm install
+          npm run eslint
