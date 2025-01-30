@@ -5,7 +5,7 @@
     "cdk-eregs": "bin/cdk-eregs.js"
   },
   "scripts": {
-    "eslint": "eslint --debug",
+    "eslint": "eslint",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
