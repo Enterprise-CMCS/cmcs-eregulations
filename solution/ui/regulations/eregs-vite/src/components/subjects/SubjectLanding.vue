@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
@@ -49,9 +49,10 @@ const $route = useRoute();
                 </template>
             </SignInCTA>
         </section>
-        <a class="about__anchor" :href="aboutUrl"
-            >Learn more about documents on eRegs.</a
-        >
+        <a
+            class="about__anchor"
+            :href="aboutUrl"
+        >Learn more about documents on eRegs.</a>
     </div>
 </template>
 
