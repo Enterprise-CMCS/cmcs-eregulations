@@ -13,7 +13,7 @@ import base64
 import io
 import os
 import sys
-from urllib.parse import unquote, urlencode
+from urllib.parse import unquote, urlencode, urlparse
 
 from django.core.wsgi import get_wsgi_application
 from werkzeug.datastructures import Headers
@@ -30,11 +30,17 @@ TEXT_MIME_TYPES = [
 ]
 
 
+# Load Django as a WSGI application.
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
+django_app = get_wsgi_application()
+
+
 # Determine if a "stage name" path should be prepended to all requests.
 # This is necessary for API Gateway requests that are not on a custom domain.
 def get_script_name(headers, request_context):
     stage = os.environ.get("STAGE_ENV") or request_context.get("stage")
-    if stage and "amazonaws.com" in headers.get("Host", ""):
+    host = urlparse(f"//{headers.get("Host", "")}", scheme="https").hostname or ""
+    if stage and host.endswith(".amazonaws.com"):
         return f"/{stage}"
     return ""
 
@@ -162,10 +168,6 @@ def handler(event, context):
         "serverless.event": event,
         "serverless.context": context,
     })
-
-    # Load Django as a WSGI application.
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
-    django_app = get_wsgi_application()
 
     # Forward the request to Django and generate a response.
     response = Response.from_app(django_app, environment)
