@@ -10,7 +10,6 @@ export default [
     {
         rules: {
             ...globalConfig,
-            "vue/html-indent": ["error", 4],
             "vue/order-in-components": "off",
             "vue/max-attributes-per-line": [
                 "error",
