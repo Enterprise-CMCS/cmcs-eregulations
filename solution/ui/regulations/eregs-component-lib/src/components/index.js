@@ -43,6 +43,7 @@ export { default as AccessLink } from "../../../eregs-vite/src/components/Access
 export { default as HeaderComponent } from "../../../eregs-vite/src/components/header/HeaderComponent.vue";
 export { default as HeaderLinks } from "../../../eregs-vite/src/components/header/HeaderLinks.vue";
 export { default as HeaderSearch } from "../../../eregs-vite/src/components/header/HeaderSearch.vue";
+export { default as SignInCta } from "../../../eregs-vite/src/components/SignInCTA.vue";
 export { default as SignInLink } from "../../../eregs-vite/src/components/SignInLink.vue";
 export { default as JumpTo } from "../../../eregs-vite/src/components/JumpTo.vue";
 export { default as HeaderUserWidget } from "../../../eregs-vite/src/components/header/HeaderUserWidget.vue";

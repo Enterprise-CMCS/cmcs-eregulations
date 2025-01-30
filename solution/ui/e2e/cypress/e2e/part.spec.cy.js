@@ -16,7 +16,7 @@ describe("Part View", () => {
 
         cy.injectAxe();
         cy.contains("Part 433 - State Fiscal Administration").should(
-            "be.visible"
+            "be.visible",
         );
         cy.get("#jumpToTitle").invoke("val").should("equal", "42");
         cy.get("#jumpToPart").invoke("val").should("equal", "433");
@@ -30,7 +30,7 @@ describe("Part View", () => {
 
         cy.url().should(
             "include",
-            Cypress.config().baseUrl + "/42/433/Subpart-B"
+            Cypress.config().baseUrl + "/42/433/Subpart-B",
         );
         cy.checkLinkRel();
         cy.get("h2.section-title")
@@ -62,7 +62,7 @@ describe("Part View", () => {
             cy.get($el).should(
                 "have.css",
                 "background-color",
-                "rgb(238, 250, 254)"
+                "rgb(238, 250, 254)",
             );
         });
     });
@@ -71,19 +71,22 @@ describe("Part View", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/51");
 
-        cy.get(".div__login-sidebar").contains(
-            "CMCS staff participating in the Policy Repository pilot can sign in to see internal resources."
+        cy.get(".login-cta__div--sidebar").contains(
+            "To see internal documents, sign in or learn how to get account access.",
         );
 
         cy.get("span[data-testid=loginSidebar] a")
             .should("have.attr", "href")
             .and("include", "/login/?next=")
             .and("include", "/42/433/Subpart-B/");
+        cy.get("a.access__anchor")
+            .should("have.attr", "href")
+            .and("include", "/get-account-access/");
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
         cy.intercept("**/v3/resources/public?&citations=42.431.A**").as(
-            "resources"
+            "resources",
         );
         cy.intercept("**/v3/resources/internal/categories**", {
             fixture: "categories-internal.json",
@@ -95,11 +98,11 @@ describe("Part View", () => {
         cy.eregsLogin({ username, password });
         cy.visit("/42/431/10");
 
-        cy.get(".div__login-sidebar").contains(
-            "Resources you can access include policy documents internal to CMCS."
+        cy.get(".login-cta__div--sidebar").contains(
+            "Resources you can access include policy documents internal to CMCS.",
         );
         cy.get("button[data-testid='user-account-button']").should(
-            "be.visible"
+            "be.visible",
         );
         cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
@@ -116,19 +119,19 @@ describe("Part View", () => {
             cy.wait(250);
             cy.get(".right-sidebar").scrollTo("bottom");
             cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
             )
                 .first()
                 .find(".supplemental-content-date")
                 .contains("June 6, 2024");
             cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
             )
                 .first()
                 .find(".supplemental-content-description")
                 .contains("[Mock] Internal PDF");
             cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content"
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
             )
                 .eq(1)
                 .find(".supplemental-content-description")
@@ -163,24 +166,24 @@ describe("Part View", () => {
 
         // Assert that subcategory is visible
         cy.get(
-            "button[data-test='State Medicaid Director Letter (SMDL)']"
+            "button[data-test='State Medicaid Director Letter (SMDL)']",
         ).should("be.visible");
 
         // Assert that supplemental content list is visible alongside subcategories
         cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list"
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list",
         ).should("exist");
 
         // Assert that supplemental content that is not in a subcategory is visible
         // and contains expected text
         cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
         )
             .should("exist")
             .scrollIntoView();
 
         cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description"
+            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
         )
             .and("be.visible")
             .and("contain.text", "Mock title");
@@ -228,7 +231,7 @@ describe("Part View", () => {
 
         cy.get(".latest-version").should("exist");
         cy.findByRole("button", { name: /View Past Versions/i }).should(
-            "not.exist"
+            "not.exist",
         );
     });
 
@@ -239,7 +242,7 @@ describe("Part View", () => {
         cy.url().should("include", "2020-12-31");
         cy.get(".latest-version").should("not.exist");
         cy.findByRole("button", { name: /View Past Versions/i }).should(
-            "not.exist"
+            "not.exist",
         );
 
         cy.get(".view-and-compare").should("be.visible");
@@ -273,16 +276,16 @@ describe("Part View", () => {
             force: true,
         });
         cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should(
-            "be.visible"
+            "be.visible",
         );
         cy.get(
-            "#433-8-title .copy-btn-container .tooltip.clicked .tooltip-title"
+            "#433-8-title .copy-btn-container .tooltip.clicked .tooltip-title",
         ).contains("42 CFR § 433.8");
         cy.get(
-            "#433-8-title .copy-btn-container .tooltip.clicked button.close-btn"
+            "#433-8-title .copy-btn-container .tooltip.clicked button.close-btn",
         ).click({ force: true });
         cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should(
-            "not.exist"
+            "not.exist",
         );
     });
 
@@ -297,23 +300,23 @@ describe("Part View", () => {
             force: true,
         });
         cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
-            "be.visible"
+            "be.visible",
         );
         cy.checkLinkRel();
         cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title"
+            "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title",
         ).contains("View § 433.8 Effective In");
         cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)"
+            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)",
         )
             .should("have.attr", "href")
             .and("include", "govinfo.gov")
             .and("include", "CFR-1997");
         cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked button.close-btn"
+            "#433-8 .reg-history-link-container .tooltip.clicked button.close-btn",
         ).click({ force: true });
         cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
-            "not.exist"
+            "not.exist",
         );
     });
 });
