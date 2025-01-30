@@ -5,13 +5,13 @@
             :status="copyStatus"
             action-type="link"
             @action-btn-click="handleActionClick"
-        ></ActionBtn>
+        />
         <ActionBtn
             :selected-action="selectedAction"
             :status="copyStatus"
             action-type="citation"
             @action-btn-click="handleActionClick"
-        ></ActionBtn>
+        />
     </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
                     await navigator.clipboard.writeText(this.getCopyText());
                     this.copyStatus = "success";
                 } catch (err) {
-                    console.log("Error copying to clipboard", err);
+                    console.info("Error copying to clipboard", err);
                     this.copyStatus = "idle";
                 }
             }

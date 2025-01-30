@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <slot name="toggler" v-bind:toggle="toggle">
-      <button
-        v-clickaway="away"
-        class="dropdown-button ds-c-field"
-        @click="toggle"
-      >
-        {{ selection }}
-      </button>
-    </slot>
-    <slot v-bind:active="active"/>
-  </div>
+    <div>
+        <slot name="toggler" :toggle="toggle">
+            <button
+                v-clickaway="away"
+                class="dropdown-button ds-c-field"
+                @click="toggle"
+            >
+                {{ selection }}
+            </button>
+        </slot>
+        <slot :active="active" />
+    </div>
 </template>
 
 <script>

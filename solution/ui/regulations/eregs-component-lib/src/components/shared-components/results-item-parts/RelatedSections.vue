@@ -46,9 +46,13 @@ const groupedLocations = _groupBy(filteredLocations, "title");
                     v-if="locations.length > 1"
                     :key="i + title"
                     class="section-sign"
-                    >§§
+                >§§
                 </span>
-                <span v-else :key="i + title + i" class="section-sign">§ </span>
+                <span
+                    v-else
+                    :key="i + title + i"
+                    class="section-sign"
+                >§ </span>
                 <template
                     v-for="(location, j) in locations"
                     :key="location.display_name + j"

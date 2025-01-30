@@ -6,13 +6,21 @@
         class="collapsible-title"
         @click="click"
     >
-        <slot v-if="visible && !keepContentsOnToggle" name="expanded"
-            >Hide</slot
+        <slot
+            v-if="visible && !keepContentsOnToggle"
+            name="expanded"
         >
-        <slot v-if="!visible && !keepContentsOnToggle" name="collapsed"
-            >Show</slot
+            Hide
+        </slot>
+        <slot
+            v-if="!visible && !keepContentsOnToggle"
+            name="collapsed"
         >
-        <slot v-if="keepContentsOnToggle" name="contents">Click here</slot>
+            Show
+        </slot>
+        <slot v-if="keepContentsOnToggle" name="contents">
+            Click here
+        </slot>
     </button>
 </template>
 

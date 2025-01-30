@@ -3,6 +3,9 @@ import pluginVue from "eslint-plugin-vue";
 import globalConfig from "../../eslint-global-rules.mjs";
 
 export default [
+    {
+        ignores: ["**/dist/"],
+    },
     ...pluginVue.configs["flat/recommended"],
     {
         rules: {

@@ -53,7 +53,9 @@ export default {
             <v-tab class="content-tabs" tabindex="0">
                 Recent Subregulatory Guidance
             </v-tab>
-            <v-tab class="content-tabs" tabindex="0"> Recent Rules </v-tab>
+            <v-tab class="content-tabs" tabindex="0">
+                Recent Rules
+            </v-tab>
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item>
@@ -63,7 +65,7 @@ export default {
                     :categories="categories"
                     type="supplemental"
                     class="recent-supplemental-content"
-                ></RecentChangesContainer>
+                />
             </v-window-item>
             <v-window-item>
                 <p class="recent-rules-descriptive-text">
@@ -72,7 +74,7 @@ export default {
                 <RecentChangesContainer
                     :api-url="apiUrl"
                     type="rules"
-                ></RecentChangesContainer>
+                />
             </v-window-item>
         </v-window>
     </div>

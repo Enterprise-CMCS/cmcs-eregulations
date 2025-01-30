@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 export { default as CollapseButton } from "./CollapseButton.vue";
 export { default as Collapsible } from "./Collapsible.vue";
 export { default as Dropdown } from "./Dropdown.vue";

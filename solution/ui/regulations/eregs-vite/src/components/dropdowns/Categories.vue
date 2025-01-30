@@ -49,7 +49,7 @@ const parent = inject("parent");
 const $route = useRoute();
 const $router = useRouter();
 
-const selectedId = defineModel("id");
+const selectedId = defineModel("id", { type: String });
 const silentReset = ref(false);
 
 onBeforeMount(() => {
@@ -188,6 +188,5 @@ const onMenuUpdate = () => {
         :items="list"
         :item-props="itemProps"
         @update:menu="onMenuUpdate"
-    >
-    </GenericDropdown>
+    />
 </template>

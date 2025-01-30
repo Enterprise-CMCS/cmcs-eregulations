@@ -12,8 +12,7 @@
                 :class="{
                     'supplemental-content-mid-bar': !isBlank(name),
                 }"
-                >{{ formatDate(date) }}</span
-            >
+            >{{ formatDate(date) }}</span>
             <!-- DivisionLabel
                 v-if="docType === 'internal_file' && division"
                 :division="division"
@@ -22,8 +21,7 @@
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
                 :class="getLinkClasses(docType, description)"
-                >{{ name }}</span
-            >
+            >{{ name }}</span>
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"
@@ -32,11 +30,11 @@
                 <span
                     v-sanitize-html="
                         description +
-                        addFileTypeButton({
-                            fileName,
-                            uid,
-                            docType,
-                        })
+                            addFileTypeButton({
+                                fileName,
+                                uid,
+                                docType,
+                            })
                     "
                 />
             </div>
@@ -47,13 +45,13 @@
 <script>
 import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
 
-import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
+//import DivisionLabel from "./shared-components/results-item-parts/DivisionLabel.vue";
 
 export default {
     name: "SupplementalContentObject",
 
     components: {
-        DivisionLabel,
+        //DivisionLabel,
     },
 
     props: {

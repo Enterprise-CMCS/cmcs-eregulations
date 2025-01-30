@@ -39,13 +39,13 @@
                 <show-more-button
                     button-text="- Show Less"
                     :count="rules.length"
-                ></show-more-button>
+                />
             </template>
             <template #collapsed>
                 <show-more-button
                     button-text="+ Show More"
                     :count="rules.length"
-                ></show-more-button>
+                />
             </template>
         </collapse-button>
         <collapsible
@@ -63,12 +63,11 @@
                     :document_number="rule.document_number"
                     :html_url="html_url(rule)"
                     :action="rule.action"
-                >
-                </related-rule>
+                />
                 <template
                     v-if="
                         rule.related_resources &&
-                        rule.related_resources.length > 0
+                            rule.related_resources.length > 0
                     "
                 >
                     <related-rule
@@ -95,13 +94,13 @@
                     <show-more-button
                         button-text="- Show Less"
                         :count="rules.length"
-                    ></show-more-button>
+                    />
                 </template>
                 <template #collapsed>
                     <show-more-button
                         button-text="+ Show More"
                         :count="rules.length"
-                    ></show-more-button>
+                    />
                 </template>
             </collapse-button>
         </collapsible>
