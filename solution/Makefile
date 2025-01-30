@@ -78,7 +78,8 @@ watch-all:
 .PHONY: eslint
 eslint: ## Run eslint
 	cd ui/regulations; \
-		npx eslint;
+		npm install; \
+		npm run eslint;
 
 .PHONY: lint
 lint:
