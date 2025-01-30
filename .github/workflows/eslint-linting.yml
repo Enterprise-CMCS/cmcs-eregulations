@@ -26,7 +26,7 @@ jobs:
       # Execute linting
       - name: Run ESLint on front end
         if: success()
-        working-directory: .solution
+        working-directory: ./solution
         run: |
           make eslint
       - name: Run ESLint on CDK TS files
