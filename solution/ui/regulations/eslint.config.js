@@ -1,16 +1,12 @@
 // eslint.config.js
 import pluginVue from "eslint-plugin-vue";
+import globalConfig from "../../eslint-global-rules.mjs";
 
 export default [
     ...pluginVue.configs["flat/recommended"],
     {
         rules: {
-            eqeqeq: "off",
-            "import/no-unresolved": "off",
-            "import/first": "off",
-            "no-console": ["error", { allow: ["warn", "error", "info"] }],
-            "no-nested-ternary": "off",
-            "prefer-template": "off",
+            ...globalConfig,
             "vue/html-indent": ["error", 4],
             "vue/order-in-components": "off",
             "vue/max-attributes-per-line": [

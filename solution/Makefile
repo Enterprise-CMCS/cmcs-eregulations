@@ -75,6 +75,11 @@ watch-all: ## watch everything for changes
 watch-all:
 	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor
 
+.PHONY: eslint
+eslint: ## Run eslint
+	cd ui/regulations; \
+		npx eslint;
+
 .PHONY: lint
 lint:
 	flake8;
