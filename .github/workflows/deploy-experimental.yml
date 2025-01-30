@@ -220,7 +220,7 @@ jobs:
         env:
           STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/backend
           python manage.py collectstatic --noinput
@@ -232,7 +232,7 @@ jobs:
         env:
           STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution
           make regulations
