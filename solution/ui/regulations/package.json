@@ -3,7 +3,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "eslint" : "eslint --debug",
+    "eslint" : "eslint",
     "test-vue": "vitest --environment jsdom",
     "test-vue-ui": "vitest --environment jsdom --coverage.enabled=true --ui",
     "test-vue-coverage": "vitest --environment jsdom run --coverage",
