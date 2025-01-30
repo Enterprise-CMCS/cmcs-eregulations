@@ -1,6 +1,6 @@
 cryptography>=42.0.2
 pyopenssl>=24,<25
-Werkzeug==0.15.5
+Werkzeug
 boto3
 django-debug-toolbar
 django>=5.1
@@ -27,5 +27,3 @@ pytest-cov
 djangorestframework_simplejwt
 olefile
 sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
-mangum
-a2wsgi==1.10.8
