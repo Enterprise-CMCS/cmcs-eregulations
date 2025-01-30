@@ -230,7 +230,7 @@ export class APIStack extends cdk.Stack {
     // ================================
     // DEFINE YOUR LAMBDAS
     // ================================
-    const regSiteLambda = createDockerLambda('RegSite', 'regsite.Dockerfile', 'handler.lambda_handler', 30);
+    const regSiteLambda = createDockerLambda('RegSite', 'regsite.Dockerfile', 'handler.handler', 30);
     const migrateLambda = createDockerLambda('Migrate', 'migrate.Dockerfile', 'migrate.handler', 900);
     const createDbLambda = createDockerLambda('CreateDb', 'createdb.Dockerfile', 'createdb.handler');
     const dropDbLambda = createDockerLambda('DropDb', 'dropdb.Dockerfile', 'dropdb.handler');
