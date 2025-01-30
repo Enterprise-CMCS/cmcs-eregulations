@@ -93,7 +93,7 @@ def lambda_handler(event, context):
     handler = Mangum(
         django_asgi_app,
         lifespan="off",
-        api_gateway_base_path=base_path
+        #api_gateway_base_path=base_path
     )
 
     response = handler(event, context)
