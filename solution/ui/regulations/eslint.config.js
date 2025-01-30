@@ -1,6 +1,6 @@
 // eslint.config.js
 import pluginVue from "eslint-plugin-vue";
-import globalConfig from "../../eslint-global-rules.mjs";
+import globalConfig from "../../../eslint-global-rules.mjs";
 
 export default [
     {
