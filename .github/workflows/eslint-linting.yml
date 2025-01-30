@@ -10,7 +10,7 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  test-javascript:
+  lint-eslint:
     runs-on: ubuntu-22.04
     steps:
       # Checkout the code
