@@ -6,7 +6,7 @@ root = true
 indent_style = space
 indent_size = 2
 
-# 4 space indentation for .js/.cjs/.mjs/.vue files
+# 4 space indentation for .js/.cjs/.mjs files
 [*.{js,cjs,mjs}]
 indent_style = space
 indent_size = 4
