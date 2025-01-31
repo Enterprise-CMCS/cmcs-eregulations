@@ -136,13 +136,13 @@ const getFilteredSubjects = (filter) => {
         .reduce((acc, subject) => {
             const shortNameMatch = subject.short_name
                 ? subject.short_name
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
+                    .toLowerCase()
+                    .includes(filter.toLowerCase())
                 : false;
             const abbreviationMatch = subject.abbreviation
                 ? subject.abbreviation
-                      .toLowerCase()
-                      .includes(filter.toLowerCase())
+                    .toLowerCase()
+                    .includes(filter.toLowerCase())
                 : false;
             const fullNameMatch = subject.full_name
                 ? subject.full_name.toLowerCase().includes(filter.toLowerCase())

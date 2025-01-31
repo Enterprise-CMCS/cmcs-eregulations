@@ -31,9 +31,9 @@ const directChild = computed(() =>
 const titleSubheading = computed(() =>
     directChild.value
         ? `${directChild.value.label_level} - ${directChild.value.label_description}`.replace(
-              /&amp;/g,
-              "&"
-          )
+            /&amp;/g,
+            "&"
+        )
         : undefined
 );
 </script>

@@ -1,6 +1,6 @@
 const configObject ={
     eqeqeq: "off",
-    "indent": ["error", 4],
+    "indent": ["error", 4, { SwitchCase: 1 }],
     "import/no-unresolved": "off",
     "import/first": "off",
     "no-console": ["error", { allow: ["warn", "error", "info"] }],

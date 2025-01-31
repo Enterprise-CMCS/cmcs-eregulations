@@ -24,9 +24,9 @@ const props = defineProps({
 
 const filteredLocations = props.item.cfr_citations
     ? props.item.cfr_citations.filter((location) => {
-          const { part } = location;
-          return props.partsLastUpdated[part];
-      })
+        const { part } = location;
+        return props.partsLastUpdated[part];
+    })
     : [];
 
 const locationsCount = filteredLocations.length;

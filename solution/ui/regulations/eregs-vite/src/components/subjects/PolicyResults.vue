@@ -119,9 +119,9 @@ const getCollapseName = (doc) =>
 const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
     const regCitations = doc.cfr_citations
         ? doc.cfr_citations.filter((location) => {
-              const { part } = location;
-              return partsLastUpdated[part];
-          })
+            const { part } = location;
+            return partsLastUpdated[part];
+        })
         : [];
 
     return regCitations.length > 0;
@@ -192,7 +192,7 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-          ? createRegResultLink(
+            ? createRegResultLink(
                 {
                     date: doc.date,
                     headline: doc.content_headline,
@@ -204,7 +204,7 @@ const getUrl = (doc) =>
                 homeUrl,
                 $route.query?.q
             )
-          : doc.url;
+            : doc.url;
 
 const needsBar = (item) => item.date && item.document_id;
 

@@ -15,31 +15,31 @@
 
 <script>
 export default {
-  name: 'Dropdown',
-  props: {
-    initialActive: {
-      type: Boolean,
-      required: true,
-      default: false
+    name: 'Dropdown',
+    props: {
+        initialActive: {
+            type: Boolean,
+            required: true,
+            default: false
+        },
+        selection: {
+            type: String,
+            required: true,
+            default: "Select Date"
+        }
     },
-    selection: {
-      type: String,
-      required: true,
-      default: "Select Date"
-    }
-  },
-  data() {
-    return {
-      active: this.initialActive
-    }
-  },
-  methods: {
-    toggle() {
-      this.active = !this.active
+    data() {
+        return {
+            active: this.initialActive
+        }
     },
-    away() {
-      this.active = false
+    methods: {
+        toggle() {
+            this.active = !this.active
+        },
+        away() {
+            this.active = false
+        }
     }
-  }
 }
 </script>

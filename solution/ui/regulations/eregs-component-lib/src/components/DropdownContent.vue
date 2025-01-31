@@ -8,12 +8,12 @@
 
 <script>
 export default {
-  name: 'DropdownContent',
-  props: {
-    active: {
-      type: Boolean,
-      default: false
+    name: 'DropdownContent',
+    props: {
+        active: {
+            type: Boolean,
+            default: false
+        },
     },
-  },
 }
 </script>

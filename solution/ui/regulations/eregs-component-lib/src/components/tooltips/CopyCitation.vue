@@ -70,8 +70,8 @@ export default {
             return this.selectedAction === "citation"
                 ? this.formattedCitation
                 : `${new URL(window.location.href.split("#")[0]).toString()}#${
-                      this.hash
-                  }`;
+                    this.hash
+                }`;
         },
     },
 };
