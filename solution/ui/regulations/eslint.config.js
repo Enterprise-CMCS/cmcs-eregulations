@@ -1,4 +1,5 @@
 // eslint.config.js
+import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
 import globalConfig from "../../../eslint-global-rules.mjs";
 
@@ -6,6 +7,7 @@ export default [
     {
         ignores: ["**/dist/"],
     },
+    pluginJs.configs.recommended,
     ...pluginVue.configs["flat/recommended"],
     {
         rules: {
