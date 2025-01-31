@@ -6,7 +6,7 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
-const props = defineProps({
+defineProps({
     adminUrl: {
         type: String,
         default: "/admin/",

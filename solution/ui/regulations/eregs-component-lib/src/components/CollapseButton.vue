@@ -86,7 +86,7 @@ export default {
     },
 
     methods: {
-        click(event) {
+        click() {
             eventbus.emit("collapse-toggle", this.dataName);
         },
         toggle(target) {

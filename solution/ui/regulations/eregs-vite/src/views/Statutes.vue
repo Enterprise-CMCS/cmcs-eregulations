@@ -92,7 +92,7 @@ const getStatutesArray = async () => {
 // watch query params and fetch statutes
 watch(
     () => $route.query,
-    (newParams, oldParams) => {
+    (newParams) => {
         queryParams.value = {
             act: newParams.act,
             title: newParams.title,
@@ -102,7 +102,7 @@ watch(
 
 watch(
     () => queryParams.value,
-    async (newParams, oldParams) => {
+    async () => {
         await getStatutesArray();
     }
 );

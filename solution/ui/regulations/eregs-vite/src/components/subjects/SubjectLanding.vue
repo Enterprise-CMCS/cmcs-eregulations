@@ -11,7 +11,7 @@ const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
 
-const props = defineProps({
+defineProps({
     policyDocSubjects: {
         type: Object,
         default: () => ({ results: [], loading: true }),

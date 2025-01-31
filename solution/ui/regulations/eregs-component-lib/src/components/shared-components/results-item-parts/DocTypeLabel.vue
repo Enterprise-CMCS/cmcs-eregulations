@@ -6,7 +6,7 @@ const iconTypesDict = {
     Internal: "key",
 };
 
-const props = defineProps({
+defineProps({
     iconType: {
         type: String,
         required: true,

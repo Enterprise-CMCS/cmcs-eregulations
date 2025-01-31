@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     cellData: {
         type: Object,
         required: true,

@@ -28,7 +28,7 @@ const catTypeDict = {
 
 provide("catTypeDict", catTypeDict);
 
-const props = defineProps({
+defineProps({
     error: {
         type: Object,
         default: () => {},

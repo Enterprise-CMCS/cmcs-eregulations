@@ -5,7 +5,6 @@ import { useRoute, useRouter } from "vue-router";
 import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
 
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import { getLastUpdatedDates, getTitles } from "utilities/api";
@@ -174,7 +173,7 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-getDocsOnLoad = async () => {
+const getDocsOnLoad = async () => {
     if (!$route.query.q) {
         clearDocList();
         return;

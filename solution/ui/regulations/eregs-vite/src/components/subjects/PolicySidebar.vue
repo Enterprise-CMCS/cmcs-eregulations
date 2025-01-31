@@ -1,21 +1,3 @@
-<script setup>
-import { inject } from "vue";
-import { useRoute } from "vue-router";
-import useLoginRedirectUrl from "composables/login";
-
-const customLoginUrl = inject("customLoginUrl");
-const homeUrl = inject("homeUrl");
-const isAuthenticated = inject("isAuthenticated");
-
-const $route = useRoute();
-
-const loginUrl = useLoginRedirectUrl({
-    customLoginUrl,
-    homeUrl,
-    route: $route,
-});
-</script>
-
 <template>
     <div class="sidebar__filters">
         <slot name="title">

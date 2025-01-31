@@ -18,7 +18,6 @@ import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue"
 import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
-import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
@@ -293,10 +292,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
                 >{{ formatDate(doc.date) }}</span>
-                <!-- DivisionLabel
-                    v-if="doc.type === 'internal' && doc.division"
-                    :division="doc.division"
-                /-->
                 <span v-if="doc.document_id">{{ doc.document_id }}</span>
             </template>
             <template #link>

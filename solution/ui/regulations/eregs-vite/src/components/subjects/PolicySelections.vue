@@ -13,7 +13,7 @@ const commonRemoveList = inject("commonRemoveList", []);
 const additionalRemoveList = inject("policySelectionsRemoveList", []);
 const removeList = commonRemoveList.concat(additionalRemoveList);
 
-const props = defineProps({
+defineProps({
     selectedSubject: {
         type: Object,
         default: () => ({}),

@@ -16,7 +16,7 @@ const app = createApp(App);
 app.use(vuetify);
 
 // App-level provide of all data attributes on the mount element
-for (datum in mountEl.dataset) {
+for (const datum in mountEl.dataset) {
     if (mountEl.dataset[datum] === "True") {
         app.provide(datum, true);
     } else if (mountEl.dataset[datum] === "False") {
@@ -52,7 +52,7 @@ router.beforeEach((to) => {
         const { q, ...qlessQuery } = to.query;
 
         if (isAuthenticated === "False" && to.query?.type) {
-            const { type, ...typelessQuery } = qlessQuery;
+            const { type: _type, ...typelessQuery } = qlessQuery;
             return { name: "subjects", query: typelessQuery };
         }
 

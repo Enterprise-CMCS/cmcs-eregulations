@@ -57,7 +57,7 @@ const checkedBoxes = ref(boxesArr);
 
 const onCheckboxChange = (event) => {
     const { checked, value } = event.target;
-    const { type, ...queryClone } = $route.query;
+    const { type: _type, ...queryClone } = $route.query;
 
     if (checked) {
         checkedBoxes.value = [...checkedBoxes.value, value];

@@ -38,7 +38,7 @@ import { computed, inject } from "vue";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters";
 
-const props = defineProps({
+defineProps({
     subject: {
         type: Object,
         default: () => ({}),
