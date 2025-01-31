@@ -10,6 +10,7 @@ export default [
     {
         rules: {
             ...globalConfig,
+            "indent": ["error", 4, { SwitchCase: 1 }],
             "vue/order-in-components": "off",
             "vue/max-attributes-per-line": [
                 "error",
