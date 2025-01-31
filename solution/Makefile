@@ -75,9 +75,15 @@ watch-all: ## watch everything for changes
 watch-all:
 	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor
 
-.PHONY: eslint
-eslint: ## Run eslint
+.PHONY: eslint-frontend
+eslint-frontend: ## Run eslint
 	cd ui/regulations; \
+		npm install; \
+		npm run eslint;
+
+.PHONY: eslint-cdk
+eslint-cdk: ## Run eslint
+	cd ../cdk-eregs; \
 		npm install; \
 		npm run eslint;
 

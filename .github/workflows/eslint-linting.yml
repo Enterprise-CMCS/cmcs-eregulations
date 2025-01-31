@@ -28,11 +28,9 @@ jobs:
         if: success()
         working-directory: ./solution
         run: |
-          make eslint
+          make eslint-frontend
       - name: Run ESLint on CDK TS files
         if: success()
-        working-directory: .
+        working-directory: ./solution
         run: |
-          cd cdk-eregs
-          npm install
-          npm run eslint
+          make eslint-cdk
