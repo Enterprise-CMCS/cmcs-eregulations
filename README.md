@@ -1,4 +1,4 @@
-# CMCS eRegulations
+# Policy Connector shareable reference fork
 
 [![Deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml)
 [![Parser Checks](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml)
@@ -6,7 +6,7 @@
 
 # About
 
-This repo forks an existing app developed for government policy staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project. 
+This repo is a more easily shareable version of an existing app developed for government policy staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
 
 There is public documentation about the original product, design, and research processes in [this repository wiki](https://github.com/Enterprise-CMCS/cmcs-eregulations/wiki). 
 
