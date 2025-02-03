@@ -14,6 +14,45 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  deploy-database-cdk:    
+    strategy:
+      max-parallel: 1
+      matrix:
+        environment: ["dev"]
+    runs-on: ubuntu-22.04
+    environment:
+      name: ${{ matrix.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true     
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}e
+          aws-region: us-east-1
+
+      - name: Deploy Database Stack
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Get exact stack names
+          DATABASE_STACK="cms-eregs-${{ matrix.environment }}-database-stack"
+          
+          
+          cdk deploy ${DATABASE_STACK} \
+          -c environment=${{ matrix.environment }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/database.ts"
+          popd
   deploy-zip-lambdas-cdk:    
     strategy:
       max-parallel: 1

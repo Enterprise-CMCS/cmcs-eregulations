@@ -116,12 +116,23 @@ export class APIStack extends cdk.Stack {
       ],
     };
 
-    const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-      vpc,
-      description: 'SecurityGroup for Serverless Functions',
-      allowAllOutbound: true,
-    });
-
+    // const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
+    //   vpc,
+    //   description: 'SecurityGroup for Serverless Functions',
+    //   allowAllOutbound: true,
+    // });
+    const serverlessSG = stageConfig.isEphemeral()
+    ? ec2.SecurityGroup.fromSecurityGroupId(
+        this,
+        'ImportedDevServerlessSG',
+        cdk.Fn.importValue(`${StageConfig.projectName}-dev-serverless-security-group`)
+      )
+    : new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
+        vpc,
+        description: `SecurityGroup for ${stageConfig.environment} Serverless Functions`,
+        allowAllOutbound: true,
+        securityGroupName: stageConfig.getResourceName('serverless-security-group'),
+      });
     // ================================
     // EXISTING SQS QUEUE
     // ================================

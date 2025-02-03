@@ -17,7 +17,7 @@ export interface ApiConstructProps {
  /** VPC configuration */
  vpc: ec2.IVpc;
  /** Security group for API resources */
- securityGroup: ec2.SecurityGroup;
+ securityGroup: ec2.ISecurityGroup;
  /** Environment variables for Lambda functions */
  environmentVariables: Record<string, string>;
  /** Name of the S3 bucket for storage */
