@@ -16,7 +16,11 @@
                     citation
                 }}</span>
             </span>
-            <div v-if="!grouped" class="recent-title" :class="recentTitleClass">
+            <div
+                v-if="!grouped"
+                class="recent-title"
+                :class="recentTitleClass"
+            >
                 {{ title }}
             </div>
         </a>
@@ -24,6 +28,7 @@
 </template>
 
 <script>
+/* eslint-disable vue/prop-name-casing */
 import { formatDate } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";

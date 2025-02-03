@@ -11,7 +11,13 @@
                     class="ds-c-field"
                     required
                 >
-                    <option value="" disabled selected>Title</option>
+                    <option
+                        value=""
+                        disabled
+                        selected
+                    >
+                        Title
+                    </option>
                     <option
                         v-for="listedTitle in titles"
                         :key="listedTitle"
@@ -30,7 +36,13 @@
                     required
                     :disabled="!selectedTitle"
                 >
-                    <option value="" disable selected>Part</option>
+                    <option
+                        value=""
+                        disable
+                        selected
+                    >
+                        Part
+                    </option>
                     <option
                         v-for="listedPart in filteredParts"
                         :key="listedPart"
@@ -50,14 +62,14 @@
                     pattern="\d+"
                     title="Regulation section number, i.e. 111"
                     aria-label="Regulation section number, i.e. 111"
-                />
+                >
                 <input
                     id="jumpBtn"
                     class="submit"
                     :class="{ active: isActive }"
                     type="submit"
                     value="Go"
-                />
+                >
             </div>
         </form>
     </div>
@@ -148,7 +160,7 @@ export default {
                 .map((part) => part.name)
                 .filter((part) => part !== "75");
         },
-        getLink(e) {
+        getLink() {
             let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
             if (this.selectedSection !== "") {
                 link += `&section=${this.selectedSection}&-version='latest'`;

@@ -1,18 +1,34 @@
 // eslint.config.js
+import pluginJs from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
-import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import globals from "globals";
+import globalConfig from "../../../eslint-global-rules.mjs";
 
 export default [
+    {
+        ignores: ["**/dist/"],
+    },
+    {
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.node,
+            },
+        },
+    },
+    pluginJs.configs.recommended,
     ...pluginVue.configs["flat/recommended"],
     {
         rules: {
-            eqeqeq: "off",
-            "import/no-unresolved": "off",
-            "import/first": "off",
-            "no-console": ["error", { allow: ["warn", "error", "info"] }],
-            "no-nested-ternary": "off",
-            "prefer-template": "off",
-            "vue/html-indent": ["error", 4],
+            ...globalConfig,
+            indent: ["error", 4, { SwitchCase: 1 }],
+            "no-unused-vars": [
+                "error", {
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                }
+            ],
             "vue/order-in-components": "off",
             "vue/max-attributes-per-line": [
                 "error",
@@ -28,7 +44,17 @@ export default [
             "vue/multi-word-component-names": "off",
             "vue/no-multiple-template-root": "off",
             "vue/no-v-html": "off",
+            "vue/html-indent": [
+                "error",
+                4,
+                {
+                    attribute: 1,
+                    baseIndent: 1,
+                    closeBracket: 0,
+                    alignAttributesVertically: false,
+                    ignores: [],
+                },
+            ],
         },
     },
-    eslintPluginPrettierRecommended,
 ];

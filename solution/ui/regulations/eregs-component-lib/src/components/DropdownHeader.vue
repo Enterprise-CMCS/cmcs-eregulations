@@ -1,11 +1,11 @@
 <template>
-  <li class="dropdown-header">
-    <slot />
-  </li>
+    <li class="dropdown-header">
+        <slot />
+    </li>
 </template>
 
 <script>
-  export default {
-    name: "dropdown-header"
-  };
+export default {
+    name: "DropdownHeader"
+};
 </script>

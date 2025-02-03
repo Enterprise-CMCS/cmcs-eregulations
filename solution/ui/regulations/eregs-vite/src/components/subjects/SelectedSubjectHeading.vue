@@ -18,8 +18,7 @@ defineProps({
                     'subj-heading__span--border': index === 0,
                     'subj-heading__span--bold': part[1],
                 }"
-                >{{ part[0] }}</span
-            >
+            >{{ part[0] }}</span>
         </template>
     </h1>
 </template>

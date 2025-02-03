@@ -18,7 +18,6 @@ import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue"
 import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
-import DivisionLabel from "sharedComponents/results-item-parts/DivisionLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
@@ -119,9 +118,9 @@ const getCollapseName = (doc) =>
 const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
     const regCitations = doc.cfr_citations
         ? doc.cfr_citations.filter((location) => {
-              const { part } = location;
-              return partsLastUpdated[part];
-          })
+            const { part } = location;
+            return partsLastUpdated[part];
+        })
         : [];
 
     return regCitations.length > 0;
@@ -192,7 +191,7 @@ const getUrl = (doc) =>
     doc.type === "internal_file"
         ? `${apiUrl}resources/internal/files/${doc.uid}`
         : doc.type === "reg_text"
-          ? createRegResultLink(
+            ? createRegResultLink(
                 {
                     date: doc.date,
                     headline: doc.content_headline,
@@ -204,7 +203,7 @@ const getUrl = (doc) =>
                 homeUrl,
                 $route.query?.q
             )
-          : doc.url;
+            : doc.url;
 
 const needsBar = (item) => item.date && item.document_id;
 
@@ -227,16 +226,13 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 <template>
     <div class="doc__list">
         <div class="search-results-count">
-            <span v-if="results.length > 0"
-                >{{ currentPageResultsRange[0] }} -
-                {{ currentPageResultsRange[1] }} of</span
-            >
-            {{ resultsCount }} <span v-if="searchQuery">result</span
-            ><span v-else>document</span>
+            <span v-if="results.length > 0">{{ currentPageResultsRange[0] }} -
+                {{ currentPageResultsRange[1] }} of</span>
+            {{ resultsCount }} <span v-if="searchQuery">result</span><span v-else>document</span>
             <span v-if="results.length != 1">s</span>
-            <slot name="sign-in-cta"></slot>
+            <slot name="sign-in-cta" />
         </div>
-        <slot name="empty-state"></slot>
+        <slot name="empty-state" />
         <ResultsItem
             v-for="doc in transformedResults"
             :key="doc.uid"
@@ -249,7 +245,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :href="`${apiUrl}resources/${doc.id}/edit`"
                 >
                     Edit
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit" />
                 </a>
             </template>
             <template #labels>
@@ -268,9 +264,9 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     :name="
                         doc.category?.parent
                             ? getParentCategoryName({
-                                  itemCategory: doc.category,
-                                  categoriesArr: categories,
-                              })
+                                itemCategory: doc.category,
+                                categoriesArr: categories,
+                            })
                             : doc.category?.name
                     "
                     type="category"
@@ -295,22 +291,17 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     v-else-if="doc.date"
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
-                    >{{ formatDate(doc.date) }}</span
-                >
-                <!-- DivisionLabel
-                    v-if="doc.type === 'internal' && doc.division"
-                    :division="doc.division"
-                /-->
+                >{{ formatDate(doc.date) }}</span>
                 <span v-if="doc.document_id">{{ doc.document_id }}</span>
             </template>
             <template #link>
                 <a
                     v-sanitize-html="
                         getResultLinkText(doc) +
-                        getFileTypeButton({
-                            fileName: doc.file_name,
-                            uid: doc.uid,
-                        })
+                            getFileTypeButton({
+                                fileName: doc.file_name,
+                                uid: doc.uid,
+                            })
                     "
                     :href="getUrl(doc)"
                     :target="doc.type === 'reg_text' ? undefined : '_blank'"
@@ -321,7 +312,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
-                ></a>
+                />
             </template>
             <template #snippet>
                 <div
@@ -341,19 +332,19 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <CollapseButton
                     v-if="
                         doc.type !== 'reg_text' &&
-                        hasRegulationCitations({ doc, partsLastUpdated })
+                            hasRegulationCitations({ doc, partsLastUpdated })
                     "
                     :name="getCollapseName(doc)"
                     state="collapsed"
                     class="related-citations__btn--collapse"
                 >
-                    <template #expanded
-                        >Hide Related Citations
-                        <i class="fa fa-chevron-up"></i>
+                    <template #expanded>
+                        Hide Related Citations
+                        <i class="fa fa-chevron-up" />
                     </template>
-                    <template #collapsed
-                        >Show Related Citations
-                        <i class="fa fa-chevron-down"></i>
+                    <template #collapsed>
+                        Show Related Citations
+                        <i class="fa fa-chevron-down" />
                     </template>
                 </CollapseButton>
                 <Collapsible

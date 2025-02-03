@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: "show-more-button",
+    name: "ShowMoreButton",
     props: {
         count: {
             type: Number,

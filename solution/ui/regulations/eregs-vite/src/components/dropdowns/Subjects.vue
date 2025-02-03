@@ -152,7 +152,7 @@ watchEffect(() => {
             <v-icon
                 class="subjects-select__append-icon"
                 icon="mdi-menu-swap"
-            ></v-icon>
+            />
         </template>
     </v-btn>
     <v-menu

@@ -13,7 +13,7 @@ const commonRemoveList = inject("commonRemoveList", []);
 const additionalRemoveList = inject("policySelectionsRemoveList", []);
 const removeList = commonRemoveList.concat(additionalRemoveList);
 
-const props = defineProps({
+defineProps({
     selectedSubject: {
         type: Object,
         default: () => ({}),
@@ -51,7 +51,7 @@ const removeClick = () => {
                     :data-type="selectedSubject.type"
                     @click="removeClick"
                 >
-                    <i class="mdi mdi-close"></i>
+                    <i class="mdi mdi-close" />
                 </button>
             </li>
         </ul>

@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     accessUrl: {
         type: String,
         required: true,
@@ -13,13 +13,12 @@ const props = defineProps({
 
 <template>
     <div class="login-cta__div">
-        <span :data-testid="testId"
-            >To see internal documents,
-            <slot name="sign-in-link">sign in</slot></span
-        >
+        <span :data-testid="testId">To see internal documents,
+            <slot name="sign-in-link">sign in</slot></span>
         or
-        <a class="access__anchor" :href="accessUrl"
-            >learn how to get account access</a
-        >.
+        <a
+            class="access__anchor"
+            :href="accessUrl"
+        >learn how to get account access</a>.
     </div>
 </template>

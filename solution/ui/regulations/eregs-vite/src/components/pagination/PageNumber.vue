@@ -13,7 +13,11 @@
             {{ number }}
         </router-link>
     </li>
-    <li v-else class="page-number-li current-page" :class="numberClasses">
+    <li
+        v-else
+        class="page-number-li current-page"
+        :class="numberClasses"
+    >
         {{ number }}
     </li>
 </template>
@@ -36,23 +40,6 @@ export default {
             default: 1,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
-
     data() {
         return {
             dataProp: "value",

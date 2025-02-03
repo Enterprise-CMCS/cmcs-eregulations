@@ -150,8 +150,7 @@ watch(selectedSection, (newValue) => {
                 :supplemental_content="category.supplemental_content"
                 :subcategories="category.subcategories"
                 :show-if-empty="category.show_if_empty"
-            >
-            </supplemental-content-category>
+            />
         </template>
     </div>
 </template>

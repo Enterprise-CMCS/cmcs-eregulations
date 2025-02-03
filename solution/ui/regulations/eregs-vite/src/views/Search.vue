@@ -5,7 +5,6 @@ import { useRoute, useRouter } from "vue-router";
 import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
 
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import { getLastUpdatedDates, getTitles } from "utilities/api";
@@ -174,7 +173,7 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-getDocsOnLoad = async () => {
+const getDocsOnLoad = async () => {
     if (!$route.query.q) {
         clearDocList();
         return;
@@ -352,7 +351,7 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
-                <template v-if="!searchQuery"></template>
+                <template v-if="!searchQuery" />
                 <template
                     v-else-if="
                         policyDocList.loading || partsLastUpdated.loading
@@ -387,14 +386,10 @@ getDocsOnLoad();
                                 />
                             </template>
                         </SignInCTA>
-                        <span class="no-results__span"
-                            >Your search for
+                        <span class="no-results__span">Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
                             results
-                            <span v-if="hasActiveFilters"
-                                >with the selected filters</span
-                            ><span v-else>on eRegulations</span>.</span
-                        >
+                            <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"

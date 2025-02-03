@@ -7,7 +7,7 @@ const distWatcher = chokidar.watch("./dist");
 const mainWatcher = chokidar.watch("./src/main.js");
 
 // Something to use when events are received.
-const log = console.log.bind(console);
+const log = console.info.bind(console);
 
 distWatcher
     .on("add", (path) => {

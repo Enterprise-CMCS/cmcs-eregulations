@@ -1,10 +1,11 @@
 <template>
-    <section v-sanitize-html="table" class="table-section"></section>
+    <section v-sanitize-html="table" class="table-section" />
 </template>
 
 <script>
+/* eslint-disable vue/prop-name-casing */
 export default {
-    name: "table-component",
+    name: "TableComponent",
 
     props: {
         table_markup: {

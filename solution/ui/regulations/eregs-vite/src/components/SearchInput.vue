@@ -1,5 +1,9 @@
 <template>
-    <form ref="formRef" :class="formClass" @submit.prevent="submitForm">
+    <form
+        ref="formRef"
+        :class="formClass"
+        @submit.prevent="submitForm"
+    >
         <v-text-field
             id="main-content"
             ref="searchInput"
@@ -44,8 +48,7 @@
                         tabindex="0"
                         @click="quotedLink"
                         @keydown.enter.space.prevent="quotedLink"
-                        >"{{ searchQuery }}"</a
-                    >
+                    >"{{ searchQuery }}"</a>
                 </div>
             </template>
             <template v-if="synonyms.length > 0">
@@ -60,11 +63,10 @@
                             tabindex="0"
                             @click="synonymLink(syn)"
                             @keydown.enter.space.prevent="synonymLink(syn)"
-                            >{{ syn }}</a
-                        ><span
+                        >{{ syn }}</a><span
                             v-if="synonyms[synonyms.length - 1] != syn"
                             :key="i"
-                            >,
+                        >,
                         </span>
                     </template>
                 </div>
@@ -132,6 +134,8 @@ export default {
             );
         },
     },
+
+    emits: ["execute-search", "clear-form"],
 
     methods: {
         submitForm() {

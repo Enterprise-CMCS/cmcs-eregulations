@@ -24,7 +24,7 @@ import {
     stripQuotes,
 } from "utilities/utils.js";
 
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 
 import internalDocsFixture from "cypress/fixtures/42.431.internal.json";
 import formattedInternalDocsFixture from "cypress/fixtures/42.431.internal-formatted";

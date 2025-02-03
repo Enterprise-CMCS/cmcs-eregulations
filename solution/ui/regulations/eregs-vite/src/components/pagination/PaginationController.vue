@@ -2,7 +2,11 @@
     <nav class="pagination-controls" aria-label="Pagination">
         <div class="pagination-control left-control">
             <template v-if="page == 1">
-                <NavBtn direction="back" label="Previous" is-disabled />
+                <NavBtn
+                    direction="back"
+                    label="Previous"
+                    is-disabled
+                />
             </template>
             <template v-else>
                 <router-link
@@ -18,7 +22,11 @@
         <PagesList :current-page="page" :pages-array="pagesArr" />
         <div class="pagination-control right-control">
             <template v-if="page == pagesArr[pagesArr.length - 1]">
-                <NavBtn direction="forward" label="Next" is-disabled />
+                <NavBtn
+                    direction="forward"
+                    label="Next"
+                    is-disabled
+                />
             </template>
             <template v-else>
                 <router-link
@@ -69,22 +77,6 @@ export default {
             required: true,
         },
     },
-
-    beforeCreate() {},
-
-    created() {},
-
-    beforeMount() {},
-
-    mounted() {},
-
-    beforeUpdate() {},
-
-    updated() {},
-
-    beforeDestroy() {},
-
-    destroyed() {},
 
     computed: {
         pagesArr() {

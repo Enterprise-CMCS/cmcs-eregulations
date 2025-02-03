@@ -131,7 +131,7 @@ const fetchJson = ({
                 } else {
                     json = JSON.parse(text);
                 }
-            } catch (err) {
+            } catch {
                 if (httpStatus >= 400) {
                     if (
                         httpStatus >= 501 &&

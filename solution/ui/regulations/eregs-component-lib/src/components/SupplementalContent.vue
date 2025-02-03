@@ -1,9 +1,11 @@
 <template>
     <div>
-        <h1 id="subpart-resources-heading">{{ activePart }} Resources</h1>
+        <h1 id="subpart-resources-heading">
+            {{ activePart }} Resources
+        </h1>
         <h2>Documents</h2>
-        <slot name="login-banner"></slot>
-        <slot name="public-label"></slot>
+        <slot name="login-banner" />
+        <slot name="public-label" />
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
@@ -16,12 +18,11 @@
                 :is-fetching="isFetching"
                 :is-fr-link-category="category.is_fr_link_category"
                 :show-if-empty="category.show_if_empty"
-            >
-            </supplemental-content-category>
-            <simple-spinner v-if="isFetching"></simple-spinner>
+            />
+            <simple-spinner v-if="isFetching" />
         </div>
     </div>
-    <slot name="authed-documents"></slot>
+    <slot name="authed-documents" />
     <div class="view-all__container">
         <a
             v-if="selectedPart && subparts.length === 1"
@@ -30,8 +31,7 @@
             @click="clearSection"
         >
             <span class="bold">
-                View All Subpart {{ subparts[0] }} Documents</span
-            >
+                View All Subpart {{ subparts[0] }} Documents</span>
             ({{ resourceCount }})
         </a>
     </div>

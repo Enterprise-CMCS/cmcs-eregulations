@@ -112,6 +112,28 @@ Before running the tests for the first time, you may need to install Cypress dep
 4. For Python unit tests, run `make test.pytest`. This will run our Python unittest using pytest.
 5. For Vitest run `make test.vitest`.  This will run our Vitest suite.
 
+## Linting and Formatting
+
+#### ESLint
+
+This project utilizes ESLint to maintain high code quality and enforce consistent coding styles across both the frontend (JavaScript) and infrastructure (TypeScript) components.  ESLint helps identify potential issues early, improving code readability and reducing the likelihood of runtime errors.
+
+We leverage a shared ESLint configuration (`eslint-global-rules.mjs` file) at the project root to define a baseline of rules applicable to both the frontend and infrastructure code. This promotes consistency in fundamental coding practices across the entire project.
+
+Each application (frontend and CDK) also maintains its own dedicated ESLint configuration file. This allows us to tailor rules and plugins specifically to the nuances of JavaScript and TypeScript, respectively, while still adhering to the core shared principles.  This approach ensures that each part of the project benefits from the appropriate linting rules for its language and context.
+
+To run ESLint, execute the following commands from the project root:
+
+```
+// lint the frontend JS
+make eslint-frontend
+
+// lint CDK TS
+make eslint-cdk
+```
+
+For more information on ESLint, as well as resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
+
 ## Working with assets
 
 Navigate to project root.

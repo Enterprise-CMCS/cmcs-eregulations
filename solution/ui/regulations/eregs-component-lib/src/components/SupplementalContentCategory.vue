@@ -11,24 +11,23 @@
                 state="collapsed"
                 class="category-title"
             >
-                <template #expanded
-                    >{{ name }}
-                    <i v-if="hasChildren" class="fa fa-chevron-up"></i
-                ></template>
-                <template #collapsed
-                    >{{ name }}
-                    <i v-if="hasChildren" class="fa fa-chevron-down"></i
-                ></template>
+                <template #expanded>
+                    {{ name }}
+                    <i v-if="hasChildren" class="fa fa-chevron-up" />
+                </template>
+                <template #collapsed>
+                    {{ name }}
+                    <i v-if="hasChildren" class="fa fa-chevron-down" />
+                </template>
             </collapse-button>
             <div v-else class="category-title childless collapsible-title">
                 {{ name }}
             </div>
-            <span v-if="isFetching"></span>
+            <span v-if="isFetching" />
             <span
                 v-else-if="!hasChildren"
                 class="childless category-description"
-                >None</span
-            >
+            >None</span>
             <span v-else-if="showDescription" class="category-description">{{
                 description
             }}</span>
@@ -48,8 +47,7 @@
                     :supplemental_content="category.supplemental_content"
                     :sub_categories="category.subcategories"
                     :is-fetching="isFetching"
-                >
-                </supplemental-content-category>
+                />
                 <template v-if="isFrLinkCategory">
                     <related-rule-list
                         v-if="supplemental_content"
@@ -69,13 +67,14 @@
 </template>
 
 <script>
+/* eslint-disable vue/prop-name-casing */
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SupplementalContentList from "./SupplementalContentList.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
 
 export default {
-    name: "supplemental-content-category",
+    name: "SupplementalContentCategory",
 
     components: {
         RelatedRuleList,
@@ -111,10 +110,12 @@ export default {
         supplemental_content: {
             type: Array,
             required: false,
+            default: undefined,
         },
         subcategories: {
             type: Array,
             required: false,
+            default: undefined,
         },
         isFrLinkCategory: {
             type: Boolean,

@@ -85,7 +85,7 @@ watchEffect(() => {
         :counts="counts.results[itemsToFetch] || []"
         :error="results.error || counts.error"
         :loading="isLoading()"
-    ></slot>
+    />
 </template>
 
 <style></style>

@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { partToc42, partToc45 } from "./part_toc.js";
 import { titles } from "./titles.js";
-import { subpartResources, sectionResources } from "./resources.js";
+import { subpartResources } from "./resources.js";
 import { subpartA } from "./subpartTOC.js";
 import { noEndCondition, titleFourtyTwoSuccess } from "./parser_success.js";
 import { history } from "./govInfoHistory.js";
@@ -20,10 +20,6 @@ const handlers = [
         return HttpResponse.json(subpartA);
     }),
     http.get("*/resources/", () => {
-        const locations = req.url.searchParams.getAll("locations");
-        if (locations[0] === "42.433.10") {
-            return HttpResponse.json(sectionResources);
-        }
         return HttpResponse.json(subpartResources);
     }),
     http.get("**test/success/ecfr_parser_result/42", () => {

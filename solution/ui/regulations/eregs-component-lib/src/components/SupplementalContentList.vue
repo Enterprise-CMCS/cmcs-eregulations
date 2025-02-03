@@ -11,8 +11,7 @@
             :url="content.url"
             :doc-type="content.type ?? 'external'"
             :file-name="content.file_name"
-        >
-        </supplemental-content-object>
+        />
         <collapse-button
             v-if="showMoreNeeded"
             :class="{ subcategory: subcategory }"
@@ -20,17 +19,17 @@
             state="collapsed"
             class="category-title show-more"
         >
-            <template v-slot:expanded>
+            <template #expanded>
                 <show-more-button
-                    buttonText="- Show Less"
+                    button-text="- Show Less"
                     :count="contentCount"
-                ></show-more-button>
+                />
             </template>
-            <template v-slot:collapsed>
+            <template #collapsed>
                 <show-more-button
-                    buttonText="+ Show More"
+                    button-text="+ Show More"
                     :count="contentCount"
-                ></show-more-button>
+                />
             </template>
         </collapse-button>
         <collapsible
@@ -47,8 +46,7 @@
                 :uid="content.uid"
                 :url="content.url"
                 :doc-type="content.type ?? 'external'"
-            >
-            </supplemental-content-object>
+            />
             <collapse-button
                 v-if="showMoreNeeded && contentCount > 10"
                 :class="{ subcategory: subcategory }"
@@ -56,17 +54,17 @@
                 state="collapsed"
                 class="category-title show-more"
             >
-                <template v-slot:expanded>
+                <template #expanded>
                     <show-more-button
-                        buttonText="- Show Less"
+                        button-text="- Show Less"
                         :count="contentCount"
-                    ></show-more-button>
+                    />
                 </template>
-                <template v-slot:collapsed>
+                <template #collapsed>
                     <show-more-button
-                        buttonText="+ Show More"
+                        button-text="+ Show More"
                         :count="contentCount"
-                    ></show-more-button>
+                    />
                 </template>
             </collapse-button>
         </collapsible>
@@ -74,13 +72,14 @@
 </template>
 
 <script>
+/* eslint-disable vue/prop-name-casing */
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 import ShowMoreButton from "./ShowMoreButton.vue";
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
 
 export default {
-    name: "supplemental-content-list",
+    name: "SupplementalContentList",
 
     components: {
         SupplementalContentObject,

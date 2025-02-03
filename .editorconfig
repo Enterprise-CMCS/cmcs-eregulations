@@ -1,0 +1,12 @@
+# top-most EditorConfig file
+root = true
+
+# 2 space indentation for .ts files
+[*.ts]
+indent_style = space
+indent_size = 2
+
+# 4 space indentation for .js/.cjs/.mjs files
+[*.{js,cjs,mjs}]
+indent_style = space
+indent_size = 4

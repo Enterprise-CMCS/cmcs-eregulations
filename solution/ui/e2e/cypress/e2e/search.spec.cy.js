@@ -526,7 +526,7 @@ describe("Search flow", () => {
         cy.get(".research__title").should("exist");
         cy.get(".research__title").should(
             "have.text",
-            "Continue Your Research",
+            " Continue Your Research ",
         );
 
         cy.get("[data-testid=research-row-1]").should("not.exist");
@@ -539,7 +539,7 @@ describe("Search flow", () => {
         cy.get(".research__title").should("exist");
         cy.get(".research__title").should(
             "have.text",
-            "Continue Your Research",
+            " Continue Your Research ",
         );
 
         cy.get("[data-testid=research-row-1]")

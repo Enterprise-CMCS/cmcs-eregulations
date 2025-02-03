@@ -3,7 +3,7 @@ import CategoriesItem from "./CategoriesItem.vue";
 
 const itemTypes = { CategoriesItem };
 
-const props = defineProps({
+defineProps({
     itemType: {
         type: String,
         default: undefined,

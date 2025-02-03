@@ -22,7 +22,7 @@ export default function useCounts() {
             });
 
             counts.value.results = response;
-        } catch (error) {
+        } catch (_error) {
             counts.value.error = true;
             counts.value.results = {};
         } finally {

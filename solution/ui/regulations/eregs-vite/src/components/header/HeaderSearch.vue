@@ -32,7 +32,11 @@ const expandButtonAriaLabel = computed(
 </script>
 
 <template>
-    <form class="search__form" :class="formClasses" :action="searchUrl">
+    <form
+        class="search__form"
+        :class="formClasses"
+        :action="searchUrl"
+    >
         <button
             type="button"
             class="form__button--toggle-mobile-search"
@@ -47,14 +51,14 @@ const expandButtonAriaLabel = computed(
             type="search"
             name="q"
             placeholder="Search"
-        />
+        >
         <button
             type="submit"
             class="search__button--submit"
             :class="expandStateClasses"
             aria-label="Search"
         >
-            <i class="fa fa-search"></i>
+            <i class="fa fa-search" />
             <HeaderSearchIcon />
         </button>
     </form>
