@@ -132,7 +132,7 @@ make eslint-frontend
 make eslint-cdk
 ```
 
-For more information on ESLint, as well as resources to help integrate ESLint into your text editor, see [LINTING.md]](LINTING.md).
+For more information on ESLint, as well as resources to help integrate ESLint into your text editor, see [LINTING.md](LINTING.md).
 
 ## Working with assets
 
