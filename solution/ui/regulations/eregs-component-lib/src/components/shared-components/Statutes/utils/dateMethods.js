@@ -1,5 +1,5 @@
-/* eslint-disable camelcase */
-/* eslint-disable eqeqeq */
+ 
+ 
 
 import _isNull from "lodash/isNull";
 import _isUndefined from "lodash/isUndefined";

@@ -46,10 +46,9 @@ export default {
                 :description="content.title"
                 :date="content.date"
                 :url="content.url"
-            >
-            </SupplementalContentObject>
+            />
             <SubjectChips :subjects="content.subjects" />
-            <div class="spacer"></div>
+            <div class="spacer" />
         </template>
     </div>
 </template>

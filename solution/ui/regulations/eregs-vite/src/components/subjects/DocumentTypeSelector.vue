@@ -57,7 +57,7 @@ const checkedBoxes = ref(boxesArr);
 
 const onCheckboxChange = (event) => {
     const { checked, value } = event.target;
-    const { type, ...queryClone } = $route.query;
+    const { type: _type, ...queryClone } = $route.query;
 
     if (checked) {
         checkedBoxes.value = [...checkedBoxes.value, value];
@@ -160,7 +160,7 @@ onUnmounted(() => {
     <div class="doc-type__toggle-container">
         <div class="doc-type__toggle">
             <fieldset class="ds-c-fieldset" aria-invalid="false">
-                <template v-if="showRegulations"> </template>
+                <template v-if="showRegulations" />
                 <div v-for="(type, index) in docTypesArr" :key="type">
                     <div class="ds-c-choice-wrapper">
                         <input
@@ -172,7 +172,7 @@ onUnmounted(() => {
                             :checked="checkedBoxes.includes(type)"
                             :disabled="loading"
                             @change="onCheckboxChange"
-                        />
+                        >
                         <label
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"

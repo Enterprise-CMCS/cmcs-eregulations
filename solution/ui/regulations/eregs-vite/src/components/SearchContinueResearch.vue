@@ -44,6 +44,7 @@ const props = defineProps({
     query: {
         type: String,
         required: false,
+        default: "",
     },
     resultsCount: {
         type: Number,
@@ -69,7 +70,9 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 
 <template>
     <div class="research__container" :class="containerClasses">
-        <h3 class="research__title">Continue Your Research</h3>
+        <h3 class="research__title">
+            Continue Your Research
+        </h3>
         <div
             v-if="resultsCount > 0 && !hasQuotes(query) && hasSpaces(query)"
             class="research__row"
@@ -92,8 +95,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                             q: `&quot;${stripQuotes(query)}&quot;`,
                         },
                     }"
-                    >"{{ stripQuotes(query) }}"</router-link
-                >
+                >"{{ stripQuotes(query) }}"</router-link>
             </span>
         </div>
         <div
@@ -112,15 +114,12 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         },
                     }"
                 >
-                    reset all active filters</router-link
-                >.
+                    reset all active filters</router-link>.
             </span>
         </div>
         <div class="research__row" data-testid="research-row-2">
-            <span class="row__title"
-                >Try your search for <strong>{{ query }}</strong> on other
-                websites</span
-            >
+            <span class="row__title">Try your search for <strong>{{ query }}</strong> on other
+                websites</span>
             <ul class="row__content row__content--list">
                 <li>
                     <a
@@ -128,8 +127,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                        >eCFR Title 42</a
-                    >
+                    >eCFR Title 42</a>
                 </li>
                 <li>
                     <a
@@ -137,8 +135,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                        >eCFR Title 45</a
-                    >
+                    >eCFR Title 45</a>
                 </li>
                 <li>
                     <a
@@ -146,8 +143,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                        >Medicaid.gov</a
-                    >
+                    >Medicaid.gov</a>
                 </li>
                 <li>
                     <a
@@ -155,8 +151,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                        >Federal Register</a
-                    >
+                    >Federal Register</a>
                 </li>
                 <li>
                     <a
@@ -164,8 +159,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                        >United States Code</a
-                    >
+                    >United States Code</a>
                 </li>
             </ul>
         </div>

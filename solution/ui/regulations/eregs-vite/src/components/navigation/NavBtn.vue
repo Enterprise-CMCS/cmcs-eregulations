@@ -2,7 +2,7 @@
     <div class="direction-btn" :class="directionClass">
         <span class="label">{{ label }}</span>
         <span class="icon">
-            <i class="fa" :class="chevronClass"></i>
+            <i class="fa" :class="chevronClass" />
         </span>
     </div>
 </template>

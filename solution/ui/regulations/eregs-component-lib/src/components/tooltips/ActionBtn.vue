@@ -21,7 +21,12 @@
                     stroke-width="0.25"
                 />
             </svg>
-            <svg width="17" height="17" x="4" y="5">
+            <svg
+                width="17"
+                height="17"
+                x="4"
+                y="5"
+            >
                 <path
                     fill-rule="evenodd"
                     clip-rule="evenodd"
@@ -77,6 +82,8 @@ export default {
             };
         },
     },
+
+    emits: ["action-btn-click"],
 
     methods: {
         handleClick() {

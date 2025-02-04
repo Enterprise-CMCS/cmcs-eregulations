@@ -4,21 +4,31 @@
         <ul>
             <li v-for="key in cacheKeys" :key="key">
                 {{ key }}
-                <v-btn class="button" @click="deleteCacheItem(key)"
-                    >Delete</v-btn
+                <v-btn
+                    class="button"
+                    @click="deleteCacheItem(key)"
                 >
-                <v-btn class="button" @click="editData(key)">Edit</v-btn>
+                    Delete
+                </v-btn>
+                <v-btn class="button" @click="editData(key)">
+                    Edit
+                </v-btn>
             </li>
             <li>
-                <v-btn class="button" @click="deleteAllCacheItems()"
-                    >Delete All Cache Items</v-btn
+                <v-btn
+                    class="button"
+                    @click="deleteAllCacheItems()"
                 >
+                    Delete All Cache Items
+                </v-btn>
             </li>
         </ul>
-        <v-divider></v-divider>
+        <v-divider />
         <v-container fluid>
             <v-row>
-                <v-label cols="2" for="path">Path: </v-label>
+                <v-label cols="2" for="path">
+                    Path:
+                </v-label>
                 <v-text-field
                     id="path"
                     v-model="path"
@@ -28,14 +38,24 @@
                 />
             </v-row>
             <v-row>
-                <v-label cols="2">Data: </v-label>
-                <v-textarea v-model="apiData" outlined cols="8" />
+                <v-label cols="2">
+                    Data:
+                </v-label>
+                <v-textarea
+                    v-model="apiData"
+                    outlined
+                    cols="8"
+                />
             </v-row>
             <v-row>
-                <v-btn @click="addToCache">Add to Cache</v-btn>
+                <v-btn @click="addToCache">
+                    Add to Cache
+                </v-btn>
             </v-row>
         </v-container>
-        <div v-if="JSONError">INVALID JSON</div>
+        <div v-if="JSONError">
+            INVALID JSON
+        </div>
     </div>
 </template>
 
@@ -64,7 +84,7 @@ export default {
     },
     methods: {
         deleteCacheItem: async function (key) {
-            console.log("Clearing Key: ", key);
+            console.info("Clearing Key: ", key);
             await removeCacheItem(key);
             this.cacheKeys = await getCacheKeys();
         },

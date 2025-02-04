@@ -13,8 +13,7 @@
                     class="external"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >{{ yearObj.year }}</a
-                >
+                >{{ yearObj.year }}</a>
             </div>
         </div>
         <div class="gov-info-source">
@@ -25,8 +24,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                GovInfo</a
-            >
+                GovInfo</a>
             (1996–Present)
         </div>
     </div>
