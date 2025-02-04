@@ -12,11 +12,7 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-<<<<<<< HEAD
     "@types/fs-extra": "^11.0.4",
-=======
-    "@eslint/js": "^9.19.0",
->>>>>>> main
     "@types/jest": "^29.5.12",
     "@types/node": "22.5.4",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
