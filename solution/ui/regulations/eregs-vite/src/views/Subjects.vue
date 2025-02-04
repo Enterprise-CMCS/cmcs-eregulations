@@ -30,10 +30,12 @@ import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SelectedSubjectHeading from "@/components/subjects/SelectedSubjectHeading.vue";
+import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SubjectSelector from "@/components/subjects/SubjectSelector.vue";
 import SubjectLanding from "@/components/subjects/SubjectLanding.vue";
 
+const accessUrl = inject("accessUrl");
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
@@ -388,7 +390,7 @@ getDocSubjects();
                     />
                 </template>
                 <template #get-access>
-                    <AccessLink class="header__access-link" :base="homeUrl" />
+                    <AccessLink v-if="!isAuthenticated" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>
@@ -397,7 +399,9 @@ getDocSubjects();
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
-                    <button class="sidebar-toggle__button">Open/Close</button>
+                    <button class="sidebar-toggle__button">
+                        Open/Close
+                    </button>
                     <PolicySidebar>
                         <template #title>
                             <h2>Research a Subject</h2>
@@ -419,7 +423,7 @@ getDocSubjects();
                     <SubjectLanding
                         v-if="
                             allDocTypesOnly($route.query) ||
-                            _isEmpty($route.query)
+                                _isEmpty($route.query)
                         "
                         :policy-doc-subjects="policyDocSubjects"
                     />
@@ -434,6 +438,22 @@ getDocSubjects();
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
+                            <SignInCTA
+                                v-else
+                                class="login-cta__div--subjects-results"
+                                :access-url="accessUrl"
+                                :is-authenticated="isAuthenticated"
+                                test-id="loginSubjectsResults"
+                            >
+                                <template #sign-in-link>
+                                    <SignInLink
+                                        :custom-login-url="customLoginUrl"
+                                        :home-url="homeUrl"
+                                        :is-authenticated="isAuthenticated"
+                                        :route="$route"
+                                    />
+                                </template>
+                            </SignInCTA>
                             <FetchItemsContainer
                                 v-slot="slotProps"
                                 items-to-fetch="categories"
@@ -444,7 +464,7 @@ getDocSubjects();
                                     :error="slotProps.error"
                                     :loading="
                                         slotProps.loading ||
-                                        policyDocList.loading
+                                            policyDocList.loading
                                     "
                                 />
                             </FetchItemsContainer>
@@ -463,7 +483,7 @@ getDocSubjects();
                         <template
                             v-if="
                                 policyDocList.loading ||
-                                partsLastUpdated.loading
+                                    partsLastUpdated.loading
                             "
                         >
                             <span class="loading__span">Loading...</span>

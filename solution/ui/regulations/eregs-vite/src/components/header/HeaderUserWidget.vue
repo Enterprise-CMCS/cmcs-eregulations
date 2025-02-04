@@ -6,7 +6,7 @@ import useDropdownMenu from "composables/dropdownMenu";
 import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import UserIconSvg from "../svgs/user-icon.vue";
 
-const props = defineProps({
+defineProps({
     adminUrl: {
         type: String,
         default: "/admin/",
@@ -43,7 +43,7 @@ const iconClasses = computed(() => ({
             <div class="account-info__container">
                 <div class="account-info--username">
                     <strong>
-                        <slot name="username"></slot>
+                        <slot name="username" />
                     </strong>
                 </div>
                 <div class="account-info--msg">
@@ -57,11 +57,10 @@ const iconClasses = computed(() => ({
                         :href="adminUrl"
                         rel="noopener noreferrer"
                         data-testid="manage-content-link"
-                        >Manage Content</a
-                    >
+                    >Manage Content</a>
                 </div>
             </div>
-            <hr />
+            <hr>
             <div class="account--sign-out">
                 <slot name="sign-out-link">
                     <button

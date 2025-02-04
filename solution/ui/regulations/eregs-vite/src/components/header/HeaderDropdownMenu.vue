@@ -8,7 +8,7 @@ const outsideClick = () => {
 
 <template>
     <div v-clickaway="outsideClick" class="dropdown-menu__container">
-        <slot name="dropdown-menu-content"></slot>
+        <slot name="dropdown-menu-content" />
     </div>
 </template>
 

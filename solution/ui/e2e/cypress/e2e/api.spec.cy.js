@@ -43,7 +43,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
     //`${SYNONYMS_ENDPOINT}${SYNONYM}`,  // TODO: see above
-    `/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
+    //`/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/sections`,

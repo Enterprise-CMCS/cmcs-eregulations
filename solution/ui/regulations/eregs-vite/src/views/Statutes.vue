@@ -92,7 +92,7 @@ const getStatutesArray = async () => {
 // watch query params and fetch statutes
 watch(
     () => $route.query,
-    (newParams, oldParams) => {
+    (newParams) => {
         queryParams.value = {
             act: newParams.act,
             title: newParams.title,
@@ -102,7 +102,7 @@ watch(
 
 watch(
     () => queryParams.value,
-    async (newParams, oldParams) => {
+    async () => {
         await getStatutesArray();
     }
 );
@@ -144,7 +144,7 @@ getStatutesArray();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :apiUrl="apiUrl" :home-url="homeUrl" />
+                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
                     <HeaderLinks :subjects-url="subjectsUrl" />
@@ -168,7 +168,7 @@ getStatutesArray();
                     />
                 </template>
                 <template #get-access>
-                    <AccessLink class="header__access-link" :base="homeUrl" />
+                    <AccessLink v-if="!isAuthenticated" :base="homeUrl" />
                 </template>
             </HeaderComponent>
         </header>

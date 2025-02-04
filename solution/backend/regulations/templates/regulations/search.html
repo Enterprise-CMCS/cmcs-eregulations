@@ -11,6 +11,7 @@
 {% block body %}
 <div
     id="vite-app"
+    data-access-url="{% url 'get_account_access' %}"
     data-admin-url="{% url 'admin:index' %}"
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"

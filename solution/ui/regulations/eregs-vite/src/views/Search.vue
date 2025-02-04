@@ -5,7 +5,6 @@ import { useRoute, useRouter } from "vue-router";
 import useSearchResults from "composables/searchResults";
 import useRemoveList from "composables/removeList";
 
-import _isArray from "lodash/isArray";
 import _isEmpty from "lodash/isEmpty";
 
 import { getLastUpdatedDates, getTitles } from "utilities/api";
@@ -26,9 +25,11 @@ import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
+import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
+const accessUrl = inject("accessUrl");
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
@@ -172,7 +173,7 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-getDocsOnLoad = async () => {
+const getDocsOnLoad = async () => {
     if (!$route.query.q) {
         clearDocList();
         return;
@@ -350,7 +351,7 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
-                <template v-if="!searchQuery"></template>
+                <template v-if="!searchQuery" />
                 <template
                     v-else-if="
                         policyDocList.loading || partsLastUpdated.loading
@@ -369,14 +370,26 @@ getDocsOnLoad();
                 </template>
                 <template v-else-if="policyDocList.results.length == 0">
                     <div class="doc__list">
-                        <span class="no-results__span"
-                            >Your search for
+                        <SignInCTA
+                            v-if="!isAuthenticated"
+                            class="login-cta__div--search-no-results"
+                            :access-url="accessUrl"
+                            :is-authenticated="isAuthenticated"
+                            test-id="loginSearchNoResults"
+                        >
+                            <template #sign-in-link>
+                                <SignInLink
+                                    :custom-login-url="customLoginUrl"
+                                    :home-url="homeUrl"
+                                    :is-authenticated="isAuthenticated"
+                                    :route="$route"
+                                />
+                            </template>
+                        </SignInCTA>
+                        <span class="no-results__span">Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
                             results
-                            <span v-if="hasActiveFilters"
-                                >with the selected filters</span
-                            ><span v-else>on eRegulations</span>.</span
-                        >
+                            <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"
@@ -395,7 +408,26 @@ getDocsOnLoad();
                         :has-editable-job-code="hasEditableJobCode"
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
-                    />
+                    >
+                        <template #sign-in-cta>
+                            <SignInCTA
+                                v-if="!isAuthenticated"
+                                class="login-cta__div--search-results"
+                                :access-url="accessUrl"
+                                :is-authenticated="isAuthenticated"
+                                test-id="loginSearchResults"
+                            >
+                                <template #sign-in-link>
+                                    <SignInLink
+                                        :custom-login-url="customLoginUrl"
+                                        :home-url="homeUrl"
+                                        :is-authenticated="isAuthenticated"
+                                        :route="$route"
+                                    />
+                                </template>
+                            </SignInCTA>
+                        </template>
+                    </PolicyResults>
                     <div class="pagination-expand-row">
                         <div class="pagination-expand-container">
                             <PaginationController

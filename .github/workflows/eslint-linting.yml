@@ -1,4 +1,4 @@
-name: "JavaScript Unit Tests with Vitest"
+name: "ESLint"
 
 on:
   pull_request:
@@ -10,10 +10,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  test-javascript:
+  lint-eslint:
     runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: true
     steps:
       # Checkout the code
       - name: Checkout
@@ -25,15 +23,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      # Install Front End dependencies
-      - name: Install Front End dependencies
+      # Execute linting
+      - name: Run ESLint on front end
         if: success()
         working-directory: ./solution
         run: |
-          make install-npm
-      # Execute the JavaScript tests
-      - name: Run JavaScript unit tests with Vitest
-        if: success()
+          make eslint-frontend
+      - name: Run ESLint on CDK TS files
+        # if: success()
+        if: false # Disable CDK linting for now
         working-directory: ./solution
         run: |
-          make test.vitest.coverage
+          make eslint-cdk

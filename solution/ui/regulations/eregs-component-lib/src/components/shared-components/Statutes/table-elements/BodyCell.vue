@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     cellData: {
         type: Object,
         required: true,
@@ -37,8 +37,7 @@ const props = defineProps({
                 :href="cellData.body.url(statute)"
                 target="_blank"
                 rel="noopener noreferrer"
-                >{{ cellData.body.text(statute) }}</a
-            >
+            >{{ cellData.body.text(statute) }}</a>
             <span v-else :data-testid="statute.usc + '-none'">None</span>
         </template>
     </td>

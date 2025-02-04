@@ -97,7 +97,11 @@ const btnAriaLabel = computed(() =>
 </script>
 
 <template>
-    <nav id="leftNav" ref="$rootNav" :class="navClasses">
+    <nav
+        id="leftNav"
+        ref="$rootNav"
+        :class="navClasses"
+    >
         <v-btn
             class="nav-toggle__button"
             :class="btnClasses"
@@ -111,13 +115,15 @@ const btnAriaLabel = computed(() =>
             @focus="toggleFocus"
             @blur="toggleFocus"
         >
-            <v-icon class="nav-toggle__button--icon" :class="btnHoverClasses">{{
-                btnIcon
-            }}</v-icon>
+            <v-icon class="nav-toggle__button--icon" :class="btnHoverClasses">
+                {{
+                    btnIcon
+                }}
+            </v-icon>
             <span v-if="!navOpen" class="nav-toggle__button--label">Menu</span>
         </v-btn>
         <div v-show="navOpen">
-            <slot name="nav-contents"></slot>
+            <slot name="nav-contents" />
         </div>
     </nav>
 </template>

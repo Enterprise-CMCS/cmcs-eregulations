@@ -5,7 +5,7 @@
         :class="{ invisible: !visible }"
         :style="[styles]"
     >
-        <slot></slot>
+        <slot />
     </div>
 </template>
 
