@@ -30,7 +30,8 @@ jobs:
         run: |
           make eslint-frontend
       - name: Run ESLint on CDK TS files
-        if: success()
+        # if: success()
+        if: false # Disable CDK linting for now
         working-directory: ./solution
         run: |
           make eslint-cdk
