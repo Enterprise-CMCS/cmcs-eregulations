@@ -116,37 +116,12 @@ export class APIStack extends cdk.Stack {
       ],
     };
 
-    // const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-    //   vpc,
-    //   description: 'SecurityGroup for Serverless Functions',
-    //   allowAllOutbound: true,
-    // });
-  const serverlessSG = stageConfig.isEphemeral()
-  ? (() => {
-      try {
-        // Try to import dev security group
-        return ec2.SecurityGroup.fromSecurityGroupId(
-          this,
-          'ImportedDevServerlessSG',
-          cdk.Fn.importValue(`${StageConfig.projectName}-dev-serverless-security-group`)
-        );
-      } catch (error) {
-        // If dev security group doesn't exist, create a new one for this ephemeral environment
-        console.warn('Dev security group not found, creating new one for ephemeral environment');
-        return new ec2.SecurityGroup(this, 'EphemeralServerlessSecurityGroup', {
-          vpc,
-          description: `SecurityGroup for ${stageConfig.stageName} Serverless Functions`,
-          allowAllOutbound: true,
-          securityGroupName: stageConfig.getResourceName('serverless-security-group'),
-        });
-      }
-    })()
-  : new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
+    const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
       vpc,
-      description: `SecurityGroup for ${stageConfig.environment} Serverless Functions`,
+      description: 'SecurityGroup for Serverless Functions',
       allowAllOutbound: true,
-      securityGroupName: stageConfig.getResourceName('serverless-security-group'),
     });
+
     // ================================
     // EXISTING SQS QUEUE
     // ================================
@@ -421,4 +396,3 @@ export class APIStack extends cdk.Stack {
     waf.associateWithApiGateway(api.api);
   }
 }
-
