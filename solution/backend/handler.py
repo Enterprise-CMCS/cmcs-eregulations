@@ -32,7 +32,7 @@ TEXT_MIME_TYPES = [
 
 # Load Django as a WSGI application.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
-django_app = get_wsgi_application()
+application = get_wsgi_application()
 
 
 # Determine if a "stage name" path should be prepended to all requests.
@@ -170,5 +170,5 @@ def handler(event, context):
     })
 
     # Forward the request to Django and generate a response.
-    response = Response.from_app(django_app, environment)
+    response = Response.from_app(application, environment)
     return generate_response(response, event)
