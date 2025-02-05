@@ -1,6 +1,3 @@
- 
- 
-
 // SSA table URL methods
 
 /**

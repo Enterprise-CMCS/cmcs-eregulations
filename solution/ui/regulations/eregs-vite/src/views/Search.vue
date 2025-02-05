@@ -2,10 +2,7 @@
 import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults";
-import useRemoveList from "composables/removeList";
-
-import _isEmpty from "lodash/isEmpty";
+const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
 
 import { getLastUpdatedDates, getTitles } from "utilities/api";
 
@@ -94,8 +91,8 @@ const setCategories = (categories) => {
 const allDocTypesOnly = (queryParams) => {
     const { type, ...rest } = queryParams;
     if (
-        (type && type.includes("all") && _isEmpty(rest)) ||
-        (!type && _isEmpty(rest))
+        (type && type.includes("all") && isEmpty(rest)) ||
+        (!type && isEmpty(rest))
     ) {
         return true;
     }
@@ -202,7 +199,7 @@ const sanitizeQueryParams = (queryParams) =>
 const sanitizedQueryParams = ref(sanitizeQueryParams($route.query));
 
 const activeFilters = computed(() =>
-    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q")
+    sanitizedQueryParams.value.filter(([key, value]) => key !== "q")
 );
 
 const hasActiveFilters = computed(() => activeFilters.value.length > 0);
@@ -229,7 +226,7 @@ watch(
         sanitizedQueryParams.value = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams.value)) {
+        if (isEmpty(sanitizedQueryParams.value)) {
             return;
         }
 

@@ -1,6 +1,4 @@
 <script>
-import _isNull from "lodash/isNull";
-
 import { getRecentResources } from "utilities/api";
 
 import RelatedRuleList from "./RelatedRuleList.vue";
@@ -76,7 +74,7 @@ export default {
 
     watch: {
         async categories(newCats, oldCats) {
-            if (_isNull(oldCats)) {
+            if (oldCats === null) {
                 this.getRules({ categories: newCats });
             }
         },

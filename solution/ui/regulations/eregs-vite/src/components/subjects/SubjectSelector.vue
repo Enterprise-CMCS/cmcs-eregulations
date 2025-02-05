@@ -20,7 +20,7 @@ const getListItemClasses = ({ parent }) => ({
 });
 
 const getSubjectClasses = ({ subjectId, subjectQueryParam }) => {
-    const routeArr = _isArray(subjectQueryParam)
+    const routeArr = Array.isArray(subjectQueryParam)
         ? subjectQueryParam
         : [subjectQueryParam];
 
@@ -52,8 +52,7 @@ import { useRouter, useRoute } from "vue-router";
 
 import useRemoveList from "composables/removeList";
 
-import _debounce from "lodash/debounce";
-import _isArray from "lodash/isArray";
+import debounce from "lodash/debounce";
 
 import { getSubjectName } from "utilities/filters";
 
@@ -179,7 +178,7 @@ const getFilteredSubjects = (filter) => {
         }, []);
 };
 
-const debouncedFilter = _debounce(getFilteredSubjects, 100);
+const debouncedFilter = debounce(getFilteredSubjects, 100);
 
 watch(() => state.filter, debouncedFilter);
 
@@ -189,7 +188,7 @@ const subjectClick = (event) => {
     const routeClone = { ...$route.query };
 
     const subjects = routeClone?.subjects ?? [];
-    const subjectsArray = _isArray(subjects) ? subjects : [subjects];
+    const subjectsArray = Array.isArray(subjects) ? subjects : [subjects];
     const subjectToAdd = event.currentTarget.dataset.id;
 
     if (subjectsArray.includes(subjectToAdd)) return;

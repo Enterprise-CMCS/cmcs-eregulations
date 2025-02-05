@@ -1,4 +1,4 @@
-import _isEqual from "lodash/isEqual";
+import isEqual from "lodash/isEqual";
 
 import {
     createLastUpdatedDates,
@@ -78,7 +78,7 @@ describe("Utilities.js", () => {
                     .file_name
             );
             expect(
-                _isEqual(
+                isEqual(
                     formattedInternalResources[0].supplemental_content[0]
                         .locations,
                     formattedInternalDocsFixture[0].supplemental_content[0]
@@ -86,7 +86,7 @@ describe("Utilities.js", () => {
                 )
             ).toBe(true);
             expect(
-                _isEqual(
+                isEqual(
                     formattedInternalResources[0].supplemental_content[0]
                         .category,
                     formattedInternalDocsFixture[0].supplemental_content[0]
