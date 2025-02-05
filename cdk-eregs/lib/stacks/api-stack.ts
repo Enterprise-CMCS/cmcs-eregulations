@@ -32,18 +32,26 @@ export class APIStack extends cdk.Stack {
   private createOrImportSecurityGroup(vpc: ec2.IVpc, stageConfig: StageConfig): ec2.ISecurityGroup {
     // For ephemeral environments, try to import dev security group
     if (stageConfig.isEphemeral()) {
+      const devSgExportName = `${StageConfig.projectName}-dev-serverless-security-group`;
+      
+      // Check if the export exists before trying to import
       try {
-        const devSgExportName = `${StageConfig.projectName}-dev-serverless-security-group`;
-        const devSgId = cdk.Fn.importValue(devSgExportName);
-        
-        return ec2.SecurityGroup.fromSecurityGroupId(
-          this, 
-          'ImportedDevServerlessSG',
-          devSgId,
-          { allowAllOutbound: true }
-        );
+        // Use Fn.condition to check if the export exists
+        const devSgId = cdk.Token.isUnresolved(devSgExportName) ? 
+          cdk.Fn.importValue(devSgExportName) : 
+          undefined;
+  
+        if (devSgId) {
+          return ec2.SecurityGroup.fromSecurityGroupId(
+            this, 
+            'ImportedDevServerlessSG',
+            devSgId,
+            { allowAllOutbound: true }
+          );
+        }
       } catch (error) {
-        console.warn('Could not import dev security group for ephemeral environment:', error);
+        // Log warning but continue with creating new security group
+        console.warn('Dev security group not found for ephemeral environment, creating new one');
       }
     }
 
