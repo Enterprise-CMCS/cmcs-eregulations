@@ -202,7 +202,7 @@ const sanitizeQueryParams = (queryParams) =>
 const sanitizedQueryParams = ref(sanitizeQueryParams($route.query));
 
 const activeFilters = computed(() =>
-    sanitizedQueryParams.value.filter(([key, value]) => key !== "q")
+    sanitizedQueryParams.value.filter(([key, _value]) => key !== "q")
 );
 
 const hasActiveFilters = computed(() => activeFilters.value.length > 0);

@@ -50,7 +50,7 @@ router.beforeEach((to) => {
         const { q, ...qlessQuery } = to.query;
 
         if (isAuthenticated === "False" && to.query?.type) {
-            const { type, ...typelessQuery } = qlessQuery;
+            const { type: _type, ...typelessQuery } = qlessQuery;
             return { name: "subjects", query: typelessQuery };
         }
 
