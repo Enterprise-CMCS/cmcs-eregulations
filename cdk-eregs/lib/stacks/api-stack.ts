@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Backend Stack that combines Database and API resources with environment awareness
+ */
+
 import * as cdk from 'aws-cdk-lib';
 import {
   aws_ec2 as ec2,
@@ -12,103 +16,221 @@ import {
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 import { ApiConstruct } from '../constructs/api-construct';
+import { DatabaseConstruct } from '../constructs/database-construct';
 import { WafConstruct } from '../constructs/waf-construct';
 import * as path from 'path';
 
-interface APIStackProps extends cdk.StackProps {
-  lambdaConfig: {
-    memorySize: number;
-    timeout: number;
-    reservedConcurrentExecutions?: number;
-  };
-  environmentConfig: {
-    vpcId: string;
-    logLevel: string;
-    subnetIds: string[];
-  };
+/**
+ * Lambda function configuration interface
+ * @interface LambdaConfig
+ */
+interface LambdaConfig {
+  /** Memory size in MB */
+  memorySize: number;
+  /** Timeout in seconds */
+  timeout: number;
+  /** Optional concurrent execution limit */
+  reservedConcurrentExecutions?: number;
 }
 
-export class APIStack extends cdk.Stack {
-  private createOrImportSecurityGroup(vpc: ec2.IVpc, stageConfig: StageConfig): ec2.ISecurityGroup {
-    // For ephemeral environments, try to import dev security group
-    if (stageConfig.isEphemeral()) {
-      const devSgExportName = `${StageConfig.projectName}-dev-serverless-security-group`;
-      
-      // Check if the export exists before trying to import
-      try {
-        // Use Fn.condition to check if the export exists
-        const devSgId = cdk.Token.isUnresolved(devSgExportName) ? 
-          cdk.Fn.importValue(devSgExportName) : 
-          undefined;
-  
-        if (devSgId) {
-          return ec2.SecurityGroup.fromSecurityGroupId(
-            this, 
-            'ImportedDevServerlessSG',
-            devSgId,
-            { allowAllOutbound: true }
-          );
-        }
-      } catch (error) {
-        // Log warning but continue with creating new security group
-        console.warn('Dev security group not found for ephemeral environment, creating new one');
-      }
-    }
+/**
+ * Environment configuration interface
+ * @interface EnvironmentConfig
+ */
+interface EnvironmentConfig {
+  /** VPC ID where resources will be deployed */
+  vpcId: string;
+  /** Logging level for the application */
+  logLevel: string;
+  /** List of subnet IDs for resource placement */
+  subnetIds: string[];
+}
 
-    // Create new security group with standardized naming
-    const sgName = stageConfig.getResourceName('serverless-security-group');
-    const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-      vpc,
-      description: `Security Group for ${stageConfig.stageName} Serverless Functions`,
-      allowAllOutbound: true,
-      securityGroupName: sgName,
-    });
+/**
+ * Props for the Backend Stack
+ * @interface BackendStackProps
+ * @extends cdk.StackProps
+ */
+interface BackendStackProps extends cdk.StackProps {
+  /** Lambda function configuration */
+  lambdaConfig: LambdaConfig;
+  /** Environment-specific configuration */
+  environmentConfig: EnvironmentConfig;
+}
 
-    // Add inbound rules
-    serverlessSG.addIngressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(443),
-      'Allow HTTPS inbound'
-    );
+/**
+ * Predefined secret paths in AWS Secrets Manager
+ * @const
+ */
+const SECRETS = {
+  OIDC_CREDENTIALS: '/eregulations/oidc/client_credentials',
+  DJANGO_CREDENTIALS: '/eregulations/http/django_credentials',
+  READER_CREDENTIALS: '/eregulations/http/reader_credentials',
+  DB_CREDENTIALS: '/eregulations/db/credentials',
+  HTTP_CREDENTIALS: '/eregulations/http/credentials',
+} as const;
 
-    // Export the security group ID
-    new cdk.CfnOutput(this, 'ServerlessSecurityGroupOutput', {
-      value: serverlessSG.securityGroupId,
-      exportName: sgName,
-      description: `Security Group ID for ${stageConfig.stageName} environment`
-    });
-
-    // Add tags using StageConfig
-    const tags = stageConfig.getStackTags();
-    Object.entries(tags).forEach(([key, value]) => {
-      cdk.Tags.of(serverlessSG).add(key, value);
-    });
-
-    return serverlessSG;
-  }
-
-  constructor(scope: Construct, id: string, props: APIStackProps, stageConfig: StageConfig) {
+/**
+ * Combined Backend Stack that manages both API and Database resources
+ * Handles environment-specific deployments and resource management
+ * @class BackendStack
+ * @extends cdk.Stack
+ */
+export class BackendStack extends cdk.Stack {
+  /**
+   * Creates an instance of BackendStack
+   * @param {Construct} scope - The parent construct
+   * @param {string} id - The construct ID
+   * @param {BackendStackProps} props - Configuration properties
+   * @param {StageConfig} stageConfig - Stage-specific configuration
+   */
+  constructor(scope: Construct, id: string, props: BackendStackProps, stageConfig: StageConfig) {
     super(scope, id, props);
 
     // ================================
     // SECRETS
     // ================================
-    const SECRETS = {
-      OIDC_CREDENTIALS: '/eregulations/oidc/client_credentials',
-      DJANGO_CREDENTIALS: '/eregulations/http/django_credentials',
-      READER_CREDENTIALS: '/eregulations/http/reader_credentials',
-      DB_CREDENTIALS: '/eregulations/db/credentials',
-      HTTP_CREDENTIALS: '/eregulations/http/credentials',
+    const secrets = {
+      oidc: secretsmanager.Secret.fromSecretNameV2(this, 'OidcSecret', SECRETS.OIDC_CREDENTIALS),
+      django: secretsmanager.Secret.fromSecretNameV2(this, 'DjangoSecret', SECRETS.DJANGO_CREDENTIALS),
+      reader: secretsmanager.Secret.fromSecretNameV2(this, 'ReaderSecret', SECRETS.READER_CREDENTIALS),
+      db: secretsmanager.Secret.fromSecretNameV2(this, 'DbSecret', SECRETS.DB_CREDENTIALS),
+      http: secretsmanager.Secret.fromSecretNameV2(this, 'HttpSecret', SECRETS.HTTP_CREDENTIALS),
     };
 
-    const oidcSecret = secretsmanager.Secret.fromSecretNameV2(this, 'OidcSecret', SECRETS.OIDC_CREDENTIALS);
-    const djangoSecret = secretsmanager.Secret.fromSecretNameV2(this, 'DjangoSecret', SECRETS.DJANGO_CREDENTIALS);
-    const readerSecret = secretsmanager.Secret.fromSecretNameV2(this, 'ReaderSecret', SECRETS.READER_CREDENTIALS);
-    const dbSecret = secretsmanager.Secret.fromSecretNameV2(this, 'DbSecret', SECRETS.DB_CREDENTIALS);
-    const httpSecret = secretsmanager.Secret.fromSecretNameV2(this, 'HttpSecret', SECRETS.HTTP_CREDENTIALS);
+    // ================================
+    // VPC & NETWORKING
+    // ================================
+    const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
+      vpcId: props.environmentConfig.vpcId,
+    });
+
+    const selectedSubnets: ec2.SubnetSelection = {
+      subnets: props.environmentConfig.subnetIds.map(
+        (subnetId, index) => ec2.Subnet.fromSubnetId(
+          this,
+          `PrivateSubnet${index + 1}`,
+          subnetId
+        )
+      ),
+    };
 
     // ================================
-    // NON-SENSITIVE PARAMETERS
+    // DATABASE SETUP WITH SAFE IMPORTS
+    // ================================
+    let databaseSecurityGroup: ec2.ISecurityGroup;
+    let databaseEndpoint: string;
+    let databaseConstruct: DatabaseConstruct | undefined;
+
+    if (!stageConfig.isEphemeral()) {
+      // Create new database for non-ephemeral environments
+      databaseConstruct = new DatabaseConstruct(this, 'Database', {
+        vpc,
+        selectedSubnets,
+        stageConfig,
+      });
+      databaseSecurityGroup = databaseConstruct.dbSecurityGroup;
+      databaseEndpoint = databaseConstruct.cluster.clusterEndpoint.hostname;
+
+      // Export database resources if this is dev environment
+      if (stageConfig.environment === 'dev') {
+        new cdk.CfnOutput(this, 'DevDatabaseEndpoint', {
+          value: databaseEndpoint,
+          description: 'Dev Database endpoint for ephemeral environments',
+          exportName: `${StageConfig.projectName}-dev-db-endpoint`,
+        });
+
+        new cdk.CfnOutput(this, 'DevDatabaseSecurityGroup', {
+          value: databaseConstruct.dbSecurityGroup.securityGroupId,
+          description: 'Dev Database security group ID for ephemeral environments',
+          exportName: `${StageConfig.projectName}-dev-db-security-group`,
+        });
+      }
+    } else {
+      // For ephemeral environments, try to import from dev
+      try {
+        // Check if dev exports exist
+        const devSgExportName = `${StageConfig.projectName}-dev-db-security-group`;
+        const devEndpointExportName = `${StageConfig.projectName}-dev-db-endpoint`;
+
+        // Use Fn.condition to check if the exports exist
+        const devDbSgId = cdk.Token.isUnresolved(devSgExportName) ? 
+          cdk.Fn.importValue(devSgExportName) : 
+          undefined;
+
+        const devDbEndpoint = cdk.Token.isUnresolved(devEndpointExportName) ? 
+          cdk.Fn.importValue(devEndpointExportName) : 
+          undefined;
+
+        if (!devDbSgId || !devDbEndpoint) {
+          throw new Error(
+            'Dev database resources not found. Please ensure dev environment is deployed first.'
+          );
+        }
+
+        databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
+          this,
+          'ImportedDbSG',
+          devDbSgId,
+          { allowAllOutbound: true }
+        );
+        databaseEndpoint = devDbEndpoint;
+      } catch (error) {
+        throw new Error(
+          'Cannot deploy ephemeral environment: Dev database does not exist yet. ' +
+          'Please deploy dev environment first to create the required database resources.'
+        );
+      }
+    }
+
+    // ================================
+    // S3 BUCKET
+    // ================================
+    const isEphemeral = stageConfig.isEphemeral();
+    const storageBucket = new s3.Bucket(this, 'StorageBucket', {
+      bucketName: stageConfig.getResourceName(`file-repo-eregs`),
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      enforceSSL: true,
+      autoDeleteObjects: isEphemeral,
+      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      cors: [
+        {
+          allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+          allowedOrigins: ['*'],
+          allowedHeaders: ['*'],
+          maxAge: 3000,
+        },
+      ],
+    });
+
+    // ================================
+    // SECURITY GROUP
+    // ================================
+    const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
+      vpc,
+      description: `Security Group for ${stageConfig.stageName} Serverless Functions`,
+      allowAllOutbound: true,
+      securityGroupName: stageConfig.getResourceName('serverless-security-group'),
+    });
+
+    // Add ingress rule to database security group
+    databaseSecurityGroup.addIngressRule(
+      serverlessSG,
+      ec2.Port.tcp(5432),
+      'Allow PostgreSQL access from Lambda functions'
+    );
+
+    // ================================
+    // SQS QUEUE
+    // ================================
+    const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
+      queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
+      queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
+    });
+
+    // ================================
+    // SSM PARAMETERS
     // ================================
     const ssmParams = {
       dbHost: ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/host'),
@@ -135,53 +257,11 @@ export class APIStack extends cdk.Stack {
     };
 
     // ================================
-    // BUILD ID FOR UNIQUE DOCKER TAGS
+    // BUILD ID
     // ================================
     const buildId = this.node.tryGetContext('buildId') 
       || process.env.RUN_ID 
       || new Date().getTime().toString();
-
-    // ================================
-    // CREATE S3 BUCKET
-    // ================================
-    const storageBucket = new s3.Bucket(this, 'StorageBucket', {
-      bucketName: stageConfig.getResourceName(`file-repo-eregs`),
-      encryption: s3.BucketEncryption.S3_MANAGED,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-      enforceSSL: true,
-      cors: [
-        {
-          allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
-          allowedOrigins: ['*'],
-          allowedHeaders: ['*'],
-          maxAge: 3000,
-        },
-      ],
-    });
-
-    // ================================
-    // VPC & SECURITY GROUP
-    // ================================
-    const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
-      vpcId: props.environmentConfig.vpcId,
-    });
-
-    const selectedSubnets: ec2.SubnetSelection = {
-      subnets: [
-        ec2.Subnet.fromSubnetId(this, 'PrivateSubnet', props.environmentConfig.subnetIds[0]),
-      ],
-    };
-
-    // Get the appropriate security group based on environment
-    const serverlessSG = this.createOrImportSecurityGroup(vpc, stageConfig);
-
-    // ================================
-    // EXISTING SQS QUEUE
-    // ================================
-    const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
-      queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
-      queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
-    });
 
     // ================================
     // ENVIRONMENT VARIABLES
@@ -189,7 +269,7 @@ export class APIStack extends cdk.Stack {
     const environmentVariables: { [key: string]: string } = {
       DB_NAME: 'eregs',
       DB_USER: 'eregsuser',
-      DB_HOST: ssmParams.dbHost,
+      DB_HOST: databaseEndpoint,
       DB_PORT: ssmParams.dbPort,
       GA_ID: ssmParams.gaId,
       DJANGO_SETTINGS_MODULE: ssmParams.djangoSettingsModule,
@@ -217,35 +297,48 @@ export class APIStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: stageConfig.getResourceName(`file-repo-eregs`),
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-      DB_PASSWORD: dbSecret.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
-      HTTP_AUTH_USER: httpSecret.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
-      HTTP_AUTH_PASSWORD: httpSecret.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
-      DJANGO_ADMIN_USERNAME: djangoSecret.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
-      DJANGO_ADMIN_PASSWORD: djangoSecret.secretValueFromJson('DJANGO_ADMIN_PASSWORD').unsafeUnwrap(),
-      DJANGO_USERNAME: readerSecret.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
-      DJANGO_PASSWORD: readerSecret.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
-      OIDC_RP_CLIENT_ID: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_ID').unsafeUnwrap(),
-      OIDC_RP_CLIENT_SECRET: oidcSecret.secretValueFromJson('OIDC_RP_CLIENT_SECRET').unsafeUnwrap(),
+      DB_PASSWORD: secrets.db.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
+      HTTP_AUTH_USER: secrets.http.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
+      HTTP_AUTH_PASSWORD: secrets.http.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
+      DJANGO_ADMIN_USERNAME: secrets.django.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
+      DJANGO_ADMIN_PASSWORD: secrets.django.secretValueFromJson('DJANGO_ADMIN_PASSWORD').unsafeUnwrap(),
+      DJANGO_USERNAME: secrets.reader.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
+      DJANGO_PASSWORD: secrets.reader.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
+      OIDC_RP_CLIENT_ID: secrets.oidc.secretValueFromJson('OIDC_RP_CLIENT_ID').unsafeUnwrap(),
+      OIDC_RP_CLIENT_SECRET: secrets.oidc.secretValueFromJson('OIDC_RP_CLIENT_SECRET').unsafeUnwrap(),
     };
 
     // ================================
-    // CREATE LOG GROUPS
+    // LOG GROUPS
     // ================================
-    const createLogGroup = (name: string) =>
+    /**
+     * Creates a CloudWatch Log Group for Lambda functions
+     * @param {string} name - Base name for the log group
+     * @returns {logs.LogGroup} Created log group
+     */
+    const createLogGroup = (name: string): logs.LogGroup => 
       new logs.LogGroup(this, `${name}LogGroup`, {
         logGroupName: stageConfig.aws.lambda(name),
         retention: logs.RetentionDays.ONE_MONTH,
       });
 
     // ================================
-    // HELPER: CREATE DOCKER-BASED LAMBDAS
+    // LAMBDA FACTORY
     // ================================
+    /**
+     * Creates a Docker-based Lambda function with standard configuration
+     * @param {string} name - Function name
+     * @param {string} dockerFile - Name of the Dockerfile
+     * @param {string} handler - Handler function path
+     * @param {number} [timeout=300] - Function timeout in seconds
+     * @returns {lambda.DockerImageFunction} Created Lambda function
+     */
     const createDockerLambda = (
       name: string,
       dockerFile: string,
       handler: string,
       timeout: number = 300,
-    ) => {
+    ): lambda.DockerImageFunction => {
       const lambdaFunction = new lambda.DockerImageFunction(this, `${name}Lambda`, {
         functionName: stageConfig.getResourceName(name.toLowerCase()),
         code: lambda.DockerImageCode.fromImageAsset(
@@ -268,11 +361,7 @@ export class APIStack extends cdk.Stack {
       });
 
       // Grant read access to secrets
-      oidcSecret.grantRead(lambdaFunction);
-      djangoSecret.grantRead(lambdaFunction);
-      readerSecret.grantRead(lambdaFunction);
-      dbSecret.grantRead(lambdaFunction);
-      httpSecret.grantRead(lambdaFunction);
+      Object.values(secrets).forEach(secret => secret.grantRead(lambdaFunction));
 
       // Add tags from StageConfig
       Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
@@ -283,16 +372,14 @@ export class APIStack extends cdk.Stack {
     };
 
     // ================================
-    // DEFINE LAMBDAS
+    // LAMBDA FUNCTIONS
     // ================================
     const regSiteLambda = createDockerLambda('RegSite', 'regsite.Dockerfile', 'handler.handler', 30);
     const migrateLambda = createDockerLambda('Migrate', 'migrate.Dockerfile', 'migrate.handler', 900);
     const createDbLambda = createDockerLambda('CreateDb', 'createdb.Dockerfile', 'createdb.handler');
     const dropDbLambda = createDockerLambda('DropDb', 'dropdb.Dockerfile', 'dropdb.handler');
-    const emptyBucketLambda = createDockerLambda('EmptyBucket', 'empty_bucket.Dockerfile', 'empty_bucket.handler', 900);
     const createSuLambda = createDockerLambda('CreateSu', 'createsu.Dockerfile', 'createsu.handler');
 
-    // Create authorizer Lambda for non-prod environments
     let authorizerLambda;
     if (stageConfig.environment !== 'prod') {
       authorizerLambda = createDockerLambda(
@@ -304,7 +391,7 @@ export class APIStack extends cdk.Stack {
     }
 
     // ================================
-    // CREATE API GATEWAY CONSTRUCT
+    // API GATEWAY
     // ================================
     const api = new ApiConstruct(this, 'Api', {
       vpc,
@@ -316,27 +403,17 @@ export class APIStack extends cdk.Stack {
       stageConfig,
       vpcSubnets: selectedSubnets,
       lambda: regSiteLambda,
-      authorizerLambda: authorizerLambda,
+      authorizerLambda,
     });
 
     // ================================
     // PERMISSIONS
     // ================================
-    // S3
     storageBucket.grantReadWrite(regSiteLambda);
-    storageBucket.grantReadWrite(emptyBucketLambda);
-
-    // SQS
     textExtractorQueue.grantSendMessages(regSiteLambda);
 
-    // ================================
-    // WAF
-    // ================================
-    const waf = new WafConstruct(this, 'Waf', stageConfig);
-
-    // ALLOW DB INSPECTION (RDS: Describe Only)
-    const dbLambdas = [createDbLambda, dropDbLambda, migrateLambda, createSuLambda];
-    dbLambdas.forEach(lambdaFn => {
+    // DB inspection permissions
+    [createDbLambda, dropDbLambda, migrateLambda, createSuLambda].forEach(lambdaFn => {
       lambdaFn.addToRolePolicy(
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
@@ -347,27 +424,10 @@ export class APIStack extends cdk.Stack {
     });
 
     // ================================
-    // TAG ALL LAMBDAS
+    // WAF
     // ================================
-    const allLambdas = [
-      regSiteLambda,
-      migrateLambda,
-      createDbLambda,
-      dropDbLambda,
-      emptyBucketLambda,
-      createSuLambda,
-    ];
-
-    if (authorizerLambda) {
-      allLambdas.push(authorizerLambda);
-    }
-
-    // Apply stage-specific tags to all lambdas
-    allLambdas.forEach(lambdaFn => {
-      Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
-        cdk.Tags.of(lambdaFn).add(key, value);
-      });
-    });
+    const waf = new WafConstruct(this, 'Waf', stageConfig);
+    waf.associateWithApiGateway(api.api);
 
     // ================================
     // STACK OUTPUTS
@@ -403,7 +463,6 @@ export class APIStack extends cdk.Stack {
         description: 'Storage bucket name',
         exportName: stageConfig.getResourceName('storage-bucket-name'),
       },
-      // WAF outputs
       WafAclArn: {
         value: waf.webAcl.attrArn,
         description: 'WAF Web ACL ARN',
@@ -427,7 +486,6 @@ export class APIStack extends cdk.Stack {
       MigrateLambdaArn: migrateLambda.functionArn,
       CreateSuLambdaArn: createSuLambda.functionArn,
       DropDbLambdaArn: dropDbLambda.functionArn,
-      EmptyBucketLambdaArn: emptyBucketLambda.functionArn,
     };
 
     Object.entries(lambdaOutputs).forEach(([name, value]) => {
@@ -438,19 +496,20 @@ export class APIStack extends cdk.Stack {
       };
     });
 
+    if (authorizerLambda) {
+      outputs.AuthorizerLambdaArn = {
+        value: authorizerLambda.functionArn,
+        description: 'Authorizer Lambda function ARN',
+        exportName: stageConfig.getResourceName('authorizer-lambda-arn'),
+      };
+    }
+
     // Create all outputs
     Object.entries(outputs).forEach(([name, config]) => {
       new cdk.CfnOutput(this, name, config);
     });
-
-    // ================================
-    // ASSOCIATE WAF WITH API GATEWAY
-    // ================================
-    waf.associateWithApiGateway(api.api);
   }
 }
-
-
 // import * as cdk from 'aws-cdk-lib';
 // import {
 //   aws_ec2 as ec2,
@@ -482,6 +541,64 @@ export class APIStack extends cdk.Stack {
 // }
 
 // export class APIStack extends cdk.Stack {
+//   private createOrImportSecurityGroup(vpc: ec2.IVpc, stageConfig: StageConfig): ec2.ISecurityGroup {
+//     // For ephemeral environments, try to import dev security group
+//     if (stageConfig.isEphemeral()) {
+//       const devSgExportName = `${StageConfig.projectName}-dev-serverless-security-group`;
+      
+//       // Check if the export exists before trying to import
+//       try {
+//         // Use Fn.condition to check if the export exists
+//         const devSgId = cdk.Token.isUnresolved(devSgExportName) ? 
+//           cdk.Fn.importValue(devSgExportName) : 
+//           undefined;
+  
+//         if (devSgId) {
+//           return ec2.SecurityGroup.fromSecurityGroupId(
+//             this, 
+//             'ImportedDevServerlessSG',
+//             devSgId,
+//             { allowAllOutbound: true }
+//           );
+//         }
+//       } catch (error) {
+//         // Log warning but continue with creating new security group
+//         console.warn('Dev security group not found for ephemeral environment, creating new one');
+//       }
+//     }
+
+//     // Create new security group with standardized naming
+//     const sgName = stageConfig.getResourceName('serverless-security-group');
+//     const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
+//       vpc,
+//       description: `Security Group for ${stageConfig.stageName} Serverless Functions`,
+//       allowAllOutbound: true,
+//       securityGroupName: sgName,
+//     });
+
+//     // Add inbound rules
+//     serverlessSG.addIngressRule(
+//       ec2.Peer.anyIpv4(),
+//       ec2.Port.tcp(443),
+//       'Allow HTTPS inbound'
+//     );
+
+//     // Export the security group ID
+//     new cdk.CfnOutput(this, 'ServerlessSecurityGroupOutput', {
+//       value: serverlessSG.securityGroupId,
+//       exportName: sgName,
+//       description: `Security Group ID for ${stageConfig.stageName} environment`
+//     });
+
+//     // Add tags using StageConfig
+//     const tags = stageConfig.getStackTags();
+//     Object.entries(tags).forEach(([key, value]) => {
+//       cdk.Tags.of(serverlessSG).add(key, value);
+//     });
+
+//     return serverlessSG;
+//   }
+
 //   constructor(scope: Construct, id: string, props: APIStackProps, stageConfig: StageConfig) {
 //     super(scope, id, props);
 
@@ -532,20 +649,21 @@ export class APIStack extends cdk.Stack {
 //     // ================================
 //     // BUILD ID FOR UNIQUE DOCKER TAGS
 //     // ================================
-//     // This is the critical addition: we pull a unique ID from CDK context or environment.
-//     // Make sure you pass `-c buildId=xyz` during `cdk deploy`.
 //     const buildId = this.node.tryGetContext('buildId') 
 //       || process.env.RUN_ID 
 //       || new Date().getTime().toString();
 
 //     // ================================
-//     // CREATE S3 BUCKET (Least Privilege, Secure by Default)
+//     // CREATE S3 BUCKET
 //     // ================================
+//     const isEphemeral = stageConfig.isEphemeral();
 //     const storageBucket = new s3.Bucket(this, 'StorageBucket', {
 //       bucketName: stageConfig.getResourceName(`file-repo-eregs`),
 //       encryption: s3.BucketEncryption.S3_MANAGED,
 //       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 //       enforceSSL: true,
+//       autoDeleteObjects: isEphemeral,
+//       removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
 //       cors: [
 //         {
 //           allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
@@ -569,11 +687,8 @@ export class APIStack extends cdk.Stack {
 //       ],
 //     };
 
-//     const serverlessSG = new ec2.SecurityGroup(this, 'ServerlessSecurityGroup', {
-//       vpc,
-//       description: 'SecurityGroup for Serverless Functions',
-//       allowAllOutbound: true,
-//     });
+//     // Get the appropriate security group based on environment
+//     const serverlessSG = this.createOrImportSecurityGroup(vpc, stageConfig);
 
 //     // ================================
 //     // EXISTING SQS QUEUE
@@ -629,7 +744,7 @@ export class APIStack extends cdk.Stack {
 //     };
 
 //     // ================================
-//     // CREATE LOG GROUPS (1-MONTH RETENTION)
+//     // CREATE LOG GROUPS
 //     // ================================
 //     const createLogGroup = (name: string) =>
 //       new logs.LogGroup(this, `${name}LogGroup`, {
@@ -653,9 +768,6 @@ export class APIStack extends cdk.Stack {
 //           {
 //             file: dockerFile,
 //             cmd: [handler],
-//             // ================================
-//             // CRITICAL: PASS BUILD_ID to ensure unique image
-//             // ================================
 //             buildArgs: {
 //               BUILD_ID: buildId,
 //             },
@@ -665,38 +777,41 @@ export class APIStack extends cdk.Stack {
 //         vpcSubnets: selectedSubnets,
 //         securityGroups: [serverlessSG],
 //         timeout: cdk.Duration.seconds(timeout),
-//         memorySize: 4096,
+//         memorySize: props.lambdaConfig.memorySize || 4096,
 //         environment: environmentVariables,
 //         logGroup: createLogGroup(name.toLowerCase()),
 //       });
 
-//       // Grant read access to all relevant secrets
+//       // Grant read access to secrets
 //       oidcSecret.grantRead(lambdaFunction);
 //       djangoSecret.grantRead(lambdaFunction);
 //       readerSecret.grantRead(lambdaFunction);
 //       dbSecret.grantRead(lambdaFunction);
 //       httpSecret.grantRead(lambdaFunction);
 
+//       // Add tags from StageConfig
+//       Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
+//         cdk.Tags.of(lambdaFunction).add(key, value);
+//       });
+
 //       return lambdaFunction;
 //     };
 
 //     // ================================
-//     // DEFINE YOUR LAMBDAS
+//     // DEFINE LAMBDAS
 //     // ================================
 //     const regSiteLambda = createDockerLambda('RegSite', 'regsite.Dockerfile', 'handler.handler', 30);
 //     const migrateLambda = createDockerLambda('Migrate', 'migrate.Dockerfile', 'migrate.handler', 900);
 //     const createDbLambda = createDockerLambda('CreateDb', 'createdb.Dockerfile', 'createdb.handler');
 //     const dropDbLambda = createDockerLambda('DropDb', 'dropdb.Dockerfile', 'dropdb.handler');
-//     const emptyBucketLambda = createDockerLambda('EmptyBucket', 'empty_bucket.Dockerfile', 'empty_bucket.handler', 900);
 //     const createSuLambda = createDockerLambda('CreateSu', 'createsu.Dockerfile', 'createsu.handler');
-
 
 //     // Create authorizer Lambda for non-prod environments
 //     let authorizerLambda;
 //     if (stageConfig.environment !== 'prod') {
 //       authorizerLambda = createDockerLambda(
 //         'Authorizer',
-//         'authorizer.Dockerfile',  // Your existing authorizer Dockerfile
+//         'authorizer.Dockerfile',
 //         'authorizer.handler',
 //         30
 //       );
@@ -715,7 +830,7 @@ export class APIStack extends cdk.Stack {
 //       stageConfig,
 //       vpcSubnets: selectedSubnets,
 //       lambda: regSiteLambda,
-//       authorizerLambda: authorizerLambda, 
+//       authorizerLambda: authorizerLambda,
 //     });
 
 //     // ================================
@@ -723,7 +838,6 @@ export class APIStack extends cdk.Stack {
 //     // ================================
 //     // S3
 //     storageBucket.grantReadWrite(regSiteLambda);
-//     storageBucket.grantReadWrite(emptyBucketLambda);
 
 //     // SQS
 //     textExtractorQueue.grantSendMessages(regSiteLambda);
@@ -753,18 +867,16 @@ export class APIStack extends cdk.Stack {
 //       migrateLambda,
 //       createDbLambda,
 //       dropDbLambda,
-//       emptyBucketLambda,
 //       createSuLambda,
 //     ];
 
-//     const commonTags = {
-//       Environment: stageConfig.environment,
-//       Service: 'eregs',
-//       DeployedBy: 'CDK',
-//     };
+//     if (authorizerLambda) {
+//       allLambdas.push(authorizerLambda);
+//     }
 
+//     // Apply stage-specific tags to all lambdas
 //     allLambdas.forEach(lambdaFn => {
-//       Object.entries(commonTags).forEach(([key, value]) => {
+//       Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
 //         cdk.Tags.of(lambdaFn).add(key, value);
 //       });
 //     });
@@ -827,7 +939,6 @@ export class APIStack extends cdk.Stack {
 //       MigrateLambdaArn: migrateLambda.functionArn,
 //       CreateSuLambdaArn: createSuLambda.functionArn,
 //       DropDbLambdaArn: dropDbLambda.functionArn,
-//       EmptyBucketLambdaArn: emptyBucketLambda.functionArn,
 //     };
 
 //     Object.entries(lambdaOutputs).forEach(([name, value]) => {

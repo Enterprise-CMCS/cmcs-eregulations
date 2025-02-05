@@ -9,7 +9,7 @@ import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspe
 import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
-import { APIStack } from '../lib/stacks/api-stack';
+import { BackendStack } from '../lib/stacks/api-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -140,7 +140,7 @@ async function main() {
       }
     }, stageConfig);
         // Create API stack with Docker-based Lambdas
-        const apiStack = new APIStack(app, stageConfig.getResourceName('api'), {
+        const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
           env,
           description: `API Stack for ${stageConfig.getResourceName('site')}`,
           lambdaConfig: {

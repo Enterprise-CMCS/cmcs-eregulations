@@ -79,11 +79,14 @@ export class StaticAssetsStack extends cdk.Stack {
    * @returns {s3.Bucket} Configured S3 bucket for assets
    */
   private createAssetsBucket(): s3.Bucket {
+    const isEphemeral = this.stageConfig.isEphemeral();
     return new s3.Bucket(this, 'AssetsBucket', {
       bucketName: this.stageConfig.getResourceName('site-assets'),
       encryption: s3.BucketEncryption.S3_MANAGED,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
+      autoDeleteObjects: isEphemeral,
+      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
       cors: [{
         allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
         allowedOrigins: ['*'],
@@ -99,10 +102,13 @@ export class StaticAssetsStack extends cdk.Stack {
    * @returns {s3.Bucket} Configured logging bucket
    */
   private createLoggingBucket(): s3.Bucket {
+    const isEphemeral = this.stageConfig.isEphemeral();
     return new s3.Bucket(this, 'CloudFrontLogsBucket', {
       bucketName: this.stageConfig.getResourceName('cloudfront-logs'),
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
       enforceSSL: true,
+      autoDeleteObjects: isEphemeral,
+      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
     });
   }
