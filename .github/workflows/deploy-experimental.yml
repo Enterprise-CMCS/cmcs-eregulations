@@ -263,7 +263,7 @@ jobs:
           --outputs-file static-outputs.json
           popd    
   deploy-text-extractor-cdk:
-    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
+    # needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -357,7 +357,7 @@ jobs:
           popd
 
   deploy-ecfr-parser-cdk:
-    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk,deploy-site-lambda-cdk]
+    needs: [deploy-site-lambda-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
