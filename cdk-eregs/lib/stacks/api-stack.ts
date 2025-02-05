@@ -1,5 +1,6 @@
 /**
  * @fileoverview Backend Stack that combines Database and API resources with environment awareness
+ * Uses SSM for database configuration and handles ephemeral environments
  */
 
 import * as cdk from 'aws-cdk-lib';
@@ -21,7 +22,7 @@ import { WafConstruct } from '../constructs/waf-construct';
 import * as path from 'path';
 
 /**
- * Lambda function configuration interface
+ * Configuration for Lambda functions
  * @interface LambdaConfig
  */
 interface LambdaConfig {
@@ -34,7 +35,7 @@ interface LambdaConfig {
 }
 
 /**
- * Environment configuration interface
+ * Environment configuration
  * @interface EnvironmentConfig
  */
 interface EnvironmentConfig {
@@ -59,7 +60,7 @@ interface BackendStackProps extends cdk.StackProps {
 }
 
 /**
- * Predefined secret paths in AWS Secrets Manager
+ * Paths for AWS Secrets Manager secrets
  * @const
  */
 const SECRETS = {
@@ -71,19 +72,11 @@ const SECRETS = {
 } as const;
 
 /**
- * Combined Backend Stack that manages both API and Database resources
- * Handles environment-specific deployments and resource management
+ * Combined Backend Stack for managing API and Database resources
  * @class BackendStack
  * @extends cdk.Stack
  */
 export class BackendStack extends cdk.Stack {
-  /**
-   * Creates an instance of BackendStack
-   * @param {Construct} scope - The parent construct
-   * @param {string} id - The construct ID
-   * @param {BackendStackProps} props - Configuration properties
-   * @param {StageConfig} stageConfig - Stage-specific configuration
-   */
   constructor(scope: Construct, id: string, props: BackendStackProps, stageConfig: StageConfig) {
     super(scope, id, props);
 
@@ -116,71 +109,48 @@ export class BackendStack extends cdk.Stack {
     };
 
     // ================================
-    // DATABASE SETUP WITH SAFE IMPORTS
+    // DATABASE SETUP USING SSM
     // ================================
-    let databaseSecurityGroup: ec2.ISecurityGroup;
-    let databaseEndpoint: string;
-    let databaseConstruct: DatabaseConstruct | undefined;
+    // Get database connection info from SSM
+    const databaseEndpoint = ssm.StringParameter.valueForStringParameter(
+      this,
+      '/eregulations/db/cdk_host'
+    );
 
+    const databasePort = ssm.StringParameter.valueForStringParameter(
+      this,
+      '/eregulations/db/port'
+    );
+
+    const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
+      this,
+      'DatabaseSG',
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        '/eregulations/aws/cdk_securitygroupid'
+      ),
+      { allowAllOutbound: true }
+    );
+
+    // Create database only for non-ephemeral environments
+    let databaseConstruct: DatabaseConstruct | undefined;
     if (!stageConfig.isEphemeral()) {
-      // Create new database for non-ephemeral environments
       databaseConstruct = new DatabaseConstruct(this, 'Database', {
         vpc,
         selectedSubnets,
         stageConfig,
       });
-      databaseSecurityGroup = databaseConstruct.dbSecurityGroup;
-      databaseEndpoint = databaseConstruct.cluster.clusterEndpoint.hostname;
 
-      // Export database resources if this is dev environment
-      if (stageConfig.environment === 'dev') {
-        new cdk.CfnOutput(this, 'DevDatabaseEndpoint', {
-          value: databaseEndpoint,
-          description: 'Dev Database endpoint for ephemeral environments',
-          exportName: `${StageConfig.projectName}-dev-db-endpoint`,
-        });
+      // Store database info in SSM when created
+      new ssm.StringParameter(this, 'DatabaseHostParam', {
+        parameterName: '/eregulations/db/cdk_host',
+        stringValue: databaseConstruct.cluster.clusterEndpoint.hostname,
+      });
 
-        new cdk.CfnOutput(this, 'DevDatabaseSecurityGroup', {
-          value: databaseConstruct.dbSecurityGroup.securityGroupId,
-          description: 'Dev Database security group ID for ephemeral environments',
-          exportName: `${StageConfig.projectName}-dev-db-security-group`,
-        });
-      }
-    } else {
-      // For ephemeral environments, try to import from dev
-      try {
-        // Check if dev exports exist
-        const devSgExportName = `${StageConfig.projectName}-dev-db-security-group`;
-        const devEndpointExportName = `${StageConfig.projectName}-dev-db-endpoint`;
-
-        // Use Fn.condition to check if the exports exist
-        const devDbSgId = cdk.Token.isUnresolved(devSgExportName) ? 
-          cdk.Fn.importValue(devSgExportName) : 
-          undefined;
-
-        const devDbEndpoint = cdk.Token.isUnresolved(devEndpointExportName) ? 
-          cdk.Fn.importValue(devEndpointExportName) : 
-          undefined;
-
-        if (!devDbSgId || !devDbEndpoint) {
-          throw new Error(
-            'Dev database resources not found. Please ensure dev environment is deployed first.'
-          );
-        }
-
-        databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-          this,
-          'ImportedDbSG',
-          devDbSgId,
-          { allowAllOutbound: true }
-        );
-        databaseEndpoint = devDbEndpoint;
-      } catch (error) {
-        throw new Error(
-          'Cannot deploy ephemeral environment: Dev database does not exist yet. ' +
-          'Please deploy dev environment first to create the required database resources.'
-        );
-      }
+      new ssm.StringParameter(this, 'DatabaseSecurityGroupParam', {
+        parameterName: '/eregulations/aws/cdk_securitygroupid',
+        stringValue: databaseConstruct.dbSecurityGroup.securityGroupId,
+      });
     }
 
     // ================================
@@ -217,7 +187,7 @@ export class BackendStack extends cdk.Stack {
     // Add ingress rule to database security group
     databaseSecurityGroup.addIngressRule(
       serverlessSG,
-      ec2.Port.tcp(5432),
+      ec2.Port.tcp(parseInt(databasePort)),
       'Allow PostgreSQL access from Lambda functions'
     );
 
@@ -233,8 +203,8 @@ export class BackendStack extends cdk.Stack {
     // SSM PARAMETERS
     // ================================
     const ssmParams = {
-      dbHost: ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/host'),
-      dbPort: ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/port'),
+      dbHost: databaseEndpoint,
+      dbPort: databasePort,
       gaId: ssm.StringParameter.valueForStringParameter(this, '/eregulations/http/google_analytics'),
       djangoSettingsModule: ssm.StringParameter.valueForStringParameter(this, '/eregulations/django_settings_module'),
       baseUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/base_url'),
@@ -270,7 +240,7 @@ export class BackendStack extends cdk.Stack {
       DB_NAME: 'eregs',
       DB_USER: 'eregsuser',
       DB_HOST: databaseEndpoint,
-      DB_PORT: ssmParams.dbPort,
+      DB_PORT: databasePort,
       GA_ID: ssmParams.gaId,
       DJANGO_SETTINGS_MODULE: ssmParams.djangoSettingsModule,
       ALLOWED_HOST: '.amazonaws.com',
@@ -294,7 +264,7 @@ export class BackendStack extends cdk.Stack {
       SEARCH_HEADLINE_MAX_WORDS: ssmParams.searchHeadlineMaxWords,
       SEARCH_HEADLINE_MAX_FRAGMENTS: ssmParams.searchHeadlineMaxFragments,
       EUA_FEATUREFLAG: ssmParams.euaFeatureFlag,
-      AWS_STORAGE_BUCKET_NAME: stageConfig.getResourceName(`file-repo-eregs`),
+      AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
       DB_PASSWORD: secrets.db.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
@@ -311,11 +281,6 @@ export class BackendStack extends cdk.Stack {
     // ================================
     // LOG GROUPS
     // ================================
-    /**
-     * Creates a CloudWatch Log Group for Lambda functions
-     * @param {string} name - Base name for the log group
-     * @returns {logs.LogGroup} Created log group
-     */
     const createLogGroup = (name: string): logs.LogGroup => 
       new logs.LogGroup(this, `${name}LogGroup`, {
         logGroupName: stageConfig.aws.lambda(name),
@@ -325,14 +290,6 @@ export class BackendStack extends cdk.Stack {
     // ================================
     // LAMBDA FACTORY
     // ================================
-    /**
-     * Creates a Docker-based Lambda function with standard configuration
-     * @param {string} name - Function name
-     * @param {string} dockerFile - Name of the Dockerfile
-     * @param {string} handler - Handler function path
-     * @param {number} [timeout=300] - Function timeout in seconds
-     * @returns {lambda.DockerImageFunction} Created Lambda function
-     */
     const createDockerLambda = (
       name: string,
       dockerFile: string,
@@ -380,6 +337,7 @@ export class BackendStack extends cdk.Stack {
     const dropDbLambda = createDockerLambda('DropDb', 'dropdb.Dockerfile', 'dropdb.handler');
     const createSuLambda = createDockerLambda('CreateSu', 'createsu.Dockerfile', 'createsu.handler');
 
+    // Create authorizer Lambda for non-prod environments
     let authorizerLambda;
     if (stageConfig.environment !== 'prod') {
       authorizerLambda = createDockerLambda(
@@ -438,54 +396,24 @@ export class BackendStack extends cdk.Stack {
         description: 'API Handler Lambda function ARN',
         exportName: stageConfig.getResourceName('api-handler-arn'),
       },
-      ApiHandlerName: {
-        value: regSiteLambda.functionName,
-        description: 'API Handler Lambda function name',
-        exportName: stageConfig.getResourceName('api-handler-name'),
-      },
       ApiEndpoint: {
         value: api.api.url,
         description: 'API Gateway endpoint URL',
         exportName: stageConfig.getResourceName('api-endpoint'),
-      },
-      ApiLogGroup: {
-        value: stageConfig.aws.apiGateway('api'),
-        description: 'API Gateway Log Group name',
-        exportName: stageConfig.getResourceName('api-log-group'),
-      },
-      LambdaLogGroup: {
-        value: stageConfig.aws.lambda('api-handler'),
-        description: 'Lambda Log Group name',
-        exportName: stageConfig.getResourceName('lambda-log-group'),
       },
       StorageBucketName: {
         value: storageBucket.bucketName,
         description: 'Storage bucket name',
         exportName: stageConfig.getResourceName('storage-bucket-name'),
       },
-      WafAclArn: {
-        value: waf.webAcl.attrArn,
-        description: 'WAF Web ACL ARN',
-        exportName: stageConfig.getResourceName('waf-acl-arn'),
-      },
-      WafAclId: {
-        value: waf.webAcl.attrId,
-        description: 'WAF Web ACL ID',
-        exportName: stageConfig.getResourceName('waf-acl-id'),
-      },
-      WafLogGroup: {
-        value: waf.getLogGroupArn(),
-        description: 'WAF Log Group ARN',
-        exportName: stageConfig.getResourceName('waf-log-group-arn'),
-      },
     };
 
-    // Additional Lambda outputs
+    // Lambda ARN outputs
     const lambdaOutputs = {
-      CreateDbLambdaArn: createDbLambda.functionArn,
       MigrateLambdaArn: migrateLambda.functionArn,
-      CreateSuLambdaArn: createSuLambda.functionArn,
+      CreateDbLambdaArn: createDbLambda.functionArn,
       DropDbLambdaArn: dropDbLambda.functionArn,
+      CreateSuLambdaArn: createSuLambda.functionArn,
     };
 
     Object.entries(lambdaOutputs).forEach(([name, value]) => {
@@ -496,6 +424,7 @@ export class BackendStack extends cdk.Stack {
       };
     });
 
+    // Add authorizer Lambda ARN output if it exists
     if (authorizerLambda) {
       outputs.AuthorizerLambdaArn = {
         value: authorizerLambda.functionArn,
