@@ -2,6 +2,9 @@
 import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+import useSearchResults from "composables/searchResults";
+import useRemoveList from "composables/removeList";
+
 const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
 
 import { getLastUpdatedDates, getTitles } from "utilities/api";
