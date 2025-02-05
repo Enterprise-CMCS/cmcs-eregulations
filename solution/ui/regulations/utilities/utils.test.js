@@ -605,7 +605,7 @@ describe("Utilities.js", () => {
 
         it("should log the error to the console", () => {
             const err = { message: "Test error" };
-            const consoleLogSpy = vi.spyOn(console, "log");
+            const consoleLogSpy = vi.spyOn(console, "info");
             parseError(err);
             expect(consoleLogSpy).toHaveBeenCalledWith(err);
             consoleLogSpy.mockRestore();
