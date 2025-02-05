@@ -187,9 +187,9 @@ export class BackendStack extends cdk.Stack {
     // Add ingress rule to database security group
     databaseSecurityGroup.addIngressRule(
       serverlessSG,
-      ec2.Port.tcp(parseInt(databasePort)),
+      ec2.Port.tcp(3306),
       'Allow PostgreSQL access from Lambda functions'
-    );
+    ); 
 
     // ================================
     // SQS QUEUE
