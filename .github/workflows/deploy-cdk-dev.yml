@@ -53,6 +53,59 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/database.ts"
           popd
+  deploy-static-asset-cdk:    
+    needs: deploy-database-cdk
+    strategy:      
+      max-parallel: 1      
+      matrix:        
+        environment: ["dev"]    
+    runs-on: ubuntu-22.04    
+    environment:      
+      name: ${{ matrix.environment }}
+    outputs:
+      static_url: ${{ steps.get-static-url.outputs.static_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true     
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static-Asset Infrastructure
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Get exact stack name
+          STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          
+          cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ matrix.environment }} \
+          -c deploymentType=infrastructure \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+
+      - name: Get Static URL
+        id: get-static-url
+        run: |
+          pushd cdk-eregs
+          STATIC_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+          popd
   deploy-zip-lambdas-cdk:    
     strategy:
       max-parallel: 1
@@ -131,7 +184,57 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+  deploy-site-lambda-cdk:
+    needs: [deploy-static-asset-cdk, deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
+    strategy:      
+      max-parallel: 1      
+      matrix:        
+        environment: ["dev"]    
+    runs-on: ubuntu-22.04    
+    environment:      
+      name: ${{ matrix.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true     
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
 
+      - name: Deploy Site-Lambda
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Get exact stack name
+          API_STACK="cms-eregs-${{ matrix.environment }}-api"
+          
+          cdk deploy $API_STACK \
+          -c environment=${{ matrix.environment }} \
+          -c buildId="${GITHUB_RUN_ID}" \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts" \
+          --outputs-file api-outputs.json
+          popd
+
+      - name: Get API URL
+        id: get-api-url
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-${{ matrix.environment }}-api"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
+          popd
   deploy-fr-parser-cdk:
     needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
     strategy:
@@ -209,4 +312,89 @@ jobs:
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+  build-and-deploy-vue-cdk:
+    needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
+    strategy:      
+      max-parallel: 1      
+      matrix:        
+        environment: ["dev"]    
+    runs-on: ubuntu-22.04    
+    environment:      
+      name: ${{ matrix.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Run collectstatic
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: ${{ matrix.environment }}
+        run: |
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
+
+      - name: Build Vite assets
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: ${{ matrix.environment }}
+        run: |
+          pushd solution
+          make regulations
+          popd
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static Assets
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          # Get exact stack name
+          STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          
+          cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ matrix.environment }} \
+          -c deploymentType=content \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
           popd
