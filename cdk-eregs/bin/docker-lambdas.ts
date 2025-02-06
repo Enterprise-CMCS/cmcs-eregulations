@@ -9,24 +9,38 @@ import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspe
 import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+import { BackendStack } from '../lib/stacks/api-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
     
     const [
-      vpcId, 
+     
       logLevel, 
       httpUser, 
       httpPassword,
       eregsApiUrl
     ] = await Promise.all([
-      getParameterValue('/account_vars/vpc/id'),
+     
       getParameterValue('/eregulations/text_extractor/log_level'),
       getParameterValue('/eregulations/http/user'),
       getParameterValue('/eregulations/http/password'),
       getParameterValue('/eregulations/custom_url'),
     ]);
+   // Fetch required infrastructure parameters
+   const [
+    vpcId,
+    privateSubnetAId,
+    privateSubnetBId,
+    iamPath
+  ] = await Promise.all([
+    getParameterValue('/account_vars/vpc/id'),
+    getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
+    getParameterValue('/account_vars/vpc/subnets/private/b/id'),
+    getParameterValue('/account_vars/iam/path'),
+  ]);
+
 
     const env = { 
       account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
@@ -74,7 +88,21 @@ async function main() {
       });
     }
 
-    // Create Docker-based Lambda stacks
+    // // Create Docker-based Lambda stacks
+    // new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
+    //   env,
+    //   lambdaConfig: {
+    //     memorySize: 1024,
+    //     timeout: 900,
+    //     reservedConcurrentExecutions: 10,
+    //   },
+    //   environmentConfig: {
+    //     vpcId,
+    //     logLevel,
+    //     httpUser,
+    //     httpPassword,
+    //   }
+    // }, stageConfig);
     new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
       env,
       lambdaConfig: {
@@ -88,7 +116,6 @@ async function main() {
         httpPassword,
       }
     }, stageConfig);
-    
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
       env,
       lambdaConfig: {
@@ -112,6 +139,21 @@ async function main() {
         httpPassword,
       }
     }, stageConfig);
+        // Create API stack with Docker-based Lambdas
+        const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
+          env,
+          description: `API Stack for ${stageConfig.getResourceName('site')}`,
+          lambdaConfig: {
+            memorySize: 4096,
+            timeout: 30,
+          },
+          environmentConfig: {
+            vpcId,
+            logLevel: process.env.LOG_LEVEL || 'INFO',
+            subnetIds: [privateSubnetAId, privateSubnetBId],
+          }
+        }, stageConfig);
+        
 
     await applyGlobalAspects(app, stageConfig);
 

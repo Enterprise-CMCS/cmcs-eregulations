@@ -1,11 +1,9 @@
-// lib/stacks/text-extractor-stack.ts
 import * as cdk from 'aws-cdk-lib';
 import {
   aws_iam as iam,
   aws_logs as logs,
   aws_lambda as lambda,
   aws_sqs as sqs,
-  aws_ec2 as ec2,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -52,34 +50,11 @@ export interface TextExtractorStackProps extends cdk.StackProps {
  * CDK Stack implementation for Text Extractor service.
  * 
  * This stack creates a serverless text extraction service with the following components:
- * - Docker-based Lambda function for text extraction
+ * - Docker-based Lambda function for text extraction using AWS managed VPC
  * - SQS Queue with Dead Letter Queue for reliable message processing
  * - IAM roles and policies for secure access
  * - CloudWatch Log Groups for monitoring
- * - VPC Security Group for network isolation
  * - Event Source Mapping for queue integration
- * 
- * The stack is designed to be environment-aware and supports deployment across
- * different stages (dev, staging, prod) through the StageConfig parameter.
- * 
- * @example
- * ```typescript
- * // Create the stack with environment configuration
- * new TextExtractorStack(app, 'text-extractor', {
- *   env: { account: '123456789', region: 'us-east-1' },
- *   lambdaConfig: {
- *     memorySize: 1024,
- *     timeout: 900,
- *     reservedConcurrentExecutions: 10,
- *   },
- *   environmentConfig: {
- *     vpcId: 'vpc-123456',
- *     logLevel: 'DEBUG',
- *     httpUser: 'user',
- *     httpPassword: 'pass'
- *   }
- * }, stageConfig);
- * ```
  */
 export class TextExtractorStack extends cdk.Stack {
   /** The Lambda function that processes text extraction requests */
@@ -91,14 +66,6 @@ export class TextExtractorStack extends cdk.Stack {
   /** Stage configuration for environment-aware deployments */
   private readonly stageConfig: StageConfig;
 
-  /**
-   * Creates a new instance of TextExtractorStack.
-   * 
-   * @param scope - The scope in which to define this construct
-   * @param id - The scoped construct ID
-   * @param props - Configuration properties for the stack
-   * @param stageConfig - Environment stage configuration
-   */
   constructor(
     scope: Construct, 
     id: string, 
@@ -131,7 +98,7 @@ export class TextExtractorStack extends cdk.Stack {
     this.lambda = this.createTextExtractorLambdaFunction(
       props.lambdaConfig,
       props.environmentConfig,
-      lambdaRole,
+      lambdaRole
     );
 
     // Create event source mapping
@@ -141,15 +108,6 @@ export class TextExtractorStack extends cdk.Stack {
     this.createStackOutputs();
   }
 
-  /**
-   * Creates and configures the Lambda function with Docker image.
-   * 
-   * @param config - Lambda function configuration
-   * @param envConfig - Environment-specific configuration
-   * @param role - IAM role for the function
-   * @returns Configured Lambda function
-   * @private
-   */
   private createTextExtractorLambdaFunction(
     config: LambdaConfig,
     envConfig: EnvironmentConfig,
@@ -175,12 +133,6 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  /**
-   * Creates event source mapping between SQS queue and Lambda function.
-   * Configures single-message processing with batch size of 1.
-   * 
-   * @private
-   */
   private createEventSourceMapping() {
     new lambda.EventSourceMapping(this, 'TextExtractorEventSourceMapping', {
       target: this.lambda,
@@ -190,16 +142,6 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  /**
-   * Creates Lambda infrastructure including IAM role and log group.
-   * Sets up:
-   * - CloudWatch Log Group with infinite retention
-   * - IAM Role with proper permissions
-   * - Required IAM policies for Queue, Textract, and S3 access
-   * 
-   * @returns Object containing IAM role and Log Group
-   * @private
-   */
   private createLambdaInfrastructure() {
     const logGroup = new logs.LogGroup(this, 'TextExtractorLogGroup', {
       logGroupName: this.stageConfig.aws.lambda('text-extractor'),
@@ -216,6 +158,7 @@ export class TextExtractorStack extends cdk.Stack {
       ),
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+        iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
       inlinePolicies: {
         QueuePolicy: this.createQueuePolicy(),
@@ -227,13 +170,6 @@ export class TextExtractorStack extends cdk.Stack {
     return { lambdaRole, logGroup };
   }
 
-  /**
-   * Creates SQS queue access policy.
-   * Grants permissions for message reception and deletion.
-   * 
-   * @returns IAM policy document for queue access
-   * @private
-   */
   private createQueuePolicy(): iam.PolicyDocument {
     return new iam.PolicyDocument({
       statements: [
@@ -250,13 +186,6 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  /**
-   * Creates Amazon Textract service access policy.
-   * Grants permission to use the DetectDocumentText API.
-   * 
-   * @returns IAM policy document for Textract access
-   * @private
-   */
   private createTextDetectionPolicy(): iam.PolicyDocument {
     return new iam.PolicyDocument({
       statements: [
@@ -270,15 +199,6 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  /**
-   * Creates Lambda execution policy for logs and S3 access.
-   * Grants permissions for:
-   * - CloudWatch Logs creation and management
-   * - S3 object operations on the environment-specific bucket
-   * 
-   * @returns IAM policy document for Lambda execution
-   * @private
-   */
   private createLambdaPolicy(): iam.PolicyDocument {
     return new iam.PolicyDocument({
       statements: [
@@ -306,15 +226,6 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  /**
-   * Creates CloudFormation outputs for stack resources.
-   * Exports:
-   * - Lambda function ARN
-   * - SQS queue URL and ARN
-   * These outputs can be imported by other stacks or used for external reference.
-   * 
-   * @private
-   */
   private createStackOutputs() {
     const outputs: Record<string, cdk.CfnOutputProps> = {
       TextExtractorLambdaFunctionQualifiedArn: {
