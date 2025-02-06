@@ -45,7 +45,7 @@ export class DatabaseConstruct extends Construct {
     );
     this.dbSecurityGroup.addIngressRule(
       envServerlessSG,
-      ec2.Port.tcp(5432),
+      ec2.Port.tcp(3306),
       `Allow PostgreSQL access from ${stageConfig.environment} Lambda functions`
     );
 
@@ -114,6 +114,7 @@ export class DatabaseConstruct extends Construct {
       parameterGroup: clusterParameterGroup,
       defaultDatabaseName: 'eregs',
       storageEncrypted: true,
+      port: 3306,
       backup: {
         retention: cdk.Duration.days(7),
       },
