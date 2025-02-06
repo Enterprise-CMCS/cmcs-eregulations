@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-u!&%t$qxa23zn1f*-+4pngd(p=nl_m3()+v839+fa=06y9(*)n')
-
+FORCE_SCRIPT_NAME = os.environ.get("FORCE_SCRIPT_NAME")
 
 ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'),
                  'localhost',

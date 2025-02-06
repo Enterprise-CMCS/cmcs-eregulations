@@ -2,16 +2,11 @@
 import * as cdk from 'aws-cdk-lib';
 import { getParameterValue } from '../utils/parameter-store';
 import { validateEnvironmentContext } from '../config/environment-config';
-import { RedirectApiStack } from '../lib/stacks/redirect-stack';
 import { StageConfig } from '../config/stage-config';
 import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
-import { S3ImportStack } from '../lib/stacks/s3-import';
-
-
+import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -67,58 +62,16 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
       cdk.Tags.of(app).add(key, value);
     });
-     
- 
-    // Create ZIP-based Lambda stacks
-    new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
-      lambdaConfig: {
-        runtime: lambda.Runtime.PYTHON_3_12,
-        memorySize: 1024,
-        timeout: 30,
-      },
-      apiConfig: {
-        loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-      },
-    }, stageConfig);
-
-    new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
-      lambdaConfig: {
-        runtime: lambda.Runtime.PYTHON_3_12,
-        memorySize: 1024,
-        timeout: 30,
-      },
-      apiConfig: {
-        loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-      },
-    }, stageConfig);
-   
-
-    
-
-// Call create() to initialize the stack's resources
-
-    // Debug output for configuration
-    console.log('Configuration Debug:', {
-      environment: context.environment,
-      ephemeralId,
+    const deploymentType = app.node.tryGetContext('deploymentType') || 'content';  
+    new StaticAssetsStack(app, `${stageConfig.getResourceName('static-assets')}`, {
       prNumber,
-      isEphemeral: stageConfig.isEphemeral(),
-      resourceExample: stageConfig.getResourceName('site-assets')
-    });
-    console.log('Configuration Debug:', {
-      determinedEnvironment: context.environment,
-      prNumber,
-      ephemeralId,
-      deployEnv: process.env.DEPLOY_ENV,
-      githubJobEnv: process.env.GITHUB_JOB_ENVIRONMENT
-    });
-    new S3ImportStack(app, 'S3ImportStack', {
-      bucketName: process.env.BUCKET_NAME || '',
+      deploymentType,  // Pass the deployment type to the stack
       env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: process.env.CDK_DEFAULT_REGION,
+        region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
       },
-    });
+      description: `Static assets stack for ${stageConfig.environment}`
+    }, stageConfig);
 
     await applyGlobalAspects(app, stageConfig);
 

@@ -16,3 +16,19 @@ solution/ui/regulations/dist
 solution/Dockerfile
 solution/ui/regulations/coverage/
 db_backup/
+# Specific to CDK Lambda layer generation
+cdk-eregs/lib/stacks/layer-output-*/
+cdk-eregs/lib/stacks/layer-output-*/**
+
+# Zip files generated during layer creation
+*.zip
+# Django collected static
+staticfiles/
+static/
+solution/static-assets/regulations/
+solution/backend/staticfiles/
+solution/backend/static/
+
+# CDK assets
+.cdk.staging/
+cdk.out/

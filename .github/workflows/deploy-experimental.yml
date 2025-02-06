@@ -74,7 +74,60 @@ jobs:
           npm install
           serverless deploy --stage dev${PR}
           popd
+  deploy-static-asset-cdk:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-22.04
+    outputs:
+      static_url: ${{ steps.get-static-url.outputs.static_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static-Asset Infrastructure
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra       
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+          cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=infrastructure \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+
+      - name: Get Static URL
+        id: get-static-url
+        run: |
+          pushd cdk-eregs
+          STATIC_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-static-assets"
+          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+          popd
+  
   deploy-zip-lambdas-cdk:
+    needs: deploy-static-asset-cdk
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -121,9 +174,96 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
+  
+  build-and-deploy-vue-cdk:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
 
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.14
+
+      - uses: actions/setup-python@v5
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/static-assets/requirements.txt
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Run collectstatic
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
+
+      - name: Build Vite assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd solution
+          make regulations
+          popd
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static Assets
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra   
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+          cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=content \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd    
   deploy-text-extractor-cdk:
-    needs: deploy-zip-lambdas-cdk
+    # needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -166,11 +306,11 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          --app "npx ts-node bin/text-extractor.ts"
           popd
 
   deploy-fr-parser-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
+    needs: [deploy-site-lambda-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -217,7 +357,7 @@ jobs:
           popd
 
   deploy-ecfr-parser-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk]
+    needs: [deploy-site-lambda-cdk]
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
     environment:
@@ -262,61 +402,99 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
-
-  deployment-status-cdk:
-    needs: [deploy-zip-lambdas-cdk, deploy-text-extractor-cdk, deploy-fr-parser-cdk, deploy-ecfr-parser-cdk]
-    if: always()
+  deploy-site-lambda-cdk:
+    needs: [deploy-static-asset-cdk,deploy-zip-lambdas-cdk, deploy-text-extractor-cdk,]
+    if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
-    environment: "dev"
+    environment:
+      name: "dev"
+    outputs:
+      api_url: ${{ steps.get-api-url.outputs.api_url }}  
+    env:
+      ENVIRONMENT_NAME: "dev"
     steps:
-      - name: Deployment Status Summary
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Site-Lambda
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
         run: |
-          echo "Deployment Summary for ${{ env.ENVIRONMENT_NAME }}"
-          echo "1. ZIP-based Lambdas: ${{ needs.deploy-zip-lambdas-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "2. Text Extractor: ${{ needs.deploy-text-extractor-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "3. FR Parser: ${{ needs.deploy-fr-parser-cdk.result == 'success' && '✅' || '❌' }}"
-          echo "4. ECFR Parser: ${{ needs.deploy-ecfr-parser-cdk.result == 'success' && '✅' || '❌' }}"
-  # deploy-hello-world-cdk:
-  #   environment:
-  #     name: "dev"
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     # Checkout the code
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         submodules: true
-  #     # Find the PR number.  This is not always trivial which is why this uses an existign action
-  #     - name: Find PR number
-  #       uses: jwalton/gh-find-current-pr@v1
-  #       id: findPr
-  #       with:
-  #         # Can be "open", "closed", or "all".  Defaults to "open".
-  #         state: open
-  #     # Configure AWS credentials for GitHub Actions
-  #     - name: Configure AWS credentials for GitHub Actions
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-  #         aws-region: us-east-1
-  #     # Deploy the text extractor lambda to AWS
-  #     - name: Deploy the hello world test lambda via CDK
-  #       id: deploy-redirect-api-test
-  #       if: success() && steps.findPr.outputs.number
-  #       env:
-  #         PR_NUMBER: ${{ steps.findPr.outputs.pr }}
-  #         RUN_ID: ${{ github.run_id }}
-  #         AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-  #         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  #       run: |
-  #         pushd cdk-eregs
-  #         npm install -g aws-cdk
-  #         npm install
-  #         STAGE=dev${PR_NUMBER} cdk synth -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION}
-  #         STAGE=dev${PR_NUMBER} cdk deploy -c stage=dev${PR_NUMBER} -c account=${AWS_ACCOUNT_ID} -c region=${AWS_DEFAULT_REGION} \
-  #           dev${PR_NUMBER}-HelloWorldStack --require-approval never
-  #         popd
- 
+          pushd cdk-eregs
+          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
+          
+          API_STACK="cms-eregs-eph-$PR_NUMBER-api"
+          
+          cdk deploy $API_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c buildId="${GITHUB_RUN_ID}" \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts" \
+          --outputs-file api-outputs.json
+          popd
+      - name: Get API URL
+        id: get-api-url
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          # Debug what we're setting
+          echo "Setting API URL: $API_URL"
+          # Use the exact same name as in the outputs section
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          # Verify it was set
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
+          popd
+
+  notify-cdk:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambda-cdk, build-and-deploy-vue-cdk]
+    steps:
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Debug Job Outputs
+        run: |
+          echo "Debug: PR number: ${{ steps.findPr.outputs.pr }}"
+          echo "Debug: All outputs from previous job:"
+          echo "${{ toJSON(needs.deploy-site-lambda-cdk.outputs) }}"
+
+      - name: Create deployment comment
+        uses: peter-evans/create-or-update-comment@v2
+        env:
+          SITE_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            ✨ See the CDK Django Site deployed at: ${{ env.SITE_URL }} ✨
+          reactions: "+1"
+
   deploy-text-extractor:
     environment:
       name: "dev"
