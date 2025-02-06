@@ -409,7 +409,7 @@ jobs:
     environment:
       name: "dev"
     outputs:
-      api_url: ${{ steps.get-api-url.outputs.url }} 
+      api_url: ${{ steps.get-api-url.outputs.api_url }}  
     env:
       ENVIRONMENT_NAME: "dev"
     steps:
@@ -458,8 +458,13 @@ jobs:
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
-          # Important: Use 'url' instead of 'api_url' to match the outputs declaration
-          echo "url=${API_URL}" >> $GITHUB_OUTPUT
+          # Debug what we're setting
+          echo "Setting API URL: $API_URL"
+          # Use the exact same name as in the outputs section
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          # Verify it was set
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
           popd
 
   notify-cdk:
