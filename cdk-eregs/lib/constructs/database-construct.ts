@@ -123,18 +123,6 @@ export class DatabaseConstruct extends Construct {
     });
 
     // Create CloudFormation outputs
-    if (stageConfig.environment === 'dev') {
-      new cdk.CfnOutput(this, 'DevDatabaseEndpoint', {
-        value: this.cluster.clusterEndpoint.hostname,
-        description: 'Dev Database endpoint for ephemeral environments',
-        exportName: `${StageConfig.projectName}-dev-db-endpoint`,
-      });
-      new cdk.CfnOutput(this, 'DevDatabaseSecurityGroup', {
-        value: this.dbSecurityGroup.securityGroupId,
-        description: 'Dev Database security group ID for ephemeral environments',
-        exportName: `${StageConfig.projectName}-dev-db-security-group`,
-      });
-    }
     new cdk.CfnOutput(this, 'DatabaseEndpoint', {
       value: this.cluster.clusterEndpoint.hostname,
       exportName: stageConfig.getResourceName('db-endpoint'),
