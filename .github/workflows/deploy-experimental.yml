@@ -408,6 +408,8 @@ jobs:
     runs-on: ubuntu-22.04
     environment:
       name: "dev"
+    outputs:
+      api_url: ${{ steps.get-api-url.outputs.api_url }}
     env:
       ENVIRONMENT_NAME: "dev"
     steps:
