@@ -457,7 +457,8 @@ jobs:
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
-          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          cat api-outputs.json
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
 
