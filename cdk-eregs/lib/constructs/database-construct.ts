@@ -41,7 +41,7 @@ export class DatabaseConstruct extends Construct {
     const envServerlessSG = ec2.SecurityGroup.fromSecurityGroupId(
       this,
       'ServerlessSG',
-      cdk.Fn.importValue(stageConfig.getResourceName('serverless-security-group'))
+      cdk.Fn.importValue(stageConfig.getResourceName('serverless-security-group-id'))
     );
     this.dbSecurityGroup.addIngressRule(
       envServerlessSG,
