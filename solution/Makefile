@@ -134,10 +134,10 @@ tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**
 %.local: export EREGS_PASSWORD=UkOAsfkItN
 
 data.%:
-	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker compose.yml -f docker compose.parser.yml up parser
+	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker-compose.yml -f docker-compose.parser.yml up parser
 
 frdocs.%:
-	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker compose.yml -f docker compose.fr-parser.yml up fr-parser
+	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker-compose.yml -f docker-compose.fr-parser.yml up fr-parser
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker compose stop
@@ -155,11 +155,11 @@ local.collectstatic: ## Create static assets.
 	docker compose exec regulations python manage.py collectstatic --noinput
 
 local.opensearch: ## Run a local opensearch environment
-	docker compose -f docker compose.opensearch.yml up -d
+	docker compose -f docker-compose.opensearch.yml up -d
 
 test.cypress: ## run the cypress e2e suite
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker compose.yml  -f docker compose.e2e.yml up e2e
-	docker compose -f docker compose.yml up -d ## resets the django_settings_module to the default
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml  -f docker-compose.e2e.yml up e2e
+	docker compose -f docker-compose.yml up -d ## resets the django_settings_module to the default
 test.cypress.local: ## run cypress tests locally without docker
 	cd ui/e2e; \
 		npm install; \
@@ -180,13 +180,13 @@ test.vitest.ui:
 
 ##uncomment the -vvv if there are errors running pytest. 
 test.pytest:
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker compose.yml up -d
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
 	docker compose exec regulations pytest -v
-	docker compose -f docker compose.yml up -d  ## resets the django_settings_module to the default
+	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 test.pytest.cov:
-	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker compose.yml up -d
+	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
 	docker compose exec regulations pytest --cov
-	docker compose -f docker compose.yml up -d  ## resets the django_settings_module to the default
+	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 python.shell:
 	docker compose exec regulations python manage.py shell
 
