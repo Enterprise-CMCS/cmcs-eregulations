@@ -457,14 +457,10 @@ jobs:
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
-          echo "Debug: Content of api-outputs.json:"
-          cat api-outputs.json
-          echo "Debug: API_STACK value: $API_STACK"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
-          echo "Debug: Extracted API_URL: $API_URL"
-          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
-          echo "Debug: GITHUB_OUTPUT content:"
-          cat $GITHUB_OUTPUT
+          # Remove any trailing slash
+          API_URL=${API_URL%/}
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
           popd
 
   notify-cdk:
@@ -482,11 +478,13 @@ jobs:
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
         env:
-          API_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+          django_url: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            ✨ See the CDK version of the Django Site [here](${{ env.API_URL }}) ✨
+            :sparkles: See the CDK Django Site [in action][1] :sparkles:
+
+            [1]: ${{ env.django_url }}
           reactions: "+1"
 
   deploy-text-extractor:
