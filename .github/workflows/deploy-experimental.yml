@@ -459,6 +459,30 @@ jobs:
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
 
+  notify-cdk:
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambda-cdk, build-and-deploy-vue-cdk]
+    steps:
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: open
+      # Notify github that this is deployed and ready to look at
+      - name: Create deployment comment
+        uses: peter-evans/create-or-update-comment@v2
+        env:
+          cdk_django_url: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            :sparkles: See the CDK version of the Django Site [in action][1] :sparkles:
+
+            [1]: ${{ env.cdk_django_url }}
+          reactions: "+1"
 
   deploy-text-extractor:
     environment:
