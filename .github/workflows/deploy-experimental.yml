@@ -409,7 +409,7 @@ jobs:
     environment:
       name: "dev"
     outputs:
-      api_url: ${{ steps.get-api-url.outputs.api_url }}
+      api_url: ${{ steps.get-api-url.outputs.url }} 
     env:
       ENVIRONMENT_NAME: "dev"
     steps:
@@ -458,10 +458,8 @@ jobs:
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
-          # Remove any trailing slash
-          API_URL=${API_URL%/}
-          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
-          cat $GITHUB_OUTPUT
+          # Important: Use 'url' instead of 'api_url' to match the outputs declaration
+          echo "url=${API_URL}" >> $GITHUB_OUTPUT
           popd
 
   notify-cdk:
@@ -475,17 +473,21 @@ jobs:
         id: findPr
         with:
           state: open
+
       - name: Debug Job Outputs
         run: |
           echo "Debug: PR number: ${{ steps.findPr.outputs.pr }}"
-          echo "Debug: API URL from previous job: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}"
+          echo "Debug: All outputs from previous job:"
+          echo "${{ toJSON(needs.deploy-site-lambda-cdk.outputs) }}"
 
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
+        env:
+          SITE_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            ✨ See the CDK Django Site deployed at: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }} ✨
+            ✨ See the CDK Django Site deployed at: ${{ env.SITE_URL }} ✨
           reactions: "+1"
 
   deploy-text-extractor:
