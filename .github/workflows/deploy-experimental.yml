@@ -461,6 +461,7 @@ jobs:
           # Remove any trailing slash
           API_URL=${API_URL%/}
           echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
+          cat $GITHUB_OUTPUT
           popd
 
   notify-cdk:
@@ -474,6 +475,10 @@ jobs:
         id: findPr
         with:
           state: open
+      - name: Debug Job Outputs
+        run: |
+          echo "Debug: PR number: ${{ steps.findPr.outputs.pr }}"
+          echo "Debug: API URL from previous job: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}"
 
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
