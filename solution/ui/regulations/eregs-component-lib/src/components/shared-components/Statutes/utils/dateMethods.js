@@ -1,6 +1,3 @@
-import isNull from "lodash/isNull";
-import isUndefined from "lodash/isUndefined";
-
 // SSA table column date methods
 
 /**
@@ -11,10 +8,10 @@ import isUndefined from "lodash/isUndefined";
  */
 const getDateLabel = ({ type, date }) => {
     if (
-        isNull(type) ||
-        isNull(date) ||
-        isUndefined(type) ||
-        isUndefined(date) ||
+        type === null ||
+        date === null ||
+        type === undefined ||
+        date === undefined ||
         type === ""
     )
         return "";

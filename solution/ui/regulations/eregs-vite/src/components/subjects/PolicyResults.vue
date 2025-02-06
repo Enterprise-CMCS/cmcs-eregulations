@@ -2,7 +2,7 @@
 import { computed, inject } from "vue";
 import { useRoute } from "vue-router";
 
-const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
+import isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
 import {

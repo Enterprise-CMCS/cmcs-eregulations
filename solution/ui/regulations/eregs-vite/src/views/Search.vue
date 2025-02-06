@@ -2,14 +2,14 @@
 import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults";
-import useRemoveList from "composables/removeList";
+import useSearchResults from "composables/searchResults.js";
+import useRemoveList from "composables/removeList.js";
 
-const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
+import isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getTitles } from "utilities/api";
+import { getLastUpdatedDates, getTitles } from "utilities/api.js";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";

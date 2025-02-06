@@ -4,7 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 
 import useCounts from "composables/counts";
 
-const isEmpty = obj => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
+import isEmpty from "lodash/isEmpty";
 
 import {
     COUNT_TYPES_MAP,

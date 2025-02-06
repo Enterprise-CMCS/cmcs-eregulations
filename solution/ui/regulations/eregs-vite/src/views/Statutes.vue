@@ -2,9 +2,9 @@
 import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 
-import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums";
-import { getStatutes, getStatutesActs } from "utilities/api";
-import { shapeTitlesResponse } from "utilities/utils";
+import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums.js";
+import { getStatutes, getStatutesActs } from "utilities/api.js";
+import { shapeTitlesResponse } from "utilities/utils.js";
 
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";

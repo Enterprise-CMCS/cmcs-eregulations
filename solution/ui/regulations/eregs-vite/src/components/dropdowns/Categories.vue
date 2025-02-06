@@ -125,8 +125,8 @@ watch(
         // Silently reset selectedId so that route change doesn't trigger
         // a route update and a subsequent re-fetch of content-search
         if (
-            (typeof newCategories === "undefined" && newCategories !== oldCategories) ||
-            (typeof newIntcategories === "undefined" &&
+            (newCategories === undefined && newCategories !== oldCategories) ||
+            (newIntcategories === undefined &&
                 newIntcategories !== oldIntcategories)
         ) {
             silentReset.value = true;
