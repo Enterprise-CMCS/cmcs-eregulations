@@ -484,9 +484,7 @@ jobs:
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            :sparkles: See the CDK version of the Django Site [in action][1] :sparkles:
-
-            [1]: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+            ✨ See the CDK version of the Django Site here: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }} ✨
           reactions: "+1"
 
   deploy-text-extractor:
