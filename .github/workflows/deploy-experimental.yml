@@ -457,9 +457,14 @@ jobs:
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
-          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          echo "Debug: Content of api-outputs.json:"
           cat api-outputs.json
-          echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
+          echo "Debug: API_STACK value: $API_STACK"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          echo "Debug: Extracted API_URL: $API_URL"
+          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          echo "Debug: GITHUB_OUTPUT content:"
+          cat $GITHUB_OUTPUT
           popd
 
   notify-cdk:
@@ -472,19 +477,16 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      # Notify github that this is deployed and ready to look at
+
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
-        env:
-          cdk_django_url: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
             :sparkles: See the CDK version of the Django Site [in action][1] :sparkles:
 
-            [1]: ${{ env.cdk_django_url }}
+            [1]: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
           reactions: "+1"
 
   deploy-text-extractor:
