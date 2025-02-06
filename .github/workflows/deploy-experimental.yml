@@ -477,14 +477,10 @@ jobs:
 
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
-        env:
-          django_url: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            :sparkles: See the CDK Django Site [in action][1] :sparkles:
-
-            [1]: ${{ env.django_url }}
+            ✨ See the CDK Django Site deployed at: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }} ✨
           reactions: "+1"
 
   deploy-text-extractor:
