@@ -1,7 +1,7 @@
 import { ref } from "vue";
 
-import { getCombinedContent, getContentWithoutQuery } from "utilities/api";
-import { DOCUMENT_TYPES_MAP } from "utilities/utils";
+import { getCombinedContent, getContentWithoutQuery } from "utilities/api.js";
+import { DOCUMENT_TYPES_MAP } from "utilities/utils.js";
 
 function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
     const policyDocList = ref({

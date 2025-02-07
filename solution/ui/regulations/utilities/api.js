@@ -1,11 +1,11 @@
-import _filter from "lodash/filter";
-import _get from "lodash/get";
-import _isBoolean from "lodash/isBoolean";
-import _isFunction from "lodash/isFunction";
-import _isNil from "lodash/isNil";
-import _isObject from "lodash/isObject";
-import _keys from "lodash/keys";
-import _map from "lodash/map";
+import isBoolean from "lodash/isBoolean";
+import isFunction from "lodash/isFunction";
+import isNil from "lodash/isNil";
+import isObject from "lodash/isObject";
+import lodashFilter from "lodash/filter";
+import lodashGet from "lodash/get";
+import lodashKeys from "lodash/keys";
+import lodashMap from "lodash/map";
 
 import localforage from "localforage";
 
@@ -63,18 +63,18 @@ const fetchJson = ({
         // For example {key1: value1, key2: value2}
 
         // Get keys from the params object such as [key1, key2] etc
-        const paramKeys = _keys(merged.params);
+        const paramKeys = lodashKeys(merged.params);
 
         // Filter out params with undefined or null values
-        const paramKeysToPass = _filter(
+        const paramKeysToPass = lodashFilter(
             paramKeys,
-            (key) => !_isNil(_get(merged.params, key))
+            (key) => !isNil(lodashGet(merged.params, key))
         );
-        const query = _map(
+        const query = lodashMap(
             paramKeysToPass,
             (key) =>
                 `${encodeURIComponent(key)}=${encodeURIComponent(
-                    _get(merged.params, key)
+                    lodashGet(merged.params, key)
                 )}`
         ).join("&");
         url = query ? `${url}?${query}` : url;
@@ -120,13 +120,13 @@ const fetchJson = ({
             return response;
         })
         .then((response) => {
-            if (_isFunction(response.text)) return response.text();
+            if (isFunction(response.text)) return response.text();
             return response;
         })
         .then((text) => {
             let json;
             try {
-                if (_isObject(text)) {
+                if (isObject(text)) {
                     json = text;
                 } else {
                     json = JSON.parse(text);
@@ -169,7 +169,7 @@ const fetchJson = ({
             return json;
         })
         .then((json) => {
-            if (_isBoolean(isOk) && !isOk) {
+            if (isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
                 if (cacheResponse) {

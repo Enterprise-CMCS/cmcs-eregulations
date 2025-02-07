@@ -1,5 +1,5 @@
 <script setup>
-import _groupBy from "lodash/groupBy";
+import groupBy from "lodash/groupBy";
 
 import { locationLabel, locationUrl } from "utilities/filters";
 
@@ -30,7 +30,7 @@ const filteredLocations = props.item.cfr_citations
     : [];
 
 const locationsCount = filteredLocations.length;
-const groupedLocations = _groupBy(filteredLocations, "title");
+const groupedLocations = groupBy(filteredLocations, "title");
 </script>
 
 <template>

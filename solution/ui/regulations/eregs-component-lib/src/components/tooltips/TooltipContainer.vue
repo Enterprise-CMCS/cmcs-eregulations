@@ -71,7 +71,7 @@ const getAnchorX = (el, elType) => {
         : el.offsetWidth * 0.7;
 };
 
-const getAnchorY = (el, _, position) => {
+const getAnchorY = (el, unused, position) => {
     if (!el) return 0;
 
     const spacer = position === "over" ? 20 : 10;

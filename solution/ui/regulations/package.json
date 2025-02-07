@@ -19,7 +19,7 @@
   "dependencies": {
     "@cmsgov/design-system": "11.1.0",
     "@fortawesome/fontawesome-free": "^6.6.0",
-    "@vitejs/plugin-vue": "^5.1.4",
+    "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
     "dompurify": "^3.2.3",
     "flush-promises": "^1.0.2",
@@ -44,7 +44,7 @@
     "jsdom": "^22.0.0",
     "msw": "^2.6.2",
     "sass-loader": "^13.0.2",
-    "vite": "^5.4.14",
+    "vite": "^6.1.0",
     "vitest": "^2.1.9",
     "vue-eslint-parser": "^9.4.2",
     "webpack": "^5.94.0",
