@@ -226,6 +226,7 @@ export class BackendStack extends cdk.Stack {
         vpc,
         selectedSubnets,
         stageConfig,
+        serverlessSecurityGroup: serverlessSG,
       });
 
       // Store database info in SSM
