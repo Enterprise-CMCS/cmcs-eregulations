@@ -36,8 +36,8 @@ async function main() {
     iamPath
   ] = await Promise.all([
     getParameterValue('/account_vars/vpc/id'),
+    getParameterValue('/account_vars/vpc/subnets/private/1a/id'),
     getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
-    getParameterValue('/account_vars/vpc/subnets/private/b/id'),
     getParameterValue('/account_vars/iam/path'),
   ]);
 
