@@ -11,6 +11,7 @@ export interface DatabaseConstructProps {
   readonly vpc: ec2.IVpc;
   readonly selectedSubnets: ec2.SubnetSelection;
   readonly stageConfig: StageConfig;
+  readonly serverlessSecurityGroup: ec2.ISecurityGroup;
 }
 
 export class DatabaseConstruct extends Construct {
@@ -20,7 +21,7 @@ export class DatabaseConstruct extends Construct {
   constructor(scope: Construct, id: string, props: DatabaseConstructProps) {
     super(scope, id);
 
-    const { vpc, selectedSubnets, stageConfig } = props;
+    const { vpc, selectedSubnets, stageConfig, serverlessSecurityGroup } = props;
 
     // Retrieve DB credentials from Secrets Manager
     const dbSecret = secretsmanager.Secret.fromSecretNameV2(
@@ -37,14 +38,9 @@ export class DatabaseConstruct extends Construct {
       securityGroupName: stageConfig.getResourceName('db-security-group'),
     });
 
-    // Import serverless security group and allow ingress
-    const envServerlessSG = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'ServerlessSG',
-      cdk.Fn.importValue(stageConfig.getResourceName('serverless-security-group-id'))
-    );
+    
     this.dbSecurityGroup.addIngressRule(
-      envServerlessSG,
+      serverlessSecurityGroup,
       ec2.Port.tcp(3306),
       `Allow PostgreSQL access from ${stageConfig.environment} Lambda functions`
     );
