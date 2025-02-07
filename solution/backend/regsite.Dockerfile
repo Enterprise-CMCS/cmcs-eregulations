@@ -17,7 +17,7 @@ RUN dnf install -y \
     && dnf clean all
 
 # Copy requirements file
-COPY requirements_tmp.txt ${LAMBDA_TASK_ROOT}/
+COPY requirements_tmp.txt ${LAMBDA_TASK_ROOT}/requirements.txt
 
 # Install Python dependencies
 RUN pip install -r ${LAMBDA_TASK_ROOT}/requirements.txt
