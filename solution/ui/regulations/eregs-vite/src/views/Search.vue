@@ -2,14 +2,14 @@
 import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults";
-import useRemoveList from "composables/removeList";
+import useSearchResults from "composables/searchResults.js";
+import useRemoveList from "composables/removeList.js";
 
-import _isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getTitles } from "utilities/api";
+import { getLastUpdatedDates, getTitles } from "utilities/api.js";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -94,8 +94,8 @@ const setCategories = (categories) => {
 const allDocTypesOnly = (queryParams) => {
     const { type, ...rest } = queryParams;
     if (
-        (type && type.includes("all") && _isEmpty(rest)) ||
-        (!type && _isEmpty(rest))
+        (type && type.includes("all") && isEmpty(rest)) ||
+        (!type && isEmpty(rest))
     ) {
         return true;
     }
@@ -229,7 +229,7 @@ watch(
         sanitizedQueryParams.value = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams.value)) {
+        if (isEmpty(sanitizedQueryParams.value)) {
             return;
         }
 

@@ -2,7 +2,7 @@
 import { computed, inject } from "vue";
 import { useRoute } from "vue-router";
 
-import _isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash/isEmpty";
 
 import { formatDate } from "utilities/filters";
 import {
@@ -260,7 +260,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     type="regulations"
                 />
                 <CategoryLabel
-                    v-else-if="!_isEmpty(doc.category)"
+                    v-else-if="!isEmpty(doc.category)"
                     :name="
                         doc.category?.parent
                             ? getParentCategoryName({

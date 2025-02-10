@@ -7,8 +7,6 @@ import vuetify from "./plugins/vuetify";
 import App from "./App.vue";
 import vueRouter from "./router";
 
-import _isArray from "lodash/isArray";
-
 const mountEl = document.querySelector("#vite-app");
 const { customUrl, host, isAuthenticated } = mountEl.dataset;
 
@@ -38,7 +36,7 @@ router.beforeEach((to) => {
     // This is a workaround to convert them back to strings -- we only need the first value.
     // `type` is the only query param that should be an array.
     Object.entries(to.query).forEach(([key, value]) => {
-        if (_isArray(value) && key != "type") {
+        if (Array.isArray(value) && key != "type") {
             to.query[key] = value[0];
         }
     });

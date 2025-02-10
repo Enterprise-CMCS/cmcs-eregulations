@@ -1,5 +1,4 @@
 import { ref } from "vue";
-import _isArray from "lodash/isArray";
 
 export default function useFetch({
     method,
@@ -21,7 +20,7 @@ export default function useFetch({
 
     method({ apiUrl, cacheResponse })
         .then((response) => {
-            responseObj.value.data = _isArray(response)
+            responseObj.value.data = Array.isArray(response)
                 ? response
                 : response.results;
         })
