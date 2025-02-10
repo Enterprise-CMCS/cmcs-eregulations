@@ -106,7 +106,7 @@ export class DatabaseConstruct extends Construct {
       vpcSubnets: selectedSubnets,
       writer,
       securityGroups: [this.dbSecurityGroup],
-      credentials: rds.Credentials.fromSecret(dbSecret),
+      credentials: rds.Credentials.fromSecret(dbSecret, 'eregsuser'),
       parameterGroup: clusterParameterGroup,
       defaultDatabaseName: 'eregs',
       storageEncrypted: true,
