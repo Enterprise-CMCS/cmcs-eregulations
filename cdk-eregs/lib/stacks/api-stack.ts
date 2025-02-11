@@ -240,7 +240,6 @@ export class BackendStack extends cdk.Stack {
         stringValue: databaseConstruct.dbSecurityGroup.securityGroupId,
       });
     }
-
     // ================================
     // S3 BUCKET
     // ================================
