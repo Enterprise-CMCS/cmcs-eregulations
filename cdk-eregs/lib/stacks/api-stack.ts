@@ -286,7 +286,7 @@ export class BackendStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-      DB_PASSWORD: secrets.db.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
+      DB_PASSWORD: secrets.db.secretValueFromJson('password').unsafeUnwrap(),
       HTTP_AUTH_USER: secrets.http.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
       HTTP_AUTH_PASSWORD: secrets.http.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
       DJANGO_ADMIN_USERNAME: secrets.django.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
