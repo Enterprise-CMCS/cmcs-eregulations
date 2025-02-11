@@ -301,7 +301,6 @@ jobs:
         run: |
           mv ./solution/backend/requirements_tmp.txt ./solution/backend/requirements.txt
           cp ./solution/backend/requirements.txt ./solution/static-assets/requirements.txt
-
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
