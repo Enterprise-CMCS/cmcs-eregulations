@@ -71,27 +71,7 @@ class SecurityGroupHandler {
     vpc: ec2.IVpc,
     stageConfig: StageConfig
   ): ec2.ISecurityGroup {
-    // For ephemeral environments, try to import security group from SSM
-    if (stageConfig.isEphemeral()) {
-      try {
-        const securityGroupId = ssm.StringParameter.valueForStringParameter(
-          scope,
-          '/eregulations/aws/cdk_securitygroupid'
-        );
-
-        if (securityGroupId) {
-          return ec2.SecurityGroup.fromSecurityGroupId(
-            scope,
-            'ImportedServerlessSG',
-            securityGroupId,
-            { allowAllOutbound: true }
-          );
-        }
-      } catch (error) {
-        console.warn('Failed to import security group for ephemeral environment, creating new one');
-      }
-    }
-
+  
     // Create new security group
     const serverlessSG = new ec2.SecurityGroup(scope, 'ServerlessSecurityGroup', {
       vpc,
@@ -106,28 +86,6 @@ class SecurityGroupHandler {
       ec2.Port.tcp(443),
       'Allow HTTPS inbound'
     );
-
-    // For non-ephemeral environments, store security group ID in SSM
-    if (!stageConfig.isEphemeral()) {
-      new ssm.StringParameter(scope, 'SecurityGroupParam', {
-        parameterName: '/eregulations/aws/cdk_securitygroupid',
-        stringValue: serverlessSG.securityGroupId,
-        description: `Security Group ID for ${stageConfig.stageName} environment`,
-      });
-    }
-
-    // Export security group ID
-    new cdk.CfnOutput(scope, 'ServerlessSecurityGroupOutput', {
-      value: serverlessSG.securityGroupId,
-      exportName: stageConfig.getResourceName('serverless-security-group-id'),
-      description: `Security Group ID for ${stageConfig.stageName} environment`
-    });
-
-    // Add tags
-    const tags = stageConfig.getStackTags();
-    Object.entries(tags).forEach(([key, value]) => {
-      cdk.Tags.of(serverlessSG).add(key, value);
-    });
 
     return serverlessSG;
   }
@@ -229,16 +187,7 @@ export class BackendStack extends cdk.Stack {
         serverlessSecurityGroup: serverlessSG,
       });
 
-      // Store database info in SSM
-      new ssm.StringParameter(this, 'DatabaseHostParam', {
-        parameterName: '/eregulations/db/cdk_host',
-        stringValue: databaseConstruct.cluster.clusterEndpoint.hostname,
-      });
 
-      new ssm.StringParameter(this, 'DatabaseSecurityGroupParam', {
-        parameterName: '/eregulations/aws/cdk_securitygroupid',
-        stringValue: databaseConstruct.dbSecurityGroup.securityGroupId,
-      });
     }
     // ================================
     // S3 BUCKET
