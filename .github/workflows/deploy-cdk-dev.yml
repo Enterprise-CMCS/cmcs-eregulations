@@ -297,6 +297,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Prepare requirements files
+        id: prep-reqs
         run: |
           mv ./solution/backend/requirements_tmp.txt ./solution/backend/requirements.txt
           cp ./solution/backend/requirements.txt ./solution/static-assets/requirements.txt
