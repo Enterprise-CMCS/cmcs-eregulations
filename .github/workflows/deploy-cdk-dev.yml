@@ -301,7 +301,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
-          pip install -r ./solution/backend/requirements.txt
+          pip install -r ./solution/backend/requirements_tmp.txt
 
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
