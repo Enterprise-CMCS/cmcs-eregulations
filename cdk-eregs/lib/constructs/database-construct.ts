@@ -13,7 +13,6 @@ export interface DatabaseConstructProps {
   readonly stageConfig: StageConfig;
   readonly serverlessSecurityGroup: ec2.ISecurityGroup;
 }
-
 export class DatabaseConstruct extends Construct {
   public readonly dbSecurityGroup: ec2.SecurityGroup;
   public readonly cluster: rds.DatabaseCluster;
