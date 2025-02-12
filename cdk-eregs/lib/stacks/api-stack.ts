@@ -71,8 +71,35 @@ class SecurityGroupHandler {
     vpc: ec2.IVpc,
     stageConfig: StageConfig
   ): ec2.ISecurityGroup {
+    
+    if (stageConfig.isEphemeral()) {
+      try {
+        // For ephemeral, import dev's serverless SG from SSM
+        const serverlessSgId = ssm.StringParameter.valueForStringParameter(
+          scope,
+          '/eregulations/aws/cdk_securitygroupid'
+        );
+
+        return ec2.SecurityGroup.fromSecurityGroupId(
+          scope,
+          'ImportedServerlessSG',
+          serverlessSgId,
+          { allowAllOutbound: true }
+        );
+      } catch (err) {
+        const errorMessage = err instanceof Error 
+          ? err.message 
+          : 'Unknown error occurred';
+
+        throw new Error(
+          'Failed to get dev serverless security group from SSM. ' +
+          'Ensure dev environment exists and SSM parameter is set. ' +
+          `Error: ${errorMessage}`
+        );
+      }
+    }
   
-    // Create new security group
+    // For non-ephemeral environments, create new security group
     const serverlessSG = new ec2.SecurityGroup(scope, 'ServerlessSecurityGroup', {
       vpc,
       description: `Security Group for ${stageConfig.stageName} Serverless Functions`,
@@ -90,7 +117,6 @@ class SecurityGroupHandler {
     return serverlessSG;
   }
 }
-
 /**
  * Paths for AWS Secrets Manager secrets
  * @const
@@ -147,39 +173,16 @@ export class BackendStack extends cdk.Stack {
       stageConfig
     );
 
-    // ================================
+// ================================
     // DATABASE SETUP
     // ================================
-    const databaseEndpoint = ssm.StringParameter.valueForStringParameter(
-      this,
-      '/eregulations/db/cdk_host'
-    );
-
-    const databasePort = ssm.StringParameter.valueForStringParameter(
-      this,
-      '/eregulations/db/port'
-    );
-
-    const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'DatabaseSG',
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/eregulations/aws/cdk_securitygroupid'
-      ),
-      { allowAllOutbound: true }
-    );
-
-    // Add ingress rule to database security group
-    databaseSecurityGroup.addIngressRule(
-      serverlessSG,
-      ec2.Port.tcp(3306),
-      'Allow PostgreSQL access from Lambda functions'
-    );
-
-    // Create database only for non-ephemeral environments
+    let databaseSecurityGroup: ec2.ISecurityGroup;
+    let databaseEndpoint: string;
+    let databasePort: string;
     let databaseConstruct: DatabaseConstruct | undefined;
-    if (!stageConfig.isEphemeral()) {
+
+    if (stageConfig.isEphemeral()) {
+      // For non-ephemeral environments
       databaseConstruct = new DatabaseConstruct(this, 'Database', {
         vpc,
         selectedSubnets,
@@ -187,8 +190,34 @@ export class BackendStack extends cdk.Stack {
         serverlessSecurityGroup: serverlessSG,
       });
 
+      databaseSecurityGroup = databaseConstruct.dbSecurityGroup;
+      databaseEndpoint = databaseConstruct.cluster.clusterEndpoint.hostname;
+      databasePort = databaseConstruct.cluster.clusterEndpoint.port.toString();
+    } else {
+      // For ephemeral environments, use dev's database settings
+      try {
+        databaseEndpoint = ssm.StringParameter.valueForStringParameter(
+          this,
+          '/eregulations/db/cdk_host'
+        );
+        
+        databasePort = ssm.StringParameter.valueForStringParameter(
+          this,
+          '/eregulations/db/port'
+        );
+      } catch (err) {
+        const errorMessage = err instanceof Error 
+          ? err.message 
+          : 'Unknown error occurred';
 
+        throw new Error(
+          'Failed to get dev database configuration from SSM. ' +
+          'Ensure SSM parameters exist. ' +
+          `Error: ${errorMessage}`
+        );
+      }
     }
+
     // ================================
     // S3 BUCKET
     // ================================

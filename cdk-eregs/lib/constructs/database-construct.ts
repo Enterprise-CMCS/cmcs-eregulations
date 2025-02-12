@@ -3,7 +3,6 @@ import {
   aws_ec2 as ec2,
   aws_rds as rds,
   aws_secretsmanager as secretsmanager,
-  aws_ssm as ssm,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -44,22 +43,6 @@ export class DatabaseConstruct extends Construct {
       ec2.Port.tcp(3306),
       `Allow PostgreSQL access from ${stageConfig.environment} Lambda functions`
     );
-
-    // If this is dev environment, store the security group ID for ephemeral environments
-    if (stageConfig.environment === 'dev') {
-      new ssm.StringParameter(this, 'DevDbSecurityGroupParam', {
-        parameterName: '/eregulations/eph/db_security_group_id',
-        stringValue: this.dbSecurityGroup.securityGroupId,
-        description: 'Dev Database Security Group ID for ephemeral environments',
-      });
-    }
-
-    // Store security group ID in environment-specific SSM parameter
-    new ssm.StringParameter(this, 'DbSecurityGroupParam', {
-      parameterName: `/eregulations/${stageConfig.environment}/db_security_group_id`,
-      stringValue: this.dbSecurityGroup.securityGroupId,
-      description: `Database Security Group ID for ${stageConfig.environment}`,
-    });
 
     // Define cluster parameter group
     const clusterParameterGroup = new rds.ParameterGroup(this, 'DBClusterParameterGroup', {
