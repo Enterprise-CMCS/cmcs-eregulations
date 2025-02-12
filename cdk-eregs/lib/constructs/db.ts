@@ -14,6 +14,7 @@ export interface DatabaseConstructProps {
   readonly stageConfig: StageConfig;
   readonly serverlessSecurityGroup: ec2.ISecurityGroup;
 }
+
 export class DatabaseConstruct extends Construct {
   public readonly dbSecurityGroup: ec2.SecurityGroup;
   public readonly cluster: rds.DatabaseCluster;
@@ -30,7 +31,7 @@ export class DatabaseConstruct extends Construct {
       '/eregulations/db/credentials'
     );
 
-    // Create DB security group
+    // Create DB security group for non-ephemeral environments
     this.dbSecurityGroup = new ec2.SecurityGroup(this, 'DBSecurityGroup', {
       vpc,
       description: `Database Security Group for ${stageConfig.stageName}`,
@@ -38,7 +39,7 @@ export class DatabaseConstruct extends Construct {
       securityGroupName: stageConfig.getResourceName('db-security-group'),
     });
 
-    
+    // Add ingress rule for Lambda functions
     this.dbSecurityGroup.addIngressRule(
       serverlessSecurityGroup,
       ec2.Port.tcp(3306),
@@ -106,11 +107,18 @@ export class DatabaseConstruct extends Construct {
       },
     });
 
-    // Define the writer instance
+    // Define the writer instance with conditional sizing based on environment
+    const instanceType = stageConfig.environment === 'prod' 
+      ? ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.LARGE)
+      : ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.MEDIUM);
+
     const writer = rds.ClusterInstance.provisioned('Instance', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.LARGE),
+      instanceType,
       parameterGroup: instanceParameterGroup,
       enablePerformanceInsights: true,
+      performanceInsightRetention: stageConfig.environment === 'prod' 
+        ? rds.PerformanceInsightRetention.LONG_TERM 
+        : rds.PerformanceInsightRetention.DEFAULT,
     });
 
     // Create the database cluster
@@ -121,6 +129,13 @@ export class DatabaseConstruct extends Construct {
       vpc,
       vpcSubnets: selectedSubnets,
       writer,
+      readers: stageConfig.environment === 'prod' ? [
+        rds.ClusterInstance.provisioned('Reader', {
+          instanceType,
+          parameterGroup: instanceParameterGroup,
+          enablePerformanceInsights: true,
+        })
+      ] : undefined,
       securityGroups: [this.dbSecurityGroup],
       credentials: rds.Credentials.fromSecret(dbSecret, 'eregsuser'),
       parameterGroup: clusterParameterGroup,
@@ -128,10 +143,42 @@ export class DatabaseConstruct extends Construct {
       storageEncrypted: true,
       port: 3306,
       backup: {
-        retention: cdk.Duration.days(7),
+        retention: stageConfig.environment === 'prod' 
+          ? cdk.Duration.days(30)
+          : cdk.Duration.days(7),
       },
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: stageConfig.environment === 'prod' 
+        ? cdk.RemovalPolicy.RETAIN
+        : cdk.RemovalPolicy.SNAPSHOT,
       cloudwatchLogsExports: ['postgresql'],
+      cloudwatchLogsRetention: stageConfig.environment === 'prod'
+        ? cdk.aws_logs.RetentionDays.SIX_MONTHS
+        : cdk.aws_logs.RetentionDays.ONE_MONTH,
+      deletionProtection: stageConfig.environment === 'prod',
+    });
+
+    // Store database endpoint in SSM for other environments to use
+    new ssm.StringParameter(this, 'DbEndpointParam', {
+      parameterName: `/eregulations/${stageConfig.environment}/db_host`,
+      stringValue: this.cluster.clusterEndpoint.hostname,
+      description: `Database Endpoint for ${stageConfig.environment}`,
+    });
+
+    new ssm.StringParameter(this, 'DbPortParam', {
+      parameterName: `/eregulations/${stageConfig.environment}/db_port`,
+      stringValue: '3306',
+      description: `Database Port for ${stageConfig.environment}`,
+    });
+
+    // Tag all resources
+    const tags = {
+      Environment: stageConfig.environment,
+      Stage: stageConfig.stageName,
+      ManagedBy: 'CDK',
+    };
+
+    Object.entries(tags).forEach(([key, value]) => {
+      cdk.Tags.of(this).add(key, value);
     });
 
     // Create CloudFormation outputs
@@ -139,9 +186,17 @@ export class DatabaseConstruct extends Construct {
       value: this.cluster.clusterEndpoint.hostname,
       exportName: stageConfig.getResourceName('db-endpoint'),
     });
+
     new cdk.CfnOutput(this, 'DatabaseSecurityGroup', {
       value: this.dbSecurityGroup.securityGroupId,
       exportName: stageConfig.getResourceName('db-security-group'),
     });
+
+    if (stageConfig.environment === 'prod') {
+      new cdk.CfnOutput(this, 'DatabaseReaderEndpoint', {
+        value: this.cluster.clusterReadEndpoint.hostname,
+        exportName: stageConfig.getResourceName('db-reader-endpoint'),
+      });
+    }
   }
 }

@@ -179,7 +179,7 @@ export class BackendStack extends cdk.Stack {
 
     // Create database only for non-ephemeral environments
     let databaseConstruct: DatabaseConstruct | undefined;
-    if (stageConfig.isEphemeral()) {
+    if (!stageConfig.isEphemeral()) {
       databaseConstruct = new DatabaseConstruct(this, 'Database', {
         vpc,
         selectedSubnets,
