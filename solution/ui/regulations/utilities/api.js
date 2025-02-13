@@ -143,7 +143,6 @@ const fetchJson = ({
             if (isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
-                console.info("returning here!");
                 return json;
             }
         });
