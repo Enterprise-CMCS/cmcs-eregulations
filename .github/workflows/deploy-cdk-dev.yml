@@ -187,6 +187,16 @@ jobs:
           --outputs-file api-outputs.json
           popd
 
+      - name: Invoke setup functions after site lambdas deployed
+        if: success() && steps.findPr.outputs.number
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout
+
       - name: Get API URL
         id: get-api-url
         run: |
