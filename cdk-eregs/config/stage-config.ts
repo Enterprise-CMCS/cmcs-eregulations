@@ -82,7 +82,7 @@ export class StageConfig {
   }
 
   public get databaseName(): string {
-    return this.isEphemeral() ? `eregs${this.ephemeralId}` : 'eregs';
+    return this.ephemeralId?.replace("-", "_") ?? 'eregs';
   }
 
   public isEphemeral(): boolean {
