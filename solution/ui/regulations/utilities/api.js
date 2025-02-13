@@ -7,8 +7,6 @@ import lodashGet from "lodash/get";
 import lodashKeys from "lodash/keys";
 import lodashMap from "lodash/map";
 
-import localforage from "localforage";
-
 import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
 const DEFAULT_CACHE_RESPONSE = false; // Change this to true if needed
 
@@ -16,12 +14,6 @@ let config = {
     fetchMode: "cors",
     maxRetryCount: 2,
 };
-
-localforage.config({
-    name: "eregs",
-    version: 1.0,
-    storeName: "eregs_django", // Should be alphanumeric, with underscores.
-});
 
 const fetchJson = ({
     url,
@@ -182,19 +174,6 @@ const httpApiGet = (
         retryCount: 0, // retryCount, default
         cacheResponse,
     });
-};
-
-// ---------- cache helpers -----------
-
-const getCacheKeys = async () => localforage.keys();
-
-const removeCacheItem = async (key) => localforage.removeItem(key);
-
-const getCacheItem = async (key) => localforage.getItem(key);
-
-const setCacheItem = async (key, data) => {
-    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-    return localforage.setItem(key, data);
 };
 
 // ---------- api calls ---------------
@@ -593,8 +572,6 @@ const throwGenericError = async () =>
 
 export {
     config,
-    getCacheItem,
-    getCacheKeys,
     getCombinedContent,
     getContentWithoutQuery,
     getExternalCategories,
@@ -615,7 +592,5 @@ export {
     getSynonyms,
     getTOC,
     getTitles,
-    removeCacheItem,
-    setCacheItem,
     throwGenericError,
 };
