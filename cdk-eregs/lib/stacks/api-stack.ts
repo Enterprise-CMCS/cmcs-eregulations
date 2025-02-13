@@ -181,7 +181,7 @@ export class BackendStack extends cdk.Stack {
     let databasePort: string;
     let databaseConstruct: DatabaseConstruct | undefined;
 
-    if (stageConfig.isEphemeral()) {
+    if (!stageConfig.isEphemeral()) {
       // For non-ephemeral environments
       databaseConstruct = new DatabaseConstruct(this, 'Database', {
         vpc,

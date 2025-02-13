@@ -462,7 +462,8 @@ jobs:
           # Debug what we're setting
           echo "Setting API URL: $API_URL"
           # Use the exact same name as in the outputs section
-          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          #echo "url=$(echo $url)" >> $GITHUB_OUTPUT
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
           # Verify it was set
           echo "GITHUB_OUTPUT contents:"
           cat $GITHUB_OUTPUT
