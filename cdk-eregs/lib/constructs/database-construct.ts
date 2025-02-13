@@ -91,7 +91,7 @@ export class DatabaseConstruct extends Construct {
 
     // Define the writer instance
     const writer = rds.ClusterInstance.provisioned('Instance', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.LARGE),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R7G, ec2.InstanceSize.LARGE),
       parameterGroup: instanceParameterGroup,
       enablePerformanceInsights: true,
     });
