@@ -143,6 +143,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
+          mv ./solution/backend/requirements_tmp.txt ./solution/backend/requirements.txt
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
           pip install -r ./solution/backend/requirements.txt
@@ -156,7 +157,7 @@ jobs:
       - name: Run collectstatic
         if: success() && steps.findPr.outputs.number
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
@@ -168,7 +169,7 @@ jobs:
       - name: Build Vite assets
         if: success() && steps.findPr.outputs.number
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
@@ -398,7 +399,7 @@ jobs:
           # Debug what we're setting
           echo "Setting API URL: $API_URL"
           # Use the exact same name as in the outputs section
-          echo "api_url=$API_URL" >> $GITHUB_OUTPUT
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
           # Verify it was set
           echo "GITHUB_OUTPUT contents:"
           cat $GITHUB_OUTPUT
