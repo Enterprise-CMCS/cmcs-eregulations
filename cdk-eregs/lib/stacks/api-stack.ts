@@ -71,28 +71,35 @@ class SecurityGroupHandler {
     vpc: ec2.IVpc,
     stageConfig: StageConfig
   ): ec2.ISecurityGroup {
-    // For ephemeral environments, try to import security group from SSM
+    
     if (stageConfig.isEphemeral()) {
       try {
-        const securityGroupId = ssm.StringParameter.valueForStringParameter(
+        // For ephemeral, import dev's serverless SG from SSM
+        const serverlessSgId = ssm.StringParameter.valueForStringParameter(
           scope,
           '/eregulations/aws/cdk_securitygroupid'
         );
 
-        if (securityGroupId) {
-          return ec2.SecurityGroup.fromSecurityGroupId(
-            scope,
-            'ImportedServerlessSG',
-            securityGroupId,
-            { allowAllOutbound: true }
-          );
-        }
-      } catch (error) {
-        console.warn('Failed to import security group for ephemeral environment, creating new one');
+        return ec2.SecurityGroup.fromSecurityGroupId(
+          scope,
+          'ImportedServerlessSG',
+          serverlessSgId,
+          { allowAllOutbound: true }
+        );
+      } catch (err) {
+        const errorMessage = err instanceof Error 
+          ? err.message 
+          : 'Unknown error occurred';
+
+        throw new Error(
+          'Failed to get dev serverless security group from SSM. ' +
+          'Ensure dev environment exists and SSM parameter is set. ' +
+          `Error: ${errorMessage}`
+        );
       }
     }
-
-    // Create new security group
+  
+    // For non-ephemeral environments, create new security group
     const serverlessSG = new ec2.SecurityGroup(scope, 'ServerlessSecurityGroup', {
       vpc,
       description: `Security Group for ${stageConfig.stageName} Serverless Functions`,
@@ -107,32 +114,9 @@ class SecurityGroupHandler {
       'Allow HTTPS inbound'
     );
 
-    // For non-ephemeral environments, store security group ID in SSM
-    if (!stageConfig.isEphemeral()) {
-      new ssm.StringParameter(scope, 'SecurityGroupParam', {
-        parameterName: '/eregulations/aws/cdk_securitygroupid',
-        stringValue: serverlessSG.securityGroupId,
-        description: `Security Group ID for ${stageConfig.stageName} environment`,
-      });
-    }
-
-    // Export security group ID
-    new cdk.CfnOutput(scope, 'ServerlessSecurityGroupOutput', {
-      value: serverlessSG.securityGroupId,
-      exportName: stageConfig.getResourceName('serverless-security-group-id'),
-      description: `Security Group ID for ${stageConfig.stageName} environment`
-    });
-
-    // Add tags
-    const tags = stageConfig.getStackTags();
-    Object.entries(tags).forEach(([key, value]) => {
-      cdk.Tags.of(serverlessSG).add(key, value);
-    });
-
     return serverlessSG;
   }
 }
-
 /**
  * Paths for AWS Secrets Manager secrets
  * @const
@@ -189,39 +173,16 @@ export class BackendStack extends cdk.Stack {
       stageConfig
     );
 
-    // ================================
+// ================================
     // DATABASE SETUP
     // ================================
-    const databaseEndpoint = ssm.StringParameter.valueForStringParameter(
-      this,
-      '/eregulations/db/cdk_host'
-    );
-
-    const databasePort = ssm.StringParameter.valueForStringParameter(
-      this,
-      '/eregulations/db/port'
-    );
-
-    const databaseSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'DatabaseSG',
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/eregulations/aws/cdk_securitygroupid'
-      ),
-      { allowAllOutbound: true }
-    );
-
-    // Add ingress rule to database security group
-    databaseSecurityGroup.addIngressRule(
-      serverlessSG,
-      ec2.Port.tcp(3306),
-      'Allow PostgreSQL access from Lambda functions'
-    );
-
-    // Create database only for non-ephemeral environments
+    let databaseSecurityGroup: ec2.ISecurityGroup;
+    let databaseEndpoint: string;
+    let databasePort: string;
     let databaseConstruct: DatabaseConstruct | undefined;
+
     if (!stageConfig.isEphemeral()) {
+      // For non-ephemeral environments
       databaseConstruct = new DatabaseConstruct(this, 'Database', {
         vpc,
         selectedSubnets,
@@ -229,16 +190,32 @@ export class BackendStack extends cdk.Stack {
         serverlessSecurityGroup: serverlessSG,
       });
 
-      // Store database info in SSM
-      new ssm.StringParameter(this, 'DatabaseHostParam', {
-        parameterName: '/eregulations/db/cdk_host',
-        stringValue: databaseConstruct.cluster.clusterEndpoint.hostname,
-      });
+      databaseSecurityGroup = databaseConstruct.dbSecurityGroup;
+      databaseEndpoint = databaseConstruct.cluster.clusterEndpoint.hostname;
+      databasePort = databaseConstruct.cluster.clusterEndpoint.port.toString();
+    } else {
+      // For ephemeral environments, use dev's database settings
+      try {
+        databaseEndpoint = ssm.StringParameter.valueForStringParameter(
+          this,
+          '/eregulations/db/cdk_host'
+        );
+        
+        databasePort = ssm.StringParameter.valueForStringParameter(
+          this,
+          '/eregulations/db/port'
+        );
+      } catch (err) {
+        const errorMessage = err instanceof Error 
+          ? err.message 
+          : 'Unknown error occurred';
 
-      new ssm.StringParameter(this, 'DatabaseSecurityGroupParam', {
-        parameterName: '/eregulations/aws/cdk_securitygroupid',
-        stringValue: databaseConstruct.dbSecurityGroup.securityGroupId,
-      });
+        throw new Error(
+          'Failed to get dev database configuration from SSM. ' +
+          'Ensure SSM parameters exist. ' +
+          `Error: ${errorMessage}`
+        );
+      }
     }
 
     // ================================
@@ -338,7 +315,7 @@ export class BackendStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-      DB_PASSWORD: secrets.db.secretValueFromJson('DB_PASSWORD').unsafeUnwrap(),
+      DB_PASSWORD: secrets.db.secretValueFromJson('password').unsafeUnwrap(),
       HTTP_AUTH_USER: secrets.http.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
       HTTP_AUTH_PASSWORD: secrets.http.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
       DJANGO_ADMIN_USERNAME: secrets.django.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),

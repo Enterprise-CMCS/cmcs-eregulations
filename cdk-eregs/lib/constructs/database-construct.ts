@@ -13,7 +13,6 @@ export interface DatabaseConstructProps {
   readonly stageConfig: StageConfig;
   readonly serverlessSecurityGroup: ec2.ISecurityGroup;
 }
-
 export class DatabaseConstruct extends Construct {
   public readonly dbSecurityGroup: ec2.SecurityGroup;
   public readonly cluster: rds.DatabaseCluster;
@@ -92,7 +91,7 @@ export class DatabaseConstruct extends Construct {
 
     // Define the writer instance
     const writer = rds.ClusterInstance.provisioned('Instance', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R6G, ec2.InstanceSize.LARGE),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R7G, ec2.InstanceSize.LARGE),
       parameterGroup: instanceParameterGroup,
       enablePerformanceInsights: true,
     });
@@ -106,7 +105,7 @@ export class DatabaseConstruct extends Construct {
       vpcSubnets: selectedSubnets,
       writer,
       securityGroups: [this.dbSecurityGroup],
-      credentials: rds.Credentials.fromSecret(dbSecret),
+      credentials: rds.Credentials.fromSecret(dbSecret, 'eregsuser'),
       parameterGroup: clusterParameterGroup,
       defaultDatabaseName: 'eregs',
       storageEncrypted: true,

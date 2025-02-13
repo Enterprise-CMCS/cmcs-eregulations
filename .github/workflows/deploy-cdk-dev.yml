@@ -296,9 +296,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Install Python dependencies
         run: |
+          mv ./solution/backend/requirements_tmp.txt ./solution/backend/requirements.txt
           python -m pip install --upgrade pip
           pip install -r ./solution/static-assets/requirements.txt
           pip install -r ./solution/backend/requirements.txt
@@ -306,13 +306,13 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
+          envkey_VITE_API_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
           directory: solution/ui/regulations/eregs-vite
           file_name: .env
 
       - name: Run collectstatic
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ matrix.environment }}
         run: |
@@ -323,7 +323,7 @@ jobs:
 
       - name: Build Vite assets
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets-cdk.outputs.static_url }}
+          STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ matrix.environment }}
         run: |
