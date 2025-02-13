@@ -7,35 +7,17 @@ import lodashGet from "lodash/get";
 import lodashKeys from "lodash/keys";
 import lodashMap from "lodash/map";
 
-import localforage from "localforage";
-
 import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
-const DEFAULT_CACHE_RESPONSE = false; // Change this to true if needed
-
-// still needed for caching purposes
-const apiPath = `${
-    import.meta.env.VITE_ENV === "prod" &&
-    window.location.host.includes("cms.gov")
-        ? `https://${window.location.host}`
-        : import.meta.env.VITE_API_URL || "http://localhost:8000"
-}/v3`;
 
 let config = {
     fetchMode: "cors",
     maxRetryCount: 2,
 };
 
-localforage.config({
-    name: "eregs",
-    version: 1.0,
-    storeName: "eregs_django", // Should be alphanumeric, with underscores.
-});
-
 const fetchJson = ({
     url,
     options = {},
     retryCount = 0,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
@@ -81,19 +63,8 @@ const fetchJson = ({
     }
 
     return Promise.resolve()
-        .then(
-            () =>
-                cacheResponse &&
-                localforage.getItem(url.replace(apiPath, merged.method))
-        )
-        .then((value) => {
-            if (value && Date.now() < value.expiration_date) {
-                console.info("CACHE HIT");
-                return value;
-            } else {
-                console.info("CACHE MISS");
-                return fetch(url, merged);
-            }
+        .then(() => {
+            return fetch(url, merged);
         })
         .catch((err) => {
             // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
@@ -172,13 +143,6 @@ const fetchJson = ({
             if (isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
-                if (cacheResponse) {
-                    json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                    localforage.setItem(
-                        url.replace(apiPath, merged.method),
-                        json
-                    );
-                }
                 return json;
             }
         });
@@ -191,13 +155,11 @@ const fetchJson = ({
  * @param {string} urlPath - Path to the API endpoints
  * @param {Object} options - Object containing options for the request
  * @param {Object} [options.params] - Query string parameters to pass to the API
- * @param {boolean} [cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<Object>} - Promise that contains the JSON response when fulfilled
  * */
 const httpApiGet = (
     urlPath,
     { params } = {},
-    cacheResponse = DEFAULT_CACHE_RESPONSE
 ) => {
     return fetchJson({
         url: `${urlPath}`,
@@ -206,21 +168,7 @@ const httpApiGet = (
             params,
         },
         retryCount: 0, // retryCount, default
-        cacheResponse,
     });
-};
-
-// ---------- cache helpers -----------
-
-const getCacheKeys = async () => localforage.keys();
-
-const removeCacheItem = async (key) => localforage.removeItem(key);
-
-const getCacheItem = async (key) => localforage.getItem(key);
-
-const setCacheItem = async (key, data) => {
-    data.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-    return localforage.setItem(key, data);
 };
 
 // ---------- api calls ---------------
@@ -468,14 +416,12 @@ const getStatutes = async ({
 /**
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<{id: number, full_name: string, short_name: string, abbreviation: string, description: string, public_resources: number, internal_resources: number}>}>} - Promise that contains array of subjects when fulfilled
  */
 const getSubjects = async ({
     apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
-    httpApiGet(`${apiUrl}resources/subjects?page_size=1000`, {}, cacheResponse);
+    httpApiGet(`${apiUrl}resources/subjects?page_size=1000`, {});
 
 /**
  * An object representing an internal category
@@ -495,17 +441,14 @@ const getSubjects = async ({
  *
  * @param {Object} options - An object containing options for the request.
  * @param {string} options.apiUrl - API base url passed in from Django template
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{counts: number, next: ?string, previous: ?string, results: InternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getInternalCategories = async ({
     apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGet(
         `${apiUrl}resources/internal/categories?page_size=1000`,
         {},
-        cacheResponse
     );
 
 /**
@@ -527,60 +470,50 @@ const getInternalCategories = async ({
  *
  * @param {object} options - An object containing options for the request.
  * @param {string} [options.apiUrl] - The base URL of the external API.
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - A boolean flag indicating whether to cache the API response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{counts: number, next: ?string, previous: ?string, results: ExternalCategory[]}>} - Promise that contains array of categories when fulfilled
  */
 const getExternalCategories = async ({
     apiUrl,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGet(
         `${apiUrl}resources/public/categories?page_size=1000`,
         {},
-        cacheResponse
     );
 
 /**
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [optons.requestParams] - Query string parameters to pass to API
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getCombinedContent = async ({
     apiUrl,
     requestParams = "",
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGet(
         `${apiUrl}content-search/${requestParams ? `?${requestParams}` : ""}`,
         {},
-        cacheResponse
     );
 
 const getGranularCounts = async ({
     apiUrl,
     requestParams = "",
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGet(
         `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
         {},
-        cacheResponse
     );
 
 /**
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [options.requestParams] - Query string parameters to pass to API
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getContentWithoutQuery = async ({
     apiUrl,
     requestParams = "",
     docType, // "public" or "internal"
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
     const typeString = docType ? `${docType.toLowerCase()}` : "";
     const rqParams = requestParams ? `?${requestParams}` : "";
@@ -588,7 +521,6 @@ const getContentWithoutQuery = async ({
     return httpApiGet(
         `${apiUrl}resources/${typeString}${rqParams}`,
         {},
-        cacheResponse
     );
 };
 
@@ -596,20 +528,17 @@ const getContentWithoutQuery = async ({
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template
  * @param {string} [options.requestParams] - Query string parameters to pass to API
- * @param {boolean} [options.cacheResponse=DEFAULT_CACHE_RESPONSE] - Whether to cache the response. Defaults to the value of `DEFAULT_CACHE_RESPONSE`.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
  */
 const getInternalDocs = async ({
     apiUrl,
     requestParams = "",
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) =>
     httpApiGet(
         `${apiUrl}resources/internal${
             requestParams ? `?${requestParams}` : ""
         }`,
         {},
-        cacheResponse
     );
 
 const throwGenericError = async () =>
@@ -619,8 +548,6 @@ const throwGenericError = async () =>
 
 export {
     config,
-    getCacheItem,
-    getCacheKeys,
     getCombinedContent,
     getContentWithoutQuery,
     getExternalCategories,
@@ -641,7 +568,5 @@ export {
     getSynonyms,
     getTOC,
     getTitles,
-    removeCacheItem,
-    setCacheItem,
     throwGenericError,
 };

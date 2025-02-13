@@ -32231,7 +32231,6 @@ const subpartResources = {
             description_headline: null,
         },
     ],
-    expiration_date: 1688678461587,
 };
 const sectionResources = {
     count: 1,

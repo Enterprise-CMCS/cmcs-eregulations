@@ -74,7 +74,6 @@ const getCategories = async (apiUrl) => {
     try {
         categories = await getExternalCategories({
             apiUrl,
-            cacheResponse: false,
         });
     } catch (error) {
         console.error(error);

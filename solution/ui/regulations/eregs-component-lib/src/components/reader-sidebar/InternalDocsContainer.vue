@@ -42,7 +42,6 @@ const getCategories = async () => {
     try {
         categories = await getInternalCategories({
             apiUrl: props.apiUrl,
-            cacheResponse: false,
         });
     } catch (error) {
         console.error(error);
@@ -81,7 +80,6 @@ const getDocuments = async ({ section }) => {
             getCategories(),
             getInternalDocs({
                 apiUrl: props.apiUrl,
-                cacheResponse: false,
                 requestParams: `${locationString}`,
             }),
         ]);
