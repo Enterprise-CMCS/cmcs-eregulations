@@ -401,9 +401,9 @@ jobs:
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb /dev/stdout
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate /dev/stdout
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu /dev/stdout
           popd
 
       - name: Get API URL
