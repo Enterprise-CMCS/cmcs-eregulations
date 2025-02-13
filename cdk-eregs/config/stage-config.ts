@@ -81,6 +81,10 @@ export class StageConfig {
     return this.ephemeralId || this.environment;
   }
 
+  public get databaseName(): string {
+    return this.ephemeralId?.replace("-", "_") ?? 'eregs';
+  }
+
   public isEphemeral(): boolean {
     return !!this.ephemeralId;
   }
