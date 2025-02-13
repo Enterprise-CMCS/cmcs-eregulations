@@ -596,9 +596,6 @@ const createLastUpdatedDates = (resultsArr) => {
         {}
     );
 
-    // remove artifact added by front end caching
-    delete combinedResults.expiration_date;
-
     return Object.fromEntries(
         Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])
     );
