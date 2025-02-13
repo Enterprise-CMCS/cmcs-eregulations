@@ -39,7 +39,7 @@ jobs:
       - name: Deploy Static-Asset Infrastructure
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -88,7 +88,7 @@ jobs:
       - name: Deploy ZIP-based Lambdas
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -129,7 +129,7 @@ jobs:
       - name: Deploy Text Extractor
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -168,7 +168,7 @@ jobs:
       - name: Deploy Site-Lambda
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -218,7 +218,7 @@ jobs:
       - name: Deploy FR Parser
         env:        
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -258,7 +258,7 @@ jobs:
       - name: Deploy ECFR Parser
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -340,7 +340,7 @@ jobs:
       - name: Deploy Static Assets
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs

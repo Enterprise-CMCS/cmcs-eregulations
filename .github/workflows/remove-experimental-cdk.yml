@@ -43,7 +43,7 @@ jobs:
         env:
             PR_NUMBER: ${{ github.event.number }}
             AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+            AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
             CDK_DEBUG: true
             ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -66,7 +66,7 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -89,7 +89,7 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -112,7 +112,7 @@ jobs:
         env:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
