@@ -81,19 +81,8 @@ const fetchJson = ({
     }
 
     return Promise.resolve()
-        .then(
-            () =>
-                cacheResponse &&
-                localforage.getItem(url.replace(apiPath, merged.method))
-        )
-        .then((value) => {
-            if (value && Date.now() < value.expiration_date) {
-                console.info("CACHE HIT");
-                return value;
-            } else {
-                console.info("CACHE MISS");
-                return fetch(url, merged);
-            }
+        .then(() => {
+            return fetch(url, merged);
         })
         .catch((err) => {
             // this will capture network/timeout errors, because fetch does not consider http Status 5xx or 4xx as errors
@@ -172,13 +161,7 @@ const fetchJson = ({
             if (isBoolean(isOk) && !isOk) {
                 throw parseError({ ...json, status: httpStatus });
             } else {
-                if (cacheResponse) {
-                    json.expiration_date = Date.now() + 8 * 60 * 60 * 1000; // 24 hours * 60 minutes * 60 seconds * 1000
-                    localforage.setItem(
-                        url.replace(apiPath, merged.method),
-                        json
-                    );
-                }
+                console.info("returning here!");
                 return json;
             }
         });
