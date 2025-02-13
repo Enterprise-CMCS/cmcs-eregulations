@@ -119,6 +119,10 @@ jobs:
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
+
+          # Delete the database for this ephemeral environment
+          echo "Deleting database for PR: ${PR_NUMBER}"
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb
           
           # Generate the stack names for this PR
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"

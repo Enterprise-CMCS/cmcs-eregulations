@@ -308,7 +308,7 @@ export class BackendStack extends cdk.Stack {
     // ENVIRONMENT VARIABLES
     // ================================
     const environmentVariables: { [key: string]: string } = {
-      DB_NAME: 'eregs',
+      DB_NAME: stageConfig.databaseName,
       DB_USER: 'eregsuser',
       DB_HOST: databaseEndpoint,
       DB_PORT: databasePort,

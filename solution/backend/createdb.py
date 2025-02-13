@@ -23,7 +23,7 @@ def handler(event, context):
                 "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'eregs'"
             )
             cursor.execute(
-                f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE eregs "
+                f"CREATE DATABASE {os.environ.get('DB_NAME')} WITH TEMPLATE eregs "
                 f"STRATEGY FILE_COPY OWNER {os.environ.get('DB_USER')}"
             )
     except ProgrammingError:

@@ -390,6 +390,22 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts" \
           --outputs-file api-outputs.json
           popd
+
+      - name: Invoke setup functions after site lambdas deployed
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu
+          popd
+
       - name: Get API URL
         id: get-api-url
         run: |
