@@ -12,14 +12,6 @@ import localforage from "localforage";
 import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
 const DEFAULT_CACHE_RESPONSE = false; // Change this to true if needed
 
-// still needed for caching purposes
-const apiPath = `${
-    import.meta.env.VITE_ENV === "prod" &&
-    window.location.host.includes("cms.gov")
-        ? `https://${window.location.host}`
-        : import.meta.env.VITE_API_URL || "http://localhost:8000"
-}/v3`;
-
 let config = {
     fetchMode: "cors",
     maxRetryCount: 2,
@@ -35,7 +27,6 @@ const fetchJson = ({
     url,
     options = {},
     retryCount = 0,
-    cacheResponse = DEFAULT_CACHE_RESPONSE,
 }) => {
     // see https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     let isOk = false;
