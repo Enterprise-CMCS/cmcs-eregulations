@@ -194,8 +194,9 @@ jobs:
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
-          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout
-          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout
+          echo "import sys; import json; j = json.loads([l for l in sys.stdin]); print(j); sys.exit(1 if 'FunctionError' in j else 0);" > check_error.py
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout | python check_error.py
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout | python check_error.py
 
       - name: Get API URL
         id: get-api-url

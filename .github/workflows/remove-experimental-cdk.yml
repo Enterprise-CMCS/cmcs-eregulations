@@ -122,7 +122,8 @@ jobs:
 
           # Delete the database for this ephemeral environment
           echo "Deleting database for PR: ${PR_NUMBER}"
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout
+          echo "import sys; import json; j = json.loads([l for l in sys.stdin]); print(j); sys.exit(1 if 'FunctionError' in j else 0);" > check_error.py
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | python check_error.py
           
           # Generate the stack names for this PR
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
