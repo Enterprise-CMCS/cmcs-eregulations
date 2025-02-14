@@ -122,7 +122,7 @@ jobs:
 
           # Delete the database for this ephemeral environment
           echo "Deleting database for PR: ${PR_NUMBER}"
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | ../.github/check_lambda_response.py
+          ! aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
           
           # Generate the stack names for this PR
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"

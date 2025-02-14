@@ -399,9 +399,9 @@ jobs:
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb /dev/stdout | ./.github/check_lambda_response.py
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate /dev/stdout | ./.github/check_lambda_response.py
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu /dev/stdout | ./.github/check_lambda_response.py
+          ! aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+          ! aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+          ! aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
 
       - name: Get API URL
         id: get-api-url
