@@ -21,7 +21,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
-    "dompurify": "^3.2.3",
+    "dompurify": "^3.2.4",
     "flush-promises": "^1.0.2",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
