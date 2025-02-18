@@ -206,6 +206,7 @@ jobs:
           pushd cdk-eregs
           API_STACK="cms-eregs-${{ matrix.environment }}-api"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          API_URL=${API_URL%/}
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
   deploy-fr-parser-cdk:
