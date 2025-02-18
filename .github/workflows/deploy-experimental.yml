@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       # setup python
       - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
@@ -134,7 +134,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       # setup python
       - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
@@ -232,7 +232,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       # setup python
       - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
@@ -375,7 +375,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       # Run the cypress tests
       - name: end-to-end tests
         uses: cypress-io/github-action@v6

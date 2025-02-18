@@ -28,7 +28,7 @@ jobs:
       # Setup Node
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       # Setup Python
       - uses: actions/setup-python@v5
         with:
