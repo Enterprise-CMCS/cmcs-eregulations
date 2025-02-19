@@ -36,7 +36,7 @@ footer {
     }
 
     .site-footer {
-        @include max-width;
+        @include eds-max-width;
     }
 
     .address {
