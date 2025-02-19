@@ -26,7 +26,7 @@ jobs:
           submodules: false
       - uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v4
         with:
