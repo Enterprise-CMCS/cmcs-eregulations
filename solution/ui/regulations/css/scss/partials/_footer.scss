@@ -35,6 +35,11 @@ footer {
         font-size: var(--font-size-sm);
     }
 
+    .site-footer {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+
     .address {
         margin-bottom: var(--spacer-3);
         font-size: $font-size-xs;
