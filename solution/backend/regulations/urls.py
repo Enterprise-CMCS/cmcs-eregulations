@@ -4,7 +4,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
 from regulations.views.about import AboutView
-from regulations.views.cache import CacheView
 from regulations.views.get_account_access import GetAccountAccessView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
@@ -47,7 +46,6 @@ urlpatterns = [
     path('search/', SearchView.as_view(), name='search'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('cache/', CacheView.as_view(), name='cache'),
     path('resources/', ResourcesView, name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
