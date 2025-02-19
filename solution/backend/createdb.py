@@ -1,20 +1,25 @@
 #!/usr/bin/env python
 import os
 
+import django
+from django.db import connections
+from django.db.utils import ProgrammingError
+
+TIMEOUT_MINUTES = 3
+
 
 def handler(event, context):
-    TIMEOUT_MINUTES = 3
-
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
-
-    import django
     django.setup()
 
-    from django.db import ProgrammingError, connection
-
-    connection.ensure_connection()
-    if not connection.is_usable():
-        raise Exception("database is unreachable")
+    try:
+        connection = connections["postgres"]
+        connection.connect()
+        connection.ensure_connection()
+        if not connection.is_usable():
+            raise Exception("database connection is not usable")
+    except Exception as e:
+        raise Exception(f"Failed to connect to the database: {str(e)}")
 
     try:
         with connection.cursor() as cursor:
@@ -23,9 +28,9 @@ def handler(event, context):
                 "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'eregs'"
             )
             cursor.execute(
-                f"CREATE DATABASE {os.environ.get('STAGE')} WITH TEMPLATE eregs "
+                f"CREATE DATABASE {os.environ.get('DB_NAME')} WITH TEMPLATE eregs "
                 f"STRATEGY FILE_COPY OWNER {os.environ.get('DB_USER')}"
             )
+            print(f"Database {os.environ.get('DB_NAME')} has been created")
     except ProgrammingError:
-        # This is raised if the database already exists
-        pass
+        print("Database was not created, most likely because it already exists")

@@ -1,7 +1,7 @@
 <script setup>
 import TocPart from "sharedComponents/TOC/TocPart.vue";
 
-const props = defineProps({
+defineProps({
     subchapter: {
         type: Object,
         required: true,

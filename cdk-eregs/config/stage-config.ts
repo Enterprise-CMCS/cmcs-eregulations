@@ -76,7 +76,14 @@ export class StageConfig {
     }
   }
 
+  public get stageName(): string {
+    // If ephemeral environment exists use it, otherwise use environment
+    return this.ephemeralId || this.environment;
+  }
 
+  public get databaseName(): string {
+    return this.ephemeralId?.replace("-", "_") ?? 'eregs';
+  }
 
   public isEphemeral(): boolean {
     return !!this.ephemeralId;

@@ -17,7 +17,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["link-clicked"]);
+defineEmits(["link-clicked"]);
 
 const links = [
     {

@@ -2,9 +2,9 @@
     <div class="nav-container" role="main">
         <div class="content">
             <h1>{{ title }}</h1>
-            <slot name="description"></slot>
-            <slot name="input"></slot>
-            <slot name="filters"></slot>
+            <slot name="description" />
+            <slot name="input" />
+            <slot name="filters" />
         </div>
     </div>
 </template>

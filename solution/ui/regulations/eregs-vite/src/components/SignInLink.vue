@@ -50,7 +50,11 @@ const linkClasses = computed(() => ({
         <span class="disabled">{{ linkLabel }}</span>
     </template>
     <template v-else>
-        <a :href="loginUrl" :class="linkClasses" rel="noopener noreferrer">{{
+        <a
+            :href="loginUrl"
+            :class="linkClasses"
+            rel="noopener noreferrer"
+        >{{
             linkLabel
         }}</a>
     </template>

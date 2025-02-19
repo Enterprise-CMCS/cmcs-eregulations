@@ -2,17 +2,16 @@
 import { inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults";
-import useRemoveList from "composables/removeList";
+import useSearchResults from "composables/searchResults.js";
+import useRemoveList from "composables/removeList.js";
 
-import _isArray from "lodash/isArray";
-import _isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api";
+import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api.js";
 
-import { getSubjectName, getSubjectNameParts } from "utilities/filters";
+import { getSubjectName, getSubjectNameParts } from "utilities/filters.js";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -90,8 +89,8 @@ const setCategories = (categories) => {
 const allDocTypesOnly = (queryParams) => {
     const { type, ...rest } = queryParams;
     if (
-        (type && type.includes("all") && _isEmpty(rest)) ||
-        (!type && _isEmpty(rest))
+        (type && type.includes("all") && isEmpty(rest)) ||
+        (!type && isEmpty(rest))
     ) {
         return true;
     }
@@ -179,7 +178,7 @@ const setSelectedParams = (subjectsListRef) => (param) => {
         return;
     }
 
-    const paramList = !_isArray(paramValue) ? [paramValue] : paramValue;
+    const paramList = !Array.isArray(paramValue) ? [paramValue] : paramValue;
     paramList.forEach((paramId) => {
         const subject = subjectsListRef.value.results.filter(
             (subjectObj) => paramId === subjectObj.id.toString()
@@ -306,7 +305,7 @@ watch(
         // set title on subject selection
         const { subjects } = newQueryParams;
         if (subjects) {
-            const subjectTitleToSet = _isArray(subjects)
+            const subjectTitleToSet = Array.isArray(subjects)
                 ? subjects[0]
                 : subjects;
             setDocumentTitle(
@@ -323,7 +322,7 @@ watch(
         );
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams)) {
+        if (isEmpty(sanitizedQueryParams)) {
             return;
         }
 
@@ -399,7 +398,9 @@ getDocSubjects();
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"
                 >
-                    <button class="sidebar-toggle__button">Open/Close</button>
+                    <button class="sidebar-toggle__button">
+                        Open/Close
+                    </button>
                     <PolicySidebar>
                         <template #title>
                             <h2>Research a Subject</h2>
@@ -421,7 +422,7 @@ getDocSubjects();
                     <SubjectLanding
                         v-if="
                             allDocTypesOnly($route.query) ||
-                            _isEmpty($route.query)
+                                isEmpty($route.query)
                         "
                         :policy-doc-subjects="policyDocSubjects"
                     />
@@ -462,7 +463,7 @@ getDocSubjects();
                                     :error="slotProps.error"
                                     :loading="
                                         slotProps.loading ||
-                                        policyDocList.loading
+                                            policyDocList.loading
                                     "
                                 />
                             </FetchItemsContainer>
@@ -481,7 +482,7 @@ getDocSubjects();
                         <template
                             v-if="
                                 policyDocList.loading ||
-                                partsLastUpdated.loading
+                                    partsLastUpdated.loading
                             "
                         >
                             <span class="loading__span">Loading...</span>

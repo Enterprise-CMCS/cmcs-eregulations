@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     title: {
         type: String,
         required: true,
@@ -14,7 +14,9 @@ const props = defineProps({
 
 <template>
     <div class="toc-title__container">
-        <h2 class="toc-title__heading">{{ title }}</h2>
+        <h2 class="toc-title__heading">
+            {{ title }}
+        </h2>
         <h3 v-if="subheading" class="toc-title__subheading">
             {{ subheading }}
         </h3>

@@ -37,7 +37,6 @@ reg_core_migrate:
 create_database:
   environment:
     STAGE: ${self:custom.stage}
-    DB_NAME: eregs
   handler: createdb.handler
   timeout: 300
   layers:
@@ -45,7 +44,6 @@ create_database:
 drop_database:
   environment:
     STAGE: ${self:custom.stage}
-    DB_NAME: eregs
   handler: dropdb.handler
   timeout: 300
   layers:

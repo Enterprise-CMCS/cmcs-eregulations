@@ -1,5 +1,5 @@
 <script setup>
-import _groupBy from "lodash/groupBy";
+import groupBy from "lodash/groupBy";
 
 import { locationLabel, locationUrl } from "utilities/filters";
 
@@ -24,13 +24,13 @@ const props = defineProps({
 
 const filteredLocations = props.item.cfr_citations
     ? props.item.cfr_citations.filter((location) => {
-          const { part } = location;
-          return props.partsLastUpdated[part];
-      })
+        const { part } = location;
+        return props.partsLastUpdated[part];
+    })
     : [];
 
 const locationsCount = filteredLocations.length;
-const groupedLocations = _groupBy(filteredLocations, "title");
+const groupedLocations = groupBy(filteredLocations, "title");
 </script>
 
 <template>
@@ -46,9 +46,13 @@ const groupedLocations = _groupBy(filteredLocations, "title");
                     v-if="locations.length > 1"
                     :key="i + title"
                     class="section-sign"
-                    >§§
+                >§§
                 </span>
-                <span v-else :key="i + title + i" class="section-sign">§ </span>
+                <span
+                    v-else
+                    :key="i + title + i"
+                    class="section-sign"
+                >§ </span>
                 <template
                     v-for="(location, j) in locations"
                     :key="location.display_name + j"

@@ -11,6 +11,8 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
 import { S3ImportStack } from '../lib/stacks/s3-import';
 
+
+
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
@@ -65,7 +67,8 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
       cdk.Tags.of(app).add(key, value);
     });
-
+     
+ 
     // Create ZIP-based Lambda stacks
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
       lambdaConfig: {
@@ -88,7 +91,27 @@ async function main() {
         loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
       },
     }, stageConfig);
+   
 
+    
+
+// Call create() to initialize the stack's resources
+
+    // Debug output for configuration
+    console.log('Configuration Debug:', {
+      environment: context.environment,
+      ephemeralId,
+      prNumber,
+      isEphemeral: stageConfig.isEphemeral(),
+      resourceExample: stageConfig.getResourceName('site-assets')
+    });
+    console.log('Configuration Debug:', {
+      determinedEnvironment: context.environment,
+      prNumber,
+      ephemeralId,
+      deployEnv: process.env.DEPLOY_ENV,
+      githubJobEnv: process.env.GITHUB_JOB_ENVIRONMENT
+    });
     new S3ImportStack(app, 'S3ImportStack', {
       bucketName: process.env.BUCKET_NAME || '',
       env: {

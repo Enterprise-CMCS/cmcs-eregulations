@@ -43,7 +43,11 @@ export class EcfrParserStack extends cdk.Stack {
 
     // Get the site stack endpoint using stageConfig
     // const siteEndpoint = cdk.Fn.importValue(`${stageConfig.getResourceName('site')}-ServiceEndpoint`);
-    const siteEndpoint = 'https://dev-site.cms.gov';
+      // Get the API Gateway endpoint from stack outputs
+      // Get API endpoint and trim any trailing slash
+      const siteEndpoint = cdk.Fn.importValue(
+        stageConfig.getResourceName('api-endpoint')
+      )
     // Create Lambda function
     this.lambda = new lambda.DockerImageFunction(this, 'EcfrParserFunction', {
       functionName: stageConfig.getResourceName('ecfr-parser'),
@@ -56,8 +60,8 @@ export class EcfrParserStack extends cdk.Stack {
         PARSER_ON_LAMBDA: 'true',
         EREGS_USERNAME: props.environmentConfig.httpUser,
         EREGS_PASSWORD: props.environmentConfig.httpPassword,
-        EREGS_API_URL_V3: `${siteEndpoint}/v3/`,
-        STAGE_ENV: stageConfig.environment,
+        EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+        STAGE_ENV: stageConfig.stageName,
         LOG_LEVEL: props.environmentConfig.logLevel,
       },
       role: lambdaRole,

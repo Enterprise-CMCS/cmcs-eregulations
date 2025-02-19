@@ -4,10 +4,7 @@ import { useRouter, useRoute } from "vue-router";
 
 import useCounts from "composables/counts";
 
-import _isArray from "lodash/isArray";
-import _intersection from "lodash/intersection";
-import _isEmpty from "lodash/isEmpty";
-import _isUndefined from "lodash/isUndefined";
+import isEmpty from "lodash/isEmpty";
 
 import {
     COUNT_TYPES_MAP,
@@ -47,7 +44,7 @@ const { counts, fetchCounts } = useCounts();
 // v-model with a ref to control if the checkbox is displayed as checked or not
 let boxesArr;
 
-if (_isUndefined(typeParams) || typeParams.includes("all")) {
+if (typeof typeParams === "undefined" || typeParams.includes("all")) {
     boxesArr = [];
 } else {
     boxesArr = typeParams.split(",");
@@ -57,7 +54,7 @@ const checkedBoxes = ref(boxesArr);
 
 const onCheckboxChange = (event) => {
     const { checked, value } = event.target;
-    const { type, ...queryClone } = $route.query;
+    const { type: _type, ...queryClone } = $route.query;
 
     if (checked) {
         checkedBoxes.value = [...checkedBoxes.value, value];
@@ -86,7 +83,7 @@ const onCheckboxChange = (event) => {
         return;
     }
 
-    const newTypes = _isEmpty(checkedBoxes.value)
+    const newTypes = isEmpty(checkedBoxes.value)
         ? undefined
         : checkedBoxes.value.join(",");
 
@@ -111,7 +108,7 @@ watch(
             fetchCounts({ apiUrl, queryParams: { subjects } });
         }
 
-        if (_isUndefined(typeParams) || typeParams.includes("all")) {
+        if (typeof typeParams === "undefined" || typeParams.includes("all")) {
             checkedBoxes.value = [];
         } else {
             checkedBoxes.value = typeParams.split(",");
@@ -143,7 +140,7 @@ const makeCount = ({ type }) => {
 
     const mappedType = COUNT_TYPES_MAP[type];
 
-    return _isUndefined(counts.value.results[mappedType])
+    return typeof counts.value.results[mappedType] === "undefined"
         ? ""
         : `(${counts.value.results[mappedType]})`;
 };
@@ -160,7 +157,7 @@ onUnmounted(() => {
     <div class="doc-type__toggle-container">
         <div class="doc-type__toggle">
             <fieldset class="ds-c-fieldset" aria-invalid="false">
-                <template v-if="showRegulations"> </template>
+                <template v-if="showRegulations" />
                 <div v-for="(type, index) in docTypesArr" :key="type">
                     <div class="ds-c-choice-wrapper">
                         <input
@@ -172,7 +169,7 @@ onUnmounted(() => {
                             :checked="checkedBoxes.includes(type)"
                             :disabled="loading"
                             @change="onCheckboxChange"
-                        />
+                        >
                         <label
                             class="ds-c-label"
                             :for="`choice-list--1__choice--${index}`"
