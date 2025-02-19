@@ -39,29 +39,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      - name: Destroy PR-Specific Static-Asset Stack
-        env:
-            PR_NUMBER: ${{ github.event.number }}
-            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-            AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-            CDK_DEBUG: true
-            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
-        run: |
-            pushd cdk-eregs
-            npm install -g aws-cdk@latest @aws-sdk/client-ssm
-            npm install
-            
-            # Generate the exact stack name for this PR
-            STACK_NAME="cms-eregs-eph-${PR_NUMBER}-static-assets"
-            
-            echo "Destroying PR-specific stack: ${STACK_NAME}"
-            cdk destroy "${STACK_NAME}" \
-            -c environment=${{ env.ENVIRONMENT_NAME }} \
-            --force \
-            --app "npx ts-node bin/zip-lambdas.ts"
-            
-            echo "Cleanup completed for stack: ${STACK_NAME}"
-            popd
+      
       - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
@@ -132,12 +110,7 @@ jobs:
           FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
           ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
           API_STACK="cms-eregs-eph-${PR_NUMBER}-api"
-          # Destroy text-extractor stack
-          echo "Destroying PR-specific stack: ${TEXT_EXTRACTOR_STACK}"
-          cdk destroy "${TEXT_EXTRACTOR_STACK}" \
-          -c environment=${{ env.ENVIRONMENT_NAME }} \
-          --force \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          
           
           # Destroy fr-parser stack
           echo "Destroying PR-specific stack: ${FR_PARSER_STACK}"
@@ -159,6 +132,34 @@ jobs:
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
-          
+          # Destroy text-extractor stack
+          echo "Destroying PR-specific stack: ${TEXT_EXTRACTOR_STACK}"
+          cdk destroy "${TEXT_EXTRACTOR_STACK}" \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --force \
+          --app "npx ts-node bin/docker-lambdas.ts"
           echo "Cleanup completed for all Docker-based stacks"
           popd
+      - name: Destroy PR-Specific Static-Asset Stack
+        env:
+            PR_NUMBER: ${{ github.event.number }}
+            AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+            AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+            CDK_DEBUG: true
+            ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
+        run: |
+            pushd cdk-eregs
+            npm install -g aws-cdk@latest @aws-sdk/client-ssm
+            npm install
+            
+            # Generate the exact stack name for this PR
+            STACK_NAME="cms-eregs-eph-${PR_NUMBER}-static-assets"
+            
+            echo "Destroying PR-specific stack: ${STACK_NAME}"
+            cdk destroy "${STACK_NAME}" \
+            -c environment=${{ env.ENVIRONMENT_NAME }} \
+            --force \
+            --app "npx ts-node bin/zip-lambdas.ts"
+            
+            echo "Cleanup completed for stack: ${STACK_NAME}"
+            popd
