@@ -122,9 +122,9 @@ header {
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
-                max-width: 1440px;
-                margin: 0 auto;
                 gap: 1px;
+
+                @include max-width;
 
                 @include custom-min(calc($width-sm / 1px)) {
                     gap: 1.5rem;
