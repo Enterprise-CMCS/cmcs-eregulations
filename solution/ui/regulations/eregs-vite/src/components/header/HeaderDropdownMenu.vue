@@ -7,10 +7,9 @@ const outsideClick = () => {
 };
 
 const windowWidth = ref(window.innerWidth);
-const appendPxSuffix = (int) => `${int}px`;
 const positionStyle = computed(() => {
     return windowWidth.value > 1504
-        ? { right: appendPxSuffix((windowWidth.value - 1440) / 2)}
+        ? { right: `${(windowWidth.value - 1440) / 2}px`}
         : {}
 });
 
