@@ -39,7 +39,7 @@ jobs:
       - name: Deploy Static-Asset Infrastructure
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -88,7 +88,7 @@ jobs:
       - name: Deploy ZIP-based Lambdas
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -129,7 +129,7 @@ jobs:
       - name: Deploy Text Extractor
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -168,7 +168,7 @@ jobs:
       - name: Deploy Site-Lambda
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -187,12 +187,26 @@ jobs:
           --outputs-file api-outputs.json
           popd
 
+      - name: Invoke setup functions after site lambdas deployed
+        if: success() && steps.findPr.outputs.number
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          # This unusual bash syntax is necessary because the AWS CLI doesn't return a non-zero exit code when the lambda fails.
+          # If lambda fails, "FunctionError" will be present in the stdout output. First copy the output to stderr so we can see it,
+          # then grep for "FunctionError" and fail if it's present (grep returns 0 if it finds the string, then we invert that with '!')
+          ! aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+          ! aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+
       - name: Get API URL
         id: get-api-url
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-${{ matrix.environment }}-api"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          API_URL=${API_URL%/}
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
   deploy-fr-parser-cdk:
@@ -218,7 +232,7 @@ jobs:
       - name: Deploy FR Parser
         env:        
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -258,7 +272,7 @@ jobs:
       - name: Deploy ECFR Parser
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
@@ -291,7 +305,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.14
+          node-version: 20
 
       - uses: actions/setup-python@v5
         with:
@@ -340,7 +354,7 @@ jobs:
       - name: Deploy Static Assets
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
