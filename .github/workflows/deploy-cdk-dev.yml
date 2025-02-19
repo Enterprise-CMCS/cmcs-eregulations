@@ -188,7 +188,6 @@ jobs:
           popd
 
       - name: Invoke setup functions after site lambdas deployed
-        if: success() && steps.findPr.outputs.number
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
