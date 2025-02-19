@@ -11,10 +11,10 @@
     }
 
     main {
-        @include eds-max-width;
-
         display: flex;
         flex-direction: row;
+
+        @include eds-max-width;
 
         @media (max-width: $eds-xs-max) {
             flex-direction: column;

@@ -43,8 +43,10 @@ $eds-width-header-links: 1240px;
 }
 
 @mixin eds-max-width($top-bottom-margin: 0) {
-    max-width: var(--content-max-width);
-    margin: $top-bottom-margin auto;
+    & {
+        max-width: var(--content-max-width);
+        margin: $top-bottom-margin auto;
+    }
 }
 
 @mixin eds-gutters {
@@ -56,7 +58,9 @@ $eds-width-header-links: 1240px;
 }
 
 @mixin eds-width-with-gutters {
-    width: calc(100% - var(--grid-form-gutter-width) - var(--grid-form-gutter-width));
+    & {
+        width: calc(100% - var(--grid-form-gutter-width) - var(--grid-form-gutter-width));
+    }
 
     @media (min-width: $eds-width-md) {
         width: calc(100% - var(--grid-gutter-width) - var(--grid-gutter-width));
