@@ -46,6 +46,10 @@ body {
     width: 100%;
 }
 
+.reader-container {
+     @include eds-max-width;
+}
+
 .match-sides {
     &[data-state="collapsed"] {
         flex: 0 0 $collapsed-sidebar-width;
