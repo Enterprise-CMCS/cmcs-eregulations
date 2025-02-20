@@ -1,10 +1,11 @@
-name: Deploy CDK
+name: Deploy CDK (Matrix Job)
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 permissions:
   id-token: write
@@ -14,14 +15,11 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:  
-  deploy-static-asset-cdk:    
-    strategy:      
-      max-parallel: 1      
-      matrix:        
-        environment: ["dev", "val"]
+  deploy-static-asset-cdk:
+    name: Deploy Static Assets
     runs-on: ubuntu-22.04    
     environment:      
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     outputs:
       static_url: ${{ steps.get-static-url.outputs.static_url }}
     steps:
@@ -47,10 +45,10 @@ jobs:
           npm install
           
           # Get exact stack name
-          STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          STATICASSET_STACK="cms-eregs-${{ inputs.environment }}-static-assets"
           
           cdk deploy ${STATICASSET_STACK} \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           -c deploymentType=infrastructure \
           --require-approval never \
           --exclusively \
@@ -62,18 +60,16 @@ jobs:
         id: get-static-url
         run: |
           pushd cdk-eregs
-          STATIC_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          STATIC_STACK="cms-eregs-${{ inputs.environment }}-static-assets"
           STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
           echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
           popd
-  deploy-zip-lambdas-cdk:    
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
+
+  deploy-zip-lambdas-cdk:
+    name: Deploy ZIP-based Lambdas    
     runs-on: ubuntu-22.04
     environment:
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -96,25 +92,22 @@ jobs:
           npm install
           
           # Get exact stack names
-          REDIRECT_STACK="cms-eregs-${{ matrix.environment }}-redirect-api"
-          MAINTENANCE_STACK="cms-eregs-${{ matrix.environment }}-maintenance-api"
+          REDIRECT_STACK="cms-eregs-${{ inputs.environment }}-redirect-api"
+          MAINTENANCE_STACK="cms-eregs-${{ inputs.environment }}-maintenance-api"
           
           cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
   deploy-text-extractor-cdk:
+    name: Deploy Text Extractor
     needs: deploy-zip-lambdas-cdk
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -136,23 +129,21 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
-          TEXT_EXTRACTOR_STACK="cms-eregs-${{ matrix.environment }}-text-extractor"
+          TEXT_EXTRACTOR_STACK="cms-eregs-${{ inputs.environment }}-text-extractor"
           
           cdk deploy $TEXT_EXTRACTOR_STACK \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+
   deploy-site-lambda-cdk:
+    name: Deploy Site Lambdas
     needs: [deploy-static-asset-cdk, deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
-    strategy:      
-      max-parallel: 1      
-      matrix:        
-        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -176,10 +167,10 @@ jobs:
           npm install
           
           # Get exact stack name
-          API_STACK="cms-eregs-${{ matrix.environment }}-api"
+          API_STACK="cms-eregs-${{ inputs.environment }}-api"
           
           cdk deploy $API_STACK \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           -c buildId="${GITHUB_RUN_ID}" \
           --require-approval never \
           --exclusively \
@@ -193,8 +184,8 @@ jobs:
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
-          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout | tee -a aws.log
-          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout | tee -a aws.log 
+          aws lambda invoke --function-name cms-eregs-${{ inputs.environment }}-migrate /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-${{ inputs.environment }}-createsu /dev/stdout | tee -a aws.log 
           # Check for invocation errors
           ! grep -q FunctionError aws.log
 
@@ -202,20 +193,18 @@ jobs:
         id: get-api-url
         run: |
           pushd cdk-eregs
-          API_STACK="cms-eregs-${{ matrix.environment }}-api"
+          API_STACK="cms-eregs-${{ inputs.environment }}-api"
           API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
           API_URL=${API_URL%/}
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
+
   deploy-fr-parser-cdk:
+    name: Deploy FR Parser
     needs: [deploy-site-lambda-cdk]
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -237,24 +226,21 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
-          FR_PARSER_STACK="cms-eregs-${{ matrix.environment }}-fr-parser"
+          FR_PARSER_STACK="cms-eregs-${{ inputs.environment }}-fr-parser"
           
           cdk deploy $FR_PARSER_STACK \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
   deploy-ecfr-parser-cdk:
+    name: Deploy eCFR Parser
     needs: [deploy-site-lambda-cdk]
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -277,23 +263,21 @@ jobs:
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
-          ECFR_PARSER_STACK="cms-eregs-${{ matrix.environment }}-ecfr-parser"
+          ECFR_PARSER_STACK="cms-eregs-${{ inputs.environment }}-ecfr-parser"
           
           cdk deploy $ECFR_PARSER_STACK \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+
   build-and-deploy-vue-cdk:
+    name: Build and Deploy Vue
     needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
-    strategy:      
-      max-parallel: 1      
-      matrix:        
-        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
-      name: ${{ matrix.environment }}
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -326,7 +310,7 @@ jobs:
         env:
           STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: ${{ matrix.environment }}
+          VITE_ENV: ${{ inputs.environment }}
         run: |
           pushd solution/backend
           python manage.py collectstatic --noinput
@@ -337,7 +321,7 @@ jobs:
         env:
           STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: ${{ matrix.environment }}
+          VITE_ENV: ${{ inputs.environment }}
         run: |
           pushd solution
           make regulations
@@ -360,10 +344,10 @@ jobs:
           npm install
           
           # Get exact stack name
-          STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
+          STATICASSET_STACK="cms-eregs-${{ inputs.environment }}-static-assets"
           
           cdk deploy ${STATICASSET_STACK} \
-          -c environment=${{ matrix.environment }} \
+          -c environment=${{ inputs.environment }} \
           -c deploymentType=content \
           --require-approval never \
           --exclusively \
