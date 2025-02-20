@@ -13,11 +13,8 @@
     }
 
     .statute__container {
-        padding: 0 var(--spacer-5);
-
-        @include screen-xl {
-            padding-left: var(--spacer-4);
-        }
+        @include eds-max-width;
+        @include eds-gutters;
 
         .content {
             display: flex;
