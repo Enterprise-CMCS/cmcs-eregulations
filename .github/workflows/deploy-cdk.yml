@@ -1,4 +1,4 @@
-name: Deploy CDK to DEV
+name: Deploy CDK
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
@@ -70,7 +70,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -111,7 +111,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -149,7 +149,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
@@ -213,7 +213,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -252,7 +252,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -291,7 +291,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
