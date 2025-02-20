@@ -42,13 +42,13 @@ $eds-width-header-links: 1240px;
     --color-focus-dark: #005fcc;
 }
 
-@mixin eds-gutters {
+@mixin eds-gutters($top-bottom-padding: 0) {
     & {
-        padding: 0 var(--grid-form-gutter-width);
+        padding: $top-bottom-padding var(--grid-form-gutter-width);
     }
 
     @media (min-width: $eds-width-md) {
-        padding: 0 var(--grid-gutter-width);
+        padding: $top-bottom-padding var(--grid-gutter-width);
     }
 }
 
