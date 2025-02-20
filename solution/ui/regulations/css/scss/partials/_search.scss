@@ -94,7 +94,10 @@
                     font-size: var(--font-size-lg);
                     line-height: 1.5rem;
                 }
+
                 .result {
+                    max-width: var(--eds-width-md);
+
                     &__link {
                         a {
                             text-decoration: none;
