@@ -99,18 +99,16 @@ jobs:
           npm install
 
           # Delete the database for this ephemeral environment
-          # This unusual bash syntax is necessary because the AWS CLI doesn't return a non-zero exit code when the lambda fails.
-          # If lambda fails, "FunctionError" will be present in the stdout output. First copy the output to stderr so we can see it,
-          # then grep for "FunctionError" and fail if it's present (grep returns 0 if it finds the string, then we invert that with '!')
           echo "Deleting database for PR: ${PR_NUMBER}"
-          ! aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | tee -a aws.log
+          # Check for invocation errors
+          ! grep -q FunctionError aws.log
           
           # Generate the stack names for this PR
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
           FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
           ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
           API_STACK="cms-eregs-eph-${PR_NUMBER}-api"
-          
           
           # Destroy fr-parser stack
           echo "Destroying PR-specific stack: ${FR_PARSER_STACK}"
