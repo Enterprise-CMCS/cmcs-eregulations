@@ -16,7 +16,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:  
   deploy-static-asset-cdk:
-    name: Deploy Static Assets
+    name: 1. Deploy Static Assets
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ inputs.environment }}
@@ -66,7 +66,7 @@ jobs:
           popd
 
   deploy-zip-lambdas-cdk:
-    name: Deploy ZIP-based Lambdas    
+    name: 2. Deploy ZIP-based Lambdas    
     runs-on: ubuntu-22.04
     environment:
       name: ${{ inputs.environment }}
@@ -103,7 +103,7 @@ jobs:
           popd
 
   deploy-text-extractor-cdk:
-    name: Deploy Text Extractor
+    name: 3. Deploy Text Extractor
     needs: deploy-zip-lambdas-cdk
     runs-on: ubuntu-22.04
     environment:
@@ -139,7 +139,7 @@ jobs:
           popd
 
   deploy-site-lambda-cdk:
-    name: Deploy Site Lambdas
+    name: 4. Deploy Site Lambdas
     needs: [deploy-static-asset-cdk, deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
     runs-on: ubuntu-22.04    
     environment:      
@@ -200,7 +200,7 @@ jobs:
           popd
 
   deploy-fr-parser-cdk:
-    name: Deploy FR Parser
+    name: 5. Deploy FR Parser
     needs: [deploy-site-lambda-cdk]
     runs-on: ubuntu-22.04
     environment:
@@ -236,7 +236,7 @@ jobs:
           popd
 
   deploy-ecfr-parser-cdk:
-    name: Deploy eCFR Parser
+    name: 6. Deploy eCFR Parser
     needs: [deploy-site-lambda-cdk]
     runs-on: ubuntu-22.04
     environment:
@@ -273,7 +273,7 @@ jobs:
           popd
 
   build-and-deploy-vue-cdk:
-    name: Build and Deploy Vue
+    name: 7. Build and Deploy Vue
     needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
     runs-on: ubuntu-22.04    
     environment:      
