@@ -43,12 +43,12 @@ $eds-width-header-links: 1240px;
 }
 
 @mixin eds-gutters {
-    @media (min-width: $eds-width-md) {
-        padding: 0 var(--grid-gutter-width);
-    }
-
     & {
         padding: 0 var(--grid-form-gutter-width);
+    }
+
+    @media (min-width: $eds-width-md) {
+        padding: 0 var(--grid-gutter-width);
     }
 }
 
