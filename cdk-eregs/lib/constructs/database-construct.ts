@@ -3,6 +3,7 @@ import {
   aws_ec2 as ec2,
   aws_rds as rds,
   aws_secretsmanager as secretsmanager,
+  aws_ssm as ssm,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -37,6 +38,33 @@ export class DatabaseConstruct extends Construct {
       securityGroupName: stageConfig.getResourceName('db-security-group'),
     });
 
+    // Import security group IDs from SSM
+    const sharedServicessg = ec2.SecurityGroup.fromSecurityGroupId(
+      this,
+      'SharedServicesSG',
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        '/eregulations/db/groups/cmscloud_shared_services'
+      )
+    );
+
+    const vpnSg = ec2.SecurityGroup.fromSecurityGroupId(
+      this,
+      'VpnSG',
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        '/eregulations/db/groups/cmscloud_vpn'
+      )
+    );
+
+    const securityToolsSg = ec2.SecurityGroup.fromSecurityGroupId(
+      this,
+      'SecurityToolsSG',
+      ssm.StringParameter.valueForStringParameter(
+        this,
+        '/eregulations/db/groups/cmscloud_security_tools'
+      )
+    );
     
     this.dbSecurityGroup.addIngressRule(
       serverlessSecurityGroup,
@@ -104,7 +132,12 @@ export class DatabaseConstruct extends Construct {
       vpc,
       vpcSubnets: selectedSubnets,
       writer,
-      securityGroups: [this.dbSecurityGroup],
+      securityGroups: [
+        this.dbSecurityGroup,
+        sharedServicessg,
+        vpnSg,
+        securityToolsSg
+      ],
       credentials: rds.Credentials.fromSecret(dbSecret, 'eregsuser'),
       parameterGroup: clusterParameterGroup,
       defaultDatabaseName: 'eregs',
