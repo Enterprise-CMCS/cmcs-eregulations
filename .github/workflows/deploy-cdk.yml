@@ -1,4 +1,4 @@
-name: Deploy CDK to DEV
+name: Deploy CDK
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
@@ -70,7 +70,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -111,7 +111,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -149,7 +149,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
@@ -193,11 +193,10 @@ jobs:
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
         run: |
-          # This unusual bash syntax is necessary because the AWS CLI doesn't return a non-zero exit code when the lambda fails.
-          # If lambda fails, "FunctionError" will be present in the stdout output. First copy the output to stderr so we can see it,
-          # then grep for "FunctionError" and fail if it's present (grep returns 0 if it finds the string, then we invert that with '!')
-          ! aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
-          ! aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout | tee /dev/stderr | grep FunctionError > /dev/null
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-migrate /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-${{ matrix.environment }}-createsu /dev/stdout | tee -a aws.log 
+          # Check for invocation errors
+          ! grep -q FunctionError aws.log
 
       - name: Get API URL
         id: get-api-url
@@ -213,7 +212,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -252,7 +251,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        environment: ["dev"]
+        environment: ["dev", "val"]
     runs-on: ubuntu-22.04
     environment:
       name: ${{ matrix.environment }}
@@ -291,7 +290,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev"]    
+        environment: ["dev", "val"]    
     runs-on: ubuntu-22.04    
     environment:      
       name: ${{ matrix.environment }}
