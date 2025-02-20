@@ -2,15 +2,14 @@
 import { computed, inject, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults";
-import useRemoveList from "composables/removeList";
+import useSearchResults from "composables/searchResults.js";
+import useRemoveList from "composables/removeList.js";
 
-import _isArray from "lodash/isArray";
-import _isEmpty from "lodash/isEmpty";
+import isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getTitles } from "utilities/api";
+import { getLastUpdatedDates, getTitles } from "utilities/api.js";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils";
+import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -95,8 +94,8 @@ const setCategories = (categories) => {
 const allDocTypesOnly = (queryParams) => {
     const { type, ...rest } = queryParams;
     if (
-        (type && type.includes("all") && _isEmpty(rest)) ||
-        (!type && _isEmpty(rest))
+        (type && type.includes("all") && isEmpty(rest)) ||
+        (!type && isEmpty(rest))
     ) {
         return true;
     }
@@ -174,7 +173,7 @@ const setTitle = (query) => {
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
-getDocsOnLoad = async () => {
+const getDocsOnLoad = async () => {
     if (!$route.query.q) {
         clearDocList();
         return;
@@ -230,7 +229,7 @@ watch(
         sanitizedQueryParams.value = sanitizeQueryParams(newQueryParams);
 
         // if all params are removed, return
-        if (_isEmpty(sanitizedQueryParams.value)) {
+        if (isEmpty(sanitizedQueryParams.value)) {
             return;
         }
 
@@ -352,7 +351,7 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
-                <template v-if="!searchQuery"></template>
+                <template v-if="!searchQuery" />
                 <template
                     v-else-if="
                         policyDocList.loading || partsLastUpdated.loading
@@ -387,14 +386,10 @@ getDocsOnLoad();
                                 />
                             </template>
                         </SignInCTA>
-                        <span class="no-results__span"
-                            >Your search for
+                        <span class="no-results__span">Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
                             results
-                            <span v-if="hasActiveFilters"
-                                >with the selected filters</span
-                            ><span v-else>on eRegulations</span>.</span
-                        >
+                            <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>
                     <SearchContinueResearch
                         :query="searchQuery"

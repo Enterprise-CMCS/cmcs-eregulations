@@ -6,7 +6,7 @@ const iconTypesDict = {
     Internal: "key",
 };
 
-const props = defineProps({
+defineProps({
     iconType: {
         type: String,
         required: true,
@@ -20,7 +20,7 @@ const props = defineProps({
 
 <template>
     <div class="doc-type__label">
-        <i :class="`fa fa-${iconTypesDict[DOCUMENT_TYPES_MAP[iconType]]}`"></i>
+        <i :class="`fa fa-${iconTypesDict[DOCUMENT_TYPES_MAP[iconType]]}`" />
         {{ docType }}
     </div>
 </template>

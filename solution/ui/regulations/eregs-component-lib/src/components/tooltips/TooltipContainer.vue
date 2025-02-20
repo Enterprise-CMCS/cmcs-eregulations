@@ -14,7 +14,7 @@
                 {{ title }}
             </template>
             <template v-else>
-                <i class="fa" :class="faIconType"></i>
+                <i class="fa" :class="faIconType" />
                 <span v-if="btnType === 'labeled-icon'">{{ label }}</span>
             </template>
         </button>
@@ -24,7 +24,9 @@
             :class="tooltipClasses"
             :style="tooltipStyles"
         >
-            <p class="hover-msg">{{ label }}</p>
+            <p class="hover-msg">
+                {{ label }}
+            </p>
         </div>
         <div
             v-if="click && clicked"
@@ -52,8 +54,10 @@
                     />
                 </svg>
             </button>
-            <p class="tooltip-title">{{ tooltipTitle }}</p>
-            <slot name="tooltip-content"></slot>
+            <p class="tooltip-title">
+                {{ tooltipTitle }}
+            </p>
+            <slot name="tooltip-content" />
         </div>
     </div>
 </template>
@@ -67,7 +71,7 @@ const getAnchorX = (el, elType) => {
         : el.offsetWidth * 0.7;
 };
 
-const getAnchorY = (el, elType, position) => {
+const getAnchorY = (el, unused, position) => {
     if (!el) return 0;
 
     const spacer = position === "over" ? 20 : 10;

@@ -34,7 +34,7 @@ CSS/Javascript etc., should inherit from this template.
         </title>
         {% include "regulations/partials/favicon.html" %}
         {% block custom_styles %}
-            <link rel="stylesheet" href="{% static '/bundles/style.css' %}?{{ DEPLOY_NUMBER }}" />
+            <link rel="stylesheet" href="{% static '/bundles/eregs-component-lib.css' %}?{{ DEPLOY_NUMBER }}" />
         {% endblock %}
         <link
             rel="stylesheet"

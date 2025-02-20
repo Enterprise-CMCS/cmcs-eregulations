@@ -1,4 +1,4 @@
-import _isEqual from "lodash/isEqual";
+import isEqual from "lodash/isEqual";
 
 import {
     createLastUpdatedDates,
@@ -24,7 +24,7 @@ import {
     stripQuotes,
 } from "utilities/utils.js";
 
-import { describe, it, expect, vi } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 
 import internalDocsFixture from "cypress/fixtures/42.431.internal.json";
 import formattedInternalDocsFixture from "cypress/fixtures/42.431.internal-formatted";
@@ -78,7 +78,7 @@ describe("Utilities.js", () => {
                     .file_name
             );
             expect(
-                _isEqual(
+                isEqual(
                     formattedInternalResources[0].supplemental_content[0]
                         .locations,
                     formattedInternalDocsFixture[0].supplemental_content[0]
@@ -86,7 +86,7 @@ describe("Utilities.js", () => {
                 )
             ).toBe(true);
             expect(
-                _isEqual(
+                isEqual(
                     formattedInternalResources[0].supplemental_content[0]
                         .category,
                     formattedInternalDocsFixture[0].supplemental_content[0]
@@ -605,7 +605,7 @@ describe("Utilities.js", () => {
 
         it("should log the error to the console", () => {
             const err = { message: "Test error" };
-            const consoleLogSpy = vi.spyOn(console, "log");
+            const consoleLogSpy = vi.spyOn(console, "info");
             parseError(err);
             expect(consoleLogSpy).toHaveBeenCalledWith(err);
             consoleLogSpy.mockRestore();

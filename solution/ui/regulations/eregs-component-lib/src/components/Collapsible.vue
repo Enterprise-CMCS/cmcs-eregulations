@@ -5,7 +5,7 @@
         :class="{ invisible: !visible }"
         :style="[styles]"
     >
-        <slot></slot>
+        <slot />
     </div>
 </template>
 
@@ -110,7 +110,7 @@ export default {
             this.$refs.target.style.position = position;
             this.$refs.target.style.height = height;
         },
-        _computeHeight: function () {
+        computeHeightInternal: function () {
             if (this.getStyle().display === "none") {
                 return "auto";
             }
@@ -132,7 +132,7 @@ export default {
             return height;
         },
         computeHeight: function () {
-            this.height = this._computeHeight();
+            this.height = this.computeHeightInternal();
         },
     },
 };

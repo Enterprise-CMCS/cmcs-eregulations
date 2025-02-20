@@ -60,30 +60,34 @@ const columnDates = getColumnDates();
                 class="statute__list-item"
             >
                 <table>
-                    <tr
-                        v-for="(column, j) in tableSchema"
-                        :key="`statute-list-row-${j}`"
-                        class="table__row"
-                    >
-                        <HeaderCell
-                            :cell-data="column.header"
-                            :display-type="props.displayType"
-                        />
-                        <BodyCell :cell-data="column" :statute="statute" />
-                    </tr>
+                    <thead>
+                        <tr
+                            v-for="(column, j) in tableSchema"
+                            :key="`statute-list-row-${j}`"
+                            class="table__row"
+                        >
+                            <HeaderCell
+                                :cell-data="column.header"
+                                :display-type="props.displayType"
+                            />
+                            <BodyCell :cell-data="column" :statute="statute" />
+                        </tr>
+                    </thead>
                 </table>
             </div>
         </div>
         <table v-else id="statuteTable">
-            <tr class="table__row table__row--header">
-                <HeaderCell
-                    v-for="(column, i) in tableSchema"
-                    :key="`statute-table-header-${i}`"
-                    :cell-data="column.header"
-                    :display-type="props.displayType"
-                    :column-dates="columnDates"
-                />
-            </tr>
+            <thead>
+                <tr class="table__row table__row--header">
+                    <HeaderCell
+                        v-for="(column, i) in tableSchema"
+                        :key="`statute-table-header-${i}`"
+                        :cell-data="column.header"
+                        :display-type="props.displayType"
+                        :column-dates="columnDates"
+                    />
+                </tr>
+            </thead>
             <tbody class="table__body">
                 <tr
                     v-for="(statute, i) in props.filteredStatutes"

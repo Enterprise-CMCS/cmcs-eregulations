@@ -1,6 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable eqeqeq */
-
 // SSA table URL methods
 
 /**

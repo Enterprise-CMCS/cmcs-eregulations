@@ -1,24 +1,10 @@
-/* eslint-disable */
-import _delay from "lodash/delay";
-import _difference from "lodash/difference";
-import _endsWith from "lodash/endsWith";
-import _filter from "lodash/filter";
-import _forEach from "lodash/forEach";
-import _get from "lodash/get";
-import _indexOf from "lodash/indexOf";
-import _isArray from "lodash/isArray";
-import _isBoolean from "lodash/isBoolean";
-import _isEmpty from "lodash/isEmpty";
-import _isFunction from "lodash/isFunction";
-import _isNil from "lodash/isNil";
-import _isNumber from "lodash/isNumber";
-import _isObject from "lodash/isObject";
-import _isString from "lodash/isString";
-import _keys from "lodash/keys";
-import _map from "lodash/map";
-import _random from "lodash/random";
-import _set from "lodash/set";
-import _transform from "lodash/transform";
+import isEmpty from "lodash/isEmpty";
+import isNil from "lodash/isNil";
+import isString from "lodash/isString";
+import lodashDelay from "lodash/delay";
+import lodashDifference from "lodash/difference";
+import lodashEndsWith from "lodash/endsWith";
+import lodashGet from "lodash/get";
 
 const EventCodes = {
     SetSection: "SetSection",
@@ -69,7 +55,7 @@ const PARAM_VALIDATION_DICT = {
     q: (query) => query === undefined || query.length > 0,
     type: (type) => {
         if (type === "all") return true;
-        if (_isString(type)) {
+        if (isString(type)) {
             const typeArray = type.split(",");
             return typeArray.every((t) => DOCUMENT_TYPES.includes(t));
         }
@@ -112,7 +98,7 @@ const getFileNameSuffix = (fileName) => {
     if (
         typeof fileName !== "string" ||
         !fileName.includes(".") ||
-        _endsWith(fileName, ".")
+        lodashEndsWith(fileName, ".")
     ) {
         return null;
     }
@@ -160,7 +146,7 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
 
     const formattedParams = rawParams
         .map(([key, value]) => {
-            const valueArray = _isArray(value) ? value : [value];
+            const valueArray = Array.isArray(value) ? value : [value];
             const filteredValues = valueArray.filter((value) =>
                 PARAM_VALIDATION_DICT[key](value)
             );
@@ -189,7 +175,7 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
                         // of types that the user wants to see.
                         const typeArray = v.split(",");
 
-                        const differenceArray = _difference(
+                        const differenceArray = lodashDifference(
                             DOCUMENT_TYPES,
                             typeArray
                         );
@@ -213,14 +199,14 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
                 })
                 .join("&");
         })
-        .filter(([_key, value]) => !_isEmpty(value))
+        .filter(([_key, value]) => !isEmpty(value))
         .join("&");
 
     return formattedParams;
 };
 
 const parseError = (err) => {
-    console.log(err);
+    console.info(err);
     const errMessage = err.errors
         ? err.errors[Object.keys(err.errors)[0]][0]
         : err.message;
@@ -228,8 +214,8 @@ const parseError = (err) => {
     const message = errMessage;
     try {
         const code = Object.keys(err.errors)[0];
-        const status = _get(err, "status");
-        const requestId = _get(err, "requestId");
+        const status = lodashGet(err, "status");
+        const requestId = lodashGet(err, "requestId");
         const error = new Error(message);
         error.code = code;
         error.requestId = requestId;
@@ -247,7 +233,7 @@ const parseError = (err) => {
 // a promise friendly delay function
 const delay = (seconds) => {
     return new Promise((resolve) => {
-        _delay(resolve, seconds * 1000);
+        lodashDelay(resolve, seconds * 1000);
     });
 };
 
@@ -258,8 +244,8 @@ const delay = (seconds) => {
  * @returns {string} - date in `MMM DD, YYYY` format
  */
 const niceDate = (kebabDate) => {
-    if (_isNil(kebabDate)) return "N/A";
-    if (_isString(kebabDate) && _isEmpty(kebabDate)) return "N/A";
+    if (isNil(kebabDate)) return "N/A";
+    if (isString(kebabDate) && isEmpty(kebabDate)) return "N/A";
     const date = new Date(`${kebabDate}T12:00:00.000-05:00`);
     const month = date.toLocaleString("default", { month: "short" });
     const day = date.getDate();
@@ -609,9 +595,6 @@ const createLastUpdatedDates = (resultsArr) => {
         }),
         {}
     );
-
-    // remove artifact added by front end caching
-    delete combinedResults.expiration_date;
 
     return Object.fromEntries(
         Object.entries(combinedResults).map((arr) => [arr[1].name, arr[1].date])

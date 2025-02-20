@@ -11,8 +11,6 @@ import {
 
 import useRemoveList from "composables/removeList";
 
-import _isUndefined from "lodash/isUndefined";
-
 import { useRoute, useRouter } from "vue-router";
 
 import GenericDropdown from "./GenericDropdown.vue";
@@ -28,7 +26,7 @@ const catTypeDict = {
 
 provide("catTypeDict", catTypeDict);
 
-const props = defineProps({
+defineProps({
     error: {
         type: Object,
         default: () => {},
@@ -49,7 +47,7 @@ const parent = inject("parent");
 const $route = useRoute();
 const $router = useRouter();
 
-const selectedId = defineModel("id");
+const selectedId = defineModel("id", { type: String });
 const silentReset = ref(false);
 
 onBeforeMount(() => {
@@ -127,8 +125,8 @@ watch(
         // Silently reset selectedId so that route change doesn't trigger
         // a route update and a subsequent re-fetch of content-search
         if (
-            (_isUndefined(newCategories) && newCategories !== oldCategories) ||
-            (_isUndefined(newIntcategories) &&
+            (newCategories === undefined && newCategories !== oldCategories) ||
+            (newIntcategories === undefined &&
                 newIntcategories !== oldIntcategories)
         ) {
             silentReset.value = true;
@@ -188,6 +186,5 @@ const onMenuUpdate = () => {
         :items="list"
         :item-props="itemProps"
         @update:menu="onMenuUpdate"
-    >
-    </GenericDropdown>
+    />
 </template>
