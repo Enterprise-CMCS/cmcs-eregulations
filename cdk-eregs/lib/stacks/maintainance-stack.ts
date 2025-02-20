@@ -52,12 +52,12 @@ const DEFAULT_API_CONFIG: ApiGatewayConfig = {
  * - Lambda function with proper IAM roles and permissions
  * - API Gateway with proxy integration to Lambda
  * - CloudWatch log groups for both Lambda and API Gateway
- * 
+ *
  * @example
  * ```typescript
  * const app = new cdk.App();
  * const stageConfig = await StageConfig.create('dev', 'eph-123');
- * 
+ *
  * new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
  *   lambdaConfig: {
  *     runtime: lambda.Runtime.PYTHON_3_12,
@@ -80,8 +80,8 @@ export class MaintenanceApiStack extends cdk.Stack {
    * @param stageConfig - Stage configuration for environment-aware resource creation
    */
   constructor(
-    scope: Construct, 
-    id: string, 
+    scope: Construct,
+    id: string,
     props: MaintenanceApiStackProps,
     stageConfig: StageConfig
   ) {
@@ -101,14 +101,14 @@ export class MaintenanceApiStack extends cdk.Stack {
    * Creates the Lambda function's infrastructure components including:
    * - CloudWatch Log Group
    * - IAM Role with appropriate permissions
-   * 
+   *
    * @returns Object containing the created role and log group
    */
   private createLambdaInfrastructure() {
     // Create CloudWatch Log Group with environment-aware naming
     const logGroup = new logs.LogGroup(this, 'MaintenanceFunctionLogGroup', {
       logGroupName: this.stageConfig.aws.lambda('maintenance-function'),
-      retention: logs.RetentionDays.INFINITE,
+      retention: logs.RetentionDays.ONE_MONTH,
     });
 
     // Create IAM Role with required permissions
@@ -213,16 +213,16 @@ export class MaintenanceApiStack extends cdk.Stack {
     const integration = new apigateway.LambdaIntegration(this.lambdaFunction, { proxy: true });
 
     // Configure root path
-    this.api.root.addMethod('ANY', integration, { 
-      apiKeyRequired: false, 
-      methodResponses: [{ statusCode: '200' }] 
+    this.api.root.addMethod('ANY', integration, {
+      apiKeyRequired: false,
+      methodResponses: [{ statusCode: '200' }]
     });
-    
+
     // Configure proxy path
     const proxyResource = this.api.root.addResource('{proxy+}');
-    proxyResource.addMethod('ANY', integration, { 
-      apiKeyRequired: false, 
-      methodResponses: [{ statusCode: '200' }] 
+    proxyResource.addMethod('ANY', integration, {
+      apiKeyRequired: false,
+      methodResponses: [{ statusCode: '200' }]
     });
   }
 

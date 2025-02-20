@@ -14,15 +14,15 @@ import { BackendStack } from '../lib/stacks/api-stack';
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
-    
+
     const [
-     
-      logLevel, 
-      httpUser, 
+
+      logLevel,
+      httpUser,
       httpPassword,
       eregsApiUrl
     ] = await Promise.all([
-     
+
       getParameterValue('/eregulations/text_extractor/log_level'),
       getParameterValue('/eregulations/http/user'),
       getParameterValue('/eregulations/http/password'),
@@ -42,8 +42,8 @@ async function main() {
   ]);
 
 
-    const env = { 
-      account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
+    const env = {
+      account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
       region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
     };
 
@@ -51,9 +51,9 @@ async function main() {
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });
 
-    const environment = app.node.tryGetContext('environment') || 
-      process.env.DEPLOY_ENV || 
-      process.env.GITHUB_JOB_ENVIRONMENT || 
+    const environment = app.node.tryGetContext('environment') ||
+      process.env.DEPLOY_ENV ||
+      process.env.GITHUB_JOB_ENVIRONMENT ||
       'dev';
     const prNumber = process.env.PR_NUMBER || '';
     const ephemeralId = prNumber ? `eph-${prNumber}` : undefined;
@@ -108,7 +108,6 @@ async function main() {
       lambdaConfig: {
         memorySize: 1024,
         timeout: 900,
-        reservedConcurrentExecutions: 10,
       },
       environmentConfig: {
         logLevel,
@@ -127,7 +126,7 @@ async function main() {
         httpPassword,
       }
     }, stageConfig);
-    
+
     new EcfrParserStack(app, stageConfig.getResourceName('ecfr-parser'), {
       env,
       lambdaConfig: {
@@ -153,7 +152,7 @@ async function main() {
             subnetIds: [privateSubnetAId, privateSubnetBId],
           }
         }, stageConfig);
-        
+
 
     await applyGlobalAspects(app, stageConfig);
 

@@ -19,6 +19,7 @@ import { StageConfig } from '../../config/stage-config';
 import { ApiConstruct } from '../constructs/api-construct';
 import { DatabaseConstruct } from '../constructs/database-construct';
 import { WafConstruct } from '../constructs/waf-construct';
+import { ApiGatewayLoggingRole } from '../constructs/api-gateway-logging';
 import * as path from 'path';
 
 /**
@@ -71,7 +72,7 @@ class SecurityGroupHandler {
     vpc: ec2.IVpc,
     stageConfig: StageConfig
   ): ec2.ISecurityGroup {
-    
+
     if (stageConfig.isEphemeral()) {
       try {
         // For ephemeral, import dev's serverless SG from SSM
@@ -87,8 +88,8 @@ class SecurityGroupHandler {
           { allowAllOutbound: true }
         );
       } catch (err) {
-        const errorMessage = err instanceof Error 
-          ? err.message 
+        const errorMessage = err instanceof Error
+          ? err.message
           : 'Unknown error occurred';
 
         throw new Error(
@@ -98,7 +99,7 @@ class SecurityGroupHandler {
         );
       }
     }
-  
+
     // For non-ephemeral environments, create new security group
     const serverlessSG = new ec2.SecurityGroup(scope, 'ServerlessSecurityGroup', {
       vpc,
@@ -122,7 +123,7 @@ class SecurityGroupHandler {
  * @const
  */
 const SECRETS = {
-  OIDC_CREDENTIALS: '/eregulations/oidc/client_credentials',
+  OIDC_CREDENTIALS: '/eregulations/oidc/credentials',
   DJANGO_CREDENTIALS: '/eregulations/http/django_credentials',
   READER_CREDENTIALS: '/eregulations/http/reader_credentials',
   DB_CREDENTIALS: '/eregulations/db/credentials',
@@ -137,7 +138,7 @@ const SECRETS = {
 export class BackendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: BackendStackProps, stageConfig: StageConfig) {
     super(scope, id, props);
-
+    new ApiGatewayLoggingRole(this, 'ApiGatewayLogging');
     // ================================
     // SECRETS
     // ================================
@@ -200,14 +201,14 @@ export class BackendStack extends cdk.Stack {
           this,
           '/eregulations/db/cdk_host'
         );
-        
+
         databasePort = ssm.StringParameter.valueForStringParameter(
           this,
           '/eregulations/db/port'
         );
       } catch (err) {
-        const errorMessage = err instanceof Error 
-          ? err.message 
+        const errorMessage = err instanceof Error
+          ? err.message
           : 'Unknown error occurred';
 
         throw new Error(
@@ -277,15 +278,15 @@ export class BackendStack extends cdk.Stack {
     // ================================
     // BUILD ID
     // ================================
-    const buildId = this.node.tryGetContext('buildId') 
-      || process.env.RUN_ID 
+    const buildId = this.node.tryGetContext('buildId')
+      || process.env.RUN_ID
       || new Date().getTime().toString();
 
     // ================================
     // ENVIRONMENT VARIABLES
     // ================================
     const environmentVariables: { [key: string]: string } = {
-      DB_NAME: stageConfig.databaseName,
+      DB_NAME: 'eregs',
       DB_USER: 'eregsuser',
       DB_HOST: databaseEndpoint,
       DB_PORT: databasePort,
@@ -329,7 +330,7 @@ export class BackendStack extends cdk.Stack {
     // ================================
     // LOG GROUPS
     // ================================
-    const createLogGroup = (name: string): logs.LogGroup => 
+    const createLogGroup = (name: string): logs.LogGroup =>
       new logs.LogGroup(this, `${name}LogGroup`, {
         logGroupName: stageConfig.aws.lambda(name),
         retention: logs.RetentionDays.ONE_MONTH,
@@ -360,7 +361,7 @@ export class BackendStack extends cdk.Stack {
         vpcSubnets: selectedSubnets,
         securityGroups: [serverlessSG],
         timeout: cdk.Duration.seconds(timeout),
-        memorySize: props.lambdaConfig.memorySize || 4096,
+        memorySize: Math.min(props.lambdaConfig.memorySize || 3008, 3008),
         environment: environmentVariables,
         logGroup: createLogGroup(name.toLowerCase()),
       });

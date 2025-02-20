@@ -4,6 +4,7 @@ import {
   aws_rds as rds,
   aws_secretsmanager as secretsmanager,
   aws_ssm as ssm,
+  aws_logs as logs,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -38,34 +39,7 @@ export class DatabaseConstruct extends Construct {
       securityGroupName: stageConfig.getResourceName('db-security-group'),
     });
 
-    // Import security group IDs from SSM
-    const sharedServicessg = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'SharedServicesSG',
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/eregulations/db/groups/cmscloud_shared_services'
-      )
-    );
 
-    const vpnSg = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'VpnSG',
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/eregulations/db/groups/cmscloud_vpn'
-      )
-    );
-
-    const securityToolsSg = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'SecurityToolsSG',
-      ssm.StringParameter.valueForStringParameter(
-        this,
-        '/eregulations/db/groups/cmscloud_security_tools'
-      )
-    );
-    
     this.dbSecurityGroup.addIngressRule(
       serverlessSecurityGroup,
       ec2.Port.tcp(3306),
@@ -117,12 +91,7 @@ export class DatabaseConstruct extends Construct {
       },
     });
 
-    // Define the writer instance
-    const writer = rds.ClusterInstance.provisioned('Instance', {
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.R7G, ec2.InstanceSize.LARGE),
-      parameterGroup: instanceParameterGroup,
-      enablePerformanceInsights: true,
-    });
+
 
     // Create the database cluster
     this.cluster = new rds.DatabaseCluster(this, 'Database', {
@@ -131,13 +100,12 @@ export class DatabaseConstruct extends Construct {
       }),
       vpc,
       vpcSubnets: selectedSubnets,
-      writer,
-      securityGroups: [
-        this.dbSecurityGroup,
-        sharedServicessg,
-        vpnSg,
-        securityToolsSg
-      ],
+      serverlessV2MinCapacity: 0.5, // Minimum ACU (Aurora Capacity Units)
+      serverlessV2MaxCapacity: 1, // Maximum ACU
+      writer: rds.ClusterInstance.serverlessV2('Writer', {
+        parameterGroup: instanceParameterGroup
+      }),
+      securityGroups: [this.dbSecurityGroup],
       credentials: rds.Credentials.fromSecret(dbSecret, 'eregsuser'),
       parameterGroup: clusterParameterGroup,
       defaultDatabaseName: 'eregs',
@@ -146,8 +114,9 @@ export class DatabaseConstruct extends Construct {
       backup: {
         retention: cdk.Duration.days(7),
       },
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
       cloudwatchLogsExports: ['postgresql'],
+      cloudwatchLogsRetention: logs.RetentionDays.ONE_MONTH,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
     // Create CloudFormation outputs

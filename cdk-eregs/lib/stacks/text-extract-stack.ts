@@ -18,8 +18,6 @@ interface LambdaConfig {
   memorySize: number;
   /** Function timeout in seconds */
   timeout: number;
-  /** Optional limit on concurrent executions */
-  reservedConcurrentExecutions?: number;
 }
 
 /**
@@ -48,7 +46,7 @@ export interface TextExtractorStackProps extends cdk.StackProps {
 
 /**
  * CDK Stack implementation for Text Extractor service.
- * 
+ *
  * This stack creates a serverless text extraction service with the following components:
  * - Docker-based Lambda function for text extraction using AWS managed VPC
  * - SQS Queue with Dead Letter Queue for reliable message processing
@@ -67,8 +65,8 @@ export class TextExtractorStack extends cdk.Stack {
   private readonly stageConfig: StageConfig;
 
   constructor(
-    scope: Construct, 
-    id: string, 
+    scope: Construct,
+    id: string,
     props: TextExtractorStackProps,
     stageConfig: StageConfig
   ) {
@@ -92,7 +90,7 @@ export class TextExtractorStack extends cdk.Stack {
     });
 
     // Create Lambda infrastructure
-    const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
+    const { lambdaRole } = this.createLambdaInfrastructure();
 
     // Create Lambda function
     this.lambda = this.createTextExtractorLambdaFunction(
@@ -114,7 +112,6 @@ export class TextExtractorStack extends cdk.Stack {
     role: iam.Role,
   ): lambda.Function {
     const dockerContextPath = path.resolve(__dirname, '../../../solution/');
-    console.log('Docker context path:', dockerContextPath);
 
     return new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
       functionName: this.stageConfig.getResourceName('text-extractor'),
@@ -123,7 +120,6 @@ export class TextExtractorStack extends cdk.Stack {
       }),
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
-      reservedConcurrentExecutions: config.reservedConcurrentExecutions,
       environment: {
         LOG_LEVEL: envConfig.logLevel,
         HTTP_AUTH_USER: envConfig.httpUser,
@@ -143,11 +139,6 @@ export class TextExtractorStack extends cdk.Stack {
   }
 
   private createLambdaInfrastructure() {
-    const logGroup = new logs.LogGroup(this, 'TextExtractorLogGroup', {
-      logGroupName: this.stageConfig.aws.lambda('text-extractor'),
-      retention: logs.RetentionDays.INFINITE,
-    });
-
     const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
       path: this.stageConfig.iamPath,
       assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
@@ -167,7 +158,7 @@ export class TextExtractorStack extends cdk.Stack {
       },
     });
 
-    return { lambdaRole, logGroup };
+    return { lambdaRole };
   }
 
   private createQueuePolicy(): iam.PolicyDocument {

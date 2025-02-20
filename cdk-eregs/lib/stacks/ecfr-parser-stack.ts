@@ -53,7 +53,7 @@ export class EcfrParserStack extends cdk.Stack {
       functionName: stageConfig.getResourceName('ecfr-parser'),
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/'), {
         file: 'ecfr-parser/Dockerfile',
-        
+
       }),
       timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
       environment: {
@@ -82,7 +82,7 @@ export class EcfrParserStack extends cdk.Stack {
   private createLambdaInfrastructure(stageConfig: StageConfig) {
     const logGroup = new logs.LogGroup(this, 'EcfrParserLogGroup', {
       logGroupName: stageConfig.aws.lambda('ecfr-parser'),
-      retention: logs.RetentionDays.INFINITE,
+      retention: logs.RetentionDays.ONE_MONTH,
     });
 
     const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {

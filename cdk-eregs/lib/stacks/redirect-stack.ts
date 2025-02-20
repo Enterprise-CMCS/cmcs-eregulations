@@ -49,8 +49,8 @@ export class RedirectApiStack extends cdk.Stack {
   private readonly stageConfig: StageConfig;
 
   constructor(
-    scope: Construct, 
-    id: string, 
+    scope: Construct,
+    id: string,
     props: RedirectApiStackProps,
     stageConfig: StageConfig
   ) {
@@ -70,7 +70,7 @@ export class RedirectApiStack extends cdk.Stack {
     // Lambda CloudWatch Log Group
     const logGroup = new logs.LogGroup(this, 'RedirectFunctionLogGroup', {
       logGroupName: this.stageConfig.aws.lambda('redirect-function'),
-      retention: logs.RetentionDays.INFINITE,
+      retention: logs.RetentionDays.ONE_MONTH,
     });
 
     // Lambda IAM Role
@@ -110,7 +110,7 @@ export class RedirectApiStack extends cdk.Stack {
       runtime: config.runtime,
       handler: config.handler ?? 'redirect_lambda.handler',
       code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
-      
+
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
       role,
@@ -145,16 +145,16 @@ export class RedirectApiStack extends cdk.Stack {
 
   private configureApiGateway() {
     const integration = new apigateway.LambdaIntegration(this.lambdaFunction, { proxy: true });
-    
-    this.api.root.addMethod('ANY', integration, { 
-      apiKeyRequired: false, 
-      methodResponses: [{ statusCode: '200' }] 
+
+    this.api.root.addMethod('ANY', integration, {
+      apiKeyRequired: false,
+      methodResponses: [{ statusCode: '200' }]
     });
-    
+
     const proxyResource = this.api.root.addResource('{proxy+}');
-    proxyResource.addMethod('ANY', integration, { 
-      apiKeyRequired: false, 
-      methodResponses: [{ statusCode: '200' }] 
+    proxyResource.addMethod('ANY', integration, {
+      apiKeyRequired: false,
+      methodResponses: [{ statusCode: '200' }]
     });
   }
 

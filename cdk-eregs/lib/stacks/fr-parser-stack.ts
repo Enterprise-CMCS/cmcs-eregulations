@@ -42,7 +42,7 @@ export class FrParserStack extends cdk.Stack {
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig);
     const siteEndpoint = cdk.Fn.importValue(
       stageConfig.getResourceName('api-endpoint')
-    );  
+    );
 
     this.lambda = new lambda.DockerImageFunction(this, 'FrParserFunction', {
       functionName: stageConfig.getResourceName('fr-parser'),
@@ -76,7 +76,7 @@ export class FrParserStack extends cdk.Stack {
   private createLambdaInfrastructure(stageConfig: StageConfig) {
     const logGroup = new logs.LogGroup(this, 'FrParserLogGroup', {
       logGroupName: stageConfig.aws.lambda('fr-parser'),
-      retention: logs.RetentionDays.INFINITE,
+      retention: logs.RetentionDays.ONE_MONTH,
     });
 
     const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
