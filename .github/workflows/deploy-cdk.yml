@@ -14,16 +14,14 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:  
-  deploy-static-asset-cdk:    
+  deploy-cdk:  
     strategy:      
       max-parallel: 1      
       matrix:        
         environment: ["dev", "val"]
-    runs-on: ubuntu-22.04    
-    environment:      
+    environment:
       name: ${{ matrix.environment }}
-    outputs:
-      static_url: ${{ steps.get-static-url.outputs.static_url }}
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,7 +34,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
 
-      - name: Deploy Static-Asset Infrastructure
+      - name: Deploy static assets
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
@@ -66,24 +64,6 @@ jobs:
           STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
           echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
           popd
-  deploy-zip-lambdas-cdk:    
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
-    runs-on: ubuntu-22.04
-    environment:
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true     
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
 
       - name: Deploy ZIP-based Lambdas
         env:
@@ -106,27 +86,7 @@ jobs:
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
-  deploy-text-extractor-cdk:
-    needs: deploy-zip-lambdas-cdk
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
-    runs-on: ubuntu-22.04
-    environment:
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-
-      - name: Deploy Text Extractor
+      - name: Deploy text extractor
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
@@ -144,28 +104,8 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
-  deploy-site-lambda-cdk:
-    needs: [deploy-static-asset-cdk, deploy-zip-lambdas-cdk, deploy-text-extractor-cdk]
-    strategy:      
-      max-parallel: 1      
-      matrix:        
-        environment: ["dev", "val"]    
-    runs-on: ubuntu-22.04    
-    environment:      
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true     
-      
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
 
-      - name: Deploy Site-Lambda
+      - name: Deploy site lambdas
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
@@ -207,25 +147,6 @@ jobs:
           API_URL=${API_URL%/}
           echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
           popd
-  deploy-fr-parser-cdk:
-    needs: [deploy-site-lambda-cdk]
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
-    runs-on: ubuntu-22.04
-    environment:
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
 
       - name: Deploy FR Parser
         env:        
@@ -246,27 +167,6 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
-  deploy-ecfr-parser-cdk:
-    needs: [deploy-site-lambda-cdk]
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val"]
-    runs-on: ubuntu-22.04
-    environment:
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-
       - name: Deploy ECFR Parser
         env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -285,20 +185,6 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
-  build-and-deploy-vue-cdk:
-    needs: [deploy-site-lambda-cdk, deploy-static-asset-cdk]
-    strategy:      
-      max-parallel: 1      
-      matrix:        
-        environment: ["dev", "val"]    
-    runs-on: ubuntu-22.04    
-    environment:      
-      name: ${{ matrix.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -318,13 +204,13 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_VITE_API_URL: ${{ needs.deploy-site-lambda-cdk.outputs.api_url }}
+          envkey_VITE_API_URL: ${{ steps.get-api-url.outputs.api_url }}
           directory: solution/ui/regulations/eregs-vite
           file_name: .env
 
       - name: Run collectstatic
         env:
-          STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
+          STATIC_URL: ${{ steps.get-static-url.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ matrix.environment }}
         run: |
@@ -335,19 +221,13 @@ jobs:
 
       - name: Build Vite assets
         env:
-          STATIC_URL: ${{ needs.deploy-static-asset-cdk.outputs.static_url }}
+          STATIC_URL: ${{ steps.get-static-url.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ matrix.environment }}
         run: |
           pushd solution
           make regulations
           popd
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
 
       - name: Deploy Static Assets
         env:
