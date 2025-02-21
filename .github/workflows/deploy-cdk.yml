@@ -18,7 +18,7 @@ jobs:
     strategy:      
       max-parallel: 1      
       matrix:        
-        environment: ["dev", "val"]
+        environment: ["dev", "val", "prod"]
     environment:
       name: ${{ matrix.environment }}
     runs-on: ubuntu-22.04
