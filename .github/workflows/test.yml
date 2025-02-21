@@ -12,8 +12,6 @@ permissions:
   contents: read
   actions: read
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
 jobs:  
   do-thing-one:
     name: 1. Do a thing

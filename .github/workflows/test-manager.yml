@@ -19,6 +19,7 @@ jobs:
       matrix:
         environment: ["dev", "val"]
     uses: ./.github/workflows/test.yml
+    concurrency: test-${{ matrix.environment }}
     with:
       environment: ${{ matrix.environment }}
     secrets: inherit
