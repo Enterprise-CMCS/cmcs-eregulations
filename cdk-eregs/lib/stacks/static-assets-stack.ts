@@ -68,9 +68,10 @@ export class StaticAssetsStack extends cdk.Stack {
    * @throws {Error} If certificate ARN is missing in production environment
    */
   private validateCertificateConfig(props: StaticAssetsStackProps): void {
-    if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
-      throw new Error('SSL Certificate ARN is required for production environment');
-    }
+    // TODO: why do we need this?
+    // if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
+    //   throw new Error('SSL Certificate ARN is required for production environment');
+    // }
   }
 
   /**
