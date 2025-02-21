@@ -38,6 +38,7 @@ jobs:
           popd
 
   do-thing-two:
+    needs: do-thing-one
     name: 2. Do another thing
     runs-on: ubuntu-22.04
     environment:
