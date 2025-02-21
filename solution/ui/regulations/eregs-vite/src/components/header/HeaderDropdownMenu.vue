@@ -1,13 +1,34 @@
 <script setup>
+import { computed, onMounted, onUnmounted, ref } from "vue";
 const emit = defineEmits(["closeMenu"]);
 
 const outsideClick = () => {
     emit("closeMenu");
 };
+
+const windowWidth = ref(window.innerWidth);
+const positionStyle = computed(() => {
+    return windowWidth.value > 1504
+        ? { right: `${(windowWidth.value - 1440) / 2}px`}
+        : {}
+});
+
+const onWidthChange = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    window.addEventListener("resize", onWidthChange);
+});
+onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 </script>
 
 <template>
-    <div v-clickaway="outsideClick" class="dropdown-menu__container">
+    <div
+        v-clickaway="outsideClick"
+        class="dropdown-menu__container"
+        :style="positionStyle"
+    >
         <slot name="dropdown-menu-content" />
     </div>
 </template>

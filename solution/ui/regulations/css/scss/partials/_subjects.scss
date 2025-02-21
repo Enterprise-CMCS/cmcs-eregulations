@@ -302,10 +302,13 @@
     display: flex;
     flex-direction: column;
 
-    &.ds-l-container {
+    @include eds-gutters;
+
+    .ds-l-row {
         padding-top: 1.5rem;
-        margin: 0;
-        max-width: 100%;
+        width: 100%;
+
+        @include eds-max-width;
     }
 
     h3 {

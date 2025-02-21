@@ -107,30 +107,16 @@ watch(
     }
 );
 
-// Watch layout
+// Watch layout for narrow table styles
 const windowWidth = ref(window.innerWidth);
 const isNarrow = computed(() => windowWidth.value < 1024);
 
-// Watch Banner left margin
-const bannerRef = ref(null);
-const bannerLeftMargin = ref(0);
-
-const getBannerLeftMargin = () => {
-    const bannerContent = bannerRef.value.$el
-        .getElementsByClassName("content")
-        .item(0);
-
-    bannerLeftMargin.value = window.getComputedStyle(bannerContent).marginLeft;
-};
-
 const onWidthChange = () => {
     windowWidth.value = window.innerWidth;
-    getBannerLeftMargin();
 };
 
 onMounted(() => {
     window.addEventListener("resize", onWidthChange);
-    getBannerLeftMargin();
 });
 onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
@@ -173,13 +159,13 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner ref="bannerRef" title="Statute Reference">
+            <Banner title="Statute Reference">
                 <template #description>
                     <h2>Look up statute text in online sources</h2>
                 </template>
             </Banner>
             <div id="main-content" class="statute__container">
-                <div class="content" :style="{ marginLeft: bannerLeftMargin }">
+                <div class="content">
                     <div class="content__selector">
                         <div class="selector__parent">
                             <h3>Included Statute</h3>
