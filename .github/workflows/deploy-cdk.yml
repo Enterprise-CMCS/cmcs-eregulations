@@ -1,11 +1,10 @@
-name: Deploy CDK (Matrix Job)
+name: Deploy CDK
 
 on:
-  workflow_call:
-    inputs:
-      environment:
-        required: true
-        type: string
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write
