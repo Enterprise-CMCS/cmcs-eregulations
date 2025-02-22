@@ -1,14 +1,17 @@
-# Policy Connector shareable reference fork
+# Policy Connector
 
-[![Deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml)
-[![Parser Checks](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml)
-[![CodeQL](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/)
+[![Deploy](https://github.com/A1MSolutions/policyconnector/actions/workflows/deploy.yml/badge.svg)](https://github.com/A1MSolutions/policyconnector/actions/workflows/deploy.yml)
+[![Parser Checks](https://github.com/A1MSolutions/policyconnector/actions/workflows/parser-checks.yml/badge.svg)](https://github.com/A1MSolutions/policyconnector/actions/workflows/parser-checks.yml)
 
 # About
 
-This repo is a more easily shareable version of an existing app developed for government policy staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
+Policy Connector is a web application for researching government policy information, including regulations and related guidance.
 
-There is public documentation about the original product, design, and research processes in [this repository wiki](https://github.com/Enterprise-CMCS/cmcs-eregulations/wiki). 
+This is an independent non-government adaptation of an open source codebase, [eRegulations](https://eregs.github.io/), that has had many contributors:
+
+1. The Consumer Financial Protection Bureau developed the first version of eRegulations in 2013 and [released it as an open source project](https://www.acus.gov/article/cfpbs-eregulations-tool-promises-help-users-navigate-federal-regulations). See its current iteration at [CFPB Interactive Bureau Regulations](https://www.consumerfinance.gov/rules-policy/regulations/).
+2. At the General Services Administration, [18F helped a few agencies adapt eRegulations for their needs](https://18f.gsa.gov/our-work/eregulations/), including the Bureau of Alcohol, Tobacco, Firearms, and Explosives: [ATF eRegulations](https://regulations.atf.gov/) ([archived repository](https://github.com/18F/atf-eregs)).
+3. The Center for Medicare & Medicaid Services reused eRegulations and developed additional features. This version is based on [the CMS codebase](https://github.com/Enterprise-CMCS/cmcs-eregulations).
 
 # Getting set up
 
@@ -29,13 +32,13 @@ See "Quick Start" in [SECRETSCANNING.md](SECRETSCANNING.md#quick-start) to ensur
 ## Get the code
 
 ```
-git clone https://github.com/Enterprise-CMCS/cmcs-eregulations
+git clone https://github.com/A1MSolutions/policyconnector
 ```
 
 Or if using SSH keys:
 
 ```
-git clone git@github.com:Enterprise-CMCS/cmcs-eregulations.git
+git clone git@github.com:A1MSolutions/policyconnector.git
 ```
 
 ## Create your Dockerfile
@@ -49,7 +52,7 @@ cp Dockerfile.template Dockerfile
 
 - Update the Dockerfile with correct environment variables values
 
-## Running eRegs
+## Running
 
 A lot of tasks for local development can be accessed through the Makefile.
 Running `make` will provide some information about the available tasks.
@@ -94,7 +97,7 @@ To see the changes on the admin site, run `make local.collectstatic`.  This will
 
 You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
 
-## Testing eRegs
+## Testing
 
 #### Testing setup
 
@@ -190,39 +193,3 @@ If adding a new model, update the following files:
 - In populate_content.py add it to both the add it to the fixtures list.  First part of it is the JSON file, the other is the model.
 - In the make file, either add it to the list of objects, or add a new line for the model.
 - In the emptyseedtables.py add the model to the handler command.
-
-## Working with CMS Single-Sign-On
-
-### Setting local to use CMS SSO (IDM)
-Update your Dockerfile with the following environment variables:
-```
-ENV OIDC_RP_CLIENT_ID=<your client id>
-ENV OIDC_RP_CLIENT_SECRET=<your client secret>
-ENV OIDC_OP_AUTHORIZATION_ENDPOINT=<authorization endpoint>
-ENV OIDC_OP_TOKEN_ENDPOINT=<token endpoint>
-ENV OIDC_OP_USER_ENDPOINT=<user endpoint>
-ENV OIDC_OP_JWKS_ENDPOINT=<jwks endpoint>
-ENV EUA_FEATUREFLAG=<set to 'true' if you want to see the eua link on admin login page>
-```
-These values can be found on AWS Parameter Store.
-
-### Register to test IDP IDM
-- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the CMS IDP (Identity Provider) portal.
-- Set up Multi-Factor Authentication (MFA) for your account. Follow the provided prompts and instructions to complete the MFA setup process.
-- Once your account has been successfully set up with MFA, please notify the CMS Okta team.
-- Inform the CMS Okta team that you need to be added to the eRegs group.
-
-Please note that the provided URL (https://test.idp.idm.cms.gov/) may require a valid CMS IDP account to access.
-
-### Troubleshooting tips
-- Issue: Setting OIDC_OP_AUTHORIZATION_ENDPOINT not found
-  This error indicates that the environment variables are not properly set.
-- Solution:
-  - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
-  - On dev, val, prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store. 
-
-## Serverless set up
-We use serverless in conjunction with GitHub Actions to deploy our application to our various environments.
-
-### Functions
-To allow us to deploy our application to various environments and prohibit certain Lambda functions to be deployed to different environments, we split our Lambda functions out into a specific folder.  In backend/serverless_functions there is a different YML file for each environment.  When you want to add a Lambda function to each environment, add the function the corresponding environment folder.
