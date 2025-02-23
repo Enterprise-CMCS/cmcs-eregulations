@@ -1,167 +1,44 @@
-# name: Deploy
+name: Deploy to Production
 
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Manual triggers only, no PRs
 
-# permissions:
-#   id-token: write
-#   contents: read
-#   actions: read
+permissions:
+  id-token: write
+  contents: read
 
-# concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
 
-# jobs:
-#   deploy:
-#     strategy:
-#       max-parallel: 1
-#       matrix:
-#         environment: ["dev", "val", "prod"]
-#     environment:
-#       name: ${{ matrix.environment }}
-#       url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-#     runs-on: ubuntu-22.04
-#     services:
-#       postgres:
-#         image: postgres
-#         env:
-#           POSTGRES_HOST: localhost
-#           POSTGRES_DB: eregs
-#           POSTGRES_USER: eregs
-#           POSTGRES_PASSWORD: sgere
-#         ports:
-#           - 5432:5432
-#           # needed because the postgres container does not provide a healthcheck
-#         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           submodules: true
-#       # should build first and save the artifact
-#       - uses: actions/setup-node@v3
-#         with:
-#           node-version: 20
-#       - uses: actions/setup-python@v5
-#         with:
-#           python-version: "3.12"
-#       - name: Install dependencies
-#         run: |
-#           python -m pip install --upgrade pip
-#           pip install -r ./solution/static-assets/requirements.txt
-#       - name: build static assets
-#         env:
-#           STATIC_ROOT: ../static-assets/regulations
-#           # This isn't at all accurate, but it doesn't matter; Django just needs it to run collectstatic
-#           STATIC_URL: http://localhost:8888/
-#           VITE_ENV: ${{ matrix.environment }}
-#         run: |
-#           pushd solution
-#           cd backend
-#           python manage.py collectstatic --noinput
-#           cd ..
-#           popd
-#       - uses: actions/setup-python@v5
-#         with:
-#           python-version: "3.12"
-#       - name: Configure AWS credentials for GitHub Actions
-#         uses: aws-actions/configure-aws-credentials@v4
-#         with:
-#           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-#           aws-region: us-east-1
-#       - name: deploy static assets
-#         run: |
-#           pushd solution/static-assets
-#           npm install serverless@">=3.38.0 <4" -g
-#           npm install
-#           serverless deploy --stage ${{ matrix.environment }}
-#           popd
-#       - name: deploy text extractor lambda
-#         run: |
-#           pushd solution/text-extractor
-#           npm install serverless@">=3.38.0 <4" -g
-#           serverless deploy --stage ${{ matrix.environment }}
-#           popd
-#       - name: deploy regulations site server
-#         id: deploy-regulations-site-server
-#         env:
-#           RUN_ID: ${{ github.run_id }}
-#         run: |
-#           pushd solution/backend
-#           npm install serverless@">=3.38.0 <4" -g
-#           npm install
-#           serverless deploy --config ./serverless-maintenance.yml --stage ${{ matrix.environment }} | tee output.log
-#           serverless deploy --config ./serverless-redirect.yml --stage ${{ matrix.environment }} | tee output.log
-#           serverless deploy --stage ${{ matrix.environment }} | tee output.log
-#           serverless invoke --function reg_core_migrate --stage ${{ matrix.environment }}
-#           serverless invoke --function create_su --stage ${{ matrix.environment }}
-#           url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)
-#           url=${url%/}
-#           echo "url=$(echo $url)" >> $GITHUB_OUTPUT
-#           popd
-#       # vite needs the .env file in order to know the URL of the api.
-#       - name: Make envfile
-#         uses: SpicyPizza/create-envfile@v2.0
-#         with:
-#           envkey_VITE_API_URL: ${{ steps.deploy-regulations-site-server.outputs.url }}
-#           envkey_VITE_ENV: ${{matrix.environment}}
-#           directory: solution/ui/regulations/eregs-vite
-#           file_name: .env
-#       - name: build-vue-assets
-#         id: build-vue-assets
-#         env:
-#           VITE_ENV: ${{ matrix.environment }}
-#         run: |
-#           pushd solution
-#           make regulations
-#           popd
-#           pushd solution/static-assets
-#           serverless deploy --stage ${{ matrix.environment }}
-#           popd
-#       - name: deploy and run eCFR parser
-#         id: deploy-run-ecfr-parser
-#         run: |
-#           pushd solution/parser
-#           npm install serverless@">=3.38.0 <4" -g
-#           serverless deploy --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
-#           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage ${{ matrix.environment }} --config ./serverless-ecfr.yml
-#           popd
-#       - name: deploy and run FR parser
-#         id: deploy-run-fr-parser
-#         run: |
-#           pushd solution/parser
-#           npm install serverless@">=3.38.0 <4" -g
-#           serverless deploy --stage ${{ matrix.environment }} --config ./serverless-fr.yml
-#           AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage ${{ matrix.environment }} --config ./serverless-fr.yml
-#           popd
-#       - name: run pytest
-#         env:
-#           STATIC_URL: http://localhost:8888/
-#           DB_HOST: localhost
-#           DB_NAME: eregs
-#           DB_USER: eregs
-#           DB_PASSWORD: sgere
-#           DB_PORT: 5432
-#           HTTP_AUTH_USER: ${{ secrets.HTTP_AUTH_USER }}
-#           HTTP_AUTH_PASSWORD: ${{ secrets.HTTP_AUTH_PASSWORD }}
-#         working-directory: ./solution/backend
-#         run: |
-#           pytest -vv
-#       # Get test user credentials from AWS Parameter Store
-#       - name: Get test user credentials
-#         uses: dkershner6/aws-ssm-getparameters-action@v2
-#         with:
-#           parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
-#             /eregulations/http/password = CYPRESS_TEST_PASSWORD,
-#             /eregulations/http/reader_user = CYPRESS_READER_USERNAME,
-#             /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
-#           withDecryption: "true" # defaults to true
-#       - name: end-to-end tests
-#         uses: cypress-io/github-action@v6
-#         with:
-#           working-directory: solution/ui/e2e
-#           config: baseUrl=${{ steps.deploy-regulations-site-server.outputs.url }}
-#         env:
-#           CYPRESS_DEPLOYING: true
-#           CYPRESS_TEST_ENV: ${{ matrix.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::891376964164:role/GithubActionRole
+          aws-region: us-east-1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Run Build and Deploy Script
+        run: |
+          cd cdk-eregs
+          chmod +x deploy.sh
+          ./deploy.sh -e prod -t all

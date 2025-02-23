@@ -1,211 +1,153 @@
-CDK Infrastructure Technical Documentation
-Overview
-This document outlines the CDK infrastructure implementation focusing on environment-aware deployments, custom synthesizers, AWS Parameter Store integration, and stack creation patterns.
-Core Components
-// app.ts
-const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
-const synthesizerConfig = JSON.parse(synthesizerConfigJson);
+# CDK Policy Connector Infrastructure
 
-// Development Environment
-const devConfig = await StageConfig.create(
-  'dev',                                        // environment
-  undefined,                                    // no ephemeralId
-  synthesizerConfig.iamPermissionsBoundary      // from synthesizer config
-);
+This directory contains the AWS CDK infrastructure code for the eRegulations project.
 
-// Example outputs:
-devConfig.getResourceName('api')                // "cms-eregs-dev-api"
-devConfig.aws.lambda('function')                // "/aws/lambda/cms-eregs-dev-function"
-devConfig.isEphemeral()                         // false
-devConfig.getStackTags()                        // { Environment: 'dev', Project: 'cms-eregs', ... }
+## Prerequisites
 
-// Production Environment
-const prodConfig = await StageConfig.create(
-  'prod',
-  undefined,
-  synthesizerConfig.iamPermissionsBoundary
-);
+- Node.js 18+
+- Python 3.10+
+- AWS CLI configured
+- Docker installed and running
+- AWS CDK CLI: `npm install -g aws-cdk`
 
-// Example outputs:
-prodConfig.getResourceName('api')               // "cms-eregs-prod-api"
-prodConfig.aws.lambda('function')               // "/aws/lambda/cms-eregs-prod-function"
-prodConfig.isEphemeral()                        // false
-1. Stage Configuration (lib/config/stage-config.ts)
-typescriptCopyexport class StageConfig {
-  public static readonly projectName = 'cms-eregs';
+## Local Development Setup
 
-  public static async create(
-    environment: string, 
-    ephemeralId?: string,
-    synthesizerPermissionsBoundary?: string
-  ): Promise<StageConfig>
-Key Features:
+1. Install dependencies:
+```bash
+npm install
+```
 
-Environment-aware resource naming
-Ephemeral environment support (PR-based deployments)
-AWS service-specific naming conventions
-Integrated IAM permissions boundary
-Automatic tagging system
+2. Bootstrap your AWS environment (if not already done):
+```bash
+cdk bootstrap aws://ACCOUNT-NUMBER/REGION
+```
 
-Resource Naming Patterns:
-typescriptCopy// Regular environments:
-{project}-{environment}-{resource}        // cms-eregs-dev-api
-// Ephemeral environments:
-{project}-eph-{pr-number}-{resource}     // cms-eregs-eph-123-api
-// AWS Service Resources:
-/aws/{service}/{project}-{environment}-{resource}
-2. Application Entry Point (bin/app.ts)
-typescriptCopyasync function main() {
-  // Environment Resolution Chain:
-  // 1. CDK Context (-c environment=dev)
-  // 2. Environment Variable (DEPLOY_ENV)
-  // 3. GitHub Environment (GITHUB_JOB_ENVIRONMENT)
-  // 4. Default ('dev')
-  const environment = app.node.tryGetContext('environment') || 
-                     process.env.DEPLOY_ENV || 
-                     process.env.GITHUB_JOB_ENVIRONMENT || 
-                     'dev';
-Features:
+3. AWS Role Setup
 
-Custom synthesizer configuration from Parameter Store
-Environment context validation
-Global tag application
-Aspect-based IAM configuration
-Debug logging system
+To develop locally, you need the `EregsDevRole`. Create it using the GitHub Role Stack:
+```bash
+# Set required environment variables
+export DEVELOPER_USERNAME=your-iam-username
+export GITHUB_REPO_PATH=org/repo-name
 
-3. AWS Parameter Store Integration
-typescriptCopy// Synthesizer Configuration
-const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
-Parameter Structure:
-jsonCopy{
-  "deployRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-deploy-role",
-  "fileAssetPublishingRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-file-publishing-role",
-  "imageAssetPublishingRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-image-publishing-role",
-  "cloudFormationExecutionRole": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-cfn-exec-role",
-  "lookupRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-lookup-role",
-  "qualifier": "one",
-  "iamPermissionsBoundary": "arn:aws:iam::ACCOUNT:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy"
-}
-4. Global Aspects System
-typescriptCopyasync function applyGlobalAspects(app: cdk.App, stageConfig: StageConfig): Promise<void> {
-  const iamPath = await getParameterValue(`/account_vars/iam/path`);
-  
-  cdk.Aspects.of(app).add(new IamPathAspect(iamPath));
-  cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(stageConfig.permissionsBoundaryArn));
-  cdk.Aspects.of(app).add(new EphemeralRemovalPolicyAspect(stageConfig));
-}
-Available Aspects:
+# Deploy the role stack (requires admin access)
+npx cdk deploy GithubActionRole
+```
 
-IamPathAspect: Enforces IAM resource paths
-IamPermissionsBoundaryAspect: Applies IAM permissions boundaries
-EphemeralRemovalPolicyAspect: Manages resource cleanup for ephemeral environments
+This creates both:
+- The GitHub Actions role for CI/CD
+- The EregsDevRole for local development
 
-5. Environment-Aware Stack Creation
-typescriptCopynew RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
-  lambdaConfig: {
-    runtime: lambda.Runtime.PYTHON_3_12,
-    memorySize: 1024,
-    timeout: 30,
-  },
-  apiConfig: {
-    loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-  },
-}, stageConfig);
-Deployment Patterns
-1. Regular Environment Deployment
-bashCopy# Using CDK context
-cdk deploy "*redirect-api" -c environment=dev
-
-# Using environment variable
-DEPLOY_ENV=dev cdk deploy "*redirect-api"
-2. PR/Ephemeral Environment Deployment
-bashCopy# Using PR number
-PR_NUMBER=123 cdk deploy "*redirect-api" -c environment=dev
-
-# Debug mode
-CDK_DEBUG=true PR_NUMBER=123 cdk deploy "*redirect-api" -c environment=dev
-3. GitHub Actions Integration
-yamlCopydeploy-redirect-api:
-  environment:
-    name: "dev"
-  runs-on: ubuntu-22.04
-  steps:
-    - name: Deploy Stack
-      env:
-        PR_NUMBER: ${{ github.event.pull_request.number }}
-        CDK_DEBUG: true
-      run: |
-        npx cdk deploy "*redirect-api" \
-          -c environment=${{ environment.name }} \
-          --require-approval never
-Debug and Logging
-1. Debug Output Structure
-typescriptCopy// Synthesizer Configuration
+Ensure your IAM user has permission to assume this role by adding this policy to your user:
+```json
 {
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  environment: "dev",
-  ephemeralId: "eph-123"
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::891376964164:role/EregsDevRole"
+        }
+    ]
 }
+```
 
-// Stage Configuration
-{
-  environment: "dev",
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  isEphemeral: true,
-  ephemeralId: "eph-123"
-}
+## Deployment
 
-// Applied Aspects
-{
-  environment: "dev",
-  iamPath: "/delegatedadmin/developer/",
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  isEphemeral: true
-}
-Resource Naming Conventions
-1. AWS Service Resources
-typescriptCopy// Lambda Functions
-stageConfig.aws.lambda('function-name')
-// Output: /aws/lambda/cms-eregs-dev-function-name
+### Using the Deploy Script
 
-// API Gateway
-stageConfig.aws.apiGateway('api-name')
-// Output: /aws/api-gateway/cms-eregs-dev-api-name
+The `deploy.sh` script handles building and deploying all components:
 
-// CloudWatch Logs
-stageConfig.aws.cloudwatch('log-group-name')
-// Output: /aws/cloudwatch/cms-eregs-dev-log-group-name
-2. Stack Resources
-typescriptCopystageConfig.getResourceName('resource-name')
-// Regular: cms-eregs-dev-resource-name
-// Ephemeral: cms-eregs-eph-123-resource-name
-Best Practices
+```bash
+# View available options
+./deploy.sh -h
 
-Environment Management:
+# Deploy everything to production
+./deploy.sh -e prod -t all
 
-Use CDK context for environment specification
-Implement fallback chain for environment resolution
-Validate environments before deployment
+# Deploy specific components
+./deploy.sh -e prod -t static    # Static assets only
+./deploy.sh -e prod -t api       # API stack only
+./deploy.sh -e prod -t content   # Content updates only
+./deploy.sh -e prod -t parsers   # Parser lambdas only
+```
+
+### Manual Stack Deployment
+
+If you need to deploy individual stacks:
+
+```bash
+# Deploy static assets infrastructure
+cdk deploy a1m-eregs-prod-static
+
+# Deploy API stack
+cdk deploy a1m-eregs-prod-api
+
+# Deploy parsers
+cdk deploy a1m-eregs-prod-ecfr-parser a1m-eregs-prod-fr-parser
+```
+
+## Utility Scripts
+
+### GitHub Role Setup (`bin/github-role.ts`)
+
+Sets up OIDC authentication between GitHub Actions and AWS:
+
+```bash
+# Set required environment variables
+export DEVELOPER_USERNAME=your-username
+export GITHUB_REPO_PATH=org/repo-name
+
+# Deploy the role stack
+npx cdk deploy GithubActionRole
+```
+
+### Cleanup Script (`bin/cleanup.ts`)
+
+Helps remove old resources and stacks:
+
+```bash
+# View what will be deleted
+npx ts-node bin/cleanup.ts --dry-run
+
+# Actually perform the cleanup
+npx ts-node bin/cleanup.ts
+```
+
+## Project Structure
+
+```
+cdk-eregs/
+├── bin/                    # CDK app entry points
+│   ├── cdk-eregs.ts       # Main CDK app
+│   ├── github-role.ts     # GitHub OIDC setup
+│   └── cleanup.ts         # Resource cleanup
+├── lib/                    # Stack definitions
+│   ├── api-stack.ts       # API Gateway and Lambda
+│   ├── static-stack.ts    # S3 and CloudFront
+│   └── parser-stack.ts    # Parser Lambdas
+├── deploy.sh              # Deployment script
+└── package.json           # Dependencies
+```
+
+## CI/CD
+
+The project uses GitHub Actions for continuous deployment. The workflow is defined in `.github/workflows/deploy.yml` and will:
+- Deploy automatically on pushes to `main`
+- Allow manual triggers via workflow_dispatch
+- Use OIDC for secure AWS authentication
+
+## Common Issues
 
 
-Resource Naming:
+### Deployment Failures
+1. Check CloudFormation console for detailed error messages
+2. Ensure all required environment variables are set
+3. Verify AWS credentials and roles are properly configured
 
-Use StageConfig methods for consistent naming
-Follow AWS service-specific naming patterns
-Include environment/PR identifiers in resource names
+## Contributing
 
-
-IAM Configuration:
-
-Apply permissions boundaries consistently
-Use IAM path prefixing for resource organization
-Implement least privilege access
-
-
-Ephemeral Environments:
-
-Implement cleanup policies
-Use PR numbers for unique identification
-Apply appropriate resource retention policies
-
-
+1. Create a feature branch
+2. Make your changes
+3. Test using `deploy.sh` with appropriate parameters
+4. Submit a pull request to `main`

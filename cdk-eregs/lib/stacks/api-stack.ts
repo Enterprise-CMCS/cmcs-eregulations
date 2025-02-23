@@ -118,17 +118,14 @@ class SecurityGroupHandler {
     return serverlessSG;
   }
 }
+
 /**
  * Paths for AWS Secrets Manager secrets
  * @const
  */
-const SECRETS = {
-  OIDC_CREDENTIALS: '/eregulations/oidc/credentials',
-  DJANGO_CREDENTIALS: '/eregulations/http/django_credentials',
-  READER_CREDENTIALS: '/eregulations/http/reader_credentials',
-  DB_CREDENTIALS: '/eregulations/db/credentials',
-  HTTP_CREDENTIALS: '/eregulations/http/credentials',
-} as const;
+function getSecretPath(stageConfig: StageConfig, path: string): string {
+  return `/eregulations/${stageConfig.environment}${path}`;
+}
 
 /**
  * Combined Backend Stack for managing API and Database resources
@@ -143,11 +140,31 @@ export class BackendStack extends cdk.Stack {
     // SECRETS
     // ================================
     const secrets = {
-      oidc: secretsmanager.Secret.fromSecretNameV2(this, 'OidcSecret', SECRETS.OIDC_CREDENTIALS),
-      django: secretsmanager.Secret.fromSecretNameV2(this, 'DjangoSecret', SECRETS.DJANGO_CREDENTIALS),
-      reader: secretsmanager.Secret.fromSecretNameV2(this, 'ReaderSecret', SECRETS.READER_CREDENTIALS),
-      db: secretsmanager.Secret.fromSecretNameV2(this, 'DbSecret', SECRETS.DB_CREDENTIALS),
-      http: secretsmanager.Secret.fromSecretNameV2(this, 'HttpSecret', SECRETS.HTTP_CREDENTIALS),
+      oidc: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'OidcSecret',
+        getSecretPath(stageConfig, '/oidc/credentials')
+      ),
+      django: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'DjangoSecret',
+        getSecretPath(stageConfig, '/http/django_credentials')
+      ),
+      reader: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'ReaderSecret',
+        getSecretPath(stageConfig, '/http/reader_credentials')
+      ),
+      db: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'DbSecret',
+        getSecretPath(stageConfig, '/db/credentials')
+      ),
+      http: secretsmanager.Secret.fromSecretNameV2(
+        this,
+        'HttpSecret',
+        getSecretPath(stageConfig, '/http/credentials')
+      ),
     };
 
     // ================================

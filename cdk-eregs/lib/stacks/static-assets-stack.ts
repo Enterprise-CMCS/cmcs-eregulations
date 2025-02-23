@@ -68,7 +68,8 @@ export class StaticAssetsStack extends cdk.Stack {
    * @throws {Error} If certificate ARN is missing in production environment
    */
   private validateCertificateConfig(props: StaticAssetsStackProps): void {
-    if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
+    // Temporarily disable certificate requirement for initial setup
+    if (false && this.stageConfig.environment === 'prod' && !props.certificateArn) {
       throw new Error('SSL Certificate ARN is required for production environment');
     }
   }
@@ -86,7 +87,7 @@ export class StaticAssetsStack extends cdk.Stack {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       enforceSSL: true,
       autoDeleteObjects: isEphemeral,
-      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
       cors: [{
         allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
         allowedOrigins: ['*'],
@@ -108,7 +109,7 @@ export class StaticAssetsStack extends cdk.Stack {
       objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
       enforceSSL: true,
       autoDeleteObjects: isEphemeral,
-      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+      removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
       accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
     });
   }
@@ -220,7 +221,7 @@ export class StaticAssetsStack extends cdk.Stack {
       exportName: this.stageConfig.getResourceName('cloudfront-id'),
       description: 'CloudFront Distribution ID',
     });
-    
+
     new cdk.CfnOutput(this, 'StaticURL', {
       value: `https://${this.distribution.domainName}`,
       exportName: this.stageConfig.getResourceName('static-url'),

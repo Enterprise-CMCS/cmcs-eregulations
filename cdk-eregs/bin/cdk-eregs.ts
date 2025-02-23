@@ -1,198 +1,118 @@
-// #!/usr/bin/env node
-// import * as cdk from 'aws-cdk-lib';
-// import { getParameterValue } from '../utils/parameter-store';
-// import { validateEnvironmentContext } from '../config/environment-config';
-// import { RedirectApiStack } from '../lib/stacks/redirect-stack';
-// import { StageConfig } from '../config/stage-config';
-// import { IamPathAspect } from '../lib/aspects/iam-path';
-// import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
-// import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-// import * as lambda from 'aws-cdk-lib/aws-lambda';
-// import { MaintenanceApiStack } from '../lib/stacks/maintainance-stack';
-// import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
-// import { FrParserStack } from '../lib/stacks/fr-parser-stack';
-// import { S3ImportStack } from '../lib/stacks/s3-import';
-// import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+#!/usr/bin/env node
+import * as cdk from 'aws-cdk-lib';
+import { VpcStack } from '../lib/stacks/vpc-stack';
+import { BackendStack } from '../lib/stacks/api-stack';
+import { StaticAssetsStack } from '../lib/stacks/static-assets-stack';
+import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+import { FrParserStack } from '../lib/stacks/fr-parser-stack';
+import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
+import { StageConfig } from '../config/stage-config';
+import { getParameterValue } from '../utils/parameter-store';
 
-// // import { StackFactory } from '../lib/factories/stack-factory';
-// // import { getStackConfigs } from '../config/stack-definition';
-// async function main() {
-//     // Initialize CDK App with synthesizer configuration
-//     // const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
-//     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
-//     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
-//     // Fetch all required SSM parameters
-//     const [
-//       vpcId,
-//       logLevel,
-//       httpUser,
-//       httpPassword,
-//       eregsApiUrl
-//     ] = await Promise.all([
-//       getParameterValue('/account_vars/vpc/id'),
-//       getParameterValue('/eregulations/text_extractor/log_level'),
-//       getParameterValue('/eregulations/http/user'),
-//       getParameterValue('/eregulations/http/password'),
-//       getParameterValue('/eregulations/custom_url'),
-//     ]);
+const app = new cdk.App();
+const env = {
+  account: process.env.CDK_DEFAULT_ACCOUNT,
+  region: process.env.CDK_DEFAULT_REGION || 'us-east-1',
+};
 
-//      // Get environment configuration
-//      const env = {
-//       account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
-//       region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
-//     };
-//     const app = new cdk.App({
-//       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
-//     });
-//     // Get bundling type from context
-//     const bundlingType = app.node.tryGetContext('bundling');
-//     const environment = app.node.tryGetContext('environment') ||
-//   process.env.DEPLOY_ENV ||
-//   process.env.GITHUB_JOB_ENVIRONMENT ||
-//   'dev';
-//   const prNumber = process.env.PR_NUMBER || '';
-//   const ephemeralId = prNumber ? `eph-${prNumber}` : undefined;
+async function main() {
+  // Create StageConfig for prod
+  const stageConfig = await StageConfig.create(
+    'prod',
+    undefined,
+    'arn:aws:iam::aws:policy/PowerUserAccess'
+  );
 
-//   const context = validateEnvironmentContext(
-//     environment,
-//     ephemeralId,
-//     process.env.GITHUB_REF,
-//     prNumber
-//   );
+  // Get infrastructure parameters
+  const [vpcId, subnet1a, subnet1b, httpUser, httpPassword] = await Promise.all([
+    getParameterValue('/account_vars/vpc/prod/id'),
+    getParameterValue('/account_vars/vpc/prod/subnets/private/1a/id'),
+    getParameterValue('/account_vars/vpc/prod/subnets/private/1b/id'),
+    getParameterValue('/eregulations/http/user'),
+    getParameterValue('/eregulations/http/password'),
+  ]);
 
-//     // Debug logging for synthesizer config
-//     if (process.env.CDK_DEBUG) {
-//       console.log('Synthesizer Config:', {
-//         permissionsBoundary: synthesizerConfig.iamPermissionsBoundary,
-//         environment,
-//         ephemeralId,
-//       });
-//     }
+  // Only create the VPC stack if we're deploying it
+  const stackName = process.argv[3];
+  if (!stackName || stackName === 'a1m-eregs-prod-vpc') {
+    new VpcStack(app, 'a1m-eregs-prod-vpc', { env });
+  }
 
+  if (!stackName || stackName === 'a1m-eregs-prod-static') {
+    // Get deployment type from context or default to 'content'
+    const deploymentType = app.node.tryGetContext('deploymentType') || 'content';
 
-//   // const environment = process.env.DEPLOY_ENV || 'dev';
+    new StaticAssetsStack(app, 'a1m-eregs-prod-static', {
+      env,
+      deploymentType,
+      certificateArn: process.env.CERTIFICATE_ARN,
+    }, stageConfig);
+  }
 
+  // Only create the API stack if we're deploying it
+  if (!stackName || stackName === 'a1m-eregs-prod-api') {
+    new BackendStack(app, 'a1m-eregs-prod-api', {
+      env,
+      environmentConfig: {
+        vpcId,
+        logLevel: 'INFO',
+        subnetIds: [subnet1a, subnet1b]
+      },
+      lambdaConfig: {
+        memorySize: 1024,
+        timeout: 30
+      }
+    }, stageConfig);
+  }
 
-//   // Create StageConfig with synthesizer's permission boundary
-//   const stageConfig = await StageConfig.create(
-//     context.environment,
-//     ephemeralId,
-//     synthesizerConfig.iamPermissionsBoundary
-//   );
+  // Add parser stacks
+  if (!stackName || stackName.includes('fr-parser') || stackName.includes('ecfr-parser')) {
+    // Create eCFR Parser Stack
+    new EcfrParserStack(app, 'a1m-eregs-prod-ecfr-parser', {
+      env,
+      environmentConfig: {
+        httpUser,
+        httpPassword,
+        logLevel: 'INFO'
+      },
+      lambdaConfig: {
+        timeout: 900  // 15 minutes
+      }
+    }, stageConfig);
 
-//   // Debug logging for StageConfig
-//   if (process.env.CDK_DEBUG) {
-//     console.log('StageConfig Details:', {
-//       environment: stageConfig.environment,
-//       permissionsBoundary: stageConfig.permissionsBoundaryArn,
-//       isEphemeral: stageConfig.isEphemeral(),
-//       ephemeralId: ephemeralId,
-//     });
-//   }
+    // Create FR Parser Stack
+    new FrParserStack(app, 'a1m-eregs-prod-fr-parser', {
+      env,
+      environmentConfig: {
+        httpUser,
+        httpPassword,
+        logLevel: 'INFO'
+      },
+      lambdaConfig: {
+        timeout: 900  // 15 minutes
+      }
+    }, stageConfig);
+  }
 
-//   // Set global tags
-//   const tags = stageConfig.getStackTags();
-//   Object.entries(tags).forEach(([key, value]) => {
-//     cdk.Tags.of(app).add(key, value);
-//   });
+  if (!stackName || stackName === 'a1m-eregs-prod-text-extractor') {
+    new TextExtractorStack(app, 'a1m-eregs-prod-text-extractor', {
+      env,
+      environmentConfig: {
+        logLevel: 'INFO',
+        httpUser,
+        httpPassword
+      },
+      lambdaConfig: {
+        memorySize: 1024,
+        timeout: 900  // 15 minutes
+      }
+    }, stageConfig);
+  }
 
-//   // Create RedirectApiStack
-//  new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
-//     lambdaConfig: {
-//       runtime: lambda.Runtime.PYTHON_3_12,
-//       memorySize: 1024,
-//       timeout: 30,
-//     },
-//     apiConfig: {
-//       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-//     },
-//   }, stageConfig);
-//  new MaintenanceApiStack(app, stageConfig.getResourceName('maintenance-api'), {
-//     lambdaConfig: {
-//       runtime: lambda.Runtime.PYTHON_3_12,
-//       memorySize: 1024,
-//       timeout: 30,
-//     },
-//     apiConfig: {
-//       loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-//     },
-//   }, stageConfig);
+  app.synth();
+}
 
-//   new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
-//     env,
-//     lambdaConfig: {
-//       memorySize: 1024,
-//       timeout: 900,
-//       reservedConcurrentExecutions: 10,
-//     },
-//     environmentConfig: {
-//       vpcId,
-//       logLevel,
-//       httpUser,
-//       httpPassword,
-//     }
-//   }, stageConfig);
-
-//   new S3ImportStack(app, 'S3ImportStack', {
-//     bucketName: process.env.BUCKET_NAME || '',
-//     env: {
-//       account: process.env.CDK_DEFAULT_ACCOUNT,
-//       region: process.env.CDK_DEFAULT_REGION,
-//     },
-//   });
-
-//   new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
-//     env,
-//     lambdaConfig: {
-//       timeout: 900,
-//     },
-//     environmentConfig: {
-//       vpcId,
-//       logLevel,
-//       httpUser,
-//       httpPassword,
-//     }
-//   }, stageConfig);
-
-//   new EcfrParserStack(app, stageConfig.getResourceName('ecfr-parser'), {
-//     env,
-//     lambdaConfig: {
-//       timeout: 900,
-//     },
-//     environmentConfig: {
-//       vpcId,
-//       logLevel,
-//       httpUser,
-//       httpPassword,
-//     }
-//   }, stageConfig);
-
-//   // Apply aspects
-//   await applyGlobalAspects(app, stageConfig);
-
-//   app.synth();
-// }
-
-// async function applyGlobalAspects(app: cdk.App, stageConfig: StageConfig): Promise<void> {
-//   const iamPath = await getParameterValue(`/account_vars/iam/path`);
-
-//   // Apply IAM aspects using stageConfig's permission boundary
-//   cdk.Aspects.of(app).add(new IamPathAspect(iamPath));
-//   cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(stageConfig.permissionsBoundaryArn));
-//   cdk.Aspects.of(app).add(new EphemeralRemovalPolicyAspect(stageConfig));
-
-//   if (process.env.CDK_DEBUG) {
-//     console.log('Applied Global Aspects:', {
-//       environment: stageConfig.environment,
-//       iamPath,
-//       permissionsBoundary: stageConfig.permissionsBoundaryArn,
-//       isEphemeral: stageConfig.isEphemeral(),
-//     });
-//   }
-// }
-
-// main().catch(error => {
-//   console.error('Error initializing CDK app:', error);
-//   process.exit(1);
-// });
-
+main().catch(error => {
+  console.error('Error:', error);
+  process.exit(1);
+});
