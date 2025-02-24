@@ -40,7 +40,7 @@ jobs:
         with:
           submodules: true
       # should build first and save the artifact
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
       - uses: actions/setup-python@v5
