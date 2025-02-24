@@ -32,12 +32,7 @@ def handler(event, context):
         </style>
     </head>
     <body>
-        <h1>eRegulations is temporarily offline for maintenance.</h1>
-        <p>You can use <a href="https://www.ecfr.gov" target="_blank">eCFR</a> for regulations in the meantime.
-         If you have any questions, please check the eRegs user help channel in CMS Slack
-         (<a href="https://app.slack.com/client/E06EP6PNBV5/C04J2FBT3KP" target="_blank">#cms-eregulations-help</a>)
-         or reach out to <a href="mailto:britta.gustafson@a1msolutions.com">britta.gustafson@a1msolutions.com</a>
-         and <a href="mailto:stephanie.boyd@cms.hhs.gov">stephanie.boyd@cms.hhs.gov</a>.</p>
+        <h1>Policy Connector is temporarily offline for maintenance.</h1>
     </body>
     </html>
     '''

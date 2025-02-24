@@ -23,36 +23,7 @@ const $route = useRoute();
 
 <template>
     <div class="subj-landing__container">
-        <h1>Find Policy Documents</h1>
-        <section>
-            Use the sidebar to look up policy documents by subject, including:
-            <ul>
-                <li>Proposed and Final Rules</li>
-                <li>Subregulatory Guidance</li>
-                <li>Technical Assistance</li>
-                <li>OIG and GAO Reports</li>
-            </ul>
-        </section>
-        <section v-if="!isAuthenticated">
-            <SignInCTA
-                :access-url="accessUrl"
-                :is-authenticated="isAuthenticated"
-                test-id="loginSubjectsLanding"
-            >
-                <template #sign-in-link>
-                    <SignInLink
-                        :custom-login-url="customLoginUrl"
-                        :home-url="homeUrl"
-                        :is-authenticated="isAuthenticated"
-                        :route="$route"
-                    />
-                </template>
-            </SignInCTA>
-        </section>
-        <a
-            class="about__anchor"
-            :href="aboutUrl"
-        >Learn more about documents on eRegs.</a>
+
     </div>
 </template>
 

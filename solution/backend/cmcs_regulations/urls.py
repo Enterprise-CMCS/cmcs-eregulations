@@ -40,6 +40,6 @@ urlpatterns = [
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
-admin.site.site_header = "eRegs"
-admin.site.site_title = 'eRegs Admin Panel'
-admin.site.index_title = 'Medicaid & CHIP eRegulations Admin Panel'
+admin.site.site_header = "Policy Connector"
+admin.site.site_title = 'Policy Connector Admin Panel'
+admin.site.index_title = 'Policy Connector Admin Panel'

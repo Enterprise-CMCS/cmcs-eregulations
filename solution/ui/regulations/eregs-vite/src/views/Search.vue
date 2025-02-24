@@ -170,7 +170,7 @@ const setSelectedParams = (param) => {
 
 const setTitle = (query) => {
     const querySubString = query ? `for ${query} ` : "";
-    document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
+    document.title = `Search ${querySubString}| Policy Connector`;
 };
 
 const getDocsOnLoad = async () => {

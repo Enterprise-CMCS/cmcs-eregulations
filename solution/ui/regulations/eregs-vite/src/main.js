@@ -30,7 +30,7 @@ app.directive("sanitize-html", SanitizeHtml);
 const router = vueRouter({ customUrl, host });
 
 router.beforeEach((to) => {
-    const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
+    const pageTitle = "Research an EO | Policy Connector";
 
     // If you pass multiple query params in the URL, Vue Router will parse them as arrays.
     // This is a workaround to convert them back to strings -- we only need the first value.

@@ -48,8 +48,6 @@ const iconClasses = computed(() => ({
                 </div>
                 <div class="account-info--msg">
                     <div class="account-message">
-                        While signed in, you can access documents
-                        <strong>internal to CMCS</strong>.
                     </div>
                 </div>
                 <div class="account-info--links">

@@ -1,6 +1,6 @@
 {% extends "admin/login.html" %}
 
-{% block title %}eRegulations Admin Login{% endblock %}
+{% block title %}Admin Login{% endblock %}
 
 
 {% block content %}
@@ -19,12 +19,8 @@
         </style>
     {% endblock %}
    {{ block.super }}
-   {% if EUA_FEATUREFLAG %}
-      <div class="okta_login_container">
-        Or Login With &nbsp;<a href="{% url 'oidc_authentication_init' %}?next={{ next }}">EUA</a>
-      </div>
-   {% endif %}
+   
    {% if form.errors %}
-    <p>Invalid credentials.  Please contact an eRegs administrator if you need access.</p>
+    <p>Invalid credentials.  Please contact an administrator if you need access.</p>
   {% endif %}
 {% endblock %}

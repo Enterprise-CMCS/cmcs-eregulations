@@ -29,22 +29,10 @@
         <div class="top-container">
             <div class="cta__container">
                 <div class="cta">
-                    <div class="video__container">
-                        <a
-                            href="{{ DEMO_VIDEO_URL }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img
-                                src="{% static 'images/home_video.png' %}"
-                                alt="View an 8-minute video demonstration."
-                            />
-                        </a>
-                        <label id="videoLabel">View an 8-minute video demonstration.</label>
-                    </div>
+                   
                     <div class="about-text__container">
                         <p>
-                            eRegulations organizes together regulations,
+                            Policy Connector organizes together regulations,
                             subregulatory guidance, and other related policy
                             materials.
                         </p>
@@ -63,29 +51,6 @@
                             api-url={{ API_BASE }}
                             home-url="{% url 'homepage' %}"
                         ></recent-resources>
-                    </div>
-                    <div class="policy-materials__container">
-                        <div class="policy-materials">
-                            <div class="homepage-component__heading policy-materials__title">Search Policy Materials</div>
-                            <div class="policy-materials__categories--parent">
-                                <div class="policy-materials__categories">
-                                    <span class="policy-materials__category">CFR</span>
-                                    <span class="policy-materials__category">Guidance</span>
-                                    <span class="policy-materials__category">Rule Preambles</span>
-                                </div>
-                            </div>
-                            <div class="policy-materials__text">
-                                <p>
-                                    Look up keywords in the complete text of several
-                                    kinds of policy materials at once.
-                                </p>
-                            </div>
-                            <a
-                                href='{% url "search" %}?q="public%20health%20emergency"'
-                                class="action-btn default-btn link-btn sample-search-btn"
-                                >Try a Sample Search</a
-                            >
-                        </div>
                     </div>
                 </div>
             </div>
