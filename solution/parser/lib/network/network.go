@@ -67,7 +67,7 @@ func SendJSON(ctx context.Context, postURL *url.URL, data interface{}, jsonError
 		return -1, fmt.Errorf("failed to create HTTP request: %+v", err)
 	}
 
-	req.Header.Set("User-Agent", "eRegs for "+os.Getenv("NAME"))
+	req.Header.Set("User-Agent", "Policy Connector for "+os.Getenv("NAME"))
 	req.Header.Set("Content-Type", "application/json")
 	if auth != nil {
 		req.SetBasicAuth(auth.Username, auth.Password)
@@ -118,7 +118,7 @@ func Fetch(ctx context.Context, fetchURL *url.URL, jsonErrors bool, auth *PostAu
 		return nil, -1, fmt.Errorf("failed to create HTTP request: %+v", err)
 	}
 
-	req.Header.Set("User-Agent", "eRegs for "+os.Getenv("NAME"))
+	req.Header.Set("User-Agent", "Policy Connector for "+os.Getenv("NAME"))
 	if auth != nil {
 		req.SetBasicAuth(auth.Username, auth.Password)
 	}
