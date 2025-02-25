@@ -32,6 +32,8 @@ export default {
             .map((cat) => `&categories=${cat.id}`)
             .join("");
 
+	};
+
     data() {
         return {
             tab: 0,
