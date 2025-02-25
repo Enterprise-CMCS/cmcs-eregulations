@@ -64,6 +64,7 @@ async function main() {
     });
     const deploymentType = app.node.tryGetContext('deploymentType') || 'content';  
     new StaticAssetsStack(app, `${stageConfig.getResourceName('static-assets')}`, {
+      certificateArn: await getParameterValue(`/eregulations/acm-cert-arn`),
       prNumber,
       deploymentType,  // Pass the deployment type to the stack
       env: {
