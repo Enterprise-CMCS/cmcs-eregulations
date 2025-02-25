@@ -32,7 +32,7 @@ export default {
             .map((cat) => `&categories=${cat.id}`)
             .join("");
 
-	};
+	},
 
     data() {
         return {
