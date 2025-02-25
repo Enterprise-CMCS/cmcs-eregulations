@@ -12,21 +12,21 @@ const makeEcfrLink = ({ query, title }) =>
     )}`;
 
 const makeFederalRegisterLink = (query) =>
-    `https://www.federalregister.gov/documents/search?conditions[agencies][]=centers-for-medicare-medicaid-services&conditions[term]=${encodeURIComponent(
+    `https://www.federalregister.gov/documents/search?conditions[agencies][]=&conditions[term]=${encodeURIComponent(
         query
     )}`;
 
-const makeMedicaidGovLink = (query) =>
-    `https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=${encodeURIComponent(
+const makeGovSiteLink = (query) =>
+    `https://www.opm.gov/search#${encodeURIComponent(
         query
-    )}&gsc.sort=`;
+    )}`;
 
 const makeUsCodeLink = (query) => {
     const urlEncodedQuery = encodeURIComponent(query);
     const base64Query = btoa(query);
     const urlEncodedBase64Query = encodeURIComponent(base64Query);
 
-    return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=%28${urlEncodedQuery}%29+AND+%28%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2819%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2821%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2818%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2816%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2811%29%29%29&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Ctrue%7C%5B42%3A%3A%3A%3A7%3A19%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A21%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A18%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A16%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A11%3A%3A%3Atrue%3A%5D%7C%5BQWxsIEZpZWxkcw%3D%3D%3A%5D`;
+    return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=${urlEncodedQuery}&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Cfalse%7C%5B%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%5D%7C%5B%3A%5D`;
 };
 
 export default {
@@ -34,7 +34,7 @@ export default {
     hasSpaces,
     makeEcfrLink,
     makeFederalRegisterLink,
-    makeMedicaidGovLink,
+    makeGovSiteLink,
     makeUsCodeLink,
 };
 </script>
@@ -103,7 +103,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
             class="research__row"
             data-testid="research-row-1"
         >
-            <span class="row__title">Broaden your search on eRegulations</span>
+            <span class="row__title">Broaden your search</span>
             <span class="row__content" data-testid="reset-filters-parent">
                 Choose a different filter option above or
                 <router-link
@@ -123,27 +123,19 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
             <ul class="row__content row__content--list">
                 <li>
                     <a
-                        :href="makeEcfrLink({ query, title: 42 })"
+                        :href="makeEcfrLink({ query, title: 5 })"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >eCFR Title 42</a>
+                    >eCFR Title 5</a>
                 </li>
                 <li>
                     <a
-                        :href="makeEcfrLink({ query, title: 45 })"
+                        :href="makeGovSiteLink(query)"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >eCFR Title 45</a>
-                </li>
-                <li>
-                    <a
-                        :href="makeMedicaidGovLink(query)"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >Medicaid.gov</a>
+                    >OPM.gov</a>
                 </li>
                 <li>
                     <a

@@ -24,12 +24,12 @@ const propsObj = {
         v-bind="propsObj"
         name="get-account-access-narrow"
         class="header__access-link header__access-link--narrow"
-        label="Get Access"
+        label="Placeholder"
     />
     <HeaderLink
         v-bind="propsObj"
         name="get-account-access-wide"
         class="header__access-link header__access-link--wide"
-        label="Get Account Access"
+        label="Placeholder"
     />
 </template>

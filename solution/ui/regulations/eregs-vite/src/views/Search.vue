@@ -25,8 +25,6 @@ import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
-import SignInCTA from "@/components/SignInCTA.vue";
-import SignInLink from "@/components/SignInLink.vue";
 import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
 const accessUrl = inject("accessUrl");
@@ -284,14 +282,6 @@ getDocsOnLoad();
                         </template>
                     </HeaderUserWidget>
                 </template>
-                <template v-else #sign-in>
-                    <SignInLink
-                        :custom-login-url="customLoginUrl"
-                        :home-url="homeUrl"
-                        :is-authenticated="isAuthenticated"
-                        :route="$route"
-                    />
-                </template>
                 <template #get-access>
                     <AccessLink v-if="!isAuthenticated" :base="homeUrl" />
                 </template>
@@ -370,22 +360,6 @@ getDocsOnLoad();
                 </template>
                 <template v-else-if="policyDocList.results.length == 0">
                     <div class="doc__list">
-                        <SignInCTA
-                            v-if="!isAuthenticated"
-                            class="login-cta__div--search-no-results"
-                            :access-url="accessUrl"
-                            :is-authenticated="isAuthenticated"
-                            test-id="loginSearchNoResults"
-                        >
-                            <template #sign-in-link>
-                                <SignInLink
-                                    :custom-login-url="customLoginUrl"
-                                    :home-url="homeUrl"
-                                    :is-authenticated="isAuthenticated"
-                                    :route="$route"
-                                />
-                            </template>
-                        </SignInCTA>
                         <span class="no-results__span">Your search for
                             <strong>{{ searchQuery }}</strong> did not match any
                             results
@@ -409,24 +383,6 @@ getDocsOnLoad();
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
                     >
-                        <template #sign-in-cta>
-                            <SignInCTA
-                                v-if="!isAuthenticated"
-                                class="login-cta__div--search-results"
-                                :access-url="accessUrl"
-                                :is-authenticated="isAuthenticated"
-                                test-id="loginSearchResults"
-                            >
-                                <template #sign-in-link>
-                                    <SignInLink
-                                        :custom-login-url="customLoginUrl"
-                                        :home-url="homeUrl"
-                                        :is-authenticated="isAuthenticated"
-                                        :route="$route"
-                                    />
-                                </template>
-                            </SignInCTA>
-                        </template>
                     </PolicyResults>
                     <div class="pagination-expand-row">
                         <div class="pagination-expand-container">

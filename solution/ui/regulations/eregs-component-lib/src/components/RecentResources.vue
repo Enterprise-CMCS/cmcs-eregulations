@@ -27,12 +27,10 @@ export default {
             (cat) => cat.name === "Subregulatory Guidance"
         )[0];
 
-        if (subregulatoryGuidance) {
-            this.categories = subregulatoryGuidance.subcategories
-                .map((cat) => `&categories=${cat.id}`)
-                .join("");
-        }
-    },
+        // Remove the filtering logic to show all categories
+        this.categories = categoriesResult.results
+            .map((cat) => `&categories=${cat.id}`)
+            .join("");
 
     data() {
         return {
@@ -51,7 +49,7 @@ export default {
     <div>
         <v-tabs v-model="tab" grow>
             <v-tab class="content-tabs" tabindex="0">
-                Recent Subregulatory Guidance
+                Recent Resources
             </v-tab>
             <v-tab class="content-tabs" tabindex="0">
                 Recent Rules
@@ -69,7 +67,7 @@ export default {
             </v-window-item>
             <v-window-item>
                 <p class="recent-rules-descriptive-text">
-                    Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 95, 155-156
+                    Includes selected parts of 5 CFR
                 </p>
                 <RecentChangesContainer
                     :api-url="apiUrl"

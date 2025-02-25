@@ -16,7 +16,6 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
-import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
@@ -158,14 +157,6 @@ getStatutesArray();
                             {{ username }}
                         </template>
                     </HeaderUserWidget>
-                </template>
-                <template v-else #sign-in>
-                    <SignInLink
-                        :custom-login-url="customLoginUrl"
-                        :home-url="homeUrl"
-                        :is-authenticated="isAuthenticated"
-                        :route="$route"
-                    />
                 </template>
                 <template #get-access>
                     <AccessLink v-if="!isAuthenticated" :base="homeUrl" />

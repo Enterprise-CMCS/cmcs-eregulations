@@ -28,7 +28,7 @@ const links = [
     },
     {
         name: "subjects",
-        label: "Research a Subject",
+        label: "Research an EO",
         active: window.location.pathname.includes("subjects"),
         href: props.subjectsUrl,
     },
