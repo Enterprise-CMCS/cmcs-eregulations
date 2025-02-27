@@ -96,10 +96,9 @@ export class StaticAssetsStack extends cdk.Stack {
    * @throws {Error} If certificate ARN is missing in production environment
    */
   private validateCertificateConfig(props: StaticAssetsStackProps): void {
-    // TODO: why do we need this?
-    // if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
-    //   throw new Error('SSL Certificate ARN is required for production environment');
-    // }
+    if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
+      throw new Error('SSL Certificate ARN is required for production environment');
+    }
   }
 
   /**
@@ -204,8 +203,6 @@ export class StaticAssetsStack extends cdk.Stack {
       logIncludesCookies: false,
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2,
-      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      domainNames: props.certificateArn ? [] : undefined,
       errorResponses: [
         {
           httpStatus: 404,
