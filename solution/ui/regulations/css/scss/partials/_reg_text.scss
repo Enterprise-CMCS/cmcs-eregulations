@@ -272,7 +272,11 @@
         color: $mid_gray;
 
         @include screen-xxl {
+            padding: 0 0 0 10px;
+
             &.subpart {
+                padding: 0 var(--spacer-6);
+
                 b {
                     padding-left: 5px;
                 }
@@ -301,6 +305,7 @@ article {
 
     @include screen-xxl {
         margin: var(--spacer-5) auto;
+        padding: 0 var(--spacer-6);
     }
 
     i {

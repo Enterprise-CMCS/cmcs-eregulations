@@ -117,31 +117,12 @@ header {
 
             @include eds-gutters;
 
-            .row--content__wrapper {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                width: 100%;
-                gap: 1px;
-
-                @include eds-max-width;
+            &--first {
+                height: 56px;
+                gap: 1rem;
 
                 @include custom-min(calc($width-sm / 1px)) {
                     gap: 1.5rem;
-                }
-            }
-
-            &--first {
-                height: 56px;
-
-                .header--account {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-
-                    @include custom-min(calc($width-sm / 1px)) {
-                        gap: 1.5rem;
-                    }
                 }
             }
 
@@ -433,8 +414,6 @@ header {
 
         .header--sign-in {
             height: $header_input_height_wide;
-            display: flex;
-            align-items: center;
 
             span.disabled {
                 @include header__anchor--bold;

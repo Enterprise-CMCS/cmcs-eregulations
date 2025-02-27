@@ -35,10 +35,6 @@ footer {
         font-size: var(--font-size-sm);
     }
 
-    .site-footer {
-        @include eds-max-width;
-    }
-
     .address {
         margin-bottom: var(--spacer-3);
         font-size: $font-size-xs;
