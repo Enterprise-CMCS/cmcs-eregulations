@@ -65,7 +65,7 @@ export default {
                 type: this.type,
                 ...catsObj,
             };
-            const rulesResponse = await getRecentResources(this.apiUrl, args);
+            const rulesResponse = await getRecentResources({ apiURL: this.apiUrl, ...args });
 
             this.rules = rulesResponse.results;
             this.loading = false;
