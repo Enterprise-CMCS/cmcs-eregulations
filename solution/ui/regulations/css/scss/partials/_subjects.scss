@@ -306,9 +306,7 @@
 
     .ds-l-row {
         padding-top: 1.5rem;
-        width: 100%;
-
-        @include eds-max-width;
+        margin-inline: unset;
     }
 
     h3 {

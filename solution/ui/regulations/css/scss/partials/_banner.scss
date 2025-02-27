@@ -11,8 +11,6 @@
     @include eds-gutters;
 
     .content {
-        @include eds-max-width;
-
         h1 {
             margin-top: 45px;
             margin-bottom: 15px;

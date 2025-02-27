@@ -21,7 +21,6 @@
             padding-top: 30px;
             padding-bottom: 30px;
 
-            @include eds-max-width;
             @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 flex-direction: column;
             }
