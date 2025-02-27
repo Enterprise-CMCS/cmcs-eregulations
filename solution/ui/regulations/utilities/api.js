@@ -256,27 +256,30 @@ const getLastUpdatedDates = async ({ apiUrl, titles = ["42"] }) => {
  * Gets the three most recent resources of a type.
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiURL - URL of API passed in from Django.  Ex: `/v2/` or `/v3/`
- * @param {number} [options.page=1] - Page number to retrieve.
- * @param {number} [options.pageSize=3] - Number of items to retrieve.
- * @param {string} [options.type="rules"] - Type of resource to retrieve.  Ex: "rules" or "links"
- * @param {string} [options.categories] - Categories to filter by.
+ * @param {Object} args - parameters specific to Recent REsources request
+ * @param {number} [options.args.page=1] - Page number to retrieve.
+ * @param {number} [options.args.pageSize=3] - Number of items to retrieve.
+ * @param {string} [options.args.type="rules"] - Type of resource to retrieve.  Ex: "rules" or "links"
+ * @param {string} [options.args.categories] - Categories to filter by.
  * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>>} - Promise that contains array of resources when fulfilled
  */
 const getRecentResources = async ({
     apiURL,
-    page = 1,
-    pageSize = 3,
-    type = "rules",
-    categories
+    args = {
+        page: 1,
+        pageSize: 3,
+        type: "rules",
+        categories: {}
+    }
 }) => {
-    if (type !== "rules") {
+    if (args.type !== "rules") {
         return httpApiGet(
-            `${apiURL}resources/public/links?page=${page}&page_size=${pageSize}${categories}`,
+            `${apiURL}resources/public/links?page=${args.page}&page_size=${args.pageSize}${args.categories}`,
             {} // params, default
         );
     }
     return httpApiGet(
-        `${apiURL}resources/public/federal_register_links?page=${page}&page_size=${pageSize}`,
+        `${apiURL}resources/public/federal_register_links?page=${args.page}&page_size=${args.pageSize}`,
         {} // params, default
     );
 };
