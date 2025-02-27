@@ -4,6 +4,7 @@ import { ref, watchEffect } from "vue";
 import useCategories from "composables/categories";
 
 import RecentChangesContainer from "./RecentChangesContainer.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 const props = defineProps({
     apiUrl: {
@@ -47,7 +48,11 @@ watchEffect(() => {
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item>
+                <div v-if="!categories" class="rules-container">
+                    <SimpleSpinner />
+                </div>
                 <RecentChangesContainer
+                    v-else
                     :api-url="apiUrl"
                     :home-url="homeUrl"
                     :categories="categories"

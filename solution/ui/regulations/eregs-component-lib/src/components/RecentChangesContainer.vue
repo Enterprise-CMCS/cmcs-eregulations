@@ -1,96 +1,66 @@
-<script>
+<script setup>
+import { provide } from "vue";
 import { getRecentResources } from "utilities/api";
+
+import useFetch from "composables/fetch";
 
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import RecentSupplementalContent from "./RecentSupplementalContent.vue";
 
-export default {
-    name: "DefaultName",
-
-    components: {
-        RelatedRuleList,
-        SimpleSpinner,
-        RecentSupplementalContent,
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
     },
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-        homeUrl: {
-            type: String,
-            required: false,
-            default: "/",
-        },
-        type: {
-            type: String,
-            required: false,
-            default: "rules",
-        },
-        categories: {
-            type: String,
-            required: false,
-            default: null,
-        },
+    homeUrl: {
+        type: String,
+        required: false,
+        default: "/",
     },
-
-    async created() {
-        if (this.type !== "supplemental") {
-            this.getRules();
-        }
+    type: {
+        type: String,
+        required: false,
+        default: "rules",
     },
-
-    data() {
-        return {
-            loading: true,
-            rules: [],
-        };
+    categories: {
+        type: String,
+        required: false,
+        default: null,
     },
+});
 
-    provide() {
-        return {
-            homeUrl: this.homeUrl,
-            itemTitleLineLimit: 9,
-            currentRouteName: "homepage",
-        };
-    },
+provide("homeUrl", props.homeUrl);
+provide("itemTitleLineLimit", 9);
+provide("currentRouteName", "homepage");
 
-    methods: {
-        async getRules(catsObj = {}) {
-            const args = {
-                page: 1,
-                pageSize: 5,
-                type: this.type,
-                ...catsObj,
-            };
-            const rulesResponse = await getRecentResources({ apiURL: this.apiUrl, args });
-
-            this.rules = rulesResponse.results;
-            this.loading = false;
-        },
-    },
-
-    watch: {
-        async categories(newCats, oldCats) {
-            if (oldCats === null) {
-                this.getRules({ categories: newCats });
-            }
-        },
-    },
+const rulesArgs = {
+    page: 1,
+    pageSize: 5,
+    type: props.type,
 };
+
+if (props.type === "supplemental") {
+    rulesArgs.categories = props.categories;
+}
+
+const rulesResults = useFetch({
+    method: getRecentResources,
+    apiUrl: props.apiUrl,
+    args: rulesArgs,
+});
+
 </script>
 <template>
     <div class="rules-container">
-        <SimpleSpinner v-if="loading" />
+        <SimpleSpinner v-if="rulesResults.loading" />
         <RelatedRuleList
-            v-if="!loading && type != 'supplemental'"
-            :rules="rules"
+            v-if="!rulesResults.loading && type != 'supplemental'"
+            :rules="rulesResults.data"
         />
         <RecentSupplementalContent
-            v-if="!loading && type == 'supplemental'"
-            :supplemental-content="rules"
+            v-if="!rulesResults.loading && type == 'supplemental'"
+            :supplemental-content="rulesResults.data"
             :limit="5"
         />
     </div>
