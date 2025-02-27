@@ -26,7 +26,7 @@
     "lodash": "^4.17.21",
     "sass": "^1.77.0",
     "vue": "^3.5.13",
-    "vuetify": "^3.7.13"
+    "vuetify": "^3.7.14"
   },
   "devDependencies": {
     "@babel/core": "^7.13.16",
@@ -43,7 +43,7 @@
     "jsdom": "^22.0.0",
     "msw": "^2.6.2",
     "sass-loader": "^13.0.2",
-    "vite": "^6.1.1",
+    "vite": "^6.2.0",
     "vitest": "^3.0.5",
     "vue-eslint-parser": "^9.4.2",
     "webpack": "^5.94.0",
