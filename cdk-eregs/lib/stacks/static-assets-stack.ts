@@ -56,18 +56,14 @@ export class StaticAssetsStack extends cdk.Stack {
     // Get certificate ARN from SSM if not provided in props
     let certificateArn = props.certificateArn;
     if (!certificateArn) {
-      try {
-        // Try to get the certificate ARN from SSM Parameter Store
-        const parameterName = '/eregulations/acm-cert-arn';
-        const parameter = ssm.StringParameter.valueFromLookup(this, parameterName);
-        
-        // Check if we got a real value (not a dummy placeholder used during synthesis)
-        if (parameter && !parameter.includes('${Token[')) {
-          certificateArn = parameter;
-        }
-      } catch (error) {
-        // If SSM parameter doesn't exist, log it but continue
-        console.log('Certificate ARN not found in SSM Parameter Store');
+      certificateArn = ssm.StringParameter.valueFromLookup(this, '/eregulations/acm-cert-arn');
+      
+      if (certificateArn.startsWith('dummy-value-for-') || !certificateArn.startsWith('arn:aws:')) {
+        // Use any valid ARN placeholder temporarily during synthesis
+        certificateArn = 'arn:aws:acm:us-east-1:123456789012:certificate/dummy-placeholder';
+        console.log('Using placeholder certificate ARN during synthesis');
+      } else {
+        console.log(`Using certificate ARN from SSM: ${certificateArn}`);
       }
     }
 
@@ -205,7 +201,7 @@ export class StaticAssetsStack extends cdk.Stack {
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      domainNames: props.certificateArn ? [] : undefined,
+      // domainNames: props.certificateArn ? [] : undefined,
       errorResponses: [
         {
           httpStatus: 404,
