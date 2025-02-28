@@ -21,7 +21,13 @@ const type = (rule) => {
     return getFrDocType(rule);
 };
 
-export { citation, html_url, publication_date, ruleTitle, type };
+export default {
+    citation,
+    html_url,
+    publication_date,
+    ruleTitle,
+    type
+};
 </script>
 
 <script setup>
