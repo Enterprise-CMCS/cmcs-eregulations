@@ -1,3 +1,61 @@
+<script setup>
+import { ref, computed, watch, onMounted, onBeforeUnmount, inject } from "vue";
+import eventbus from "../eventbus";
+
+const props = defineProps({
+    name: {
+        type: String,
+        required: true,
+    },
+    state: {
+        // expanded or collapsed
+        type: String,
+        required: true,
+    },
+    keepContentsOnToggle: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+});
+
+const getStateOverride = inject("getStateOverride", null);
+
+const dataName = ref(props.name);
+const visible = ref(props.state === "expanded");
+
+const stateOverrideValue = computed(() => {
+    if (!getStateOverride) return null;
+    return getStateOverride();
+});
+
+const click = () => {
+    eventbus.emit("collapse-toggle", dataName.value);
+};
+
+const toggle = (target) => {
+    if (dataName.value === target) {
+        visible.value = !visible.value;
+    }
+};
+
+watch(stateOverrideValue, (newStateOverrideValue) => {
+    if (visible.value && newStateOverrideValue === "collapsed") {
+        click();
+    } else if (!visible.value && newStateOverrideValue === "expanded") {
+        click();
+    }
+});
+
+onMounted(() => {
+    eventbus.on("collapse-toggle", toggle);
+});
+
+onBeforeUnmount(() => {
+    eventbus.off("collapse-toggle", toggle);
+});
+</script>
+
 <template>
     <button
         :class="{ visible: visible }"
@@ -23,77 +81,3 @@
         </slot>
     </button>
 </template>
-
-<script>
-import eventbus from "../eventbus";
-
-export default {
-    name: "CollapseButton",
-
-    inject: {
-        getStateOverride: { default: null },
-    },
-
-    props: {
-        name: {
-            type: String,
-            required: true,
-        },
-        state: {
-            // expanded or collapsed
-            type: String,
-            required: true,
-        },
-        keepContentsOnToggle: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-    },
-
-    data() {
-        return {
-            dataName: this.name,
-            visible: true,
-        };
-    },
-
-    computed: {
-        stateOverrideValue() {
-            if (!this.getStateOverride) return null;
-            return this.getStateOverride();
-        },
-    },
-
-    watch: {
-        // https://stackoverflow.com/questions/60416153/making-vue-js-provide-inject-reactive
-        stateOverrideValue(newStateOverrideValue) {
-            if (this.visible && newStateOverrideValue === "collapsed") {
-                this.click();
-            } else if (!this.visible && newStateOverrideValue === "expanded") {
-                this.click();
-            }
-        },
-    },
-
-    created() {
-        this.visible = this.state === "expanded";
-        eventbus.on("collapse-toggle", this.toggle);
-    },
-
-    beforeUnmount() {
-        eventbus.off("collapse-toggle", this.toggle);
-    },
-
-    methods: {
-        click() {
-            eventbus.emit("collapse-toggle", this.dataName);
-        },
-        toggle(target) {
-            if (this.dataName === target) {
-                this.visible = !this.visible;
-            }
-        },
-    },
-};
-</script>
