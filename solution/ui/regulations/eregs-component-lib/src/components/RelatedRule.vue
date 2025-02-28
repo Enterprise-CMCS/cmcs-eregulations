@@ -42,6 +42,10 @@ const props = defineProps({
     },
 });
 
+const isBlank = (str) => {
+    return !str || /^\s*$/.test(str);
+};
+
 const itemTitleLineLimit = inject("itemTitleLineLimit", { default: 9 });
 
 const formatPubDate = (value) => {
@@ -77,10 +81,15 @@ const recentTitleClass = computed(() => {
         >
             <span class="link-heading">
                 <IndicatorLabel v-if="type" :type="type" />
-                <span v-if="publication_date" class="recent-date">{{
+                <span
+                    v-if="publication_date"
+                    class="recent-date"
+                    :class="{
+                        'recent-date--bar': !isBlank(citation),
+                    }"
+                >{{
                     formatPubDate(publication_date)
                 }}</span>
-                |
                 <span class="recent-fr-citation" :class="citationClasses">{{
                     citation
                 }}</span>

@@ -509,6 +509,12 @@
                     .recent-date {
                         color: $mid_gray;
                         font-weight: 400;
+
+                        &--bar {
+                            padding-right: var(--spacer-1);
+                            margin-right: var(--spacer-1);
+                            border-right: 1px solid black;
+                        }
                     }
 
                     .recent-fr-citation {
@@ -528,8 +534,8 @@
                         .supplemental-content-date {
                             color: $mid_gray;
                             font-weight: 400;
-                            padding-right: var(--spacer-half);
-                            margin-right: var(--spacer-half);
+                            padding-right: var(--spacer-1);
+                            margin-right: var(--spacer-1);
                             font-size: var(--font-size-sm);
                         }
 
