@@ -7,16 +7,10 @@
 .nav-container {
     overflow: auto;
     background: $main_background_color;
-    padding: 0 var(--spacer-5);
 
-    @include screen-xl {
-        padding: 0 var(--spacer-4);
-    }
+    @include eds-gutters;
 
     .content {
-        margin: 0 auto;
-        max-width: var(--text-max-width);
-
         h1 {
             margin-top: 45px;
             margin-bottom: 15px;

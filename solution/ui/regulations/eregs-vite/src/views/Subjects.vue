@@ -393,7 +393,7 @@ getDocSubjects();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="subjectsApp" class="repository-view ds-l-container">
+        <div id="subjectsApp" class="repository-view">
             <div class="ds-l-row">
                 <div
                     class="ds-l-col--12 ds-l-md-col--4 ds-l-lg-col--3 sidebar__container"

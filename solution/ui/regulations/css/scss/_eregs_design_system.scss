@@ -16,6 +16,8 @@ $eds-width-header-links: 1240px;
 :root {
     font-size: 16px;
 
+    --content-max-width: 1024px;
+
     // Breakpoints
     --eds-width-xs: 320px;
     --eds-width-sm: 780px;
@@ -40,10 +42,29 @@ $eds-width-header-links: 1240px;
     --color-focus-dark: #005fcc;
 }
 
-@mixin eds-gutters {
-    padding: 0 var(--grid-form-gutter-width);
+@mixin eds-gutters($top-bottom-padding: 0) {
+    & {
+        padding: $top-bottom-padding var(--grid-form-gutter-width);
+    }
 
     @media (min-width: $eds-width-md) {
-        padding: 0 var(--grid-gutter-width);
+        padding: $top-bottom-padding var(--grid-gutter-width);
+    }
+}
+
+@mixin eds-width-with-gutters {
+    & {
+        width: calc(100% - var(--grid-form-gutter-width) - var(--grid-form-gutter-width));
+    }
+
+    @media (min-width: $eds-width-md) {
+        width: calc(100% - var(--grid-gutter-width) - var(--grid-gutter-width));
+    }
+}
+
+@mixin eds-max-width($top-bottom-margin: 0) {
+    & {
+        max-width: var(--content-max-width);
+        margin: $top-bottom-margin auto;
     }
 }

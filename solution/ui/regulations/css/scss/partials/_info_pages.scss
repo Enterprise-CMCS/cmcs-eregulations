@@ -9,7 +9,7 @@
 @mixin layout-and-spacing {
     display: block;
     margin: var(--spacer-3) auto var(--spacer-7);
-    max-width: var(--text-max-width);
+    max-width: var(--content-max-width);
 }
 
 main.get-account-access {
