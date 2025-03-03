@@ -22,7 +22,8 @@ body {
     display: block;
     margin: 0 auto;
     position: relative;
-    padding: var(--spacer-3) var(--spacer-5);
+
+    @include eds-gutters(var(--spacer-3));
 
     @include screen-xl {
         max-width: var(--media-width-xl);
@@ -43,6 +44,10 @@ body {
 .flexbox {
     display: flex;
     width: 100%;
+}
+
+.reader-container {
+     @include eds-max-width;
 }
 
 .match-sides {

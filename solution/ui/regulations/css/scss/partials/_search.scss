@@ -27,15 +27,14 @@
 
 .search-page {
     #searchApp.search-view {
-        margin-top: var(--spacer-3);
-        margin-bottom: var(--spacer-3);
         display: flex;
         flex-direction: column;
         min-height: 300px;
-        max-width: var(--eds-width-md);
         box-sizing: content-box;
 
         @include eds-gutters;
+        @include eds-width-with-gutters;
+        @include eds-max-width(var(--spacer-3));
 
         h1 {
             margin-bottom: var(--spacer-2);
@@ -95,7 +94,10 @@
                     font-size: var(--font-size-lg);
                     line-height: 1.5rem;
                 }
+
                 .result {
+                    max-width: var(--eds-width-md);
+
                     &__link {
                         a {
                             text-decoration: none;
