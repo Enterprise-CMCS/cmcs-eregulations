@@ -1,6 +1,6 @@
 <script setup>
 /* eslint-disable vue/prop-name-casing */
-import { computed, inject, ref } from "vue";
+import { computed, inject } from "vue";
 
 import { formatDate } from "utilities/utils";
 

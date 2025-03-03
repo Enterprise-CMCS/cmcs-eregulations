@@ -1,7 +1,7 @@
 <script setup>
 import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
 
-const props = defineProps({
+defineProps({
     name: {
         type: String,
         required: false,
