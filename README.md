@@ -17,7 +17,7 @@ We have public documentation about our product, design, and research processes i
 You need these to get started:
 
 -   git
--   Docker, including Docker Compose (for local development, install [Docker Desktop](https://docs.docker.com/desktop/))
+-   Docker, including Docker Compose (install [Docker Desktop](https://docs.docker.com/desktop/))
 -   Python 3.12 (consider using [Homebrew](https://docs.brew.sh/Homebrew-and-Python))
 -   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v20, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
 -   [go](https://go.dev/dl/) version 1.16
@@ -63,13 +63,13 @@ make local.collectstatic
 
 Proceed to <http://localhost:8000> in your browser to see the results.
 
-You can run `make` to learn about other available tasks. Recommended:
+Run `make watch-all` to automatically compile your local changes to SCSS and JS so that you can see them in your browser.
 
-`make watch-all` will automatically compile your local changes to SCSS and JS so that you can see them in your browser.
+Run `make local.createadmin` to create an admin superuser for the admin portion of the site. Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step.
 
-`make local.createadmin` will create an admin superuser for the admin portion of the site. Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step.
+You can run `make` to learn about other available tasks. For example:
 
-`make local.seed` will load data from the fixtures folder setting up a usable amount of data for local use. This data is not maintained and should not be relied on for any purpose other than development.
+`make local.seed` will load data from the fixtures folder, setting up some sample data for local use. This data is not maintained and should not be relied on for any purpose other than development.
 
 `make local.stop` will cause the running Docker processes to stop without losing data.
 
