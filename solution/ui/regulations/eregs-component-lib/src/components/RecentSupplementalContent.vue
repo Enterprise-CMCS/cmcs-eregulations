@@ -1,35 +1,25 @@
-<script>
+<script setup>
+import { computed } from "vue";
+
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 import SubjectChips from "spaComponents/subjects/SubjectChips.vue";
 
-export default {
-    name: "RecentSupplementalContent",
-
-    components: {
-        CategoryLabel,
-        SubjectChips,
-        SupplementalContentObject,
+const props = defineProps({
+    supplementalContent: {
+        type: Array,
+        required: true,
     },
-
-    props: {
-        supplementalContent: {
-            type: Array,
-            required: true,
-        },
-        limit: {
-            type: Number,
-            required: false,
-            default: 3,
-        },
+    limit: {
+        type: Number,
+        required: false,
+        default: 3,
     },
+});
 
-    computed: {
-        limitedContent() {
-            return this.supplementalContent.slice(0, this.limit);
-        },
-    },
-};
+const limitedContent = computed(() => {
+    return props.supplementalContent.slice(0, props.limit);
+});
 </script>
 
 <template>

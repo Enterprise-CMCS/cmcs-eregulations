@@ -110,8 +110,14 @@ describe("api.js", () => {
     });
     describe("getRecentResources", () => {
         it("is called with type = rules", async () => {
-            await getRecentResources("http://localhost:9000/", {
-                categories: "1",
+            await getRecentResources({
+                apiUrl: "http://localhost:9000/",
+                args: {
+                    categories: "1",
+                    page: 1,
+                    pageSize: 3,
+                    type: "rules",
+                },
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
@@ -120,11 +126,14 @@ describe("api.js", () => {
             );
         });
         it("is called with type != rules", async () => {
-            await getRecentResources("http://localhost:9000/", {
-                categories: "&categories=1",
-                page: 2,
-                pageSize: 5,
-                type: "not_rules",
+            await getRecentResources({
+                apiUrl:  "http://localhost:9000/",
+                args: {
+                    categories: "&categories=1",
+                    page: 2,
+                    pageSize: 5,
+                    type: "not_rules",
+                },
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(

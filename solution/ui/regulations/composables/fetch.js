@@ -5,6 +5,7 @@ export default function useFetch({
     apiUrl,
     needsAuthentication = false,
     isAuthenticated = false,
+    args,
 }) {
     const responseObj = ref({
         data: [],
@@ -17,7 +18,7 @@ export default function useFetch({
         return responseObj;
     }
 
-    method({ apiUrl })
+    method({ apiUrl, args })
         .then((response) => {
             responseObj.value.data = Array.isArray(response)
                 ? response
