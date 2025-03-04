@@ -139,9 +139,12 @@ jobs:
           echo "Cleanup completed for all Docker-based stacks"
           popd
       - name: Cleanup Static Assets
-        if: success() && steps.findPr.outputs.pr
         env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{ github.event.number }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
           npm install -g aws-cdk@latest @aws-sdk/client-ssm
