@@ -217,7 +217,7 @@ export class TextExtractorStack extends cdk.Stack {
             's3:GetObject',
           ],
           resources: [
-            `arn:aws:s3:::cms-eregs-${this.stageConfig.stageName}-file-repo-eregs`
+            `arn:aws:s3:::cms-eregs-${this.stageConfig.stageName}-file-repo-eregs*`
           ],
         }),
       ],
