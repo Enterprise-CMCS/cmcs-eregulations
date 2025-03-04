@@ -1,5 +1,80 @@
+<script>
+import { getFrDocType } from "utilities/utils";
+
+const citation = (rule) => {
+    return rule.citation || rule.document_id;
+};
+
+const html_url = (rule) => {
+    return rule.html_url || rule.url;
+};
+
+const publication_date = (rule) => {
+    return rule.publication_date || rule.date;
+};
+
+const ruleTitle = (rule) => {
+    return rule.title || rule.description;
+};
+
+const type = (rule) => {
+    return getFrDocType(rule);
+};
+
+export default {
+    citation,
+    html_url,
+    publication_date,
+    ruleTitle,
+    type
+};
+</script>
+
+<script setup>
+import { computed } from "vue";
+
+import RelatedRule from "./RelatedRule.vue";
+import ShowMoreButton from "./ShowMoreButton.vue";
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
+
+const props = defineProps({
+    rules: {
+        type: Array,
+        default: () => [],
+    },
+    limit: {
+        type: Number,
+        default: 5,
+    },
+    title: {
+        type: String,
+        default: "results",
+    },
+});
+
+const innerName = "RelatedRuleCollapsible";
+
+const limitedRules = computed(() => {
+    return props.rules.slice(0, props.limit);
+});
+
+const additionalRules = computed(() => {
+    return props.rules.slice(props.limit);
+});
+
+const rulesCount = computed(() => {
+    return props.rules.length;
+});
+
+const showMoreNeeded = computed(() => {
+    return rulesCount.value > props.limit;
+});
+
+</script>
+
 <template>
-    <div v-if="rules.length" class="related-rule-list">
+    <div v-if="props.rules.length" class="related-rule-list">
         <template v-for="(rule, i) in limitedRules" :key="i">
             <related-rule
                 :title="ruleTitle(rule)"
@@ -11,9 +86,7 @@
                 :action="rule.action"
             />
             <template
-                v-if="
-                    rule.related_resources && rule.related_resources.length > 0
-                "
+                v-if="rule.related_resources && rule.related_resources.length > 0"
             >
                 <related-rule
                     v-for="(related_resource, ii) in rule.related_resources"
@@ -109,81 +182,3 @@
         No {{ title }} found in the Federal Register from 1994 to present.
     </div>
 </template>
-
-<script>
-import { getFrDocType } from "utilities/utils";
-
-import RelatedRule from "./RelatedRule.vue";
-import ShowMoreButton from "./ShowMoreButton.vue";
-import CollapseButton from "./CollapseButton.vue";
-import Collapsible from "./Collapsible.vue";
-
-export default {
-    name: "RelatedRuleList",
-
-    components: {
-        RelatedRule,
-        ShowMoreButton,
-        CollapseButton,
-        Collapsible,
-    },
-
-    props: {
-        rules: {
-            type: Array,
-            default: () => [],
-        },
-        limit: {
-            type: Number,
-            default: 5,
-        },
-        title: {
-            type: String,
-            default: "results",
-        },
-    },
-
-    data() {
-        return {
-            limitedList: true,
-            innerName: "RelatedRuleCollapsible",
-        };
-    },
-
-    computed: {
-        limitedRules() {
-            return this.rules.slice(0, this.limit);
-        },
-        additionalRules() {
-            return this.rules.slice(this.limit);
-        },
-        rulesCount() {
-            return this.rules.length;
-        },
-        showMoreNeeded() {
-            return this.rulesCount > this.limit;
-        },
-    },
-
-    methods: {
-        showMore() {
-            this.limitedList = !this.limitedList;
-        },
-        ruleTitle(rule) {
-            return rule.title || rule.description;
-        },
-        type(rule) {
-            return getFrDocType(rule);
-        },
-        citation(rule) {
-            return rule.citation || rule.document_id;
-        },
-        html_url(rule) {
-            return rule.html_url || rule.url;
-        },
-        publication_date(rule) {
-            return rule.publication_date || rule.date;
-        },
-    },
-};
-</script>

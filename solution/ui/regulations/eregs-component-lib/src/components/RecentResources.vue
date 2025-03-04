@@ -1,50 +1,39 @@
-<script>
-import { getExternalCategories } from "utilities/api";
+<script setup>
+import { ref, watchEffect } from "vue";
+
+import useCategories from "composables/categories";
 
 import RecentChangesContainer from "./RecentChangesContainer.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
-export default {
-    name: "RecentResources",
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-        homeUrl: {
-            type: String,
-            required: false,
-            default: "/",
-        },
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
     },
-
-    async created() {
-        const categoriesResult = await getExternalCategories({
-            apiUrl: this.apiUrl,
-        });
-
-        const subregulatoryGuidance = categoriesResult.results.filter(
-            (cat) => cat.name === "Subregulatory Guidance"
-        )[0];
-
-        if (subregulatoryGuidance) {
-            this.categories = subregulatoryGuidance.subcategories
-                .map((cat) => `&categories=${cat.id}`)
-                .join("");
-        }
+    homeUrl: {
+        type: String,
+        required: false,
+        default: "/",
     },
+});
 
-    data() {
-        return {
-            tab: 0,
-            categories: null,
-        };
-    },
+const categoriesResults = useCategories({ apiUrl: props.apiUrl });
 
-    components: {
-        RecentChangesContainer,
-    },
-};
+const tab = ref(0);
+const categories = ref(null);
+
+watchEffect(() => {
+    const subregulatoryGuidance = categoriesResults.value.data.filter(
+        (cat) => cat.name === "Subregulatory Guidance"
+    )[0];
+
+    if (subregulatoryGuidance) {
+        categories.value = subregulatoryGuidance.subcategories
+            .map((cat) => `&categories=${cat.id}`)
+            .join("");
+    }
+});
 </script>
 
 <template>
@@ -59,7 +48,11 @@ export default {
         </v-tabs>
         <v-window v-model="tab">
             <v-window-item>
+                <div v-if="!categories" class="rules-container">
+                    <SimpleSpinner />
+                </div>
                 <RecentChangesContainer
+                    v-else
                     :api-url="apiUrl"
                     :home-url="homeUrl"
                     :categories="categories"

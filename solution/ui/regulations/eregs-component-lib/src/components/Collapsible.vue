@@ -1,3 +1,132 @@
+<script setup>
+import { ref, onMounted, onUnmounted } from "vue";
+import eventbus from "../eventbus";
+
+const props = defineProps({
+    name: {
+        type: String,
+        required: true,
+    },
+    state: {
+        //expanded or collapsed
+        type: String,
+        required: true,
+    },
+    transition: {
+        type: String,
+        required: false,
+        default: "0.5s",
+    },
+    overflow: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+});
+
+const target = ref(null);
+const dataName = ref(props.name);
+const height = ref("auto");
+const visible = ref(false);
+const styles = {
+    transition: props.transition,
+    overflow: "hidden",
+};
+
+const resize = () => {
+    computeHeight();
+};
+
+const toggleDisplay = () => {
+    if (visible.value) {
+        if (target.value) {
+            target.value.style.height = "auto";
+            if (props.state === "collapsed" && props.overflow) {
+                target.value.style.overflow = "visible";
+            }
+        }
+    } else if (target.value) {
+        target.value.classList.add("display-none");
+        target.value.style.overflow = "hidden";
+    }
+};
+
+const toggle = (targetName) => {
+    if (dataName.value === targetName) {
+        if (target.value) {
+            target.value.classList.remove("display-none");
+            target.value.style.overflow = "hidden";
+        }
+        requestAnimationFrame(() => {
+            computeHeight();
+            requestAnimationFrame(() => {
+                visible.value = !visible.value;
+            });
+        });
+    }
+};
+
+const getStyle = () => {
+    if (target.value) {
+        return window.getComputedStyle(target.value);
+    }
+    return "auto";
+};
+
+const setProps = (visibility, display, position, heightValue) => {
+    if (target.value) {
+        target.value.style.visibility = visibility;
+        target.value.style.display = display;
+        target.value.style.position = position;
+        target.value.style.height = heightValue;
+    }
+};
+
+const computeHeightInternal = () => {
+    if (getStyle().display === "none") {
+        return "auto";
+    }
+
+    if (target.value) {
+        target.value.classList.remove("invisible");
+        setProps("hidden", "block", "absolute", "auto");
+    }
+
+    const heightValue = getStyle().height;
+
+    if (target.value) {
+        setProps(null, null, null, heightValue);
+    }
+
+    if (!visible.value && target.value) {
+        target.value.classList.add("invisible");
+    }
+    return heightValue;
+};
+
+const computeHeight = () => {
+    height.value = computeHeightInternal();
+};
+
+onMounted(() => {
+    requestAnimationFrame(() => {
+        visible.value = props.state === "expanded";
+        if (!visible.value && target.value) {
+            target.value.classList.add("display-none");
+        }
+    });
+    eventbus.on("collapse-toggle", toggle);
+    window.addEventListener("resize", resize);
+    window.addEventListener("transitionend", toggleDisplay);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("resize", resize);
+    window.removeEventListener("transitionend", toggleDisplay);
+    eventbus.off("collapse-toggle", toggle);
+});
+</script>
+
 <template>
     <div
         ref="target"
@@ -8,132 +137,3 @@
         <slot />
     </div>
 </template>
-
-<script>
-import eventbus from "../eventbus";
-
-export default {
-    name: "Collapsible",
-
-    created: function () {
-        requestAnimationFrame(() => {
-            this.visible = this.state === "expanded";
-            if (!this.visible) {
-                this.$refs.target?.classList?.add("display-none");
-            }
-        });
-        eventbus.on("collapse-toggle", this.toggle);
-    },
-
-    mounted: function () {
-        window.addEventListener("resize", this.resize);
-        window.addEventListener("transitionend", this.toggleDisplay);
-    },
-
-    unmounted: function () {
-        window.removeEventListener("resize", this.resize);
-        window.removeEventListener("transitionend", this.toggleDisplay);
-    },
-
-    props: {
-        name: {
-            type: String,
-            required: true,
-        },
-        state: {
-            //expanded or collapsed
-            type: String,
-            required: true,
-        },
-        transition: {
-            type: String,
-            required: false,
-            default: "0.5s",
-        },
-        overflow: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-    },
-
-    data: function () {
-        return {
-            dataName: this.name,
-            height: "auto",
-            visible: false,
-            styles: {
-                transition: this.transition,
-                overflow: "hidden",
-            },
-        };
-    },
-
-    methods: {
-        resize: function () {
-            this.computeHeight();
-        },
-        toggleDisplay: function () {
-            if (this.visible) {
-                this.$refs.target.style.height = "auto";
-                if (this.state === "collapsed" && this.overflow) {
-                    this.$refs.target.style.overflow = "visible";
-                }
-            } else if (this.$refs.target) {
-                this.$refs.target.classList.add("display-none");
-                this.$refs.target.style.oveflow = "hidden";
-            }
-        },
-        toggle: function (target) {
-            if (this.dataName === target) {
-                if (this.$refs.target) {
-                    this.$refs.target.classList.remove("display-none");
-                    this.$refs.target.style.overflow = "hidden";
-                }
-                requestAnimationFrame(() => {
-                    this.computeHeight();
-                    requestAnimationFrame(() => {
-                        this.visible = !this.visible;
-                    });
-                });
-            }
-        },
-        getStyle: function () {
-            if (this.$refs.target) {
-                return window.getComputedStyle(this.$refs.target);
-            }
-            return "auto";
-        },
-        setProps: function (visibility, display, position, height) {
-            this.$refs.target.style.visibility = visibility;
-            this.$refs.target.style.display = display;
-            this.$refs.target.style.position = position;
-            this.$refs.target.style.height = height;
-        },
-        computeHeightInternal: function () {
-            if (this.getStyle().display === "none") {
-                return "auto";
-            }
-
-            if (this.$refs.target) {
-                this.$refs.target.classList.remove("invisible");
-                this.setProps("hidden", "block", "absolute", "auto");
-            }
-
-            const height = this.getStyle().height;
-
-            if (this.$refs.target) {
-                this.setProps(null, null, null, height);
-            }
-
-            if (!this.visible && this.$refs.target) {
-                this.$refs.target.classList.add("invisible");
-            }
-            return height;
-        },
-        computeHeight: function () {
-            this.height = this.computeHeightInternal();
-        },
-    },
-};
-</script>
