@@ -120,6 +120,7 @@ async function main() {
       env,
       lambdaConfig: {
         timeout: 900,
+        memorySize: 1024,
       },
       environmentConfig: {
         logLevel,
@@ -132,6 +133,7 @@ async function main() {
       env,
       lambdaConfig: {
         timeout: 900,
+        memorySize: 1024,
       },
       environmentConfig: {
         logLevel,
