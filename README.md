@@ -85,6 +85,9 @@ Before running the tests for the first time, you may need to install Cypress dep
 2. `cd solutions/ui/e2e`
 3. `npm install`
 
+> [!NOTE]
+> If the Cypress install process fails or hangs for an unreasonably long time, refer to the ["Troubleshoot installation" section of the Cypress installation guide](https://docs.cypress.io/app/references/advanced-installation#Troubleshoot-installation) and follow the instructions for the npm package manager.
+
 #### Running the tests
 
 1. Navigate to project root
