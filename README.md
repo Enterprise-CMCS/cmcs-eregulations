@@ -6,25 +6,23 @@
 
 # About
 
-This is a project for the Center for Medicaid and CHIP Services (CMCS) to meet needs of CMCS and State staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
+This is a project for the Center for Medicaid and CHIP Services (CMCS) to meet needs of staff researching regulations and related guidance, building on the [eRegulations](https://eregs.github.io/) open source project.
 
 We have public documentation about our product, design, and research processes in [this repository wiki](https://github.com/Enterprise-CMCS/cmcs-eregulations/wiki).
 
-# Getting set up
+# Local setup
 
 ## Prerequisites
 
--   Docker
--   Docker Compose
--   go version 1.16
+You need these to get started:
+
 -   git
--   node >= v18 (We suggest using [nvm](https://github.com/nvm-sh/nvm))
--   pre-commit hooks
--   PostgreSQL 15
+-   Docker, including Docker Compose (install [Docker Desktop](https://docs.docker.com/desktop/))
+-   Python 3.12 (consider using [Homebrew](https://docs.brew.sh/Homebrew-and-Python))
+-   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v20, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
+-   [go](https://go.dev/dl/) version 1.16
+-   **Prevent security incidents:** To stop yourself from accidentally pushing secrets to GitHub, you must set up pre-commit hooks in your local environment: [SECRETSCANNING.md](SECRETSCANNING.md#quick-start).
 
-### Set up Git pre-commit hooks
-
-See "Quick Start" in [SECRETSCANNING.md](SECRETSCANNING.md#quick-start) to ensure that pre-commit hooks are installed and working properly.
 
 ## Get the code
 
@@ -38,63 +36,46 @@ Or if using SSH keys:
 git clone git@github.com:Enterprise-CMCS/cmcs-eregulations.git
 ```
 
-## Create your Dockerfile
-
-- Create the Dockerfile
+## Create the Dockerfile
 
 ```
 cd solution
 cp Dockerfile.template Dockerfile
 ```
 
-- Update the Dockerfile with correct environment variables values
+The Dockerfile has several environment variables. For local development, you can leave them blank to use default values.
 
-## Running eRegs
+## Run the application
 
-A lot of tasks for local development can be accessed through the Makefile.
-Running `make` will provide some information about the available tasks.
-
-For example:
+To start a local Docker environment and load a few parts of 42 CFR and 45 CFR:
 
 ```
 cd solution
 make local
 ```
 
-## Create static assets
-
-Running this will create all the static assets so that the admin page
-has the proper CSS files to display properly.
+Create static assets to give the site the proper CSS files, including the admin panel:
 
 ```
 cd solution
 make local.collectstatic
 ```
 
-Will start a local Docker environment and load parts of Title 42 into it.
-
 Proceed to <http://localhost:8000> in your browser to see the results.
 
-`make local.createadmin` will create an admin superuser for the admin portion of the site.
+Run `make watch-all` to automatically compile your local changes to SCSS and JS so that you can see them in your browser.
 
-Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step.
+Run `make local.createadmin` to create an admin superuser for the admin portion of the site. Proceed to <http://localhost:8000/admin> to access the admin portion and login with the credentials you created in the previous step.
 
-`make local.seed` will load data from the fixtures folder setting up a usable amount of data for local use.  
-This data is not maintained and should not be relied on for any purpose other than development.
+You can run `make` to learn about other available tasks. For example:
+
+`make local.seed` will load data from the fixtures folder, setting up some sample data for local use. This data is not maintained and should not be relied on for any purpose other than development.
 
 `make local.stop` will cause the running Docker processes to stop without losing data.
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
 
-## Update CSS for admin site
-
-To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.  
-
-To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solution/static-assets/css/admin` directory.
-
-You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
-
-## Testing eRegs
+## Run tests
 
 #### Testing setup
 
@@ -104,6 +85,9 @@ Before running the tests for the first time, you may need to install Cypress dep
 2. `cd solutions/ui/e2e`
 3. `npm install`
 
+> [!NOTE]
+> If the Cypress install process fails or hangs for an unreasonably long time, refer to the ["Troubleshoot installation" section of the Cypress installation guide](https://docs.cypress.io/app/references/advanced-installation#Troubleshoot-installation) and follow the instructions for the npm package manager.
+
 #### Running the tests
 
 1. Navigate to project root
@@ -112,45 +96,27 @@ Before running the tests for the first time, you may need to install Cypress dep
 4. For Python unit tests, run `make test.pytest`. This will run our Python unittest using pytest.
 5. For Vitest run `make test.vitest`.  This will run our Vitest suite.
 
-## Linting and Formatting
+## Run linters
 
 #### ESLint
 
-This project utilizes ESLint to maintain high code quality and enforce consistent coding styles across both the frontend (JavaScript) and infrastructure (TypeScript) components.  ESLint helps identify potential issues early, improving code readability and reducing the likelihood of runtime errors.
-
-We leverage a shared ESLint configuration (`eslint-global-rules.mjs` file) at the project root to define a baseline of rules applicable to both the frontend and infrastructure code. This promotes consistency in fundamental coding practices across the entire project.
-
-Each application (frontend and CDK) also maintains its own dedicated ESLint configuration file. This allows us to tailor rules and plugins specifically to the nuances of JavaScript and TypeScript, respectively, while still adhering to the core shared principles.  This approach ensures that each part of the project benefits from the appropriate linting rules for its language and context.
+This project uses ESLint to enforce consistent coding styles across the frontend (JavaScript) and infrastructure (TypeScript) components, improving code readability and reducing the likelihood of runtime errors. We use a shared ESLint configuration (`eslint-global-rules.mjs` file) at the project root to define a baseline of rules applicable to both the frontend and infrastructure code. Each application (frontend and CDK) also maintains its own ESLint configuration file, to allow tailoring rules and plugins to JavaScript and TypeScript.
 
 To run ESLint, execute the following commands from the project root:
 
 ```
-// lint the frontend JS
 make eslint-frontend
 
-// lint CDK TS
 make eslint-cdk
 ```
 
-For more information on ESLint, as well as resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
+For more information and resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
 
-## Working with assets
+# Development tips
 
-Navigate to project root.
+## Export and import data
 
-`make watch-all`: SCSS and JS files can be watched and automatically compiled.
-
-For admin site customizations, please use the icon set at [Boxicons](https://boxicons.com).
-
-## Importing resource data
-
-See the [Exporting data from production](#exporting-data-from-production) section of the README below to get a copy of the data.
-
-## Exporting data from production
-
-If the data seems out of sync with production, you may want to get a more recent version of the data from production.
-
-In order to update your local data with the most recent version of production, you will need to have access to our production database, pg_dump, and access to the CMS VPN.
+To update local data with the most recent version of production, you need access to the production database and pg_dump. You can also use these instructions to update dev or val data with fresh data from production.
 
 1. You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). Local PostgreSQL server must be turned **off**.
 2. Ensure you have [AWS CLI](#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed locally on your machine.
@@ -182,8 +148,7 @@ In order to update your local data with the most recent version of production, y
 
    - Visit the local website and ensure that the data has been copied. 
 
-
-## Adding a new model
+## Add a new model
 
 If adding a new model, update the following files:
 
@@ -191,7 +156,17 @@ If adding a new model, update the following files:
 - In the make file, either add it to the list of objects, or add a new line for the model.
 - In the emptyseedtables.py add the model to the handler command.
 
-## Working with CMS Single-Sign-On
+## Update CSS for admin site
+
+To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.  
+
+To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solution/static-assets/css/admin` directory.
+
+You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
+
+For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
+
+## Working with Single-Sign-On
 
 ### Setting local to use CMS SSO (IDM)
 Update your Dockerfile with the following environment variables:
@@ -207,22 +182,14 @@ ENV EUA_FEATUREFLAG=<set to 'true' if you want to see the eua link on admin logi
 These values can be found on AWS Parameter Store.
 
 ### Register to test IDP IDM
-- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the CMS IDP (Identity Provider) portal.
+- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the IDP (Identity Provider) portal.
 - Set up Multi-Factor Authentication (MFA) for your account. Follow the provided prompts and instructions to complete the MFA setup process.
 - Once your account has been successfully set up with MFA, please notify the CMS Okta team.
-- Inform the CMS Okta team that you need to be added to the eRegs group.
+- Inform the Okta team that you need to be added to the eRegs group.
 
-Please note that the provided URL (https://test.idp.idm.cms.gov/) may require a valid CMS IDP account to access.
-
-### Troubleshooting tips
+### Troubleshooting
 - Issue: Setting OIDC_OP_AUTHORIZATION_ENDPOINT not found
   This error indicates that the environment variables are not properly set.
 - Solution:
   - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
-  - On dev, val, prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store. 
-
-## Serverless set up
-We use serverless in conjunction with GitHub Actions to deploy our application to our various environments.
-
-### Functions
-To allow us to deploy our application to various environments and prohibit certain Lambda functions to be deployed to different environments, we split our Lambda functions out into a specific folder.  In backend/serverless_functions there is a different YML file for each environment.  When you want to add a Lambda function to each environment, add the function the corresponding environment folder.
+  - On dev, val, prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store.
