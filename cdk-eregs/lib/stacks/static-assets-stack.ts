@@ -5,6 +5,8 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as wafv2 from 'aws-cdk-lib/aws-wafv2';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as ssm from 'aws-cdk-lib/aws-ssm';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as path from 'path';
 import { StageConfig } from '../../config/stage-config';
 
@@ -50,12 +52,34 @@ export class StaticAssetsStack extends cdk.Stack {
     super(scope, id, props);
 
     this.stageConfig = stageConfig;
-    this.validateCertificateConfig(props);
+
+    // Get certificate ARN from SSM if not provided in props
+    let certificateArn = props.certificateArn;
+    if (!certificateArn) {
+      certificateArn = ssm.StringParameter.valueFromLookup(this, '/eregulations/acm-cert-arn');
+      
+      if (certificateArn.startsWith('dummy-value-for-') || !certificateArn.startsWith('arn:aws:')) {
+        // Use any valid ARN placeholder temporarily during synthesis
+        certificateArn = 'arn:aws:acm:us-east-1:123456789012:certificate/dummy-placeholder';
+        console.log('Using placeholder certificate ARN during synthesis');
+      } else {
+        console.log(`Using certificate ARN from SSM: ${certificateArn}`);
+      }
+    }
+
+    // Pass the resolved certificate ARN to validation
+    this.validateCertificateConfig({
+      ...props,
+      certificateArn
+    });
 
     this.assetsBucket = this.createAssetsBucket();
     this.loggingBucket = this.createLoggingBucket();
     const waf = this.createWebACL();
-    this.distribution = this.createCloudFrontDistribution(waf, props);
+    this.distribution = this.createCloudFrontDistribution(waf, {
+      ...props,
+      certificateArn
+    });
 
     this.deployStaticAssets();
     this.addStackOutputs();
@@ -158,7 +182,8 @@ export class StaticAssetsStack extends cdk.Stack {
     waf: wafv2.CfnWebACL,
     props: StaticAssetsStackProps
   ): cloudfront.Distribution {
-    return new cloudfront.Distribution(this, 'CloudFrontDistribution', {
+    // Distribution configuration options
+    let distributionProps: cloudfront.DistributionProps = {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(this.assetsBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
@@ -176,7 +201,7 @@ export class StaticAssetsStack extends cdk.Stack {
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      domainNames: props.certificateArn ? [] : undefined,
+      // domainNames: props.certificateArn ? [] : undefined,
       errorResponses: [
         {
           httpStatus: 404,
@@ -185,7 +210,28 @@ export class StaticAssetsStack extends cdk.Stack {
           ttl: cdk.Duration.minutes(30),
         },
       ],
-    });
+    };
+
+    // Add certificate and domain configuration if certificate is available
+    if (props.certificateArn) {
+      // Create certificate reference
+      const certificate = acm.Certificate.fromCertificateArn(
+        this, 
+        'Certificate', 
+        props.certificateArn
+      );
+      
+      // Include certificate in initial props
+      distributionProps = {
+        ...distributionProps,
+        certificate,
+        minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        // Add domain names if needed - uncomment and modify as required
+        // domainNames: ['example.com'],
+      };
+    }
+    
+    return new cloudfront.Distribution(this, 'CloudFrontDistribution', distributionProps);
   }
 
   /**
