@@ -224,9 +224,9 @@
                         40px
                 );
 
-                @include screen-sm {
+                @include screen-md {
                     width: calc(100% - var(--spacer-1) - var(--spacer-1));
-                    max-width: 435px;
+                    max-width: 440px;
                 }
 
                 .gov-info-links {
@@ -240,16 +240,11 @@
                     }
 
                     .links-container {
-                        height: 280px;
                         display: flex;
                         flex-wrap: wrap;
-                        flex-direction: column;
+                        flex-direction: row;
                         padding: 10px 10px 0;
                         box-sizing: content-box;
-
-                        @include screen-sm {
-                            height: 180px;
-                        }
 
                         a {
                             font-size: 14px;
