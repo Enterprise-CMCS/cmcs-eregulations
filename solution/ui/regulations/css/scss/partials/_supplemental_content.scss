@@ -94,6 +94,10 @@
 
     .recent-date {
         font-weight: bold;
+
+        &--bar {
+            @include recent-date-pipe;
+        }
     }
 
     .recent-fr-citation {

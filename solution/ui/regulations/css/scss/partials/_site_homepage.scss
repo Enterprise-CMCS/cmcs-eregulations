@@ -511,9 +511,7 @@
                         font-weight: 400;
 
                         &--bar {
-                            padding-right: var(--spacer-1);
-                            margin-right: var(--spacer-1);
-                            border-right: 1px solid $mid_gray;
+                            @include recent-date-pipe;
                         }
                     }
 
