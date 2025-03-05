@@ -13,6 +13,8 @@ import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
 
 interface LambdaConfig {
+  /** Memory allocation in MB for the Lambda function */
+  memorySize: number;
   timeout: number;
 }
 
@@ -50,6 +52,7 @@ export class FrParserStack extends cdk.Stack {
         file: 'fr-parser/Dockerfile',
       }),
       timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
+      memorySize: props.lambdaConfig.memorySize,
       environment: {
         PARSER_ON_LAMBDA: 'true',
         EREGS_USERNAME: props.environmentConfig.httpUser,
