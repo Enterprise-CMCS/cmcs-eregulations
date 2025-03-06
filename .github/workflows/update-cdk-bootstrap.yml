@@ -47,7 +47,7 @@ jobs:
           pushd cdk-eregs/bootstrap
 
           echo "Downloading latest bootstrap template..."
-          curl -s "https://raw.githubusercontent.com/aws/aws-cdk/refs/heads/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml" -o latest-template.yaml > /dev/null
+          curl -s "https://raw.githubusercontent.com/aws/aws-cdk-cli/refs/heads/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml" -o latest-template.yaml > /dev/null
 
           echo "Applying CMS-specific changes to the template..."
           pip install -r requirements.txt
