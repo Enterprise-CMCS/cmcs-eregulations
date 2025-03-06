@@ -132,7 +132,7 @@ jobs:
           state: open
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -477,7 +477,7 @@ jobs:
           withDecryption: "true" # defaults to true
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
       # Run the cypress tests
