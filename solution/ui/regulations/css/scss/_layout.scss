@@ -85,6 +85,10 @@ aside {
         background: $reverse_background_color;
         padding: 0;
         flex-shrink: 0;
+
+        &:focus {
+            background: $reverse_background_color;
+        }
     }
 
     &.right-sidebar {
