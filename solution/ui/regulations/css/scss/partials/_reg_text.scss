@@ -428,17 +428,18 @@ article {
     max-width: 90%;
 }
 
-.btn{
+.btn {
     background-color: $mid_blue;
     color: white;
     border-radius: 3px;
     padding: 9px 10px 10px;
     border: none;
     cursor: pointer;
-    line-height: 11px
+    gap: 3px;
+    line-height: 12px;
 }
 
-.btn.inverted{
+.btn.inverted {
     color: $mid_blue;
     border: $mid_blue 2px solid;
     background-color: white;
@@ -447,14 +448,14 @@ article {
     line-height: 20px;
     text-align: center;
 }
-.btn.disabled{
+.btn.disabled {
     background-color: #D6D7D9;
     color: $dark_gray;
 }
-.bold{
+.bold {
     font-weight: 600;
     font-size: 14px;
 }
-.bold.disabled{
+.bold.disabled {
     color: $mid_gray_3;
 }
