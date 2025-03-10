@@ -1,15 +1,17 @@
+import os
 from urllib.parse import urljoin
 
 
 def handler(event, context):
     original_path = event['path']
-    new_domain = 'https://eregulations.cms.gov'
-    new_url = urljoin(new_domain, original_path)
+
+    # Not using "get" because we want to fail if the environment variable is not set
+    new_domain = os.environ["CUSTOM_URL"]
 
     response = {
         'statusCode': 302,
         'headers': {
-            'Location': new_url,
+            'Location': urljoin(new_domain, original_path),
         },
     }
 

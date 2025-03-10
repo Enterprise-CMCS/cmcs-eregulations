@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from django.conf import settings
 from django.urls import reverse
 
@@ -14,14 +16,13 @@ def is_admin_user(request):
     }
 
 
-def custom_url(request):
-    custom_url = settings.CUSTOM_URL
-    host = request.get_host()
-
-    if host == 'eregulations.cms.gov':
-        custom_url = host
-
-    return {'CUSTOM_URL': custom_url}
+def site_root(request):
+    url = urlparse(request.get_full_path())
+    path_parts = url.path.split("/")
+    site_root = None
+    if len(path_parts) > 1 and url.netloc.endswith(".amazonaws.com"):
+        site_root = path_parts[1]
+    return {"SITE_ROOT": f"/{site_root or ''}"}
 
 
 def survey_url(request):

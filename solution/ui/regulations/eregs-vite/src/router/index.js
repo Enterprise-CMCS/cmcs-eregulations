@@ -22,13 +22,9 @@ const routes = [
     },
 ];
 
-const router = ({ customUrl = "", host = "" }) =>
+const router = ({ siteRoot = "/" }) =>
     createRouter({
-        history: createWebHistory(
-            import.meta.env.VITE_ENV === "prod" && host === customUrl
-                ? "/"
-                : import.meta.env.VITE_ENV || "/"
-        ),
+        history: createWebHistory(siteRoot),
         routes,
         scrollBehavior(to) {
             if (to.hash) {
