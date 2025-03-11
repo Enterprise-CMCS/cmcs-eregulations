@@ -18,7 +18,7 @@
     >
         <button
             v-if="count !== '0'"
-            class="btn"
+            class="btn default-btn"
             @click="clickHandler"
         >
             <span class="bold">View {{ section }} resources</span>
