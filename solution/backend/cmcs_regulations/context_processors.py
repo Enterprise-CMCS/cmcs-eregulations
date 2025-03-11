@@ -17,7 +17,7 @@ def is_admin_user(request):
 
 
 def site_root(request):
-    url = urlparse(request.get_full_path())
+    url = urlparse(request.build_absolute_uri())
     path_parts = url.path.split("/")
     site_root = None
     if len(path_parts) > 1 and url.netloc.endswith(".amazonaws.com"):
