@@ -5,7 +5,7 @@ import django
 from django.db import connections
 from django.db.utils import ProgrammingError
 
-TIMEOUT_MINUTES = 3
+TIMEOUT_MINUTES = 15
 
 
 def handler(event, context):

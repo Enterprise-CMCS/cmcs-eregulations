@@ -19,10 +19,10 @@ def is_admin_user(request):
 def site_root(request):
     url = urlparse(request.build_absolute_uri())
     path_parts = url.path.split("/")
-    site_root = None
+    site_root = ""
     if len(path_parts) > 1 and url.netloc.endswith(".amazonaws.com"):
         site_root = path_parts[1]
-    return {"SITE_ROOT": f"/{site_root or ''}"}
+    return {"SITE_ROOT": f"/{site_root}"}
 
 
 def survey_url(request):
