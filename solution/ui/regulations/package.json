@@ -44,7 +44,7 @@
     "msw": "^2.6.2",
     "sass-loader": "^13.0.2",
     "vite": "^6.2.1",
-    "vitest": "^3.0.7",
+    "vitest": "^3.0.8",
     "vue-eslint-parser": "^10.1.1",
     "webpack": "^5.94.0",
     "whatwg-fetch": "^3.6.2"
