@@ -367,6 +367,10 @@ article {
         font-size: var(--font-size-sm);
         line-height: 1.4;
 
+        &:has(+ .view-resources-link) {
+            margin-bottom: var(--spacer-2);
+        }
+
         @include screen-xl {
             font-size: var(--font-size-md);
             line-height: 1.5;
