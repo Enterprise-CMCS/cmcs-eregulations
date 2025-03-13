@@ -256,7 +256,7 @@ export class BackendStack extends cdk.Stack {
       gaId: ssm.StringParameter.valueForStringParameter(this, '/eregulations/http/google_analytics'),
       djangoSettingsModule: ssm.StringParameter.valueForStringParameter(this, '/eregulations/django_settings_module'),
       baseUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/base_url'),
-      customUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/custom_url'),
+      customUrl: stageConfig.stageName === "prod" ? ssm.StringParameter.valueForStringParameter(this, '/eregulations/custom_url') : "",
       surveyUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/survey_url'),
       signupUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/signup_url'),
       demoVideoUrl: ssm.StringParameter.valueForStringParameter(this, '/eregulations/demo_video_url'),
