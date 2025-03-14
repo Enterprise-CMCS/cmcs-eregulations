@@ -27,6 +27,7 @@ import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
+import SortDropdown from "@/components/dropdowns/Sort.vue";
 import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
 const accessUrl = inject("accessUrl");
@@ -409,6 +410,12 @@ getDocsOnLoad();
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
                     >
+                        <template #filters>
+                            <div class="sort__div">
+                                <span class="sort__label">Sort by</span>
+                                <SortDropdown />
+                            </div>
+                        </template>
                         <template #sign-in-cta>
                             <SignInCTA
                                 v-if="!isAuthenticated"
