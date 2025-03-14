@@ -27,6 +27,7 @@ import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchInput from "@/components/SearchInput.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
+import SortDropdown from "@/components/dropdowns/Sort.vue";
 import SubjectsDropdown from "@/components/dropdowns/Subjects.vue";
 
 const accessUrl = inject("accessUrl");
@@ -246,6 +247,7 @@ watch(
         const newRequestParams = getRequestParams({
             queryParams: newQueryParams,
         });
+
         getDocList({
             apiUrl,
             pageSize,
@@ -351,6 +353,10 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
+                <div class="sort__div">
+                    <span class="sort__label">Sort by</span>
+                    <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
+                </div>
                 <template v-if="!searchQuery" />
                 <template
                     v-else-if="

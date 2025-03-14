@@ -12,14 +12,18 @@ defineProps({
         type: Boolean,
         default: false,
     },
+    clearable: {
+        type: Boolean,
+        default: true,
+    },
 });
 </script>
 
 <template>
     <v-select
         class="filter__select"
+        :clearable="clearable"
         variant="outlined"
-        clearable
         persistent-clear
         single-line
         hide-details
