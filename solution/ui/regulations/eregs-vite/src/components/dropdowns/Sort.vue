@@ -19,6 +19,8 @@ const props = defineProps({
 const $route = useRoute();
 const $router = useRouter();
 
+const selectedSortMethod = defineModel({ default: "default", type: String });
+
 const sortOptions = [
     { method: "default", label: "Relevance" },
     { method: "desc", label: "Newest" },
@@ -29,12 +31,14 @@ const sortOptions = [
 
 <template>
     <GenericDropdown
+        v-model="selectedSortMethod"
         class="filter__select--sort"
+        :clearable="false"
         data-testid="sort-select"
         :disabled="loading"
         :items="sortOptions"
-        :item-title="label"
-        :item-value="method"
+        item-title="label"
+        item-value="method"
     />
 </template>
 
