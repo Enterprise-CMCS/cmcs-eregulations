@@ -352,6 +352,10 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
+                <div class="sort__div">
+                    <span class="sort__label">Sort by</span>
+                    <SortDropdown />
+                </div>
                 <template v-if="!searchQuery" />
                 <template
                     v-else-if="
@@ -410,12 +414,6 @@ getDocsOnLoad();
                         :search-query="searchQuery"
                         :selected-subject-parts="selectedSubjectParts"
                     >
-                        <template #filters>
-                            <div class="sort__div">
-                                <span class="sort__label">Sort by</span>
-                                <SortDropdown />
-                            </div>
-                        </template>
                         <template #sign-in-cta>
                             <SignInCTA
                                 v-if="!isAuthenticated"
