@@ -40,6 +40,17 @@ watch(
 watch(
     selectedSortMethod,
     (newValue) => {
+        if (newValue === "default") {
+            $router.push({
+                name: "search",
+                query: {
+                    ...$route.query,
+                    sort: undefined,
+                },
+            });
+            return;
+        }
+
         $router.push({
             name: "search",
             query: {
