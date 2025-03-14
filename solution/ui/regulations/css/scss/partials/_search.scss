@@ -81,6 +81,21 @@
             &-count {
                 margin-bottom: var(--spacer-4);
 
+                .count__info-row {
+                    display: flex;
+                    justify-content: space-between;
+
+                    .sort__div {
+                        display: flex;
+                        align-items: center;
+                        gap: var(--spacer-1);
+
+                        .sort-label {
+                            font-weight: bold;
+                        }
+                    }
+                }
+
                 .login-cta__div--search-results {
                     margin-top: var(--spacer-2);
                 }

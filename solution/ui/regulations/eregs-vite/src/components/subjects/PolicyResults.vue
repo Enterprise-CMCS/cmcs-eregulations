@@ -23,6 +23,7 @@ import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.v
 import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
+import SortDropdown from "@/components/dropdowns/Sort.vue";
 import SubjectChips from "./SubjectChips.vue";
 
 const addSurroundingEllipses = (str) => {
@@ -226,10 +227,18 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 <template>
     <div class="doc__list">
         <div class="search-results-count">
-            <span v-if="results.length > 0">{{ currentPageResultsRange[0] }} -
-                {{ currentPageResultsRange[1] }} of</span>
-            {{ resultsCount }} <span v-if="searchQuery">result</span><span v-else>document</span>
-            <span v-if="results.length != 1">s</span>
+            <div class="count__info-row">
+                <div class="count__info">
+                    <span v-if="results.length > 0">{{ currentPageResultsRange[0] }} -
+                        {{ currentPageResultsRange[1] }} of</span>
+                    {{ resultsCount }} <span v-if="searchQuery">result</span><span v-else>document</span>
+                    <span v-if="results.length != 1">s</span>
+                </div>
+                <div class="sort__div">
+                    <span class="sort__label">Sort by</span>
+                    <SortDropdown />
+                </div>
+            </div>
             <slot name="sign-in-cta" />
         </div>
         <slot name="empty-state" />
