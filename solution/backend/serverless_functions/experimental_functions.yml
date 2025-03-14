@@ -38,7 +38,7 @@ create_database:
   environment:
     STAGE: ${self:custom.stage}
   handler: createdb.handler
-  timeout: 300
+  timeout: 900
   layers:
     - ${cf:cmcs-eregs-static-assets-${self:custom.stage}.PythonRequirementsLambdaLayerQualifiedArn}
 drop_database:
