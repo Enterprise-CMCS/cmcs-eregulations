@@ -247,6 +247,7 @@ watch(
         const newRequestParams = getRequestParams({
             queryParams: newQueryParams,
         });
+
         getDocList({
             apiUrl,
             pageSize,

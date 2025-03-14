@@ -36,6 +36,7 @@ const PARAM_MAP = {
     page: "page",
     categories: "categories",
     intcategories: "categories",
+    sort: "sort",
 };
 
 /**
@@ -48,6 +49,7 @@ const PARAM_MAP = {
  * @property {function} page - Validates that the page is a number
  * @property {function} categories - Validates that the category is a number
  * @property {function} intcategories - Validates that the internal category is a number
+ * @property {function} sort - Validates that the sort is either "asc" or "desc"
  */
 const PARAM_VALIDATION_DICT = {
     subjects: (subject) =>
@@ -64,6 +66,7 @@ const PARAM_VALIDATION_DICT = {
     page: (page) => !Number.isNaN(parseInt(page, 10)),
     categories: (category) => !Number.isNaN(parseInt(category, 10)),
     intcategories: (category) => !Number.isNaN(parseInt(category, 10)),
+    sort: (sort) => ["asc", "desc"].includes(sort),
 };
 
 /**
