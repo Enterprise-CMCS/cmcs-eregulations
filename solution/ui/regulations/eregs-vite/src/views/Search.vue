@@ -354,7 +354,7 @@ getDocsOnLoad();
             <section class="search-results">
                 <div class="sort__div">
                     <span class="sort__label">Sort by</span>
-                    <SortDropdown />
+                    <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
                 </div>
                 <template v-if="!searchQuery" />
                 <template

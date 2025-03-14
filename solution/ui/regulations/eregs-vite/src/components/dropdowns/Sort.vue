@@ -6,6 +6,10 @@ import { useRoute, useRouter } from "vue-router";
 import GenericDropdown from "./GenericDropdown.vue";
 
 defineProps({
+    loading: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const $route = useRoute();
@@ -57,6 +61,7 @@ watch(
         :items="sortOptions"
         item-title="label"
         item-value="method"
+        :disabled="loading"
     />
 </template>
 
