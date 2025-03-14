@@ -1,19 +1,11 @@
 <script setup>
-import { computed, ref } from "vue";
+import { watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
 import GenericDropdown from "./GenericDropdown.vue";
 
-const props = defineProps({
-    prop1: {
-        type: String,
-        required: true,
-    },
-    prop2: {
-        type: Object,
-        required: true,
-    },
+defineProps({
 });
 
 const $route = useRoute();
@@ -27,6 +19,33 @@ const sortOptions = [
     { method: "asc", label: "Oldest" },
 ];
 
+watch(
+    () => $route.query,
+    (queryParams) => {
+        const { sort } = queryParams;
+
+        if (sort) {
+            selectedSortMethod.value = sort;
+        } else {
+            selectedSortMethod.value = "default";
+        }
+    },
+    { immediate: true }
+);
+
+watch(
+    selectedSortMethod,
+    (newValue) => {
+        $router.push({
+            name: "search",
+            query: {
+                ...$route.query,
+                sort: newValue,
+            },
+        });
+    }
+)
+
 </script>
 
 <template>
@@ -35,7 +54,6 @@ const sortOptions = [
         class="filter__select--sort"
         :clearable="false"
         data-testid="sort-select"
-        :disabled="loading"
         :items="sortOptions"
         item-title="label"
         item-value="method"
