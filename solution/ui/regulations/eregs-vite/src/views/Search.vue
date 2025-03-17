@@ -353,7 +353,10 @@ getDocsOnLoad();
                 </fieldset>
             </section>
             <section class="search-results">
-                <div class="sort__div">
+                <div
+                    v-if="searchQuery && !policyDocList.error && policyDocList.results.length > 0"
+                    class="sort__div"
+                >
                     <span class="sort__label">Sort by</span>
                     <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
                 </div>
