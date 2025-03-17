@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from "vue";
+import { ref, watch } from "vue";
 
 import { useRoute, useRouter } from "vue-router";
 
@@ -17,21 +17,44 @@ const $router = useRouter();
 
 const selectedSortMethod = defineModel({ default: "default", type: String });
 
-const sortOptions = [
+const sortOptions = ref([
     { method: "default", label: "Relevance" },
     { method: "desc", label: "Newest" },
     { method: "asc", label: "Oldest" },
-];
+]);
+
+const itemProps = (item) => {
+    return {
+        title: item.label,
+        value: item.method,
+        disabled: item.disabled
+    };
+};
 
 watch(
     () => $route.query,
     (queryParams) => {
-        const { sort } = queryParams;
+        const { sort, type } = queryParams;
 
         if (sort) {
             selectedSortMethod.value = sort;
         } else {
             selectedSortMethod.value = "default";
+        }
+
+        // disable all but default sort method for regulations
+        if (type && type === "regulations") {
+            sortOptions.value
+                .filter((option) => option.method !== "default")
+                .forEach(option => {
+                    option.disabled = true;
+                });
+        } else {
+            sortOptions.value
+                .filter((option) => option.method !== "default")
+                .forEach(option => {
+                    option.disabled = false;
+                });
         }
     },
     { immediate: true }
@@ -69,11 +92,8 @@ watch(
         class="filter__select--sort"
         :clearable="false"
         data-testid="sort-select"
+        :item-props="itemProps"
         :items="sortOptions"
-        item-title="label"
-        item-value="method"
         :disabled="loading"
     />
 </template>
-
-<style></style>

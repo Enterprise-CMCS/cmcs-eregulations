@@ -64,7 +64,8 @@ const onCheckboxChange = (event) => {
         );
     }
 
-    // if only Regulations is checked, remove categories from route
+    // if only Regulations is checked,
+    // remove all other query params except q
     if (
         checkedBoxes.value.length === 1 &&
         checkedBoxes.value[0] === "regulations"
@@ -75,6 +76,7 @@ const onCheckboxChange = (event) => {
                 ...queryClone,
                 type: "regulations",
                 categories: undefined,
+                sort: undefined,
                 subjects: undefined,
                 page: undefined,
             },
