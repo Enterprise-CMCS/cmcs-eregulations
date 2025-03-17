@@ -5,6 +5,7 @@ import {
   aws_logs as logs,
   aws_lambda as lambda,
   aws_apigateway as apigateway,
+  aws_ssm as ssm,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -58,9 +59,10 @@ export class RedirectApiStack extends cdk.Stack {
     this.stageConfig = stageConfig;
 
     const apiConfig = { ...DEFAULT_API_CONFIG, ...props.apiConfig };
+    const customUrl = stageConfig.stageName === "prod" ? ssm.StringParameter.valueForStringParameter(this, '/eregulations/custom_url') : "";
 
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
-    this.lambdaFunction = this.createLambdaFunction(lambdaRole, logGroup, props.lambdaConfig);
+    this.lambdaFunction = this.createLambdaFunction(lambdaRole, customUrl, logGroup, props.lambdaConfig);
     this.api = this.createApiGateway(apiConfig);
     this.configureApiGateway();
     this.createStackOutputs();
@@ -101,6 +103,7 @@ export class RedirectApiStack extends cdk.Stack {
 
   private createLambdaFunction(
     role: iam.Role,
+    customUrl: string,
     logGroup: logs.LogGroup,
     config: LambdaConfig,
   ): lambda.Function {
@@ -110,13 +113,13 @@ export class RedirectApiStack extends cdk.Stack {
       runtime: config.runtime,
       handler: config.handler ?? 'redirect_lambda.handler',
       code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
-      
       memorySize: config.memorySize,
       timeout: cdk.Duration.seconds(config.timeout),
       role,
       environment: {
         STAGE: this.stageConfig.environment,
         APP_NAME: StageConfig.projectName,
+        CUSTOM_URL: customUrl,
       },
     });
   }
