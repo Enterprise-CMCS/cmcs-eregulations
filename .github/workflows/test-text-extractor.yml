@@ -27,10 +27,11 @@ jobs:
         with:
           python-version: "3.12"
 
-      # Install Python dependencies
-      - name: Install Python dependencies
+      # Install dependencies
+      - name: Install dependencies
         if: success()
         run: |
+          sudo apt-get install -y poppler-utils
           python -m pip install --upgrade pip
           pip install -r ./solution/text-extractor/requirements.txt
           
