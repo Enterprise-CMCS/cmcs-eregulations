@@ -1,4 +1,4 @@
-name: Parser Checks
+name: Lint & Unit Test Parsers
 
 on:
   pull_request:
