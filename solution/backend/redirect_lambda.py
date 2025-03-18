@@ -7,11 +7,12 @@ def handler(event, context):
 
     # Not using "get" because we want to fail if the environment variable is not set
     new_domain = os.environ["CUSTOM_URL"]
+    redirect_url = urljoin(f"https://{new_domain}", original_path)
 
     response = {
         'statusCode': 302,
         'headers': {
-            'Location': urljoin(new_domain, original_path),
+            'Location': redirect_url,
         },
     }
 
