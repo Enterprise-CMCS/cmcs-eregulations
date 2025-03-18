@@ -3,6 +3,7 @@ import {
   aws_wafv2 as wafv2,
   aws_logs as logs,
   aws_apigateway as apigw,
+  aws_iam as iam,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -23,6 +24,16 @@ export class WafConstruct extends Construct {
       retention: logs.RetentionDays.ONE_MONTH,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
+
+    // Add a resource policy to allow WAF to write logs
+    this.logGroup.addToResourcePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        principals: [new iam.ServicePrincipal('waf.amazonaws.com')],
+        actions: ['logs:CreateLogStream', 'logs:PutLogEvents'],
+        resources: [`${this.logGroup.logGroupArn}:*`],
+      }),
+    );
 
     // Create the WAFv2 Web ACL
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
