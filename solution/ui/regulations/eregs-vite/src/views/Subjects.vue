@@ -66,11 +66,7 @@ provide("FilterTypesDict", FilterTypesDict);
 // provide router query params to remove on child component change
 const commonRemoveList = ["page", "categories", "intcategories"];
 const policySelectionsRemoveList = ["subjects", "q"];
-const searchInputRemoveList = commonRemoveList.concat([
-    "q",
-    "type",
-    "categories",
-]);
+const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
 provide("commonRemoveList", commonRemoveList);
 provide("policySelectionsRemoveList", policySelectionsRemoveList);
@@ -103,7 +99,7 @@ const executeSearch = (payload) => {
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
-        removeList: ["p"],
+        removeList: searchInputRemoveList,
     });
 
     const redirectParams = new URLSearchParams(cleanedRoute);
