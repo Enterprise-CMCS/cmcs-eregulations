@@ -1,5 +1,7 @@
 <script setup>
-import { ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
+
+import useRemoveList from "composables/removeList";
 
 import { useRoute, useRouter } from "vue-router";
 
@@ -14,6 +16,10 @@ defineProps({
 
 const $route = useRoute();
 const $router = useRouter();
+
+// injected commonRemoveList contains "p" for page
+// and any other params specific to where this component is used
+const removeList = inject("commonRemoveList", []);
 
 const selectedSortMethod = defineModel({ default: "default", type: String });
 
@@ -63,11 +69,18 @@ watch(
 watch(
     selectedSortMethod,
     (newValue) => {
+        const routeClone = { ...$route.query };
+
+        const cleanedRoute = useRemoveList({
+            route: routeClone,
+            removeList,
+        });
+
         if (newValue === "default") {
             $router.push({
                 name: "search",
                 query: {
-                    ...$route.query,
+                    ...cleanedRoute,
                     sort: undefined,
                 },
             });
@@ -77,7 +90,7 @@ watch(
         $router.push({
             name: "search",
             query: {
-                ...$route.query,
+                ...cleanedRoute,
                 sort: newValue,
             },
         });
