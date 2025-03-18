@@ -198,7 +198,8 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
           --outputs-file static-outputs.json
-          popd    
+          popd
+
   deploy-text-extractor:
     if: github.event.action != 'closed'
     runs-on: ubuntu-22.04
@@ -338,6 +339,7 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+
   deploy-site-lambdas:
     needs: [deploy-static-assets, deploy-zip-lambdas, deploy-text-extractor]
     if: github.event.action != 'closed'

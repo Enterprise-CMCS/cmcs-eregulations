@@ -13,11 +13,11 @@ permissions:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-jobs:  
-  deploy-cdk:  
-    strategy:      
-      max-parallel: 1      
-      matrix:        
+jobs:
+  deploy-cdk:
+    strategy:
+      max-parallel: 1
+      matrix:
         environment: ["dev", "val", "prod"]
     environment:
       name: ${{ matrix.environment }}
@@ -194,6 +194,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
@@ -248,3 +249,21 @@ jobs:
           --app "npx ts-node bin/static-assets.ts" \
           --outputs-file static-outputs.json
           popd
+
+      - name: Get Cypress test user credentials
+        uses: dkershner6/aws-ssm-getparameters-action@v2
+        with:
+          parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
+            /eregulations/http/password = CYPRESS_TEST_PASSWORD,
+            /eregulations/http/reader_user = CYPRESS_READER_USERNAME,
+            /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
+          withDecryption: "true" # defaults to true
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: solution/ui/e2e
+          config: baseUrl=${{ steps.get-api-url.outputs.api_url }}
+        env:
+          CYPRESS_DEPLOYING: true
+          CYPRESS_TEST_ENV: ${{ matrix.environment }}
