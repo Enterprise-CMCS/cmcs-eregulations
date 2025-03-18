@@ -143,9 +143,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          mv ./solution/backend/requirements_tmp.txt ./solution/backend/requirements.txt
           python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
           pip install -r ./solution/backend/requirements.txt
 
       - name: Make envfile
