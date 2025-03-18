@@ -119,20 +119,21 @@ export class WafConstruct extends Construct {
     this.webAcl.node.addDependency(this.logGroup);
 
     // Format a clean ARN for WAF logging
-    const stack = cdk.Stack.of(this);
-    const logGroupArnForWAF = cdk.Arn.format(
-      {
-        service: 'logs',
-        resource: 'log-group',
-        resourceName: this.logGroup.logGroupName,
-        arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
-      },
-      stack,
-    );
+    // const stack = cdk.Stack.of(this);
+    // const logGroupArnForWAF = cdk.Arn.format(
+    //   {
+    //     service: 'logs',
+    //     resource: 'log-group',
+    //     resourceName: this.logGroup.logGroupName,
+    //     arnFormat: cdk.ArnFormat.COLON_RESOURCE_NAME,
+    //   },
+    //   stack,
+    // );
 
     // Create the WAF logging config
     const loggingConfig = new wafv2.CfnLoggingConfiguration(this, 'WafLogging', {
-      logDestinationConfigs: [logGroupArnForWAF],
+      //logDestinationConfigs: [logGroupArnForWAF],
+      logDestinationConfigs: [this.logGroup.logGroupArn],
       resourceArn: this.webAcl.attrArn,
     });
 
