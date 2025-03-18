@@ -103,7 +103,7 @@ const executeSearch = (payload) => {
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
-        removeList: searchInputRemoveList,
+        removeList: ["p"],
     });
 
     const redirectParams = new URLSearchParams(cleanedRoute);
