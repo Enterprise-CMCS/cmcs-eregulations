@@ -31,7 +31,7 @@ export class WafConstruct extends Construct {
         effect: iam.Effect.ALLOW,
         principals: [new iam.ServicePrincipal('waf.amazonaws.com')],
         actions: ['logs:CreateLogStream', 'logs:PutLogEvents'],
-        resources: [this.logGroup.logGroupArn], // Updated to remove wildcard ":*"
+        resources: [`${this.logGroup.logGroupArn}:*`],
       }),
     );
 
