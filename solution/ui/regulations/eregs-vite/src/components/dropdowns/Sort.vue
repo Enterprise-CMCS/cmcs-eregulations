@@ -19,8 +19,8 @@ const selectedSortMethod = defineModel({ default: "default", type: String });
 
 const sortOptions = ref([
     { method: "default", label: "Relevance" },
-    { method: "desc", label: "Newest" },
-    { method: "asc", label: "Oldest" },
+    { method: "-date", label: "Newest" },
+    { method: "date", label: "Oldest" },
 ]);
 
 const itemProps = (item) => {
