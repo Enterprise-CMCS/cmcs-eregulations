@@ -1,3 +1,4 @@
+pytest
 requests
 boto3
 moto

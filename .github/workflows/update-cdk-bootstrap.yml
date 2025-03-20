@@ -1,8 +1,7 @@
 name: Update CDK Bootstrap
 
 on:
-  schedule:
-    - cron: '0 0 * * 1' # Runs every Monday 
+  workflow_dispatch:
 
 permissions:
   id-token: write
