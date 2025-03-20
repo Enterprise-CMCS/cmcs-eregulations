@@ -53,7 +53,7 @@ def get_secret_from_aws(secret_name: str) -> dict:
     import boto3
     from botocore.exceptions import ClientError
 
-    logger.info("Retrieving secret from AWS Secrets Manager.", secret_name)
+    logger.info("Retrieving secret from AWS Secrets Manager.")
 
     client = boto3.client("secretsmanager")
     try:
