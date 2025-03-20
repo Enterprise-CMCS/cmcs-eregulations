@@ -29,10 +29,8 @@ interface LambdaConfig {
 interface EnvironmentConfig {
   /** Log level for the Lambda function (e.g., DEBUG, INFO) */
   logLevel: string;
-  /** HTTP basic auth username for API authentication */
-  httpUser: string;
-  /** HTTP basic auth password for API authentication */
-  httpPassword: string;
+  /** Name of secret for authentication **/
+  secretName: string;
 }
 
 /**
@@ -126,8 +124,7 @@ export class TextExtractorStack extends cdk.Stack {
       reservedConcurrentExecutions: config.reservedConcurrentExecutions,
       environment: {
         LOG_LEVEL: envConfig.logLevel,
-        HTTP_AUTH_USER: envConfig.httpUser,
-        HTTP_AUTH_PASSWORD: envConfig.httpPassword,
+        SECRET_NAME: envConfig.secretName,
       },
       role,
     });

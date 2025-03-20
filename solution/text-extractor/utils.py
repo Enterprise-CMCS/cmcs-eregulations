@@ -48,8 +48,25 @@ def clean_output(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def get_secret_from_aws(secret_name: str) -> dict:
+    import boto3
+    from botocore.exceptions import ClientError
+
+    logger.info("Retrieving secret '%s' from AWS Secrets Manager.", secret_name)
+
+    client = boto3.client("secretsmanager")
+    try:
+        response = client.get_secret_value(SecretId=secret_name)
+    except ClientError as e:
+        logger.error("Failed to retrieve secret '%s' from AWS Secrets Manager: %s", secret_name, str(e))
+        raise Exception(f"failed to retrieve secret '{secret_name}' from AWS Secrets Manager: {str(e)}")
+
+    return json.loads(response["SecretString"])
+
+
 def configure_authorization(auth: dict) -> str:
     auth_type = auth["type"].lower().strip()
+
     if auth_type == "token":
         token = auth["token"]
         return f"Bearer {token}"
@@ -60,6 +77,19 @@ def configure_authorization(auth: dict) -> str:
             if auth_type == "basic" else
             (os.environ[auth["username"]], os.environ[auth["password"]])
         )
+        credentials = f"{username}:{password}"
+        token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
+        return f"Basic {token}"
+
+    if auth_type in ["basic-secretsmanager", "basic-secretsmanager-env"]:
+        secret_name = (
+            auth["secret_name"]
+            if auth_type == "basic-secretsmanager" else
+            os.environ[auth["secret_name"]]
+        )
+        secret = get_secret_from_aws(secret_name)
+        username = secret[auth["username_key"]]
+        password = secret[auth["password_key"]]
         credentials = f"{username}:{password}"
         token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
         return f"Basic {token}"
