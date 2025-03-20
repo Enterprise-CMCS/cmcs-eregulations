@@ -24,7 +24,7 @@ export class WafConstruct extends Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    // CRITICAL FIX: Add resource policy to allow WAF log delivery
+     //Add resource policy to allow WAF log delivery
     const logResourcePolicy = new logs.CfnResourcePolicy(this, 'WafLogResourcePolicy', {
       policyName: stageConfig.getResourceName('waf-logs-delivery-policy'),
       policyDocument: JSON.stringify({
@@ -33,7 +33,7 @@ export class WafConstruct extends Construct {
           {
             Effect: 'Allow',
             Principal: {
-              Service: 'delivery.logs.amazonaws.com'  // This is the critical service principal
+              Service: 'delivery.logs.amazonaws.com'  
             },
             Action: [
               'logs:CreateLogStream',
