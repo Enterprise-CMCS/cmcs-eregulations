@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"time"
+	"encoding/json"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
 	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
