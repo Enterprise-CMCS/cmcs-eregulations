@@ -139,13 +139,19 @@ jobs:
         run: |
           pushd cdk-eregs
           API_STACK="cms-eregs-${{ matrix.environment }}-api"
-          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiUrl")
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
           API_URL=${API_URL%/}
-          echo "api_url=${API_URL}" >> $GITHUB_OUTPUT
+          # Debug what we're setting
+          echo "Setting API URL: $API_URL"
+          # Use the exact same name as in the outputs section
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
+          # Verify it was set
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
           popd
 
       - name: Deploy FR Parser
-        env:        
+        env:
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           CDK_DEBUG: true
