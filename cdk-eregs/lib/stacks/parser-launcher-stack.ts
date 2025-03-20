@@ -77,7 +77,7 @@ export class ParserLauncherStack extends cdk.Stack {
 
   private createLambdaInfrastructure(stageConfig: StageConfig, ecfrParserArn: string, frParserArn: string) {
     const logGroup = new logs.LogGroup(this, 'ParserLauncherLogGroup', {
-      logGroupName: stageConfig.aws.lambda('fr-parser'),
+      logGroupName: stageConfig.aws.lambda('parser-launcher'),
       retention: logs.RetentionDays.INFINITE,
     });
 
