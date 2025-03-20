@@ -47,20 +47,20 @@ export class ParserLauncherStack extends cdk.Stack {
     const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig, ecfrParserArn, frParserArn);
 
     // Create Lambda function
-    this.lambda = new lambda.Function(this, 'ParserLauncherFunction', {
-        functionName: stageConfig.getResourceName('parser-launcher'),
-        runtime: props.lambdaConfig.runtime,
-        handler: 'parser_launcher.handler',
-        code: lambda.Code.fromAsset(path.join(__dirname, '../../../solution/parser/')),
-        timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
-        memorySize: props.lambdaConfig.memorySize,
-        environment: {
-            STAGE_ENV: stageConfig.stageName,
-            SECRET_NAME: props.environmentConfig.secretName,
-            ECFR_PARSER_ARN: ecfrParserArn,
-            FR_PARSER_ARN: frParserArn,
-        },
-        role: lambdaRole,
+    this.lambda = new lambda.DockerImageFunction(this, 'ParserLauncherFunction', {
+      functionName: stageConfig.getResourceName('parser-launcher'),
+      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/launcher/'), {
+        file: 'Dockerfile',
+      }),
+      timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
+      memorySize: props.lambdaConfig.memorySize,
+      environment: {
+          STAGE_ENV: stageConfig.stageName,
+          SECRET_NAME: props.environmentConfig.secretName,
+          ECFR_PARSER_ARN: ecfrParserArn,
+          FR_PARSER_ARN: frParserArn,
+      },
+      role: lambdaRole,
     });
 
     // Create CloudWatch Event Rule
