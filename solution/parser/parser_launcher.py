@@ -26,8 +26,8 @@ def lambda_handler(event, context):
 
     # Payload to send to the invoked Lambda functions
     payload = {
-        "USERNAME": username,
-        "PASSWORD": password,
+        "username": username,
+        "password": password,
     }
 
     logger.info("Invoking the eCFR parser asynchronously.")

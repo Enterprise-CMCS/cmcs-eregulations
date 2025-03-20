@@ -57,8 +57,22 @@ func parseConfig(c *eregs.ParserConfig) {
 	log.SetLevel(eregs.GetLogLevel(c.LogLevel))
 }
 
+type lambdaEvent struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 // Only runs if parser is in a Lambda
-func lambdaHandler(ctx context.Context) (string, error) {
+func lambdaHandler(ctx context.Context, event json.RawMessage) (string, error) {
+	// Set EREGS_USERNAME and EREGS_PASSWORD environment variables
+	// This is only for a single invocation and not stored anywhere
+	var e lambdaEvent
+	if err := json.Unmarshal(event, &e); err != nil {
+		return "", fmt.Errorf("failed to unmarshal event: %s", err)
+	}
+	os.Setenv("EREGS_USERNAME", e.Username)
+	os.Setenv("EREGS_PASSWORD", e.Password)
+
 	err := start()
 	return "Operation complete.", err
 }
