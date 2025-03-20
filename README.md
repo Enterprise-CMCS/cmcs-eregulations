@@ -1,7 +1,7 @@
 # CMCS eRegulations
 
 [![Deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml)
-[![Parser Checks](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/parser-checks.yml)
+[![Parser Tests](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-and-test-parsers.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-and-test-parsers.yml)
 [![CodeQL](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/)
 
 # About
@@ -130,12 +130,12 @@ To update local data with the most recent version of production, you need access
 > restore_db.sh also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
 5. Sign in to the Cloudtamer CMS portal (cloudtamer.cms.gov) to retrieve your short-term access keys.
 6. Paste the access keys into your terminal. This will enable you to use AWS CLI commands.
-7. Run the script by executing ./solution/backend/scripts/backup_db.sh from your terminal.
+7. Run the script by executing ./scripts/backup_db.sh from your terminal.
 8. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
 
    - The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
 
-9. With the backup file ready, proceed to restore the database by running the script `./solution/backend/scripts/restore_db.sh`.
+9. With the backup file ready, proceed to restore the database by running the script `./scripts/restore_db.sh`.
 
    - local database name: `localhost`
    - local port: `5432`

@@ -1,4 +1,4 @@
-name: "ESLint"
+name: Lint JavaScript and TypeScript Code
 
 on:
   pull_request:

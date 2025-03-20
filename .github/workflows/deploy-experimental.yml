@@ -1,4 +1,4 @@
-name: "Deploy Experimental"
+name: Deploy Experimental
 
 on:
   pull_request:
@@ -13,343 +13,441 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  deploy-static:
+  deploy-static-assets:
     environment:
       name: "dev"
-      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
     runs-on: ubuntu-22.04
+    outputs:
+      static_url: ${{ steps.get-static-url.outputs.static_url }}
     steps:
-      # Checkout the code
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
+
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      # should build first and save the artifact
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Static-Asset Infrastructure
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+          npx cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=infrastructure \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+
+      - name: Get Static URL
+        id: get-static-url
+        run: |
+          pushd cdk-eregs
+          STATIC_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-static-assets"
+          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+          popd
+  
+  deploy-zip-lambdas:
+    needs: deploy-static-assets
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy ZIP-based Lambdas
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          # Get exact stack names
+          REDIRECT_STACK="cms-eregs-eph-$PR_NUMBER-redirect-api"
+          MAINTENANCE_STACK="cms-eregs-eph-$PR_NUMBER-maintenance-api"
+          
+          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/zip-lambdas.ts"
+          popd
+  
+  deploy-vue-assets:
+    environment:
+      name: "dev"
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambdas, deploy-static-assets]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      # setup python
+
       - uses: actions/setup-python@v5
         if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
-      - name: Install dependencies
+
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
-      # build the static assets for the website
-      - name: build static assets
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Run collectstatic
         if: success() && steps.findPr.outputs.number
         env:
-          STATIC_URL: http://localhost:8888/
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution/backend
           python manage.py collectstatic --noinput
           cd ..
           popd
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      # deploy static assets to AWS
-      - name: deploy static assets
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-        run: |
-          pushd solution/static-assets
-          npm install serverless@">=3.38.0 <4" -g
-          npm install
-          serverless deploy --stage dev${PR}
-          popd
 
-  deploy-text-extractor:
-    environment:
-      name: "dev"
-    runs-on: ubuntu-22.04
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      # Deploy the text extractor lambda to AWS
-      - name: Deploy text extractor lambda
-        id: deploy-text-extractor
+      - name: Build Vite assets
         if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          pushd solution/text-extractor
-          npm install serverless@">=3.38.0 <4" -g
-          serverless deploy --stage dev${PR}
-          popd
-  deploy-django:
-    environment:
-      name: "dev"
-    outputs:
-      url: ${{ steps.deploy-regulations-site-server.outputs.url }}
-    runs-on: ubuntu-22.04
-    needs: [deploy-static, deploy-text-extractor]
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # should build first and save the artifact
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      # setup python
-      - uses: actions/setup-python@v5
-        if: success() && steps.findPr.outputs.number
-        with:
-          python-version: "3.12"
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-      # Deploy the regulation site to AWS
-      - name: deploy regulations site server
-        id: deploy-regulations-site-server
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          pushd solution/backend
-          npm install serverless@">=3.38.0 <4" -g
-          npm install
-          serverless deploy --config ./serverless-experimental.yml --stage dev${PR} | tee output.log
-          serverless invoke --config ./serverless-experimental.yml --function create_database --stage dev${PR}
-          serverless invoke --config ./serverless-experimental.yml --function reg_core_migrate --stage dev${PR}
-          serverless invoke --config ./serverless-experimental.yml --function create_su --stage dev${PR}
-          url=$(cat output.log | grep -m1 'ANY -' | cut -c 9-)
-          url=${url%/}
-          echo "url=$(echo $url)" >> $GITHUB_OUTPUT
-          popd
-  test-python:
-    needs: [deploy-django]
-    runs-on: ubuntu-22.04
-    env:
-      STATIC_URL: http://localhost:8888/
-      DB_HOST: localhost
-      DB_NAME: eregs
-      DB_USER: eregs
-      DB_PASSWORD: sgere
-      DB_PORT: 5432
-      HTTP_AUTH_USER: ${{ secrets.HTTP_AUTH_USER }}
-      HTTP_AUTH_PASSWORD: ${{ secrets.HTTP_AUTH_PASSWORD }}
-    services:
-      postgres:
-        image: postgres
-        env:
-          STATIC_URL: http://localhost:8888/
-          POSTGRES_HOST: localhost
-          POSTGRES_DB: eregs
-          POSTGRES_USER: eregs
-          POSTGRES_PASSWORD: sgere
-        ports:
-          - 5432:5432
-          # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-    steps:
-      # checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # setup Python
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/static-assets/requirements.txt
-      # run Python unit tests
-      - name: Run Python unit tests
-        working-directory: ./solution/backend
-        run: |
-          DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" pytest -vv
-  build-and-deploy-vue:
-    environment:
-      name: "dev"
-    runs-on: ubuntu-22.04
-    needs: deploy-django
-    steps:
-      # Checkout the code
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existing action
-      - name: Find PR number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
-          state: open
-      # Setup node environment
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-      # setup python
-      - uses: actions/setup-python@v5
-        if: success() && steps.findPr.outputs.number
-        with:
-          python-version: "3.12"
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_VITE_API_URL: ${{ needs.deploy-django.outputs.url }}
-          directory: solution/ui/regulations/eregs-vite
-          file_name: .env
-      # build the static assets for the website
-      - name: build static assets
-        if: success() && steps.findPr.outputs.number
-        env:
-          STATIC_URL: http://localhost:8888/
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
-          VITE_ENV: dev${{ steps.findPr.outputs.pr }}
+          VITE_ENV: eph-${{ steps.findPr.outputs.pr }}
         run: |
           pushd solution
           make regulations
           popd
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      # deploy static assets to AWS
-      - name: deploy static assets
+
+      - name: Deploy Static Assets
         if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
         run: |
-          pushd solution/static-assets
-          npm install serverless@">=3.38.0 <4" -g
-          npm install
-          serverless deploy --stage dev${PR}
+          pushd cdk-eregs
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra   
+          STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
+          npx cdk deploy ${STATICASSET_STACK} \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c deploymentType=content \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
           popd
 
-  deploy-go:
+  deploy-text-extractor:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
     environment:
       name: "dev"
-    runs-on: ubuntu-22.04
-    needs: deploy-django
+    env:
+      ENVIRONMENT_NAME: "dev"
     steps:
-      # Checkout the code
       - name: Checkout
         uses: actions/checkout@v3
         with:
           submodules: true
-      # Find the PR number.  This is not always trivial which is why this uses an existign action
+
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      # Configure AWS credentials for GitHub Actions
-      - name: Configure AWS credentials for GitHub Actions
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: us-east-1
-      # deploy and run eCFR parser
-      - name: deploy and run eCFR parser
-        id: deploy-run-ecfr-parser
-        timeout-minutes: 20
+
+      - name: Deploy Text Extractor
+        if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
         run: |
-          pushd solution/parser
-          npm install serverless@">=3.38.0 <4" -g
-          serverless deploy --stage dev${PR} --config ./serverless-ecfr.yml
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function ecfr_parser --stage dev${PR} --config ./serverless-ecfr.yml
+          pushd cdk-eregs
+          npm install
+          
+          TEXT_EXTRACTOR_STACK="cms-eregs-eph-$PR_NUMBER-text-extractor"
+          
+          npx cdk deploy $TEXT_EXTRACTOR_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/text-extractor.ts"
           popd
-      # deploy and run Federal Register parser
-      - name: deploy and run FR parser
-        id: deploy-run-fr-parser
+
+  deploy-fr-parser:
+    needs: [deploy-site-lambdas]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy FR Parser
+        if: success() && steps.findPr.outputs.number
         env:
-          PR: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
         run: |
-          pushd solution/parser
-          npm install serverless@">=3.38.0 <4" -g
-          serverless deploy --stage dev${PR} --config ./serverless-fr.yml
-          AWS_CLIENT_TIMEOUT=360000 serverless invoke --function fr_parser --stage dev${PR} --config ./serverless-fr.yml
+          pushd cdk-eregs
+          npm install
+          
+          FR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-fr-parser"
+          
+          npx cdk deploy $FR_PARSER_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deploy-ecfr-parser:
+    needs: [deploy-site-lambdas]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy ECFR Parser
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          ECFR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-ecfr-parser"
+          
+          npx cdk deploy $ECFR_PARSER_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deploy-site-lambdas:
+    needs: [deploy-static-assets, deploy-zip-lambdas, deploy-text-extractor]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    outputs:
+      api_url: ${{ steps.get-api-url.outputs.api_url }}  
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Site-Lambda
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          API_STACK="cms-eregs-eph-$PR_NUMBER-api"
+          
+          npx cdk deploy $API_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          -c buildId="${GITHUB_RUN_ID}" \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts" \
+          --outputs-file api-outputs.json
+          popd
+
+      - name: Invoke setup functions after site lambdas deployed
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createdb /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-migrate /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-createsu /dev/stdout | tee -a aws.log
+          # Check for invocation errors
+          ! grep -q FunctionError aws.log
+
+      - name: Get API URL
+        id: get-api-url
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-eph-${{ steps.findPr.outputs.pr }}-api"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          API_URL=${API_URL%/}
+          # Debug what we're setting
+          echo "Setting API URL: $API_URL"
+          # Use the exact same name as in the outputs section
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
+          # Verify it was set
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
           popd
 
   notify:
     permissions:
       pull-requests: write
     runs-on: ubuntu-22.04
-    needs: [deploy-django, build-and-deploy-vue]
+    needs: [deploy-site-lambdas, deploy-vue-assets]
     steps:
       - name: Find PR number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
         with:
-          # Can be "open", "closed", or "all".  Defaults to "open".
           state: open
-      # Notify github that this is deployed and ready to look at
+
+      - name: Debug Job Outputs
+        run: |
+          echo "Debug: PR number: ${{ steps.findPr.outputs.pr }}"
+          echo "Debug: All outputs from previous job:"
+          echo "${{ toJSON(needs.deploy-site-lambdas.outputs) }}"
+
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v2
         env:
-          django_url: ${{ needs.deploy-django.outputs.url }}
+          SITE_URL: ${{ needs.deploy-site-lambdas.outputs.api_url }}
         with:
           issue-number: ${{ steps.findPr.outputs.pr }}
           body: |
-            :sparkles: See the Django Site [in action][1] :sparkles:
-
-            [1]: ${{ env.django_url }}
+            ✨ See the CDK Django Site deployed at: ${{ env.SITE_URL }} ✨
           reactions: "+1"
+ 
   test-cypress:
     environment:
       name: "dev"
     runs-on: ubuntu-22.04
-    needs: [deploy-django, build-and-deploy-vue]
+    needs: [deploy-site-lambdas, deploy-vue-assets]
     steps:
       # Checkout the code
       - name: Checkout
@@ -381,7 +479,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: solution/ui/e2e
-          config: baseUrl=${{ needs.deploy-django.outputs.url }}
+          config: baseUrl=${{ needs.deploy-site-lambdas.outputs.api_url }}
         env:
           CYPRESS_DEPLOYING: true
       - uses: actions/upload-artifact@v4
