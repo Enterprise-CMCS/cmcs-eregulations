@@ -19,8 +19,6 @@ interface LambdaConfig {
 }
 
 interface EnvironmentConfig {
-  httpUser: string;
-  httpPassword: string;
   logLevel: string;
 }
 
@@ -61,8 +59,6 @@ export class EcfrParserStack extends cdk.Stack {
       memorySize: props.lambdaConfig.memorySize,
       environment: {
         PARSER_ON_LAMBDA: 'true',
-        EREGS_USERNAME: props.environmentConfig.httpUser,
-        EREGS_PASSWORD: props.environmentConfig.httpPassword,
         EREGS_API_URL_V3: `${siteEndpoint}v3/`,
         STAGE_ENV: stageConfig.stageName,
         LOG_LEVEL: props.environmentConfig.logLevel,
@@ -70,13 +66,13 @@ export class EcfrParserStack extends cdk.Stack {
       role: lambdaRole,
     });
 
-    // Create CloudWatch Event Rule - note different cron expression
-    const rule = new events.Rule(this, 'EcfrParserSchedule', {
-      schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
-      enabled: true,
-    });
-
-    rule.addTarget(new targets.LambdaFunction(this.lambda));
+    // DISABLED for now
+    // // Create CloudWatch Event Rule - note different cron expression
+    // const rule = new events.Rule(this, 'EcfrParserSchedule', {
+    //   schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
+    //   enabled: true,
+    // });
+    // rule.addTarget(new targets.LambdaFunction(this.lambda));
 
     // Create stack outputs
     this.createStackOutputs(stageConfig);

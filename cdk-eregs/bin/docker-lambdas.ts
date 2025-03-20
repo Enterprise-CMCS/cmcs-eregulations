@@ -94,8 +94,6 @@ async function main() {
       },
       environmentConfig: {
         logLevel,
-        httpUser,
-        httpPassword,
       }
     }, stageConfig);
     
@@ -107,8 +105,6 @@ async function main() {
       },
       environmentConfig: {
         logLevel,
-        httpUser,
-        httpPassword,
       }
     }, stageConfig);
 
