@@ -49,14 +49,13 @@ jobs:
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Generate the exact stack name for this PR
           STACK_NAME="cms-eregs-eph-${PR_NUMBER}-redirect-api"
           
           echo "Destroying PR-specific stack: ${STACK_NAME}"
-          cdk destroy "${STACK_NAME}" \
+          npx cdk destroy "${STACK_NAME}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/zip-lambdas.ts"
@@ -72,14 +71,13 @@ jobs:
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Generate the exact stack name for this PR
           STACK_NAME="cms-eregs-eph-${PR_NUMBER}-maintenance-api"
           
           echo "Destroying PR-specific stack: ${STACK_NAME}"
-          cdk destroy "${STACK_NAME}" \
+          npx cdk destroy "${STACK_NAME}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/zip-lambdas.ts"
@@ -95,7 +93,6 @@ jobs:
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
 
           # Delete the database for this ephemeral environment
@@ -112,27 +109,27 @@ jobs:
           
           # Destroy fr-parser stack
           echo "Destroying PR-specific stack: ${FR_PARSER_STACK}"
-          cdk destroy "${FR_PARSER_STACK}" \
+          npx cdk destroy "${FR_PARSER_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           
           # Destroy ecfr-parser stack
           echo "Destroying PR-specific stack: ${ECFR_PARSER_STACK}"
-          cdk destroy "${ECFR_PARSER_STACK}" \
+          npx cdk destroy "${ECFR_PARSER_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           
           # Destroy api-stack stack
           echo "Destroying PR-specific stack: ${API_STACK}"
-          cdk destroy "${API_STACK}" \
+          npx cdk destroy "${API_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
           # Destroy text-extractor stack
           echo "Destroying PR-specific stack: ${TEXT_EXTRACTOR_STACK}"
-          cdk destroy "${TEXT_EXTRACTOR_STACK}" \
+          npx cdk destroy "${TEXT_EXTRACTOR_STACK}" \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --app "npx ts-node bin/docker-lambdas.ts"
@@ -147,7 +144,7 @@ jobs:
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
           npm install fs-extra
           npm install --save-dev @types/fs-extra
           
@@ -173,7 +170,7 @@ jobs:
           fi
           
           # Now destroy the stack with force
-          cdk destroy $STATIC_STACK \
+          npx cdk destroy $STATIC_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --force \
           --exclusively \

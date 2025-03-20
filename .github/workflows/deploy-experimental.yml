@@ -43,11 +43,11 @@ jobs:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
+          npm install
           npm install fs-extra
-          npm install --save-dev @types/fs-extra       
+          npm install --save-dev @types/fs-extra
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
-          cdk deploy ${STATICASSET_STACK} \
+          npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           -c deploymentType=infrastructure \
           --require-approval never \
@@ -100,14 +100,13 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Get exact stack names
           REDIRECT_STACK="cms-eregs-eph-$PR_NUMBER-redirect-api"
           MAINTENANCE_STACK="cms-eregs-eph-$PR_NUMBER-maintenance-api"
           
-          cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
+          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
@@ -187,11 +186,10 @@ jobs:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install fs-extra
           npm install --save-dev @types/fs-extra   
           STATICASSET_STACK="cms-eregs-eph-$PR_NUMBER-static-assets"   
-          cdk deploy ${STATICASSET_STACK} \
+          npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           -c deploymentType=content \
           --require-approval never \
@@ -234,12 +232,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-$PR_NUMBER-text-extractor"
           
-          cdk deploy $TEXT_EXTRACTOR_STACK \
+          npx cdk deploy $TEXT_EXTRACTOR_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
@@ -281,12 +278,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           FR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-fr-parser"
           
-          cdk deploy $FR_PARSER_STACK \
+          npx cdk deploy $FR_PARSER_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
@@ -328,12 +324,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           ECFR_PARSER_STACK="cms-eregs-eph-$PR_NUMBER-ecfr-parser"
           
-          cdk deploy $ECFR_PARSER_STACK \
+          npx cdk deploy $ECFR_PARSER_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           --require-approval never \
           --exclusively \
@@ -377,12 +372,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           API_STACK="cms-eregs-eph-$PR_NUMBER-api"
           
-          cdk deploy $API_STACK \
+          npx cdk deploy $API_STACK \
           -c environment=${{ env.ENVIRONMENT_NAME }} \
           -c buildId="${GITHUB_RUN_ID}" \
           --require-approval never \

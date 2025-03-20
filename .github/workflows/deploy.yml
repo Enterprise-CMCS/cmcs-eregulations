@@ -41,13 +41,12 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Get exact stack name
           STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
           
-          cdk deploy ${STATICASSET_STACK} \
+          npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ matrix.environment }} \
           -c deploymentType=infrastructure \
           --require-approval never \
@@ -72,14 +71,13 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Get exact stack names
           REDIRECT_STACK="cms-eregs-${{ matrix.environment }}-redirect-api"
           MAINTENANCE_STACK="cms-eregs-${{ matrix.environment }}-maintenance-api"
           
-          cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
+          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
@@ -93,12 +91,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           TEXT_EXTRACTOR_STACK="cms-eregs-${{ matrix.environment }}-text-extractor"
           
-          cdk deploy $TEXT_EXTRACTOR_STACK \
+          npx cdk deploy $TEXT_EXTRACTOR_STACK \
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
@@ -112,13 +109,12 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Get exact stack name
           API_STACK="cms-eregs-${{ matrix.environment }}-api"
           
-          cdk deploy $API_STACK \
+          npx cdk deploy $API_STACK \
           -c environment=${{ matrix.environment }} \
           -c buildId="${GITHUB_RUN_ID}" \
           --require-approval never \
@@ -155,12 +151,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           FR_PARSER_STACK="cms-eregs-${{ matrix.environment }}-fr-parser"
           
-          cdk deploy $FR_PARSER_STACK \
+          npx cdk deploy $FR_PARSER_STACK \
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
@@ -174,12 +169,11 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           ECFR_PARSER_STACK="cms-eregs-${{ matrix.environment }}-ecfr-parser"
           
-          cdk deploy $ECFR_PARSER_STACK \
+          npx cdk deploy $ECFR_PARSER_STACK \
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
@@ -235,13 +229,12 @@ jobs:
           CDK_DEBUG: true
         run: |
           pushd cdk-eregs
-          npm install -g aws-cdk@latest @aws-sdk/client-ssm
           npm install
           
           # Get exact stack name
           STATICASSET_STACK="cms-eregs-${{ matrix.environment }}-static-assets"
           
-          cdk deploy ${STATICASSET_STACK} \
+          npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${{ matrix.environment }} \
           -c deploymentType=content \
           --require-approval never \
