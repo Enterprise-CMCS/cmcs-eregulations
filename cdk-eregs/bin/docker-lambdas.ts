@@ -86,34 +86,6 @@ async function main() {
       });
     }
 
-    // // Create Docker-based Lambda stacks
-    // new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
-    //   env,
-    //   lambdaConfig: {
-    //     memorySize: 1024,
-    //     timeout: 900,
-    //     reservedConcurrentExecutions: 10,
-    //   },
-    //   environmentConfig: {
-    //     vpcId,
-    //     logLevel,
-    //     httpUser,
-    //     httpPassword,
-    //   }
-    // }, stageConfig);
-    new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
-      env,
-      lambdaConfig: {
-        memorySize: 1024,
-        timeout: 900,
-        reservedConcurrentExecutions: 10,
-      },
-      environmentConfig: {
-        logLevel,
-        httpUser,
-        httpPassword,
-      }
-    }, stageConfig);
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
       env,
       lambdaConfig: {
@@ -139,21 +111,21 @@ async function main() {
         httpPassword,
       }
     }, stageConfig);
-        // Create API stack with Docker-based Lambdas
-        const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
-          env,
-          description: `API Stack for ${stageConfig.getResourceName('site')}`,
-          lambdaConfig: {
-            memorySize: 4096,
-            timeout: 30,
-          },
-          environmentConfig: {
-            vpcId,
-            logLevel: process.env.LOG_LEVEL || 'INFO',
-            subnetIds: [privateSubnetAId, privateSubnetBId],
-          }
-        }, stageConfig);
-        
+
+    // Create API stack with Docker-based Lambdas
+    const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
+      env,
+      description: `API Stack for ${stageConfig.getResourceName('site')}`,
+      lambdaConfig: {
+        memorySize: 4096,
+        timeout: 30,
+      },
+      environmentConfig: {
+        vpcId,
+        logLevel: process.env.LOG_LEVEL || 'INFO',
+        subnetIds: [privateSubnetAId, privateSubnetBId],
+      }
+    }, stageConfig);        
 
     await applyGlobalAspects(app, stageConfig);
 
