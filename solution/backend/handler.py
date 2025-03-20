@@ -39,7 +39,7 @@ application = get_wsgi_application()
 # This is necessary for API Gateway requests that are not on a custom domain.
 def get_script_name(headers, request_context):
     stage = os.environ.get("STAGE_ENV") or request_context.get("stage")
-    host = urlparse(f"//{headers.get("Host", "")}", scheme="https").hostname or ""
+    host = urlparse(f"//{headers.get('Host', '')}", scheme="https").hostname or ""
     if stage and host.endswith(".amazonaws.com"):
         return f"/{stage}"
     return ""
