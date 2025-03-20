@@ -90,7 +90,7 @@ export class TextExtractorStack extends cdk.Stack {
     });
 
     // Create Lambda infrastructure
-    const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
+    const { lambdaRole, logGroup } = this.createLambdaInfrastructure(props.environmentConfig);
 
     // Create Lambda function
     this.lambda = this.createTextExtractorLambdaFunction(
@@ -139,7 +139,7 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  private createLambdaInfrastructure() {
+  private createLambdaInfrastructure(envConfig: EnvironmentConfig) {
     const logGroup = new logs.LogGroup(this, 'TextExtractorLogGroup', {
       logGroupName: this.stageConfig.aws.lambda('text-extractor'),
       retention: logs.RetentionDays.INFINITE,
@@ -160,7 +160,7 @@ export class TextExtractorStack extends cdk.Stack {
       inlinePolicies: {
         QueuePolicy: this.createQueuePolicy(),
         TextDetectionPolicy: this.createTextDetectionPolicy(),
-        LambdaPolicy: this.createLambdaPolicy(),
+        LambdaPolicy: this.createLambdaPolicy(envConfig),
       },
     });
 
@@ -196,7 +196,7 @@ export class TextExtractorStack extends cdk.Stack {
     });
   }
 
-  private createLambdaPolicy(): iam.PolicyDocument {
+  private createLambdaPolicy(envConfig: EnvironmentConfig): iam.PolicyDocument {
     return new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
@@ -206,7 +206,9 @@ export class TextExtractorStack extends cdk.Stack {
             'logs:CreateLogStream',
             'logs:PutLogEvents'
           ],
-          resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
+          resources: [
+            `arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`,
+          ],
         }),
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
@@ -214,7 +216,16 @@ export class TextExtractorStack extends cdk.Stack {
             's3:GetObject',
           ],
           resources: [
-            `arn:aws:s3:::cms-eregs-${this.stageConfig.stageName}-file-repo-eregs*`
+            `arn:aws:s3:::cms-eregs-${this.stageConfig.stageName}-file-repo-eregs*`,
+          ],
+        }),
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            'secretsmanager:GetSecretValue',
+          ],
+          resources: [
+            `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${envConfig.secretName}*`,
           ],
         }),
       ],
