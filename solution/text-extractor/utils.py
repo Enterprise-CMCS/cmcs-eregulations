@@ -58,8 +58,8 @@ def get_secret_from_aws(secret_name: str) -> dict:
     try:
         response = client.get_secret_value(SecretId=secret_name)
     except ClientError as e:
-        logger.error("Failed to retrieve secret '%s' from AWS Secrets Manager: %s", secret_name, str(e))
-        raise Exception(f"failed to retrieve secret '{secret_name}' from AWS Secrets Manager: {str(e)}")
+        logger.error("Failed to retrieve secret from AWS Secrets Manager: %s", str(e))
+        raise Exception(f"failed to retrieve secret from AWS Secrets Manager: {str(e)}")
 
     return json.loads(response["SecretString"])
 
