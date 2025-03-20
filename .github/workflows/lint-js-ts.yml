@@ -1,4 +1,4 @@
-name: Lint JavaScript Code
+name: Lint JavaScript and TypeScript Code
 
 on:
   pull_request:
