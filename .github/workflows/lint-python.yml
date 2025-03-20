@@ -1,5 +1,7 @@
-name: Ruff
+name: Lint Python Code
+
 on: [ push, pull_request, workflow_dispatch ]
+
 jobs:
   ruff:
     runs-on: ubuntu-22.04

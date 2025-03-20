@@ -32,7 +32,6 @@ services:
       STATIC_ROOT: /app/static-assets/regulations
       SIDEBAR_CONTENT_DIR: /var/lib/eregs/cmcs/content
       DEBUG: "True"
-      SUPPLEMENTAL_CONTENT_PATH: /app/src/serverless/guidance
       DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.local}
     ports:
       - 8000:8000
