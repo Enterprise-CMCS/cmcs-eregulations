@@ -6,6 +6,7 @@ import base64
 import os
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
@@ -52,7 +53,7 @@ def get_secret_from_aws(secret_name: str) -> dict:
     import boto3
     from botocore.exceptions import ClientError
 
-    logger.info("Retrieving secret '%s' from AWS Secrets Manager.", secret_name)
+    logger.info("Retrieving secret from AWS Secrets Manager.", secret_name)
 
     client = boto3.client("secretsmanager")
     try:
