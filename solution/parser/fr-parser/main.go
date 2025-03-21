@@ -31,8 +31,9 @@ func lambdaHandler(ctx context.Context, event json.RawMessage) (string, error) {
 	if err := json.Unmarshal(event, &e); err != nil {
 		return "", fmt.Errorf("failed to unmarshal event: %s", err)
 	}
-	os.Setenv("EREGS_USERNAME", e.Username)
-	os.Setenv("EREGS_PASSWORD", e.Password)
+	eregs.PostAuth.Username = e.Username
+	eregs.PostAuth.Password = e.Password
+	
 	err := start()
 	return "Operation complete.", err
 }

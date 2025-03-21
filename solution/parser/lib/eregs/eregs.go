@@ -19,7 +19,7 @@ var DefaultBaseURL = "http://localhost:8000/v3/"
 
 var parserResultURL = "/ecfr_parser_result/%d"
 
-var postAuth = &network.PostAuth{
+var PostAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
 	Password: os.Getenv("EREGS_PASSWORD"),
 }
@@ -29,7 +29,7 @@ func getAuth() *network.PostAuth {
 	if stageEnv == "" || stageEnv == "local" || stageEnv == "prod" {
 		return nil
 	}
-	return postAuth
+	return PostAuth
 }
 
 func init() {
@@ -68,5 +68,5 @@ func PostParserResult(ctx context.Context, p *ParserResult) (int, error) {
 		return -1, err
 	}
 	p.End = time.Now().Format(time.RFC3339)
-	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPost)
+	return network.SendJSON(ctx, u, p, true, PostAuth, network.HTTPPost)
 }

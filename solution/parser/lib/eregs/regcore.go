@@ -44,7 +44,7 @@ func PutPart(ctx context.Context, p *Part) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	return network.SendJSON(ctx, u, p, true, postAuth, network.HTTPPut)
+	return network.SendJSON(ctx, u, p, true, PostAuth, network.HTTPPut)
 }
 
 // GetExistingParts gets existing parts already imported
