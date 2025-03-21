@@ -234,6 +234,11 @@ describe("Find by Subjects", () => {
 
         cy.get(".search-field")
             .find(".v-field__clearable i")
+            .should("have.attr", "title")
+            .and("include", "Clear All");
+
+        cy.get(".search-field")
+            .find(".v-field__clearable i")
             .click({ force: true });
 
         cy.get("input#main-content").invoke("val").should("eq", "");
