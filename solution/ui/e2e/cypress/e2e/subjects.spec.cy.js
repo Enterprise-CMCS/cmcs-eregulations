@@ -710,7 +710,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']").should("not.exist");
     });
 
-    it("should clear selected category if query string or subject is toggled", () => {
+    it("should not clear selected category if query string or subject is toggled", () => {
         cy.viewport("macbook-15");
 
         // Log in
@@ -741,9 +741,6 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .find(".v-select__selection")
             .should("have.text", "Related Statutes in Fixture");
-        cy.get("div[data-testid='category-select']")
-            .find("label")
-            .should("not.be.visible");
 
         // Assert that External document type checkbox has been selected
         // and Internal document type checkbox has been deselected
@@ -766,15 +763,13 @@ describe("Find by Subjects", () => {
             force: true,
         });
 
-        // Assert that category is removed from URL and
-        // category select label is reset
-        cy.url().should("include", "/subjects?subjects=1");
-        cy.url().should("not.include", "&categories=3");
+        // Assert that category is retained in URL and
+        // category select label remains the same
+        cy.url().should("include", "/subjects?subjects=1")
+            .and("include", "&categories=1");
         cy.get("div[data-testid='category-select']")
-            .should("exist")
-            .find("label")
-            .should("have.text", "Choose Category")
-            .and("be.visible");
+            .find(".v-select__selection")
+            .should("have.text", "Related Statutes in Fixture");
 
         // Select a new category
         cy.get("div[data-testid='category-select']").click();
@@ -789,7 +784,7 @@ describe("Find by Subjects", () => {
             .should("not.be.visible");
         cy.url().should(
             "include",
-            "/subjects?subjects=1&categories=1&type=external",
+            "/subjects?subjects=1&categories=1",
         );
     });
 
