@@ -1,4 +1,3 @@
-// https://vuejs.org/guide/reusability/composables
 export default function useRemoveList({ route, removeList = [] }) {
     const routeClone = { ...route };
 
