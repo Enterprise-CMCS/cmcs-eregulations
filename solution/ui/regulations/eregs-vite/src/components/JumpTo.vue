@@ -155,10 +155,7 @@ export default {
     methods: {
         async getParts(title) {
             const partsList = await fetchParts({ title, apiUrl: this.apiUrl });
-            // temporarily filter part 75. See EREGCSC-1397
-            this.filteredParts = partsList
-                .map((part) => part.name)
-                .filter((part) => part !== "75");
+            this.filteredParts = partsList.map((part) => part.name);
         },
         getLink() {
             let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
