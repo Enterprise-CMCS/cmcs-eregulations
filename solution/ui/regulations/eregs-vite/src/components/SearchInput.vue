@@ -22,6 +22,7 @@
         >
             <template #clear>
                 <v-icon
+                    title="Clear All"
                     aria-label="Clear search form"
                     icon="mdi-close"
                     data-testid="clear-search-form"
