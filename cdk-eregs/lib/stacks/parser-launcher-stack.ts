@@ -44,7 +44,7 @@ export class ParserLauncherStack extends cdk.Stack {
     const frParserArn = cdk.Fn.importValue(`sls-${stageConfig.getResourceName('fr-parser')}-FrParserLambdaFunctionQualifiedArn`);
 
     // Create Lambda infrastructure
-    const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig, ecfrParserArn, frParserArn);
+    const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig, props.environmentConfig.secretName, ecfrParserArn, frParserArn);
 
     // Create Lambda function
     this.lambda = new lambda.DockerImageFunction(this, 'ParserLauncherFunction', {
@@ -75,7 +75,7 @@ export class ParserLauncherStack extends cdk.Stack {
     this.createStackOutputs(stageConfig);
   }
 
-  private createLambdaInfrastructure(stageConfig: StageConfig, ecfrParserArn: string, frParserArn: string) {
+  private createLambdaInfrastructure(stageConfig: StageConfig, secretName: string, ecfrParserArn: string, frParserArn: string) {
     const logGroup = new logs.LogGroup(this, 'ParserLauncherLogGroup', {
       logGroupName: stageConfig.aws.lambda('parser-launcher'),
       retention: logs.RetentionDays.INFINITE,
@@ -93,14 +93,14 @@ export class ParserLauncherStack extends cdk.Stack {
         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
       ],
       inlinePolicies: {
-        LambdaPolicy: this.createLambdaPolicy(ecfrParserArn, frParserArn),
+        LambdaPolicy: this.createLambdaPolicy(secretName, ecfrParserArn, frParserArn),
       },
     });
 
     return { lambdaRole, logGroup };
   }
 
-  private createLambdaPolicy(ecfrParserArn: string, frParserArn: string): iam.PolicyDocument {
+  private createLambdaPolicy(secretName: string, ecfrParserArn: string, frParserArn: string): iam.PolicyDocument {
     return new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
@@ -118,6 +118,15 @@ export class ParserLauncherStack extends cdk.Stack {
                 'lambda:InvokeFunction',
             ],
             resources: [ecfrParserArn, frParserArn],
+        }),
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: [
+            'secretsmanager:GetSecretValue',
+          ],
+          resources: [
+            `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${secretName}*`,
+          ],
         }),
       ],
     });
