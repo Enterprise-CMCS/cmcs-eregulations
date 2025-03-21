@@ -122,7 +122,7 @@ export class EcfrParserStack extends cdk.Stack {
   private createStackOutputs(stageConfig: StageConfig) {
     // Output the Lambda function ARN
     new cdk.CfnOutput(this, 'EcfrParserLambdaFunctionQualifiedArn', {
-      value: this.lambda.currentVersion.functionArn,
+      value: this.lambda.functionArn,
       description: 'Current Lambda function version',
       exportName: `sls-${stageConfig.getResourceName('ecfr-parser')}-EcfrParserLambdaFunctionQualifiedArn`,
     });
