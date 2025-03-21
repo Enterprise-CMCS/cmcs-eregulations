@@ -727,7 +727,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']").should("not.exist");
     });
 
-    it("should not clear selected category if query string or subject is toggled", () => {
+    it("should clear selected category if subject is toggled", () => {
         cy.viewport("macbook-15");
 
         // Log in
@@ -780,13 +780,15 @@ describe("Find by Subjects", () => {
             force: true,
         });
 
-        // Assert that category is retained in URL and
+        // Assert that category is removed from URL and
         // category select label remains the same
         cy.url().should("include", "/subjects?subjects=1")
-            .and("include", "&categories=1");
+            .and("not.include", "&categories=1");
         cy.get("div[data-testid='category-select']")
-            .find(".v-select__selection")
-            .should("have.text", "Related Statutes in Fixture");
+            .should("exist")
+            .find("label")
+            .should("have.text", "Choose Category")
+            .and("be.visible");
 
         // Select a new category
         cy.get("div[data-testid='category-select']").click();
