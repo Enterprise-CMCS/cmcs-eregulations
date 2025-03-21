@@ -64,6 +64,9 @@ type lambdaEvent struct {
 
 // Only runs if parser is in a Lambda
 func lambdaHandler(ctx context.Context, event json.RawMessage) (string, error) {
+	// Retrieve eRegs username and password from the lambda event
+	// This is only for a single invocation and not stored anywhere
+	// The event comes from the parser-launcher lambda only
 	var e lambdaEvent
 	if err := json.Unmarshal(event, &e); err != nil {
 		return "", fmt.Errorf("failed to unmarshal event: %s", err)

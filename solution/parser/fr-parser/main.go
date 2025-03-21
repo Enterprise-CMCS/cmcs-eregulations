@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
-	"encoding/json"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/eregs"
 	"github.com/cmsgov/cmcs-eregulations/lib/fedreg"
@@ -25,15 +25,16 @@ type lambdaEvent struct {
 
 // Only runs if parser is in a Lambda
 func lambdaHandler(ctx context.Context, event json.RawMessage) (string, error) {
-	// Set EREGS_USERNAME and EREGS_PASSWORD environment variables
+	// Retrieve eRegs username and password from the lambda event
 	// This is only for a single invocation and not stored anywhere
+	// The event comes from the parser-launcher lambda only
 	var e lambdaEvent
 	if err := json.Unmarshal(event, &e); err != nil {
 		return "", fmt.Errorf("failed to unmarshal event: %s", err)
 	}
 	eregs.PostAuth.Username = e.Username
 	eregs.PostAuth.Password = e.Password
-	
+
 	err := start()
 	return "Operation complete.", err
 }
