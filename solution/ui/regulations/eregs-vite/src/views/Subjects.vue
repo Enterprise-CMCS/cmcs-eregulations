@@ -64,7 +64,7 @@ provide("currentRouteName", $route.name);
 provide("FilterTypesDict", FilterTypesDict);
 
 // provide router query params to remove on child component change
-const commonRemoveList = ["page", "categories", "intcategories"];
+const commonRemoveList = ["page"];
 const policySelectionsRemoveList = ["subjects", "q"];
 const searchInputRemoveList = commonRemoveList.concat(["q"]);
 
