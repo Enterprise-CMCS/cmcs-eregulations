@@ -1,6 +1,6 @@
 FROM python:3.12-alpine
 
-COPY ["static-assets/requirements.txt", "/app/src/"]
+COPY ["backend/requirements.txt", "/app/src/"]
 WORKDIR /app/src/
 
 RUN apk add libffi-dev

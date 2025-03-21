@@ -8,7 +8,7 @@ import App from "./App.vue";
 import vueRouter from "./router";
 
 const mountEl = document.querySelector("#vite-app");
-const { customUrl, host, isAuthenticated } = mountEl.dataset;
+const { siteRoot, isAuthenticated } = mountEl.dataset;
 
 const app = createApp(App);
 app.use(vuetify);
@@ -27,7 +27,7 @@ for (const datum in mountEl.dataset) {
 app.directive("clickaway", Clickaway);
 app.directive("sanitize-html", SanitizeHtml);
 
-const router = vueRouter({ customUrl, host });
+const router = vueRouter({ siteRoot });
 
 router.beforeEach((to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";

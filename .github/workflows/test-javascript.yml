@@ -1,4 +1,4 @@
-name: "JavaScript Unit Tests with Vitest"
+name: Unit Test JavaScript Code
 
 on:
   pull_request:

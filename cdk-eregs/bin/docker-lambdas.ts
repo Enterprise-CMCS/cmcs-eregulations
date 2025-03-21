@@ -19,14 +19,12 @@ async function main() {
      
       logLevel, 
       httpUser, 
-      httpPassword,
-      eregsApiUrl
+      httpPassword
     ] = await Promise.all([
      
       getParameterValue('/eregulations/text_extractor/log_level'),
       getParameterValue('/eregulations/http/user'),
-      getParameterValue('/eregulations/http/password'),
-      getParameterValue('/eregulations/custom_url'),
+      getParameterValue('/eregulations/http/password')
     ]);
    // Fetch required infrastructure parameters
    const [
