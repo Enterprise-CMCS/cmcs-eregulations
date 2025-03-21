@@ -1,3 +1,4 @@
+import os
 import logging
 
 import extract_msg
@@ -8,6 +9,7 @@ from .exceptions import (
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class OutlookExtractor(Extractor):

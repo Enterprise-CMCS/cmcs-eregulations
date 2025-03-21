@@ -1,3 +1,4 @@
+import os
 import logging
 
 from pptx import Presentation
@@ -5,6 +6,7 @@ from pptx import Presentation
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class PowerPointExtractor(Extractor):

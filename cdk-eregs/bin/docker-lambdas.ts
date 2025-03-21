@@ -6,10 +6,10 @@ import { StageConfig } from '../config/stage-config';
 import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
 import { BackendStack } from '../lib/stacks/api-stack';
+import { ParserLauncherStack } from '../lib/stacks/parser-launcher-stack';
 
 async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
@@ -86,34 +86,6 @@ async function main() {
       });
     }
 
-    // // Create Docker-based Lambda stacks
-    // new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
-    //   env,
-    //   lambdaConfig: {
-    //     memorySize: 1024,
-    //     timeout: 900,
-    //     reservedConcurrentExecutions: 10,
-    //   },
-    //   environmentConfig: {
-    //     vpcId,
-    //     logLevel,
-    //     httpUser,
-    //     httpPassword,
-    //   }
-    // }, stageConfig);
-    new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
-      env,
-      lambdaConfig: {
-        memorySize: 1024,
-        timeout: 900,
-        reservedConcurrentExecutions: 10,
-      },
-      environmentConfig: {
-        logLevel,
-        httpUser,
-        httpPassword,
-      }
-    }, stageConfig);
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
       env,
       lambdaConfig: {
@@ -122,8 +94,6 @@ async function main() {
       },
       environmentConfig: {
         logLevel,
-        httpUser,
-        httpPassword,
       }
     }, stageConfig);
     
@@ -135,25 +105,35 @@ async function main() {
       },
       environmentConfig: {
         logLevel,
-        httpUser,
-        httpPassword,
       }
     }, stageConfig);
-        // Create API stack with Docker-based Lambdas
-        const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
-          env,
-          description: `API Stack for ${stageConfig.getResourceName('site')}`,
-          lambdaConfig: {
-            memorySize: 4096,
-            timeout: 30,
-          },
-          environmentConfig: {
-            vpcId,
-            logLevel: process.env.LOG_LEVEL || 'INFO',
-            subnetIds: [privateSubnetAId, privateSubnetBId],
-          }
-        }, stageConfig);
-        
+
+    new ParserLauncherStack(app, stageConfig.getResourceName('parser-launcher'), {
+      env,
+      lambdaConfig: {
+        runtime: cdk.aws_lambda.Runtime.PYTHON_3_12,
+        timeout: 900,
+        memorySize: 1024,
+      },
+      environmentConfig: {
+        secretName: "/eregulations/http/credentials",
+      }
+    }, stageConfig);
+
+    // Create API stack with Docker-based Lambdas
+    const apiStack = new BackendStack(app, stageConfig.getResourceName('api'), {
+      env,
+      description: `API Stack for ${stageConfig.getResourceName('site')}`,
+      lambdaConfig: {
+        memorySize: 4096,
+        timeout: 30,
+      },
+      environmentConfig: {
+        vpcId,
+        logLevel: process.env.LOG_LEVEL || 'INFO',
+        subnetIds: [privateSubnetAId, privateSubnetBId],
+      }
+    }, stageConfig);        
 
     await applyGlobalAspects(app, stageConfig);
 

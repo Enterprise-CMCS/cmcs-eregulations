@@ -19,8 +19,6 @@ interface LambdaConfig {
 }
 
 interface EnvironmentConfig {
-  httpUser: string;
-  httpPassword: string;
   logLevel: string;
 }
 
@@ -55,8 +53,6 @@ export class FrParserStack extends cdk.Stack {
       memorySize: props.lambdaConfig.memorySize,
       environment: {
         PARSER_ON_LAMBDA: 'true',
-        EREGS_USERNAME: props.environmentConfig.httpUser,
-        EREGS_PASSWORD: props.environmentConfig.httpPassword,
         EREGS_API_URL_V3: `${siteEndpoint}v3/`,
         STAGE_ENV: stageConfig.stageName,
         LOG_LEVEL: props.environmentConfig.logLevel,
@@ -64,13 +60,13 @@ export class FrParserStack extends cdk.Stack {
       role: lambdaRole,
     });
 
-    // Create CloudWatch Event Rule
-    const rule = new events.Rule(this, 'FrParserSchedule', {
-      schedule: events.Schedule.expression('cron(0 2 * * ? *)'),
-      enabled: true,
-    });
-
-    rule.addTarget(new targets.LambdaFunction(this.lambda));
+    // DISABLED for now
+    // // Create CloudWatch Event Rule
+    // const rule = new events.Rule(this, 'FrParserSchedule', {
+    //   schedule: events.Schedule.expression('cron(0 2 * * ? *)'),
+    //   enabled: true,
+    // });
+    // rule.addTarget(new targets.LambdaFunction(this.lambda));
 
     // Create stack outputs
     this.createStackOutputs(stageConfig);
@@ -120,7 +116,7 @@ export class FrParserStack extends cdk.Stack {
   private createStackOutputs(stageConfig: StageConfig) {
     // Output the Lambda function ARN
     new cdk.CfnOutput(this, 'FrParserLambdaFunctionQualifiedArn', {
-      value: this.lambda.currentVersion.functionArn,
+      value: this.lambda.functionArn,
       description: 'Current Lambda function version',
       exportName: `sls-${stageConfig.getResourceName('fr-parser')}-FrParserLambdaFunctionQualifiedArn`,
     });

@@ -335,6 +335,52 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+  deploy-parser-launcher:
+    needs: [deploy-ecfr-parser, deploy-fr-parser]
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-22.04
+    environment:
+      name: "dev"
+    env:
+      ENVIRONMENT_NAME: "dev"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Find PR number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: open
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Deploy Parser Launcher
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          PARSER_LAUNCHER_STACK="cms-eregs-eph-$PR_NUMBER-parser-launcher"
+          
+          npx cdk deploy $PARSER_LAUNCHER_STACK \
+          -c environment=${{ env.ENVIRONMENT_NAME }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd          
+
   deploy-site-lambdas:
     needs: [deploy-static-assets, deploy-zip-lambdas, deploy-text-extractor]
     if: github.event.action != 'closed'

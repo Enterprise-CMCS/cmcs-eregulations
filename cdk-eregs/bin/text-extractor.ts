@@ -20,17 +20,8 @@ async function main() {
     const app = new cdk.App({
       defaultStackSynthesizer: new cdk.DefaultStackSynthesizer(synthesizerConfig),
     });
-    const [
-     
-      logLevel, 
-      httpUser, 
-      httpPassword
-    ] = await Promise.all([
-     
-      getParameterValue('/eregulations/text_extractor/log_level'),
-      getParameterValue('/eregulations/http/user'),
-      getParameterValue('/eregulations/http/password')
-    ]);
+
+    const logLevel = await getParameterValue('/eregulations/text_extractor/log_level');
     const environment = app.node.tryGetContext('environment') || 
       process.env.DEPLOY_ENV || 
       process.env.GITHUB_JOB_ENVIRONMENT || 
@@ -82,8 +73,7 @@ async function main() {
       },
       environmentConfig: {
         logLevel,
-        httpUser,
-        httpPassword,
+        secretName: "/eregulations/http/credentials",
       }
     }, stageConfig);
 

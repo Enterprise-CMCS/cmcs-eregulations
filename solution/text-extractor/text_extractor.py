@@ -22,13 +22,18 @@ from .utils import (
 )
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
-logger = logging.getLogger()
-if logger.handlers:
-    logger.removeHandler(logger.handlers[0])  # Remove the default handler to avoid duplicate logs
+root_logger = logging.getLogger()
+if root_logger.handlers:
+    root_logger.removeHandler(root_logger.handlers[0])  # Remove the default handler to avoid duplicate logs
 ch = logging.StreamHandler()
 formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
 ch.setFormatter(formatter)
-logger.addHandler(ch)
+root_logger.addHandler(ch)
+root_logger.setLevel(logging.INFO)
+
+
+# Initialize the logger for this module
+logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 

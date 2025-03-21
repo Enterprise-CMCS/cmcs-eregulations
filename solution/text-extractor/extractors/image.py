@@ -1,3 +1,4 @@
+import os
 import io
 import logging
 
@@ -6,6 +7,7 @@ from PIL import Image
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class ImageExtractor(Extractor):

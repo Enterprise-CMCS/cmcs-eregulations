@@ -1,8 +1,10 @@
 import logging
+import os
 
 from .exceptions import BackendInitException
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 # Base class for file backends

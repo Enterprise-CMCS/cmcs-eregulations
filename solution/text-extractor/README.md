@@ -125,6 +125,28 @@ To use basic auth but retrieve the credentials from environment variables, confi
 }
 ```
 
+For basic auth with credentials retrieved as JSON from AWS Secrets Manager, configure like this:
+
+```jsonc
+"auth": {
+    "type": "basic-secretsmanager",
+    "secret_name": "name of the secret in AWS",
+    "username_key": "key for username field",
+    "password_key": "key for password field"
+}
+```
+
+You can also retrieve the secret name from an environment variable, like so:
+
+```jsonc
+"auth": {
+    "type": "basic-secretsmanager-env",
+    "secret_name": "env variable name containing the secret name",
+    "username_key": "key for username field",
+    "password_key": "key for password field"
+}
+```
+
 To use token-based authentication, configure like this:
 
 ```jsonc

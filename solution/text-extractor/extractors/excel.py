@@ -1,3 +1,4 @@
+import os
 import logging
 import warnings
 
@@ -6,6 +7,7 @@ from openpyxl import load_workbook
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class ExcelExtractor(Extractor):
