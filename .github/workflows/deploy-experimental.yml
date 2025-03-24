@@ -434,7 +434,7 @@ jobs:
           echo "${{ toJSON(needs.deploy-site-lambdas.outputs) }}"
 
       - name: Create deployment comment
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v4
         env:
           SITE_URL: ${{ needs.deploy-site-lambdas.outputs.api_url }}
         with:
