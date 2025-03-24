@@ -12,7 +12,6 @@ import {
   aws_ssm as ssm,
   aws_logs as logs,
   aws_iam as iam,
-  aws_secretsmanager as secretsmanager,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -121,7 +120,7 @@ class SecurityGroupHandler {
  * Paths for AWS Secrets Manager secrets
  * @const
  */
-const SECRETS = {
+const SECRET_NAMES = {
   OIDC_CREDENTIALS: '/eregulations/oidc/client_credentials',
   DJANGO_CREDENTIALS: '/eregulations/http/django_credentials',
   READER_CREDENTIALS: '/eregulations/http/reader_credentials',
@@ -137,17 +136,6 @@ const SECRETS = {
 export class BackendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props: BackendStackProps, stageConfig: StageConfig) {
     super(scope, id, props);
-
-    // ================================
-    // SECRETS
-    // ================================
-    const secrets = {
-      oidc: secretsmanager.Secret.fromSecretNameV2(this, 'OidcSecret', SECRETS.OIDC_CREDENTIALS),
-      django: secretsmanager.Secret.fromSecretNameV2(this, 'DjangoSecret', SECRETS.DJANGO_CREDENTIALS),
-      reader: secretsmanager.Secret.fromSecretNameV2(this, 'ReaderSecret', SECRETS.READER_CREDENTIALS),
-      db: secretsmanager.Secret.fromSecretNameV2(this, 'DbSecret', SECRETS.DB_CREDENTIALS),
-      http: secretsmanager.Secret.fromSecretNameV2(this, 'HttpSecret', SECRETS.HTTP_CREDENTIALS),
-    };
 
     // ================================
     // VPC & NETWORKING
@@ -173,7 +161,7 @@ export class BackendStack extends cdk.Stack {
       stageConfig
     );
 
-// ================================
+    // ================================
     // DATABASE SETUP
     // ================================
     let databaseSecurityGroup: ec2.ISecurityGroup;
@@ -212,7 +200,7 @@ export class BackendStack extends cdk.Stack {
 
         throw new Error(
           'Failed to get dev database configuration from SSM. ' +
-          'Ensure SSM parameters exist. ' +
+          'Ensure SSM parameters and secrets exist. ' +
           `Error: ${errorMessage}`
         );
       }
@@ -285,8 +273,8 @@ export class BackendStack extends cdk.Stack {
     // ENVIRONMENT VARIABLES
     // ================================
     const environmentVariables: { [key: string]: string } = {
+      DB_SECRET: SECRET_NAMES.DB_CREDENTIALS,
       DB_NAME: stageConfig.databaseName,
-      DB_USER: 'eregsuser',
       DB_HOST: databaseEndpoint,
       DB_PORT: databasePort,
       GA_ID: ssmParams.gaId,
@@ -300,6 +288,7 @@ export class BackendStack extends cdk.Stack {
       SURVEY_URL: ssmParams.surveyUrl,
       SIGNUP_URL: ssmParams.signupUrl,
       DEMO_VIDEO_URL: ssmParams.demoVideoUrl,
+      OIDC_RP_CLIENT_SECRET: SECRET_NAMES.OIDC_CREDENTIALS,
       OIDC_OP_AUTHORIZATION_ENDPOINT: ssmParams.oidcAuthEndpoint,
       OIDC_OP_TOKEN_ENDPOINT: ssmParams.oidcTokenEndpoint,
       OIDC_OP_JWKS_ENDPOINT: ssmParams.oidcJwksEndpoint,
@@ -315,15 +304,9 @@ export class BackendStack extends cdk.Stack {
       AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
       TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
       DEPLOY_NUMBER: process.env.RUN_ID || '',
-      DB_PASSWORD: secrets.db.secretValueFromJson('password').unsafeUnwrap(),
-      HTTP_AUTH_USER: secrets.http.secretValueFromJson('HTTP_AUTH_USER').unsafeUnwrap(),
-      HTTP_AUTH_PASSWORD: secrets.http.secretValueFromJson('HTTP_AUTH_PASSWORD').unsafeUnwrap(),
-      DJANGO_ADMIN_USERNAME: secrets.django.secretValueFromJson('DJANGO_ADMIN_USERNAME').unsafeUnwrap(),
-      DJANGO_ADMIN_PASSWORD: secrets.django.secretValueFromJson('DJANGO_ADMIN_PASSWORD').unsafeUnwrap(),
-      DJANGO_USERNAME: secrets.reader.secretValueFromJson('DJANGO_USERNAME').unsafeUnwrap(),
-      DJANGO_PASSWORD: secrets.reader.secretValueFromJson('DJANGO_PASSWORD').unsafeUnwrap(),
-      OIDC_RP_CLIENT_ID: secrets.oidc.secretValueFromJson('OIDC_RP_CLIENT_ID').unsafeUnwrap(),
-      OIDC_RP_CLIENT_SECRET: secrets.oidc.secretValueFromJson('OIDC_RP_CLIENT_SECRET').unsafeUnwrap(),
+      HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
+      DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
+      READER_SECRET: SECRET_NAMES.READER_CREDENTIALS,
     };
 
     // ================================
@@ -364,9 +347,6 @@ export class BackendStack extends cdk.Stack {
         environment: environmentVariables,
         logGroup: createLogGroup(name.toLowerCase()),
       });
-
-      // Grant read access to secrets
-      Object.values(secrets).forEach(secret => secret.grantRead(lambdaFunction));
 
       // Add tags from StageConfig
       Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
@@ -425,6 +405,17 @@ export class BackendStack extends cdk.Stack {
           effect: iam.Effect.ALLOW,
           actions: ['rds:DescribeDBInstances', 'rds:DescribeDBClusters'],
           resources: ['*'],
+        }),
+      );
+    });
+
+    // AWS Secret Manager permissions
+    [regSiteLambda, migrateLambda, createDbLambda, dropDbLambda, createSuLambda, authorizerLambda].forEach(lambdaFn => {
+      lambdaFn?.addToRolePolicy(
+        new iam.PolicyStatement({
+          effect: iam.Effect.ALLOW,
+          actions: ['secretsmanager:GetSecretValue'],
+          resources: Object.values(SECRET_NAMES),
         }),
       );
     });

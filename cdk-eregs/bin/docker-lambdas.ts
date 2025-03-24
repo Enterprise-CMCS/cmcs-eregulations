@@ -15,30 +15,20 @@ async function main() {
     const synthesizerConfigJson = await getParameterValue('/eregulations/cdk_config');
     const synthesizerConfig = JSON.parse(synthesizerConfigJson);
     
+    // Fetch required infrastructure parameters
     const [
-     
-      logLevel, 
-      httpUser, 
-      httpPassword
+      logLevel,
+      vpcId,
+      privateSubnetAId,
+      privateSubnetBId,
+      iamPath
     ] = await Promise.all([
-     
       getParameterValue('/eregulations/text_extractor/log_level'),
-      getParameterValue('/eregulations/http/user'),
-      getParameterValue('/eregulations/http/password')
+      getParameterValue('/account_vars/vpc/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/1a/id'),
+      getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
+      getParameterValue('/account_vars/iam/path'),
     ]);
-   // Fetch required infrastructure parameters
-   const [
-    vpcId,
-    privateSubnetAId,
-    privateSubnetBId,
-    iamPath
-  ] = await Promise.all([
-    getParameterValue('/account_vars/vpc/id'),
-    getParameterValue('/account_vars/vpc/subnets/private/1a/id'),
-    getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
-    getParameterValue('/account_vars/iam/path'),
-  ]);
-
 
     const env = { 
       account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
