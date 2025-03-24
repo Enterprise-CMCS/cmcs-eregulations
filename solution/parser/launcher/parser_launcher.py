@@ -17,8 +17,8 @@ def handler(event, context):
         secret = json.loads(response['SecretString'])
         # Payload to send to the invoked Lambda functions
         payload = {
-            "username": usernname,
-            "password": password,
+            "username": secret["username"],
+            "password": secret["password"],
         }
     except Exception as e:
         logger.error(f"Failed to retrieve secret: {str(e)}")
