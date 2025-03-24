@@ -19,6 +19,7 @@ var DefaultBaseURL = "http://localhost:8000/v3/"
 
 var parserResultURL = "/ecfr_parser_result/%d"
 
+// PostAuth contains the username and password to authenticate with the eRegs server
 var PostAuth = &network.PostAuth{
 	Username: os.Getenv("EREGS_USERNAME"),
 	Password: os.Getenv("EREGS_PASSWORD"),
