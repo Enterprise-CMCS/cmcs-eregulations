@@ -510,7 +510,7 @@ jobs:
       - name: Get test user credentials
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
-          secretIds: |
+          secret-ids: |
             CYPRESS_TEST, /eregulations/http/credentials
             CYPRESS_READER, /eregulations/http/reader_credentials
           name-transformation: uppercase
