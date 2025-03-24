@@ -5,6 +5,9 @@
 3. [Running locally](#running-locally)
 4. [Request structure](#request-structure)
     1. [Configuring authentication](#configuring-authentication)
+        1. [Basic auth](#basic-auth)
+        2. [AWS Secrets Manager](#aws-secrets-manager)
+        3. [Token auth](#token-auth)
     2. [Currently supported backends](#currently-supported-backends)
 5. [Response structure](#response-structure)
 6. [Creating a new file backend](#creating-a-new-file-backend)
@@ -105,7 +108,11 @@ Direct invocation is the easiest way to asynchronously run the text extractor. O
 
 ## Configuring authentication
 
-The text extractor supports the use of basic authentication and token authentication. For basic auth, configure your request like so:
+The text extractor supports several authentication schemes. 
+
+### Basic auth
+
+Direct basic auth which includes the credentials in the request:
 
 ```jsonc
 "auth": {
@@ -124,6 +131,8 @@ To use basic auth but retrieve the credentials from environment variables, confi
     "password": "PASSWORD_ENV_VAR"
 }
 ```
+
+### AWS Secrets Manager
 
 For basic auth with credentials retrieved as JSON from AWS Secrets Manager, configure like this:
 
@@ -146,6 +155,8 @@ You can also retrieve the secret name from an environment variable, like so:
     "password_key": "key for password field"
 }
 ```
+
+### Token auth
 
 To use token-based authentication, configure like this:
 
