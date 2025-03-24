@@ -415,7 +415,7 @@ export class BackendStack extends cdk.Stack {
         new iam.PolicyStatement({
           effect: iam.Effect.ALLOW,
           actions: ['secretsmanager:GetSecretValue'],
-          resources: Object.values(SECRET_NAMES),
+          resources: Object.values(SECRET_NAMES).map(secretName => `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${secretName}*`),
         }),
       );
     });
