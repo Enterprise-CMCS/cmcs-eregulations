@@ -14,6 +14,8 @@ import os
 from datetime import datetime
 from pathlib import Path
 
+from secret_manager import get_password, get_username
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -102,7 +104,6 @@ ROOT_URLCONF = 'cmcs_regulations.urls'
 
 STATIC_URL = os.environ.get("STATIC_URL", None)
 STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
-
 
 LOGGING = {
     "version": 1,
@@ -207,8 +208,8 @@ API_BASE = "v3/"  # Note: never include leading forward-slash
 
 GUIDANCE_DIR = os.environ.get("SIDEBAR_CONTENT_DIR")
 
-HTTP_AUTH_USER = os.environ.get("HTTP_AUTH_USER")
-HTTP_AUTH_PASSWORD = os.environ.get("HTTP_AUTH_PASSWORD")
+HTTP_AUTH_USER = get_username("HTTP_AUTH_SECRET", environment_fallback="HTTP_AUTH_USER")
+HTTP_AUTH_PASSWORD = get_password("HTTP_AUTH_SECRET", environment_fallback="HTTP_AUTH_PASSWORD")
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_COLLAPSED': True
