@@ -4,6 +4,7 @@ import boto3
 import json
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def handler(event, context):
@@ -14,8 +15,11 @@ def handler(event, context):
         secretsmanager_client = boto3.client('secretsmanager')
         response = secretsmanager_client.get_secret_value(SecretId=secret_name)
         secret = json.loads(response['SecretString'])
-        username = secret['HTTP_AUTH_USER']
-        password = secret['HTTP_AUTH_PASSWORD']
+        # Payload to send to the invoked Lambda functions
+        payload = {
+            "username": usernname,
+            "password": password,
+        }
     except Exception as e:
         logger.error(f"Failed to retrieve secret: {str(e)}")
         raise
@@ -24,12 +28,6 @@ def handler(event, context):
     lambda_client = boto3.client('lambda')
     ecfr_parser_arn = os.environ['ECFR_PARSER_ARN']
     fr_parser_arn = os.environ['FR_PARSER_ARN']
-
-    # Payload to send to the invoked Lambda functions
-    payload = {
-        "username": username,
-        "password": password,
-    }
 
     logger.info("Invoking the eCFR parser asynchronously.")
 
