@@ -178,21 +178,33 @@ describe("Find by Subjects", () => {
         cy.url().should("not.include", "type");
     });
 
-    it("should redirect to the Search page with the correct selected subject when a search term is entered", () => {
+    it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/subjects");
+
+        // Select a subject
         cy.get(".subjects__list button[data-testid=add-subject-3]")
             .should("have.text", "Access to Services(1)")
             .click({ force: true });
+
+        // Select a category and document type
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        // Search for a term
         cy.get("input#main-content").type("mock", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
+
+        // Assert URL
         cy.url()
             .should("include", "/search")
             .and("include", "q=mock")
-            .and("include", "subjects=3");
+            .and("include", "type=external")
+            .and("include", "subjects=3")
+            .and("include", "categories=1");
     });
 
     it("clearing the search input should not reload the page", () => {
@@ -219,6 +231,11 @@ describe("Find by Subjects", () => {
         cy.get("input#main-content").type("mock", { force: true });
 
         cy.get("input#main-content").invoke("val").should("eq", "mock");
+
+        cy.get(".search-field")
+            .find(".v-field__clearable i")
+            .should("have.attr", "title")
+            .and("include", "Clear All");
 
         cy.get(".search-field")
             .find(".v-field__clearable i")
@@ -710,7 +727,7 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']").should("not.exist");
     });
 
-    it("should clear selected category if query string or subject is toggled", () => {
+    it("should clear selected category if subject is toggled", () => {
         cy.viewport("macbook-15");
 
         // Log in
@@ -741,9 +758,6 @@ describe("Find by Subjects", () => {
         cy.get("div[data-testid='category-select']")
             .find(".v-select__selection")
             .should("have.text", "Related Statutes in Fixture");
-        cy.get("div[data-testid='category-select']")
-            .find("label")
-            .should("not.be.visible");
 
         // Assert that External document type checkbox has been selected
         // and Internal document type checkbox has been deselected
@@ -767,9 +781,9 @@ describe("Find by Subjects", () => {
         });
 
         // Assert that category is removed from URL and
-        // category select label is reset
-        cy.url().should("include", "/subjects?subjects=1");
-        cy.url().should("not.include", "&categories=3");
+        // category select label remains the same
+        cy.url().should("include", "/subjects?subjects=1")
+            .and("not.include", "&categories=1");
         cy.get("div[data-testid='category-select']")
             .should("exist")
             .find("label")
@@ -789,7 +803,7 @@ describe("Find by Subjects", () => {
             .should("not.be.visible");
         cy.url().should(
             "include",
-            "/subjects?subjects=1&categories=1&type=external",
+            "/subjects?subjects=1&categories=1",
         );
     });
 
