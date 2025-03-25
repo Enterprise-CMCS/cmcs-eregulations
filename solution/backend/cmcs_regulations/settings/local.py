@@ -2,6 +2,9 @@ from .base import * # noqa
 import os
 import socket
 
+from secret_manager import get_username, get_password
+
+
 DEBUG = os.environ.get("DEBUG", False)
 
 # turns on django toolbar if debug is true
@@ -12,16 +15,16 @@ if DEBUG:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('DB_USER', 'eregsuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
+        'USER': get_username("DB_SECRET", environment_fallback="DB_USER", default="eregsuser"),
+        'PASSWORD': get_password("DB_SECRET", environment_fallback="DB_PASSWORD", default="sgere"),
         'HOST': os.environ.get('DB_HOST', 'db'),
         'PORT': os.environ.get('DB_PORT', '5432'),
         'NAME': os.environ.get('DB_NAME', 'eregs'),
     },
     'postgres': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('DB_USER', 'eregsuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
+        'USER': get_username("DB_SECRET", environment_fallback="DB_USER", default="eregsuser"),
+        'PASSWORD': get_password("DB_SECRET", environment_fallback="DB_PASSWORD", default="sgere"),
         'HOST': os.environ.get('DB_HOST', 'db'),
         'PORT': os.environ.get('DB_PORT', '5432'),
         'NAME': "postgres",

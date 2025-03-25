@@ -1,3 +1,4 @@
+import os
 import logging
 
 import boto3
@@ -6,6 +7,7 @@ from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class TextractExtractor(Extractor):

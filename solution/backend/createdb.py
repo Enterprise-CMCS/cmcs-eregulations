@@ -5,12 +5,16 @@ import django
 from django.db import connections
 from django.db.utils import ProgrammingError
 
+from secret_manager import get_username
+
 TIMEOUT_MINUTES = 15
 
 
 def handler(event, context):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cmcs_regulations.settings.deploy")
     django.setup()
+
+    db_user = get_username("DB_SECRET", environment_fallback="DB_USER", default="eregsuser")
 
     try:
         connection = connections["postgres"]
@@ -29,7 +33,7 @@ def handler(event, context):
             )
             cursor.execute(
                 f"CREATE DATABASE {os.environ.get('DB_NAME')} WITH TEMPLATE eregs "
-                f"STRATEGY FILE_COPY OWNER {os.environ.get('DB_USER')}"
+                f"STRATEGY FILE_COPY OWNER {db_user};"
             )
             print(f"Database {os.environ.get('DB_NAME')} has been created")
     except ProgrammingError:

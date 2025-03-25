@@ -1,3 +1,4 @@
+import os
 import logging
 from tempfile import NamedTemporaryFile
 import sys
@@ -10,6 +11,8 @@ from .exceptions import (
 from magika import Magika, PredictionMode
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
+
 magika = Magika(prediction_mode=PredictionMode.MEDIUM_CONFIDENCE)
 
 

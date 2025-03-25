@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.11
+FROM public.ecr.aws/lambda/python:3.12
 
 ENV HOSTNAME="text-extractor"
 ENV EXTERNAL_PORT="6000"
@@ -10,7 +10,7 @@ ENV STARTUP_CMD="app.text_extractor.handler"
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 
 # Install binary dependencies
-RUN yum install -y poppler-utils
+RUN dnf install -y poppler-utils
 
 # Install the required packages
 RUN pip install -r app/requirements.txt

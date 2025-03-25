@@ -12,7 +12,7 @@ xlrd
 docx2txt
 openpyxl
 python-pptx
-magika
+magika==0.5.1 # new version causes unit test failures, need to investigate
 werkzeug>=3.0.3 # not directly required, pinned by Snyk to avoid a vulnerability
 certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 cryptography>=42.0.2 # not directly required, pinned by Snyk to avoid a vulnerability
