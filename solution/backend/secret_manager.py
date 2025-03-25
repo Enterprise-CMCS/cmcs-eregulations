@@ -27,7 +27,7 @@ def get_secret(secret_id):
 #
 # secret_name: The environment variable containing the ID of the secret to retrieve
 # field_name: The name of the field to retrieve
-# environment_fallback: The environment variable to use as a fallback, if desired
+# environment_fallback: The environment variable to use as a fallback, if desired (typical use case is local dev)
 # default: The default value to return if the secret cannot be retrieved
 # Returns: The field as a string, or the default value if the secret cannot be retrieved
 def get_secret_field(secret_name, field_name, environment_fallback=None, default=None):
@@ -41,7 +41,7 @@ def get_secret_field(secret_name, field_name, environment_fallback=None, default
 # Get the username from an AWS secret or environment variable
 #
 # secret_name: The environment variable containing the ID of the secret to retrieve
-# environment_fallback: The environment variable to use as a fallback, if desired
+# environment_fallback: The environment variable to use as a fallback, if desired (typical use case is local dev)
 # default: The default value to return if the secret cannot be retrieved, if desired
 # Returns: The username as a string, or the default value if the secret cannot be retrieved
 def get_username(secret_name, environment_fallback=None, default=None):
@@ -51,7 +51,7 @@ def get_username(secret_name, environment_fallback=None, default=None):
 # Get the password from an AWS secret or environment variable
 #
 # secret_name: The environment variable containing the ID of the secret to retrieve
-# environment_fallback: The environment variable to use as a fallback, if desired
+# environment_fallback: The environment variable to use as a fallback, if desired (typical use case is local dev)
 # default: The default value to return if the secret cannot be retrieved, if desired
 # Returns: The password as a string, or the default value if the secret cannot be retrieved
 def get_password(secret_name, environment_fallback=None, default=None):

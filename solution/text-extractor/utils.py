@@ -5,6 +5,9 @@ import unicodedata
 import base64
 import os
 
+import boto3
+from botocore.exceptions import ClientError
+
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
@@ -50,9 +53,6 @@ def clean_output(text: str) -> str:
 
 
 def get_secret_from_aws(secret_name: str) -> dict:
-    import boto3
-    from botocore.exceptions import ClientError
-
     logger.info("Retrieving secret from AWS Secrets Manager.")
 
     client = boto3.client("secretsmanager")
