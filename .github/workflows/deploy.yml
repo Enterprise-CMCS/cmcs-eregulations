@@ -186,6 +186,24 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+      - name: Deploy Parser Launcher
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          PARSER_LAUNCHER_STACK="cms-eregs-${{ matrix.environment }}-parser-launcher"
+          
+          npx cdk deploy $PARSER_LAUNCHER_STACK \
+          -c environment=${{ matrix.environment }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
