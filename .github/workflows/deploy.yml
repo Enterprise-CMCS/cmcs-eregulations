@@ -99,7 +99,7 @@ jobs:
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          --app "npx ts-node bin/text-extractor.ts"
           popd
 
       - name: Deploy site lambdas
