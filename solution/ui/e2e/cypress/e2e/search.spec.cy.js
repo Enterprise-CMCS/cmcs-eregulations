@@ -452,6 +452,35 @@ describe("Search flow", () => {
         cy.url().should("not.include", "subjects=3");
     });
 
+    it("should not clear selected filters when updating the search term", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}`);
+
+        // Select subject
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+        cy.url().should("include", "subjects=3");
+
+        // Select category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+        cy.url().should("include", "subjects=3")
+            .and("include", "categories=1");
+
+        // Update search term
+        cy.get("input#main-content").clear().type("new search term");
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        // Assert that the selected filters are still in the URL
+        cy.url().should("include", "subjects=3")
+            .and("include", "categories=1")
+            .and("include", "q=new+search+term");
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });

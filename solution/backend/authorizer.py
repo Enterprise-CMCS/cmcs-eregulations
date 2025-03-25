@@ -1,5 +1,6 @@
 import base64
-import os
+
+from secret_manager import get_password, get_username
 
 
 def handler(event, context):
@@ -13,8 +14,9 @@ def handler(event, context):
 
     b64_token = authorizationHeader.split(" ")[-1]
     username, password = base64.b64decode(b64_token).decode("utf-8").split(":")
-    expected_username = os.environ.get("HTTP_AUTH_USER")
-    expected_password = os.environ.get("HTTP_AUTH_PASSWORD")
+
+    expected_username = get_username("HTTP_AUTH_SECRET", environment_fallback="HTTP_AUTH_USER")
+    expected_password = get_password("HTTP_AUTH_SECRET", environment_fallback="HTTP_AUTH_PASSWORD")
 
     if not expected_username or not expected_password or username != expected_username or password != expected_password:
         raise Exception("Unauthorized")

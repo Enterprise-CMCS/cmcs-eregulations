@@ -142,9 +142,10 @@ def call_text_extractor(request, resources):
             "username": settings.HTTP_AUTH_USER,
             "password": settings.HTTP_AUTH_PASSWORD,
         } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
-            "type": "basic-env",
-            "username": "HTTP_AUTH_USER",
-            "password": "HTTP_AUTH_PASSWORD",
+            "type": "basic-secretsmanager-env",
+            "secret_name": "SECRET_NAME",
+            "username_key": "username",
+            "password_key": "password",
         },
         "aws": {
             "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
