@@ -1,5 +1,5 @@
-
-from django.db.models import Count, F, Prefetch, Q
+from django.db.models import BooleanField, Case, CharField, Count, ExpressionWrapper, F, IntegerField, Prefetch, Q, Value, When
+from django.db.models.functions import Cast
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -112,6 +112,7 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         citations = request.GET.getlist("citations")
         subjects = request.GET.getlist("subjects")
         categories = request.GET.getlist("categories")
+        sort = request.GET.get("sort")
         show_public = string_to_bool(request.GET.get("show_public"), True)
         show_internal = string_to_bool(request.GET.get("show_internal"), True)
         show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
@@ -154,6 +155,54 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Perform search and headline generation
         query = query.search(search_query)
+
+        if sort:
+            # Begin LLM code (Gemini Advanced 2.0 Flash)
+            query = query.annotate(
+                resource_date_str=ExpressionWrapper(
+                    Case(
+                        When(resource__isnull=False, then=Cast(F("resource__date"), output_field=CharField())),
+                        default=Value(''),
+                        output_field=CharField(),
+                    ),
+                    output_field=CharField(),
+                ),
+                has_reg_text=Case(
+                    When(reg_text__isnull=False, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
+                is_empty_resource_date=Case(
+                    When(resource_date_str='', then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
+            )
+
+            ordering = []
+
+            # Handle Regulations (always last)
+            ordering.append('has_reg_text')  # False (no reg_text) comes before True (has reg_text)
+
+            # Handle Empty Resource Dates (before Regulations)
+            ordering.append(
+                Case(
+                    When(is_empty_resource_date=True, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                )
+            )
+
+            # Handle Valid Resource Dates
+            if sort == "-date":
+                ordering.append('-resource_date_str')
+            else:  # Default to ascending 'date'
+                ordering.append('resource_date_str')
+
+            query = query.order_by(*ordering)
+
+        # End LLM code
+
         current_page = [i.pk for i in self.paginate_queryset(query)]
         query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
 

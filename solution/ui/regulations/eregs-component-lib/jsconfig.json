@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "composables/*": ["../composables/*"],
+            "directives/*": ["../directives/*"],
+            "sharedComponents/*": ["./src/components/shared-components/*"],
+            "spaComponents/*": ["..eregs-vite/src/components/*"],
+            "utilities/*": ["../utilities/*"]
+        }
+    }
+}
