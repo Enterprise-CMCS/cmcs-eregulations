@@ -112,6 +112,16 @@ make eslint-cdk
 
 For more information and resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
 
+## Working with single-sign-on
+
+To use our Okta identity provider locally, you need to update the OIDC_RP and OIDC_OP environment variables in your Dockerfile. See internal authentication developers guide.
+
+# Deployment
+
+See [CDK Readme](cdk-eregs/README.md).
+
+To use our Okta identity provider on an experimental (ephemeral) deployment, see internal authentication developers guide.
+
 # Development tips
 
 ## Export and import data
@@ -165,31 +175,3 @@ To see the changes on the admin site, run `make local.collectstatic`.  This will
 You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
 
 For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
-
-## Working with Single-Sign-On
-
-### Setting local to use CMS SSO (IDM)
-Update your Dockerfile with the following environment variables:
-```
-ENV OIDC_RP_CLIENT_ID=<your client id>
-ENV OIDC_RP_CLIENT_SECRET=<your client secret>
-ENV OIDC_OP_AUTHORIZATION_ENDPOINT=<authorization endpoint>
-ENV OIDC_OP_TOKEN_ENDPOINT=<token endpoint>
-ENV OIDC_OP_USER_ENDPOINT=<user endpoint>
-ENV OIDC_OP_JWKS_ENDPOINT=<jwks endpoint>
-ENV EUA_FEATUREFLAG=<set to 'true' if you want to see the eua link on admin login page>
-```
-These values can be found on AWS Parameter Store.
-
-### Register to test IDP IDM
-- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the IDP (Identity Provider) portal.
-- Set up Multi-Factor Authentication (MFA) for your account. Follow the provided prompts and instructions to complete the MFA setup process.
-- Once your account has been successfully set up with MFA, please notify the CMS Okta team.
-- Inform the Okta team that you need to be added to the eRegs group.
-
-### Troubleshooting
-- Issue: Setting OIDC_OP_AUTHORIZATION_ENDPOINT not found
-  This error indicates that the environment variables are not properly set.
-- Solution:
-  - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
-  - On dev, val, prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store.
