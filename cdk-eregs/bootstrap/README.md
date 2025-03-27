@@ -4,9 +4,9 @@
 
 In order for our CDK scripts to reliably deploy/create AWS resources, we need to keep our CDK stacks up to date.
 
-We decided we wanted to do this automatically via cron'd Github Action, but found it wasn't possible to do this using standard bootstrap procedure because we are relying on a CMS-specific `template.yaml`.  By diffing the CMS `template.yaml` with the [default one from CDK](https://github.com/aws/aws-cdk/blob/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml), we found it was feasible to create a script (`update_template.py`) that attempts to automatically apply those needed changes to the default template.
+We decided to do this via a GitHub Action, but found it wasn't possible using standard bootstrap procedure because we rely on a CMS-specific `template.yaml`.  By diffing the CMS `template.yaml` with the [default one from CDK](https://github.com/aws/aws-cdk/blob/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml), we found it was feasible to create a script (`update_template.py`) that attempts to automatically apply those needed changes to the default template.
 
-From there, we can automate the bootstrap update procedure.
+From there, we can automate the bootstrap update procedure. We decided to run this update periodically on request, instead of automatically on a recurring schedule, to make it easier to check for any breaking changes or other impacts to our deployment process.
 
 ## Prerequisites
 
@@ -60,81 +60,4 @@ Path to be added to the role properties. Default is: `/delegatedadmin/developer/
 
 ## Automating CDK updates via Github Actions
 
-This sample script should provide the starting point for a script that can automatically update the CDK bootstrap:
-
-```yaml
-name: Update CDK Bootstrap
-
-on:
-  schedule:
-    - cron: '0 0 * * 1' # Runs every Monday 
-
-permissions:
-  id-token: write
-  contents: read
-  actions: read
-
-jobs:
-  update-cdk-bootstrap:
-    strategy:
-      max-parallel: 1
-      matrix:
-        environment: ["dev", "val", "prod"]
-
-    runs-on: ubuntu-latest
-
-    environment:
-      name: ${{ matrix.environment }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Configure AWS credentials for GitHub Actions
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: us-east-1
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.14
-
-      - name: Install AWS CDK
-        run: npm install -g aws-cdk # Install CDK
-
-      - name: Update CDK Bootstrap
-        env:
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }} # Get the account ID and region
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-          pushd cdk-eregs/bootstrap
-
-          # Use curl to download the latest template.yaml directly from the CDK repo
-          curl -s "https://raw.githubusercontent.com/aws/aws-cdk/refs/heads/main/packages/aws-cdk/lib/api/bootstrap/bootstrap-template.yaml" -o latest-template.yaml > /dev/null
-
-          # Install script requirements
-          pip install -r requirements.txt
-
-          # Use update_template.py to generate our custom template.yaml
-          # Note the role-to-assume name of 'ct-ado-eregs-application-admin',
-          # update this for your use-case.
-          ./update_template.py roles.json latest-template.yaml template.yaml ct-ado-eregs-application-admin
-
-          # Create a temporary CDK app for bootstrapping purposes only
-          mkdir temp; pushd temp
-          cdk init app --language=typescript > /dev/null
-
-          # Copy the default template into the new CDK app
-          cp ../template.yaml .
-
-          # Run cdk bootstrap with the custom template
-          # Note other account-specific parameters that can be adjusted for your use-case
-          cdk bootstrap --template template.yaml \
-            --cloudformation-execution-policies arn:aws:iam::aws:policy/AdministratorAccess,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/ADO-Restriction-Policy,arn:aws:iam::${AWS_ACCOUNT_ID}:policy/CMSApprovedAWSServices \
-            --custom-permissions-boundary ct-ado-poweruser-permissions-boundary-policy \
-            --qualifier one
-
-          popd; popd
-```
+See our GitHub Actions script here: [/.github/workflows/update-cdk-bootstrap.yml](/.github/workflows/update-cdk-bootstrap.yml)
