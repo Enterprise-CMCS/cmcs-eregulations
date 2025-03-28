@@ -6,7 +6,6 @@ import re
 import threading
 import sys
 import time
-from datetime import timedelta
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -53,7 +52,7 @@ def update_thread_status(**kwargs):
 
         # Compute elapsed time as a string
         elapsed = time.time() - start_time
-        elapsed_str = time.strftime("%H:%M:%S".format(str(elapsed % 1)[2:])[:15], time.gmtime(elapsed))
+        elapsed_str = time.strftime("%H:%M:%S".format()[:15], time.gmtime(elapsed))
 
         sys.stdout.write("\033[H\033[J")  # Clear the terminal
         sys.stdout.write(f"Processed: {processed_stacks}/{total_stacks}\tFailed: {len(failed_stacks)}\tElapsed: {elapsed_str}\n\n")
@@ -150,7 +149,7 @@ def delete_stack(stack):
             except s3_client.exceptions.NoSuchBucket:
                 # Bucket already deleted
                 pass
-            except Exception as e:
+            except Exception:
                 update_thread_status(status="Error processing", stack=stack_name, bucket=bucket_name, object=None)
                 time.sleep(5) # Give the user a moment to see the error
                 raise  # Re-raise the exception to skip the stack
@@ -166,7 +165,7 @@ def delete_group(group):
     for stack in group:
         try:
             delete_stack(stack)
-        except Exception as e:
+        except Exception:
             with failed_lock:
                 failed_stacks.append(stack["StackName"])
             update_thread_status(status="Error processing", stack=stack["StackName"], bucket=None, object=None)
