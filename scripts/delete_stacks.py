@@ -6,6 +6,7 @@ import re
 import threading
 import sys
 import time
+from datetime import timedelta
 import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -28,6 +29,14 @@ status_lock = threading.Lock()
 failed_stacks = []
 failed_lock = threading.Lock()
 
+# Thread-safe counter for processed stacks
+processed_stacks = 0
+total_stacks = 0
+processed_lock = threading.Lock()
+
+# Start time
+start_time = None
+
 
 def update_thread_status(**kwargs):
     thread_id = kwargs.get("thread_id", threading.get_ident())
@@ -42,8 +51,12 @@ def update_thread_status(**kwargs):
         for key, value in kwargs.items():
             thread_status[thread_id][key] = value
 
+        # Compute elapsed time as a string
+        elapsed = time.time() - start_time
+        elapsed_str = time.strftime("%H:%M:%S".format(str(elapsed % 1)[2:])[:15], time.gmtime(elapsed))
+
         sys.stdout.write("\033[H\033[J")  # Clear the terminal
-        sys.stdout.write("Processing...\n\n")
+        sys.stdout.write(f"Processed: {processed_stacks}/{total_stacks}\tFailed: {len(failed_stacks)}\tElapsed: {elapsed_str}\n\n")
         sys.stdout.write("Current thread statuses:\n\n")
         for i, thread in enumerate(thread_status.values()):
             if not thread["stack"]:
@@ -144,6 +157,9 @@ def delete_stack(stack):
 
     delete_stack_instance(stack_name)
     wait_for_stack_deletion(stack_name)
+    with processed_lock:
+        global processed_stacks
+        processed_stacks += 1
 
 
 def delete_group(group):
@@ -159,6 +175,8 @@ def delete_group(group):
 
 
 def delete_stacks(exclude_prs):
+    print("Retrieving list of stacks...")
+
     # List all stacks that are not currently being updated, or are already deleted
     stacks = []
     next_token = None
@@ -191,9 +209,11 @@ def delete_stacks(exclude_prs):
     # Then group stacks by PR number
     pattern = re.compile(r"(?:dev|eph-)(\d{4})")
     pr_groups = {}
+    global total_stacks
     for stack in stacks:
         match = pattern.search(stack["StackName"])
         if match:
+            total_stacks += 1
             pr_number = match.group(1)
             pr_groups.setdefault(pr_number, []).append(stack)
 
@@ -212,6 +232,9 @@ def delete_stacks(exclude_prs):
     if confirmation != "yes":
         print("Deletion process aborted by the user.")
         return
+
+    global start_time
+    start_time = time.time()
 
     # Process stacks in parallel with a limit on the number of concurrent executions
     with ThreadPoolExecutor(max_workers=MAX_CONCURRENT) as executor:
