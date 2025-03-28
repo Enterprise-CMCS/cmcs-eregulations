@@ -6,6 +6,7 @@ import re
 import threading
 import sys
 import time
+import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
@@ -16,7 +17,8 @@ cf_client = boto3.client("cloudformation")
 # Global variables
 DRY_RUN = False
 DRY_RUN_SLEEP = 0.05
-MAX_CONCURRENT = 5
+MAX_CONCURRENT = int((os.get_terminal_size().lines - 4) / 4)
+CLI_COLUMNS = os.get_terminal_size().columns
 
 # Thread-safe dictionary to track thread statuses
 thread_status = {}
@@ -53,7 +55,7 @@ def update_thread_status(**kwargs):
                 else:
                     sys.stdout.write("\n")
                 if thread["object"]:
-                    sys.stdout.write(f"  Object: {thread['object'][:80]}...\n")
+                    sys.stdout.write(f"  Object: {thread['object'][:(CLI_COLUMNS - 20)]}...\n")
                 else:
                     sys.stdout.write("\n")
             sys.stdout.write("\n")
@@ -242,12 +244,6 @@ if __name__ == "__main__":
         type=str,
         help="List of stacks (by PR number) to exclude from deletion"
     )
-    parser.add_argument(
-        "--max-concurrent",
-        type=int,
-        default=5,
-        help="Maximum number of concurrent deletions (default: 5)"
-    )
     args = parser.parse_args()
 
     if args.dry_run:
@@ -255,6 +251,5 @@ if __name__ == "__main__":
         print("Dry run mode enabled. No AWS resources will be deleted.")
 
     exclude_prs = args.exclude_prs if args.exclude_prs else []
-    MAX_CONCURRENT = args.max_concurrent
 
     delete_stacks(exclude_prs)
