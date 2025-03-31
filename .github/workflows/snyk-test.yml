@@ -43,7 +43,7 @@ jobs:
             SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
         - name: use the custom github  action to parse Snyk output
-          uses: Enterprise-CMCS/mac-fc-security-scan-report@v2.7.4
+          uses: Enterprise-CMCS/mac-fc-security-scan-report@v2.8.5
           with:
               jira-token: ${{ secrets.JIRA_TOKEN}}
               jira-host: ${{ secrets.JIRA_HOST }}
