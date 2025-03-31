@@ -91,6 +91,7 @@ export class DatabaseConstruct extends Construct {
       }),
       description: `Instance parameter group for ${stageConfig.stageName}`,
       parameters: {
+        // Most of these are required for security compliance
         'shared_preload_libraries': 'auto_explain,pg_stat_statements,pg_hint_plan,pgaudit',
         'log_statement': 'ddl',
         'log_connections': '1',
