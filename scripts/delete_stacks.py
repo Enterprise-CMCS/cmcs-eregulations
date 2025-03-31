@@ -172,6 +172,9 @@ def delete_group(group):
             time.sleep(5) # Give the user a moment to see the error
             continue # Permit the loop to continue even if one stack fails
 
+    # Set the status back to idle indicating that the current group is done
+    update_thread_status(status="", stack=None, bucket=None, object=None)
+
 
 def delete_stacks(exclude_prs):
     print("Retrieving list of stacks...")
