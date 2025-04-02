@@ -33,7 +33,8 @@ const itemProps = (item) => {
     return {
         title: item.label,
         value: item.method,
-        disabled: item.disabled
+        disabled: item.disabled,
+        "data-testid": `sort-${item.label.toLowerCase()}`,
     };
 };
 
