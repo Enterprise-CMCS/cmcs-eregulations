@@ -6,9 +6,9 @@ ENV PYTHONPATH=/var/task
 ENV LAMBDA_TASK_ROOT=/var/task
 ENV DJANGO_CONFIGURATION=Production
 ENV PYTHONUNBUFFERED=1
-ENV AWS_LAMBDA_LOG_LEVEL=DEBUG
 ARG BUILD_ID=env
 RUN echo "BUILD_ID is: ${BUILD_ID}"
+
 # Install system dependencies
 RUN dnf install -y \
     gcc \
@@ -24,9 +24,6 @@ RUN pip install -r ${LAMBDA_TASK_ROOT}/requirements.txt
 
 # Copy function code
 COPY . ${LAMBDA_TASK_ROOT}/
-
-# # Copy debug handler
-# COPY debug_handler.py ${LAMBDA_TASK_ROOT}/handler.py
 
 # Make sure Django can write to tmp
 RUN chmod 777 /tmp

@@ -175,3 +175,28 @@ To see the changes on the admin site, run `make local.collectstatic`.  This will
 You will need to restart the local environment to see the changes. The Makefile will automatically move those files to the correct location where `STATIC_ROOT` is defined. This is the location where Django will look for static files.
 
 For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
+
+## Deleting old CloudFormation stacks
+Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can built up and become a nuisance.
+
+We have 2 scripts in our repo that can assist with cleaning up unused stacks and resources. Both are contained in the `./scripts` directory. Both scripts require the `boto3` library to be installed on your machine, and an AWS account must be configured either via CLI profile or environment variables. Be sure to run `export AWS_REGION=<your_region>` as well.
+
+### delete_stacks.py
+
+This script will retrieve a list of all experimental deployments and automatically delete them in parallel using a thread pool. The thread pool's size is proportional to the size of your terminal window to allow you to easily track the progress.
+
+**Example:**
+To delete all experimental deployments _except_ the stacks belonging to PR numbers 1234 and 6789, run `./scripts/delete_stacks.py --exclude-prs 1234 6789`.
+
+**Example:**
+To perform a dry run of the delete action, run `./scripts/delete_stacks.py --dry-run`. The dry run will also simulate a short delay between deleting resources. This makes the dry run more realistic, as well as pevents contention between the various threads in the thread pool.
+
+### delete_resources.py
+
+This script retrieves a list of all S3 Buckets, Security Groups, and Log Groups that belong to an experimental deployment but are not associated with any CloudFormation stack that exists currently.
+
+The script runs in three steps, one for each resource type, and prompts the user to delete the listed resources or not. If the user selects no, it will move on to the next resource type.
+
+This does not run in parallel to better display error messages and give the user a chance to respond to issues, however it is usually very fast compared to deleting stacks so this is not a concern.
+
+To use this script, just run `./scripts/delete_resources.py` with no arguments needed.
