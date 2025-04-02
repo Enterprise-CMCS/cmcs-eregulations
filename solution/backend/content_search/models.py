@@ -8,6 +8,7 @@ from django.contrib.postgres.search import (
     SearchVectorField,
 )
 from django.db import models
+from django.db.models import F
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
 from django.db.models.signals import post_save
@@ -59,14 +60,28 @@ class ContentIndexQuerySet(models.QuerySet):
             "rank_d_string",
         )
 
-    def search(self, search_query):
+    def search(self, search_query, sort_method="-rank"):
         cover_density = self._is_quoted(search_query)
         rank_filter = float(settings.QUOTED_SEARCH_FILTER if cover_density else settings.BASIC_SEARCH_FILTER)
-        return self.annotate(rank=SearchRank(
-            RawSQL("vector_column", [], output_field=SearchVectorField()),
-            self._get_search_query_object(search_query), cover_density=cover_density))\
-            .filter(rank__gt=rank_filter)\
-            .order_by('-rank', '-id')
+
+        if sort_method == "-date":
+            order_by = (F("date").desc(nulls_last=True), F("resource__title").asc(nulls_last=True))
+
+        elif sort_method == "date":
+            order_by = (F("date").asc(nulls_last=True), F("resource__title").asc(nulls_last=True))
+
+        else:
+            order_by = ("-rank", "-date", "-id")
+
+        return self.annotate(
+            rank=SearchRank(
+                RawSQL("vector_column", [], output_field=SearchVectorField()),
+                self._get_search_query_object(search_query), cover_density=cover_density
+            )
+        )\
+        .filter(rank__gt=rank_filter)\
+        .order_by(*order_by)\
+
 
     def generate_headlines(self, search_query):
         query_object = self._get_search_query_object(search_query)
@@ -131,6 +146,7 @@ class ContentIndex(models.Model):
     name = models.TextField(blank=True)
     summary = models.TextField(blank=True)
     content = models.TextField(blank=True)
+    date = models.CharField(max_length=10, null=True)
 
     # Rank fields for searching
     rank_a_string = models.TextField(blank=True)
@@ -162,6 +178,7 @@ def update_indexed_public_resource(sender, instance, created, **kwargs):
     index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.document_id
     index.summary = instance.title
+    index.date = instance.date or None
     index.rank_a_string = "{} {}".format(
         instance.document_id,
         instance.title,
@@ -177,6 +194,7 @@ def update_indexed_internal_file(sender, instance, created, **kwargs):
     index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.title
     index.summary = instance.summary
+    index.date = instance.date or None
     index.rank_a_string = instance.title
     index.rank_b_string = instance.summary
     index.rank_c_string = "{} {}".format(
@@ -192,6 +210,7 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
     index, _ = ContentIndex.objects.get_or_create(resource=instance)
     index.name = instance.title
     index.summary = instance.summary
+    index.date = instance.date or None
     index.rank_a_string = instance.title
     index.rank_b_string = instance.summary
     index.rank_c_string = instance.date
