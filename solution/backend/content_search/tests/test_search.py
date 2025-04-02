@@ -296,7 +296,7 @@ class SearchTest(TestCase):
         self.assertEqual(results[0]['resource']["title"], "Policy reference file fire fire fire")
         self.assertEqual(results[1]['resource']["title"], "But the worlds been burning since the worlds been turning")
 
-    # If sorted by 'date', a search for 'fire' from fixture data will return two results with dates 2019-05-12 and then 2020-02-29
+    # If sorted by 'date', a search for 'fire' from fixture data will return two results, oldest first
     def test_date_sorting_oldest(self):
         self.login()
         response = self.client.get("/v3/content-search/?q=fire&sort=date")
@@ -308,7 +308,7 @@ class SearchTest(TestCase):
         self.assertEqual(results[1]['resource']["title"], "Policy reference file fire fire fire")
         self.assertEqual(results[1]['resource']["date"], "2020-02-29")
 
-    # If sorted by '-date', a search for 'fire' from fixture data will return two results with dates 2019-05-12 and then 2020-02-29
+    # If sorted by '-date', a search for 'fire' from fixture data will return two results, newest first
     def test_date_sorting_newest(self):
         self.login()
         response = self.client.get("/v3/content-search/?q=fire&sort=-date")
@@ -322,7 +322,7 @@ class SearchTest(TestCase):
 
     # This test ensures that sorted search results put undated resources after dated resources
     # and Regulations at the end of the list.
-    def test_sorting_newest_undated(self):
+    def test_sorting_date_undated_regulations(self):
         self.login()
 
         # Newest first
