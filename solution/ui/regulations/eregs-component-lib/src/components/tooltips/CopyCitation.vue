@@ -1,20 +1,3 @@
-<template>
-    <div class="action-btns">
-        <ActionBtn
-            :selected-action="selectedAction"
-            :status="copyStatus"
-            action-type="link"
-            @action-btn-click="handleActionClick"
-        />
-        <ActionBtn
-            :selected-action="selectedAction"
-            :status="copyStatus"
-            action-type="citation"
-            @action-btn-click="handleActionClick"
-        />
-    </div>
-</template>
-
 <script setup>
 import { ref, watch, computed } from "vue";
 import ActionBtn from "./ActionBtn.vue";
@@ -62,3 +45,20 @@ watch(
     }
 );
 </script>
+
+<template>
+    <div class="action-btns">
+        <ActionBtn
+            :selected-action="selectedAction"
+            :status="copyStatus"
+            action-type="link"
+            @action-btn-click="handleActionClick"
+        />
+        <ActionBtn
+            :selected-action="selectedAction"
+            :status="copyStatus"
+            action-type="citation"
+            @action-btn-click="handleActionClick"
+        />
+    </div>
+</template>
