@@ -1,3 +1,52 @@
+<script setup>
+import { ref, onMounted } from 'vue';
+import { getGovInfoLinks } from "utilities/api";
+import SimpleSpinner from "../SimpleSpinner.vue";
+
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    part: {
+        type: String,
+        required: true,
+    },
+    section: {
+        type: String,
+        required: true,
+    },
+});
+
+const govInfoLinks = ref([]);
+const loading = ref(true);
+
+onMounted(() => {
+    getGovInfoLinks({
+        apiUrl: props.apiUrl,
+        filterParams: {
+            title: props.title,
+            part: props.part,
+            section: props.section,
+        },
+    })
+        .then((response) => {
+            govInfoLinks.value = response.sort((a, b) => b.year - a.year);
+        })
+        .catch((error) => {
+            console.error("Error", error);
+            govInfoLinks.value = [];
+        })
+        .finally(() => {
+            loading.value = false;
+        });
+});
+</script>
+
 <template>
     <div class="gov-info-links-container">
         <div class="gov-info-links">
@@ -30,62 +79,4 @@
     </div>
 </template>
 
-<script>
-import { getGovInfoLinks } from "utilities/api";
-import SimpleSpinner from "../SimpleSpinner.vue";
 
-export default {
-    name: "GovInfoLinks",
-
-    components: {
-        SimpleSpinner,
-    },
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-        title: {
-            type: String,
-            required: true,
-        },
-        part: {
-            type: String,
-            required: true,
-        },
-        section: {
-            type: String,
-            required: true,
-        },
-    },
-
-    created() {
-        getGovInfoLinks({
-            apiUrl: this.apiUrl,
-            filterParams: {
-                title: this.title,
-                part: this.part,
-                section: this.section,
-            },
-        })
-            .then((response) => {
-                this.govInfoLinks = response.sort((a, b) => b.year - a.year);
-            })
-            .catch((error) => {
-                console.error("Error", error);
-                this.govInfoLinks = [];
-            })
-            .finally(() => {
-                this.loading = false;
-            });
-    },
-
-    data() {
-        return {
-            govInfoLinks: [],
-            loading: true,
-        };
-    },
-};
-</script>
