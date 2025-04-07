@@ -24,27 +24,6 @@ export class WafConstruct extends Construct {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-     //Add resource policy to allow WAF log delivery
-    const logResourcePolicy = new logs.CfnResourcePolicy(this, 'WafLogResourcePolicy', {
-      policyName: stageConfig.getResourceName('waf-logs-delivery-policy'),
-      policyDocument: JSON.stringify({
-        Version: '2012-10-17',
-        Statement: [
-          {
-            Effect: 'Allow',
-            Principal: {
-              Service: 'delivery.logs.amazonaws.com'  
-            },
-            Action: [
-              'logs:CreateLogStream',
-              'logs:PutLogEvents'
-            ],
-            Resource: `${this.logGroup.logGroupArn}:*`  // Note the :* suffix for log streams
-          }
-        ]
-      })
-    });
-
     // Create the WAFv2 Web ACL
     this.webAcl = new wafv2.CfnWebACL(this, 'APIGatewayWAF', {
       name: stageConfig.getResourceName('APIGateway-eregs-allow-usa-plus-territories'),
@@ -127,7 +106,6 @@ export class WafConstruct extends Construct {
 
     // Make sure WAF depends on log group
     this.webAcl.node.addDependency(this.logGroup);
-    this.webAcl.node.addDependency(logResourcePolicy);
 
     // Format a clean ARN for WAF logging
     const stack = cdk.Stack.of(this);
@@ -149,7 +127,6 @@ export class WafConstruct extends Construct {
 
     // Add explicit dependencies
     loggingConfig.node.addDependency(this.logGroup);
-    loggingConfig.node.addDependency(logResourcePolicy); // Add dependency on the resource policy
     loggingConfig.node.addDependency(this.webAcl);
 
     // Add resource tags
