@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ],
+            "composables/*": ["../composables/*"],
+            "directives/*": ["../directives/*"],
+            "eregsComponentLib/*": ["../eregsComponentLib/*"],
+            "legacy/*": ["../../regulations/*"],
+            "sharedComponents/*": ["../eregs-component-lib/src/components/shared-components/*"],
+            "utilities/*": ["../utilities/*"]
+        }
+    }
+}

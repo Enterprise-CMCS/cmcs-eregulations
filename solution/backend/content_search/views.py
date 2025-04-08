@@ -1,4 +1,3 @@
-
 from django.db.models import Count, F, Prefetch, Q
 from django.http import QueryDict
 from django.urls import reverse
@@ -112,6 +111,7 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
         citations = request.GET.getlist("citations")
         subjects = request.GET.getlist("subjects")
         categories = request.GET.getlist("categories")
+        sort = request.GET.get("sort")
         show_public = string_to_bool(request.GET.get("show_public"), True)
         show_internal = string_to_bool(request.GET.get("show_internal"), True)
         show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
@@ -153,7 +153,8 @@ class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
             query = query.exclude(reg_text__isnull=False)
 
         # Perform search and headline generation
-        query = query.search(search_query)
+        query = query.search(search_query, sort)
+
         current_page = [i.pk for i in self.paginate_queryset(query)]
         query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
 
