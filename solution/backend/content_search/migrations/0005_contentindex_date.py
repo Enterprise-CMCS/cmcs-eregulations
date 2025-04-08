@@ -3,8 +3,13 @@
 from django.db import migrations, models
 from django.db.models import Q
 
+TIMEOUT_MINUTES = 10
+
 
 def populate_date(apps, schema_editor):
+    # Lessen the likelihood of this migration timing out during the copy operation
+    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+    
     ContentIndex = apps.get_model('content_search', 'ContentIndex')
     for index in ContentIndex.objects.filter(Q(resource__isnull=False) & ~Q(resource__date="")):
         index.date = index.resource.date
