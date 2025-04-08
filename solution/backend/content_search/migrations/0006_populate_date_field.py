@@ -7,7 +7,6 @@ def populate_date(apps, schema_editor):
     q_filter = Q(resource__isnull=False) & ~Q(resource__date="") & Q(date__isnull=True)
     while ContentIndex.objects.filter(q_filter).exists():
         with transaction.atomic():
-            print("Updating 100 indices", flush=True)
             for index in ContentIndex.objects.filter(q_filter)[:100]:
                 index.date = index.resource.date or None
                 index.save()
