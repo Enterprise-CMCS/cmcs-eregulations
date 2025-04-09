@@ -1,5 +1,36 @@
+<script setup>
+import { defineProps, computed } from 'vue';
+import { EventCodes } from "utilities/utils";
+import eventbus from "../eventbus";
+
+const props = defineProps({
+    section: {
+        type: String,
+        required: true,
+    },
+    count: {
+        type: String,
+        required: true,
+    },
+    type: {
+        type: String,
+        required: false,
+        default: "link",
+    },
+});
+
+const clickHandler = () => {
+    eventbus.emit(EventCodes.SetSection, {
+        section: props.section,
+        count: props.count,
+    });
+};
+
+const isLink = computed(() => props.type === "link");
+</script>
+
 <template>
-    <div v-if="isLink()" class="view-resources-link">
+    <div v-if="isLink" class="view-resources-link">
         <button
             v-if="count !== '0'"
             class="link-btn"
@@ -30,39 +61,3 @@
         </button>
     </div>
 </template>
-
-<script>
-import { EventCodes } from "utilities/utils";
-import eventbus from "../eventbus";
-
-export default {
-    name: "ViewResourcesLink",
-
-    props: {
-        section: {
-            type: String,
-            required: true,
-        },
-        count: {
-            type: String,
-            required: true,
-        },
-        type: {
-            type: String,
-            required: false,
-            default: "link",
-        },
-    },
-    methods: {
-        clickHandler() {
-            eventbus.emit(EventCodes.SetSection, {
-                section: this.section,
-                count: this.count,
-            });
-        },
-        isLink() {
-            return this.type === "link";
-        },
-    },
-};
-</script>

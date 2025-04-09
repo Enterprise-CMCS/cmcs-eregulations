@@ -1,3 +1,54 @@
+<script setup>
+import { computed, defineEmits, defineProps } from 'vue';
+
+const props = defineProps({
+    actionType: {
+        type: String,
+        required: true,
+    },
+    selectedAction: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+    },
+});
+
+const emit = defineEmits(['action-btn-click']);
+
+const selected = computed(() => {
+    return (
+        props.selectedAction === props.actionType &&
+        props.status !== "idle"
+    );
+});
+
+const labelState = computed(() => {
+    return selected.value && props.status === "success"
+        ? "copied"
+        : "copy";
+});
+
+const label = computed(() => {
+    return `${labelState.value} ${props.actionType}`;
+});
+
+const buttonClasses = computed(() => {
+    return {
+        "selected-btn": selected.value && props.status === "success",
+        "default-btn": !selected.value,
+    };
+});
+
+const handleClick = () => {
+    emit('action-btn-click', {
+        actionType: props.actionType,
+    });
+};
+</script>
+
 <template>
     <button
         class="action-btn"
@@ -40,57 +91,3 @@
         {{ label }}
     </button>
 </template>
-
-<script>
-export default {
-    name: "ActionButton",
-
-    props: {
-        actionType: {
-            type: String,
-            required: true,
-        },
-        selectedAction: {
-            type: String,
-            required: true,
-        },
-        status: {
-            type: String,
-            required: true,
-        },
-    },
-
-    computed: {
-        selected() {
-            return (
-                this.selectedAction === this.actionType &&
-                this.status !== "idle"
-            );
-        },
-        labelState() {
-            return this.selected && this.status === "success"
-                ? "copied"
-                : "copy";
-        },
-        label() {
-            return `${this.labelState} ${this.actionType}`;
-        },
-        buttonClasses() {
-            return {
-                "selected-btn": this.selected && this.status === "success",
-                "default-btn": !this.selected,
-            };
-        },
-    },
-
-    emits: ["action-btn-click"],
-
-    methods: {
-        handleClick() {
-            this.$emit("action-btn-click", {
-                actionType: this.actionType,
-            });
-        },
-    },
-};
-</script>

@@ -1,3 +1,230 @@
+<script setup>
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import {
+    getExternalCategories,
+    getSupplementalContent,
+    getSubpartTOC,
+} from "utilities/api";
+import {
+    EventCodes,
+    formatResourceCategories,
+    getSectionsRecursive,
+} from "utilities/utils";
+
+import SimpleSpinner from "./SimpleSpinner.vue";
+import SupplementalContentCategory from "./SupplementalContentCategory.vue";
+
+import eventbus from "../eventbus";
+
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    part: {
+        type: String,
+        required: true,
+    },
+    subparts: {
+        type: Array,
+        required: false,
+        default() {
+            return [];
+        },
+    },
+});
+
+const categories = ref([]);
+const isFetching = ref(true);
+const selectedPart = ref(undefined);
+const resourceCount = ref(0);
+const partDict = ref({});
+const location = ref("");
+
+const activePart = computed(() => {
+    if (selectedPart.value !== undefined) {
+        return selectedPart.value;
+    }
+    return `Subpart ${props.subparts[0]}`;
+});
+
+watch(
+    () => props.subparts,
+    () => {
+        categories.value = [];
+        isFetching.value = true;
+        fetchContent();
+    }
+);
+
+watch(selectedPart, () => {
+    categories.value = [];
+    isFetching.value = true;
+    if (selectedPart.value) {
+        fetchContent(
+            `citations=${props.title}.${props.part}.${
+                selectedPart.value.split(".")[1]
+            }`
+        );
+    } else {
+        fetchContent();
+    }
+});
+
+onMounted(() => {
+    if (window.location.hash) {
+        location.value = parseHash(window.location.hash);
+    } else {
+        fetchContent();
+    }
+    fetchContent(location.value);
+    window.addEventListener("hashchange", handleHashChange);
+
+    eventbus.on(EventCodes.SetSection, (args) => {
+        selectedPart.value = args.section;
+    });
+    categories.value = getDefaultCategories();
+});
+
+onUnmounted(() => {
+    eventbus.off(EventCodes.SetSection);
+    window.removeEventListener("hashchange", handleHashChange);
+});
+
+const handleHashChange = () => {
+    location.value = parseHash(window.location.hash);
+    fetchContent(location.value);
+};
+
+const parseHash = (locationHash) => {
+    if (window.location.hash === "#main-content") return "";
+    if (locationHash.toLowerCase().includes("appendix")) {
+        selectedPart.value = undefined;
+        return "";
+    }
+
+    let section = locationHash.substring(1).replace("-", ".");
+
+    if (section.includes("-")) {
+        // eslint-prefer-destructuring, kinda cool
+        [section] = section.split("-");
+    }
+
+    if (Number.isNaN(section)) {
+        return `citations=${props.title}.${props.part}.${section}`;
+    }
+
+    selectedPart.value = `§ ${section}`;
+    return `citations=${props.title}.${section}`;
+};
+
+const fetchContent = async (location) => {
+    try {
+        // Page size is set to 1000 to attempt to get all resources.
+        // Defualt page size of 100 was omitting resources from the right sidebar.
+        // Right now no single subpart hits this number so this shouldn't be an issue
+
+        let response = "";
+        if (location) {
+            response = await getSupplementalContent({
+                apiUrl: props.apiUrl,
+                builtCitationString: location,
+                pageSize: 1000,
+            });
+        }
+        await getPartDictionary();
+
+        const results = await Promise.all([
+            getCategories(props.apiUrl),
+            getSupplementalContent({
+                apiUrl: props.apiUrl,
+                partDict: partDict.value,
+                pageSize: 1000,
+            }),
+        ]);
+
+        const categoryData = results[0];
+        const subpartResponse = results[1];
+
+        resourceCount.value = subpartResponse.count;
+
+        if (response !== "") {
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: categoryData.results,
+                resources: response.results,
+            });
+        } else {
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: categoryData.results,
+                resources: subpartResponse.results,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isFetching.value = false;
+    }
+};
+
+const getPartDictionary = async () => {
+    const sections = await getSubpartTOC({
+        apiUrl: props.apiUrl,
+        title: props.title,
+        part: props.part,
+        subPart: props.subparts[0],
+    });
+
+    const secList = getSectionsRecursive(sections);
+
+    partDict.value[props.part] = {
+        title: props.title,
+        subparts: props.subparts,
+        sections: secList,
+    };
+};
+
+const clearSection = () => {
+    selectedPart.value = undefined;
+    location.value = undefined;
+    eventbus.emit(EventCodes.ClearSections);
+};
+
+function getDefaultCategories() {
+    if (!document.getElementById("categories")) return [];
+
+    const rawCategories = JSON.parse(
+        document.getElementById("categories").textContent
+    );
+
+    return rawCategories.map((c) => {
+        const category = JSON.parse(JSON.stringify(c));
+        category.subcategories = [];
+        return category;
+    });
+}
+
+const getCategories = async (apiUrl) => {
+    let categories = [];
+
+    try {
+        categories = await getExternalCategories({
+            apiUrl,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return categories;
+};
+</script>
+
 <template>
     <div>
         <h1 id="subpart-resources-heading">
@@ -36,240 +263,3 @@
         </a>
     </div>
 </template>
-
-<script>
-import {
-    getExternalCategories,
-    getSupplementalContent,
-    getSubpartTOC,
-} from "utilities/api";
-import {
-    EventCodes,
-    formatResourceCategories,
-    getSectionsRecursive,
-} from "utilities/utils";
-
-import SimpleSpinner from "./SimpleSpinner.vue";
-import SupplementalContentCategory from "./SupplementalContentCategory.vue";
-
-import eventbus from "../eventbus";
-
-function getDefaultCategories() {
-    if (!document.getElementById("categories")) return [];
-
-    const rawCategories = JSON.parse(
-        document.getElementById("categories").textContent
-    );
-
-    return rawCategories.map((c) => {
-        const category = JSON.parse(JSON.stringify(c));
-        category.subcategories = [];
-        return category;
-    });
-}
-
-const getCategories = async (apiUrl) => {
-    let categories = [];
-
-    try {
-        categories = await getExternalCategories({
-            apiUrl,
-        });
-    } catch (error) {
-        console.error(error);
-    }
-
-    return categories;
-};
-
-export default {
-    components: {
-        SupplementalContentCategory,
-        SimpleSpinner,
-    },
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        title: {
-            type: String,
-            required: true,
-        },
-        part: {
-            type: String,
-            required: true,
-        },
-        subparts: {
-            type: Array,
-            required: false,
-            default() {
-                return [];
-            },
-        },
-    },
-
-    data() {
-        return {
-            categories: [],
-            isFetching: true,
-            selectedPart: undefined,
-            resourceCount: 0,
-            partDict: {},
-        };
-    },
-
-    computed: {
-        activePart() {
-            if (this.selectedPart !== undefined) {
-                return this.selectedPart;
-            }
-            return `Subpart ${this.subparts[0]}`;
-        },
-    },
-
-    watch: {
-        subparts() {
-            this.categories = [];
-            this.isFetching = true;
-            this.fetchContent();
-        },
-        selectedPart() {
-            this.categories = [];
-            this.isFetching = true;
-            if (this.selectedPart) {
-                this.fetchContent(
-                    `citations=${this.title}.${this.part}.${
-                        this.selectedPart.split(".")[1]
-                    }`
-                );
-            } else {
-                this.fetchContent();
-            }
-        },
-    },
-
-    created() {
-        let location = "";
-        if (window.location.hash) {
-            location = this.parseHash(window.location.hash);
-        } else {
-            this.fetchContent();
-        }
-        this.fetchContent(location);
-        window.addEventListener("hashchange", this.handleHashChange);
-    },
-    mounted() {
-        eventbus.on(EventCodes.SetSection, (args) => {
-            this.selectedPart = args.section;
-        });
-        this.categories = getDefaultCategories();
-    },
-    beforeUnmount() {
-        eventbus.off(EventCodes.SetSection);
-    },
-    unmounted() {
-        window.removeEventListener("hashchange", this.handleHashChange);
-    },
-
-    methods: {
-        handleHashChange() {
-            const location = this.parseHash(window.location.hash);
-            this.fetchContent(location);
-        },
-        parseHash(locationHash) {
-            if (window.location.hash === "#main-content") return "";
-            if (locationHash.toLowerCase().includes("appendix")) {
-                this.selectedPart = undefined;
-                return "";
-            }
-
-            let section = locationHash.substring(1).replace("-", ".");
-
-            if (section.includes("-")) {
-                // eslint-prefer-destructuring, kinda cool
-                [section] = section.split("-");
-            }
-
-            if (Number.isNaN(section)) {
-                return `citations=${this.title}.${this.part}.${section}`;
-            }
-
-            this.selectedPart = `§ ${section}`;
-            return `citations=${this.title}.${section}`;
-        },
-        async fetchContent(location) {
-            try {
-                // Page size is set to 1000 to attempt to get all resources.
-                // Defualt page size of 100 was omitting resources from the right sidebar.
-                // Right now no single subpart hits this number so this shouldn't be an issue
-
-                let response = "";
-                if (location) {
-                    response = await getSupplementalContent({
-                        apiUrl: this.apiUrl,
-                        builtCitationString: location,
-                        pageSize: 1000,
-                    });
-                }
-                await this.getPartDictionary();
-
-                const results = await Promise.all([
-                    getCategories(this.apiUrl),
-                    getSupplementalContent({
-                        apiUrl: this.apiUrl,
-                        partDict: this.partDict,
-                        pageSize: 1000,
-                    }),
-                ]);
-
-                const categories = results[0];
-                const subpartResponse = results[1];
-
-                this.resourceCount = subpartResponse.count;
-
-                if (response !== "") {
-                    this.categories = formatResourceCategories({
-                        apiUrl: this.apiUrl,
-                        categories: categories.results,
-                        resources: response.results,
-                    });
-                } else {
-                    this.categories = formatResourceCategories({
-                        apiUrl: this.apiUrl,
-                        categories: categories.results,
-                        resources: subpartResponse.results,
-                    });
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                this.isFetching = false;
-            }
-        },
-        async getPartDictionary() {
-            const sections = await getSubpartTOC({
-                apiUrl: this.apiUrl,
-                title: this.title,
-                part: this.part,
-                subPart: this.subparts[0],
-            });
-
-            const secList = getSectionsRecursive(sections);
-
-            this.partDict[this.part] = {
-                title: this.title,
-                subparts: this.subparts,
-                sections: secList,
-            };
-        },
-        clearSection() {
-            this.selectedPart = undefined;
-            this.location = undefined;
-            eventbus.emit(EventCodes.ClearSections);
-        },
-    },
-};
-</script>
