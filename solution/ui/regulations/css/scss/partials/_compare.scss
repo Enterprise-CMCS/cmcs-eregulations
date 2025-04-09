@@ -43,9 +43,19 @@
         display: inline-block;
 
         select {
-            border: none;
-            padding: 0.8em var(--spacer-2) 0.8em var(--spacer-1-5);
-            border-radius: 0;
+            width: 120px;
+
+            background-image: url("../images/arrow-both.svg");
+            background-repeat: no-repeat;
+            background-position-x: calc(100% - 8px);
+            background-position-y: 50%;
+
+            background-color: #fff;
+            border: 1px solid $light_gray;
+            height: 2rem;
+            font-size: var(--font-size-md);
+            padding-top: 0px;
+            padding-bottom: 0px;
         }
     }
 
