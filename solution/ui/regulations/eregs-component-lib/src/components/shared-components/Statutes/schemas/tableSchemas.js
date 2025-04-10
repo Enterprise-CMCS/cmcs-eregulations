@@ -54,7 +54,6 @@ const ssaSchema = [
             title: "US Code House.gov",
             secondary: true,
             subtitles: [
-                () => "Web Page",
                 (columnDates) =>
                     getDateLabel(columnDates?.us_code_house_gov ?? {}),
             ],
@@ -72,7 +71,6 @@ const ssaSchema = [
             title: "Statute Compilation",
             secondary: true,
             subtitles: [
-                () => "PDF Document",
                 (columnDates) =>
                     getDateLabel(columnDates?.statute_compilation ?? {}),
             ],
@@ -90,7 +88,6 @@ const ssaSchema = [
             title: "US Code Annual",
             secondary: true,
             subtitles: [
-                () => "PDF Document",
                 (columnDates) =>
                     getDateLabel(columnDates?.us_code_annual ?? {}),
             ],
@@ -108,7 +105,6 @@ const ssaSchema = [
             title: "SSA.gov Compilation",
             secondary: true,
             subtitles: [
-                () => "Web Page",
                 (columnDates) =>
                     getDateLabel(columnDates?.ssa_gov_compilation ?? {}),
             ],
