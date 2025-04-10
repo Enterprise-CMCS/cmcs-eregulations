@@ -444,14 +444,6 @@ a {
     &:hover.external::after {
         @include external-link-hover;
     }
-
-    &:link.pdf {
-        position: relative;
-
-        &::after {
-            @include pdf-link;
-        }
-    }
 }
 
 .smooth-scroll {

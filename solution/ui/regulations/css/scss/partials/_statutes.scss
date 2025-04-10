@@ -172,6 +172,15 @@
                         a {
                             text-decoration: none;
 
+                            &:link.pdf {
+                                display: flex;
+                                align-items: center;
+
+                                span {
+                                    margin-left: var(--spacer-half);
+                                }
+                            }
+
                             &:hover {
                                 color: $primary_link_hover;
                             }

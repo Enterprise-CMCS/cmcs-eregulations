@@ -37,7 +37,13 @@ defineProps({
                 :href="cellData.body.url(statute)"
                 target="_blank"
                 rel="noopener noreferrer"
-            >{{ cellData.body.text(statute) }}</a>
+            >
+                {{ cellData.body.text(statute) }}
+                <span
+                    v-if="cellData.body.url(statute) && cellData.body.type === 'pdf'"
+                    class="result__link--file-type"
+                >PDF</span>
+            </a>
             <span v-else :data-testid="statute.usc + '-none'">None</span>
         </template>
     </td>
