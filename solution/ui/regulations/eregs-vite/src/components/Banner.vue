@@ -1,3 +1,12 @@
+<script setup>
+defineProps({
+    title: {
+        type: String,
+        required: true,
+    },
+});
+</script>
+
 <template>
     <div class="nav-container" role="main">
         <div class="content">
@@ -8,18 +17,3 @@
         </div>
     </div>
 </template>
-
-<script>
-export default {
-    name: "BannerComponent",
-
-    components: {},
-
-    props: {
-        title: {
-            type: String,
-            required: true,
-        },
-    },
-};
-</script>
