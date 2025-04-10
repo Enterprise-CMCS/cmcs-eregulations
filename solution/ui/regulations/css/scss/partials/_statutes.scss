@@ -172,6 +172,13 @@
                         a {
                             text-decoration: none;
 
+                            &:link.pdf {
+                                display: flex;
+                                align-items: center;
+                                gap: var(--spacer-half);
+                                white-space: nowrap;
+                            }
+
                             &:hover {
                                 color: $primary_link_hover;
                             }

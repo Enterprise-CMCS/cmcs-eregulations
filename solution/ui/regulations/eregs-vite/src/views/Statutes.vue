@@ -159,11 +159,7 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Statute Reference">
-                <template #description>
-                    <h2>Look up statute text in online sources</h2>
-                </template>
-            </Banner>
+            <Banner title="Look Up Statute Text" />
             <div id="main-content" class="statute__container">
                 <div class="content">
                     <div class="content__selector">
