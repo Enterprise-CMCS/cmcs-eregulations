@@ -38,7 +38,7 @@ defineProps({
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                {{ cellData.body.text(statute) }}
+                <span class="table-link__span">{{ cellData.body.text(statute) }}</span>
                 <span
                     v-if="cellData.body.url(statute) && cellData.body.type === 'pdf'"
                     class="result__link--file-type"

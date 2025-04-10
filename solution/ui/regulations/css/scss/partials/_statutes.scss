@@ -175,10 +175,8 @@
                             &:link.pdf {
                                 display: flex;
                                 align-items: center;
-
-                                span {
-                                    margin-left: var(--spacer-half);
-                                }
+                                gap: var(--spacer-half);
+                                white-space: nowrap;
                             }
 
                             &:hover {
