@@ -24,11 +24,7 @@ export class DatabaseConstruct extends Construct {
         const { vpc, selectedSubnets, stageConfig, serverlessSecurityGroup } = props;
 
         // Retrieve DB credentials from Secrets Manager
-        const dbSecret = secretsmanager.Secret.fromSecretNameV2(
-            this,
-            'DbSecret',
-            '/eregulations/db/credentials'
-        );
+        const dbSecret = secretsmanager.Secret.fromSecretNameV2(this, 'DbSecret', '/eregulations/db/credentials');
 
         // Create DB security group
         this.dbSecurityGroup = new ec2.SecurityGroup(this, 'DBSecurityGroup', {
@@ -42,28 +38,19 @@ export class DatabaseConstruct extends Construct {
         const sharedServicessg = ec2.SecurityGroup.fromSecurityGroupId(
             this,
             'SharedServicesSG',
-            ssm.StringParameter.valueForStringParameter(
-                this,
-                '/eregulations/db/groups/cmscloud_shared_services'
-            )
+            ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/groups/cmscloud_shared_services')
         );
 
         const vpnSg = ec2.SecurityGroup.fromSecurityGroupId(
             this,
             'VpnSG',
-            ssm.StringParameter.valueForStringParameter(
-                this,
-                '/eregulations/db/groups/cmscloud_vpn'
-            )
+            ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/groups/cmscloud_vpn')
         );
 
         const securityToolsSg = ec2.SecurityGroup.fromSecurityGroupId(
             this,
             'SecurityToolsSG',
-            ssm.StringParameter.valueForStringParameter(
-                this,
-                '/eregulations/db/groups/cmscloud_security_tools'
-            )
+            ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/groups/cmscloud_security_tools')
         );
     
         this.dbSecurityGroup.addIngressRule(

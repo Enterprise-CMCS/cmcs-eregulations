@@ -14,33 +14,33 @@ import { StageConfig } from '../../config/stage-config';
 * @interface ApiConstructProps
 */
 export interface ApiConstructProps {
- /** VPC configuration */
- vpc: ec2.IVpc;
- /** Security group for API resources */
- securityGroup: ec2.ISecurityGroup;
- /** Environment variables for Lambda functions */
- environmentVariables: Record<string, string>;
- /** Name of the S3 bucket for storage */
- storageBucketName: string;
- /** URL of the SQS queue */
- queueUrl: string;
- /** Configuration for Lambda functions */
- lambdaConfig: {
-   /** Memory size in MB */
-   memorySize: number;
-   /** Timeout in seconds */
-   timeout: number;
-   /** Optional concurrent execution limit */
-   reservedConcurrentExecutions?: number;
- };
- /** Stage configuration */
- stageConfig: StageConfig;
- /** VPC subnet selection */
- vpcSubnets: ec2.SubnetSelection;
- /** Main Lambda function for API */
- lambda: lambda.Function;
- /** Optional authorizer Lambda function */
- authorizerLambda?: lambda.Function;
+    /** VPC configuration */
+    vpc: ec2.IVpc;
+    /** Security group for API resources */
+    securityGroup: ec2.ISecurityGroup;
+    /** Environment variables for Lambda functions */
+    environmentVariables: Record<string, string>;
+    /** Name of the S3 bucket for storage */
+    storageBucketName: string;
+    /** URL of the SQS queue */
+    queueUrl: string;
+    /** Configuration for Lambda functions */
+    lambdaConfig: {
+        /** Memory size in MB */
+        memorySize: number;
+        /** Timeout in seconds */
+        timeout: number;
+        /** Optional concurrent execution limit */
+        reservedConcurrentExecutions?: number;
+    };
+    /** Stage configuration */
+    stageConfig: StageConfig;
+    /** VPC subnet selection */
+    vpcSubnets: ec2.SubnetSelection;
+    /** Main Lambda function for API */
+    lambda: lambda.Function;
+    /** Optional authorizer Lambda function */
+    authorizerLambda?: lambda.Function;
 }
 
 /**
@@ -54,11 +54,11 @@ export class ApiConstruct extends Construct {
     public readonly lambda: lambda.Function;
 
     /**
-  * Creates a new API Gateway construct
-  * @param {Construct} scope - The parent construct
-  * @param {string} id - The construct's unique id
-  * @param {ApiConstructProps} props - Configuration properties
-  */
+    * Creates a new API Gateway construct
+    * @param {Construct} scope - The parent construct
+    * @param {string} id - The construct's unique id
+    * @param {ApiConstructProps} props - Configuration properties
+    */
     constructor(scope: Construct, id: string, props: ApiConstructProps) {
         super(scope, id);
 
@@ -167,10 +167,10 @@ export class ApiConstruct extends Construct {
     }
 
     /**
-  * Adds CORS options to an API resource
-  * @param {apigateway.IResource} apiResource - The API resource to add CORS options to
-  * @private
-  */
+    * Adds CORS options to an API resource
+    * @param {apigateway.IResource} apiResource - The API resource to add CORS options to
+    * @private
+    */
     private addCorsOptions(apiResource: apigateway.IResource) {
         apiResource.addMethod(
             'OPTIONS',
@@ -179,11 +179,9 @@ export class ApiConstruct extends Construct {
                     {
                         statusCode: '200',
                         responseParameters: {
-                            'method.response.header.Access-Control-Allow-Headers':
-               "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
+                            'method.response.header.Access-Control-Allow-Headers': "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
                             'method.response.header.Access-Control-Allow-Origin': "'*'",
-                            'method.response.header.Access-Control-Allow-Methods':
-               "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                            'method.response.header.Access-Control-Allow-Methods': "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
                         },
                     },
                 ],
