@@ -118,7 +118,7 @@ export class EphemeralRemovalPolicyAspect implements cdk.IAspect {
     ): void {
         if (process.env.CDK_DEBUG) {
             const action = willBeDestroyed ? 'will be destroyed' : 'protected';
-            console.log(
+            console.info(
                 `[${this.stageConfig.environment}] Resource ${action}: ${logicalId} (${resourceType})`
             );
         }

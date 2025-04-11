@@ -1,4 +1,4 @@
-import { IAspect, CfnResource, Stack } from 'aws-cdk-lib';
+import { IAspect, CfnResource } from 'aws-cdk-lib';
 import { IConstruct } from 'constructs';
 
 export class IamPermissionsBoundaryAspect implements IAspect {
