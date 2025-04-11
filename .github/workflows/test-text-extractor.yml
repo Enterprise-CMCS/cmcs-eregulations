@@ -31,6 +31,7 @@ jobs:
       - name: Install dependencies
         if: success()
         run: |
+          sudo apt-get update
           sudo apt-get install -y poppler-utils
           python -m pip install --upgrade pip
           pip install -r ./solution/text-extractor/requirements.txt

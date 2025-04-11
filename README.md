@@ -181,6 +181,15 @@ Sometimes, the `remove-experimental.yml` Github Action fails to complete, leavin
 
 We have 2 scripts in our repo that can assist with cleaning up unused stacks and resources. Both are contained in the `./scripts` directory. Both scripts require the `boto3` library to be installed on your machine, and an AWS account must be configured either via CLI profile or environment variables. Be sure to run `export AWS_REGION=<your_region>` as well.
 
+On most systems, installing `boto3` is as simple as running `pip install boto3` or `pip3 install boto3` assuming you have both Python3 and Pip (or Pip3) installed. On MacOS systems where Python and Pip are installed with Homebrew, you may need to create a Python virtualenv first:
+
+```bash
+$ python3 -m venv /path/to/new/venv_directory
+$ source /path/to/new/venv_directory/bin/activate
+$ pip3 install boto3
+$ ./run/scripts/below
+```
+
 ### delete_stacks.py
 
 This script will retrieve a list of all experimental deployments and automatically delete them in parallel using a thread pool. The thread pool's size is proportional to the size of your terminal window to allow you to easily track the progress.
