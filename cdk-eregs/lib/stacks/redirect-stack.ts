@@ -1,4 +1,3 @@
-// lib/stacks/redirect-api-stack.ts
 import * as cdk from 'aws-cdk-lib';
 import {
     aws_iam as iam,

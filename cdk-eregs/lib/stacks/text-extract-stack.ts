@@ -90,7 +90,7 @@ export class TextExtractorStack extends cdk.Stack {
         });
 
         // Create Lambda infrastructure
-        const { lambdaRole, logGroup } = this.createLambdaInfrastructure(props.environmentConfig);
+        const { lambdaRole } = this.createLambdaInfrastructure(props.environmentConfig);
 
         // Create Lambda function
         this.lambda = this.createTextExtractorLambdaFunction(
@@ -112,7 +112,6 @@ export class TextExtractorStack extends cdk.Stack {
         role: iam.Role,
     ): lambda.Function {
         const dockerContextPath = path.resolve(__dirname, '../../../solution/');
-        console.log('Docker context path:', dockerContextPath);
 
         return new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
             functionName: this.stageConfig.getResourceName('text-extractor'),

@@ -61,17 +61,8 @@ export class StaticAssetsStack extends cdk.Stack {
             if (certificateArn.startsWith('dummy-value-for-') || !certificateArn.startsWith('arn:aws:')) {
                 // Use any valid ARN placeholder temporarily during synthesis
                 certificateArn = 'arn:aws:acm:us-east-1:123456789012:certificate/dummy-placeholder';
-                console.log('Using placeholder certificate ARN during synthesis');
-            } else {
-                console.log(`Using certificate ARN from SSM: ${certificateArn}`);
             }
         }
-
-        // Pass the resolved certificate ARN to validation
-        this.validateCertificateConfig({
-            ...props,
-            certificateArn
-        });
 
         this.assetsBucket = this.createAssetsBucket();
         this.loggingBucket = this.createLoggingBucket();
@@ -83,19 +74,6 @@ export class StaticAssetsStack extends cdk.Stack {
 
         this.deployStaticAssets();
         this.addStackOutputs();
-    }
-
-    /**
-   * Validates SSL certificate configuration for production environment
-   * @private
-   * @param {StaticAssetsStackProps} props - Stack properties
-   * @throws {Error} If certificate ARN is missing in production environment
-   */
-    private validateCertificateConfig(props: StaticAssetsStackProps): void {
-    // TODO: why do we need this?
-    // if (this.stageConfig.environment === 'prod' && !props.certificateArn) {
-    //   throw new Error('SSL Certificate ARN is required for production environment');
-    // }
     }
 
     /**
@@ -127,13 +105,12 @@ export class StaticAssetsStack extends cdk.Stack {
    * @returns {s3.Bucket} Configured logging bucket
    */
     private createLoggingBucket(): s3.Bucket {
-        const isEphemeral = this.stageConfig.isEphemeral();
         return new s3.Bucket(this, 'CloudFrontLogsBucket', {
             bucketName: this.stageConfig.getResourceName('cloudfront-logs'),
             objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
             enforceSSL: true,
-            autoDeleteObjects: isEphemeral,
-            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+            autoDeleteObjects: this.stageConfig.isEphemeral(),
+            removalPolicy: this.stageConfig.isEphemeral() ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
             accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
         });
     }
@@ -182,7 +159,7 @@ export class StaticAssetsStack extends cdk.Stack {
         waf: wafv2.CfnWebACL,
         props: StaticAssetsStackProps
     ): cloudfront.Distribution {
-    // Distribution configuration options
+        // Distribution configuration options
         let distributionProps: cloudfront.DistributionProps = {
             defaultBehavior: {
                 origin: origins.S3BucketOrigin.withOriginAccessControl(this.assetsBucket),
@@ -201,7 +178,6 @@ export class StaticAssetsStack extends cdk.Stack {
             defaultRootObject: 'index.html',
             httpVersion: cloudfront.HttpVersion.HTTP2,
             minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-            // domainNames: props.certificateArn ? [] : undefined,
             errorResponses: [
                 {
                     httpStatus: 404,
@@ -226,8 +202,6 @@ export class StaticAssetsStack extends cdk.Stack {
                 ...distributionProps,
                 certificate,
                 minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-                // Add domain names if needed - uncomment and modify as required
-                // domainNames: ['example.com'],
             };
         }
     

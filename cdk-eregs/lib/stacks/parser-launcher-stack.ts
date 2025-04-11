@@ -5,8 +5,6 @@ import {
     aws_lambda as lambda,
     aws_events as events,
     aws_events_targets as targets,
-    aws_ec2 as ec2,
-    Tags,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -44,7 +42,7 @@ export class ParserLauncherStack extends cdk.Stack {
         const frParserArn = cdk.Fn.importValue(`sls-${stageConfig.getResourceName('fr-parser')}-FrParserLambdaFunctionQualifiedArn`);
 
         // Create Lambda infrastructure
-        const { lambdaRole, logGroup } = this.createLambdaInfrastructure(stageConfig, props.environmentConfig.secretName, ecfrParserArn, frParserArn);
+        const { lambdaRole } = this.createLambdaInfrastructure(stageConfig, props.environmentConfig.secretName, ecfrParserArn, frParserArn);
 
         // Create Lambda function
         this.lambda = new lambda.DockerImageFunction(this, 'ParserLauncherFunction', {
@@ -68,7 +66,6 @@ export class ParserLauncherStack extends cdk.Stack {
             schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
             enabled: true,
         });
-
         rule.addTarget(new targets.LambdaFunction(this.lambda));
 
         // Create stack outputs
@@ -133,7 +130,7 @@ export class ParserLauncherStack extends cdk.Stack {
     }
 
     private createStackOutputs(stageConfig: StageConfig) {
-    // Output the Lambda function ARN
+        // Output the Lambda function ARN
         new cdk.CfnOutput(this, 'ParserLauncherLambdaFunctionQualifiedArn', {
             value: this.lambda.currentVersion.functionArn,
             description: 'Current Lambda function version',
