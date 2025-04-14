@@ -25,7 +25,7 @@ describe("Statute Table Header Cell", () => {
                 await flushPromises();
 
                 const dateCell = wrapper.getByTestId(
-                    `${column.header.testId}-subtitle-1`
+                    `${column.header.testId}-subtitle-0`
                 ).textContent;
                 expect(dateCell.trim()).toEqual("");
 
@@ -43,7 +43,7 @@ describe("Statute Table Header Cell", () => {
                 await flushPromises();
 
                 const dateCell = wrapper.getByTestId(
-                    `${column.header.testId}-subtitle-1`
+                    `${column.header.testId}-subtitle-0`
                 ).textContent;
                 expect(dateCell.trim()).toEqual("effective Aug 2023");
 
