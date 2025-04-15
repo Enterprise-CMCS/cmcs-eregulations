@@ -427,15 +427,6 @@ $tablet-max: $width-lg - 1; // 1023px
     @include external-link;
 }
 
-@mixin pdf-link {
-    @include shared-link-rules;
-
-    content: url(#{$eregs-image-path}/PDF-icon.svg);
-    position: absolute;
-    top: 2px;
-    padding-left: 3px;
-}
-
 a {
     &:link.external::after {
         @include external-link;
@@ -443,14 +434,6 @@ a {
 
     &:hover.external::after {
         @include external-link-hover;
-    }
-
-    &:link.pdf {
-        position: relative;
-
-        &::after {
-            @include pdf-link;
-        }
     }
 }
 
