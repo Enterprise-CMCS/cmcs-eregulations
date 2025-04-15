@@ -43,7 +43,7 @@ async function main() {
     Object.entries(tags).forEach(([key, value]) => {
         cdk.Tags.of(app).add(key, value);
     });
-     
+
     // Create ZIP-based Lambda stacks
 
     new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
@@ -74,9 +74,7 @@ async function main() {
 }
 
 async function applyGlobalAspects(app: cdk.App, stageConfig: StageConfig): Promise<void> {
-    const iamPath = await getParameterValue(`/account_vars/iam/path`);
-
-    cdk.Aspects.of(app).add(new IamPathAspect(iamPath));
+    cdk.Aspects.of(app).add(new IamPathAspect(await getParameterValue(`/account_vars/iam/path`)));
     cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(stageConfig.permissionsBoundaryArn));
     cdk.Aspects.of(app).add(new EphemeralRemovalPolicyAspect(stageConfig));
 }

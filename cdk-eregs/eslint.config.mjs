@@ -19,7 +19,7 @@ export default [
         rules: {
             ...pluginJs.configs.recommended.rules,
             "indent": ["error", 4, { SwitchCase: 1 }],
-        } 
+        }
     },
     {
         rules: {
