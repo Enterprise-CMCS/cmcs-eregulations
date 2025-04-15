@@ -1,3 +1,83 @@
+<script setup>
+import { ref, watch, onMounted } from "vue";
+import { getTitles, getParts as fetchParts } from "utilities/api.js";
+
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    part: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    homeUrl: {
+        type: String,
+        default: "/",
+    },
+});
+
+const titles = ref([]);
+const selectedPart = ref("");
+const defaultTitle = ref("");
+const selectedTitle = ref("");
+const selectedSection = ref("");
+const hideTitle = ref(false);
+const filteredParts = ref([]);
+const isActive = ref(false);
+
+const getParts = async (title) => {
+    const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
+    filteredParts.value = partsList
+        .map((part) => part.name)
+        .filter((part) => part !== "75");
+};
+
+const getLink = () => {
+    let linkValue = `${props.homeUrl}goto/?title=${selectedTitle.value}&part=${selectedPart.value}`;
+    if (selectedSection.value !== "") {
+        linkValue += `&section=${selectedSection.value}&-version='latest'`;
+    }
+    window.location.href = linkValue;
+};
+
+onMounted(async () => {
+    titles.value = await getTitles({ apiUrl: props.apiUrl });
+    if (titles.value.length === 1) {
+        selectedTitle.value = titles.value[0];
+        defaultTitle.value = selectedTitle.value;
+        hideTitle.value = true;
+    }
+    if (props.title !== "") {
+        selectedTitle.value = props.title;
+        hideTitle.value = true;
+    }
+    if (props.part !== "") {
+        selectedPart.value = props.part;
+        isActive.value = true;
+    }
+});
+
+watch(selectedTitle, (title) => {
+    if (title === "") {
+        selectedPart.value = "";
+        isActive.value = false;
+    } else {
+        getParts(title);
+    }
+});
+
+watch(selectedPart, (part) => {
+    isActive.value = part !== "";
+});
+</script>
+
 <template>
     <div>
         <form @submit.prevent="getLink">
@@ -74,100 +154,3 @@
         </form>
     </div>
 </template>
-<script>
-import { getTitles, getParts as fetchParts } from "utilities/api.js";
-
-export default {
-    name: "JumpTo",
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-        title: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        part: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        homeUrl: {
-            type: String,
-            default: "/",
-        },
-    },
-    data() {
-        return {
-            titles: [],
-            selectedPart: "",
-            defaultTitle: "",
-            selectedTitle: "",
-            selectedSection: "",
-            hideTitle: false,
-            filteredParts: [],
-            isActive: false,
-            parts: [],
-            link: "",
-        };
-    },
-
-    async created() {
-        // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        this.titles = await getTitles({ apiUrl: this.apiUrl });
-        if (this.titles.length === 1) {
-            this.selectedTitle = this.titles[0];
-            this.defaultTitle = this.selectedTitle;
-            this.hideTitle = true;
-        }
-        if (this.title !== "") {
-            this.selectedTitle = this.title;
-            this.hideTitle = true;
-        }
-        if (this.part !== "") {
-            this.selectedPart = this.part;
-            this.isActive = true;
-        }
-    },
-
-    watch: {
-        selectedTitle(title) {
-            if (title === "") {
-                this.selectedPart = "";
-                this.isActive = false;
-            } else {
-                this.getParts(title);
-            }
-        },
-
-        selectedPart(part) {
-            if (part !== "") {
-                this.isActive = true;
-            } else {
-                this.isActive = false;
-            }
-        },
-    },
-
-    methods: {
-        async getParts(title) {
-            const partsList = await fetchParts({ title, apiUrl: this.apiUrl });
-            // temporarily filter part 75. See EREGCSC-1397
-            this.filteredParts = partsList
-                .map((part) => part.name)
-                .filter((part) => part !== "75");
-        },
-        getLink() {
-            let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
-            if (this.selectedSection !== "") {
-                link += `&section=${this.selectedSection}&-version='latest'`;
-            }
-
-            window.location.href = link;
-        },
-    },
-};
-</script>
