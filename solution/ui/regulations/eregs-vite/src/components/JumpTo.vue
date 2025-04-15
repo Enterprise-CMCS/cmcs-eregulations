@@ -28,7 +28,6 @@ const selectedPart = ref("");
 const defaultTitle = ref("");
 const selectedTitle = ref("");
 const selectedSection = ref("");
-const hideTitle = ref(false);
 const filteredParts = ref([]);
 const isActive = ref(false);
 
@@ -49,15 +48,14 @@ const getLink = () => {
 
 onMounted(async () => {
     titles.value = await getTitles({ apiUrl: props.apiUrl });
-    if (titles.value.length === 1) {
-        selectedTitle.value = titles.value[0];
-        defaultTitle.value = selectedTitle.value;
-        hideTitle.value = true;
-    }
+
     if (props.title !== "") {
         selectedTitle.value = props.title;
-        hideTitle.value = true;
+    } else {
+        selectedTitle.value = titles.value[0];
+        defaultTitle.value = selectedTitle.value;
     }
+
     if (props.part !== "") {
         selectedPart.value = props.part;
         isActive.value = true;
@@ -83,12 +81,12 @@ watch(selectedPart, (part) => {
         <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
-                    v-if="defaultTitle === ''"
                     id="jumpToTitle"
                     v-model="selectedTitle"
                     name="title"
                     aria-label="Regulation title number"
                     class="ds-c-field"
+                    :disabled="!selectedTitle"
                     required
                 >
                     <option
