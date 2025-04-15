@@ -29,7 +29,6 @@ const defaultTitle = ref("");
 const selectedTitle = ref("");
 const selectedSection = ref("");
 const filteredParts = ref([]);
-const isActive = ref(false);
 
 const getParts = async (title) => {
     const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
@@ -58,21 +57,15 @@ onMounted(async () => {
 
     if (props.part !== "") {
         selectedPart.value = props.part;
-        isActive.value = true;
     }
 });
 
 watch(selectedTitle, (title) => {
     if (title === "") {
         selectedPart.value = "";
-        isActive.value = false;
     } else {
         getParts(title);
     }
-});
-
-watch(selectedPart, (part) => {
-    isActive.value = part !== "";
 });
 </script>
 
@@ -144,7 +137,7 @@ watch(selectedPart, (part) => {
                 <input
                     id="jumpBtn"
                     class="submit"
-                    :class="{ active: isActive }"
+                    :class="{ active: true }"
                     type="submit"
                     value="Go"
                 >
