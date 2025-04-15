@@ -9,11 +9,12 @@ import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 
 export interface DatabaseConstructProps {
-  readonly vpc: ec2.IVpc;
-  readonly selectedSubnets: ec2.SubnetSelection;
-  readonly stageConfig: StageConfig;
-  readonly serverlessSecurityGroup: ec2.ISecurityGroup;
+    readonly vpc: ec2.IVpc;
+    readonly selectedSubnets: ec2.SubnetSelection;
+    readonly stageConfig: StageConfig;
+    readonly serverlessSecurityGroup: ec2.ISecurityGroup;
 }
+
 export class DatabaseConstruct extends Construct {
     public readonly dbSecurityGroup: ec2.SecurityGroup;
     public readonly cluster: rds.DatabaseCluster;

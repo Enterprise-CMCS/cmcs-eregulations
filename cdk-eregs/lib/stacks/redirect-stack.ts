@@ -24,17 +24,17 @@ interface LambdaConfig {
  * Configuration for the API Gateway
  */
 interface ApiGatewayConfig {
-  binaryMediaTypes?: string[];
-  endpointType?: apigateway.EndpointType;
-  loggingLevel?: apigateway.MethodLoggingLevel;
+    binaryMediaTypes?: string[];
+    endpointType?: apigateway.EndpointType;
+    loggingLevel?: apigateway.MethodLoggingLevel;
 }
 
 /**
  * Properties for the RedirectApiStack
  */
 export interface RedirectApiStackProps extends cdk.StackProps {
-  lambdaConfig: LambdaConfig;
-  apiConfig?: ApiGatewayConfig;
+    lambdaConfig: LambdaConfig;
+    apiConfig?: ApiGatewayConfig;
 }
 
 const DEFAULT_API_CONFIG: ApiGatewayConfig = {
@@ -68,7 +68,7 @@ export class RedirectApiStack extends cdk.Stack {
     }
 
     private createLambdaInfrastructure() {
-    // Lambda CloudWatch Log Group
+        // Lambda CloudWatch Log Group
         const logGroup = new logs.LogGroup(this, 'RedirectFunctionLogGroup', {
             logGroupName: this.stageConfig.aws.lambda('redirect-function'),
             retention: logs.RetentionDays.INFINITE,

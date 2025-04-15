@@ -14,12 +14,12 @@ import * as path from 'path';
  * Defines required and optional parameters for Lambda function configuration.
  */
 interface LambdaConfig {
-  /** Memory allocation in MB for the Lambda function */
-  memorySize: number;
-  /** Function timeout in seconds */
-  timeout: number;
-  /** Optional limit on concurrent executions */
-  reservedConcurrentExecutions?: number;
+    /** Memory allocation in MB for the Lambda function */
+    memorySize: number;
+    /** Function timeout in seconds */
+    timeout: number;
+    /** Optional limit on concurrent executions */
+    reservedConcurrentExecutions?: number;
 }
 
 /**
@@ -27,10 +27,10 @@ interface LambdaConfig {
  * Contains all the external configuration values needed for the stack.
  */
 interface EnvironmentConfig {
-  /** Log level for the Lambda function (e.g., DEBUG, INFO) */
-  logLevel: string;
-  /** Name of secret for authentication **/
-  secretName: string;
+    /** Log level for the Lambda function (e.g., DEBUG, INFO) */
+    logLevel: string;
+    /** Name of secret for authentication **/
+    secretName: string;
 }
 
 /**
@@ -38,10 +38,10 @@ interface EnvironmentConfig {
  * Extends standard CDK stack properties with custom configuration settings.
  */
 export interface TextExtractorStackProps extends cdk.StackProps {
-  /** Lambda function configuration settings */
-  lambdaConfig: LambdaConfig;
-  /** Environment-specific configuration settings */
-  environmentConfig: EnvironmentConfig;
+    /** Lambda function configuration settings */
+    lambdaConfig: LambdaConfig;
+    /** Environment-specific configuration settings */
+    environmentConfig: EnvironmentConfig;
 }
 
 /**

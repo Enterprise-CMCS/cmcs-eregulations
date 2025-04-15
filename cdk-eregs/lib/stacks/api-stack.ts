@@ -25,12 +25,12 @@ import * as path from 'path';
  * @interface LambdaConfig
  */
 interface LambdaConfig {
-  /** Memory size in MB */
-  memorySize: number;
-  /** Timeout in seconds */
-  timeout: number;
-  /** Optional concurrent execution limit */
-  reservedConcurrentExecutions?: number;
+    /** Memory size in MB */
+    memorySize: number;
+    /** Timeout in seconds */
+    timeout: number;
+    /** Optional concurrent execution limit */
+    reservedConcurrentExecutions?: number;
 }
 
 /**
@@ -38,12 +38,12 @@ interface LambdaConfig {
  * @interface EnvironmentConfig
  */
 interface EnvironmentConfig {
-  /** VPC ID where resources will be deployed */
-  vpcId: string;
-  /** Logging level for the application */
-  logLevel: string;
-  /** List of subnet IDs for resource placement */
-  subnetIds: string[];
+    /** VPC ID where resources will be deployed */
+    vpcId: string;
+    /** Logging level for the application */
+    logLevel: string;
+    /** List of subnet IDs for resource placement */
+    subnetIds: string[];
 }
 
 /**
@@ -52,10 +52,10 @@ interface EnvironmentConfig {
  * @extends cdk.StackProps
  */
 interface BackendStackProps extends cdk.StackProps {
-  /** Lambda function configuration */
-  lambdaConfig: LambdaConfig;
-  /** Environment-specific configuration */
-  environmentConfig: EnvironmentConfig;
+    /** Lambda function configuration */
+    lambdaConfig: LambdaConfig;
+    /** Environment-specific configuration */
+    environmentConfig: EnvironmentConfig;
 }
 
 /**
@@ -63,8 +63,8 @@ interface BackendStackProps extends cdk.StackProps {
  */
 class SecurityGroupHandler {
     /**
-   * Creates or imports a security group based on environment type
-   */
+     * Creates or imports a security group based on environment type
+     */
     static createOrImportSecurityGroup(
         scope: Construct,
         vpc: ec2.IVpc,
@@ -111,6 +111,7 @@ class SecurityGroupHandler {
         return serverlessSG;
     }
 }
+
 /**
  * Paths for AWS Secrets Manager secrets
  * @const

@@ -12,28 +12,28 @@ import { StageConfig } from '../../config/stage-config';
  * Configuration for the Lambda function, including runtime, memory, timeout, handler, and code path.
  */
 interface LambdaConfig {
-  runtime: lambda.Runtime;
-  memorySize: number;
-  timeout: number;
-  handler?: string;
-  codePath?: string;
+    runtime: lambda.Runtime;
+    memorySize: number;
+    timeout: number;
+    handler?: string;
+    codePath?: string;
 }
 
 /**
  * Configuration for the API Gateway, allowing customization of binary media types, endpoint type, and logging level.
  */
 interface ApiGatewayConfig {
-  binaryMediaTypes?: string[];
-  endpointType?: apigateway.EndpointType;
-  loggingLevel?: apigateway.MethodLoggingLevel;
+    binaryMediaTypes?: string[];
+    endpointType?: apigateway.EndpointType;
+    loggingLevel?: apigateway.MethodLoggingLevel;
 }
 
 /**
  * Properties for the MaintenanceApiStack, including Lambda and API Gateway configurations.
  */
 export interface MaintenanceApiStackProps extends cdk.StackProps {
-  lambdaConfig: LambdaConfig;
-  apiConfig?: ApiGatewayConfig;
+    lambdaConfig: LambdaConfig;
+    apiConfig?: ApiGatewayConfig;
 }
 
 /**
@@ -72,12 +72,12 @@ export class MaintenanceApiStack extends cdk.Stack {
     private readonly stageConfig: StageConfig;
 
     /**
-   * Creates a new instance of MaintenanceApiStack.
-   * @param scope - The scope in which to define this construct
-   * @param id - The scoped construct ID
-   * @param props - Configuration properties for the stack
-   * @param stageConfig - Stage configuration for environment-aware resource creation
-   */
+     * Creates a new instance of MaintenanceApiStack.
+     * @param scope - The scope in which to define this construct
+     * @param id - The scoped construct ID
+     * @param props - Configuration properties for the stack
+     * @param stageConfig - Stage configuration for environment-aware resource creation
+     */
     constructor(
         scope: Construct, 
         id: string, 
@@ -97,14 +97,14 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Creates the Lambda function's infrastructure components including:
-   * - CloudWatch Log Group
-   * - IAM Role with appropriate permissions
-   * 
-   * @returns Object containing the created role and log group
-   */
+     * Creates the Lambda function's infrastructure components including:
+     * - CloudWatch Log Group
+     * - IAM Role with appropriate permissions
+     * 
+     * @returns Object containing the created role and log group
+     */
     private createLambdaInfrastructure() {
-    // Create CloudWatch Log Group with environment-aware naming
+        // Create CloudWatch Log Group with environment-aware naming
         const logGroup = new logs.LogGroup(this, 'MaintenanceFunctionLogGroup', {
             logGroupName: this.stageConfig.aws.lambda('maintenance-function'),
             retention: logs.RetentionDays.INFINITE,
@@ -131,9 +131,9 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Creates the IAM policy document for Lambda CloudWatch Logs permissions
-   * @returns PolicyDocument with CloudWatch Logs write permissions
-   */
+     * Creates the IAM policy document for Lambda CloudWatch Logs permissions
+     * @returns PolicyDocument with CloudWatch Logs write permissions
+     */
     private createLambdaPolicy(): iam.PolicyDocument {
         return new iam.PolicyDocument({
             statements: [
@@ -147,12 +147,12 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Creates and configures the Lambda function
-   * @param role - IAM role for the Lambda function
-   * @param logGroup - CloudWatch Log Group for Lambda logs
-   * @param config - Lambda function configuration
-   * @returns Configured Lambda function
-   */
+     * Creates and configures the Lambda function
+     * @param role - IAM role for the Lambda function
+     * @param logGroup - CloudWatch Log Group for Lambda logs
+     * @param config - Lambda function configuration
+     * @returns Configured Lambda function
+     */
     private createLambdaFunction(
         role: iam.Role,
         logGroup: logs.LogGroup,
@@ -175,10 +175,10 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Creates and configures the API Gateway
-   * @param config - API Gateway configuration
-   * @returns Configured REST API
-   */
+     * Creates and configures the API Gateway
+     * @param config - API Gateway configuration
+     * @returns Configured REST API
+     */
     private createApiGateway(config: ApiGatewayConfig): apigateway.RestApi {
         const api = new apigateway.RestApi(this, 'ApiGatewayRestApi', {
             restApiName: this.stageConfig.getResourceName('maintenance-api'),
@@ -202,12 +202,12 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Configures API Gateway routes and integrations
-   * Sets up:
-   * - Lambda proxy integration
-   * - ANY method on root path
-   * - ANY method on proxy resource (/{proxy+})
-   */
+     * Configures API Gateway routes and integrations
+     * Sets up:
+     * - Lambda proxy integration
+     * - ANY method on root path
+     * - ANY method on proxy resource (/{proxy+})
+     */
     private configureApiGateway() {
         const integration = new apigateway.LambdaIntegration(this.lambdaFunction, { proxy: true });
 
@@ -226,11 +226,11 @@ export class MaintenanceApiStack extends cdk.Stack {
     }
 
     /**
-   * Creates CloudFormation outputs for the stack
-   * Exports:
-   * - Lambda function ARN
-   * - API Gateway endpoint URL
-   */
+     * Creates CloudFormation outputs for the stack
+     * Exports:
+     * - Lambda function ARN
+     * - API Gateway endpoint URL
+     */
     private createStackOutputs() {
         const outputs: Record<string, cdk.CfnOutputProps> = {
             MaintenanceFunctionLambdaFunctionQualifiedArn: {

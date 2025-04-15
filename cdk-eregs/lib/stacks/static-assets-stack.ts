@@ -16,12 +16,12 @@ import { StageConfig } from '../../config/stage-config';
  * @extends {cdk.StackProps}
  */
 export interface StaticAssetsStackProps extends cdk.StackProps {
-  /** Optional ACM certificate ARN for custom domain */
-  certificateArn?: string;
-  /** Optional PR number for ephemeral environments */
-  prNumber?: string;
-  /** Type of deployment - either infrastructure setup or content deployment */
-  deploymentType: 'infrastructure' | 'content';
+    /** Optional ACM certificate ARN for custom domain */
+    certificateArn?: string;
+    /** Optional PR number for ephemeral environments */
+    prNumber?: string;
+    /** Type of deployment - either infrastructure setup or content deployment */
+    deploymentType: 'infrastructure' | 'content';
 }
 
 /**
@@ -37,12 +37,12 @@ export class StaticAssetsStack extends cdk.Stack {
     private readonly distribution: cloudfront.Distribution;
 
     /**
-   * Creates an instance of StaticAssetsStack
-   * @param {Construct} scope - The scope in which to define this construct
-   * @param {string} id - The scoped construct ID
-   * @param {StaticAssetsStackProps} props - Configuration properties
-   * @param {StageConfig} stageConfig - Stage-specific configuration
-   */
+     * Creates an instance of StaticAssetsStack
+     * @param {Construct} scope - The scope in which to define this construct
+     * @param {string} id - The scoped construct ID
+     * @param {StaticAssetsStackProps} props - Configuration properties
+     * @param {StageConfig} stageConfig - Stage-specific configuration
+     */
     constructor(
         scope: Construct,
         id: string,
@@ -77,10 +77,10 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Creates S3 bucket for storing static assets
-   * @private
-   * @returns {s3.Bucket} Configured S3 bucket for assets
-   */
+     * Creates S3 bucket for storing static assets
+     * @private
+     * @returns {s3.Bucket} Configured S3 bucket for assets
+     */
     private createAssetsBucket(): s3.Bucket {
         const isEphemeral = this.stageConfig.isEphemeral();
         return new s3.Bucket(this, 'AssetsBucket', {
@@ -100,10 +100,10 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Creates S3 bucket for CloudFront access logging
-   * @private
-   * @returns {s3.Bucket} Configured logging bucket
-   */
+     * Creates S3 bucket for CloudFront access logging
+     * @private
+     * @returns {s3.Bucket} Configured logging bucket
+     */
     private createLoggingBucket(): s3.Bucket {
         return new s3.Bucket(this, 'CloudFrontLogsBucket', {
             bucketName: this.stageConfig.getResourceName('cloudfront-logs'),
@@ -116,10 +116,10 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Creates WAF Web ACL for CloudFront with geographical restrictions
-   * @private
-   * @returns {wafv2.CfnWebACL} Configured Web ACL
-   */
+     * Creates WAF Web ACL for CloudFront with geographical restrictions
+     * @private
+     * @returns {wafv2.CfnWebACL} Configured Web ACL
+     */
     private createWebACL(): wafv2.CfnWebACL {
         return new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
             defaultAction: { allow: {} },
@@ -149,12 +149,12 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Creates and configures CloudFront distribution
-   * @private
-   * @param {wafv2.CfnWebACL} waf - WAF Web ACL to attach to the distribution
-   * @param {StaticAssetsStackProps} props - Stack properties
-   * @returns {cloudfront.Distribution} Configured CloudFront distribution
-   */
+     * Creates and configures CloudFront distribution
+     * @private
+     * @param {wafv2.CfnWebACL} waf - WAF Web ACL to attach to the distribution
+     * @param {StaticAssetsStackProps} props - Stack properties
+     * @returns {cloudfront.Distribution} Configured CloudFront distribution
+     */
     private createCloudFrontDistribution(
         waf: wafv2.CfnWebACL,
         props: StaticAssetsStackProps
@@ -209,10 +209,10 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Deploys static assets to S3 and invalidates CloudFront cache
-   * Only executes if deploymentType is 'content'
-   * @private
-   */
+     * Deploys static assets to S3 and invalidates CloudFront cache
+     * Only executes if deploymentType is 'content'
+     * @private
+     */
     private deployStaticAssets(): void {
         if (this.node.tryGetContext('deploymentType') === 'infrastructure') {
             return;
@@ -232,9 +232,9 @@ export class StaticAssetsStack extends cdk.Stack {
     }
 
     /**
-   * Adds CloudFront distribution ID and URL as stack outputs
-   * @private
-   */
+     * Adds CloudFront distribution ID and URL as stack outputs
+     * @private
+     */
     private addStackOutputs(): void {
         new cdk.CfnOutput(this, 'CloudFrontDistributionId', {
             value: this.distribution.distributionId,

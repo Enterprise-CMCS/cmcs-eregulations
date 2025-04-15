@@ -9,18 +9,18 @@ import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
 
 interface LambdaConfig {
-  /** Memory allocation in MB for the Lambda function */
-  memorySize: number;
-  timeout: number;
+    /** Memory allocation in MB for the Lambda function */
+    memorySize: number;
+    timeout: number;
 }
 
 interface EnvironmentConfig {
-  logLevel: string;
+    logLevel: string;
 }
 
 export interface EcfrParserStackProps extends cdk.StackProps {
-  lambdaConfig: LambdaConfig;
-  environmentConfig: EnvironmentConfig;
+    lambdaConfig: LambdaConfig;
+    environmentConfig: EnvironmentConfig;
 }
 
 export class EcfrParserStack extends cdk.Stack {

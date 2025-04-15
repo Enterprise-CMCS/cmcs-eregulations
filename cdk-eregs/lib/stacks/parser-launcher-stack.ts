@@ -11,19 +11,19 @@ import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
 
 interface LambdaConfig {
-  runtime: lambda.Runtime;
-  /** Memory allocation in MB for the Lambda function */
-  memorySize: number;
-  timeout: number;
+    runtime: lambda.Runtime;
+    /** Memory allocation in MB for the Lambda function */
+    memorySize: number;
+    timeout: number;
 }
 
 interface EnvironmentConfig {
-  secretName: string;
+    secretName: string;
 }
 
 export interface ParserLauncherStackProps extends cdk.StackProps {
-  lambdaConfig: LambdaConfig;
-  environmentConfig: EnvironmentConfig;
+    lambdaConfig: LambdaConfig;
+    environmentConfig: EnvironmentConfig;
 }
 
 export class ParserLauncherStack extends cdk.Stack {

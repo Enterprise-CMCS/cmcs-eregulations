@@ -136,9 +136,9 @@ export class WafConstruct extends Construct {
     }
 
     /**
-   * Associate this WAF with an API Gateway deployment.
-   * @param apiGateway The API Gateway to associate with the WAF
-   */
+     * Associate this WAF with an API Gateway deployment.
+     * @param apiGateway The API Gateway to associate with the WAF
+     */
     public associateWithApiGateway(apiGateway: apigw.RestApi): void {
         new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
             resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
@@ -147,17 +147,17 @@ export class WafConstruct extends Construct {
     }
 
     /**
-   * Get the ARN of the Web ACL
-   * @returns The ARN of the Web ACL
-   */
+     * Get the ARN of the Web ACL
+     * @returns The ARN of the Web ACL
+     */
     public getWebAclArn(): string {
         return this.webAcl.attrArn;
     }
 
     /**
-   * Get the raw ARN of the log group
-   * Note: this returns the wildcard version with :*
-   */
+     * Get the raw ARN of the log group
+     * Note: this returns the wildcard version with :*
+     */
     public getLogGroupArn(): string {
         return this.logGroup.logGroupArn;
     }
