@@ -5,18 +5,25 @@ import globalConfig from "../eslint-global-rules.mjs";
 
 export default [
     { files: ["**/*.{js,mjs,cjs,ts}"] },
-    { languageOptions: { globals: globals.browser } },
+    {
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.node
+            }
+        }
+    },
     ...tseslint.configs.recommended,
     {
-        files: ["**/*.js"],
+        files: ["**/*.js", "**/*.mjs", "**/*.cjs", "**/*.ts"],
         rules: {
             ...pluginJs.configs.recommended.rules,
             "indent": ["error", 4, { SwitchCase: 1 }],
-        } 
+        }
     },
     {
         rules: {
             ...globalConfig,
         },
-    },
+    }
 ];
