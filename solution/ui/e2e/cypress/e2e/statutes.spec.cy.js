@@ -23,8 +23,12 @@ describe("Statute Table", () => {
         });
         cy.url().should("include", "/statutes/");
 
-        cy.get("h1").contains("Statute Reference");
-        cy.get("h2").contains("Look up statute text in online sources");
+        cy.get("h1").contains("Look Up Statute Text");
+
+        cy.get(".table__caption")
+            .contains(
+                "This table shows sections of 42 U.S.C. Chapter 7 (Social Security) enacted by the Social Security Act. Learn about these sources: US Code House.gov, Statute Compilation, US Code Annual, SSA.gov Compilation."
+            );
 
         cy.checkLinkRel();
 
