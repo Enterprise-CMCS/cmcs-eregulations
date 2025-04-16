@@ -51,9 +51,11 @@ export class StaticAssetsStack extends cdk.Stack {
     ) {
         super(scope, id, props);
 
-        this.stageConfig = stageConfig;
+        const isEphemeral = stageConfig.isEphemeral();
 
-        // Get certificate ARN from SSM if not provided in props
+        // =========================
+        // SSL CERTIFICATE
+        // =========================
         let certificateArn = props.certificateArn;
         if (!certificateArn) {
             certificateArn = ssm.StringParameter.valueFromLookup(this, '/eregulations/acm-cert-arn');
@@ -64,27 +66,11 @@ export class StaticAssetsStack extends cdk.Stack {
             }
         }
 
-        this.assetsBucket = this.createAssetsBucket();
-        this.loggingBucket = this.createLoggingBucket();
-        const waf = this.createWebACL();
-        this.distribution = this.createCloudFrontDistribution(waf, {
-            ...props,
-            certificateArn
-        });
-
-        this.deployStaticAssets();
-        this.addStackOutputs();
-    }
-
-    /**
-     * Creates S3 bucket for storing static assets
-     * @private
-     * @returns {s3.Bucket} Configured S3 bucket for assets
-     */
-    private createAssetsBucket(): s3.Bucket {
-        const isEphemeral = this.stageConfig.isEphemeral();
-        return new s3.Bucket(this, 'AssetsBucket', {
-            bucketName: this.stageConfig.getResourceName('site-assets'),
+        // =========================
+        // S3 BUCKET
+        // =========================
+        const assetsBucket = new s3.Bucket(this, 'AssetsBucket', {
+            bucketName: stageConfig.getResourceName('site-assets'),
             encryption: s3.BucketEncryption.S3_MANAGED,
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             enforceSSL: true,
@@ -97,41 +83,34 @@ export class StaticAssetsStack extends cdk.Stack {
                 maxAge: 3000,
             }],
         });
-    }
 
-    /**
-     * Creates S3 bucket for CloudFront access logging
-     * @private
-     * @returns {s3.Bucket} Configured logging bucket
-     */
-    private createLoggingBucket(): s3.Bucket {
-        return new s3.Bucket(this, 'CloudFrontLogsBucket', {
-            bucketName: this.stageConfig.getResourceName('cloudfront-logs'),
+        // ========================
+        // LOGGING BUCKET
+        // ========================
+        const loggingBucket = new s3.Bucket(this, 'CloudFrontLogsBucket', {
+            bucketName: stageConfig.getResourceName('cloudfront-logs'),
             objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
             enforceSSL: true,
-            autoDeleteObjects: this.stageConfig.isEphemeral(),
-            removalPolicy: this.stageConfig.isEphemeral() ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+            autoDeleteObjects: isEphemeral,
+            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
             accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
         });
-    }
 
-    /**
-     * Creates WAF Web ACL for CloudFront with geographical restrictions
-     * @private
-     * @returns {wafv2.CfnWebACL} Configured Web ACL
-     */
-    private createWebACL(): wafv2.CfnWebACL {
-        return new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
+
+        // ========================
+        // WAF
+        // ========================
+        const waf = new wafv2.CfnWebACL(this, 'CloudFrontWebACL', {
             defaultAction: { allow: {} },
             scope: 'CLOUDFRONT',
             visibilityConfig: {
                 sampledRequestsEnabled: true,
                 cloudWatchMetricsEnabled: true,
-                metricName: this.stageConfig.getResourceName('cloudfront-metric'),
+                metricName: stageConfig.getResourceName('cloudfront-metric'),
             },
-            name: this.stageConfig.getResourceName('cloudfront-acl'),
+            name: stageConfig.getResourceName('cloudfront-acl'),
             rules: [{
-                name: this.stageConfig.getResourceName('allow-usa-territories'),
+                name: stageConfig.getResourceName('allow-usa-territories'),
                 priority: 0,
                 statement: {
                     geoMatchStatement: {
@@ -142,27 +121,17 @@ export class StaticAssetsStack extends cdk.Stack {
                 visibilityConfig: {
                     sampledRequestsEnabled: true,
                     cloudWatchMetricsEnabled: true,
-                    metricName: this.stageConfig.getResourceName('usa-territories-metric'),
+                    metricName: stageConfig.getResourceName('usa-territories-metric'),
                 },
             }],
         });
-    }
 
-    /**
-     * Creates and configures CloudFront distribution
-     * @private
-     * @param {wafv2.CfnWebACL} waf - WAF Web ACL to attach to the distribution
-     * @param {StaticAssetsStackProps} props - Stack properties
-     * @returns {cloudfront.Distribution} Configured CloudFront distribution
-     */
-    private createCloudFrontDistribution(
-        waf: wafv2.CfnWebACL,
-        props: StaticAssetsStackProps
-    ): cloudfront.Distribution {
-        // Distribution configuration options
+        // ========================
+        // CLOUDFRONT DISTRIBUTION
+        // ========================
         let distributionProps: cloudfront.DistributionProps = {
             defaultBehavior: {
-                origin: origins.S3BucketOrigin.withOriginAccessControl(this.assetsBucket),
+                origin: origins.S3BucketOrigin.withOriginAccessControl(assetsBucket),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
                 compress: true,
@@ -170,9 +139,9 @@ export class StaticAssetsStack extends cdk.Stack {
                 cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
                 originRequestPolicy: cloudfront.OriginRequestPolicy.CORS_S3_ORIGIN,
             },
-            comment: `CloudFront Distribution for ${this.stageConfig.getResourceName('site')}`,
+            comment: `CloudFront Distribution for ${stageConfig.getResourceName('site')}`,
             webAclId: waf.attrArn,
-            logBucket: this.loggingBucket,
+            logBucket: loggingBucket,
             logFilePrefix: 'cf-logs/',
             logIncludesCookies: false,
             defaultRootObject: 'index.html',
@@ -204,16 +173,13 @@ export class StaticAssetsStack extends cdk.Stack {
                 minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
             };
         }
-    
-        return new cloudfront.Distribution(this, 'CloudFrontDistribution', distributionProps);
-    }
 
-    /**
-     * Deploys static assets to S3 and invalidates CloudFront cache
-     * Only executes if deploymentType is 'content'
-     * @private
-     */
-    private deployStaticAssets(): void {
+        // Create CloudFront distribution
+        const distribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', distributionProps);
+
+        // =========================
+        // DEPLOY ASSETS
+        // =========================
         if (this.node.tryGetContext('deploymentType') === 'infrastructure') {
             return;
         }
@@ -221,30 +187,27 @@ export class StaticAssetsStack extends cdk.Stack {
             sources: [
                 s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),
             ],
-            destinationBucket: this.assetsBucket,
-            distribution: this.distribution,
+            destinationBucket: assetsBucket,
+            distribution: distribution,
             distributionPaths: ['/*'],
         });
 
-        Object.entries(this.stageConfig.getStackTags()).forEach(([key, value]) => {
+        // =========================
+        // STACK OUTPUTS
+        // =========================
+        Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
             cdk.Tags.of(this).add(key, value);
         });
-    }
 
-    /**
-     * Adds CloudFront distribution ID and URL as stack outputs
-     * @private
-     */
-    private addStackOutputs(): void {
         new cdk.CfnOutput(this, 'CloudFrontDistributionId', {
-            value: this.distribution.distributionId,
-            exportName: this.stageConfig.getResourceName('cloudfront-id'),
+            value: distribution.distributionId,
+            exportName: stageConfig.getResourceName('cloudfront-id'),
             description: 'CloudFront Distribution ID',
         });
     
         new cdk.CfnOutput(this, 'StaticURL', {
-            value: `https://${this.distribution.domainName}`,
-            exportName: this.stageConfig.getResourceName('static-url'),
+            value: `https://${distribution.domainName}`,
+            exportName: stageConfig.getResourceName('static-url'),
             description: 'CloudFront Distribution URL',
         });
     }

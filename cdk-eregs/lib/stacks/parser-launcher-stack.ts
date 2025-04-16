@@ -37,68 +37,24 @@ export class ParserLauncherStack extends cdk.Stack {
     ) {
         super(scope, id, props);
 
-        // eCFR and FR ARNs
+        // ================================
+        // STACK IMPORTS
+        // ================================
         const ecfrParserArn = cdk.Fn.importValue(`sls-${stageConfig.getResourceName('ecfr-parser')}-EcfrParserLambdaFunctionQualifiedArn`);
         const frParserArn = cdk.Fn.importValue(`sls-${stageConfig.getResourceName('fr-parser')}-FrParserLambdaFunctionQualifiedArn`);
 
-        // Create Lambda infrastructure
-        const { lambdaRole } = this.createLambdaInfrastructure(stageConfig, props.environmentConfig.secretName, ecfrParserArn, frParserArn);
-
-        // Create Lambda function
-        this.lambda = new lambda.DockerImageFunction(this, 'ParserLauncherFunction', {
-            functionName: stageConfig.getResourceName('parser-launcher'),
-            code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/launcher/'), {
-                file: 'Dockerfile',
-            }),
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
-            memorySize: props.lambdaConfig.memorySize,
-            environment: {
-                STAGE_ENV: stageConfig.stageName,
-                SECRET_NAME: props.environmentConfig.secretName,
-                ECFR_PARSER_ARN: ecfrParserArn,
-                FR_PARSER_ARN: frParserArn,
-            },
-            role: lambdaRole,
-        });
-
-        // Create CloudWatch Event Rule
-        const rule = new events.Rule(this, 'ParserLauncherSchedule', {
-            schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
-            enabled: true,
-        });
-        rule.addTarget(new targets.LambdaFunction(this.lambda));
-
-        // Create stack outputs
-        this.createStackOutputs(stageConfig);
-    }
-
-    private createLambdaInfrastructure(stageConfig: StageConfig, secretName: string, ecfrParserArn: string, frParserArn: string) {
-        const logGroup = new logs.LogGroup(this, 'ParserLauncherLogGroup', {
+        // ================================
+        // LOG GROUP
+        // ================================
+        new logs.LogGroup(this, 'ParserLauncherLogGroup', {
             logGroupName: stageConfig.aws.lambda('parser-launcher'),
             retention: logs.RetentionDays.INFINITE,
         });
 
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            path: stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'PermissionsBoundary',
-                stageConfig.permissionsBoundaryArn
-            ),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-            ],
-            inlinePolicies: {
-                LambdaPolicy: this.createLambdaPolicy(secretName, ecfrParserArn, frParserArn),
-            },
-        });
-
-        return { lambdaRole, logGroup };
-    }
-
-    private createLambdaPolicy(secretName: string, ecfrParserArn: string, frParserArn: string): iam.PolicyDocument {
-        return new iam.PolicyDocument({
+        // ================================
+        // LAMBDA ROLE
+        // ================================
+        const lambdaPolicy = new iam.PolicyDocument({
             statements: [
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
@@ -122,17 +78,61 @@ export class ParserLauncherStack extends cdk.Stack {
                         'secretsmanager:GetSecretValue',
                     ],
                     resources: [
-                        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${secretName}*`,
+                        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${props.environmentConfig.secretName}*`,
                     ],
                 }),
             ],
         });
-    }
 
-    private createStackOutputs(stageConfig: StageConfig) {
-        // Output the Lambda function ARN
+        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+            path: stageConfig.iamPath,
+            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+                this,
+                'PermissionsBoundary',
+                stageConfig.permissionsBoundaryArn
+            ),
+            managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+            ],
+            inlinePolicies: {
+                LambdaPolicy: lambdaPolicy,
+            },
+        });
+
+        // ================================
+        // LAMBDA FUNCTION
+        // ================================
+        const lambdaFunction = new lambda.DockerImageFunction(this, 'ParserLauncherFunction', {
+            functionName: stageConfig.getResourceName('parser-launcher'),
+            code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/launcher/'), {
+                file: 'Dockerfile',
+            }),
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
+            memorySize: props.lambdaConfig.memorySize,
+            environment: {
+                STAGE_ENV: stageConfig.stageName,
+                SECRET_NAME: props.environmentConfig.secretName,
+                ECFR_PARSER_ARN: ecfrParserArn,
+                FR_PARSER_ARN: frParserArn,
+            },
+            role: lambdaRole,
+        });
+
+        // ================================
+        // CLOUDWATCH EVENT RULE
+        // ================================
+        const rule = new events.Rule(this, 'ParserLauncherSchedule', {
+            schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
+            enabled: true,
+        });
+        rule.addTarget(new targets.LambdaFunction(lambdaFunction));
+
+        // ================================
+        // STACK OUTPUTS
+        // ================================
         new cdk.CfnOutput(this, 'ParserLauncherLambdaFunctionQualifiedArn', {
-            value: this.lambda.currentVersion.functionArn,
+            value: lambdaFunction.currentVersion.functionArn,
             description: 'Current Lambda function version',
             exportName: `sls-${stageConfig.getResourceName('parser-launcher')}-ParserLauncherLambdaFunctionQualifiedArn`,
         });

@@ -71,103 +71,36 @@ export class TextExtractorStack extends cdk.Stack {
         stageConfig: StageConfig
     ) {
         super(scope, id, props);
-        this.stageConfig = stageConfig;
 
-        // Create DLQ
-        this.deadLetterQueue = new sqs.Queue(this, 'DeadLetterQueue', {
-            queueName: this.stageConfig.getResourceName('text-extractor-dl-queue'),
+        // ================================
+        // SQS QUEUES
+        // ================================
+        const deadLetterQueue = new sqs.Queue(this, 'DeadLetterQueue', {
+            queueName: stageConfig.getResourceName('text-extractor-dl-queue'),
         });
 
-        // Create main queue
-        this.queue = new sqs.Queue(this, 'TextExtractorQueue', {
-            queueName: this.stageConfig.getResourceName('text-extractor-queue'),
+        const queue = new sqs.Queue(this, 'TextExtractorQueue', {
+            queueName: stageConfig.getResourceName('text-extractor-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(4),
             deadLetterQueue: {
                 maxReceiveCount: 5,
-                queue: this.deadLetterQueue,
+                queue: deadLetterQueue,
             },
         });
 
-        // Create Lambda infrastructure
-        const { lambdaRole } = this.createLambdaInfrastructure(props.environmentConfig);
-
-        // Create Lambda function
-        this.lambda = this.createTextExtractorLambdaFunction(
-            props.lambdaConfig,
-            props.environmentConfig,
-            lambdaRole
-        );
-
-        // Create event source mapping
-        this.createEventSourceMapping();
-
-        // Create stack outputs
-        this.createStackOutputs();
-    }
-
-    private createTextExtractorLambdaFunction(
-        config: LambdaConfig,
-        envConfig: EnvironmentConfig,
-        role: iam.Role,
-    ): lambda.Function {
-        const dockerContextPath = path.resolve(__dirname, '../../../solution/');
-
-        return new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
-            functionName: this.stageConfig.getResourceName('text-extractor'),
-            code: lambda.DockerImageCode.fromImageAsset(dockerContextPath, {
-                file: 'text-extractor/Dockerfile',
-            }),
-            memorySize: config.memorySize,
-            timeout: cdk.Duration.seconds(config.timeout),
-            reservedConcurrentExecutions: config.reservedConcurrentExecutions,
-            environment: {
-                LOG_LEVEL: envConfig.logLevel,
-                SECRET_NAME: envConfig.secretName,
-            },
-            role,
-        });
-    }
-
-    private createEventSourceMapping() {
-        new lambda.EventSourceMapping(this, 'TextExtractorEventSourceMapping', {
-            target: this.lambda,
-            batchSize: 1,
-            eventSourceArn: this.queue.queueArn,
-            enabled: true,
-        });
-    }
-
-    private createLambdaInfrastructure(envConfig: EnvironmentConfig) {
-        const logGroup = new logs.LogGroup(this, 'TextExtractorLogGroup', {
-            logGroupName: this.stageConfig.aws.lambda('text-extractor'),
+        // ================================
+        // LOG GROUP
+        // ================================
+        new logs.LogGroup(this, 'TextExtractorLogGroup', {
+            logGroupName: stageConfig.aws.lambda('text-extractor'),
             retention: logs.RetentionDays.INFINITE,
         });
 
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            path: this.stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'PermissionsBoundary',
-                this.stageConfig.permissionsBoundaryArn
-            ),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-            ],
-            inlinePolicies: {
-                QueuePolicy: this.createQueuePolicy(),
-                TextDetectionPolicy: this.createTextDetectionPolicy(),
-                LambdaPolicy: this.createLambdaPolicy(envConfig),
-            },
-        });
-
-        return { lambdaRole, logGroup };
-    }
-
-    private createQueuePolicy(): iam.PolicyDocument {
-        return new iam.PolicyDocument({
+        // ================================
+        // LAMBDA ROLE
+        // ================================
+        const sqsPolicy = new iam.PolicyDocument({
             statements: [
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
@@ -176,14 +109,12 @@ export class TextExtractorStack extends cdk.Stack {
                         'sqs:DeleteMessage',
                         'sqs:GetQueueAttributes'
                     ],
-                    resources: [this.queue.queueArn],
+                    resources: [queue.queueArn],
                 }),
             ],
         });
-    }
 
-    private createTextDetectionPolicy(): iam.PolicyDocument {
-        return new iam.PolicyDocument({
+        const textDetectionPolicy = new iam.PolicyDocument({
             statements: [
                 new iam.PolicyStatement({
                     sid: 'DetectDocumentText',
@@ -193,10 +124,8 @@ export class TextExtractorStack extends cdk.Stack {
                 }),
             ],
         });
-    }
 
-    private createLambdaPolicy(envConfig: EnvironmentConfig): iam.PolicyDocument {
-        return new iam.PolicyDocument({
+        const lambdaPolicy = new iam.PolicyDocument({
             statements: [
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
@@ -215,7 +144,7 @@ export class TextExtractorStack extends cdk.Stack {
                         's3:GetObject',
                     ],
                     resources: [
-                        `arn:aws:s3:::cms-eregs-${this.stageConfig.stageName}-file-repo-eregs*`,
+                        `arn:aws:s3:::cms-eregs-${stageConfig.stageName}-file-repo-eregs*`,
                     ],
                 }),
                 new iam.PolicyStatement({
@@ -224,27 +153,72 @@ export class TextExtractorStack extends cdk.Stack {
                         'secretsmanager:GetSecretValue',
                     ],
                     resources: [
-                        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${envConfig.secretName}*`,
+                        `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${props.environmentConfig.secretName}*`,
                     ],
                 }),
             ],
         });
-    }
 
-    private createStackOutputs() {
+        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+            path: stageConfig.iamPath,
+            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+                this,
+                'PermissionsBoundary',
+                stageConfig.permissionsBoundaryArn
+            ),
+            managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+            ],
+            inlinePolicies: {
+                QueuePolicy: sqsPolicy,
+                TextDetectionPolicy: textDetectionPolicy,
+                LambdaPolicy: lambdaPolicy,
+            },
+        });
+
+        // ================================
+        // LAMBDA FUNCTION
+        // ================================
+        const lambdaFunction = new lambda.DockerImageFunction(this, 'TextExtractorFunction', {
+            functionName: stageConfig.getResourceName('text-extractor'),
+            code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
+                file: 'text-extractor/Dockerfile',
+            }),
+            memorySize: props.lambdaConfig.memorySize,
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            reservedConcurrentExecutions: props.lambdaConfig.reservedConcurrentExecutions,
+            environment: {
+                LOG_LEVEL: props.environmentConfig.logLevel,
+                SECRET_NAME: props.environmentConfig.secretName,
+            },
+            role: lambdaRole,
+        });
+
+        new lambda.EventSourceMapping(this, 'TextExtractorEventSourceMapping', {
+            target: lambdaFunction,
+            batchSize: 1,
+            eventSourceArn: queue.queueArn,
+            enabled: true,
+        });
+
+        // ================================
+        // STACK OUTPUTS
+        // ================================
         const outputs: Record<string, cdk.CfnOutputProps> = {
             TextExtractorLambdaFunctionQualifiedArn: {
-                value: this.lambda.functionArn,
+                value: lambdaFunction.functionArn,
                 description: 'Current Lambda function version',
-                exportName: this.stageConfig.getResourceName('text-extractor-lambda-arn'),
+                exportName: stageConfig.getResourceName('text-extractor-lambda-arn'),
             },
             TextExtractorQueueUrl: {
-                value: this.queue.queueUrl,
-                exportName: this.stageConfig.getResourceName('text-extractor-queue-url'),
+                value: queue.queueUrl,
+                exportName: stageConfig.getResourceName('text-extractor-queue-url'),
             },
             TextExtractorQueueArn: {
-                value: this.queue.queueArn,
-                exportName: this.stageConfig.getResourceName('text-extractor-queue-arn'),
+                value: queue.queueArn,
+                exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
             }
         };
 

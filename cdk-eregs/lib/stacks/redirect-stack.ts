@@ -55,41 +55,22 @@ export class RedirectApiStack extends cdk.Stack {
         stageConfig: StageConfig
     ) {
         super(scope, id, props);
-        this.stageConfig = stageConfig;
 
         const apiConfig = { ...DEFAULT_API_CONFIG, ...props.apiConfig };
         const customUrl = stageConfig.stageName === "prod" ? ssm.StringParameter.valueForStringParameter(this, '/eregulations/custom_url') : "";
 
-        const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
-        this.lambdaFunction = this.createLambdaFunction(lambdaRole, customUrl, logGroup, props.lambdaConfig);
-        this.api = this.createApiGateway(apiConfig);
-        this.configureApiGateway();
-        this.createStackOutputs();
-    }
-
-    private createLambdaInfrastructure() {
-        // Lambda CloudWatch Log Group
-        const logGroup = new logs.LogGroup(this, 'RedirectFunctionLogGroup', {
-            logGroupName: this.stageConfig.aws.lambda('redirect-function'),
+        // ================================
+        // LOG GROUP
+        // ================================
+        new logs.LogGroup(this, 'RedirectFunctionLogGroup', {
+            logGroupName: stageConfig.aws.lambda('redirect-function'),
             retention: logs.RetentionDays.INFINITE,
         });
 
-        // Lambda IAM Role
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
-            ],
-            inlinePolicies: {
-                LambdaPolicy: this.createLambdaPolicy(),
-            },
-        });
-
-        return { lambdaRole, logGroup };
-    }
-
-    private createLambdaPolicy(): iam.PolicyDocument {
-        return new iam.PolicyDocument({
+        // ================================
+        // LAMBDA ROLE
+        // ================================
+        const lambdaPolicy = new iam.PolicyDocument({
             statements: [
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
@@ -98,83 +79,86 @@ export class RedirectApiStack extends cdk.Stack {
                 }),
             ],
         });
-    }
 
-    private createLambdaFunction(
-        role: iam.Role,
-        customUrl: string,
-        logGroup: logs.LogGroup,
-        config: LambdaConfig,
-    ): lambda.Function {
-        return new lambda.Function(this, 'RedirectFunctionLambdaFunction', {
-            functionName: this.stageConfig.getResourceName('redirect-function'),
-            description: `Redirect API Lambda function for ${this.stageConfig.environment} stage`,
-            runtime: config.runtime,
-            handler: config.handler ?? 'redirect_lambda.handler',
-            code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
-            memorySize: config.memorySize,
-            timeout: cdk.Duration.seconds(config.timeout),
-            role,
+        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+            managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
+            ],
+            inlinePolicies: {
+                LambdaPolicy: lambdaPolicy,
+            },
+        });
+
+        // ================================
+        // LAMBDA FUNCTION
+        // ================================
+        const lambdaFunction = new lambda.Function(this, 'RedirectFunctionLambdaFunction', {
+            functionName: stageConfig.getResourceName('redirect-function'),
+            description: `Redirect API Lambda function for ${stageConfig.environment} stage`,
+            runtime: props.lambdaConfig.runtime,
+            handler: props.lambdaConfig.handler ?? 'redirect_lambda.handler',
+            code: lambda.Code.fromAsset(props.lambdaConfig.codePath ?? '../solution/backend/'),
+            memorySize: props.lambdaConfig.memorySize,
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            role: lambdaRole,
             environment: {
-                STAGE: this.stageConfig.environment,
+                STAGE: stageConfig.environment,
                 APP_NAME: StageConfig.projectName,
                 CUSTOM_URL: customUrl,
             },
         });
-    }
 
-    private createApiGateway(config: ApiGatewayConfig): apigateway.RestApi {
+        // ================================
+        // API GATEWAY
+        // ================================
         const api = new apigateway.RestApi(this, 'ApiGatewayRestApi', {
-            restApiName: this.stageConfig.getResourceName('api-gateway'),
-            description: `API Gateway for ${StageConfig.projectName} ${this.stageConfig.environment}`,
-            binaryMediaTypes: config.binaryMediaTypes,
+            restApiName: stageConfig.getResourceName('api-gateway'),
+            description: `API Gateway for ${StageConfig.projectName} ${stageConfig.environment}`,
+            binaryMediaTypes: apiConfig.binaryMediaTypes,
             endpointConfiguration: {
-                types: [config.endpointType!],
+                types: [apiConfig.endpointType!],
             },
             deployOptions: {
-                stageName: this.stageConfig.environment,
-                loggingLevel: config.loggingLevel,
+                stageName: stageConfig.environment,
+                loggingLevel: apiConfig.loggingLevel,
             },
         });
 
         // API Gateway Log Group
         new logs.LogGroup(this, 'ApiGatewayLogGroup', {
-            logGroupName: this.stageConfig.aws.apiGateway('api-gateway'),
+            logGroupName: stageConfig.aws.apiGateway('api-gateway'),
         });
 
-        return api;
-    }
-
-    private configureApiGateway() {
-        const integration = new apigateway.LambdaIntegration(this.lambdaFunction, { proxy: true });
+        const integration = new apigateway.LambdaIntegration(lambdaFunction, { proxy: true });
     
-        this.api.root.addMethod('ANY', integration, { 
+        api.root.addMethod('ANY', integration, { 
             apiKeyRequired: false, 
             methodResponses: [{ statusCode: '200' }] 
         });
     
-        const proxyResource = this.api.root.addResource('{proxy+}');
+        const proxyResource = api.root.addResource('{proxy+}');
         proxyResource.addMethod('ANY', integration, { 
             apiKeyRequired: false, 
             methodResponses: [{ statusCode: '200' }] 
         });
-    }
-
-    private createStackOutputs() {
+    
+        // ================================
+        // STACK OUTPUTS
+        // ================================
         const outputs: Record<string, cdk.CfnOutputProps> = {
             RedirectFunctionLambdaFunctionQualifiedArn: {
-                value: this.lambdaFunction.functionArn,
+                value: lambdaFunction.functionArn,
                 description: 'Current Lambda function version',
-                exportName: this.stageConfig.getResourceName('redirect-function-arn'),
+                exportName: stageConfig.getResourceName('redirect-function-arn'),
             },
             ServiceEndpoint: {
-                value: `https://${this.api.restApiId}.execute-api.${this.region}.${cdk.Aws.URL_SUFFIX}/${this.stageConfig.environment}`,
+                value: `https://${api.restApiId}.execute-api.${this.region}.${cdk.Aws.URL_SUFFIX}/${stageConfig.environment}`,
                 description: 'URL of the service endpoint',
-                exportName: this.stageConfig.getResourceName('service-endpoint'),
+                exportName: stageConfig.getResourceName('service-endpoint'),
             },
         };
 
         Object.entries(outputs).forEach(([name, props]) => new cdk.CfnOutput(this, name, props));
     }
 }
-

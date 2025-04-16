@@ -85,32 +85,30 @@ export class MaintenanceApiStack extends cdk.Stack {
         stageConfig: StageConfig
     ) {
         super(scope, id, props);
-        this.stageConfig = stageConfig;
 
         const apiConfig = { ...DEFAULT_API_CONFIG, ...props.apiConfig };
 
-        const { lambdaRole, logGroup } = this.createLambdaInfrastructure();
-        this.lambdaFunction = this.createLambdaFunction(lambdaRole, logGroup, props.lambdaConfig);
-        this.api = this.createApiGateway(apiConfig);
-        this.configureApiGateway();
-        this.createStackOutputs();
-    }
-
-    /**
-     * Creates the Lambda function's infrastructure components including:
-     * - CloudWatch Log Group
-     * - IAM Role with appropriate permissions
-     * 
-     * @returns Object containing the created role and log group
-     */
-    private createLambdaInfrastructure() {
-        // Create CloudWatch Log Group with environment-aware naming
-        const logGroup = new logs.LogGroup(this, 'MaintenanceFunctionLogGroup', {
-            logGroupName: this.stageConfig.aws.lambda('maintenance-function'),
+        // ================================
+        // LOG GROUP
+        // ================================
+        new logs.LogGroup(this, 'MaintenanceFunctionLogGroup', {
+            logGroupName: stageConfig.aws.lambda('maintenance-function'),
             retention: logs.RetentionDays.INFINITE,
         });
 
-        // Create IAM Role with required permissions
+        // ================================
+        // LAMBDA ROLE
+        // ================================
+        const lambdaPolicy = new iam.PolicyDocument({
+            statements: [
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
+                    resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
+                }),
+            ],
+        });
+
         const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
             path: '/delegatedadmin/developer/',
             assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
@@ -123,125 +121,77 @@ export class MaintenanceApiStack extends cdk.Stack {
                 iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaVPCAccessExecutionRole'),
             ],
             inlinePolicies: {
-                LambdaPolicy: this.createLambdaPolicy(),
+                LambdaPolicy: lambdaPolicy,
             },
         });
 
-        return { lambdaRole, logGroup };
-    }
-
-    /**
-     * Creates the IAM policy document for Lambda CloudWatch Logs permissions
-     * @returns PolicyDocument with CloudWatch Logs write permissions
-     */
-    private createLambdaPolicy(): iam.PolicyDocument {
-        return new iam.PolicyDocument({
-            statements: [
-                new iam.PolicyStatement({
-                    effect: iam.Effect.ALLOW,
-                    actions: ['logs:CreateLogGroup', 'logs:CreateLogStream', 'logs:PutLogEvents'],
-                    resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
-                }),
-            ],
-        });
-    }
-
-    /**
-     * Creates and configures the Lambda function
-     * @param role - IAM role for the Lambda function
-     * @param logGroup - CloudWatch Log Group for Lambda logs
-     * @param config - Lambda function configuration
-     * @returns Configured Lambda function
-     */
-    private createLambdaFunction(
-        role: iam.Role,
-        logGroup: logs.LogGroup,
-        config: LambdaConfig,
-    ): lambda.Function {
-        return new lambda.Function(this, 'MaintenanceFunctionLambda', {
-            functionName: this.stageConfig.getResourceName('maintenance-function'),
-            description: `Maintenance API Lambda function for ${this.stageConfig.environment} stage`,
-            runtime: config.runtime,
-            handler: config.handler ?? 'maintenance_lambda.handler',
-            code: lambda.Code.fromAsset(config.codePath ?? '../solution/backend/'),
-            memorySize: config.memorySize,
-            timeout: cdk.Duration.seconds(config.timeout),
-            role,
+        // ================================
+        // LAMBDA FUNCTION
+        // ================================
+        const lambdaFunction = new lambda.Function(this, 'MaintenanceFunctionLambda', {
+            functionName: stageConfig.getResourceName('maintenance-function'),
+            description: `Maintenance API Lambda function for ${stageConfig.environment} stage`,
+            runtime: props.lambdaConfig.runtime,
+            handler: props.lambdaConfig.handler ?? 'maintenance_lambda.handler',
+            code: lambda.Code.fromAsset(props.lambdaConfig.codePath ?? '../solution/backend/'),
+            memorySize: props.lambdaConfig.memorySize,
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            role: lambdaRole,
             environment: {
-                STAGE: this.stageConfig.environment,
+                STAGE: stageConfig.environment,
                 APP_NAME: StageConfig.projectName,
             },
         });
-    }
 
-    /**
-     * Creates and configures the API Gateway
-     * @param config - API Gateway configuration
-     * @returns Configured REST API
-     */
-    private createApiGateway(config: ApiGatewayConfig): apigateway.RestApi {
+        // ================================
+        // API GATEWAY
+        // ================================
         const api = new apigateway.RestApi(this, 'ApiGatewayRestApi', {
-            restApiName: this.stageConfig.getResourceName('maintenance-api'),
-            description: `Maintenance API Gateway for ${StageConfig.projectName} ${this.stageConfig.environment}`,
-            binaryMediaTypes: config.binaryMediaTypes,
+            restApiName: stageConfig.getResourceName('maintenance-api'),
+            description: `Maintenance API Gateway for ${StageConfig.projectName} ${stageConfig.environment}`,
+            binaryMediaTypes: apiConfig.binaryMediaTypes,
             endpointConfiguration: {
-                types: [config.endpointType!],
+                types: [apiConfig.endpointType!],
             },
             deployOptions: {
-                stageName: this.stageConfig.environment,
-                loggingLevel: config.loggingLevel,
+                stageName: stageConfig.environment,
+                loggingLevel: apiConfig.loggingLevel,
             },
         });
 
         // Create API Gateway Log Group
         new logs.LogGroup(this, 'ApiGatewayLogGroup', {
-            logGroupName: this.stageConfig.aws.apiGateway('maintenance-api'),
+            logGroupName: stageConfig.aws.apiGateway('maintenance-api'),
         });
 
-        return api;
-    }
-
-    /**
-     * Configures API Gateway routes and integrations
-     * Sets up:
-     * - Lambda proxy integration
-     * - ANY method on root path
-     * - ANY method on proxy resource (/{proxy+})
-     */
-    private configureApiGateway() {
-        const integration = new apigateway.LambdaIntegration(this.lambdaFunction, { proxy: true });
+        const integration = new apigateway.LambdaIntegration(lambdaFunction, { proxy: true });
 
         // Configure root path
-        this.api.root.addMethod('ANY', integration, { 
+        api.root.addMethod('ANY', integration, { 
             apiKeyRequired: false, 
             methodResponses: [{ statusCode: '200' }] 
         });
     
         // Configure proxy path
-        const proxyResource = this.api.root.addResource('{proxy+}');
+        const proxyResource = api.root.addResource('{proxy+}');
         proxyResource.addMethod('ANY', integration, { 
             apiKeyRequired: false, 
             methodResponses: [{ statusCode: '200' }] 
         });
-    }
 
-    /**
-     * Creates CloudFormation outputs for the stack
-     * Exports:
-     * - Lambda function ARN
-     * - API Gateway endpoint URL
-     */
-    private createStackOutputs() {
+        // ================================
+        // STACK OUTPUTS
+        // ================================
         const outputs: Record<string, cdk.CfnOutputProps> = {
             MaintenanceFunctionLambdaFunctionQualifiedArn: {
-                value: this.lambdaFunction.functionArn,
+                value: lambdaFunction.functionArn,
                 description: 'Current Lambda function version',
-                exportName: this.stageConfig.getResourceName('maintenance-function-arn'),
+                exportName: stageConfig.getResourceName('maintenance-function-arn'),
             },
             ServiceEndpoint: {
-                value: `https://${this.api.restApiId}.execute-api.${this.region}.${cdk.Aws.URL_SUFFIX}/${this.stageConfig.environment}`,
+                value: `https://${api.restApiId}.execute-api.${this.region}.${cdk.Aws.URL_SUFFIX}/${stageConfig.environment}`,
                 description: 'URL of the service endpoint',
-                exportName: this.stageConfig.getResourceName('maintenance-service-endpoint'),
+                exportName: stageConfig.getResourceName('maintenance-service-endpoint'),
             },
         };
 

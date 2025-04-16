@@ -34,14 +34,55 @@ export class EcfrParserStack extends cdk.Stack {
     ) {
         super(scope, id, props);
 
-        // Create Lambda infrastructure
-        const { lambdaRole } = this.createLambdaInfrastructure(stageConfig);
+        // ================================
+        // LOG GROUP
+        // ================================
+        new logs.LogGroup(this, 'EcfrParserLogGroup', {
+            logGroupName: stageConfig.aws.lambda('ecfr-parser'),
+            retention: logs.RetentionDays.INFINITE,
+        });
+
+        // ================================
+        // LAMBDA ROLE
+        // ================================
+        const lambdaPolicy = new iam.PolicyDocument({
+            statements: [
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: [
+                        'logs:CreateLogGroup',
+                        'logs:CreateLogStream',
+                        'logs:PutLogEvents'
+                    ],
+                    resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
+                }),
+            ],
+        });
+
+        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+            path: stageConfig.iamPath,
+            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+                this,
+                'PermissionsBoundary',
+                stageConfig.permissionsBoundaryArn
+            ),
+            managedPolicies: [
+                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+            ],
+            inlinePolicies: {
+                LambdaPolicy: lambdaPolicy,
+            },
+        });
+
+        // ================================
+        // LAMBDA FUNCTION
+        // ================================
 
         // Get the API Gateway endpoint from stack outputs
         const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'))
 
-        // Create Lambda function
-        this.lambda = new lambda.DockerImageFunction(this, 'EcfrParserFunction', {
+        const lambdaFunction = new lambda.DockerImageFunction(this, 'EcfrParserFunction', {
             functionName: stageConfig.getResourceName('ecfr-parser'),
             code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/'), {
                 file: 'ecfr-parser/Dockerfile',
@@ -57,63 +98,22 @@ export class EcfrParserStack extends cdk.Stack {
             role: lambdaRole,
         });
 
+        // ================================
+        // CLOUDWATCH EVENT RULE
+        // ================================
         // DISABLED for now
         // // Create CloudWatch Event Rule - note different cron expression
         // const rule = new events.Rule(this, 'EcfrParserSchedule', {
         //   schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
         //   enabled: true,
         // });
-        // rule.addTarget(new targets.LambdaFunction(this.lambda));
+        // rule.addTarget(new targets.LambdaFunction(lambdaFunction));
 
-        // Create stack outputs
-        this.createStackOutputs(stageConfig);
-    }
-
-    private createLambdaInfrastructure(stageConfig: StageConfig) {
-        const logGroup = new logs.LogGroup(this, 'EcfrParserLogGroup', {
-            logGroupName: stageConfig.aws.lambda('ecfr-parser'),
-            retention: logs.RetentionDays.INFINITE,
-        });
-
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            path: stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'PermissionsBoundary',
-                stageConfig.permissionsBoundaryArn
-            ),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-            ],
-            inlinePolicies: {
-                LambdaPolicy: this.createLambdaPolicy(),
-            },
-        });
-
-        return { lambdaRole, logGroup };
-    }
-
-    private createLambdaPolicy(): iam.PolicyDocument {
-        return new iam.PolicyDocument({
-            statements: [
-                new iam.PolicyStatement({
-                    effect: iam.Effect.ALLOW,
-                    actions: [
-                        'logs:CreateLogGroup',
-                        'logs:CreateLogStream',
-                        'logs:PutLogEvents'
-                    ],
-                    resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
-                }),
-            ],
-        });
-    }
-
-    private createStackOutputs(stageConfig: StageConfig) {
-        // Output the Lambda function ARN
+        // ================================
+        // STACK OUTPUTS
+        // ================================
         new cdk.CfnOutput(this, 'EcfrParserLambdaFunctionQualifiedArn', {
-            value: this.lambda.functionArn,
+            value: lambdaFunction.functionArn,
             description: 'Current Lambda function version',
             exportName: `sls-${stageConfig.getResourceName('ecfr-parser')}-EcfrParserLambdaFunctionQualifiedArn`,
         });
