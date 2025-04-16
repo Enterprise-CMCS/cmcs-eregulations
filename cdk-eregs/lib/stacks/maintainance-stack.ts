@@ -67,10 +67,6 @@ const DEFAULT_API_CONFIG: ApiGatewayConfig = {
  * ```
  */
 export class MaintenanceApiStack extends cdk.Stack {
-    public readonly lambdaFunction: lambda.Function;
-    public readonly api: apigateway.RestApi;
-    private readonly stageConfig: StageConfig;
-
     /**
      * Creates a new instance of MaintenanceApiStack.
      * @param scope - The scope in which to define this construct
@@ -78,12 +74,7 @@ export class MaintenanceApiStack extends cdk.Stack {
      * @param props - Configuration properties for the stack
      * @param stageConfig - Stage configuration for environment-aware resource creation
      */
-    constructor(
-        scope: Construct, 
-        id: string, 
-        props: MaintenanceApiStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: MaintenanceApiStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         const apiConfig = { ...DEFAULT_API_CONFIG, ...props.apiConfig };

@@ -55,21 +55,7 @@ export interface TextExtractorStackProps extends cdk.StackProps {
  * - Event Source Mapping for queue integration
  */
 export class TextExtractorStack extends cdk.Stack {
-    /** The Lambda function that processes text extraction requests */
-    public readonly lambda: lambda.Function;
-    /** The SQS queue that holds text extraction requests */
-    public readonly queue: sqs.Queue;
-    /** The Dead Letter Queue for failed message processing */
-    private readonly deadLetterQueue: sqs.Queue;
-    /** Stage configuration for environment-aware deployments */
-    private readonly stageConfig: StageConfig;
-
-    constructor(
-        scope: Construct, 
-        id: string, 
-        props: TextExtractorStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: TextExtractorStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         // ================================

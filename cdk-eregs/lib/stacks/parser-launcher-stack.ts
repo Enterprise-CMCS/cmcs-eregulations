@@ -27,14 +27,7 @@ export interface ParserLauncherStackProps extends cdk.StackProps {
 }
 
 export class ParserLauncherStack extends cdk.Stack {
-    public readonly lambda: lambda.Function;
-
-    constructor(
-        scope: Construct,
-        id: string,
-        props: ParserLauncherStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: ParserLauncherStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         // ================================

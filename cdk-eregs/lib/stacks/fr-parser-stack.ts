@@ -24,14 +24,7 @@ export interface FrParserStackProps extends cdk.StackProps {
 }
 
 export class FrParserStack extends cdk.Stack {
-    public readonly lambda: lambda.Function;
-
-    constructor(
-        scope: Construct,
-        id: string,
-        props: FrParserStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: FrParserStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         // ================================

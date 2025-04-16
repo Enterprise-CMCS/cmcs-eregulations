@@ -31,11 +31,6 @@ export interface StaticAssetsStackProps extends cdk.StackProps {
  * @extends {cdk.Stack}
  */
 export class StaticAssetsStack extends cdk.Stack {
-    private readonly stageConfig: StageConfig;
-    private readonly assetsBucket: s3.Bucket;
-    private readonly loggingBucket: s3.Bucket;
-    private readonly distribution: cloudfront.Distribution;
-
     /**
      * Creates an instance of StaticAssetsStack
      * @param {Construct} scope - The scope in which to define this construct
@@ -43,12 +38,7 @@ export class StaticAssetsStack extends cdk.Stack {
      * @param {StaticAssetsStackProps} props - Configuration properties
      * @param {StageConfig} stageConfig - Stage-specific configuration
      */
-    constructor(
-        scope: Construct,
-        id: string,
-        props: StaticAssetsStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: StaticAssetsStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         const isEphemeral = stageConfig.isEphemeral();

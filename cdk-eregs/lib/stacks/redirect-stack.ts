@@ -44,16 +44,7 @@ const DEFAULT_API_CONFIG: ApiGatewayConfig = {
 };
 
 export class RedirectApiStack extends cdk.Stack {
-    public readonly lambdaFunction: lambda.Function;
-    public readonly api: apigateway.RestApi;
-    private readonly stageConfig: StageConfig;
-
-    constructor(
-        scope: Construct, 
-        id: string, 
-        props: RedirectApiStackProps,
-        stageConfig: StageConfig
-    ) {
+    constructor(scope: Construct, id: string, props: RedirectApiStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
         const apiConfig = { ...DEFAULT_API_CONFIG, ...props.apiConfig };
