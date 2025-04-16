@@ -180,17 +180,16 @@ export class StaticAssetsStack extends cdk.Stack {
         // =========================
         // DEPLOY ASSETS
         // =========================
-        if (this.node.tryGetContext('deploymentType') === 'infrastructure') {
-            return;
+        if (this.node.tryGetContext('deploymentType') === 'content') {
+            new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
+                sources: [
+                    s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),
+                ],
+                destinationBucket: assetsBucket,
+                distribution: distribution,
+                distributionPaths: ['/*'],
+            });
         }
-        new s3deploy.BucketDeployment(this, 'DeployStaticAssets', {
-            sources: [
-                s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),
-            ],
-            destinationBucket: assetsBucket,
-            distribution: distribution,
-            distributionPaths: ['/*'],
-        });
 
         // =========================
         // STACK OUTPUTS
