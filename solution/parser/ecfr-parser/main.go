@@ -196,15 +196,19 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	for _, part := range parts {
 		versionList := list.New()
 
-		// sort versions ascending
+		// sort versions descending
 		keys := make([]string, 0, len(versions[part.Value]))
 		for k := range versions[part.Value] {
 			keys = append(keys, k)
 		}
-		sort.Strings(keys)
+		//sort.Strings(keys)
+		sort.Sort(sort.Reverse(sort.StringSlice(keys)))
+		
+		// only choose the latest date for processing
+		if len(keys) > 0 {
+			date := keys[0]
 
-		for _, date := range keys {
-			// If we have this part already, skip it
+			// if we already have this part, skip it if configured to do so
 			if config.SkipRegVersions && contains(existingVersions[date], part.Value) {
 				log.Trace("[main] Skipping title ", title, " part ", part.Value, " version ", date)
 				skippedVersions++
