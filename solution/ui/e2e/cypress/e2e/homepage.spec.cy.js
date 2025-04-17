@@ -25,6 +25,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();
+
+        cy.get("#jumpToTitle").should("have.value", "42");
+        cy.get("#jumpToPart").should("not.have.attr", "disabled");
+        cy.get("#jumpBtn").should("have.class", "active");
     });
 
     it("has a hidden Skip to main content link", () => {
@@ -192,14 +196,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .and.eq("rgb(214, 215, 217)");
                 });
         });
-    });
-
-    it("Does not allow selection of Part till Title is selected in Jump To", () => {
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        cy.get("#jumpToPart").should("be.disabled");
-        cy.get("#jumpToTitle").select("45");
-        cy.get("#jumpToPart").should("not.be.disabled");
     });
 
     it("Does not include Part 75 when Title 45 is selected in Jump To", () => {

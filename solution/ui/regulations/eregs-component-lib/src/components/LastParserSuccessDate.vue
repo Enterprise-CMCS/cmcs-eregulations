@@ -1,3 +1,28 @@
+<script setup>
+import { ref, onMounted } from "vue";
+import { getLastParserSuccessDate } from "utilities/api";
+import SimpleSpinner from "./SimpleSpinner.vue";
+
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
+    },
+});
+
+const lastParserSuccess = ref("");
+
+onMounted(() => {
+    getLastParserSuccessDate({ apiUrl: props.apiUrl })
+        .then((response) => {
+            lastParserSuccess.value = response;
+        })
+        .catch(() => {
+            lastParserSuccess.value = "N/A";
+        });
+});
+</script>
+
 <template>
     <span>
         <template v-if="lastParserSuccess">{{ lastParserSuccess }}</template>
@@ -6,42 +31,6 @@
         </span>
     </span>
 </template>
-
-<script>
-import { getLastParserSuccessDate } from "utilities/api";
-import SimpleSpinner from "./SimpleSpinner.vue";
-
-export default {
-    name: "LastParserSuccessDate",
-
-    components: {
-        SimpleSpinner,
-    },
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-    },
-
-    created() {
-        getLastParserSuccessDate({ apiUrl: this.apiUrl })
-            .then((response) => {
-                this.lastParserSuccess = response;
-            })
-            .catch(() => {
-                this.lastParserSuccess = "N/A";
-            });
-    },
-
-    data() {
-        return {
-            lastParserSuccess: "",
-        };
-    },
-};
-</script>
 
 <style>
 .spinner-span {

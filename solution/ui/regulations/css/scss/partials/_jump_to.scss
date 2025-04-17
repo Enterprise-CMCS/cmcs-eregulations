@@ -8,9 +8,9 @@ form .jump-to-input {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    gap: 4px;
 
     .section-symbol {
-        margin-right: 4px;
         font-size: 15px;
         font-weight: 600;
     }
@@ -18,7 +18,6 @@ form .jump-to-input {
     .dot {
         font-size: var(--font-size-2xl);
         line-height: 1;
-        padding: 0 4px;
     }
 
     select {
@@ -84,7 +83,7 @@ form .jump-to-input {
         font-weight: 700;
         margin-top: 0px;
         margin-bottom: 0px;
-        padding: 5px 8px;
+        padding: 4px 8px;
 
         &:disabled {
             padding: 4px 7px;
@@ -93,15 +92,10 @@ form .jump-to-input {
 
     select#jumpToTitle {
         width: 85px;
-        margin-right: 4px;
     }
 
     select#jumpToPart {
-        width: 80px;
-
-        @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
-            width: 70px;
-        }
+        width: 70px;
 
         @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
             width: 65px;
@@ -109,12 +103,7 @@ form .jump-to-input {
     }
 
     input#jumpToSection {
-        margin-right: 4px;
-        width: 65px;
-
-        @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
-            width: 60px;
-        }
+        width: 60px;
 
         @include custom-max(calc((calc($eds-width-sm - 1px)) / 1px)) {
             width: 45px;

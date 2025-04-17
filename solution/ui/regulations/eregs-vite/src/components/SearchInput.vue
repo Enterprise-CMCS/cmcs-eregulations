@@ -1,3 +1,94 @@
+<script setup>
+import { ref, computed, watch, inject } from 'vue';
+import { useRouter } from 'vue-router';
+
+const props = defineProps({
+    formClass: {
+        type: String,
+        required: true,
+    },
+    label: {
+        type: String,
+        required: true,
+    },
+    searchQuery: {
+        type: String,
+        default: undefined,
+    },
+    synonyms: {
+        type: Array,
+        default: () => [],
+    },
+    showSuggestions: {
+        type: Boolean,
+        default: false,
+    },
+    redirectTo: {
+        type: String,
+        default: undefined,
+    },
+});
+
+const emit = defineEmits(['execute-search', 'clear-form']);
+
+const parent = inject('parent', 'search');
+const router = useRouter();
+
+const searchInputValue = ref(props.searchQuery);
+
+const multiWordQuery = computed(() => {
+    if (props.searchQuery === undefined) return false;
+    return (
+        props.searchQuery.split(' ').length > 1 &&
+        props.searchQuery[0] !== '"' &&
+        props.searchQuery[props.searchQuery.length - 1] !== '"'
+    );
+});
+
+const submitForm = () => {
+    emit('execute-search', { query: searchInputValue.value });
+    searchInputValue.value = undefined;
+};
+
+const clearForm = () => {
+    searchInputValue.value = undefined;
+    emit('clear-form');
+};
+
+const updateSearchValue = (value) => {
+    searchInputValue.value = value;
+};
+
+const synonymLink = (synonym) => {
+    router.push({
+        name: props.redirectTo || parent,
+        query: {
+            ...router.currentRoute.value.query,
+            page: undefined,
+            q: `"${synonym}"`,
+        },
+    });
+};
+
+const quotedLink = () => {
+    router.push({
+        name: props.redirectTo || parent,
+        query: {
+            ...router.currentRoute.value.query,
+            page: undefined,
+            q: `"${props.searchQuery}"`,
+        },
+    });
+};
+
+watch(
+    () => props.searchQuery,
+    (newQuery) => {
+        searchInputValue.value = newQuery;
+    }
+);
+</script>
+
 <template>
     <form
         ref="formRef"
@@ -45,7 +136,6 @@
                 <div class="search-suggestion">
                     Didn't find what you were looking for? Try searching for
                     <a
-                        :key="i"
                         tabindex="0"
                         @click="quotedLink"
                         @keydown.enter.space.prevent="quotedLink"
@@ -66,7 +156,6 @@
                             @keydown.enter.space.prevent="synonymLink(syn)"
                         >{{ syn }}</a><span
                             v-if="synonyms[synonyms.length - 1] != syn"
-                            :key="i"
                         >,
                         </span>
                     </template>
@@ -75,112 +164,3 @@
         </div>
     </form>
 </template>
-
-<script>
-export default {
-    name: "DefaultName",
-
-    inject: {
-        parent: {
-            default: "search",
-        },
-    },
-
-    props: {
-        formClass: {
-            type: String,
-            required: true,
-        },
-        label: {
-            type: String,
-            required: true,
-        },
-        searchQuery: {
-            type: String,
-            default: undefined,
-        },
-        synonyms: {
-            type: Array,
-            default: () => [],
-        },
-        showSuggestions: {
-            type: Boolean,
-            default: false,
-        },
-        redirectTo: {
-            type: String,
-            default: undefined,
-        },
-    },
-
-    created() {
-        if (this.parent !== "subjects") {
-            this.searchInputValue = this.searchQuery;
-        }
-    },
-    data() {
-        return {
-            searchInputValue: undefined,
-        };
-    },
-
-    computed: {
-        multiWordQuery() {
-            if (this.searchQuery === undefined) return false;
-
-            return (
-                this.searchQuery.split(" ").length > 1 &&
-                this.searchQuery[0] !== '"' &&
-                this.searchQuery[this.searchQuery.length - 1] !== '"'
-            );
-        },
-    },
-
-    emits: ["execute-search", "clear-form"],
-
-    methods: {
-        submitForm() {
-            this.$emit("execute-search", { query: this.searchInputValue });
-
-            // clear search input so input is clear if user clicks back button
-            // to return to this page
-            this.$refs.searchInput.reset();
-        },
-        clearForm() {
-            this.searchInputValue = undefined;
-            this.$emit("clear-form");
-        },
-        updateSearchValue(value) {
-            this.searchInputValue = value;
-        },
-        synonymLink(synonym) {
-            this.$router.push({
-                name: this.redirectTo || this.parent,
-                query: {
-                    ...this.queryParams,
-                    page: undefined,
-                    q: `"${synonym}"`,
-                },
-            });
-        },
-        quotedLink() {
-            this.$router.push({
-                name: this.redirectTo || this.parent,
-                query: {
-                    ...this.queryParams,
-                    page: undefined,
-                    q: `"${this.searchQuery}"`,
-                },
-            });
-        },
-    },
-
-    watch: {
-        searchQuery: {
-            async handler(newQuery) {
-                this.searchInputValue = newQuery;
-            },
-        },
-    },
-};
-</script>
