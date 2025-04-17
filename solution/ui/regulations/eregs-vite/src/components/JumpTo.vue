@@ -133,11 +133,12 @@ watch(selectedTitle, (title) => {
                     pattern="\d+"
                     title="Regulation section number, i.e. 111"
                     aria-label="Regulation section number, i.e. 111"
+                    :disabled="!selectedTitle"
                 >
                 <input
                     id="jumpBtn"
-                    class="submit"
-                    :class="{ active: true }"
+                    class="submit active"
+                    :disabled="!selectedTitle"
                     type="submit"
                     value="Go"
                 >
