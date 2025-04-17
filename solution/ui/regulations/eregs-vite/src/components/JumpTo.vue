@@ -105,7 +105,7 @@ watch(selectedTitle, (title) => {
                     class="ds-c-field"
                     aria-label="Regulation part number"
                     required
-                    :disabled="!selectedTitle"
+                    :disabled="!selectedTitle || filteredParts.length === 0"
                 >
                     <option
                         value=""
