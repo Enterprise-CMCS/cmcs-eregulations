@@ -1,4 +1,3 @@
-// lib/utils/environment.ts
 import { Environment, EnvironmentContext, VALID_ENVIRONMENTS, isValidEnvironment } from './environments';
 
 /**
@@ -10,22 +9,22 @@ import { Environment, EnvironmentContext, VALID_ENVIRONMENTS, isValidEnvironment
  * @returns EnvironmentContext - Validated environment context.
  */
 export function validateEnvironmentContext(
-  env?: string,
-  ephemeralId?: string,
-  branch?: string,
-  prNumber?: string
+    env?: string,
+    ephemeralId?: string,
+    branch?: string,
+    prNumber?: string
 ): EnvironmentContext {
-  const environment = validateEnvironment(env);
+    const environment = validateEnvironment(env);
 
-  if (prNumber && !ephemeralId) {
-    throw new Error('Ephemeral ID is required when a PR number is provided');
-  }
+    if (prNumber && !ephemeralId) {
+        throw new Error('Ephemeral ID is required when a PR number is provided');
+    }
 
-  if (ephemeralId) {
-    validateEphemeralId(ephemeralId);
-  }
+    if (ephemeralId) {
+        validateEphemeralId(ephemeralId);
+    }
 
-  return { environment, ephemeralId, branch, prNumber };
+    return { environment, ephemeralId, branch, prNumber };
 }
 
 /**
@@ -34,13 +33,13 @@ export function validateEnvironmentContext(
  * @returns Environment - Valid environment constant.
  */
 export function validateEnvironment(env?: string): Environment {
-  const environment = (env || 'dev').toLowerCase() as Environment;
+    const environment = (env || 'dev').toLowerCase() as Environment;
 
-  if (!isValidEnvironment(environment)) {
-    throw new Error(`Invalid environment: ${environment}. Must be one of: ${VALID_ENVIRONMENTS.join(', ')}`);
-  }
+    if (!isValidEnvironment(environment)) {
+        throw new Error(`Invalid environment: ${environment}. Must be one of: ${VALID_ENVIRONMENTS.join(', ')}`);
+    }
 
-  return environment;
+    return environment;
 }
 
 /**
@@ -48,9 +47,9 @@ export function validateEnvironment(env?: string): Environment {
  * @param ephemeralId - Ephemeral environment identifier.
  */
 export function validateEphemeralId(ephemeralId: string): void {
-  if (ephemeralId.length > 20) throw new Error('Ephemeral ID cannot exceed 20 characters');
-  if (!/^[a-z0-9-]+$/.test(ephemeralId)) throw new Error('Ephemeral ID must contain only lowercase letters, numbers, and hyphens');
-  if (!ephemeralId.startsWith('eph-')) throw new Error('Ephemeral ID must start with "eph-"');
+    if (ephemeralId.length > 20) throw new Error('Ephemeral ID cannot exceed 20 characters');
+    if (!/^[a-z0-9-]+$/.test(ephemeralId)) throw new Error('Ephemeral ID must contain only lowercase letters, numbers, and hyphens');
+    if (!ephemeralId.startsWith('eph-')) throw new Error('Ephemeral ID must start with "eph-"');
 }
 
 /**
@@ -62,23 +61,23 @@ export function validateEphemeralId(ephemeralId: string): void {
  * @returns Record<string, string> - Key-value pairs for tags.
  */
 export function getEnvironmentTags(
-  environment: Environment,
-  projectName: string,
-  serviceName: string,
-  ephemeralId?: string
+    environment: Environment,
+    projectName: string,
+    serviceName: string,
+    ephemeralId?: string
 ): Record<string, string> {
-  const tags: Record<string, string> = {
-    Environment: environment,
-    Project: projectName,
-    Service: serviceName,
-  };
+    const tags: Record<string, string> = {
+        Environment: environment,
+        Project: projectName,
+        Service: serviceName,
+    };
 
-  if (ephemeralId) {
-    tags.EphemeralId = ephemeralId;
-    tags.EnvironmentType = 'ephemeral';
-  } else {
-    tags.EnvironmentType = 'permanent';
-  }
+    if (ephemeralId) {
+        tags.EphemeralId = ephemeralId;
+        tags.EnvironmentType = 'ephemeral';
+    } else {
+        tags.EnvironmentType = 'permanent';
+    }
 
-  return tags;
+    return tags;
 }
