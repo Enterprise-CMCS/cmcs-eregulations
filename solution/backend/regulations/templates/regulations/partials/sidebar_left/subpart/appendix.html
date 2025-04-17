@@ -1,13 +1,22 @@
 <li class="{{ extra_class }}">
     {% if item.reserved %}
-    <span class="menu-section">
-        <div class="toc-section-number">{{ item.label_level }}</div>
-        <div class="toc-section-name">[Reserved]</div>
-    </span>
+        <span class="menu-section">
+            <div class="toc-section-number">{{ item.label_level }}</div>
+            <div class="toc-section-name">[Reserved]</div>
+        </span>
     {% else %}
-    <a class="menu-section" href="{% url 'reader_view' title reg_part subpart version %}#{{item.identifier|join:'-' }}" data-section-id="{{item.identifier|join:'-' }}" id="nav-{{item.identifier|join:'-'}}">
-        <div class="toc-section-number">{{ item.label_level }}</div>
-        <div class="toc-section-name">{{item.label_description|safe}}</div>
-    </a>
+        {% if item.parent_type == 'subpart' %}
+            <!-- For appendices within subparts, use anchor links -->
+            <a class="menu-section" href="{% url 'reader_view' title reg_part subpart version %}#{{item.identifier|join:'-' }}" data-section-id="{{item.identifier|join:'-' }}" id="nav-{{item.identifier|join:'-'}}">
+                <div class="toc-section-number">{{ item.label_level }}</div>
+                <div class="toc-section-name">{{item.label_description|safe}}</div>
+            </a>
+        {% else %}
+            <!-- For appendices directly under parts, use dedicated pages -->
+            <a class="menu-section" href="{% url 'reader_view' title reg_part item.identifier|join:'-' version %}" data-section-id="{{item.identifier|join:'-' }}" id="nav-{{item.identifier|join:'-'}}">
+                <div class="toc-section-number">{{ item.label_level }}</div>
+                <div class="toc-section-name">{{item.label_description|safe}}</div>
+            </a>
+        {% endif %}
     {% endif %}
 </li>

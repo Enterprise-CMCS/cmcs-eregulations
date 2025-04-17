@@ -13,6 +13,7 @@ from regulations.views.reader import (
     PartReaderView,
     SectionReaderView,
     SubpartReaderView,
+    AppendixReaderView,
 )
 from regulations.views.redirect import RegulationRedirectView
 from regulations.views.regulation_landing import RegulationLandingView
@@ -25,6 +26,7 @@ from regulations.views.subjects import SubjectsView
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
 register_converter(converters.VersionConverter, 'version')
+register_converter(converters.AppendixConverter, 'appendix')
 
 urlpatterns = [
     path('', HomepageView.as_view(), name='homepage'),
@@ -40,6 +42,12 @@ urlpatterns = [
          name="reader_view"),
     path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/',
          SubpartReaderView.as_view(),
+         name="reader_view"),
+    path('<numeric:title>/<numeric:part>/<appendix:appendix>/',
+         AppendixReaderView.as_view(),
+         name="reader_view"),
+    path('<numeric:title>/<numeric:part>/<appendix:appendix>/<version:version>/',
+         AppendixReaderView.as_view(),
          name="reader_view"),
     path('<numeric:title>/<numeric:part>/<version:version>/', PartReaderView.as_view(), name='reader_view'),
     path('goto/', GoToRedirectView.as_view(), name='goto'),
@@ -60,5 +68,4 @@ urlpatterns = [
         })),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
 ]

@@ -27,7 +27,7 @@
 
             <main class="reg-text match-middle" id="main-content">
                 {% ecfr_part_url_formatter title reg_part as ecfr_part_url %}
-                <p class="up-to-date{{ subpart|yesno:" subpart," }}">
+                <p class="up-to-date{{ subpart|yesno:" subpart," }}{{ appendix|yesno:" appendix," }}">
                 <a href="{{ecfr_part_url}}" target="_blank" rel="noopener noreferrer" class="external">
                     {{ toc.label_level }} up to date from eCFR
                 </a> as of {{ parser_last_success|parser_success_date_formatter }}{% if is_latest_version and has_meaningful_latest_version_date %}<span class="latest-version">; last amended </span>{{ formatted_latest_version }}{% endif %}.

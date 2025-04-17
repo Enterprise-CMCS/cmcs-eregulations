@@ -82,6 +82,12 @@ func (c *PartChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) erro
 			return err
 		}
 		*c = append(*c, child)
+	case "DIV9":
+		child := &Appendix{}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	default:
 		logParseError(fmt.Sprintf("Unknown XML type in part %+v", start))
 		d.Skip()
@@ -176,7 +182,7 @@ func (sg *SubjectGroup) PostProcess() {
 // SubjectGroupChildren is an array of interface
 type SubjectGroupChildren []interface{}
 
-// UnmarshalXML defines how to unmarshall a SUbjectGroupChildren from XMl
+// UnmarshalXML defines how to unmarshall a SubjectGroupChildren from XMl
 func (c *SubjectGroupChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 	switch start.Name.Local {
 	case "DIV8":
@@ -327,7 +333,7 @@ func (sl *SectionCitation) UnmarshalText(data []byte) error {
 	return nil
 }
 
-// Appendix is the struct fro an appendix to the regulation
+// Appendix is the struct for an appendix to the regulation
 type Appendix struct {
 	Type     string           `xml:"TYPE,attr" json:"node_type"`
 	Citation AppendixCitation `xml:"N,attr" json:"label"`
@@ -347,8 +353,54 @@ func (c *AppendixChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) 
 			return err
 		}
 		*c = append(*c, child)
+	case "FP":
+		fallthrough
+	case "FP-1":
+		fallthrough
+	case "FP-2":
+		child := &FlushParagraph{Type: "FlushParagraph"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
 	case "HD1":
 		child := &Heading{Type: "Heading"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "HD2":
+		child := &Heading{Type: "Heading2"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "HD3":
+		child := &Heading{Type: "Heading3"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "DIV":
+		child := &Division{Type: "Division"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "TABLE":
+		child := &Division{Type: "Table", Content: "<table>" + start.Name.Local + "</table>"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "FTNT":
+		child := &FootNote{Type: "FootNote"}
+		if err := d.DecodeElement(child, &start); err != nil {
+			return err
+		}
+		*c = append(*c, child)
+	case "CITA":
+		child := &Citation{Type: "Citation"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}

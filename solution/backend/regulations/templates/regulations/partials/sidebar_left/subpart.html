@@ -6,6 +6,8 @@
         {% for item in toc.children %}
             {% if item.type == "section" %}
                 {% include "regulations/partials/sidebar_left/subpart/orphan_section.html" with extra_class="orphan" %}
+            {% elif item.type == "appendix" %}
+                {% include "regulations/partials/sidebar_left/subpart/orphan_appendix.html" with extra_class="orphan" %}
             {% elif item.type == "subpart" %}
                 {% if subpart and item.identifier.0 == subpart %}
                     {% include "regulations/partials/sidebar_left/subpart/subpart.html" with collapse_state="expanded" %}

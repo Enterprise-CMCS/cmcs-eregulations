@@ -235,3 +235,84 @@ class SectionReaderView(View):
         redirect_url = url + "?highlight=" + query_string.replace('%', '%25') if query_string else url
 
         return HttpResponseRedirect(redirect_url)
+
+
+class AppendixReaderView(ReaderView):
+    def get_view_type(self):
+        return "appendix"
+
+    def get_content(self, context, document, toc):
+        # Get the appendix identifier from the URL
+        appendix_path = context.get('appendix')
+
+        # Find the appendix in the document structure
+        appendix_index = -1
+
+        for i, child in enumerate(toc['children']):
+            if ('type' in child and child['type'] == 'appendix' and
+                'identifier' in child):
+                # Compare the full identifier to find the exact appendix
+                # Need to make a case-insensitive and format-insensitive comparison
+
+                # First, standardize both identifiers for comparison
+                url_identifier = [part.upper() for part in appendix_path]
+                child_identifier = [part.upper() for part in child['identifier']]
+
+                # Check if the important parts match (Appendix number, part number)
+                # For example, match ["APPENDIX", "VIII", "TO", "PART", "75"]
+                # with ["APPENDIX", "VIII", "TO", "PART", "75"]
+
+                # Find the appendix number index (usually index 1 if present)
+                appendix_num_index = (1 if len(url_identifier) > 1 and
+                                      url_identifier[1] not in ["TO", "PART"] else None)
+
+                if appendix_num_index:
+                    # Compare appendix number and part number
+                    url_appendix_num = url_identifier[appendix_num_index]
+                    child_appendix_num = (child_identifier[appendix_num_index]
+                                          if len(child_identifier) > appendix_num_index else None)
+
+                    # Get part numbers
+                    url_part_index = (url_identifier.index("PART") + 1
+                                      if "PART" in url_identifier else None)
+                    child_part_index = (child_identifier.index("PART") + 1
+                                        if "PART" in child_identifier else None)
+
+                    url_part_num = (url_identifier[url_part_index]
+                                    if url_part_index and url_part_index < len(url_identifier) else None)
+                    child_part_num = (child_identifier[child_part_index]
+                                      if child_part_index and child_part_index < len(child_identifier) else None)
+
+                    # Match both appendix number and part number
+                    if (url_appendix_num == child_appendix_num and
+                            url_part_num == child_part_num):
+                        appendix_index = i
+                        context['appendix_data'] = child
+                        break
+                else:
+                    # Handle case with no appendix number (just "Appendix to Part X")
+                    # Compare just the part numbers
+                    url_part_index = (url_identifier.index("PART") + 1
+                                      if "PART" in url_identifier else None)
+                    child_part_index = (child_identifier.index("PART") + 1
+                                        if "PART" in child_identifier else None)
+
+                    url_part_num = (url_identifier[url_part_index]
+                                    if url_part_index and url_part_index < len(url_identifier) else None)
+                    child_part_num = (child_identifier[child_part_index]
+                                      if child_part_index and child_part_index < len(child_identifier) else None)
+
+                    # If neither has an appendix number and part numbers match
+                    if (("TO" in url_identifier and "TO" in child_identifier) and
+                            url_part_num == child_part_num and
+                            url_identifier[0] == child_identifier[0]):  # Both start with "APPENDIX"
+                        appendix_index = i
+                        context['appendix_data'] = child
+                        break
+
+        if appendix_index == -1:
+            raise Http404
+
+        content = document['children'][appendix_index]
+        context['appendix'] = True  # Flag that we're viewing an appendix
+        return content

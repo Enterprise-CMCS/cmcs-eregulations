@@ -11,29 +11,37 @@
             >
                 <option value="" disabled>Select Date</option>
                 {% for version in versions %}
-                    {% if citation.1 %}
+                    {% if appendix %}
+                        <option data-url="{% url 'reader_view' title citation.0 appendix_data.identifier|join:'-' version.date %}">{{version.date|version_date}}</option>
+                    {% elif citation.1 %}
                         <option data-url="{% url 'reader_view' title citation.0 citation.1 version.date %}">{{version.date|version_date}}</option>
                     {% else %}
                         <option data-url="{% url 'reader_view' title citation.0 version.date %}">{{version.date|version_date}}</option>
                     {% endif %}
-
                 {% endfor %}
             </select>
         </span>
-        {% if citation.1 %}
-        <a
-            id="close-link"
-            class="close-button"
-            href="{% url 'reader_view' title citation.0 citation.1 versions.0.date  %}"
-            aria-label="close view past versions"
-        >
+        {% if appendix %}
+            <a
+                id="close-link"
+                class="close-button"
+                href="{% url 'reader_view' title citation.0 appendix_data.identifier|join:'-' versions.0.date %}"
+                aria-label="close view past versions"
+            >
+        {% elif citation.1 %}
+            <a
+                id="close-link"
+                class="close-button"
+                href="{% url 'reader_view' title citation.0 citation.1 versions.0.date %}"
+                aria-label="close view past versions"
+            >
         {% else %}
-        <a
-            id="close-link"
-            class="close-button"
-            href="{% url 'reader_view' title citation.0 versions.0.date  %}"
-            aria-label="close view past versions"
-        >
+            <a
+                id="close-link"
+                class="close-button"
+                href="{% url 'reader_view' title citation.0 versions.0.date %}"
+                aria-label="close view past versions"
+            >
         {% endif %}
             <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <title>Close</title>
