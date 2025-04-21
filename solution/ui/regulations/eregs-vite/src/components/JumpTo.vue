@@ -28,13 +28,11 @@ const selectedPart = ref("");
 const defaultTitle = ref("");
 const selectedTitle = ref("");
 const selectedSection = ref("");
-const filteredParts = ref([]);
+const namedParts = ref([]);
 
 const getParts = async (title) => {
     const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
-    filteredParts.value = partsList
-        .map((part) => part.name)
-        .filter((part) => part !== "75");
+    namedParts.value = partsList.map((part) => part.name);
 };
 
 const getLink = () => {
@@ -105,7 +103,7 @@ watch(selectedTitle, (title) => {
                     class="ds-c-field"
                     aria-label="Regulation part number"
                     required
-                    :disabled="!selectedTitle || filteredParts.length === 0"
+                    :disabled="!selectedTitle || namedParts.length === 0"
                 >
                     <option
                         value=""
@@ -115,7 +113,7 @@ watch(selectedTitle, (title) => {
                         Part
                     </option>
                     <option
-                        v-for="listedPart in filteredParts"
+                        v-for="listedPart in namedParts"
                         :key="listedPart"
                         :value="listedPart"
                     >
