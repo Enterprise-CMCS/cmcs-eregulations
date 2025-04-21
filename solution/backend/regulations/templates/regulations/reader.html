@@ -36,9 +36,11 @@
                 {% include "regulations/partials/navigation.html" %}
             </main>
 
-            <aside class="right-sidebar match-sides">
-                {% include "regulations/partials/sidebar_right.html" %}
-            </aside>
+            {% if view_type != "appendix" %}
+                <aside class="right-sidebar match-sides">
+                    {% include "regulations/partials/sidebar_right.html" %}
+                </aside>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
