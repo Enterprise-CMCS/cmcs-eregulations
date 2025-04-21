@@ -203,7 +203,7 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 		}
 		//sort.Strings(keys)
 		sort.Sort(sort.Reverse(sort.StringSlice(keys)))
-		
+
 		// only choose the latest date for processing
 		if len(keys) > 0 {
 			date := keys[0]

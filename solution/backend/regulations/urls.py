@@ -10,10 +10,10 @@ from regulations.views.homepage import HomepageView
 from regulations.views.login import LoginView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.reader import (
+    AppendixReaderView,
     PartReaderView,
     SectionReaderView,
     SubpartReaderView,
-    AppendixReaderView,
 )
 from regulations.views.redirect import RegulationRedirectView
 from regulations.views.regulation_landing import RegulationLandingView
