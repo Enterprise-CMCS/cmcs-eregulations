@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "CommonJS",
     "lib": [
-      "es2020",
-      "dom"
+      "ES2020"
     ],
     "declaration": true,
     "strict": true,
@@ -22,7 +21,11 @@
     "strictPropertyInitialization": false,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "types": [
+      "node"
+    ],
+    "esModuleInterop": true
   },
   "exclude": [
     "node_modules",
