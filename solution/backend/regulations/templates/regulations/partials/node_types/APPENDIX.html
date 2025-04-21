@@ -3,6 +3,20 @@
 {% endcomment %}
 {% load string_formatters %}
 
+{% comment %}
+    wrap in article tag if view_type is "appendix".
+
+    Possible view_types are:
+        - "appendix"
+        - "subpart"
+        - "part"
+
+    "part" and "subpart" view types contain orphan section and subpart partial templates that contain their own wrapping article tags.
+{% endcomment %}
+{% if view_type == "appendix" %}
+    <article>
+{% endif %}
+
 <section aria-labelledby="{{ node.label | join:'-' }}-title" tabindex="-1" id="{{node.label | join:'-'}}" class="appendix-section">
     <h2 class="section-title" id="{{ node.label | join:'-' }}-title">
 
@@ -35,5 +49,8 @@
             {% include "regulations/partials/node_types/node.html" %}
         {% endfor %}
     </div>
-
 </section>
+
+{% if view_type == "appendix" %}
+    </article>
+{% endif %}
