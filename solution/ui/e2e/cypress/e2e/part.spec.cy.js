@@ -319,4 +319,42 @@ describe("Part View", () => {
             "not.exist",
         );
     });
+
+    it("loads an appendix view type without a right sidebar", () => {
+        cy.viewport("macbook-15");
+        cy.visit("45/75/Appendix-I-to-Part-75/#Appendix-I-to-Part-75");
+        cy.checkLinkRel();
+
+        cy.get("#jumpToTitle").invoke("val").should("equal", "45");
+        cy.get("#jumpToPart").invoke("val").should("equal", "75");
+        cy.get(".latest-version").should("exist");
+        cy.get(".right-sidebar").should("not.exist");
+
+        cy.focused().then(($el) => {
+            cy.get($el).should("have.id", "Appendix-I-to-Part-75");
+            cy.get($el).should(
+                "have.css",
+                "background-color",
+                "rgb(238, 250, 254)",
+            );
+        });
+
+        // copy tooltip works as expected
+        cy.get("#Appendix-I-to-Part-75-title .copy-btn-container button.trigger-btn").click({
+            force: true,
+        });
+        cy.get("#Appendix-I-to-Part-75-title .copy-btn-container .tooltip.clicked").should(
+            "be.visible",
+        );
+        cy.get(
+            "#Appendix-I-to-Part-75-title .copy-btn-container .tooltip.clicked .tooltip-title",
+        ).contains("45 CFR Appendix I to Part 75");
+        cy.get(
+            "#Appendix-I-to-Part-75-title .copy-btn-container .tooltip.clicked button.close-btn",
+        ).click({ force: true });
+        cy.get("#Appendix-I-to-Part-75-title .copy-btn-container .tooltip.clicked").should(
+            "not.exist",
+        );
+    });
+
 });
