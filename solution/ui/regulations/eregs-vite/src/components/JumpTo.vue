@@ -1,14 +1,83 @@
+<script setup>
+import { ref, watch, onMounted } from "vue";
+import { getTitles, getParts as fetchParts } from "utilities/api.js";
+
+const props = defineProps({
+    apiUrl: {
+        type: String,
+        required: true,
+    },
+    title: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    part: {
+        type: String,
+        required: false,
+        default: "",
+    },
+    homeUrl: {
+        type: String,
+        default: "/",
+    },
+});
+
+const titles = ref([]);
+const selectedPart = ref("");
+const defaultTitle = ref("");
+const selectedTitle = ref("");
+const selectedSection = ref("");
+const namedParts = ref([]);
+
+const getParts = async (title) => {
+    const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
+    namedParts.value = partsList.map((part) => part.name);
+};
+
+const getLink = () => {
+    let linkValue = `${props.homeUrl}goto/?title=${selectedTitle.value}&part=${selectedPart.value}`;
+    if (selectedSection.value !== "") {
+        linkValue += `&section=${selectedSection.value}&-version='latest'`;
+    }
+    window.location.href = linkValue;
+};
+
+onMounted(async () => {
+    titles.value = await getTitles({ apiUrl: props.apiUrl });
+
+    if (props.title !== "") {
+        selectedTitle.value = props.title;
+    } else {
+        selectedTitle.value = titles.value[0];
+        defaultTitle.value = selectedTitle.value;
+    }
+
+    if (props.part !== "") {
+        selectedPart.value = props.part;
+    }
+});
+
+watch(selectedTitle, (title) => {
+    if (title === "") {
+        selectedPart.value = "";
+    } else {
+        getParts(title);
+    }
+});
+</script>
+
 <template>
     <div>
         <form @submit.prevent="getLink">
             <div class="jump-to-input">
                 <select
-                    v-if="defaultTitle === ''"
                     id="jumpToTitle"
                     v-model="selectedTitle"
                     name="title"
                     aria-label="Regulation title number"
                     class="ds-c-field"
+                    :disabled="!selectedTitle"
                     required
                 >
                     <option
@@ -34,7 +103,7 @@
                     class="ds-c-field"
                     aria-label="Regulation part number"
                     required
-                    :disabled="!selectedTitle"
+                    :disabled="!selectedTitle || namedParts.length === 0"
                 >
                     <option
                         value=""
@@ -44,7 +113,7 @@
                         Part
                     </option>
                     <option
-                        v-for="listedPart in filteredParts"
+                        v-for="listedPart in namedParts"
                         :key="listedPart"
                         :value="listedPart"
                     >
@@ -62,11 +131,12 @@
                     pattern="\d+"
                     title="Regulation section number, i.e. 111"
                     aria-label="Regulation section number, i.e. 111"
+                    :disabled="!selectedTitle"
                 >
                 <input
                     id="jumpBtn"
-                    class="submit"
-                    :class="{ active: isActive }"
+                    class="submit active"
+                    :disabled="!selectedTitle"
                     type="submit"
                     value="Go"
                 >
@@ -74,97 +144,3 @@
         </form>
     </div>
 </template>
-<script>
-import { getTitles, getParts as fetchParts } from "utilities/api.js";
-
-export default {
-    name: "JumpTo",
-
-    props: {
-        apiUrl: {
-            type: String,
-            required: true,
-        },
-        title: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        part: {
-            type: String,
-            required: false,
-            default: "",
-        },
-        homeUrl: {
-            type: String,
-            default: "/",
-        },
-    },
-    data() {
-        return {
-            titles: [],
-            selectedPart: "",
-            defaultTitle: "",
-            selectedTitle: "",
-            selectedSection: "",
-            hideTitle: false,
-            filteredParts: [],
-            isActive: false,
-            parts: [],
-            link: "",
-        };
-    },
-
-    async created() {
-        // When title 45 or another title is added uncomment line below, and remove the hardcoded
-        this.titles = await getTitles({ apiUrl: this.apiUrl });
-        if (this.titles.length === 1) {
-            this.selectedTitle = this.titles[0];
-            this.defaultTitle = this.selectedTitle;
-            this.hideTitle = true;
-        }
-        if (this.title !== "") {
-            this.selectedTitle = this.title;
-            this.hideTitle = true;
-        }
-        if (this.part !== "") {
-            this.selectedPart = this.part;
-            this.isActive = true;
-        }
-    },
-
-    watch: {
-        selectedTitle(title) {
-            if (title === "") {
-                this.selectedPart = "";
-                this.isActive = false;
-            } else {
-                this.getParts(title);
-            }
-        },
-
-        selectedPart(part) {
-            if (part !== "") {
-                this.isActive = true;
-            } else {
-                this.isActive = false;
-            }
-        },
-    },
-
-    methods: {
-        async getParts(title) {
-            const partsList = await fetchParts({ title, apiUrl: this.apiUrl });
-            this.filteredParts = partsList.map((part) => part.name);
-        },
-        getLink() {
-            let link = `${this.homeUrl}goto/?title=${this.selectedTitle}&part=${this.selectedPart}`;
-            if (this.selectedSection !== "") {
-                link += `&section=${this.selectedSection}&-version='latest'`;
-            }
-
-            window.location.href = link;
-        },
-    },
-};
-</script>
