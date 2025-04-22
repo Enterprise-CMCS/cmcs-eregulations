@@ -254,7 +254,7 @@ class AppendixReaderView(ReaderView):
 
                 # First, standardize both identifiers for comparison
                 url_identifier = [part.upper().strip() for part in appendix_path]
-                child_identifier = [part.upper().strip() for part in child['identifier']]
+                child_identifier = [part.upper().strip() for part in child["identifier"]]
 
                 # Check if the important parts match (Appendix number, part number)
                 # For example, match ["APPENDIX", "VIII", "TO", "PART", "75"]
@@ -285,12 +285,12 @@ class AppendixReaderView(ReaderView):
                 # Finally check the appendix number
                 if url_identifier[:2] == child_identifier[:2]:
                     appendix_index = i
-                    context['appendix_data'] = child
+                    context["appendix_data"] = child
                     break
 
         if appendix_index == -1:
             raise Http404
 
-        content = document['children'][appendix_index]
-        context['appendix'] = True  # Flag that we're viewing an appendix
+        content = document["children"][appendix_index]
+        context["appendix"] = True  # Flag that we're viewing an appendix
         return content
