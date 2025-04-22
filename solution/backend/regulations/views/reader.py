@@ -244,10 +244,9 @@ class AppendixReaderView(ReaderView):
     def get_content(self, context, document, toc):
         # Get the appendix identifier from the URL
         appendix_path = context.get("appendix")
-
-        # Find the appendix in the document structure
         appendix_index = -1
 
+        # Loop through the children of the TOC to find the appendix
         for i, child in enumerate(toc["children"]):
             if child.get("type") == "appendix" and "identifier" in child:
                 # Compare the full identifier to find the exact appendix
