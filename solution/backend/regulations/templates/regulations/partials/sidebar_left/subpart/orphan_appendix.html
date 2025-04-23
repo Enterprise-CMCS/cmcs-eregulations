@@ -1,0 +1,13 @@
+<li class="{{ extra_class }} {% if appendix and item.identifier|join:'-' == appendix_data.identifier|join:'-' %}active{% endif %}">
+    {% if item.reserved %}
+    <span class="menu-section">
+        <div class="toc-section-number">{{ item.label_level }}</div>
+        <div class="toc-section-name">[Reserved]</div>
+    </span>
+    {% else %}
+    <a class="menu-section" href="{% url 'reader_view' title reg_part item.identifier|join:'-' version %}" data-section-id="{{item.identifier|join:'-' }}" id="nav-{{item.identifier|join:'-'}}">
+        <div class="toc-section-number">{{ item.label_level }}</div>
+        <div class="toc-section-name">{{item.label_description|safe}}</div>
+    </a>
+    {% endif %}
+</li>

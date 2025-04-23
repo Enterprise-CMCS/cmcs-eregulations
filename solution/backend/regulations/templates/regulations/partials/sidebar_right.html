@@ -1,7 +1,7 @@
 {% load string_formatters %}
 
 <section id="right-sidebar" data-cache-key="sidebar" data-cache-value="{{label_id}}">
-    {% if node_list %}
+    {% if node_list and not appendix %}
         <supplemental-content
             api-url="{{ API_BASE }}"
             title="{{ title }}"
