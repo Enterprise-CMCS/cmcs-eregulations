@@ -452,6 +452,35 @@ describe("Search flow", () => {
         cy.url().should("not.include", "subjects=3");
     });
 
+    it("should not clear selected filters when updating the search term", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search?q=${SEARCH_TERM}`);
+
+        // Select subject
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+        cy.url().should("include", "subjects=3");
+
+        // Select category
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+        cy.url().should("include", "subjects=3")
+            .and("include", "categories=1");
+
+        // Update search term
+        cy.get("input#main-content").clear().type("new search term");
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        // Assert that the selected filters are still in the URL
+        cy.url().should("include", "subjects=3")
+            .and("include", "categories=1")
+            .and("include", "q=new+search+term");
+    });
+
     it("displays results of the search and highlights search term in regulation text", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
@@ -552,5 +581,224 @@ describe("Search flow", () => {
         cy.url().should("include", "/search?q=%22test+query%22");
 
         cy.get("[data-testid=research-row-1]").should("not.exist");
+    });
+
+    it("should show the correct URL parameters when sorting", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Relevance");
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.get("div[data-testid='sort-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Newest");
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-oldest']").click({ force: true });
+
+        cy.get("div[data-testid='sort-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Oldest");
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=date`,
+        );
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-relevance']").click({ force: true });
+
+        cy.get("div[data-testid='sort-select']")
+            .find(".v-select__selection")
+            .should("have.text", "Relevance");
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}`,
+        );
+    });
+
+    it("should disable newest and oldest sort options when only Regulations are selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .check({ force: true });
+
+        cy.get("div[data-testid='sort-select']").click();
+
+        cy.get("div[data-testid='sort-newest']").should("have.class", "v-list-item--disabled");
+        cy.get("div[data-testid='sort-oldest']").should("have.class", "v-list-item--disabled");
+
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+        cy.url().should(
+            "not.include",
+            `&sort=-date`,
+        );
+
+        cy.get("div[data-testid='sort-oldest']").click({ force: true });
+        cy.url().should(
+            "not.include",
+            `&sort=date`,
+        );
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(0)
+            .find("input")
+            .uncheck({ force: true });
+
+        cy.get("div[data-testid='sort-select']").click();
+
+        cy.get("div[data-testid='sort-newest']").should("not.have.class", "v-list-item--disabled");
+        cy.get("div[data-testid='sort-oldest']").should("not.have.class", "v-list-item--disabled");
+
+        cy.get("div[data-testid='sort-oldest']").click({ force: true });
+        cy.url().should(
+            "include",
+            `&sort=date`,
+        );
+    });
+
+    it("should not show sort dropdown if there are no results", () => {
+        cy.intercept(`**/v3/content-search/**`, {
+            next: null,
+            previous: null,
+            count: 0,
+            results: [],
+        }).as("noResults");
+
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").should("not.exist");
+    });
+
+    it("should keep sort selection if public resources are selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(1)
+            .find("input")
+            .check({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date&type=external`,
+        );
+    });
+
+    it("should keep sort selection if internal resources are selected", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({
+            username,
+            password,
+            landingPage: "/search/",
+        });
+
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get(".doc-type__toggle fieldset > div")
+            .eq(2)
+            .find("input")
+            .check({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date&type=internal`,
+        );
+    });
+
+    it("should keep sort selection if new search term is entered", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get("input#main-content").clear().type("new search term");
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        cy.url().should(
+            "include",
+            `/search?sort=-date&q=new+search+term`,
+        );
+    });
+
+    it("should keep sort selection if subject is selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get("button[data-testid='subjects-activator']")
+            .should("exist")
+            .click();
+
+        cy.get("button[data-testid=add-subject-3]").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date&subjects=3`,
+        );
+    });
+
+    it("should keep sort selection if category is selected", () => {
+        cy.viewport("macbook-15");
+        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+        cy.get("div[data-testid='sort-select']").click();
+        cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date`,
+        );
+
+        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='external-0']").click({ force: true });
+
+        cy.url().should(
+            "include",
+            `/search?q=${SEARCH_TERM}&sort=-date&categories=1`,
+        );
     });
 });

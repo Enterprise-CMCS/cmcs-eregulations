@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from urllib import robotparser
 from urllib.parse import urlsplit
@@ -9,6 +10,7 @@ from .backend import FileBackend
 from .exceptions import BackendException
 
 logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class WebBackend(FileBackend):

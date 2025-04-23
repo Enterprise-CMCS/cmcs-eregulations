@@ -99,7 +99,7 @@ jobs:
           -c environment=${{ matrix.environment }} \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
+          --app "npx ts-node bin/text-extractor.ts"
           popd
 
       - name: Deploy site lambdas
@@ -186,6 +186,24 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+      - name: Deploy Parser Launcher
+        env:
+          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          CDK_DEBUG: true
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          PARSER_LAUNCHER_STACK="cms-eregs-${{ matrix.environment }}-parser-launcher"
+          
+          npx cdk deploy $PARSER_LAUNCHER_STACK \
+          -c environment=${{ matrix.environment }} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -249,14 +267,15 @@ jobs:
           --outputs-file static-outputs.json
           popd
 
-      - name: Get Cypress test user credentials
-        uses: dkershner6/aws-ssm-getparameters-action@v2
+      # Get test user credentials from AWS Secret Manager
+      - name: Get test user credentials
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
-          parameterPairs: "/eregulations/http/user = CYPRESS_TEST_USERNAME,
-            /eregulations/http/password = CYPRESS_TEST_PASSWORD,
-            /eregulations/http/reader_user = CYPRESS_READER_USERNAME,
-            /eregulations/http/reader_password = CYPRESS_READER_PASSWORD"
-          withDecryption: "true" # defaults to true
+          secret-ids: |
+            CYPRESS_TEST, /eregulations/http/credentials
+            CYPRESS_READER, /eregulations/http/reader_credentials
+          name-transformation: uppercase
+          parse-json-secrets: true
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6

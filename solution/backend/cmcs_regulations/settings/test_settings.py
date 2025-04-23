@@ -1,6 +1,9 @@
 from .base import * # noqa
 import os
 
+from secret_manager import get_username, get_password
+
+
 USE_AWS_TOKEN = True
 S3_AWS_ACCESS_KEY_ID = os.environ.get("FILE_MANAGER_AWS_ACCESS_KEY_ID", 'test')
 S3_AWS_SECRET_ACCESS_KEY = os.environ.get("FILE_MANAGER_AWS_SECRET_ACCESS_KEY", 'test')
@@ -36,8 +39,8 @@ LOGOUT_REDIRECT_URL = '/logout'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': os.environ.get('DB_USER', 'eregsuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
+        'USER': get_username("DB_SECRET", environment_fallback="DB_USER", default="eregsuser"),
+        'PASSWORD': get_password("DB_SECRET", environment_fallback="DB_PASSWORD", default="sgere"),
         'HOST': os.environ.get('DB_HOST', 'db'),
         'PORT': os.environ.get('DB_PORT', '5432'),
         'NAME': os.environ.get('DB_NAME', 'eregs'),

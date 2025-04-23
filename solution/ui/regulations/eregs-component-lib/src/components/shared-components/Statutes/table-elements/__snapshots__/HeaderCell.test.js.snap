@@ -17,12 +17,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-0"
         >
-          Web Page
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="house-gov-link-subtitle-1"
-        >
           effective Aug 2023
         </div>
         
@@ -42,12 +36,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-0"
-      >
-        Web Page
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="house-gov-link-subtitle-1"
       >
         effective Aug 2023
       </div>
@@ -126,12 +114,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
           data-testid="house-gov-link-subtitle-0"
-        >
-          Web Page
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="house-gov-link-subtitle-1"
         />
         
       </th>
@@ -150,12 +132,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="house-gov-link-subtitle-0"
-      >
-        Web Page
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="house-gov-link-subtitle-1"
       />
       
     </th>
@@ -233,12 +209,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-0"
         >
-          PDF Document
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="statute-compilation-link-subtitle-1"
-        >
           effective Aug 2023
         </div>
         
@@ -258,12 +228,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-0"
-      >
-        PDF Document
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="statute-compilation-link-subtitle-1"
       >
         effective Aug 2023
       </div>
@@ -342,12 +306,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
           data-testid="statute-compilation-link-subtitle-0"
-        >
-          PDF Document
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="statute-compilation-link-subtitle-1"
         />
         
       </th>
@@ -366,12 +324,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="statute-compilation-link-subtitle-0"
-      >
-        PDF Document
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="statute-compilation-link-subtitle-1"
       />
       
     </th>
@@ -449,12 +401,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-0"
         >
-          PDF Document
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="us-code-annual-link-subtitle-1"
-        >
           effective Aug 2023
         </div>
         
@@ -474,12 +420,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-0"
-      >
-        PDF Document
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="us-code-annual-link-subtitle-1"
       >
         effective Aug 2023
       </div>
@@ -558,12 +498,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
           data-testid="us-code-annual-link-subtitle-0"
-        >
-          PDF Document
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="us-code-annual-link-subtitle-1"
         />
         
       </th>
@@ -582,12 +516,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="us-code-annual-link-subtitle-0"
-      >
-        PDF Document
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="us-code-annual-link-subtitle-1"
       />
       
     </th>
@@ -665,12 +593,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-0"
         >
-          Web Page
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="ssa-gov-link-subtitle-1"
-        >
           effective Aug 2023
         </div>
         
@@ -690,12 +612,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-0"
-      >
-        Web Page
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="ssa-gov-link-subtitle-1"
       >
         effective Aug 2023
       </div>
@@ -774,12 +690,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__subtitle"
           data-testid="ssa-gov-link-subtitle-0"
-        >
-          Web Page
-        </div>
-        <div
-          class="cell__subtitle"
-          data-testid="ssa-gov-link-subtitle-1"
         />
         
       </th>
@@ -798,12 +708,6 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__subtitle"
         data-testid="ssa-gov-link-subtitle-0"
-      >
-        Web Page
-      </div>
-      <div
-        class="cell__subtitle"
-        data-testid="ssa-gov-link-subtitle-1"
       />
       
     </th>

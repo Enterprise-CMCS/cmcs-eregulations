@@ -4,28 +4,20 @@
 
 read -p "Enter the environment you wish you backup (dev/val/prod): " ENV
 
-if [ "$ENV" == "dev" ]; then
-  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-dev-reg_site"
-elif [ "$ENV" == "val" ]; then
-  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-val-reg_site"
-elif [ "$ENV" == "prod" ]; then
-  LAMBDA_FUNCTION_NAME="cmcs-eregs-site-prod-reg_site"
-else
-  echo "Invalid environment. Exiting..."
-  exit 1
-fi
-
+LAMBDA_FUNCTION_NAME="cms-eregs-$ENV-regsite"
 
 # Get the environment variables from the Lambda function
-data=$(aws lambda get-function-configuration --function-name $LAMBDA_FUNCTION_NAME --query 'Environment.Variables.{DB_HOST:DB_HOST,DB_PORT:DB_PORT,DB_NAME:DB_NAME,DB_USER:DB_USER,DB_PASSWORD:DB_PASSWORD}' --output text)
-
+data=$(aws lambda get-function-configuration --function-name $LAMBDA_FUNCTION_NAME --query 'Environment.Variables.{DB_HOST:DB_HOST,DB_PORT:DB_PORT,DB_NAME:DB_NAME,DB_SECRET:DB_SECRET}' --output text)
 data_array=($data)
-
 DB_HOST=${data_array[0]}
 DB_NAME=${data_array[1]}
-DB_PASSWORD=${data_array[2]}
-DB_PORT=${data_array[3]}
-DB_USER=${data_array[4]}
+DB_PORT=${data_array[2]}
+DB_SECRET=${data_array[3]}
+
+# Get the database user and password from the Lambda function
+data=$(aws secretsmanager get-secret-value --secret-id $DB_SECRET --query 'SecretString' --output text)
+DB_USER=$(echo $data | jq -r '.username')
+DB_PASSWORD=$(echo $data | jq -r '.password')
 
 # Validate if the environment variables were parsed correctly
 if [ -z "$DB_HOST" ] || [ -z "$DB_PORT" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER" ] || [ -z "$DB_PASSWORD" ]; then

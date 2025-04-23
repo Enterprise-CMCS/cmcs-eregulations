@@ -112,6 +112,16 @@ make eslint-cdk
 
 For more information and resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
 
+## Working with single-sign-on
+
+To use our Okta identity provider locally, you need to update the OIDC_RP and OIDC_OP environment variables in your Dockerfile. See internal authentication developers guide.
+
+# Deployment
+
+See [CDK Readme](cdk-eregs/README.md).
+
+To use our Okta identity provider on an experimental (ephemeral) deployment, see internal authentication developers guide.
+
 # Development tips
 
 ## Export and import data
@@ -166,30 +176,36 @@ You will need to restart the local environment to see the changes. The Makefile 
 
 For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
 
-## Working with Single-Sign-On
+## Deleting old CloudFormation stacks
+Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can built up and become a nuisance.
 
-### Setting local to use CMS SSO (IDM)
-Update your Dockerfile with the following environment variables:
+We have 2 scripts in our repo that can assist with cleaning up unused stacks and resources. Both are contained in the `./scripts` directory. Both scripts require the `boto3` library to be installed on your machine, and an AWS account must be configured either via CLI profile or environment variables. Be sure to run `export AWS_REGION=<your_region>` as well.
+
+On most systems, installing `boto3` is as simple as running `pip install boto3` or `pip3 install boto3` assuming you have both Python3 and Pip (or Pip3) installed. On MacOS systems where Python and Pip are installed with Homebrew, you may need to create a Python virtualenv first:
+
+```bash
+$ python3 -m venv /path/to/new/venv_directory
+$ source /path/to/new/venv_directory/bin/activate
+$ pip3 install boto3
+$ ./run/scripts/below
 ```
-ENV OIDC_RP_CLIENT_ID=<your client id>
-ENV OIDC_RP_CLIENT_SECRET=<your client secret>
-ENV OIDC_OP_AUTHORIZATION_ENDPOINT=<authorization endpoint>
-ENV OIDC_OP_TOKEN_ENDPOINT=<token endpoint>
-ENV OIDC_OP_USER_ENDPOINT=<user endpoint>
-ENV OIDC_OP_JWKS_ENDPOINT=<jwks endpoint>
-ENV EUA_FEATUREFLAG=<set to 'true' if you want to see the eua link on admin login page>
-```
-These values can be found on AWS Parameter Store.
 
-### Register to test IDP IDM
-- Sign into the URL [https://test.idp.idm.cms.gov/](https://test.idp.idm.cms.gov/) to access the IDP (Identity Provider) portal.
-- Set up Multi-Factor Authentication (MFA) for your account. Follow the provided prompts and instructions to complete the MFA setup process.
-- Once your account has been successfully set up with MFA, please notify the CMS Okta team.
-- Inform the Okta team that you need to be added to the eRegs group.
+### delete_stacks.py
 
-### Troubleshooting
-- Issue: Setting OIDC_OP_AUTHORIZATION_ENDPOINT not found
-  This error indicates that the environment variables are not properly set.
-- Solution:
-  - On your local environment verify that the DJANGO_SETTINGS_MODULE environment variable is set to ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}. You can modify your docker-compose.yml file to include this setting: DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.euasettings}.
-  - On dev, val, prod ensure that DJANGO_SETTINGS_MODULE is set correctly in AWS Param Store.
+This script will retrieve a list of all experimental deployments and automatically delete them in parallel using a thread pool. The thread pool's size is proportional to the size of your terminal window to allow you to easily track the progress.
+
+**Example:**
+To delete all experimental deployments _except_ the stacks belonging to PR numbers 1234 and 6789, run `./scripts/delete_stacks.py --exclude-prs 1234 6789`.
+
+**Example:**
+To perform a dry run of the delete action, run `./scripts/delete_stacks.py --dry-run`. The dry run will also simulate a short delay between deleting resources. This makes the dry run more realistic, as well as pevents contention between the various threads in the thread pool.
+
+### delete_resources.py
+
+This script retrieves a list of all S3 Buckets, Security Groups, and Log Groups that belong to an experimental deployment but are not associated with any CloudFormation stack that exists currently.
+
+The script runs in three steps, one for each resource type, and prompts the user to delete the listed resources or not. If the user selects no, it will move on to the next resource type.
+
+This does not run in parallel to better display error messages and give the user a chance to respond to issues, however it is usually very fast compared to deleting stacks so this is not a concern.
+
+To use this script, just run `./scripts/delete_resources.py` with no arguments needed.

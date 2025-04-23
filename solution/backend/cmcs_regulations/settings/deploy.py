@@ -1,12 +1,15 @@
 from .base import * # noqa
 import os
 
+from secret_manager import get_username, get_password
+
+
 default_database_values = {
     'ENGINE': 'django.db.backends.postgresql',
-    'USER': os.environ.get('DB_USER', 'eregsuser'),
+    'USER': get_username("DB_SECRET", environment_fallback="DB_USER", default="eregsuser"),
+    'PASSWORD': get_password("DB_SECRET", environment_fallback="DB_PASSWORD", default="sgere"),
     'PORT': os.environ.get('DB_PORT', '5432'),
     'HOST': os.environ.get('DB_HOST', 'db'),
-    'PASSWORD': os.environ.get('DB_PASSWORD', 'sgere'),
 }
 
 DATABASES = {
@@ -22,6 +25,7 @@ DATABASES = {
         'NAME': "postgres",
     },
 }
+
 S3_AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", None)
 S3_AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", None)
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME", None)

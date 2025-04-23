@@ -226,10 +226,14 @@ const currentPageResultsRange = getCurrentPageResultsRange({
 <template>
     <div class="doc__list">
         <div class="search-results-count">
-            <span v-if="results.length > 0">{{ currentPageResultsRange[0] }} -
-                {{ currentPageResultsRange[1] }} of</span>
-            {{ resultsCount }} <span v-if="searchQuery">result</span><span v-else>document</span>
-            <span v-if="results.length != 1">s</span>
+            <div class="count__info-row">
+                <div class="count__info">
+                    <span v-if="results.length > 0">{{ currentPageResultsRange[0] }} -
+                        {{ currentPageResultsRange[1] }} of</span>
+                    {{ resultsCount }} <span v-if="searchQuery">result</span><span v-else>document</span>
+                    <span v-if="results.length != 1">s</span>
+                </div>
+            </div>
             <slot name="sign-in-cta" />
         </div>
         <slot name="empty-state" />

@@ -57,8 +57,23 @@ func parseConfig(c *eregs.ParserConfig) {
 	log.SetLevel(eregs.GetLogLevel(c.LogLevel))
 }
 
+type lambdaEvent struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 // Only runs if parser is in a Lambda
-func lambdaHandler(ctx context.Context) (string, error) {
+func lambdaHandler(ctx context.Context, event json.RawMessage) (string, error) {
+	// Retrieve eRegs username and password from the lambda event
+	// This is only for a single invocation and not stored anywhere
+	// The event comes from the parser-launcher lambda only
+	var e lambdaEvent
+	if err := json.Unmarshal(event, &e); err != nil {
+		return "", fmt.Errorf("failed to unmarshal event: %s", err)
+	}
+	eregs.PostAuth.Username = e.Username
+	eregs.PostAuth.Password = e.Password
+
 	err := start()
 	return "Operation complete.", err
 }
@@ -181,15 +196,19 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	for _, part := range parts {
 		versionList := list.New()
 
-		// sort versions ascending
+		// sort versions descending
 		keys := make([]string, 0, len(versions[part.Value]))
 		for k := range versions[part.Value] {
 			keys = append(keys, k)
 		}
-		sort.Strings(keys)
+		//sort.Strings(keys)
+		sort.Sort(sort.Reverse(sort.StringSlice(keys)))
 
-		for _, date := range keys {
-			// If we have this part already, skip it
+		// only choose the latest date for processing
+		if len(keys) > 0 {
+			date := keys[0]
+
+			// if we already have this part, skip it if configured to do so
 			if config.SkipRegVersions && contains(existingVersions[date], part.Value) {
 				log.Trace("[main] Skipping title ", title, " part ", part.Value, " version ", date)
 				skippedVersions++

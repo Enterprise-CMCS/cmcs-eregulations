@@ -120,7 +120,12 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
           rel="noopener noreferrer"
           target="_blank"
         >
-          1301
+          <span
+            class="table-link__span"
+          >
+            1301
+          </span>
+          <!--v-if-->
         </a>
         
       </td>
@@ -137,7 +142,12 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
         rel="noopener noreferrer"
         target="_blank"
       >
-        1301
+        <span
+          class="table-link__span"
+        >
+          1301
+        </span>
+        <!--v-if-->
       </a>
       
     </td>
@@ -212,7 +222,16 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
           rel="noopener noreferrer"
           target="_blank"
         >
-          Title XI
+          <span
+            class="table-link__span"
+          >
+            Title XI
+          </span>
+          <span
+            class="result__link--file-type"
+          >
+            PDF
+          </span>
         </a>
         
       </td>
@@ -229,7 +248,16 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
         rel="noopener noreferrer"
         target="_blank"
       >
-        Title XI
+        <span
+          class="table-link__span"
+        >
+          Title XI
+        </span>
+        <span
+          class="result__link--file-type"
+        >
+          PDF
+        </span>
       </a>
       
     </td>
@@ -304,7 +332,16 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
           rel="noopener noreferrer"
           target="_blank"
         >
-          1301
+          <span
+            class="table-link__span"
+          >
+            1301
+          </span>
+          <span
+            class="result__link--file-type"
+          >
+            PDF
+          </span>
         </a>
         
       </td>
@@ -321,7 +358,16 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
         rel="noopener noreferrer"
         target="_blank"
       >
-        1301
+        <span
+          class="table-link__span"
+        >
+          1301
+        </span>
+        <span
+          class="result__link--file-type"
+        >
+          PDF
+        </span>
       </a>
       
     </td>
@@ -396,7 +442,12 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
           rel="noopener noreferrer"
           target="_blank"
         >
-          1101
+          <span
+            class="table-link__span"
+          >
+            1101
+          </span>
+          <!--v-if-->
         </a>
         
       </td>
@@ -413,7 +464,12 @@ exports[`Statute Table Body Cell > SSA table type > Creates a snapshot of a body
         rel="noopener noreferrer"
         target="_blank"
       >
-        1101
+        <span
+          class="table-link__span"
+        >
+          1101
+        </span>
+        <!--v-if-->
       </a>
       
     </td>

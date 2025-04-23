@@ -296,6 +296,61 @@ class SearchTest(TestCase):
         self.assertEqual(results[0]['resource']["title"], "Policy reference file fire fire fire")
         self.assertEqual(results[1]['resource']["title"], "But the worlds been burning since the worlds been turning")
 
+    # If sorted by 'date', a search for 'fire' from fixture data will return two results, oldest first
+    def test_date_sorting_oldest(self):
+        self.login()
+        response = self.client.get("/v3/content-search/?q=fire&sort=date")
+        data = get_paginated_data(response)
+        results = data["results"]
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0]['resource']["title"], "But the worlds been burning since the worlds been turning")
+        self.assertEqual(results[0]['resource']["date"], "2019-05-12")
+        self.assertEqual(results[1]['resource']["title"], "Policy reference file fire fire fire")
+        self.assertEqual(results[1]['resource']["date"], "2020-02-29")
+
+    # If sorted by '-date', a search for 'fire' from fixture data will return two results, newest first
+    def test_date_sorting_newest(self):
+        self.login()
+        response = self.client.get("/v3/content-search/?q=fire&sort=-date")
+        data = get_paginated_data(response)
+        results = data["results"]
+        self.assertEqual(len(results), 2)
+        self.assertEqual(results[0]['resource']["title"], "Policy reference file fire fire fire")
+        self.assertEqual(results[0]['resource']["date"], "2020-02-29")
+        self.assertEqual(results[1]['resource']["title"], "But the worlds been burning since the worlds been turning")
+        self.assertEqual(results[1]['resource']["date"], "2019-05-12")
+
+    # This test ensures that sorted search results put undated resources after dated resources
+    # and Regulations at the end of the list.
+    def test_sorting_date_undated_regulations(self):
+        self.login()
+
+        # Newest first
+        response = self.client.get("/v3/content-search/?q=sort&sort=-date")
+        data = get_paginated_data(response)
+        results = data["results"]
+        self.assertEqual(len(results), 4)
+        self.assertEqual(results[0]['resource']["document_id"], "Test Supplemental 1")
+        self.assertEqual(results[0]['resource']["date"], "2023-02-01")
+        self.assertEqual(results[1]['resource']["title"], "Internal notes")
+        self.assertEqual(results[1]['resource']["date"], "2019-05-12")
+        self.assertEqual(results[2]['resource']["document_id"], "Into the unknown")
+        self.assertEqual(results[2]['resource']["date"], "")
+        self.assertEqual(results[3]['reg_text']["date"], "2023-01-01")
+
+        # Oldest first
+        response = self.client.get("/v3/content-search/?q=sort&sort=date")
+        data = get_paginated_data(response)
+        results = data["results"]
+        self.assertEqual(len(results), 4)
+        self.assertEqual(results[0]['resource']["title"], "Internal notes")
+        self.assertEqual(results[0]['resource']["date"], "2019-05-12")
+        self.assertEqual(results[1]['resource']["document_id"], "Test Supplemental 1")
+        self.assertEqual(results[1]['resource']["date"], "2023-02-01")
+        self.assertEqual(results[2]['resource']["document_id"], "Into the unknown")
+        self.assertEqual(results[2]['resource']["date"], "")
+        self.assertEqual(results[3]['reg_text']["date"], "2023-01-01")
+
     # This test ensures that reg text is included in the search results, and only if show_regulations is set to true or not set.
     def test_reg_text_search(self):
         self.login()

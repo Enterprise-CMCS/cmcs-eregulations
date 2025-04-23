@@ -1,3 +1,190 @@
+<script setup>
+import { ref, computed } from 'vue';
+
+// Props
+const props = defineProps({
+    btnClass: {
+        type: String,
+        default: "copy-btn",
+    },
+    buttonIcon: {
+        type: String,
+        default: "link",
+    },
+    btnType: {
+        type: String,
+        default: "normal",
+        validator: (value) =>
+            ["btn", "icon", "labeled-btn", "labeled-icon", "link"].includes(
+                value
+            ),
+    },
+    click: {
+        type: Boolean,
+        default: false,
+    },
+    hover: {
+        type: Boolean,
+        default: false,
+    },
+    label: {
+        type: String,
+        required: true,
+    },
+    position: {
+        type: String,
+        default: "over",
+    },
+    title: {
+        type: String,
+        required: true,
+    },
+    tooltipTitle: {
+        type: String,
+        required: true,
+    },
+});
+
+// Data (Refs)
+const entered = ref(false);
+const clicked = ref(false);
+const leftSafe = ref(true);
+const anchorX = ref(0);
+const anchorY = ref(0);
+
+// Computed Properties
+const ariaLabel = computed(() => {
+    return props.btnType === "icon"
+        ? `${props.label} for ${props.title}`
+        : false;
+});
+
+const closeAriaLabel = computed(() => {
+    return `close ${props.label} dialog`;
+});
+
+const buttonClasses = computed(() => {
+    return {
+        "trigger-btn-labeled": props.btnType === "labeled-icon",
+        "trigger-btn-link": props.btnType === "link",
+        [props.btnClass]: true,
+    };
+});
+
+const buttonContainerClasses = computed(() => {
+    return {
+        [`${props.btnClass}-container`]: true,
+    };
+});
+
+const tooltipClasses = computed(() => {
+    return {
+        "tooltip-caret": leftSafe.value && props.position === "over",
+        "tooltip-caret-top": leftSafe.value && props.position === "under",
+        "tooltip-caret-left":
+            !leftSafe.value && props.position === "over",
+        "tooltip-caret-top-left":
+            !leftSafe.value && props.position === "under",
+    };
+});
+
+const tooltipStyles = computed(() => {
+    if (props.position === "over") {
+        return {
+            left: anchorX.value,
+            transform: `translate(-${leftSafe.value ? 50 : 20}%, 0)`,
+            bottom: anchorY.value,
+        };
+    }
+
+    if (props.position === "under") {
+        const spacing = {
+            "margin-top": "10px",
+        };
+
+        if (leftSafe.value) {
+            return {
+                transform: `translate(-${anchorX.value}, 0)`,
+                ...spacing,
+            };
+        }
+
+        return spacing;
+    }
+
+    return {};
+});
+
+const faIconType = computed(() => {
+    return `fa-${props.buttonIcon}`;
+});
+
+// Methods
+const getAnchorX = (el, elType) => {
+    if (!el) return 0;
+
+    return elType === "labeled-icon" || elType === "link"
+        ? el.offsetWidth / 2
+        : el.offsetWidth * 0.7;
+};
+
+const getAnchorY = (el, unused, position) => {
+    if (!el) return 0;
+
+    const spacer = position === "over" ? 20 : 10;
+
+    return parseInt(window.getComputedStyle(el).fontSize, 10) + spacer;
+};
+
+const appendPxSuffix = (int) => `${int}px`;
+
+const leftWarning = (el) => el.getBoundingClientRect().left < 130;
+
+const handleEnter = (e) => {
+    entered.value = !entered.value && !clicked.value;
+    leftSafe.value = !leftWarning(e.currentTarget);
+    anchorX.value = appendPxSuffix(
+        getAnchorX(e.currentTarget, props.btnType)
+    );
+    anchorY.value = appendPxSuffix(
+        getAnchorY(e.currentTarget, props.btnType, props.position)
+    );
+};
+
+const handleExit = () => {
+    if (!clicked.value) {
+        entered.value = false;
+        anchorX.value = undefined;
+        leftSafe.value = true;
+    }
+};
+
+const handleClick = (e) => {
+    if (!clicked.value) {
+        entered.value = false;
+        clicked.value = true;
+        if (leftWarning(e.currentTarget)) {
+            leftSafe.value = false;
+        }
+        anchorX.value = appendPxSuffix(
+            getAnchorX(e.currentTarget, props.btnType)
+        );
+        anchorY.value = appendPxSuffix(
+            getAnchorY(e.currentTarget, props.btnType)
+        );
+    }
+};
+
+const handleCloseClick = () => {
+    if (clicked.value) {
+        clicked.value = false;
+        entered.value = false;
+        anchorX.value = undefined;
+        leftSafe.value = true;
+    }
+};
+</script>
+
 <template>
     <div class="trigger-btn-container" :class="buttonContainerClasses">
         <button
@@ -61,187 +248,3 @@
         </div>
     </div>
 </template>
-
-<script>
-const getAnchorX = (el, elType) => {
-    if (!el) return 0;
-
-    return elType === "labeled-icon" || elType === "link"
-        ? el.offsetWidth / 2
-        : el.offsetWidth * 0.7;
-};
-
-const getAnchorY = (el, unused, position) => {
-    if (!el) return 0;
-
-    const spacer = position === "over" ? 20 : 10;
-
-    return parseInt(window.getComputedStyle(el).fontSize, 10) + spacer;
-};
-
-const appendPxSuffix = (int) => `${int}px`;
-
-const leftWarning = (el) => el.getBoundingClientRect().left < 130;
-
-export default {
-    name: "TooltipContainer",
-
-    props: {
-        btnClass: {
-            type: String,
-            default: "copy-btn",
-        },
-        buttonIcon: {
-            type: String,
-            default: "link",
-        },
-        btnType: {
-            default: "normal",
-            validator: (value) =>
-                ["btn", "icon", "labeled-btn", "labeled-icon", "link"].includes(
-                    value
-                ),
-        },
-        click: {
-            type: Boolean,
-            default: false,
-        },
-        hover: {
-            type: Boolean,
-            default: false,
-        },
-        label: {
-            type: String,
-            required: true,
-        },
-        position: {
-            type: String,
-            default: "over",
-        },
-        title: {
-            type: String,
-            required: true,
-        },
-        tooltipTitle: {
-            type: String,
-            required: true,
-        },
-    },
-
-    data() {
-        return {
-            entered: false,
-            clicked: false,
-            leftSafe: true,
-            anchorX: 0,
-            anchorY: 0,
-        };
-    },
-
-    computed: {
-        ariaLabel() {
-            return this.btnType === "icon"
-                ? `${this.label} for ${this.title}`
-                : false;
-        },
-        closeAriaLabel() {
-            return `close ${this.label} dialog`;
-        },
-        buttonClasses() {
-            return {
-                "trigger-btn-labeled": this.btnType === "labeled-icon",
-                "trigger-btn-link": this.btnType === "link",
-                [this.btnClass]: true,
-            };
-        },
-        buttonContainerClasses() {
-            return {
-                [`${this.btnClass}-container`]: true,
-            };
-        },
-        tooltipClasses() {
-            return {
-                "tooltip-caret": this.leftSafe && this.position === "over",
-                "tooltip-caret-top": this.leftSafe && this.position === "under",
-                "tooltip-caret-left":
-                    !this.leftSafe && this.position === "over",
-                "tooltip-caret-top-left":
-                    !this.leftSafe && this.position === "under",
-            };
-        },
-        tooltipStyles() {
-            if (this.position === "over") {
-                return {
-                    left: this.anchorX,
-                    transform: `translate(-${this.leftSafe ? 50 : 20}%, 0)`,
-                    bottom: this.anchorY,
-                };
-            }
-
-            if (this.position === "under") {
-                const spacing = {
-                    "margin-top": "10px",
-                };
-
-                if (this.leftSafe) {
-                    return {
-                        transform: `translate(-${this.anchorX}, 0)`,
-                        ...spacing,
-                    };
-                }
-
-                return spacing;
-            }
-
-            return {};
-        },
-        faIconType() {
-            return `fa-${this.buttonIcon}`;
-        },
-    },
-
-    methods: {
-        handleEnter(e) {
-            this.entered = !this.entered && !this.clicked;
-            this.leftSafe = !leftWarning(e.currentTarget);
-            this.anchorX = appendPxSuffix(
-                getAnchorX(e.currentTarget, this.btnType)
-            );
-            this.anchorY = appendPxSuffix(
-                getAnchorY(this.$el, this.btnType, this.position)
-            );
-        },
-        handleExit() {
-            if (!this.clicked) {
-                this.entered = false;
-                this.anchorX = undefined;
-                this.leftSafe = true;
-            }
-        },
-        handleClick(e) {
-            if (!this.clicked) {
-                this.entered = false;
-                this.clicked = true;
-                if (leftWarning(e.currentTarget)) {
-                    this.leftSafe = false;
-                }
-                this.anchorX = appendPxSuffix(
-                    getAnchorX(e.currentTarget, this.btnType)
-                );
-                this.anchorY = appendPxSuffix(
-                    getAnchorY(this.$el, this.btnType)
-                );
-            }
-        },
-        handleCloseClick() {
-            if (this.clicked) {
-                this.clicked = false;
-                this.entered = false;
-                this.anchorX = undefined;
-                this.leftSafe = true;
-                this.selectedAction = null;
-            }
-        },
-    },
-};
-</script>

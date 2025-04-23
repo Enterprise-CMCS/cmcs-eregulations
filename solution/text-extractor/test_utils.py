@@ -145,3 +145,5 @@ class UtilsTestCase(unittest.TestCase):
         }
         with self.assertRaises(Exception):
             configure_authorization(auth)
+
+    ### TODO: test AWS secrets manager here
