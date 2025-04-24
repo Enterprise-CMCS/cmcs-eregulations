@@ -127,7 +127,8 @@ To use our Okta identity provider on an experimental (ephemeral) deployment, see
 ## Backing up and restoring the database
 
 The scripts `backup_db.sh`, `restore_remote_db.sh`, and `restore_local_db.sh` can be used for the following purposes:
-* Copying the prod DB to val and prod for more accurate testing.
+
+* Copying the prod DB to dev and val for more accurate testing.
 * Copying an RDS database to your local environment.
 * Restoring one or more databases from a previously taken backup without using RDS Snapshots.
 
@@ -156,7 +157,7 @@ Note that specifying `prod` as an environment will prompt for confirmation. Be a
 1. From the `db_backup` directory, run `../scripts/restore_local_db.sh`.
 2. Enter the relative path to the SQL backup file created above.
 3. Enter the password to the local database.
-4. Wait for the script to restore the local database from the file. This may take a few minutes.
+4. Wait for the script to restore the local database from the file. This may take a few minutes.d
 
 ## Add a new model
 
