@@ -26,4 +26,5 @@ echo "Restoring data from backup file ${RESTORE_FILE}"
 # Restore data from a backup file. (this is a different file than existing db backup file)
 # restore the data with an existing backup file.
 PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d ${DB_NAME} < $RESTORE_FILE
+
 echo "Database restore completed successfully."
