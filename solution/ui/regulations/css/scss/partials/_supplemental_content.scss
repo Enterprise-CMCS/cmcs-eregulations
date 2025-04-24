@@ -165,10 +165,7 @@
 
 .internal-docs__container {
     .supplemental-content-description > span:has(.result__link--file-type) {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 6px;
+        display: inline;
     }
 }
 
