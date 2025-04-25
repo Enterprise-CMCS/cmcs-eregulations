@@ -93,9 +93,9 @@ const PARAM_ENCODE_DICT = {
  * console.log(suffix); // "docx"
  *
  * @example
- * const fileName = "test.pdf";
+ * const fileName = "test.msg";
  * const suffix = getFileNameSuffix(fileName);
- * console.log(suffix); // null
+ * console.log(suffix); // "Outlook"
  */
 const getFileNameSuffix = (fileName) => {
     if (
