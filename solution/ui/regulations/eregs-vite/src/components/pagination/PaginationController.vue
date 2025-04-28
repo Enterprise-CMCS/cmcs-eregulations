@@ -1,3 +1,36 @@
+<script setup>
+import { computed } from "vue";
+import { createOneIndexedArray } from "utilities/utils";
+import PagesList from "@/components/pagination/PagesList.vue";
+import NavBtn from "@/components/navigation/NavBtn.vue";
+
+const props = defineProps({
+    count: {
+        type: Number,
+        required: false,
+        default: 0,
+    },
+    page: {
+        type: Number,
+        required: false,
+        default: 1,
+    },
+    pageSize: {
+        type: Number,
+        required: false,
+        default: 100,
+    },
+    view: {
+        type: String,
+        required: true,
+    },
+});
+
+const pagesArr = computed(() => {
+    return createOneIndexedArray(Math.ceil(props.count / props.pageSize));
+});
+</script>
+
 <template>
     <nav class="pagination-controls" aria-label="Pagination">
         <div class="pagination-control left-control">
@@ -41,47 +74,3 @@
         </div>
     </nav>
 </template>
-
-<script>
-import PagesList from "@/components/pagination/PagesList.vue";
-import NavBtn from "@/components/navigation/NavBtn.vue";
-
-import { createOneIndexedArray } from "utilities/utils";
-
-export default {
-    name: "PaginationController",
-
-    components: {
-        NavBtn,
-        PagesList,
-    },
-
-    props: {
-        count: {
-            type: Number,
-            required: false,
-            default: 0,
-        },
-        page: {
-            type: Number,
-            required: false,
-            default: 1,
-        },
-        pageSize: {
-            type: Number,
-            required: false,
-            default: 100,
-        },
-        view: {
-            type: String,
-            required: true,
-        },
-    },
-
-    computed: {
-        pagesArr() {
-            return createOneIndexedArray(Math.ceil(this.count / this.pageSize));
-        },
-    },
-};
-</script>
