@@ -1,9 +1,5 @@
 export { default as CollapseButton } from "./CollapseButton.vue";
 export { default as Collapsible } from "./Collapsible.vue";
-export { default as Dropdown } from "./Dropdown.vue";
-export { default as DropdownContent } from "./DropdownContent.vue";
-export { default as DropdownHeader } from "./DropdownHeader.vue";
-export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as InternalDocsContainer } from "./reader-sidebar/InternalDocsContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as PartButton } from "./PartButton.vue";
