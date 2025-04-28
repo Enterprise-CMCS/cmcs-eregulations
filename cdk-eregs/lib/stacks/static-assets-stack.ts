@@ -148,12 +148,12 @@ export class StaticAssetsStack extends cdk.Stack {
         };
 
         // Add certificate and domain configuration if certificate is available
-        if (props.certificateArn) {
+        if (certificateArn) {
             // Create certificate reference
             const certificate = acm.Certificate.fromCertificateArn(
                 this, 
                 'Certificate', 
-                props.certificateArn
+                certificateArn
             );
       
             // Include certificate in initial props
