@@ -1,3 +1,27 @@
+<script setup>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
+const props = defineProps({
+    currentPage: {
+        type: Number,
+        required: false,
+        default: 1,
+    },
+    number: {
+        type: Number,
+        required: false,
+        default: 1,
+    },
+});
+
+const route = useRoute();
+
+const numberClasses = computed(() => {
+    return props.currentPage === props.number ? "selected" : "unselected";
+});
+</script>
+
 <template>
     <li
         v-if="currentPage != number"
@@ -7,7 +31,7 @@
         <router-link
             :to="{
                 name: view,
-                query: { ...$route.query, page: number },
+                query: { ...route.query, page: number },
             }"
         >
             {{ number }}
@@ -21,35 +45,3 @@
         {{ number }}
     </li>
 </template>
-
-<script>
-export default {
-    name: "PageNumber",
-
-    components: {},
-
-    props: {
-        currentPage: {
-            type: Number,
-            required: false,
-            default: 1,
-        },
-        number: {
-            type: Number,
-            required: false,
-            default: 1,
-        },
-    },
-    data() {
-        return {
-            dataProp: "value",
-        };
-    },
-
-    computed: {
-        numberClasses() {
-            return this.currentPage == this.number ? "selected" : "unselected";
-        },
-    },
-};
-</script>
