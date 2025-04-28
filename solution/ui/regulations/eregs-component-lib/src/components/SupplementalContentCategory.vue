@@ -1,3 +1,77 @@
+<script setup>
+import { computed } from "vue";
+import RelatedRuleList from "./RelatedRuleList.vue";
+import SupplementalContentList from "./SupplementalContentList.vue";
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
+
+const props = defineProps({
+    subcategory: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    isFetching: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    showIfEmpty: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    supplemental_content: {
+        type: Array,
+        required: false,
+        default: undefined,
+    },
+    subcategories: {
+        type: Array,
+        required: false,
+        default: undefined,
+    },
+    isFrLinkCategory: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+});
+
+const showDescription = computed(() => {
+    return props.description && !/^\s*$/.test(props.description);
+});
+
+const hasSubcategories = computed(() => {
+    return props?.subcategories?.length ?? 0;
+});
+
+const hasChildren = computed(() => {
+    return !!(
+        props.supplemental_content?.length ||
+        (props.subcategories &&
+            props.subcategories.some(
+                (subcategory) => subcategory.supplemental_content
+            ))
+    );
+});
+
+const collapseButtonClasses = computed(() => {
+    return {
+        subcategory: props.subcategory,
+        "is-fr-link-btn": props.isFrLinkCategory,
+    };
+});
+</script>
+
 <template>
     <div
         v-if="hasChildren || (!hasChildren && showIfEmpty)"
@@ -65,87 +139,3 @@
         </div>
     </div>
 </template>
-
-<script>
-/* eslint-disable vue/prop-name-casing */
-import RelatedRuleList from "./RelatedRuleList.vue";
-import SupplementalContentList from "./SupplementalContentList.vue";
-import CollapseButton from "./CollapseButton.vue";
-import Collapsible from "./Collapsible.vue";
-
-export default {
-    name: "SupplementalContentCategory",
-
-    components: {
-        RelatedRuleList,
-        SupplementalContentList,
-        CollapseButton,
-        Collapsible,
-    },
-
-    props: {
-        subcategory: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-        isFetching: {
-            type: Boolean,
-            required: false,
-            default: true,
-        },
-        name: {
-            type: String,
-            required: true,
-        },
-        description: {
-            type: String,
-            required: true,
-        },
-        showIfEmpty: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-        supplemental_content: {
-            type: Array,
-            required: false,
-            default: undefined,
-        },
-        subcategories: {
-            type: Array,
-            required: false,
-            default: undefined,
-        },
-        isFrLinkCategory: {
-            type: Boolean,
-            required: false,
-            default: false,
-        },
-    },
-
-    computed: {
-        showDescription() {
-            return this.description && !/^\s*$/.test(this.description);
-        },
-        hasSubcategories() {
-            return this?.subcategories?.length ?? 0;
-        },
-        hasChildren() {
-            return !!(
-                this.supplemental_content?.length ||
-                (this.subcategories &&
-                    this.subcategories.some(
-                        (subcategory) => subcategory.supplemental_content
-                    ))
-            );
-        },
-        collapseButtonClasses() {
-            return {
-                subcategory: this.subcategory,
-                "is-fr-link-btn": this.isFrLinkCategory,
-            };
-        },
-    },
-};
-</script>
