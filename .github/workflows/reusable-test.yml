@@ -17,7 +17,7 @@ jobs:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
   test-val:
-    needs: test-a
+    needs: test-dev
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: val
@@ -27,7 +27,7 @@ jobs:
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
   test-prod:
-    needs: test-b
+    needs: test-val
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: prod
