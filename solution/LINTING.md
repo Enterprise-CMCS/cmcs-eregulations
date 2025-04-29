@@ -27,11 +27,8 @@ We've added the official ESLint plugin for Vue.js: [eslint-plugin-vue](https://e
 ESLint will run as a GitHub Action on every pull request.  If you want to run ESLint locally, you can do so by running the following commands from `./solution`:
 
 ```
-// lint the frontend JS
-make eslint-frontend
-
-// lint CDK TS
-make eslint-cdk
+// lint the entire project
+make eslint
 ```
 
 This will return a list of errors and warnings that need to be fixed.
@@ -53,7 +50,11 @@ Typical workflow for using ESLint in your text editor:
 
 [ESLint plugin for VSCode](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
-#### Neovim via nvim.coc
+#### Neovim with `mason.nvim` and `lspconfig`
+
+[mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim)
+
+#### Neovim via `nvim.coc`
 
 [coc-eslint](https://github.com/neoclide/coc-eslint)
 

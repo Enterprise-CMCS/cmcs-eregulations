@@ -100,14 +100,12 @@ Before running the tests for the first time, you may need to install Cypress dep
 
 #### ESLint
 
-This project uses ESLint to enforce consistent coding styles across the frontend (JavaScript) and infrastructure (TypeScript) components, improving code readability and reducing the likelihood of runtime errors. We use a shared ESLint configuration (`eslint-global-rules.mjs` file) at the project root to define a baseline of rules applicable to both the frontend and infrastructure code. Each application (frontend and CDK) also maintains its own ESLint configuration file, to allow tailoring rules and plugins to JavaScript and TypeScript.
+This project uses ESLint to enforce consistent coding styles across the frontend (JavaScript) and infrastructure (TypeScript) components, improving code readability and reducing the likelihood of runtime errors. We use a shared ESLint configuration file located at the root of the project.  This file is used by all JavaScript and TypeScript files in the project, including all CDK TS files, Cypress end to end test suites and config files, and all front end files including Vue components and related Javascript files.
 
-To run ESLint, execute the following commands from the project root:
+To run ESLint, execute the following command from `./solution`:
 
 ```
-make eslint-frontend
-
-make eslint-cdk
+make eslint
 ```
 
 For more information and resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
