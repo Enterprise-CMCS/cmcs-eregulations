@@ -13,8 +13,7 @@ jobs:
       environment: dev
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.DEV_AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.DEV_AWS_ACCOUNT_ID }}
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
   test-val:
     needs: test-dev
@@ -23,12 +22,11 @@ jobs:
       environment: val
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.VAL_AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.VAL_AWS_ACCOUNT_ID }}
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
   wait-for-approval:
     needs: test-val
-    environment: prod
+    environment: approval
     runs-on: ubuntu-latest
     steps:
       - name: Wait for approval
@@ -41,5 +39,4 @@ jobs:
       environment: prod
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.PROD_AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.PROD_AWS_ACCOUNT_ID }}
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
