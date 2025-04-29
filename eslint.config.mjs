@@ -19,7 +19,12 @@ export default defineConfig([
     },
     pluginJs.configs.recommended,
     {
-        files: ["cdk-eregs/**/*.js", "cdk-eregs/**/*.mjs", "cdk-eregs/**/*.cjs", "cdk-eregs/**/*.ts"],
+        files: [
+            "cdk-eregs/**/*.js",
+            "cdk-eregs/**/*.mjs",
+            "cdk-eregs/**/*.cjs",
+            "cdk-eregs/**/*.ts"
+        ],
         plugins: {
             typescript: tseslint,
         },
@@ -35,9 +40,18 @@ export default defineConfig([
         extends: [
             pluginCypress.configs.recommended,
         ],
+        rules: {
+            "cypress/no-unnecessary-waiting": "off"
+        },
     },
     {
-        files: ["./solution/ui/regulations/**/*.js", "./solution/ui/regulations/**/*.mjs", "./solution/ui/regulations/**/*.cjs", "./solution/ui/regulations/**/*.ts", "./solution/ui/regulations/**/*.vue"],
+        files: [
+            "./solution/ui/regulations/**/*.js",
+            "./solution/ui/regulations/**/*.mjs",
+            "./solution/ui/regulations/**/*.cjs",
+            "./solution/ui/regulations/**/*.ts",
+            "./solution/ui/regulations/**/*.vue"
+        ],
         plugins: {
             vue: pluginVue,
         },
@@ -79,7 +93,7 @@ export default defineConfig([
             eqeqeq: "off",
             "import/no-unresolved": "off",
             "import/first": "off",
-            "no-console": ["error", { allow: ["warn", "error", "info"] }],
+            "no-console": ["error", { allow: ["warn", "error", "info", "table"] }],
             "no-nested-ternary": "off",
             "prefer-template": "off",
             "no-unused-vars": [

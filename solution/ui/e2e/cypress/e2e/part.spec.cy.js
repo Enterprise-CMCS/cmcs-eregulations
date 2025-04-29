@@ -161,7 +161,8 @@ describe("Part View", () => {
 
         // Find and expand Subregulatory Guidance category
         cy.get("button[data-test='Subregulatory Guidance']")
-            .scrollIntoView()
+            .scrollIntoView();
+        cy.get("button[data-test='Subregulatory Guidance']")
             .click({ force: true });
 
         // Assert that subcategory is visible

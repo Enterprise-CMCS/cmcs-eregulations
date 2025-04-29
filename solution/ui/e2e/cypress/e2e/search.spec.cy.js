@@ -5,7 +5,6 @@ const SEARCH_TERM = "FMAP";
 const SEARCH_TERM_2 = "almond";
 const NO_RESULTS_SEARCH_TERM = "no results";
 const SPACED_SEARCH_TERM = "test query";
-const QUOTED_SEARCH_TERM = '"test query"';
 
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
@@ -470,7 +469,10 @@ describe("Search flow", () => {
             .and("include", "categories=1");
 
         // Update search term
-        cy.get("input#main-content").clear().type("new search term");
+        cy.get("input#main-content")
+            .clear();
+        cy.get("input#main-content")
+            .type("new search term");
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
@@ -746,7 +748,10 @@ describe("Search flow", () => {
             `/search?q=${SEARCH_TERM}&sort=-date`,
         );
 
-        cy.get("input#main-content").clear().type("new search term");
+        cy.get("input#main-content")
+            .clear();
+        cy.get("input#main-content")
+            .type("new search term");
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
