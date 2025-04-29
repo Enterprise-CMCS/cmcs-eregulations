@@ -13,6 +13,9 @@ on:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
         description: 'AWS OIDC role to assume for deployment'
+      AWS_ACCOUNT_ID:
+        required: true
+        description: 'AWS account ID for deployment'
 
 permissions:
   id-token: write
@@ -30,7 +33,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.DEV_AWS_OIDC_ROLE_TO_ASSUME }}
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
 
       - name: Do thing A

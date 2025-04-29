@@ -14,6 +14,7 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.DEV_AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.DEV_AWS_ACCOUNT_ID }}
 
   test-val:
     needs: test-dev
@@ -23,6 +24,7 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.VAL_AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.VAL_AWS_ACCOUNT_ID }}
 
   wait-for-approval:
     needs: test-val
@@ -40,3 +42,4 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.PROD_AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.PROD_AWS_ACCOUNT_ID }}
