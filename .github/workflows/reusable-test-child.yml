@@ -13,9 +13,6 @@ on:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
         description: 'AWS OIDC role to assume for deployment'
-      AWS_ACCOUNT_ID:
-        required: true
-        description: 'AWS account ID for deployment'
 
 permissions:
   id-token: write
@@ -25,7 +22,6 @@ permissions:
 
 jobs:
   do-thing-a:
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -42,7 +38,6 @@ jobs:
 
   do-thing-b:
     needs: do-thing-a
-    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

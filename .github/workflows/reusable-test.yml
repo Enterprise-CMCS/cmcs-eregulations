@@ -13,8 +13,7 @@ jobs:
       environment: dev
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.DEV_AWS_OIDC_ROLE_TO_ASSUME }}
 
   test-val:
     needs: test-dev
@@ -23,15 +22,21 @@ jobs:
       environment: val
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.VAL_AWS_OIDC_ROLE_TO_ASSUME }}
+
+  wait-for-approval:
+    needs: test-val
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for approval
+        run: echo "Waiting for approval to proceed to production deployment"
 
   test-prod:
-    needs: test-val
+    needs: wait-for-approval
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: prod
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
-      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.PROD_AWS_OIDC_ROLE_TO_ASSUME }}
