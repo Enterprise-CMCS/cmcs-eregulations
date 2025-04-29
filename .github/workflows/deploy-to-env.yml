@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   deploy-static-assets:
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     outputs:
       static_url: ${{ steps.get-static-url.outputs.static_url }}
@@ -80,7 +80,7 @@ jobs:
   
   deploy-zip-lambdas:
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -114,7 +114,7 @@ jobs:
           popd
   
   deploy-vue-assets:
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     needs: [deploy-site-lambdas, deploy-static-assets]
     steps:
@@ -192,7 +192,7 @@ jobs:
 
   deploy-text-extractor:
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -226,7 +226,7 @@ jobs:
   deploy-fr-parser:
     needs: [deploy-site-lambdas]
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -260,7 +260,7 @@ jobs:
   deploy-ecfr-parser:
     needs: [deploy-site-lambdas]
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -294,7 +294,7 @@ jobs:
   deploy-parser-launcher:
     needs: [deploy-ecfr-parser, deploy-fr-parser]
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -328,7 +328,7 @@ jobs:
   deploy-site-lambdas:
     needs: [deploy-static-assets, deploy-text-extractor]
     runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     outputs:
       api_url: ${{ steps.get-api-url.outputs.api_url }}  
     steps:
@@ -409,7 +409,7 @@ jobs:
           reactions: "+1"
  
   test-cypress:
-    environment: ${{ inputs.environment }}
+    #environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
     needs: [deploy-site-lambdas, deploy-vue-assets]
     steps:
