@@ -6,7 +6,6 @@ export { default as RecentChangesContainer } from "./RecentChangesContainer.vue"
 export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
 export { default as RelatedRuleList } from "./RelatedRuleList.vue";
-export { default as RelatedRules } from "./RelatedRules.vue";
 export { default as ShowMoreButton } from "./ShowMoreButton.vue";
 export { default as SimpleSpinner } from "./SimpleSpinner.vue";
 export { default as SupplementalContent } from "./SupplementalContent.vue";
