@@ -6,6 +6,9 @@ on:
       environment:
         required: true
         type: string
+      aws_default_region:
+        required: true
+        type: string
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
