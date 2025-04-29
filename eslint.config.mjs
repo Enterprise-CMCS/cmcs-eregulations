@@ -23,23 +23,18 @@ export default defineConfig([
         plugins: {
             typescript: tseslint,
         },
-        rules: {
-            ...tseslint.configs.recommended.rules,
-        }
+        extends: [
+            tseslint.configs.recommended,
+        ],
     },
     {
         files: ["./solution/ui/e2e/**/*.js"],
         plugins: {
             cypress: pluginCypress,
         },
-        languageOptions: {
-            globals: {
-                ...pluginCypress.configs.recommended.globals,
-            },
-        },
-        rules: {
-            ...pluginCypress.configs.recommended.rules,
-        },
+        extends: [
+            pluginCypress.configs.recommended,
+        ],
     },
     {
         files: ["./solution/ui/regulations/**/*.js", "./solution/ui/regulations/**/*.mjs", "./solution/ui/regulations/**/*.cjs", "./solution/ui/regulations/**/*.ts", "./solution/ui/regulations/**/*.vue"],
