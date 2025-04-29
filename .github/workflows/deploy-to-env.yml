@@ -83,7 +83,6 @@ jobs:
           popd
   
   deploy-zip-lambdas:
-    needs: deploy-static-assets
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
     steps:
@@ -331,7 +330,7 @@ jobs:
           popd          
 
   deploy-site-lambdas:
-    needs: [deploy-static-assets, deploy-zip-lambdas, deploy-text-extractor]
+    needs: [deploy-static-assets, deploy-text-extractor]
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
     outputs:
