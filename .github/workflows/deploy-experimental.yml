@@ -8,7 +8,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   deploy-experimental:
-    environment: dev
     uses: ./.github/workflows/deploy-to-env.yml
     with:
       environment: dev
