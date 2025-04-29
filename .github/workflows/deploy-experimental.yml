@@ -16,4 +16,3 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}

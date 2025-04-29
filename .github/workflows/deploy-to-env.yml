@@ -20,9 +20,6 @@ on:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
         description: 'AWS OIDC role to assume for deployment'
-      AWS_ACCOUNT_ID:
-        required: true
-        description: 'AWS account ID for deployment'
 
 permissions:
   id-token: write
