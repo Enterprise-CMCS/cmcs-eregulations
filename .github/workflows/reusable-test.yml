@@ -7,7 +7,7 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  test-a:
+  test-dev:
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: dev
@@ -16,20 +16,22 @@ jobs:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
-  test-b:
+  test-val:
     needs: test-a
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: val
+      aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
 
-  test-c:
+  test-prod:
     needs: test-b
     uses: ./.github/workflows/reusable-test-child.yml
     with:
       environment: prod
+      aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  
