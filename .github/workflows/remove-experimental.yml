@@ -45,7 +45,6 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -67,7 +66,6 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -89,7 +87,6 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -148,7 +145,6 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
