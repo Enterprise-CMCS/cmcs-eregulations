@@ -1,0 +1,34 @@
+name: Reusable Workflow Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  test-a:
+    uses: ./.github/workflows/reusable-test-child.yml
+    with:
+      environment: dev
+    secrets:
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  test-b:
+    needs: test-a
+    uses: ./.github/workflows/reusable-test-child.yml
+    with:
+      environment: val
+    secrets:
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+
+  test-c:
+    needs: test-b
+    uses: ./.github/workflows/reusable-test-child.yml
+    with:
+      environment: prod
+    secrets:
+      AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}  
