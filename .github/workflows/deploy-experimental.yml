@@ -9,7 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   deploy-experimental:
     environment: dev
-    uses: Enterprise-CMCS/cmcs-eregulations/.github/workflows/deploy-to-env.yml@${{ github.sha }}
+    uses: ./.github/workflows/deploy-to-env.yml
     with:
       environment: dev
       stage_name: eph-${{ github.event.pull_request.number }}
