@@ -9,10 +9,6 @@ on:
       stage_name:
         required: true
         type: string
-      is_ephemeral:
-        required: false
-        type: boolean
-        default: false
       pr_number:
         required: false
         type: string
@@ -396,7 +392,7 @@ jobs:
           popd
 
   notify:
-    if: ${{ inputs.is_ephemeral == 'true' }}
+    if: ${{ inputs.pr_number != '' }}
     permissions:
       pull-requests: write
     runs-on: ubuntu-22.04
