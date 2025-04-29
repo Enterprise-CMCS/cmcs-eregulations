@@ -1,0 +1,458 @@
+name: Deploy to Environment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      stage_name:
+        required: true
+        type: string
+      is_ephemeral:
+        required: false
+        type: boolean
+        default: false
+      aws_default_region:
+        required: true
+        type: string
+    secrets:
+      AWS_OIDC_ROLE_TO_ASSUME:
+        required: true
+        description: 'AWS OIDC role to assume for deployment'
+      AWS_ACCOUNT_ID:
+        required: true
+        description: 'AWS account ID for deployment'
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+jobs:
+  deploy-static-assets:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    outputs:
+      static_url: ${{ steps.get-static-url.outputs.static_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Static-Asset Infrastructure
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra
+          STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
+          npx cdk deploy ${STATICASSET_STACK} \
+          -c environment=${ENVIRONMENT} \
+          -c deploymentType=infrastructure \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+
+      - name: Get Static URL
+        id: get-static-url
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          pushd cdk-eregs
+          STATIC_STACK="cms-eregs-${STAGE_NAME}-static-assets"
+          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
+          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
+          popd
+  
+  deploy-zip-lambdas:
+    needs: deploy-static-assets
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy ZIP-based Lambdas
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          # Get exact stack names
+          REDIRECT_STACK="cms-eregs-${STAGE_NAME}-redirect-api"
+          MAINTENANCE_STACK="cms-eregs-${STAGE_NAME}-maintenance-api"
+          
+          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/zip-lambdas.ts"
+          popd
+  
+  deploy-vue-assets:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambdas, deploy-static-assets]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - uses: actions/setup-python@v5
+        if: success() && steps.findPr.outputs.number
+        with:
+          python-version: "3.12"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r ./solution/backend/requirements.txt
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          directory: solution/ui/regulations/eregs-vite
+          file_name: .env
+
+      - name: Run collectstatic
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: ${{ inputs.stage_name }}
+        run: |
+          pushd solution/backend
+          python manage.py collectstatic --noinput
+          cd ..
+          popd
+
+      - name: Build Vite assets
+        env:
+          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
+          STATIC_ROOT: ../static-assets/regulations
+          VITE_ENV: ${{ inputs.stage_name }}
+        run: |
+          pushd solution
+          make regulations
+          popd
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Static Assets
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install fs-extra
+          npm install --save-dev @types/fs-extra   
+          STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
+          npx cdk deploy ${STATICASSET_STACK} \
+          -c environment=${ENVIRONMENT} \
+          -c deploymentType=content \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/static-assets.ts" \
+          --outputs-file static-outputs.json
+          popd
+
+  deploy-text-extractor:
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Text Extractor
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          TEXT_EXTRACTOR_STACK="cms-eregs-${STAGE_NAME}-text-extractor"
+          
+          npx cdk deploy $TEXT_EXTRACTOR_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/text-extractor.ts"
+          popd
+
+  deploy-fr-parser:
+    needs: [deploy-site-lambdas]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy FR Parser
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          FR_PARSER_STACK="cms-eregs-${STAGE_NAME}-fr-parser"
+          
+          npx cdk deploy $FR_PARSER_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deploy-ecfr-parser:
+    needs: [deploy-site-lambdas]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy ECFR Parser
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          ECFR_PARSER_STACK="cms-eregs-${STAGE_NAME}-ecfr-parser"
+          
+          npx cdk deploy $ECFR_PARSER_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+  deploy-parser-launcher:
+    needs: [deploy-ecfr-parser, deploy-fr-parser]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Parser Launcher
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          PARSER_LAUNCHER_STACK="cms-eregs-${STAGE_NAME}-parser-launcher"
+          
+          npx cdk deploy $PARSER_LAUNCHER_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd          
+
+  deploy-site-lambdas:
+    needs: [deploy-static-assets, deploy-zip-lambdas, deploy-text-extractor]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    outputs:
+      api_url: ${{ steps.get-api-url.outputs.api_url }}  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Site-Lambda
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          API_STACK="cms-eregs-${STAGE_NAME}-api"
+          
+          npx cdk deploy $API_STACK \
+          -c environment=${ENVIRONMENT} \
+          -c buildId="${GITHUB_RUN_ID}" \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts" \
+          --outputs-file api-outputs.json
+          popd
+
+      - name: Invoke setup functions after site lambdas deployed
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-createdb /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-migrate /dev/stdout | tee -a aws.log
+          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-createsu /dev/stdout | tee -a aws.log
+          # Check for invocation errors
+          ! grep -q FunctionError aws.log
+
+      - name: Get API URL
+        id: get-api-url
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          pushd cdk-eregs
+          API_STACK="cms-eregs-${STAGE_NAME}-api"
+          API_URL=$(cat api-outputs.json | jq -r ".[\"$API_STACK\"].ApiEndpoint")
+          API_URL=${API_URL%/}
+          # Debug what we're setting
+          echo "Setting API URL: $API_URL"
+          # Use the exact same name as in the outputs section
+          echo "api_url=$(echo $API_URL)" >> $GITHUB_OUTPUT
+          # Verify it was set
+          echo "GITHUB_OUTPUT contents:"
+          cat $GITHUB_OUTPUT
+          popd
+
+  notify:
+    if: ${{ inputs.is_ephemeral == 'true' }}
+    permissions:
+      pull-requests: write
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambdas, deploy-vue-assets]
+    steps:
+      - name: Create deployment comment
+        uses: peter-evans/create-or-update-comment@v4
+        env:
+          SITE_URL: ${{ needs.deploy-site-lambdas.outputs.api_url }}
+        with:
+          issue-number: ${{ steps.findPr.outputs.pr }}
+          body: |
+            ✨ See the Django Site deployed at: ${{ env.SITE_URL }} ✨
+          reactions: "+1"
+ 
+  test-cypress:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-22.04
+    needs: [deploy-site-lambdas, deploy-vue-assets]
+    steps:
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      # Configure AWS credentials for GitHub Actions
+      - name: Configure AWS credentials for GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      # Get test user credentials from AWS Secret Manager
+      - name: Get test user credentials
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            CYPRESS_TEST, /eregulations/http/credentials
+            CYPRESS_READER, /eregulations/http/reader_credentials
+          name-transformation: uppercase
+          parse-json-secrets: true
+
+      # Setup node environment
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # Run the cypress tests
+      - name: end-to-end tests
+        uses: cypress-io/github-action@v6
+        with:
+          working-directory: solution/ui/e2e
+          config: baseUrl=${{ needs.deploy-site-lambdas.outputs.api_url }}
+        env:
+          CYPRESS_DEPLOYING: true
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/screenshots/*/*
+
+      # Test run video was always captured, so this action uses "always()" condition
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos
+          path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*
