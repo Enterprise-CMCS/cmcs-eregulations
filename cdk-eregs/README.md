@@ -55,7 +55,7 @@ For more in-depth examples, see the Github Actions workflows located at `.github
 Manages the redirect API with Lambda and API Gateway. Entry-point is "zip-lambdas.ts".
 
 ### 2. `StaticAssetsStack`
-Handles static assets using S3 and CloudFront, with WAF integration. Supports infrastructure-only or infrastructure-plus-content deployments, to increase deployment efficiency. Use `-c deploymentType=infrastructure/content`. Entry-point is "static-assets.ts".
+Handles static assets using S3 and CloudFront, with WAF integration. Entry-point is "static-assets.ts".
 
 ### 3. `TextExtractorStack`
 Creates the Text Extractor service with Lambda and SQS. SQS URL is exported. Entry-point is "docker-lambdas.ts".

@@ -38,11 +38,9 @@ async function main() {
     Object.entries(stageConfig.getStackTags()).forEach(([key, value]) => {
         cdk.Tags.of(app).add(key, value);
     });
-    const deploymentType = app.node.tryGetContext('deploymentType') || 'content';  
 
     new StaticAssetsStack(app, `${stageConfig.getResourceName('static-assets')}`, {
         prNumber,
-        deploymentType,  // Pass the deployment type to the stack
         env: {
             account: process.env.CDK_DEFAULT_ACCOUNT,
             region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
