@@ -67,6 +67,9 @@ jobs:
           cd ..
           popd
 
+      # Previously this was done in a separate step because Django required the CloudFront distro URL and Vue required
+      # the Django URL, leading to a circular dependency that could only be resolved by deploying static assets twice.
+      # But now build and deploy can be done in the same step as Vue gets the site URL from Django at runtime.
       - name: Build Vite assets
         env:
           STATIC_ROOT: ../static-assets/regulations
