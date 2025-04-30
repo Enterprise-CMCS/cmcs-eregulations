@@ -58,6 +58,7 @@ jobs:
 
       - name: Run collectstatic
         env:
+          STATIC_URL: http://localhost:8888/  # This is a placeholder value, but it is required for the command to run
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ inputs.stage_name }}
         run: |
