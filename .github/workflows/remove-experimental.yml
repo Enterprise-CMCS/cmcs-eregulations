@@ -47,7 +47,6 @@ jobs:
       - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -69,7 +68,6 @@ jobs:
       - name: Destroy PR-Maintenance Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -91,7 +89,6 @@ jobs:
       - name: Cleanup Docker-based Lambda Stacks
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
@@ -146,11 +143,10 @@ jobs:
           --app "npx ts-node bin/text-extractor.ts"
           echo "Cleanup completed for all Docker-based stacks"
           popd
-          
+
       - name: Cleanup Static Assets
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
