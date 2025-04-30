@@ -98,7 +98,6 @@ jobs:
           STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
           npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${ENVIRONMENT} \
-          -c deploymentType=content \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts"
