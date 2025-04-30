@@ -30,8 +30,6 @@ jobs:
   deploy-static-assets:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
-    outputs:
-      static_url: ${{ steps.get-static-url.outputs.static_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -44,7 +42,6 @@ jobs:
           node-version: 20
 
       - uses: actions/setup-python@v5
-        if: success() && steps.findPr.outputs.number
         with:
           python-version: "3.12"
 
@@ -61,7 +58,6 @@ jobs:
 
       - name: Run collectstatic
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ inputs.stage_name }}
         run: |
@@ -72,7 +68,6 @@ jobs:
 
       - name: Build Vite assets
         env:
-          STATIC_URL: ${{ needs.deploy-static-assets.outputs.static_url }}
           STATIC_ROOT: ../static-assets/regulations
           VITE_ENV: ${{ inputs.stage_name }}
         run: |
@@ -102,8 +97,7 @@ jobs:
           -c deploymentType=content \
           --require-approval never \
           --exclusively \
-          --app "npx ts-node bin/static-assets.ts" \
-          --outputs-file static-outputs.json
+          --app "npx ts-node bin/static-assets.ts"
           popd
   
   deploy-zip-lambdas:
