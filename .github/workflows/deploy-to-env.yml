@@ -38,88 +38,6 @@ jobs:
         with:
           submodules: true
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
-
-      - name: Deploy Static-Asset Infrastructure
-        env:
-          ENVIRONMENT: ${{ inputs.environment }}
-          STAGE_NAME: ${{ inputs.stage_name }}
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-          pushd cdk-eregs
-          npm install
-          npm install fs-extra
-          npm install --save-dev @types/fs-extra
-          STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
-          npx cdk deploy ${STATICASSET_STACK} \
-          -c environment=${ENVIRONMENT} \
-          -c deploymentType=infrastructure \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/static-assets.ts" \
-          --outputs-file static-outputs.json
-          popd
-
-      - name: Get Static URL
-        id: get-static-url
-        env:
-          STAGE_NAME: ${{ inputs.stage_name }}
-        run: |
-          pushd cdk-eregs
-          STATIC_STACK="cms-eregs-${STAGE_NAME}-static-assets"
-          STATIC_URL=$(cat static-outputs.json | jq -r ".[\"$STATIC_STACK\"].StaticURL")
-          echo "static_url=${STATIC_URL}" >> $GITHUB_OUTPUT
-          popd
-  
-  deploy-zip-lambdas:
-    runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
-
-      - name: Deploy ZIP-based Lambdas
-        env:
-          STAGE_NAME: ${{ inputs.stage_name }}
-          ENVIRONMENT: ${{ inputs.environment }}
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-          pushd cdk-eregs
-          npm install
-          
-          # Get exact stack names
-          REDIRECT_STACK="cms-eregs-${STAGE_NAME}-redirect-api"
-          MAINTENANCE_STACK="cms-eregs-${STAGE_NAME}-maintenance-api"
-          
-          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
-          -c environment=${ENVIRONMENT} \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/zip-lambdas.ts"
-          popd
-  
-  deploy-vue-assets:
-    environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
-    needs: [deploy-site-lambdas, deploy-static-assets]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: true
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -175,6 +93,7 @@ jobs:
           PR_NUMBER: ${{ inputs.pr_number }}
         run: |
           pushd cdk-eregs
+          npm install
           npm install fs-extra
           npm install --save-dev @types/fs-extra   
           STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
@@ -185,6 +104,41 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/static-assets.ts" \
           --outputs-file static-outputs.json
+          popd
+  
+  deploy-zip-lambdas:
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy ZIP-based Lambdas
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          pushd cdk-eregs
+          npm install
+          
+          # Get exact stack names
+          REDIRECT_STACK="cms-eregs-${STAGE_NAME}-redirect-api"
+          MAINTENANCE_STACK="cms-eregs-${STAGE_NAME}-maintenance-api"
+          
+          npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
   deploy-text-extractor:
@@ -393,7 +347,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-22.04
-    needs: [deploy-site-lambdas, deploy-vue-assets]
+    needs: deploy-site-lambdas
     steps:
       - name: Create deployment comment
         uses: peter-evans/create-or-update-comment@v4
@@ -408,7 +362,7 @@ jobs:
   test-cypress:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
-    needs: [deploy-site-lambdas, deploy-vue-assets]
+    needs: deploy-site-lambdas
     steps:
       # Checkout the code
       - name: Checkout
