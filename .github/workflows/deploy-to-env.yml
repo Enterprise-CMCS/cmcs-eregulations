@@ -21,11 +21,6 @@ on:
         required: true
         description: 'AWS OIDC role to assume for deployment'
 
-permissions:
-  id-token: write
-  contents: read
-  actions: read
-
 jobs:
   deploy-static-assets:
     environment: ${{ inputs.environment }}
