@@ -1,266 +1,98 @@
-# CDK Infrastructure Technical Documentation
+# CDK Infrastructure for eRegs
 
 ## Overview
+This repository contains the AWS CDK (Cloud Development Kit) infrastructure code for the eRegs project. It is designed to manage and deploy various AWS resources, including Lambda functions, API Gateways, S3 buckets, and more, with environment-aware configurations and support for ephemeral environments.
 
-This document outlines the CDK infrastructure implementation focusing on environment-aware deployments, custom synthesizers, AWS Parameter Store integration, and stack creation patterns.
+## Key Features
+- **Environment-Aware Deployments**: Automatically configures resources based on the target environment (e.g., `dev`, `val`, `prod`, or ephemeral environments for PR previews).
+- **Custom Synthesizer**: Uses a custom CDK synthesizer configuration stored in AWS Parameter Store.
+- **Integrated IAM Policies**: Applies IAM permissions boundaries and paths for secure resource access.
+- **Ephemeral Environment Support**: Supports PR-based deployments with automatic cleanup policies.
+- **Global Aspects System**: Applies global configurations like IAM paths, permissions boundaries, and removal policies.
 
-## Core Components
+## Project Structure
+- **`bin/`**: Entry points for deploying specific stacks (e.g., `docker-lambdas.ts`, `static-assets.ts`).
+- **`lib/stacks/`**: Contains stack definitions for various independent stacks like the eRegs site, the parsers, the text extractor, etc.
+- **`lib/constructs/`**: Reusable constructs for common patterns like WAF and database setups.
+- **`lib/aspects/`**: Custom CDK aspects for applying global configurations.
+- **`config/`**: Configuration utilities for environment and stage management.
+- **`utils/`**: Helper functions for tasks like fetching parameters from AWS Parameter Store.
 
-```typescript
-// app.ts
-const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
-const synthesizerConfig = JSON.parse(synthesizerConfigJson);
+## Deployment
+### Prerequisites
+- AWS CLI configured with appropriate credentials.
+- Node.js and npm installed.
+- Required AWS permissions to deploy CDK stacks.
 
-// Development Environment
-const devConfig = await StageConfig.create(
-  'dev',                                        // environment
-  undefined,                                    // no ephemeralId
-  synthesizerConfig.iamPermissionsBoundary      // from synthesizer config
-);
+### Steps
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Bootstrap the environment (if not already done). See the README in the bootstrap directory for details.
+3. Determine your stack name and environment. Set `$ENV` to `dev`, `val`, `prod`, or `eph-1234` for an ephemeral deploy. Set `$STACK` to the name of the stack, e.g. `api`, `parser-launcher`.
+4. Calculate the stack's full name:
+   ```bash
+   STACK_NAME=cms-eregs-$ENV-$STACK
+   ```
+5. Determine your entry-point filename. See the [stacks](#stacks) section.
+6. Deploy a specific stack:
+   ```bash
+   npx cdk deploy $STACK_NAME \
+      -c environment=<environment> \
+      -c buildId=<optional build ID> \
+      --require-approval never \
+      --exclusively \
+      --app "npx ts-node bin/<entry point>.ts" \
+      --outputs-file <outputs filename>
+   ```
+   Replace `<environment>` with one of `dev`, `val`, or `prod`. For ephemeral, set `<environment>` to `dev` and use the `eph-1234` naming scheme for the stack name.
 
-// Example outputs:
-devConfig.getResourceName('api')                // "cms-eregs-dev-api"
-devConfig.aws.lambda('function')                // "/aws/lambda/cms-eregs-dev-function"
-devConfig.isEphemeral()                         // false
-devConfig.getStackTags()                        // { Environment: 'dev', Project: 'cms-eregs', ... }
+For more in-depth examples, see the Github Actions workflows located at `.github/workflows/deploy-*.yml`.
 
-// Production Environment
-const prodConfig = await StageConfig.create(
-  'prod',
-  undefined,
-  synthesizerConfig.iamPermissionsBoundary
-);
+## Stacks
+### 1. `RedirectApiStack`
+Manages the redirect API with Lambda and API Gateway. Entry-point is "zip-lambdas.ts".
 
-// Example outputs:
-prodConfig.getResourceName('api')               // "cms-eregs-prod-api"
-prodConfig.aws.lambda('function')               // "/aws/lambda/cms-eregs-prod-function"
-prodConfig.isEphemeral()                        // false
-```
+### 2. `StaticAssetsStack`
+Handles static assets using S3 and CloudFront, with WAF integration. Supports infrastructure-only or infrastructure-plus-content deployments, to increase deployment efficiency. Use `-c deploymentType=infrastructure/content`. Entry-point is "static-assets.ts".
 
-### 1. Stage Configuration (lib/config/stage-config.ts)
+### 3. `TextExtractorStack`
+Creates the Text Extractor service with Lambda and SQS. SQS URL is exported. Entry-point is "docker-lambdas.ts".
 
-```typescript
-export class StageConfig {
-  public static readonly projectName = 'cms-eregs';
+### 4. `BackendStack`
+Combines API and database resources, including VPC configurations and S3 storage. Includes the regsite Lambda as well as supporting Lambdas: migrate, createsu, createdb, dropdb, and the authorizer function. Entry-point is "docker-lambdas.ts".
 
-  public static async create(
-    environment: string, 
-    ephemeralId?: string,
-    synthesizerPermissionsBoundary?: string
-  ): Promise<StageConfig>
-```
+### 5. `ParserLauncherStack`
+Schedules and invokes the eCFR and FR parser Lambda functions. Entry-point is "docker-lambdas.ts".
 
-Key Features:
+### 6. `EcfrParserStack`
+Deploys the eCFR parser Lambda function. Entry-point is "docker-lambdas.ts".
 
-- Environment-aware resource naming
-- Ephemeral environment support (PR-based deployments)
-- AWS service-specific naming conventions
-- Integrated IAM permissions boundary
-- Automatic tagging system
+### 7. `FrParserStack`
+Deploys the Federal Register (FR) parser Lambda function. Entry-point is "docker-lambdas.ts".
 
-Resource Naming Patterns:
-```
-// Regular environments:
-{project}-{environment}-{resource}        // cms-eregs-dev-api
-// Ephemeral environments:
-{project}-eph-{pr-number}-{resource}     // cms-eregs-eph-123-api
-// AWS Service Resources:
-/aws/{service}/{project}-{environment}-{resource}
-```
+### 8. `MaintenanceStack`
+Deploys the so-called "maintenance API", which consists simply of a Lambda function that the production API Gateway can be quickly switched to to take down the site for maintenance or repairs. Entry-point is "zip-lambdas.ts".
 
-### 2. Application Entry Point (bin/app.ts)
+## Configuration
+### Environment Variables
+- `DEPLOY_ENV`: Specifies the deployment environment (e.g., `dev`, `val`, and `prod`).
+- `PR_NUMBER`: Used for ephemeral environments to identify the PR.
 
-```typescript
-async function main() {
-  // Environment Resolution Chain:
-  // 1. CDK Context (-c environment=dev)
-  // 2. Environment Variable (DEPLOY_ENV)
-  // 3. GitHub Environment (GITHUB_JOB_ENVIRONMENT)
-  // 4. Default ('dev')
-  const environment = app.node.tryGetContext('environment') || 
-                     process.env.DEPLOY_ENV || 
-                     process.env.GITHUB_JOB_ENVIRONMENT || 
-                     'dev';
-```
+### Parameter Store
+Key CDK-specific parameters are stored in AWS Parameter Store, such as:
+- `/eregulations/cdk_config`: Custom synthesizer configuration.
+- `/account_vars/vpc/id`: VPC ID for resource placement.
 
-Features:
-
-- Custom synthesizer configuration from Parameter Store
-- Environment context validation
-- Global tag application
-- Aspect-based IAM configuration
-- Debug logging system
-
-### 3. AWS Parameter Store Integration
-
-```typescript
-// Synthesizer Configuration
-const synthesizerConfigJson = await getParameterValue('/cms/cloud/cdkSynthesizerConfig');
-```
-
-Parameter Structure:
-```json
-{
-  "deployRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-deploy-role",
-  "fileAssetPublishingRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-file-publishing-role",
-  "imageAssetPublishingRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-image-publishing-role",
-  "cloudFormationExecutionRole": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-cfn-exec-role",
-  "lookupRoleArn": "arn:aws:iam::ACCOUNT:role/delegatedadmin/developer/cdk-lookup-role",
-  "qualifier": "one",
-  "iamPermissionsBoundary": "arn:aws:iam::ACCOUNT:policy/cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy"
-}
-```
-
-### 4. Global Aspects System
-
-```typescript
-async function applyGlobalAspects(app: cdk.App, stageConfig: StageConfig): Promise<void> {
-  const iamPath = await getParameterValue(`/account_vars/iam/path`);
-  
-  cdk.Aspects.of(app).add(new IamPathAspect(iamPath));
-  cdk.Aspects.of(app).add(new IamPermissionsBoundaryAspect(stageConfig.permissionsBoundaryArn));
-  cdk.Aspects.of(app).add(new EphemeralRemovalPolicyAspect(stageConfig));
-}
-```
-
-Available Aspects:
-
-- **IamPathAspect**: Enforces IAM resource paths
-- **IamPermissionsBoundaryAspect**: Applies IAM permissions boundaries
-- **EphemeralRemovalPolicyAspect**: Manages resource cleanup for ephemeral environments
-
-### 5. Environment-Aware Stack Creation
-
-```typescript
-new RedirectApiStack(app, stageConfig.getResourceName('redirect-api'), {
-  lambdaConfig: {
-    runtime: lambda.Runtime.PYTHON_3_12,
-    memorySize: 1024,
-    timeout: 30,
-  },
-  apiConfig: {
-    loggingLevel: cdk.aws_apigateway.MethodLoggingLevel.INFO,
-  },
-}, stageConfig);
-```
-
-## Deployment Patterns
-
-### 1. Regular Environment Deployment
-
-```bash
-# Using CDK context
-cdk deploy "*redirect-api" -c environment=dev
-
-# Using environment variable
-DEPLOY_ENV=dev cdk deploy "*redirect-api"
-```
-
-### 2. PR/Ephemeral Environment Deployment
-
-```bash
-# Using PR number
-PR_NUMBER=123 cdk deploy "*redirect-api" -c environment=dev
-
-# Debug mode
-CDK_DEBUG=true PR_NUMBER=123 cdk deploy "*redirect-api" -c environment=dev
-```
-
-### 3. GitHub Actions Integration
-
-```yaml
-deploy-redirect-api:
-  environment:
-    name: "dev"
-  runs-on: ubuntu-22.04
-  steps:
-    - name: Deploy Stack
-      env:
-        PR_NUMBER: ${{ github.event.pull_request.number }}
-        CDK_DEBUG: true
-      run: |
-        npx cdk deploy "*redirect-api" \
-          -c environment=${{ environment.name }} \
-          --require-approval never
-```
-
-## Debug and Logging
-
-### 1. Debug Output Structure
-
-```typescript
-// Synthesizer Configuration
-{
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  environment: "dev",
-  ephemeralId: "eph-123"
-}
-
-// Stage Configuration
-{
-  environment: "dev",
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  isEphemeral: true,
-  ephemeralId: "eph-123"
-}
-
-// Applied Aspects
-{
-  environment: "dev",
-  iamPath: "/delegatedadmin/developer/",
-  permissionsBoundary: "arn:aws:iam::ACCOUNT:policy/boundary",
-  isEphemeral: true
-}
-```
-
-## Resource Naming Conventions
-
-### 1. AWS Service Resources
-
-```typescript
-// Lambda Functions
-stageConfig.aws.lambda('function-name')
-// Output: /aws/lambda/cms-eregs-dev-function-name
-
-// API Gateway
-stageConfig.aws.apiGateway('api-name')
-// Output: /aws/api-gateway/cms-eregs-dev-api-name
-
-// CloudWatch Logs
-stageConfig.aws.cloudwatch('log-group-name')
-// Output: /aws/cloudwatch/cms-eregs-dev-log-group-name
-```
-
-### 2. Stack Resources
-
-```typescript
-stageConfig.getResourceName('resource-name')
-// Regular: cms-eregs-dev-resource-name
-// Ephemeral: cms-eregs-eph-123-resource-name
-```
+### Secrets Manager
+All credentials are stored in AWS Secrets Manager. The only credentials loaded at deploy-time are for setting up the database. All others are loaded at Lambda runtime.
 
 ## Best Practices
+- Use ephemeral environments for testing PRs to avoid impacting shared resources.
+- Regularly update the CDK bootstrap template using the `update_template.py` script in the `bootstrap/` directory.
+- Follow the resource naming conventions defined in `StageConfig` for consistency.
 
-### Environment Management:
-
-- Use CDK context for environment specification
-- Implement fallback chain for environment resolution
-- Validate environments before deployment
-
-### Resource Naming:
-
-- Use StageConfig methods for consistent naming
-- Follow AWS service-specific naming patterns
-- Include environment/PR identifiers in resource names
-
-### IAM Configuration:
-
-- Apply permissions boundaries consistently
-- Use IAM path prefixing for resource organization
-- Implement least privilege access
-
-### Ephemeral Environments:
-
-- Implement cleanup policies
-- Use PR numbers for unique identification
-- Apply appropriate resource retention policies
+## Additional Resources
+- [AWS CDK Documentation](https://docs.aws.amazon.com/cdk/latest/guide/home.html)
+- [eRegs GitHub Actions Workflow](.github/workflows/update-cdk-bootstrap.yml) for automating updates.

@@ -3,7 +3,6 @@ const SUBPART = "A";
 const PART = 430;
 const SECTION = 10;
 const VERSION = "latest";
-const SYNONYM = "synonym";
 const SEARCH_TERM = "FMAP";
 const ACT = "Social Security Act";
 

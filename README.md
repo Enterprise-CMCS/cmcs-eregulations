@@ -100,14 +100,12 @@ Before running the tests for the first time, you may need to install Cypress dep
 
 #### ESLint
 
-This project uses ESLint to enforce consistent coding styles across the frontend (JavaScript) and infrastructure (TypeScript) components, improving code readability and reducing the likelihood of runtime errors. We use a shared ESLint configuration (`eslint-global-rules.mjs` file) at the project root to define a baseline of rules applicable to both the frontend and infrastructure code. Each application (frontend and CDK) also maintains its own ESLint configuration file, to allow tailoring rules and plugins to JavaScript and TypeScript.
+This project uses ESLint to enforce consistent coding styles across the frontend (JavaScript) and infrastructure (TypeScript) components, improving code readability and reducing the likelihood of runtime errors. We use a shared ESLint configuration file located at the root of the project.  This file is used by all JavaScript and TypeScript files in the project, including all CDK TS files, Cypress end to end test suites and config files, and all front end files including Vue components and related Javascript files.
 
-To run ESLint, execute the following commands from the project root:
+To run ESLint, execute the following command from `./solution`:
 
 ```
-make eslint-frontend
-
-make eslint-cdk
+make eslint
 ```
 
 For more information and resources to help integrate ESLint into your text editor, see [LINTING.md](solution/LINTING.md).
@@ -124,39 +122,40 @@ To use our Okta identity provider on an experimental (ephemeral) deployment, see
 
 # Development tips
 
-## Export and import data
+## Backing up and restoring the database
 
-To update local data with the most recent version of production, you need access to the production database and pg_dump. You can also use these instructions to update dev or val data with fresh data from production.
+The scripts `backup_db.sh`, `restore_remote_db.sh`, and `restore_local_db.sh` can be used for the following purposes:
 
-1. You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). Local PostgreSQL server must be turned **off**.
-2. Ensure you have [AWS CLI](#https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed locally on your machine.
-3. Connect to the VPN. 
-4. Create a backup of the database you intend to restore using pg_dump. Execute the following command:
+* Copying the prod DB to dev and val for more accurate testing.
+* Copying an RDS database to your local environment.
+* Restoring one or more databases from a previously taken backup without using RDS Snapshots.
 
-   - `pg_dump -U <DB_USER> -h <DB_HOST> -p <DB_PORT> <DB_NAME> > <name_you_want_your_backupfile_to_be>`
-   - It is recommended that you put these backups in a folder that is hidden from `git`.  We suggest creating a folder in the root of the project named `db_backup` and dumping all of your backups into it.  This directory name is safe to use, as it has already been added to the project's `.gitignore`.
+You must have the correct version of PostgreSQL installed locally on your machine (see [prerequisites](#prerequisites) for version number). To prevent connection conflicts, the local PostgreSQL server must be turned **off**. You also need the AWS CLI installed and configured with your short-term access keys from Cloudtamer. Additionally, be sure to run `export AWS_REGION=<your region>`. To access RDS and Cloudtamer, you must be connected to the VPN.
 
-> [!NOTE]
-> restore_db.sh also performs a backup of the database you intend to restore. However, as a precautionary measure, it's advisable to create a separate backup of your database.)
-5. Sign in to the Cloudtamer CMS portal (cloudtamer.cms.gov) to retrieve your short-term access keys.
-6. Paste the access keys into your terminal. This will enable you to use AWS CLI commands.
-7. Run the script by executing ./scripts/backup_db.sh from your terminal.
-8. Once the backup process is finished, you'll find a copy of the backup file in the directory where the command was executed.
+### Creating a backup
 
-   - The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`.
+1. Run `mkdir -p db_backup; cd db_backup` from the eRegs root directory. This creates a `db_backup` directory which is already hidden from Git.
+2. Run `../scripts/backup_db.sh` to start the backup process.
+3. Specify the environment you wish to backup. (`dev`, `val`, `prod`, etc.)
+4. Wait for the script to fetch the database parameters and perform the backup.
 
-9. With the backup file ready, proceed to restore the database by running the script `./scripts/restore_db.sh`.
+When done, the backup file will be named `<DB host>_<name of DB>_<date>.sql`.
 
-   - local database name: `localhost`
-   - local port: `5432`
+### Restoring from a backup file to RDS
 
-10. Upon running the restoration script, you'll receive a prompt indicating that the existing database will be replaced. If you're certain, type yes.
+1. From the `db_backup` directory, run `../scripts/restore_remote_db.sh`.
+2. Enter the relative path to the SQL backup file created above.
+3. Specify the environment you wish to restore. (`dev`, `val`, `prod`, `eph-*`, etc.)
+4. Wait for the script to fetch the database parameters, create a backup of the remote DB, and perform the restore. This will take a while.
 
-11. Follow the subsequent prompts, providing the necessary credentials. When prompted for the backup file, enter the name of the file generated during the backup process.
+Note that specifying `prod` as an environment will prompt for confirmation. Be absolutely sure that the backup that you have taken is valid and the file you specify is the correct one. However, this script will take a backup of the remote DB first before restoring from the specified file. If an error occurs, this new backup can be used for recovery. If this fails, a restore from an RDS Snapshot will be required.
 
-12. Before the database is restored, a backup is created of the db that is being restored. The file will be named in the following format: `<db host name>_<name of your db>_<date>.sql`. 
+### Restoring from a backup file to local PostgreSQL
 
-   - Visit the local website and ensure that the data has been copied. 
+1. From the `db_backup` directory, run `../scripts/restore_local_db.sh`.
+2. Enter the relative path to the SQL backup file created above.
+3. Enter the password to the local database.
+4. Wait for the script to restore the local database from the file. This may take a few minutes.d
 
 ## Add a new model
 

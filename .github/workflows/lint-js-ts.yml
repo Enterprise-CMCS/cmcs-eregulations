@@ -24,14 +24,8 @@ jobs:
         with:
           node-version: 20
       # Execute linting
-      - name: Run ESLint on front end
+      - name: Run ESLint on project
         if: success()
         working-directory: ./solution
         run: |
-          make eslint-frontend
-      - name: Run ESLint on CDK TS files
-        # if: success()
-        if: false # Disable CDK linting for now
-        working-directory: ./solution
-        run: |
-          make eslint-cdk
+          make eslint

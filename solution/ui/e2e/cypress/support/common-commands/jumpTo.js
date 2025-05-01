@@ -1,7 +1,8 @@
 // Jump To
 export const jumpToRegulationPart = ({ title, part }) => {
     cy.get("#jumpToTitle")
-        .select(title, { force: true })
+        .select(title, { force: true });
+    cy.get("#jumpToTitle")
         .then(() => {
             cy.get("#jumpToPart").should("be.visible").select(part);
         });
