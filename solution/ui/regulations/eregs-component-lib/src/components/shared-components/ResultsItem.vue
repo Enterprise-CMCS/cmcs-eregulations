@@ -1,5 +1,3 @@
-<script setup></script>
-
 <template>
     <div class="result">
         <slot name="actions" />

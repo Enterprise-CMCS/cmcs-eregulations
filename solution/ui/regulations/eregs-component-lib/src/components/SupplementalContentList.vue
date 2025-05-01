@@ -1,3 +1,35 @@
+<script setup>
+import { computed, ref } from "vue";
+import SupplementalContentObject from "./SupplementalContentObject.vue";
+import ShowMoreButton from "./ShowMoreButton.vue";
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
+
+const props = defineProps({
+    supplemental_content: {
+        type: Array,
+        required: true,
+    },
+    hasSubcategories: {
+        type: Number,
+        required: true,
+    },
+    limit: {
+        type: Number,
+        required: false,
+        default: 5,
+    },
+});
+
+const subcategory = ref("");
+const innerName = ref("SupplementalContentCollapsible");
+
+const limitedContent = computed(() => props.supplemental_content.slice(0, props.limit));
+const additionalContent = computed(() => props.supplemental_content.slice(props.limit));
+const contentCount = computed(() => props.supplemental_content.length);
+const showMoreNeeded = computed(() => contentCount.value > props.limit);
+</script>
+
 <template>
     <div class="supplemental-content-list">
         <supplemental-content-object
@@ -71,60 +103,3 @@
         </collapsible>
     </div>
 </template>
-
-<script>
-/* eslint-disable vue/prop-name-casing */
-import SupplementalContentObject from "./SupplementalContentObject.vue";
-import ShowMoreButton from "./ShowMoreButton.vue";
-import CollapseButton from "./CollapseButton.vue";
-import Collapsible from "./Collapsible.vue";
-
-export default {
-    name: "SupplementalContentList",
-
-    components: {
-        SupplementalContentObject,
-        ShowMoreButton,
-        CollapseButton,
-        Collapsible,
-    },
-
-    props: {
-        supplemental_content: {
-            type: Array,
-            required: true,
-        },
-        hasSubcategories: {
-            type: Number,
-            required: true,
-        },
-        limit: {
-            type: Number,
-            required: false,
-            default: 5,
-        },
-    },
-
-    data() {
-        return {
-            subcategory: "",
-            innerName: "SupplementalContentCollapsible",
-        };
-    },
-
-    computed: {
-        limitedContent() {
-            return this.supplemental_content.slice(0, this.limit);
-        },
-        additionalContent() {
-            return this.supplemental_content.slice(this.limit);
-        },
-        contentCount() {
-            return this.supplemental_content.length;
-        },
-        showMoreNeeded() {
-            return this.contentCount > this.limit;
-        },
-    },
-};
-</script>

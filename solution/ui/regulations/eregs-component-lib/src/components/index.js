@@ -1,17 +1,11 @@
 export { default as CollapseButton } from "./CollapseButton.vue";
 export { default as Collapsible } from "./Collapsible.vue";
-export { default as Dropdown } from "./Dropdown.vue";
-export { default as DropdownContent } from "./DropdownContent.vue";
-export { default as DropdownHeader } from "./DropdownHeader.vue";
-export { default as DropdownItem } from "./DropdownItem.vue";
 export { default as InternalDocsContainer } from "./reader-sidebar/InternalDocsContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
-export { default as PartButton } from "./PartButton.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
 export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
 export { default as RelatedRuleList } from "./RelatedRuleList.vue";
-export { default as RelatedRules } from "./RelatedRules.vue";
 export { default as ShowMoreButton } from "./ShowMoreButton.vue";
 export { default as SimpleSpinner } from "./SimpleSpinner.vue";
 export { default as SupplementalContent } from "./SupplementalContent.vue";
