@@ -390,12 +390,12 @@ describe("Utilities.js", () => {
         expect(getFileNameSuffix(1)).toBe(null);
         expect(getFileNameSuffix("test")).toBe(null);
         expect(getFileNameSuffix("test.docx.")).toBe(null);
-        expect(getFileNameSuffix("test.pdf")).toBe(null);
-        expect(getFileNameSuffix("test.msg")).toBe("msg");
-        expect(getFileNameSuffix("test.docx")).toBe("docx");
+        expect(getFileNameSuffix("test.pdf")).toBe("PDF");
+        expect(getFileNameSuffix("test.msg")).toBe("Outlook");
+        expect(getFileNameSuffix("test.docx")).toBe("DOCX");
         expect(getFileNameSuffix("test.docxmsg")).toBe(null);
-        expect(getFileNameSuffix("test.docx.msg")).toBe("msg");
-        expect(getFileNameSuffix("test.docx.msg.txt")).toBe("txt");
+        expect(getFileNameSuffix("test.docx.msg")).toBe("Outlook");
+        expect(getFileNameSuffix("test.docx.msg.txt")).toBe("TXT");
         expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
     });
 
@@ -404,14 +404,22 @@ describe("Utilities.js", () => {
             expect(
                 getFileTypeButton({ fileName: "index_zero.docx", uid: "url" })
             ).toBe(
-                "<span data-testid='download-chip-url' class='result__link--file-type'>Download DOCX</span>"
+                "<span data-testid='download-chip-url' class='result__link--file-type'>DOCX</span>"
             );
         });
 
         it("is a PDF file", async () => {
             expect(
-                getFileTypeButton({ fileName: "index_four.pdf", url: "url" })
-            ).toBe("");
+                getFileTypeButton({ fileName: "index_four.pdf", uid: "url" })
+            ).toBe("<span data-testid='download-chip-url' class='result__link--file-type'>PDF</span>");
+        });
+
+        it("is a MSG file", async () => {
+            expect(
+                getFileTypeButton({ fileName: "index_five.msg", uid: "url" })
+            ).toBe(
+                "<span data-testid='download-chip-url' class='result__link--file-type'>Outlook</span>"
+            );
         });
     });
 

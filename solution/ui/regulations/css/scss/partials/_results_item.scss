@@ -89,10 +89,7 @@
 
         a {
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
+            display: inline;
         }
 
         &--file-type {
@@ -102,6 +99,7 @@
             font-weight: 600;
             border: 1px solid;
             border-radius: 26px;
+            margin-left: 6px;
         }
     }
 

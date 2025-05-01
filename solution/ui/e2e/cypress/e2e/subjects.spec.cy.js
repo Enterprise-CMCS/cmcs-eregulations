@@ -343,22 +343,23 @@ describe("Find by Subjects", () => {
             .and("include", "/42/440/130#440-130");
         cy.get(".result__link") // internal_file
             .eq(0)
-            .should("include.text", "Download")
             .find("a")
             .should("not.have.class", "external")
             .find(
                 "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]",
             )
-            .should("include.text", "Download MSG");
+            .should("include.text", "Outlook");
         cy.get(".result__link") // regulations link
             .eq(1)
             .find("a")
-            .should("not.include.text", "Download");
+            .find("span.fesult__link--file-type")
+            .should("not.exist");
         cy.get(".result__link") // internal_link
             .eq(2)
             .find("a")
-            .should("not.include.text", "Download")
-            .and("have.class", "external");
+            .should("have.class", "external")
+            .find("span.fesult__link--file-type")
+            .should("not.exist");
         cy.get(".doc-type__label")
             .eq(0)
             .should("include.text", " Internal")

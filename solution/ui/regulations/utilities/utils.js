@@ -93,9 +93,9 @@ const PARAM_ENCODE_DICT = {
  * console.log(suffix); // "docx"
  *
  * @example
- * const fileName = "test.pdf";
+ * const fileName = "test.msg";
  * const suffix = getFileNameSuffix(fileName);
- * console.log(suffix); // null
+ * console.log(suffix); // "Outlook"
  */
 const getFileNameSuffix = (fileName) => {
     if (
@@ -108,11 +108,15 @@ const getFileNameSuffix = (fileName) => {
 
     const suffix = fileName.split(".").pop();
 
-    if (suffix.length > 4 || suffix.length < 2 || suffix.includes("pdf")) {
+    if (suffix.length > 4 || suffix.length < 2) {
         return null;
     }
 
-    return suffix;
+    const SUFFIX_DICT = {
+        msg: "Outlook",
+    };
+
+    return SUFFIX_DICT[suffix] ?? suffix.toUpperCase();
 };
 
 /**
@@ -127,7 +131,7 @@ const getFileTypeButton = ({ fileName, uid }) => {
 
     let fileTypeButton;
     if (fileName && fileTypeSuffix) {
-        fileTypeButton = `<span data-testid='download-chip-${uid}' class='result__link--file-type'>Download ${fileTypeSuffix.toUpperCase()}</span>`;
+        fileTypeButton = `<span data-testid='download-chip-${uid}' class='result__link--file-type'>${fileTypeSuffix}</span>`;
     }
 
     return `${fileTypeButton ?? ""}`;

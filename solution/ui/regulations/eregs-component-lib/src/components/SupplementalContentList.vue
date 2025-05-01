@@ -46,6 +46,7 @@
                 :uid="content.uid"
                 :url="content.url"
                 :doc-type="content.type ?? 'external'"
+                :file-name="content.file_name"
             />
             <collapse-button
                 v-if="showMoreNeeded && contentCount > 10"
