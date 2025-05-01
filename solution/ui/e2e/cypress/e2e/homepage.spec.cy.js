@@ -364,7 +364,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".contact__column a")
-            .scrollIntoView()
+            .scrollIntoView();
+        cy.get(".contact__column a")
             .should("have.attr", "href")
             .and("include", "https://docs.google.com");
     });
@@ -373,7 +374,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".signup__column a")
-            .scrollIntoView()
+            .scrollIntoView();
+        cy.get(".signup__column a")
             .should("have.attr", "href")
             .and("include", "https://docs.google.com");
     });

@@ -1,5 +1,6 @@
 // EXAMPLE SCHEMA
 
+/*
 const itemCategoryDefaultSchema = {
     type: "object",
     properties: {
@@ -31,3 +32,4 @@ const itemLocationSchema = {
         parent: { type: "number", nullable: true },
     },
 };
+*/
