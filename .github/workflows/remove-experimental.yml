@@ -21,18 +21,22 @@ jobs:
         env:
           PR: ${{ github.event.number }}
         run: echo "Your PR is ${PR}"
+
       # Checkout the code
       - uses: actions/checkout@v3
         with:
           submodules: true
+
       # Setup Node
       - uses: actions/setup-node@v3
         with:
           node-version: 20
+
       # Setup Python
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
       # Configure AWS credentials for GitHub Actions
       - name: Configure AWS credentials for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v4
@@ -43,9 +47,7 @@ jobs:
       - name: Destroy PR-Specific Redirect Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -62,12 +64,11 @@ jobs:
           
           echo "Cleanup completed for stack: ${STACK_NAME}"
           popd
+
       - name: Destroy PR-Maintenance Stack
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -84,12 +85,11 @@ jobs:
           
           echo "Cleanup completed for stack: ${STACK_NAME}"
           popd
+
       - name: Cleanup Docker-based Lambda Stacks
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
@@ -143,12 +143,11 @@ jobs:
           --app "npx ts-node bin/text-extractor.ts"
           echo "Cleanup completed for all Docker-based stacks"
           popd
+
       - name: Cleanup Static Assets
         env:
           PR_NUMBER: ${{ github.event.number }}
-          AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
-          CDK_DEBUG: true
           ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
           pushd cdk-eregs
