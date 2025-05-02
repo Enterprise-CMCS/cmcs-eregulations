@@ -56,8 +56,8 @@ jobs:
           DB_USER: eregs
           DB_PASSWORD: sgere
           DB_PORT: 5432
-          HTTP_AUTH_USER: ${{ secrets.HTTP_AUTH_USER }}
-          HTTP_AUTH_PASSWORD: ${{ secrets.HTTP_AUTH_PASSWORD }}
+          HTTP_AUTH_USER: eregs
+          HTTP_AUTH_PASSWORD: sgere
         working-directory: ./solution/backend
         run: |
           pytest -vv
