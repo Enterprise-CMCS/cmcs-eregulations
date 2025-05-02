@@ -6,7 +6,7 @@ jobs:
   gitleaks-scan:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run gitleaks
       uses: docker://zricethezav/gitleaks
       with:
