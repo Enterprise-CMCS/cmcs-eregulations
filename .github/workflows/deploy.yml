@@ -43,7 +43,7 @@ jobs:
         run: echo "Waiting for approval to proceed to production deployment"
 
   deploy-to-prod:
-    needs: deploy-to-val
+    needs: wait-for-approval
     uses: ./.github/workflows/deploy-to-env.yml
     with:
       environment: prod
