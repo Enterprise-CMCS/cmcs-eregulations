@@ -15,7 +15,7 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  deploy-to-dev:
+  dev-deploy:
     uses: ./.github/workflows/deploy-to-env.yml
     with:
       environment: dev
@@ -24,8 +24,8 @@ jobs:
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
-  deploy-to-val:
-    needs: deploy-to-dev
+  val-deploy:
+    needs: dev-deploy
     uses: ./.github/workflows/deploy-to-env.yml
     with:
       environment: val
@@ -35,14 +35,14 @@ jobs:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
   wait-for-approval:
-    needs: deploy-to-val
+    needs: val-deploy
     runs-on: ubuntu-latest
     environment: approval
     steps:
       - name: Wait for approval
         run: echo "Waiting for approval to proceed to production deployment"
 
-  deploy-to-prod:
+  prod-deploy:
     needs: wait-for-approval
     uses: ./.github/workflows/deploy-to-env.yml
     with:
