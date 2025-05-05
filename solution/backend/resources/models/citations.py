@@ -1,5 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Case, Value, When
+from django.db.models.functions import Cast, Coalesce
 from model_utils.managers import InheritanceManager
 
 from common.mixins import DisplayNameFieldMixin
@@ -14,6 +16,21 @@ class AbstractCitation(models.Model, DisplayNameFieldMixin):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = [
+            "title",
+            "part",
+            Coalesce(
+                Case(
+                    When(subpart__isnull=False, then="subpart__subpart_id"),
+                    When(section__isnull=False, then=Cast("section__section_id", output_field=models.CharField())),
+                    default=Value(""),
+                    output_field=models.CharField(),
+                ),
+                Value(""),
+            ),
+        ]
 
 
 class Subpart(AbstractCitation):
