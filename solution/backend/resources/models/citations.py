@@ -1,7 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Case, Value, When
-from django.db.models.functions import Cast, Coalesce
 from model_utils.managers import InheritanceManager
 
 from common.mixins import DisplayNameFieldMixin
