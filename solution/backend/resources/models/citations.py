@@ -10,6 +10,7 @@ from common.mixins import DisplayNameFieldMixin
 class AbstractCitation(models.Model, DisplayNameFieldMixin):
     title = models.IntegerField()
     part = models.IntegerField()
+    child_id = models.CharField(max_length=12)
 
     objects = InheritanceManager()
 
@@ -18,19 +19,7 @@ class AbstractCitation(models.Model, DisplayNameFieldMixin):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = [
-            "title",
-            "part",
-            Coalesce(
-                Case(
-                    When(subpart__isnull=False, then="subpart__subpart_id"),
-                    When(section__isnull=False, then=Cast("section__section_id", output_field=models.CharField())),
-                    default=Value(""),
-                    output_field=models.CharField(),
-                ),
-                Value(""),
-            ),
-        ]
+        ordering = ["title", "part", "child_id"]
 
 
 class Subpart(AbstractCitation):
@@ -38,6 +27,10 @@ class Subpart(AbstractCitation):
 
     def __str__(self):
         return f"{self.title} CFR {self.part} Subpart {self.subpart_id}"
+
+    def save(self, *args, **kwargs):
+        self.child_id = self.subpart_id
+        super().save(*args, **kwargs)
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
@@ -56,6 +49,10 @@ class Section(AbstractCitation):
 
     def __str__(self):
         return f"{self.title} CFR {self.part}.{self.section_id}"
+
+    def save(self, *args, **kwargs):
+        self.child_id = f"{self.section_id:012d}"
+        super().save(*args, **kwargs)
 
     def validate_unique(self, exclude=None):
         super().validate_unique(exclude=exclude)
