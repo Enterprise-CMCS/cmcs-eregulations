@@ -49,7 +49,10 @@ class Section(AbstractCitation):
         return f"{self.title} CFR {self.part}.{self.section_id}"
 
     def save(self, *args, **kwargs):
-        self.child_id = f"{self.section_id:012d}"
+        # Ensure child_id is zero-padded to 12 digits. (12 is arbitrary, but it is the max length of the field.)
+        # int() ensures that the value is an integer, because even though the field is an IntegerField,
+        # it can be passed as a string to the model during create or update.
+        self.child_id = f"{int(self.section_id):012d}"
         super().save(*args, **kwargs)
 
     def validate_unique(self, exclude=None):
