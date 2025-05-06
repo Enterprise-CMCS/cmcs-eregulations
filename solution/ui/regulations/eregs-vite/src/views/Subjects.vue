@@ -251,6 +251,7 @@ const getDocSubjects = async () => {
 };
 
 const selectedSubjectParts = ref([]);
+const selectedSubjectDescription = ref("");
 
 const setSelectedSubjectParts = () => {
     if (selectedParams.paramsArray.length) {
@@ -261,9 +262,11 @@ const setSelectedSubjectParts = () => {
                     selectedParams.paramsArray[0].id
             )[0];
             selectedSubjectParts.value = getSubjectNameParts(selectedSubject);
+            selectedSubjectDescription.value = selectedSubject.description ?? "";
         }
     } else {
         selectedSubjectParts.value = [];
+        selectedSubjectDescription.value = "";
     }
 };
 
@@ -430,6 +433,12 @@ getDocSubjects();
                             <SelectedSubjectHeading
                                 :selected-subject-parts="selectedSubjectParts"
                             />
+                            <span
+                                v-if="selectedSubjectDescription"
+                                data-testid="selected-subject-description"
+                            >
+                                {{ selectedSubjectDescription }}
+                            </span>
                         </div>
                         <div class="subject__filters--row">
                             <DocumentTypeSelector v-if="isAuthenticated" />
