@@ -17,7 +17,7 @@
       "full_name": "Access to Services",
       "short_name": "",
       "abbreviation": "",
-      "description": "",
+      "description": "Access to Services Description",
       "public_resources": 1,
       "internal_resources": 0
     },
@@ -215,7 +215,7 @@
       "full_name": "21st Century Cures Act",
       "short_name": "",
       "abbreviation": "Cures Act",
-      "description": "",
+      "description": "Cures Act Description",
       "public_resources": 1,
       "internal_resources": 0
     },
@@ -566,7 +566,7 @@
       "full_name": "Managed Care",
       "short_name": "",
       "abbreviation": "",
-      "description": "",
+      "description": "Managed Care Description",
       "public_resources": 0,
       "internal_resources": 0
     },

@@ -6,7 +6,7 @@ import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
 
 const props = defineProps({
-    supplemental_content: {
+    supplemental_content: { // eslint-disable-line vue/prop-name-casing
         type: Array,
         required: true,
     },

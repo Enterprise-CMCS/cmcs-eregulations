@@ -166,9 +166,11 @@ describe("Find by Subjects", () => {
             .should("have.text", "Managed Care")
             .click({ force: true });
         cy.get(".doc-type__toggle fieldset").should("not.exist");
-        cy.get(".subject__heading")
+        cy.get(".subject__heading h1")
             .should("exist")
             .and("have.text", "Managed Care");
+        cy.get("span[data-testid=selected-subject-description]")
+            .should("have.text", "Managed Care Description")
         cy.url().should("include", "/subjects?subjects=63");
     });
 
@@ -266,9 +268,11 @@ describe("Find by Subjects", () => {
             .should("have.text", "Access to Services(1)")
             .click({ force: true });
         cy.url().should("include", "/subjects?subjects=3");
-        cy.get(".subject__heading")
+        cy.get(".subject__heading h1")
             .should("exist")
             .and("have.text", "Access to Services");
+        cy.get("span[data-testid=selected-subject-description]")
+            .should("have.text", "Access to Services Description")
         cy.get("search-results__heading").should("not.exist");
         cy.get(".search-results-count").should(
             "have.text",
@@ -292,39 +296,45 @@ describe("Find by Subjects", () => {
         });
         cy.url().should("include", "/subjects?subjects=1");
         cy.get(`button[data-testid=remove-subject-1]`).should("exist");
-        cy.get(".subject__heading span")
+        cy.get(".subject__heading h1 span")
             .eq(0)
             .should("have.text", "Cures Act")
             .and("have.class", "subj-heading__span--bold");
-        cy.get(".subject__heading span")
+        cy.get(".subject__heading h1 span")
             .eq(1)
             .should("have.text", "21st Century Cures Act")
             .and("not.have.class", "subj-heading__span--bold");
+        cy.get("span[data-testid=selected-subject-description]")
+            .should("have.text", "Cures Act Description")
 
         cy.get(`button[data-testid=add-subject-2]`).click({
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=2");
         cy.get(`button[data-testid=remove-subject-2]`).should("exist");
-        cy.get(".subject__heading span")
+        cy.get(".subject__heading h1 span")
             .eq(0)
             .should("have.text", "ABP")
             .and("have.class", "subj-heading__span--bold");
-        cy.get(".subject__heading span")
+        cy.get(".subject__heading h1 span")
             .eq(1)
             .should("have.text", "Alternative Benefit Plan")
             .and("not.have.class", "subj-heading__span--bold");
+        cy.get("span[data-testid=selected-subject-description]")
+            .should("not.exist");
 
         cy.get(`button[data-testid=add-subject-3]`).click({
             force: true,
         });
         cy.url().should("include", "/subjects?subjects=3");
         cy.get(`button[data-testid=remove-subject-3]`).should("exist");
-        cy.get(".subject__heading span")
+        cy.get(".subject__heading h1 span")
             .eq(0)
             .should("have.text", "Access to Services")
             .and("have.class", "subj-heading__span--bold");
-        cy.get(".subject__heading span").eq(1).should("not.exist");
+        cy.get(".subject__heading h1 span").eq(1).should("not.exist");
+        cy.get("span[data-testid=selected-subject-description]")
+            .should("have.text", "Access to Services Description")
 
         cy.go("back");
         cy.url().should("include", "/subjects?subjects=2");

@@ -4,12 +4,10 @@ import { computed } from "vue";
 const props = defineProps({
     direction: {
         type: String,
-        required: true,
         default: "forward",
     },
     label: {
         type: String,
-        required: true,
         default: "Loading...",
     },
     isDisabled: {
