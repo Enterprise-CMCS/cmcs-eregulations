@@ -2,13 +2,13 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    table_markup: {
+    tableMarkup: {
         type: String,
         required: true,
     },
 });
 
-const table = computed(() => props.table_markup);
+const table = computed(() => props.tableMarkup);
 </script>
 
 <template>
