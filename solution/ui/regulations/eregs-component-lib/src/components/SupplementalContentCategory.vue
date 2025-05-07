@@ -29,7 +29,7 @@ const props = defineProps({
         required: false,
         default: false,
     },
-    supplemental_content: {
+    supplemental_content: { // eslint-disable-line vue/prop-name-casing
         type: Array,
         required: false,
         default: undefined,
