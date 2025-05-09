@@ -153,18 +153,24 @@ CFR_REF_SCHEMA = {
 }
 
 
-def _convert_dashes(exceptions, key):
-    for i in exceptions:
-        i[key] = DASH_REGEX.sub("-", i[key])
-    return exceptions
+def _ref_field_pre_save_hook(value, schema):
+    # Get names of keys in the schema
+    keys = list(schema["items"]["keys"].keys())
+
+    # Standardize dashes in the reference field
+    for i in value:
+        i[keys[1]] = DASH_REGEX.sub("-", i[keys[1]])
+
+    # Return the sorted list of references
+    return sorted(value, key=lambda x: (x[keys[0]], x[keys[1]]))
 
 
 class _ReferenceField(JSONField):
-    def __init__(self, schema, key, *args, **kwargs):
+    def __init__(self, schema, *args, **kwargs):
         kwargs = {**kwargs, **{
             "default": list,
             "blank": True,
-            "pre_save_hook": partial(_convert_dashes, key=key),
+            "pre_save_hook": partial(_ref_field_pre_save_hook, schema=schema),
             "schema": schema,
         }}
         super().__init__(*args, **kwargs)
@@ -172,17 +178,17 @@ class _ReferenceField(JSONField):
 
 class StatuteRefField(_ReferenceField):
     def __init__(self, *args, **kwargs):
-        super().__init__(STATUTE_REF_SCHEMA, "section", *args, **kwargs)
+        super().__init__(STATUTE_REF_SCHEMA, *args, **kwargs)
 
 
 class UscRefField(_ReferenceField):
     def __init__(self, *args, **kwargs):
-        super().__init__(USC_REF_SCHEMA, "section", *args, **kwargs)
+        super().__init__(USC_REF_SCHEMA, *args, **kwargs)
 
 
 class CfrRefField(_ReferenceField):
     def __init__(self, *args, **kwargs):
-        super().__init__(CFR_REF_SCHEMA, "reference", *args, **kwargs)
+        super().__init__(CFR_REF_SCHEMA, *args, **kwargs)
 
 
 # Retrieves automatically generated search headlines
