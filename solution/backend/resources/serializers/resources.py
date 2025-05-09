@@ -20,10 +20,10 @@ from resources.models import (
 from .categories import AbstractCategorySerializer
 from .citations import (
     AbstractCitationSerializer,
+    ActCitationSerializer,
     SectionCreateSerializer,
     SectionRangeCreateSerializer,
     UscCitationSerializer,
-    ActCitationSerializer,
 )
 from .polymorphic import (
     PolymorphicSerializer,
