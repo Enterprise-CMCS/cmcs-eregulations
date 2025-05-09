@@ -154,15 +154,15 @@ CFR_REF_SCHEMA = {
 
 
 def _ref_field_pre_save_hook(value, schema):
-    # Get names of keys in the schema
+    # Get names of keys from the schema
     keys = list(schema["items"]["keys"].keys())
 
-    # Standardize dashes in the reference field
+    # Standardize dashes in the reference field and strip whitespace
     for i in value:
         i[keys[0]] = i[keys[0]].strip()
         i[keys[1]] = DASH_REGEX.sub("-", i[keys[1]].strip())
 
-    # Return the sorted list of references
+    # Return the alphabetically sorted list of references
     return sorted(value, key=lambda x: (x[keys[0]], x[keys[1]]))
 
 
