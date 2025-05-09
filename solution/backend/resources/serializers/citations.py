@@ -64,3 +64,13 @@ MetaCitationSerializer = ProxySerializerWrapper(
         SubpartSerializer,
     ],
 )
+
+
+class ActCitationSerializer(serializers.Serializer):
+    act = serializers.CharField()
+    section = serializers.CharField()
+
+
+class UscCitationSerializer(serializers.Serializer):
+    title = serializers.CharField()
+    section = serializers.CharField()

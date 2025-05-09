@@ -20,8 +20,10 @@ from resources.models import (
 from .categories import AbstractCategorySerializer
 from .citations import (
     AbstractCitationSerializer,
+    ActCitationSerializer,
     SectionCreateSerializer,
     SectionRangeCreateSerializer,
+    UscCitationSerializer,
 )
 from .polymorphic import (
     PolymorphicSerializer,
@@ -177,6 +179,8 @@ class ResourceSerializer(serializers.Serializer):
     approved = serializers.BooleanField()
     category = AbstractCategorySerializer()
     cfr_citations = AbstractCitationSerializer(many=True)
+    act_citations = ActCitationSerializer(many=True)
+    usc_citations = UscCitationSerializer(many=True)
     subjects = SubjectSerializer(many=True)
     document_id = serializers.CharField()
     title = serializers.CharField()
