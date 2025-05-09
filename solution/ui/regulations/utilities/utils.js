@@ -106,7 +106,12 @@ const getFileNameSuffix = (fileName) => {
         return null;
     }
 
-    const suffix = fileName.split(".").pop();
+    let suffix = fileName.split(".").pop();
+
+    if (suffix.includes("#")) {
+        // if the file name contains a #, remove everything after the #
+        suffix = suffix.split("#")[0];
+    }
 
     if (suffix.length > 4 || suffix.length < 2) {
         return null;
