@@ -60,7 +60,12 @@ const getResultLinkText = (item) => {
             item.title;
     }
 
-    return `<span class='result__link--label'>${linkText}</span>`;
+    const fileTypeButton = getFileTypeButton({
+        fileName: item.url,
+        uid: item.uid,
+    });
+
+    return `<span class='result__link--label'>${linkText}</span>${fileTypeButton}`;
 };
 
 const showResultSnippet = (item) => {
