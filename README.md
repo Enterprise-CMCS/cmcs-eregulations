@@ -86,7 +86,7 @@ Before running the tests for the first time, you may need to install Cypress dep
 3. `npm install`
 
 > [!NOTE]
-> If the Cypress install process fails or hangs for an unreasonably long time, refer to the ["Troubleshoot installation" section of the Cypress installation guide](https://docs.cypress.io/app/references/advanced-installation#Troubleshoot-installation) and follow the instructions for the npm package manager, which are as follows:
+> If the Cypress install process fails or hangs for an unreasonably long time, refer to the ["Troubleshoot installation" section of the Cypress installation guide](https://docs.cypress.io/app/references/advanced-installation#Troubleshoot-installation) and follow the instructions for the npm package manager.  Instead of running `npm install`, run the following commands:
 
 ```
 CYPRESS_INSTALL_BINARY=0 npm install cypress --save-dev
