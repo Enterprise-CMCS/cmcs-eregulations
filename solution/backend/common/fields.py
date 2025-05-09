@@ -159,7 +159,8 @@ def _ref_field_pre_save_hook(value, schema):
 
     # Standardize dashes in the reference field
     for i in value:
-        i[keys[1]] = DASH_REGEX.sub("-", i[keys[1]])
+        i[keys[0]] = i[keys[0]].strip()
+        i[keys[1]] = DASH_REGEX.sub("-", i[keys[1]].strip())
 
     # Return the sorted list of references
     return sorted(value, key=lambda x: (x[keys[0]], x[keys[1]]))
