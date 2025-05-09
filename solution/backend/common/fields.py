@@ -3,6 +3,8 @@ import datetime
 import re
 from functools import partial
 
+from natsort import natsorted
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
@@ -162,8 +164,8 @@ def _ref_field_pre_save_hook(value, schema):
         i[keys[0]] = i[keys[0]].strip()
         i[keys[1]] = DASH_REGEX.sub("-", i[keys[1]].strip())
 
-    # Return the alphabetically sorted list of references
-    return sorted(value, key=lambda x: (x[keys[0]], x[keys[1]]))
+    # Return the naturally sorted list of references
+    return natsorted(value, key=lambda x: (x[keys[0]], x[keys[1]]))
 
 
 class _ReferenceField(JSONField):
