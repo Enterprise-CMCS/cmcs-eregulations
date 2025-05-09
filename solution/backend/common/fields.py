@@ -3,13 +3,12 @@ import datetime
 import re
 from functools import partial
 
-from natsort import natsorted
-
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django_jsonform.models.fields import JSONField
 from drf_spectacular.utils import OpenApiTypes, extend_schema_field
+from natsort import natsorted
 from rest_framework import serializers
 
 from .patterns import DASH_REGEX
