@@ -129,9 +129,11 @@ class ResourceViewSet(viewsets.ModelViewSet):
         subjects = self.request.GET.getlist("subjects")
         group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
 
-        category_prefetch = AbstractCategory.objects.select_subclasses()
         citation_prefetch = AbstractCitation.objects.select_subclasses()
         subject_prefetch = Subject.objects.all()
+        category_prefetch = AbstractCategory.objects.select_subclasses().prefetch_related(
+            Prefetch("parent", AbstractCategory.objects.select_subclasses()),
+        )
 
         query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
             Prefetch("category", category_prefetch),
