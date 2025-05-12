@@ -19,7 +19,7 @@
     "vuetify": "^3.8.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue": "^5.2.4",
     "fast-glob": "^3.2.12",
     "vite": "^6.3.5",
     "vite-plugin-vuetify": "^2.1.0"
