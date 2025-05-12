@@ -3,7 +3,7 @@ import unittest
 import pytest
 from django.core.exceptions import ValidationError
 
-from common.fields import HeadlineField, VariableDateField
+from common.fields import HeadlineField, VariableDateField, _ReferenceField
 from resources.models import Subject
 
 
@@ -82,6 +82,48 @@ class HeadlineFieldTest(unittest.TestCase):
         field = HeadlineField(blank_when_no_highlight=True)
         field.field_name = "test_field"
         self.assertEqual(field.to_representation(fake_obj), None)
+
+
+class ReferenceFieldTest(unittest.TestCase):
+    TEST_SCHEMA = {
+        "type": "list",
+        "minItems": 0,
+        "items": {
+            "type": "dict",
+            "keys": {
+                "title": {
+                    "type": "string",
+                    "required": True,
+                    "placeholder": "42",
+                },
+                "section": {
+                    "type": "string",
+                    "required": True,
+                    "placeholder": "1902(a)(1)(C)",
+                },
+            },
+        },
+    }
+
+    def test_ordering(self):
+        field = _ReferenceField(self.TEST_SCHEMA)
+
+        # Test with a list of dictionaries
+        value = [
+            {"title": "42", "section": " 1902(a)(1)(C)  "},
+            {"title": "42", "section": " 1902(a)(1)(B)"},
+            {"title": " 42 ", "section": "1902(a)(1)(A)"},
+            {"title": "5", "section": "B"},
+            {"title": "5", "section": "A"},
+        ]
+        expected = [
+            {"title": "5", "section": "A"},
+            {"title": "5", "section": "B"},
+            {"title": "42", "section": "1902(a)(1)(A)"},
+            {"title": "42", "section": "1902(a)(1)(B)"},
+            {"title": "42", "section": "1902(a)(1)(C)"},
+        ]
+        self.assertEqual(field.pre_save_hook(value), expected)
 
 
 def clean_up():
