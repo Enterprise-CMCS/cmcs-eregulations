@@ -75,6 +75,12 @@ You can run `make` to learn about other available tasks. For example:
 
 `make local.clean` will remove the local environment completely, useful when you want to start fresh.
 
+You may also need [Docker compose commands](https://docs.docker.com/compose/). For example:
+
+If you add or update Python dependencies, you may need to rebuild the site: `docker compose up -d --build regulations`
+
+In general, `make local` will run any migrations that need to run, but if you need to run migrations on their own: `docker compose exec regulations python manage.py migrate`
+
 ## Run tests
 
 #### Testing setup
