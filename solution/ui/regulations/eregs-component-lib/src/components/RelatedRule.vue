@@ -1,6 +1,6 @@
 <script setup>
 /* eslint-disable vue/prop-name-casing */
-import { computed, inject } from "vue";
+import { computed } from "vue";
 
 import { formatDate, getFileTypeButton } from "utilities/utils";
 
