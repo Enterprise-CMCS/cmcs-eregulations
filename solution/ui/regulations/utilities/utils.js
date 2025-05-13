@@ -33,6 +33,8 @@ const INVALID_SUFFIXES = [
     "gov",
     "net",
     "org",
+    "htm",
+    "html",
 ];
 
 const COUNT_TYPES_MAP = {
