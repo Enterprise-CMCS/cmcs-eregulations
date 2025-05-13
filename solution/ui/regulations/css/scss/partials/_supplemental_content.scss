@@ -27,6 +27,16 @@
             border: solid $light_gray;
             border-width: 0 0 1px 1px;
         }
+
+        .related-rule-title {
+            &:link .link-heading::after {
+                @include external-link;
+            }
+
+            &:hover .link-heading::after {
+                @include external-link-hover;
+            }
+        }
     }
 }
 
@@ -59,15 +69,8 @@
 .related-rule-title {
     text-decoration: none;
     font-size: var(--font-size-sm);
-
-    &:link .link-heading::after {
-        @include external-link;
-    }
-
-    &:hover .link-heading::after {
-        @include external-link-hover;
-    }
 }
+
 .related-rule-list {
     div:first-of-type {
         padding: 0;
@@ -110,6 +113,10 @@
 
     .recent-title {
         margin-top: 0.2em;
+
+        &::after {
+            @include external-link;
+        }
     }
 }
 
