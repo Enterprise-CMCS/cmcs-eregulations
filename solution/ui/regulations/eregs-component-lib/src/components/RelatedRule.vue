@@ -2,7 +2,7 @@
 /* eslint-disable vue/prop-name-casing */
 import { computed, inject } from "vue";
 
-import { formatDate } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, formatDate, getFileTypeButton } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
@@ -96,11 +96,15 @@ const recentTitleClass = computed(() => {
             </span>
             <div
                 v-if="!grouped"
+                v-sanitize-html="
+                    title +
+                        getFileTypeButton({
+                            fileName: html_url,
+                            uid: document_number,
+                        })"
                 class="recent-title"
                 :class="recentTitleClass"
-            >
-                {{ title }}
-            </div>
+            />
         </a>
     </div>
 </template>
