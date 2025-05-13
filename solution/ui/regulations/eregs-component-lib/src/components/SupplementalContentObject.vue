@@ -79,7 +79,7 @@ const formatDate = (value) => {
     return format.format(date);
 };
 
-const getLinkClasses = (docType, description) => {
+const getLinkClasses = (docType) => {
     return {
         "supplemental-content-external-link":
             (DOCUMENT_TYPES_MAP[docType] === "Public" ||
@@ -101,13 +101,13 @@ const getLinkClasses = (docType, description) => {
                 class="supplemental-content-date"
                 :class="[
                     !isBlank(name) && 'supplemental-content-mid-bar',
-                    isBlank(name) && getLinkClasses(docType, description)
+                    isBlank(name) && getLinkClasses(docType)
                 ]"
             >{{ formatDate(date) }}</span>
             <span
                 v-if="!isBlank(name)"
                 class="supplemental-content-title"
-                :class="getLinkClasses(docType, description)"
+                :class="getLinkClasses(docType)"
             >{{ name }}</span>
             <div
                 v-if="!isBlank(description)"
