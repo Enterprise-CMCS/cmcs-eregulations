@@ -83,8 +83,7 @@ const getLinkClasses = (docType, description) => {
     return {
         "supplemental-content-external-link":
             (DOCUMENT_TYPES_MAP[docType] === "Public" ||
-                docType === "internal_link") &&
-            isBlank(description),
+                docType === "internal_link")
     };
 };
 </script>
@@ -100,9 +99,10 @@ const getLinkClasses = (docType, description) => {
             <span
                 v-if="date"
                 class="supplemental-content-date"
-                :class="{
-                    'supplemental-content-mid-bar': !isBlank(name),
-                }"
+                :class="[
+                    !isBlank(name) && 'supplemental-content-mid-bar',
+                    isBlank(name) && getLinkClasses(docType, description)
+                ]"
             >{{ formatDate(date) }}</span>
             <span
                 v-if="!isBlank(name)"
@@ -112,7 +112,6 @@ const getLinkClasses = (docType, description) => {
             <div
                 v-if="!isBlank(description)"
                 class="supplemental-content-description"
-                :class="getLinkClasses(docType)"
             >
                 <span
                     v-sanitize-html="
