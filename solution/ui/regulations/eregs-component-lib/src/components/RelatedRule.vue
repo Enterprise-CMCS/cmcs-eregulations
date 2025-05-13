@@ -46,8 +46,6 @@ const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
 };
 
-const itemTitleLineLimit = inject("itemTitleLineLimit", { default: 9 });
-
 const formatPubDate = (value) => {
     return formatDate(value);
 };
@@ -63,10 +61,6 @@ const citationClasses = computed(() => {
     return {
         grouped: props.grouped,
     };
-});
-
-const recentTitleClass = computed(() => {
-    return `line-clamp-${itemTitleLineLimit}`;
 });
 
 </script>
@@ -103,7 +97,6 @@ const recentTitleClass = computed(() => {
                             uid: document_number,
                         })"
                 class="recent-title"
-                :class="recentTitleClass"
             />
         </a>
     </div>

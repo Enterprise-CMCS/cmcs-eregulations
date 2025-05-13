@@ -31,7 +31,6 @@ const props = defineProps({
 });
 
 provide("homeUrl", props.homeUrl);
-provide("itemTitleLineLimit", 9);
 provide("currentRouteName", "homepage");
 
 const rulesArgs = {
