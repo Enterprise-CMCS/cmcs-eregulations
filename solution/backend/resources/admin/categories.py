@@ -3,6 +3,7 @@ from django.db.models import Prefetch
 
 from common.admin import CustomAdminMixin
 from resources.models import (
+    AbstractCategory,
     InternalCategory,
     InternalSubCategory,
     PublicCategory,
@@ -39,7 +40,7 @@ class PublicSubCategoryAdmin(AbstractCategoryAdmin):
             super()
             .get_queryset(request)
             .prefetch_related(
-                Prefetch("parent", PublicCategory.objects.all()),
+                Prefetch("parent", AbstractCategory.objects.select_subclasses()),
             )
         )
 
@@ -69,6 +70,6 @@ class InternalSubCategoryAdmin(AbstractCategoryAdmin):
             super()
             .get_queryset(request)
             .prefetch_related(
-                Prefetch("parent", InternalCategory.objects.all()),
+                Prefetch("parent", AbstractCategory.objects.select_subclasses()),
             )
         )
