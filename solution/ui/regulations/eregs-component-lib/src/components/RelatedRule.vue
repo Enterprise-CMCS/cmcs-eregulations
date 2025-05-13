@@ -2,7 +2,7 @@
 /* eslint-disable vue/prop-name-casing */
 import { computed, inject } from "vue";
 
-import { DOCUMENT_TYPES_MAP, formatDate, getFileTypeButton } from "utilities/utils";
+import { formatDate, getFileTypeButton } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
