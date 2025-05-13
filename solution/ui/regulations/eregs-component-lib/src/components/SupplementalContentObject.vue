@@ -57,7 +57,7 @@ const addFileTypeButton = ({ fileName, uid, url, docType }) => {
 
     if (DOCUMENT_TYPES_MAP[docType] == "Internal") {
         return getFileTypeButton({
-            fileName: url,
+            fileName,
             uid,
         });
     }
