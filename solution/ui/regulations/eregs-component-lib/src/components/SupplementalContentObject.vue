@@ -51,7 +51,7 @@ const addFileTypeButton = ({ fileName, uid, url, docType }) => {
     if (docType == "public_link" || docType == "internal_link") {
         return getFileTypeButton({
             fileName: url,
-            uid,
+            uid: uid ?? url,
         });
     }
 

@@ -94,7 +94,7 @@ const citationClasses = computed(() => {
                     title +
                         getFileTypeButton({
                             fileName: html_url,
-                            uid: document_number,
+                            uid: document_number || 'default',
                         })"
                 class="recent-title"
             />

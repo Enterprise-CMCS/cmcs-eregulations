@@ -36,6 +36,7 @@ const limitedContent = computed(() => {
                 :description="content.title"
                 :date="content.date"
                 :url="content.url"
+                :uid="content.uid ?? content.id"
             />
             <SubjectChips :subjects="content.subjects" />
             <div class="spacer" />
