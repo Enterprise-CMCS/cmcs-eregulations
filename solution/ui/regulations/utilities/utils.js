@@ -24,6 +24,17 @@ const DOCUMENT_TYPES_MAP = {
     regulations: "Regulations",
 };
 
+const SUFFIX_DICT = {
+    msg: "Outlook",
+};
+
+const INVALID_SUFFIXES = [
+    "com",
+    "gov",
+    "net",
+    "org",
+];
+
 const COUNT_TYPES_MAP = {
     external: "public_resource_count",
     internal: "internal_resource_count",
@@ -113,13 +124,9 @@ const getFileNameSuffix = (fileName) => {
         suffix = suffix.split("#")[0];
     }
 
-    if (suffix.length > 4 || suffix.length < 2) {
+    if (suffix.length > 4 || suffix.length < 2 || INVALID_SUFFIXES.includes(suffix)) {
         return null;
     }
-
-    const SUFFIX_DICT = {
-        msg: "Outlook",
-    };
 
     return SUFFIX_DICT[suffix] ?? suffix.toUpperCase();
 };

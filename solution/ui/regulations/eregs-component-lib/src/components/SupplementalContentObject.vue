@@ -48,7 +48,7 @@ const isBlank = (str) => {
 };
 
 const addFileTypeButton = ({ fileName, uid, url, docType }) => {
-    if (DOCUMENT_TYPES_MAP[docType] == "Public") {
+    if (docType == "public_link" || docType == "internal_link") {
         return getFileTypeButton({
             fileName: url,
             uid,
