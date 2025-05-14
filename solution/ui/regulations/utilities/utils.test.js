@@ -428,6 +428,26 @@ describe("Utilities.js", () => {
                 "<span data-testid='download-chip-url' class='result__link--file-type'>Outlook</span>"
             );
         });
+        it("is a MSG link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "http://www.test.com/link.MSG", uid: "url" })
+            ).toBe(
+                "<span data-testid='download-chip-url' class='result__link--file-type'>Outlook</span>"
+            );
+        });
+        it("is a HTML link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.com/link.HTML", uid: "url" })
+            ).toBe("");
+        });
+        it("is a .gov link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.gov", uid: "url" })
+            ).toBe("");
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.gov/", uid: "url" })
+            ).toBe("");
+        });
     });
 
     describe("getFrDocType", () => {
