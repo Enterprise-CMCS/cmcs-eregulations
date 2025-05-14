@@ -143,6 +143,12 @@ describe("Part View", () => {
                 .find(".supplemental-content-description")
                 .should("have.class", "supplemental-content-external-link")
                 .and("include.text", "[Mock] Test 1 -- internal link");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+            )
+                .eq(1)
+                .find(".supplemental-content-description .result__link--file-type")
+                .should("include.text", "PDF");
             cy.get(".internal-docs__container div[data-test=TestSubCat]")
                 .find(".show-more-button")
                 .contains("+ Show More (6)")
