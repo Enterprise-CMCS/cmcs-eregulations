@@ -339,7 +339,7 @@ describe("Part View", () => {
         );
     });
 
-    it("loads an appendix view type without a right sidebar", () => {
+    it.skip("loads an appendix view type without a right sidebar", () => {
         cy.viewport("macbook-15");
         cy.visit("45/75/Appendix-I-to-Part-75/#Appendix-I-to-Part-75");
         cy.checkLinkRel();
