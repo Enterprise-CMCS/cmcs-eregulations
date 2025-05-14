@@ -331,6 +331,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container")
             .contains("View More Guidance")
             .should("not.exist");
+        cy.get(".supplemental-content .supplemental-content-description")
+            .first()
+            .find(".result__link--file-type")
+            .should("have.text", "PDF");
         cy.get(".document__subjects a")
             .eq(0)
             .should("have.text", "Administrative Claiming Fixture Value");
