@@ -119,11 +119,19 @@ const getFileNameSuffix = (fileName) => {
         return null;
     }
 
-    let suffix = fileName.split(".").pop();
+    let suffix = fileName
+        .toLowerCase()
+        .split(".")
+        .pop();
 
     if (suffix.includes("#")) {
         // if the file name contains a #, remove everything after the #
         suffix = suffix.split("#")[0];
+    }
+
+    // if suffix ends with a forward slash, remove the forward slash
+    if (suffix.endsWith("/")) {
+        suffix = suffix.slice(0, -1);
     }
 
     if (suffix.length > 4 || suffix.length < 2 || INVALID_SUFFIXES.includes(suffix)) {
