@@ -29,10 +29,6 @@ const SUFFIX_DICT = {
 };
 
 const INVALID_SUFFIXES = [
-    "com",
-    "gov",
-    "net",
-    "org",
     "htm",
     "html",
 ];
@@ -97,7 +93,7 @@ const PARAM_ENCODE_DICT = {
 };
 
 /**
- * @param {string} fileName - name of the file
+ * @param {string} fileName - name of the file or link to the file
  * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns null
  *
  * @example
@@ -109,32 +105,45 @@ const PARAM_ENCODE_DICT = {
  * const fileName = "test.msg";
  * const suffix = getFileNameSuffix(fileName);
  * console.log(suffix); // "Outlook"
+ *
+ * @example
+ * const fileName = "https://www.google.com/test.html";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // ""
  */
 const getFileNameSuffix = (fileName) => {
     if (
-        typeof fileName !== "string" ||
-        !fileName.includes(".") ||
-        lodashEndsWith(fileName, ".")
+        typeof fileName !== "string"
+            || !fileName.includes(".")
+            || lodashEndsWith(fileName, ".")
     ) {
         return null;
     }
 
-    let suffix = fileName
-        .toLowerCase()
-        .split(".")
-        .pop();
+    let suffix;
 
-    if (suffix.includes("#")) {
-        // if the file name contains a #, remove everything after the #
-        suffix = suffix.split("#")[0];
+    try {
+        // filter out top level domain suffixes
+        // and early return if pathname does not contain a suffix
+        const url = new URL(fileName.toLowerCase(), "https://example.com");
+        if (url.pathname.split(".").length < 2) {
+            return null;
+        }
+        suffix = url.pathname.split(".").pop();
+    } catch (_error) {
+        // if URL constructor fails, assume fileName is a string
+        // and fall back to splitting by "."
+        suffix = fileName
+            .toLowerCase()
+            .split(".")
+            .pop();
     }
 
-    // if suffix ends with a forward slash, remove the forward slash
-    if (suffix.endsWith("/")) {
-        suffix = suffix.slice(0, -1);
-    }
-
-    if (suffix.length > 4 || suffix.length < 2 || INVALID_SUFFIXES.includes(suffix)) {
+    if (
+        suffix.length > 4
+            || suffix.length < 2
+            || INVALID_SUFFIXES.includes(suffix) // html, htm
+    ) {
         return null;
     }
 
