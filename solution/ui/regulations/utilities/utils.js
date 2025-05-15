@@ -94,7 +94,7 @@ const PARAM_ENCODE_DICT = {
 
 /**
  * @param {string} fileName - name of the file or link to the file
- * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns null
+ * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns undefined
  *
  * @example
  * const fileName = "test.docx";
@@ -118,7 +118,7 @@ const getFileNameSuffix = (fileName) => {
             || !fileName.includes(".")
             || lodashEndsWith(fileName, ".")
     ) {
-        return null;
+        return undefined;
     }
 
     let fileNameString;
@@ -134,7 +134,7 @@ const getFileNameSuffix = (fileName) => {
 
     const pathArray = fileNameString.split(".");
 
-    if (pathArray.length < 2) return null;
+    if (pathArray.length < 2) return undefined;
 
     const suffix = pathArray.pop();
 
@@ -143,7 +143,7 @@ const getFileNameSuffix = (fileName) => {
             || suffix.length < 2
             || INVALID_SUFFIXES.includes(suffix) // html, htm
     ) {
-        return null;
+        return undefined;
     }
 
     return SUFFIX_DICT[suffix] ?? suffix.toUpperCase();
