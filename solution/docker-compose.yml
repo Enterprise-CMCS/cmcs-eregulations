@@ -5,7 +5,7 @@ networks:
     name: eregs
 services:
   db:
-    image: postgres:15.2
+    image: pgvector/pgvector:pg15
     environment:
       POSTGRES_USER: eregsuser
       POSTGRES_PASSWORD: sgere
