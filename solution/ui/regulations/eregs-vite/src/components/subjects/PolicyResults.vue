@@ -48,6 +48,10 @@ const getParentCategoryName = ({ itemCategory, categoriesArr }) => {
 };
 
 const getResultLinkText = (item) => {
+    const fileName = item.type === "internal_file"
+        ? item.file_name
+        : item.url;
+
     let linkText;
     if (DOCUMENT_TYPES_MAP[item.type] === "Internal") {
         linkText = item.name_headline || item.title;
@@ -61,7 +65,7 @@ const getResultLinkText = (item) => {
     }
 
     const fileTypeButton = getFileTypeButton({
-        fileName: item.url,
+        fileName,
         uid: item.uid,
     });
 
