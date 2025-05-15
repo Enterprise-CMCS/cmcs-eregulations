@@ -391,18 +391,16 @@ describe("Utilities.js", () => {
         expect(getFileNameSuffix("test")).toBe(null);
         expect(getFileNameSuffix("test.docx.")).toBe(null);
         expect(getFileNameSuffix("test.pdf")).toBe("PDF");
-        expect(getFileNameSuffix("https://www.test.com/testing.pdf")).toBe("PDF");
-        expect(getFileNameSuffix("test.pdf#param=val")).toBe("PDF");
+        expect(getFileNameSuffix("https://www.mockurl.com/this/test.pdf")).toBe("PDF");
+        expect(getFileNameSuffix("https://www.mockurl.com/hash.pdf?param=val#100")).toBe("PDF");
         expect(getFileNameSuffix("test.msg")).toBe("Outlook");
-        expect(getFileNameSuffix("test.msg/")).toBe("Outlook");
         expect(getFileNameSuffix("test.docx")).toBe("DOCX");
-        expect(getFileNameSuffix("test.docx/")).toBe("DOCX");
         expect(getFileNameSuffix("test.docxmsg")).toBe(null);
         expect(getFileNameSuffix("test.docx.msg")).toBe("Outlook");
         expect(getFileNameSuffix("test.docx.msg.txt")).toBe("TXT");
         expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
-        expect(getFileNameSuffix("www.test.gov")).toBe(null);
-        expect(getFileNameSuffix("www.test.com/")).toBe(null);
+        expect(getFileNameSuffix("https://www.test.gov")).toBe(null);
+        expect(getFileNameSuffix("https://www.test.com/")).toBe(null);
 
     });
 

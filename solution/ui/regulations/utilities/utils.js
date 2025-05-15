@@ -112,6 +112,7 @@ const PARAM_ENCODE_DICT = {
  * console.log(suffix); // ""
  */
 const getFileNameSuffix = (fileName) => {
+    // early return if fileName is not a string or is otherwise invalid
     if (
         typeof fileName !== "string"
             || !fileName.includes(".")
@@ -120,24 +121,22 @@ const getFileNameSuffix = (fileName) => {
         return null;
     }
 
-    let suffix;
+    let fileNameString;
 
+    // if fileName is a URL, leverage URL API to get cleaned pathname
     try {
-        // filter out top level domain suffixes
-        // and early return if pathname does not contain a suffix
-        const url = new URL(fileName.toLowerCase(), "https://example.com");
-        if (url.pathname.split(".").length < 2) {
-            return null;
-        }
-        suffix = url.pathname.split(".").pop();
+        let url = new URL(fileName);
+        fileNameString = url.pathname.toLowerCase();
     } catch (_error) {
-        // if URL constructor fails, assume fileName is a string
-        // and fall back to splitting by "."
-        suffix = fileName
-            .toLowerCase()
-            .split(".")
-            .pop();
+        // if fileName is not a URL, use it as is
+        fileNameString = fileName.toLowerCase();
     }
+
+    const pathArray = fileNameString.split(".");
+
+    if (pathArray.length < 2) return null;
+
+    const suffix = pathArray.pop();
 
     if (
         suffix.length > 4
