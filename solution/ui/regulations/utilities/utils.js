@@ -123,7 +123,7 @@ const getFileNameSuffix = (fileName) => {
 
     let fileNameString;
 
-    // if fileName is a URL, leverage URL API to get cleaned pathname
+    // if fileName is a URL, leverage URL interface to get cleaned pathname
     try {
         let url = new URL(fileName);
         fileNameString = url.pathname.toLowerCase();
