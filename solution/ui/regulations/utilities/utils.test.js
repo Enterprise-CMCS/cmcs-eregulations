@@ -391,7 +391,7 @@ describe("Utilities.js", () => {
         expect(getFileNameSuffix("test")).toBe(null);
         expect(getFileNameSuffix("test.docx.")).toBe(null);
         expect(getFileNameSuffix("test.pdf")).toBe("PDF");
-        expect(getFileNameSuffix("https://www.test.pdf")).toBe("PDF");
+        expect(getFileNameSuffix("https://www.test.com/testing.pdf")).toBe("PDF");
         expect(getFileNameSuffix("test.pdf#param=val")).toBe("PDF");
         expect(getFileNameSuffix("test.msg")).toBe("Outlook");
         expect(getFileNameSuffix("test.msg/")).toBe("Outlook");
