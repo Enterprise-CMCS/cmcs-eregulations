@@ -164,7 +164,7 @@ describe("getResultLinkText", () => {
 
     it("/resources/internal result", async () => {
         expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(
-            "<span class='result__link--label'>this is a document name string</span>"
+            "<span class='result__link--label'>this is a document name string</span><span data-testid='download-chip-a4e00982-4944-4a8d-8dd9-e5d2caa11f51' class='result__link--file-type'>TXT</span>"
         );
     });
 
