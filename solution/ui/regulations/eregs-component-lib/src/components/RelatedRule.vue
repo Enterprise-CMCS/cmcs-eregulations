@@ -1,8 +1,8 @@
 <script setup>
 /* eslint-disable vue/prop-name-casing */
-import { computed, inject } from "vue";
+import { computed } from "vue";
 
-import { formatDate } from "utilities/utils";
+import { formatDate, getFileTypeButton } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
@@ -46,8 +46,6 @@ const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
 };
 
-const itemTitleLineLimit = inject("itemTitleLineLimit", { default: 9 });
-
 const formatPubDate = (value) => {
     return formatDate(value);
 };
@@ -63,10 +61,6 @@ const citationClasses = computed(() => {
     return {
         grouped: props.grouped,
     };
-});
-
-const recentTitleClass = computed(() => {
-    return `line-clamp-${itemTitleLineLimit}`;
 });
 
 </script>
@@ -96,11 +90,14 @@ const recentTitleClass = computed(() => {
             </span>
             <div
                 v-if="!grouped"
+                v-sanitize-html="
+                    title +
+                        getFileTypeButton({
+                            fileName: html_url,
+                            uid: document_number || 'default',
+                        })"
                 class="recent-title"
-                :class="recentTitleClass"
-            >
-                {{ title }}
-            </div>
+            />
         </a>
     </div>
 </template>

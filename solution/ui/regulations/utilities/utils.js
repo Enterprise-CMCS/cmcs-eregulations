@@ -24,6 +24,15 @@ const DOCUMENT_TYPES_MAP = {
     regulations: "Regulations",
 };
 
+const SUFFIX_DICT = {
+    msg: "Outlook",
+};
+
+const INVALID_SUFFIXES = [
+    "htm",
+    "html",
+];
+
 const COUNT_TYPES_MAP = {
     external: "public_resource_count",
     internal: "internal_resource_count",
@@ -84,8 +93,8 @@ const PARAM_ENCODE_DICT = {
 };
 
 /**
- * @param {string} fileName - name of the file
- * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns null
+ * @param {string} fileName - name of the file or link to the file
+ * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns undefined
  *
  * @example
  * const fileName = "test.docx";
@@ -96,25 +105,46 @@ const PARAM_ENCODE_DICT = {
  * const fileName = "test.msg";
  * const suffix = getFileNameSuffix(fileName);
  * console.log(suffix); // "Outlook"
+ *
+ * @example
+ * const fileName = "https://www.google.com/test.html";
+ * const suffix = getFileNameSuffix(fileName);
+ * console.log(suffix); // ""
  */
 const getFileNameSuffix = (fileName) => {
+    // early return if fileName is not a string or is otherwise invalid
     if (
-        typeof fileName !== "string" ||
-        !fileName.includes(".") ||
-        lodashEndsWith(fileName, ".")
+        typeof fileName !== "string"
+            || !fileName.includes(".")
+            || lodashEndsWith(fileName, ".")
     ) {
-        return null;
+        return undefined;
     }
 
-    const suffix = fileName.split(".").pop();
+    let fileNameString;
 
-    if (suffix.length > 4 || suffix.length < 2) {
-        return null;
+    // if fileName is a URL, leverage URL interface to get cleaned pathname
+    try {
+        let url = new URL(fileName);
+        fileNameString = url.pathname.toLowerCase();
+    } catch (_error) {
+        // if fileName is not a URL, use it as is
+        fileNameString = fileName.toLowerCase();
     }
 
-    const SUFFIX_DICT = {
-        msg: "Outlook",
-    };
+    const pathArray = fileNameString.split(".");
+
+    if (pathArray.length < 2) return undefined;
+
+    const suffix = pathArray.pop();
+
+    if (
+        suffix.length > 4
+            || suffix.length < 2
+            || INVALID_SUFFIXES.includes(suffix) // html, htm
+    ) {
+        return undefined;
+    }
 
     return SUFFIX_DICT[suffix] ?? suffix.toUpperCase();
 };

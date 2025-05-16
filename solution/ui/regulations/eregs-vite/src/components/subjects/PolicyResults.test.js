@@ -136,6 +136,20 @@ describe("getResultLinkText", () => {
         );
     });
 
+    const cs_internal_with_url_1 = {
+        type: "internal",
+        name_headline: "this is a name_headline field",
+        title: "this is a title field",
+        url: "https://www.example.com/file.pdf",
+        uid: "12345",
+    };
+
+    it("/content_search internal result with url 1", async () => {
+        expect(PolicyResults.getResultLinkText(cs_internal_with_url_1)).toBe(
+            "<span class='result__link--label'>this is a name_headline field</span><span data-testid='download-chip-12345' class='result__link--file-type'>PDF</span>"
+        );
+    });
+
     const cs_internal_2 = {
         type: "internal",
         name_headline: "",
@@ -150,7 +164,7 @@ describe("getResultLinkText", () => {
 
     it("/resources/internal result", async () => {
         expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(
-            "<span class='result__link--label'>this is a document name string</span>"
+            "<span class='result__link--label'>this is a document name string</span><span data-testid='download-chip-a4e00982-4944-4a8d-8dd9-e5d2caa11f51' class='result__link--file-type'>TXT</span>"
         );
     });
 

@@ -47,15 +47,22 @@ const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
 };
 
-const addFileTypeButton = ({ fileName, uid, docType }) => {
-    if (DOCUMENT_TYPES_MAP[docType] !== "Internal") {
-        return "";
+const addFileTypeButton = ({ fileName, uid, url, docType }) => {
+    if (docType == "public_link" || docType == "internal_link") {
+        return getFileTypeButton({
+            fileName: url,
+            uid: uid ?? url,
+        });
     }
 
-    return getFileTypeButton({
-        fileName,
-        uid,
-    });
+    if (DOCUMENT_TYPES_MAP[docType] == "Internal") {
+        return getFileTypeButton({
+            fileName,
+            uid,
+        });
+    }
+
+    return "";
 };
 
 const formatDate = (value) => {
@@ -76,8 +83,7 @@ const getLinkClasses = (docType, description) => {
     return {
         "supplemental-content-external-link":
             (DOCUMENT_TYPES_MAP[docType] === "Public" ||
-                docType === "internal_link") &&
-            isBlank(description),
+                docType === "internal_link") && isBlank(description),
     };
 };
 </script>
@@ -113,6 +119,7 @@ const getLinkClasses = (docType, description) => {
                             addFileTypeButton({
                                 fileName,
                                 uid,
+                                url,
                                 docType,
                             })
                     "

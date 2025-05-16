@@ -48,6 +48,10 @@ const getParentCategoryName = ({ itemCategory, categoriesArr }) => {
 };
 
 const getResultLinkText = (item) => {
+    const fileName = item.type === "internal_file"
+        ? item.file_name
+        : item.url;
+
     let linkText;
     if (DOCUMENT_TYPES_MAP[item.type] === "Internal") {
         linkText = item.name_headline || item.title;
@@ -60,7 +64,12 @@ const getResultLinkText = (item) => {
             item.title;
     }
 
-    return `<span class='result__link--label'>${linkText}</span>`;
+    const fileTypeButton = getFileTypeButton({
+        fileName,
+        uid: item.uid,
+    });
+
+    return `<span class='result__link--label'>${linkText}</span>${fileTypeButton}`;
 };
 
 const showResultSnippet = (item) => {
@@ -300,13 +309,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             </template>
             <template #link>
                 <a
-                    v-sanitize-html="
-                        getResultLinkText(doc) +
-                            getFileTypeButton({
-                                fileName: doc.file_name,
-                                uid: doc.uid,
-                            })
-                    "
+                    v-sanitize-html="getResultLinkText(doc)"
                     :href="getUrl(doc)"
                     :target="doc.type === 'reg_text' ? undefined : '_blank'"
                     :rel="

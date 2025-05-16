@@ -362,14 +362,14 @@ describe("Find by Subjects", () => {
         cy.get(".result__link") // regulations link
             .eq(1)
             .find("a")
-            .find("span.fesult__link--file-type")
-            .should("not.exist");
+            .find("span.result__link--file-type")
+            .should("include.text", "PDF");
         cy.get(".result__link") // internal_link
             .eq(2)
             .find("a")
             .should("have.class", "external")
-            .find("span.fesult__link--file-type")
-            .should("not.exist");
+            .find("span.result__link--file-type")
+            .should("include.text", "DOCX");
         cy.get(".doc-type__label")
             .eq(0)
             .should("include.text", " Internal")

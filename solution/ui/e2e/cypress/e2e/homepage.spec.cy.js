@@ -87,6 +87,27 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .to.have.css("background-color")
                         .and.eq("rgb(2, 102, 102)");
                 });
+            // assert that grouped element has download chip
+            cy.wrap($els[0])
+                .find(".recent-title span[data-testid='download-chip-2023-12098']")
+                .should("exist")
+                .and("have.text", "PDF");
+            // assert that ::after pseudo element is present on title
+            // and not heading for grouped item
+            cy.wrap($els[0])
+                .find(".link-heading")
+                .then(($el) => {
+                    const after = window.getComputedStyle($el[0], "::after");
+                    const content = after.getPropertyValue("content");
+                    expect(content).to.equal("none");
+                });
+            cy.wrap($els[0])
+                .find(".recent-title")
+                .then(($el) => {
+                    const after = window.getComputedStyle($el[0], "::after");
+                    const content = after.getPropertyValue("content");
+                    expect(content).to.include("url");
+                });
         });
         cy.get(".related-rule.grouped").then(($els) => {
             expect($els).to.have.length(4);
@@ -99,6 +120,23 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .to.have.css("background-color")
                         .and.eq("rgb(255, 255, 255)");
                 });
+            // assert that first grouped element has no download chip even
+            // even though file url has a .pdf extension
+            cy.wrap($els[0])
+                .find(".recent-title span.result__link--file-type")
+                .should("not.exist");
+            // assert that ::after pseudo element is present on heading
+            // and not title for grouped item
+            cy.wrap($els[0])
+                .find(".link-heading")
+                .then(($el) => {
+                    const after = window.getComputedStyle($el[0], "::after");
+                    const content = after.getPropertyValue("content");
+                    expect(content).to.include("url");
+                });
+            cy.wrap($els[0])
+                .find(".recent-title")
+                .should("not.exist");
         });
 
         cy.get(".resources__container")
@@ -293,6 +331,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.get(".resources__container")
             .contains("View More Guidance")
             .should("not.exist");
+        cy.get(".supplemental-content .supplemental-content-description")
+            .first()
+            .find(".result__link--file-type")
+            .should("have.text", "PDF");
         cy.get(".document__subjects a")
             .eq(0)
             .should("have.text", "Administrative Claiming Fixture Value");

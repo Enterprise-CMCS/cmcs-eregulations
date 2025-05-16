@@ -384,19 +384,24 @@ describe("Utilities.js", () => {
         ).toBe("show_internal=false");
     });
 
-    it("gets the proper suffix for a filename or returns null", async () => {
-        expect(getFileNameSuffix(null)).toBe(null);
-        expect(getFileNameSuffix(undefined)).toBe(null);
-        expect(getFileNameSuffix(1)).toBe(null);
-        expect(getFileNameSuffix("test")).toBe(null);
-        expect(getFileNameSuffix("test.docx.")).toBe(null);
+    it("gets the proper suffix for a filename or returns undefined", async () => {
+        expect(getFileNameSuffix(null)).toBe(undefined);
+        expect(getFileNameSuffix(undefined)).toBe(undefined);
+        expect(getFileNameSuffix(1)).toBe(undefined);
+        expect(getFileNameSuffix("test")).toBe(undefined);
+        expect(getFileNameSuffix("test.docx.")).toBe(undefined);
         expect(getFileNameSuffix("test.pdf")).toBe("PDF");
+        expect(getFileNameSuffix("https://www.mockurl.com/this/test.pdf")).toBe("PDF");
+        expect(getFileNameSuffix("https://www.mockurl.com/hash.pdf?param=val#100")).toBe("PDF");
         expect(getFileNameSuffix("test.msg")).toBe("Outlook");
         expect(getFileNameSuffix("test.docx")).toBe("DOCX");
-        expect(getFileNameSuffix("test.docxmsg")).toBe(null);
+        expect(getFileNameSuffix("test.docxmsg")).toBe(undefined);
         expect(getFileNameSuffix("test.docx.msg")).toBe("Outlook");
         expect(getFileNameSuffix("test.docx.msg.txt")).toBe("TXT");
-        expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(null);
+        expect(getFileNameSuffix("testdocxmsgjlkltxt")).toBe(undefined);
+        expect(getFileNameSuffix("https://www.test.gov")).toBe(undefined);
+        expect(getFileNameSuffix("https://www.test.com/")).toBe(undefined);
+
     });
 
     describe("getFileTypeButton", () => {
@@ -420,6 +425,26 @@ describe("Utilities.js", () => {
             ).toBe(
                 "<span data-testid='download-chip-url' class='result__link--file-type'>Outlook</span>"
             );
+        });
+        it("is a MSG link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "http://www.test.com/link.MSG", uid: "url" })
+            ).toBe(
+                "<span data-testid='download-chip-url' class='result__link--file-type'>Outlook</span>"
+            );
+        });
+        it("is a HTML link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.com/link.HTML", uid: "url" })
+            ).toBe("");
+        });
+        it("is a .gov link", async () => {
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.gov", uid: "url" })
+            ).toBe("");
+            expect(
+                getFileTypeButton({ fileName: "https://www.test.gov/", uid: "url" })
+            ).toBe("");
         });
     });
 
