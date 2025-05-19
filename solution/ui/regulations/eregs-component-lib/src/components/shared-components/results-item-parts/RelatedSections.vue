@@ -1,7 +1,6 @@
 <script setup>
-import groupBy from "lodash/groupBy";
-
-import { locationLabel, locationUrl } from "utilities/filters";
+import RelatedRegulationLink from "./RelatedRegulationLink.vue";
+import RelatedStatuteLink from "./RelatedStatuteLink.vue";
 
 const props = defineProps({
     base: {
@@ -22,59 +21,87 @@ const props = defineProps({
     },
 });
 
-const filteredLocations = props.item.cfr_citations
-    ? props.item.cfr_citations.filter((location) => {
-        const { part } = location;
-        return props.partsLastUpdated[part];
-    })
-    : [];
+let groupedCitations = [];
 
-const locationsCount = filteredLocations.length;
-const groupedLocations = groupBy(filteredLocations, "title");
+if (props.label === "Regulations") {
+    const citations = props.item.cfr_citations
+        ? props.item.cfr_citations.filter((citation) => {
+            const { part } = citation;
+            return props.partsLastUpdated[part];
+        })
+        : [];
+
+    groupedCitations = groupBy(citations, "title");
+} else {
+    const actCitations = props.item.act_citations
+        .map((citation) => {
+            citation.title = citation.act;
+            return citation;
+        });
+    const groupedActCitations = Object.groupBy(actCitations, citation => {
+        return citation.title;
+    });
+
+    const uscCitations = props.item.usc_citations
+        .map((citation) => {
+            citation.title = `${citation.title} U.S.C.`;
+            return citation;
+        });
+    const groupedUscCitations = Object.groupBy(uscCitations, citation => {
+        return citation.title;
+    });
+
+    groupedCitations = {
+        ...groupedActCitations,
+        ...groupedUscCitations,
+    };
+}
+
 </script>
 
 <template>
     <div class="related-sections">
         <span class="related-sections-title"> {{ label }}: </span>
-        <template v-if="locationsCount > 0">
+        <template
+            v-for="(citations, title, i) in groupedCitations"
+            :key="title + i"
+        >
+            <span class="title__span">
+                {{ title }}
+                <span v-if="label === 'Regulations'"> CFR</span>
+            </span>
+            <span
+                v-if="citations.length > 1"
+                :key="i + title"
+                class="section-sign"
+            > §§ </span>
+            <span
+                v-else
+                :key="i + title + i"
+                class="section-sign"
+            > § </span>
             <template
-                v-for="(locations, title, i) in groupedLocations"
-                :key="title + i"
+                v-for="(citation, j) in citations"
+                :key="i + 'key' + j"
             >
-                <span class="title__span">{{ title }} CFR </span>
-                <span
-                    v-if="locations.length > 1"
-                    :key="i + title"
-                    class="section-sign"
-                >§§
-                </span>
-                <span
-                    v-else
-                    :key="i + title + i"
-                    class="section-sign"
-                >§ </span>
-                <template
-                    v-for="(location, j) in locations"
-                    :key="location.display_name + j"
-                >
-                    <span class="related-section-link">
-                        <a :href="locationUrl(location, base)">{{
-                            locationLabel(location)
-                        }}</a>
-                        <span v-if="j + 1 != locations.length">, </span>
-                    </span>
-                </template>
-                <span
-                    v-if="i + 1 != Object.keys(groupedLocations).length"
-                    :key="i + title + i"
-                    class="pipe-separator"
-                >
-                    |
+                <span class="related-section-link">
+                    <RelatedRegulationLink
+                        v-if="props.label === 'Regulations'"
+                        :citation="citation"
+                        :base="base"
+                    />
+                    <RelatedStatuteLink
+                        v-else
+                        v-bind="citation"
+                    />
+                    <span v-if="j + 1 != citations.length">, </span>
                 </span>
             </template>
-        </template>
-        <template v-else>
-            <span class="related-sections-none">None</span>
+            <span
+                v-if="i + 1 != Object.keys(groupedCitations).length"
+                :key="i + title + i"
+                class="pipe-separator"
+            >; </span>
         </template>
     </div>
 </template>

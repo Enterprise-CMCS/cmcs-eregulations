@@ -356,8 +356,8 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 <CollapseButton
                     v-if="
                         doc.type !== 'reg_text' &&
-                            hasRegulationCitations({ doc, partsLastUpdated })
-                    "
+                            (hasRegulationCitations({ doc, partsLastUpdated })
+                                || hasStatuteCitations({ doc }))"
                     :name="getCollapseName(doc)"
                     state="collapsed"
                     class="related-citations__btn--collapse"
@@ -377,13 +377,21 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     class="collapse-content"
                     overflow
                 >
-                    <RelatedSections
-                        v-if="doc.type !== 'reg_text'"
-                        :base="homeUrl"
-                        :item="doc"
-                        :parts-last-updated="partsLastUpdated"
-                        label="Regulations"
-                    />
+                    <template v-if="doc.type !== 'reg_text'">
+                        <RelatedSections
+                            v-if="hasStatuteCitations({ doc })"
+                            :base="homeUrl"
+                            :item="doc"
+                            label="Statutes"
+                        />
+                        <RelatedSections
+                            v-if="hasRegulationCitations({ doc, partsLastUpdated })"
+                            :base="homeUrl"
+                            :item="doc"
+                            :parts-last-updated="partsLastUpdated"
+                            label="Regulations"
+                        />
+                    </template>
                 </Collapsible>
             </template>
         </ResultsItem>
