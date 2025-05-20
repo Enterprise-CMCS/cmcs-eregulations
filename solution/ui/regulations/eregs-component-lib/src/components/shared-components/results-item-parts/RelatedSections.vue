@@ -31,7 +31,7 @@ if (props.label === "Regulations") {
         })
         : [];
 
-    groupedCitations = groupBy(citations, "title");
+    groupedCitations = Object.groupBy(citations, () => "title");
 } else {
     const actCitations = props.item.act_citations
         .map((citation) => {
