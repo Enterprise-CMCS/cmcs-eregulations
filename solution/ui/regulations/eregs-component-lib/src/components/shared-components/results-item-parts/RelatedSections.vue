@@ -32,30 +32,30 @@ if (props.label === "Regulations") {
         : [];
 
     const mappedCitations = citations.map((citation) => {
-        citation.title = `${citation.title} CFR`;
+        citation.titleLabel = `${citation.title} CFR`;
         return citation;
     });
 
     groupedCitations = Object.groupBy(mappedCitations, (citation) => {
-        return citation.title;
+        return citation.titleLabel;
     });
 } else {
     const actCitations = props.item.act_citations
         .map((citation) => {
-            citation.title = citation.act;
+            citation.titleLabel = citation.act;
             return citation;
         });
     const groupedActCitations = Object.groupBy(actCitations, citation => {
-        return citation.title;
+        return citation.titleLabel;
     });
 
     const uscCitations = props.item.usc_citations
         .map((citation) => {
-            citation.title = `${citation.title} U.S.C.`;
+            citation.titleLabel = `${citation.title} U.S.C.`;
             return citation;
         });
     const groupedUscCitations = Object.groupBy(uscCitations, citation => {
-        return citation.title;
+        return citation.titleLabel;
     });
 
     groupedCitations = {
@@ -70,20 +70,20 @@ if (props.label === "Regulations") {
     <div class="related-sections">
         <span class="related-sections-title"> {{ label }}: </span>
         <template
-            v-for="(citations, title, i) in groupedCitations"
-            :key="title + i"
+            v-for="(citations, key, i) in groupedCitations"
+            :key="key + i"
         >
             <span class="title__span">
-                {{ title }}
+                {{ key }}
             </span>
             <span
                 v-if="citations.length > 1"
-                :key="i + title"
+                :key="i + key"
                 class="section-sign"
             > §§ </span>
             <span
                 v-else
-                :key="i + title + i"
+                :key="i + key"
                 class="section-sign"
             > § </span>
             <template
