@@ -14,7 +14,10 @@ defineProps({
 </script>
 
 <template>
-    <a :href="locationUrl(citation, base)">{{
+    <a
+        :href="locationUrl(citation, base)"
+        class="related-regulation__link"
+    >{{
         locationLabel(citation)
     }}</a>
 </template>

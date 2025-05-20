@@ -20,11 +20,13 @@ defineProps({
     <a
         v-if="url"
         :href="url"
-        class="related-section"
+        _target="_blank"
+        rel="noopener noreferrer"
+        class="related-statute__link"
     >
         {{ section }}
     </a>
-    <span v-else class="related-section">
+    <span v-else class="related-statute__span">
         {{ section }}
     </span>
 </template>
