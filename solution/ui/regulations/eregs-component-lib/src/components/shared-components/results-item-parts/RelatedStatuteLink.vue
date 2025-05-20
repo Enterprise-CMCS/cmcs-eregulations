@@ -20,7 +20,7 @@ defineProps({
     <a
         v-if="url"
         :href="url"
-        _target="_blank"
+        target="_blank"
         rel="noopener noreferrer"
         class="related-statute__link"
     >
