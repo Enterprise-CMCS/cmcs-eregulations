@@ -31,7 +31,14 @@ if (props.label === "Regulations") {
         })
         : [];
 
-    groupedCitations = Object.groupBy(citations, () => "title");
+    const mappedCitations = citations.map((citation) => {
+        citation.title = `${citation.title} CFR`;
+        return citation;
+    });
+
+    groupedCitations = Object.groupBy(mappedCitations, (citation) => {
+        return citation.title;
+    });
 } else {
     const actCitations = props.item.act_citations
         .map((citation) => {
@@ -68,7 +75,6 @@ if (props.label === "Regulations") {
         >
             <span class="title__span">
                 {{ title }}
-                <span v-if="label === 'Regulations'"> CFR</span>
             </span>
             <span
                 v-if="citations.length > 1"
