@@ -34,6 +34,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [
                 {
                     "id": 3,
@@ -98,6 +100,8 @@
                     "section_id": 510
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [
                 {
                     "id": 3,
@@ -121,6 +125,8 @@
             "approved": true,
             "category": {},
             "cfr_citations": [],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "document id field",
             "title": "public link without subject or category or keyword",

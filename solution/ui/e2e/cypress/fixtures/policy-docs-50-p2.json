@@ -287,6 +287,8 @@
           "section_id": 21
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 54760",
       "title": "Streamlining the Medicaid, Children's Health Insurance Program, and Basic Health Program Application, Eligibility Determination, Enrollment, and Renewal Processes",
@@ -326,6 +328,8 @@
           "subpart_id": "C"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Resources to Support System and Logic Testing for Unwinding when the PHE (Public Health Emergency) Ends",
@@ -365,6 +369,8 @@
           "section_id": 155
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid nursing facility payment approaches to advance health equity and improve health outcomes",
@@ -445,6 +451,8 @@
           "section_id": 770
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 51303",
       "title": "Medicaid Program and CHIP; Mandatory Medicaid and Children's Health Insurance Program (CHIP) Core Set Reporting",
@@ -603,6 +611,8 @@
           "subpart_id": "B"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Information on School-Based Services in Medicaid: Funding, Documentation and Expanding Services",
@@ -677,6 +687,8 @@
           "section_id": 2
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Applicable Federal Cost Principles for Ground Emergency Medical Transportation (GEMT)",
@@ -967,6 +979,8 @@
           "section_id": 1230
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 47824",
       "title": "Nondiscrimination in Health Programs and Activities",
@@ -1041,6 +1055,8 @@
           "section_id": 205
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SMD # 22-004",
       "title": "Health Homes for Children with Medically Complex Conditions",
@@ -1115,6 +1131,8 @@
           "section_id": 745
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SMD# 22-003",
       "title": "RE: Home and Community-Based Services Quality Measure Set",
@@ -1168,6 +1186,8 @@
           "section_id": 502
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Beneficiary Protections and Medicaid Drug Coverage - Under Value Based Purchasing (VBP) and Other Innovative Payment Arrangements",
@@ -1284,6 +1304,8 @@
           "section_id": 420
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Health Coverage Options for Certain Ukrainian Nationals",
@@ -1365,6 +1387,8 @@
           "section_id": 1209
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid and CHIP Managed Care Monitoring and Oversight Tools",
@@ -1411,6 +1435,8 @@
           "section_id": 74
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medical Loss Ratio (MLR) Reporting Template",
@@ -1464,6 +1490,8 @@
           "section_id": 207
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Network Adequacy and Access Assurances Report Template",
@@ -1502,6 +1530,8 @@
           "section_id": 300
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 39001",
       "title": "Grants Regulation; Removal of Non-Discrimination Provisions and Repromulgation of Administrative Provisions Under the Uniform Grant Regulation",
@@ -1524,6 +1554,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "87 FR 31432",
           "title": "Health and Human Services Grants Regulation",
@@ -1552,6 +1584,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "87 FR 4167",
           "title": "Grants Regulation; Removal of Non-Discrimination Provisions and Repromulgation of Administrative Provisions Under the Uniform Grant Regulation",
@@ -1580,6 +1614,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "86 FR 67351",
           "title": "Grants Regulation; Removal of Non-Discrimination Provisions and Repromulgation of Administrative Provisions Under the Uniform Grant Regulation",
@@ -1608,6 +1644,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "86 FR 53562",
           "title": "Health and Human Services Grants Regulation",
@@ -1636,6 +1674,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "86 FR 11641",
           "title": "Health and Human Services Grants Regulation",
@@ -1707,6 +1747,8 @@
               "section_id": 365
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "86 FR 2257",
           "title": "Health and Human Services Grants Regulation",
@@ -1735,6 +1777,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "84 FR 63809",
           "title": "Notification of Nonenforcement of Health and Human Services Grants Regulation",
@@ -1806,6 +1850,8 @@
               "section_id": 365
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "84 FR 63831",
           "title": "Office of the Assistant Secretary for Financial Resources; Health and Human Services Grants Regulation",
@@ -1884,6 +1930,8 @@
               "section_id": 110
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "81 FR 89393",
           "title": "Health and Human Services Grants Regulation",
@@ -1962,6 +2010,8 @@
               "section_id": 365
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "81 FR 45270",
           "title": "Health and Human Services Grants Regulation",
@@ -2005,6 +2055,8 @@
               "section_id": 2
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "81 FR 19043",
           "title": "Federal Awarding Agency Regulatory Implementation of Office of Management and Budget's Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards; Correction and Technical Amendments",
@@ -2524,6 +2576,8 @@
               "section_id": 439
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "81 FR 3004",
           "title": "Federal Awarding Agency Regulatory Implementation of Office of Management and Budget's Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards; Technical Amendments",
@@ -2554,6 +2608,8 @@
             "type": "public_category"
           },
           "cfr_citations": [],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "79 FR 75867",
           "title": "Federal Awarding Agency Regulatory Implementation of Office of Management and Budget's Uniform Administrative Requirements, Cost Principles, and Audit Requirements for Federal Awards",
@@ -2670,6 +2726,8 @@
           "section_id": 182
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SMD# 22-002",
       "title": "RE: Updated Reporting Requirements and Extension of Deadline to Fully Expend State Funds Under American Rescue Plan Act of 2021 Section 9817",
@@ -2842,6 +2900,8 @@
           "section_id": 380
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Top 10 Fundamental Actions to Prepare for Unwinding and Resources to Support State Efforts",
@@ -2930,6 +2990,8 @@
           "section_id": 832
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Updated 2022 SSI and Spousal Impoverishment Standards",
@@ -3452,6 +3514,8 @@
           "subpart_id": "K"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "Medicaid and CHIP Coverage Learning Collaborative",
       "title": "Inventory of Medicaid and CHIP Flexibilities and Authorities in the Event of a Public Health Emergency or Disaster",
@@ -4023,6 +4087,8 @@
           "subpart_id": "K"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Preparedness and Response Toolkit for State Medicaid and CHIP Agencies in the Event of a Public Health Emergency or Disaster",
@@ -4202,6 +4268,8 @@
           "section_id": 10
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "HCBS Settings Rule Implementation – Moving Forward Toward March 2023 & Beyond",
@@ -4234,6 +4302,8 @@
           "section_id": 511
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "State Release #190",
       "title": "New Requirement for Certification of State Drug Utilization Data (SDUD)",
@@ -4546,6 +4616,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Eligibility & Enrollment Processing for Medicaid, CHIP, and BHP During COVID-19 Public Health Emergency Unwinding Key Requirements for Compliance",
@@ -4577,6 +4649,8 @@
           "section_id": 10
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 29675",
       "title": "Medicaid Program; Reassignment of Medicaid Provider Claims",
@@ -4607,6 +4681,8 @@
               "section_id": 10
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "86 FR 41803",
           "title": "Medicaid Program; Reassignment of Medicaid Provider Claims",
@@ -4676,6 +4752,8 @@
           "section_id": 130
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SHO # 22-002",
       "title": "RE: Medicaid and CHIP Coverage of Stand-alone Vaccine Counseling",
@@ -4995,6 +5073,8 @@
           "subpart_id": "L"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Coverage and Reimbursement of COVID-19 Vaccines, Vaccine Administration, and Cost Sharing under Medicaid, the Children's Health Insurance Program, and Basic Health Program",
@@ -5201,6 +5281,8 @@
           "section_id": 170
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "87 FR 27208",
       "title": "Patient Protection and Affordable Care Act; HHS Notice of Benefit and Payment Parameters for 2023",
@@ -5497,6 +5579,8 @@
               "section_id": 1515
             }
           ],
+          "act_citations": [],
+          "usc_citations": [],
           "subjects": [],
           "document_id": "87 FR 584",
           "title": "Patient Protection and Affordable Care Act; HHS Notice of Benefit and Payment Parameters for 2023",
@@ -5594,6 +5678,8 @@
           "subpart_id": "F"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SMD # 22-001",
       "title": "RE: Updated Medicaid Information Technology Systems Guidance: Streamlined Modular Certification for Medicaid Enterprise Systems",
@@ -5696,6 +5782,8 @@
           "subpart_id": "A"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "2022-2023 Medicaid Managed Care Rate Development Guide For Rating Periods Starting between July 1, 2022 and June 30, 2023",
@@ -5742,6 +5830,8 @@
           "section_id": 917
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid and CHIP Unwinding Planning Efforts: Summary of Best & Promising State Practices from CMS/State Discussions",
@@ -5781,6 +5871,8 @@
           "section_id": 116
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid Enterprise Systems (MES) Testing Guidance Framework",
@@ -5834,6 +5926,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Strategic Approaches to Support State Fair Hearings as States Resume Normal Eligibility and Enrollment Operations After the COVID-19 PHE (Public Health Emergency)",
@@ -5915,6 +6009,8 @@
           "subpart_id": "C"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Streamlined Modular Certification for Medicaid Enterprise Systems Certification Guidance, Version 1.0",
@@ -5982,6 +6078,8 @@
           "section_id": 120
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Streamlined Modular Certification: Intake Form",
@@ -6035,6 +6133,8 @@
           "section_id": 510
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid Drug Rebate Program Notice, Manufacturer Release No. 116; Technical Guidance - Value-Based Purchasing (VBP) Arrangements for Drug Therapies using Multiple Best Prices",
@@ -6067,6 +6167,8 @@
           "section_id": 112
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Streamlined Modular Certification: Example Monthly Project Status Report",
@@ -6106,6 +6208,8 @@
           "section_id": 204
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "CMS Enforcement Discretion – Medicaid Access Monitoring Review Plans",
@@ -6152,6 +6256,8 @@
           "section_id": 420
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Strategies for SBMs to Improve Medicaid to Marketplace Coordination and Maximize Enrollee Transitions at the End of the Continuous Enrollment Requirement",
@@ -6450,6 +6556,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "CMS Unwinding Resources and March All State Call Series",
@@ -6790,6 +6898,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "SHO# 22-001",
       "title": "RE: Promoting Continuity of Coverage and Distributing Eligibility and Enrollment Workload in Medicaid, the Children's Health Insurance Program (CHIP), and Basic Health Program (BHP) Upon Conclusion of the COVID-19 Public Health Emergency",
@@ -7102,6 +7212,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid and Children's Health Insurance Program Return to Normal Operations Upon Conclusion of the COVID-19 Public Health Emergency: Eligibility and Enrollment Pending Actions Resolution Planning Tool - Version 2.0",
@@ -7428,6 +7540,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid and CHIP Eligibility Renewals (Continuous Enrollment Unwinding): A Communications Toolkit",
@@ -7726,6 +7840,8 @@
           "subpart_id": "E"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Medicaid Unwinding Toolkit Graphics",
@@ -7758,6 +7874,8 @@
           "section_id": 16
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "State Renewal Report (fillable PDF report)",
@@ -7790,6 +7908,8 @@
           "section_id": 16
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Unwinding Data Report",
@@ -7822,6 +7942,8 @@
           "section_id": 16
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Unwinding Data Specifications for Unwinding Data Report",
@@ -8449,6 +8571,8 @@
           "subpart_id": "K"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "State Guide to CMS Criteria for Children's Health Insurance Program (CHIP) Managed Care Contract Review and Approval",
@@ -8544,6 +8668,8 @@
           "subpart_id": "G"
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "Your Rights in the Programs of All-Inclusive Care for the Elderly (PACE)",
@@ -8597,6 +8723,8 @@
           "section_id": 315
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "",
       "title": "2022 Federal Poverty Level Standards",
@@ -8664,6 +8792,8 @@
           "section_id": 511
         }
       ],
+      "act_citations": [],
+      "usc_citations": [],
       "subjects": [],
       "document_id": "State Release #188",
       "title": "State Pharmacy Assistance Programs",
