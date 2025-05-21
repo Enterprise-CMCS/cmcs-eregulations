@@ -20,6 +20,8 @@
                 "parent": 4
             },
             "cfr_citations": [],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "FAQ  for State Medicaid and CHIP Agencies: Consolidated Appropriations Act, 2023: FMAP Reduction for Failure to Meet Reporting Requirements under Section 1902(tt)(1) of the Social Security Act",
@@ -178,6 +180,8 @@
                     "section_id": 115
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 23-003",
             "title": "Mandatory Medicaid and Children’s Health Insurance Program Coverage of Adult Vaccinations under the Inflation Reduction Act",
@@ -223,6 +227,8 @@
                     "section_id": 62
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Non-Emergency Medical Transportation in Medicaid, 2018–2021",
@@ -261,6 +267,8 @@
                     "section_id": 186
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 37174",
             "title": "Medicare Program; Contract Year 2024 Policy and Technical Changes to the Medicare Advantage Program, Medicare Prescription Drug Benefit Program, Medicare Cost Plan Program, and Programs of All-Inclusive Care for the Elderly; Correction",
@@ -283,6 +291,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "88 FR 34779",
                     "title": "Medicare Program; Contract Year 2024 Policy and Technical Changes to the Medicare Advantage Program, Medicare Prescription Drug Benefit Program, Medicare Cost Plan Program, and Programs of All-Inclusive Care for the Elderly; Correction",
@@ -762,6 +772,8 @@
                             "section_id": 2536
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "88 FR 22120",
                     "title": "Medicare Program; Contract Year 2024 Policy and Technical Changes to the Medicare Advantage Program, Medicare Prescription Drug Benefit Program, Medicare Cost Plan Program, and Programs of All-Inclusive Care for the Elderly",
@@ -1647,6 +1659,8 @@
                             "section_id": 2536
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 79452",
                     "title": "Medicare Program; Contract Year 2024 Policy and Technical Changes to the Medicare Advantage Program, Medicare Prescription Drug Benefit Program, Medicare Cost Plan Program, Medicare Parts A, B, C, and D Overpayment Provisions of the Affordable Care Act and Programs of All-Inclusive Care for the Elderly; Health Information Technology Standards and Implementation Specifications",
@@ -1799,6 +1813,8 @@
                     "section_id": 30
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 36485",
             "title": "Medicare and Medicaid Programs; Policy and Regulatory Changes to the Omnibus COVID-19 Health Care Staff Vaccination Requirements; Additional Policy and Regulatory Changes to the Requirements for Long-Term Care (LTC) Facilities and Intermediate Care Facilities for Individuals With Intellectual Disabilities (ICFs-IID) To Provide COVID-19 Vaccine Education and Offer Vaccinations to Residents, Clients, and Staff; Policy and Regulatory Changes to the Long Term Care Facility COVID-19 Testing Requirements",
@@ -1941,6 +1957,8 @@
                             "section_id": 30
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "86 FR 61555",
                     "title": "Medicare and Medicaid Programs; Omnibus COVID-19 Health Care Staff Vaccination",
@@ -2061,6 +2079,8 @@
                     "section_id": 343
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "State Strategies to Minimize Terminations for Procedural Reasons During the COVID-19 Unwinding Period",
@@ -2148,6 +2168,8 @@
                     "section_id": 520
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 34238",
             "title": "Medicaid Program; Misclassification of Drugs, Program Administration and Program Integrity Updates Under the Medicaid Drug Rebate Program",
@@ -2236,6 +2258,8 @@
                     "section_id": 615
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Medicaid Enterprise Systems Compliance and Reapproval Process for State Systems with Operational Costs Claimed at the 75 Percent Federal Match Rate",
@@ -2449,6 +2473,8 @@
                     "subpart_id": "F"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Delivering Service in School-Based Settings: A Comprehensive Guide to Medicaid Services and Administrative Claiming",
@@ -2488,6 +2514,8 @@
                     "section_id": 139
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Information on School-Based Services in Medicaid: Policy Flexibilities and Guide on Coverage, Billing, Reimbursement, Documentation and School-Based Administrative Claiming",
@@ -2744,6 +2772,8 @@
                     "subpart_id": "F"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "End of the Medicaid Continuous Enrollment Condition Frequently Asked Questions for State Medicaid and CHIP Agencies",
@@ -2832,6 +2862,8 @@
                     "section_id": 832
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Updated 2023 SSI and Spousal Impoverishment Standards",
@@ -2976,6 +3008,8 @@
                     "subpart_id": "E"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "End of the COVID-19 Public Health Emergency (PHE) and the COVID-19 National Emergency and Implications for Medicaid and the Children’s Health Insurance Program (CHIP)",
@@ -3168,6 +3202,8 @@
                     "section_id": 204
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 27960",
             "title": "Medicaid Program; Ensuring Access to Medicaid Services",
@@ -3507,6 +3543,8 @@
                     "section_id": 535
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 28092",
             "title": "Medicaid Program; Medicaid and Children's Health Insurance Program (CHIP) Managed Care Access, Finance, and Quality",
@@ -3616,6 +3654,8 @@
                     "subpart_id": "A"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "2023-2024 Medicaid Managed Care Rate Development Guide For Rating Periods Starting between July 1, 2023 and June 30, 2024",
@@ -3689,6 +3729,8 @@
                     "section_id": 2
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 25313",
             "title": "Clarifying Eligibility for a Qualified Health Plan Through an Exchange, Advance Payments of the Premium Tax Credit, Cost-Sharing Reductions, a Basic Health Program, and for Some Medicaid and Children's Health Insurance Programs",
@@ -3826,6 +3868,8 @@
                     "subpart_id": "B"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMD #23-003",
             "title": "Opportunities to Test Transition-Related Strategies to Support Community Reentry and Improve Care Transitions for Individuals Who Are Incarcerated",
@@ -3857,6 +3901,8 @@
                     "section_id": 1380
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 15918",
             "title": "Medicare and Medicaid Programs, CY 2023 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment and Coverage Policies; Medicare Shared Savings Program Requirements; Implementing Requirements for Manufacturers of Certain Single-Dose Container or Single-Use Package Drugs To Provide Refunds With Respect to Discarded Amounts; and COVID-19 Interim Final Rules; Corrections",
@@ -4132,6 +4178,8 @@
                             "section_id": 305
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "85 FR 19230",
                     "title": "Medicare and Medicaid Programs; Policy and Regulatory Revisions in Response to the COVID-19 Public Health Emergency",
@@ -4548,6 +4596,8 @@
                             "section_id": 800
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "85 FR 84472",
                     "title": "Medicare Program; CY 2021 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicaid Promoting Interoperability Program Requirements for Eligible Professionals; Quality Payment Program; Coverage of Opioid Use Disorder Services Furnished by Opioid Treatment Programs; Medicare Enrollment of Opioid Treatment Programs; Electronic Prescribing for Controlled Substances for a Covered Part D Drug; Payment for Office/Outpatient Evaluation and Management Services; Hospital IQR Program; Establish New Code Categories; Medicare Diabetes Prevention Program (MDPP) Expanded Model Emergency Policy; Coding and Payment for Virtual Check-in Services Interim Final Rule Policy; Coding and Payment for Personal Protective Equipment (PPE) Interim Final Rule Policy; Regulatory Revisions in Response to the Public Health Emergency (PHE) for COVID-19; and Finalization of Certain Provisions from the March 31st, May 8th and September 2nd Interim Final Rules in Response to the PHE for COVID-19",
@@ -4590,6 +4640,8 @@
                             "section_id": 1400
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "86 FR 9471",
                     "title": "Medicare Program; CY 2021 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicaid Promoting Interoperability Program Requirements for Eligible Professionals; Quality Payment Program; Coverage of Opioid Use Disorder Services Furnished by Opioid Treatment Programs; Medicare Enrollment of Opioid Treatment Programs; Electronic Prescribing for Controlled Substances for a Covered Part D Drug; Payment for Office/Outpatient Evaluation and Management Services; Hospital IQR Program; Establish New Code Categories; Medicare Diabetes Prevention Program (MDPP) Expanded Model Emergency Policy; Coding and Payment for Virtual Check-In Services Interim Final Rule Policy; Coding and Payment for Personal Protective Equipment (PPE) Interim Final Rule Policy; Regulatory Revisions in Response to the Public Health Emergency (PHE) for COVID-19; and Finalization of Certain Provisions From the March 31st, May 8th and September 2nd Interim Final Rules in Response to the PHE for COVID-19; Correcting Amendment",
@@ -5125,6 +5177,8 @@
                             "section_id": 800
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 69404",
                     "title": "Medicare and Medicaid Programs; CY 2023 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment and Coverage Policies; Medicare Shared Savings Program Requirements; Implementing Requirements for Manufacturers of Certain Single-dose Container or Single-use Package Drugs To Provide Refunds With Respect to Discarded Amounts; and COVID-19 Interim Final Rules",
@@ -5158,6 +5212,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "86 FR 5020",
                     "title": "Medicare Program; CY 2021 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicaid Promoting Interoperability Program Requirements for Eligible Professionals; Quality Payment Program; Coverage of Opioid Use Disorder Services Furnished by Opioid Treatment Programs; Medicare Enrollment of Opioid Treatment Programs; Electronic Prescribing for Controlled Substances for a Covered Part D Drug; Payment for Office/Outpatient Evaluation and Management Services; Hospital IQR Program; Establish New Code Categories; Medicare Diabetes Prevention Program (MDPP) Expanded Model Emergency Policy; Coding and Payment for Virtual Check-In Services Interim Final Rule Policy; Coding and Payment for Personal Protective Equipment (PPE) Interim Final Rule Policy; Regulatory Revisions in Response to the Public Health Emergency (PHE) for COVID-19; and Finalization of Certain Provisions From the March 31st, May 8th and September 2nd Interim Final Rules in Response to the PHE for COVID-19; Correction",
@@ -5192,6 +5248,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "86 FR 14690",
                     "title": "Medicare Program; CY 2021 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicaid Promoting Interoperability Program Requirements for Eligible Professionals; Quality Payment Program; Coverage of Opioid Use Disorder Services Furnished by Opioid Treatment Programs; Medicare Enrollment of Opioid Treatment Programs; Electronic Prescribing for Controlled Substances for a Covered Part D Drug; Payment for Office/Outpatient Evaluation and Management Services; Hospital IQR Program; Establish New Code Categories; Medicare Diabetes Prevention Program (MDPP) Expanded Model Emergency Policy; Coding and Payment for Virtual Check-In Services Interim Final Rule Policy; Coding and Payment for Personal Protective Equipment (PPE) Interim Final Rule Policy; Regulatory Revisions in Response to the Public Health Emergency (PHE) for COVID-19; and Finalization of Certain Provisions From the March 31st, May 8th and September 2nd Interim Final Rules in Response to the PHE for COVID-19; Correction",
@@ -5731,6 +5789,8 @@
                             "section_id": 800
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 45860",
                     "title": "Medicare and Medicaid Programs; CY 2023 Payment Policies Under the Physician Fee Schedule and Other Changes to Part B Payment Policies; Medicare Shared Savings Program Requirements; Medicare and Medicaid Provider Enrollment Policies, Including for Skilled Nursing Facilities; Conditions of Payment for Suppliers of Durable Medicaid Equipment, Prosthetics, Orthotics, and Supplies (DMEPOS); and Implementing Requirements for Manufacturers of Certain Single-Dose Container or Single-Use Package Drugs To Provide Refunds With Respect to Discarded Amounts",
@@ -5849,6 +5909,8 @@
                     "section_id": 154
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMD #23-002",
             "title": "Third-Party Liability in Medicaid: State Compliance with Changes Required in Law and Court Rulings",
@@ -5929,6 +5991,8 @@
                     "section_id": 609
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 11865",
             "title": "Medicaid Program; Disproportionate Share Hospital Third-Party Payer Rule",
@@ -6080,6 +6144,8 @@
                     "section_id": 104
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Medicaid and Children's Health Insurance Program (CHIP) Disability and Language Access Requirements Slide Deck",
@@ -6154,6 +6220,8 @@
                     "section_id": 364
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Health Care-Related Taxes and Hold Harmless Arrangements Involving the Redistribution of Medicaid Payments",
@@ -6227,6 +6295,8 @@
                     "subpart_id": "B"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "88 FR 9820",
             "title": "Medicare and Medicaid Programs; Disclosures of Ownership and Additional Disclosable Parties Information for Skilled Nursing Facilities and Nursing Facilities",
@@ -6266,6 +6336,8 @@
                     "section_id": 518
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "State Release # 191",
             "title": "Important Medicaid Drug Rebate Program Reminders for States: State Data Report on CMS-Authorized Supplemental Rebate Agreements with ValueBased Purchasing Arrangements DUE March 1, 2023; Requirement for Certification of State Drug Utilization Data (SDUD)",
@@ -6494,6 +6566,8 @@
                     "subpart_id": "F"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 23-002",
             "title": "Medicaid Continuous Enrollment Condition Changes, Conditions for Receiving the FFCRA Temporary FMAP Increase, Reporting Requirements, and Enforcement Provisions in the Consolidated Appropriations Act, 2023",
@@ -6526,6 +6600,8 @@
                     "section_id": 420
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "FAQ: Temporary Special Enrollment Period (SEP) for Consumers Losing Medicaid or the Children's Health Insurance Program (CHIP) Coverage Due to Unwinding of the Medicaid Continuous Enrollment Condition",
@@ -6614,6 +6690,8 @@
                     "section_id": 350
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "2023 Federal Poverty Level Standards",
@@ -6681,6 +6759,8 @@
                     "section_id": 225
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Strategic Approaches to Engaging Managed Care Plans to Maximize Continuity of Coverage as States Resume Normal Eligibility and Enrollment Operations",
@@ -6776,6 +6856,8 @@
                     "section_id": 57
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO # 23-001",
             "title": "Coverage and Payment of Interprofessional Consultation in Medicaid and the Children's Health Insurance Program (CHIP)",
@@ -6906,6 +6988,8 @@
                     "section_id": 340
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Key Dates Related to the Medicaid Continuous Enrollment Condition Provisions in the Consolidated Appropriations Act, 2023",
@@ -6987,6 +7071,8 @@
                     "section_id": 404
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMD #23-001",
             "title": "Additional Guidance on Use of In Lieu of Services and Settings in Medicaid Managed Care",
@@ -7032,6 +7118,8 @@
                     "section_id": 25
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 80468",
             "title": "Medicare Program; Implementing Certain Provisions of the Consolidated Appropriations Act, 2021 and Other Revisions to Medicare Enrollment and Eligibility Rules; Correction",
@@ -7279,6 +7367,8 @@
                             "section_id": 30
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 66454",
                     "title": "Medicare Program; Implementing Certain Provisions of the Consolidated Appropriations Act, 2021 and Other Revisions to Medicare Enrollment and Eligibility Rules",
@@ -7541,6 +7631,8 @@
                             "section_id": 30
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 25090",
                     "title": "Medicare Program; Implementing Certain Provisions of the Consolidated Appropriations Act, 2021 and Other Revisions to Medicare Enrollment and Eligibility Rules",
@@ -7617,6 +7709,8 @@
                     "section_id": 70
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMDL #22-006",
             "title": "Additional Guidance on Section 9815 of the American Rescue Plan Act of 2021",
@@ -7830,6 +7924,8 @@
                     "section_id": 1220
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 78206",
             "title": "Patient Protection and Affordable Care Act, HHS Notice of Benefit and Payment Parameters for 2024",
@@ -7868,6 +7964,8 @@
                     "section_id": 610
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 77722",
             "title": "Basic Health Program; Federal Funding Methodology for Program Year 2023 and Changes to the Basic Health Program Payment Notice Process",
@@ -7905,6 +8003,8 @@
                             "section_id": 610
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "87 FR 31815",
                     "title": "Basic Health Program; Federal Funding Methodology for Program Year 2023 and Proposed Changes to Basic Health Program Regulations",
@@ -8002,6 +8102,8 @@
                     "section_id": 1110
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 22-003",
             "title": "Coverage of Youth Formerly in Foster Care in Medicaid (Section 1002(a) of the SUPPORT Act)",
@@ -8062,6 +8164,8 @@
                     "subpart_id": "C"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Medicaid Coverage of Youth Formerly in Foster Care Changes under Section 1002(a) of the SUPPORT Act",
@@ -8254,6 +8358,8 @@
                     "section_id": 631
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 76238",
             "title": "Medicare and Medicaid Programs; Patient Protection and Affordable Care Act; Advancing Interoperability and Improving Prior Authorization Processes for Medicare Advantage Organizations, Medicaid Managed Care Plans, State Medicaid Agencies, Children's Health Insurance Program (CHIP) Agencies and CHIP Managed Care Entities, Issuers of Qualified Health Plans on the Federally-Facilitated Exchanges, Merit-Based Incentive Payment System (MIPS) Eligible Clinicians, and Eligible Hospitals and Critical Access Hospitals in the Medicare Promoting Interoperability Program",
@@ -8335,6 +8441,8 @@
                     "section_id": 340
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Supporting Seamless Coverage Transitions for Children Moving Between Medicaid and CHIP in Separate CHIP States",
@@ -8423,6 +8531,8 @@
                     "section_id": 832
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "2023 SSI and Spousal Impoverishment Standards",
@@ -8497,6 +8607,8 @@
                     "section_id": 1250
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "2023 and 2024 Updates to the Child and Adult Core Health Care Quality Measurement Sets",
@@ -8520,6 +8632,8 @@
                 "type": "public_category"
             },
             "cfr_citations": [],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 65723",
             "title": "Medicare and Medicaid Programs; Policy and Technical Changes to the Medicare Advantage, Medicare Prescription Drug Benefit, Program of All-Inclusive Care for the Elderly (PACE), Medicaid Fee-For-Service, and Medicaid Managed Care Programs for Years 2020 and 2021; Extension of Timeline To Finalize a Rulemaking",
@@ -8578,6 +8692,8 @@
                             "section_id": 120
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "84 FR 26578",
                     "title": "Medicare and Medicaid Programs; Policy and Technical Changes to the Medicare Advantage, Medicare Prescription Drug Benefit, Programs of All-Inclusive Care for the Elderly (PACE), Medicaid Fee-For-Service, and Medicaid Managed Care Programs for Years 2020 and 2021; Correction",
@@ -8889,6 +9005,8 @@
                             "section_id": 5
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "84 FR 15680",
                     "title": "Medicare and Medicaid Programs; Policy and Technical Changes to the Medicare Advantage, Medicare Prescription Drug Benefit, Programs of All-Inclusive Care for the Elderly (PACE), Medicaid Fee-For-Service, and Medicaid Managed Care Programs for Years 2020 and 2021",
@@ -9221,6 +9339,8 @@
                             "section_id": 5
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "83 FR 54982",
                     "title": "Medicare and Medicaid Programs; Policy and Technical Changes to the Medicare Advantage, Medicare Prescription Drug Benefit, Program of All-Inclusive Care for the Elderly (PACE), Medicaid Fee-for-Service, and Medicaid Managed Care Programs for Years 2020 and 2021",
@@ -9251,6 +9371,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "86 FR 58245",
                     "title": "Medicare and Medicaid Programs; Policy and Technical Changes to the Medicare Advantage, Medicare Prescription Drug Benefit, Program of All-Inclusive Care for the Elderly (PACE), Medicaid Fee-For-Service, and Medicaid Managed Care Programs for Years 2020 and 2021; Extension of Timeline To Finalize a Rulemaking",
@@ -9383,6 +9505,8 @@
                     "section_id": 340
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Ex Parte Renewal: Strategies to Maximize Automation, Increase Renewal Rates, and Support Unwinding Efforts",
@@ -9555,6 +9679,8 @@
                     "subpart_id": "E"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "COVID-19 Public Health Emergency Unwinding Frequently Asked Questions for State Medicaid and CHIP Agencies",
@@ -9601,6 +9727,8 @@
                     "section_id": 220
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Ending Coverage in the Optional COVID-19 Group: Preparing States for the End of the Public Health Emergency",
@@ -9625,6 +9753,8 @@
                 "parent": 11
             },
             "cfr_citations": [],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Funding Opportunity: Health Home for Children with Medically Complex Conditions",
@@ -9656,6 +9786,8 @@
                     "section_id": 400
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "87 FR 58456",
             "title": "Medicaid Program; Temporary Increase in Federal Medical Assistance Percentage (FMAP) in Response to the COVID-19 Public Health Emergency (PHE); Reopening of Public Comment Period",
@@ -9896,6 +10028,8 @@
                             "section_id": 90
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "85 FR 71142",
                     "title": "Additional Policy and Regulatory Revisions in Response to the COVID-19 Public Health Emergency",
@@ -9951,6 +10085,8 @@
                     "section_id": 302
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMD# 22-005",
             "title": "RE: Guidance on Nursing Facility State Plan Payment and Upper Payment Limit Approaches in Medicaid Relying on the Medicare Patient-Driven Payment Model",
@@ -10088,6 +10224,8 @@
                     "section_id": 380
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Opportunities to Support Unwinding Efforts for States with Integrated Eligibility Systems and/or Workforces",
