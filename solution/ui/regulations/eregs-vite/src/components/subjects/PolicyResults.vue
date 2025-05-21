@@ -380,12 +380,14 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     <template v-if="doc.type !== 'reg_text'">
                         <RelatedSections
                             v-if="hasStatuteCitations({ doc })"
+                            class="related-statutes"
                             :base="homeUrl"
                             :item="doc"
                             label="Statutes"
                         />
                         <RelatedSections
                             v-if="hasRegulationCitations({ doc, partsLastUpdated })"
+                            class="related-regulations"
                             :base="homeUrl"
                             :item="doc"
                             :parts-last-updated="partsLastUpdated"

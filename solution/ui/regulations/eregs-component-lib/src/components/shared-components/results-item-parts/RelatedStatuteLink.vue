@@ -1,16 +1,12 @@
 <script setup>
 defineProps({
-    title: {
-        type: String,
-        required: true,
-    },
     section: {
         type: Object,
         required: true,
     },
     url: {
         type: String,
-        default: undefined,
+        default: "",
     },
 });
 

@@ -341,16 +341,39 @@ describe("Find by Subjects", () => {
         cy.get(`button[data-testid=remove-subject-3]`).should("not.exist");
     });
 
-    it("should display and fetch the correct subjects on load if they are included in URL", () => {
+    it("should display the correct related statutes and regulations", () => {
         cy.getPolicyDocs({ username, password });
-        cy.get(".related-sections")
+        // check related statute without url
+        cy.get(".related-statutes")
             .first()
-            .find(".related-section-link")
+            .find(".related-section-item")
+            .first()
+            .find(".related-statute__span")
+            .should("have.text", "1905(r)")
+            .and("not.have.attr", "href");
+        // check related statute with url
+        cy.get(".related-statutes")
+            .first()
+            .find(".related-section-item")
+            .eq(1)
+            .find("a.related-statute__link")
+            .first()
+            .should("have.text", "6409")
+            .and("have.attr", "href")
+            .and("include", "https://www.mock-url.com");
+        // check related regulation
+        cy.get(".related-regulations")
+            .first()
+            .find(".related-section-item")
             .first()
             .find("a")
             .should("have.attr", "href")
             .and("not.include", "undefined")
             .and("include", "/42/440/130#440-130");
+    });
+
+    it("should display and fetch the correct subjects on load if they are included in URL", () => {
+        cy.getPolicyDocs({ username, password });
         cy.get(".result__link") // internal_file
             .eq(0)
             .find("a")

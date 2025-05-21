@@ -83,14 +83,14 @@ if (props.label === "Regulations") {
             > §§ </span>
             <span
                 v-else
-                :key="i + key"
+                :key="i + key + i + key"
                 class="section-sign"
             > § </span>
             <template
                 v-for="(citation, j) in citations"
                 :key="i + 'key' + j"
             >
-                <span class="related-section-link">
+                <span class="related-section-item">
                     <RelatedRegulationLink
                         v-if="props.label === 'Regulations'"
                         :citation="citation"
@@ -98,7 +98,8 @@ if (props.label === "Regulations") {
                     />
                     <RelatedStatuteLink
                         v-else
-                        v-bind="citation"
+                        :section="citation.section"
+                        :url="citation.url"
                     />
                     <span v-if="j + 1 != citations.length">, </span>
                 </span>
