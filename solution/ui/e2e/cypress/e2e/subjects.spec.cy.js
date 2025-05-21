@@ -228,11 +228,11 @@ describe("Find by Subjects", () => {
             "/subjects?subjects=3&categories=1&type=external",
         );
 
-        cy.get("input#main-content").invoke("val").should("eq", "");
+        cy.get("input#main-content").should("have.value", "");
 
         cy.get("input#main-content").type("mock", { force: true });
 
-        cy.get("input#main-content").invoke("val").should("eq", "mock");
+        cy.get("input#main-content").should("have.value", "mock");
 
         cy.get(".search-field")
             .find(".v-field__clearable i")
@@ -243,7 +243,7 @@ describe("Find by Subjects", () => {
             .find(".v-field__clearable i")
             .click({ force: true });
 
-        cy.get("input#main-content").invoke("val").should("eq", "");
+        cy.get("input#main-content").should("have.value", "");
 
         cy.url().should(
             "include",
