@@ -16,7 +16,7 @@ jobs:
       fail-fast: true
     services:
       postgres:
-        image: postgres
+        image: pgvector/pgvector:pg15  # Use the same image as in docker-compose.yml
         env:
           POSTGRES_HOST: localhost
           POSTGRES_DB: eregs
