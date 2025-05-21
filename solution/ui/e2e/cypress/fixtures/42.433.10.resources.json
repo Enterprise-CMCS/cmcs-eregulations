@@ -27,6 +27,8 @@
                     "section_id": 206
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "78 FR 32991",
             "title": "Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010; Correction",
@@ -78,6 +80,8 @@
                             "section_id": 206
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "78 FR 19917",
                     "title": "Medicaid Program; Increased Federal Medical Assistance Percentage Changes Under the Affordable Care Act of 2010",
@@ -482,6 +486,8 @@
                     "section_id": 955
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "77 FR 17143",
             "title": "Medicaid Program; Eligiblity Changes Under the Affordable Care Act of 2010",
@@ -841,6 +847,8 @@
                             "section_id": 335
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "76 FR 51147",
                     "title": "Medicaid Program; Eligibility Changes Under the Affordable Care Act of 2010",
@@ -888,6 +896,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "73 FR 70886",
             "title": "Medicaid Program; State Allotments for Payment of Medicare Part B Premiums for Qualifying Individuals: Federal Fiscal Year 2008 and Federal Fiscal Year 2009",
@@ -918,6 +928,8 @@
                 "type": "public_category"
             },
             "cfr_citations": [],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "71 FR 60663",
             "title": "Medicaid Program; State Allotments for Payment of Medicare Part B Premiums for Qualifying Individuals: Federal Fiscal Year 2006 and Fiscal Year 2007",
@@ -948,6 +960,8 @@
                             "section_id": 10
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "71 FR 25085",
                     "title": "Medicaid Program; State Allotments for Payment of Medicare Part B Premiums for Qualifying Individuals: Federal Fiscal Year 2006",
@@ -995,6 +1009,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "70 FR 50214",
             "title": "Medicaid Program; State Allotments for Payment of Medicare Part B Premiums for Qualifying Individuals: Federal Fiscal Year 2005",
@@ -1215,6 +1231,8 @@
                     "section_id": 1190
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "66 FR 33809",
             "title": "State Child Health; Revisions to the Regulations Implementing the State Children's Health Insurance Program",
@@ -1931,6 +1949,8 @@
                             "subpart_id": "A"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "64 FR 60882",
                     "title": "State Child Health; Implementing Regulations for the State Children's Health Insurance Program",
@@ -1961,6 +1981,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "66 FR 31178",
                     "title": "State Child Health; Implementing Regulations for the State Children's Health Insurance Program: Further Delay of Effective Date",
@@ -2818,6 +2840,8 @@
                             "section_id": 955
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "66 FR 2489",
                     "title": "State Child Health; Implementing Regulations for the State Children's Health Insurance Program",
@@ -2848,6 +2872,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "66 FR 11547",
                     "title": "State Child Health; Implementing Regulations for the State Children's Health Insurance Program: Delay of Effective Date",
@@ -2895,6 +2921,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "54 FR 21066",
             "title": "Medicare and Medicaid; Approved Information Collection Requirements and Federal Medical Assistance Percentage Computation",
@@ -2954,6 +2982,8 @@
                     "section_id": 3
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "51 FR 41350",
             "title": "Medicare and Medicaid Programs; Miscellaneous Conforming Amendments",
@@ -3034,6 +3064,8 @@
                     "section_id": 2
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "46 FR 48566",
             "title": "Professional Standards Review; Professional Standards Review Organizations (PSRO)",
@@ -3436,6 +3468,8 @@
                     "section_id": 331
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "45 FR 24884",
             "title": "Medicaid Program; Miscellaneous Corrections",
@@ -6357,6 +6391,8 @@
                             "subpart_id": "C"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "43 FR 45176",
                     "title": "Reorganization and Rewriting",
@@ -9277,6 +9313,8 @@
                             "subpart_id": "C"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "subjects": [],
                     "document_id": "43 FR 2413",
                     "title": "Reorganization and Rewrite of Medicaid Regulations",
