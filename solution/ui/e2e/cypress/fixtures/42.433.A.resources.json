@@ -34,6 +34,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 23-002000",
             "title": "Mock title",
@@ -261,6 +263,8 @@
                     "subpart_id": "F"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 23-002",
             "title": "Medicaid Continuous Enrollment Condition Changes, Conditions for Receiving the FFCRA Temporary FMAP Increase, Reporting Requirements, and Enforcement Provisions in the Consolidated Appropriations Act, 2023",
@@ -320,6 +324,8 @@
                     "section_id": 52
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMDL #22-006",
             "title": "Additional Guidance on Section 9815 of the American Rescue Plan Act of 2021",
@@ -379,6 +385,8 @@
                     "section_id": 907
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Medicaid Coverage of Youth Formerly in Foster Care Changes under Section 1002(a) of the SUPPORT Act",
@@ -550,6 +558,8 @@
                     "section_id": 230
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "COVID-19 Public Health Emergency Unwinding Frequently Asked Questions for State Medicaid and CHIP Agencies",
@@ -616,6 +626,8 @@
                     "section_id": 32
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SMD # 22-004",
             "title": "Health Homes for Children with Medically Complex Conditions",
@@ -934,6 +946,8 @@
                     "section_id": 608
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Coverage and Reimbursement of COVID-19 Vaccines, Vaccine Administration, and Cost Sharing under Medicaid, the Children's Health Insurance Program, and Basic Health Program",
@@ -1168,6 +1182,8 @@
                     "section_id": 300
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Data Sharing for Child Welfare Agencies and Medicaid",
@@ -1283,6 +1299,8 @@
                     "section_id": 520
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Medicaid, CHIP and BHP COVID-19 Vaccine Administration Coverage, Cost-Sharing, and Reimbursement Fact Sheet",
@@ -1440,6 +1458,8 @@
                     "section_id": 107
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "SHO# 21-004",
             "title": "RE: Temporary increases to FMAP under sections 9811, 9814, 9815, and 9821 of the ARP and administrative claiming for vaccine incentives",
@@ -1485,6 +1505,8 @@
                     "section_id": 618
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "Available Flexibilities and Funding Opportunities to Address COVID-19 Vaccine Hesitancy",
