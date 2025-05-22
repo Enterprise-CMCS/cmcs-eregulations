@@ -688,6 +688,14 @@ const deserializeResult = (obj) => {
         item: obj,
         fieldName: "cfr_citations",
     });
+    returnObj.usc_citations = getFieldVal({
+        item: obj,
+        fieldName: "usc_citations",
+    });
+    returnObj.act_citations = getFieldVal({
+        item: obj,
+        fieldName: "act_citations",
+    });
     returnObj.content_headline = obj.content_headline;
     returnObj.correction = getFieldVal({ item: obj, fieldName: "correction" });
     returnObj.date = getFieldVal({ item: obj, fieldName: "date" });

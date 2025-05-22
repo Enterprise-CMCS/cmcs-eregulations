@@ -31,6 +31,8 @@
                     "type": "section"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "correction": true,
             "created_at": "2024-07-08 10:21:59.135621",
             "date": "2023-06-07",
@@ -52,6 +54,8 @@
                         "type": "public_category"
                     },
                     "cfr_citations": [],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "correction": true,
                     "created_at": "2024-07-08 10:21:59.166491",
                     "date": "2023-05-31",
@@ -529,6 +533,8 @@
                             "type": "section"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "correction": false,
                     "created_at": "2024-07-08 10:21:59.234943",
                     "date": "2023-04-12",
@@ -1412,6 +1418,8 @@
                             "type": "section"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "correction": false,
                     "created_at": "2024-07-08 10:21:59.294564",
                     "date": "2022-12-27",
@@ -1561,6 +1569,8 @@
                     "type": "section"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "correction": false,
             "created_at": "2024-07-08 10:21:59.153010",
             "date": "2023-06-05",
@@ -1702,6 +1712,8 @@
                             "type": "section"
                         }
                     ],
+                    "act_citations": [],
+                    "usc_citations": [],
                     "correction": true,
                     "created_at": "2024-07-08 10:21:59.596315",
                     "date": "2021-11-05",
@@ -1802,6 +1814,8 @@
                     "type": "section"
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "correction": false,
             "created_at": "2024-07-08 10:21:59.182423",
             "date": "2023-05-26",

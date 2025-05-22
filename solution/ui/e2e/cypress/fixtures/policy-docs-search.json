@@ -28,6 +28,20 @@
                         "type": "section"
                     }
                 ],
+                "act_citations": [
+                    {
+                        "act": "Social Security Act",
+                        "section": "1905(r)",
+                        "url": ""
+                    }
+                ],
+                "usc_citations": [
+                    {
+                        "title": "42",
+                        "section": "6409",
+                        "url": "https://www.mock-url.com"
+                    }
+                ],
                 "created_at": "2024-07-18 10:22:56.341901",
                 "date": "2014-06-23",
                 "document_id": "",
@@ -128,6 +142,8 @@
                         "type": "section"
                     }
                 ],
+                "act_citations": [],
+                "usc_citations": [],
                 "created_at": "2024-07-18 10:22:30.394694",
                 "date": "2003-06-13",
                 "document_id": "SMDL #03-005",
@@ -195,6 +211,8 @@
                         "type": "section"
                     }
                 ],
+                "act_citations": [],
+                "usc_citations": [],
                 "correction": true,
                 "created_at": "2024-07-18 10:22:35.320776",
                 "date": "2022-09-27",

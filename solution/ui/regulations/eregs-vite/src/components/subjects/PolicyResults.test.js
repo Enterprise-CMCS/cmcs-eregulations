@@ -431,3 +431,64 @@ describe("hasRegulationCitations", () => {
         ).toBe(false);
     });
 });
+
+describe("hasStatuteCitations", () => {
+    it("returns false if the document has no act_citations or no usc_citations", async () => {
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 1,
+                    unrelated_field: ["x"],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 2,
+                    act_citations: [],
+                    usc_citations: [],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 3,
+                    act_citations: [1, 2],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 4,
+                    act_citations: [],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 5,
+                    usc_citations: [1, 2],
+                    act_citations: [],
+                },
+            })
+        ).toBe(true);
+
+        expect(
+            PolicyResults.hasStatuteCitations({
+                doc: {
+                    id: 6,
+                    act_citations: [1, 2],
+                    usc_citations: ["one", "two"],
+                },
+            })
+        ).toBe(true);
+    });
+});

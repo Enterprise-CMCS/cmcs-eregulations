@@ -27,6 +27,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [
                 {
                     "id": 8,
@@ -90,6 +92,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [
                 {
                     "id": 2,
@@ -153,6 +157,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "[Mock] Test 1 -- internal link",
@@ -184,6 +190,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "[Mock] Test file 2",
@@ -218,6 +226,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "[Mock] Test file 3",
@@ -252,6 +262,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "[Mock] Test file 4",
@@ -286,6 +298,8 @@
                     "section_id": 10
                 }
             ],
+            "act_citations": [],
+            "usc_citations": [],
             "subjects": [],
             "document_id": "",
             "title": "[Mock] Test file 5",
