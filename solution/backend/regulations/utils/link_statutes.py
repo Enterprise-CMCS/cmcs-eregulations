@@ -1,6 +1,12 @@
 import re
 from functools import partial
 
+
+from regulations.models import (
+    StatuteLinkConverter,
+)
+
+
 from common.patterns import (
     AND_OR_PATTERN,
     DASH_PATTERN,
@@ -37,6 +43,27 @@ NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
+
+
+# Create a mixin class that adds link conversions to the serializer context.
+class LinkConversionsMixin:
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["link_conversions"] = self.get_link_conversions()
+        return context
+
+    def get_link_conversions(self):
+        # This method should be overridden to provide the actual link conversions.
+        conversions = {}
+        for section, usc, act, title in StatuteLinkConverter.objects.values_list("section", "usc", "act", "title"):
+            if act not in conversions:
+                conversions[act] = {}
+            conversions[act][section] = {
+                "title": title,
+                "usc": usc,
+            }
+        return conversions
+
 
 
 # This takes a section identifier and tries to determine if a dash within it is part of the ID, or marking continuity.

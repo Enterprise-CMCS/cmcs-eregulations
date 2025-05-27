@@ -15,8 +15,8 @@ from regcore.models import Part
 from regulations.models import (
     RegulationLinkConfiguration,
     StatuteLinkConfiguration,
-    StatuteLinkConverter,
 )
+from regulations.utils import LinkConversionsMixin
 from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
@@ -26,7 +26,7 @@ from resources.models import (
 )
 
 
-class ReaderView(CitationContextMixin, TemplateView):
+class ReaderView(CitationContextMixin, LinkConversionsMixin, TemplateView):
 
     template_name = 'regulations/reader.html'
 
@@ -64,15 +64,6 @@ class ReaderView(CitationContextMixin, TemplateView):
         for location in locations:
             resource_count[location.display_name] = location.num_locations
 
-        conversions = {}
-        for section, usc, act, title in StatuteLinkConverter.objects.values_list("section", "usc", "act", "title"):
-            if act not in conversions:
-                conversions[act] = {}
-            conversions[act][section] = {
-                "title": title,
-                "usc": usc,
-            }
-
         statute_link_config = StatuteLinkConfiguration.get_solo()
         reg_link_config = RegulationLinkConfiguration.get_solo()
 
@@ -101,7 +92,7 @@ class ReaderView(CitationContextMixin, TemplateView):
             'view_type':    self.get_view_type(),
             'categories':   categories,
             'resource_count': resource_count,
-            'link_conversions': conversions,
+            'link_conversions': self.get_link_conversions(),
             'link_config': link_config,
             'is_user_authenticated': is_user_authenticated,
             'user': user,

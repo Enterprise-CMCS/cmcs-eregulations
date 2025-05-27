@@ -69,6 +69,12 @@ MetaCitationSerializer = ProxySerializerWrapper(
 class ActCitationSerializer(serializers.Serializer):
     act = serializers.CharField()
     section = serializers.CharField()
+    url = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        if obj.act and obj.section:
+            return f"/api/v1/citations/act/{obj.act}/{obj.section}/"
+        return None
 
 
 class UscCitationSerializer(serializers.Serializer):
