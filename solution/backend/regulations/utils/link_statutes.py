@@ -1,12 +1,6 @@
 import re
 from functools import partial
 
-
-from regulations.models import (
-    StatuteLinkConverter,
-)
-
-
 from common.patterns import (
     AND_OR_PATTERN,
     DASH_PATTERN,
@@ -15,6 +9,9 @@ from common.patterns import (
     PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
     USC_CFR_IGNORE_PATTERN,
+)
+from regulations.models import (
+    StatuteLinkConverter,
 )
 
 USCODE_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" class="external" href="https://uscode.house.gov/view.xhtml'\
@@ -63,7 +60,6 @@ class LinkConversionsMixin:
                 "usc": usc,
             }
         return conversions
-
 
 
 # This takes a section identifier and tries to determine if a dash within it is part of the ID, or marking continuity.

@@ -1,5 +1,11 @@
+from functools import partial
+
 from rest_framework import serializers
 
+from regulations.utils import (
+    SECTION_REGEX,
+    replace_section,
+)
 from resources.models import (
     Section,
     Subpart,
@@ -72,8 +78,12 @@ class ActCitationSerializer(serializers.Serializer):
     url = serializers.SerializerMethodField()
 
     def get_url(self, obj):
-        if obj.act and obj.section:
-            return f"/api/v1/citations/act/{obj.act}/{obj.section}/"
+        conversions = self.context.get("link_conversions")
+        if obj["act"] and obj["section"]:
+            return SECTION_REGEX.sub(
+                partial(replace_section, act=obj["act"], link_conversions=conversions, exceptions=[]),
+                obj["section"]
+            )
         return None
 
 

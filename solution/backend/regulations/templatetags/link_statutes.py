@@ -1,13 +1,13 @@
 from functools import partial
 
+from django import template
+
 from regulations.utils import (
     STATUTE_REF_REGEX,
     USC_REF_REGEX,
     replace_sections,
     replace_usc_citations,
 )
-
-from django import template
 
 register = template.Library()
 
