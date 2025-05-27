@@ -81,7 +81,13 @@ class ActCitationSerializer(serializers.Serializer):
         conversions = self.context.get("link_conversions")
         if obj["act"] and obj["section"]:
             return SECTION_REGEX.sub(
-                partial(replace_section, act=obj["act"], link_conversions=conversions, exceptions=[]),
+                partial(
+                    replace_section,
+                    act=obj["act"],
+                    link_conversions=conversions,
+                    exceptions=[],
+                    generate_url_only=True
+                ),
                 obj["section"]
             )
         return None

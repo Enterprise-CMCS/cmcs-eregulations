@@ -14,8 +14,8 @@ from regulations.models import (
     StatuteLinkConverter,
 )
 
-USCODE_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" class="external" href="https://uscode.house.gov/view.xhtml'\
-                     '?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}">{}</a>'
+USCODE_ANCHOR_FORMAT = '<a target="_blank" rel="noopener noreferrer" class="external" href="{}">{}</a>'
+USCODE_LINK_FORMAT = 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title{}-section{}&num=0&edition=prelim{}'
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
 NUMBER_PATTERN = r"[0-9]+"
@@ -89,7 +89,7 @@ def extract_paragraphs(section_text):
 
 # This function is run by re.sub() to replace individual section refs with links.
 # "act" and "link_conversions" must be passed in via a partial function.
-def replace_section(section, act, link_conversions, exceptions):
+def replace_section(section, act, link_conversions, exceptions, generate_url_only=False):
     section_text = section.group()
     try:
         citation, remainder = split_citation(section_text)
@@ -102,13 +102,16 @@ def replace_section(section, act, link_conversions, exceptions):
     if act in link_conversions and section in link_conversions[act]:
         paragraphs = extract_paragraphs(section_text)
         conversion = link_conversions[act][section]
-        return USCODE_LINK_FORMAT.format(
+        link = USCODE_LINK_FORMAT.format(
             conversion["title"],
             DASH_REGEX.sub("-", conversion["usc"]),
             USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
             citation,
-        ) + remainder
-    return section_text
+        )
+        if not generate_url_only:
+            return USCODE_ANCHOR_FORMAT.format(link, citation) + remainder
+        return link
+    return "" if generate_url_only else section_text
 
 
 # This middleman re.sub() function is run when an entire statute ref is matched. It performs another substition on individual
