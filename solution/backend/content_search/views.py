@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from regulations.utils import LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -102,7 +103,7 @@ class ContentSearchPagination(ViewSetPagination):
         ),
     ] + ViewSetPagination.QUERY_PARAMETERS,
 )
-class ContentSearchViewSet(viewsets.ReadOnlyModelViewSet):
+class ContentSearchViewSet(LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
     pagination_class = ContentSearchPagination
