@@ -1,12 +1,12 @@
 from functools import partial
 
-from regulations.utils.link_statutes import replace_usc_citation
 from rest_framework import serializers
 
 from regulations.utils import (
     SECTION_REGEX,
     replace_section,
 )
+from regulations.utils.link_statutes import replace_usc_citation
 from resources.models import (
     Section,
     Subpart,
