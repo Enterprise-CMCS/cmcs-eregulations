@@ -135,7 +135,7 @@ USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 # Replaces individual USC refs with links, to be run by re.sub().
 # "title" must be passed in via a partial function.
-def replace_usc_citation(match, title, exceptions):
+def replace_usc_citation(match, title, exceptions, generate_url_only=False):
     citation_text = match.group()
     try:
         citation, remainder = split_citation(citation_text)
@@ -145,12 +145,15 @@ def replace_usc_citation(match, title, exceptions):
         return citation_text
     section = SECTION_ID_REGEX.match(citation).group()
     paragraphs = extract_paragraphs(citation)
-    return USCODE_LINK_FORMAT.format(
+    link = USCODE_LINK_FORMAT.format(
         title,
         DASH_REGEX.sub("-", section),
         USCODE_SUBSTRUCT_FORMAT.format("_".join(paragraphs)) if paragraphs else "",
         citation,
-    ) + remainder
+    )
+    if not generate_url_only:
+        return USCODE_ANCHOR_FORMAT.format(link, citation) + remainder
+    return link
 
 
 # Matches entire USC citations to account for "and", "or" scenarios.

@@ -1,5 +1,6 @@
 from functools import partial
 
+from regulations.utils.link_statutes import replace_usc_citation
 from rest_framework import serializers
 
 from regulations.utils import (
@@ -96,3 +97,17 @@ class ActCitationSerializer(serializers.Serializer):
 class UscCitationSerializer(serializers.Serializer):
     title = serializers.CharField()
     section = serializers.CharField()
+    url = serializers.SerializerMethodField()
+
+    def get_url(self, obj):
+        if obj["title"] and obj["section"]:
+            return SECTION_REGEX.sub(
+                partial(
+                    replace_usc_citation,
+                    title=obj["title"],
+                    exceptions=[],
+                    generate_url_only=True
+                ),
+                obj["section"]
+            )
+        return None
