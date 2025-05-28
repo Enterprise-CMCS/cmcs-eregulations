@@ -1,12 +1,13 @@
 from functools import partial
+from os import stat
 
 from rest_framework import serializers
 
 from regulations.utils import (
     SECTION_REGEX,
     replace_section,
+    replace_usc_citation,
 )
-from regulations.utils.link_statutes import replace_usc_citation
 from resources.models import (
     Section,
     Subpart,
@@ -80,13 +81,15 @@ class ActCitationSerializer(serializers.Serializer):
 
     def get_url(self, obj):
         conversions = self.context.get("link_conversions")
+        link_config = self.context.get("link_config")
+        statute_ref_exceptions = link_config["statute_ref_exceptions"]
         if conversions and obj["act"] and obj["section"]:
             return SECTION_REGEX.sub(
                 partial(
                     replace_section,
                     act=obj["act"],
                     link_conversions=conversions,
-                    exceptions=[],
+                    exceptions=statute_ref_exceptions.get(obj["act"], []),
                     generate_url_only=True
                 ),
                 obj["section"]
@@ -100,12 +103,13 @@ class UscCitationSerializer(serializers.Serializer):
     url = serializers.SerializerMethodField()
 
     def get_url(self, obj):
+        link_config = self.context.get("link_config")
         if obj["title"] and obj["section"]:
             return SECTION_REGEX.sub(
                 partial(
                     replace_usc_citation,
                     title=obj["title"],
-                    exceptions=[],
+                    exceptions=link_config["usc_ref_exceptions"].get(obj["title"], []),
                     generate_url_only=True
                 ),
                 obj["section"]

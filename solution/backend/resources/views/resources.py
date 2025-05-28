@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 from cmcs_regulations.utils import ViewSetPagination
 from common.auth import SettingsAuthentication
-from regulations.utils import LinkConversionsMixin
+from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -103,7 +103,7 @@ RESOURCE_ENDPOINT_PARAMETERS = [
 ] + ViewSetPagination.QUERY_PARAMETERS
 
 
-class ResourceViewSet(LinkConversionsMixin, viewsets.ModelViewSet):
+class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewSet):
     pagination_class = ResourceCountPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource

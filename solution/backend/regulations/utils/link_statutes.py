@@ -11,6 +11,8 @@ from common.patterns import (
     USC_CFR_IGNORE_PATTERN,
 )
 from regulations.models import (
+    RegulationLinkConfiguration,
+    StatuteLinkConfiguration,
     StatuteLinkConverter,
 )
 
@@ -61,6 +63,27 @@ class LinkConversionsMixin:
             }
         return conversions
 
+# Create a mixin that adds exceptions to the serializer context.
+class LinkConfigMixin:
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["link_config"] = self.get_link_config()
+        return context
+
+    def get_link_config(self):
+        # This method should be overridden to provide the actual exceptions.
+
+        statute_link_config = StatuteLinkConfiguration.get_solo()
+        reg_link_config = RegulationLinkConfiguration.get_solo()
+        return {
+            "link_statute_refs": statute_link_config.link_statute_refs,
+            "link_usc_refs": statute_link_config.link_usc_refs,
+            "statute_ref_exceptions": statute_link_config.statute_ref_exceptions_dict,
+            "usc_ref_exceptions": statute_link_config.usc_ref_exceptions_dict,
+            "link_cfr_refs": reg_link_config.link_cfr_refs,
+            "cfr_ref_exceptions": reg_link_config.cfr_ref_exceptions_dict,
+        }
+
 
 # This takes a section identifier and tries to determine if a dash within it is part of the ID, or marking continuity.
 # We assume that all section IDs start with a number. So we can extract the numeric parts and, if B >= A, we can conclude that
@@ -96,7 +119,7 @@ def replace_section(section, act, link_conversions, exceptions, generate_url_onl
     except ValueError:
         return section_text
     if DASH_REGEX.sub("-", citation) in exceptions:
-        return section_text
+        return "" if generate_url_only else section_text
     section = DASH_REGEX.sub("-", SECTION_ID_REGEX.match(citation).group())  # extract section
     # only link if section exists within the relevant act
     if act in link_conversions and section in link_conversions[act]:
@@ -142,7 +165,7 @@ def replace_usc_citation(match, title, exceptions, generate_url_only=False):
     except ValueError:
         return citation_text
     if DASH_REGEX.sub("-", citation) in exceptions:
-        return citation_text
+        return "" if generate_url_only else citation_text
     section = SECTION_ID_REGEX.match(citation).group()
     paragraphs = extract_paragraphs(citation)
     link = USCODE_LINK_FORMAT.format(
