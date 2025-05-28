@@ -79,6 +79,8 @@ class ActCitationSerializer(serializers.Serializer):
 
     def get_url(self, obj):
         conversions = self.context.get("link_conversions")
+        if not conversions:
+            return None
         if obj["act"] and obj["section"]:
             return SECTION_REGEX.sub(
                 partial(
