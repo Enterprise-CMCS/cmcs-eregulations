@@ -63,6 +63,7 @@ class LinkConversionsMixin:
             }
         return conversions
 
+
 # Create a mixin that adds exceptions to the serializer context.
 class LinkConfigMixin:
     def get_serializer_context(self):

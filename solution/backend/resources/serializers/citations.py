@@ -1,5 +1,4 @@
 from functools import partial
-from os import stat
 
 from rest_framework import serializers
 
