@@ -27,6 +27,7 @@ class ReplaceCitationTests(TestCase):
             '6409</a>'
         )
         self.assertEqual(result, expected_link)
+
     def test_replace_usc_citation_generate_url_only_true(self):
         match = MagicMock()
         match.group.side_effect = ["6409"]
@@ -45,8 +46,7 @@ class ReplaceCitationTests(TestCase):
             }
         }
         result = replace_section(
-            match, act =
-                "Social Security Act", link_conversions=link_conversions_mock, exceptions=[], generate_url_only=False
+            match, act="Social Security Act", link_conversions=link_conversions_mock, exceptions=[], generate_url_only=False
         )
         expected_link = (
             '<a target="_blank" rel="noopener noreferrer" class="external" '
@@ -64,8 +64,8 @@ class ReplaceCitationTests(TestCase):
             }
         }
         result = replace_section(
-            match, act =
-                "Social Security Act", link_conversions=link_conversions_mock, exceptions=self.exceptions, generate_url_only=True
+            match,
+            act="Social Security Act", link_conversions=link_conversions_mock, exceptions=self.exceptions, generate_url_only=True
         )
         expected_link = (
             "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1302&num=0&edition=prelim"
