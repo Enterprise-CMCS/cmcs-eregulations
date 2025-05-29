@@ -82,7 +82,7 @@ class ActCitationSerializer(serializers.Serializer):
         conversions = self.context.get("link_conversions")
         link_config = self.context.get("link_config")
         statute_ref_exceptions = link_config["statute_ref_exceptions"]
-        if conversions and obj["act"] and obj["section"]:
+        if conversions and link_config["link_statute_refs"] and obj["act"] and obj["section"]:
             return SECTION_REGEX.sub(
                 partial(
                     replace_section,
@@ -103,7 +103,7 @@ class UscCitationSerializer(serializers.Serializer):
 
     def get_url(self, obj):
         link_config = self.context.get("link_config")
-        if obj["title"] and obj["section"]:
+        if link_config["link_usc_refs"] and obj["title"] and obj["section"]:
             return SECTION_REGEX.sub(
                 partial(
                     replace_usc_citation,
