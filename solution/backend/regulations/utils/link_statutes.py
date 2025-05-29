@@ -44,7 +44,7 @@ NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 DEFAULT_ACT = "Social Security Act"
 
 
-# Create a mixin class that adds link conversions to the serializer context.
+# Mixin that adds link conversions to the context
 class LinkConversionsMixin:
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -52,7 +52,6 @@ class LinkConversionsMixin:
         return context
 
     def get_link_conversions(self):
-        # This method should be overridden to provide the actual link conversions.
         conversions = {}
         for section, usc, act, title in StatuteLinkConverter.objects.values_list("section", "usc", "act", "title"):
             if act not in conversions:
@@ -64,7 +63,7 @@ class LinkConversionsMixin:
         return conversions
 
 
-# Create a mixin that adds exceptions to the serializer context.
+# Mixin that adds exceptions to the context
 class LinkConfigMixin:
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -72,8 +71,6 @@ class LinkConfigMixin:
         return context
 
     def get_link_config(self):
-        # This method should be overridden to provide the actual exceptions.
-
         statute_link_config = StatuteLinkConfiguration.get_solo()
         reg_link_config = RegulationLinkConfiguration.get_solo()
         return {
