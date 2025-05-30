@@ -10,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 from cmcs_regulations.utils import ViewSetPagination
 from common.auth import SettingsAuthentication
+from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
     AbstractCitation,
@@ -102,7 +103,7 @@ RESOURCE_ENDPOINT_PARAMETERS = [
 ] + ViewSetPagination.QUERY_PARAMETERS
 
 
-class ResourceViewSet(viewsets.ModelViewSet):
+class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewSet):
     pagination_class = ResourceCountPagination
     serializer_class = AbstractResourceSerializer
     model = AbstractResource
@@ -121,7 +122,9 @@ class ResourceViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
     def get_serializer_context(self):
-        return {"show_related": string_to_bool(self.request.GET.get("group_resources"), True)}
+        context = super().get_serializer_context()
+        context["show_related"] = string_to_bool(self.request.GET.get("group_resources"), True)
+        return context
 
     def get_queryset(self):
         citations = self.request.GET.getlist("citations")

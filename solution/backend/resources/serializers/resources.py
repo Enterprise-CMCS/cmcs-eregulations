@@ -191,7 +191,7 @@ class ResourceSerializer(serializers.Serializer):
     @extend_schema_field(serializers.ListField(child=serializers.DictField()))
     def get_related_resources(self, obj):
         if self.context.get("show_related", False):
-            return AbstractResourceSerializer(instance=obj.related_resources, many=True).data
+            return AbstractResourceSerializer(instance=obj.related_resources, context=self.context, many=True).data
         return None
 
 
