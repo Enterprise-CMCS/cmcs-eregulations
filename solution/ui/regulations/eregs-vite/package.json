@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
-    "vue": "^3.5.14",
+    "vue": "^3.5.16",
     "vue-router": "^4.5.1",
-    "vuetify": "^3.8.6"
+    "vuetify": "^3.8.7"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.4",
