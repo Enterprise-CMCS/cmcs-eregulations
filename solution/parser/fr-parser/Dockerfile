@@ -1,7 +1,7 @@
 FROM public.ecr.aws/lambda/provided:al2023 as build
 
 # install compiler
-RUN yum install -y golang
+RUN dnf install -y golang
 RUN go env -w GOPROXY=direct
 
 # build parser
