@@ -1,0 +1,42 @@
+{% extends "regulations/spa_base.html" %}
+{% load static %}
+{% load string_formatters %}
+
+{% block title_prefix %}Manual | {% endblock %}
+
+{% block outside_vue %}
+    {{ site_config|json_script:"site_config" }}
+    {{ block.super }}
+{% endblock %}
+
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
+
+{% block body %}
+<div
+    id="vite-app"
+    data-access-url="{% url 'get_account_access' %}"
+    data-admin-url="{% url 'admin:index' %}"
+    data-api-url="{{ API_BASE }}"
+    data-about-url="{% url 'about' %}"
+    data-custom-login-url="{% url 'custom_login' %}"
+    data-site-root="{{ SITE_ROOT }}"
+    data-home-url="{% url 'homepage' %}"
+    data-host="{{ host }}"
+    data-is-authenticated="{{ user.is_authenticated }}"
+    data-search-url="{% url 'search' %}"
+    data-subjects-url="{% url 'subjects' %}"
+    data-username="{{ user.username }}"
+></div>
+{% endblock %}
+
+{% block custom_styles %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static '/vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
+{% endblock %}
+
+{% block post_footer %}
+    {{ block.super }}
+    <script src="{% static '/vite/index.js' %}?{{ DEPLOY_NUMBER }}"></script>
+{% endblock %} 
