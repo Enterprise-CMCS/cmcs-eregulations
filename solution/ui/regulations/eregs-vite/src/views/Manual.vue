@@ -32,7 +32,7 @@ const sections = ref([
         title: "Part 1 - General",
         zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_01.zip",
         subsections: [
-            { id: 101, title: "Foreword", web: "https://web.archive.org/web/20010715053550/http://www.hcfa.gov/pubforms/45_smm/foreword.htm", pdf: "https://web.archive.org/web/20041106221936/http://www.cms.hhs.gov/manuals/pub45pdf/smmfwd.pdf" },
+        { id: 101, title: "Foreword", web: "https://web.archive.org/web/20010715053550/http://www.hcfa.gov/pubforms/45_smm/foreword.htm", pdf: "https://web.archive.org/web/20041106221936/http://www.cms.hhs.gov/manuals/pub45pdf/smmfwd.pdf" },
         ],
     },
     {
@@ -271,7 +271,19 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
                 <div class="content no-sidebar">
                     <p class="manual-page-description">
                         Most of the manual is outdated, but it may be helpful in some policy areas or for historical reference.
-                        This page links to web and PDF versions from archived copies of the CMS website,
+                        This page links to <a 
+                            class="external"
+                            target="_blank"
+                            href="
+                            https://web.archive.org/web/20010609052207/http://www.hcfa.gov/pubforms/45_smm/pub45toc.htm
+                            ">web</a> 
+                        and <a
+                            class="external"
+                            target="_blank"
+                            href="
+                            https://web.archive.org/web/20050204151206/http://www.cms.hhs.gov:80/manuals/pub45pdf/smmtoc.asp
+                            ">PDF</a>
+                        versions from archived copies of the CMS website,
                         along with <a 
                             class="external"
                             target="_blank"
