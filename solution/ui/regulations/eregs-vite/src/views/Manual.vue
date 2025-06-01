@@ -22,10 +22,8 @@ const searchUrl = inject("searchUrl");
 const subjectsUrl = inject("subjectsUrl");
 const username = inject("username");
 
-// get route query params
 const $route = useRoute();
 
-// Dummy data for sections with subsections and links
 const sections = ref([
     {
         id: 1,
