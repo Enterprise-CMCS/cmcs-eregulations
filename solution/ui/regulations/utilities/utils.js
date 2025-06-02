@@ -648,12 +648,16 @@ const getCurrentSectionFromHash = (windowHash) => {
  * @param {Array<object>} sectionList - array of Table of Contents objects from getSubpartTOC
  * @returns {Array<string>} - array of section identifier numbers as strings
  */
-const getSectionsRecursive = (tocPartsList) =>
-    tocPartsList.flatMap((tocPart) => {
+const getSectionsRecursive = (tocPartsList) => {
+    if (!tocPartsList || !Array.isArray(tocPartsList)) {
+        return [];
+    }
+    return tocPartsList.flatMap((tocPart) => {
         if (tocPart.type !== "section")
             return getSectionsRecursive(tocPart.children);
         return tocPart.identifier[1];
     });
+};
 
 const getFieldVal = ({ item, fieldName }) => {
     if (item?.resource) {
