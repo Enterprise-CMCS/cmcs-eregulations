@@ -38,8 +38,8 @@ const sections = ref([
         title: "Part 2 - State Organization and General Administration",
         zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_02.zip",
         subsections: [
-            { id: 201, title: "2000. Table of Contents", web: "https://web.archive.org/web/20010621231345/http://www.hcfa.gov/pubforms/45_smm/sm_02_2_toc.htm", pdf: "https://web.archive.org/web/20050204223152/http://www.cms.hhs.gov/manuals/pub45pdf/smm2t.asp" },
-            { id: 202, title: "2040. Appeals of State Adverse Actions for Medicaid Skilled Nursing and Intermediate Care Facilities (Not Applicable to Federal Terminations of Medicaid Facilities)", web: "https://web.archive.org/web/20010709053605/http://www.hcfa.gov/pubforms/45_smm/sm_02_2_2040_to_2040.htm", pdf: "https://web.archive.org/web/20030630065708/http://www.cms.gov:80/manuals/pub45pdf/2040.pdf" },
+            { id: 2000, title: "2000. Table of Contents", web: "https://web.archive.org/web/20010621231345/http://www.hcfa.gov/pubforms/45_smm/sm_02_2_toc.htm", pdf: "https://web.archive.org/web/20050204223152/http://www.cms.hhs.gov/manuals/pub45pdf/smm2t.asp" },
+            { id: 2040, title: "2040. Appeals of State Adverse Actions for Medicaid Skilled Nursing and Intermediate Care Facilities (Not Applicable to Federal Terminations of Medicaid Facilities)", web: "https://web.archive.org/web/20010709053605/http://www.hcfa.gov/pubforms/45_smm/sm_02_2_2040_to_2040.htm", pdf: "https://web.archive.org/web/20030630065708/http://www.cms.gov:80/manuals/pub45pdf/2040.pdf" },
             { 
                 id: 2080,
                 title: "2080 to 2089.9",
@@ -206,7 +206,212 @@ const sections = ref([
         title: "Part 3 - Eligibility",
         zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_03.zip",
         subsections: [
-        { id: 300, title: "3000. Table of Contents", web: "https://web.archive.org/web/20010621231541/http://www.hcfa.gov/pubforms/45_smm/sm_03_3_toc.htm", pdf: "https://web.archive.org/web/20040202231037/http://cms.hhs.gov:80/manuals/pub45pdf/smm3t.asp" },
+        { id: 3000, title: "3000. Table of Contents", web: "https://web.archive.org/web/20010621231541/http://www.hcfa.gov/pubforms/45_smm/sm_03_3_toc.htm", pdf: "https://web.archive.org/web/20040202231037/http://cms.hhs.gov:80/manuals/pub45pdf/smm3t.asp" },
+        { 
+            id: 3200,
+            title: "3200 to 3207",
+            web: "https://web.archive.org/web/20010715053855/http://www.hcfa.gov/pubforms/45_smm/sm_03_3_3200_to_3207.htm",
+            pdf: "https://web.archive.org/web/20000929141030/http://www.hcfa.gov:80/pubforms/pub45pdf/sm3200.pdf",
+            subsections: [
+                { title: "3200 Changes Due to Welfare Reform", web: "", pdf: "" },
+                { title: "3207 Changes in SSI Definition of Disability Due to Welfare Reform", web: "", pdf: "" },
+            ]
+        },
+        { 
+            id: 3210,
+            title: "3210 to 3256",
+            web: "https://web.archive.org/web/20010715054127/http://www.hcfa.gov/pubforms/45_smm/sm_03_3_3210_to_3256.htm",
+            pdf: "https://web.archive.org/web/20030808034231/http://www.cms.hhs.gov/manuals/pub45pdf/sm3210.pdf",
+            subsections: [
+                { title: "3210 Citizenship and Alienage", web: "", pdf: "" },
+                { title: "3211 Aliens", web: "", pdf: "" },
+                { title: "3212 Documentation and Verification of Status as Citizen or Alien", web: "", pdf: "" },
+                { title: "3213 Redeterminations and FFP Availability", web: "", pdf: "" },
+                { title: "3215 Treatment of Potential Payments From Medicaid Qualifying Trust", web: "", pdf: "" },
+                { title: "3230 State Residence", web: "", pdf: "" },
+                { title: "3240 More Liberal Income and Resource Methods", web: "", pdf: "" },
+                { title: "3250 Transfer of Resources", web: "", pdf: "" },
+                { title: "3255 Elimination of SSI Provision on Resources Transferred for Less Than Fair Market Value and Notification by SSA", web: "", pdf: "" },
+                { title: "3256 Transfer of Resources Procedures", web: "", pdf: "" },
+            ]
+        },
+        { title: "3257 Transfers of Assets and Treatment of Trusts Transfers of Assets for Less Than Fair Market Value", web: "", pdf: "" },
+        { title: "3258. Transfers of Assets for Less Than Fair Market Value", web: "", pdf: "" },
+        { title: "3259 Treatment of Trusts", web: "", pdf: "" },
+        { title: "3260. Income and Resource Eligibility Rules for Certain Institutionalized Individuals and Certain Individuals Under Home and Community-Based Waivers Who Have Community Spouses", web: "", pdf: "" },
+        { title: "3261. Income Eligibility", web: "", pdf: "" },
+        { title: "3262. Resource Assessments and Eligibility", web: "", pdf: "" },
+        { title: "3263. Notice, Hearings and Appeals", web: "", pdf: "" },
+        { title: "3270. Disability Determinations Under Medicaid", web: "", pdf: "" },
+        { title: "3271. Disability Determinations in §1902(f) States and SSI Criteria States", web: "", pdf: "" },
+        { title: "3272. Medicaid Eligibility Quality Control (MEQC) Treatment of Payments Made During Period You Made a Reasonable Application of SSI Disability Criteria", web: "", pdf: "" },
+        { title: "3273. Composition of Disability Review Teams", web: "", pdf: "" },
+        { title: "3274. Procedures for Making Disability Determinations", web: "", pdf: "" },
+        { title: "3275. Coordination Between State Medicaid Agency and the SSA Disability Determination Service (DDS)", web: "", pdf: "" },
+        { title: "3276. Referral to SSA", web: "", pdf: "" },
+        { title: "3277. Time Limit to Determine Eligibility in Disability Cases", web: "", pdf: "" },
+        { title: "3280. Mandatory Coordination With WIC", web: "", pdf: "" },
+        { title: "3300. Introduction", web: "", pdf: "" },
+        { title: "3301. Low Income Families With Children", web: "", pdf: "" },
+        { title: "3302. Individuals Deemed to Be Recipients of AFDC", web: "", pdf: "" },
+        { title: "3303 Qualified Pregnant Women", web: "", pdf: "" },
+        { title: "3304 Qualified Children", web: "", pdf: "" },
+        { title: "3305 Deemed Eligibility of Newborns", web: "", pdf: "" },
+        { title: "3306 Extended Medicaid Coverage for Pregnant Women", web: "", pdf: "" },
+        { title: "3307 Continuous Eligibility", web: "", pdf: "" },
+        { title: "3308 Extended Medicaid Benefits to Families Who Lose AFDC Because of Earnings From Employment or Loss of Earnings Disregards", web: "", pdf: "" },
+        { title: "3309 Qualified Family Members", web: "", pdf: "" },
+        { title: "3311 Mandatory Coverage for Low Income Pregnant Women and Infants", web: "", pdf: "" },
+        { title: "3312 Mandatory Coverage for Low Income Children Under Age 6", web: "", pdf: "" },
+        { title: "3313  Mandatory Coverage for Low Income Children Under Age 19", web: "", pdf: "" },
+        { title: "3314 Extended Medicaid Benefits to Families Who Lose Eligibility Because of Income From Support Payments", web: "", pdf: "" },
+        { title: "3405 Changes Due to Welfare Reform", web: "", pdf: "" },
+        { title: "3410 Medicaid Eligibility for Qualified Severely Impaired Individuals and Individuals in §1619 Status", web: "", pdf: "" },
+        { title: "3411 Provisions of OBRA1986 and EODAA", web: "", pdf: "" },
+        { title: "3412 Operational Considerations", web: "", pdf: "" },
+        { title: "3420 Individuals in States Using More Restrictive Eligibility Requirements", web: "", pdf: "" },
+        { title: "3435 Persons With Drug Addiction or Alcoholism", web: "", pdf: "" },
+        { title: "3485 Coverage of Qualified Disabled and Working Individuals", web: "", pdf: "" },
+        { title: "3490 Coverage of Qualified Medicare Beneficiaries for Medicare Cost Sharing Expenses", web: "", pdf: "" },
+        { title: "3491 Coverage of Specified Low Income Medicare Beneficiaries for Medicare Part B Premiums", web: "", pdf: "" },
+        { title: "3492 Coverage of Qualifying Individuals for Medicare Part B Premiums", web: "", pdf: "" },
+        { title: "3493 Medicaid Eligibility for Disabled Children Who Lose SSI Payment", web: "", pdf: "" },
+        { title: "3500 Introduction", web: "", pdf: "" },
+        { title: "3501 Definitions", web: "", pdf: "" },
+        { title: "3502 Persons Who Meet Income and Resource Requirements for, but Do Not Receive Cash Assistance", web: "", pdf: "" },
+        { title: "3503 Children Under Age 21", web: "", pdf: "" },
+        { title: "3504 Reserved", web: "", pdf: "" },
+        { title: "3505 Reserved", web: "", pdf: "" },
+        { title: "3506 Children Under State Adoption Assistance Programs", web: "", pdf: "" },
+        { title: "3570 Optional Presumptive Eligibility Period for Pregnant Women", web: "", pdf: "" },
+        { title: "3571 Optional Coverage for Poor Pregnant (And Postpartum) Women, Infants and Children", web: "", pdf: "" },
+        { title: "3580 Hospice Benefits", web: "", pdf: "" },
+        { title: "3581 Optional Hospice Care Eligibility Group", web: "", pdf: "" },
+        { title: "3582 Comparability of Hospice Care Benefits", web: "", pdf: "" },
+        { title: "3583 Copayments on Hospice Care Benefits", web: "", pdf: "" },
+        { title: "3584 Post-Eligibility Treatment of Income for Hospice Care", web: "", pdf: "" },
+        { title: "3589 Medicaid Coverage of Home Care for Certain Disabled Children", web: "", pdf: "" },
+        { title: "3590 Individuals Eligible for Services Under a Home and Community-Based Services Waiver", web: "", pdf: "" },
+        { title: "3596 Optional Coverage of the Elderly and Disabled Poor for All Medicaid Benefits", web: "", pdf: "" },
+        { title: "3597 Treatment of Couples in Medical Institutions", web: "", pdf: "" },
+        { title: "3598 Coverage of COBRA Continuation Beneficiaries", web: "", pdf: "" },
+        { title: "3599 Buy-In to Medicaid for the Working Disabled", web: "", pdf: "" },
+        { title: "3600 Introduction", web: "", pdf: "" },
+        { title: "3601 Background", web: "", pdf: "" },
+        { title: "3610 Eligible Groups", web: "", pdf: "" },
+        { title: "3611 Required Groups", web: "", pdf: "" },
+        { title: "3612 Optional Eligible Groups", web: "", pdf: "" },
+        { title: "3613 Criteria for Determining Categorically Needy and Medically Needy", web: "", pdf: "" },
+        { title: "3620 Financial Eligibility", web: "", pdf: "" },
+        { title: "3621 Single Income and Resource Standard", web: "", pdf: "" },
+        { title: "3622 Cost of Living Variations", web: "", pdf: "" },
+        { title: "3623 Defining Reasonable Standards", web: "", pdf: "" },
+        { title: "3624 Federal Financial Participation (FFP) Limitation", web: "", pdf: "" },
+        { title: "3625 Financial Methodologies", web: "", pdf: "" },
+        { title: "3626 Income Eligibility", web: "", pdf: "" },
+        { title: "3627 Budget Periods", web: "", pdf: "" },
+        { title: "3628 Deduction of Incurred Medical and Remedial Care Expenses (Spenddown)", web: "", pdf: "" },
+        { title: "3630 Resource Eligibility", web: "", pdf: "" },
+        { title: "3640 Moratorium", web: "", pdf: "" },
+        { title: "3645 Pay-In Spenddown Option", web: "", pdf: "" },
+        { title: "3700 Introduction", web: "", pdf: "" },
+        { title: "3701 General Statement of Post-Eligibility Process", web: "", pdf: "" },
+        { title: "3702 Deductions From the Individual's Total Income", web: "", pdf: "" },
+        { title: "3703 Required Deductions", web: "", pdf: "" },
+        { title: "3704 Optional Deductions", web: "", pdf: "" },
+        { title: "3705 Post-Eligibility Treatment of Certain Payments Made by the Department of Veterans Affairs", web: "", pdf: "" },
+        { title: "3708 Post-Eligibility Treatment of Certain Disabled Institutionalized Individuals", web: "", pdf: "" },
+        { title: "3710 Special Post-Eligibility Process for Institutionalized Persons With Community Spouses", web: "", pdf: "" },
+        { title: "3711 Income Used in the Post-Eligibility Process", web: "", pdf: "" },
+        { title: "3712 Mandatory Deductions From Income", web: "", pdf: "" },
+        { title: "3713 Monthly Income Allowances for Community Spouses and Other Family Members", web: "", pdf: "" },
+        { title: "3714 Notice, Hearings and Appeals", web: "", pdf: "" },
+        { title: "3810 Medicaid Estate Recoveries", web: "", pdf: "" },
+        { title: "3812 Treatment of Contributions From Relatives to Medicaid Applicants or Recipients", web: "", pdf: "" },
+        { title: "3900 Third Party Liability (TPL)", web: "", pdf: "" },
+        { title: "3901 Definitions", web: "", pdf: "" },
+        { title: "3902 General TPL Requirements", web: "", pdf: "" },
+        { title: "3903 Identification of Resources (42 CFR 433.138)", web: "", pdf: "" },
+        { title: "3904 Payment of Claims (42 CFR 433.139)", web: "", pdf: "" },
+        { title: "3905 Assignment of Rights to Benefits - (42 CFR 433.145)", web: "", pdf: "" },
+        { title: "3906 Cooperative Agreements and Incentive Payments", web: "", pdf: "" },
+        { title: "3907 Distribution of Collections", web: "", pdf: "" },
+        { title: "3908 Conflicting Claims by Medicare and Medicaid", web: "", pdf: "" },
+        { title: "3909 Medicare/Medicaid Crossover Claims", web: "", pdf: "" },
+        { title: "3910 Medicaid Payments for Recipients Under Group Health Plans", web: "", pdf: "" },
+        { title: "IM 3570 Requirements for Eligibility Under a Special Income Level", web: "", pdf: "" },
+        { title: "IM 3900 Third Party Liability (TPL)", web: "", pdf: "" },
+    ],
+    },
+    {
+        id: 4,
+        title: "Part 4 - Services",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_04.zip",
+        subsections: [
+        ],
+    },
+    {
+        id: 5,
+        title: "Part 5 - Early and Periodic Screening",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_05.zip",
+        pdf: "https://web.archive.org/web/20041106222101/http://www.cms.hhs.gov/manuals/pub45pdf/smm5t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 6,
+        title: "Part 6 - Payments for Services",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_06.zip",
+        pdf: "https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/downloads/smm6t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 7,
+        title: "Part 7 - Quality Control",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_07.zip",
+        pdf: "https://web.archive.org/web/20041106222046/http://www.cms.hhs.gov/manuals/pub45pdf/smm7t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 8,
+        title: "Part 8 - Program Integrity",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_08.zip",
+        pdf: "https://web.archive.org/web/20041106221935/http://www.cms.hhs.gov/manuals/pub45pdf/smm8t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 9,
+        title: "Part 9 - Utilization Control",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_09.zip",
+        pdf: "https://web.archive.org/web/20041106222347/http://www.cms.hhs.gov/manuals/pub45pdf/smm9t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 11,
+        title: "Part 11 - Medicaid Management Information System",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_11.zip",
+        pdf: "https://web.archive.org/web/20041106222214/http://www.cms.hhs.gov/manuals/pub45pdf/smm11t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 13,
+        title: "Part 13 - State Plan Procedures and Preprints",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_13.zip",
+        pdf: "https://web.archive.org/web/20041106222106/http://www.cms.hhs.gov/manuals/pub45pdf/smm13t.pdf",
+        subsections: [
+        ],
+    },
+    {
+        id: 15,
+        title: "Part 15 - Income and Eligibility Verification System",
+        zip: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_15.zip",
+        pdf: "https://web.archive.org/web/20041106222351/http://www.cms.hhs.gov/manuals/pub45pdf/smm15t.pdf",
+        subsections: [
         ],
     },
 ]);
@@ -268,7 +473,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
             <div id="main-content" class="manual__container">
                 <div class="content no-sidebar">
                     <p class="manual-page-description">
-                        Most of the manual is outdated, but it may be helpful in some policy areas or for historical reference.
+                        Most of this manual has been superseded, but it may be helpful in some policy areas or for historical reference.
                         This page links to <a 
                             class="external"
                             target="_blank"
@@ -288,8 +493,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
                             href="
                             https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927
                             ">
-                            zipped Word documents from the current CMS website</a>.
-                        The zip files are the most complete and current version.
+                            zipped Word documents from the current CMS website</a>. The ZIP files are the most complete version.
                     </p>
                     <div class="manual-table-search-row">
                         <form class="search__form" action="#" @submit.prevent>
@@ -306,7 +510,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
                         <table id="manualTable">
                             <thead>
                                 <tr class="table__row table__row--header">
-                                    <th class="table__header">Part/Section</th>
+                                    <th class="table__header">Web</th>
                                     <th class="table__header">PDF</th>
                                     <th class="table__header">Word</th>
                                 </tr>
@@ -376,7 +580,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 }
 
 .manual__container {
-    padding: 0 2rem;
+    padding: 0 2rem 2rem;
 }
 
 .table__parent {
