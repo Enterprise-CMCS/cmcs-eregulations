@@ -2,8 +2,9 @@
 import { inject, provide, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import useSearchResults from "composables/searchResults.js";
+import usePartsLastUpdated from "composables/partsLastUpdated.js";
 import useRemoveList from "composables/removeList.js";
+import useSearchResults from "composables/searchResults.js";
 
 import isEmpty from "lodash/isEmpty";
 
@@ -108,25 +109,7 @@ const executeSearch = (payload) => {
 };
 
 // partsLastUpdated fetch for related regulations citations filtering
-const partsLastUpdated = ref({
-    results: {},
-    loading: true,
-});
-
-const getPartsLastUpdated = async () => {
-    try {
-        const titles = await getTitles({ apiUrl });
-        partsLastUpdated.value.results = await getLastUpdatedDates({
-            apiUrl,
-            titles,
-        });
-    } catch (error) {
-        console.error(error);
-    } finally {
-        partsLastUpdated.value.loading = false;
-    }
-};
-
+const { partsLastUpdated, getPartsLastUpdated } = usePartsLastUpdated();
 const { policyDocList, getDocList } = useSearchResults();
 
 // use "reactive" method to make urlParams reactive when provided/injected
@@ -352,7 +335,7 @@ watch(
 );
 
 // fetches on page load
-getPartsLastUpdated();
+getPartsLastUpdated({ apiUrl });
 getDocSubjects();
 </script>
 
