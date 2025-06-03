@@ -128,11 +128,11 @@ const sections = ref([
                 title: "",
                 web: {
                     url: "https://web.archive.org/web/20041211221428/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2090_to_2092.9.asp",
-                    date: ""
+                    date: "1992"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929140914/http://www.hcfa.gov:80/pubforms/pub45pdf/20902.pdf",
-                    date: ""
+                    date: "1992"
                 },
                 subsections: [
                     { id: 2090, title: "Marketing, Enrollment and Disenrollment", date: "" },
@@ -145,11 +145,11 @@ const sections = ref([
                 title: "",
                 web: {
                     url: "https://web.archive.org/web/20041211221711/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2100_to_2106.2.asp",
-                    date: ""
+                    date: "1994"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910143952/http://cms.gov:80/manuals/pub45pdf/2100.pdf",
-                    date: ""
+                    date: "1994"
                 },
                 subsections: [
                     { id: 2100, title: "Free Choice of Providers - General", date: "" },
@@ -166,11 +166,11 @@ const sections = ref([
                 title: "",
                 web: {
                     url: "https://web.archive.org/web/20041211222317/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2106.3_to_2493.asp",
-                    date: ""
+                    date: "1991"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20051208033356/http://www.cms.hhs.gov:80/manuals/pub45pdf/21063.pdf",
-                    date: ""
+                    date: "1991"
                 },
                 subsections: [
                     { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)", date: "" },
@@ -202,11 +202,11 @@ const sections = ref([
                 title: "",
                 web: {
                     url: "https://web.archive.org/web/20041211220824/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2495_to_2500.1.asp",
-                    date: ""
+                    date: "1991"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910235317/http://cms.gov:80/manuals/pub45pdf/2495.pdf",
-                    date: ""
+                    date: "1991"
                 },
                 subsections: [
                     { id: 2495, title: "Maintenance of Effort", date: "" },
@@ -465,7 +465,18 @@ const sections = ref([
                     { id: 3314, title: "Extended Medicaid Benefits to Families Who Lose Eligibility Because of Income From Support Payments", date: "" },
                 ]
             },
-            { id: 3405, title: "Changes Due to Welfare Reform", date: "" },
+            { 
+                id: 3405, 
+                title: "Changes Due to Welfare Reform", 
+                web: {
+                    url: "https://web.archive.org/web/20040808082505/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3405_to_3405.asp",
+                    date: "1997"
+                },
+                pdf: {
+                    url: "https://web.archive.org/web/20030910213015/http://cms.gov/manuals/pub45pdf/sm3405.pdf",
+                    date: "1997"
+                },
+            },
             { 
                 id: "3410 to 3493",
                 title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled",
@@ -585,13 +596,16 @@ const sections = ref([
             { 
                 id: "3800 to 3812",
                 title: "Chapter IX - Financial Eligibility Requirements and Options",
+                zip: {
+                    date: "1994"
+                },
                 web: {
                     url: "https://web.archive.org/web/20040808074529/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3800_to_3812.asp",
-                    date: ""
+                    date: "2001"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20031201073207/http://www.cms.gov/manuals/pub45pdf/sm3800.pdf",
-                    date: ""
+                    date: "2001"
                 },
                 subsections: [
                     { id: 3810, title: "Medicaid Estate Recoveries", date: "" },
@@ -601,13 +615,16 @@ const sections = ref([
             { 
                 id: "3900 to 3910.15",
                 title: "Chapter X - Third Party Liability",
+                zip: {
+                    date: "2015"
+                },
                 web: {
                     url: "https://web.archive.org/web/20040808075451/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3900_to_3910.15.asp",
-                    date: ""
+                    date: "1998"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20050308152122/http://www.cms.hhs.gov:80/manuals/pub45pdf/sm3900.pdf",
-                    date: "03-08"
+                    date: "1998"
                 },
                 subsections: [
                     { id: 3900, title: "Third Party Liability (TPL)", date: "" },
@@ -623,8 +640,28 @@ const sections = ref([
                     { id: 3910, title: "Medicaid Payments for Recipients Under Group Health Plans", date: "" },
                 ]
             },
-            { id: "IM 3570", title: "Requirements for Eligibility Under a Special Income Level", date: "" },
-            { id: "IM 3900", title: "Third Party Liability (TPL)", date: "" },
+            { 
+                id: "IM 3570", 
+                title: "Requirements for Eligibility Under a Special Income Level", 
+                zip: {
+                    date: ""
+                },
+                web: {
+                    url: "https://web.archive.org/web/20040227225635/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3570.asp",
+                    date: "1986"
+                },
+            },
+            { 
+                id: "IM 3900", 
+                title: "Third Party Liability (TPL)", 
+                zip: {
+                    date: ""
+                },
+                web: {
+                    url: "https://web.archive.org/web/20040808080724/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3900_to_im_3900.asp",
+                    date: "1994"
+                },
+            },
         ],
     },
     {
@@ -632,11 +669,11 @@ const sections = ref([
         title: "Part 4 – Services",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_04.zip",
-            date: ""
+            date: "2015"
         },
         web: {
             url: "https://web.archive.org/web/20041212082209/http://www.cms.hhs.gov/manuals/45_smm/SM_04_4_toc.asp",
-            date: ""
+            date: "1999"
         },
         subsections: [
             { 
@@ -742,11 +779,11 @@ const sections = ref([
                 title: "Requirements and Limits Applicable to Specific Services",
                 web: {
                     url: "https://web.archive.org/web/20041206161854/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4444_to_4658.asp",
-                    date: ""
+                    date: "1999"
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911080158/http://cms.gov:80/manuals/pub45pdf/sm4444.pdf",
-                    date: ""
+                    date: "1999"
                 },
                 subsections: [
                     { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request", date: "" },    
@@ -774,9 +811,30 @@ const sections = ref([
                     { id: 4658, title: "Guidance to States for Medicaid Nursing Facility (NF) Remedies", date: "" },
                 ]
             },
-            { id: "", title: "Addendum A - Wage Indices for Urban Areas", date: "" },
-            { id: "", title: "Addendum B - Wage Indices for Rural Areas", date: "" },
-            { id: "IM 4604", title: "Change in Authority to Grant Life Safety Code Waivers for Medicaid Only NFs", date: "" },
+            { 
+                id: "", 
+                title: "Addendum A - Wage Indices for Urban Areas", 
+                web: {
+                    url: "https://web.archive.org/web/20041206162508/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_a.asp",
+                    date: "1987"
+                },
+            },
+            { 
+                id: "", 
+                title: "Addendum B - Wage Indices for Rural Areas", 
+                web: {
+                    url: "https://web.archive.org/web/20041206163143/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_b.asp",
+                    date: "1987"
+                },
+            },
+            { 
+                id: "IM 4604", 
+                title: "Change in Authority to Grant Life Safety Code Waivers for Medicaid Only NFs", 
+                web: {
+                    url: "https://web.archive.org/web/20041206164106/http://www.cms.hhs.gov/manuals/45_smm/sm_04_im_4604.asp",
+                    date: "1991"
+                },
+            },
         ],
     },
     {
@@ -784,15 +842,15 @@ const sections = ref([
         title: "Part 5 – Early and Periodic Screening",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_05.zip",
-            date: ""
+            date: "1998"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222101/http://www.cms.hhs.gov/manuals/pub45pdf/smm5t.pdf",
-            date: ""
+            date: "1998"
         },
         web: {
             url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp",
-            date: ""
+            date: "1998"
         },
         subsections: [
         ],
@@ -1165,6 +1223,7 @@ const toggleExpand = (id) => {
 .table__cell {
     padding: 1rem;
     border-bottom: 1px solid #dee2e6;
+    vertical-align: top;
 }
 
 /* Add fixed widths for specific columns */
