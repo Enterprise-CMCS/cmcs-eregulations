@@ -11,6 +11,8 @@ import {
     getCurrentPageResultsRange,
     getFileTypeButton,
     getFrDocType,
+    hasRegulationCitations,
+    hasStatuteCitations,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
@@ -118,36 +120,6 @@ const getResultSnippet = (item) => {
 
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
-const getCollapseName = (doc) =>
-    `related citations collapsible ${doc.id ?? doc.node_id}`;
-
-const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
-    const regCitations = doc.cfr_citations
-        ? doc.cfr_citations.filter((location) => {
-            const { part } = location;
-            return partsLastUpdated[part];
-        })
-        : [];
-
-    return regCitations.length > 0;
-};
-
-/**
- * Checks if the document has statute citations.
- *
- * @param {Object} doc - The document object.
- * @param {Array} doc.act_citations - Array of act citations.
- * @param {Array} doc.usc_citations - Array of USC citations.
- * @returns {boolean} - Returns true if the document has both statute citation fields in the response and if one of those fields has a length > 0, false otherwise.
- */
-const hasStatuteCitations = ({ doc }) => {
-    // ensure that both act_citations and usc_citations fields are present
-    if (!doc.act_citations || !doc.usc_citations) return false;
-
-    // if both fields exist, check if either field has citations
-    return doc.act_citations.length > 0 || doc.usc_citations.length > 0;
-};
-
 export default {
     addSurroundingEllipses,
     getParentCategoryName,
@@ -155,9 +127,6 @@ export default {
     getResultSnippet,
     partDocumentTitleLabel,
     showResultSnippet,
-    getCollapseName,
-    hasRegulationCitations,
-    hasStatuteCitations,
 };
 </script>
 

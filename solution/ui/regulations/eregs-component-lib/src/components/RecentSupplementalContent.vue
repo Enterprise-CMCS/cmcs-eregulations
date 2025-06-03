@@ -1,6 +1,11 @@
 <script setup>
 import { computed, inject } from "vue";
 
+import {
+    hasRegulationCitations,
+    hasStatuteCitations,
+} from "utilities/utils";
+
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
@@ -45,11 +50,15 @@ const limitedContent = computed(() => {
             />
             <SubjectChips :subjects="content.subjects" />
             <RelatedSectionsCollapse
+                v-if="
+                    content.type !== 'reg_text' &&
+                        (hasRegulationCitations({ doc: content, partsLastUpdated })
+                            || hasStatuteCitations({ doc: content }))"
                 :item="content"
                 :base-url="content.url"
                 :parts-last-updated="partsLastUpdated"
-                :has-statute-citations="true"
-                :has-regulation-citations="true"
+                :has-statute-citations="hasStatuteCitations({ doc: content })"
+                :has-regulation-citations="hasRegulationCitations({ doc: content, partsLastUpdated })"
             />
             <div class="spacer" />
         </template>
