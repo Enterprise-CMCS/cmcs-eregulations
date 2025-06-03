@@ -38,7 +38,7 @@ const { partsLastUpdated, getPartsLastUpdated } = usePartsLastUpdated();
 
 const rulesArgs = {
     page: 1,
-    pageSize: 5,
+    pageSize: 7,
     type: props.type,
 };
 
@@ -60,12 +60,13 @@ getPartsLastUpdated({ apiUrl: props.apiUrl });
         <SimpleSpinner v-if="rulesResults.loading || partsLastUpdated.loading" />
         <RelatedRuleList
             v-if="!rulesResults.loading && !partsLastUpdated.loading && type != 'supplemental'"
+            :limit="rulesArgs.pageSize"
             :rules="rulesResults.data"
         />
         <RecentSupplementalContent
             v-if="!rulesResults.loading && !partsLastUpdated.loading && type == 'supplemental'"
             :parts-last-updated="partsLastUpdated.results"
-            :limit="5"
+            :limit="rulesArgs.pageSize"
             :supplemental-content="rulesResults.data"
         />
     </div>
