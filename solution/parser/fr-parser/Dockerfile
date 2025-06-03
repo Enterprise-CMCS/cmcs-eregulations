@@ -1,7 +1,7 @@
-FROM public.ecr.aws/lambda/provided:al2 as build
+FROM public.ecr.aws/lambda/provided:al2023 as build
 
 # install compiler
-RUN yum install -y golang
+RUN dnf install -y golang
 RUN go env -w GOPROXY=direct
 
 # build parser
@@ -11,6 +11,6 @@ RUN go mod download
 RUN go build -tags lambda.norpc -o /main
 
 # copy artifacts to a clean image
-FROM public.ecr.aws/lambda/provided:al2
+FROM public.ecr.aws/lambda/provided:al2023
 COPY --from=build /main /main
 ENTRYPOINT [ "/main" ]
