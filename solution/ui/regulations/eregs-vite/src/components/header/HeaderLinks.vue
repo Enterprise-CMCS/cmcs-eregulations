@@ -15,10 +15,6 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    manualUrl: {
-        type: String,
-        required: true,
-    },
 });
 
 defineEmits(["link-clicked"]);
@@ -26,15 +22,9 @@ defineEmits(["link-clicked"]);
 const links = [
     {
         name: "statutes",
-        label: "Social Security Act",
+        label: "Access Statute Citations",
         active: window.location.pathname.includes("statutes"),
         href: props.statutesUrl,
-    },
-    {
-        name: "manual",
-        label: "State Medicaid Manual",
-        active: window.location.pathname.includes("manual"),
-        href: props.manualUrl,
     },
     {
         name: "subjects",
