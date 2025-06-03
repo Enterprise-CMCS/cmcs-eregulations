@@ -14,13 +14,10 @@ import {
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
-import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue";
-import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
-
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
-import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
+import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 import SubjectChips from "./SubjectChips.vue";
@@ -353,48 +350,16 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 </div>
             </template>
             <template #sections>
-                <CollapseButton
+                <RelatedSectionsCollapse
                     v-if="
                         doc.type !== 'reg_text' &&
                             (hasRegulationCitations({ doc, partsLastUpdated })
                                 || hasStatuteCitations({ doc }))"
-                    :name="getCollapseName(doc)"
-                    state="collapsed"
-                    class="related-citations__btn--collapse"
-                >
-                    <template #expanded>
-                        Hide Related Citations
-                        <i class="fa fa-chevron-up" />
-                    </template>
-                    <template #collapsed>
-                        Show Related Citations
-                        <i class="fa fa-chevron-down" />
-                    </template>
-                </CollapseButton>
-                <Collapsible
-                    :name="getCollapseName(doc)"
-                    state="collapsed"
-                    class="collapse-content"
-                    overflow
-                >
-                    <template v-if="doc.type !== 'reg_text'">
-                        <RelatedSections
-                            v-if="hasStatuteCitations({ doc })"
-                            class="related-statutes"
-                            :base="homeUrl"
-                            :item="doc"
-                            label="Statutes"
-                        />
-                        <RelatedSections
-                            v-if="hasRegulationCitations({ doc, partsLastUpdated })"
-                            class="related-regulations"
-                            :base="homeUrl"
-                            :item="doc"
-                            :parts-last-updated="partsLastUpdated"
-                            label="Regulations"
-                        />
-                    </template>
-                </Collapsible>
+                    :item="doc"
+                    :parts-last-updated="partsLastUpdated"
+                    :has-statute-citations="hasStatuteCitations({ doc })"
+                    :has-regulation-citations="hasRegulationCitations({ doc, partsLastUpdated })"
+                />
             </template>
         </ResultsItem>
     </div>
