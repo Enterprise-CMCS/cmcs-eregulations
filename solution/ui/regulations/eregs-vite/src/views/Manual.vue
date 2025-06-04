@@ -887,15 +887,15 @@ const sections = ref([
         title: "Part 6 – Payments for Services",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_06.zip",
-            date: ""
+            date: "2000"
         },
         pdf: {
             url: "https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/downloads/smm6t.pdf",
-            date: ""
+            date: "2000"
         },
         web: {
             url: "https://web.archive.org/web/20041212235830/http://www.cms.hhs.gov/manuals/45_smm/sm_06_6_toc.asp",
-            date: ""
+            date: "2000"
         },
         subsections: [
             { id: 6000, title: "Inpatient Hospital and Long-Term Care Reimbursement - General", },
@@ -923,15 +923,15 @@ const sections = ref([
         title: "Part 7 – Quality Control",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_07.zip",
-            date: ""
+            date: "1994"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222046/http://www.cms.hhs.gov/manuals/pub45pdf/smm7t.pdf",
-            date: ""
+            date: "1994"
         },
         web: {
             url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7_toc.asp",
-            date: ""
+            date: "1994"
         },
         subsections: [
             { id: 7000, title: "Introduction", },
@@ -1073,15 +1073,15 @@ const sections = ref([
         title: "Part 8 – Program Integrity",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_08.zip",
-            date: ""
+            date: "1983"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106221935/http://www.cms.hhs.gov/manuals/pub45pdf/smm8t.pdf",
-            date: ""
+            date: "1983"
         },
         web: {
             url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp",
-            date: ""
+            date: "1983"
         },
         subsections: [
             { id: 8001, title: "Claims for Payment in Alcohol and Drug Abuse Case - General", },
@@ -1094,15 +1094,15 @@ const sections = ref([
         title: "Part 9 – Utilization Control",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_09.zip",
-            date: ""
+            date: "1989"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222347/http://www.cms.hhs.gov/manuals/pub45pdf/smm9t.pdf",
-            date: ""
+            date: "1989"
         },
         web: {
             url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9_toc.asp",
-            date: ""
+            date: "1989"
         },
         subsections: [
             { id: 9100, title: "Legal Background and Authority for the Utilization Control Program", },
@@ -1151,15 +1151,15 @@ const sections = ref([
         title: "Part 11 – Medicaid Management Information System",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_11.zip",
-            date: ""
+            date: "2015"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222214/http://www.cms.hhs.gov/manuals/pub45pdf/smm11t.pdf",
-            date: ""
+            date: "1998"
         },
         web: {
             url: "https://web.archive.org/web/20041212235810/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11_toc.asp",
-            date: ""
+            date: "1998"
         },
         subsections: [
             { id: 11100, title: "Background", },
@@ -1224,20 +1224,20 @@ const sections = ref([
         title: "Part 13 – State Plan Procedures and Preprints",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_13.zip",
-            date: ""
+            date: "1984"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222106/http://www.cms.hhs.gov/manuals/pub45pdf/smm13t.pdf",
-            date: ""
+            date: "1984"
         },
         web: {
             url: "https://web.archive.org/web/20041212234952/http://www.cms.hhs.gov/manuals/45_smm/sm_13_13_toc.asp",
-            date: ""
+            date: "1984"
         },
         subsections: [
             { id: 13025, title: "State Plans and Plan Amendments - General", },
             { id: 13026, title: "Approval of State Plans and Amendments", },
-            { id: 13100, title: "Inclusion of Waiver Provisions in the Approved State Medicaid", },
+            { id: 13100, title: "Inclusion of Waiver Provisions in the Approved State Medicaid Plan", },
         ],
     },
     {
@@ -1245,15 +1245,15 @@ const sections = ref([
         title: "Part 15 - Income and Eligibility Verification System",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_15.zip",
-            date: ""
+            date: "1991"
         },
         web: {
             url: "https://web.archive.org/web/20041212235650/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15_toc.asp",
-            date: ""
+            date: "1991"
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222351/http://www.cms.hhs.gov/manuals/pub45pdf/smm15t.pdf",
-            date: ""
+            date: "1991"
         },
         subsections: [
             { id: 15800, title: "Background of Income and Eligibility Verification System (IEVS)", },
