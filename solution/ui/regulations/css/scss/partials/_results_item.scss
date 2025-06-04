@@ -133,8 +133,17 @@
   }
 }
 
-.supplemental-content-list .collapsible-title {
-    font-size: 12px;
+.supplemental-content-list {
+    .collapsible-title,
+    .related-sections,
+    .related-sections .related-sections-title,
+    .related-sections .pipe-separator,
+    .related-sections .title__span,
+    .related-sections .section-sign,
+    .related-sections .related-section-item {
+        font-size: 12px;
+        line-height: 1.5;
+    }
 }
 
 .related-sections {
