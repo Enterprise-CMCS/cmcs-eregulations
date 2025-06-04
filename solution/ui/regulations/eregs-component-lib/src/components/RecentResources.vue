@@ -62,7 +62,7 @@ watchEffect(() => {
             </v-window-item>
             <v-window-item>
                 <p class="recent-rules-descriptive-text">
-                    Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 95, 155-156
+                    Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 75, 95, 155-156
                 </p>
                 <RecentChangesContainer
                     :api-url="apiUrl"

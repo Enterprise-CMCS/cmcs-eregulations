@@ -71,7 +71,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .should(($el) => {
                 expect($el.text().trim()).to.equal(
-                    "Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 95, 155-156",
+                    "Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 75, 95, 155-156",
                 );
             });
 
