@@ -19,7 +19,7 @@ export default function usePartsLastUpdated() {
                 apiUrl,
                 titles,
             });
-        } catch (error) {
+        } catch (_error) {
             partsLastUpdated.value.error = true;
             partsLastUpdated.value.results = {};
         } finally {

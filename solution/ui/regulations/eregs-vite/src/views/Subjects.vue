@@ -8,7 +8,7 @@ import useSearchResults from "composables/searchResults.js";
 
 import isEmpty from "lodash/isEmpty";
 
-import { getLastUpdatedDates, getSubjects, getTitles } from "utilities/api.js";
+import { getSubjects } from "utilities/api.js";
 
 import { getSubjectName, getSubjectNameParts } from "utilities/filters.js";
 
