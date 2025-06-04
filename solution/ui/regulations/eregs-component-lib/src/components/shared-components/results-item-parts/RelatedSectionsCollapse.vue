@@ -50,11 +50,11 @@ const homeUrl = inject("homeUrl");
         class="related-citations__btn--collapse"
     >
         <template #expanded>
-            Hide Related Sections
+            Hide Related Citations
             <i class="fa fa-chevron-up" />
         </template>
         <template #collapsed>
-            Show Related Sections
+            Show Related Citations
             <i class="fa fa-chevron-down" />
         </template>
     </CollapseButton>
