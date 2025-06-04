@@ -168,6 +168,9 @@
 
         a {
             text-decoration: none;
+            &:visited {
+                color: $primary_link_color;
+            }
         }
     }
 
