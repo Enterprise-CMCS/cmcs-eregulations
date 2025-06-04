@@ -29,9 +29,10 @@ watchEffect(() => {
     )[0];
 
     if (subregulatoryGuidance) {
-        categories.value = subregulatoryGuidance.subcategories
+        const subCats = subregulatoryGuidance.subcategories
             .map((cat) => `&categories=${cat.id}`)
             .join("");
+        categories.value = `&categories=${subregulatoryGuidance.id}` + subCats;
     }
 });
 </script>
