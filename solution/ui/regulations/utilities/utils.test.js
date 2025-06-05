@@ -16,6 +16,8 @@ import {
     getRequestParams,
     getSectionsRecursive,
     getTagContent,
+    hasRegulationCitations,
+    hasStatuteCitations,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
@@ -896,5 +898,111 @@ describe("Utilities.js", () => {
                 nestedObject
             );
         });
+    });
+});
+
+describe("hasRegulationCitations", () => {
+    const partsLastUpdated = {
+        438: "2024-07-09",
+    };
+
+    const doc1 = {
+        cfr_citations: [{ title: "42", part: "438" }],
+    };
+
+    it("returns true if the document has cfr_citations with an updated part", async () => {
+        expect(
+            hasRegulationCitations({
+                doc: doc1,
+                partsLastUpdated,
+            })
+        ).toBe(true);
+    });
+
+    const doc2 = {
+        cfr_citations: [{ title: "42", part: "439" }],
+    };
+
+    it("returns false if the document has cfr_citations with an unknown part", async () => {
+        expect(
+            hasRegulationCitations({
+                doc: doc2,
+                partsLastUpdated,
+            })
+        ).toBe(false);
+    });
+
+    const doc3 = {
+        cfr_citations: [],
+    };
+
+    it("returns false if the document has no cfr_citations", async () => {
+        expect(
+            hasRegulationCitations({
+                doc: doc3,
+                partsLastUpdated,
+            })
+        ).toBe(false);
+    });
+});
+
+describe("hasStatuteCitations", () => {
+    it("returns false if the document has no act_citations or no usc_citations", async () => {
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 1,
+                    unrelated_field: ["x"],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 2,
+                    act_citations: [],
+                    usc_citations: [],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 3,
+                    act_citations: [1, 2],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 4,
+                    act_citations: [],
+                },
+            })
+        ).toBe(false);
+
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 5,
+                    usc_citations: [1, 2],
+                    act_citations: [],
+                },
+            })
+        ).toBe(true);
+
+        expect(
+            hasStatuteCitations({
+                doc: {
+                    id: 6,
+                    act_citations: [1, 2],
+                    usc_citations: ["one", "two"],
+                },
+            })
+        ).toBe(true);
     });
 });

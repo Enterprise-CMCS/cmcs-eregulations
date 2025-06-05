@@ -4,8 +4,7 @@ import { inject } from "vue";
 const getCollapseName = (doc) =>
     `related citations collapsible ${doc.id ?? doc.node_id}`;
 
-export { getCollapseName };
-    
+export default { getCollapseName };
 </script>
 
 <script setup>
