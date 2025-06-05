@@ -6,7 +6,7 @@
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "@vitest/eslint-plugin": "^1.1.44",
-    "eslint": "^9.25.1",
+    "eslint": "^9.28.0",
     "eslint-plugin-cypress": "^4.3.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-vue": "^10.0.1",

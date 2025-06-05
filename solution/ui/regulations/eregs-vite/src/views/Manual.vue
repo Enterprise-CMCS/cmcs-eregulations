@@ -106,19 +106,19 @@ const sections = ref([
                         date: ""
                     } },
                     { id: 2086, title: "Eligibility for FFP", web: {
-                        /*uurl: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867901",*/
+                        /*url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867901",*/
                         date: ""
                     } },
                     { id: 2087, title: "HMO and Certain HIO Contracts - General", web: {
-                        /*uurl: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867918",*/
+                        /*url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867918",*/
                         date: ""
                     } },
                     { id: 2088, title: "Enrollees and Benefits", web: {
-                        /*uurl: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867929",*/
+                        /*url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867929",*/
                         date: ""
                     } },
                     { id: 2089, title: "Capitation Payments", web: {
-                        /*uurl: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867939",*/
+                        /*url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp#_Toc489867939",*/
                         date: ""
                     } },
                 ]
@@ -222,6 +222,8 @@ const sections = ref([
                 id: "2500.2 to 2500.6", 
                 title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program",
                 zip: { date: 1991 }, 
+                web: { date: "missing" },
+                pdf: { date: "missing" },
             },
             { 
                 id: "2501 to 2555",
@@ -283,6 +285,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20041211221327/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2600.11_to_2602.asp",
                     date: "1991"
                 },
+                pdf: { date: "missing" },
                 subsections: [
                     { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program" },
                     { id: 2602, title: "Submission Schedule - Medicaid Program Budget Report (Form HCFA-25)" },
@@ -697,6 +700,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20040227225635/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3570.asp",
                     date: "1986"
                 },
+                pdf: { date: "missing" },
             },
             { 
                 id: "IM 3900", 
@@ -708,6 +712,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20040808080724/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3900_to_im_3900.asp",
                     date: "1994"
                 },
+                pdf: { date: "missing" },
             },
         ],
     },
@@ -871,6 +876,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20041206162508/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_a.asp",
                     date: "1987"
                 },
+                pdf: { date: "missing" },
             },
             { 
                 id: "Addendum B", 
@@ -880,6 +886,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20041206163143/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_b.asp",
                     date: "1987"
                 },
+                pdf: { date: "missing" },
             },
             { 
                 id: "IM 4604", 
@@ -889,6 +896,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20041206164106/http://www.cms.hhs.gov/manuals/45_smm/sm_04_im_4604.asp",
                     date: "1991"
                 },
+                pdf: { date: "missing" },
             },
         ],
     },
@@ -1017,14 +1025,22 @@ const sections = ref([
             date: "1994"
         },
         subsections: [
-            { id: "", title: "Legal Background and Authority", },
+            { 
+                id: "", 
+                title: "Legal Background and Authority",
+                zip: { date: "no date" },
+                web: { date: "missing" },
+                pdf: { date: "no date" },
+            },
             { 
                 id: "7000 to 7099",
                 title: "Chapter 1 - Administration and Objectives",
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041209184841/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7000_to_7099.asp",
-                    date: ""
+                    date: 1992
                 },
+                pdf: { date: 1992 },
                 subsections: [
                     { id: 7000, title: "Introduction", },
                     { id: 7005, title: "Administration of MEQC", },
@@ -1045,14 +1061,12 @@ const sections = ref([
             { 
                 id: "7100 to 7124",
                 title: "Chapter 2 - Sampling Methods",
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041205015137/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7100_to_7124.asp",
-                    date: ""
+                    date: 1992
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1992 },
                 subsections: [
                     { id: 7100, title: "Quality Control Sampling", },
                     { id: 7102, title: "Overview of the MEQC System", },
@@ -1070,14 +1084,12 @@ const sections = ref([
             { 
                 id: "7125 to 7154",
                 title: "Chapter 2 - Sampling Methods",
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041205030649/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7125_to_7154.asp",
-                    date: ""
+                    date: 1992
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1992 },
                 subsections: [
                     { id: 7125, title: "Sample Selection", },    
                     { id: 7126, title: "Claims Collection", },
@@ -1097,46 +1109,52 @@ const sections = ref([
             { 
                 id: 7199, 
                 title: "Chapter 2 - Sampling Methods - Exhibits", 
+                zip: { date: 1989 },
                 web: {
                     url: "https://web.archive.org/web/20041209205013/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_to_exhibit_2.asp",
-                    date: ""
+                    date: 1989
                 },
+                pdf: { date: 1989 },
             },
             { 
-                id: "", 
-                title: "Chapter 2 - Sampling Methods - Glossary of Terms; Appendix A - MEQC Error Rate Calculation", 
+                id: "Appendix A", 
+                title: "Chapter 2 - Sampling Methods - Glossary of Terms; MEQC Error Rate Calculation",
+                zip: { date: 1993 },
                 web: {
                     url: "https://web.archive.org/web/20041205013851/http://www.cms.hhs.gov/manuals/45%5Fsmm/sm%5F07%5F7199%5Fapa.asp",
-                    date: ""
+                    date: "1993"
                 },
+                pdf: { date: 1993 },
             },
             { 
-                id: "", 
-                title: "Chapter 2 - Sampling Methods - Appendix B - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)", 
+                id: "Appendix B", 
+                title: "Chapter 2 - Sampling Methods - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)", 
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041209185620/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_apb.asp",
-                    date: ""
+                    date: 1992
                 },
+                pdf: { date: 1992 },
             },
             { 
-                id: "", 
-                title: "Chapter 2 - Sampling Methods - Appendix C - Retrospective Sampling", 
+                id: "Appendix C", 
+                title: "Chapter 2 - Sampling Methods - Retrospective Sampling",
+                zip: { date: "no date" },
                 web: {
                     url: "https://web.archive.org/web/20041209204006/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_apc.asp",
-                    date: ""
+                    date: "no date"
                 },
+                pdf: { date: "no date" },
             },
             { 
                 id: "7200 to 7230",
                 title: "Chapter 3 - Review Process",
+                zip: { date: 1993 },
                 web: {
                     url: "https://web.archive.org/web/20041209210243/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7200_to_7230.asp",
-                    date: ""
+                    date: 1993
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1993 },
                 subsections: [
                     { id: 7200, title: "Medicaid Eligibility Overview", },
                     { id: 7203, title: "Definitions of Key Terms", },
@@ -1154,14 +1172,12 @@ const sections = ref([
             { 
                 id: "7233 to 7265",
                 title: "Chapter 3 - Review Process",
+                zip: { date: 1994 },
                 web: {
-                    url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7233_to_7265.asp#_Toc490317903",
-                    date: ""
+                    url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7233_to_7265.asp",
+                    date: 1994
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1994 },
                 subsections: [
                     { id: 7233, title: "Cash Assistance Eligibility Determinations", },
                     { id: 7236, title: "Review of AFDC Cash Cases/Individuals", },
@@ -1182,14 +1198,12 @@ const sections = ref([
             { 
                 id: "7265.1 to 7272",
                 title: "Chapter 3 - Review Process",
+                zip: { date: 1994 },
                 web: {
                     url: "https://web.archive.org/web/20041209212827/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7265.1_to_7269.5.asp",
-                    date: ""
+                    date: 1994
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1994 },
                 subsections: [
                     { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
                     { id: 7266, title: "Documentation", },
@@ -1199,23 +1213,23 @@ const sections = ref([
             },
             { 
                 id: "7272 (Continued)", 
-                title: "Chapter 3 - Review Process - Verification Guide", 
+                title: "Chapter 3 - Review Process - Verification Guide",
+                zip: { date: 1994 },
                 web: {
                     url: "https://web.archive.org/web/20041210111723/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7272_to_7272.asp",
-                    date: ""
+                    date: 1994
                 },
+                pdf: { date: 1994 },
             },
             { 
                 id: "7275 to 7355",
                 title: "Chapter 3 - Review Process",
+                zip: { date: 1993 },
                 web: {
                     url: "https://web.archive.org/web/20041209213227/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7275_to_7355.asp",
-                    date: ""
+                    date: 1993
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1993 },
                 subsections: [
                     { id: 7275, title: "Instructions for Integrated Review Schedule (IRS) - Form HCFA 301", },
                     { id: 7278, title: "Administrative Period", },
@@ -1266,14 +1280,12 @@ const sections = ref([
             { 
                 id: "7500 to 7599",
                 title: "Chapter 4 - Reports",
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7500_to_7599.asp",
-                    date: ""
+                    date: 1992
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1992 },
                 subsections: [
                     { id: 7500, title: "Introduction", },
                     { id: 7505, title: "Analysis of Reported Data", },
@@ -1281,7 +1293,13 @@ const sections = ref([
                     { id: 7520, title: "Table Instructions - Table V", },
                 ]
             },
-            { id: "7700 to 7770.2", title: "Chapter 8 - Quality Control of Negative Case Actions", },
+            { 
+                id: "7700 to 7770.2", 
+                title: "Chapter 8 - Quality Control of Negative Case Actions",
+                zip: { date: 1994 },
+                web: { date: "missing" },
+                pdf: { date: "missing" },
+            },
         ],
     },
     {
@@ -1504,7 +1522,11 @@ const sections = ref([
                     { id: 11276, title: "Costs Related to MMIS Design, Development, Installation, Operation, and Enhancement", },
                 ]
             },
-            { id: "11276 to 11282.1", title: "Chapter 2 - Approval of MMIS Systems", },
+            { 
+                id: "11276 to 11282.1", 
+                title: "Chapter 2 - Approval of MMIS Systems", 
+                web: { date: "missing" },
+            },
             { 
                 id: "11300 to 11350",
                 title: "Chapter 3 - System Requirements",
@@ -1541,7 +1563,7 @@ const sections = ref([
                 id: "11600 to 11606",
                 title: "Chapter 6 - CPAS Review Process",
                 web: {
-                    url: "",
+                    url: "https://web.archive.org/web/20041213120934/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11600_to_11606.asp",
                     date: ""
                 },
                 pdf: {
@@ -1588,7 +1610,11 @@ const sections = ref([
                     { id: 11611, title: "CPAS Corrective Action", },
                 ]
             },
-            { id: "", title: "Legal Background And Authority", },
+            { 
+                id: "", 
+                title: "Legal Background And Authority",
+                web: { date: "missing" },
+            },
         ],
     },
     {
@@ -1695,7 +1721,7 @@ const toggleExpand = (id) => {
                         >
                             zipped Word documents from the CMS website
                         </a>
-                        , which is the most complete version of the manual, 
+                        , which is the most current and complete version of the manual, 
                         along with links to convenient 
                         <a 
                             class="external"
@@ -1758,7 +1784,7 @@ const toggleExpand = (id) => {
                                                 @click="toggleExpand(section.id)"
                                             >
                                                 <span v-if="section.subsections && section.subsections.length">
-                                                    {{ expanded[section.id] ? '▼' : '▶' }}
+                                                    <i :class="['fa', expanded[section.id] ? 'fa-angle-down' : 'fa-angle-right']"></i>
                                                 </span>
                                             </button>
                                             <span 
@@ -1798,6 +1824,7 @@ const toggleExpand = (id) => {
                                             >
                                                 PDF <span v-if="section.pdf.date" class="date-stamp">({{ section.pdf.date }})</span>
                                             </a>
+                                            <span v-else-if="section.pdf?.date" class="date-stamp">({{ section.pdf.date }})</span>
                                         </td>
                                     </tr>
                                     <template v-if="expanded[section.id] && section.subsections">
@@ -1809,7 +1836,7 @@ const toggleExpand = (id) => {
                                                         class="expand-btn" 
                                                         @click="toggleExpand(sub.id)"
                                                     >
-                                                        <span>{{ expanded[sub.id] ? '▼' : '▶' }}</span>
+                                                        <i :class="['fa', expanded[sub.id] ? 'fa-angle-down' : 'fa-angle-right']"></i>
                                                     </button>
                                                     <span 
                                                         v-if="sub.id || sub.title" 
@@ -1833,6 +1860,7 @@ const toggleExpand = (id) => {
                                                         Web 
                                                         <span v-if="sub.web.date" class="date-stamp">({{ sub.web.date }})</span>
                                                     </a>
+                                                    <span v-else-if="sub.web?.date" class="date-stamp">({{ sub.web.date }})</span>
                                                 </td>
                                                 <td class="table__cell">
                                                     <a 
@@ -1844,6 +1872,7 @@ const toggleExpand = (id) => {
                                                         PDF 
                                                         <span v-if="sub.pdf.date" class="date-stamp">({{ sub.pdf.date }})</span>
                                                     </a>
+                                                    <span v-else-if="sub.pdf?.date" class="date-stamp">({{ sub.pdf.date }})</span>
                                                 </td>
                                             </tr>
                                             <template v-if="sub.subsections && expanded[sub.id]">
@@ -1886,6 +1915,7 @@ const toggleExpand = (id) => {
                                                             PDF 
                                                             <span v-if="nestedSub.pdf.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
                                                         </a>
+                                                        <span v-else-if="nestedSub.pdf?.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
                                                     </td>
                                                 </tr>
                                             </template>
@@ -1989,6 +2019,10 @@ const toggleExpand = (id) => {
     color: #1a355e;
 }
 
+.fa-angle-right {
+    margin-right: 2px; /* adjust for the right-arrow and down-arrow being slightly different sizes */
+}
+
 .sticky {
     position: sticky;
     top: 0;
@@ -2022,4 +2056,4 @@ const toggleExpand = (id) => {
     margin-left: 4px;
 }
 
-</style> 
+</style>
