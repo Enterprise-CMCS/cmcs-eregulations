@@ -6,6 +6,9 @@ root = true
 end_of_line = lf
 insert_final_newline = true
 
+# Remove any whitespace characters preceding newline characters
+trim_trailing_whitespace = true
+
 # 4 space indentation for .js/.cjs/.mjs files
 [*.{ts,js,cjs,mjs}]
 indent_style = space
