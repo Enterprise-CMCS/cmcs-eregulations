@@ -472,7 +472,7 @@ const sections = ref([
             },
             { 
                 id: 3405, 
-                title: "Changes Due to Welfare Reform", 
+                title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled - Changes Due to Welfare Reform", 
                 web: {
                     url: "https://web.archive.org/web/20040808082505/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3405_to_3405.asp",
                     date: "1997"
@@ -822,16 +822,16 @@ const sections = ref([
                 ]
             },
             { 
-                id: "", 
-                title: "Addendum A - Wage Indices for Urban Areas", 
+                id: "Addendum A", 
+                title: "Wage Indices for Urban Areas", 
                 web: {
                     url: "https://web.archive.org/web/20041206162508/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_a.asp",
                     date: "1987"
                 },
             },
             { 
-                id: "", 
-                title: "Addendum B - Wage Indices for Rural Areas", 
+                id: "Addendum B", 
+                title: "Wage Indices for Rural Areas", 
                 web: {
                     url: "https://web.archive.org/web/20041206163143/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_b.asp",
                     date: "1987"
@@ -898,24 +898,54 @@ const sections = ref([
             date: "2000"
         },
         subsections: [
-            { id: 6000, title: "Inpatient Hospital and Long-Term Care Reimbursement - General", },
-            { id: 6001, title: "Statutory Requirements", },
-            { id: 6002, title: "Requirements Necessary for State Plan Sections 4.19(A) or 4.19(D)", },
-            { id: 6003, title: "HCFA Action", },
-            { id: 6004, title: "Public Notice", },
-            { id: 6005, title: "Upper Payment Limit Requirements", },
-            { id: 6006, title: "Appeals", },
-            { id: 6300, title: "Payment for Outpatient Clinical Diagnostic Laboratory Tests for Calendar Quarters Beginning on or After October 1, 1984", },
-            { id: 6301, title: "Rural Health Clinic Reimbursement", },
-            { id: 6302, title: "Rural Health Clinic Carriers", },
-            { id: 6303, title: "Federally Qualified Health Center and Other Ambulatory Services Payment", },
-            { id: 6305, title: "Specific Upper Limits for Multiple Source and \"Other\" Drugs", },
-            { id: 6320, title: "Direct Reimbursement by States to Medicaid Recipients to Correct Erroneous Denials", },
-            { id: 6400, title: "Payment for Physician Services to Pregnant Women and Children", },
-
-            { id: "IM 6000", title: "Inpatient Hospital and Long-Term Care Reimbursement", },
-            { id: "IM 6007", title: "Revaluation of Assets", },
-            { id: "", title: "Addendum A", },
+            { 
+                id: "6000 to 6400.3",
+                title: "",
+                web: {
+                    url: "https://web.archive.org/web/20041118085615/http://www.cms.hhs.gov/manuals/45_smm/sm_06_6000_to_6400.3.asp",
+                    date: ""
+                },
+                subsections: [
+                    { id: 6000, title: "Inpatient Hospital and Long-Term Care Reimbursement - General", },
+                    { id: 6001, title: "Statutory Requirements", },
+                    { id: 6002, title: "Requirements Necessary for State Plan Sections 4.19(A) or 4.19(D)", },
+                    { id: 6003, title: "HCFA Action", },
+                    { id: 6004, title: "Public Notice", },
+                    { id: 6005, title: "Upper Payment Limit Requirements", },
+                    { id: 6006, title: "Appeals", },
+                    { id: 6300, title: "Payment for Outpatient Clinical Diagnostic Laboratory Tests for Calendar Quarters Beginning on or After October 1, 1984", },
+                    { id: 6301, title: "Rural Health Clinic Reimbursement", },
+                    { id: 6302, title: "Rural Health Clinic Carriers", },
+                    { id: 6303, title: "Federally Qualified Health Center and Other Ambulatory Services Payment", },
+                    { id: 6305, title: "Specific Upper Limits for Multiple Source and \"Other\" Drugs", },
+                    { id: 6320, title: "Direct Reimbursement by States to Medicaid Recipients to Correct Erroneous Denials", },
+                    { id: 6400, title: "Payment for Physician Services to Pregnant Women and Children", },
+                ]
+            },
+            { 
+                id: "IM 6000", 
+                title: "Inpatient Hospital and Long-Term Care Reimbursement", 
+                web: {
+                    url: "https://web.archive.org/web/20041212235830/http://www.cms.hhs.gov/manuals/45_smm/sm_06_im_6000_to_6000.5.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "IM 6007", 
+                title: "Revaluation of Assets", 
+                web: {
+                    url: "https://web.archive.org/web/20041213121344/http://www.cms.hhs.gov/manuals/45_smm/sm_06_im_6007_to_6007.asp",
+                    date: ""
+                }
+            },
+            { 
+                id: "Addendum A", 
+                title: "", 
+                web: {
+                    url: "https://web.archive.org/web/20041213115707/http://www.cms.hhs.gov/manuals/45_smm/sm_06_6000_ad_a.asp",
+                    date: ""
+                }
+            },
         ],
     },
     {
@@ -934,138 +964,271 @@ const sections = ref([
             date: "1994"
         },
         subsections: [
-            { id: 7000, title: "Introduction", },
-            { id: 7005, title: "Administration of MEQC", },
-            { id: 7015, title: "Federal MEQC State Plan Requirements", },
-            { id: 7030, title: "Components of the MEQC System", },
-            { id: 7031, title: "Sample Selection", },
-            { id: 7032, title: "Review Process", },
-            { id: 7033, title: "Individual Corrective Action", },
-            { id: 7034, title: "Data Management", },
-            { id: 7035, title: "Error Analysis", },
-            { id: 7036, title: "Dissemination of Findings", },
-            { id: 7050, title: "MEQC and Corrective Action", },
-            { id: 7052, title: "MEQC Cap Requirements", },
-            { id: 7055, title: "MEQC Cap Format", },
-            { id: 7099, title: "Role of a State Model System in the Evaluation Process", },
-
-            { id: 7100, title: "Quality Control Sampling", },
-            { id: 7102, title: "Overview of the MEQC System", },
-            { id: 7104, title: "MEQC Sampling Requirements", },
-            { id: 7109, title: "Types of Errors", },
-            { id: 7110, title: "Validity and Reliability of Statistical Data", },
-            { id: 7113, title: "Stratification", },
-            { id: 7120, title: "General Sampling Requirements of MEQC", },
-            { id: 7121, title: "Sample Unit", },
-            { id: 7122, title: "Sample Sizes", },
-            { id: 7123, title: "Populations to Be Sampled", },
-            { id: 7124, title: "Sampling Frames", },
-
-            { id: 7126, title: "Claims Collection", },
-            { id: 7130, title: "Requirements for Sampling Plan Documentation", },
-            { id: 7132, title: "Random Sample Selection Procedures", },
-            { id: 7133, title: "Calculation of Sampling Interval", },
-            { id: 7134, title: "Selection of Cases for the Review Month", },
-            { id: 7140, title: "Procedures for Correcting the Monthly Sample for Excessive Oversampling and Undersampling", },
-            { id: 7142, title: "Correcting for Excessive Oversampling", },
-            { id: 7144, title: "Correcting for Undersampling", },
-            { id: 7146, title: "Alternate Method of Correcting for Undersampling or Oversampling", },
-            { id: 7150, title: "Guidelines for Expanded and Substratified Samples", },
-            { id: 7152, title: "Guidelines for Expanding Sample Size", },
-            { id: 7154, title: "Guidelines for Further Stratification", },
-
-            { id: 7199, title: "Exhibits", },
-            { id: "", title: "Exhibit 1 - Sample Sizes", },
-            { id: "", title: "Exhibit 2 - Table of Random Sampling Numbers", },
-
-            { id: "", title: "Glossary of Terms", },
-            { id: "", title: "Appendix A - MEQC Error Rate Calculation", },
-
-            { id: "", title: "Appendix B - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)", },
-
-            { id: "", title: "Appendix C - Retrospective Sampling", },
-
-            { id: 7200, title: "Medicaid Eligibility Overview", },
-            { id: 7203, title: "Definitions of Key Terms", },
-            { id: 7206, title: "Medicaid Eligibility Quality Control (MEQC) Review", },
-            { id: 7209, title: "Scope of MEQC System", },
-            { id: 7212, title: "MEQC Operation", },
-            { id: 7215, title: "Role of Reviewer", },
-            { id: 7218, title: "Independence of MEQC Review", },
-            { id: 7221, title: "Documentation of Reviews", },
-            { id: 7224, title: "Approach to MEQC", },
-            { id: 7227, title: "Cases to Be Reviewed", },
-            { id: 7230, title: "Cases Which Are Not Reviewed", },
-
-            { id: 7233, title: "Cash Assistance Eligibility Determinations", },
-            { id: 7236, title: "Review of AFDC Cash Cases/Individuals", },
-            { id: 7237, title: "Review of AFDC-Related and SSI-Related Cases", },
-            { id: 7239, title: "Review of SSI Cash Cases Under §1903(u) of the Act Enacted by TEFRA 1982", },
-            { id: 7242, title: "Review of SSI Cash Cases in SSI-Criteria and 209(b) States", },
-            { id: 7245, title: "Review of Aged, Blind and Disabled Cases in 209(b) States and United States Territories", },
-            { id: 7248, title: "Case Record Review", },
-            { id: 7251, title: "Field Investigation", },
-            { id: 7254, title: "In-Person Interview", },
-            { id: 7257, title: "Collateral Contacts", },
-            { id: 7260, title: "Worksheet for Integrated AFDC, Adult, Food Stamp, and Medicaid Eligibility Quality Control Reviews (Facesheet)", },
-            { id: 7263, title: "Elements of Eligibility and Payment Determination (Integrated QC Worksheet)", },
-            { id: 7264, title: "Mandatory Use of Ievs Information", },
-            { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
-
-            { id: 7266, title: "Documentation", },
-            { id: 7269, title: "Verification Standards", },
-            { id: 7272, title: "Verification Guide", },
-
-            { id: 7272, title: "Verification Guide", },
-            { id: 7275, title: "Instructions for Integrated Review Schedule (IRS) - Form HCFA 301", },
-            { id: 7278, title: "Administrative Period", },
-            { id: 7300, title: "Classification of Errors", },
-            { id: 7303, title: "Eligibility Errors", },
-            { id: 7306, title: "Reporting of Eligibility Errors", },
-            { id: 7309, title: "Technical Errors", },
-            { id: 7310, title: "Hierarchy of MEQC Errors", },
-            { id: 7312, title: "Eligible With Ineligible Services", },
-            { id: 7315, title: "Erroneous Payment Computation", },
-            { id: 7316, title: "Dollar Amount of Case Eligibility Errors", },
-            { id: 7318, title: "Computation of Liability Errors", },
-            { id: 7319, title: "Review Month Income Projected Forward Throughout Spenddown Period", },
-            { id: 7321, title: "Identification of Claims for Services", },
-            { id: 7324, title: "Rounding to Nearest Dollar", },
-            { id: 7327, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Eligibility Errors", },
-            { id: 7330, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Liability Understated Errors", },
-            { id: 7333, title: "Determining Final Misspent Dollar Amounts of Institutional Cases", },
-            { id: 7336, title: "Identifying the Primary Eligibility and Liability Errors", },
-            { id: 7339, title: "Definition of Misspent Dollar Amounts for Cases Containing Final Eligibility or Liability Errors", },
-            { id: 7342, title: "Completing the Unduplicated Dollar Error Amount Worksheet (Optional)", },
-            { id: 7343, title: "Computation of Error Amounts for Cases Involving Beneficiaries Dually Eligible for QMB and Non-QMB Coverage Group", },
-            { id: 7275, title: "Instructions for Integrated Review Schedule (IRS) - Form HCFA 301", },
-            { id: 7278, title: "Administrative Period", },
-            { id: 7300, title: "Classification of Errors", },
-            { id: 7303, title: "Eligibility Errors", },
-            { id: 7306, title: "Reporting of Eligibility Errors", },
-            { id: 7309, title: "Technical Errors", },
-            { id: 7310, title: "Hierarchy of MEQC Errors", },
-            { id: 7312, title: "Eligible With Ineligible Services", },
-            { id: 7315, title: "Erroneous Payment Computation", },
-            { id: 7316, title: "Dollar Amount of Case Eligibility Errors", },
-            { id: 7318, title: "Computation of Liability Errors", },
-            { id: 7319, title: "Review Month Income Projected Forward Throughout Spenddown Period", },
-            { id: 7321, title: "Identification of Claims for Services", },
-            { id: 7324, title: "Rounding to Nearest Dollar", },
-            { id: 7327, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Eligibility Errors", },
-            { id: 7330, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Liability Understated Errors", },
-            { id: 7333, title: "Determining Final Misspent Dollar Amounts of Institutional Cases", },
-            { id: 7336, title: "Identifying the Primary Eligibility and Liability Errors", },
-            { id: 7339, title: "Definition of Misspent Dollar Amounts for Cases Containing Final Eligibility or Liability Errors", },
-            { id: 7342, title: "Completing the Unduplicated Dollar Error Amount Worksheet (Optional)", },
-            { id: 7343, title: "Computation of Error Amounts for Cases Involving Beneficiaries Dually Eligible for QMB and Non-QMB Coverage Group", },
-            { id: 7350, title: "Federal Monitoring", },
-            { id: 7355, title: "Record Maintenance", },
-
-            { id: 7500, title: "Introduction", },
-            { id: 7505, title: "Analysis of Reported Data", },
-            { id: 7510, title: "Instructions", },
-            { id: 7520, title: "Table Instructions - Table V", },
+            { id: "", title: "Legal Background and Authority", },
+            { 
+                id: "7000 to 7099",
+                title: "Chapter 1 - Administration and Objectives",
+                web: {
+                    url: "https://web.archive.org/web/20041209184841/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7000_to_7099.asp",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7000, title: "Introduction", },
+                    { id: 7005, title: "Administration of MEQC", },
+                    { id: 7015, title: "Federal MEQC State Plan Requirements", },
+                    { id: 7030, title: "Components of the MEQC System", },
+                    { id: 7031, title: "Sample Selection", },
+                    { id: 7032, title: "Review Process", },
+                    { id: 7033, title: "Individual Corrective Action", },
+                    { id: 7034, title: "Data Management", },
+                    { id: 7035, title: "Error Analysis", },
+                    { id: 7036, title: "Dissemination of Findings", },
+                    { id: 7050, title: "MEQC and Corrective Action", },
+                    { id: 7052, title: "MEQC Cap Requirements", },
+                    { id: 7055, title: "MEQC Cap Format", },
+                    { id: 7099, title: "Role of a State Model System in the Evaluation Process", },
+                ]
+            },
+            { 
+                id: "7100 to 7124",
+                title: "Chapter 2 - Sampling Methods",
+                web: {
+                    url: "https://web.archive.org/web/20041205015137/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7100_to_7124.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7100, title: "Quality Control Sampling", },
+                    { id: 7102, title: "Overview of the MEQC System", },
+                    { id: 7104, title: "MEQC Sampling Requirements", },
+                    { id: 7109, title: "Types of Errors", },
+                    { id: 7110, title: "Validity and Reliability of Statistical Data", },
+                    { id: 7113, title: "Stratification", },
+                    { id: 7120, title: "General Sampling Requirements of MEQC", },
+                    { id: 7121, title: "Sample Unit", },
+                    { id: 7122, title: "Sample Sizes", },
+                    { id: 7123, title: "Populations to Be Sampled", },
+                    { id: 7124, title: "Sampling Frames", },
+                ]
+            },
+            { 
+                id: "7125 to 7154",
+                title: "Chapter 2 - Sampling Methods",
+                web: {
+                    url: "https://web.archive.org/web/20041205030649/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7125_to_7154.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7125, title: "Sample Selection", },    
+                    { id: 7126, title: "Claims Collection", },
+                    { id: 7130, title: "Requirements for Sampling Plan Documentation", },
+                    { id: 7132, title: "Random Sample Selection Procedures", },
+                    { id: 7133, title: "Calculation of Sampling Interval", },
+                    { id: 7134, title: "Selection of Cases for the Review Month", },
+                    { id: 7140, title: "Procedures for Correcting the Monthly Sample for Excessive Oversampling and Undersampling", },
+                    { id: 7142, title: "Correcting for Excessive Oversampling", },
+                    { id: 7144, title: "Correcting for Undersampling", },
+                    { id: 7146, title: "Alternate Method of Correcting for Undersampling or Oversampling", },
+                    { id: 7150, title: "Guidelines for Expanded and Substratified Samples", },
+                    { id: 7152, title: "Guidelines for Expanding Sample Size", },
+                    { id: 7154, title: "Guidelines for Further Stratification", },
+                ]
+            },
+            { 
+                id: 7199, 
+                title: "Chapter 2 - Sampling Methods - Exhibits", 
+                web: {
+                    url: "https://web.archive.org/web/20041209205013/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_to_exhibit_2.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "", 
+                title: "Chapter 2 - Sampling Methods - Glossary of Terms; Appendix A - MEQC Error Rate Calculation", 
+                web: {
+                    url: "https://web.archive.org/web/20041205013851/http://www.cms.hhs.gov/manuals/45%5Fsmm/sm%5F07%5F7199%5Fapa.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "", 
+                title: "Chapter 2 - Sampling Methods - Appendix B - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)", 
+                web: {
+                    url: "https://web.archive.org/web/20041209185620/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_apb.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "", 
+                title: "Chapter 2 - Sampling Methods - Appendix C - Retrospective Sampling", 
+                web: {
+                    url: "https://web.archive.org/web/20041209204006/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_apc.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "7200 to 7230",
+                title: "Chapter 3 - Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041209210243/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7200_to_7230.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7200, title: "Medicaid Eligibility Overview", },
+                    { id: 7203, title: "Definitions of Key Terms", },
+                    { id: 7206, title: "Medicaid Eligibility Quality Control (MEQC) Review", },
+                    { id: 7209, title: "Scope of MEQC System", },
+                    { id: 7212, title: "MEQC Operation", },
+                    { id: 7215, title: "Role of Reviewer", },
+                    { id: 7218, title: "Independence of MEQC Review", },
+                    { id: 7221, title: "Documentation of Reviews", },
+                    { id: 7224, title: "Approach to MEQC", },
+                    { id: 7227, title: "Cases to Be Reviewed", },
+                    { id: 7230, title: "Cases Which Are Not Reviewed", },
+                ]
+            },
+            { 
+                id: "7233 to 7265",
+                title: "Chapter 3 - Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7233_to_7265.asp#_Toc490317903",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7233, title: "Cash Assistance Eligibility Determinations", },
+                    { id: 7236, title: "Review of AFDC Cash Cases/Individuals", },
+                    { id: 7237, title: "Review of AFDC-Related and SSI-Related Cases", },
+                    { id: 7239, title: "Review of SSI Cash Cases Under §1903(u) of the Act Enacted by TEFRA 1982", },
+                    { id: 7242, title: "Review of SSI Cash Cases in SSI-Criteria and 209(b) States", },
+                    { id: 7245, title: "Review of Aged, Blind and Disabled Cases in 209(b) States and United States Territories", },
+                    { id: 7248, title: "Case Record Review", },
+                    { id: 7251, title: "Field Investigation", },
+                    { id: 7254, title: "In-Person Interview", },
+                    { id: 7257, title: "Collateral Contacts", },
+                    { id: 7260, title: "Worksheet for Integrated AFDC, Adult, Food Stamp, and Medicaid Eligibility Quality Control Reviews (Facesheet)", },
+                    { id: 7263, title: "Elements of Eligibility and Payment Determination (Integrated QC Worksheet)", },
+                    { id: 7264, title: "Mandatory Use of Ievs Information", },
+                    { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
+                ]
+            },
+            { 
+                id: "7265.1 to 7272",
+                title: "Chapter 3 - Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041209212827/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7265.1_to_7269.5.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
+                    { id: 7266, title: "Documentation", },
+                    { id: 7269, title: "Verification Standards", },
+                    { id: 7272, title: "Verification Guide", },
+                ]
+            },
+            { 
+                id: "7272 (Continued)", 
+                title: "Chapter 3 - Review Process - Verification Guide", 
+                web: {
+                    url: "https://web.archive.org/web/20041210111723/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7272_to_7272.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "7275 to 7355",
+                title: "Chapter 3 - Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041209213227/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7275_to_7355.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7275, title: "Instructions for Integrated Review Schedule (IRS) - Form HCFA 301", },
+                    { id: 7278, title: "Administrative Period", },
+                    { id: 7300, title: "Classification of Errors", },
+                    { id: 7303, title: "Eligibility Errors", },
+                    { id: 7306, title: "Reporting of Eligibility Errors", },
+                    { id: 7309, title: "Technical Errors", },
+                    { id: 7310, title: "Hierarchy of MEQC Errors", },
+                    { id: 7312, title: "Eligible With Ineligible Services", },
+                    { id: 7315, title: "Erroneous Payment Computation", },
+                    { id: 7316, title: "Dollar Amount of Case Eligibility Errors", },
+                    { id: 7318, title: "Computation of Liability Errors", },
+                    { id: 7319, title: "Review Month Income Projected Forward Throughout Spenddown Period", },
+                    { id: 7321, title: "Identification of Claims for Services", },
+                    { id: 7324, title: "Rounding to Nearest Dollar", },
+                    { id: 7327, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Eligibility Errors", },
+                    { id: 7330, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Liability Understated Errors", },
+                    { id: 7333, title: "Determining Final Misspent Dollar Amounts of Institutional Cases", },
+                    { id: 7336, title: "Identifying the Primary Eligibility and Liability Errors", },
+                    { id: 7339, title: "Definition of Misspent Dollar Amounts for Cases Containing Final Eligibility or Liability Errors", },
+                    { id: 7342, title: "Completing the Unduplicated Dollar Error Amount Worksheet (Optional)", },
+                    { id: 7343, title: "Computation of Error Amounts for Cases Involving Beneficiaries Dually Eligible for QMB and Non-QMB Coverage Group", },
+                    { id: 7275, title: "Instructions for Integrated Review Schedule (IRS) - Form HCFA 301", },
+                    { id: 7278, title: "Administrative Period", },
+                    { id: 7300, title: "Classification of Errors", },
+                    { id: 7303, title: "Eligibility Errors", },
+                    { id: 7306, title: "Reporting of Eligibility Errors", },
+                    { id: 7309, title: "Technical Errors", },
+                    { id: 7310, title: "Hierarchy of MEQC Errors", },
+                    { id: 7312, title: "Eligible With Ineligible Services", },
+                    { id: 7315, title: "Erroneous Payment Computation", },
+                    { id: 7316, title: "Dollar Amount of Case Eligibility Errors", },
+                    { id: 7318, title: "Computation of Liability Errors", },
+                    { id: 7319, title: "Review Month Income Projected Forward Throughout Spenddown Period", },
+                    { id: 7321, title: "Identification of Claims for Services", },
+                    { id: 7324, title: "Rounding to Nearest Dollar", },
+                    { id: 7327, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Eligibility Errors", },
+                    { id: 7330, title: "Determining Final Misspent Dollar Amounts of Cases Containing Initial Liability Understated Errors", },
+                    { id: 7333, title: "Determining Final Misspent Dollar Amounts of Institutional Cases", },
+                    { id: 7336, title: "Identifying the Primary Eligibility and Liability Errors", },
+                    { id: 7339, title: "Definition of Misspent Dollar Amounts for Cases Containing Final Eligibility or Liability Errors", },
+                    { id: 7342, title: "Completing the Unduplicated Dollar Error Amount Worksheet (Optional)", },
+                    { id: 7343, title: "Computation of Error Amounts for Cases Involving Beneficiaries Dually Eligible for QMB and Non-QMB Coverage Group", },
+                    { id: 7350, title: "Federal Monitoring", },
+                    { id: 7355, title: "Record Maintenance", },
+                ]
+            },
+            { 
+                id: "7500 to 7599",
+                title: "Chapter 4 - Reports",
+                web: {
+                    url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7500_to_7599.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 7500, title: "Introduction", },
+                    { id: 7505, title: "Analysis of Reported Data", },
+                    { id: 7510, title: "Instructions", },
+                    { id: 7520, title: "Table Instructions - Table V", },
+                ]
+            },
+            { id: "7700 to 7770.2", title: "Chapter 8 - Quality Control of Negative Case Actions", },
         ],
     },
     {
@@ -1084,9 +1247,9 @@ const sections = ref([
             date: "1983"
         },
         subsections: [
-            { id: 8001, title: "Claims for Payment in Alcohol and Drug Abuse Case - General", },
-            { id: 8002, title: "Confidentiality of Provider Records", },
-            { id: 8003, title: "Consent Form", },
+            { id: 8001, title: "Disclosure of Information by Providers and Fiscal Agents - Claims for Payment in Alcohol and Drug Abuse Case - General", },
+            { id: 8002, title: "Disclosure of Information by Providers and Fiscal Agents - Confidentiality of Provider Records", },
+            { id: 8003, title: "Disclosure of Information by Providers and Fiscal Agents - Consent Form", },
         ],
     },
     {
@@ -1105,45 +1268,100 @@ const sections = ref([
             date: "1989"
         },
         subsections: [
-            { id: 9100, title: "Legal Background and Authority for the Utilization Control Program", },
-            { id: 9102, title: "Scope of the UC Quality Review System", },
-            { id: 9105, title: "Requirements for Content of Quarterly Showings", },
-            { id: 9110, title: "Completing Facility Lists", },
-            { id: 9111, title: "Facilities for Which No Reviews Were Performed", },
-            { id: 9115, title: "Submission of Quarterly Showings", },
-            { id: 9120, title: "Acceptable Reasons for Not Meeting Annual Review Requirements of the Quarterly Showing", },
-            { id: 9125, title: "Procedures When a State Claims an Exception Clause", },
-            { id: 9130, title: "Recipients in Out-of-State Facilities", },
-            { id: 9135, title: "Recipients in Facilities Without Valid Provider Agreements", },
-            { id: 9140, title: "Validation Survey in the State Agency", },
-            { id: 9150, title: "Conditions for Meeting a 100-Percent Recipient Review", },
-            { id: 9155, title: "A Reasonable State System for Identifying Recipients for Review", },
-            { id: 9160, title: "Multiple IOC Reviews", },
-            { id: 9165, title: "Acceptable Reasons for Not Meeting Requirements for a 100 Percent Recipient Review", },
-            { id: 9170, title: "Entrance and Exit Conferences", },
-            { id: 9180, title: "Reductions in Federal Financial Participation", },
-            { id: "", title: "Exhibit 1", },
-            { id: "", title: "Exhibit 2", },
-            { id: "", title: "Exhibit 3", },
-            { id: "", title: "Exhibit 4", },
-            { id: "", title: "Exhibit 5", },
-            { id: "", title: "Exhibit 6", },
-
-            { id: 9214, title: "Legal Background", },
-            { id: 9215, title: "Certification", },
-            { id: 9216, title: "Plan of Care Requirements", },
-            { id: 9220, title: "Recertification", },
-            { id: 9300, title: "Submitting Superior UR System Waiver Request to HCFA", },
-            { id: 9310, title: "Utilization Review Features Which Will Not Be Waived", },
-            { id: 9320, title: "Content of Initial Waiver Request", },
-            { id: 9330, title: "Content of Renewal of Waiver Request", },
-            { id: 9340, title: "Decisions and Notifications by HCFA", },
-            { id: 9350, title: "Withdrawal of HCFA Approval", },
-
-            { id: "IM 9215", title: "Certification of the Need for Inpatient SNF or ICF Care", },
-            { id: "IM 9216", title: "Who May Establish a Plan of Care for SNF or ICF Inpatients", },
-            { id: "IM 9220", title: "Utilization Control", },
-            { id: "IM 9220", title: "Recertification of the Need for Inpatient SNF or ICF Care", },
+            { 
+                id: "9100 to 9180.3, Exhibits 1 to 6",
+                title: "General Provisions",
+                web: {
+                    url: "https://web.archive.org/web/20041213121705/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9100_to_exhibit_6.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 9100, title: "Legal Background and Authority for the Utilization Control Program", },
+                    { id: 9102, title: "Scope of the UC Quality Review System", },
+                    { id: 9105, title: "Requirements for Content of Quarterly Showings", },
+                    { id: 9110, title: "Completing Facility Lists", },
+                    { id: 9111, title: "Facilities for Which No Reviews Were Performed", },
+                    { id: 9115, title: "Submission of Quarterly Showings", },
+                    { id: 9120, title: "Acceptable Reasons for Not Meeting Annual Review Requirements of the Quarterly Showing", },
+                    { id: 9125, title: "Procedures When a State Claims an Exception Clause", },
+                    { id: 9130, title: "Recipients in Out-of-State Facilities", },
+                    { id: 9135, title: "Recipients in Facilities Without Valid Provider Agreements", },
+                    { id: 9140, title: "Validation Survey in the State Agency", },
+                    { id: 9150, title: "Conditions for Meeting a 100-Percent Recipient Review", },
+                    { id: 9155, title: "A Reasonable State System for Identifying Recipients for Review", },
+                    { id: 9160, title: "Multiple IOC Reviews", },
+                    { id: 9165, title: "Acceptable Reasons for Not Meeting Requirements for a 100 Percent Recipient Review", },
+                    { id: 9170, title: "Entrance and Exit Conferences", },
+                    { id: 9180, title: "Reductions in Federal Financial Participation", },
+                    { id: "Exhibit 1", title: "", },
+                    { id: "Exhibit 2", title: "", },
+                    { id: "Exhibit 3", title: "", },
+                    { id: "Exhibit 4", title: "", },
+                    { id: "Exhibit 5", title: "", },
+                    { id: "Exhibit 6", title: "", },
+                ]
+            },
+            { 
+                id: 9214, 
+                title: "Physician Certification/Recertification - Legal Background", 
+                web: {
+                    url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9214.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "9215 to 9350",
+                title: "Physician Certification/Recertification",
+                web: {
+                    url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9215_to_9350.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 9215, title: "Certification", },
+                    { id: 9216, title: "Plan of Care Requirements", },
+                    { id: 9220, title: "Recertification", },
+                    { id: 9300, title: "Submitting Superior UR System Waiver Request to HCFA", },
+                    { id: 9310, title: "Utilization Review Features Which Will Not Be Waived", },
+                    { id: 9320, title: "Content of Initial Waiver Request", },
+                    { id: 9330, title: "Content of Renewal of Waiver Request", },
+                    { id: 9340, title: "Decisions and Notifications by HCFA", },
+                    { id: 9350, title: "Withdrawal of HCFA Approval", },
+                ]
+            },
+            { 
+                id: "IM 9215 to IM 9216",
+                title: "",
+                web: {
+                    url: "https://web.archive.org/web/20041213115942/http://www.cms.hhs.gov/manuals/45_smm/sm_09_im_9215.asp",
+                    date: ""
+                },
+                subsections: [
+                    { 
+                        id: "IM 9215", 
+                        title: "Certification of the Need for Inpatient SNF or ICF Care",
+                    },
+                    { 
+                        id: "IM 9216", 
+                        title: "Who May Establish a Plan of Care for SNF or ICF Inpatients", 
+                    },
+                ]
+            },
+            { 
+                id: "IM 9220", 
+                title: "Recertification of the Need for Inpatient SNF or ICF Care", 
+                web: {
+                    url: "https://web.archive.org/web/20041213112941/http://www.cms.hhs.gov/manuals/45_smm/sm_09_im_9220.asp",
+                    date: ""
+                },
+            },
         ],
     },
     {
@@ -1162,61 +1380,162 @@ const sections = ref([
             date: "1998"
         },
         subsections: [
-            { id: 11100, title: "Background", },
-            { id: 11105, title: "Introduction", },
-            { id: 11110, title: "Definitions", },
-            { id: 11115, title: "Objectives", },
-
-            { id: 11200, title: "Applicable Federal Approval Requirements", },
-            { id: 11205, title: "90 Percent FFP - General Regulatory Requirements", },
-            { id: 11210, title: "75 Percent FFP - General Regulatory Requirements", },
-            { id: 11215, title: "Access for State and Federal Inspection", },
-            { id: 11220, title: "Prospective Approval of Enhanced Funding", },
-            { id: 11225, title: "Considerations and Options", },
-            { id: 11227, title: "Acquisition of Adp Equipment and Services", },
-            { id: 11230, title: "Approval Process and Documentation Submissions", },
-            { id: 11235, title: "90 Percent FFP", },
-            { id: 11236, title: "Implementation Advance Planning Document (APD)", },
-            { id: 11237, title: "Detailed Implementation Schedule (DIS)", },
-            { id: 11238, title: "Project Reporting Requirements", },
-            { id: 11240, title: "75 Percent FFP - Federal Certification Review Process", },
-            { id: 11241, title: "Preliminary Evaluation", },
-            { id: 11242, title: "Onsite Observation", },
-            { id: 11243, title: "Post-Site Evaluation", },
-            { id: 11250, title: "Reimbursable Costs for State MMIS", },
-            { id: 11255, title: "Transition Funding--90- and 75-Percent FFP", },
-            { id: 11260, title: "Retroactive 75 Percent FFP", },
-
-            { id: 11265, title: "Contractual Services", },
-            { id: 11266, title: "Request for Proposal (RFP)", },
-            { id: 11268, title: "Cost Allocation Plan", },
-            { id: 11269, title: "Replacement Systems", },
-            { id: 11270, title: "Reserved", },
-            { id: 11276, title: "Costs Related to MMIS Design, Development, Installation, Operation, and Enhancement", },
-
-            { id: 11300, title: "General Requirements", },
-            { id: 11301, title: "Future Additional System Requirements", },
-            { id: 11310, title: "MMIS Functional Requirements", },
-            { id: 11315, title: "Recipient Subsystem", },
-            { id: 11320, title: "Provider Subsystem", },
-            { id: 11325, title: "Claims Processing Subsystem", },
-            { id: 11330, title: "Reference File Subsystem", },
-            { id: 11335, title: "Surveillance and Utilization Review (SUR) Subsystem", },
-            { id: 11340, title: "Management and Administrative Reporting (MAR) Subsystem", },
-            { id: 11350, title: "MARs and SURs Reports", },
-
-            { id: 11375, title: "Data Requirements", },
-
-            { id: 11600, title: "Background", },
-            { id: 11601, title: "Overview of CPAS", },
-            { id: 11604, title: "Mandatory System", },
-            { id: 11606, title: "Alternate System", },
-            { id: 11607, title: "CPAS Plan", },
-            { id: 11608, title: "General Requirements for Mandatory System Sample Selection", },
-            { id: 11609, title: "Documentation Source Sheet", },
-
-            { id: 11610, title: "Contents of the State CPAS File", },
-            { id: 11611, title: "CPAS Corrective Action", },
+            { 
+                id: "11000 to 11115",
+                title: "Chapter 1 - General",
+                web: {
+                    url: "https://web.archive.org/web/20041213114014/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11100_to_11115.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11100, title: "Background", },
+                    { id: 11105, title: "Introduction", },
+                    { id: 11110, title: "Definitions", },
+                    { id: 11115, title: "Objectives", },
+                ]
+            },
+            { 
+                id: "11200 to 11260",
+                title: "Chapter 2 - Approval of MMIS Systems",
+                web: {
+                    url: "https://web.archive.org/web/20041213114442/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11200_to_11260.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11200, title: "Applicable Federal Approval Requirements", },
+                    { id: 11205, title: "90 Percent FFP - General Regulatory Requirements", },
+                    { id: 11210, title: "75 Percent FFP - General Regulatory Requirements", },
+                    { id: 11215, title: "Access for State and Federal Inspection", },
+                    { id: 11220, title: "Prospective Approval of Enhanced Funding", },
+                    { id: 11225, title: "Considerations and Options", },
+                    { id: 11227, title: "Acquisition of Adp Equipment and Services", },
+                    { id: 11230, title: "Approval Process and Documentation Submissions", },
+                    { id: 11235, title: "90 Percent FFP", },
+                    { id: 11236, title: "Implementation Advance Planning Document (APD)", },
+                    { id: 11237, title: "Detailed Implementation Schedule (DIS)", },
+                    { id: 11238, title: "Project Reporting Requirements", },
+                    { id: 11240, title: "75 Percent FFP - Federal Certification Review Process", },
+                    { id: 11241, title: "Preliminary Evaluation", },
+                    { id: 11242, title: "Onsite Observation", },
+                    { id: 11243, title: "Post-Site Evaluation", },
+                    { id: 11250, title: "Reimbursable Costs for State MMIS", },
+                    { id: 11255, title: "Transition Funding--90- and 75-Percent FFP", },
+                    { id: 11260, title: "Retroactive 75 Percent FFP", },
+                ]
+            },
+            { 
+                id: "11265 to 11276.5",
+                title: "Chapter 2 - Approval of MMIS Systems",
+                web: {
+                    url: "https://web.archive.org/web/20041213235006/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11265_to_11276.5.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11265, title: "Contractual Services", },
+                    { id: 11266, title: "Request for Proposal (RFP)", },
+                    { id: 11268, title: "Cost Allocation Plan", },
+                    { id: 11269, title: "Replacement Systems", },
+                    { id: 11270, title: "Reserved", },
+                    { id: 11276, title: "Costs Related to MMIS Design, Development, Installation, Operation, and Enhancement", },
+                ]
+            },
+            { id: "11276 to 11282.1", title: "Chapter 2 - Approval of MMIS Systems", },
+            { 
+                id: "11300 to 11350",
+                title: "Chapter 3 - System Requirements",
+                web: {
+                    url: "https://web.archive.org/web/20041213120930/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11300_to_11350.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11300, title: "General Requirements", },
+                    { id: 11301, title: "Future Additional System Requirements", },
+                    { id: 11310, title: "MMIS Functional Requirements", },
+                    { id: 11315, title: "Recipient Subsystem", },
+                    { id: 11320, title: "Provider Subsystem", },
+                    { id: 11325, title: "Claims Processing Subsystem", },
+                    { id: 11330, title: "Reference File Subsystem", },
+                    { id: 11335, title: "Surveillance and Utilization Review (SUR) Subsystem", },
+                    { id: 11340, title: "Management and Administrative Reporting (MAR) Subsystem", },
+                    { id: 11350, title: "MARS and SURS Reports", },
+                ]
+            },
+            { 
+                id: 11375, 
+                title: "Chapter 3 - System Requirements - Data Requirements", 
+                web: {
+                    url: "https://web.archive.org/web/20041213005333/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11375.asp",
+                    date: ""
+                },
+            },
+            { 
+                id: "11600 to 11606",
+                title: "Chapter 6 - CPAS Review Process",
+                web: {
+                    url: "",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11600, title: "Background", },
+                    { id: 11601, title: "Overview of CPAS", },
+                    { id: 11604, title: "Mandatory System", },
+                    { id: 11606, title: "Alternate System", },
+                ]
+            },
+            { 
+                id: "11607 to 11609",
+                title: "Chapter 6 - CPAS Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041213233451/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11607_to_11609.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11607, title: "CPAS Plan", },
+                    { id: 11608, title: "General Requirements for Mandatory System Sample Selection", },
+                    { id: 11609, title: "Documentation Source Sheet", },
+                ]
+            },
+            { 
+                id: "11610 to 11611",
+                title: "Chapter 6 - CPAS Review Process",
+                web: {
+                    url: "https://web.archive.org/web/20041213234016/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11610_to_11611.asp",
+                    date: ""
+                },
+                pdf: {
+                    url: "",
+                    date: ""
+                },
+                subsections: [
+                    { id: 11610, title: "Contents of the State CPAS File", },
+                    { id: 11611, title: "CPAS Corrective Action", },
+                ]
+            },
+            { id: "", title: "Legal Background And Authority", },
         ],
     },
     {
