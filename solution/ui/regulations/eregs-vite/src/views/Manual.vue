@@ -135,9 +135,9 @@ const sections = ref([
                     date: "1992"
                 },
                 subsections: [
-                    { id: 2090, title: "Marketing, Enrollment and Disenrollment", date: "" },
-                    { id: 2091, title: "Quality Assurance", date: "" },
-                    { id: 2092, title: "Additional State Agency Responsibilities", date: "" },
+                    { id: 2090, title: "Marketing, Enrollment and Disenrollment" },
+                    { id: 2091, title: "Quality Assurance" },
+                    { id: 2092, title: "Additional State Agency Responsibilities" },
                 ]
             },
             { 
@@ -152,13 +152,13 @@ const sections = ref([
                     date: "1994"
                 },
                 subsections: [
-                    { id: 2100, title: "Free Choice of Providers - General", date: "" },
-                    { id: 2101, title: "Informing Beneficiaries", date: "" },
-                    { id: 2102, title: "Contractual Arrangements", date: "" },
-                    { id: 2103, title: "Exceptions to Freedom of Choice", date: "" },
-                    { id: 2104, title: "Waiver of State Plan Requirements", date: "" },
-                    { id: 2105, title: "Categories of Waivers Under §1915(b)", date: "" },
-                    { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)", date: "" },
+                    { id: 2100, title: "Free Choice of Providers - General" },
+                    { id: 2101, title: "Informing Beneficiaries" },
+                    { id: 2102, title: "Contractual Arrangements" },
+                    { id: 2103, title: "Exceptions to Freedom of Choice" },
+                    { id: 2104, title: "Waiver of State Plan Requirements" },
+                    { id: 2105, title: "Categories of Waivers Under §1915(b)" },
+                    { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)" },
                 ]
             },
             { 
@@ -173,28 +173,28 @@ const sections = ref([
                     date: "1991"
                 },
                 subsections: [
-                    { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)", date: "" },
-                    { id: 2107, title: "Documentation Required When Submitting Requests for Waiver Under Section 1915(b)", date: "" },
-                    { id: 2108, title: "Documentation of Cost Effectiveness, Access to Care, Quality of Care and Projected Impact of Waiver on the Medicaid Program", date: "" },
-                    { id: 2109, title: "Requests for Modification of an Approved Waiver Program", date: "" },
-                    { id: 2110, title: "Waiver Renewals", date: "" },
-                    { id: 2111, title: "Monitoring, Evaluation, and Termination of Waivers", date: "" },
-                    { id: 2112, title: "Freedom of Choice - Family Planning Services Under §1915(b)", date: "" },
-                    { id: 2113, title: "Transportation to Providers of Services", date: "" },
-                    { id: 2114, title: "Case Management for Which No Waiver Is Required", date: "" },
-                    { id: 2200, title: "Requirements for Advance Directives Under State Plans for Medical Assistance", date: "" },
-                    { id: 2350, title: "Legislative Background", date: "" },
-                    { id: 2351, title: "State-PSRO Contracting Process", date: "" },
-                    { id: 2352, title: "Plan Amendment", date: "" },
-                    { id: 2353, title: "Functions Under the State-PSRO Contract", date: "" },
-                    { id: 2354, title: "State Agency Jurisdiction for Hearing and Appeals", date: "" },
-                    { id: 2355, title: "Responsibilities of a State That Does Not Contract With a PSRO", date: "" },
-                    { id: 2356, title: "Transition Issues", date: "" },
-                    { id: 2450, title: "Conflict of Interest Provisions", date: "" },
-                    { id: 2451, title: "Definitions", date: "" },
-                    { id: 2452, title: "Prohibited Activities", date: "" },
-                    { id: 2490, title: "Claiming Federal Financial Participation (FFP) for Advance Payments Made to Providers of Medical Assistance Under Title XIX of the Social Security Actfederal Financial Participation", date: "" },
-                    { id: 2493, title: "Claiming FFP for Provider Payments for State Taxes", date: "" },
+                    { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)" },
+                    { id: 2107, title: "Documentation Required When Submitting Requests for Waiver Under Section 1915(b)" },
+                    { id: 2108, title: "Documentation of Cost Effectiveness, Access to Care, Quality of Care and Projected Impact of Waiver on the Medicaid Program" },
+                    { id: 2109, title: "Requests for Modification of an Approved Waiver Program" },
+                    { id: 2110, title: "Waiver Renewals" },
+                    { id: 2111, title: "Monitoring, Evaluation, and Termination of Waivers" },
+                    { id: 2112, title: "Freedom of Choice - Family Planning Services Under §1915(b)" },
+                    { id: 2113, title: "Transportation to Providers of Services" },
+                    { id: 2114, title: "Case Management for Which No Waiver Is Required" },
+                    { id: 2200, title: "Requirements for Advance Directives Under State Plans for Medical Assistance" },
+                    { id: 2350, title: "Legislative Background" },
+                    { id: 2351, title: "State-PSRO Contracting Process" },
+                    { id: 2352, title: "Plan Amendment" },
+                    { id: 2353, title: "Functions Under the State-PSRO Contract" },
+                    { id: 2354, title: "State Agency Jurisdiction for Hearing and Appeals" },
+                    { id: 2355, title: "Responsibilities of a State That Does Not Contract With a PSRO" },
+                    { id: 2356, title: "Transition Issues" },
+                    { id: 2450, title: "Conflict of Interest Provisions" },
+                    { id: 2451, title: "Definitions" },
+                    { id: 2452, title: "Prohibited Activities" },
+                    { id: 2490, title: "Claiming Federal Financial Participation (FFP) for Advance Payments Made to Providers of Medical Assistance Under Title XIX of the Social Security Actfederal Financial Participation" },
+                    { id: 2493, title: "Claiming FFP for Provider Payments for State Taxes" },
                 ]
             },
             { 
@@ -209,12 +209,12 @@ const sections = ref([
                     date: "1991"
                 },
                 subsections: [
-                    { id: 2495, title: "Maintenance of Effort", date: "" },
-                    { id: 2497, title: "Documentation Required to Support a Claim for Federal Financial Participation", date: "" },
-                    { id: 2500, title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program", date: "" },
+                    { id: 2495, title: "Maintenance of Effort" },
+                    { id: 2497, title: "Documentation Required to Support a Claim for Federal Financial Participation" },
+                    { id: 2500, title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program" },
                 ]
             },
-            { id: "2500.2 to 2500.6", title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program", date: "" },
+            { id: "2500.2 to 2500.6", title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program" },
             { 
                 id: "2501 to 2555",
                 title: "",
@@ -227,13 +227,13 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 2501, title: "Federal Medical Assistance Percentages (FMAP) - State-by-State Tables", date: "" },
-                    { id: 2502, title: "Interest on Disputed Medicaid Claims", date: "" },
-                    { id: 2504, title: "Deeming and Waiver of Nurse Aide Training and Competency Evaluation Requirements", date: "" },
-                    { id: 2505, title: "Nurse Aide Training and Competency Evaluation Programs and Competency Evaluation Programs", date: "" },
-                    { id: 2514, title: "Federal Financial Participation (FFP) for Nurse Aide Training and Competency Evaluation Programs (NATCEPs) and Competency Evaluation Programs (CEPs).", date: "" },
-                    { id: 2515, title: "Federal Financial Participation for Preadmission Screening and Annual Resident Review (PASARR) Activities", date: "" },
-                    { id: 2555, title: "Information on Target Expenditure Levels, Reductions in Medicaid Payments, and Computation of Incentive Rebates to States", date: "" },
+                    { id: 2501, title: "Federal Medical Assistance Percentages (FMAP) - State-by-State Tables" },
+                    { id: 2502, title: "Interest on Disputed Medicaid Claims" },
+                    { id: 2504, title: "Deeming and Waiver of Nurse Aide Training and Competency Evaluation Requirements" },
+                    { id: 2505, title: "Nurse Aide Training and Competency Evaluation Programs and Competency Evaluation Programs" },
+                    { id: 2514, title: "Federal Financial Participation (FFP) for Nurse Aide Training and Competency Evaluation Programs (NATCEPs) and Competency Evaluation Programs (CEPs)." },
+                    { id: 2515, title: "Federal Financial Participation for Preadmission Screening and Annual Resident Review (PASARR) Activities" },
+                    { id: 2555, title: "Information on Target Expenditure Levels, Reductions in Medicaid Payments, and Computation of Incentive Rebates to States" },
                 ]
             },
             { 
@@ -248,8 +248,8 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 2560, title: "Medicaid Funding Limitations Policy", date: "" },
-                    { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program", date: "" },
+                    { id: 2560, title: "Medicaid Funding Limitations Policy" },
+                    { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program" },
                 ]
             },
             { id: "2600.3 to 2600.10", title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program", web: {
@@ -267,8 +267,8 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program", date: "" },
-                    { id: 2602, title: "Submission Schedule - Medicaid Program Budget Report (Form HCFA-25)", date: "" },
+                    { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program" },
+                    { id: 2602, title: "Submission Schedule - Medicaid Program Budget Report (Form HCFA-25)" },
                 ]
             },
             { id: "2700 to 2700.2", title: "Federal Reporting Requirements", web: {
@@ -304,10 +304,10 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 2850, title: "Withholding the Federal Share of Payments to Medicaid Providers to Recover Medicare Overpayments; Withholding Medicare Payments to Recover Medicaid Overpayments", date: "" },
-                    { id: 2851, title: "Procedures Required of the Medicaid State Agency to Implement Section 1914", date: "" },
-                    { id: 2852, title: "Procedures Required of the Medicaid State Agency to Implement Section 1885", date: "" },
-                    { id: 2853, title: "Procedures for Refunding the Federal Share of Medicaid Overpayments", date: "" },
+                    { id: 2850, title: "Withholding the Federal Share of Payments to Medicaid Providers to Recover Medicare Overpayments; Withholding Medicare Payments to Recover Medicaid Overpayments" },
+                    { id: 2851, title: "Procedures Required of the Medicaid State Agency to Implement Section 1914" },
+                    { id: 2852, title: "Procedures Required of the Medicaid State Agency to Implement Section 1885" },
+                    { id: 2853, title: "Procedures for Refunding the Federal Share of Medicaid Overpayments" },
                 ]
             },
             { 
@@ -322,21 +322,21 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 2900, title: "Fair Hearings and Appeals", date: "" },
-                    { id: 2901, title: "Notice and Opportunity for a Fair Hearing", date: "" },
-                    { id: 2902, title: "Hearings", date: "" },
-                    { id: 2903, title: "Hearing Decision", date: "" },
-                    { id: 2904, title: "Reopening and Recovery", date: "" },
-                    { id: 2905, title: "Outstationing of Eligibility Workers General", date: "" },
-                    { id: 2906, title: "Outstation Locations", date: "" },
-                    { id: 2907, title: "Staffing at Outstation Locations", date: "" },
-                    { id: 2908, title: "Guidelines for Outstationing and Providing Application Assistance at Low Use Locations", date: "" },
-                    { id: 2909, title: "Limitations on Outstationed Eligibility Workers", date: "" },
-                    { id: 2910, title: "Application Process", date: "" },
-                    { id: 2911, title: "Applications", date: "" },
-                    { id: 2912, title: "Compliance With Federal Regulations", date: "" },
-                    { id: 2913, title: "FFP for Outstationing", date: "" },
-                    { id: 2975, title: "Contingency Fee Reimbursement for Third Party Liability Identification or Collection", date: "" },
+                    { id: 2900, title: "Fair Hearings and Appeals" },
+                    { id: 2901, title: "Notice and Opportunity for a Fair Hearing" },
+                    { id: 2902, title: "Hearings" },
+                    { id: 2903, title: "Hearing Decision" },
+                    { id: 2904, title: "Reopening and Recovery" },
+                    { id: 2905, title: "Outstationing of Eligibility Workers General" },
+                    { id: 2906, title: "Outstation Locations" },
+                    { id: 2907, title: "Staffing at Outstation Locations" },
+                    { id: 2908, title: "Guidelines for Outstationing and Providing Application Assistance at Low Use Locations" },
+                    { id: 2909, title: "Limitations on Outstationed Eligibility Workers" },
+                    { id: 2910, title: "Application Process" },
+                    { id: 2911, title: "Applications" },
+                    { id: 2912, title: "Compliance With Federal Regulations" },
+                    { id: 2913, title: "FFP for Outstationing" },
+                    { id: 2975, title: "Contingency Fee Reimbursement for Third Party Liability Identification or Collection" },
                 ]
             },
         ],
@@ -366,8 +366,8 @@ const sections = ref([
                 },
                 zip: { date: "1997" },
                 subsections: [
-                    { id: 3200, title: "Changes Due to Welfare Reform", date: "" },
-                    { id: 3207, title: "Changes in SSI Definition of Disability Due to Welfare Reform", date: "" },
+                    { id: 3200, title: "Changes Due to Welfare Reform" },
+                    { id: 3207, title: "Changes in SSI Definition of Disability Due to Welfare Reform" },
                 ]
             },
             { 
@@ -383,16 +383,16 @@ const sections = ref([
                 },
                 zip: { date: "1997" },
                 subsections: [
-                    { id: 3210, title: "Citizenship and Alienage", date: "" },
-                    { id: 3211, title: "Aliens", date: "" },
-                    { id: 3212, title: "Documentation and Verification of Status as Citizen or Alien", date: "" },
-                    { id: 3213, title: "Redeterminations and FFP Availability", date: "" },
-                    { id: 3215, title: "Treatment of Potential Payments From Medicaid Qualifying Trust", date: "" },
-                    { id: 3230, title: "State Residence", date: "" },
-                    { id: 3240, title: "More Liberal Income and Resource Methods", date: "" },
-                    { id: 3250, title: "Transfer of Resources", date: "" },
-                    { id: 3255, title: "Elimination of SSI Provision on Resources Transferred for Less Than Fair Market Value and Notification by SSA", date: "" },
-                    { id: 3256, title: "Transfer of Resources Procedures", date: "" },
+                    { id: 3210, title: "Citizenship and Alienage" },
+                    { id: 3211, title: "Aliens" },
+                    { id: 3212, title: "Documentation and Verification of Status as Citizen or Alien" },
+                    { id: 3213, title: "Redeterminations and FFP Availability" },
+                    { id: 3215, title: "Treatment of Potential Payments From Medicaid Qualifying Trust" },
+                    { id: 3230, title: "State Residence" },
+                    { id: 3240, title: "More Liberal Income and Resource Methods" },
+                    { id: 3250, title: "Transfer of Resources" },
+                    { id: 3255, title: "Elimination of SSI Provision on Resources Transferred for Less Than Fair Market Value and Notification by SSA" },
+                    { id: 3256, title: "Transfer of Resources Procedures" },
                 ]
             },
             { 
@@ -408,9 +408,9 @@ const sections = ref([
                 },
                 zip: { date: "1994" },
                 subsections: [
-                    { id: 3257, title: "Transfers of Assets and Treatment of Trusts Transfers of Assets for Less Than Fair Market Value", date: "" },
-                    { id: 3258, title: "Transfers of Assets for Less Than Fair Market Value", date: "" },
-                    { id: 3259, title: "Treatment of Trusts", date: "" },
+                    { id: 3257, title: "Transfers of Assets and Treatment of Trusts Transfers of Assets for Less Than Fair Market Value" },
+                    { id: 3258, title: "Transfers of Assets for Less Than Fair Market Value" },
+                    { id: 3259, title: "Treatment of Trusts" },
                 ]
             },
             { 
@@ -426,19 +426,19 @@ const sections = ref([
                 },
                 zip: { date: "1991" },
                 subsections: [
-                    { id: 3260, title: "Income and Resource Eligibility Rules for Certain Institutionalized Individuals and Certain Individuals Under Home and Community-Based Waivers Who Have Community Spouses", date: "" },
-                    { id: 3261, title: "Income Eligibility", date: "" },
-                    { id: 3262, title: "Resource Assessments and Eligibility", date: "" },
-                    { id: 3263, title: "Notice, Hearings and Appeals", date: "" },
-                    { id: 3270, title: "Disability Determinations Under Medicaid", date: "" },
-                    { id: 3271, title: "Disability Determinations in §1902(f) States and SSI Criteria States", date: "" },
-                    { id: 3272, title: "Medicaid Eligibility Quality Control (MEQC) Treatment of Payments Made During Period You Made a Reasonable Application of SSI Disability Criteria", date: "" },
-                    { id: 3273, title: "Composition of Disability Review Teams", date: "" },
-                    { id: 3274, title: "Procedures for Making Disability Determinations", date: "" },
-                    { id: 3275, title: "Coordination Between State Medicaid Agency and the SSA Disability Determination Service (DDS)", date: "" },
-                    { id: 3276, title: "Referral to SSA", date: "" },
-                    { id: 3277, title: "Time Limit to Determine Eligibility in Disability Cases", date: "" },
-                    { id: 3280, title: "Mandatory Coordination With WIC", date: "" },
+                    { id: 3260, title: "Income and Resource Eligibility Rules for Certain Institutionalized Individuals and Certain Individuals Under Home and Community-Based Waivers Who Have Community Spouses" },
+                    { id: 3261, title: "Income Eligibility" },
+                    { id: 3262, title: "Resource Assessments and Eligibility" },
+                    { id: 3263, title: "Notice, Hearings and Appeals" },
+                    { id: 3270, title: "Disability Determinations Under Medicaid" },
+                    { id: 3271, title: "Disability Determinations in §1902(f) States and SSI Criteria States" },
+                    { id: 3272, title: "Medicaid Eligibility Quality Control (MEQC) Treatment of Payments Made During Period You Made a Reasonable Application of SSI Disability Criteria" },
+                    { id: 3273, title: "Composition of Disability Review Teams" },
+                    { id: 3274, title: "Procedures for Making Disability Determinations" },
+                    { id: 3275, title: "Coordination Between State Medicaid Agency and the SSA Disability Determination Service (DDS)" },
+                    { id: 3276, title: "Referral to SSA" },
+                    { id: 3277, title: "Time Limit to Determine Eligibility in Disability Cases" },
+                    { id: 3280, title: "Mandatory Coordination With WIC" },
                 ]
             },
             { 
@@ -454,20 +454,20 @@ const sections = ref([
                 },
                 zip: { date: "1998" },
                 subsections: [
-                    { id: 3300, title: "Introduction", date: "" },
-                    { id: 3301, title: "Low Income Families With Children", date: "" },
-                    { id: 3302, title: "Individuals Deemed to Be Recipients of AFDC", date: "" },
-                    { id: 3303, title: "Qualified Pregnant Women", date: "" },
-                    { id: 3304, title: "Qualified Children", date: "" },
-                    { id: 3305, title: "Deemed Eligibility of Newborns", date: "" },
-                    { id: 3306, title: "Extended Medicaid Coverage for Pregnant Women", date: "" },
-                    { id: 3307, title: "Continuous Eligibility", date: "" },
-                    { id: 3308, title: "Extended Medicaid Benefits to Families Who Lose AFDC Because of Earnings From Employment or Loss of Earnings Disregards", date: "" },
-                    { id: 3309, title: "Qualified Family Members", date: "" },
-                    { id: 3311, title: "Mandatory Coverage for Low Income Pregnant Women and Infants", date: "" },
-                    { id: 3312, title: "Mandatory Coverage for Low Income Children Under Age 6", date: "" },
-                    { id: 3313, title: " Mandatory Coverage for Low Income Children Under Age 19", date: "" },
-                    { id: 3314, title: "Extended Medicaid Benefits to Families Who Lose Eligibility Because of Income From Support Payments", date: "" },
+                    { id: 3300, title: "Introduction", },
+                    { id: 3301, title: "Low Income Families With Children", },
+                    { id: 3302, title: "Individuals Deemed to Be Recipients of AFDC" },
+                    { id: 3303, title: "Qualified Pregnant Women" },
+                    { id: 3304, title: "Qualified Children" },
+                    { id: 3305, title: "Deemed Eligibility of Newborns" },
+                    { id: 3306, title: "Extended Medicaid Coverage for Pregnant Women" },
+                    { id: 3307, title: "Continuous Eligibility" },
+                    { id: 3308, title: "Extended Medicaid Benefits to Families Who Lose AFDC Because of Earnings From Employment or Loss of Earnings Disregards" },
+                    { id: 3309, title: "Qualified Family Members" },
+                    { id: 3311, title: "Mandatory Coverage for Low Income Pregnant Women and Infants" },
+                    { id: 3312, title: "Mandatory Coverage for Low Income Children Under Age 6" },
+                    { id: 3313, title: " Mandatory Coverage for Low Income Children Under Age 19" },
+                    { id: 3314, title: "Extended Medicaid Benefits to Families Who Lose Eligibility Because of Income From Support Payments" },
                 ]
             },
             { 
@@ -496,16 +496,16 @@ const sections = ref([
                 },
                 zip: { date: "1998" },
                 subsections: [
-                    { id: 3410, title: "Medicaid Eligibility for Qualified Severely Impaired Individuals and Individuals in §1619 Status", date: "" },
-                    { id: 3411, title: "Provisions of OBRA1986 and EODAA", date: "" },
-                    { id: 3412, title: "Operational Considerations", date: "" },
-                    { id: 3420, title: "Individuals in States Using More Restrictive Eligibility Requirements", date: "" },
-                    { id: 3435, title: "Persons With Drug Addiction or Alcoholism", date: "" },
-                    { id: 3485, title: "Coverage of Qualified Disabled and Working Individuals", date: "" },
-                    { id: 3490, title: "Coverage of Qualified Medicare Beneficiaries for Medicare Cost Sharing Expenses", date: "" },
-                    { id: 3491, title: "Coverage of Specified Low Income Medicare Beneficiaries for Medicare Part B Premiums", date: "" },
-                    { id: 3492, title: "Coverage of Qualifying Individuals for Medicare Part B Premiums", date: "" },
-                    { id: 3493, title: "Medicaid Eligibility for Disabled Children Who Lose SSI Payment", date: "" },
+                    { id: 3410, title: "Medicaid Eligibility for Qualified Severely Impaired Individuals and Individuals in §1619 Status" },
+                    { id: 3411, title: "Provisions of OBRA1986 and EODAA" },
+                    { id: 3412, title: "Operational Considerations" },
+                    { id: 3420, title: "Individuals in States Using More Restrictive Eligibility Requirements" },
+                    { id: 3435, title: "Persons With Drug Addiction or Alcoholism" },
+                    { id: 3485, title: "Coverage of Qualified Disabled and Working Individuals" },
+                    { id: 3490, title: "Coverage of Qualified Medicare Beneficiaries for Medicare Cost Sharing Expenses" },
+                    { id: 3491, title: "Coverage of Specified Low Income Medicare Beneficiaries for Medicare Part B Premiums" },
+                    { id: 3492, title: "Coverage of Qualifying Individuals for Medicare Part B Premiums" },
+                    { id: 3493, title: "Medicaid Eligibility for Disabled Children Who Lose SSI Payment" },
                 ]
             },
             { 
@@ -521,26 +521,26 @@ const sections = ref([
                 },
                 zip: { date: "1998" },
                 subsections: [
-                    { id: 3500, title: "Introduction", date: "" },
-                    { id: 3501, title: "Definitions", date: "" },
-                    { id: 3502, title: "Persons Who Meet Income and Resource Requirements for, but Do Not Receive Cash Assistance", date: "" },
-                    { id: 3503, title: "Children Under Age 21", date: "" },
-                    { id: 3504, title: "Reserved", date: "" },
-                    { id: 3505, title: "Reserved", date: "" },
-                    { id: 3506, title: "Children Under State Adoption Assistance Programs", date: "" },
-                    { id: 3570, title: "Optional Presumptive Eligibility Period for Pregnant Women", date: "" },
-                    { id: 3571, title: "Optional Coverage for Poor Pregnant (And Postpartum) Women, Infants and Children", date: "" },
-                    { id: 3580, title: "Hospice Benefits", date: "" },
-                    { id: 3581, title: "Optional Hospice Care Eligibility Group", date: "" },
-                    { id: 3582, title: "Comparability of Hospice Care Benefits", date: "" },
-                    { id: 3583, title: "Copayments on Hospice Care Benefits", date: "" },
-                    { id: 3584, title: "Post-Eligibility Treatment of Income for Hospice Care", date: "" },
-                    { id: 3589, title: "Medicaid Coverage of Home Care for Certain Disabled Children", date: "" },
-                    { id: 3590, title: "Individuals Eligible for Services Under a Home and Community-Based Services Waiver", date: "" },
-                    { id: 3596, title: "Optional Coverage of the Elderly and Disabled Poor for All Medicaid Benefits", date: "" },
-                    { id: 3597, title: "Treatment of Couples in Medical Institutions", date: "" },
-                    { id: 3598, title: "Coverage of COBRA Continuation Beneficiaries", date: "" },
-                    { id: 3599, title: "Buy-In to Medicaid for the Working Disabled", date: "" },
+                    { id: 3500, title: "Introduction" },
+                    { id: 3501, title: "Definitions" },
+                    { id: 3502, title: "Persons Who Meet Income and Resource Requirements for, but Do Not Receive Cash Assistance" },
+                    { id: 3503, title: "Children Under Age 21" },
+                    { id: 3504, title: "Reserved" },
+                    { id: 3505, title: "Reserved" },
+                    { id: 3506, title: "Children Under State Adoption Assistance Programs" },
+                    { id: 3570, title: "Optional Presumptive Eligibility Period for Pregnant Women" },
+                    { id: 3571, title: "Optional Coverage for Poor Pregnant (And Postpartum) Women, Infants and Children" },
+                    { id: 3580, title: "Hospice Benefits" },
+                    { id: 3581, title: "Optional Hospice Care Eligibility Group" },
+                    { id: 3582, title: "Comparability of Hospice Care Benefits" },
+                    { id: 3583, title: "Copayments on Hospice Care Benefits" },
+                    { id: 3584, title: "Post-Eligibility Treatment of Income for Hospice Care" },
+                    { id: 3589, title: "Medicaid Coverage of Home Care for Certain Disabled Children" },
+                    { id: 3590, title: "Individuals Eligible for Services Under a Home and Community-Based Services Waiver" },
+                    { id: 3596, title: "Optional Coverage of the Elderly and Disabled Poor for All Medicaid Benefits" },
+                    { id: 3597, title: "Treatment of Couples in Medical Institutions" },
+                    { id: 3598, title: "Coverage of COBRA Continuation Beneficiaries" },
+                    { id: 3599, title: "Buy-In to Medicaid for the Working Disabled" },
                 ]
             },
             { 
@@ -556,24 +556,24 @@ const sections = ref([
                 },
                 zip: { date: "1997" },
                 subsections: [
-                    { id: 3600, title: "Introduction", date: "" },
-                    { id: 3601, title: "Background", date: "" },
-                    { id: 3610, title: "Eligible Groups", date: "" },
-                    { id: 3611, title: "Required Groups", date: "" },
-                    { id: 3612, title: "Optional Eligible Groups", date: "" },
-                    { id: 3613, title: "Criteria for Determining Categorically Needy and Medically Needy", date: "" },
-                    { id: 3620, title: "Financial Eligibility", date: "" },
-                    { id: 3621, title: "Single Income and Resource Standard", date: "" },
-                    { id: 3622, title: "Cost of Living Variations", date: "" },
-                    { id: 3623, title: "Defining Reasonable Standards", date: "" },
-                    { id: 3624, title: "Federal Financial Participation (FFP) Limitation", date: "" },
-                    { id: 3625, title: "Financial Methodologies", date: "" },
-                    { id: 3626, title: "Income Eligibility", date: "" },
-                    { id: 3627, title: "Budget Periods", date: "" },
-                    { id: 3628, title: "Deduction of Incurred Medical and Remedial Care Expenses (Spenddown)", date: "" },
-                    { id: 3630, title: "Resource Eligibility", date: "" },
-                    { id: 3640, title: "Moratorium", date: "" },
-                    { id: 3645, title: "Pay-In Spenddown Option", date: "" },
+                    { id: 3600, title: "Introduction" },
+                    { id: 3601, title: "Background" },
+                    { id: 3610, title: "Eligible Groups" },
+                    { id: 3611, title: "Required Groups" },
+                    { id: 3612, title: "Optional Eligible Groups" },
+                    { id: 3613, title: "Criteria for Determining Categorically Needy and Medically Needy" },
+                    { id: 3620, title: "Financial Eligibility" },
+                    { id: 3621, title: "Single Income and Resource Standard" },
+                    { id: 3622, title: "Cost of Living Variations" },
+                    { id: 3623, title: "Defining Reasonable Standards" },
+                    { id: 3624, title: "Federal Financial Participation (FFP) Limitation" },
+                    { id: 3625, title: "Financial Methodologies" },
+                    { id: 3626, title: "Income Eligibility" },
+                    { id: 3627, title: "Budget Periods" },
+                    { id: 3628, title: "Deduction of Incurred Medical and Remedial Care Expenses (Spenddown)" },
+                    { id: 3630, title: "Resource Eligibility" },
+                    { id: 3640, title: "Moratorium" },
+                    { id: 3645, title: "Pay-In Spenddown Option" },
                 ]
             },
             { 
@@ -589,18 +589,18 @@ const sections = ref([
                 },
                 zip: { date: "1998" },
                 subsections: [
-                    { id: 3700, title: "Introduction", date: "" },
-                    { id: 3701, title: "General Statement of Post-Eligibility Process", date: "" },
-                    { id: 3702, title: "Deductions From the Individual's Total Income", date: "" },
-                    { id: 3703, title: "Required Deductions", date: "" },
-                    { id: 3704, title: "Optional Deductions", date: "" },
-                    { id: 3705, title: "Post-Eligibility Treatment of Certain Payments Made by the Department of Veterans Affairs", date: "" },
-                    { id: 3708, title: "Post-Eligibility Treatment of Certain Disabled Institutionalized Individuals", date: "" },
-                    { id: 3710, title: "Special Post-Eligibility Process for Institutionalized Persons With Community Spouses", date: "" },
-                    { id: 3711, title: "Income Used in the Post-Eligibility Process", date: "" },
-                    { id: 3712, title: "Mandatory Deductions From Income", date: "" },
-                    { id: 3713, title: "Monthly Income Allowances for Community Spouses and Other Family Members", date: "" },
-                    { id: 3714, title: "Notice, Hearings and Appeals", date: "" },
+                    { id: 3700, title: "Introduction" },
+                    { id: 3701, title: "General Statement of Post-Eligibility Process" },
+                    { id: 3702, title: "Deductions From the Individual's Total Income" },
+                    { id: 3703, title: "Required Deductions" },
+                    { id: 3704, title: "Optional Deductions" },
+                    { id: 3705, title: "Post-Eligibility Treatment of Certain Payments Made by the Department of Veterans Affairs" },
+                    { id: 3708, title: "Post-Eligibility Treatment of Certain Disabled Institutionalized Individuals" },
+                    { id: 3710, title: "Special Post-Eligibility Process for Institutionalized Persons With Community Spouses" },
+                    { id: 3711, title: "Income Used in the Post-Eligibility Process" },
+                    { id: 3712, title: "Mandatory Deductions From Income" },
+                    { id: 3713, title: "Monthly Income Allowances for Community Spouses and Other Family Members" },
+                    { id: 3714, title: "Notice, Hearings and Appeals" },
                 ]
             },
             { 
@@ -618,8 +618,8 @@ const sections = ref([
                     date: "2001"
                 },
                 subsections: [
-                    { id: 3810, title: "Medicaid Estate Recoveries", date: "" },
-                    { id: 3812, title: "Treatment of Contributions From Relatives to Medicaid Applicants or Recipients", date: "" },
+                    { id: 3810, title: "Medicaid Estate Recoveries" },
+                    { id: 3812, title: "Treatment of Contributions From Relatives to Medicaid Applicants or Recipients" },
                 ]
             },
             { 
@@ -637,17 +637,17 @@ const sections = ref([
                     date: "1998"
                 },
                 subsections: [
-                    { id: 3900, title: "Third Party Liability (TPL)", date: "" },
-                    { id: 3901, title: "Definitions", date: "" },
-                    { id: 3902, title: "General TPL Requirements", date: "" },
-                    { id: 3903, title: "Identification of Resources (42 CFR 433.138)", date: "" },
-                    { id: 3904, title: "Payment of Claims (42 CFR 433.139)", date: "" },
-                    { id: 3905, title: "Assignment of Rights to Benefits - (42 CFR 433.145)", date: "" },
-                    { id: 3906, title: "Cooperative Agreements and Incentive Payments", date: "" },
-                    { id: 3907, title: "Distribution of Collections", date: "" },
-                    { id: 3908, title: "Conflicting Claims by Medicare and Medicaid", date: "" },
-                    { id: 3909, title: "Medicare/Medicaid Crossover Claims", date: "" },
-                    { id: 3910, title: "Medicaid Payments for Recipients Under Group Health Plans", date: "" },
+                    { id: 3900, title: "Third Party Liability (TPL)" },
+                    { id: 3901, title: "Definitions" },
+                    { id: 3902, title: "General TPL Requirements" },
+                    { id: 3903, title: "Identification of Resources (42 CFR 433.138)" },
+                    { id: 3904, title: "Payment of Claims (42 CFR 433.139)" },
+                    { id: 3905, title: "Assignment of Rights to Benefits - (42 CFR 433.145)" },
+                    { id: 3906, title: "Cooperative Agreements and Incentive Payments" },
+                    { id: 3907, title: "Distribution of Collections" },
+                    { id: 3908, title: "Conflicting Claims by Medicare and Medicaid" },
+                    { id: 3909, title: "Medicare/Medicaid Crossover Claims" },
+                    { id: 3910, title: "Medicaid Payments for Recipients Under Group Health Plans" },
                 ]
             },
             { 
@@ -698,14 +698,14 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 4130, title: "Comparability of Services", date: "" },
-                    { id: 4201, title: "Organ Transplants", date: "" },
-                    { id: 4221, title: "Outpatient Psychiatric Services.", date: "" },
-                    { id: 4231, title: "Federally Qualified Health Center (FQHC) and Other Ambulatory Services", date: "" },
-                    { id: 4250, title: "Minimum Federal Criteria for States to Use in Making Preadmission and Annual Review Determinations About Admission to or Continued Residence in Nursing Facilities for Individuals Who Have Mental Illness or Mental Retardation", date: "" },
-                    { id: 4251, title: "Minimum Evaluation Criteria Specific to Screening Persons With MR or MI for the Need for NF Level of Services (PASARR/NF)", date: "" },
-                    { id: 4252, title: "Minimum Criteria Specific to the Screening of Persons With MI (PASARR/MI)", date: "" },
-                    { id: 4253, title: "Minimum Criteria Specific to the Screening for Persons With MR (PASARR/MR)", date: "" },
+                    { id: 4130, title: "Comparability of Services" },
+                    { id: 4201, title: "Organ Transplants" },
+                    { id: 4221, title: "Outpatient Psychiatric Services." },
+                    { id: 4231, title: "Federally Qualified Health Center (FQHC) and Other Ambulatory Services" },
+                    { id: 4250, title: "Minimum Federal Criteria for States to Use in Making Preadmission and Annual Review Determinations About Admission to or Continued Residence in Nursing Facilities for Individuals Who Have Mental Illness or Mental Retardation" },
+                    { id: 4251, title: "Minimum Evaluation Criteria Specific to Screening Persons With MR or MI for the Need for NF Level of Services (PASARR/NF)" },
+                    { id: 4252, title: "Minimum Criteria Specific to the Screening of Persons With MI (PASARR/MI)" },
+                    { id: 4253, title: "Minimum Criteria Specific to the Screening for Persons With MR (PASARR/MR)" },
                 ]
             },
             { 
@@ -720,23 +720,23 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 4270, title: "Family Planning Services", date: "" },
-                    { id: 4280, title: "Establishment and Use of Medicaid Unique Physician Identifier", date: "" },
-                    { id: 4281, title: "Restriction on Payments for Physician Services", date: "" },
-                    { id: 4282, title: "Maintenance of List of Physicians by States", date: "" },
-                    { id: 4283, title: "Conditions for Foreign Medical Graduate Certification", date: "" },
-                    { id: 4301, title: "Home Respiratory Care for Ventilator-Dependent Individuals", date: "" },
-                    { id: 4302, title: "Optional Targeted Case Management Services - Basis, Scope and Purpose", date: "" },
-                    { id: 4305, title: "Hospice Services", date: "" },
-                    { id: 4306, title: "Hospice Reimbursement", date: "" },
-                    { id: 4307, title: "Payment for Physician Services Under Hospice", date: "" },
-                    { id: 4308, title: "Optional Cap on Overall Hospice Reimbursement", date: "" },
-                    { id: 4310, title: "Private Duty Nursing Services", date: "" },
-                    { id: 4320, title: "Clinic Services.", date: "" },
-                    { id: 4370, title: "Less Than Effective and Identical, Related or Similar Drugs", date: "" },
-                    { id: 4375, title: "Tuberculosis Related Services", date: "" },
-                    { id: 4385, title: "Preventive Services", date: "" },
-                    { id: 4390, title: "Institutions for Mental Diseases", date: "" },
+                    { id: 4270, title: "Family Planning Services" },
+                    { id: 4280, title: "Establishment and Use of Medicaid Unique Physician Identifier" },
+                    { id: 4281, title: "Restriction on Payments for Physician Services" },
+                    { id: 4282, title: "Maintenance of List of Physicians by States" },
+                    { id: 4283, title: "Conditions for Foreign Medical Graduate Certification" },
+                    { id: 4301, title: "Home Respiratory Care for Ventilator-Dependent Individuals" },
+                    { id: 4302, title: "Optional Targeted Case Management Services - Basis, Scope and Purpose" },
+                    { id: 4305, title: "Hospice Services" },
+                    { id: 4306, title: "Hospice Reimbursement" },
+                    { id: 4307, title: "Payment for Physician Services Under Hospice" },
+                    { id: 4308, title: "Optional Cap on Overall Hospice Reimbursement" },
+                    { id: 4310, title: "Private Duty Nursing Services" },
+                    { id: 4320, title: "Clinic Services." },
+                    { id: 4370, title: "Less Than Effective and Identical, Related or Similar Drugs" },
+                    { id: 4375, title: "Tuberculosis Related Services" },
+                    { id: 4385, title: "Preventive Services" },
+                    { id: 4390, title: "Institutions for Mental Diseases" },
                 ]
             },
             { 
@@ -751,18 +751,18 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 4395, title: "Inappropriate Placement of Mentally Retarded Persons in SNFs and ICFs", date: "" },
-                    { id: 4396, title: "Application of the Educational Services Exclusion in ICFs/MR", date: "" },
-                    { id: 4397, title: "Application of the Vocational Services Exclusion in ICFs/MR", date: "" },
-                    { id: 4398, title: "Persons With Related Conditions", date: "" },
-                    { id: 4415, title: "Nurse Practitioner Services", date: "" },
-                    { id: 4420, title: "Nurse-Midwife Services", date: "" },
-                    { id: 4421, title: "Services for Pregnant Women", date: "" },
-                    { id: 4430, title: "Legal Background and Authority", date: "" },
-                    { id: 4431, title: "Federal Funding of Abortions", date: "" },
-                    { id: 4432, title: "Federal Funding of Abortion Related Services", date: "" },
-                    { id: 4434, title: "Legal Background and Authority", date: "" },
-                    { id: 4435, title: "Sterilization by Hysterectomy", date: "" },
+                    { id: 4395, title: "Inappropriate Placement of Mentally Retarded Persons in SNFs and ICFs" },
+                    { id: 4396, title: "Application of the Educational Services Exclusion in ICFs/MR" },
+                    { id: 4397, title: "Application of the Vocational Services Exclusion in ICFs/MR" },
+                    { id: 4398, title: "Persons With Related Conditions" },
+                    { id: 4415, title: "Nurse Practitioner Services" },
+                    { id: 4420, title: "Nurse-Midwife Services" },
+                    { id: 4421, title: "Services for Pregnant Women" },
+                    { id: 4430, title: "Legal Background and Authority" },
+                    { id: 4431, title: "Federal Funding of Abortions" },
+                    { id: 4432, title: "Federal Funding of Abortion Related Services" },
+                    { id: 4434, title: "Legal Background and Authority" },
+                    { id: 4435, title: "Sterilization by Hysterectomy" },
                 ]
             },
             { 
@@ -777,11 +777,11 @@ const sections = ref([
                     date: ""
                 },
                 subsections: [
-                    { id: 4440, title: "Home and Community-Based Services - Basis, Scope, and Purpose", date: "" },
-                    { id: 4441, title: "Home and Community-Based Services - Process", date: "" },
-                    { id: 4442, title: "Waiver Request Requirements", date: "" },
-                    { id: 4443, title: "Home and Community-Based Services - Model Waiver Request", date: "" },
-                    { id: 4444, title: "Home and Community-Based Services - Procedures to Request", date: "" },
+                    { id: 4440, title: "Home and Community-Based Services - Basis, Scope, and Purpose" },
+                    { id: 4441, title: "Home and Community-Based Services - Process" },
+                    { id: 4442, title: "Waiver Request Requirements" },
+                    { id: 4443, title: "Home and Community-Based Services - Model Waiver Request" },
+                    { id: 4444, title: "Home and Community-Based Services - Procedures to Request" },
                 ]
             },
             { 
@@ -796,29 +796,29 @@ const sections = ref([
                     date: "1999"
                 },
                 subsections: [
-                    { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request", date: "" },    
-                    { id: 4445, title: "Home and Community-Based Services Amendments", date: "" },
-                    { id: 4446, title: "Home and Community-Based Services Terminations", date: "" },
-                    { id: 4460, title: "Nurse Aide Registry", date: "" },
-                    { id: 4470, title: "Specification of Resident Assessment Instruments for Use in Long Term Care Facilities", date: "" },
-                    { id: 4480, title: "Personal Care Services", date: "" },
-                    { id: 4560, title: "Skilled Nursing Facility (SSF) and Intermediate Care Facility (ICF) Services Provided by Swing Bed Hospitals", date: "" },
-                    { id: 4570, title: "Ambulatory Surgical Center Services.", date: "" },
-                    { id: 4580, title: "Phlebotomy and Case Management Services Associated With the Drug Clozaril", date: "" },
-                    { id: 4600, title: "Usage of Certification Transmittal, HCFA-1539", date: "" },
-                    { id: 4601, title: "Usage of the Statement of Deficiencies and Plan of Correction, HCFA-2567", date: "" },
-                    { id: 4602, title: "Provider Agreements", date: "" },
-                    { id: 4603, title: "Readmission to the Medicare or Medicaid Program After Termination", date: "" },
-                    { id: 4604, title: "Authority to Grant Life Safety Code Waivers for Medicaid Only NFs", date: "" },
-                    { id: 4650, title: "Termination - General", date: "" },
-                    { id: 4651, title: "Basis for Terminating Program Participation", date: "" },
-                    { id: 4652, title: "Termination Procedures--Immediate and Serious Threat to Patient Health and Safety", date: "" },
-                    { id: 4653, title: "Termination Procedures--Noncompliance Limits Capacity of Facility to Furnish Adequate Level or Quality of Care - No Immediate and Serious Threat to Health and Safety", date: "" },
-                    { id: 4654, title: "Nonrenewal or Cancellation of Time Limited Agreements for Long Term Care Facilities (Medicare and Medicaid)", date: "" },
-                    { id: 4655, title: "Notice of Termination", date: "" },
-                    { id: 4656, title: "Additional Communications With Facility", date: "" },
-                    { id: 4657, title: "Relocating Patients or Residents Displaced by Termination or Closure", date: "" },
-                    { id: 4658, title: "Guidance to States for Medicaid Nursing Facility (NF) Remedies", date: "" },
+                    { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request" },    
+                    { id: 4445, title: "Home and Community-Based Services Amendments" },
+                    { id: 4446, title: "Home and Community-Based Services Terminations" },
+                    { id: 4460, title: "Nurse Aide Registry" },
+                    { id: 4470, title: "Specification of Resident Assessment Instruments for Use in Long Term Care Facilities" },
+                    { id: 4480, title: "Personal Care Services" },
+                    { id: 4560, title: "Skilled Nursing Facility (SSF) and Intermediate Care Facility (ICF) Services Provided by Swing Bed Hospitals" },
+                    { id: 4570, title: "Ambulatory Surgical Center Services." },
+                    { id: 4580, title: "Phlebotomy and Case Management Services Associated With the Drug Clozaril" },
+                    { id: 4600, title: "Usage of Certification Transmittal, HCFA-1539" },
+                    { id: 4601, title: "Usage of the Statement of Deficiencies and Plan of Correction, HCFA-2567" },
+                    { id: 4602, title: "Provider Agreements" },
+                    { id: 4603, title: "Readmission to the Medicare or Medicaid Program After Termination" },
+                    { id: 4604, title: "Authority to Grant Life Safety Code Waivers for Medicaid Only NFs" },
+                    { id: 4650, title: "Termination - General" },
+                    { id: 4651, title: "Basis for Terminating Program Participation" },
+                    { id: 4652, title: "Termination Procedures--Immediate and Serious Threat to Patient Health and Safety" },
+                    { id: 4653, title: "Termination Procedures--Noncompliance Limits Capacity of Facility to Furnish Adequate Level or Quality of Care - No Immediate and Serious Threat to Health and Safety" },
+                    { id: 4654, title: "Nonrenewal or Cancellation of Time Limited Agreements for Long Term Care Facilities (Medicare and Medicaid)" },
+                    { id: 4655, title: "Notice of Termination" },
+                    { id: 4656, title: "Additional Communications With Facility" },
+                    { id: 4657, title: "Relocating Patients or Residents Displaced by Termination or Closure" },
+                    { id: 4658, title: "Guidance to States for Medicaid Nursing Facility (NF) Remedies" },
                 ]
             },
             { 
@@ -1389,7 +1389,11 @@ const toggleExpand = (id) => {
                                                     {{ expanded[section.id] ? '▼' : '▶' }}
                                                 </span>
                                             </button>
-                                            <span v-if="section.id || section.title" :class="['section-text', { 'section-link': section.subsections }]" @click="section.subsections && toggleExpand(section.id)"> 
+                                            <span 
+                                                v-if="section.id || section.title" 
+                                                :class="['section-text', { 'section-link': section.subsections }]" 
+                                                @click="section.subsections && toggleExpand(section.id)"
+                                            > 
                                                 <span>{{ section.title }}</span>
                                             </span>
                                         </td>
@@ -1428,10 +1432,18 @@ const toggleExpand = (id) => {
                                         <template v-for="sub in section.subsections" :key="sub.id">
                                             <tr class="table__row table__row--body subsection-row">
                                                 <td class="table__cell subsection-cell">
-                                                    <button v-if="sub.subsections" class="expand-btn" @click="toggleExpand(sub.id)">
+                                                    <button 
+                                                        v-if="sub.subsections" 
+                                                        class="expand-btn" 
+                                                        @click="toggleExpand(sub.id)"
+                                                    >
                                                         <span>{{ expanded[sub.id] ? '▼' : '▶' }}</span>
                                                     </button>
-                                                    <span v-if="sub.id || sub.title" :class="['section-text', { 'section-link': sub.subsections }]" @click="sub.subsections && toggleExpand(sub.id)">
+                                                    <span 
+                                                        v-if="sub.id || sub.title" 
+                                                        :class="['section-text', { 'section-link': sub.subsections }]" 
+                                                        @click="sub.subsections && toggleExpand(sub.id)"
+                                                    >
                                                         <span v-if="sub.id" class="section-number">{{ sub.id }}{{ sub.title ? '. ' : '' }}</span>
                                                         <span>{{ sub.title }}</span>
                                                     </span>
@@ -1463,11 +1475,17 @@ const toggleExpand = (id) => {
                                                 </td>
                                             </tr>
                                             <template v-if="sub.subsections && expanded[sub.id]">
-                                                <tr v-for="nestedSub in sub.subsections" 
+                                                <tr 
+                                                    v-for="nestedSub in sub.subsections" 
                                                     :key="nestedSub.id"
-                                                    class="table__row table__row--body nested-subsection-row">
+                                                    class="table__row table__row--body nested-subsection-row"
+                                                >
                                                     <td class="table__cell nested-subsection-cell">
-                                                        <span v-if="nestedSub.id || nestedSub.title" :class="['section-text', { 'section-link': nestedSub.subsections }]" @click="nestedSub.subsections && toggleExpand(nestedSub.id)">
+                                                        <span 
+                                                            v-if="nestedSub.id || nestedSub.title" 
+                                                            :class="['section-text', { 'section-link': nestedSub.subsections }]" 
+                                                            @click="nestedSub.subsections && toggleExpand(nestedSub.id)"
+                                                        >
                                                             <span v-if="nestedSub.id" class="section-number">{{ nestedSub.id }}{{ nestedSub.title ? '. ' : '' }}</span>
                                                             <span>{{ nestedSub.title }}</span>
                                                         </span>
