@@ -20,57 +20,7 @@
         "type": "public_subcategory",
         "parent": 3
       },
-      "cfr_citations": [
-        {
-          "id": 234,
-          "title": 42,
-          "part": 433,
-          "type": "section",
-          "section_id": 15
-        },
-        {
-          "id": 263,
-          "title": 42,
-          "part": 433,
-          "type": "section",
-          "section_id": 112
-        },
-        {
-          "id": 266,
-          "title": 42,
-          "part": 433,
-          "type": "section",
-          "section_id": 116
-        },
-        {
-          "id": 1794,
-          "title": 45,
-          "part": 75,
-          "type": "section",
-          "section_id": 2
-        },
-        {
-          "id": 1892,
-          "title": 45,
-          "part": 75,
-          "type": "section",
-          "section_id": 413
-        },
-        {
-          "id": 2021,
-          "title": 45,
-          "part": 95,
-          "type": "section",
-          "section_id": 631
-        },
-        {
-          "id": 2315,
-          "title": 45,
-          "part": 170,
-          "type": "subpart",
-          "subpart_id": "B"
-        }
-      ],
+      "cfr_citations": [],
       "act_citations": [],
       "usc_citations": [],
       "subjects": [
@@ -251,29 +201,7 @@
         "type": "public_subcategory",
         "parent": 3
       },
-      "cfr_citations": [
-        {
-          "id": 615,
-          "title": 42,
-          "part": 437,
-          "type": "section",
-          "section_id": 10
-        },
-        {
-          "id": 616,
-          "title": 42,
-          "part": 437,
-          "type": "section",
-          "section_id": 15
-        },
-        {
-          "id": 1466,
-          "title": 42,
-          "part": 457,
-          "type": "section",
-          "section_id": 770
-        }
-      ],
+      "cfr_citations": [],
       "act_citations": [],
       "usc_citations": [],
       "subjects": [
