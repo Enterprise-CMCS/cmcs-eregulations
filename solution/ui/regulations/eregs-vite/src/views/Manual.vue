@@ -1321,21 +1321,25 @@ const toggleExpand = (id) => {
                             target="_blank"
                             href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
                         >
-                        zipped Word documents from the CMS website</a>, which is the most complete version of the manual, 
+                            zipped Word documents from the CMS website
+                        </a>
+                        , which is the most complete version of the manual, 
                         along with links to convenient 
                         <a 
                             class="external"
                             target="_blank"
                             href="https://web.archive.org/web/20041212094406/http://www.cms.hhs.gov/manuals/45_smm/pub45toc.asp"
                         >
-                        web pages</a> 
+                            web pages
+                        </a> 
                         and 
                         <a
                             class="external"
                             target="_blank"
                             href="https://web.archive.org/web/20050204151206/http://www.cms.hhs.gov:80/manuals/pub45pdf/smmtoc.asp"
                         >
-                        PDFs</a>
+                            PDFs
+                        </a>
                         from archived copies of the CMS website.
                     </p>
                     <section class="table__parent">
@@ -1377,27 +1381,45 @@ const toggleExpand = (id) => {
                                 <template v-for="section in sections" :key="section.id">
                                     <tr class="table__row table__row--body main-row">
                                         <td class="table__cell">
-                                            <button class="expand-btn" @click="toggleExpand(section.id)">
+                                            <button 
+                                                class="expand-btn" 
+                                                @click="toggleExpand(section.id)"
+                                            >
                                                 <span v-if="section.subsections && section.subsections.length">
                                                     {{ expanded[section.id] ? '▼' : '▶' }}
                                                 </span>
                                             </button>
-                                            <span v-if="section.id || section.title" :class="['section-text', { 'section-link': section.subsections }]" @click="section.subsections && toggleExpand(section.id)">
+                                            <span v-if="section.id || section.title" :class="['section-text', { 'section-link': section.subsections }]" @click="section.subsections && toggleExpand(section.id)"> 
                                                 <span>{{ section.title }}</span>
                                             </span>
                                         </td>
                                         <td class="table__cell">
-                                            <a v-if="section.zip?.url" :href="section.zip.url" target="_blank" class="link-btn">
+                                            <a 
+                                                v-if="section.zip?.url" 
+                                                :href="section.zip.url" 
+                                                target="_blank" 
+                                                class="link-btn"
+                                            >
                                                 Word <span v-if="section.zip.date" class="date-stamp">({{ section.zip.date }})</span>
                                             </a>
                                         </td>
                                         <td class="table__cell">
-                                            <a v-if="section.web?.url" :href="section.web.url" target="_blank" class="link-btn">
+                                            <a 
+                                                v-if="section.web?.url" 
+                                                :href="section.web.url" 
+                                                target="_blank"
+                                                class="link-btn"
+                                            >
                                                 Web <span v-if="section.web.date" class="date-stamp">({{ section.web.date }})</span>
                                             </a>
                                         </td>
                                         <td class="table__cell">
-                                            <a v-if="section.pdf?.url" :href="section.pdf.url" target="_blank" class="link-btn">
+                                            <a 
+                                                v-if="section.pdf?.url" 
+                                                :href="section.pdf.url" 
+                                                target="_blank" 
+                                                class="link-btn"
+                                            >
                                                 PDF <span v-if="section.pdf.date" class="date-stamp">({{ section.pdf.date }})</span>
                                             </a>
                                         </td>
@@ -1410,20 +1432,33 @@ const toggleExpand = (id) => {
                                                         <span>{{ expanded[sub.id] ? '▼' : '▶' }}</span>
                                                     </button>
                                                     <span v-if="sub.id || sub.title" :class="['section-text', { 'section-link': sub.subsections }]" @click="sub.subsections && toggleExpand(sub.id)">
-                                                        <span v-if="sub.id" class="section-number">{{ sub.id }}{{ sub.title ? '.' : '' }}</span> <span>{{ sub.title }}</span>
+                                                        <span v-if="sub.id" class="section-number">{{ sub.id }}{{ sub.title ? '. ' : '' }}</span>
+                                                        <span>{{ sub.title }}</span>
                                                     </span>
                                                 </td>
                                                 <td class="table__cell">
                                                     <span v-if="sub.zip?.date" class="date-stamp">({{ sub.zip.date }})</span>
                                                 </td>
                                                 <td class="table__cell">
-                                                    <a v-if="sub.web?.url" :href="sub.web.url" target="_blank" class="link-btn">
-                                                        Web <span v-if="sub.web.date" class="date-stamp">({{ sub.web.date }})</span>
+                                                    <a 
+                                                        v-if="sub.web?.url" 
+                                                        :href="sub.web.url" 
+                                                        target="_blank" 
+                                                        class="link-btn"
+                                                    >
+                                                        Web 
+                                                        <span v-if="sub.web.date" class="date-stamp">({{ sub.web.date }})</span>
                                                     </a>
                                                 </td>
                                                 <td class="table__cell">
-                                                    <a v-if="sub.pdf?.url" :href="sub.pdf.url" target="_blank" class="link-btn">
-                                                        PDF <span v-if="sub.pdf.date" class="date-stamp">({{ sub.pdf.date }})</span>
+                                                    <a 
+                                                        v-if="sub.pdf?.url" 
+                                                        :href="sub.pdf.url" 
+                                                        target="_blank" 
+                                                        class="link-btn"
+                                                    >
+                                                        PDF 
+                                                        <span v-if="sub.pdf.date" class="date-stamp">({{ sub.pdf.date }})</span>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -1433,18 +1468,33 @@ const toggleExpand = (id) => {
                                                     class="table__row table__row--body nested-subsection-row">
                                                     <td class="table__cell nested-subsection-cell">
                                                         <span v-if="nestedSub.id || nestedSub.title" :class="['section-text', { 'section-link': nestedSub.subsections }]" @click="nestedSub.subsections && toggleExpand(nestedSub.id)">
-                                                            <span v-if="nestedSub.id" class="section-number">{{ nestedSub.id }}{{ nestedSub.title ? '.' : '' }}</span> <span>{{ nestedSub.title }}</span>
+                                                            <span v-if="nestedSub.id" class="section-number">{{ nestedSub.id }}{{ nestedSub.title ? '. ' : '' }}</span>
+                                                            <span>{{ nestedSub.title }}</span>
                                                         </span>
                                                     </td>
-                                                    <td class="table__cell"></td>
                                                     <td class="table__cell">
-                                                        <a v-if="nestedSub.web?.url" :href="nestedSub.web.url" target="_blank" class="link-btn">
-                                                            Web <span v-if="nestedSub.web.date" class="date-stamp">({{ nestedSub.web.date }})</span>
+                                                        <span v-if="nestedSub.zip?.date" class="date-stamp">({{ nestedSub.zip.date }})</span>
+                                                    </td>
+                                                    <td class="table__cell">
+                                                        <a 
+                                                            v-if="nestedSub.web?.url" 
+                                                            :href="nestedSub.web.url" 
+                                                            target="_blank" 
+                                                            class="link-btn"
+                                                        >
+                                                            Web 
+                                                            <span v-if="nestedSub.web.date" class="date-stamp">({{ nestedSub.web.date }})</span>
                                                         </a>
                                                     </td>
                                                     <td class="table__cell">
-                                                        <a v-if="nestedSub.pdf?.url" :href="nestedSub.pdf.url" target="_blank" class="link-btn">
-                                                            PDF <span v-if="nestedSub.pdf.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
+                                                        <a 
+                                                            v-if="nestedSub.pdf?.url" 
+                                                            :href="nestedSub.pdf.url" 
+                                                            target="_blank" 
+                                                            class="link-btn"
+                                                        >
+                                                            PDF 
+                                                            <span v-if="nestedSub.pdf.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
                                                         </a>
                                                     </td>
                                                 </tr>
