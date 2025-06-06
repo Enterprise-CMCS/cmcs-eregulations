@@ -51,11 +51,11 @@ const sections = ref([
             date: "2000"
         },
         subsections: [
-            { 
-                id: 2040, 
-                title: "Appeals of State Adverse Actions for Medicaid Skilled Nursing and Intermediate Care Facilities (Not Applicable to Federal Terminations of Medicaid Facilities)", 
+            {
+                id: 2040,
+                title: "Appeals of State Adverse Actions for Medicaid Skilled Nursing and Intermediate Care Facilities (Not Applicable to Federal Terminations of Medicaid Facilities)",
                 zip: {
-                    date: "1986" 
+                    date: "1986"
                 },
                 web: {
                     url: "https://web.archive.org/web/20041211221927/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2040_to_2040.asp",
@@ -66,11 +66,11 @@ const sections = ref([
                     date: "1986"
                 }
             },
-            { 
+            {
                 id: "2080 to 2089.9",
                 title: "",
                 zip: {
-                    date: "2000" 
+                    date: "2000"
                 },
                 web: {
                     url: "https://web.archive.org/web/20041211222603/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp",
@@ -123,7 +123,7 @@ const sections = ref([
                     } },
                 ]
             },
-            { 
+            {
                 id: "2090 to 2092.9",
                 title: "",
                 zip: { date: "1992" },
@@ -141,7 +141,7 @@ const sections = ref([
                     { id: 2092, title: "Additional State Agency Responsibilities" },
                 ]
             },
-            { 
+            {
                 id: "2100 to 2106.2",
                 title: "",
                 zip: { date: 1994 },
@@ -163,7 +163,7 @@ const sections = ref([
                     { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)" },
                 ]
             },
-            { 
+            {
                 id: "2106.3 to 2493",
                 title: "",
                 zip: { date: 1991 },
@@ -200,7 +200,7 @@ const sections = ref([
                     { id: 2493, title: "Claiming FFP for Provider Payments for State Taxes" },
                 ]
             },
-            { 
+            {
                 id: "2495 to 2500.1",
                 title: "",
                 zip: { date: 1991 },
@@ -218,17 +218,17 @@ const sections = ref([
                     { id: 2500, title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program" },
                 ]
             },
-            { 
-                id: "2500.2 to 2500.6", 
+            {
+                id: "2500.2 to 2500.6",
                 title: "Quarterly Medicaid Statement of Expenditures for the Medical Assistance Program",
-                zip: { date: 1991 }, 
-                web: { date: "missing" },
-                pdf: { date: "missing" },
+                zip: { date: 1991 },
+                web: { date: "unavailable" },
+                pdf: { date: "unavailable" },
             },
-            { 
+            {
                 id: "2501 to 2555",
                 title: "",
-                zip: { date: 1992 }, 
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041211221703/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2501_to_2555.asp",
                     date: "1992"
@@ -247,10 +247,10 @@ const sections = ref([
                     { id: 2555, title: "Information on Target Expenditure Levels, Reductions in Medicaid Payments, and Computation of Incentive Rebates to States" },
                 ]
             },
-            { 
+            {
                 id: "2560 to 2600.2",
                 title: "",
-                zip: { date: 1991 }, 
+                zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211222048/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2560_to_2600.2.asp",
                     date: "1991"
@@ -264,20 +264,20 @@ const sections = ref([
                     { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program" },
                 ]
             },
-            { 
-                id: "2600.3 to 2600.10", 
-                title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program", 
-                zip: { date: 1991 }, 
+            {
+                id: "2600.3 to 2600.10",
+                title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program",
+                zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211221749/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2600_to_2600.10.asp",
                     date: "1991"
-                }, 
+                },
                 pdf: {
                     url: "https://web.archive.org/web/20000929140950/http://www.hcfa.gov:80/pubforms/pub45pdf/26003.pdf",
                     date: "1991"
-                } 
+                }
             },
-            { 
+            {
                 id: "2600.11 to 2602",
                 title: "",
                 zip: { date: 1991 },
@@ -285,52 +285,52 @@ const sections = ref([
                     url: "https://web.archive.org/web/20041211221327/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2600.11_to_2602.asp",
                     date: "1991"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
                 subsections: [
                     { id: 2600, title: "Quarterly Budget Estimates - Grants to States for Medical Assistance Program" },
                     { id: 2602, title: "Submission Schedule - Medicaid Program Budget Report (Form HCFA-25)" },
                 ]
             },
-            { 
-                id: "2700 to 2700.2", 
+            {
+                id: "2700 to 2700.2",
                 title: "Federal Reporting Requirements",
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041211221832/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700_to_2700.2.asp",
                     date: "1998"
-                }, 
+                },
                 pdf: {
                     url: "https://web.archive.org/web/20030910161000/http://cms.gov:80/manuals/pub45pdf/2700.pdf",
                     date: "1998"
-                } 
+                }
             },
-            { 
-                id: "2700.4", 
-                title: "Federal Reporting Requirements", 
+            {
+                id: "2700.4",
+                title: "Federal Reporting Requirements",
                 zip: { date: 1996 },
                 web: {
                     url: "https://web.archive.org/web/20041211222643/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700.4_to_2700.4.asp",
                     date: "1996"
-                }, 
+                },
                 pdf: {
                     url: "https://web.archive.org/web/20030910202813/http://cms.gov:80/manuals/pub45pdf/27004.pdf",
                     date: "1996"
-                } 
+                }
             },
-            { 
-                id: "2700.6", 
-                title: "Federal Reporting Requirements", 
+            {
+                id: "2700.6",
+                title: "Federal Reporting Requirements",
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041211050529/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700.6_to_2700.6.asp",
                     date: "1998"
-                }, 
+                },
                 pdf: {
                     url: "https://web.archive.org/web/20000929141011/http://www.hcfa.gov:80/pubforms/pub45pdf/27006.pdf",
                     date: "1998"
-                } 
+                }
             },
-            { 
+            {
                 id: "2850 to 2853.5",
                 title: "",
                 zip: { date: 1986 },
@@ -349,7 +349,7 @@ const sections = ref([
                     { id: 2853, title: "Procedures for Refunding the Federal Share of Medicaid Overpayments" },
                 ]
             },
-            { 
+            {
                 id: "2900.2 to 2975.6",
                 zip: { date: 1991 },
                 title: "",
@@ -393,7 +393,7 @@ const sections = ref([
             date: "2001"
         },
         subsections: [
-            { 
+            {
                 id: "3200 to 3207",
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
@@ -410,7 +410,7 @@ const sections = ref([
                     { id: 3207, title: "Changes in SSI Definition of Disability Due to Welfare Reform" },
                 ]
             },
-            { 
+            {
                 id: "3210 to 3256",
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
@@ -435,7 +435,7 @@ const sections = ref([
                     { id: 3256, title: "Transfer of Resources Procedures" },
                 ]
             },
-            { 
+            {
                 id: "3257 to 3259.8",
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
@@ -453,7 +453,7 @@ const sections = ref([
                     { id: 3259, title: "Treatment of Trusts" },
                 ]
             },
-            { 
+            {
                 id: "3260 to 3280.2",
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
@@ -481,7 +481,7 @@ const sections = ref([
                     { id: 3280, title: "Mandatory Coordination With WIC" },
                 ]
             },
-            { 
+            {
                 id: "3300 to 3314.2",
                 title: "Chapter IV - Mandatory Coverage of Categorically Needy Families and Children",
                 web: {
@@ -510,9 +510,9 @@ const sections = ref([
                     { id: 3314, title: "Extended Medicaid Benefits to Families Who Lose Eligibility Because of Income From Support Payments" },
                 ]
             },
-            { 
-                id: 3405, 
-                title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled - Changes Due to Welfare Reform", 
+            {
+                id: 3405,
+                title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled - Changes Due to Welfare Reform",
                 web: {
                     url: "https://web.archive.org/web/20040808082505/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3405_to_3405.asp",
                     date: "1997"
@@ -523,7 +523,7 @@ const sections = ref([
                 },
                 zip: { date: "1997" },
             },
-            { 
+            {
                 id: "3410 to 3493",
                 title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled",
                 web: {
@@ -548,7 +548,7 @@ const sections = ref([
                     { id: 3493, title: "Medicaid Eligibility for Disabled Children Who Lose SSI Payment" },
                 ]
             },
-            { 
+            {
                 id: "3500 to 3599.4",
                 title: "Chapter VI - Optional Coverage of Categorically Needy Groups",
                 web: {
@@ -583,7 +583,7 @@ const sections = ref([
                     { id: 3599, title: "Buy-In to Medicaid for the Working Disabled" },
                 ]
             },
-            { 
+            {
                 id: "3600 to 3645.6",
                 title: "Chapter VII - Coverage of the Medically Needy",
                 web: {
@@ -616,7 +616,7 @@ const sections = ref([
                     { id: 3645, title: "Pay-In Spenddown Option" },
                 ]
             },
-            { 
+            {
                 id: "3700 to 3714.2",
                 title: "Chapter VIII - Post-Eligibility",
                 web: {
@@ -643,7 +643,7 @@ const sections = ref([
                     { id: 3714, title: "Notice, Hearings and Appeals" },
                 ]
             },
-            { 
+            {
                 id: "3800 to 3812",
                 title: "Chapter IX - Financial Eligibility Requirements and Options",
                 zip: {
@@ -662,7 +662,7 @@ const sections = ref([
                     { id: 3812, title: "Treatment of Contributions From Relatives to Medicaid Applicants or Recipients" },
                 ]
             },
-            { 
+            {
                 id: "3900 to 3910.15",
                 title: "Chapter X - Third Party Liability",
                 zip: {
@@ -690,9 +690,9 @@ const sections = ref([
                     { id: 3910, title: "Medicaid Payments for Recipients Under Group Health Plans" },
                 ]
             },
-            { 
-                id: "IM 3570", 
-                title: "Requirements for Eligibility Under a Special Income Level", 
+            {
+                id: "IM 3570",
+                title: "Requirements for Eligibility Under a Special Income Level",
                 zip: {
                     date: "1986"
                 },
@@ -700,11 +700,11 @@ const sections = ref([
                     url: "https://web.archive.org/web/20040227225635/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3570.asp",
                     date: "1986"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
             },
-            { 
-                id: "IM 3900", 
-                title: "Third Party Liability (TPL)", 
+            {
+                id: "IM 3900",
+                title: "Third Party Liability (TPL)",
                 zip: {
                     date: "1994"
                 },
@@ -712,7 +712,7 @@ const sections = ref([
                     url: "https://web.archive.org/web/20040808080724/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3900_to_im_3900.asp",
                     date: "1994"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
             },
         ],
     },
@@ -728,7 +728,7 @@ const sections = ref([
             date: "1999"
         },
         subsections: [
-            { 
+            {
                 id: "4130 to 4253",
                 title: "Requirements and Limits Applicable to All Services; Requirements and Limits Applicable to Specific Services",
                 zip: { date: 1990 },
@@ -751,7 +751,7 @@ const sections = ref([
                     { id: 4253, title: "Minimum Criteria Specific to the Screening for Persons With MR (PASARR/MR)" },
                 ]
             },
-            { 
+            {
                 id: "4270 to 4390.1",
                 title: "Requirements and Limits Applicable to Specific Services",
                 zip: { date: 1997 },
@@ -783,7 +783,7 @@ const sections = ref([
                     { id: 4390, title: "Institutions for Mental Diseases" },
                 ]
             },
-            { 
+            {
                 id: "4395 to 4435.4",
                 title: "Requirements and Limits Applicable to Specific Services",
                 zip: { date: 1995 },
@@ -810,7 +810,7 @@ const sections = ref([
                     { id: 4435, title: "Sterilization by Hysterectomy" },
                 ]
             },
-            { 
+            {
                 id: "4440 to 4444",
                 title: "Requirements and Limits Applicable to Specific Services",
                 zip: { date: 1998 },
@@ -830,7 +830,7 @@ const sections = ref([
                     { id: 4444, title: "Home and Community-Based Services - Procedures to Request" },
                 ]
             },
-            { 
+            {
                 id: "4444 to 4658",
                 title: "Requirements and Limits Applicable to Specific Services",
                 zip: { date: 1999 },
@@ -843,7 +843,7 @@ const sections = ref([
                     date: "1999"
                 },
                 subsections: [
-                    { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request" },    
+                    { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request" },
                     { id: 4445, title: "Home and Community-Based Services Amendments" },
                     { id: 4446, title: "Home and Community-Based Services Terminations" },
                     { id: 4460, title: "Nurse Aide Registry" },
@@ -868,35 +868,35 @@ const sections = ref([
                     { id: 4658, title: "Guidance to States for Medicaid Nursing Facility (NF) Remedies" },
                 ]
             },
-            { 
-                id: "Addendum A", 
-                title: "Wage Indices for Urban Areas", 
+            {
+                id: "Addendum A",
+                title: "Wage Indices for Urban Areas",
                 zip: { date: 1987 },
                 web: {
                     url: "https://web.archive.org/web/20041206162508/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_a.asp",
                     date: "1987"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
             },
-            { 
-                id: "Addendum B", 
+            {
+                id: "Addendum B",
                 title: "Wage Indices for Rural Areas",
                 zip: { date: 1987 },
                 web: {
                     url: "https://web.archive.org/web/20041206163143/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_b.asp",
                     date: "1987"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
             },
-            { 
-                id: "IM 4604", 
+            {
+                id: "IM 4604",
                 title: "Change in Authority to Grant Life Safety Code Waivers for Medicaid Only NFs",
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041206164106/http://www.cms.hhs.gov/manuals/45_smm/sm_04_im_4604.asp",
                     date: "1991"
                 },
-                pdf: { date: "missing" },
+                pdf: { date: "unavailable" },
             },
         ],
     },
@@ -951,7 +951,7 @@ const sections = ref([
             date: "2000"
         },
         subsections: [
-            { 
+            {
                 id: "6000 to 6400.3",
                 title: "",
                 zip: { date: 1997 },
@@ -977,9 +977,9 @@ const sections = ref([
                     { id: 6400, title: "Payment for Physician Services to Pregnant Women and Children", },
                 ]
             },
-            { 
-                id: "Addendum A", 
-                title: "", 
+            {
+                id: "Addendum A",
+                title: "",
                 zip: { date: 2000 },
                 web: {
                     url: "https://web.archive.org/web/20041213115707/http://www.cms.hhs.gov/manuals/45_smm/sm_06_6000_ad_a.asp",
@@ -987,9 +987,9 @@ const sections = ref([
                 },
                 pdf: { date: 2000 },
             },
-            { 
-                id: "IM 6000 to 6000.5", 
-                title: "Inpatient Hospital and Long-Term Care Reimbursement", 
+            {
+                id: "IM 6000 to 6000.5",
+                title: "Inpatient Hospital and Long-Term Care Reimbursement",
                 zip: { date: 1988 },
                 web: {
                     url: "https://web.archive.org/web/20041212235830/http://www.cms.hhs.gov/manuals/45_smm/sm_06_im_6000_to_6000.5.asp",
@@ -997,9 +997,9 @@ const sections = ref([
                 },
                 pdf: { date: 1988 },
             },
-            { 
-                id: "IM 6007", 
-                title: "Revaluation of Assets", 
+            {
+                id: "IM 6007",
+                title: "Revaluation of Assets",
                 zip: { date: 1984 },
                 web: {
                     url: "https://web.archive.org/web/20041213121344/http://www.cms.hhs.gov/manuals/45_smm/sm_06_im_6007_to_6007.asp",
@@ -1025,14 +1025,14 @@ const sections = ref([
             date: "1994"
         },
         subsections: [
-            { 
-                id: "", 
+            {
+                id: "",
                 title: "Legal Background and Authority",
                 zip: { date: "no date" },
-                web: { date: "missing" },
+                web: { date: "unavailable" },
                 pdf: { date: "no date" },
             },
-            { 
+            {
                 id: "7000 to 7099",
                 title: "Chapter 1 - Administration and Objectives",
                 zip: { date: 1992 },
@@ -1058,7 +1058,7 @@ const sections = ref([
                     { id: 7099, title: "Role of a State Model System in the Evaluation Process", },
                 ]
             },
-            { 
+            {
                 id: "7100 to 7124",
                 title: "Chapter 2 - Sampling Methods",
                 zip: { date: 1992 },
@@ -1081,7 +1081,7 @@ const sections = ref([
                     { id: 7124, title: "Sampling Frames", },
                 ]
             },
-            { 
+            {
                 id: "7125 to 7154",
                 title: "Chapter 2 - Sampling Methods",
                 zip: { date: 1992 },
@@ -1091,7 +1091,7 @@ const sections = ref([
                 },
                 pdf: { date: 1992 },
                 subsections: [
-                    { id: 7125, title: "Sample Selection", },    
+                    { id: 7125, title: "Sample Selection", },
                     { id: 7126, title: "Claims Collection", },
                     { id: 7130, title: "Requirements for Sampling Plan Documentation", },
                     { id: 7132, title: "Random Sample Selection Procedures", },
@@ -1106,9 +1106,9 @@ const sections = ref([
                     { id: 7154, title: "Guidelines for Further Stratification", },
                 ]
             },
-            { 
-                id: 7199, 
-                title: "Chapter 2 - Sampling Methods - Exhibits", 
+            {
+                id: 7199,
+                title: "Chapter 2 - Sampling Methods - Exhibits",
                 zip: { date: 1989 },
                 web: {
                     url: "https://web.archive.org/web/20041209205013/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_to_exhibit_2.asp",
@@ -1116,8 +1116,8 @@ const sections = ref([
                 },
                 pdf: { date: 1989 },
             },
-            { 
-                id: "Appendix A", 
+            {
+                id: "Appendix A",
                 title: "Chapter 2 - Sampling Methods - Glossary of Terms; MEQC Error Rate Calculation",
                 zip: { date: 1993 },
                 web: {
@@ -1126,9 +1126,9 @@ const sections = ref([
                 },
                 pdf: { date: 1993 },
             },
-            { 
-                id: "Appendix B", 
-                title: "Chapter 2 - Sampling Methods - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)", 
+            {
+                id: "Appendix B",
+                title: "Chapter 2 - Sampling Methods - Criteria for Adjusting Anticipated Error Rates Pursuant to 42 CFR 431.865(d)",
                 zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041209185620/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7199_apb.asp",
@@ -1136,8 +1136,8 @@ const sections = ref([
                 },
                 pdf: { date: 1992 },
             },
-            { 
-                id: "Appendix C", 
+            {
+                id: "Appendix C",
                 title: "Chapter 2 - Sampling Methods - Retrospective Sampling",
                 zip: { date: "no date" },
                 web: {
@@ -1146,7 +1146,7 @@ const sections = ref([
                 },
                 pdf: { date: "no date" },
             },
-            { 
+            {
                 id: "7200 to 7230",
                 title: "Chapter 3 - Review Process",
                 zip: { date: 1993 },
@@ -1169,7 +1169,7 @@ const sections = ref([
                     { id: 7230, title: "Cases Which Are Not Reviewed", },
                 ]
             },
-            { 
+            {
                 id: "7233 to 7265",
                 title: "Chapter 3 - Review Process",
                 zip: { date: 1994 },
@@ -1195,7 +1195,7 @@ const sections = ref([
                     { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
                 ]
             },
-            { 
+            {
                 id: "7265.1 to 7272",
                 title: "Chapter 3 - Review Process",
                 zip: { date: 1994 },
@@ -1211,8 +1211,8 @@ const sections = ref([
                     { id: 7272, title: "Verification Guide", },
                 ]
             },
-            { 
-                id: "7272 (Continued)", 
+            {
+                id: "7272 (Continued)",
                 title: "Chapter 3 - Review Process - Verification Guide",
                 zip: { date: 1994 },
                 web: {
@@ -1221,7 +1221,7 @@ const sections = ref([
                 },
                 pdf: { date: 1994 },
             },
-            { 
+            {
                 id: "7275 to 7355",
                 title: "Chapter 3 - Review Process",
                 zip: { date: 1993 },
@@ -1277,7 +1277,7 @@ const sections = ref([
                     { id: 7355, title: "Record Maintenance", },
                 ]
             },
-            { 
+            {
                 id: "7500 to 7599",
                 title: "Chapter 4 - Reports",
                 zip: { date: 1992 },
@@ -1293,12 +1293,12 @@ const sections = ref([
                     { id: 7520, title: "Table Instructions - Table V", },
                 ]
             },
-            { 
-                id: "7700 to 7770.2", 
+            {
+                id: "7700 to 7770.2",
                 title: "Chapter 8 - Quality Control of Negative Case Actions",
                 zip: { date: 1994 },
-                web: { date: "missing" },
-                pdf: { date: "missing" },
+                web: { date: "unavailable" },
+                pdf: { date: "unavailable" },
             },
         ],
     },
@@ -1339,17 +1339,15 @@ const sections = ref([
             date: "1989"
         },
         subsections: [
-            { 
+            {
                 id: "9100 to 9180.3, Exhibits 1 to 6",
                 title: "General Provisions",
+                zip: { date: 1988 },
                 web: {
                     url: "https://web.archive.org/web/20041213121705/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9100_to_exhibit_6.asp",
-                    date: ""
+                    date: 1988
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1988 },
                 subsections: [
                     { id: 9100, title: "Legal Background and Authority for the Utilization Control Program", },
                     { id: 9102, title: "Scope of the UC Quality Review System", },
@@ -1376,25 +1374,25 @@ const sections = ref([
                     { id: "Exhibit 6", title: "", },
                 ]
             },
-            { 
-                id: 9214, 
-                title: "Physician Certification/Recertification - Legal Background", 
+            {
+                id: 9214,
+                title: "Physician Certification/Recertification - Legal Background",
+                zip: { date: "no date" },
                 web: {
                     url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9214.asp",
-                    date: ""
+                    date: "no date"
                 },
+                pdf: { date: "no date" },
             },
-            { 
+            {
                 id: "9215 to 9350",
-                title: "Physician Certification/Recertification",
+                title: "Physician Certification/Recertification; Superior UR Systems",
+                zip: { date: 1986 },
                 web: {
                     url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9215_to_9350.asp",
-                    date: ""
+                    date: 1986
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: "unavailable" },
                 subsections: [
                     { id: 9215, title: "Certification", },
                     { id: 9216, title: "Plan of Care Requirements", },
@@ -1407,31 +1405,35 @@ const sections = ref([
                     { id: 9350, title: "Withdrawal of HCFA Approval", },
                 ]
             },
-            { 
+            {
                 id: "IM 9215 to IM 9216",
                 title: "",
+                zip: { date: 1989 },
                 web: {
                     url: "https://web.archive.org/web/20041213115942/http://www.cms.hhs.gov/manuals/45_smm/sm_09_im_9215.asp",
-                    date: ""
+                    date: 1989
                 },
+                pdf: { date: 1989 },
                 subsections: [
-                    { 
-                        id: "IM 9215", 
+                    {
+                        id: "IM 9215",
                         title: "Certification of the Need for Inpatient SNF or ICF Care",
                     },
-                    { 
-                        id: "IM 9216", 
-                        title: "Who May Establish a Plan of Care for SNF or ICF Inpatients", 
+                    {
+                        id: "IM 9216",
+                        title: "Who May Establish a Plan of Care for SNF or ICF Inpatients",
                     },
                 ]
             },
-            { 
-                id: "IM 9220", 
-                title: "Recertification of the Need for Inpatient SNF or ICF Care", 
+            {
+                id: "IM 9220",
+                title: "Recertification of the Need for Inpatient SNF or ICF Care",
+                zip: { date: 1989 },
                 web: {
                     url: "https://web.archive.org/web/20041213112941/http://www.cms.hhs.gov/manuals/45_smm/sm_09_im_9220.asp",
-                    date: ""
+                    date: 1989
                 },
+                pdf: { date: 1989 },
             },
         ],
     },
@@ -1451,9 +1453,10 @@ const sections = ref([
             date: "1998"
         },
         subsections: [
-            { 
+            {
                 id: "11000 to 11115",
                 title: "Chapter 1 - General",
+                zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213114014/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11100_to_11115.asp",
                     date: ""
@@ -1469,9 +1472,10 @@ const sections = ref([
                     { id: 11115, title: "Objectives", },
                 ]
             },
-            { 
+            {
                 id: "11200 to 11260",
                 title: "Chapter 2 - Approval of MMIS Systems",
+                zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213114442/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11200_to_11260.asp",
                     date: ""
@@ -1502,9 +1506,10 @@ const sections = ref([
                     { id: 11260, title: "Retroactive 75 Percent FFP", },
                 ]
             },
-            { 
+            {
                 id: "11265 to 11276.5",
                 title: "Chapter 2 - Approval of MMIS Systems",
+                zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213235006/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11265_to_11276.5.asp",
                     date: ""
@@ -1522,14 +1527,16 @@ const sections = ref([
                     { id: 11276, title: "Costs Related to MMIS Design, Development, Installation, Operation, and Enhancement", },
                 ]
             },
-            { 
-                id: "11276 to 11282.1", 
-                title: "Chapter 2 - Approval of MMIS Systems", 
-                web: { date: "missing" },
+            {
+                id: "11276 to 11282.1",
+                title: "Chapter 2 - Approval of MMIS Systems",
+                zip: { date: 1998 },
+                web: { date: "unavailable" },
             },
-            { 
+            {
                 id: "11300 to 11350",
                 title: "Chapter 3 - System Requirements",
+                zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213120930/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11300_to_11350.asp",
                     date: ""
@@ -1551,17 +1558,19 @@ const sections = ref([
                     { id: 11350, title: "MARS and SURS Reports", },
                 ]
             },
-            { 
-                id: 11375, 
-                title: "Chapter 3 - System Requirements - Data Requirements", 
+            {
+                id: 11375,
+                title: "Chapter 3 - System Requirements - Data Requirements",
+                zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213005333/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11375.asp",
                     date: ""
                 },
             },
-            { 
+            {
                 id: "11600 to 11606",
                 title: "Chapter 6 - CPAS Review Process",
+                zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213120934/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11600_to_11606.asp",
                     date: ""
@@ -1577,9 +1586,10 @@ const sections = ref([
                     { id: 11606, title: "Alternate System", },
                 ]
             },
-            { 
+            {
                 id: "11607 to 11609",
                 title: "Chapter 6 - CPAS Review Process",
+                zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213233451/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11607_to_11609.asp",
                     date: ""
@@ -1594,9 +1604,10 @@ const sections = ref([
                     { id: 11609, title: "Documentation Source Sheet", },
                 ]
             },
-            { 
+            {
                 id: "11610 to 11611",
                 title: "Chapter 6 - CPAS Review Process",
+                zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213234016/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11610_to_11611.asp",
                     date: ""
@@ -1610,10 +1621,11 @@ const sections = ref([
                     { id: 11611, title: "CPAS Corrective Action", },
                 ]
             },
-            { 
-                id: "", 
+            {
+                id: "",
+                zip: { date: "no date" },
                 title: "Legal Background And Authority",
-                web: { date: "missing" },
+                web: { date: "unavailable" },
             },
         ],
     },
@@ -1713,24 +1725,24 @@ const toggleExpand = (id) => {
             <div id="main-content" class="manual__container">
                 <div class="">
                     <p class="manual-page-description">
-                        This page provides links to 
-                        <a 
+                        This page provides links to
+                        <a
                             class="external"
                             target="_blank"
                             href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
                         >
                             zipped Word documents from the CMS website
                         </a>
-                        , which is the most current and complete version of the manual, 
-                        along with links to convenient 
-                        <a 
+                        , which is the most current and complete version of the manual,
+                        along with links to convenient
+                        <a
                             class="external"
                             target="_blank"
                             href="https://web.archive.org/web/20041212094406/http://www.cms.hhs.gov/manuals/45_smm/pub45toc.asp"
                         >
                             web pages
-                        </a> 
-                        and 
+                        </a>
+                        and
                         <a
                             class="external"
                             target="_blank"
@@ -1779,143 +1791,176 @@ const toggleExpand = (id) => {
                                 <template v-for="section in sections" :key="section.id">
                                     <tr class="table__row table__row--body main-row">
                                         <td class="table__cell">
-                                            <button 
-                                                class="expand-btn" 
+                                            <button
+                                                class="expand-btn"
                                                 @click="toggleExpand(section.id)"
                                             >
                                                 <span v-if="section.subsections && section.subsections.length">
-                                                    <i :class="['fa', expanded[section.id] ? 'fa-angle-down' : 'fa-angle-right']"></i>
+                                                    <i :class="['fa', expanded[section.id] ? 'fa-angle-down' : 'fa-angle-right']" />
                                                 </span>
                                             </button>
-                                            <span 
-                                                v-if="section.id || section.title" 
-                                                :class="['section-text', { 'section-link': section.subsections }]" 
+                                            <span
+                                                v-if="section.id || section.title"
+                                                :class="['section-text', { 'section-link': section.subsections }]"
                                                 @click="section.subsections && toggleExpand(section.id)"
-                                            > 
+                                            >
                                                 <span>{{ section.title }}</span>
                                             </span>
                                         </td>
                                         <td class="table__cell">
-                                            <a 
-                                                v-if="section.zip?.url" 
-                                                :href="section.zip.url" 
-                                                target="_blank" 
-                                                class="link-btn"
-                                            >
-                                                Word <span v-if="section.zip.date" class="date-stamp">({{ section.zip.date }})</span>
-                                            </a>
-                                        </td>
-                                        <td class="table__cell">
-                                            <a 
-                                                v-if="section.web?.url" 
-                                                :href="section.web.url" 
+                                            <a
+                                                v-if="section.zip?.url"
+                                                :href="section.zip.url"
                                                 target="_blank"
                                                 class="link-btn"
                                             >
-                                                Web <span v-if="section.web.date" class="date-stamp">({{ section.web.date }})</span>
+                                                Word
+                                                <span v-if="section.zip.date" class="date-stamp">
+                                                    ({{ section.zip.date }})
+                                                </span>
                                             </a>
                                         </td>
                                         <td class="table__cell">
-                                            <a 
-                                                v-if="section.pdf?.url" 
-                                                :href="section.pdf.url" 
-                                                target="_blank" 
+                                            <a
+                                                v-if="section.web?.url"
+                                                :href="section.web.url"
+                                                target="_blank"
                                                 class="link-btn"
                                             >
-                                                PDF <span v-if="section.pdf.date" class="date-stamp">({{ section.pdf.date }})</span>
+                                                Web
+                                                <span v-if="section.web.date" class="date-stamp">
+                                                    ({{ section.web.date }})
+                                                </span>
                                             </a>
-                                            <span v-else-if="section.pdf?.date" class="date-stamp">({{ section.pdf.date }})</span>
+                                        </td>
+                                        <td class="table__cell">
+                                            <a
+                                                v-if="section.pdf?.url"
+                                                :href="section.pdf.url"
+                                                target="_blank"
+                                                class="link-btn"
+                                            >
+                                                PDF
+                                                <span v-if="section.pdf.date" class="date-stamp">
+                                                    ({{ section.pdf.date }})
+                                                </span>
+                                            </a>
+                                            <span v-else-if="section.pdf?.date" class="date-stamp">
+                                                ({{ section.pdf.date }})
+                                            </span>
                                         </td>
                                     </tr>
                                     <template v-if="expanded[section.id] && section.subsections">
                                         <template v-for="sub in section.subsections" :key="sub.id">
                                             <tr class="table__row table__row--body subsection-row">
                                                 <td class="table__cell subsection-cell">
-                                                    <button 
-                                                        v-if="sub.subsections" 
-                                                        class="expand-btn" 
+                                                    <button
+                                                        v-if="sub.subsections"
+                                                        class="expand-btn"
                                                         @click="toggleExpand(sub.id)"
                                                     >
-                                                        <i :class="['fa', expanded[sub.id] ? 'fa-angle-down' : 'fa-angle-right']"></i>
+                                                        <i :class="['fa', expanded[sub.id] ? 'fa-angle-down' : 'fa-angle-right']" />
                                                     </button>
-                                                    <span 
-                                                        v-if="sub.id || sub.title" 
-                                                        :class="['section-text', { 'section-link': sub.subsections }]" 
+                                                    <span
+                                                        v-if="sub.id || sub.title"
+                                                        :class="['section-text', { 'section-link': sub.subsections }]"
                                                         @click="sub.subsections && toggleExpand(sub.id)"
                                                     >
-                                                        <span v-if="sub.id" class="section-number">{{ sub.id }}{{ sub.title ? '. ' : '' }}</span>
+                                                        <span v-if="sub.id" class="section-number">
+                                                            {{ sub.id }}{{ sub.title ? '. ' : '' }}
+                                                        </span>
                                                         <span>{{ sub.title }}</span>
                                                     </span>
                                                 </td>
                                                 <td class="table__cell">
-                                                    <span v-if="sub.zip?.date" class="date-stamp">({{ sub.zip.date }})</span>
+                                                    <span v-if="sub.zip?.date" class="date-stamp">
+                                                        ({{ sub.zip.date }})
+                                                    </span>
                                                 </td>
                                                 <td class="table__cell">
-                                                    <a 
-                                                        v-if="sub.web?.url" 
-                                                        :href="sub.web.url" 
-                                                        target="_blank" 
+                                                    <a
+                                                        v-if="sub.web?.url"
+                                                        :href="sub.web.url"
+                                                        target="_blank"
                                                         class="link-btn"
                                                     >
-                                                        Web 
-                                                        <span v-if="sub.web.date" class="date-stamp">({{ sub.web.date }})</span>
+                                                        Web
+                                                        <span v-if="sub.web.date" class="date-stamp">
+                                                            ({{ sub.web.date }})
+                                                        </span>
                                                     </a>
-                                                    <span v-else-if="sub.web?.date" class="date-stamp">({{ sub.web.date }})</span>
+                                                    <span v-else-if="sub.web?.date" class="date-stamp">
+                                                        ({{ sub.web.date }})
+                                                    </span>
                                                 </td>
                                                 <td class="table__cell">
-                                                    <a 
-                                                        v-if="sub.pdf?.url" 
-                                                        :href="sub.pdf.url" 
-                                                        target="_blank" 
+                                                    <a
+                                                        v-if="sub.pdf?.url"
+                                                        :href="sub.pdf.url"
+                                                        target="_blank"
                                                         class="link-btn"
                                                     >
-                                                        PDF 
-                                                        <span v-if="sub.pdf.date" class="date-stamp">({{ sub.pdf.date }})</span>
+                                                        PDF
+                                                        <span v-if="sub.pdf.date" class="date-stamp">
+                                                            ({{ sub.pdf.date }})
+                                                        </span>
                                                     </a>
-                                                    <span v-else-if="sub.pdf?.date" class="date-stamp">({{ sub.pdf.date }})</span>
+                                                    <span v-else-if="sub.pdf?.date" class="date-stamp">
+                                                        ({{ sub.pdf.date }})
+                                                    </span>
                                                 </td>
                                             </tr>
                                             <template v-if="sub.subsections && expanded[sub.id]">
-                                                <tr 
-                                                    v-for="nestedSub in sub.subsections" 
+                                                <tr
+                                                    v-for="nestedSub in sub.subsections"
                                                     :key="nestedSub.id"
                                                     class="table__row table__row--body nested-subsection-row"
                                                 >
                                                     <td class="table__cell nested-subsection-cell">
-                                                        <span 
-                                                            v-if="nestedSub.id || nestedSub.title" 
-                                                            :class="['section-text', { 'section-link': nestedSub.subsections }]" 
+                                                        <span
+                                                            v-if="nestedSub.id || nestedSub.title"
+                                                            :class="['section-text', { 'section-link': nestedSub.subsections }]"
                                                             @click="nestedSub.subsections && toggleExpand(nestedSub.id)"
                                                         >
-                                                            <span v-if="nestedSub.id" class="section-number">{{ nestedSub.id }}{{ nestedSub.title ? '. ' : '' }}</span>
+                                                            <span v-if="nestedSub.id" class="section-number">
+                                                                {{ nestedSub.id }}{{ nestedSub.title ? '. ' : '' }}
+                                                            </span>
                                                             <span>{{ nestedSub.title }}</span>
                                                         </span>
                                                     </td>
                                                     <td class="table__cell">
-                                                        <span v-if="nestedSub.zip?.date" class="date-stamp">({{ nestedSub.zip.date }})</span>
+                                                        <span v-if="nestedSub.zip?.date" class="date-stamp">
+                                                            ({{ nestedSub.zip.date }})
+                                                        </span>
                                                     </td>
                                                     <td class="table__cell">
-                                                        <a 
-                                                            v-if="nestedSub.web?.url" 
-                                                            :href="nestedSub.web.url" 
-                                                            target="_blank" 
+                                                        <a
+                                                            v-if="nestedSub.web?.url"
+                                                            :href="nestedSub.web.url"
+                                                            target="_blank"
                                                             class="link-btn"
                                                         >
-                                                            Web 
-                                                            <span v-if="nestedSub.web.date" class="date-stamp">({{ nestedSub.web.date }})</span>
+                                                            Web
+                                                            <span v-if="nestedSub.web.date" class="date-stamp">
+                                                                ({{ nestedSub.web.date }})
+                                                            </span>
                                                         </a>
                                                     </td>
                                                     <td class="table__cell">
-                                                        <a 
-                                                            v-if="nestedSub.pdf?.url" 
-                                                            :href="nestedSub.pdf.url" 
-                                                            target="_blank" 
+                                                        <a
+                                                            v-if="nestedSub.pdf?.url"
+                                                            :href="nestedSub.pdf.url"
+                                                            target="_blank"
                                                             class="link-btn"
                                                         >
-                                                            PDF 
-                                                            <span v-if="nestedSub.pdf.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
+                                                            PDF
+                                                            <span v-if="nestedSub.pdf.date" class="date-stamp">
+                                                                ({{ nestedSub.pdf.date }})
+                                                            </span>
                                                         </a>
-                                                        <span v-else-if="nestedSub.pdf?.date" class="date-stamp">({{ nestedSub.pdf.date }})</span>
+                                                        <span v-else-if="nestedSub.pdf?.date" class="date-stamp">
+                                                            ({{ nestedSub.pdf.date }})
+                                                        </span>
                                                     </td>
                                                 </tr>
                                             </template>
@@ -1964,7 +2009,7 @@ const toggleExpand = (id) => {
     color: #fff;
 }
 
-/* Add fixed widths for specific columns */
+/* Fixed widths for document type columns */
 .table__header:nth-child(2),
 .table__header:nth-child(3),
 .table__header:nth-child(4) {
@@ -1983,7 +2028,7 @@ const toggleExpand = (id) => {
     vertical-align: top;
 }
 
-/* Add fixed widths for specific columns */
+/* Fixed widths for document type columns */
 .table__cell:nth-child(2),
 .table__cell:nth-child(3),
 .table__cell:nth-child(4) {
@@ -1991,12 +2036,16 @@ const toggleExpand = (id) => {
 }
 
 .table__row--body.main-row {
-    background: #fff;
+    background: #f0f2f5;
     font-weight: 600;
 }
 
 .table__row--body.subsection-row {
     background: #f8f9fa;
+}
+
+.table__row--body.nested-subsection-row {
+    background: #fff;
 }
 
 .subsection-cell {
@@ -2032,10 +2081,6 @@ const toggleExpand = (id) => {
 .nested-subsection-cell {
     padding-left: 4rem;
     font-size: 0.95rem;
-}
-
-.nested-subsection-row {
-    background: #f0f2f5;
 }
 
 .section-text {
