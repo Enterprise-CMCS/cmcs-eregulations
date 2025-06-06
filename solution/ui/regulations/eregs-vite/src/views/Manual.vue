@@ -45,42 +45,38 @@ const sections = ref([
         title: "Part 2 – State Organization and General Administration",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_02.zip",
-            date: "2000"
+            date: 2000
         },
         web: {
             url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_toc.asp",
-            date: "2000"
+            date: 2000
         },
         pdf: { date: "" },
         subsections: [
             {
                 id: 2040,
                 title: "Appeals of State Adverse Actions for Medicaid Skilled Nursing and Intermediate Care Facilities (Not Applicable to Federal Terminations of Medicaid Facilities)",
-                zip: {
-                    date: "1986"
-                },
+                zip: { date: 1986 },
                 web: {
                     url: "https://web.archive.org/web/20041211221927/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2040_to_2040.asp",
-                    date: "1986"
+                    date: 1986
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030630065708/http://www.cms.gov:80/manuals/pub45pdf/2040.pdf",
-                    date: "1986"
+                    date: 1986
                 }
             },
             {
                 id: "2080 to 2089.9",
                 title: "",
-                zip: {
-                    date: "2000"
-                },
+                zip: { date: 2000 },
                 web: {
                     url: "https://web.archive.org/web/20041211222603/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2080_to_2089.9.asp",
-                    date: "2000"
+                    date: 2000
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20031210081448/http://cms.hhs.gov:80/manuals/pub45pdf/2080.pdf",
-                    date: "1993"
+                    date: 1993
                 },
                 subsections: [
                     { id: 2080, title: "Contracts Between State Agencies and Fiscal Agents, Health Care Project Grant Centers, Private Nonmedical Institutions, Health Insuring Organizations, Health Maintenance Organizations, Prepaid Health Plans and for Contracts for Automatic Data Processing Equipment/Services", web: {
@@ -128,14 +124,14 @@ const sections = ref([
             {
                 id: "2090 to 2092.9",
                 title: "",
-                zip: { date: "1992" },
+                zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041211221428/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2090_to_2092.9.asp",
-                    date: "1992"
+                    date: 1992
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929140914/http://www.hcfa.gov:80/pubforms/pub45pdf/20902.pdf",
-                    date: "1992"
+                    date: 1992
                 },
                 subsections: [
                     { id: 2090, title: "Marketing, Enrollment and Disenrollment" },
@@ -149,11 +145,11 @@ const sections = ref([
                 zip: { date: 1994 },
                 web: {
                     url: "https://web.archive.org/web/20041211221711/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2100_to_2106.2.asp",
-                    date: "1994"
+                    date: 1994
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910143952/http://cms.gov:80/manuals/pub45pdf/2100.pdf",
-                    date: "1994"
+                    date: 1994
                 },
                 subsections: [
                     { id: 2100, title: "Free Choice of Providers - General" },
@@ -171,11 +167,11 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211222317/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2106.3_to_2493.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20051208033356/http://www.cms.hhs.gov:80/manuals/pub45pdf/21063.pdf",
-                    date: "1991"
+                    date: 1991
                 },
                 subsections: [
                     { id: 2106, title: "How to Submit Request for Waiver Under §1915(b)" },
@@ -208,11 +204,11 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211220824/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2495_to_2500.1.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910235317/http://cms.gov:80/manuals/pub45pdf/2495.pdf",
-                    date: "1991"
+                    date: 1991
                 },
                 subsections: [
                     { id: 2495, title: "Maintenance of Effort" },
@@ -233,11 +229,11 @@ const sections = ref([
                 zip: { date: 1992 },
                 web: {
                     url: "https://web.archive.org/web/20041211221703/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2501_to_2555.asp",
-                    date: "1992"
+                    date: 1992
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911060906/http://cms.gov:80/manuals/pub45pdf/2501.pdf",
-                    date: "1992"
+                    date: 1992
                 },
                 subsections: [
                     { id: 2501, title: "Federal Medical Assistance Percentages (FMAP) - State-by-State Tables" },
@@ -255,11 +251,11 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211222048/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2560_to_2600.2.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911084821/http://cms.gov:80/manuals/pub45pdf/2560.pdf",
-                    date: "1991"
+                    date: 1991
                 },
                 subsections: [
                     { id: 2560, title: "Medicaid Funding Limitations Policy" },
@@ -272,11 +268,11 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211221749/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2600_to_2600.10.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929140950/http://www.hcfa.gov:80/pubforms/pub45pdf/26003.pdf",
-                    date: "1991"
+                    date: 1991
                 }
             },
             {
@@ -285,7 +281,7 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041211221327/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2600.11_to_2602.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: { date: "unavailable" },
                 subsections: [
@@ -299,11 +295,11 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041211221832/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700_to_2700.2.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910161000/http://cms.gov:80/manuals/pub45pdf/2700.pdf",
-                    date: "1998"
+                    date: 1998
                 }
             },
             {
@@ -312,11 +308,11 @@ const sections = ref([
                 zip: { date: 1996 },
                 web: {
                     url: "https://web.archive.org/web/20041211222643/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700.4_to_2700.4.asp",
-                    date: "1996"
+                    date: 1996
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910202813/http://cms.gov:80/manuals/pub45pdf/27004.pdf",
-                    date: "1996"
+                    date: 1996
                 }
             },
             {
@@ -325,11 +321,11 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041211050529/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2700.6_to_2700.6.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929141011/http://www.hcfa.gov:80/pubforms/pub45pdf/27006.pdf",
-                    date: "1998"
+                    date: 1998
                 }
             },
             {
@@ -338,11 +334,11 @@ const sections = ref([
                 zip: { date: 1986 },
                 web: {
                     url: "https://web.archive.org/web/20041211164736/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2850_to_2853.5.asp",
-                    date: "1986"
+                    date: 1986
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929141015/http://www.hcfa.gov:80/pubforms/pub45pdf/2850.pdf",
-                    date: "1986"
+                    date: 1986
                 },
                 subsections: [
                     { id: 2850, title: "Withholding the Federal Share of Payments to Medicaid Providers to Recover Medicare Overpayments; Withholding Medicare Payments to Recover Medicaid Overpayments" },
@@ -357,11 +353,11 @@ const sections = ref([
                 title: "",
                 web: {
                     url: "https://web.archive.org/web/20041211222256/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_2900.2_to_2975.6.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929141021/http://www.hcfa.gov:80/pubforms/pub45pdf/2900.pdf",
-                    date: "1991"
+                    date: 1991
                 },
                 subsections: [
                     { id: 2900, title: "Fair Hearings and Appeals" },
@@ -400,13 +396,13 @@ const sections = ref([
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
                     url: "https://web.archive.org/web/20041212152429/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3200_to_3207.asp",
-                    date: "1997"
+                    date: 1997
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20000929141030/http://www.hcfa.gov:80/pubforms/pub45pdf/sm3200.pdf",
-                    date: "1997"
+                    date: 1997
                 },
-                zip: { date: "1997" },
+                zip: { date: 1997 },
                 subsections: [
                     { id: 3200, title: "Changes Due to Welfare Reform" },
                     { id: 3207, title: "Changes in SSI Definition of Disability Due to Welfare Reform" },
@@ -417,13 +413,13 @@ const sections = ref([
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
                     url: "https://web.archive.org/web/20041213002635/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3210_to_3256.asp",
-                    date: "1997"
+                    date: 1997
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030808034231/http://www.cms.hhs.gov/manuals/pub45pdf/sm3210.pdf",
-                    date: "1997"
+                    date: 1997
                 },
-                zip: { date: "1997" },
+                zip: { date: 1997 },
                 subsections: [
                     { id: 3210, title: "Citizenship and Alienage" },
                     { id: 3211, title: "Aliens" },
@@ -442,13 +438,13 @@ const sections = ref([
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
                     url: "https://web.archive.org/web/20041213121554/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3257_to_3259.8.asp",
-                    date: "1994"
+                    date: 1994
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20040625034414/http://cms.hhs.gov:80/manuals/pub45pdf/sm3257.pdf",
-                    date: "1994"
+                    date: 1994
                 },
-                zip: { date: "1994" },
+                zip: { date: 1994 },
                 subsections: [
                     { id: 3257, title: "Transfers of Assets and Treatment of Trusts Transfers of Assets for Less Than Fair Market Value" },
                     { id: 3258, title: "Transfers of Assets for Less Than Fair Market Value" },
@@ -460,13 +456,13 @@ const sections = ref([
                 title: "Chapter III - General And Categorical Eligibility Requirements",
                 web: {
                     url: "https://web.archive.org/web/20040808075206/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3260.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910145847/http://cms.gov:80/manuals/pub45pdf/sm3260.pdf",
-                    date: "1991"
+                    date: 1991
                 },
-                zip: { date: "1991" },
+                zip: { date: 1991 },
                 subsections: [
                     { id: 3260, title: "Income and Resource Eligibility Rules for Certain Institutionalized Individuals and Certain Individuals Under Home and Community-Based Waivers Who Have Community Spouses" },
                     { id: 3261, title: "Income Eligibility" },
@@ -488,13 +484,13 @@ const sections = ref([
                 title: "Chapter IV - Mandatory Coverage of Categorically Needy Families and Children",
                 web: {
                     url: "https://web.archive.org/web/20040808081605/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3300_to_3314.2.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910181119/http://cms.gov:80/manuals/pub45pdf/sm3300.pdf",
-                    date: "1998"
+                    date: 1998
                 },
-                zip: { date: "1998" },
+                zip: { date: 1998 },
                 subsections: [
                     { id: 3300, title: "Introduction", },
                     { id: 3301, title: "Low Income Families With Children", },
@@ -517,26 +513,26 @@ const sections = ref([
                 title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled - Changes Due to Welfare Reform",
                 web: {
                     url: "https://web.archive.org/web/20040808082505/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3405_to_3405.asp",
-                    date: "1997"
+                    date: 1997
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030910213015/http://cms.gov/manuals/pub45pdf/sm3405.pdf",
-                    date: "1997"
+                    date: 1997
                 },
-                zip: { date: "1997" },
+                zip: { date: 1997 },
             },
             {
                 id: "3410 to 3493",
                 title: "Chapter V - Mandatory Coverage of the Aged, Blind, and Disabled",
                 web: {
                     url: "https://web.archive.org/web/20040808082726/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3410_to_3493.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20031127050455/http://www.cms.gov:80/manuals/pub45pdf/sm3410.pdf",
-                    date: "1998"
+                    date: 1998
                 },
-                zip: { date: "1998" },
+                zip: { date: 1998 },
                 subsections: [
                     { id: 3410, title: "Medicaid Eligibility for Qualified Severely Impaired Individuals and Individuals in §1619 Status" },
                     { id: 3411, title: "Provisions of OBRA1986 and EODAA" },
@@ -555,13 +551,13 @@ const sections = ref([
                 title: "Chapter VI - Optional Coverage of Categorically Needy Groups",
                 web: {
                     url: "https://web.archive.org/web/20040808084030/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3500_to_3599.4.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030805123125/http://www.cms.hhs.gov:80/manuals/pub45pdf/sm3500.pdf",
-                    date: "1998"
+                    date: 1998
                 },
-                zip: { date: "1998" },
+                zip: { date: 1998 },
                 subsections: [
                     { id: 3500, title: "Introduction" },
                     { id: 3501, title: "Definitions" },
@@ -590,13 +586,13 @@ const sections = ref([
                 title: "Chapter VII - Coverage of the Medically Needy",
                 web: {
                     url: "https://web.archive.org/web/20040808070458/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3600_to_3645.6.asp",
-                    date: "1997"
+                    date: 1997
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911083221/http://cms.gov:80/manuals/pub45pdf/sm3600.pdf",
-                    date: "1997"
+                    date: 1997
                 },
-                zip: { date: "1997" },
+                zip: { date: 1997 },
                 subsections: [
                     { id: 3600, title: "Introduction" },
                     { id: 3601, title: "Background" },
@@ -623,13 +619,13 @@ const sections = ref([
                 title: "Chapter VIII - Post-Eligibility",
                 web: {
                     url: "https://web.archive.org/web/20040808074001/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3700_to_3714.2.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20050524160719/http://www.cms.hhs.gov:80/manuals/pub45pdf/sm3700.pdf",
-                    date: "1998"
+                    date: 1998
                 },
-                zip: { date: "1998" },
+                zip: { date: 1998 },
                 subsections: [
                     { id: 3700, title: "Introduction" },
                     { id: 3701, title: "General Statement of Post-Eligibility Process" },
@@ -648,9 +644,7 @@ const sections = ref([
             {
                 id: "3800 to 3812",
                 title: "Chapter IX - Financial Eligibility Requirements and Options",
-                zip: {
-                    date: "1994 and 2001"
-                },
+                zip: { date: "1994 and 2001" },
                 web: {
                     url: "https://web.archive.org/web/20040808074529/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3800_to_3812.asp",
                     date: "2001"
@@ -667,16 +661,14 @@ const sections = ref([
             {
                 id: "3900 to 3910.15",
                 title: "Chapter X - Third Party Liability",
-                zip: {
-                    date: "2015"
-                },
+                zip: { date: "2015" },
                 web: {
                     url: "https://web.archive.org/web/20040808075451/http://www.cms.hhs.gov/manuals/45_smm/sm_03_3_3900_to_3910.15.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20050308152122/http://www.cms.hhs.gov:80/manuals/pub45pdf/sm3900.pdf",
-                    date: "1998"
+                    date: 1998
                 },
                 subsections: [
                     { id: 3900, title: "Third Party Liability (TPL)" },
@@ -695,24 +687,20 @@ const sections = ref([
             {
                 id: "IM 3570",
                 title: "Requirements for Eligibility Under a Special Income Level",
-                zip: {
-                    date: "1986"
-                },
+                zip: { date: 1986 },
                 web: {
                     url: "https://web.archive.org/web/20040227225635/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3570.asp",
-                    date: "1986"
+                    date: 1986
                 },
                 pdf: { date: "unavailable" },
             },
             {
                 id: "IM 3900",
                 title: "Third Party Liability (TPL)",
-                zip: {
-                    date: "1994"
-                },
+                zip: { date: 1994 },
                 web: {
                     url: "https://web.archive.org/web/20040808080724/http://www.cms.hhs.gov/manuals/45_smm/sm_03_im_3900_to_im_3900.asp",
-                    date: "1994"
+                    date: 1994
                 },
                 pdf: { date: "unavailable" },
             },
@@ -727,7 +715,7 @@ const sections = ref([
         },
         web: {
             url: "https://web.archive.org/web/20041212082209/http://www.cms.hhs.gov/manuals/45_smm/SM_04_4_toc.asp",
-            date: "1999"
+            date: 1999
         },
         subsections: [
             {
@@ -736,11 +724,11 @@ const sections = ref([
                 zip: { date: 1990 },
                 web: {
                     url: "https://web.archive.org/web/20041206171539/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4130_to_4253.asp",
-                    date: "1990"
+                    date: 1990
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20050110002858/http://cms.hhs.gov:80/manuals/pub45pdf/sm4130.pdf",
-                    date: "1990"
+                    date: 1990
                 },
                 subsections: [
                     { id: 4130, title: "Comparability of Services" },
@@ -759,11 +747,11 @@ const sections = ref([
                 zip: { date: 2015 },
                 web: {
                     url: "https://web.archive.org/web/20041206172221/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4270_to_4390.1.asp",
-                    date: "1997"
+                    date: 1997
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20040503210948/http://cms.hhs.gov:80/manuals/pub45pdf/sm4270.pdf",
-                    date: "1997"
+                    date: 1997
                 },
                 subsections: [
                     { id: 4270, title: "Family Planning Services" },
@@ -791,11 +779,11 @@ const sections = ref([
                 zip: { date: 1995 },
                 web: {
                     url: "https://web.archive.org/web/20041206172723/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4395_to_4435.4.asp",
-                    date: "1995"
+                    date: 1995
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911004440/http://cms.gov:80/manuals/pub45pdf/sm4395.pdf",
-                    date: "1995"
+                    date: 1995
                 },
                 subsections: [
                     { id: 4395, title: "Inappropriate Placement of Mentally Retarded Persons in SNFs and ICFs" },
@@ -818,11 +806,11 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041206161214/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4440_to_4444.asp",
-                    date: "1998"
+                    date: 1998
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911050125/http://cms.gov:80/manuals/pub45pdf/sm4440.pdf",
-                    date: "1997"
+                    date: 1997
                 },
                 subsections: [
                     { id: 4440, title: "Home and Community-Based Services - Basis, Scope, and Purpose" },
@@ -838,11 +826,11 @@ const sections = ref([
                 zip: { date: 1999 },
                 web: {
                     url: "https://web.archive.org/web/20041206161854/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4444_to_4658.asp",
-                    date: "1999"
+                    date: 1999
                 },
                 pdf: {
                     url: "https://web.archive.org/web/20030911080158/http://cms.gov:80/manuals/pub45pdf/sm4444.pdf",
-                    date: "1999"
+                    date: 1999
                 },
                 subsections: [
                     { id: "4444 (Continued)", title: "Home and Community-Based Services - Procedures to Request" },
@@ -876,7 +864,7 @@ const sections = ref([
                 zip: { date: 1987 },
                 web: {
                     url: "https://web.archive.org/web/20041206162508/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_a.asp",
-                    date: "1987"
+                    date: 1987
                 },
                 pdf: { date: "unavailable" },
             },
@@ -886,7 +874,7 @@ const sections = ref([
                 zip: { date: 1987 },
                 web: {
                     url: "https://web.archive.org/web/20041206163143/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_add_b.asp",
-                    date: "1987"
+                    date: 1987
                 },
                 pdf: { date: "unavailable" },
             },
@@ -896,7 +884,7 @@ const sections = ref([
                 zip: { date: 1991 },
                 web: {
                     url: "https://web.archive.org/web/20041206164106/http://www.cms.hhs.gov/manuals/45_smm/sm_04_im_4604.asp",
-                    date: "1991"
+                    date: 1991
                 },
                 pdf: { date: "unavailable" },
             },
@@ -907,15 +895,15 @@ const sections = ref([
         title: "Part 5 – Early and Periodic Screening",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_05.zip",
-            date: "1998"
+            date: 1998
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222101/http://www.cms.hhs.gov/manuals/pub45pdf/smm5t.pdf",
-            date: "1998"
+            date: 1998
         },
         web: {
             url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp",
-            date: "1998"
+            date: 1998
         },
         subsections: [
             {
@@ -1095,15 +1083,15 @@ const sections = ref([
         title: "Part 6 – Payments for Services",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_06.zip",
-            date: "2000"
+            date: 2000
         },
         pdf: {
             url: "https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/downloads/smm6t.pdf",
-            date: "2000"
+            date: 2000
         },
         web: {
             url: "https://web.archive.org/web/20041212235830/http://www.cms.hhs.gov/manuals/45_smm/sm_06_6_toc.asp",
-            date: "2000"
+            date: 2000
         },
         subsections: [
             {
@@ -1169,15 +1157,15 @@ const sections = ref([
         title: "Part 7 – Quality Control",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_07.zip",
-            date: "1994"
+            date: 1994
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222046/http://www.cms.hhs.gov/manuals/pub45pdf/smm7t.pdf",
-            date: "1994"
+            date: 1994
         },
         web: {
             url: "https://web.archive.org/web/20041205032506/http://www.cms.hhs.gov/manuals/45_smm/sm_07_7_toc.asp",
-            date: "1994"
+            date: 1994
         },
         subsections: [
             {
@@ -1277,7 +1265,7 @@ const sections = ref([
                 zip: { date: 1993 },
                 web: {
                     url: "https://web.archive.org/web/20041205013851/http://www.cms.hhs.gov/manuals/45%5Fsmm/sm%5F07%5F7199%5Fapa.asp",
-                    date: "1993"
+                    date: 1993
                 },
                 pdf: { date: 1993 },
             },
@@ -1462,15 +1450,15 @@ const sections = ref([
         title: "Part 8 – Program Integrity",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_08.zip",
-            date: "1983"
+            date: 1983
         },
         web: {
             url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp",
-            date: "1983"
+            date: 1983
         },
         pdf: {
             url: "https://web.archive.org/web/20041106221935/http://www.cms.hhs.gov/manuals/pub45pdf/smm8t.pdf",
-            date: "1983"
+            date: 1983
         },
         subsections: [
             {
@@ -1510,15 +1498,15 @@ const sections = ref([
         title: "Part 9 – Utilization Control",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_09.zip",
-            date: "1989"
+            date: 1989
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222347/http://www.cms.hhs.gov/manuals/pub45pdf/smm9t.pdf",
-            date: "1989"
+            date: 1989
         },
         web: {
             url: "https://web.archive.org/web/20041212235359/http://www.cms.hhs.gov/manuals/45_smm/sm_09_9_toc.asp",
-            date: "1989"
+            date: 1989
         },
         subsections: [
             {
@@ -1628,11 +1616,11 @@ const sections = ref([
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222214/http://www.cms.hhs.gov/manuals/pub45pdf/smm11t.pdf",
-            date: "1998"
+            date: 1998
         },
         web: {
             url: "https://web.archive.org/web/20041212235810/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11_toc.asp",
-            date: "1998"
+            date: 1998
         },
         subsections: [
             {
@@ -1798,15 +1786,15 @@ const sections = ref([
         title: "Part 13 – State Plan Procedures and Preprints",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_13.zip",
-            date: "1984"
+            date: 1984
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222106/http://www.cms.hhs.gov/manuals/pub45pdf/smm13t.pdf",
-            date: "1984"
+            date: 1984
         },
         web: {
             url: "https://web.archive.org/web/20041212234952/http://www.cms.hhs.gov/manuals/45_smm/sm_13_13_toc.asp",
-            date: "1984"
+            date: 1984
         },
         subsections: [
             {
@@ -1846,15 +1834,15 @@ const sections = ref([
         title: "Part 15 - Income and Eligibility Verification System",
         zip: {
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_15.zip",
-            date: "1991"
+            date: 1991
         },
         web: {
             url: "https://web.archive.org/web/20041212235650/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15_toc.asp",
-            date: "1991"
+            date: 1991
         },
         pdf: {
             url: "https://web.archive.org/web/20041106222351/http://www.cms.hhs.gov/manuals/pub45pdf/smm15t.pdf",
-            date: "1991"
+            date: 1991
         },
         subsections: [
             {
@@ -2006,7 +1994,7 @@ const toggleExpand = (id) => {
             <div id="main-content" class="manual__container">
                 <div class="">
                     <p class="manual-page-description">
-                        This page provides links to
+                        This table provides links to
                         <a
                             class="external"
                             target="_blank"
@@ -2255,32 +2243,25 @@ const toggleExpand = (id) => {
 </template>
 
 <style scoped>
-
 .manual__container {
-    padding: 0 2rem 0 2rem;
+    padding: 0 2rem;
 }
 
 .table__parent {
-    background: white;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     overflow-x: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: stretch;
     width: 100%;
 }
 
 #manualTable {
     width: 100%;
     border-collapse: collapse;
-    height: 100%;
 }
 
 .table__header {
     text-align: left;
     vertical-align: top;
-    padding: 1rem;
+    padding: 0.5rem 0 0.5rem 1.5rem;
     background-color: #254c68;
     border-bottom: 2px solid #dee2e6;
     font-weight: 700;
@@ -2292,6 +2273,7 @@ const toggleExpand = (id) => {
 .table__header:nth-child(3),
 .table__header:nth-child(4) {
     width: 130px;
+    padding: 0.5rem 0 0.5rem 1rem;
 }
 
 .cell__subtitle {
@@ -2335,6 +2317,11 @@ const toggleExpand = (id) => {
     margin-left: -1rem;
 }
 
+.nested-subsection-cell {
+    padding-left: 4rem;
+    font-size: 0.95rem;
+}
+
 .link-btn {
     color: #1976d2;
     font-weight: 500;
@@ -2352,17 +2339,6 @@ const toggleExpand = (id) => {
 
 .fa-angle-right {
     margin-right: 2px; /* adjust for the right-arrow and down-arrow being slightly different sizes */
-}
-
-.sticky {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
-
-.nested-subsection-cell {
-    padding-left: 4rem;
-    font-size: 0.95rem;
 }
 
 .section-text {
@@ -2383,5 +2359,4 @@ const toggleExpand = (id) => {
     margin-left: 4px;
     font-weight: 500;
 }
-
 </style>
