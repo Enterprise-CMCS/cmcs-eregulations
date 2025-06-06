@@ -50,6 +50,7 @@ const sections = ref([
             url: "https://web.archive.org/web/20041211162316/http://www.cms.hhs.gov/manuals/45_smm/sm_02_2_toc.asp",
             date: "2000"
         },
+        pdf: { date: "" },
         subsections: [
             {
                 id: 2040,
@@ -754,7 +755,7 @@ const sections = ref([
             {
                 id: "4270 to 4390.1",
                 title: "Requirements and Limits Applicable to Specific Services",
-                zip: { date: 1997 },
+                zip: { date: 2015 },
                 web: {
                     url: "https://web.archive.org/web/20041206172221/http://www.cms.hhs.gov/manuals/45_smm/sm_04_4_4270_to_4390.1.asp",
                     date: "1997"
@@ -916,23 +917,176 @@ const sections = ref([
             date: "1998"
         },
         subsections: [
-            { id: 5010, title: "Overview", },
-            { id: 5110, title: "Basic Requirements", },
-            { id: 5121, title: "Informing Families of EPSDT Services", },
-            { id: 5122, title: "EPSDT Service Requirements", },
-            { id: 5123, title: "Screening Service Delivery and Content", },
-            { id: 5124, title: "Diagnosis and Treatment", },
-            { id: 5140, title: "Periodicity Schedule", },
-            { id: 5150, title: "Transportation and Scheduling Assistance (Support Services)", },
-            { id: 5220, title: "Utilization of Providers", },
-            { id: 5230, title: "Coordination With Related Agencies and Programs", },
-            { id: 5240, title: "Continuing Care", },
-            { id: 5310, title: "Program Monitoring, Planning, and Evaluation", },
-            { id: 5320, title: "Information Needs and Reporting", },
-            { id: 5330, title: "Timeliness", },
-            { id: 5340, title: "Reimbursement", },
-            { id: 5350, title: "Confidentiality", },
-            { id: 5360, title: "Annual Participation Goals", },
+            {
+                id: 5010,
+                title: "Introduction - Overview",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454938",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5110,
+                title: "Program Requirements and Methods - Basic Requirements",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454939",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5121,
+                title: "Program Requirements and Methods - Informing Families of EPSDT Services",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454940",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5122,
+                title: "Program Requirements and Methods - EPSDT Service Requirements",
+                zip: { date: 1994 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454941",
+                    date: 1994
+                },
+                pdf: { date: 1994 },
+            },
+            {
+                id: 5123,
+                title: "Program Requirements and Methods - Screening Service Delivery and Content",
+                zip: { date: 1998 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454942",
+                    date: 1998
+                },
+                pdf: { date: 1998 },
+            },
+            {
+                id: 5124,
+                title: "Program Requirements and Methods - Diagnosis and Treatment",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454946",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5140,
+                title: "Program Requirements and Methods - Periodicity Schedule",
+                zip: { date: 1995 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454947",
+                    date: 1995
+                },
+                pdf: { date: 1995 },
+            },
+            {
+                id: 5150,
+                title: "Program Requirements and Methods - Transportation and Scheduling Assistance (Support Services)",
+                zip: { date: 1995 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454948",
+                    date: 1995
+                },
+                pdf: { date: 1995 },
+            },
+            {
+                id: 5220,
+                title: "Utilization of Providers and Coordination With Related Programs - Utilization of Providers",
+                zip: { date: 1994 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454949",
+                    date: 1994
+                },
+                pdf: { date: 1994 },
+            },
+            {
+                id: 5230,
+                title: "Utilization of Providers and Coordination With Related Programs - Coordination With Related Agencies and Programs",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454950",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5240,
+                title: "Utilization of Providers and Coordination With Related Programs - Continuing Care",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454951",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5310,
+                title: "Administration - Program Monitoring, Planning, and Evaluation",
+                zip: { date: 1995 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454952",
+                    date: 1995
+                },
+                pdf: { date: 1995 },
+            },
+            {
+                id: 5320,
+                title: "Administration - Information Needs and Reporting",
+                zip: { date: 1994 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454953",
+                    date: 1994
+                },
+                pdf: { date: 1994 },
+            },
+            {
+                id: 5330,
+                title: "Administration - Timeliness",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454956",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 5340,
+                title: "Administration - Reimbursement",
+                zip: { date: 1995 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454957",
+                    date: 1995
+                },
+                pdf: { date: 1995 },
+            },
+            {
+                id: 5350,
+                title: "Administration - Confidentiality",
+                zip: { date: 1993 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454958",
+                    date: 1993
+                },
+                pdf: { date: 1993 },
+            },
+            {
+                id: 5360,
+                title: "Administration - Annual Participation Goals",
+                zip: { date: 1993 },
+                web: {
+                    url: "https://web.archive.org/web/20041106183904/http://www.cms.hhs.gov/manuals/45_smm/sm_05_5_5010_to_5360with_toc.asp#_toc490454959",
+                    date: 1993
+                },
+                pdf: { date: 1993 },
+            },
         ],
     },
     {
@@ -1309,18 +1463,45 @@ const sections = ref([
             url: "https://www.cms.gov/regulations-and-guidance/guidance/manuals/downloads/p45_08.zip",
             date: "1983"
         },
-        pdf: {
-            url: "https://web.archive.org/web/20041106221935/http://www.cms.hhs.gov/manuals/pub45pdf/smm8t.pdf",
-            date: "1983"
-        },
         web: {
             url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp",
             date: "1983"
         },
+        pdf: {
+            url: "https://web.archive.org/web/20041106221935/http://www.cms.hhs.gov/manuals/pub45pdf/smm8t.pdf",
+            date: "1983"
+        },
         subsections: [
-            { id: 8001, title: "Disclosure of Information by Providers and Fiscal Agents - Claims for Payment in Alcohol and Drug Abuse Case - General", },
-            { id: 8002, title: "Disclosure of Information by Providers and Fiscal Agents - Confidentiality of Provider Records", },
-            { id: 8003, title: "Disclosure of Information by Providers and Fiscal Agents - Consent Form", },
+            {
+                id: 8001,
+                title: "Disclosure of Information by Providers and Fiscal Agents - Claims for Payment in Alcohol and Drug Abuse Case - General",
+                zip: { date: 1983 },
+                web: {
+                    url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp#_toc490446506",
+                    date: 1983
+                },
+                pdf: { date: 1983 },
+            },
+            {
+                id: 8002,
+                title: "Disclosure of Information by Providers and Fiscal Agents - Confidentiality of Provider Records",
+                zip: { date: 1983 },
+                web: {
+                    url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp#_toc490446507",
+                    date: 1983
+                },
+                pdf: { date: 1983 },
+            },
+            {
+                id: 8003,
+                title: "Disclosure of Information by Providers and Fiscal Agents - Consent Form",
+                zip: { date: 1983 },
+                web: {
+                    url: "https://web.archive.org/web/20041118225622/http://www.cms.hhs.gov/manuals/45_smm/sm_08_8_8001_to_8003with_toc.asp#_toc490446508",
+                    date: 1983
+                },
+                pdf: { date: 1983 },
+            },
         ],
     },
     {
@@ -1459,12 +1640,9 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213114014/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11100_to_11115.asp",
-                    date: ""
+                    date: 1998
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1998 },
                 subsections: [
                     { id: 11100, title: "Background", },
                     { id: 11105, title: "Introduction", },
@@ -1478,12 +1656,9 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213114442/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11200_to_11260.asp",
-                    date: ""
+                    date: 1998
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1998 },
                 subsections: [
                     { id: 11200, title: "Applicable Federal Approval Requirements", },
                     { id: 11205, title: "90 Percent FFP - General Regulatory Requirements", },
@@ -1512,12 +1687,9 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213235006/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11265_to_11276.5.asp",
-                    date: ""
+                    date: 1998
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1998 },
                 subsections: [
                     { id: 11265, title: "Contractual Services", },
                     { id: 11266, title: "Request for Proposal (RFP)", },
@@ -1532,6 +1704,7 @@ const sections = ref([
                 title: "Chapter 2 - Approval of MMIS Systems",
                 zip: { date: 1998 },
                 web: { date: "unavailable" },
+                pdf: { date: 1998 },
             },
             {
                 id: "11300 to 11350",
@@ -1539,12 +1712,9 @@ const sections = ref([
                 zip: { date: 1998 },
                 web: {
                     url: "https://web.archive.org/web/20041213120930/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11300_to_11350.asp",
-                    date: ""
+                    date: 1998
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1998 },
                 subsections: [
                     { id: 11300, title: "General Requirements", },
                     { id: 11301, title: "Future Additional System Requirements", },
@@ -1561,11 +1731,12 @@ const sections = ref([
             {
                 id: 11375,
                 title: "Chapter 3 - System Requirements - Data Requirements",
-                zip: { date: 1998 },
+                zip: { date: 2015 },
                 web: {
                     url: "https://web.archive.org/web/20041213005333/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11375.asp",
-                    date: ""
+                    date: 1998
                 },
+                pdf: { date: 1998 },
             },
             {
                 id: "11600 to 11606",
@@ -1573,12 +1744,9 @@ const sections = ref([
                 zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213120934/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11600_to_11606.asp",
-                    date: ""
+                    date: 1985
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1985 },
                 subsections: [
                     { id: 11600, title: "Background", },
                     { id: 11601, title: "Overview of CPAS", },
@@ -1592,12 +1760,9 @@ const sections = ref([
                 zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213233451/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11607_to_11609.asp",
-                    date: ""
+                    date: 1985
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1985 },
                 subsections: [
                     { id: 11607, title: "CPAS Plan", },
                     { id: 11608, title: "General Requirements for Mandatory System Sample Selection", },
@@ -1610,12 +1775,9 @@ const sections = ref([
                 zip: { date: 1985 },
                 web: {
                     url: "https://web.archive.org/web/20041213234016/http://www.cms.hhs.gov/manuals/45_smm/sm_11_11610_to_11611.asp",
-                    date: ""
+                    date: 1985
                 },
-                pdf: {
-                    url: "",
-                    date: ""
-                },
+                pdf: { date: 1985 },
                 subsections: [
                     { id: 11610, title: "Contents of the State CPAS File", },
                     { id: 11611, title: "CPAS Corrective Action", },
@@ -1626,6 +1788,7 @@ const sections = ref([
                 zip: { date: "no date" },
                 title: "Legal Background And Authority",
                 web: { date: "unavailable" },
+                pdf: { date: "no date" },
             },
         ],
     },
@@ -1645,9 +1808,36 @@ const sections = ref([
             date: "1984"
         },
         subsections: [
-            { id: 13025, title: "State Plans and Plan Amendments - General", },
-            { id: 13026, title: "Approval of State Plans and Amendments", },
-            { id: 13100, title: "Inclusion of Waiver Provisions in the Approved State Medicaid Plan", },
+            {
+                id: 13025,
+                title: "State Plans and Plan Amendments - General",
+                zip: { date: 1984 },
+                web: {
+                    url: "https://web.archive.org/web/20041213113241/http://www.cms.hhs.gov/manuals/45_smm/sm_13_13025_to_13100.asp#_toc490633729",
+                    date: 1984
+                },
+                pdf: { date: 1984 },
+            },
+            {
+                id: 13026,
+                title: "Approval of State Plans and Amendments",
+                zip: { date: 1984 },
+                web: {
+                    url: "https://web.archive.org/web/20041213113241/http://www.cms.hhs.gov/manuals/45_smm/sm_13_13025_to_13100.asp#_toc490633730",
+                    date: 1984
+                },
+                pdf: { date: 1984 },
+            },
+            {
+                id: 13100,
+                title: "Inclusion of Waiver Provisions in the Approved State Medicaid Plan",
+                zip: { date: 1984 },
+                web: {
+                    url: "https://web.archive.org/web/20041213113241/http://www.cms.hhs.gov/manuals/45_smm/sm_13_13025_to_13100.asp#_toc490633731",
+                    date: 1984
+                },
+                pdf: { date: 1984 },
+            },
         ],
     },
     {
@@ -1666,16 +1856,106 @@ const sections = ref([
             date: "1991"
         },
         subsections: [
-            { id: 15800, title: "Background of Income and Eligibility Verification System (IEVS)", },
-            { id: 15801, title: "Requests for Information and Data Exchanges", },
-            { id: 15802, title: "Use and Verification of Social Security Number (SSN)", },
-            { id: 15803, title: "Use and Verification of Information", },
-            { id: 15804, title: "Targeting the Use of Income and Eligibility Verification System (IEVS) Data", },
-            { id: 15805, title: "Alternate Sources of Data", },
-            { id: 15806, title: "State Plan Requirement", },
-            { id: 15807, title: "Safeguard Requirements for IRS Unearned Income Data", },
-            { id: 15808, title: "Recordkeeping and Data Management", },
-            { id: "Exhibit 1", title: "Safeguard Activity Report", },
+            {
+                id: 15800,
+                title: "Background of Income and Eligibility Verification System (IEVS)",
+                zip: { date: 1989 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634424",
+                    date: 1989
+                },
+                pdf: { date: 1989 },
+            },
+            {
+                id: 15801,
+                title: "Requests for Information and Data Exchanges",
+                zip: { date: 1991 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634425",
+                    date: 1991
+                },
+                pdf: { date: 1991 },
+            },
+            {
+                id: 15802,
+                title: "Use and Verification of Social Security Number (SSN)",
+                zip: { date: 1991 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634426",
+                    date: 1991
+                },
+                pdf: { date: 1991 },
+            },
+            {
+                id: 15803,
+                title: "Use and Verification of Information",
+                zip: { date: 1991 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634427",
+                    date: 1991
+                },
+                pdf: { date: 1991 },
+            },
+            {
+                id: 15804,
+                title: "Targeting the Use of Income and Eligibility Verification System (IEVS) Data",
+                zip: { date: 1991 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634428",
+                    date: 1991
+                },
+                pdf: { date: 1991 },
+            },
+            {
+                id: 15805,
+                title: "Alternate Sources of Data",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634429",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 15806,
+                title: "State Plan Requirement",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634430",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
+            {
+                id: 15807,
+                title: "Safeguard Requirements for IRS Unearned Income Data",
+                zip: { date: 1989 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634431",
+                    date: 1989
+                },
+                pdf: { date: 1989 },
+            },
+            {
+                id: "Exhibit 1",
+                title: "Safeguard Activity Report",
+                zip: { date: "no date" },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634432",
+                    date: "no date"
+                },
+                pdf: { date: "no date" },
+            },
+            {
+                id: 15808,
+                title: "Recordkeeping and Data Management",
+                zip: { date: 1990 },
+                web: {
+                    url: "https://web.archive.org/web/20041213114018/http://www.cms.hhs.gov/manuals/45_smm/sm_15_15800_to_15808.asp#_toc490634433",
+                    date: 1990
+                },
+                pdf: { date: 1990 },
+            },
         ],
     },
 ]);
@@ -2013,7 +2293,7 @@ const toggleExpand = (id) => {
 .table__header:nth-child(2),
 .table__header:nth-child(3),
 .table__header:nth-child(4) {
-    width: 120px;
+    width: 130px;
 }
 
 .cell__subtitle {
@@ -2032,7 +2312,7 @@ const toggleExpand = (id) => {
 .table__cell:nth-child(2),
 .table__cell:nth-child(3),
 .table__cell:nth-child(4) {
-    width: 120px;
+    width: 130px;
 }
 
 .table__row--body.main-row {
@@ -2049,8 +2329,12 @@ const toggleExpand = (id) => {
 }
 
 .subsection-cell {
-    padding-left: 2.5rem;
+    padding-left: 3rem;
     font-size: 0.98rem;
+}
+
+.subsection-cell .expand-btn {
+    margin-left: -1rem;
 }
 
 .link-btn {
@@ -2097,8 +2381,9 @@ const toggleExpand = (id) => {
 
 .date-stamp {
     font-size: 0.8em;
-    color: #666;
+    color: #5b616b;
     margin-left: 4px;
+    font-weight: 500;
 }
 
 </style>
