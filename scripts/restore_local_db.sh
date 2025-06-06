@@ -11,7 +11,7 @@ DB_HOST=localhost
 DB_NAME=eregs
 DB_USER=eregsuser
 DB_PORT=5432
-read -p "Enter the database password: " DB_PASSWORD
+read -sp "Enter the database password: " DB_PASSWORD
 
 echo "Dropping database $DB_NAME on $DB_HOST now..."
 # Drop existing database
