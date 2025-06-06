@@ -26,6 +26,7 @@ export { default as CategoryLabel } from "./shared-components/results-item-parts
 export { default as DocTypeLabel } from "./shared-components/results-item-parts/DocTypeLabel.vue";
 export { default as IndicatorLabel } from "./shared-components/results-item-parts/IndicatorLabel.vue";
 export { default as LeftNavCollapse } from "./shared-components/LeftNavCollapse.vue";
+export { default as RelatedSectionsCollapse } from "./shared-components/results-item-parts/RelatedSectionsCollapse.vue";
 export { default as Toc } from "./shared-components/TOC/Toc.vue";
 export { default as TocContainer } from "./shared-components/TOC/TocContainer.vue";
 export { default as TocPart } from "./shared-components/TOC/TocPart.vue";

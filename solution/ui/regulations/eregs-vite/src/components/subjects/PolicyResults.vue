@@ -11,16 +11,15 @@ import {
     getCurrentPageResultsRange,
     getFileTypeButton,
     getFrDocType,
+    hasRegulationCitations,
+    hasStatuteCitations,
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
-
-import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue";
-import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
 
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
 import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
 import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
-import RelatedSections from "sharedComponents/results-item-parts/RelatedSections.vue";
+import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
 import ResultsItem from "sharedComponents/ResultsItem.vue";
 
 import SubjectChips from "./SubjectChips.vue";
@@ -121,36 +120,6 @@ const getResultSnippet = (item) => {
 
 const partDocumentTitleLabel = (string) => string.toLowerCase();
 
-const getCollapseName = (doc) =>
-    `related citations collapsible ${doc.id ?? doc.node_id}`;
-
-const hasRegulationCitations = ({ doc, partsLastUpdated }) => {
-    const regCitations = doc.cfr_citations
-        ? doc.cfr_citations.filter((location) => {
-            const { part } = location;
-            return partsLastUpdated[part];
-        })
-        : [];
-
-    return regCitations.length > 0;
-};
-
-/**
- * Checks if the document has statute citations.
- *
- * @param {Object} doc - The document object.
- * @param {Array} doc.act_citations - Array of act citations.
- * @param {Array} doc.usc_citations - Array of USC citations.
- * @returns {boolean} - Returns true if the document has both statute citation fields in the response and if one of those fields has a length > 0, false otherwise.
- */
-const hasStatuteCitations = ({ doc }) => {
-    // ensure that both act_citations and usc_citations fields are present
-    if (!doc.act_citations || !doc.usc_citations) return false;
-
-    // if both fields exist, check if either field has citations
-    return doc.act_citations.length > 0 || doc.usc_citations.length > 0;
-};
-
 export default {
     addSurroundingEllipses,
     getParentCategoryName,
@@ -158,9 +127,6 @@ export default {
     getResultSnippet,
     partDocumentTitleLabel,
     showResultSnippet,
-    getCollapseName,
-    hasRegulationCitations,
-    hasStatuteCitations,
 };
 </script>
 
@@ -353,48 +319,16 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                 </div>
             </template>
             <template #sections>
-                <CollapseButton
+                <RelatedSectionsCollapse
                     v-if="
                         doc.type !== 'reg_text' &&
                             (hasRegulationCitations({ doc, partsLastUpdated })
                                 || hasStatuteCitations({ doc }))"
-                    :name="getCollapseName(doc)"
-                    state="collapsed"
-                    class="related-citations__btn--collapse"
-                >
-                    <template #expanded>
-                        Hide Related Citations
-                        <i class="fa fa-chevron-up" />
-                    </template>
-                    <template #collapsed>
-                        Show Related Citations
-                        <i class="fa fa-chevron-down" />
-                    </template>
-                </CollapseButton>
-                <Collapsible
-                    :name="getCollapseName(doc)"
-                    state="collapsed"
-                    class="collapse-content"
-                    overflow
-                >
-                    <template v-if="doc.type !== 'reg_text'">
-                        <RelatedSections
-                            v-if="hasStatuteCitations({ doc })"
-                            class="related-statutes"
-                            :base="homeUrl"
-                            :item="doc"
-                            label="Statutes"
-                        />
-                        <RelatedSections
-                            v-if="hasRegulationCitations({ doc, partsLastUpdated })"
-                            class="related-regulations"
-                            :base="homeUrl"
-                            :item="doc"
-                            :parts-last-updated="partsLastUpdated"
-                            label="Regulations"
-                        />
-                    </template>
-                </Collapsible>
+                    :item="doc"
+                    :parts-last-updated="partsLastUpdated"
+                    :has-statute-citations="hasStatuteCitations({ doc })"
+                    :has-regulation-citations="hasRegulationCitations({ doc, partsLastUpdated })"
+                />
             </template>
         </ResultsItem>
     </div>

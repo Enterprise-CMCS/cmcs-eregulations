@@ -1,19 +1,29 @@
 <script setup>
 import { computed } from "vue";
 
+import {
+    hasRegulationCitations,
+    hasStatuteCitations,
+} from "utilities/utils";
+
 import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 import SubjectChips from "spaComponents/subjects/SubjectChips.vue";
 
 const props = defineProps({
-    supplementalContent: {
-        type: Array,
-        required: true,
-    },
     limit: {
         type: Number,
         required: false,
         default: 3,
+    },
+    partsLastUpdated: {
+        type: Object,
+        required: true,
+    },
+    supplementalContent: {
+        type: Array,
+        required: true,
     },
 });
 
@@ -39,6 +49,17 @@ const limitedContent = computed(() => {
                 :uid="content.uid ?? content.id"
             />
             <SubjectChips :subjects="content.subjects" />
+            <RelatedSectionsCollapse
+                v-if="
+                    content.type !== 'reg_text' &&
+                        (hasRegulationCitations({ doc: content, partsLastUpdated })
+                            || hasStatuteCitations({ doc: content }))"
+                :item="content"
+                :base-url="content.url"
+                :parts-last-updated="partsLastUpdated"
+                :has-statute-citations="hasStatuteCitations({ doc: content })"
+                :has-regulation-citations="hasRegulationCitations({ doc: content, partsLastUpdated })"
+            />
             <div class="spacer" />
         </template>
     </div>

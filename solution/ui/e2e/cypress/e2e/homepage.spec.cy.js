@@ -10,10 +10,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             fixture: "categories.json",
         }).as("categories");
         cy.intercept(
-            "**/v3/resources/public/federal_register_links?page=1&page_size=5**",
+            "**/v3/resources/public/federal_register_links?page=1&page_size=7**",
             { fixture: "frdocs.json" },
         ).as("frdocs");
-        cy.intercept("**/v3/resources/public/links?page=1&page_size=5**", {
+        cy.intercept("**/v3/resources/public/links?page=1&page_size=7**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
     });
@@ -71,7 +71,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .should(($el) => {
                 expect($el.text().trim()).to.equal(
-                    "Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 95, 155-156",
+                    "Includes 42 CFR 400, 430-460, 483, 600; 45 CFR 75, 95, 155-156",
                 );
             });
 
@@ -322,7 +322,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         );
     });
 
-    it("has Recent Subregulatory Guidance tab and results with clickable subjects", () => {
+    it("has Recent Subregulatory Guidance tab and results with clickable subjects and related citations", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
         cy.get(".resources__container").should("exist");
@@ -335,9 +335,41 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .find(".result__link--file-type")
             .should("have.text", "PDF");
+        cy.get(".document__subjects")
+            .first()
+            .next() // next element should not be related citations collapse btn
+            .should("have.class", "spacer");
         cy.get(".document__subjects a")
             .eq(0)
             .should("have.text", "Administrative Claiming Fixture Value");
+
+        cy.get(".document__subjects")
+            .eq(1)
+            .next() // next element should be related citations collapse btn
+            .should("have.class", "collapsible-title")
+            .and("have.attr", "data-test", "related citations collapsible 526")
+            .next() // next element should be hidden collapse content div
+            .should("have.class", "collapse-content")
+            .and("have.class", "invisible");
+
+        // display collapse content
+        cy.get(".collapsible-title")
+            .first()
+            .click({ force: true });
+        cy.get("button[data-test='related citations collapsible 526']")
+            .next()
+            .should("have.class", "collapse-content")
+            .and("not.have.class", "invisible");
+
+        // re-hide collapse content
+        cy.get(".collapsible-title")
+            .first()
+            .click({ force: true });
+        cy.get("button[data-test='related citations collapsible 526']")
+            .next()
+            .should("have.class", "collapse-content")
+            .and("have.class", "invisible");
+            
         cy.get(".document__subjects a")
             .eq(1)
             .should("have.text", "Cost Allocation");

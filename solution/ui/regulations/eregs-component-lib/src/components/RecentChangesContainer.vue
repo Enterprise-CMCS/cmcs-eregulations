@@ -3,6 +3,7 @@ import { provide } from "vue";
 import { getRecentResources } from "utilities/api";
 
 import useFetch from "composables/fetch";
+import usePartsLastUpdated from "composables/partsLastUpdated.js";
 
 import RelatedRuleList from "./RelatedRuleList.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
@@ -33,9 +34,11 @@ const props = defineProps({
 provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "homepage");
 
+const { partsLastUpdated, getPartsLastUpdated } = usePartsLastUpdated();
+
 const rulesArgs = {
     page: 1,
-    pageSize: 5,
+    pageSize: 7,
     type: props.type,
 };
 
@@ -49,18 +52,22 @@ const rulesResults = useFetch({
     args: rulesArgs,
 });
 
+getPartsLastUpdated({ apiUrl: props.apiUrl });
 </script>
+
 <template>
     <div class="rules-container">
-        <SimpleSpinner v-if="rulesResults.loading" />
+        <SimpleSpinner v-if="rulesResults.loading || partsLastUpdated.loading" />
         <RelatedRuleList
-            v-if="!rulesResults.loading && type != 'supplemental'"
+            v-if="!rulesResults.loading && !partsLastUpdated.loading && type != 'supplemental'"
+            :limit="rulesArgs.pageSize"
             :rules="rulesResults.data"
         />
         <RecentSupplementalContent
-            v-if="!rulesResults.loading && type == 'supplemental'"
+            v-if="!rulesResults.loading && !partsLastUpdated.loading && type == 'supplemental'"
+            :parts-last-updated="partsLastUpdated.results"
+            :limit="rulesArgs.pageSize"
             :supplemental-content="rulesResults.data"
-            :limit="5"
         />
     </div>
 </template>
