@@ -171,8 +171,7 @@ const getLinkDomain = (link) => {
     try {
         const url = new URL(link);
         return url.hostname.replace(/^www\./, "");
-    } catch (error) {
-        console.warn("Invalid URL:", link, error);
+    } catch (_error) {
         return "";
     }
 };
