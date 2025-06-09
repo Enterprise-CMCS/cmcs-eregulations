@@ -167,6 +167,18 @@ const getFileTypeButton = ({ fileName, uid }) => {
     return `${fileTypeButton ?? ""}`;
 };
 
+/**
+ * @param {string} link - URL to extract domain from
+ * @returns {string} - domain of the link without "www." prefix
+ * @example
+ * const link = "https://www.example.com/path/to/resource";
+ * const domain = getLinkDomain(link);
+ * console.log(domain); // "example.com"
+ * @example
+ * const link = "not a valid url";
+ * const domain = getLinkDomain(link);
+ * console.log(domain); // ""
+ **/
 const getLinkDomain = (link) => {
     try {
         const url = new URL(link);

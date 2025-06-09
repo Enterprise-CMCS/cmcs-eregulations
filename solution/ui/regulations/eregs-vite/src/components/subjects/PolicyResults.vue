@@ -70,7 +70,7 @@ const getResultLinkText = (item) => {
     });
 
     const domain = getLinkDomain(item.url);
-    const domainString = domain ? `<span class="result__link--domain"> ${domain}</span>` : "";
+    const domainString = domain ? `<span class='result__link--domain'> ${domain}</span>` : "";
 
     return `<span class='result__link--label'>${linkText}</span>${domainString}${fileTypeButton}`;
 };

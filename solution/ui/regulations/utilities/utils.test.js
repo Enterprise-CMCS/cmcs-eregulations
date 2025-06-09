@@ -12,6 +12,7 @@ import {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomain,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,
@@ -472,6 +473,24 @@ describe("Utilities.js", () => {
                 withdrawal: false,
             };
             expect(getFrDocType(doc3)).toBe("Final");
+        });
+    });
+
+    describe("getLinkDomain", () => {
+        it("returns the domain of a given URL", () => {
+            expect(getLinkDomain("https://www.example.com/path/to/resource")).toBe(
+                "example.com"
+            );
+            expect(getLinkDomain("http://subdomain.example.com")).toBe(
+                "subdomain.example.com"
+            );
+            expect(getLinkDomain("https://example.org")).toBe("example.org");
+            expect(getLinkDomain("ftp://ftp.example.com")).toBe("ftp.example.com");
+            expect(getLinkDomain("https://www.test.gov")).toBe("test.gov");
+        });
+
+        it("returns an empty string for invalid URLs", () => {
+            expect(getLinkDomain("invalid-url")).toBe("");
         });
     });
 
