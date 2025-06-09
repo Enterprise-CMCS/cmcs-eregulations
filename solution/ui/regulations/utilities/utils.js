@@ -167,6 +167,16 @@ const getFileTypeButton = ({ fileName, uid }) => {
     return `${fileTypeButton ?? ""}`;
 };
 
+const getLinkDomain = (link) => {
+    try {
+        const url = new URL(link);
+        return url.hostname.replace(/^www\./, "");
+    } catch (error) {
+        console.warn("Invalid URL:", link, error);
+        return "";
+    }
+};
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -778,6 +788,7 @@ export {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomain,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,

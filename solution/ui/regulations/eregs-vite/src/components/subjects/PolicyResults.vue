@@ -11,6 +11,7 @@ import {
     getCurrentPageResultsRange,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomain,
     hasRegulationCitations,
     hasStatuteCitations,
     DOCUMENT_TYPES_MAP,
@@ -68,7 +69,10 @@ const getResultLinkText = (item) => {
         uid: item.uid,
     });
 
-    return `<span class='result__link--label'>${linkText}</span>${fileTypeButton}`;
+    const domain = getLinkDomain(item.url);
+    const domainString = domain ? `<span class="result__link--domain"> ${domain}</span>` : "";
+
+    return `<span class='result__link--label'>${linkText}</span>${domainString}${fileTypeButton}`;
 };
 
 const showResultSnippet = (item) => {

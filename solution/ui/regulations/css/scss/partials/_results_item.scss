@@ -102,6 +102,11 @@
             margin-left: 6px;
             margin-right: 2px;
         }
+
+        &--domain {
+            font-size: var(--font-size-sm);
+            color: $mid_gray;
+        }
     }
 
     &__snippet {
