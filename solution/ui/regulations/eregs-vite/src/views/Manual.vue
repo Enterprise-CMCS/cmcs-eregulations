@@ -1196,8 +1196,8 @@ const sections = ref([
                     { id: 7035, title: "Error Analysis", },
                     { id: 7036, title: "Dissemination of Findings", },
                     { id: 7050, title: "MEQC and Corrective Action", },
-                    { id: 7052, title: "MEQC Cap Requirements", },
-                    { id: 7055, title: "MEQC Cap Format", },
+                    { id: 7052, title: "MEQC CAP Requirements", },
+                    { id: 7055, title: "MEQC CAP Format", },
                     { id: 7099, title: "Role of a State Model System in the Evaluation Process", },
                 ]
             },
@@ -1334,7 +1334,7 @@ const sections = ref([
                     { id: 7257, title: "Collateral Contacts", },
                     { id: 7260, title: "Worksheet for Integrated AFDC, Adult, Food Stamp, and Medicaid Eligibility Quality Control Reviews (Facesheet)", },
                     { id: 7263, title: "Elements of Eligibility and Payment Determination (Integrated QC Worksheet)", },
-                    { id: 7264, title: "Mandatory Use of Ievs Information", },
+                    { id: 7264, title: "Mandatory Use of IEVS Information", },
                     { id: 7265, title: "Hold Harmless Provision of Immigration Reform and Control Act (IRCA)", },
                 ]
             },
@@ -1655,7 +1655,7 @@ const sections = ref([
                     { id: 11215, title: "Access for State and Federal Inspection", },
                     { id: 11220, title: "Prospective Approval of Enhanced Funding", },
                     { id: 11225, title: "Considerations and Options", },
-                    { id: 11227, title: "Acquisition of Adp Equipment and Services", },
+                    { id: 11227, title: "Acquisition of ADP Equipment and Services", },
                     { id: 11230, title: "Approval Process and Documentation Submissions", },
                     { id: 11235, title: "90 Percent FFP", },
                     { id: 11236, title: "Implementation Advance Planning Document (APD)", },
