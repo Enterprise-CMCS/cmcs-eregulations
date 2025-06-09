@@ -40,6 +40,9 @@ $eds-width-header-links: 1240px;
 
     // Color overrides
     --color-focus-dark: #005fcc;
+
+    // font sizes
+    --font-size-xs: 0.75rem; // 12px
 }
 
 @mixin eds-gutters($top-bottom-padding: 0) {

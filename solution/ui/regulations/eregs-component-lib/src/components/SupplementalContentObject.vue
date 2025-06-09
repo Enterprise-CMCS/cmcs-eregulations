@@ -1,5 +1,5 @@
 <script setup>
-import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomain } from "utilities/utils";
 
 defineProps({
     name: {
@@ -45,6 +45,14 @@ defineProps({
 
 const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
+};
+
+const addLinkDomain = (url) => {
+    const linkDomain = getLinkDomain(url);
+    if (isBlank(linkDomain)) {
+        return "";
+    }
+    return `<span class="supplemental-content-domain"> ${linkDomain}</span>`;
 };
 
 const addFileTypeButton = ({ fileName, uid, url, docType }) => {
@@ -116,6 +124,7 @@ const getLinkClasses = (docType, description) => {
                 <span
                     v-sanitize-html="
                         description +
+                            addLinkDomain(url) +
                             addFileTypeButton({
                                 fileName,
                                 uid,

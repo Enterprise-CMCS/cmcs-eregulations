@@ -2,7 +2,7 @@
 /* eslint-disable vue/prop-name-casing */
 import { computed } from "vue";
 
-import { formatDate, getFileTypeButton } from "utilities/utils";
+import { formatDate, getFileTypeButton, getLinkDomain } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
@@ -44,6 +44,14 @@ const props = defineProps({
 
 const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
+};
+
+const addLinkDomain = (url) => {
+    const linkDomain = getLinkDomain(url);
+    if (isBlank(linkDomain)) {
+        return "";
+    }
+    return `<span class="related-rule-domain"> ${linkDomain}</span>`;
 };
 
 const formatPubDate = (value) => {
@@ -92,6 +100,7 @@ const citationClasses = computed(() => {
                 v-if="!grouped"
                 v-sanitize-html="
                     title +
+                        addLinkDomain(html_url) +
                         getFileTypeButton({
                             fileName: html_url,
                             uid: document_number || 'default',

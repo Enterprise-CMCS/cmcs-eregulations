@@ -69,6 +69,11 @@
 .related-rule-title {
     text-decoration: none;
     font-size: var(--font-size-sm);
+
+    .related-rule-domain {
+        font-size: var(--font-size-xs);
+        color: $mid_gray;
+    }
 }
 
 .related-rule-list {
@@ -122,6 +127,11 @@
 
 .supplemental-content {
     margin-bottom: 1em;
+
+    .supplemental-content-domain {
+        font-size: var(--font-size-xs);
+        color: $mid_gray;
+    }
 
     .supplemental-content-link {
         text-decoration: none;
