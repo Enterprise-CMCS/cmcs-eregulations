@@ -21,24 +21,16 @@ jobs:
         with:
           submodules: true
 
-      # Setup Python environment
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+      # Build the text-extractor Docker image
+      - name: Build text-extractor Docker image
+        run: |
+          pushd solution
+          make text-extractor
+          popd
 
-      # Install dependencies
-      - name: Install dependencies
-        if: success()
+      # Run the unit tests in the Docker container
+      - name: Run unit tests in Docker container
         run: |
-          sudo apt-get update
-          sudo apt-get install -y poppler-utils
-          python -m pip install --upgrade pip
-          pip install -r ./solution/text-extractor/requirements.txt
-          
-      # Execute the Python tests
-      - name: Run Python unit tests
-        if: success()
-        working-directory: ./solution/text-extractor
-        run: |
-          pytest -vv
+          pushd solution
+          make text-extractor.test
+          popd
