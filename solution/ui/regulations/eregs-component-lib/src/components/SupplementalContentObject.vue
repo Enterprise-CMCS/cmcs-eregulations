@@ -1,5 +1,5 @@
 <script setup>
-import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomain, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
 
 defineProps({
     name: {
