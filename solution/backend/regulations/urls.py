@@ -8,6 +8,7 @@ from regulations.views.get_account_access import GetAccountAccessView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.login import LoginView
+from regulations.views.manual import ManualView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.reader import (
     AppendixReaderView,
@@ -56,6 +57,7 @@ urlpatterns = [
     path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('resources/', ResourcesView, name='resources'),
     path('statutes/', StatuteView.as_view(), name='statutes'),
+    path('manual/', ManualView.as_view(), name='manual'),
     path('reg_redirect/', RegulationRedirectView.as_view(), name="reg_redirect"),
     path('policy-repository/', PolicyRepositoryView, name='policy-repository'),
     path('subjects/', SubjectsView.as_view(), name='subjects'),

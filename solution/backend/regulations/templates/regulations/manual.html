@@ -1,0 +1,33 @@
+{% extends "regulations/spa_base.html" %}
+{% load static %}
+{% load string_formatters %}
+
+{% block title_prefix %}State Medicaid Manual | {% endblock %}
+
+{% block outside_vue %}
+    {{ site_config|json_script:"site_config" }}
+    {{ block.super }}
+{% endblock %}
+
+{% block pre_header %}
+    <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
+{% endblock %}
+
+{% block body %}
+<div
+    id="vite-app"
+    data-access-url="{% url 'get_account_access' %}"
+    data-admin-url="{% url 'admin:index' %}"
+    data-api-url="{{ API_BASE }}"
+    data-about-url="{% url 'about' %}"
+    data-custom-login-url="{% url 'custom_login' %}"
+    data-site-root="{{ SITE_ROOT }}"
+    data-home-url="{% url 'homepage' %}"
+    data-host="{{ host }}"
+    data-is-authenticated="{{ user.is_authenticated }}"
+    data-search-url="{% url 'search' %}"
+    data-statutes-url="{% url 'statutes' %}"
+    data-subjects-url="{% url 'subjects' %}"
+    data-username="{{ user.username }}"
+></div>
+{% endblock %}
