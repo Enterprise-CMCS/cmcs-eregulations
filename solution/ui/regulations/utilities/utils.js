@@ -188,6 +188,24 @@ const getLinkDomain = (link) => {
     }
 };
 
+const getLinkDomainString = ({ url, className }) => {
+    const domain = getLinkDomain(url);
+
+    if (isEmpty(domain)) {
+        return "";
+    }
+
+    return `<span class="${className}">${domain}</span>`;
+};
+
+const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
+    const domainFileTypeEl = domainString
+        ? `<div>${domainString}${fileTypeButton}</div>`
+        : `${fileTypeButton}`;
+
+    return `${linkTitle}${domainFileTypeEl}`;
+};
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -800,6 +818,8 @@ export {
     getFileTypeButton,
     getFrDocType,
     getLinkDomain,
+    getLinkDomainFileTypeEl,
+    getLinkDomainString,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,

@@ -11,7 +11,7 @@ import {
     getCurrentPageResultsRange,
     getFileTypeButton,
     getFrDocType,
-    getLinkDomain,
+    getLinkDomainString,
     hasRegulationCitations,
     hasStatuteCitations,
     DOCUMENT_TYPES_MAP,
@@ -69,10 +69,12 @@ const getResultLinkText = (item) => {
         uid: item.uid,
     });
 
-    const domain = getLinkDomain(item.url);
-    const domainString = domain ? `<span class='result__link--domain'> ${domain}</span>` : "";
+    const domainString = getLinkDomainString({ url: item.url, className: "result__link--domain" });
+    const domainFileTypeEl = domainString
+        ? `<div>${domainString}${fileTypeButton}</div>`
+        : `${fileTypeButton}`;
 
-    return `<span class='result__link--label'>${linkText}</span>${domainString}${fileTypeButton}`;
+    return `<span class='result__link--label'>${linkText}</span>${domainFileTypeEl}`;
 };
 
 const showResultSnippet = (item) => {
@@ -204,10 +206,6 @@ const getUrl = (doc) =>
 const needsBar = (item) => item.date && item.document_id;
 
 const resultLinkClasses = (doc) => ({
-    external:
-        doc.type !== "reg_text" &&
-        (doc.type === "internal_link" ||
-            DOCUMENT_TYPES_MAP[doc.type] === "Public"),
     "document__link--search": !!$route?.query?.q,
     "document__link--regulations": doc.type === "reg_text",
 });

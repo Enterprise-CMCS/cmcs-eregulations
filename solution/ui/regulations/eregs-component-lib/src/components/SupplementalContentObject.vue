@@ -1,5 +1,5 @@
 <script setup>
-import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomain } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomain, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
 
 defineProps({
     name: {
@@ -47,14 +47,6 @@ const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
 };
 
-const addLinkDomain = (url) => {
-    const linkDomain = getLinkDomain(url);
-    if (isBlank(linkDomain)) {
-        return "";
-    }
-    return `<span class="supplemental-content-domain"> ${linkDomain}</span>`;
-};
-
 const addFileTypeButton = ({ fileName, uid, url, docType }) => {
     if (docType == "public_link" || docType == "internal_link") {
         return getFileTypeButton({
@@ -71,6 +63,17 @@ const addFileTypeButton = ({ fileName, uid, url, docType }) => {
     }
 
     return "";
+};
+
+const addDomainFileTypeEl = ({ title, fileName, uid, url, docType }) => {
+    const domainString = getLinkDomainString({url, className: "supplemental-content-domain"});
+    const fileTypeButton = addFileTypeButton({
+        fileName,
+        uid,
+        url,
+        docType,
+    })
+    return getLinkDomainFileTypeEl(title, domainString, fileTypeButton);
 };
 
 const formatDate = (value) => {
@@ -122,16 +125,7 @@ const getLinkClasses = (docType, description) => {
                 :class="getLinkClasses(docType)"
             >
                 <span
-                    v-sanitize-html="
-                        description +
-                            addLinkDomain(url) +
-                            addFileTypeButton({
-                                fileName,
-                                uid,
-                                url,
-                                docType,
-                            })
-                    "
+                    v-sanitize-html="addDomainFileTypeEl({ title: description, fileName, uid, url, docType })"
                 />
             </div>
         </a>

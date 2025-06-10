@@ -118,10 +118,6 @@
 
     .recent-title {
         margin-top: 0.2em;
-
-        &::after {
-            @include external-link;
-        }
     }
 }
 
@@ -171,12 +167,6 @@
         color: $primary_link_color;
         text-decoration: none;
         font-size: var(--font-size-sm);
-    }
-
-    .supplemental-content-external-link {
-        &:after {
-            @include external-link;
-        }
     }
 }
 

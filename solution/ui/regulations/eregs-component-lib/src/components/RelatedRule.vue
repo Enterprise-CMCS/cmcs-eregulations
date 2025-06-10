@@ -2,7 +2,7 @@
 /* eslint-disable vue/prop-name-casing */
 import { computed } from "vue";
 
-import { formatDate, getFileTypeButton, getLinkDomain } from "utilities/utils";
+import { formatDate, getFileTypeButton, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
 
 import IndicatorLabel from "./shared-components/results-item-parts/IndicatorLabel.vue";
 
@@ -46,12 +46,10 @@ const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
 };
 
-const addLinkDomain = (url) => {
-    const linkDomain = getLinkDomain(url);
-    if (isBlank(linkDomain)) {
-        return "";
-    }
-    return `<span class="related-rule-domain"> ${linkDomain}</span>`;
+const addDomainFileTypeEl = ({ title, url, uid = "default" }) => {
+    const domainString = getLinkDomainString({url, className: "related-rule-domain"});
+    const fileTypeButton = getFileTypeButton({ fileName: url, uid });
+    return getLinkDomainFileTypeEl(title, domainString, fileTypeButton);
 };
 
 const formatPubDate = (value) => {
@@ -98,13 +96,7 @@ const citationClasses = computed(() => {
             </span>
             <div
                 v-if="!grouped"
-                v-sanitize-html="
-                    title +
-                        addLinkDomain(html_url) +
-                        getFileTypeButton({
-                            fileName: html_url,
-                            uid: document_number || 'default',
-                        })"
+                v-sanitize-html="addDomainFileTypeEl({ title, url: html_url, uid: document_number })"
                 class="recent-title"
             />
         </a>
