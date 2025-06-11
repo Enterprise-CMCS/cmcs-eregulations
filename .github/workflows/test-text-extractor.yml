@@ -25,7 +25,7 @@ jobs:
       - name: Build text-extractor Docker image
         run: |
           pushd solution
-          make text-extractor
+          make text-extractor.build
           popd
 
       # Run the unit tests in the Docker container
