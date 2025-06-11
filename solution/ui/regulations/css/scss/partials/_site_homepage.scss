@@ -507,17 +507,9 @@
                     }
 
                     .recent-date {
-                        color: $mid_gray;
-                        font-weight: 400;
-
                         &--bar {
                             @include recent-date-pipe;
                         }
-                    }
-
-                    .recent-fr-citation {
-                        color: $mid_gray;
-                        font-weight: 400;
                     }
 
                     .supplemental-content-list {
