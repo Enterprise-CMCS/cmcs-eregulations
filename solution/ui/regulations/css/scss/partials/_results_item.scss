@@ -105,6 +105,8 @@
 
         &--domain {
             @include common-link-domain;
+
+            font-size: var(--font-size-sm);
         }
     }
 
