@@ -191,7 +191,7 @@ const getLinkDomain = (link) => {
 /**
  * @param {Object} args - Arguments object
  * @param {string} args.url - URL from which to extract domain
- * @param {string} args.className - CSS class to apply to the domain string
+ * @param {string} args.className - CSS class to apply to the domain string span
  * @return {string} - HTML string with the domain wrapped in a span with the provided class name
  * @example
  * const args = {
@@ -208,7 +208,6 @@ const getLinkDomain = (link) => {
  *   const domainString = getLinkDomainString(args);
  *   console.log(domainString); // ""
  */
-
 const getLinkDomainString = ({ url, className }) => {
     const domain = getLinkDomain(url);
 
@@ -219,6 +218,18 @@ const getLinkDomainString = ({ url, className }) => {
     return `<span class='${className}'>${domain}</span>`;
 };
 
+/**
+ * @param {string} linkTitle - Title of the link
+ * @param {string} domainString - Domain string to append to the link title
+ * @param {string} fileTypeButton - HTML string for the file type button
+ * @return {string} - HTML string with the link title, domain string, and file type button
+ * @example
+ * const linkTitle = "Example Link";
+ * const domainString = "<span class='domain-class'>example.com</span>";
+ * const fileTypeButton = "<span class='result__link--file-type'>PDF</span>";
+ * const linkDomainFileTypeEl = getLinkDomainFileTypeEl(linkTitle, domainString, fileTypeButton);
+ * console.log(linkDomainFileTypeEl); // "Example Link<span class='result__link--file-type'>PDF</span><span class='domain-class'>example.com</span>"
+ */
 const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     const domainFileTypeEl = domainString
         ? `${fileTypeButton}${domainString}`
