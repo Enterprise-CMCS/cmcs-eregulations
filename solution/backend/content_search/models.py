@@ -13,6 +13,7 @@ from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from pgvector.django import VectorField
 
 from common.constants import QUOTE_TYPES
 from content_search.utils import remove_control_characters
@@ -153,6 +154,9 @@ class ContentIndex(models.Model):
     rank_b_string = models.TextField(blank=True)
     rank_c_string = models.TextField(blank=True)
     rank_d_string = models.TextField(blank=True)
+
+    # Vector field for semantic search
+    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
 
     # OneToOne fields linked to possible indexed types
     resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
