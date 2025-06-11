@@ -385,7 +385,7 @@ describe("Find by Subjects", () => {
         cy.get(".result__link") // internal_file
             .eq(0)
             .find("a")
-            .fint("span.result__link--domain")
+            .find("span.result__link--domain")
             .should("not.exist");
         cy.get(".result__link") // regulations link
             .eq(1)
