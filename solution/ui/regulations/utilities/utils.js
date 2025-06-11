@@ -200,7 +200,7 @@ const getLinkDomainString = ({ url, className }) => {
 
 const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     const domainFileTypeEl = domainString
-        ? `<div>${domainString}${fileTypeButton}</div>`
+        ? `${fileTypeButton} ${domainString}`
         : `${fileTypeButton}`;
 
     return `${linkTitle}${domainFileTypeEl}`;

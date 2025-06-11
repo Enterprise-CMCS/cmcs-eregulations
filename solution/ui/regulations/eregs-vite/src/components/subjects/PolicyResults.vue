@@ -11,6 +11,7 @@ import {
     getCurrentPageResultsRange,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomainFileTypeEl,
     getLinkDomainString,
     hasRegulationCitations,
     hasStatuteCitations,
@@ -70,11 +71,13 @@ const getResultLinkText = (item) => {
     });
 
     const domainString = getLinkDomainString({ url: item.url, className: "result__link--domain" });
-    const domainFileTypeEl = domainString
-        ? `<div>${domainString}${fileTypeButton}</div>`
-        : `${fileTypeButton}`;
+    const domainFileTypeEl = getLinkDomainFileTypeEl(
+        linkText,
+        domainString,
+        fileTypeButton
+    );
 
-    return `<span class='result__link--label'>${linkText}</span>${domainFileTypeEl}`;
+    return `<span class='result__link--label'>${domainFileTypeEl}</span>`;
 };
 
 const showResultSnippet = (item) => {

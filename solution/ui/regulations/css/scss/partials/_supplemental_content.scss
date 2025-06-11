@@ -5,6 +5,11 @@
 
 @import "../application_settings";
 
+.related-rule-domain,
+.supplemental-content-domain {
+    @include common-link-domain;
+}
+
 .related-rule {
     &.ungrouped {
         padding-top: 26px;
@@ -70,10 +75,6 @@
     text-decoration: none;
     font-size: var(--font-size-sm);
 
-    .related-rule-domain {
-        font-size: var(--font-size-xs);
-        color: $mid_gray;
-    }
 }
 
 .related-rule-list {
@@ -123,11 +124,6 @@
 
 .supplemental-content {
     margin-bottom: 1em;
-
-    .supplemental-content-domain {
-        font-size: var(--font-size-xs);
-        color: $mid_gray;
-    }
 
     .supplemental-content-link {
         text-decoration: none;

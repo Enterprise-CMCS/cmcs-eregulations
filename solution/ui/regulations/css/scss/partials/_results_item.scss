@@ -104,8 +104,7 @@
         }
 
         &--domain {
-            font-size: var(--font-size-sm);
-            color: $mid_gray;
+            @include common-link-domain;
         }
     }
 
