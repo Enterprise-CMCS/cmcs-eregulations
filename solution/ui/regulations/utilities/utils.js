@@ -232,10 +232,10 @@ const getLinkDomainString = ({ url, className }) => {
  */
 const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     const domainFileTypeEl = domainString
-        ? `${fileTypeButton}<span class="spacer__span">&nbsp</span>${domainString}`
+        ? `${fileTypeButton}<span class='spacer__span'>&nbsp</span>${domainString}`
         : `${fileTypeButton}`;
 
-    return `<span class='result__label--title'>${linkTitle}</span><span class="spacer__span"> </span>${domainFileTypeEl}`;
+    return `<span class='result__label--title'>${linkTitle}</span><span class='spacer__span'> </span>${domainFileTypeEl}`;
 };
 
 /*
