@@ -92,6 +92,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 .find(".recent-title span[data-testid='download-chip-2023-12098']")
                 .should("exist")
                 .and("have.text", "PDF");
+            // assert that ungrouped element has domain
+            cy.wrap($els[0])
+                .find(".recent-title span.related-rule-domain")
+                .should("have.text", "federalregister.gov");
             // assert that ::after pseudo element is not present on ungrouped item
             cy.wrap($els[0])
                 .find(".link-heading")
@@ -135,6 +139,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 });
             cy.wrap($els[0])
                 .find(".recent-title")
+                .should("not.exist");
+            // assert that first grouped element does not have domain
+            cy.wrap($els[0])
+                .find(".recent-title span.related-rule-domain")
                 .should("not.exist");
         });
 
@@ -334,6 +342,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .find(".result__link--file-type")
             .should("have.text", "PDF");
+        cy.get(".supplemental-content .supplemental-content-description")
+            .first()
+            .find(".supplemental-content-domain")
+            .should("have.text", "medicaid.gov");
         cy.get(".document__subjects")
             .first()
             .next() // next element should not be related citations collapse btn
