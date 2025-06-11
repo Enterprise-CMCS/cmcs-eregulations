@@ -382,15 +382,25 @@ describe("Find by Subjects", () => {
                 "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]",
             )
             .should("include.text", "Outlook");
+        cy.get(".result__link") // internal_file
+            .eq(0)
+            .find("a")
+            .fint("span.result__link--domain")
+            .should("not.exist");
         cy.get(".result__link") // regulations link
             .eq(1)
             .find("a")
             .find("span.result__link--file-type")
             .should("include.text", "PDF");
+        cy.get(".result__link") // regulations link
+            .eq(1)
+            .find("a")
+            .find("span.result__link--domain")
+            .should("include.text", "medicaid.gov");
         cy.get(".result__link") // internal_link
             .eq(2)
             .find("a")
-            .should("have.class", "external")
+            .should("not.have.class", "external")
             .find("span.result__link--file-type")
             .should("include.text", "DOCX");
         cy.get(".doc-type__label")
