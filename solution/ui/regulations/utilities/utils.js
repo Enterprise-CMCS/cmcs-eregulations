@@ -188,6 +188,27 @@ const getLinkDomain = (link) => {
     }
 };
 
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.url - URL from which to extract domain
+ * @param {string} args.className - CSS class to apply to the domain string
+ * @return {string} - HTML string with the domain wrapped in a span with the provided class name
+ * @example
+ * const args = {
+ *       url: "https://www.example.com/path/to/resource",
+ *       className: "domain-class"
+ *   };
+ *   const domainString = getLinkDomainString(args);
+ *   console.log(domainString); // "<span class='domain-class'>example.com</span>"
+ * @example
+ *   const args = {
+ *       url: "not a valid url",
+ *       className: "domain-class"
+ *   };
+ *   const domainString = getLinkDomainString(args);
+ *   console.log(domainString); // ""
+ */
+
 const getLinkDomainString = ({ url, className }) => {
     const domain = getLinkDomain(url);
 
@@ -195,7 +216,7 @@ const getLinkDomainString = ({ url, className }) => {
         return "";
     }
 
-    return `<span class="${className}">${domain}</span>`;
+    return `<span class='${className}'>${domain}</span>`;
 };
 
 const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
