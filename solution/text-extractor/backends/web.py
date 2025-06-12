@@ -28,7 +28,9 @@ class WebBackend(FileBackend):
         logger.info("Retrieving file \"%s\" using 'web' backend.", uri)
 
         # Use robots.txt to determine if we can crawl the URL
-        if not self._ignore_robots:
+        if self._ignore_robots:
+            logger.debug("Ignoring robots.txt for \"%s\".", uri)
+        else:
             logger.debug("Checking robots.txt for \"%s\".", uri)
             if not uri.startswith(("http://", "https://")):
                 raise BackendException(f"Invalid URL scheme for robots.txt: {uri}")
