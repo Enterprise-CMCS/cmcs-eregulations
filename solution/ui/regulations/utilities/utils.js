@@ -231,7 +231,9 @@ const getLinkDomainString = ({ url, className }) => {
  * console.log(linkDomainFileTypeEl); // "Example Link<span class='result__link--file-type'>PDF</span><span class='domain-class'>example.com</span>"
  */
 const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
-    const fileString = fileTypeButton ? `${fileTypeButton}<span class='spacer__span'> </span>` : "";
+    const fileString = fileTypeButton
+        ? `${fileTypeButton}${domainString && "<span class='spacer__span'> </span>"}`
+        : "";
     const domainFileTypeEl = domainString
         ? `${fileString}${domainString}`
         : `${fileString}`;

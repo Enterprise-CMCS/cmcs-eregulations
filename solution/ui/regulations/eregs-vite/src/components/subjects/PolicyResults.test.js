@@ -146,7 +146,7 @@ describe("getResultLinkText", () => {
 
     it("/content_search internal result with url 1", async () => {
         expect(PolicyResults.getResultLinkText(cs_internal_with_url_1)).toBe(
-            "<span class='result__link--label'><span class='result__label--title'>this is a name_headline field</span><span class='spacer__span'> </span><span data-testid='download-chip-12345' class='result__link--file-type'>PDF</span><span class='spacer__span'>&nbsp</span><span class='result__link--domain'>example.com</span></span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a name_headline field</span><span class='spacer__span'> </span><span data-testid='download-chip-12345' class='result__link--file-type'>PDF</span><span class='spacer__span'> </span><span class='result__link--domain'>example.com</span></span>"
         );
     });
 
@@ -212,7 +212,7 @@ describe("getResultLinkText", () => {
             action_type: "RFI",
         };
         expect(PolicyResults.getResultLinkText(result)).toBe(
-            "<span class='result__link--label'><span class='result__label--title'>this is a title</span><span class='spacer__span'> </span><span class='spacer__span'>&nbsp</span><span class='result__link--domain'>federalregister.gov</span></span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a title</span><span class='spacer__span'> </span><span class='result__link--domain'>federalregister.gov</span></span>"
         );
     });
 });

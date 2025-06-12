@@ -518,7 +518,7 @@ describe("Utilities.js", () => {
             const fileTypeButton = "<span class='result__link--file-type'>PDF</span>";
             const linkDomainFileTypeEl = getLinkDomainFileTypeEl(linkTitle, domainString, fileTypeButton);
             expect(linkDomainFileTypeEl).toBe(
-                "<span class='result__label--title'>Example Link</span><span class='spacer__span'> </span><span class='result__link--file-type'>PDF</span><span class='spacer__span'>&nbsp</span><span class='domain-class'>example.com</span>"
+                "<span class='result__label--title'>Example Link</span><span class='spacer__span'> </span><span class='result__link--file-type'>PDF</span><span class='spacer__span'> </span><span class='domain-class'>example.com</span>"
             );
 
         });
