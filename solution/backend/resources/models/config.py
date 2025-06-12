@@ -37,7 +37,7 @@ class ResourcesConfiguration(SingletonModel):
             "items": {
                 "type": "string",
                 "title": "URL",
-                "placeholder": "https://www.example.com/*",
+                "placeholder": "example.com",
             },
         },
         pre_save_hook=lambda value: [url for url in [url.strip().lower() for url in value] if url],
