@@ -27,9 +27,9 @@ class ResourcesConfiguration(SingletonModel):
     robots_txt_allow_list = JSONField(
         default=list,
         blank=True,
-        help_text="A list of URLs that the text extractor should be allowed to access, even if eRegs is not in their robots.txt "
-                  "file. Use of asterisks (*) is allowed at the beginning or end of URLs to match any characters. For example, "
-                  "'https://www.example.com/*' will allow access to all URLs under 'https://www.example.com/'.",
+        help_text="A list of URLs and/or domains that the text extractor should be allowed to access, even if eRegs is not in "
+                  "their robots.txt file. For example, 'example.com' will allow the entire domain and all subdomains to be "
+                  "accessed, while 'https://example.com/page.html' will allow only that specific page.",
         verbose_name="Robots.txt Allow List",
         schema={
             "type": "list",
