@@ -1,5 +1,6 @@
 from django.db import models
 from solo.models import SingletonModel
+from django_jsonform.models.fields import JSONField
 
 from resources.models import AbstractCategory
 
@@ -21,6 +22,25 @@ class ResourcesConfiguration(SingletonModel):
                   "saved/created or when its source is changed: URL (for public and internal links), document number "
                   "(for FR links), or attached file (for internal files).",
         verbose_name="Auto Extract",
+    )
+
+    robots_txt_allow_list = JSONField(
+        default=list,
+        blank=True,
+        help_text="A list of URLs that the text extractor should be allowed to access, even if eRegs is not in their robots.txt "
+                  "file. Use of asterisks (*) is allowed at the beginning or end of URLs to match any characters. For example, "
+                  "'https://www.example.com/*' will allow access to all URLs under 'https://www.example.com/'.",
+        verbose_name="Robots.txt Allow List",
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "string",
+                "title": "URL",
+                "placeholder": "https://www.example.com/*",
+            },
+        },
+        pre_save_hook=lambda value: [url for url in [url.strip().lower() for url in value] if url],
     )
 
     def __str__(self):

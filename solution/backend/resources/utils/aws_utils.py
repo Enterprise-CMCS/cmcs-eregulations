@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlparse
 
 import boto3
 import requests
@@ -6,7 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 
-from resources.models import FederalRegisterLink
+from resources.models import FederalRegisterLink, ResourcesConfiguration
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
 _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
@@ -111,6 +112,29 @@ def _get_resource_keys(resource):
     }
 
 
+# Determines if the robots.txt should be ignored for the given resource.
+# Currently, this is true for all FederalRegisterLink resources and resources that have URLs in the allow list.
+def _should_ignore_robots_txt(resource, allow_list):
+    if isinstance(resource, FederalRegisterLink):
+        return True
+
+    url = resource.url.strip().lower()
+    resource_domain = urlparse(url).hostname.lower() or ""
+
+    for pattern in allow_list:
+        # Exact URL match
+        if pattern.startswith('http://') or pattern.startswith('https://'):
+            if url == pattern:
+                return True
+        # Domain match (e.g. 'example.com' will match 'https://example.com/path' and 'http://www.example.com/path')
+        elif not pattern.startswith('http'):  # Most likely not an exact URL
+            if resource_domain == pattern or resource_domain.endswith('.' + pattern):
+                return True
+
+    # If no match found, do not ignore robots.txt
+    return False
+
+
 # Run the text extractor for the given resources.
 # For SQS, requests are batched by groups of 10.
 #
@@ -129,9 +153,12 @@ def _get_resource_keys(resource):
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
+    # Retrieve the allow list from the ResourcesConfiguration solo model
+    allow_list = ResourcesConfiguration.get_solo().robots_txt_allow_list
+
     requests = [{**{
         "id": i.pk,
-        "ignore_robots_txt": isinstance(i, FederalRegisterLink),
+        "ignore_robots_txt": _should_ignore_robots_txt(i, allow_list),
         "upload_url": (
             f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
