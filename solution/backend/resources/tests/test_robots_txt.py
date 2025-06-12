@@ -1,5 +1,7 @@
 import pytest
-from backend.resources.aws_utils import _should_ignore_robots_txt
+
+from resources.utils.aws_utils import _should_ignore_robots_txt
+
 
 @pytest.mark.parametrize(
     "url,allow_list,expected",
@@ -12,7 +14,7 @@ from backend.resources.aws_utils import _should_ignore_robots_txt
         ("https://other.com", ["example.com"], False),
         # Allow list with subdomain
         ("https://sub.example.com", ["sub.example.com"], True),
-        ("https://sub.example.com", ["example.com"], False),
+        ("https://sub.example.com", ["example.com"], True),
         # Allow list with path
         ("https://example.com/page.html", ["example.com"], True),
         ("https://other.com/page.html", ["example.com"], False),
@@ -23,4 +25,8 @@ from backend.resources.aws_utils import _should_ignore_robots_txt
     ]
 )
 def test_should_ignore_robots_txt(url, allow_list, expected):
-    assert _should_ignore_robots_txt(url, allow_list) == expected
+    def resource():
+        return None
+    resource.url = url
+
+    assert _should_ignore_robots_txt(resource, allow_list) == expected

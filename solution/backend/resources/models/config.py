@@ -1,6 +1,6 @@
 from django.db import models
-from solo.models import SingletonModel
 from django_jsonform.models.fields import JSONField
+from solo.models import SingletonModel
 
 from resources.models import AbstractCategory
 
