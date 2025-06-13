@@ -92,7 +92,7 @@ class SecurityGroupHandler {
                 );
             }
         }
-  
+
         // For non-ephemeral environments, create new security group
         const serverlessSG = new ec2.SecurityGroup(scope, 'ServerlessSecurityGroup', {
             vpc,
@@ -280,7 +280,7 @@ export class BackendStack extends cdk.Stack {
             EUA_FEATUREFLAG: ssmParams.euaFeatureFlag,
             AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
             TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
-            DEPLOY_NUMBER: process.env.RUN_ID || '',
+            DEPLOY_NUMBER: buildId,
             HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
             DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
             READER_SECRET: SECRET_NAMES.READER_CREDENTIALS,
@@ -289,7 +289,7 @@ export class BackendStack extends cdk.Stack {
         // ================================
         // LOG GROUPS
         // ================================
-        const createLogGroup = (name: string): logs.LogGroup => 
+        const createLogGroup = (name: string): logs.LogGroup =>
             new logs.LogGroup(this, `${name}LogGroup`, {
                 logGroupName: stageConfig.aws.lambda(name),
                 retention: logs.RetentionDays.ONE_MONTH,
