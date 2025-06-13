@@ -87,13 +87,16 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                         .to.have.css("background-color")
                         .and.eq("rgb(2, 102, 102)");
                 });
-            // assert that grouped element has download chip
+            // assert that ungrouped element has download chip
             cy.wrap($els[0])
                 .find(".recent-title span[data-testid='download-chip-2023-12098']")
                 .should("exist")
                 .and("have.text", "PDF");
-            // assert that ::after pseudo element is present on title
-            // and not heading for grouped item
+            // assert that ungrouped element has domain
+            cy.wrap($els[0])
+                .find(".recent-title span.related-rule-domain")
+                .should("have.text", "federalregister.gov");
+            // assert that ::after pseudo element is not present on ungrouped item
             cy.wrap($els[0])
                 .find(".link-heading")
                 .then(($el) => {
@@ -106,7 +109,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 .then(($el) => {
                     const after = window.getComputedStyle($el[0], "::after");
                     const content = after.getPropertyValue("content");
-                    expect(content).to.include("url");
+                    expect(content).to.equal("none");
                 });
         });
         cy.get(".related-rule.grouped").then(($els) => {
@@ -136,6 +139,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
                 });
             cy.wrap($els[0])
                 .find(".recent-title")
+                .should("not.exist");
+            // assert that first grouped element does not have domain
+            cy.wrap($els[0])
+                .find(".recent-title span.related-rule-domain")
                 .should("not.exist");
         });
 
@@ -335,6 +342,10 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .first()
             .find(".result__link--file-type")
             .should("have.text", "PDF");
+        cy.get(".supplemental-content .supplemental-content-description")
+            .first()
+            .find(".supplemental-content-domain")
+            .should("have.text", "medicaid.gov");
         cy.get(".document__subjects")
             .first()
             .next() // next element should not be related citations collapse btn
@@ -369,7 +380,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             .next()
             .should("have.class", "collapse-content")
             .and("have.class", "invisible");
-            
+
         cy.get(".document__subjects a")
             .eq(1)
             .should("have.text", "Cost Allocation");

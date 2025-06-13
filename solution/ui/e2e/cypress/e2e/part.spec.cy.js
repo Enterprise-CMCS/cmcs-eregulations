@@ -139,6 +139,12 @@ describe("Part View", () => {
             cy.get(
                 ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
             )
+                .first()
+                .find(".supplemental-content-description .result__link--domain")
+                .should("not.exist");
+            cy.get(
+                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+            )
                 .eq(1)
                 .find(".supplemental-content-description")
                 .should("have.class", "supplemental-content-external-link")

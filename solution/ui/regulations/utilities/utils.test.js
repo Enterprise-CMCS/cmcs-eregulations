@@ -12,6 +12,9 @@ import {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomain,
+    getLinkDomainFileTypeEl,
+    getLinkDomainString,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,
@@ -472,6 +475,52 @@ describe("Utilities.js", () => {
                 withdrawal: false,
             };
             expect(getFrDocType(doc3)).toBe("Final");
+        });
+    });
+
+    describe("getLinkDomain", () => {
+        it("returns the domain of a given URL", () => {
+            expect(getLinkDomain("https://www.example.com/path/to/resource")).toBe(
+                "example.com"
+            );
+            expect(getLinkDomain("http://subdomain.example.com")).toBe(
+                "subdomain.example.com"
+            );
+            expect(getLinkDomain("https://example.org")).toBe("example.org");
+            expect(getLinkDomain("ftp://ftp.example.com")).toBe("ftp.example.com");
+            expect(getLinkDomain("https://www.test.gov")).toBe("test.gov");
+        });
+
+        it("returns an empty string for invalid URLs", () => {
+            expect(getLinkDomain("invalid-url")).toBe("");
+        });
+    });
+
+    describe("getLinkDomainString", () => {
+        it("returns the correct domain string for a given URL", () => {
+            let args = {
+                url: "https://www.example.com/path/to/resource",
+                className: "domain-class"
+            };
+            const domainString = getLinkDomainString(args);
+            expect(domainString).toBe("<span class='domain-class'>example.com</span>");
+
+            args.url = "not a valid url";
+            const domainString2 = getLinkDomainString(args);
+            expect(domainString2).toBe("");
+        });
+    });
+
+    describe("getLinkDomainFileTypeEl", () => {
+        it("returns the correct file type element for a given URL", () => {
+            const linkTitle = "Example Link";
+            const domainString = "<span class='domain-class'>example.com</span>";
+            const fileTypeButton = "<span class='result__link--file-type'>PDF</span>";
+            const linkDomainFileTypeEl = getLinkDomainFileTypeEl(linkTitle, domainString, fileTypeButton);
+            expect(linkDomainFileTypeEl).toBe(
+                "<span class='result__label--title'>Example Link</span><span class='spacer__span'> </span><span class='result__link--file-type'>PDF</span><span class='spacer__span'> </span><span class='domain-class'>example.com</span>"
+            );
+
         });
     });
 

@@ -167,6 +167,80 @@ const getFileTypeButton = ({ fileName, uid }) => {
     return `${fileTypeButton ?? ""}`;
 };
 
+/**
+ * @param {string} link - URL to extract domain from
+ * @returns {string} - domain of the link without "www." prefix
+ * @example
+ * const link = "https://www.example.com/path/to/resource";
+ * const domain = getLinkDomain(link);
+ * console.log(domain); // "example.com"
+ * @example
+ * const link = "not a valid url";
+ * const domain = getLinkDomain(link);
+ * console.log(domain); // ""
+ **/
+const getLinkDomain = (link) => {
+    try {
+        const url = new URL(link);
+        return url.hostname.replace(/^www\./, "");
+    } catch (_error) {
+        return "";
+    }
+};
+
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.url - URL from which to extract domain
+ * @param {string} args.className - CSS class to apply to the domain string span
+ * @return {string} - HTML string with the domain wrapped in a span with the provided class name
+ * @example
+ * const args = {
+ *       url: "https://www.example.com/path/to/resource",
+ *       className: "domain-class"
+ *   };
+ *   const domainString = getLinkDomainString(args);
+ *   console.log(domainString); // "<span class='domain-class'>example.com</span>"
+ * @example
+ *   const args = {
+ *       url: "not a valid url",
+ *       className: "domain-class"
+ *   };
+ *   const domainString = getLinkDomainString(args);
+ *   console.log(domainString); // ""
+ */
+const getLinkDomainString = ({ url, className }) => {
+    const domain = getLinkDomain(url);
+
+    if (isEmpty(domain)) {
+        return "";
+    }
+
+    return `<span class='${className}'>${domain}</span>`;
+};
+
+/**
+ * @param {string} linkTitle - Title of the link
+ * @param {string} domainString - Domain string to append to the link title
+ * @param {string} fileTypeButton - HTML string for the file type button
+ * @return {string} - HTML string with the link title, domain string, and file type button
+ * @example
+ * const linkTitle = "Example Link";
+ * const domainString = "<span class='domain-class'>example.com</span>";
+ * const fileTypeButton = "<span class='result__link--file-type'>PDF</span>";
+ * const linkDomainFileTypeEl = getLinkDomainFileTypeEl(linkTitle, domainString, fileTypeButton);
+ * console.log(linkDomainFileTypeEl); // "Example Link<span class='result__link--file-type'>PDF</span><span class='domain-class'>example.com</span>"
+ */
+const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
+    const fileString = fileTypeButton
+        ? `${fileTypeButton}${domainString && "<span class='spacer__span'> </span>"}`
+        : "";
+    const domainFileTypeEl = domainString
+        ? `${fileString}${domainString}`
+        : `${fileString}`;
+
+    return `<span class='result__label--title'>${linkTitle}</span><span class='spacer__span'> </span>${domainFileTypeEl}`;
+};
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -778,6 +852,9 @@ export {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getLinkDomain,
+    getLinkDomainFileTypeEl,
+    getLinkDomainString,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,

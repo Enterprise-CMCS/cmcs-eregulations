@@ -1,5 +1,5 @@
 <script setup>
-import { DOCUMENT_TYPES_MAP, getFileTypeButton } from "utilities/utils";
+import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
 
 defineProps({
     name: {
@@ -65,6 +65,17 @@ const addFileTypeButton = ({ fileName, uid, url, docType }) => {
     return "";
 };
 
+const addDomainFileTypeEl = ({ title, fileName, uid, url, docType }) => {
+    const domainString = getLinkDomainString({url, className: "supplemental-content-domain"});
+    const fileTypeButton = addFileTypeButton({
+        fileName,
+        uid,
+        url,
+        docType,
+    })
+    return getLinkDomainFileTypeEl(title, domainString, fileTypeButton);
+};
+
 const formatDate = (value) => {
     const date = new Date(value);
     const options = { year: "numeric", timeZone: "UTC" };
@@ -114,15 +125,7 @@ const getLinkClasses = (docType, description) => {
                 :class="getLinkClasses(docType)"
             >
                 <span
-                    v-sanitize-html="
-                        description +
-                            addFileTypeButton({
-                                fileName,
-                                uid,
-                                url,
-                                docType,
-                            })
-                    "
+                    v-sanitize-html="addDomainFileTypeEl({ title: description, fileName, uid, url, docType })"
                 />
             </div>
         </a>
