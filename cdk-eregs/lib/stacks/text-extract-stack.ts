@@ -20,6 +20,8 @@ interface LambdaConfig {
     timeout: number;
     /** Optional limit on concurrent executions */
     reservedConcurrentExecutions?: number;
+    /** Optional delay for SQS messages */
+    sqsDelaySeconds?: number;
 }
 
 /**
@@ -46,7 +48,7 @@ export interface TextExtractorStackProps extends cdk.StackProps {
 
 /**
  * CDK Stack implementation for Text Extractor service.
- * 
+ *
  * This stack creates a serverless text extraction service with the following components:
  * - Docker-based Lambda function for text extraction using AWS managed VPC
  * - SQS Queue with Dead Letter Queue for reliable message processing
@@ -69,6 +71,7 @@ export class TextExtractorStack extends cdk.Stack {
             queueName: stageConfig.getResourceName('text-extractor-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(4),
+            deliveryDelay: cdk.Duration.seconds(props.lambdaConfig.sqsDelaySeconds || 0),
             deadLetterQueue: {
                 maxReceiveCount: 5,
                 queue: deadLetterQueue,
