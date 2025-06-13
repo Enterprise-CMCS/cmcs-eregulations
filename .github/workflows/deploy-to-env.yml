@@ -95,15 +95,15 @@ jobs:
           pushd cdk-eregs
           npm install
           npm install fs-extra
-          npm install --save-dev @types/fs-extra   
-          STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"   
+          npm install --save-dev @types/fs-extra
+          STATICASSET_STACK="cms-eregs-${STAGE_NAME}-static-assets"
           npx cdk deploy ${STATICASSET_STACK} \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/static-assets.ts"
           popd
-  
+
   deploy-alternate-sites:
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
@@ -127,11 +127,11 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install
-          
+
           # Get exact stack names
           REDIRECT_STACK="cms-eregs-${STAGE_NAME}-redirect-api"
           MAINTENANCE_STACK="cms-eregs-${STAGE_NAME}-maintenance-api"
-          
+
           npx cdk deploy ${REDIRECT_STACK} ${MAINTENANCE_STACK} \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
@@ -162,9 +162,9 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install
-          
+
           TEXT_EXTRACTOR_STACK="cms-eregs-${STAGE_NAME}-text-extractor"
-          
+
           npx cdk deploy $TEXT_EXTRACTOR_STACK \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
@@ -196,9 +196,9 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install
-          
+
           FR_PARSER_STACK="cms-eregs-${STAGE_NAME}-fr-parser"
-          
+
           npx cdk deploy $FR_PARSER_STACK \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
@@ -230,9 +230,9 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install
-          
+
           ECFR_PARSER_STACK="cms-eregs-${STAGE_NAME}-ecfr-parser"
-          
+
           npx cdk deploy $ECFR_PARSER_STACK \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
@@ -264,22 +264,22 @@ jobs:
         run: |
           pushd cdk-eregs
           npm install
-          
+
           PARSER_LAUNCHER_STACK="cms-eregs-${STAGE_NAME}-parser-launcher"
-          
+
           npx cdk deploy $PARSER_LAUNCHER_STACK \
           -c environment=${ENVIRONMENT} \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
-          popd          
+          popd
 
   deploy-site:
     needs: [deploy-static-assets, deploy-text-extractor]
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
     outputs:
-      api_url: ${{ steps.get-api-url.outputs.api_url }}  
+      api_url: ${{ steps.get-api-url.outputs.api_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -297,12 +297,13 @@ jobs:
           STAGE_NAME: ${{ inputs.stage_name }}
           ENVIRONMENT: ${{ inputs.environment }}
           PR_NUMBER: ${{ inputs.pr_number }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
         run: |
           pushd cdk-eregs
           npm install
-          
+
           API_STACK="cms-eregs-${STAGE_NAME}-api"
-          
+
           npx cdk deploy $API_STACK \
           -c environment=${ENVIRONMENT} \
           -c buildId="${GITHUB_RUN_ID}" \
@@ -356,7 +357,7 @@ jobs:
           body: |
             ✨ See the Django Site deployed at: ${{ env.SITE_URL }} ✨
           reactions: "+1"
- 
+
   test-cypress:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-22.04
