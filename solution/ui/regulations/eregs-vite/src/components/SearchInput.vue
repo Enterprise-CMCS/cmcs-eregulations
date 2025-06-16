@@ -129,7 +129,7 @@ watch(
             <template #append-inner>
                 <v-icon
                     icon="mdi-magnify"
-                    :aria-label="`Search for ${searchInputValue}`"
+                    :aria-label="`Search${searchInputValue ? ' for ' + searchInputValue : ''}`"
                     data-testid="search-form-submit"
                     @click="submitForm"
                     @keydown.enter.space.prevent="submitForm"
