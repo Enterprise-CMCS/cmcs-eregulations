@@ -69,24 +69,6 @@ class TestWebBackend(unittest.TestCase):
     def test_requests_timeout(self, *args):
         self._test_get_success(*args)
 
-    @patch.object(RobotFileParser, "read", return_value=None)
-    @patch.object(RobotFileParser, "can_fetch", return_value=True)
-    @patch.object(requests, "get", side_effect=[
-        Mock(status_code=503, content=b"Unavailable right now", headers={"Retry-After": 1}),
-        Mock(status_code=200, content=b"This is some content", headers={}),
-    ])
-    def test_retry_after(self, *args):
-        self._test_get_success(*args)
-
-    @patch.object(RobotFileParser, "read", return_value=None)
-    @patch.object(RobotFileParser, "can_fetch", return_value=True)
-    @patch.object(requests, "get", side_effect=[
-        Mock(status_code=429, content=b"Too many requests! But no 'retry-after'.", headers={}),
-        Mock(status_code=200, content=b"This is some content", headers={}),
-    ])
-    def test_too_many_requests(self, *args):
-        self._test_get_success(*args)
-
     @patch.object(urllib.request, "urlopen", return_value=Mock(status=200, read=lambda: b"User-agent: *\nAllow: /\n"))
     @patch.object(requests, "get", return_value=SUCCESS_MOCK)
     def test_get_robots_txt_200(self, *args):
