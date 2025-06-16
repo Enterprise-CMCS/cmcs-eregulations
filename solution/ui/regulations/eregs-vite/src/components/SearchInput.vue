@@ -3,6 +3,10 @@ import { ref, computed, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     formClass: {
         type: String,
         required: true,
@@ -99,6 +103,7 @@ watch(
             id="main-content"
             ref="searchInput"
             v-model="searchInputValue"
+            :disabled="disabled"
             clearable
             variant="outlined"
             density="compact"

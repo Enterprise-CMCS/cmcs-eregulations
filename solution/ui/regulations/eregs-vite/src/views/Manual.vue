@@ -136,6 +136,7 @@ const executeSearch = (payload) => {
                                 <SearchInput
                                     form-class="search-form"
                                     :label="getSearchInputLabel(slotProps)"
+                                    :disabled="slotProps.loading"
                                     parent="manual"
                                     redirect-to="search"
                                     @execute-search="executeSearch"
