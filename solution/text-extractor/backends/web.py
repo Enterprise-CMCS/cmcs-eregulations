@@ -21,47 +21,30 @@ class WebBackend(FileBackend):
 
     def __init__(self, config: dict):
         self._ignore_robots = config.get("ignore_robots_txt", False)
-        self._parser = robotparser.RobotFileParser()
         self._headers = requests.utils.default_headers()
         self._headers["User-Agent"] = self._user_agent
-
-    def _get_robots_txt(self, url: str):
-        if self._ignore_robots:
-            logger.info("Ignoring robots.txt")
-            return
-        logger.debug("Fetching robots.txt from \"%s\".", url)
-        resp = requests.head(url, timeout=60)
-        if resp.status_code == requests.codes.NOT_FOUND:
-            # Robots.txt doesn't exist for this site
-            self._ignore_robots = True
-            return
-        elif resp.status_code != requests.codes.OK:
-            # Received a different error code, assume we aren't allowed to crawl
-            raise BackendException(f"got {resp.status_code} while trying to fetch robots.txt")
-        self._parser.set_url(url)
-        self._parser.read()
-
-    def _can_fetch(self, url: str) -> bool:
-        return self._ignore_robots or self._parser.can_fetch(self._user_agent, url)
 
     def get_file(self, uri: str) -> bytes:
         logger.info("Retrieving file \"%s\" using 'web' backend.", uri)
 
-        # Get robots.txt
-        try:
+        # Use robots.txt to determine if we can crawl the URL
+        if self._ignore_robots:
+            logger.debug("Ignoring robots.txt for \"%s\".", uri)
+        else:
+            logger.debug("Checking robots.txt for \"%s\".", uri)
+            if not uri.startswith(("http://", "https://")):
+                raise BackendException(f"Invalid URL scheme for robots.txt: {uri}")
+            # Parse the URL to construct the robots.txt path
             path = urlsplit(uri)
-            scheme = f"{path.scheme}://" if path.scheme else ""
-            path = f"{scheme}{path.netloc}/robots.txt"
-            self._get_robots_txt(path)
-        except Exception as e:
-            raise BackendException(f"failed to parse robots.txt, must assume we are not allowed to look at the URL: {str(e)}")
+            path = f"{path.scheme}://{path.netloc}/robots.txt"
+            robots_parser = robotparser.RobotFileParser()
+            robots_parser.set_url(path)
+            robots_parser.read()
+            if not robots_parser.can_fetch(self._user_agent, uri):
+                raise BackendException(f"robots.txt has disallowed crawling of \"{uri}\"")
 
-        # Figure out of robots.txt allows us to crawl the URL
-        logger.debug("Determining if \"%s\" can crawl the path.", self._user_agent)
-        if not self._can_fetch(uri):
-            raise BackendException(f"robots.txt has disallowed crawling of \"{uri}\"")
-
-        while True:  # Loop until the lambda times out, max of 15 mins
+        # Loop until the lambda times out, max of 15 mins
+        while True:
             try:
                 logger.debug("Sending GET request to %s with headers: %s", uri, str(self._headers))
                 resp = requests.get(uri, timeout=60, headers=self._headers)

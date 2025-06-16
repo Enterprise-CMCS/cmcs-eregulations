@@ -132,7 +132,7 @@ describe("getResultLinkText", () => {
 
     it("/content_search internal result 1", async () => {
         expect(PolicyResults.getResultLinkText(cs_internal_1)).toBe(
-            "<span class='result__link--label'>this is a name_headline field</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a name_headline field</span><span class='spacer__span'> </span></span>"
         );
     });
 
@@ -146,7 +146,7 @@ describe("getResultLinkText", () => {
 
     it("/content_search internal result with url 1", async () => {
         expect(PolicyResults.getResultLinkText(cs_internal_with_url_1)).toBe(
-            "<span class='result__link--label'>this is a name_headline field</span><span data-testid='download-chip-12345' class='result__link--file-type'>PDF</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a name_headline field</span><span class='spacer__span'> </span><span data-testid='download-chip-12345' class='result__link--file-type'>PDF</span><span class='spacer__span'> </span><span class='result__link--domain'>example.com</span></span>"
         );
     });
 
@@ -158,13 +158,13 @@ describe("getResultLinkText", () => {
 
     it("/content_search internal result 2", async () => {
         expect(PolicyResults.getResultLinkText(cs_internal_2)).toBe(
-            "<span class='result__link--label'>this is a title field</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a title field</span><span class='spacer__span'> </span></span>"
         );
     });
 
     it("/resources/internal result", async () => {
         expect(PolicyResults.getResultLinkText(MOCK_RESULTS[1])).toBe(
-            "<span class='result__link--label'>this is a document name string</span><span data-testid='download-chip-a4e00982-4944-4a8d-8dd9-e5d2caa11f51' class='result__link--file-type'>TXT</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a document name string</span><span class='spacer__span'> </span><span data-testid='download-chip-a4e00982-4944-4a8d-8dd9-e5d2caa11f51' class='result__link--file-type'>TXT</span></span>"
         );
     });
 
@@ -177,7 +177,7 @@ describe("getResultLinkText", () => {
 
     it("/content-search external result", async () => {
         expect(PolicyResults.getResultLinkText(cs_external_1)).toBe(
-            "<span class='result__link--label'>this is a summary_headline field</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a summary_headline field</span><span class='spacer__span'> </span></span>"
         );
     });
 
@@ -189,7 +189,7 @@ describe("getResultLinkText", () => {
 
     it("/content-search external result", async () => {
         expect(PolicyResults.getResultLinkText(cs_external_2)).toBe(
-            "<span class='result__link--label'>this is a name_headline field</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a name_headline field</span><span class='spacer__span'> </span></span>"
         );
     });
 
@@ -212,7 +212,7 @@ describe("getResultLinkText", () => {
             action_type: "RFI",
         };
         expect(PolicyResults.getResultLinkText(result)).toBe(
-            "<span class='result__link--label'>this is a title</span>"
+            "<span class='result__link--label'><span class='result__label--title'>this is a title</span><span class='spacer__span'> </span><span class='result__link--domain'>federalregister.gov</span></span>"
         );
     });
 });

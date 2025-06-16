@@ -23,7 +23,7 @@
     "dompurify": "^3.2.5",
     "flush-promises": "^1.0.2",
     "lodash": "^4.17.21",
-    "sass": "^1.89.1",
+    "sass": "^1.89.2",
     "vue": "^3.5.16",
     "vuetify": "^3.8.7"
   },
@@ -38,7 +38,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.43.0"
   },
   "msw": {
     "workerDirectory": "msw"

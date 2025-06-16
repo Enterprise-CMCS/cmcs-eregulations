@@ -584,6 +584,12 @@ select {
     border-right: 1px solid $mid_gray;
 }
 
+@mixin common-link-domain {
+    font-size: var(--font-size-xs);
+    color: $mid_gray;
+    font-style: italic;
+}
+
 .login-cta__div {
     background-color: $secondary_background_color;
     border: 1px solid $border_color;

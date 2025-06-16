@@ -99,8 +99,11 @@
             font-weight: 600;
             border: 1px solid;
             border-radius: 26px;
-            margin-left: 6px;
-            margin-right: 2px;
+        }
+
+        &--domain {
+            @include common-link-domain;
+            font-size: var(--font-size-sm);
         }
     }
 

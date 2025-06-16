@@ -5,6 +5,11 @@
 
 @import "../application_settings";
 
+.related-rule-domain,
+.supplemental-content-domain {
+    @include common-link-domain;
+}
+
 .related-rule {
     &.ungrouped {
         padding-top: 26px;
@@ -69,6 +74,7 @@
 .related-rule-title {
     text-decoration: none;
     font-size: var(--font-size-sm);
+
 }
 
 .related-rule-list {
@@ -113,10 +119,6 @@
 
     .recent-title {
         margin-top: 0.2em;
-
-        &::after {
-            @include external-link;
-        }
     }
 }
 
@@ -161,12 +163,6 @@
         color: $primary_link_color;
         text-decoration: none;
         font-size: var(--font-size-sm);
-    }
-
-    .supplemental-content-external-link {
-        &:after {
-            @include external-link;
-        }
     }
 }
 
