@@ -7,6 +7,7 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import SearchInput from "@/components/SearchInput.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
@@ -1966,6 +1967,11 @@ const toggleExpand = (id) => {
     expanded.value[id] = !expanded.value[id];
 };
 
+const executeSearch = (payload) => {
+    const redirectPath = `${homeUrl}search/?q=${payload.query}`;
+    window.location.assign(redirectPath);
+};
+
 </script>
 
 <template>
@@ -2032,7 +2038,13 @@ const toggleExpand = (id) => {
                     </p>
                     <section class="search__container">
                         <div v-if="isAuthenticated">
-                            Hi, you're logged in!
+                            <SearchInput
+                                form-class="search-form"
+                                label="Search within the manual"
+                                parent="manual"
+                                redirect-to="search"
+                                @execute-search="executeSearch"
+                            />
                         </div>
                         <SignInCTA
                             v-else
