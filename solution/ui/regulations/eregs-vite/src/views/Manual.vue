@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 
 import AccessLink from "@/components/AccessLink.vue";
 import Banner from "@/components/Banner.vue";
+import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -1967,8 +1968,31 @@ const toggleExpand = (id) => {
     expanded.value[id] = !expanded.value[id];
 };
 
+const smmCatIdRef = ref(null);
+const setSmmCatId = (categories) => {
+    if (!categories.loading || !categories.error) {
+        const smmCategory = categories.find(cat => cat.name === "State Medicaid Manual");
+        smmCatIdRef.value = smmCategory ? smmCategory.id : null;
+    } else {
+        smmCatIdRef.value = null;
+    }
+};
+
+const getSearchInputLabel = (fetchCategoriesProps) => {
+    if (fetchCategoriesProps.loading) {
+        return "Loading...";
+    }
+
+    if (smmCatIdRef.value) {
+        return `Search within State Medicaid Manual`;
+    }
+
+    return "Search for a document";
+};
+
 const executeSearch = (payload) => {
-    const redirectPath = `${homeUrl}search/?q=${payload.query}`;
+    const catId = smmCatIdRef.value ? `intcategories=${smmCatIdRef.value}&` : "";
+    const redirectPath = `${homeUrl}search/?${catId}q=${payload.query}`;
     window.location.assign(redirectPath);
 };
 
@@ -2038,13 +2062,19 @@ const executeSearch = (payload) => {
                     </p>
                     <section class="search__container">
                         <div v-if="isAuthenticated">
-                            <SearchInput
-                                form-class="search-form"
-                                label="Search within the manual"
-                                parent="manual"
-                                redirect-to="search"
-                                @execute-search="executeSearch"
-                            />
+                            <FetchItemsContainer
+                                v-slot="slotProps"
+                                items-to-fetch="categories"
+                                :items-capture-function="setSmmCatId"
+                            >
+                                <SearchInput
+                                    form-class="search-form"
+                                    :label="getSearchInputLabel(slotProps)"
+                                    parent="manual"
+                                    redirect-to="search"
+                                    @execute-search="executeSearch"
+                                />
+                            </FetchItemsContainer>
                         </div>
                         <SignInCTA
                             v-else
