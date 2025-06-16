@@ -7,10 +7,12 @@ import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
+import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
+const accessUrl = inject("accessUrl");
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
@@ -2028,6 +2030,28 @@ const toggleExpand = (id) => {
                             PDFs</a>
                         from archived copies of the CMS website.
                     </p>
+                    <section class="search__container">
+                        <div v-if="isAuthenticated">
+                            Hi, you're logged in!
+                        </div>
+                        <SignInCTA
+                            v-else
+                            class="login-cta__div--subjects-results"
+                            :access-url="accessUrl"
+                            desired-action-string="search within the manual"
+                            :is-authenticated="isAuthenticated"
+                            test-id="loginManual"
+                        >
+                            <template #sign-in-link>
+                                <SignInLink
+                                    :custom-login-url="customLoginUrl"
+                                    :home-url="homeUrl"
+                                    :is-authenticated="isAuthenticated"
+                                    :route="$route"
+                                />
+                            </template>
+                        </SignInCTA>
+                    </section>
                     <section class="table__parent">
                         <table id="manualTable">
                             <thead>
@@ -2266,6 +2290,10 @@ const toggleExpand = (id) => {
 <style scoped>
 .manual__container {
     padding: 0 2rem;
+}
+
+.search__container {
+    margin-bottom: 1rem;
 }
 
 .table__parent {
