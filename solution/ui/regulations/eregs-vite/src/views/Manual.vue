@@ -1991,7 +1991,7 @@ const getSearchInputLabel = (fetchCategoriesProps) => {
 };
 
 const executeSearch = (payload) => {
-    const catId = smmCatIdRef.value ? `intcategories=${smmCatIdRef.value}&` : "";
+    const catId = smmCatIdRef.value ? `type=internal&intcategories=${smmCatIdRef.value}&` : "";
     const redirectPath = `${homeUrl}search/?${catId}q=${payload.query}`;
     window.location.assign(redirectPath);
 };
