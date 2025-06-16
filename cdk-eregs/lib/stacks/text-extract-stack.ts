@@ -20,8 +20,6 @@ interface LambdaConfig {
     timeout: number;
     /** Optional limit on concurrent executions */
     reservedConcurrentExecutions?: number;
-    /** Optional delay for SQS messages */
-    sqsDelaySeconds?: number;
 }
 
 /**
@@ -71,7 +69,6 @@ export class TextExtractorStack extends cdk.Stack {
             queueName: stageConfig.getResourceName('text-extractor-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(4),
-            deliveryDelay: cdk.Duration.seconds(props.lambdaConfig.sqsDelaySeconds || 0),
             deadLetterQueue: {
                 maxReceiveCount: 5,
                 queue: deadLetterQueue,

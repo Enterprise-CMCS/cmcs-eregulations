@@ -11,6 +11,9 @@ from botocore.exceptions import ClientError
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
+# Whether to raise an exception on failure or return a failure Lambda response object
+_RAISE_ON_FAILURE = False
+
 
 def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
     logging.log(loglevel, message)
@@ -26,6 +29,9 @@ def lambda_success(message: str) -> dict:
 
 
 def lambda_failure(status_code: int, message: str) -> dict:
+    if _RAISE_ON_FAILURE:
+        logger.error(message)
+        raise Exception(message)
     return lambda_response(status_code, logging.ERROR, message)
 
 
@@ -35,6 +41,8 @@ def get_config(event: dict) -> dict:
     # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
         logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
+        # For SQS, we need to raise an exception during a failure event to ensure the message is not deleted from the queue
+        _RAISE_ON_FAILURE = True
         return json.loads(event["Records"][0]["body"])
 
     # Handle API Gateway invocation

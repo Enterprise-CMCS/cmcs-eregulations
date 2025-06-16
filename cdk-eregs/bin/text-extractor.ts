@@ -48,10 +48,9 @@ async function main() {
     new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
         env,
         lambdaConfig: {
-            memorySize: 1024,                   // 1 GB
-            timeout: 900,                       // 15 minutes (max timeout for lambda)
-            reservedConcurrentExecutions: 1,    // Only permit one extraction at a time
-            sqsDelaySeconds: 180,               // 3 minutes
+            memorySize: 1024,
+            timeout: 900,
+            reservedConcurrentExecutions: 1,
         },
         environmentConfig: {
             logLevel,
