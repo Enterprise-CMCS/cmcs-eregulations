@@ -1984,10 +1984,10 @@ const getSearchInputLabel = (fetchCategoriesProps) => {
     }
 
     if (smmCatIdRef.value) {
-        return `Search within State Medicaid Manual`;
+        return "Search within the manual";
     }
 
-    return "Search for a document";
+    return "Search";
 };
 
 const executeSearch = (payload) => {
@@ -2061,7 +2061,7 @@ const executeSearch = (payload) => {
                         from archived copies of the CMS website.
                     </p>
                     <section class="search__container">
-                        <div v-if="isAuthenticated">
+                        <div v-if="isAuthenticated" class="search-input__div">
                             <FetchItemsContainer
                                 v-slot="slotProps"
                                 items-to-fetch="categories"
@@ -2336,6 +2336,10 @@ const executeSearch = (payload) => {
 
 .search__container {
     margin-bottom: 1rem;
+}
+
+.search__container .search-input__div {
+    width: 320px;
 }
 
 .table__parent {
