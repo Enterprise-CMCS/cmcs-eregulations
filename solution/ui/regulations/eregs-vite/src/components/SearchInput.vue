@@ -3,6 +3,10 @@ import { ref, computed, watch, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     formClass: {
         type: String,
         required: true,
@@ -99,6 +103,7 @@ watch(
             id="main-content"
             ref="searchInput"
             v-model="searchInputValue"
+            :disabled="disabled"
             clearable
             variant="outlined"
             density="compact"
@@ -124,7 +129,7 @@ watch(
             <template #append-inner>
                 <v-icon
                     icon="mdi-magnify"
-                    :aria-label="`Search for ${searchInputValue}`"
+                    :aria-label="`Search${searchInputValue ? ' for ' + searchInputValue : ''}`"
                     data-testid="search-form-submit"
                     @click="submitForm"
                     @keydown.enter.space.prevent="submitForm"

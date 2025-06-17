@@ -4,6 +4,10 @@ defineProps({
         type: String,
         required: true,
     },
+    desiredActionString: {
+        type: String,
+        default: "see internal documents",
+    },
     testId: {
         type: String,
         default: "loginSpa",
@@ -13,7 +17,7 @@ defineProps({
 
 <template>
     <div class="login-cta__div">
-        <span :data-testid="testId">To see internal documents,
+        <span :data-testid="testId">To {{ desiredActionString }},
             <slot name="sign-in-link">sign in</slot></span>
         or
         <a

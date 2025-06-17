@@ -17,6 +17,16 @@ class ResourcesConfiguration(SingletonModel):
         verbose_name="FR Link Category",
     )
 
+    state_medicaid_manual_category = models.ForeignKey(
+        AbstractCategory,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="smm_category_config",
+        help_text="The category that contains State Medicaid Manual documents.",
+        verbose_name="State Medicaid Manual Category",
+    )
+
     auto_extract = models.BooleanField(
         default=False,
         help_text="Check this box if eRegs should automatically request text extraction on any resource when it is originally "

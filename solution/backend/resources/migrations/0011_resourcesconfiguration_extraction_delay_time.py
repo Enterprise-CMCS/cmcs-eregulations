@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0009_resourcesconfiguration_robots_txt_allow_list'),
+        ('resources', '0010_resourcesconfiguration_state_medicaid_manual_category'),
     ]
 
     operations = [
