@@ -65,6 +65,7 @@ The following data structure is required:
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
+    "retrieval_delay": 0,                    // Optional - Lambda guarantees delay of this value (in seconds) between downloads.
     // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
