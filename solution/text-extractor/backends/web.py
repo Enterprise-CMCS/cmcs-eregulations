@@ -1,6 +1,5 @@
 import logging
 import os
-import time
 from urllib import robotparser
 from urllib.parse import urlsplit
 
@@ -48,7 +47,7 @@ class WebBackend(FileBackend):
             resp = requests.get(uri, timeout=60, headers=self._headers)
             resp.raise_for_status()  # Raises an HTTPError for bad responses (4xx and 5xx)
         except requests.exceptions.Timeout:
-            raise BackendException(f"GET request timed out")
+            raise BackendException("GET request timed out")
         except requests.exceptions.RequestException as e:
             raise BackendException(f"GET request failed: {str(e)}")
         except requests.exceptions.HTTPError as e:
