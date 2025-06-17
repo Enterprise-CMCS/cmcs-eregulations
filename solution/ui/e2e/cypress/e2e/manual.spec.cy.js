@@ -17,6 +17,14 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         cy.checkLinkRel();
     });
 
+    it.skip("checks a11y for Get Account Access page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/manual", { timeout: 60000 });
+        cy.checkLinkRel();
+        cy.injectAxe();
+        cy.checkAccessibility();
+    });
+
     it("goes to the Subjects page using header link", () => {
         cy.viewport("macbook-15");
         cy.visit("/manual/");
@@ -49,5 +57,23 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         });
         cy.visit("/manual");
         cy.get(".subj-landing__container .login-cta__div").should("not.exist");
+    });
+
+    it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
+        cy.viewport("macbook-15");
+        cy.eregsLogin({ username, password });
+        cy.visit("/manual");
+
+        // Search for a term
+        cy.get("input#main-content").type("mock", { force: true });
+        cy.get('[data-testid="search-form-submit"]').click({
+            force: true,
+        });
+
+        // Assert URL
+        cy.url()
+            .should("include", "/search")
+            .and("include", "type=internal")
+            .and("include", "intcategories=60");
     });
 });
