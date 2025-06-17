@@ -1,5 +1,6 @@
 import logging
 import os
+import time
 
 import requests
 
@@ -16,8 +17,7 @@ from .extractors import (
 from .utils import (
     clean_output,
     get_config,
-    lambda_failure,
-    lambda_success,
+    lambda_response,
     configure_authorization,
 )
 
@@ -31,20 +31,21 @@ ch.setFormatter(formatter)
 root_logger.addHandler(ch)
 root_logger.setLevel(logging.INFO)
 
-
 # Initialize the logger for this module
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
+# Global variable representing the time that the file was retrieved
+# If None, it means the file has not been retrieved yet
+retrieval_finished_time = None
 
-def handler(event: dict, context: dict) -> dict:
-    logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
-    # Retrieve configuration from event dict
-    try:
-        config = get_config(event)
-    except Exception as e:
-        return lambda_failure(400, f"Failed to get Lambda configuration: {str(e)}")
+class TextExtractorException(Exception):
+    pass
+
+
+def start_text_extractor(config: dict):
+    global retrieval_finished_time
 
     # Retrieve required arguments
     logger.info("Retrieving required parameters from event.")
@@ -53,7 +54,7 @@ def handler(event: dict, context: dict) -> dict:
         uri = config["uri"]
         upload_url = config["upload_url"]
     except KeyError:
-        return lambda_failure(400, "You must include 'id', 'uri', 'token', and 'upload_url' in the request body.")
+        raise TextExtractorException("You must include 'id', 'uri', 'token', and 'upload_url' in the request body.")
 
     # Configure authorization, if desired
     authorization = None
@@ -61,26 +62,34 @@ def handler(event: dict, context: dict) -> dict:
         try:
             authorization = configure_authorization(config["auth"])
         except Exception as e:
-            return lambda_failure(400, f"Failed to configure authorization: {str(e)}")
+            raise TextExtractorException(f"Failed to configure authorization: {str(e)}")
 
     # Retrieve the file
-    logger.info("Starting file retrieval.")
+    logger.info("Starting file retrieval from URI: %s", uri)
     try:
         backend_type = config.get("backend", "web").lower()
         backend = FileBackend.get_backend(backend_type, config)
         file = backend.get_file(uri)
     except BackendInitException as e:
-        return lambda_failure(500, f"Failed to initialize backend: {str(e)}")
+        raise TextExtractorException(f"Failed to initialize backend: {str(e)}")
     except BackendException as e:
-        return lambda_failure(500, f"Failed to retrieve file: {str(e)}")
+        # If retrieval fails, we should still delay if configured to do so
+        retrieval_finished_time = time.time()
+        raise TextExtractorException(f"Failed to retrieve file: {str(e)}")
     except Exception as e:
-        return lambda_failure(500, f"Backend unexpectedly failed: {str(e)}")
+        # If retrieval fails for an unexpected reason, we should still delay if configured to do so
+        retrieval_finished_time = time.time()
+        raise TextExtractorException(f"Backend unexpectedly failed: {str(e)}")
+
+    # Set the retrieval finished time
+    retrieval_finished_time = time.time()
+    logger.info("File retrieved successfully. Size: %d bytes", len(file))
 
     # Determine the file's content type
     try:
         file_type = Extractor.get_file_type(file)
     except Exception as e:
-        return lambda_failure(500, f"Failed to determine file type: {str(e)}")
+        raise TextExtractorException(f"Failed to determine file type: {str(e)}")
 
     # Run extractor
     logger.info("Starting text extraction.")
@@ -88,11 +97,11 @@ def handler(event: dict, context: dict) -> dict:
         extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
     except ExtractorInitException as e:
-        return lambda_failure(500, f"Failed to initialize text extractor: {str(e)}")
+        raise TextExtractorException(f"Failed to initialize text extractor: {str(e)}")
     except ExtractorException as e:
-        return lambda_failure(500, f"Failed to extract text: {str(e)}")
+        raise TextExtractorException(f"Failed to extract text: {str(e)}")
     except Exception as e:
-        return lambda_failure(500, f"Extractor unexpectedly failed: {str(e)}")
+        raise TextExtractorException(f"Extractor unexpectedly failed: {str(e)}")
 
     # Strip control characters and unneeded data out of the extracted text
     text = clean_output(text)
@@ -113,10 +122,32 @@ def handler(event: dict, context: dict) -> dict:
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
         if hasattr(e, "response") and hasattr(e.response, "text") and e.response.text:
-            return lambda_failure(500, f"Failed to PATCH results with status code {e.response.status_code}: {e.response.text}")
-        return lambda_failure(500, f"Failed to PATCH results: {str(e)}")
+            raise TextExtractorException(f"Failed to PATCH results with status code {e.response.status_code}: {e.response.text}")
+        raise TextExtractorException(f"Failed to PATCH results: {str(e)}")
     except Exception as e:
-        return lambda_failure(500, f"PATCH unexpectedly failed: {str(e)}")
+        raise TextExtractorException(f"PATCH unexpectedly failed: {str(e)}")
 
-    # Return success code
-    return lambda_success("Function exited normally.")
+
+def handler(event: dict, context: dict) -> dict:
+    logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
+
+    global retrieval_finished_time
+    raise_on_failure = True
+    retrieval_delay_time = 0
+
+    try:
+        config = get_config(event)
+        raise_on_failure = config.get("raise_on_failure", True)
+        retrieval_delay_time = config.get("retrieval_delay_time", 0)
+        start_text_extractor(config)
+        return lambda_response(200, "Text extraction completed successfully.")
+    except Exception as e:
+        if raise_on_failure:
+            logger.error("An error occurred: %s", str(e))
+            raise e
+        return lambda_response(500, f"An error occurred: {str(e)}")
+    finally:
+        time_since_retrieval = time.time() - (retrieval_finished_time or 0)
+        if retrieval_finished_time and time_since_retrieval < retrieval_delay_time:
+            logger.info("Waiting for %d seconds before finishing.", retrieval_delay_time - time_since_retrieval)
+            time.sleep(retrieval_delay_time - time_since_retrieval)

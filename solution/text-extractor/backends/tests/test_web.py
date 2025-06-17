@@ -26,13 +26,11 @@ class TestWebBackend(unittest.TestCase):
 
     def _test_get_success(self, mock_read, mock_can_fetch, mock_get):
         backend = FileBackend.get_backend("web")
-        backend.retry_timeout = 0.1
         data = backend.get_file("https://some_url/file.txt")
         self.assertEqual(data, b"This is some content")
 
     def _test_get_failure(self, mock_read, mock_can_fetch, mock_get):
         backend = FileBackend.get_backend("web")
-        backend.retry_timeout = 0.1
         with self.assertRaises(BackendException):
             backend.get_file("https://some_url/file.txt")
 
@@ -50,9 +48,12 @@ class TestWebBackend(unittest.TestCase):
 
     @patch.object(RobotFileParser, "read", return_value=None)
     @patch.object(RobotFileParser, "can_fetch", return_value=True)
-    @patch.object(requests, "get", return_value=Mock(status_code=404, content=b"File not found!", headers={}))
-    def test_bad_url(self, *args):
-        self._test_get_failure(*args)
+    @patch.object(requests, "get")
+    def test_bad_url(self, mock_get, mock_can_fetch, mock_read):
+        mock_response = Mock(status_code=404, content=b"File not found!", headers={})
+        mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError("404 Client Error")
+        mock_get.return_value = mock_response
+        self._test_get_failure(mock_read, mock_can_fetch, mock_get)
 
     @patch.object(RobotFileParser, "read", return_value=None)
     @patch.object(RobotFileParser, "can_fetch", return_value=True)
@@ -67,7 +68,7 @@ class TestWebBackend(unittest.TestCase):
         Mock(status_code=200, content=b"This is some content", headers={}),
     ])
     def test_requests_timeout(self, *args):
-        self._test_get_success(*args)
+        self._test_get_failure(*args)
 
     @patch.object(urllib.request, "urlopen", return_value=Mock(status=200, read=lambda: b"User-agent: *\nAllow: /\n"))
     @patch.object(requests, "get", return_value=SUCCESS_MOCK)
