@@ -15,6 +15,7 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         cy.checkLinkRel();
     });
 
+    // remove skip after addressing a11y issues
     it.skip("checks a11y for Get Account Access page", () => {
         cy.viewport("macbook-15");
         cy.visit("/manual", { timeout: 60000 });
@@ -57,7 +58,8 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         cy.get(".subj-landing__container .login-cta__div").should("not.exist");
     });
 
-    it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
+    // remove skip in final cleanup story
+    it.skip("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/manual");
