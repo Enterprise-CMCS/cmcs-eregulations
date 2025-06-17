@@ -18,6 +18,16 @@
             flex-direction: column;
         }
 
+        h1.homepage__title {
+            margin-bottom: 6px;
+            font-size: 30px;
+        }
+
+        p.homepage__subtitle {
+            margin-top: 6px;
+            margin-block-start: 6px !important;
+        }
+
         .link-btn {
             @include link-common;
 
