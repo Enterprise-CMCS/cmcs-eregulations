@@ -100,7 +100,7 @@ def _extract_via_lambda(batch, client):
 
 
 # Internal function to compute the 2 keys needed for text-extractor requests: "uri" and "backend".
-def _get_resource_keys(resource):
+def _get_resource_keys(resource, extraction_delay_time=0):
     if hasattr(resource, "key"):
         return {
             "uri": resource.key,
@@ -109,6 +109,7 @@ def _get_resource_keys(resource):
     return {
         "uri": resource.extract_url or resource.url,
         "backend": "web",
+        "extraction_delay_time": extraction_delay_time,  # Only used for web backend currently.
     }
 
 
@@ -153,8 +154,10 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
-    # Retrieve the allow list from the ResourcesConfiguration solo model
-    allow_list = ResourcesConfiguration.get_solo().robots_txt_allow_list
+    # Retrieve relevant configuration from the ResourcesConfiguration solo model
+    config = ResourcesConfiguration.get_solo()
+    allow_list = config.robots_txt_allow_list
+    extraction_delay_time = config.extraction_delay_time
 
     requests = [{**{
         "id": i.pk,
@@ -184,7 +187,7 @@ def call_text_extractor(request, resources):
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         },
-    }, **_get_resource_keys(i)} for i in resources]
+    }, **_get_resource_keys(i, extraction_delay_time)} for i in resources]
 
     succeed_count = 0
     failures = [{
