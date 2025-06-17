@@ -1,7 +1,5 @@
 const username = Cypress.env("TEST_USERNAME");
 const password = Cypress.env("TEST_PASSWORD");
-const readerUsername = Cypress.env("READER_USERNAME");
-const readerPassword = Cypress.env("READER_PASSWORD");
 
 describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
