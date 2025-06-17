@@ -106,6 +106,7 @@ const executeSearch = (payload) => {
                         <a
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                             href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
                         >
                             zipped Word documents from the CMS website</a>,
@@ -114,6 +115,7 @@ const executeSearch = (payload) => {
                         <a
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                             href="https://web.archive.org/web/20041212094406/http://www.cms.hhs.gov/manuals/45_smm/pub45toc.asp"
                         >
                             web pages</a>
@@ -121,6 +123,7 @@ const executeSearch = (payload) => {
                         <a
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                             href="https://web.archive.org/web/20050204151206/http://www.cms.hhs.gov:80/manuals/pub45pdf/smmtoc.asp"
                         >
                             PDFs</a>
@@ -145,7 +148,7 @@ const executeSearch = (payload) => {
                         </div>
                         <SignInCTA
                             v-else
-                            class="login-cta__div--subjects-results"
+                            class="login-cta__div--manual"
                             :access-url="accessUrl"
                             desired-action-string="search within the manual"
                             :is-authenticated="isAuthenticated"
@@ -222,6 +225,7 @@ const executeSearch = (payload) => {
                                                 :href="section.doc.url"
                                                 target="_blank"
                                                 class="link-btn"
+                                                rel="noopener noreferrer"
                                             >
                                                 Word
                                                 <span v-if="section.doc.date" class="date-stamp">
@@ -235,6 +239,7 @@ const executeSearch = (payload) => {
                                                 :href="section.web.url"
                                                 target="_blank"
                                                 class="link-btn"
+                                                rel="noopener noreferrer"
                                             >
                                                 Web
                                                 <span v-if="section.web.date" class="date-stamp">
@@ -248,6 +253,7 @@ const executeSearch = (payload) => {
                                                 :href="section.pdf.url"
                                                 target="_blank"
                                                 class="link-btn"
+                                                rel="noopener noreferrer"
                                             >
                                                 PDF
                                                 <span v-if="section.pdf.date" class="date-stamp">
@@ -287,6 +293,7 @@ const executeSearch = (payload) => {
                                                         :href="sub.doc.url"
                                                         target="_blank"
                                                         class="link-btn"
+                                                        rel="noopener noreferrer"
                                                     >
                                                         Word
                                                         <span v-if="sub.doc.date" class="date-stamp">
@@ -303,6 +310,7 @@ const executeSearch = (payload) => {
                                                         :href="sub.web.url"
                                                         target="_blank"
                                                         class="link-btn"
+                                                        rel="noopener noreferrer"
                                                     >
                                                         Web
                                                         <span v-if="sub.web.date" class="date-stamp">
@@ -319,6 +327,7 @@ const executeSearch = (payload) => {
                                                         :href="sub.pdf.url"
                                                         target="_blank"
                                                         class="link-btn"
+                                                        rel="noopener noreferrer"
                                                     >
                                                         PDF
                                                         <span v-if="sub.pdf.date" class="date-stamp">
@@ -359,6 +368,7 @@ const executeSearch = (payload) => {
                                                             :href="nestedSub.web.url"
                                                             target="_blank"
                                                             class="link-btn"
+                                                            rel="noopener noreferrer"
                                                         >
                                                             Web
                                                             <span v-if="nestedSub.web.date" class="date-stamp">
@@ -372,6 +382,7 @@ const executeSearch = (payload) => {
                                                             :href="nestedSub.pdf.url"
                                                             target="_blank"
                                                             class="link-btn"
+                                                            rel="noopener noreferrer"
                                                         >
                                                             PDF
                                                             <span v-if="nestedSub.pdf.date" class="date-stamp">
