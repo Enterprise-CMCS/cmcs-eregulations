@@ -37,7 +37,7 @@ const toggleExpand = (id) => {
 const smmCatIdRef = ref(null);
 const setSmmCatId = (categories) => {
     if (!categories.loading || !categories.error) {
-        const smmCategory = categories.find(cat => cat.name === "State Medicaid Manual");
+        const smmCategory = categories.find(cat => cat.is_smm_category);
         smmCatIdRef.value = smmCategory ? smmCategory.id : null;
     } else {
         smmCatIdRef.value = null;

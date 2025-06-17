@@ -32,6 +32,7 @@ class CategorySerializer(serializers.Serializer):
     order = serializers.IntegerField()
     show_if_empty = serializers.BooleanField()
     is_fr_link_category = serializers.BooleanField()
+    is_smm_category = serializers.BooleanField()
     type = PolymorphicTypeField()
 
 

@@ -13,6 +13,10 @@ class AbstractCategoryManager(InheritanceManager):
             is_fr_link_category=models.ExpressionWrapper(
                 ~models.Q(fr_link_category_config=None),
                 output_field=models.BooleanField()
+            ),
+            is_smm_category=models.ExpressionWrapper(
+                ~models.Q(smm_category_config=None),
+                output_field=models.BooleanField()
             )
         )
 
