@@ -7,9 +7,7 @@ import base64
 from utils import (
     clean_output,
     get_config,
-    lambda_failure,
     lambda_response,
-    lambda_success,
     configure_authorization,
 )
 
@@ -32,6 +30,7 @@ class UtilsTestCase(unittest.TestCase):
         record = {
             "hello": "world",
             "x": 1,
+            "raise_on_failure": True,
         }
 
         body = {
@@ -53,6 +52,7 @@ class UtilsTestCase(unittest.TestCase):
         body = {
             "hello": "world",
             "x": 1,
+            "raise_on_failure": False,
         }
 
         event = {
@@ -76,26 +76,19 @@ class UtilsTestCase(unittest.TestCase):
         event = {
             "param1": "value1",
             "param2": 0,
+            "raise_on_failure": False,
         }
 
         output = get_config(event)
         self.assertEqual(output, event)
 
     def test_lambda_response(self):
-        output = lambda_response(100, logging.ERROR, "Hello world")
+        output = lambda_response(100, "Hello world")
         self.assertEqual(output, {
             "statusCode": 100,
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps({"message": "Hello world"}),
         })
-
-    def test_lambda_success(self):
-        output = lambda_success("Hello world")
-        self.assertEqual(output["statusCode"], 200)
-
-    def test_lambda_failure(self):
-        output = lambda_failure(400, "Hello world")
-        self.assertEqual(output["statusCode"], 400)
 
     def test_config_auth_basic(self):
         auth = {

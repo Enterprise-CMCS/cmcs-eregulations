@@ -46,7 +46,7 @@ export interface TextExtractorStackProps extends cdk.StackProps {
 
 /**
  * CDK Stack implementation for Text Extractor service.
- * 
+ *
  * This stack creates a serverless text extraction service with the following components:
  * - Docker-based Lambda function for text extraction using AWS managed VPC
  * - SQS Queue with Dead Letter Queue for reliable message processing
@@ -68,7 +68,7 @@ export class TextExtractorStack extends cdk.Stack {
         const queue = new sqs.Queue(this, 'TextExtractorQueue', {
             queueName: stageConfig.getResourceName('text-extractor-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
-            retentionPeriod: cdk.Duration.days(4),
+            retentionPeriod: cdk.Duration.days(14),
             deadLetterQueue: {
                 maxReceiveCount: 5,
                 queue: deadLetterQueue,
@@ -185,6 +185,7 @@ export class TextExtractorStack extends cdk.Stack {
         new lambda.EventSourceMapping(this, 'TextExtractorEventSourceMapping', {
             target: lambdaFunction,
             batchSize: 1,
+            maxConcurrency: 1,
             eventSourceArn: queue.queueArn,
             enabled: true,
         });

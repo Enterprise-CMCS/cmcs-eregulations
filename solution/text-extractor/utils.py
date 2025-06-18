@@ -12,21 +12,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
-def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
-    logging.log(loglevel, message)
+def lambda_response(status_code: int, message: str) -> dict:
     return {
         "statusCode": status_code,
         "headers": {"Content-Type": "application/json"},
         "body": json.dumps({"message": message}),
     }
-
-
-def lambda_success(message: str) -> dict:
-    return lambda_response(200, logging.INFO, message)
-
-
-def lambda_failure(status_code: int, message: str) -> dict:
-    return lambda_response(status_code, logging.ERROR, message)
 
 
 def get_config(event: dict) -> dict:
@@ -35,15 +26,21 @@ def get_config(event: dict) -> dict:
     # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
         logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
-        return json.loads(event["Records"][0]["body"])
+        config = json.loads(event["Records"][0]["body"])
+        # For SQS, we need to raise an exception during a failure event to ensure the message is not deleted from the queue\
+        config["raise_on_failure"] = True
+        return config
 
     # Handle API Gateway invocation
     if "body" in event and event["body"]:
         logger.debug("Found truthy 'body' key in event, assuming API Gateway invocation.")
-        return json.loads(event["body"])
+        config = json.loads(event["body"])
+        config["raise_on_failure"] = False
+        return config
 
     # Handle direct invocation via boto3 etc.
     logger.debug("No 'body' key present in event, assuming direct AWS invocation.")
+    event["raise_on_failure"] = False
     return event
 
 
