@@ -100,7 +100,7 @@ def _extract_via_lambda(batch, client):
 
 
 # Internal function to compute the 2 keys needed for text-extractor requests: "uri" and "backend".
-def _get_resource_keys(resource, extraction_delay_time=0):
+def _get_resource_keys(resource, retrieval_delay=0):
     if hasattr(resource, "key"):
         return {
             "uri": resource.key,
@@ -109,7 +109,7 @@ def _get_resource_keys(resource, extraction_delay_time=0):
     return {
         "uri": resource.extract_url or resource.url,
         "backend": "web",
-        "extraction_delay_time": extraction_delay_time,  # Only used for web backend currently.
+        "retrieval_delay": retrieval_delay,  # Only used for web backend currently.
     }
 
 
