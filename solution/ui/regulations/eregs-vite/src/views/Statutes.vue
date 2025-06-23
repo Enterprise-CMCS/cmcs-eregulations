@@ -125,10 +125,11 @@ getActTitles();
 getStatutesArray();
 
 const citationInput = ref("");
-const handleGetCitationLink = () => {
-    // For now, just log the value. Replace with actual logic as needed.
-    console.info("Citation input:", citationInput.value);
-};
+const showCitationHelp = ref(false);
+
+function toggleCitationHelp() {
+    showCitationHelp.value = !showCitationHelp.value;
+}
 </script>
 
 <template>
@@ -168,22 +169,51 @@ const handleGetCitationLink = () => {
             <Banner title="Social Security Act" />
             <div id="main-content" class="statute__container">
                 <div class="content">
-                    <!-- Citation input/button always at the top -->
+                    <h2>Look Up Statute Text</h2>
                     <div class="citation-link-box">
                         <input
                             v-model="citationInput"
                             type="text"
                             class="citation-input"
                             placeholder="Enter citation, e.g., 1902(a)(74) or 42 U.S.C. 1396a(a)(74)"
-                        />
+                        >
                         <input
                             id="citation-button"
                             class="btn default-btn"
                             type="submit"
-                            value="Get Link to Citation"
+                            value="Go"
                         >
                     </div>
-                    <!-- Statute selector and table grouped together -->
+                    <div class="citation-help-toggle-container">
+                        <button
+                            type="button"
+                            class="collapsible-title"
+                            :aria-expanded="showCitationHelp.toString()"
+                            @click="toggleCitationHelp"
+                            style="background: none; border: none; padding: 0; margin: 0;"
+                        >
+                            <span>{{ showCitationHelp ? 'Hide example formats ▲' : 'Show example formats ▼' }}</span>
+                        </button>
+                        <div v-if="showCitationHelp" class="citation-help-text">
+                            <p><strong>Social Security Act:</strong></p>
+                            <ul>
+                                <li>1945A</li>
+                                <li>1902(a)(74)</li>
+                                <li>1903(m)(2)(A)(x)</li>
+                            </ul>
+                            <p><strong>US Code:</strong></p>
+                            <ul>
+                                <li>42 U.S.C. 1396w-4a</li>
+                                <li>42 U.S.C. 1396(a)(74)</li>
+                                <li>42 U.S.C. 1396b(m)(2)(A)(x)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h2>Table of Contents</h2>
+                    <TableCaption
+                        :selected-act="ACT_TYPES[queryParams.act]"
+                        :selected-title="queryParams.title"
+                    />
                     <div class="statute-table-section">
                         <div class="content__selector">
                             <div class="selector__parent">
@@ -205,10 +235,6 @@ const handleGetCitationLink = () => {
                                 class="table__spinner"
                             />
                             <template v-else>
-                                <TableCaption
-                                    :selected-act="ACT_TYPES[queryParams.act]"
-                                    :selected-title="queryParams.title"
-                                />
                                 <StatuteTable
                                     :display-type="isNarrow ? 'list' : 'table'"
                                     :filtered-statutes="statutes.results"

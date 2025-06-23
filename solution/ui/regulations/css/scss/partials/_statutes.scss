@@ -20,8 +20,6 @@
             flex-direction: row;
             padding-left: 10px;
             padding-bottom: 30px;
-            border: 1px solid $table_border_color;
-            border-radius: 4px;
 
             @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 flex-direction: column;
@@ -78,7 +76,6 @@
 
                     &.acts__list {
                         padding-left: 0;
-                        margin-top: 3.5rem;
                     }
 
                     &.titles__list {
@@ -248,7 +245,42 @@
     display: flex;
     gap: var(--spacer-1, 0.5rem);
     align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+// Styles for the citation help toggle and help text
+.citation-help-toggle-container {
+    margin-top: 0;
     margin-bottom: var(--spacer-3, 1.5rem);
+    padding-left: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .collapsible-title {
+        color: $primary_link_color;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: none;
+        border: none;
+        padding: 0;
+        margin-bottom: 0.25rem;
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover,
+        &:focus {
+            color: $primary_link_hover;
+        }
+    }
+
+    .citation-help-text {
+        font-size: 0.95rem;
+        background: $lightest_blue;
+        padding: 0rem 1rem 1rem;
+        border-radius: 4px;
+    }
 }
 
 .citation-input {
