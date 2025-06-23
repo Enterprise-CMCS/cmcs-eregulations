@@ -123,6 +123,12 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 // On load
 getActTitles();
 getStatutesArray();
+
+const citationInput = ref("");
+const handleGetCitationLink = () => {
+    // For now, just log the value. Replace with actual logic as needed.
+    console.info("Citation input:", citationInput.value);
+};
 </script>
 
 <template>
@@ -162,36 +168,54 @@ getStatutesArray();
             <Banner title="Social Security Act" />
             <div id="main-content" class="statute__container">
                 <div class="content">
-                    <div class="content__selector">
-                        <div class="selector__parent">
-                            <StatuteSelector
-                                v-if="!acts.loading"
-                                :loading="statutes.loading"
-                                :selected-act="queryParams.act"
-                                :selected-title="queryParams.title"
-                                :titles="parsedTitles"
-                            />
-                        </div>
-                    </div>
-                    <div
-                        class="table__parent"
-                        :class="{ loading: statutes.loading }"
-                    >
-                        <SimpleSpinner
-                            v-if="statutes.loading"
-                            class="table__spinner"
+                    <!-- Citation input/button always at the top -->
+                    <div class="citation-link-box">
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input"
+                            placeholder="Enter citation, e.g., 1902(a)(74) or 42 U.S.C. 1396a(a)(74)"
                         />
-                        <template v-else>
-                            <TableCaption
-                                :selected-act="ACT_TYPES[queryParams.act]"
-                                :selected-title="queryParams.title"
+                        <input
+                            id="citation-button"
+                            class="btn default-btn"
+                            type="submit"
+                            value="Get Link to Citation"
+                        >
+                    </div>
+                    <!-- Statute selector and table grouped together -->
+                    <div class="statute-table-section">
+                        <div class="content__selector">
+                            <div class="selector__parent">
+                                <StatuteSelector
+                                    v-if="!acts.loading"
+                                    :loading="statutes.loading"
+                                    :selected-act="queryParams.act"
+                                    :selected-title="queryParams.title"
+                                    :titles="parsedTitles"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="table__parent"
+                            :class="{ loading: statutes.loading }"
+                        >
+                            <SimpleSpinner
+                                v-if="statutes.loading"
+                                class="table__spinner"
                             />
-                            <StatuteTable
-                                :display-type="isNarrow ? 'list' : 'table'"
-                                :filtered-statutes="statutes.results"
-                                table-type="ssa"
-                            />
-                        </template>
+                            <template v-else>
+                                <TableCaption
+                                    :selected-act="ACT_TYPES[queryParams.act]"
+                                    :selected-title="queryParams.title"
+                                />
+                                <StatuteTable
+                                    :display-type="isNarrow ? 'list' : 'table'"
+                                    :filtered-statutes="statutes.results"
+                                    table-type="ssa"
+                                />
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>

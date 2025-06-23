@@ -15,10 +15,9 @@
     .statute__container {
         @include eds-gutters;
 
-        .content {
+        .statute-table-section {
             display: flex;
             flex-direction: row;
-            padding-top: 10px;
             padding-left: 10px;
             padding-bottom: 30px;
             border: 1px solid $table_border_color;
@@ -243,4 +242,23 @@
             }
         }
     }
+}
+
+.citation-link-box {
+    display: flex;
+    gap: var(--spacer-1, 0.5rem);
+    align-items: center;
+    margin-bottom: var(--spacer-3, 1.5rem);
+}
+
+.citation-input {
+    width: 450px;
+    padding: 0.5rem;
+    border: 1px solid $border_color;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+#citation-button {
+    font-weight: 700;
+    height: 2.5rem;
 }
