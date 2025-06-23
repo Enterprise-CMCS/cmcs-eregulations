@@ -22,6 +22,7 @@ const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
@@ -72,7 +73,11 @@ const executeSearch = (payload) => {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :manual-url="manualUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />

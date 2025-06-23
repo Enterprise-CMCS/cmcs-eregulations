@@ -25,7 +25,9 @@ const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
+const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
 const username = inject("username");
 
@@ -140,7 +142,11 @@ function toggleCitationHelp() {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :manual-url="manualUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -189,8 +195,8 @@ function toggleCitationHelp() {
                             type="button"
                             class="collapsible-title"
                             :aria-expanded="showCitationHelp.toString()"
-                            @click="toggleCitationHelp"
                             style="background: none; border: none; padding: 0; margin: 0;"
+                            @click="toggleCitationHelp"
                         >
                             <span>{{ showCitationHelp ? 'Hide example formats ▲' : 'Show example formats ▼' }}</span>
                         </button>

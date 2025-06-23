@@ -11,6 +11,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    manualUrl: {
+        type: String,
+        required: true,
+    },
     subjectsUrl: {
         type: String,
         required: true,
@@ -25,6 +29,12 @@ const links = [
         label: "Social Security Act",
         active: window.location.pathname.includes("statutes"),
         href: props.statutesUrl,
+    },
+    {
+        name: "manual",
+        label: "State Medicaid Manual",
+        active: window.location.pathname.includes("manual"),
+        href: props.manualUrl,
     },
     {
         name: "subjects",

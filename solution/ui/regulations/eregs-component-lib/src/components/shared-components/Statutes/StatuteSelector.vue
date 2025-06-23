@@ -22,7 +22,6 @@ const props = defineProps({
     },
 });
 
-const isActActive = ({ act }) => act === props.selectedAct;
 const isTitleActive = ({ act, title }) =>
     act === props.selectedAct && title === props.selectedTitle;
 </script>
