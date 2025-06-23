@@ -185,7 +185,6 @@ export class TextExtractorStack extends cdk.Stack {
         new lambda.EventSourceMapping(this, 'TextExtractorEventSourceMapping', {
             target: lambdaFunction,
             batchSize: 1,
-            maxConcurrency: 1,
             eventSourceArn: queue.queueArn,
             enabled: true,
         });
