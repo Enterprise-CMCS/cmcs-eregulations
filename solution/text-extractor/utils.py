@@ -26,6 +26,7 @@ def get_config(event: dict) -> dict:
     # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
         logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
+        logger.info(json.dumps(event["Records"]))
         config = json.loads(event["Records"][0]["body"])
         # For SQS, we need to raise an exception during a failure event to ensure the message is not deleted from the queue\
         config["raise_on_failure"] = True
