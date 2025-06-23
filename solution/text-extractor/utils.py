@@ -25,23 +25,19 @@ def get_config(event: dict) -> dict:
 
     # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
-        logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
-        logger.info(json.dumps(event["Records"]))
-        config = json.loads(event["Records"][0]["body"])
-        # For SQS, we need to raise an exception during a failure event to ensure the message is not deleted from the queue
-        config["raise_on_failure"] = True
+        logger.debug("Found a 'Records' key in the event, assuming SQS invocation.")
+        record = event["Records"][0]
+        config = json.loads(record["body"])
+        config["sqs_group"] = record.get("attributes", {}).get("MessageGroupId")
         return config
 
     # Handle API Gateway invocation
     if "body" in event and event["body"]:
-        logger.debug("Found truthy 'body' key in event, assuming API Gateway invocation.")
-        config = json.loads(event["body"])
-        config["raise_on_failure"] = False
-        return config
+        logger.debug("Found a 'body' key in the event, assuming API Gateway invocation.")
+        return json.loads(event["body"])
 
     # Handle direct invocation via boto3 etc.
-    logger.debug("No 'body' key present in event, assuming direct AWS invocation.")
-    event["raise_on_failure"] = False
+    logger.debug("No 'body' key present in the event, assuming direct AWS invocation.")
     return event
 
 

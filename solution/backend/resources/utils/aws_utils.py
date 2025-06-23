@@ -52,11 +52,25 @@ def _extract_via_http(batch, client):
     return success, fail
 
 
+def _get_message_group_id(request):
+    backend = request.get("backend")
+    if backend == "s3":
+        # Each S3 request belongs to a new group to allow unrestricted parallel processing
+        return f"s3:{request['uri']}"
+    elif backend == "web":
+        # Web requests are grouped by hostname to avoid any parallel requests to the same server
+        # Requests to different servers can be processed in parallel without issue
+        hostname = urlparse(request["uri"]).hostname.lower()
+        return f"web:{hostname}"
+    # Fallback for unknown backends
+    return f"{backend}:default"
+
+
 def _extract_via_sqs(batch, client):
     entries = [{
         "Id": str(i["id"]),
         "MessageBody": json.dumps(i),
-        "MessageGroupId": "text-extractor",
+        "MessageGroupId": _get_message_group_id(i),
     } for i in batch]
 
     try:

@@ -132,22 +132,26 @@ def handler(event: dict, context: dict) -> dict:
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
     global retrieval_finished_time
-    raise_on_failure = True
+    sqs_group = None
     retrieval_delay = 0
 
     try:
         config = get_config(event)
-        raise_on_failure = config.get("raise_on_failure", True)
+        sqs_group = config.get("sqs_group")
         retrieval_delay = config.get("retrieval_delay", 0)
         start_text_extractor(config)
         return lambda_response(200, "Text extraction completed successfully.")
     except Exception as e:
-        if raise_on_failure:
+        if sqs_group:
             logger.error("An error occurred: %s", str(e))
             raise e
         return lambda_response(500, f"An error occurred: {str(e)}")
     finally:
         time_since_retrieval = time.time() - (retrieval_finished_time or 0)
         if retrieval_finished_time and time_since_retrieval < retrieval_delay:
-            logger.info("Waiting for %d seconds before finishing.", retrieval_delay - time_since_retrieval)
+            logger.info(
+                "%sWaiting for %d seconds before finishing.",
+                f"[Group: {sqs_group}] " if sqs_group else "",
+                retrieval_delay - time_since_retrieval,
+            )
             time.sleep(retrieval_delay - time_since_retrieval)
