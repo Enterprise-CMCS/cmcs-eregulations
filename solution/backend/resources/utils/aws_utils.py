@@ -56,6 +56,7 @@ def _extract_via_sqs(batch, client):
     entries = [{
         "Id": str(i["id"]),
         "MessageBody": json.dumps(i),
+        "MessageGroupId": "text-extractor",
     } for i in batch]
 
     try:
