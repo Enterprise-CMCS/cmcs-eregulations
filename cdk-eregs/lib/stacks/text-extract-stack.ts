@@ -71,6 +71,7 @@ export class TextExtractorStack extends cdk.Stack {
             fifo: true,
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(14),
+            contentBasedDeduplication: true,
             deadLetterQueue: {
                 maxReceiveCount: 5,
                 queue: deadLetterQueue,
