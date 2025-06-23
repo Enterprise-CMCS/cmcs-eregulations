@@ -50,7 +50,7 @@ async function main() {
         lambdaConfig: {
             memorySize: 1024,
             timeout: 900,
-            reservedConcurrentExecutions: 1,
+            reservedConcurrentExecutions: 10,
         },
         environmentConfig: {
             logLevel,

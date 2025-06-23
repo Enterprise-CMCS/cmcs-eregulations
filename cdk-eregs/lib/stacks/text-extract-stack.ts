@@ -62,11 +62,13 @@ export class TextExtractorStack extends cdk.Stack {
         // SQS QUEUES
         // ================================
         const deadLetterQueue = new sqs.Queue(this, 'DeadLetterQueue', {
-            queueName: stageConfig.getResourceName('text-extractor-dl-queue'),
+            queueName: stageConfig.getResourceName('text-extractor-dl-queue.fifo'),
+            fifo: true,
         });
 
         const queue = new sqs.Queue(this, 'TextExtractorQueue', {
-            queueName: stageConfig.getResourceName('text-extractor-queue'),
+            queueName: stageConfig.getResourceName('text-extractor-queue.fifo'),
+            fifo: true,
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(14),
             deadLetterQueue: {
