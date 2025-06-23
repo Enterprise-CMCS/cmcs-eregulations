@@ -1,5 +1,7 @@
 <script setup>
 import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
+import { ref } from "vue";
+import SubjectChips from "../../../eregs-vite/src/components/subjects/SubjectChips.vue";
 
 defineProps({
     name: {
@@ -38,6 +40,11 @@ defineProps({
     },
     fileName: {
         type: String,
+        required: false,
+        default: undefined,
+    },
+    subjects: {
+        type: Array,
         required: false,
         default: undefined,
     },
@@ -97,6 +104,9 @@ const getLinkClasses = (docType, description) => {
                 docType === "internal_link") && isBlank(description),
     };
 };
+
+const showSubjects = ref(false);
+const hasSubjects = (subjects) => Array.isArray(subjects) && subjects.length > 0;
 </script>
 
 <template>
@@ -129,5 +139,24 @@ const getLinkClasses = (docType, description) => {
                 />
             </div>
         </a>
+        <div v-if="hasSubjects(subjects)" class="supplemental-content-subjects">
+            <a
+                href="#"
+                class="supplemental-content-subjects-toggle"
+                @click.prevent="showSubjects = !showSubjects"
+            >
+                <span v-if="!showSubjects">
+                    Show Related Subjects
+                    <i class="fa fa-chevron-down" />
+                </span>
+                <span v-else>
+                    Hide Related Subjects
+                    <i class="fa fa-chevron-up" />
+                </span>
+            </a>
+            <div v-if="showSubjects" class="supplemental-content-subjectchips">
+                <SubjectChips :subjects="subjects" />
+            </div>
+        </div>
     </div>
 </template>
