@@ -28,7 +28,20 @@ const props = defineProps({
         }"
     >
         <div class="cell__title">
-            {{ props.cellData.title }}
+            <template v-if="cellData.learnMoreUrl">
+                <a
+                    :href="cellData.learnMoreUrl"
+                    class="cell__learn-more"
+                    target="_blank"
+                    rel="noopener"
+                    style="color: #fff; text-decoration: underline;"
+                >
+                    {{ props.cellData.title }}
+                </a>
+            </template>
+            <template v-else>
+                {{ props.cellData.title }}
+            </template>
         </div>
         <template v-if="cellData.subtitles">
             <div

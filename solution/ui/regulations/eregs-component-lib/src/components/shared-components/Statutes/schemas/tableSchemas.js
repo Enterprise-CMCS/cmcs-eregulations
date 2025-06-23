@@ -57,6 +57,7 @@ const ssaSchema = [
                 (columnDates) =>
                     getDateLabel(columnDates?.us_code_house_gov ?? {}),
             ],
+            learnMoreUrl: "https://uscode.house.gov/",
         },
         body: {
             url: (statute) => houseGovUrl(statute),
@@ -74,6 +75,7 @@ const ssaSchema = [
                 (columnDates) =>
                     getDateLabel(columnDates?.statute_compilation ?? {}),
             ],
+            learnMoreUrl: "https://www.govinfo.gov/app/collection/comps/",
         },
         body: {
             url: (statute) => statuteCompilationUrl(statute),
@@ -91,6 +93,7 @@ const ssaSchema = [
                 (columnDates) =>
                     getDateLabel(columnDates?.us_code_annual ?? {}),
             ],
+            learnMoreUrl: "https://www.govinfo.gov/app/collection/uscode",
         },
         body: {
             url: (statute) => usCodeUrl(statute),
@@ -108,6 +111,7 @@ const ssaSchema = [
                 (columnDates) =>
                     getDateLabel(columnDates?.ssa_gov_compilation ?? {}),
             ],
+            learnMoreUrl: "https://www.ssa.gov/OP_Home/ssact/ssact.htm",
         },
         body: {
             url: (statute) => ssaGovUrl(statute),
