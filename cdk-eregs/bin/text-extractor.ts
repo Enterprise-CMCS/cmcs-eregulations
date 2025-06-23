@@ -48,7 +48,7 @@ async function main() {
     new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
         env,
         lambdaConfig: {
-            memorySize: 1024,
+            memorySize: 1769,  // 1 vCPU allocated
             timeout: 900,
             reservedConcurrentExecutions: 10,
         },
