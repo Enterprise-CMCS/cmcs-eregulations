@@ -34,14 +34,15 @@ const isTitleActive = ({ act, title }) =>
             :key="`${key}-${i}`"
             class="acts-list__item"
         >
-            <h4
+            <!--<h4
                 class="acts-item__heading"
                 :class="{
                     'acts-item__heading--active': isActActive({ act: key }),
                 }"
             >
                 {{ value.name }}
-            </h4>
+            </h4>-->
+            <h4>View Title</h4>
             <ul class="titles__list">
                 <li
                     v-for="(title, j) in value.titles"

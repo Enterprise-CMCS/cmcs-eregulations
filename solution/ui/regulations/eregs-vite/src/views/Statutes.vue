@@ -159,12 +159,11 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Look Up Statute Text" />
+            <Banner title="Social Security Act" />
             <div id="main-content" class="statute__container">
                 <div class="content">
                     <div class="content__selector">
                         <div class="selector__parent">
-                            <h3>Included Statute</h3>
                             <StatuteSelector
                                 v-if="!acts.loading"
                                 :loading="statutes.loading"

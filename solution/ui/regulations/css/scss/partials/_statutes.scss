@@ -18,16 +18,18 @@
         .content {
             display: flex;
             flex-direction: row;
-            padding-top: 30px;
+            padding-top: 10px;
+            padding-left: 10px;
             padding-bottom: 30px;
+            border: 1px solid $table_border_color;
+            border-radius: 4px;
 
             @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 flex-direction: column;
             }
 
             .content__selector {
-                flex: 0 0 200px;
-                margin-right: 25px;
+                flex: 0 0 120px;
 
                 h3 {
                     font-size: 1.5rem;
@@ -55,6 +57,7 @@
                     }
                 }
 
+
                 .titles-list__link {
                     text-decoration: none;
                     transition: none;
@@ -76,18 +79,19 @@
 
                     &.acts__list {
                         padding-left: 0;
+                        margin-top: 3.5rem;
                     }
 
                     &.titles__list {
                         margin: 0;
+                        padding-left: 0;
+                        font-size: 1.2rem;
                     }
                 }
             }
 
             .table__parent {
                 padding: 0.75rem;
-                border: 1px solid $table_border_color;
-                border-radius: 4px;
                 width: 100%;
 
                 &.loading {
