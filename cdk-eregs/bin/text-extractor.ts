@@ -11,8 +11,8 @@ import { TextExtractorStack } from '../lib/stacks/text-extract-stack';
 async function main() {
     const synthesizerConfig = JSON.parse(await getParameterValue('/eregulations/cdk_config'));
 
-    const env = { 
-        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID, 
+    const env = {
+        account: process.env.CDK_DEFAULT_ACCOUNT || process.env.AWS_ACCOUNT_ID,
         region: process.env.CDK_DEFAULT_REGION || 'us-east-1'
     };
 
@@ -21,9 +21,9 @@ async function main() {
     });
 
     const logLevel = await getParameterValue('/eregulations/text_extractor/log_level');
-    const environment = app.node.tryGetContext('environment') || 
-        process.env.DEPLOY_ENV || 
-        process.env.GITHUB_JOB_ENVIRONMENT || 
+    const environment = app.node.tryGetContext('environment') ||
+        process.env.DEPLOY_ENV ||
+        process.env.GITHUB_JOB_ENVIRONMENT ||
         'dev';
     const prNumber = process.env.PR_NUMBER || '';
     const ephemeralId = prNumber ? `eph-${prNumber}` : undefined;
@@ -48,7 +48,7 @@ async function main() {
     new TextExtractorStack(app, stageConfig.getResourceName('text-extractor'), {
         env,
         lambdaConfig: {
-            memorySize: 1024,
+            memorySize: 1769,  // 1 vCPU allocated
             timeout: 900,
             reservedConcurrentExecutions: 10,
         },

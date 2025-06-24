@@ -65,6 +65,7 @@ The following data structure is required:
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
+    "retrieval_delay": 0,                    // Optional - Lambda guarantees delay of this value (in seconds) between downloads.
     // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
@@ -108,7 +109,7 @@ Direct invocation is the easiest way to asynchronously run the text extractor. O
 
 ## Configuring authentication
 
-The text extractor supports several authentication schemes. 
+The text extractor supports several authentication schemes.
 
 ### Basic auth
 
@@ -173,9 +174,7 @@ The text extractor currently supports downloading files from Amazon S3 (`s3`) an
 
 If you're using the S3 backend, you must include the `aws` dictionary in the example request above, with all listed keys specified. Then, set the `uri` to the key of the object stored in S3 that you wish to extract text from.
 
-If you're using web, no further configuration is required. Set the `uri` to the URL to download, including the scheme (http or https). Note that the web backend has built-in retries in the event of a timeout or a `429 TOO MANY REQUESTS` response. By default, the extractor will wait 30 seconds between retries, or if a `Retry-After` header is specified, it will wait for the number of seconds specified there.
-
-The extractor will continue retrying until the content downloads, a fatal error occurs, or the Lambda timeout occurs. Please note that if the Lambda timeout is increased, so too will the maximum amount of retries.
+If you're using web, no further configuration is required. Set the `uri` to the URL to download, including the scheme (http or https). Any non-OK error codes will result in a `BackendException` being raised. If invoked by SQS and configured properly, this will allow the extraction to be retried. Be sure to set a dead-letter queue to avoid infinite retries.
 
 By default, the web extractor respects robots.txt. However, if you are confident that an exception is permitted, you may pass in `ignore_robots_txt: true`. This option must be exercised with caution, and must never be set for all requests.
 
@@ -185,7 +184,7 @@ When the function completes, it will send the text and ID back to the `upload_ur
 
 ```jsonc
 {
-    "text": "xxxxxx"  // The text extracted   
+    "text": "xxxxxx"  // The text extracted
 }
 ```
 

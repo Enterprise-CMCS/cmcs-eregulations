@@ -54,7 +54,7 @@ services:
   text-extractor:
     build:
       context: .
-      dockerfile: text-extractor/Dockerfile
+      dockerfile: text-extractor/Dockerfile.local
     ports:
       - 9000:8080
       - 8001:6000

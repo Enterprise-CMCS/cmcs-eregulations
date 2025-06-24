@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
-def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
-    logging.log(loglevel, message)
+def lambda_response(status_code: int, message: str) -> dict:
     return {
         "statusCode": status_code,
         "headers": {"Content-Type": "application/json"},
@@ -21,29 +20,24 @@ def lambda_response(status_code: int, loglevel: int, message: str) -> dict:
     }
 
 
-def lambda_success(message: str) -> dict:
-    return lambda_response(200, logging.INFO, message)
-
-
-def lambda_failure(status_code: int, message: str) -> dict:
-    return lambda_response(status_code, logging.ERROR, message)
-
-
 def get_config(event: dict) -> dict:
     logger.info("Retrieving Lambda event dictionary.")
 
     # Handle invocation from SQS (only one record at a time)
     if "Records" in event and event["Records"]:
-        logger.debug("Found truthy 'Records' key in event, assuming SQS invocation.")
-        return json.loads(event["Records"][0]["body"])
+        logger.debug("Found a 'Records' key in the event, assuming SQS invocation.")
+        record = event["Records"][0]
+        config = json.loads(record["body"])
+        config["sqs_group"] = record.get("attributes", {}).get("MessageGroupId")
+        return config
 
     # Handle API Gateway invocation
     if "body" in event and event["body"]:
-        logger.debug("Found truthy 'body' key in event, assuming API Gateway invocation.")
+        logger.debug("Found a 'body' key in the event, assuming API Gateway invocation.")
         return json.loads(event["body"])
 
     # Handle direct invocation via boto3 etc.
-    logger.debug("No 'body' key present in event, assuming direct AWS invocation.")
+    logger.debug("No 'body' key present in the event, assuming direct AWS invocation.")
     return event
 
 

@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django_jsonform.models.fields import JSONField
 from solo.models import SingletonModel
@@ -34,6 +35,15 @@ class ResourcesConfiguration(SingletonModel):
         verbose_name="Auto Extract",
     )
 
+    extraction_delay_time = models.IntegerField(
+        default=180,  # Default to 3 minutes
+        blank=True,
+        validators=[MinValueValidator(0)],
+        help_text="The number of seconds to delay between multiple text extraction requests. This is useful to prevent "
+                  "overloading external services with too many requests in a short period of time.",
+        verbose_name="Extraction Delay Time",
+    )
+
     robots_txt_allow_list = JSONField(
         default=list,
         blank=True,
@@ -46,7 +56,7 @@ class ResourcesConfiguration(SingletonModel):
             "minItems": 0,
             "items": {
                 "type": "string",
-                "title": "URL",
+                "title": "URL or Domain",
                 "placeholder": "example.com",
             },
         },
