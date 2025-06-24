@@ -24,4 +24,6 @@ COPY lambda-proxy /proxy
 RUN pip install -r /proxy/requirements.txt
 
 # Set the custom entrypoint to run lambda-proxy on startup
-ENTRYPOINT /proxy/startup.sh
+#ENTRYPOINT /proxy/startup.sh
+
+CMD [ "app.text_extractor.handler" ]
