@@ -58,6 +58,8 @@ def _extract_via_sqs(batch, client):
         "MessageBody": json.dumps(i),
     } for i in batch]
 
+    print("hello")
+
     try:
         resp = client.send_message_batch(
             QueueUrl=settings.TEXT_EXTRACTOR_QUEUE_URL,
