@@ -30,7 +30,7 @@ class UtilsTestCase(unittest.TestCase):
         record = {
             "hello": "world",
             "x": 1,
-            "raise_on_failure": True,
+            "sqs_group": "some-group",
         }
 
         body = {
@@ -39,8 +39,18 @@ class UtilsTestCase(unittest.TestCase):
 
         event = {
             "Records": [
-                {"body": json.dumps(record)},
-                {"body": json.dumps(body)},
+                {
+                    "body": json.dumps(record),
+                    "attributes": {
+                        "MessageGroupId": "some-group",
+                    },
+                },
+                {
+                    "body": json.dumps(body),
+                    "attributes": {
+                        "MessageGroupId": "some-other-group",
+                    },
+                },
             ],
             "body": json.dumps(body),
         }
@@ -52,7 +62,6 @@ class UtilsTestCase(unittest.TestCase):
         body = {
             "hello": "world",
             "x": 1,
-            "raise_on_failure": False,
         }
 
         event = {
@@ -76,7 +85,6 @@ class UtilsTestCase(unittest.TestCase):
         event = {
             "param1": "value1",
             "param2": 0,
-            "raise_on_failure": False,
         }
 
         output = get_config(event)
