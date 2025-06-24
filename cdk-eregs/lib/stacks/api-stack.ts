@@ -8,7 +8,7 @@ import {
     aws_ec2 as ec2,
     aws_s3 as s3,
     aws_lambda as lambda,
-    aws_sqs as sqs,
+    //aws_sqs as sqs,
     aws_ssm as ssm,
     aws_logs as logs,
     aws_iam as iam,
