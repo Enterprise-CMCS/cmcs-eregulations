@@ -172,24 +172,10 @@ function toggleCitationHelp() {
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Social Security Act" />
+            <Banner title="Statute Reference" />
             <div id="main-content" class="statute__container">
                 <div class="content">
                     <h2>Look Up Statute Text</h2>
-                    <div class="citation-link-box">
-                        <input
-                            v-model="citationInput"
-                            type="text"
-                            class="citation-input"
-                            placeholder="Enter citation, e.g., 1902(a)(74) or 42 U.S.C. 1396a(a)(74)"
-                        >
-                        <input
-                            id="citation-button"
-                            class="btn default-btn"
-                            type="submit"
-                            value="Go"
-                        >
-                    </div>
                     <div class="citation-help-toggle-container">
                         <button
                             type="button"
@@ -198,9 +184,16 @@ function toggleCitationHelp() {
                             style="background: none; border: none; padding: 0; margin: 0;"
                             @click="toggleCitationHelp"
                         >
-                            <span>{{ showCitationHelp ? 'Hide example formats ▲' : 'Show example formats ▼' }}</span>
+                            <span>{{ showCitationHelp ? 'Hide examples ▲' : 'Show examples ▼' }}</span>
                         </button>
                         <div v-if="showCitationHelp" class="citation-help-text">
+                            <p>Enter a citation to get a direct link to current text on the
+                                <a
+                                    href="https://uscode.house.gov/"
+                                >
+                                    US Code House.gov</a>
+                                website.
+                            </p>
                             <p><strong>Social Security Act:</strong></p>
                             <ul>
                                 <li>1945A</li>
@@ -215,7 +208,43 @@ function toggleCitationHelp() {
                             </ul>
                         </div>
                     </div>
-                    <h2>Table of Contents</h2>
+                    <div class="citation-link-box">
+                        <label>Social Security Act §</label>
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input"
+                            placeholder="1903(a)(3)(A)(i)"
+                        >
+                        <input
+                            id="citation-button"
+                            class="btn default-btn"
+                            type="submit"
+                            value="Get Citation Link"
+                        >
+                    </div>
+                    <div class="citation-link-box">
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input-short"
+                            placeholder="42"
+                        >
+                        <label>U.S.C.</label>
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input"
+                            placeholder="1396b(a)(3)(A)(i)"
+                        >
+                        <input
+                            id="citation-button"
+                            class="btn default-btn"
+                            type="submit"
+                            value="Get Citation Link"
+                        >
+                    </div>
+                    <h2>Social Security Act Table of Contents</h2>
                     <TableCaption
                         :selected-act="ACT_TYPES[queryParams.act]"
                         :selected-title="queryParams.title"

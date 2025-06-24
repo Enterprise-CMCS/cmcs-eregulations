@@ -245,10 +245,12 @@
     display: flex;
     gap: var(--spacer-1, 0.5rem);
     align-items: center;
-    margin-bottom: 0.5rem;
-}
+    margin-bottom: 1rem;
 
-// Styles for the citation help toggle and help text
+    label {
+        font-weight: 700;
+    }
+}
 .citation-help-toggle-container {
     margin-top: 0;
     margin-bottom: var(--spacer-3, 1.5rem);
@@ -284,7 +286,14 @@
 }
 
 .citation-input {
-    width: 450px;
+    width: 200px;
+    padding: 0.5rem;
+    border: 1px solid $border_color;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+.citation-input-short {
+    width: 50px;
     padding: 0.5rem;
     border: 1px solid $border_color;
     border-radius: 4px;
