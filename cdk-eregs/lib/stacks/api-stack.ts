@@ -8,7 +8,7 @@ import {
     aws_ec2 as ec2,
     aws_s3 as s3,
     aws_lambda as lambda,
-    aws_sqs as sqs,
+    //aws_sqs as sqs,
     aws_ssm as ssm,
     aws_logs as logs,
     aws_iam as iam,
@@ -209,10 +209,10 @@ export class BackendStack extends cdk.Stack {
         // ================================
         // SQS QUEUE
         // ================================
-        const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
-            queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
-            queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
-        });
+        // const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
+        //     queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
+        //     queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
+        // });
 
         // ================================
         // SSM PARAMETERS
@@ -279,7 +279,8 @@ export class BackendStack extends cdk.Stack {
             SEARCH_HEADLINE_MAX_FRAGMENTS: ssmParams.searchHeadlineMaxFragments,
             EUA_FEATUREFLAG: ssmParams.euaFeatureFlag,
             AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
-            TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
+            //TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
+            TEXT_EXTRACTOR_QUEUE_URL: "",
             DEPLOY_NUMBER: buildId,
             HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
             DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
@@ -361,7 +362,8 @@ export class BackendStack extends cdk.Stack {
             securityGroup: serverlessSG,
             environmentVariables,
             storageBucketName: storageBucket.bucketName,
-            queueUrl: textExtractorQueue.queueUrl,
+            //queueUrl: textExtractorQueue.queueUrl,
+            queueUrl: "",
             lambdaConfig: props.lambdaConfig,
             stageConfig,
             vpcSubnets: selectedSubnets,
@@ -373,7 +375,7 @@ export class BackendStack extends cdk.Stack {
         // PERMISSIONS
         // ================================
         storageBucket.grantReadWrite(regSiteLambda);
-        textExtractorQueue.grantSendMessages(regSiteLambda);
+        //textExtractorQueue.grantSendMessages(regSiteLambda);
 
         // DB inspection permissions
         [createDbLambda, dropDbLambda, migrateLambda, createSuLambda].forEach(lambdaFn => {
