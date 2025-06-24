@@ -58,10 +58,11 @@ def _get_message_group_id(request):
         # Each S3 request belongs to a new group to allow unrestricted parallel processing
         return f"s3:{request['uri']}"
     elif backend == "web":
-        # Web requests are grouped by hostname to avoid any parallel requests to the same server
-        # Requests to different servers can be processed in parallel without issue
-        hostname = urlparse(request["uri"]).hostname.lower()
-        return f"web:{hostname}"
+        # Web requests are grouped by domain name to avoid any parallel requests to the same server
+        # Requests to different domains can be processed in parallel without issue
+        hostname = urlparse(request["uri"]).hostname or "default"
+        domain_name = ".".join(hostname.split(".")[-2:])
+        return f"web:{domain_name}"
     # Fallback for unknown backends
     return f"{backend}:default"
 
@@ -135,7 +136,7 @@ def _should_ignore_robots_txt(resource, allow_list):
         return True
 
     url = resource.url.strip().lower()
-    resource_domain = urlparse(url).hostname.lower() or ""
+    resource_domain = urlparse(url).hostname or ""
 
     for pattern in allow_list:
         # Exact URL match
