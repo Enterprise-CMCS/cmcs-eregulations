@@ -41,7 +41,7 @@ const isTitleActive = ({ act, title }) =>
             >
                 {{ value.name }}
             </h4>-->
-            <h4>View Title</h4>
+            <h4>Included Titles</h4>
             <ul class="titles__list">
                 <li
                     v-for="(title, j) in value.titles"

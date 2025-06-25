@@ -187,24 +187,27 @@ function toggleCitationHelp() {
                             <span>{{ showCitationHelp ? 'Hide examples ▲' : 'Show examples ▼' }}</span>
                         </button>
                         <div v-if="showCitationHelp" class="citation-help-text">
-                            <p>Enter a citation to get a direct link to current text on the
+                            <p>Get a link to current statute text on the
                                 <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="external"
                                     href="https://uscode.house.gov/"
                                 >
                                     US Code House.gov</a>
                                 website.
                             </p>
-                            <p><strong>Social Security Act:</strong></p>
+                            <p>For <strong>Social Security Act</strong> citations, enter the section and optionally the paragraph:</p>
                             <ul>
                                 <li>1945A</li>
-                                <li>1902(a)(74)</li>
+                                <li>1902(k)</li>
                                 <li>1903(m)(2)(A)(x)</li>
                             </ul>
-                            <p><strong>US Code:</strong></p>
+                            <p>Or for <strong>U.S.C.</strong> citations, enter the title (such as 42), then enter the section and optionally the paragraph:</p>
                             <ul>
-                                <li>42 U.S.C. 1396w-4a</li>
-                                <li>42 U.S.C. 1396(a)(74)</li>
-                                <li>42 U.S.C. 1396b(m)(2)(A)(x)</li>
+                                <li>1396w-4a</li>
+                                <li>1396a(k)</li>
+                                <li>1396b(m)(2)(A)(x)</li>
                             </ul>
                         </div>
                     </div>

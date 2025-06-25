@@ -20,7 +20,6 @@
             flex-direction: row;
             padding-left: 10px;
             padding-bottom: 30px;
-
             @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
                 flex-direction: column;
             }
@@ -252,12 +251,10 @@
     }
 }
 .citation-help-toggle-container {
-    margin-top: 0;
-    margin-bottom: var(--spacer-3, 1.5rem);
-    padding-left: 2px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-bottom: .5rem;
 
     .collapsible-title {
         color: $primary_link_color;
