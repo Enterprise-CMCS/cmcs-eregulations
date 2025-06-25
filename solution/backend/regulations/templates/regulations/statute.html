@@ -2,7 +2,7 @@
 {% load static %}
 {% load string_formatters %}
 
-{% block title_prefix %}Statute Reference | {% endblock %}
+{% block title_prefix %}Social Security Act | {% endblock %}
 
 {% block outside_vue %}
     {{ site_config|json_script:"site_config" }}
@@ -25,7 +25,9 @@
     data-home-url="{% url 'homepage' %}"
     data-host="{{ host }}"
     data-is-authenticated="{{ user.is_authenticated }}"
+    data-manual-url="{% url 'manual' %}"
     data-search-url="{% url 'search' %}"
+    data-statutes-url="{% url 'statutes' %}"
     data-subjects-url="{% url 'subjects' %}"
     data-username="{{ user.username }}"
 ></div>

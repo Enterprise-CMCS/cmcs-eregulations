@@ -25,7 +25,9 @@ const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
+const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
 const username = inject("username");
 
@@ -123,6 +125,13 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 // On load
 getActTitles();
 getStatutesArray();
+
+const citationInput = ref("");
+const showCitationHelp = ref(false);
+
+function toggleCitationHelp() {
+    showCitationHelp.value = !showCitationHelp.value;
+}
 </script>
 
 <template>
@@ -133,7 +142,11 @@ getStatutesArray();
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :manual-url="manualUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -159,40 +172,114 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Look Up Statute Text" />
+            <Banner title="Statute Reference" />
             <div id="main-content" class="statute__container">
                 <div class="content">
-                    <div class="content__selector">
-                        <div class="selector__parent">
-                            <h3>Included Statute</h3>
-                            <StatuteSelector
-                                v-if="!acts.loading"
-                                :loading="statutes.loading"
-                                :selected-act="queryParams.act"
-                                :selected-title="queryParams.title"
-                                :titles="parsedTitles"
-                            />
+                    <h2>Look Up Statute Text</h2>
+                    <div class="citation-help-toggle-container">
+                        <button
+                            type="button"
+                            class="collapsible-title"
+                            :aria-expanded="showCitationHelp.toString()"
+                            style="background: none; border: none; padding: 0; margin: 0;"
+                            @click="toggleCitationHelp"
+                        >
+                            <span>{{ showCitationHelp ? 'Hide examples ▲' : 'Show examples ▼' }}</span>
+                        </button>
+                        <div v-if="showCitationHelp" class="citation-help-text">
+                            <p>Get a link to current statute text on the
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="external"
+                                    href="https://uscode.house.gov/"
+                                >
+                                    US Code House.gov</a>
+                                website.
+                            </p>
+                            <p>For <strong>Social Security Act</strong> citations, enter the section and optionally the paragraph:</p>
+                            <ul>
+                                <li>1945A</li>
+                                <li>1902(k)</li>
+                                <li>1903(m)(2)(A)(x)</li>
+                            </ul>
+                            <p>Or for <strong>U.S.C.</strong> citations, enter the title (such as 42), then enter the section and optionally the paragraph:</p>
+                            <ul>
+                                <li>1396w-4a</li>
+                                <li>1396a(k)</li>
+                                <li>1396b(m)(2)(A)(x)</li>
+                            </ul>
                         </div>
                     </div>
-                    <div
-                        class="table__parent"
-                        :class="{ loading: statutes.loading }"
-                    >
-                        <SimpleSpinner
-                            v-if="statutes.loading"
-                            class="table__spinner"
-                        />
-                        <template v-else>
-                            <TableCaption
-                                :selected-act="ACT_TYPES[queryParams.act]"
-                                :selected-title="queryParams.title"
+                    <div class="citation-link-box">
+                        <label>Social Security Act §</label>
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input"
+                            placeholder="1903(a)(3)(A)(i)"
+                        >
+                        <input
+                            id="citation-button"
+                            class="btn default-btn"
+                            type="submit"
+                            value="Get Citation Link"
+                        >
+                    </div>
+                    <div class="citation-link-box">
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input-short"
+                            placeholder="42"
+                        >
+                        <label>U.S.C.</label>
+                        <input
+                            v-model="citationInput"
+                            type="text"
+                            class="citation-input"
+                            placeholder="1396b(a)(3)(A)(i)"
+                        >
+                        <input
+                            id="citation-button"
+                            class="btn default-btn"
+                            type="submit"
+                            value="Get Citation Link"
+                        >
+                    </div>
+                    <h2>Social Security Act Table of Contents</h2>
+                    <TableCaption
+                        :selected-act="ACT_TYPES[queryParams.act]"
+                        :selected-title="queryParams.title"
+                    />
+                    <div class="statute-table-section">
+                        <div class="content__selector">
+                            <div class="selector__parent">
+                                <StatuteSelector
+                                    v-if="!acts.loading"
+                                    :loading="statutes.loading"
+                                    :selected-act="queryParams.act"
+                                    :selected-title="queryParams.title"
+                                    :titles="parsedTitles"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="table__parent"
+                            :class="{ loading: statutes.loading }"
+                        >
+                            <SimpleSpinner
+                                v-if="statutes.loading"
+                                class="table__spinner"
                             />
-                            <StatuteTable
-                                :display-type="isNarrow ? 'list' : 'table'"
-                                :filtered-statutes="statutes.results"
-                                table-type="ssa"
-                            />
-                        </template>
+                            <template v-else>
+                                <StatuteTable
+                                    :display-type="isNarrow ? 'list' : 'table'"
+                                    :filtered-statutes="statutes.results"
+                                    table-type="ssa"
+                                />
+                            </template>
+                        </div>
                     </div>
                 </div>
             </div>

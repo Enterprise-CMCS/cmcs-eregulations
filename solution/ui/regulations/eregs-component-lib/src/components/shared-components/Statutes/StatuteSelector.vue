@@ -22,7 +22,6 @@ const props = defineProps({
     },
 });
 
-const isActActive = ({ act }) => act === props.selectedAct;
 const isTitleActive = ({ act, title }) =>
     act === props.selectedAct && title === props.selectedTitle;
 </script>
@@ -34,14 +33,15 @@ const isTitleActive = ({ act, title }) =>
             :key="`${key}-${i}`"
             class="acts-list__item"
         >
-            <h4
+            <!--<h4
                 class="acts-item__heading"
                 :class="{
                     'acts-item__heading--active': isActActive({ act: key }),
                 }"
             >
                 {{ value.name }}
-            </h4>
+            </h4>-->
+            <h4>Included Titles</h4>
             <ul class="titles__list">
                 <li
                     v-for="(title, j) in value.titles"

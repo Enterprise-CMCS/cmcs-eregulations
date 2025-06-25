@@ -22,6 +22,7 @@ const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
@@ -72,7 +73,11 @@ const executeSearch = (payload) => {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :manual-url="manualUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -101,34 +106,7 @@ const executeSearch = (payload) => {
             <Banner title="State Medicaid Manual" />
             <div id="main-content" class="manual__container">
                 <div class="">
-                    <p class="manual-page-description">
-                        This table provides links to
-                        <a
-                            class="external"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
-                        >
-                            zipped Word documents from the CMS website</a>,
-                        which is the most current and complete version of the manual,
-                        along with links to convenient
-                        <a
-                            class="external"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://web.archive.org/web/20041212094406/http://www.cms.hhs.gov/manuals/45_smm/pub45toc.asp"
-                        >
-                            web pages</a>
-                        and
-                        <a
-                            class="external"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href="https://web.archive.org/web/20050204151206/http://www.cms.hhs.gov:80/manuals/pub45pdf/smmtoc.asp"
-                        >
-                            PDFs</a>
-                        from archived copies of the CMS website.
-                    </p>
+                    <h2>Search</h2>
                     <section class="search__container">
                         <div v-if="isAuthenticated" class="search-input__div">
                             <FetchItemsContainer
@@ -164,6 +142,35 @@ const executeSearch = (payload) => {
                             </template>
                         </SignInCTA>
                     </section>
+                    <h2>Table of Contents</h2>
+                    <p class="manual-page-description">
+                        This table provides links to
+                        <a
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://www.cms.gov/Regulations-and-Guidance/Guidance/Manuals/Paper-Based-Manuals-Items/CMS021927"
+                        >
+                            zipped Word documents from the CMS website</a>,
+                        which is the most current and complete version of the manual,
+                        along with links to convenient
+                        <a
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://web.archive.org/web/20041212094406/http://www.cms.hhs.gov/manuals/45_smm/pub45toc.asp"
+                        >
+                            web pages</a>
+                        and
+                        <a
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://web.archive.org/web/20050204151206/http://www.cms.hhs.gov:80/manuals/pub45pdf/smmtoc.asp"
+                        >
+                            PDFs</a>
+                        from archived copies of the CMS website.
+                    </p>
                     <section class="table__parent">
                         <table id="manualTable">
                             <thead>
