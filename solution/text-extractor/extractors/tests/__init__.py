@@ -32,8 +32,8 @@ class FixtureTestCase(unittest.TestCase):
             output = extractor.extract(sample)
 
         # Uncomment these 2 lines to re-export fixture files the next time tests are run.
-        with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "w") as f:
-            f.write(output)
+        # with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "w") as f:
+        #     f.write(output)
 
         with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "rb") as f:
             expected = f.read().decode()
