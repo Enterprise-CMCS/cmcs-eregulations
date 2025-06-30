@@ -14,7 +14,7 @@ def mock_extract_embedded(self, file_name: str, file: bytes) -> str:
 
 class FixtureTestCase(unittest.TestCase):
     BASE_PATH = "extractors/tests/fixtures/"
-    
+
     def _test_file_type(self, file_type, **kwargs):
         variation = kwargs.get("variation", None)
         variation = f"{variation}_" if variation else ""
@@ -32,8 +32,8 @@ class FixtureTestCase(unittest.TestCase):
             output = extractor.extract(sample)
 
         # Uncomment these 2 lines to re-export fixture files the next time tests are run.
-        # with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "w") as f:
-        #     f.write(output)
+        with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "w") as f:
+            f.write(output)
 
         with open(f"{self.BASE_PATH}{collection}/{variation}expected.txt", "rb") as f:
             expected = f.read().decode()
