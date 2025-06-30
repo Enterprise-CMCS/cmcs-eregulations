@@ -23,19 +23,21 @@ const iconComponents = {
 <template>
     <v-card
         class="icon-card"
-        variant="tonal"
+        variant="outlined"
     >
-        <v-card-title>
+        <v-card-title class="icon-card__header">
             <div class="icon-card__title-container">
-                <div>
+                <div class="icon-card__title">
                     <slot name="card-title">
                         Default Title
                     </slot>
                 </div>
-                <component
-                    :is="iconComponents[props.iconType]"
-                    class="icon-card__icon"
-                />
+                <div class="icon-card__icon">
+                    <component
+                        :is="iconComponents[props.iconType]"
+                        class="icon-card__icon"
+                    />
+                </div>
             </div>
         </v-card-title>
         <v-card-text>
