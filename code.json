@@ -1,5 +1,5 @@
 {
-  "name": "eRegulations",
+  "name": "cmcs-eregulations",
   "description": "Web application for efficient in-depth research into Medicaid and CHIP policy, including statute, regulations, rules, and guidance",
   "longDescription": "eRegulations is a web application that reduces the time and effort required for policy staff to find, read, and analyze relevant statute, regulations, guidance, internal policy reference materials, and other policy information. By providing a comprehensive and easy-to-use policy reference tool with powerful cross-referencing and search options, this application radically improves the speed and efficiency of work such as: drafting and reviewing drafts of proposed rules, guidance, technical assistance, and other policy materials; reviewing and responding to requests; answering technical assistance questions; training staff, including new staff and transfers. eRegulations is different from existing websites because it brings many kinds of related policy resources into context with each other, instead of being the publisher of only a specific category of policy information.",
   "status": "Production",
@@ -19,7 +19,7 @@
   "repositoryHost": "github.com/Enterprise-CMCS",
   "repositoryVisibility": "public",
   "vcs": "git",
-  "laborHours": 21367,
+  "laborHours": 21420,
   "reuseFrequency": {
     "forks": 12
   },
@@ -33,8 +33,8 @@
   "languages": [
     "JavaScript",
     "Python",
-    "Go",
     "Vue",
+    "Go",
     "SCSS",
     "TypeScript",
     "HTML",
@@ -47,8 +47,8 @@
   "contractNumber": "47QTCA21D006V:75FCMC21F0092",
   "date": {
     "created": "2020-09-28T15:44:46Z",
-    "lastModified": "2025-06-03T16:22:35Z",
-    "metaDataLastUpdated": "2025-06-03T20:42:37.038Z"
+    "lastModified": "2025-06-30T16:36:31Z",
+    "metaDataLastUpdated": "2025-07-01T00:20:36.960Z"
   },
   "tags": [
     "regulations",

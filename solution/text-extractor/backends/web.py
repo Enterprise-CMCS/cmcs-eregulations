@@ -1,6 +1,5 @@
 import logging
 import os
-import time
 from urllib import robotparser
 from urllib.parse import urlsplit
 
@@ -16,7 +15,6 @@ logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 class WebBackend(FileBackend):
     backend = "web"
 
-    _retry_timeout = 30
     _user_agent = "CMCSeRegsTextExtractorBot/1.0"
 
     def __init__(self, config: dict):
@@ -43,28 +41,17 @@ class WebBackend(FileBackend):
             if not robots_parser.can_fetch(self._user_agent, uri):
                 raise BackendException(f"robots.txt has disallowed crawling of \"{uri}\"")
 
-        # Loop until the lambda times out, max of 15 mins
-        while True:
-            try:
-                logger.debug("Sending GET request to %s with headers: %s", uri, str(self._headers))
-                resp = requests.get(uri, timeout=60, headers=self._headers)
-            except requests.exceptions.Timeout:
-                logger.warning("GET request timed out. Retrying in %i seconds.", self.retry_timeout)
-                time.sleep(self.retry_timeout)
-                continue
-            except requests.exceptions.RequestException as e:
-                raise BackendException(f"GET request failed: {str(e)}")
+        # Attempt to retrieve the file
+        try:
+            logger.debug("Sending GET request to %s with headers: %s", uri, str(self._headers))
+            resp = requests.get(uri, timeout=60, headers=self._headers)
+            resp.raise_for_status()  # Raises an HTTPError for bad responses (4xx and 5xx)
+        except requests.exceptions.Timeout:
+            raise BackendException("GET request timed out")
+        except requests.exceptions.RequestException as e:
+            raise BackendException(f"GET request failed: {str(e)}")
+        except requests.exceptions.HTTPError as e:
+            raise BackendException(f"GET request failed with HTTP error: {str(e)}")
 
-            if resp.status_code == requests.codes.OK:
-                return resp.content
-            elif "Retry-After" in resp.headers:
-                retry = int(resp.headers["Retry-After"])
-                logger.warning("Received a %i response with a 'Retry-After' of %i seconds.", resp.status_code, retry)
-                time.sleep(retry)
-                continue
-            elif resp.status_code == requests.codes.TOO_MANY:
-                logger.warning("Got a 'too many requests' error for \"%s\". Retrying in %i seconds.", uri, self.retry_timeout)
-                time.sleep(self.retry_timeout)
-                continue
-            else:
-                raise BackendException(f"GET request failed with a {resp.status_code} code: '{resp.content}'")
+        logger.debug("Received response with status code %i.", resp.status_code)
+        return resp.content
