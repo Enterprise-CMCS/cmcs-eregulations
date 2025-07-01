@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 import boto3
 import requests
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse
 
 from resources.models import FederalRegisterLink, ResourcesConfiguration
@@ -142,7 +141,7 @@ def _should_ignore_robots_txt(resource, allow_list):
 #   - USE_LOCAL_TEXT_EXTRACTOR: if true will use the local dockerized text extractor instead of the AWS client.
 #   - TEXT_EXTRACTOR_QUEUE_URL: if set will use the SQS queue instead of invoking the Lambda directly.
 #   - TEXT_EXTRACTOR_ARN: if the above is not set and this is, will invoke the Lamba directly.
-# If none of these are set, ImproperlyConfigured is raised.
+# If none of these are set, extraction will fail for all resources.
 #
 # Arguments:
 # request: the Django Request object that caused this call to occur.
@@ -203,7 +202,11 @@ def call_text_extractor(request, resources):
         extract_function = _extract_via_lambda
         client = establish_client("lambda")
     else:
-        raise ImproperlyConfigured("The text extractor destination is not configured.")
+        failures += [{
+            "id": i["id"],
+            "reason": "The text extractor destination is not configured.",
+        } for i in requests]
+        requests = []
 
     for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
         success, fail = extract_function(batch, client)
