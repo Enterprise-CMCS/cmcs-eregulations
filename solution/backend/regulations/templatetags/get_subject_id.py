@@ -4,6 +4,7 @@ from resources.models import Subject
 
 register = template.Library()
 
+
 @register.simple_tag
 def get_subject_id(subject_name):
     try:
@@ -13,4 +14,3 @@ def get_subject_id(subject_name):
         return None
     except Exception:
         return None
-

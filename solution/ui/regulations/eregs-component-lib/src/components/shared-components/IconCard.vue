@@ -1,5 +1,4 @@
 <script setup>
-import { computed, ref } from "vue";
 
 import HomeBook from "spaComponents/svgs/home-book.vue";
 import HomeClipboard from "spaComponents/svgs/home-clipboard.vue";
