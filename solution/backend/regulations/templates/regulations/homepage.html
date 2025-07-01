@@ -1,6 +1,7 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 {% load render_nested %}
+{% load get_subject_id %}
 
 {% block title_prefix %}{% endblock %}
 
@@ -82,7 +83,7 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{{ HOME_URL }}/subjects?subjects=112"
+                                        href="{{ HOME_URL }}/subjects?subjects={% get_subject_id "Maternal Health" %}"
                                     >
                                         Maternal Health
                                     </a>
@@ -90,7 +91,7 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{{ HOME_URL }}/subjects?subjects=108"
+                                        href="{{ HOME_URL }}/subjects?subjects={% get_subject_id "Preventive Services" %}"
                                     >
                                         Preventive Services
                                     </a>
@@ -98,7 +99,7 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{{ HOME_URL }}/subjects?subjects=225"
+                                        href="{{ HOME_URL }}/subjects?subjects={% get_subject_id "Home Health" %}"
                                     >
                                         Home Health
                                     </a>
