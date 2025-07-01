@@ -55,6 +55,11 @@ ol {
     gap: 0;
 }
 
+.v-card-title,
+.v-card-text {
+    letter-spacing: normal !important;
+}
+
 .v-application {
     font-family:
         Open Sans,
