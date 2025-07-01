@@ -398,6 +398,7 @@
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 0;
+        min-height: 100vh;
 
         @mixin clamp-title {
             font-size: clamp(1rem, 2.2cqi, 1.5rem);
