@@ -40,7 +40,7 @@ const iconComponents = {
                 </div>
             </div>
         </v-card-title>
-        <v-card-text>
+        <v-card-text class="icon-card__content">
             <slot name="card-content">
                 Default Content
             </slot>

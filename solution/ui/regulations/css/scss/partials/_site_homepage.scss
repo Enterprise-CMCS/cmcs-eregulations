@@ -13,6 +13,10 @@
         background: $secondary_background_color;
         border: 0;
 
+      a {
+            text-decoration: none;
+      }
+
         .icon-card__header {
             background-color: $teal;
             padding: 15px 20px;
@@ -47,6 +51,29 @@
                 .icon-card__icon {
                     display: flex;
                     justify-content: flex-end;
+                }
+            }
+        }
+
+        .icon-card__content {
+            ul li {
+                line-height: var(--font-line-height-lead);
+
+                &::marker {
+                    color: $primary_link_color;
+                    font-size: var(--font-size-xs);
+                }
+
+                a {
+                    color: $primary_link_color;
+                    text-decoration: none;
+
+                    &:hover,
+                    &:focus,
+                    &:focus-visible,
+                    &:visited {
+                        color: $primary_link_color;
+                    }
                 }
             }
         }
