@@ -14,7 +14,15 @@
         border: 0;
 
       a {
-            text-decoration: none;
+          color: $primary_link_color;
+          text-decoration: none;
+
+          &:hover,
+          &:focus,
+          &:focus-visible,
+          &:visited {
+              color: $primary_link_color;
+          }
       }
 
         .icon-card__header {
@@ -43,7 +51,7 @@
               }
 
                 .icon-card__title {
-                    width: 139px;
+                    width: 135px;
                     line-height: var(--font-line-height-heading);
                     white-space: normal;
                 }
@@ -62,18 +70,6 @@
                 &::marker {
                     color: $primary_link_color;
                     font-size: var(--font-size-xs);
-                }
-
-                a {
-                    color: $primary_link_color;
-                    text-decoration: none;
-
-                    &:hover,
-                    &:focus,
-                    &:focus-visible,
-                    &:visited {
-                        color: $primary_link_color;
-                    }
                 }
             }
         }
