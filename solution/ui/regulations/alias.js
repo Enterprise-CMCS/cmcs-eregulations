@@ -11,6 +11,7 @@ export default {
     sharedComponents: r(
         "../regulations/eregs-component-lib/src/components/shared-components"
     ),
+    spaComponents: r("../regulations/eregs-vite/src/components"),
     utilities: r("./utilities"),
     vite: r("../regulations/eregs-vite/src"),
 };
