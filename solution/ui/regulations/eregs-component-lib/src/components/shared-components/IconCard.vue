@@ -4,7 +4,7 @@ import HomeBook from "spaComponents/svgs/home-book.vue";
 import HomeClipboard from "spaComponents/svgs/home-clipboard.vue";
 import HomeSearch from "spaComponents/svgs/home-search.vue";
 
-const props = defineProps({
+defineProps({
     iconType: {
         type: String,
         required: true,
@@ -33,7 +33,7 @@ const iconComponents = {
                 </div>
                 <div class="icon-card__icon">
                     <component
-                        :is="iconComponents[props.iconType]"
+                        :is="iconComponents[iconType]"
                         class="icon-card__icon"
                     />
                 </div>
