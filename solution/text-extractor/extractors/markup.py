@@ -6,12 +6,17 @@
 # If no custom rule is defined or the custom rule fails, it falls back to generic extraction logic, starting with the <main>
 # tag, then <article> or <section> tags, and finally the entire body.
 
+import os
+import logging
 from urllib.parse import urlparse
 import warnings
 
 from bs4 import BeautifulSoup, XMLParsedAsHTMLWarning
 
 from .extractor import Extractor
+
+logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 class MarkupExtractor(Extractor):
@@ -33,26 +38,32 @@ class MarkupExtractor(Extractor):
                 hostname = urlparse(uri).hostname or ""
                 hostname = hostname[4:] if hostname.startswith("www.") else hostname
                 func_name = "_extract_from_" + hostname.replace(".", "_")
+                logger.info("Found hostname '%s'. Attempting to use custom rules in function: '%s'.", hostname, func_name)
                 return getattr(self, func_name)(soup)
             except Exception:
                 # If the custom extraction function does not exist or fails to find text, we will handle it below
-                pass
+                logger.warning("Failed to extract using custom hostname-based rules. Falling back to default extraction logic.")
 
         # If no custom extraction rule is defined for this domain or text wasn't found, attempt to use default extraction logic
 
-        # Look for content in a <main> tag first
-        main = soup.find("main")
-        if main:
-            return main.get_text(" ")
+        # Fallback 1: Look for content in a <main> tag first
+        try:
+            logger.info("Fallback 1: Attempting to extract text from <main> tag.")
+            return soup.find("main").get_text(" ")
+        except Exception:
+            # If the <main> tag is not found or fails to extract text, fallback to other methods
+            logger.warning("Failed to extract text from <main> tag.")
 
-        # Fallback 1: look for <article> or <section> tags
-        candidates = soup.find_all(["article", "section"], recursive=True)
-        if candidates:
-            text = " ".join(candidate.get_text(" ") or "" for candidate in candidates).strip()
-            if text:
-                return text
+        # Fallback 2: look for <article> or <section> tags
+        try:
+            logger.info("Fallback 2: Attempting to extract text from <article> or <section> tags.")
+            candidates = soup.find_all(["article", "section"], recursive=True) or None
+            return " ".join(candidate.get_text(" ") or "" for candidate in candidates).strip()
+        except Exception:
+            logger.warning("Failed to extract text from <article> or <section> tags.")
 
-        # Fallback 2: use the page's entire body
+        # Fallback 3: use the page's entire body
+        logger.info("Fallback 3: Attempting to extract text from the entire <body> tag.")
         body = soup.body or soup
         return body.get_text(" ")
 
