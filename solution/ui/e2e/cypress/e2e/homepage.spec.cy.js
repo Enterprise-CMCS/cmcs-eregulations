@@ -300,32 +300,72 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("has the correct descriptive text", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".cta .about-text__container p").should(($el) => {
-            expect($el.text().replace(/\s+/g, " ").trim()).to.equal(
-                "eRegulations organizes together regulations, subregulatory guidance, and other related policy materials.",
+        cy.get("h1").should("have.text", "An Easier Way to Navigate Policy Information");
+        cy.get(".homepage__subtitle").should(($el) => {
+            expect($el.text().replace(/\s+/g, " ").trim()).to.contain(
+                "Find what you need in one place: eRegulations organizes together statute, regulations, guidance, internal documents, and related policy materials. View an 8-minute video demo and learn how it gets updated.",
             );
         });
     });
 
-    it("takes you to the about page when clicking 'Learn About This Tool'", () => {
+    it("takes you to the YouTube video when clicking 'View an 8-minute video demo'", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".cta .about-text__container a")
-            .contains("Learn About This Tool")
+        cy.get(".homepage__subtitle a")
+            .first()
+            .should("have.attr", "href")
+            .and("include", "https://www.youtube.com/");
+    });
+
+    it("takes you to the about page when clicking 'learn how it gets updated'", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".homepage__subtitle a")
+            .eq(1)
+            .contains("learn how it gets updated")
             .click();
         cy.url().should("eq", Cypress.config().baseUrl + "/about/");
     });
 
-    it("takes you to the proper sample search", () => {
+    it("takes you to the proper reg from demo card", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.get(".policy-materials__container a.sample-search-btn")
-            .contains("Try a Sample Search")
+        cy.get(".card--regs a")
+            .first()
+            .contains("§ 435.908 Assistance with application and renewal.")
+            .click({ force: true });
+        cy.url()
+            .should("contain", Cypress.config().baseUrl)
+            .and("contain", "/42/435")
+            .and("contain", "#435-908");
+    });
+
+    it("takes you to the proper subject from demo card", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".card--subjects a")
+            .first()
+            .contains("Maternal Health")
+            .click({ force: true });
+        cy.url()
+            .should(
+                "contain",
+                Cypress.config().baseUrl + `/subjects/?subjects=`
+            );
+        cy.get("h1").should("have.text", "Maternal Health");
+    });
+
+    it("takes you to the proper sample search from demo card", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.get(".card--search a")
+            .first()
+            .contains("dental examinations")
             .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/search/?q=%22public%20health%20emergency%22`,
+                `/search/?q=dental+examinations`,
         );
     });
 

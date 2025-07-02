@@ -4,6 +4,78 @@
 
 @import "../application_settings";
 
+.homepage__demo-cards {
+    gap: var(--homepage-card-gap);
+    margin-bottom: var(--spacer-1-5);
+
+    .icon-card {
+        flex: 1;
+        background: $secondary_background_color;
+        border: 0;
+
+      a {
+          color: $primary_link_color;
+          text-decoration: none;
+
+          &:hover,
+          &:focus,
+          &:focus-visible,
+          &:visited {
+              color: $primary_link_color;
+          }
+      }
+
+        .icon-card__header {
+            background-color: $teal;
+            padding: 15px 20px;
+
+            .icon-card__title-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+              container: title-container / inline-size;
+
+              @container title-container (max-width: 199px) {
+                  .icon-card__title {
+                      width: 120px;
+                      max-width: 120px;
+                      font-size: var(--font-size-md);
+                  }
+
+                  .icon-card__icon {
+                      svg {
+                          width: 80%;
+                      }
+                  }
+              }
+
+                .icon-card__title {
+                    width: 135px;
+                    line-height: var(--font-line-height-heading);
+                    white-space: normal;
+                }
+
+                .icon-card__icon {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+            }
+        }
+
+        .icon-card__content {
+            ul li {
+                line-height: var(--font-line-height-lead);
+
+                &::marker {
+                    color: $primary_link_color;
+                    font-size: var(--font-size-xs);
+                }
+            }
+        }
+    }
+}
+
 .site-homepage--update {
     @mixin link-common {
         text-decoration: none;
@@ -16,6 +88,16 @@
 
         @media (max-width: $eds-xs-max) {
             flex-direction: column;
+        }
+
+        h1.homepage__title {
+            margin-bottom: 6px;
+            font-size: 30px;
+        }
+
+        p.homepage__subtitle {
+            margin-top: 6px;
+            margin-block-start: 6px !important;
         }
 
         .link-btn {
@@ -312,6 +394,7 @@
         flex-direction: column;
         justify-content: space-between;
         padding-bottom: 0;
+        min-height: 100vh;
 
         @mixin clamp-title {
             font-size: clamp(1rem, 2.2cqi, 1.5rem);
@@ -342,96 +425,17 @@
             @container cta-container (max-width: 629px) {
                 .cta {
                     flex-direction: column;
-
-                    .video__container {
-                        margin-right: 0;
-                    }
-
-                    .resources__container {
-                        margin-right: 0;
-                        padding-bottom: var(--spacer-1-5);
-
-                        .content-tabs {
-                            padding-right: 12px;
-                            padding-left: 0px;
-                            font-family: "Open Sans";
-                        }
-                    }
-
-                    .about-text__container {
-                        margin-left: 0;
-                    }
                 }
             }
 
             @container cta-container (min-width: 630px) {
                 .cta {
                     flex-direction: row;
-
-                    .video__container {
-                        margin-right: 15px;
-                    }
-
-                    .resources__container {
-                        margin-right: 15px;
-                        padding-top: 19px;
-                    }
-
-                    .about-text__container,
-                    .policy-materials__container {
-                        margin-left: 15px;
-                        margin-bottom: 30px;
-                    }
-
-                    .policy-materials__container {
-                        .policy-materials__title {
-                            @include clamp-title;
-                        }
-                    }
-                }
-            }
-
-            @container cta-container (min-width: 630px) and (max-width: 658px) {
-                .policy-materials__title {
-                    line-height: 1.5rem;
-                }
-            }
-
-            @container cta-container (max-width: 799px) {
-                .cta {
-                    .about-text__container {
-                        margin-bottom: 24px;
-                    }
-                }
-            }
-
-            @container cta-container (min-width: 800px) {
-                .cta {
-                    .resources__container {
-                        .content-tabs {
-                            flex: 1 1 auto;
-                        }
-                    }
                 }
             }
 
             .cta {
                 display: flex;
-
-                .video__container {
-                    flex: 2;
-
-                    img {
-                        width: 100%;
-                        border-radius: 3px;
-                    }
-
-                    label {
-                        font-size: 12px;
-                        color: $mid_gray;
-                        padding-top: var(--spacer-half);
-                    }
-                }
 
                 .resources__container {
                     flex: 2;
@@ -538,94 +542,6 @@
 
                     .document__subjects {
                         margin-top: var(--spacer-half);
-                    }
-                }
-
-                .about-text__container {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-
-                    p {
-                        font-size: 18px;
-                        line-height: 24px;
-                    }
-                }
-
-                .policy-materials__container {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-start;
-
-                    .policy-materials {
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        background-color: $lightest_gray;
-                        padding: 24px 8px 32px;
-                        border-radius: 3px;
-
-                        .policy-materials__title {
-                            text-align: center;
-                            margin-bottom: 8px;
-                        }
-
-                        .policy-materials__categories--parent {
-                            container: policy-materials-categories / inline-size;
-
-                            width: 100%;
-
-                            .policy-materials__categories {
-                                display: flex;
-                                flex-wrap: wrap;
-                                justify-content: center;
-                                margin-bottom: 8px;
-
-                                span {
-                                    font-weight: bold;
-                                    font-size: 14px;
-                                    line-height: 22px;
-                                    color: $mid_gray;
-
-                                    &:not(:last-child) {
-                                        padding-right: 1em;
-                                        margin-right: 1em;
-                                        border-right: 1px solid $light_gray;
-                                    }
-
-                                    @container policy-materials-categories (max-width: 274px) {
-                                        font-size: 12px;
-                                        line-height: 20px;
-
-                                        &:not(:last-child) {
-                                            padding-right: 0.5em;
-                                            margin-right: 0.5em;
-                                        }
-                                    }
-
-                                    @container policy-materials-categories (max-width: 215px) {
-                                        font-size: 11px;
-
-                                        &:not(:last-child) {
-                                            padding-right: 0.3em;
-                                            margin-right: 0.3em;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        .policy-materials__text {
-                            margin: 0 24px 16px;
-                            p {
-                                margin-block-start: 0 !important;
-                                margin-block-end: 0 !important;
-                                font-size: 16px;
-                                line-height: 24px;
-                            }
-                        }
                     }
                 }
 

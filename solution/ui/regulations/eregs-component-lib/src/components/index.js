@@ -24,6 +24,7 @@ export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 // Shared Components
 export { default as CategoryLabel } from "./shared-components/results-item-parts/CategoryLabel.vue";
 export { default as DocTypeLabel } from "./shared-components/results-item-parts/DocTypeLabel.vue";
+export { default as IconCard } from "./shared-components/IconCard.vue";
 export { default as IndicatorLabel } from "./shared-components/results-item-parts/IndicatorLabel.vue";
 export { default as LeftNavCollapse } from "./shared-components/LeftNavCollapse.vue";
 export { default as RelatedSectionsCollapse } from "./shared-components/results-item-parts/RelatedSectionsCollapse.vue";

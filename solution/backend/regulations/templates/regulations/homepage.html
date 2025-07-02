@@ -1,6 +1,7 @@
 {% extends "regulations/base.html" %}
 {% load static %}
 {% load render_nested %}
+{% load get_subject_id %}
 
 {% block title_prefix %}{% endblock %}
 
@@ -27,33 +28,122 @@
     </left-nav-collapse>
     <div id="main-content">
         <div class="top-container">
+            <h1 class="homepage__title">An Easier Way to Navigate Policy Information</h1>
+            <p class="homepage__subtitle">
+                Find what you need in one place: eRegulations organizes together statute, regulations, guidance, internal documents, and related policy materials.
+                    <a
+                        href="{{ DEMO_VIDEO_URL }}"
+                        class="external"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >View an 8-minute video demo</a>
+                and <a href="{% url 'about' %}">learn how it gets updated</a>.
+            </p>
             <div class="cta__container">
-                <div class="cta">
-                    <div class="video__container">
-                        <a
-                            href="{{ DEMO_VIDEO_URL }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img
-                                src="{% static 'images/home_video.png' %}"
-                                alt="View an 8-minute video demonstration."
-                            />
-                        </a>
-                        <label id="videoLabel">View an 8-minute video demonstration.</label>
-                    </div>
-                    <div class="about-text__container">
-                        <p>
-                            eRegulations organizes together regulations,
-                            subregulatory guidance, and other related policy
-                            materials.
-                        </p>
-                        <a
-                            href="{% url 'about' %}"
-                            class="action-btn default-btn link-btn"
-                            >Learn About This Tool</a
-                        >
-                    </div>
+                <div class="cta homepage__demo-cards">
+                    <icon-card icon-type="book" class="card--regs">
+                        <template #card-title>
+                            Regulations with Context
+                        </template>
+                        <template #card-content>
+                            <p>
+                                Get the whole picture.  Read regulations and view related materials.
+                                <em>Try it:</em>
+                            </p>
+                            <ul>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}42/435/Subpart-J#435-908"
+                                    >
+                                        § 435.908 Assistance with application and renewal.
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}42/438/Subpart-A#438-8"
+                                    >
+                                        § 438.8 Medical loss ratio (MLR) standards.
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </icon-card>
+                    <icon-card icon-type="clipboard" class="card--subjects">
+                        <template #card-title>
+                            Topic-Based Research
+                        </template>
+                        <template #card-content>
+                            <p>
+                                Start with a subject and see recent rules, guidance, GAO reports, and more.
+                                <em>Try it:</em>
+                            </p>
+                            <ul>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Maternal Health" %}"
+                                    >
+                                        Maternal Health
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Preventive Services" %}"
+                                    >
+                                        Preventive Services
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Home Health" %}"
+                                    >
+                                        Home Health
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </icon-card>
+                    <icon-card icon-type="search" class="card--search">
+                        <template #card-title>
+                            One Search, All Sources
+                        </template>
+                        <template #card-content>
+                            <p>
+                                Is something in statute, regulation, or guidance?  Search everything.
+                                <em>Try it:</em>
+                            </p>
+                            <ul>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}search?q=dental+examinations"
+                                    >
+                                        dental examinations
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}search?q=spousal+support"
+                                    >
+                                        spousal support
+                                    </a>
+                                </li>
+                                <li>
+                                    <a
+                                        class="card__link"
+                                        href="{% url 'homepage' %}search?q=timely+claim"
+                                    >
+                                        timely claim
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </icon-card>
                 </div>
             </div>
             <div class="cta__container">
@@ -63,29 +153,6 @@
                             api-url={{ API_BASE }}
                             home-url="{% url 'homepage' %}"
                         ></recent-resources>
-                    </div>
-                    <div class="policy-materials__container">
-                        <div class="policy-materials">
-                            <div class="homepage-component__heading policy-materials__title">Search Policy Materials</div>
-                            <div class="policy-materials__categories--parent">
-                                <div class="policy-materials__categories">
-                                    <span class="policy-materials__category">CFR</span>
-                                    <span class="policy-materials__category">Guidance</span>
-                                    <span class="policy-materials__category">Rule Preambles</span>
-                                </div>
-                            </div>
-                            <div class="policy-materials__text">
-                                <p>
-                                    Look up keywords in the complete text of several
-                                    kinds of policy materials at once.
-                                </p>
-                            </div>
-                            <a
-                                href='{% url "search" %}?q="public%20health%20emergency"'
-                                class="action-btn default-btn link-btn sample-search-btn"
-                                >Try a Sample Search</a
-                            >
-                        </div>
                     </div>
                 </div>
             </div>

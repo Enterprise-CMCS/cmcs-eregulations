@@ -36,12 +36,12 @@ h2 {
     font-family: $secondary_site_font;
 }
 
-.homepage-component__heading {
-    font-size: 24px;
+.icon-card__title {
+    font-size: var(--font-size-lg);
     line-height: 36px;
     font-weight: 700;
     font-family: $secondary_site_font;
-    color: $primary_color;
+    color: $white;
 }
 
 su,

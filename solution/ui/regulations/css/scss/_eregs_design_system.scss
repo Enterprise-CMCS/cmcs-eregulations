@@ -43,6 +43,9 @@ $eds-width-header-links: 1240px;
 
     // font sizes
     --font-size-xs: 0.75rem; // 12px
+
+    // homepage cards
+    --homepage-card-gap: 30px;
 }
 
 @mixin eds-gutters($top-bottom-padding: 0) {
