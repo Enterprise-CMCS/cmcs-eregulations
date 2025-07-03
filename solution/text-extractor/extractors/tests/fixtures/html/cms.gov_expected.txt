@@ -1,0 +1,13 @@
+
+ CMS.gov Sample Page 
+ This is a sample page for testing the text extraction functionality. 
+ It contains various elements that should be processed correctly. 
+ 
+ Content Section 
+ This section contains important information. 
+ 
+ Item 1 
+ Item 2 
+ Item 3 
+ 
+ 

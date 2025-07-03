@@ -1,10 +1,2 @@
 
- 
- 
- 
- XHTML Basic Document Structure 
- 
- 
  Welcome to XHTML 
- 
- 

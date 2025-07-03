@@ -14,7 +14,7 @@ def mock_extract_embedded(self, file_name: str, file: bytes) -> str:
 
 class FixtureTestCase(unittest.TestCase):
     BASE_PATH = "extractors/tests/fixtures/"
-    
+
     def _test_file_type(self, file_type, **kwargs):
         variation = kwargs.get("variation", None)
         variation = f"{variation}_" if variation else ""

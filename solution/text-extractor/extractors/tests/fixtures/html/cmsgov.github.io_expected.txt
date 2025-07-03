@@ -1,0 +1,25 @@
+
+ Streamlined Modular Certification Frequently Asked Questions (FAQs) 
+ CMS prepared this set of FAQs to inform states and the public about the Streamlined Modular Certification (SMC) process and requirements. The official  SMC Guidance  is available at  Medicaid.gov  and is the primary source of information on the SMC process and requirements. Other helpful information is available in the MES Certification Repository, and State Officers are available to answer your questions. Questions may also be submitted via the Medicaid Enterprise System mailbox at  MES@cms.hhs.gov . 
+ 
+ Overview of SMC 
+ What States Must Know about the SMC Process 
+ Outcomes and Metrics 
+ Conditions for Enhanced Funding 
+ Intake Form 
+ Certification 
+ Reporting Requirements 
+ Metrics 
+ 
+ 
+ Overview of SMC 
+ Q1: What is SMC? 
+ A: Streamlined Modular Certification (SMC) is the process for certifying discrete Medicaid information technology (IT) systems. State Medicaid Agencies use these IT systems and modules, known as Medicaid Enterprise Systems (MES), to manage, monitor, and administer their Medicaid program. The SMC framework promotes reduced burden and increased flexibility for states while ensuring states meet federal requirements (and state-specific outcomes) for systems and modules. 
+ SMC contains the following certification elements: 
+ 
+ Conditions for Enhanced Funding that require ongoing state compliance. 
+ CMS-required outcomes are based on statutory or regulatory requirements to promote the efficient, economical, and effective administration of the state’s Medicaid program. 
+ State-specific outcomes that reflect the unique circumstances, characteristics, or program priorities that the state’s IT project will directly address while ensuring benefit to the state’s Medicaid program. 
+ Metrics to provide evidence about whether the outcomes are achieved continuously. 
+ Required artifacts are required for certification. These are documents that demonstrate the progression of a state’s IT project. 
+ 
