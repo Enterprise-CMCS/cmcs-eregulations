@@ -114,7 +114,8 @@ export class TextExtractorStack extends cdk.Stack {
         // ================================
         const textractTopic = new sns.Topic(this, 'TextractTopic', {
             topicName: stageConfig.getResourceName('text-extractor-topic'),
-            displayName: 'Text Extractor Topic',
+            fifo: true,
+            contentBasedDeduplication: true,
         });
 
         // Allow Textract to publish to the SNS topic
@@ -126,7 +127,9 @@ export class TextExtractorStack extends cdk.Stack {
         }));
 
         // Subscribe the SQS queue to the SNS topic
-        textractTopic.addSubscription(new SqsSubscription(queue));
+        textractTopic.addSubscription(new SqsSubscription(queue, {
+            rawMessageDelivery: true, // Ensures the message is delivered in its original format
+        }));
 
         // ================================
         // LOG GROUP
@@ -223,7 +226,6 @@ export class TextExtractorStack extends cdk.Stack {
                 stageConfig.permissionsBoundaryArn
             ),
             managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
                 iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
             ],
             inlinePolicies: {
