@@ -4,7 +4,10 @@ import {
     aws_logs as logs,
     aws_lambda as lambda,
     aws_sqs as sqs,
+    aws_s3 as s3,
+    aws_sns as sns,
 } from 'aws-cdk-lib';
+import { SqsSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
@@ -79,6 +82,56 @@ export class TextExtractorStack extends cdk.Stack {
         });
 
         // ================================
+        // S3 BUCKET FOR TEMP PDF STORAGE
+        // ================================
+        const pdfBucket = new s3.Bucket(this, 'TextExtractorPdfBucket', {
+            bucketName: stageConfig.getResourceName('text-extractor-pdf-bucket'),
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+            enforceSSL: true,
+            autoDeleteObjects: true,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            cors: [
+                {
+                    allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+                    allowedOrigins: ['*'],
+                    allowedHeaders: ['*'],
+                    maxAge: 3000,
+                },
+            ],
+        });
+
+        // Allow Textract to access the S3 bucket
+        pdfBucket.addToResourcePolicy(new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
+            actions: ['s3:GetObject', 's3:PutObject'],
+            resources: [`${pdfBucket.bucketArn}/*`],
+        }));
+
+        // ================================
+        // SNS TOPIC FOR TEXTRACT
+        // ================================
+        const textractTopic = new sns.Topic(this, 'TextractTopic', {
+            topicName: stageConfig.getResourceName('text-extractor-topic'),
+            fifo: true,
+            contentBasedDeduplication: true,
+        });
+
+        // Allow Textract to publish to the SNS topic
+        textractTopic.addToResourcePolicy(new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
+            actions: ['sns:Publish'],
+            resources: [textractTopic.topicArn],
+        }));
+
+        // Subscribe the SQS queue to the SNS topic
+        textractTopic.addSubscription(new SqsSubscription(queue, {
+            rawMessageDelivery: true, // Ensures the message is delivered in its original format
+        }));
+
+        // ================================
         // LOG GROUP
         // ================================
         new logs.LogGroup(this, 'TextExtractorLogGroup', {
@@ -108,7 +161,11 @@ export class TextExtractorStack extends cdk.Stack {
                 new iam.PolicyStatement({
                     sid: 'DetectDocumentText',
                     effect: iam.Effect.ALLOW,
-                    actions: ['textract:DetectDocumentText'],
+                    actions: [
+                        'textract:DetectDocumentText',
+                        'textract:StartDocumentTextDetection',
+                        'textract:GetDocumentTextDetection',
+                    ],
                     resources: ['*'],
                 }),
             ],
@@ -136,6 +193,18 @@ export class TextExtractorStack extends cdk.Stack {
                         `arn:aws:s3:::cms-eregs-${stageConfig.stageName}-file-repo-eregs*`,
                     ],
                 }),
+                // Allow Lambda read/write access to the PDF bucket
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: [
+                        's3:PutObject',
+                        's3:GetObject',
+                        's3:DeleteObject',
+                    ],
+                    resources: [
+                        `arn:aws:s3:::${pdfBucket.bucketName}/*`,
+                    ],
+                }),
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
@@ -157,7 +226,6 @@ export class TextExtractorStack extends cdk.Stack {
                 stageConfig.permissionsBoundaryArn
             ),
             managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
                 iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
             ],
             inlinePolicies: {
