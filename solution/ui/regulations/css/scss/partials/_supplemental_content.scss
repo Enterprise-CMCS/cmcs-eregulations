@@ -164,6 +164,14 @@
         text-decoration: none;
         font-size: var(--font-size-sm);
     }
+
+    .supplemental-content-subjects-toggle {
+        color: $primary_link_color;
+        cursor: pointer;
+        font-size: var(--font-size-xs);
+        text-decoration: none;
+        display: inline-block;
+    }
 }
 
 .internal-docs__container {
