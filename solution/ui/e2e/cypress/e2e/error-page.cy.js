@@ -4,6 +4,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
+        cy.intercept("**/v3/title/42/parts").as("title42parts");
     });
 
     it("loads as a 404 page when server returns a 404 error", () => {
@@ -30,6 +31,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .its("status")
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
+        cy.wait("@title42parts");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
@@ -39,6 +41,7 @@ describe("Error page", { scrollBehavior: "center" }, () => {
             .its("status")
             .should("equal", 404);
         cy.visit("/404", { failOnStatusCode: false });
+        cy.wait("@title42parts");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",
