@@ -124,7 +124,7 @@ export class TextExtractorStack extends cdk.Stack {
             assumedBy: new iam.ServicePrincipal('textract.amazonaws.com'),
             permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
                 this,
-                'PermissionsBoundary',
+                'TextractPermissionsBoundary',
                 stageConfig.permissionsBoundaryArn
             ),
             inlinePolicies: {
