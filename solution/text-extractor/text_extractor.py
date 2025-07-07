@@ -130,6 +130,8 @@ def start_text_extractor(config: dict):
 
 def handler(event: dict, context: dict) -> dict:
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
+    logger.info("Received event: %s", event)
+    return lambda_response(200, "Done processing event.")
 
     global retrieval_finished_time
     sqs_group = None
