@@ -16,8 +16,8 @@
     "vuetify": "^3.8.7"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.2.4",
-    "vite": "^6.3.5",
+    "@vitejs/plugin-vue": "~6.0.0",
+    "vite": "^7.0.2",
     "vite-plugin-vuetify": "^2.1.0"
   },
   "optionalDependencies": {
