@@ -113,7 +113,7 @@ export class TextExtractorStack extends cdk.Stack {
         // SNS TOPIC FOR TEXTRACT
         // ================================
         const textractTopic = new sns.Topic(this, 'TextractTopic', {
-            topicName: stageConfig.getResourceName('text-extractor-topic'),
+            topicName: `AmazonTextract-${stageConfig.getResourceName('topic')}`, // Prepending with AmazonTextract is required
             fifo: true,
             contentBasedDeduplication: true,
         });
