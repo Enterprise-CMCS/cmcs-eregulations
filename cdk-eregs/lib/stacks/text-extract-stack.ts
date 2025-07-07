@@ -118,13 +118,27 @@ export class TextExtractorStack extends cdk.Stack {
             contentBasedDeduplication: true,
         });
 
-        // Allow Textract to publish to the SNS topic
-        textractTopic.addToResourcePolicy(new iam.PolicyStatement({
-            effect: iam.Effect.ALLOW,
-            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
-            actions: ['sns:Publish'],
-            resources: [textractTopic.topicArn],
-        }));
+        // Create IAM role allowing Textract to publish messages to the SNS topic
+        const textractRole = new iam.Role(this, 'TextractSnsPublishRole', {
+            path: stageConfig.iamPath,
+            assumedBy: new iam.ServicePrincipal('textract.amazonaws.com'),
+            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+                this,
+                'PermissionsBoundary',
+                stageConfig.permissionsBoundaryArn
+            ),
+            inlinePolicies: {
+                PublishPolicy: new iam.PolicyDocument({
+                    statements: [
+                        new iam.PolicyStatement({
+                            effect: iam.Effect.ALLOW,
+                            actions: ['sns:Publish'],
+                            resources: [textractTopic.topicArn],
+                        }),
+                    ],
+                }),
+            },
+        });
 
         // Subscribe the SQS queue to the SNS topic
         textractTopic.addSubscription(new SqsSubscription(queue, {
@@ -276,7 +290,15 @@ export class TextExtractorStack extends cdk.Stack {
             TextExtractorQueueArn: {
                 value: queue.queueArn,
                 exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
-            }
+            },
+            TextractRoleArn: {
+                value: textractRole.roleArn,
+                exportName: stageConfig.getResourceName('textract-role-arn'),
+            },
+            TextractTopicArn: {
+                value: textractTopic.topicArn,
+                exportName: stageConfig.getResourceName('textract-topic-arn'),
+            },
         };
 
         Object.entries(outputs).forEach(([name, props]) => new cdk.CfnOutput(this, name, props));
