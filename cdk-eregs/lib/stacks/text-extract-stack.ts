@@ -152,7 +152,7 @@ export class TextExtractorStack extends cdk.Stack {
                     },
                 },
             },
-            targets: [new targets.SqsQueue(queue)],
+            targets: [new targets.SqsQueue(queue, {messageGroupId: 'TextractResults'})],
         });
 
         // ================================
