@@ -5,8 +5,6 @@ import {
     aws_lambda as lambda,
     aws_sqs as sqs,
     aws_s3 as s3,
-    aws_events as events,
-    aws_events_targets as targets,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -82,10 +80,10 @@ export class TextExtractorStack extends cdk.Stack {
         });
 
         // ================================
-        // S3 BUCKET FOR TEMP PDF STORAGE
+        // S3 BUCKET FOR PDF STORAGE AND RESULTS
         // ================================
-        const pdfBucket = new s3.Bucket(this, 'TextractPdfBucket', {
-            bucketName: stageConfig.getResourceName('textract-pdf-bucket'),
+        const textractBucket = new s3.Bucket(this, 'TextractBucket', {
+            bucketName: stageConfig.getResourceName('textract-bucket'),
             encryption: s3.BucketEncryption.S3_MANAGED,
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             enforceSSL: true,
@@ -102,58 +100,22 @@ export class TextExtractorStack extends cdk.Stack {
         });
 
         // Allow Textract to access the S3 bucket
-        pdfBucket.addToResourcePolicy(new iam.PolicyStatement({
+        textractBucket.addToResourcePolicy(new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
-            actions: ['s3:GetObject'],
-            resources: [`${pdfBucket.bucketArn}/*`],
-        }));
-
-        // ================================
-        // S3 BUCKET FOR TEXTRACT RESULTS
-        // ================================
-        const textractResultsBucket = new s3.Bucket(this, 'TextractResultsBucket', {
-            bucketName: stageConfig.getResourceName('textract-results-bucket'),
-            encryption: s3.BucketEncryption.S3_MANAGED,
-            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-            enforceSSL: true,
-            autoDeleteObjects: true,
-            removalPolicy: cdk.RemovalPolicy.DESTROY,
-            cors: [
-                {
-                    allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
-                    allowedOrigins: ['*'],
-                    allowedHeaders: ['*'],
-                    maxAge: 3000,
-                },
+            actions: [
+                "s3:Get*",
+                "s3:List*",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3-object-lambda:Get*",
+                "s3-object-lambda:List*",
+                "s3:ListMultipartUploadParts",
+                "s3:ListBucketMultipartUploads",
+                "s3:AbortMultipartUpload",
             ],
-        });
-
-        // Allow Textract to write results to the S3 bucket
-        textractResultsBucket.addToResourcePolicy(new iam.PolicyStatement({
-            effect: iam.Effect.ALLOW,
-            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
-            actions: ['s3:PutObject'],
-            resources: [`${textractResultsBucket.bucketArn}/*`],
+            resources: [`${textractBucket.bucketArn}/*`],
         }));
-
-        // ================================
-        // EVENTBRIDGE RULE FOR TEXTRACT RESULTS BUCKET
-        // ================================
-        new events.Rule(this, 'TextractResultsS3EventRule', {
-            ruleName: stageConfig.getResourceName('textract-results-s3-event-rule'),
-            eventPattern: {
-                source: ['aws.s3'],
-                detailType: ['Object Created'],
-                resources: [textractResultsBucket.bucketArn],
-                detail: {
-                    bucket: {
-                        name: [textractResultsBucket.bucketName],
-                    },
-                },
-            },
-            targets: [new targets.SqsQueue(queue, {messageGroupId: 'TextractResults'})],
-        });
 
         // ================================
         // LOG GROUP
@@ -217,27 +179,17 @@ export class TextExtractorStack extends cdk.Stack {
                         `arn:aws:s3:::cms-eregs-${stageConfig.stageName}-file-repo-eregs*`,
                     ],
                 }),
-                // Allow Lambda read/write access to the PDF bucket
+                // Allow Lambda read/write access to the Textract bucket
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
+                        's3:List*',
                         's3:PutObject',
                         's3:GetObject',
                         's3:DeleteObject',
                     ],
                     resources: [
-                        `arn:aws:s3:::${pdfBucket.bucketName}/*`,
-                    ],
-                }),
-                // Allow Lambda read/delete access to the Textract results bucket
-                new iam.PolicyStatement({
-                    effect: iam.Effect.ALLOW,
-                    actions: [
-                        's3:GetObject',
-                        's3:DeleteObject',
-                    ],
-                    resources: [
-                        `${textractResultsBucket.bucketArn}/*`,
+                        `arn:aws:s3:::${textractBucket.bucketName}/*`,
                     ],
                 }),
                 new iam.PolicyStatement({
