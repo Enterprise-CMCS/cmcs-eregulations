@@ -236,6 +236,8 @@ export class TextExtractorStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 SECRET_NAME: props.environmentConfig.secretName,
+                TEXTRACT_BUCKET: textractBucket.bucketName,
+                TEXT_EXTRACTOR_QUEUE_URL: queue.queueUrl,
             },
             role: lambdaRole,
         });
@@ -259,10 +261,6 @@ export class TextExtractorStack extends cdk.Stack {
             TextExtractorQueueUrl: {
                 value: queue.queueUrl,
                 exportName: stageConfig.getResourceName('text-extractor-queue-url'),
-            },
-            TextExtractorQueueArn: {
-                value: queue.queueArn,
-                exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
             },
         };
 
