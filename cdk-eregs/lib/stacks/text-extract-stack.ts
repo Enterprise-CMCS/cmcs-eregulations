@@ -5,9 +5,9 @@ import {
     aws_lambda as lambda,
     aws_sqs as sqs,
     aws_s3 as s3,
-    aws_sns as sns,
+    aws_events as events,
+    aws_events_targets as targets,
 } from 'aws-cdk-lib';
-import { SqsSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
@@ -84,8 +84,8 @@ export class TextExtractorStack extends cdk.Stack {
         // ================================
         // S3 BUCKET FOR TEMP PDF STORAGE
         // ================================
-        const pdfBucket = new s3.Bucket(this, 'TextExtractorPdfBucket', {
-            bucketName: stageConfig.getResourceName('text-extractor-pdf-bucket'),
+        const pdfBucket = new s3.Bucket(this, 'TextractPdfBucket', {
+            bucketName: stageConfig.getResourceName('textract-pdf-bucket'),
             encryption: s3.BucketEncryption.S3_MANAGED,
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             enforceSSL: true,
@@ -105,45 +105,55 @@ export class TextExtractorStack extends cdk.Stack {
         pdfBucket.addToResourcePolicy(new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
-            actions: ['s3:GetObject', 's3:PutObject'],
+            actions: ['s3:GetObject'],
             resources: [`${pdfBucket.bucketArn}/*`],
         }));
 
         // ================================
-        // SNS TOPIC FOR TEXTRACT
+        // S3 BUCKET FOR TEXTRACT RESULTS
         // ================================
-        const textractTopic = new sns.Topic(this, 'TextractTopic', {
-            topicName: `AmazonTextract-${stageConfig.getResourceName('topic')}`, // Prepending with AmazonTextract is required
-            fifo: true,
-            contentBasedDeduplication: true,
+        const textractResultsBucket = new s3.Bucket(this, 'TextractResultsBucket', {
+            bucketName: stageConfig.getResourceName('textract-results-bucket'),
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+            enforceSSL: true,
+            autoDeleteObjects: true,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            cors: [
+                {
+                    allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+                    allowedOrigins: ['*'],
+                    allowedHeaders: ['*'],
+                    maxAge: 3000,
+                },
+            ],
         });
 
-        // Create IAM role allowing Textract to publish messages to the SNS topic
-        const textractRole = new iam.Role(this, 'TextractSnsPublishRole', {
-            path: stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('textract.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'TextractPermissionsBoundary',
-                stageConfig.permissionsBoundaryArn
-            ),
-            inlinePolicies: {
-                PublishPolicy: new iam.PolicyDocument({
-                    statements: [
-                        new iam.PolicyStatement({
-                            effect: iam.Effect.ALLOW,
-                            actions: ['sns:Publish'],
-                            resources: [textractTopic.topicArn],
-                        }),
-                    ],
-                }),
-            },
-        });
-
-        // Subscribe the SQS queue to the SNS topic
-        textractTopic.addSubscription(new SqsSubscription(queue, {
-            rawMessageDelivery: true, // Ensures the message is delivered in its original format
+        // Allow Textract to write results to the S3 bucket
+        textractResultsBucket.addToResourcePolicy(new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
+            actions: ['s3:PutObject'],
+            resources: [`${textractResultsBucket.bucketArn}/*`],
         }));
+
+        // ================================
+        // EVENTBRIDGE RULE FOR TEXTRACT RESULTS BUCKET
+        // ================================
+        new events.Rule(this, 'TextractResultsS3EventRule', {
+            ruleName: stageConfig.getResourceName('textract-results-s3-event-rule'),
+            eventPattern: {
+                source: ['aws.s3'],
+                detailType: ['Object Created'],
+                resources: [textractResultsBucket.bucketArn],
+                detail: {
+                    bucket: {
+                        name: [textractResultsBucket.bucketName],
+                    },
+                },
+            },
+            targets: [new targets.SqsQueue(queue)],
+        });
 
         // ================================
         // LOG GROUP
@@ -219,6 +229,17 @@ export class TextExtractorStack extends cdk.Stack {
                         `arn:aws:s3:::${pdfBucket.bucketName}/*`,
                     ],
                 }),
+                // Allow Lambda read/delete access to the Textract results bucket
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: [
+                        's3:GetObject',
+                        's3:DeleteObject',
+                    ],
+                    resources: [
+                        `${textractResultsBucket.bucketArn}/*`,
+                    ],
+                }),
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
@@ -291,17 +312,8 @@ export class TextExtractorStack extends cdk.Stack {
                 value: queue.queueArn,
                 exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
             },
-            TextractRoleArn: {
-                value: textractRole.roleArn,
-                exportName: stageConfig.getResourceName('textract-role-arn'),
-            },
-            TextractTopicArn: {
-                value: textractTopic.topicArn,
-                exportName: stageConfig.getResourceName('textract-topic-arn'),
-            },
         };
 
         Object.entries(outputs).forEach(([name, props]) => new cdk.CfnOutput(this, name, props));
     }
 }
-
