@@ -156,7 +156,7 @@ const hasSubjects = (subjects) => Array.isArray(subjects) && subjects.length > 0
             <Collapsible
                 :name="'subjects-' + uid"
                 state="collapsed"
-                class="collapse-content"
+                class="collapse-content__subjects collapse-content"
                 overflow
             >
                 <SubjectChips
