@@ -64,32 +64,42 @@ def start_text_extractor(config: dict):
         except Exception as e:
             raise TextExtractorException(f"Failed to configure authorization: {str(e)}")
 
-    # Retrieve the file
-    logger.info("Starting file retrieval from URI: %s", uri)
-    try:
-        backend_type = config.get("backend", "web").lower()
-        backend = FileBackend.get_backend(backend_type, config)
-        file = backend.get_file(uri)
-    except BackendInitException as e:
-        raise TextExtractorException(f"Failed to initialize backend: {str(e)}")
-    except BackendException as e:
-        # If retrieval fails, we should still delay if configured to do so
-        retrieval_finished_time = time.time()
-        raise TextExtractorException(f"Failed to retrieve file: {str(e)}")
-    except Exception as e:
-        # If retrieval fails for an unexpected reason, we should still delay if configured to do so
-        retrieval_finished_time = time.time()
-        raise TextExtractorException(f"Backend unexpectedly failed: {str(e)}")
+    if "job_id" in config:
+        # If a job ID is provided, we assume this invocation is a continuation of a previous job being processed
+        # by an external service, and so we skip the file retrieval step.
+        logger.info("Job ID found in config: %s, skipping file retrieval.", config["job_id"])
+        file = None
+    else:
+        # Retrieve the file
+        logger.info("Starting file retrieval from URI: %s", uri)
+        try:
+            backend_type = config.get("backend", "web").lower()
+            backend = FileBackend.get_backend(backend_type, config)
+            file = backend.get_file(uri)
+            # Set the retrieval finished time
+            retrieval_finished_time = time.time()
+            logger.info("File retrieved successfully. Size: %d bytes", len(file))
+        except BackendInitException as e:
+            raise TextExtractorException(f"Failed to initialize backend: {str(e)}")
+        except BackendException as e:
+            # If retrieval fails, we should still delay if configured to do so
+            retrieval_finished_time = time.time()
+            raise TextExtractorException(f"Failed to retrieve file: {str(e)}")
+        except Exception as e:
+            # If retrieval fails for an unexpected reason, we should still delay if configured to do so
+            retrieval_finished_time = time.time()
+            raise TextExtractorException(f"Backend unexpectedly failed: {str(e)}")
 
-    # Set the retrieval finished time
-    retrieval_finished_time = time.time()
-    logger.info("File retrieved successfully. Size: %d bytes", len(file))
-
-    # Determine the file's content type
-    try:
-        file_type = Extractor.get_file_type(file)
-    except Exception as e:
-        raise TextExtractorException(f"Failed to determine file type: {str(e)}")
+    if "file_type" in config:
+        # If a file type is provided, we use it directly instead of determining it from the file
+        file_type = config["file_type"]
+        logger.info("Using provided file type: %s", file_type)
+    else:
+        # Determine the file's content type
+        try:
+            file_type = Extractor.get_file_type(file)
+        except Exception as e:
+            raise TextExtractorException(f"Failed to determine file type: {str(e)}")
 
     # Run extractor
     logger.info("Starting text extraction.")
@@ -102,6 +112,14 @@ def start_text_extractor(config: dict):
         raise TextExtractorException(f"Failed to extract text: {str(e)}")
     except Exception as e:
         raise TextExtractorException(f"Extractor unexpectedly failed: {str(e)}")
+
+    # If no text was extracted, we will skip sending results to eRegs, but still return a successful response
+    if text is None:
+        logger.info(
+            "No text was extracted from the file, but no errors occurred. "
+            "This may be expected for certain file types, empty files, or files that will be processed by an external service."
+        )
+        return
 
     # Strip control characters and unneeded data out of the extracted text
     text = clean_output(text)

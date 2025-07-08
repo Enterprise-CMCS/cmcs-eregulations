@@ -8,6 +8,8 @@ from .exceptions import (
     ExtractorInitException,
 )
 
+import boto3
+from botocore.client import BaseClient
 from magika import Magika, PredictionMode
 
 logger = logging.getLogger(__name__)
@@ -42,6 +44,27 @@ class Extractor:
     def __init__(self, file_type: str, config: dict):
         self.file_type = file_type
         self.config = config
+
+    def _get_boto3_client(self, client_type: str) -> type[BaseClient]:
+        logger.debug("Initializing boto3 %s client.", client_type)
+
+        try:
+            params = {
+                "aws_access_key_id": self.config["aws"]["aws_access_key_id"],
+                "aws_secret_access_key": self.config["aws"]["aws_secret_access_key"],
+                "region_name": self.config["aws"]["aws_region"],
+            }
+            logger.debug("Retrieved AWS parameters from config.")
+        except KeyError:
+            logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
+            params = {
+                "config": boto3.session.Config(signature_version='s3v4'),
+            }
+
+        return boto3.client(
+            client_type,
+            **params,
+        )
 
     def _write_file(self, data: bytes, **kwargs) -> str:
         extension = kwargs.get("extension")
