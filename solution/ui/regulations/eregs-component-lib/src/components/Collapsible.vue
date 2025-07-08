@@ -77,22 +77,6 @@ const toggle = (targetName) => {
     }
 };
 
-const getStyle = () => {
-    if (target.value) {
-        return window.getComputedStyle(target.value);
-    }
-    return "auto";
-};
-
-const setProps = (visibility, display, position, heightValue) => {
-    if (target.value) {
-        target.value.style.visibility = visibility;
-        target.value.style.display = display;
-        target.value.style.position = position;
-        target.value.style.height = heightValue;
-    }
-};
-
 onMounted(() => {
     requestAnimationFrame(() => {
         visible.value = props.state === "expanded";
