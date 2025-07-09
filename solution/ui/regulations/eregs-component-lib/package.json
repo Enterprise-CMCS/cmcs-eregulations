@@ -21,7 +21,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "~6.0.0",
     "fast-glob": "^3.2.12",
-    "vite": "^7.0.2",
+    "vite": "^7.0.3",
     "vite-plugin-vuetify": "^2.1.0"
   },
   "optionalDependencies": {
