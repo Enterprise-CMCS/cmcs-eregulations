@@ -2,7 +2,6 @@ import os
 import logging
 import io
 import json
-import time
 
 from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
@@ -103,15 +102,14 @@ class PdfExtractor(Extractor):
                     if item["BlockType"] == "LINE":
                         text += item["Text"] + " "
                 # Clean up the S3 bucket after successful extraction
+                logger.info("Attempting to clean up S3 bucket after successful extraction.")
                 self._cleanup_s3(resource_id)
-                logger.info("Cleaned up S3 bucket after successful extraction.")
                 return text
             elif job_status == "FAILED":
                 status_message = response.get("StatusMessage", "No message provided")
                 raise ExtractorException(f"Textract job \"{job_id}\" failed: {status_message}")
             elif job_status == "IN_PROGRESS":
-                logger.info("Textract job \"%s\" is still in progress. Pausing for 1 minute.", job_id)
-                time.sleep(60)
+                logger.info("Textract job \"%s\" is still in progress. Will check again later.", job_id)
             else:
                 raise ExtractorException(f"Textract job \"{job_id}\" is in an unexpected state: {job_status}")
         else:

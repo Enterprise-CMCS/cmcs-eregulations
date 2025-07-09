@@ -1,6 +1,7 @@
 import logging
 import os
 import time
+from typing import Any
 
 import requests
 
@@ -44,7 +45,7 @@ class TextExtractorException(Exception):
     pass
 
 
-def start_text_extractor(config: dict):
+def start_text_extractor(config: dict, context: Any) -> None:
     global retrieval_finished_time
 
     # Retrieve required arguments
@@ -114,11 +115,16 @@ def start_text_extractor(config: dict):
         raise TextExtractorException(f"Extractor unexpectedly failed: {str(e)}")
 
     # If no text was extracted, we will skip sending results to eRegs, but still return a successful response
-    if text is None:
+    if not text:
         logger.info(
             "No text was extracted from the file, but no errors occurred. "
             "This may be expected for certain file types, empty files, or files that will be processed by an external service."
         )
+        if context.get_remaining_time_in_millis() > 60 * 1000:
+            # If we have more than 60 seconds left, we will sleep for a minute to allow for any asynchronous processing to occur
+            # This is useful if the file is being processed by an external service that may take some time to complete
+            logger.info("Sleeping for 1 minute before finishing to allow for any potential asynchronous processing to occur.")
+            time.sleep(60)
         return
 
     # Strip control characters and unneeded data out of the extracted text
@@ -146,7 +152,7 @@ def start_text_extractor(config: dict):
         raise TextExtractorException(f"PATCH unexpectedly failed: {str(e)}")
 
 
-def handler(event: dict, context: dict) -> dict:
+def handler(event: dict, context: Any) -> dict:
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
     global retrieval_finished_time
@@ -157,7 +163,7 @@ def handler(event: dict, context: dict) -> dict:
         config = get_config(event)
         sqs_group = config.get("sqs_group")
         retrieval_delay = config.get("retrieval_delay", 0)
-        start_text_extractor(config)
+        start_text_extractor(config, context)
         return lambda_response(200, "Text extraction completed successfully.")
     except Exception as e:
         if sqs_group:
@@ -166,10 +172,13 @@ def handler(event: dict, context: dict) -> dict:
         return lambda_response(500, f"An error occurred: {str(e)}")
     finally:
         time_since_retrieval = time.time() - (retrieval_finished_time or 0)
+        delay_time = retrieval_delay - time_since_retrieval
+        remaining_time = context.get_remaining_time_in_millis() / 1000  # Convert to seconds
+        delay_time = delay_time if remaining_time > delay_time else remaining_time - 1  # Don't delay more than the time left
         if retrieval_finished_time and time_since_retrieval < retrieval_delay:
             logger.info(
                 "%sWaiting for %d seconds before finishing.",
                 f"[Group: {sqs_group}] " if sqs_group else "",
-                retrieval_delay - time_since_retrieval,
+                delay_time,
             )
-            time.sleep(retrieval_delay - time_since_retrieval)
+            time.sleep(delay_time)
