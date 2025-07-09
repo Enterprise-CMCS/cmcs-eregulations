@@ -128,6 +128,7 @@ export class TextExtractorStack extends cdk.Stack {
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
+                        'sqs:SendMessage',
                         'sqs:ReceiveMessage',
                         'sqs:DeleteMessage',
                         'sqs:GetQueueAttributes'
