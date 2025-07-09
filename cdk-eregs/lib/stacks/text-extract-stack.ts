@@ -186,6 +186,7 @@ export class TextExtractorStack extends cdk.Stack {
                     ],
                     resources: [
                         `arn:aws:s3:::${textractBucket.bucketName}/*`,
+                        `arn:aws:s3:::${textractBucket.bucketName}`,
                     ],
                 }),
                 new iam.PolicyStatement({
