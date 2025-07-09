@@ -262,6 +262,10 @@ export class TextExtractorStack extends cdk.Stack {
                 value: queue.queueUrl,
                 exportName: stageConfig.getResourceName('text-extractor-queue-url'),
             },
+            TextExtractorQueueArn: {
+                value: queue.queueArn,
+                exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
+            },
         };
 
         Object.entries(outputs).forEach(([name, props]) => new cdk.CfnOutput(this, name, props));
