@@ -47,7 +47,7 @@ jobs:
       with:
         version: "2022.1.3"
         working-directory: "./solution/parser/${{ matrix.dir }}"
-        use-cache: false
+        install-go: false
 
     # Run lint on the code
     - name: Run lint
