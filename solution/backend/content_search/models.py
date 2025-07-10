@@ -96,7 +96,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 max_words=self._max_words,
                 config='english',
                 fragment_delimiter='...',
-                max_fragments=self._max_fragments,
+                max_fragments=None,
             ),
             name_headline=SearchHeadline(
                 "name",
@@ -108,7 +108,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 config='english',
                 highlight_all=True,
                 fragment_delimiter='...',
-                max_fragments=self._max_fragments,
+                max_fragments=None,
             ),
             content_headline=SearchHeadline(
                 "content_short",
