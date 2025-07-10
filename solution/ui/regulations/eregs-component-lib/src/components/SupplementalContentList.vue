@@ -43,6 +43,7 @@ const showMoreNeeded = computed(() => contentCount.value > props.limit);
             :url="content.url"
             :doc-type="content.type ?? 'external'"
             :file-name="content.file_name"
+            :subjects="content.subjects"
         />
         <collapse-button
             v-if="showMoreNeeded"
@@ -79,6 +80,7 @@ const showMoreNeeded = computed(() => contentCount.value > props.limit);
                 :url="content.url"
                 :doc-type="content.type ?? 'external'"
                 :file-name="content.file_name"
+                :subjects="content.subjects"
             />
             <collapse-button
                 v-if="showMoreNeeded && contentCount > 10"

@@ -1,4 +1,9 @@
 <script setup>
+import { useId } from "vue";
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
+import SubjectChips from "spaComponents/subjects/SubjectChips.vue";
+
 import { DOCUMENT_TYPES_MAP, getFileTypeButton, getLinkDomainFileTypeEl, getLinkDomainString } from "utilities/utils";
 
 defineProps({
@@ -22,11 +27,6 @@ defineProps({
         required: false,
         default: null,
     },
-    uid: {
-        type: String,
-        required: false,
-        default: undefined,
-    },
     url: {
         type: String,
         default: undefined,
@@ -41,7 +41,14 @@ defineProps({
         required: false,
         default: undefined,
     },
+    subjects: {
+        type: Array,
+        required: false,
+        default: undefined,
+    },
 });
+
+const uid = useId();
 
 const isBlank = (str) => {
     return !str || /^\s*$/.test(str);
@@ -97,6 +104,8 @@ const getLinkClasses = (docType, description) => {
                 docType === "internal_link") && isBlank(description),
     };
 };
+
+const hasSubjects = (subjects) => Array.isArray(subjects) && subjects.length > 0;
 </script>
 
 <template>
@@ -129,5 +138,31 @@ const getLinkClasses = (docType, description) => {
                 />
             </div>
         </a>
+        <template v-if="hasSubjects(subjects)">
+            <CollapseButton
+                class="supplemental-content-subjects"
+                :name="'subjects-' + uid"
+                state="collapsed"
+            >
+                <template #expanded>
+                    Hide Related Subjects
+                    <i class="fa fa-chevron-up" />
+                </template>
+                <template #collapsed>
+                    Show Related Subjects
+                    <i class="fa fa-chevron-down" />
+                </template>
+            </CollapseButton>
+            <Collapsible
+                :name="'subjects-' + uid"
+                state="collapsed"
+                class="collapse-content__subjects collapse-content"
+                overflow
+            >
+                <SubjectChips
+                    :subjects="subjects"
+                />
+            </Collapsible>
+        </template>
     </div>
 </template>

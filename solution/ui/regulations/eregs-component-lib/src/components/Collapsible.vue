@@ -26,15 +26,10 @@ const props = defineProps({
 
 const target = ref(null);
 const dataName = ref(props.name);
-const height = ref("auto");
 const visible = ref(false);
 const styles = {
     transition: props.transition,
     overflow: "hidden",
-};
-
-const resize = () => {
-    computeHeight();
 };
 
 const toggleDisplay = () => {
@@ -51,61 +46,35 @@ const toggleDisplay = () => {
     }
 };
 
+// Accurately measuring height of dynamic content and transitioning smoothly:
+// https://dev.to/nikneym/getcomputedstyle-the-good-the-bad-and-the-ugly-parts-1l34
 const toggle = (targetName) => {
     if (dataName.value === targetName) {
-        if (target.value) {
+        if (!visible.value && target.value) {
             target.value.classList.remove("display-none");
             target.value.style.overflow = "hidden";
+            target.value.classList.remove("invisible");
         }
+
+        target.value.style.height = "auto";
+
+        const height = getComputedStyle(target.value).height;
+
+        if (!visible.value && target.value) {
+            target.value.style.height = "0px";
+        } else if (target.value) {
+            target.value.style.height = "";
+        }
+
         requestAnimationFrame(() => {
-            computeHeight();
             requestAnimationFrame(() => {
-                visible.value = !visible.value;
+                target.value.style.height = height;
+                requestAnimationFrame(() => {
+                    visible.value = !visible.value;
+                });
             });
         });
     }
-};
-
-const getStyle = () => {
-    if (target.value) {
-        return window.getComputedStyle(target.value);
-    }
-    return "auto";
-};
-
-const setProps = (visibility, display, position, heightValue) => {
-    if (target.value) {
-        target.value.style.visibility = visibility;
-        target.value.style.display = display;
-        target.value.style.position = position;
-        target.value.style.height = heightValue;
-    }
-};
-
-const computeHeightInternal = () => {
-    if (getStyle().display === "none") {
-        return "auto";
-    }
-
-    if (target.value) {
-        target.value.classList.remove("invisible");
-        setProps("hidden", "block", "absolute", "auto");
-    }
-
-    const heightValue = getStyle().height;
-
-    if (target.value) {
-        setProps(null, null, null, heightValue);
-    }
-
-    if (!visible.value && target.value) {
-        target.value.classList.add("invisible");
-    }
-    return heightValue;
-};
-
-const computeHeight = () => {
-    height.value = computeHeightInternal();
 };
 
 onMounted(() => {
@@ -116,12 +85,10 @@ onMounted(() => {
         }
     });
     eventbus.on("collapse-toggle", toggle);
-    window.addEventListener("resize", resize);
     window.addEventListener("transitionend", toggleDisplay);
 });
 
 onUnmounted(() => {
-    window.removeEventListener("resize", resize);
     window.removeEventListener("transitionend", toggleDisplay);
     eventbus.off("collapse-toggle", toggle);
 });

@@ -184,6 +184,16 @@
 
 .supplemental-content-container
     .supplemental-content-category
+    .collapse-content__subjects.collapse-content:not(.show-more-content),
+.internal-docs__container
+    .supplemental-content-category
+    .collapse-content__subjects.collapse-content:not(.show-more-content) {
+    margin: 0;
+    margin-top: var(--spacer-1);
+}
+
+.supplemental-content-container
+    .supplemental-content-category
     .collapse-content.additional-rules {
     margin: inherit;
 }

@@ -171,6 +171,61 @@ describe("Part View", () => {
         });
     });
 
+    it("has Show/Hide Subjects button when supplemental content has subjects", () => {
+        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
+            fixture: "42.433.A.resources.json",
+        }).as("resources433A");
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/Subpart-A");
+
+        // Find and expand Subregulatory Guidance category
+        cy.get("button[data-test='Subregulatory Guidance']")
+            .scrollIntoView();
+        cy.get("button[data-test='Subregulatory Guidance']")
+            .click({ force: true });
+
+        cy.get("button[data-test='State Medicaid Director Letter (SMDL)']")
+            .click({ force: true });
+
+        cy.get("button[data-test='subjects-v-0']")
+            .should("be.visible")
+            .and("contain.text", "Show Related Subjects");
+
+        // first SMDL object has subjects
+        cy.get("div[data-test='State Medicaid Director Letter (SMDL)']")
+            .find(".supplemental-content")
+            .eq(0)
+            .find("button.supplemental-content-subjects")
+            .should("exist");
+
+        // second SMDL object does not have subjects
+        cy.get("div[data-test='State Medicaid Director Letter (SMDL)']")
+            .find(".supplemental-content")
+            .eq(1)
+            .should("exist")
+            .find("button.supplemental-content-subjects")
+            .should("not.exist");
+
+        // click to show subjects
+        cy.get("button[data-test='subjects-v-0']")
+            .click({ force: true });
+
+        cy.get("button[data-test='subjects-v-0']")
+            .should("contain.text", "Hide Related Subjects");
+
+        // Assert that subjects are visible
+        cy.get("a[data-testid='add-subject-chip-19']")
+            .should("be.visible")
+            .and("contain.text", "Reports and Evaluations");
+
+        // click on a subject chip
+        cy.get("a[data-testid='add-subject-chip-19']")
+            .click({ force: true });
+
+        // Assert that the new URL includes the subject ID
+        cy.url().should("include", "/subjects/?subjects=19");
+    });
+
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
         cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
