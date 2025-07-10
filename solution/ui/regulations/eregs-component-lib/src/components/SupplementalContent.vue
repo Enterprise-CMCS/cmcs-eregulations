@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
 import {
     getExternalCategories,
     getSupplementalContent,
@@ -22,6 +22,11 @@ const props = defineProps({
         required: false,
         default: "",
     },
+    homeUrl: {
+        type: String,
+        required: false,
+        default: "/",
+    },
     title: {
         type: String,
         required: true,
@@ -38,6 +43,9 @@ const props = defineProps({
         },
     },
 });
+
+provide("homeUrl", props.homeUrl);
+provide("currentRouteName", "reader-view");
 
 const categories = ref([]);
 const isFetching = ref(true);

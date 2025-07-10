@@ -326,7 +326,15 @@
             ],
             "act_citations": [],
             "usc_citations": [],
-            "subjects": [],
+            "subjects": [
+                {
+                    "id": 19,
+                    "full_name": "Reports and Evaluations",
+                    "short_name": "",
+                    "abbreviation": "",
+                    "description": "Documents related to requirements for states to conduct program evaluations and submit certain reports to CMS."
+                }
+            ],
             "document_id": "SMDL #22-006",
             "title": "Additional Guidance on Section 9815 of the American Rescue Plan Act of 2021",
             "date": "2022-12-27",

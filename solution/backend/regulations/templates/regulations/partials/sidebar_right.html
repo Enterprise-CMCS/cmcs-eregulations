@@ -4,6 +4,7 @@
     {% if node_list and not appendix %}
         <supplemental-content
             api-url="{{ API_BASE }}"
+            home-url="{% url 'homepage' %}"
             title="{{ title }}"
             part="{{ reg_part }}"
             :subparts="{{ node_list.subparts }}"
