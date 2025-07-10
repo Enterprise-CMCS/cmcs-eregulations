@@ -2,6 +2,7 @@ import os
 import logging
 import io
 import json
+import time
 
 from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
@@ -134,4 +135,5 @@ class PdfExtractor(Extractor):
                 raise ExtractorException(f"failed to push job to SQS: {str(e)}")
 
         # If no queue URL is set, we will process the job synchronously
+        time.sleep(60)  # Pause for a minute to allow Textract to process the document
         return self._extract(None)
