@@ -1,13 +1,6 @@
 name: Lint & Unit Test Parsers
 
-on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
-    paths:
-      - 'solution/parser/**'
-  push:
-    branches:
-      - main
+on: [ push, pull_request, workflow_dispatch ]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
