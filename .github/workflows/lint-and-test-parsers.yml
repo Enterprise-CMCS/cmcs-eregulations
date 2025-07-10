@@ -2,7 +2,7 @@ name: Lint & Unit Test Parsers
 
 on:
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [ push, opened, synchronize, reopened ]
   push:
     branches:
       - main
@@ -28,7 +28,7 @@ jobs:
       uses: actions/setup-go@v5
       with:
         go-version: '^1.16' # The Go version to download (if necessary) and use.
-  
+
     # set up build cache
     - name: Set up build cache
       uses: actions/cache@v4
@@ -60,7 +60,7 @@ jobs:
         pushd solution/parser/${{ matrix.dir }}
         golint -set_exit_status ./...
         popd
-    
+
     # Run tests and create coverage report
     - name: Run tests
       run: |
