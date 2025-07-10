@@ -3,8 +3,6 @@ name: Lint & Unit Test Parsers
 on:
   pull_request:
     types: [ opened, synchronize, reopened ]
-    paths:
-      - 'solution/parser/**'
   push:
     branches:
       - main
