@@ -1,11 +1,6 @@
 name: Lint & Unit Test Parsers
 
-on:
-  pull_request:
-    types: [ push, opened, synchronize, reopened ]
-  push:
-    branches:
-      - main
+on: [ push, pull_request, workflow_dispatch ]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
