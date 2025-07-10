@@ -7,6 +7,10 @@ import HeaderDropdownMenu from "./HeaderDropdownMenu.vue";
 import HeaderLink from "./HeaderLink.vue";
 
 const props = defineProps({
+    manualUrl: {
+        type: String,
+        required: true,
+    },
     statutesUrl: {
         type: String,
         required: true,
@@ -21,8 +25,14 @@ defineEmits(["link-clicked"]);
 
 const links = [
     {
+        name: "manual",
+        label: "State Medicaid Manual",
+        active: window.location.pathname.includes("manual"),
+        href: props.manualUrl,
+    },
+    {
         name: "statutes",
-        label: "Access Statute Citations",
+        label: "Social Security Act",
         active: window.location.pathname.includes("statutes"),
         href: props.statutesUrl,
     },
