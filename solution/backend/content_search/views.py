@@ -110,7 +110,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
     pagination_class = ContentSearchPagination
 
     def list(self, request, *args, **kwargs):
-        search_headline_text_max = request.GET.get("search_headline_text_max", int(settings.SEARCH_HEADLINE_TEXT_MAX))
+        search_headline_text_max = int(request.GET.get("search_headline_text_max", settings.SEARCH_HEADLINE_TEXT_MAX))
         citations = request.GET.getlist("citations")
         subjects = request.GET.getlist("subjects")
         categories = request.GET.getlist("categories")
