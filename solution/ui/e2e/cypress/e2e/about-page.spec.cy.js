@@ -22,4 +22,15 @@ describe("About page", { scrollBehavior: "center" }, () => {
         });
         cy.url().should("include", "/subjects");
     });
+
+    it("goes to the State Medicaid Manual page using header link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/about/");
+        cy.clickHeaderLink({
+            page: "manual",
+            label: "State Medicaid Manual",
+            screen: "wide",
+        });
+        cy.url().should("include", "/manual");
+    });
 });

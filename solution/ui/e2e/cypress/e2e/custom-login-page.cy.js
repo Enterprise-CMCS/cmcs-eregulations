@@ -58,6 +58,18 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("goes to the State Medicaid Manual page using header link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/login");
+        cy.clickHeaderLink({
+            page: "manual",
+            label: "State Medicaid Manual",
+            screen: "wide",
+        });
+        cy.url().should("include", "/manual");
+    });
+
+
     it("custom-login-page - allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
