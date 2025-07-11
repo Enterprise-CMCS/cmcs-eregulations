@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db.models import Count, F, Prefetch, Q
 from django.http import QueryDict
 from django.urls import reverse
@@ -109,6 +110,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
     pagination_class = ContentSearchPagination
 
     def list(self, request, *args, **kwargs):
+        search_headline_text_max = request.GET.get("search_headline_text_max", int(settings.SEARCH_HEADLINE_TEXT_MAX))
         citations = request.GET.getlist("citations")
         subjects = request.GET.getlist("subjects")
         categories = request.GET.getlist("categories")
@@ -157,7 +159,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         query = query.search(search_query, sort)
 
         current_page = [i.pk for i in self.paginate_queryset(query)]
-        query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
+        query = ContentIndex.objects.defer_text().filter(pk__in=current_page)\
+                .generate_headlines(search_query, search_headline_text_max)
 
         # Prefetch all related data
         query = query.prefetch_related(

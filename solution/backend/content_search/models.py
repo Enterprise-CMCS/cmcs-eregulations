@@ -84,9 +84,9 @@ class ContentIndexQuerySet(models.QuerySet):
         .order_by(*order_by)\
 
 
-    def generate_headlines(self, search_query):
+    def generate_headlines(self, search_query, search_headline_text_max):
         query_object = self._get_search_query_object(search_query)
-        return self.annotate(content_short=Substr("content", 1, self._text_max)).annotate(
+        return self.annotate(content_short=Substr("content", 1, search_headline_text_max)).annotate(
             summary_headline=SearchHeadline(
                 "summary",
                 query_object,
