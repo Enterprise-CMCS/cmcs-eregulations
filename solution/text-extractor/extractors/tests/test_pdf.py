@@ -1,55 +1,95 @@
-from unittest.mock import patch
+import os
+import json
 
+import boto3
+from moto import mock_aws
 
 from extractors import (
     Extractor,
-    ExtractorException,
-    PdfExtractor,
 )
 
 from . import FixtureTestCase
 
-orig = Extractor.get_extractor
-
-
-class MockJpegExtractor:
-    def extract(self, file: bytes) -> str:
-        if Extractor.get_file_type(file) != "jpeg":
-            raise ExtractorException("Extractor did not convert page to jpeg.")
-        return "Sample output"  # Expected file will contain 2 copies of this as there are 2 pages in the PDF
-
-
-class MockNullExtractor:
-    def extract(self, file: bytes) -> str:
-        return "Sample output"
-
-
-def mock_get_extractor(file_type: str, config: dict = {}) -> Extractor:
-    if file_type == "jpeg":
-        return MockJpegExtractor()
-    if file_type == "null":
-        return MockNullExtractor()
-    return orig(file_type, config)
-
-
-def mock_convert_to_images(self: PdfExtractor, file: bytes, temp_dir: str) -> [str]:
-    for i in range(self.max_pages + 10):
-        with open(f"{temp_dir}/page{i}.null", "wb") as f:
-            f.write(b"null")
-    return [f"{temp_dir}/page{i}.null" for i in range(self.max_pages + 10)]
-
 
 class TestPdfExtractor(FixtureTestCase):
-    # This simple test verifies that multipage support is working and that it is converting PDF pages to jpeg images.
-    @patch.object(Extractor, "get_extractor", mock_get_extractor)
-    def test_extract_pdf(self):
-        self._test_file_type("pdf")
+    CONFIG = {
+        "id": 1234,
+        "aws": {
+            "aws_access_key_id": "xxxxxx",
+            "aws_secret_access_key": "xxxxxx",
+            "aws_region": "us-east-1",
+        },
+    }
 
-    # This test verifies that the extractor will only extract up to the maximum number of pages.
-    @patch.object(Extractor, "get_extractor", mock_get_extractor)
-    @patch.object(PdfExtractor, "_convert_to_images", mock_convert_to_images)
-    def test_pdf_max_pages(self, *args):
-        with open(f"{self.BASE_PATH}pdf/sample.pdf", "rb") as f:
-            sample = f.read()
-        output = PdfExtractor("pdf", {}, output_file_type="null").extract(sample)
-        self.assertEqual(output.count("Sample output"), PdfExtractor.max_pages)
+    BUCKET_NAME = "test-bucket"
+    QUEUE_NAME = "test-queue.fifo"
+
+    def setUp(self):
+        super().setUp()
+        self.mock_aws = mock_aws()
+        self.mock_aws.start()
+
+        self.s3_client = boto3.client("s3", region_name=self.CONFIG["aws"]["aws_region"])
+        self.s3_client.create_bucket(Bucket=self.BUCKET_NAME)
+
+        self.sqs_client = boto3.client("sqs", region_name=self.CONFIG["aws"]["aws_region"])
+        self.sqs_client.create_queue(
+            QueueName=self.QUEUE_NAME,
+            Attributes={
+                "FifoQueue": "true",
+                "ContentBasedDeduplication": "true",
+            },
+        )
+        self.sqs_url = self.sqs_client.get_queue_url(QueueName=self.QUEUE_NAME)["QueueUrl"]
+
+    def test_extract_pdf_async(self):
+        # Start the async extraction
+        os.environ["TEXTRACT_BUCKET"] = self.BUCKET_NAME
+        os.environ["TEXT_EXTRACTOR_QUEUE_URL"] = self.sqs_url
+        extractor = Extractor.get_extractor("pdf", self.CONFIG)
+        output = extractor.extract(b"123")
+        self.assertEqual(output, None)
+
+        # After extract() returns, the PDF should be uploaded to S3
+        objects = self.s3_client.list_objects_v2(Bucket=self.BUCKET_NAME)["Contents"]
+        self.assertEqual(len(objects), 1)
+        self.assertEqual(objects[0]["Key"], f"{self.CONFIG['id']}.pdf")
+
+        # After extract() returns, a new message with a job ID should be sent to the SQS queue
+        messages = self.sqs_client.receive_message(
+            QueueUrl=self.sqs_url,
+            MaxNumberOfMessages=10,
+        )["Messages"]
+        self.assertEqual(len(messages), 1)
+        body = json.loads(messages[0]["Body"])
+        self.assertIn("job_id", body)
+        self.assertEqual(body.get("id"), self.CONFIG["id"])
+
+        # Simulate a continuation of the extraction process
+        config = {**self.CONFIG, "job_id": extractor.config["job_id"]}
+        extractor = Extractor.get_extractor("pdf", config)
+        output = extractor.extract(None)
+        self.assertEqual(output, "")  # moto returns a blank string for Textract results
+
+        # Check that the S3 object was deleted after extraction
+        s3_response = self.s3_client.list_objects_v2(Bucket=self.BUCKET_NAME)
+        self.assertEqual(s3_response["KeyCount"], 0)
+
+        # Check the SQS queue is empty
+        sqs_response = self.sqs_client.receive_message(
+            QueueUrl=self.sqs_url,
+            MaxNumberOfMessages=10,
+        )
+        self.assertNotIn("Messages", sqs_response)  # No messages should be left
+
+    def test_extract_pdf_sync(self):
+        # Start the sync extraction
+        os.environ["TEXTRACT_BUCKET"] = self.BUCKET_NAME
+        os.environ["TEXT_EXTRACTOR_QUEUE_URL"] = ""
+        extractor = Extractor.get_extractor("pdf", self.CONFIG)
+        output = extractor.extract(b"123")
+        self.assertEqual(output, "")  # moto returns a blank string for Textract results
+
+        # Assert that the PDF is no longer in S3
+        s3_response = self.s3_client.list_objects_v2(Bucket=self.BUCKET_NAME)
+        self.assertEqual(s3_response["KeyCount"], 0)

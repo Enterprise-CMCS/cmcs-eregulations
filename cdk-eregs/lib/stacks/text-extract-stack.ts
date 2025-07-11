@@ -4,6 +4,7 @@ import {
     aws_logs as logs,
     aws_lambda as lambda,
     aws_sqs as sqs,
+    aws_s3 as s3,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -79,6 +80,39 @@ export class TextExtractorStack extends cdk.Stack {
         });
 
         // ================================
+        // S3 BUCKET FOR PDF STORAGE AND RESULTS
+        // ================================
+        const textractBucket = new s3.Bucket(this, 'TextractBucket', {
+            bucketName: stageConfig.getResourceName('textract-bucket'),
+            encryption: s3.BucketEncryption.S3_MANAGED,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+            enforceSSL: true,
+            autoDeleteObjects: true,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            cors: [
+                {
+                    allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
+                    allowedOrigins: ['*'],
+                    allowedHeaders: ['*'],
+                    maxAge: 3000,
+                },
+            ],
+        });
+
+        // Allow Textract to access the S3 bucket
+        textractBucket.addToResourcePolicy(new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            principals: [new iam.ServicePrincipal('textract.amazonaws.com')],
+            actions: [
+                "s3:Get*",
+                "s3:List*",
+                "s3:PutObject",
+                "s3:AbortMultipartUpload",
+            ],
+            resources: [`${textractBucket.bucketArn}/*`],
+        }));
+
+        // ================================
         // LOG GROUP
         // ================================
         new logs.LogGroup(this, 'TextExtractorLogGroup', {
@@ -94,6 +128,7 @@ export class TextExtractorStack extends cdk.Stack {
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
+                        'sqs:SendMessage',
                         'sqs:ReceiveMessage',
                         'sqs:DeleteMessage',
                         'sqs:GetQueueAttributes'
@@ -108,7 +143,11 @@ export class TextExtractorStack extends cdk.Stack {
                 new iam.PolicyStatement({
                     sid: 'DetectDocumentText',
                     effect: iam.Effect.ALLOW,
-                    actions: ['textract:DetectDocumentText'],
+                    actions: [
+                        'textract:DetectDocumentText',
+                        'textract:StartDocumentTextDetection',
+                        'textract:GetDocumentTextDetection',
+                    ],
                     resources: ['*'],
                 }),
             ],
@@ -136,6 +175,20 @@ export class TextExtractorStack extends cdk.Stack {
                         `arn:aws:s3:::cms-eregs-${stageConfig.stageName}-file-repo-eregs*`,
                     ],
                 }),
+                // Allow Lambda read/write access to the Textract bucket
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: [
+                        's3:ListBucket',
+                        's3:PutObject',
+                        's3:GetObject',
+                        's3:DeleteObject',
+                    ],
+                    resources: [
+                        `arn:aws:s3:::${textractBucket.bucketName}/*`,
+                        `arn:aws:s3:::${textractBucket.bucketName}`,
+                    ],
+                }),
                 new iam.PolicyStatement({
                     effect: iam.Effect.ALLOW,
                     actions: [
@@ -157,7 +210,6 @@ export class TextExtractorStack extends cdk.Stack {
                 stageConfig.permissionsBoundaryArn
             ),
             managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
                 iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
             ],
             inlinePolicies: {
@@ -181,6 +233,8 @@ export class TextExtractorStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 SECRET_NAME: props.environmentConfig.secretName,
+                TEXTRACT_BUCKET: textractBucket.bucketName,
+                TEXT_EXTRACTOR_QUEUE_URL: queue.queueUrl,
             },
             role: lambdaRole,
         });
@@ -208,10 +262,9 @@ export class TextExtractorStack extends cdk.Stack {
             TextExtractorQueueArn: {
                 value: queue.queueArn,
                 exportName: stageConfig.getResourceName('text-extractor-queue-arn'),
-            }
+            },
         };
 
         Object.entries(outputs).forEach(([name, props]) => new cdk.CfnOutput(this, name, props));
     }
 }
-

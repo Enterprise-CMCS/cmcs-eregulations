@@ -9,6 +9,7 @@
         2. [AWS Secrets Manager](#aws-secrets-manager)
         3. [Token auth](#token-auth)
     2. [Currently supported backends](#currently-supported-backends)
+    3. [Extracting with Textract](#extracting-with-textract)
 5. [Response structure](#response-structure)
 6. [Creating a new file backend](#creating-a-new-file-backend)
 7. [Creating a new text extractor](#creating-a-new-text-extractor)
@@ -30,7 +31,7 @@ The text extractor supports the following file types. File types that are planne
 
 - [x] Plain text (txt, multiple encodings supported, currently excluding UTF-16)
 - [x] HTML and XML (html, htm, xhtml, xml)
-- [x] PDF
+- [x] PDF (via Textract)
 - [x] Images (png, jpeg, gif, tiff, bmp, tga, webp)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
@@ -60,12 +61,15 @@ The following data structure is required:
 
 ```jsonc
 {
+    "id": 1234,                              // A unique integer ID to identify the resource.
     "uri": "object_uri",                     // The web URL or object name to extract text from.
     "upload_url": "https://api-url-here/",   // The API URL to PATCH the text to.
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
     "ignore_robots_txt": true,               // Optional - include to ignore robots.txt.
     "retrieval_delay": 0,                    // Optional - Lambda guarantees delay of this value (in seconds) between downloads.
+    "job_id": "ID as a string",              // Optional - include if a continuation of a previous job. Won't re-download.
+    "file_type": "magika type",              // Optional - use to override the Magika text detection.
     // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
@@ -178,6 +182,16 @@ If you're using web, no further configuration is required. Set the `uri` to the 
 
 By default, the web extractor respects robots.txt. However, if you are confident that an exception is permitted, you may pass in `ignore_robots_txt: true`. This option must be exercised with caution, and must never be set for all requests.
 
+## Extracting with Textract
+
+The image and PDF extractor types both use AWS Textract. Images are processed synchronously with a call to boto3's `detect_document_text()` method. Aside from ensuring the Lambda function has permissions to call Textract, no other configuration is required for images.
+
+PDFs are processed using boto3's `start_document_text_detection()` which is an async call. PDFs are first uploaded to a bucket specified by the required environment variable `TEXTRACT_BUCKET`, then the request to Textract is sent. What happens next depends on if you have an SQS queue configured via the `TEXT_EXTRACTOR_QUEUE_URL` environment variable or not.
+
+If you are using SQS, the extractor will push a new message to the queue containing the original request plus the job ID returned by Textract. Then the extractor will return a `None` to tell the handler to exit without error or uploading text. When SQS invokes the Lambda again, it will pick up on the job ID and use it to check the status of Textract, and if it is done, process the extracted text. If it is not done, it will push the message back to the queue and try again next time.
+
+If you are not using SQS, the extractor will recursively query the Textract job every minute until the job is done or the Lambda times out.
+
 # Response structure
 
 When the function completes, it will send the text and ID back to the `upload_url` specified in the request as a JSON PATCH request formatted like:
@@ -253,6 +267,8 @@ from .sample import SampleExtractor as SampleExtractor  # Note the redundant ali
 The extractor is now registered and will be automatically instantiated when a file has one of the content types listed in `file_types`. See [Determining file types and fixing misdetected ones](#determining-file-types-and-fixing-misdetected-ones) for instructions on determine a file's content type.
 
 Note the underscore in front of the `_extract()` method definition. Be sure to override this instead of `extract()` because the latter performs pre-extraction checks, then calls `_extract()`.
+
+Returning `None` or a blank string from `_extract()` will tell the Lambda handler that no error occured, but no text was extracted either. This is useful in cases where a file is empty or being processed by an external service. The handler will pause for 60 seconds to give a chance for any external processing to occur, and then exit without error or further processing.
 
 ## Extracting embedded files
 

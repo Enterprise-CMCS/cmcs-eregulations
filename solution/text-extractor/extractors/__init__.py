@@ -15,5 +15,4 @@ from .old_excel import OldExcelExtractor as OldExcelExtractor
 from .word import WordExtractor as WordExtractor
 from .powerpoint import PowerPointExtractor as PowerPointExtractor
 from .excel import ExcelExtractor as ExcelExtractor
-from .textract import TextractExtractor as TextractExtractor
 from .image import ImageExtractor as ImageExtractor
