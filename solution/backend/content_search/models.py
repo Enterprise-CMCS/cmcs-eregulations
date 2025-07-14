@@ -95,6 +95,7 @@ class ContentIndexQuerySet(models.QuerySet):
                 min_words=None,
                 max_words=None,
                 config='english',
+                highlight_all=True,
                 fragment_delimiter='...',
                 max_fragments=None,
             ),
