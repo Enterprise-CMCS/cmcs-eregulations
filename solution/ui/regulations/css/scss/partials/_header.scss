@@ -227,7 +227,7 @@ header {
                 }
 
                 .more--dropdown-menu {
-                    @include custom-min(calc($eds-width-sm / 1px)) {
+                    @include custom-min(calc($eds-width-md / 1px)) {
                         display: none;
                     }
                 }
