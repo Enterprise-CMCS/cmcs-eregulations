@@ -73,3 +73,7 @@ echo "Restoring data from backup file ${RESTORE_FILE}"
 PGPASSWORD=$DB_PASSWORD psql -U $DB_USER -h $DB_HOST -p $DB_PORT -d ${DB_NAME} < $RESTORE_FILE
 
 echo "Database restore completed successfully."
+
+echo "Running Lambda function to create superuser..."
+LAMBDA_FUNCTION_NAME="cms-eregs-$ENV-createsu"
+aws lambda invoke --function-name $LAMBDA_FUNCTION_NAME
