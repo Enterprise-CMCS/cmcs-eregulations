@@ -145,21 +145,25 @@ You must have the correct version of PostgreSQL installed locally on your machin
 
 ### Creating a backup
 
-1. Run `mkdir -p db_backup; cd db_backup` from the eRegs root directory. This creates a `db_backup` directory which is already hidden from Git.
-2. Run `../scripts/backup_db.sh` to start the backup process.
-3. Specify the environment you wish to backup. (`dev`, `val`, `prod`, etc.)
-4. Wait for the script to fetch the database parameters and perform the backup.
+1. Copy short-term admin access key environment variables from CloudTamer to your CLI for the environment that you are backing up.
+2. Run `mkdir -p db_backup; cd db_backup` from the eRegs root directory. This creates a `db_backup` directory which is already hidden from Git.
+3. Run `../scripts/backup_db.sh` to start the backup process.
+4. Specify the environment you wish to backup. (`dev`, `val`, `prod`, etc.)
+5. Wait for the script to fetch the database parameters and perform the backup.
 
 When done, the backup file will be named `<DB host>_<name of DB>_<date>.sql`.
 
 ### Restoring from a backup file to RDS
 
-1. From the `db_backup` directory, run `../scripts/restore_remote_db.sh`.
-2. Enter the relative path to the SQL backup file created above.
-3. Specify the environment you wish to restore. (`dev`, `val`, `prod`, `eph-*`, etc.)
-4. Wait for the script to fetch the database parameters, create a backup of the remote DB, and perform the restore. This will take a while.
+1. Copy short-term admin access key environment variables from CloudTamer to your CLI for the environment that you are restoring to.
+2. From the `db_backup` directory, run `../scripts/restore_remote_db.sh`.
+3. Enter the relative path to the SQL backup file created above.
+4. Specify the environment you wish to restore. (`dev`, `val`, `prod`, `eph-*`, etc.)
+5. Wait for the script to fetch the database parameters, create a backup of the remote DB if restoring to prod, and perform the restore. This will take a while.
+6. In the restored environment's admin panel, log in using the credentials of the environment that you backed up to start with.
+7. In the admin panel, go to the root user's account and update both the username and password to match the credentials for that environment. (val should have val credentials, not prod's, etc.)
 
-Note that specifying `prod` as an environment will prompt for confirmation. Be absolutely sure that the backup that you have taken is valid and the file you specify is the correct one. However, this script will take a backup of the remote DB first before restoring from the specified file. If an error occurs, this new backup can be used for recovery. If this fails, a restore from an RDS Snapshot will be required.
+Note that specifying `prod` as an environment will prompt for confirmation. Be absolutely sure that the backup that you have taken is valid and the file you specify is the correct one. However, this script will take a backup of the prod DB first before restoring from the specified file. If an error occurs, this new backup can be used for recovery. If this fails, a restore from an RDS Snapshot will be required.
 
 ### Restoring from a backup file to local PostgreSQL
 
@@ -178,7 +182,7 @@ If adding a new model, update the following files:
 
 ## Update CSS for admin site
 
-To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.  
+To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.
 
 To see the changes on the admin site, run `make local.collectstatic`.  This will update/create the CSS files in the `solution/static-assets/css/admin` directory.
 

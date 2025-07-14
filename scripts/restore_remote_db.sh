@@ -49,13 +49,14 @@ if [ -z "$DB_HOST" ] || [ -z "$DB_PORT" ] || [ -z "$DB_NAME" ] || [ -z "$DB_USER
   exit 1
 fi
 
-# Backup the database that we are restoring.
-echo "Backing up $DB_NAME before restoring..."
-
-CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
-BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
-PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME
-echo "Database backed up successfully to {$BACKUP_FILENAME}"
+if [[ $ENV == *"prod"* ]]; then
+    # Backup the database that we are restoring.
+    echo "Backing up $DB_NAME before restoring..."
+    CURRENT_DATE=$(date +"%Y%m%d%H%M%S")
+    BACKUP_FILENAME="${DB_HOST}_${DB_NAME}_${CURRENT_DATE}.sql"
+    PGPASSWORD=$DB_PASSWORD pg_dump -U $DB_USER -h $DB_HOST -p $DB_PORT $DB_NAME > $BACKUP_FILENAME
+    echo "Database backed up successfully to {$BACKUP_FILENAME}"
+fi
 
 echo "Dropping database $DB_NAME on $DB_HOST now..."
 # Drop existing database
