@@ -76,4 +76,4 @@ echo "Database restore completed successfully."
 
 echo "Running Lambda function to create superuser..."
 LAMBDA_FUNCTION_NAME="cms-eregs-$ENV-createsu"
-aws lambda invoke --function-name $LAMBDA_FUNCTION_NAME
+aws lambda invoke --function-name $LAMBDA_FUNCTION_NAME /dev/null

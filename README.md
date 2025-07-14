@@ -159,9 +159,7 @@ When done, the backup file will be named `<DB host>_<name of DB>_<date>.sql`.
 2. From the `db_backup` directory, run `../scripts/restore_remote_db.sh`.
 3. Enter the relative path to the SQL backup file created above.
 4. Specify the environment you wish to restore. (`dev`, `val`, `prod`, `eph-*`, etc.)
-5. Wait for the script to fetch the database parameters, create a backup of the remote DB if restoring to prod, and perform the restore. This will take a while.
-6. In the restored environment's admin panel, log in using the credentials of the environment that you backed up to start with.
-7. In the admin panel, go to the root user's account and update both the username and password to match the credentials for that environment. (val should have val credentials, not prod's, etc.)
+5. Wait for the script to fetch the database parameters, create a backup of the remote DB if restoring to prod, perform the restore, and create the superuser. This will take a while.
 
 Note that specifying `prod` as an environment will prompt for confirmation. Be absolutely sure that the backup that you have taken is valid and the file you specify is the correct one. However, this script will take a backup of the prod DB first before restoring from the specified file. If an error occurs, this new backup can be used for recovery. If this fails, a restore from an RDS Snapshot will be required.
 
