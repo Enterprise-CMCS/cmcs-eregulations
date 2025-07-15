@@ -86,7 +86,12 @@ class ContentIndexQuerySet(models.QuerySet):
 
     def generate_headlines(self, search_query, search_headline_text_max):
         query_object = self._get_search_query_object(search_query)
+<<<<<<< Updated upstream
         return self.annotate(content_short=Substr("content", 1, search_headline_text_max)).annotate(
+=======
+        #return self.annotate(content_short=Substr("content", 1, self._text_max)).annotate(
+        return self.annotate(
+>>>>>>> Stashed changes
             summary_headline=SearchHeadline(
                 "summary",
                 query_object,
@@ -111,7 +116,8 @@ class ContentIndexQuerySet(models.QuerySet):
                 max_fragments=self._max_fragments,
             ),
             content_headline=SearchHeadline(
-                "content_short",
+                #"content_short",
+                "content",
                 query_object,
                 start_sel="<span class='search-highlight'>",
                 stop_sel="</span>",
