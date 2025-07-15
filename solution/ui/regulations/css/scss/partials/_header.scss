@@ -206,12 +206,12 @@ header {
                     align-items: center;
                     padding: 0 12px;
 
-                    @include custom-min(calc($eds-width-sm / 1px)) {
+                    @include custom-min(calc($eds-width-md / 1px)) {
                         display: none;
                     }
 
                     @include custom-max(
-                        calc((calc($eds-width-sm - 1px)) / 1px)
+                        calc((calc($eds-width-md - 1px)) / 1px)
                     ) {
                         border: none;
                         padding: 0 10px;
@@ -227,7 +227,7 @@ header {
                 }
 
                 .more--dropdown-menu {
-                    @include custom-min(calc($eds-width-sm / 1px)) {
+                    @include custom-min(calc($eds-width-md / 1px)) {
                         display: none;
                     }
                 }
@@ -261,7 +261,7 @@ header {
                         margin-block: 0px;
 
                         @include custom-max(
-                            calc(calc($eds-width-sm - 1px) / 1px)
+                            calc(calc($eds-width-md - 1px) / 1px)
                         ) {
                             display: none;
                         }

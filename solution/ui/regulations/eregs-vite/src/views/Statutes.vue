@@ -25,6 +25,7 @@ const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const subjectsUrl = inject("subjectsUrl");
 const username = inject("username");
@@ -133,7 +134,10 @@ getStatutesArray();
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :manual-url="manualUrl"
+                        :subjects-url="subjectsUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />

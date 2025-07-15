@@ -18,7 +18,7 @@ describe("Statute Table", () => {
         cy.visit("/");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Access Statute Citations",
+            label: "Social Security Act",
             screen: "wide",
         });
         cy.url().should("include", "/statutes/");
@@ -65,7 +65,7 @@ describe("Statute Table", () => {
         cy.visit("/");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Access Statute Citations",
+            label: "Social Security Act",
             screen: "narrow",
         });
         cy.url().should("include", "/statutes/");

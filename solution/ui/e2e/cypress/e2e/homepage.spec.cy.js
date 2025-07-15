@@ -274,6 +274,17 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
+    it("goes to the State Medicaid Manual page using header link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/");
+        cy.clickHeaderLink({
+            page: "manual",
+            label: "State Medicaid Manual",
+            screen: "wide",
+        });
+        cy.url().should("include", "/manual");
+    });
+
     it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");

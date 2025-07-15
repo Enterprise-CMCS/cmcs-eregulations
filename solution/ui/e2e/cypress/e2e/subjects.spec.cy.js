@@ -861,7 +861,7 @@ describe("Find by Subjects", () => {
         cy.visit("/subjects");
         cy.clickHeaderLink({
             page: "statutes",
-            label: "Access Statute Citations",
+            label: "Social Security Act",
             screen: "wide",
         });
         cy.url().should("include", "/statutes");

@@ -58,8 +58,7 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         cy.get(".subj-landing__container .login-cta__div").should("not.exist");
     });
 
-    // remove skip in final cleanup story
-    it.skip("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
+    it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/manual");
