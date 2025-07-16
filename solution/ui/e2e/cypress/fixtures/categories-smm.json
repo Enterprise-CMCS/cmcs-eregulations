@@ -1,0 +1,18 @@
+{
+    "count": 1,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 60,
+            "name": "State Medicaid Manual",
+            "description": "Public manual converted to a searchable format",
+            "order": 50,
+            "show_if_empty": false,
+            "is_fr_link_category": false,
+            "is_smm_category": true,
+            "type": "",
+            "subcategories": []
+        }
+    ]
+}

@@ -59,9 +59,19 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
     });
 
     it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
+        cy.intercept("**/v3/resources/public/categories**", {
+            fixture: "categories.json",
+        }).as("categories");
+        cy.intercept("**/v3/resources/internal/categories**", {
+            fixture: "categories-smm.json",
+        }).as("intcategories");
+
         cy.viewport("macbook-15");
         cy.eregsLogin({ username, password });
         cy.visit("/manual");
+
+        cy.get("label[for='main-content']")
+            .should("contain", "Search within the manual");
 
         // Search for a term
         cy.get("input#main-content").type("mock", { force: true });
