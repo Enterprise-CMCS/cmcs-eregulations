@@ -36,6 +36,7 @@ const customLoginUrl = inject("customLoginUrl");
 const hasEditableJobCode = inject("hasEditableJobCode");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
+const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
@@ -247,6 +248,7 @@ getDocsOnLoad();
                 </template>
                 <template #links>
                     <HeaderLinks
+                        :manual-url="manualUrl"
                         :statutes-url="statutesUrl"
                         :subjects-url="subjectsUrl"
                     />

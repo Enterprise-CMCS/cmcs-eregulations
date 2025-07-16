@@ -51,13 +51,24 @@ describe("Error page", { scrollBehavior: "center" }, () => {
 
     it("error-page - goes to the Subjects page using header link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/about/");
+        cy.visit("/404", { failOnStatusCode: false });
         cy.clickHeaderLink({
             page: "subjects",
             label: "Research a Subject",
             screen: "wide",
         });
         cy.url().should("include", "/subjects");
+    });
+
+    it("goes to the State Medicaid Manual page using header link", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/404", { failOnStatusCode: false });
+        cy.clickHeaderLink({
+            page: "manual",
+            label: "State Medicaid Manual",
+            screen: "wide",
+        });
+        cy.url().should("include", "/manual");
     });
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
