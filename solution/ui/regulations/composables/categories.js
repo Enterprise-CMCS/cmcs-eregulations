@@ -27,7 +27,7 @@ export default function useCategories({ apiUrl, isAuthenticated = false }) {
     // https://vuejs.org/guide/essentials/watchers.html#watcheffect
     watchEffect(() => {
         combinedCategories.value.loading =
-            externalCategories.value.loading ||
+            externalCategories.value.loading &&
             internalCategories.value.loading;
 
         combinedCategories.value.error =
