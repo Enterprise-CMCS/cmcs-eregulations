@@ -81,6 +81,7 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
             # If retrieval fails for an unexpected reason, we should still delay if configured to do so
             return None, None, time.time(), f"Backend unexpectedly failed: {str(e)}"
 
+    detected_file_type = None
     if config.get("file_type"):
         # If a file type is provided, we use it directly instead of determining it from the file
         file_type = config["file_type"]
@@ -88,7 +89,7 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
     else:
         # Determine the file's content type
         try:
-            file_type = Extractor.get_file_type(file)
+            detected_file_type = file_type = Extractor.get_file_type(file)
         except Exception as e:
             return None, None, retrieval_finished_time, f"Failed to determine file type: {str(e)}"
 
@@ -98,11 +99,11 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
         extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
     except ExtractorInitException as e:
-        return None, file_type, retrieval_finished_time, f"Failed to initialize text extractor: {str(e)}"
+        return None, detected_file_type, retrieval_finished_time, f"Failed to initialize text extractor: {str(e)}"
     except ExtractorException as e:
-        return None, file_type, retrieval_finished_time, f"Failed to extract text: {str(e)}"
+        return None, detected_file_type, retrieval_finished_time, f"Failed to extract text: {str(e)}"
     except Exception as e:
-        return None, file_type, retrieval_finished_time, f"Extractor unexpectedly failed: {str(e)}"
+        return None, detected_file_type, retrieval_finished_time, f"Extractor unexpectedly failed: {str(e)}"
 
     # If no text was extracted, we will skip sending results to eRegs, but still return a successful response
     if not text:
@@ -115,13 +116,13 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
             # This is useful if the file is being processed by an external service that may take some time to complete
             logger.info("Sleeping for 1 minute before finishing to allow for any potential asynchronous processing to occur.")
             time.sleep(60)
-        return None, file_type, retrieval_finished_time, None
+        return None, detected_file_type, retrieval_finished_time, None
 
     # Strip control characters and unneeded data out of the extracted text
     text = clean_output(text)
 
-    # Return the extracted text, file type, and no error
-    return text, file_type, retrieval_finished_time, None
+    # Return the extracted text, file type, time that retrieval finished, and no error
+    return text, detected_file_type, retrieval_finished_time, None
 
 
 def handler(event: dict, context: Any) -> dict:
