@@ -51,11 +51,32 @@ export const clickHeaderLink = ({
 
         cy.get(".more--dropdown-menu").should("be.visible");
 
+        // not styled as selected
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
+            .should("be.visible")
+            .should("have.attr", "class")
+            .and("not.match", /active/);
+
         cy.get(
             `${listLocation} ul.links__list li a[data-testid=${page.toLowerCase()}]`
         )
             .should("be.visible")
             .should("have.text", label)
             .click({ force: true });
+
+        cy.get("button.more__button")
+            .should("be.visible")
+            .click({ force: true });
+
+        // styled as selected
+        cy.get(
+            `${listLocation} > ul.links__list li a[data-testid=${page.toLowerCase()}]`
+        )
+            .should("be.visible")
+            .should("have.text", label)
+            .should("have.attr", "class")
+            .and("match", /active/);
     }
 };
