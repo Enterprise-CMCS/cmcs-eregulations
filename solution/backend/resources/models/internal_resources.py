@@ -17,7 +17,6 @@ class InternalLink(AbstractInternalResource):
 
 class InternalFile(AbstractInternalResource):
     file_name = models.CharField(max_length=512, blank=True, editable=False)
-    file_type = models.CharField(max_length=32, blank=True, editable=False)
     uid = models.UUIDField(
         primary_key=False,
         default=uuid.uuid4,
