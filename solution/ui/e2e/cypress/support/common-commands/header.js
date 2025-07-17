@@ -3,6 +3,18 @@ export const goHome = () => {
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
 
+const checkLinkOrder = (listLocation) => {
+    cy.get(`${listLocation} > ul.links__list li a`)
+        .eq(0)
+        .should("have.text", "Social Security Act");
+    cy.get(`${listLocation} > ul.links__list li a`)
+        .eq(1)
+        .should("have.text", "State Medicaid Manual");
+    cy.get(`${listLocation} > ul.links__list li a`)
+        .eq(2)
+        .should("have.text", "Research a Subject");
+};
+
 export const clickHeaderLink = ({
     page = "statutes",
     label = "Statutes",
@@ -15,6 +27,9 @@ export const clickHeaderLink = ({
 
     if (screen === "wide") {
         cy.get("button.more__button").should("not.be.visible");
+
+        // links in correct order
+        checkLinkOrder(listLocation);
 
         // not styled as selected
         cy.get(
@@ -50,6 +65,9 @@ export const clickHeaderLink = ({
             .click({ force: true });
 
         cy.get(".more--dropdown-menu").should("be.visible");
+
+        // links in correct order
+        checkLinkOrder(listLocation);
 
         // not styled as selected
         cy.get(
