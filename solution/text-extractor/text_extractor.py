@@ -36,34 +36,26 @@ root_logger.setLevel(logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
-# Global variable representing the time that the file was retrieved
-# If None, it means the file has not been retrieved yet
-retrieval_finished_time = None
 
+def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
+    """
+    Extracts text from a file specified in the configuration, handling file retrieval, type detection, and extraction.
+    This function supports both direct file retrieval and continuation of asynchronous jobs (via job_id).
+    It determines the file type (if not provided), initializes the appropriate extractor, and processes the file to extract text.
+    Handles various error conditions and logs progress throughout the process.
+    Args:
+        config (dict): Configuration dictionary containing parameters such as 'uri', 'backend', 'file_type', and optionally 'job_id'.
+        context (Any): Context object, expected to provide a method `get_remaining_time_in_millis()` for time management.
+    Returns:
+        tuple[str, str, float, str]:
+            - Extracted text as a string (or None if extraction failed or no text found).
+            - File type as a string (or None if undetermined).
+            - Retrieval finished time as a float timestamp (or None if not applicable).
+            - Error message as a string (or None if successful).
+    """
 
-class TextExtractorException(Exception):
-    pass
-
-
-def start_text_extractor(config: dict, context: Any) -> None:
-    global retrieval_finished_time
-
-    # Retrieve required arguments
-    logger.info("Retrieving required parameters from event.")
-    try:
-        resource_id = config["id"]
-        uri = config["uri"]
-        upload_url = config["upload_url"]
-    except KeyError:
-        raise TextExtractorException("You must include 'id', 'uri', 'token', and 'upload_url' in the request body.")
-
-    # Configure authorization, if desired
-    authorization = None
-    if config.get("auth"):
-        try:
-            authorization = configure_authorization(config["auth"])
-        except Exception as e:
-            raise TextExtractorException(f"Failed to configure authorization: {str(e)}")
+    retrieval_finished_time = None
+    uri = config["uri"]
 
     if config.get("job_id"):
         # If a job ID is provided, we assume this invocation is a continuation of a previous job being processed
@@ -81,15 +73,13 @@ def start_text_extractor(config: dict, context: Any) -> None:
             retrieval_finished_time = time.time()
             logger.info("File retrieved successfully. Size: %d bytes", len(file))
         except BackendInitException as e:
-            raise TextExtractorException(f"Failed to initialize backend: {str(e)}")
+            return None, None, None, f"Failed to initialize backend: {str(e)}"
         except BackendException as e:
             # If retrieval fails, we should still delay if configured to do so
-            retrieval_finished_time = time.time()
-            raise TextExtractorException(f"Failed to retrieve file: {str(e)}")
+            return None, None, time.time(), f"Failed to retrieve file: {str(e)}"
         except Exception as e:
             # If retrieval fails for an unexpected reason, we should still delay if configured to do so
-            retrieval_finished_time = time.time()
-            raise TextExtractorException(f"Backend unexpectedly failed: {str(e)}")
+            return None, None, time.time(), f"Backend unexpectedly failed: {str(e)}"
 
     if config.get("file_type"):
         # If a file type is provided, we use it directly instead of determining it from the file
@@ -100,7 +90,7 @@ def start_text_extractor(config: dict, context: Any) -> None:
         try:
             file_type = Extractor.get_file_type(file)
         except Exception as e:
-            raise TextExtractorException(f"Failed to determine file type: {str(e)}")
+            return None, None, retrieval_finished_time, f"Failed to determine file type: {str(e)}"
 
     # Run extractor
     logger.info("Starting text extraction.")
@@ -108,11 +98,11 @@ def start_text_extractor(config: dict, context: Any) -> None:
         extractor = Extractor.get_extractor(file_type, config)
         text = extractor.extract(file)
     except ExtractorInitException as e:
-        raise TextExtractorException(f"Failed to initialize text extractor: {str(e)}")
+        return None, file_type, retrieval_finished_time, f"Failed to initialize text extractor: {str(e)}"
     except ExtractorException as e:
-        raise TextExtractorException(f"Failed to extract text: {str(e)}")
+        return None, file_type, retrieval_finished_time, f"Failed to extract text: {str(e)}"
     except Exception as e:
-        raise TextExtractorException(f"Extractor unexpectedly failed: {str(e)}")
+        return None, file_type, retrieval_finished_time, f"Extractor unexpectedly failed: {str(e)}"
 
     # If no text was extracted, we will skip sending results to eRegs, but still return a successful response
     if not text:
@@ -125,56 +115,129 @@ def start_text_extractor(config: dict, context: Any) -> None:
             # This is useful if the file is being processed by an external service that may take some time to complete
             logger.info("Sleeping for 1 minute before finishing to allow for any potential asynchronous processing to occur.")
             time.sleep(60)
-        return
+        return None, file_type, retrieval_finished_time, None
 
     # Strip control characters and unneeded data out of the extracted text
     text = clean_output(text)
 
-    # Send result to eRegs
-    logger.info("Sending extracted text to PATCH URL.")
-    headers = {'Authorization': authorization} if authorization else {}
+    # Return the extracted text, file type, and no error
+    return text, file_type, retrieval_finished_time, None
+
+
+def send_results_to_eregs(resource_id: int, upload_url: str, auth: str, **kwargs) -> None:
+    """
+    Send extracted text and related data to the eRegs service via a PATCH request.
+
+    Args:
+        resource_id (int): The ID of the resource to update.
+        upload_url (str): The URL endpoint for the PATCH request.
+        auth (str): Authorization token for the request headers, or None if not required.
+        **kwargs: Additional data to include in the request payload (e.g., "text", "file_type", "error").
+
+    Raises:
+        Exception: If the PATCH request fails or an unexpected error occurs.
+    """
+
+    # Prepare the data to send
+    error = ""
+    headers = {'Authorization': auth} if auth else {}
+    data = {"id": resource_id, **{k: v for k, v in kwargs.items() if v}}
+
+    # Send the PATCH request to eRegs
+    logger.info("Sending results to eRegs at %s for resource ID %d.", upload_url, resource_id)
     try:
-        resp = requests.patch(
+        response = requests.patch(
             upload_url,
             headers=headers,
-            json={
-                "id": resource_id,
-                "text": text,
-            },
+            json=data,
             timeout=60,
         )
-        resp.raise_for_status()
+        response.raise_for_status()
     except requests.exceptions.RequestException as e:
         if hasattr(e, "response") and hasattr(e.response, "text") and e.response.text:
-            raise TextExtractorException(f"Failed to PATCH results with status code {e.response.status_code}: {e.response.text}")
-        raise TextExtractorException(f"Failed to PATCH results: {str(e)}")
+            error = f"Failed to send results to eRegs with status code {e.response.status_code}: {e.response.text}"
+        else:
+            error = f"Failed to send results to eRegs: {str(e)}"
     except Exception as e:
-        raise TextExtractorException(f"PATCH unexpectedly failed: {str(e)}")
+        error = f"Unexpected error while sending results to eRegs: {str(e)}"
+    finally:
+        additional_error_text = kwargs.get("error")
+        if additional_error_text:
+            error += f". An additional error occurred while extracting text: {additional_error_text}."
+        if error:
+            logger.error(error)
+            raise Exception(error)
 
 
 def handler(event: dict, context: Any) -> dict:
+    """
+    AWS Lambda handler function to process text extraction requests.
+    This function initializes logging, retrieves configuration, and performs text extraction.
+    It handles both synchronous and asynchronous requests, and sends results to eRegs if applicable.
+    Args:
+        event (dict): The event data passed to the Lambda function, expected to contain configuration parameters.
+        context (Any): The context object provided by AWS Lambda, used for managing execution time.
+    Returns:
+        dict: A response dictionary containing the status code and success or failure message.
+    Raises:
+        Exception: If an error occurs during processing and the Lambda is invoked by SQS.
+    """
+
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
 
-    global retrieval_finished_time
-    sqs_group = None
-    retrieval_delay = 0
+    # Get config
+    config = get_config(event)
+
+    # Check for required parameters in the event
+    logger.info("Retrieving required parameters from event.")
+    try:
+        resource_id = config["id"]
+        _ = config["uri"]
+        upload_url = config["upload_url"]
+    except KeyError:
+        return lambda_response(400, "You must include 'id', 'uri', and 'upload_url' in the request body.")
+
+    # Configure authorization
+    authorization = None
+    if config.get("auth"):
+        try:
+            authorization = configure_authorization(config["auth"])
+        except Exception as e:
+            return lambda_response(400, f"Failed to configure authorization: {str(e)}")
+
+    sqs_group = config.get("sqs_group")
+    retrieval_delay = config.get("retrieval_delay", 0)
 
     try:
-        config = get_config(event)
-        sqs_group = config.get("sqs_group")
-        retrieval_delay = config.get("retrieval_delay", 0)
-        start_text_extractor(config, context)
+        # Perform text extraction
+        text, file_type, retrieval_finished_time, error = extract_text(config, context)
+
+        # Attempt to send results to eRegs
+        send_results_to_eregs(
+            resource_id,
+            upload_url,
+            authorization,
+            text=text,
+            file_type=file_type,
+            error=error,
+        )
+
+        if error:
+            raise Exception(error)
+
         return lambda_response(200, "Text extraction completed successfully.")
+
     except Exception as e:
         if sqs_group:
             logger.error("An error occurred: %s", str(e))
             raise e
         return lambda_response(500, f"An error occurred: {str(e)}")
+
     finally:
         time_since_retrieval = time.time() - (retrieval_finished_time or 0)
         delay_time = retrieval_delay - time_since_retrieval
-        remaining_time = context.get_remaining_time_in_millis() / 1000  # Convert to seconds
-        delay_time = delay_time if remaining_time > delay_time else remaining_time - 1  # Don't delay more than the time left
+        remaining_time = (context.get_remaining_time_in_millis() / 1000) - 1  # Convert to seconds and subtract 1 for safety
+        delay_time = delay_time if remaining_time > delay_time else remaining_time  # Don't delay more than the time left
         if retrieval_finished_time and time_since_retrieval < retrieval_delay:
             logger.info(
                 "%sWaiting for %d seconds before finishing.",
