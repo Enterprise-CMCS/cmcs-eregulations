@@ -84,6 +84,11 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="The file type that the text extractor detected for this resource.",
         editable=False,
     )
+    extraction_error = models.TextField(
+        blank=True,
+        help_text="If the text extractor failed to extract text from this resource, the error message will be stored here.",
+        editable=False,
+    )
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)

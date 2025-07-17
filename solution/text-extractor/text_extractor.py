@@ -59,13 +59,13 @@ def start_text_extractor(config: dict, context: Any) -> None:
 
     # Configure authorization, if desired
     authorization = None
-    if "auth" in config:
+    if config.get("auth"):
         try:
             authorization = configure_authorization(config["auth"])
         except Exception as e:
             raise TextExtractorException(f"Failed to configure authorization: {str(e)}")
 
-    if "job_id" in config:
+    if config.get("job_id"):
         # If a job ID is provided, we assume this invocation is a continuation of a previous job being processed
         # by an external service, and so we skip the file retrieval step.
         logger.info("Job ID found in config: %s, skipping file retrieval.", config["job_id"])
@@ -91,10 +91,10 @@ def start_text_extractor(config: dict, context: Any) -> None:
             retrieval_finished_time = time.time()
             raise TextExtractorException(f"Backend unexpectedly failed: {str(e)}")
 
-    if "file_type" in config:
+    if config.get("file_type"):
         # If a file type is provided, we use it directly instead of determining it from the file
         file_type = config["file_type"]
-        logger.info("Using provided file type: %s", file_type)
+        logger.info("Attempting to use the provided file type: %s", file_type)
     else:
         # Determine the file's content type
         try:

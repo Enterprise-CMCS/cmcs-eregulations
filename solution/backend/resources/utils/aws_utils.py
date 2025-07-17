@@ -196,6 +196,7 @@ def call_text_extractor(request, resources):
     requests = [{**{
         "id": i.pk,
         "ignore_robots_txt": _should_ignore_robots_txt(i, allow_list),
+        "file_type": i.file_type or None,
         "upload_url": (
             f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
