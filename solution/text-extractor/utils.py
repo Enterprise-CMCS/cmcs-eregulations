@@ -7,6 +7,7 @@ import os
 
 import boto3
 from botocore.exceptions import ClientError
+import requests
 
 logger = logging.getLogger(__name__)
 logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
@@ -90,3 +91,49 @@ def configure_authorization(auth: dict) -> str:
         return f"Basic {token}"
 
     raise Exception(f"'{auth_type}' is an unsupported authorization type")
+
+
+def send_results(resource_id: int, upload_url: str, auth: str, **kwargs) -> None:
+    """
+    Send extracted text and related data to the eRegs service via a PATCH request.
+
+    Args:
+        resource_id (int): The ID of the resource to update.
+        upload_url (str): The URL endpoint for the PATCH request.
+        auth (str): Authorization token for the request headers, or None if not required.
+        **kwargs: Additional data to include in the request payload (e.g., "text", "file_type", "error").
+
+    Raises:
+        Exception: If the PATCH request fails or an unexpected error occurs.
+    """
+
+    # Prepare the data to send
+    error = None
+    headers = {'Authorization': auth} if auth else {}
+    data = {"id": resource_id, **{k: v for k, v in kwargs.items() if v}}
+
+    # Send the PATCH request to eRegs
+    logger.info("Sending results to eRegs at %s for resource ID %d.", upload_url, resource_id)
+    try:
+        response = requests.patch(
+            upload_url,
+            headers=headers,
+            json=data,
+            timeout=60,
+        )
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        if hasattr(e, "response") and hasattr(e.response, "text") and e.response.text:
+            error = f"Failed to send results to eRegs with status code {e.response.status_code}: {e.response.text}"
+        else:
+            error = f"Failed to send results to eRegs: {str(e)}"
+    except Exception as e:
+        error = f"Unexpected error while sending results to eRegs: {str(e)}"
+    finally:
+        additional_error_text = kwargs.get("error", "")
+        if additional_error_text:
+            additional_error_text += f". An additional error occurred while extracting text: {additional_error_text}."
+        if error:
+            error = f"{error}{additional_error_text}"
+            logger.error(error)
+            raise Exception(error)

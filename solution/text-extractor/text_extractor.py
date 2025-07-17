@@ -3,7 +3,6 @@ import os
 import time
 from typing import Any
 
-import requests
 
 from .backends import (
     BackendException,
@@ -20,6 +19,7 @@ from .utils import (
     get_config,
     lambda_response,
     configure_authorization,
+    send_results,
 )
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
@@ -124,51 +124,6 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
     return text, file_type, retrieval_finished_time, None
 
 
-def send_results_to_eregs(resource_id: int, upload_url: str, auth: str, **kwargs) -> None:
-    """
-    Send extracted text and related data to the eRegs service via a PATCH request.
-
-    Args:
-        resource_id (int): The ID of the resource to update.
-        upload_url (str): The URL endpoint for the PATCH request.
-        auth (str): Authorization token for the request headers, or None if not required.
-        **kwargs: Additional data to include in the request payload (e.g., "text", "file_type", "error").
-
-    Raises:
-        Exception: If the PATCH request fails or an unexpected error occurs.
-    """
-
-    # Prepare the data to send
-    error = ""
-    headers = {'Authorization': auth} if auth else {}
-    data = {"id": resource_id, **{k: v for k, v in kwargs.items() if v}}
-
-    # Send the PATCH request to eRegs
-    logger.info("Sending results to eRegs at %s for resource ID %d.", upload_url, resource_id)
-    try:
-        response = requests.patch(
-            upload_url,
-            headers=headers,
-            json=data,
-            timeout=60,
-        )
-        response.raise_for_status()
-    except requests.exceptions.RequestException as e:
-        if hasattr(e, "response") and hasattr(e.response, "text") and e.response.text:
-            error = f"Failed to send results to eRegs with status code {e.response.status_code}: {e.response.text}"
-        else:
-            error = f"Failed to send results to eRegs: {str(e)}"
-    except Exception as e:
-        error = f"Unexpected error while sending results to eRegs: {str(e)}"
-    finally:
-        additional_error_text = kwargs.get("error")
-        if additional_error_text:
-            error += f". An additional error occurred while extracting text: {additional_error_text}."
-        if error:
-            logger.error(error)
-            raise Exception(error)
-
-
 def handler(event: dict, context: Any) -> dict:
     """
     AWS Lambda handler function to process text extraction requests.
@@ -213,7 +168,7 @@ def handler(event: dict, context: Any) -> dict:
         text, file_type, retrieval_finished_time, error = extract_text(config, context)
 
         # Attempt to send results to eRegs
-        send_results_to_eregs(
+        send_results(
             resource_id,
             upload_url,
             authorization,
