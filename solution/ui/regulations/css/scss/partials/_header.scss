@@ -245,10 +245,7 @@ header {
                             }
 
                             .header--links__anchor {
-                                font-size: var(--font-size-md);
-                                line-height: 22px;
-                                color: $mid-gray;
-                                text-decoration: none;
+                                @include header__anchor--complete;
                             }
                         }
                     }
