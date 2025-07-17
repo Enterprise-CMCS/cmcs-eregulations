@@ -134,7 +134,7 @@ def _get_resource_keys(resource, **kwargs):
     user_agent = None
     for item in user_agent_override_list:
         if item["domain"] == domain or domain.endswith('.' + item["domain"]):
-            user_agent = item.get("user_agent", default_user_agent_override)
+            user_agent = item["user_agent"] or default_user_agent_override
             break
 
     return {
