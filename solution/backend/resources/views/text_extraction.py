@@ -42,15 +42,23 @@ class ContentTextViewSet(APIView):
             content.value = text
             content.save()
 
+        resource_updated = False
+
         file_type = data.get("file_type")
         if file_type:
+            resource_updated = True
             resource.detected_file_type = file_type
 
         error = data.get("error")
         if error:
+            resource_updated = True
             resource.extraction_error = error
 
-        if file_type or error:
-            resource.save()
+        if text and not error:
+            resource_updated = True
+            resource.extraction_error = ""
+
+        if resource_updated:
+            resource.save()  # Avoid repeated save calls
 
         return Response(data=f"A {resource._meta.verbose_name} with ID {pk} was updated successfully.")
