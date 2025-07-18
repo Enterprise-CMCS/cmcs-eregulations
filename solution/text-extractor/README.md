@@ -31,8 +31,8 @@ The text extractor supports the following file types. File types that are planne
 
 - [x] Plain text (txt, multiple encodings supported, currently excluding UTF-16)
 - [x] HTML and XML (html, htm, xhtml, xml)
-- [x] PDF (via Textract)
-- [x] Images (png, jpeg, gif, tiff, bmp, tga, webp)
+- [x] PDF (via AWS Textract)
+- [x] Images (png, jpeg, gif, tiff, bmp, tga, webp, all via AWS Textract)
 - [x] Microsoft Word (doc and docx)
 - [x] Microsoft Excel (xls and xlsx)
 - [x] Microsoft Outlook (msg)
@@ -70,6 +70,7 @@ The following data structure is required:
     "retrieval_delay": 0,                    // Optional - Lambda guarantees delay of this value (in seconds) between downloads.
     "job_id": "ID as a string",              // Optional - include if a continuation of a previous job. Won't re-download.
     "file_type": "magika type",              // Optional - use to override the Magika text detection.
+    "user_agent": "a user agent string",     // Optional - use to override the default user agent if it's being blocked.
     // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
@@ -85,7 +86,7 @@ The following data structure is required:
 }
 ```
 
-Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has permissions to access AWS Textract and S3.
+Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for AWS Textract, S3, and SQS (if you are using it).
 
 It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
@@ -194,17 +195,24 @@ If you are not using SQS, the extractor will recursively query the Textract job 
 
 # Response structure
 
-When the function completes, it will send the text and ID back to the `upload_url` specified in the request as a JSON PATCH request formatted like:
+When the function completes, it will attempt to send a JSON PATCH request to the URL specified in `upload_url`. The request will be sent whether the extractor succeeds or fails. The contents will look like this:
 
 ```jsonc
 {
-    "text": "xxxxxx"  // The text extracted
+    "id": 1234,           // The unique ID of the resource
+    "text": "xxxxxx",     // The text extracted
+    "file_type": "type",  // The Magika-supported detected file type
+    "error": "error str"  // An error if any occured
 }
 ```
 
-The `upload_url` parameter must contain a unique identifier, because the request body will not.
+The fields `text`, `file_type`, and `error` are all optional and their existence indicates the status of the extraction:
 
-Future iterations may include uploading error messages to eRegs if they occur, but for now errors will be recorded in logs only and no PATCH will be sent.
+* If `text` exists, then text extraction was successful and the contents may be used.
+* If `file_type` exists, then Magika was able to detect a valid file type.
+* If `error` exists, then text extraction did not complete successfully and this will contain the reason why.
+
+Note that it's possible for text extraction to fail but file type detection to succeed, and in such a case, only `file_type` and `error` will be present.
 
 # Creating a new file backend
 

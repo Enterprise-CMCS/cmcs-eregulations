@@ -63,6 +63,48 @@ class ResourcesConfiguration(SingletonModel):
         pre_save_hook=lambda value: [url for url in [url.strip().lower() for url in value] if url],
     )
 
+    user_agent_override_list = JSONField(
+        default=list,
+        blank=True,
+        help_text="A list of domains and user agents that the text extractor should use instead of the default user agent. "
+                  "This is useful for sites that block eRegs' default user agent. Note that a domain will match all subdomains.",
+        verbose_name="User Agent Override List",
+        schema={
+            "type": "list",
+            "minItems": 0,
+            "items": {
+                "type": "object",
+                "title": "Domain and User Agent",
+                "properties": {
+                    "domain": {
+                        "type": "string",
+                        "title": "Domain",
+                        "placeholder": "example.com",
+                    },
+                    "user_agent": {
+                        "type": "string",
+                        "title": "User Agent (optional)",
+                        "placeholder": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
+                    },
+                },
+                "required": ["domain"],
+            },
+        },
+        pre_save_hook=lambda value: [
+            {"domain": item["domain"].strip(), "user_agent": item.get("user_agent", "").strip()}
+            for item in value if item.get("domain")
+        ],
+    )
+
+    default_user_agent_override = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="A default user agent to use for all requests to domains in the user agent override list that do not "
+                  "specify a user agent. This is useful for sites that block eRegs' default user agent.",
+        verbose_name="Default User Agent Override",
+        default="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
+    )
+
     def __str__(self):
         return "Resources Configuration"
 

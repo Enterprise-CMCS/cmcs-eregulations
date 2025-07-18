@@ -28,6 +28,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
+    readonly_fields = ["detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -37,7 +38,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
             "fields": ["date", "document_id", "summary", "editor_notes"],
         }),
         ("Categorization", {
-            "fields": ["category", "subjects"],
+            "fields": ["category", "subjects", "file_type", "detected_file_type"],
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
@@ -71,7 +72,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
-    readonly_fields = ["download_file", "file_name", "file_type"]
+    readonly_fields = ["download_file", "file_name", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -81,7 +82,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
             "fields": ["date", "document_id", "summary", "editor_notes"],
         }),
         ("Categorization", {
-            "fields": ["category", "subjects"],
+            "fields": ["category", "subjects", "file_type", "detected_file_type"],
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],

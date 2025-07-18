@@ -2,6 +2,7 @@ import os
 import json
 import logging
 import unittest
+from unittest.mock import patch
 import base64
 
 from utils import (
@@ -9,6 +10,7 @@ from utils import (
     get_config,
     lambda_response,
     configure_authorization,
+    send_results,
 )
 
 logging.disable(logging.CRITICAL)
@@ -147,4 +149,63 @@ class UtilsTestCase(unittest.TestCase):
         with self.assertRaises(Exception):
             configure_authorization(auth)
 
-    ### TODO: test AWS secrets manager here
+    def test_send_results(self):
+        resource_id = 123
+        upload_url = "http://example.com/upload"
+        auth = "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+        kwargs = {
+            "text": "Sample text",
+            "file_type": "text",
+            "error": None,
+        }
+        expected_data = {
+            "id": resource_id,
+            "text": "Sample text",
+            "file_type": "text",
+        }
+        headers = {'Authorization': auth}
+
+        with patch('requests.patch') as mock_patch:
+            mock_response = unittest.mock.Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"status": "success"}
+            mock_patch.return_value = mock_response
+
+            send_results(resource_id, upload_url, auth, **kwargs)
+
+            mock_patch.assert_called_once_with(
+                upload_url,
+                headers=headers,
+                json=expected_data,
+                timeout=60,
+            )
+
+    def test_send_error(self):
+        resource_id = 123
+        upload_url = "http://example.com/upload"
+        auth = "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
+        kwargs = {
+            "text": None,
+            "file_type": None,
+            "error": "Sample error",
+        }
+        expected_data = {
+            "id": resource_id,
+            "error": "Sample error",
+        }
+        headers = {'Authorization': auth}
+
+        with patch('requests.patch') as mock_patch:
+            mock_response = unittest.mock.Mock()
+            mock_response.status_code = 200
+            mock_response.json.return_value = {"status": "success"}
+            mock_patch.return_value = mock_response
+
+            send_results(resource_id, upload_url, auth, **kwargs)
+
+            mock_patch.assert_called_once_with(
+                upload_url,
+                headers=headers,
+                json=expected_data,
+                timeout=60,
+            )
