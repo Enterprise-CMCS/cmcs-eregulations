@@ -86,7 +86,7 @@ The following data structure is required:
 }
 ```
 
-Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has permissions to access AWS Textract and S3.
+Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for AWS Textract, S3, and SQS (if you are using it).
 
 It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
