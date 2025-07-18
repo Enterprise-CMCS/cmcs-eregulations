@@ -484,6 +484,7 @@ a {
 // Dropdowns, Menus, and Selects
 // -------------------------
 
+// https://css-tricks.com/bold-on-hover-without-the-layout-shift/
 @mixin handle-layout-shift {
     height: 0;
     visibility: hidden;
