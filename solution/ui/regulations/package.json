@@ -25,7 +25,7 @@
     "lodash": "^4.17.21",
     "sass": "^1.89.2",
     "vue": "^3.5.17",
-    "vuetify": "^3.9.0"
+    "vuetify": "^3.9.2"
   },
   "devDependencies": {
     "@testing-library/vue": "^8.1.0",
