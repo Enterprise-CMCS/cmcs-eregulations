@@ -368,7 +368,7 @@ describe("Search flow", () => {
 
         cy.get("button[data-testid=add-subject-3]")
             .should("not.have.class", "subjects-li__button--selected")
-            .find(".count")
+            .find(".count:not(:hidden)")
             .should("have.text", "(15)");
 
         cy.get("button[data-testid=add-subject-3]").click({ force: true });

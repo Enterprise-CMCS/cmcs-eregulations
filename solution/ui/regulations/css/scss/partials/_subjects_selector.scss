@@ -112,6 +112,10 @@
         }
     }
 
+    .subjects-li__button-menu-subtitle {
+        @include handle-layout-shift;
+    }
+
     ul.subjects__list {
         padding: 0;
         margin: 0;
@@ -210,6 +214,10 @@
                         display: flex;
                         justify-content: space-between;
                         line-height: 22px;
+
+                        &--menu {
+                            flex-direction: column;
+                        }
 
                         &:hover,
                         &:focus,

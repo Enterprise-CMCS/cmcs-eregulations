@@ -55,6 +55,7 @@ describe("Subject Selector", () => {
             })
         ).toStrictEqual({
             "subjects-li__button": true,
+            "subjects-li__button--menu": true,
             "subjects-li__button--selected": false,
         });
 
@@ -65,6 +66,7 @@ describe("Subject Selector", () => {
             })
         ).toStrictEqual({
             "subjects-li__button": true,
+            "subjects-li__button--menu": true,
             "subjects-li__button--selected": true,
         });
     });
