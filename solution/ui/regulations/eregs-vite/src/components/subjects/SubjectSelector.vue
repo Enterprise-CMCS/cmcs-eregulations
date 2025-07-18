@@ -26,6 +26,7 @@ const getSubjectClasses = ({ subjectId, subjectQueryParam }) => {
 
     return {
         "subjects-li__button": true,
+        "subjects-li__button--menu": parent !== "subjects",
         "subjects-li__button--selected": routeArr.includes(
             subjectId.toString()
         ),
