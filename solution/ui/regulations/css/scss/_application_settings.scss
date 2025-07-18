@@ -481,6 +481,23 @@ a {
 }
 
 // -------------------------
+// Dropdowns, Menus, and Selects
+// -------------------------
+
+@mixin handle-layout-shift {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+    font-weight: 700;
+
+    @media speech {
+        display: none;
+    }
+}
+
+// -------------------------
 // General Settings
 // -------------------------
 
