@@ -295,6 +295,19 @@
             margin-top: 12px;
         }
     }
+
+    .v-list-item-subtitle {
+        height: 0;
+        visibility: hidden;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
+        font-weight: 700;
+
+        @media speech {
+            display: none;
+        }
+    }
 }
 
 #subjectsApp.repository-view {
