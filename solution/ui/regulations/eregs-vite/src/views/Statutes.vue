@@ -12,7 +12,6 @@ import StatuteTable from "eregsComponentLib/src/components/shared-components/Sta
 import TableCaption from "eregsComponentLib/src/components/shared-components/Statutes/TableCaption.vue";
 
 import AccessLink from "@/components/AccessLink.vue";
-import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -163,10 +162,16 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Look Up Statute Text" />
+            <h1>Statute Reference</h1>
+            <h2 class="heading__sans">
+                Social Security Act Table of Contents
+            </h2>
+            <p class="p__description">
+                List the sections of 42 U.S.C. Chapter 7 enacted by the Social Security Act.
+            </p>
             <div id="main-content" class="statute__container">
                 <div class="content">
-                    <div class="content__selector">
+                    <!-- div class="content__selector">
                         <div class="selector__parent">
                             <h3>Included Statute</h3>
                             <StatuteSelector
@@ -177,7 +182,7 @@ getStatutesArray();
                                 :titles="parsedTitles"
                             />
                         </div>
-                    </div>
+                    </div -->
                     <div
                         class="table__parent"
                         :class="{ loading: statutes.loading }"

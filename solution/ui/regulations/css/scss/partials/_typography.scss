@@ -34,6 +34,10 @@ h2 {
     font-size: var(--font-size-2xl);
     font-weight: bold;
     font-family: $secondary_site_font;
+
+    &.heading__sans {
+        font-family: $primary_site_font;
+    }
 }
 
 .icon-card__title {

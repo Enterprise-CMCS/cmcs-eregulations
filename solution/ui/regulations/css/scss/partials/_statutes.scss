@@ -4,237 +4,181 @@
 
 @import "../application_settings";
 
-.statute-page #statuteApp {
-    @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
-        h1 {
-            font-size: 36px;
-            margin-top: 24px;
+#statuteApp.statute-view {
+    @include eds-standard-layout;
+
+    h1 {
+        margin-bottom: var(--spacer-2);
+    }
+
+    h2 {
+        margin: 0 0 1.5rem !important; // !important to override the default h2 margin due to vuetify defaults
+
+        @media (max-width: $eds-width-md) {
+            font-size: var(--font-size-xl);
         }
     }
 
-    .statute__container {
-        @include eds-gutters;
+    .content {
+        display: flex;
+        flex-direction: row;
+        padding-top: 30px;
+        padding-bottom: 30px;
 
-        .content {
-            display: flex;
-            flex-direction: row;
-            padding-top: 30px;
-            padding-bottom: 30px;
+        @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
+            flex-direction: column;
+        }
 
-            @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
-                flex-direction: column;
+        .table__parent {
+            padding: 0.75rem;
+            border: 1px solid $table_border_color;
+            border-radius: 4px;
+            width: 100%;
+
+            &.loading {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .table__caption {
+                padding-bottom: 1.5rem;
+                color: $primary_text_color;
             }
 
-            .content__selector {
-                flex: 0 0 200px;
-                margin-right: 25px;
+            @mixin commonTableStyles {
+                width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
 
-                h3 {
-                    font-size: 1.5rem;
-                    line-height: 36px;
-                    margin: 0 0 16px;
-                }
+            // statuteList-specific styles
+            #statuteList {
+                .statute__list-item {
+                    padding: 12px 0;
+                    border-bottom: 1px solid $table_border_color;
 
-                h4 {
-                    margin: 0 0 12px;
+                    &:first-of-type {
+                        padding-top: 0px;
+                    }
 
-                    &.acts-item__heading {
-                        color: $mid_blue;
-                        transition: none;
+                    &:last-of-type {
+                        border: none;
+                    }
 
-                        &--active {
-                            color: $dark_gray;
+                    table {
+                        @include commonTableStyles;
+
+                        .table__row {
+                            &:first-of-type {
+                                .row__cell--body {
+                                    padding-top: 0.5rem;
+                                }
+                            }
+
+                            .row__cell {
+                                &--body {
+                                    vertical-align: top;
+                                    padding-top: 0.5rem;
+                                    padding-bottom: 0.5rem;
+                                }
+                            }
                         }
                     }
                 }
+            }
 
-                .selector__parent {
-                    @include screen-eds-md {
+            #statuteTable {
+                @include commonTableStyles;
+            }
+
+            #statuteList,
+            #statuteTable {
+                .table__row {
+                    &--header {
                         position: sticky;
                         top: $header_height;
-                    }
-                }
-
-                .titles-list__link {
-                    text-decoration: none;
-                    transition: none;
-
-                    &:hover,
-                    &:focus,
-                    &--active {
-                        color: $dark_gray;
-                        border-bottom: 1px solid $dark_gray;
+                        z-index: 1;
                     }
 
-                    &--loading {
-                        pointer-events: none;
-                    }
-                }
-
-                ul {
-                    list-style-type: none;
-
-                    &.acts__list {
-                        padding-left: 0;
-                    }
-
-                    &.titles__list {
-                        margin: 0;
-                    }
-                }
-            }
-
-            .table__parent {
-                padding: 0.75rem;
-                border: 1px solid $table_border_color;
-                border-radius: 4px;
-                width: 100%;
-
-                &.loading {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .table__caption {
-                    padding-bottom: 1.5rem;
-                    color: $primary_text_color;
-                }
-
-                @mixin commonTableStyles {
-                    width: 100%;
-                    border-collapse: collapse;
-                    border-spacing: 0;
-                }
-
-                // statuteList-specific styles
-                #statuteList {
-                    .statute__list-item {
-                        padding: 12px 0;
+                    &--body {
                         border-bottom: 1px solid $table_border_color;
+                    }
 
-                        &:first-of-type {
-                            padding-top: 0px;
-                        }
-
-                        &:last-of-type {
-                            border: none;
-                        }
-
-                        table {
-                            @include commonTableStyles;
-
-                            .table__row {
-                                &:first-of-type {
-                                    .row__cell--body {
-                                        padding-top: 0.5rem;
-                                    }
-                                }
-
-                                .row__cell {
-                                    &--body {
-                                        vertical-align: top;
-                                        padding-top: 0.5rem;
-                                        padding-bottom: 0.5rem;
-                                    }
-                                }
-                            }
+                    &:first-of-type {
+                        .row__cell--body {
+                            padding-top: 18px;
                         }
                     }
                 }
 
-                #statuteTable {
-                    @include commonTableStyles;
+                .row__cell {
+                    padding: 0.5rem 0 0.5rem 1.5rem;
+
+                    a {
+                        text-decoration: none;
+
+                        &:link.pdf {
+                            display: flex;
+                            align-items: center;
+                            gap: var(--spacer-half);
+                            white-space: nowrap;
+                        }
+
+                        &:hover {
+                            color: $primary_link_hover;
+                        }
+                    }
+
+                    .cell__title {
+                        font-weight: bold;
+                    }
+
+                    .cell__subtitle {
+                        font-size: 14px;
+                        line-height: 22px;
+                        font-weight: normal;
+                        font-style: italic;
+                        text-transform: capitalize;
+                    }
+
+                    .cell__usc-label {
+                        padding: 0.5rem 0;
+                    }
+
+                    .cell__name {
+                        font-size: 0.75rem;
+                        line-height: 18px;
+                    }
+
+                    &--header {
+                        background-color: $mid_blue_2;
+                        color: #fff;
+                        text-align: left;
+                        vertical-align: top;
+                    }
+
+                    &--body {
+                        padding-top: 0.75rem;
+                        padding-bottom: 0.75rem;
+                    }
+
+                    &--primary {
+                        width: 220px;
+                        box-sizing: border-box;
+                    }
+
+                    &:first-of-type {
+                        padding-left: 1rem;
+                        padding-right: 1rem;
+                    }
+
+                    &:last-of-type {
+                        padding-right: 1rem;
+                    }
                 }
 
-                #statuteList,
-                #statuteTable {
-                    .table__row {
-                        &--header {
-                            position: sticky;
-                            top: $header_height;
-                            z-index: 1;
-                        }
-
-                        &--body {
-                            border-bottom: 1px solid $table_border_color;
-                        }
-
-                        &:first-of-type {
-                            .row__cell--body {
-                                padding-top: 18px;
-                            }
-                        }
-                    }
-
-                    .row__cell {
-                        padding: 0.5rem 0 0.5rem 1.5rem;
-
-                        a {
-                            text-decoration: none;
-
-                            &:link.pdf {
-                                display: flex;
-                                align-items: center;
-                                gap: var(--spacer-half);
-                                white-space: nowrap;
-                            }
-
-                            &:hover {
-                                color: $primary_link_hover;
-                            }
-                        }
-
-                        .cell__title {
-                            font-weight: bold;
-                        }
-
-                        .cell__subtitle {
-                            font-size: 14px;
-                            line-height: 22px;
-                            font-weight: normal;
-                            font-style: italic;
-                            text-transform: capitalize;
-                        }
-
-                        .cell__usc-label {
-                            padding: 0.5rem 0;
-                        }
-
-                        .cell__name {
-                            font-size: 0.75rem;
-                            line-height: 18px;
-                        }
-
-                        &--header {
-                            background-color: $mid_blue_2;
-                            color: #fff;
-                            text-align: left;
-                            vertical-align: top;
-                        }
-
-                        &--body {
-                            padding-top: 0.75rem;
-                            padding-bottom: 0.75rem;
-                        }
-
-                        &--primary {
-                            width: 220px;
-                            box-sizing: border-box;
-                        }
-
-                        &:first-of-type {
-                            padding-left: 1rem;
-                            padding-right: 1rem;
-                        }
-
-                        &:last-of-type {
-                            padding-right: 1rem;
-                        }
-                    }
-
-                    .row__cell--body.row__cell--primary {
-                        background-color: $lightest_blue;
-                    }
+                .row__cell--body.row__cell--primary {
+                    background-color: $lightest_blue;
                 }
             }
         }
