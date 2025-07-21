@@ -18,8 +18,8 @@ from resources.models import (
     AbstractCitation,
     AbstractInternalCategory,
     AbstractPublicCategory,
-    ResourcesConfiguration,
     AbstractResource,
+    ResourcesConfiguration,
 )
 from resources.utils import (
     call_text_extractor,

@@ -102,11 +102,11 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     def indexing_status(self):
         if self.extraction_error:
             return f"Error: {self.extraction_error}"
-        if not self.content:
+        if not hasattr(self, "content") or not self.content:
             return "Not indexed"
         if self.content.value:
             return f"Indexed: {self.content.value[:100]}..."
-        return "Empty content"
+        return "Not indexed or no content found"
 
     def save(self, *args, **kwargs):
         self.full_clean()
