@@ -69,4 +69,12 @@ const buttonTextClasses = computed(() => getButtonTextClasses(parent));
     >
         {{ getSubjectNameParts(subject)[1][0] }}
     </span>
+    <span
+        v-else-if="parent !== 'subjects'"
+        v-sanitize-html="
+            (subject.displayName || getSubjectName(subject)) +
+                getDisplayCount(subject)
+        "
+        class="subjects-li__button-menu-subtitle"
+    />
 </template>

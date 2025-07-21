@@ -32,6 +32,7 @@ const sortOptions = ref([
 const itemProps = (item) => {
     return {
         title: item.label,
+        subtitle: item.label,
         value: item.method,
         disabled: item.disabled,
         "data-testid": `sort-${item.label.toLowerCase()}`,

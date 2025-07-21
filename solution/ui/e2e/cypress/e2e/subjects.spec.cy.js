@@ -156,7 +156,7 @@ describe("Find by Subjects", () => {
 
         cy.checkAccessibility();
 
-        cy.get(".subjects__list button[data-testid=add-subject-3] span.count")
+        cy.get(".subjects__list button[data-testid=add-subject-3] span.count:not(:hidden)")
             .should("be.visible")
             .and("have.text", "(1)");
         cy.get(
@@ -518,7 +518,7 @@ describe("Find by Subjects", () => {
         cy.get(".subjects__list li").should("have.length", 1);
         cy.get(`button[data-testid=add-subject-1]`)
             .should("include.text", "21st Century Cures Act")
-            .find("span.count")
+            .find("span.count:not(:hidden)")
             .should("include.text", "(1)");
         cy.get(`button[data-testid=add-subject-1]`).click({
             force: true,

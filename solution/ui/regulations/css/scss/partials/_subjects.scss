@@ -295,6 +295,10 @@
             margin-top: 12px;
         }
     }
+
+    .v-list-item-subtitle {
+        @include handle-layout-shift;
+    }
 }
 
 #subjectsApp.repository-view {

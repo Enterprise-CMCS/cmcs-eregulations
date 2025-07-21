@@ -65,6 +65,7 @@ onBeforeMount(() => {
 const itemProps = (item) => ({
     value: `${item.id}-${item.categoryType}`,
     title: item.name,
+    subtitle: item.name,
     "data-testid": `${catTypeDict[item.categoryType]}-${item.catIndex}`,
 });
 
