@@ -19,6 +19,7 @@ from resources.models import (
     AbstractInternalCategory,
     AbstractPublicCategory,
     ResourcesConfiguration,
+    AbstractResource,
 )
 from resources.utils import (
     call_text_extractor,
@@ -101,7 +102,14 @@ class AbstractInternalResourceAdmin(AbstractResourceAdmin):
 
 
 class AbstractResourceForm(forms.ModelForm):
-    pass
+    file_type = forms.CharField(
+        max_length=32,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'size': '6',
+        }),
+        help_text=AbstractResource._meta.get_field('file_type').help_text,
+    )
 
 
 class AbstractPublicResourceForm(AbstractResourceForm):
