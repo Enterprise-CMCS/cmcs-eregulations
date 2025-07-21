@@ -6,7 +6,11 @@ import requests
 from django.conf import settings
 from django.urls import reverse
 
-from resources.models import FederalRegisterLink, ResourcesConfiguration
+from resources.models import (
+    AbstractResource,
+    FederalRegisterLink,
+    ResourcesConfiguration,
+)
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
 _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
@@ -186,6 +190,9 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
+    # Blank the error field for all resources before processing
+    AbstractResource.objects.filter(pk__in=[i.pk for i in resources]).update(extraction_error="")
+
     # Retrieve relevant configuration from the ResourcesConfiguration solo model
     config = ResourcesConfiguration.get_solo()
     allow_list = config.robots_txt_allow_list
