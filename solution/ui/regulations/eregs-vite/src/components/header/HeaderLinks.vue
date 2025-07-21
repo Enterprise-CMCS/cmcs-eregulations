@@ -25,16 +25,16 @@ defineEmits(["link-clicked"]);
 
 const links = [
     {
-        name: "manual",
-        label: "State Medicaid Manual",
-        active: window.location.pathname.includes("manual"),
-        href: props.manualUrl,
-    },
-    {
         name: "statutes",
         label: "Social Security Act",
         active: window.location.pathname.includes("statutes"),
         href: props.statutesUrl,
+    },
+    {
+        name: "manual",
+        label: "State Medicaid Manual",
+        active: window.location.pathname.includes("manual"),
+        href: props.manualUrl,
     },
     {
         name: "subjects",
