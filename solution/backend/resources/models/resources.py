@@ -98,6 +98,16 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+    @property
+    def indexing_status(self):
+        if self.extraction_error:
+            return f"Error: {self.extraction_error}"
+        if not self.content:
+            return "Not indexed"
+        if self.content.value:
+            return f"Indexed: {self.content.value[:100]}..."
+        return "Empty content"
+
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
