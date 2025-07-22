@@ -154,6 +154,11 @@ $reverse_background_color: $dark_blue;
 $reverse_background_darker: $darkest_blue;
 $reverse_background_lighter: $mid_dark_blue;
 $table_header_background_color: $lightest_gray;
+$table_header_link_color: $white;
+
+@mixin table_header_link_external_icon_color {
+  filter: brightness(0) saturate(100%) invert(98%) sepia(5%) saturate(105%) hue-rotate(243deg) brightness(113%) contrast(100%);
+}
 
 $hero_background_color: $teal;
 $hero_link_color: $white;

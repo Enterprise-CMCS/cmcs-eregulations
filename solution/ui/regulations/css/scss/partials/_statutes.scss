@@ -131,6 +131,15 @@
 
                     .cell__title {
                         font-weight: bold;
+
+                        a {
+                            color: $table_header_link_color;
+                            text-decoration: underline;
+
+                            &::after {
+                                @include table_header_link_external_icon_color;
+                            }
+                        }
                     }
 
                     .cell__subtitle {
