@@ -2,3 +2,13 @@ table#result_list tbody tr td {
     /* Allow wrapping on all columns*/
     white-space: normal !important;
 }
+
+.submit-row-checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.submit-row-checkbox label {
+    margin: 0;
+}

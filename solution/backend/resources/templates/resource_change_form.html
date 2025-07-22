@@ -1,0 +1,21 @@
+{% extends 'admin/change_form.html' %}
+
+{% load i18n admin_urls %}
+
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+        {% block submit-row %}
+        <input type="submit" value="{% translate 'Save' %}" class="default" name="_save">
+        <input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">
+        <input type="submit" value="{% translate 'Save and continue editing' %}" name="_continue">
+        {% if original %}
+            <span class="submit-row-checkbox">
+                <input type="checkbox" name="extract_text_after_saving" id="extract_text_after_saving" />
+                <label for="extract_text_after_saving">Extract text after saving</label>
+            </span>
+            {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
+            <a role="button" href="{% add_preserved_filters delete_url %}" class="deletelink">{% translate "Delete" %}</a>
+        {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

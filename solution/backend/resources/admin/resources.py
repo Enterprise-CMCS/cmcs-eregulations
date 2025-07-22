@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
+    change_form_template = "resource_change_form.html"
     actions = [actions.mark_approved, actions.mark_not_approved, actions.extract_text]
     filter_horizontal = ["cfr_citations", "subjects"]
     empty_value_display = "NONE"
@@ -61,9 +62,12 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         )
 
     def save_model(self, request, obj, form, change, *args, **kwargs):
-        super().save_model(request, obj, form, change)
+        # If the form is being saved with the "Save and extract text" button, set force_extract to True
+        force_extract = kwargs.pop("force_extract", False) or "extract_text_after_saving" in request.POST
+
+        super().save_model(request, obj, form, change, *args, **kwargs)
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
-        if auto_extract and (not change or field_changed(form, "url") or kwargs.pop("force_extract", False)):
+        if (auto_extract and (not change or field_changed(form, "url") or field_changed(form, "file_type"))) or force_extract:
             _, fail = call_text_extractor(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
