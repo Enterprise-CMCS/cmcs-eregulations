@@ -9,6 +9,7 @@ updates:
     - package-ecosystem: "npm"
       # Look for `package.json` and `lock` files
       directories:
+        - "/cdk-eregs" # CDK project
         - "/solution/ui/e2e" # Cypress tests
         - "/solution/ui/regulations" # Vitest, bundling
         - "/solution/ui/regulations/eregs-component-lib" # Django template components
@@ -33,6 +34,9 @@ updates:
           vitest:
             patterns:
               - "vitest*"
+          cdk:
+            patterns:
+              - "*aws*"
 
     - package-ecosystem: "github-actions"
       directory: "/"
