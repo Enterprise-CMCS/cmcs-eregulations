@@ -37,7 +37,6 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
-    change_form_template = "resource_change_form.html"
     actions = [actions.mark_approved, actions.mark_not_approved, actions.extract_text]
     filter_horizontal = ["cfr_citations", "subjects"]
     empty_value_display = "NONE"
@@ -63,7 +62,7 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change, *args, **kwargs):
         # If the form is being saved with the "Save and extract text" button, set force_extract to True
-        force_extract = kwargs.pop("force_extract", False) or "extract_text_after_saving" in request.POST
+        force_extract = kwargs.pop("force_extract", False) or form.cleaned_data.get("extract_text", False)
 
         super().save_model(request, obj, form, change, *args, **kwargs)
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
@@ -113,6 +112,12 @@ class AbstractResourceForm(forms.ModelForm):
             'size': '6',
         }),
         help_text=AbstractResource._meta.get_field('file_type').help_text,
+    )
+
+    extract_text = forms.BooleanField(
+        required=False,
+        help_text="If checked, text will be extracted from this resource after saving. This will occur even if the URL or file "
+                  "type has not changed, and if automatic extraction is disabled.",
     )
 
 
