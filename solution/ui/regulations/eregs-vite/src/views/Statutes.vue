@@ -9,7 +9,6 @@ import { shapeTitlesResponse } from "utilities/utils.js";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
-import TableCaption from "eregsComponentLib/src/components/shared-components/Statutes/TableCaption.vue";
 
 import AccessLink from "@/components/AccessLink.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
@@ -192,10 +191,6 @@ getStatutesArray();
                             class="table__spinner"
                         />
                         <template v-else>
-                            <TableCaption
-                                :selected-act="ACT_TYPES[queryParams.act]"
-                                :selected-title="queryParams.title"
-                            />
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"
                                 :filtered-statutes="statutes.results"
