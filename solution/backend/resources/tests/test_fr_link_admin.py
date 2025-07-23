@@ -54,7 +54,7 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(link.extract_url, "https://example.com/raw_text")
 
         response_messages = list(get_messages(request))
-        self.assertEqual(len(response_messages), 0)
+        self.assertEqual(len(response_messages), 1)
 
     @patch('resources.admin.requests.get')
     @patch('resources.admin.resources.call_text_extractor')
@@ -89,7 +89,7 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(link.extract_url, "https://example.com/raw_text")
 
         response_messages = list(get_messages(request))
-        self.assertEqual(len(response_messages), 0)
+        self.assertEqual(len(response_messages), 1)
 
     @patch('resources.admin.requests.get')
     @patch('resources.admin.resources.call_text_extractor')

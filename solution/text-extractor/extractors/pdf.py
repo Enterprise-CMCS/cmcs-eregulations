@@ -118,15 +118,13 @@ class PdfExtractor(Extractor):
             self.config["job_id"] = job_id  # For synchronous processing
 
         if self.queue_url:
+            self.config["file_type"] = self.file_type  # Store file type in config for SQS message
+            self.config["job_id"] = job_id  # Store job ID in config for SQS message
             # Push a new job to the SQS queue, and we'll check Textract's status later
             try:
                 self.sqs_client.send_message(
                     QueueUrl=self.queue_url,
-                    MessageBody=json.dumps({
-                        "job_id": job_id,
-                        "file_type": self.file_type,
-                        **self.config,  # Include the original config in the message body
-                    }),
+                    MessageBody=json.dumps(self.config),
                     MessageGroupId=f"textract:{resource_id}",  # Use resource_id as the new group ID to allow parallel processing
                 )
                 logger.info("Pushed Textract job ID \"%s\" to SQS queue \"%s\".", job_id, self.queue_url)
