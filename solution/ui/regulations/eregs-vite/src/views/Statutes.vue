@@ -102,9 +102,9 @@ watch(
 );
 
 watch(
-    () => queryParams.value,
+    () => tabRef.value,
     async () => {
-        //await getStatutesArray();
+        await getStatutesArray();
     }
 );
 
@@ -123,7 +123,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
 // On load
 getActTitles();
-//getStatutesArray();
+getStatutesArray();
 </script>
 
 <template>
