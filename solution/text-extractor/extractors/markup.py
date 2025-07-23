@@ -73,7 +73,7 @@ class MarkupExtractor(Extractor):
         content = soup.find("div", id="docViewer")
         for i in content.find_all("div", class_="jumpTo"):  # Remove "jump to" links
             i.decompose()
-        return content.get_text()
+        return content.get_text(" ")
 
     # Extract text from gao.gov pages
     def _extract_from_gao_gov(self, soup: BeautifulSoup) -> str:
