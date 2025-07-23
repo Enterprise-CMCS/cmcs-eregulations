@@ -49,7 +49,7 @@ class MarkupExtractor(Extractor):
         # Fallback 1: Look for content in a <main> tag first
         try:
             logger.info("Fallback 1: Attempting to extract text from <main> tag.")
-            return soup.find("main").get_text(" ")
+            return soup.find("main").get_text()
         except Exception:
             # If the <main> tag is not found or fails to extract text, fallback to other methods
             logger.warning("Failed to extract text from <main> tag.")
@@ -58,14 +58,14 @@ class MarkupExtractor(Extractor):
         try:
             logger.info("Fallback 2: Attempting to extract text from <article> or <section> tags.")
             candidates = soup.find_all(["article", "section"], recursive=True) or None
-            return " ".join(candidate.get_text(" ") or "" for candidate in candidates).strip()
+            return " ".join(candidate.get_text() or "" for candidate in candidates).strip()
         except Exception:
             logger.warning("Failed to extract text from <article> or <section> tags.")
 
         # Fallback 3: use the page's entire body
         logger.info("Fallback 3: Attempting to extract text from the entire <body> tag.")
         body = soup.body or soup
-        return body.get_text(" ")
+        return body.get_text()
 
     # Extract text from uscode.house.gov pages
     def _extract_from_uscode_house_gov(self, soup: BeautifulSoup) -> str:
@@ -73,21 +73,21 @@ class MarkupExtractor(Extractor):
         content = soup.find("div", id="docViewer")
         for i in content.find_all("div", class_="jumpTo"):  # Remove "jump to" links
             i.decompose()
-        return content.get_text(" ")
+        return content.get_text()
 
     # Extract text from gao.gov pages
     def _extract_from_gao_gov(self, soup: BeautifulSoup) -> str:
         # GAO.gov pages have the main content in a <div id="block-gao-uswds-content">
         content = soup.find("div", id="block-gao-uswds-content")
-        return content.get_text(" ")
+        return content.get_text()
 
     # Extract text from cmsgov.github.io pages
     def _extract_from_cmsgov_github_io(self, soup: BeautifulSoup) -> str:
         # cmsgov.github.io pages have the main content in an <article> tag
         content = soup.find("article", id="content")
-        return content.get_text(" ")
+        return content.get_text()
 
     def _extract_from_cms_gov(self, soup: BeautifulSoup) -> str:
         # Some cms.gov pages have the main content in a <div id="block-cms-evo-content">
         content = soup.find("div", id="block-cms-evo-content")
-        return content.get_text(" ")
+        return content.get_text()
