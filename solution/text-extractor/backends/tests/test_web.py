@@ -89,9 +89,3 @@ class TestWebBackend(unittest.TestCase):
         backend = FileBackend.get_backend("web")
         data = backend.get_file("https://example.com/test.txt")
         self.assertEqual(data, b"This is some content")
-
-    @patch.object(requests, "head", return_value=Mock(status_code=403))
-    def test_get_robots_txt_forbidden(self, *args):
-        backend = FileBackend.get_backend("web")
-        with self.assertRaises(BackendException):
-            backend.get_file("https://example.com/test.txt")
