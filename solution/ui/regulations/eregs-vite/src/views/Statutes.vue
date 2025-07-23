@@ -1,6 +1,6 @@
 <script setup>
-import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { computed, inject, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums.js";
 import { getStatutes, getStatutesActs } from "utilities/api.js";
@@ -30,6 +30,9 @@ const username = inject("username");
 
 // get route query params
 const $route = useRoute();
+const $router = useRouter();
+
+provide("router", $router);
 
 const tabRef = ref();
 
@@ -102,7 +105,7 @@ watch(
 );
 
 watch(
-    () => tabRef.value,
+    () => queryParams.value,
     async () => {
         await getStatutesArray();
     }

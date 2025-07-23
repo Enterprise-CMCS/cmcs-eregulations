@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeMount } from "vue";
+import { computed, inject, onBeforeMount } from "vue";
 
 const props = defineProps({
     loading: {
@@ -24,6 +24,8 @@ const props = defineProps({
     },
 });
 
+const router = inject("router");
+
 const tabRef = defineModel("tabModel", {
     type: Number,
     default: 0,
@@ -43,6 +45,16 @@ onBeforeMount(() => {
     tabRef.value = getSelectedTitleIndex();
 });
 
+const updateRouterOnClick = (title) => {
+    router.push({
+        name: "statutes",
+        query: {
+            act: props.selectedAct,
+            title: title.title,
+        },
+    });
+};
+
 </script>
 
 <template>
@@ -55,7 +67,7 @@ onBeforeMount(() => {
             :key="`${title.title}-${i}`"
             class="content-tabs"
             tabindex="0"
-            @click="() => { console.log('Tab clicked:', title.titleRoman); }"
+            @click="updateRouterOnClick(title)"
         >
             Title {{ title.titleRoman }}
         </v-tab>
