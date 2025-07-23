@@ -1,4 +1,6 @@
 <script setup>
+import { computed, onBeforeMount } from "vue";
+
 const props = defineProps({
     loading: {
         type: Boolean,
@@ -22,23 +24,38 @@ const props = defineProps({
     },
 });
 
-const isActActive = ({ act }) => act === props.selectedAct;
-const isTitleActive = ({ act, title }) =>
-    act === props.selectedAct && title === props.selectedTitle;
+const tabRef = defineModel("tabModel", {
+    type: Number,
+    default: 0,
+});
+
+const selectedTitles = computed(() => {
+    return props.titles[props.selectedAct]?.titles || [];
+});
+
+const getSelectedTitleIndex = () => {
+    return selectedTitles.value.findIndex(
+        (title) => title.title === props.selectedTitle
+    );
+};
+
+onBeforeMount(() => {
+    tabRef.value = getSelectedTitleIndex();
+});
+
 </script>
 
 <template>
     <v-tabs
-        v-for="(value, key, i) in titles"
-        :key="`${key}-${i}`"
-        v-model="tab"
+        v-model="tabRef"
         grow
     >
         <v-tab
-            v-for="(title, j) in value.titles"
-            :key="`${title.title}-${j}`"
+            v-for="(title, i) in selectedTitles"
+            :key="`${title.title}-${i}`"
             class="content-tabs"
             tabindex="0"
+            @click="() => { console.log('Tab clicked:', title.titleRoman); }"
         >
             Title {{ title.titleRoman }}
         </v-tab>

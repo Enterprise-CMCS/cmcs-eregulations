@@ -31,6 +31,8 @@ const username = inject("username");
 // get route query params
 const $route = useRoute();
 
+const tabRef = ref();
+
 // validate query params to make sure they're in the enum?
 const queryParams = ref({
     act: $route?.query?.act ?? "ssa",
@@ -102,7 +104,7 @@ watch(
 watch(
     () => queryParams.value,
     async () => {
-        await getStatutesArray();
+        //await getStatutesArray();
     }
 );
 
@@ -121,7 +123,7 @@ onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
 // On load
 getActTitles();
-getStatutesArray();
+//getStatutesArray();
 </script>
 
 <template>
@@ -181,6 +183,7 @@ getStatutesArray();
                         <div class="selector__parent">
                             <StatuteSelector
                                 v-if="!acts.loading"
+                                v-model:tab-model="tabRef"
                                 :loading="statutes.loading"
                                 :selected-act="queryParams.act"
                                 :selected-title="queryParams.title"
@@ -193,7 +196,7 @@ getStatutesArray();
                         :class="{ loading: statutes.loading }"
                     >
                         <SimpleSpinner
-                            v-if="statutes.loading"
+                            v-if="statutes.loading || acts.loading"
                             class="table__spinner"
                         />
                         <template v-else>
