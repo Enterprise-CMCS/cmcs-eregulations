@@ -11,4 +11,4 @@ xlrd
 docx2txt
 openpyxl
 python-pptx
-magika
+magika==0.5.1 # newer versions still cause unit test failures- recheck next time we do dependency updates
