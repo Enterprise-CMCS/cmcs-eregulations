@@ -28,7 +28,22 @@ const isTitleActive = ({ act, title }) =>
 </script>
 
 <template>
-    <ul class="acts__list">
+    <v-tabs
+        v-for="(value, key, i) in titles"
+        :key="`${key}-${i}`"
+        v-model="tab"
+        grow
+    >
+        <v-tab
+            v-for="(title, j) in value.titles"
+            :key="`${title.title}-${j}`"
+            class="content-tabs"
+            tabindex="0"
+        >
+            Title {{ title.titleRoman }}
+        </v-tab>
+    </v-tabs>
+    <!-- ul class="acts__list">
         <li
             v-for="(value, key, i) in titles"
             :key="`${key}-${i}`"
@@ -40,7 +55,6 @@ const isTitleActive = ({ act, title }) =>
                     'acts-item__heading--active': isActActive({ act: key }),
                 }"
             >
-                {{ value.name }}
             </h4>
             <ul class="titles__list">
                 <li
@@ -73,5 +87,5 @@ const isTitleActive = ({ act, title }) =>
                 </li>
             </ul>
         </li>
-    </ul>
+    </ul -->
 </template>

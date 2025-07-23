@@ -177,9 +177,8 @@ getStatutesArray();
             </p>
             <div id="main-content" class="statute__container">
                 <div class="content">
-                    <!-- div class="content__selector">
+                    <div class="content__selector">
                         <div class="selector__parent">
-                            <h3>Included Statute</h3>
                             <StatuteSelector
                                 v-if="!acts.loading"
                                 :loading="statutes.loading"
@@ -188,7 +187,7 @@ getStatutesArray();
                                 :titles="parsedTitles"
                             />
                         </div>
-                    </div -->
+                    </div>
                     <div
                         class="table__parent"
                         :class="{ loading: statutes.loading }"
