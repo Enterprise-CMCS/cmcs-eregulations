@@ -29,6 +29,22 @@
             flex-direction: column;
         }
 
+        .v-tabs.acts__tabs {
+            .v-tab {
+                font-size: 22px;
+                color: $dark_blue;
+                font-family: $secondary_site_font;
+                font-weight: 700;
+                letter-spacing: normal;
+                text-transform: capitalize;
+
+                .v-tab__slider {
+                    height: 5px;
+                    background-color: $dark_blue;
+                }
+            }
+        }
+
         .table__parent {
             width: 100%;
 
@@ -90,6 +106,8 @@
 
             #statuteList,
             #statuteTable {
+                border-top: 5px solid $light_gray;
+
                 .table__row {
                     &--header {
                         position: sticky;

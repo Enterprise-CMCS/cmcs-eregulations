@@ -60,6 +60,7 @@ const updateRouterOnClick = (title) => {
 <template>
     <v-tabs
         v-model="tabRef"
+        class="acts__tabs"
         grow
     >
         <v-tab
