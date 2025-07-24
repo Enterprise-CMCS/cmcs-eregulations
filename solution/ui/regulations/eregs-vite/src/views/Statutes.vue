@@ -166,7 +166,7 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <h1>Statute Reference</h1>
+            <h1>Look Up Statute Text</h1>
             <h2 class="heading__sans">
                 Social Security Act Table of Contents
             </h2>
