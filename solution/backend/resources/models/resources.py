@@ -72,6 +72,24 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     url = models.URLField(max_length=512, blank=True, verbose_name="URL")
     extract_url = models.URLField(max_length=512, blank=True, verbose_name="Extract URL")
 
+    file_type = models.CharField(
+        max_length=32,
+        blank=True,
+        help_text="The file type of the document. Only use this field if the automatically detected file type is incorrect, "
+                  "and the document content is not extracting correctly as a result.",
+    )
+    detected_file_type = models.CharField(
+        max_length=32,
+        blank=True,
+        help_text="The file type that the text extractor detected for this resource.",
+        editable=False,
+    )
+    extraction_error = models.TextField(
+        blank=True,
+        help_text="If the text extractor failed to extract text from this resource, the error message will be stored here.",
+        editable=False,
+    )
+
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
     related_categories = models.ManyToManyField(AbstractCategory, blank=True)
@@ -79,6 +97,16 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     group_parent = models.BooleanField(default=True)
 
     objects = InheritanceManager()
+
+    @property
+    def indexing_status(self):
+        if self.extraction_error:
+            return f"Error: {self.extraction_error}"
+        if not getattr(self, "content", None):
+            return "Not indexed"
+        if self.content.value:
+            return f"Indexed: {self.content.value[:100]}..."
+        return "Not indexed or no content found"
 
     def save(self, *args, **kwargs):
         self.full_clean()

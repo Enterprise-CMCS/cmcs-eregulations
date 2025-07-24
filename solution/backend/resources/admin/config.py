@@ -18,6 +18,8 @@ class ResourcesConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
         "state_medicaid_manual_category",
         "extraction_delay_time",
         "robots_txt_allow_list",
+        "user_agent_override_list",
+        "default_user_agent_override",
         "auto_extract",
     ]
 

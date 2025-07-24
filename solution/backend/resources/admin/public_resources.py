@@ -33,6 +33,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "url"]
+    readonly_fields = ["indexing_status", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -46,6 +47,10 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+        }),
+        ("Search indexing", {
+            "classes": ("collapse",),
+            "fields": ["indexing_status", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
@@ -89,6 +94,8 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
                     "action_type", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "docket_numbers", "document_number", "updated_at"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number", "url"]
+    readonly_fields = ["indexing_status", "detected_file_type"]
+
     fieldsets = [
         ("Basics", {
             "fields": ["url", "title"],
@@ -102,6 +109,10 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Related citations", {
             "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+        }),
+        ("Search indexing", {
+            "classes": ("collapse",),
+            "fields": ["indexing_status", "detected_file_type", "file_type"],
         }),
         ("Document status", {
             "fields": ["approved"],

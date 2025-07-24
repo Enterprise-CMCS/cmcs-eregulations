@@ -6,7 +6,11 @@ import requests
 from django.conf import settings
 from django.urls import reverse
 
-from resources.models import FederalRegisterLink, ResourcesConfiguration
+from resources.models import (
+    AbstractResource,
+    FederalRegisterLink,
+    ResourcesConfiguration,
+)
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
 _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
@@ -115,16 +119,33 @@ def _extract_via_lambda(batch, client):
 
 
 # Internal function to compute the 2 keys needed for text-extractor requests: "uri" and "backend".
-def _get_resource_keys(resource, retrieval_delay=0):
+# kwargs accepted:
+#  - user_agent_override_list: a list of dicts with "domain" and "user_agent" keys.
+#  - default_user_agent_override: a string to use as the default user agent if no override is found.
+#  - retrieval_delay: an integer representing the delay time in seconds for the request.
+def _get_resource_keys(resource, **kwargs):
     if hasattr(resource, "key"):
         return {
             "uri": resource.key,
             "backend": "s3",
         }
+
+    # Determine if we should override the user agent for this resource.
+    user_agent_override_list = kwargs.get("user_agent_override_list", [])
+    default_user_agent_override = kwargs.get("default_user_agent_override", "")
+    url = resource.extract_url or resource.url
+    domain = urlparse(url).hostname or ""
+    user_agent = None
+    for item in user_agent_override_list:
+        if item["domain"] == domain or domain.endswith('.' + item["domain"]):
+            user_agent = item["user_agent"] or default_user_agent_override
+            break
+
     return {
-        "uri": resource.extract_url or resource.url,
+        "uri": url,
         "backend": "web",
-        "retrieval_delay": retrieval_delay,  # Only used for web backend currently.
+        "retrieval_delay": kwargs.get("retrieval_delay", 0),
+        "user_agent": user_agent,
     }
 
 
@@ -169,14 +190,20 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor(request, resources):
+    # Blank the error field for all resources before processing
+    AbstractResource.objects.filter(pk__in=[i.pk for i in resources]).update(extraction_error="")
+
     # Retrieve relevant configuration from the ResourcesConfiguration solo model
     config = ResourcesConfiguration.get_solo()
     allow_list = config.robots_txt_allow_list
     extraction_delay_time = config.extraction_delay_time
+    default_user_agent_override = config.default_user_agent_override
+    user_agent_override_list = config.user_agent_override_list
 
     requests = [{**{
         "id": i.pk,
         "ignore_robots_txt": _should_ignore_robots_txt(i, allow_list),
+        "file_type": i.file_type or None,
         "upload_url": (
             f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
@@ -202,7 +229,12 @@ def call_text_extractor(request, resources):
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         },
-    }, **_get_resource_keys(i, extraction_delay_time)} for i in resources]
+    }, **_get_resource_keys(
+        i,
+        user_agent_override_list=user_agent_override_list,
+        default_user_agent_override=default_user_agent_override,
+        retrieval_delay=extraction_delay_time,
+    )} for i in resources]
 
     succeed_count = 0
     failures = [{

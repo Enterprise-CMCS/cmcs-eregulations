@@ -18,6 +18,7 @@ class WebBackend(FileBackend):
     _user_agent = "CMCSeRegsTextExtractorBot/1.0"
 
     def __init__(self, config: dict):
+        self._user_agent = config.get("user_agent") or self._user_agent
         self._ignore_robots = config.get("ignore_robots_txt", False)
         self._headers = requests.utils.default_headers()
         self._headers["User-Agent"] = self._user_agent

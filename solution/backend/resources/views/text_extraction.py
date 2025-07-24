@@ -23,18 +23,42 @@ class ContentTextViewSet(APIView):
 
     @transaction.atomic
     def patch(self, request, *args, **kwargs):
-        pk = kwargs.get("id")
+        serializer = ContentUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        pk = kwargs.get("id", data.get("id"))
         if not pk:
             raise NotFound("The ID of the object to update must be passed in.")
 
-        serializer = ContentUpdateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
         try:
             resource = AbstractResource.objects.select_subclasses().get(pk=pk)
-            content, _ = ResourceContent.objects.get_or_create(resource=resource)
-            content.value = serializer.validated_data.get("text", "")
-            content.save()
-            return Response(data=f"A {resource._meta.verbose_name} with ID {pk} was updated successfully.")
         except AbstractResource.DoesNotExist:
-            raise NotFound(f"A resource matching {pk} does not exist.")
+            raise NotFound(f"A resource matching ID {pk} does not exist.")
+
+        text = data.get("text")
+        if text:
+            content, _ = ResourceContent.objects.get_or_create(resource=resource)
+            content.value = text
+            content.save()
+
+        resource_updated = False
+
+        file_type = data.get("file_type")
+        if file_type:
+            resource_updated = True
+            resource.detected_file_type = file_type
+
+        error = data.get("error")
+        if error:
+            resource_updated = True
+            resource.extraction_error = error
+
+        if text and not error:
+            resource_updated = True
+            resource.extraction_error = ""
+
+        if resource_updated:
+            resource.save()  # Avoid repeated save calls
+
+        return Response(data=f"A {resource._meta.verbose_name} with ID {pk} was updated successfully.")

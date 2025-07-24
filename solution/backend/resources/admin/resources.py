@@ -18,6 +18,7 @@ from resources.models import (
     AbstractCitation,
     AbstractInternalCategory,
     AbstractPublicCategory,
+    AbstractResource,
     ResourcesConfiguration,
 )
 from resources.utils import (
@@ -60,9 +61,12 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         )
 
     def save_model(self, request, obj, form, change, *args, **kwargs):
-        super().save_model(request, obj, form, change)
+        # If the form is being saved with the "Save and extract text" button, set force_extract to True
+        force_extract = kwargs.pop("force_extract", False) or form.cleaned_data.get("extract_text", False)
+
+        super().save_model(request, obj, form, change, *args, **kwargs)
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
-        if auto_extract and (not change or field_changed(form, "url") or kwargs.pop("force_extract", False)):
+        if (auto_extract and (not change or field_changed(form, "url") or field_changed(form, "file_type"))) or force_extract:
             _, fail = call_text_extractor(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
@@ -101,7 +105,20 @@ class AbstractInternalResourceAdmin(AbstractResourceAdmin):
 
 
 class AbstractResourceForm(forms.ModelForm):
-    pass
+    file_type = forms.CharField(
+        max_length=32,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'size': '6',
+        }),
+        help_text=AbstractResource._meta.get_field('file_type').help_text,
+    )
+
+    extract_text = forms.BooleanField(
+        required=False,
+        help_text="If checked, text will be extracted from this resource after saving. This will occur even if the URL or file "
+                  "type has not changed, and if automatic extraction is disabled.",
+    )
 
 
 class AbstractPublicResourceForm(AbstractResourceForm):
