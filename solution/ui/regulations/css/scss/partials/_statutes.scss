@@ -48,6 +48,12 @@
                         height: 5px;
                         background-color: $dark_blue;
                     }
+
+                    .prefix__span {
+                        @media (max-width: $eds-width-md) {
+                            display: none;
+                        }
+                    }
                 }
             }
         }

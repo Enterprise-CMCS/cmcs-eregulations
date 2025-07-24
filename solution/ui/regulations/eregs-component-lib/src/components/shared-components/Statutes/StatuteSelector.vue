@@ -70,7 +70,7 @@ const updateRouterOnClick = (title) => {
             tabindex="0"
             @click="updateRouterOnClick(title)"
         >
-            Title {{ title.titleRoman }}
+            <span class="prefix__span">Title </span>{{ title.titleRoman }}
         </v-tab>
     </v-tabs>
     <!-- ul class="acts__list">
