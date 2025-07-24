@@ -29,18 +29,25 @@
             flex-direction: column;
         }
 
-        .v-tabs.acts__tabs {
-            .v-tab {
-                font-size: 22px;
-                color: $dark_blue;
-                font-family: $secondary_site_font;
-                font-weight: 700;
-                letter-spacing: normal;
-                text-transform: capitalize;
+        .content__selector {
+            position: sticky;
+            top: calc($header_height);
+            background-color: $white;
 
-                .v-tab__slider {
-                    height: 5px;
-                    background-color: $dark_blue;
+            .v-tabs.acts__tabs {
+                .v-tab {
+                    border-bottom: 5px solid $light_gray;
+                    font-size: 22px;
+                    color: $dark_blue;
+                    font-family: $secondary_site_font;
+                    font-weight: 700;
+                    letter-spacing: normal;
+                    text-transform: capitalize;
+
+                    .v-tab__slider {
+                        height: 5px;
+                        background-color: $dark_blue;
+                    }
                 }
             }
         }
@@ -102,16 +109,16 @@
 
             #statuteTable {
                 @include commonTableStyles;
+
+                border-collapse: separate;
             }
 
             #statuteList,
             #statuteTable {
-                border-top: 5px solid $light_gray;
-
                 .table__row {
                     &--header {
                         position: sticky;
-                        top: $header_height;
+                        top: calc($header_height + 48px);;
                         z-index: 1;
                     }
 
