@@ -1,16 +1,16 @@
-Content Section 
- This section contains important information. 
+Content Section
+This section contains important information.
+
+Item 1
+Item 2
+Item 3
+
  
- Item 1 
- Item 2 
- Item 3 
+Article Section
+This section is wrapped in an article tag.
  
+Another Section
+This section is wrapped in a section tag.
  
- Article Section 
- This section is wrapped in an article tag. 
- 
- Another Section 
- This section is wrapped in a section tag. 
- 
- Another Article Section 
- This section is also wrapped in an article tag.
+Another Article Section
+This section is also wrapped in an article tag.
