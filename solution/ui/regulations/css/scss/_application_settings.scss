@@ -433,7 +433,7 @@ $tablet-max: $width-lg - 1; // 1023px
 }
 
 @mixin external-link-hover {
-    @include external-link($color: $white);
+    @include external-link;
 }
 
 a {
