@@ -27,14 +27,11 @@
 
 .search-page {
     #searchApp.search-view {
+        @include eds-standard-layout;
+
         display: flex;
         flex-direction: column;
         min-height: 300px;
-        box-sizing: content-box;
-
-        @include eds-gutters;
-        @include eds-width-with-gutters;
-        @include eds-max-width(var(--spacer-3));
 
         h1 {
             margin-bottom: var(--spacer-2);

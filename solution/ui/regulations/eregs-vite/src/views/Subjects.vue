@@ -387,7 +387,9 @@ getDocSubjects();
                     </button>
                     <PolicySidebar>
                         <template #title>
-                            <h2>Research a Subject</h2>
+                            <h2 class="heading__sans">
+                                Research a Subject
+                            </h2>
                         </template>
                         <template #filters>
                             <SubjectSelector
@@ -481,7 +483,7 @@ getDocSubjects();
                             <div class="doc__list">
                                 <h2
                                     v-if="!selectedSubjectParts.length"
-                                    class="search-results__heading"
+                                    class="search-results__heading heading__sans"
                                 >
                                     Search Results
                                 </h2>

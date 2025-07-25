@@ -28,7 +28,20 @@ const props = defineProps({
         }"
     >
         <div class="cell__title">
-            {{ props.cellData.title }}
+            <template v-if="cellData.url">
+                <a
+                    :href="cellData.url()"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="external"
+                    :data-testid="`${props.cellData.testId}-link`"
+                >
+                    {{ props.cellData.title }}
+                </a>
+            </template>
+            <template v-else>
+                {{ props.cellData.title }}
+            </template>
         </div>
         <template v-if="cellData.subtitles">
             <div
