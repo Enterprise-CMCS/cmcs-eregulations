@@ -66,10 +66,6 @@
                 justify-content: center;
                 align-items: center;
             }
-            .table__caption {
-                padding-bottom: 1.5rem;
-                color: $primary_text_color;
-            }
 
             @mixin commonTableStyles {
                 width: 100%;
