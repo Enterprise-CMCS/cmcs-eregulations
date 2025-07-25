@@ -164,8 +164,8 @@
                             color: $table_header_link_color;
                             text-decoration: underline;
 
-                            &::after {
-                                @include table_header_link_external_icon_color;
+                            &:link.external::after {
+                                @include external-link($color: $table_header_link_color);
                             }
                         }
                     }
