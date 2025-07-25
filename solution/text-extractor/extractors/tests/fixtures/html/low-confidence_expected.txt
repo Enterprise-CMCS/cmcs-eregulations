@@ -1,153 +1,153 @@
 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-   
- Hospital-Acquired Conditions (Present on Admission Indicator)
-     	 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-   
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-   
- Hospital-Acquired Conditions (Present on Admission Indicator) 
- 
- 
- 
- 
-   
- 
- On February 8, 2006, the President signed the Deficit Reduction Act (DRA) of 2005. Section 5001(c) of DRA requires the Secretary to identify conditions that are: (a) high cost or high volume or both, (b) result in the assignment of a case to a DRG that has a higher payment when present as a secondary diagnosis, and (c) could reasonably have been prevented through the application of evidence-based guidelines. Section 5001(c) provides that CMS can revise the list of conditions from time to time, as long as it contains at least two conditions. The statute is available in the  Statute/Regulations/Program Instructions  section, accessible through the navigation menu at left. 
- CMS also required hospitals to report present on admission information for both principal and secondary diagnoses when submitting claims for discharges on or after October 1, 2007. 
- For discharges occurring on or after October 1, 2008, hospitals will not receive additional payment for cases in which one of the selected conditions was not present on admission. That is, the case would be paid as though the secondary diagnosis were not present. 
-   
- 
- 
- 
- 
- 
-   
- 
- Downloads 
- 
- 
- 
- Hospital-Acquired Conditions–Present on Admission: Examination of Spillover Effects and Unintended Consequences--September 2012 (PDF) 
- 
- 
- 
- 
- Accuracy of Coding in the Hospital-Acquired Conditions-Present on Admission Program--June 2012 (PDF) 
- 
- 
- 
- 
- Readmissions Due to Hospital-Acquired Conditions (HACs): Multivariate Modeling and Under-coding Analyses--September 2012 (PDF) 
- 
- 
- 
- 
- Examination of the Accuracy of Coding Pressure Ulcer Stages--April 2012 (PDF) 
- 
- 
- 
- 
- Update on State Government Tracking of Health Care-Acquired Conditions and a Four-State In-Depth Review--June 2012 (PDF) 
- 
- 
- 
- 
- Evidence-based Guidelines for Selected and Previously Considered Hospital-Acquired Conditions Report--June 2015 (ZIP) 
- 
- 
- 
- 
- Incremental Updated Cost Report – Updated May 2012 (ZIP) 
- 
- 
- 
- 
- Evidence Based Guidelines Report for Selected and Candidate Hospital-Acquired Conditions--January 2010 (PDF) 
- 
- 
- 
- 
- Evidenced-based Guidelines for Selected and Previously Considered Hospital-Acquired Conditions Report-2016 (PDF) 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- Page Last Modified: 
- 09/06/2023 04:51 PM 
- 
- 
- Help with File Formats and Plug-Ins 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+Hospital-Acquired Conditions (Present on Admission Indicator)
+     	
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+Hospital-Acquired Conditions (Present on Admission Indicator)
+
+
+
+
+ 
+
+On February 8, 2006, the President signed the Deficit Reduction Act (DRA) of 2005. Section 5001(c) of DRA requires the Secretary to identify conditions that are: (a) high cost or high volume or both, (b) result in the assignment of a case to a DRG that has a higher payment when present as a secondary diagnosis, and (c) could reasonably have been prevented through the application of evidence-based guidelines. Section 5001(c) provides that CMS can revise the list of conditions from time to time, as long as it contains at least two conditions. The statute is available in the Statute/Regulations/Program Instructions section, accessible through the navigation menu at left.
+CMS also required hospitals to report present on admission information for both principal and secondary diagnoses when submitting claims for discharges on or after October 1, 2007.
+For discharges occurring on or after October 1, 2008, hospitals will not receive additional payment for cases in which one of the selected conditions was not present on admission. That is, the case would be paid as though the secondary diagnosis were not present.
+ 
+
+
+
+
+
+ 
+
+Downloads
+
+
+
+Hospital-Acquired Conditions–Present on Admission: Examination of Spillover Effects and Unintended Consequences--September 2012 (PDF)
+
+
+
+
+Accuracy of Coding in the Hospital-Acquired Conditions-Present on Admission Program--June 2012 (PDF)
+
+
+
+
+Readmissions Due to Hospital-Acquired Conditions (HACs): Multivariate Modeling and Under-coding Analyses--September 2012 (PDF)
+
+
+
+
+Examination of the Accuracy of Coding Pressure Ulcer Stages--April 2012 (PDF)
+
+
+
+
+Update on State Government Tracking of Health Care-Acquired Conditions and a Four-State In-Depth Review--June 2012 (PDF)
+
+
+
+
+Evidence-based Guidelines for Selected and Previously Considered Hospital-Acquired Conditions Report--June 2015 (ZIP)
+
+
+
+
+Incremental Updated Cost Report – Updated May 2012 (ZIP)
+
+
+
+
+Evidence Based Guidelines Report for Selected and Candidate Hospital-Acquired Conditions--January 2010 (PDF)
+
+
+
+
+Evidenced-based Guidelines for Selected and Previously Considered Hospital-Acquired Conditions Report-2016 (PDF)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Page Last Modified:
+09/06/2023 04:51 PM
+
+
+Help with File Formats and Plug-Ins
+
+
+
+
+
+
+
+
+
+
+
+
+
