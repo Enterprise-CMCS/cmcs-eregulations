@@ -66,7 +66,7 @@ const updateRouterOnClick = (title) => {
             tabindex="0"
             @click="updateRouterOnClick(title)"
         >
-            <span class="prefix__span">Title </span>{{ title.titleRoman }}
+            <span class="prefix__span">Title&nbsp;</span>{{ title.titleRoman }}
         </v-tab>
     </v-tabs>
 </template>

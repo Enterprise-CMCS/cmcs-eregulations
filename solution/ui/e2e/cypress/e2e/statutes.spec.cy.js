@@ -27,7 +27,7 @@ describe("Statute Table", () => {
 
         cy.get(".p__description")
             .contains(
-                "List the sections of 42 U.S.C. Chapter 7 enacted by the Social Security Act."
+                "List of sections of 42 U.S.C. Chapter 7 enacted by the Social Security Act."
             );
 
         cy.checkLinkRel();

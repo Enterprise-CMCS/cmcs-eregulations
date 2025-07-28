@@ -171,7 +171,7 @@ getStatutesArray();
                 Social Security Act Table of Contents
             </h2>
             <p class="p__description">
-                List the sections of
+                List of sections of
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
