@@ -2,11 +2,6 @@
 import { computed, inject, onBeforeMount } from "vue";
 
 const props = defineProps({
-    loading: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     selectedAct: {
         type: String,
         required: false,
@@ -66,6 +61,7 @@ const updateRouterOnClick = (title) => {
         <v-tab
             v-for="(title, i) in selectedTitles"
             :key="`${title.title}-${i}`"
+            :data-testid="`${selectedAct}-${title.titleRoman}-${title.title}`"
             class="content-tabs"
             tabindex="0"
             @click="updateRouterOnClick(title)"

@@ -187,7 +187,6 @@ getStatutesArray();
                             <StatuteSelector
                                 v-if="!acts.loading"
                                 v-model:tab-model="tabRef"
-                                :loading="statutes.loading"
                                 :selected-act="queryParams.act"
                                 :selected-title="queryParams.title"
                                 :titles="parsedTitles"
