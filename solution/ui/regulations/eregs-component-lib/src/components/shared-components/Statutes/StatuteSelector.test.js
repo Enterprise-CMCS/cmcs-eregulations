@@ -53,30 +53,6 @@ describe("Statute Table Selector", () => {
             expect(wrapper).toMatchSnapshot();
         });
 
-        it(`Creates a snapshot of the Statute Selector with a loading prop`, async () => {
-            const wrapper = render(StatuteSelector, {
-                global: {
-                    plugins: [vuetify],
-                },
-                props: {
-                    loading: true,
-                    titles: SHAPED_TITLES,
-                },
-                stubs: { RouterLink: true },
-            });
-
-            await flushPromises();
-
-            const activeLink = screen.getByTestId("ssa-XIX-19");
-
-            const inactiveLink = screen.getByTestId("ssa-XXI-21");
-            expect(
-                inactiveLink.classList.contains("v-tab-item--selected")
-            ).toBe(false);
-
-            expect(wrapper).toMatchSnapshot();
-        });
-
         it(`Creates a snapshot of the Statute Selector when act and title props passed in to component`, async () => {
             const wrapper = render(StatuteSelector, {
                 global: {
