@@ -25,20 +25,20 @@ describe("Statute Table", () => {
 
         cy.get("h1").contains("Look Up Statute Text");
 
-        cy.get(".table__caption")
+        cy.get(".p__description")
             .contains(
-                "This table shows sections of 42 U.S.C. Chapter 7 (Social Security) enacted by the Social Security Act. Learn about these sources: US Code House.gov, Statute Compilation, US Code Annual, SSA.gov Compilation."
+                "List the sections of 42 U.S.C. Chapter 7 enacted by the Social Security Act."
             );
 
         cy.checkLinkRel();
 
-        cy.get("a[data-testid=ssa-XIX-19]").should(
+        cy.get("button[data-testid=ssa-XIX-19]").should(
             "have.class",
-            "titles-list__link--active"
+            "v-tab-item--selected"
         );
-        cy.get("a[data-testid=ssa-XI-11]").should(
+        cy.get("button[data-testid=ssa-XI-11]").should(
             "not.have.class",
-            "titles-list__link--active"
+            "v-tab-item--selected"
         );
     });
 
@@ -75,10 +75,10 @@ describe("Statute Table", () => {
         cy.viewport("macbook-15");
         cy.visit("/statutes");
 
-        cy.clickStatuteLink({ act: "ssa", titleRoman: "XXI", title: "21" });
+        cy.clickStatuteTab({ act: "ssa", titleRoman: "XXI", title: "21" });
         cy.url().should("include", "/statutes?act=ssa&title=21");
 
-        cy.clickStatuteLink({ act: "ssa", titleRoman: "XI", title: "11" });
+        cy.clickStatuteTab({ act: "ssa", titleRoman: "XI", title: "11" });
         cy.url().should("include", "/statutes?act=ssa&title=11");
     });
 
