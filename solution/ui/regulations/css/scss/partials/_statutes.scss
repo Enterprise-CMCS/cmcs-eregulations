@@ -8,7 +8,7 @@
     @include eds-standard-layout;
 
     h1 {
-        margin-bottom: var(--spacer-2);
+        margin-bottom: var(--spacer-3);
     }
 
     h2 {
@@ -19,11 +19,13 @@
         }
     }
 
+    p.p__description {
+        margin-bottom: var(--spacer-3) !important; // !important to override the default p margin due to vuetify defaults
+    }
+
     .content {
         display: flex;
         flex-direction: column;
-        padding-top: 30px;
-        padding-bottom: 30px;
 
         @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
             flex-direction: column;
