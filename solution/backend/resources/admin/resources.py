@@ -66,7 +66,8 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
 
         super().save_model(request, obj, form, change, *args, **kwargs)
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
-        if (auto_extract and (not change or field_changed(form, "url") or field_changed(form, "file_type"))) or force_extract:
+        fields_changed = any([field_changed(form, field) for field in ["url", "file_type", "extract_url"]])
+        if (auto_extract and (not change or fields_changed)) or force_extract:
             _, fail = call_text_extractor(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
@@ -118,6 +119,17 @@ class AbstractResourceForm(forms.ModelForm):
         required=False,
         help_text="If checked, text will be extracted from this resource after saving. This will occur even if the URL or file "
                   "type has not changed, and if automatic extraction is disabled.",
+    )
+
+    extract_url = forms.URLField(
+        label="Text extraction URL",
+        required=False,
+        widget=forms.TextInput(attrs={
+            'size': '60',
+        }),
+        help_text="The URL to extract text from, if different from the main URL. This is typically used for Federal Register "
+                  "links, but can be used for any resource where the URL that the user visits is not the same as the URL that "
+                  "the text extractor should use.",
     )
 
 
