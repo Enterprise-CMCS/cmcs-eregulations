@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PGVector Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        fieldset {
+            margin-top: 10px;
+            padding: 10px;
+        }
+        legend {
+            font-weight: bold;
+        }
+        textarea, fieldset, button {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        label {
+            margin: 8px 0;
+        }
+        #search-options {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>PGVector Search Test Page</h1>
+
+    <p>This is a test page for the PGVector search functionality. Filtering is currently unsupported, and all documents will be searched. <b>Do not deploy</b> this to prod as-is.</p>
+
+    <form id="search-form" method="post" action="{% url 'pgvector_search_template' %}" target="_blank">
+        {% csrf_token %}
+        <textarea id="query" name="query" rows="10" placeholder="Search query" required></textarea>
+        <fieldset>
+            <legend>Distance algorithm</legend>
+            <label>
+                <input type="radio" name="distance_algorithm" value="L2Distance" checked>
+                L2 Distance
+            </label>
+            <label>
+                <input type="radio" name="distance_algorithm" value="MaxInnerProduct">
+                Max Inner Product
+            </label>
+            <label>
+                <input type="radio" name="distance_algorithm" value="CosineDistance">
+                Cosine Distance
+            </label>
+            <label>
+                <input type="radio" name="distance_algorithm" value="L1Distance">
+                L1 Distance
+            </label>
+            <label>
+                <input type="radio" name="distance_algorithm" value="HammingDistance">
+                Hamming Distance
+            </label>
+            <label>
+                <input type="radio" name="distance_algorithm" value="JaccardDistance">
+                Jaccard Distance
+            </label>
+        </fieldset>
+        <fieldset id="search-options">
+            <legend>Search options</legend>
+            <label>
+                <input type="checkbox" name="include_content" checked>
+                Include content chunk in results
+            </label>
+            <label>
+                Max distance:
+                <input type="number" name="max_distance" min="0" step="any" value="5" required>
+            </label>
+            <label>
+                Max results:
+                <input type="number" name="max_results" min="1" value="100" required>
+            </label>
+        </fieldset>
+        <button type="submit">Search</button>
+    </form>
+</body>
+
+</html>
