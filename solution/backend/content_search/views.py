@@ -200,6 +200,7 @@ class PgVectorSearchView(TemplateView):
             return JsonResponse({"error": "Query parameter 'query' is required."}, status=400)
         if len(query) > 20000:
             return JsonResponse({"error": "Query parameter 'query' must be less than 20,000 characters."}, status=400)
+        query = " ".join(query.split()).lower()  # Remove extra spaces and convert to lowercase
 
         # Validate the distance algorithm
         distance_algorithm = request.POST.get("distance_algorithm")
