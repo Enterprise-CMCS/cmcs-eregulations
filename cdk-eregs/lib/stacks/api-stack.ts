@@ -397,6 +397,21 @@ export class BackendStack extends cdk.Stack {
             );
         });
 
+        // Bedrock permissions for embedding generation
+        regSiteLambda.addToRolePolicy(
+            new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: [
+                    'bedrock:InvokeModel',
+                    'bedrock:BatchInvokeModel',
+                    'bedrock:ListModels',
+                ],
+                resources: [
+                    'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0',
+                ],
+            }),
+        );
+
         // ================================
         // WAF
         // ================================
