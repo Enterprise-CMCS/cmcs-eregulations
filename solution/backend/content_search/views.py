@@ -4,6 +4,10 @@ from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
+import boto3
+from pgvector.django import L2Distance, CosineDistance
+import json
+from django.db.models.functions import Lower, Substr
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
@@ -16,7 +20,7 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex, IndexedRegulationText
+from .models import ContentIndex, IndexedRegulationText, TextEmbedding
 from .serializers import ContentCountSerializer, ContentSearchSerializer
 
 
@@ -124,6 +128,112 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
         # Defer all unnecessary text fields to reduce database load and memory usage
         query = ContentIndex.objects.defer_text()
+
+        # Filter out unapproved resources
+        query = query.exclude(resource__approved=False)
+
+        # Filter inclusively by citations if this array exists
+        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
+        if citation_filter:
+            query = query.filter(citation_filter)
+
+        # Filter by subject pks if subjects array is present
+        if subjects:
+            query = query.filter(resource__subjects__pk__in=subjects)
+
+        # Filter by categories (both parent and subcategories) if the categories array is present
+        if categories:
+            query = query.filter(
+                Q(resource__category__pk__in=categories) |
+                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+            )
+
+        # Filter by public, internal, and regulation text
+        if not show_public:
+            query = query.exclude(resource__abstractpublicresource__isnull=False)
+        if not show_internal or not self.request.user.is_authenticated:
+            query = query.exclude(resource__abstractinternalresource__isnull=False)
+        if not show_regulations:
+            query = query.exclude(reg_text__isnull=False)
+
+        # Perform search and headline generation
+        query = query.search(search_query, sort)
+
+        current_page = [i.pk for i in self.paginate_queryset(query)]
+        query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
+
+        # Prefetch all related data
+        query = query.prefetch_related(
+            Prefetch("reg_text", IndexedRegulationText.objects.all()),
+            Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
+                Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
+                    Prefetch("parent", AbstractCategory.objects.select_subclasses()),
+                )),
+                Prefetch("subjects", Subject.objects.all()),
+            )),
+        )
+
+        # Sort the current page by rank
+        query = sorted(query, key=lambda x: current_page.index(x.pk))
+
+        # Serialize and return the results
+        serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
+        return self.get_paginated_response(serializer.data)
+
+
+class PgVectorSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    model = ContentIndex
+    serializer_class = ContentSearchSerializer
+    pagination_class = ContentSearchPagination
+
+    def list(self, request, *args, **kwargs):
+        citations = request.GET.getlist("citations")
+        subjects = request.GET.getlist("subjects")
+        categories = request.GET.getlist("categories")
+        sort = request.GET.get("sort")
+        show_public = string_to_bool(request.GET.get("show_public"), True)
+        show_internal = string_to_bool(request.GET.get("show_internal"), True)
+        show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
+
+        # Retrieve the required search query param
+        search_query = request.GET.get("q")
+        if not search_query:
+            raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
+
+        # Use Bedrock to perform a vector search
+        client = boto3.client(
+            'bedrock-runtime',
+            region_name="us-east-1",
+            # aws_access_key_id="",
+            # aws_secret_access_key="",
+            # aws_session_token="",
+        )
+        try:
+            payload = {
+                "inputText": search_query,
+                "dimensions": 512,
+            }
+            response = client.invoke_model(
+                modelId="amazon.titan-embed-text-v2:0",
+                body=json.dumps(payload),
+                contentType="application/json",
+                accept="application/json",
+            )
+            embedding = json.loads(response.get("body").read())["embedding"]
+        except Exception as e:
+            raise BadRequest(f"Failed to invoke Bedrock model: {str(e)}")
+
+        # Perform the vector search using the embedding
+        embeddings = TextEmbedding.objects.annotate(
+            distance=CosineDistance('embedding', embedding),
+            # Get the substring of the embedding based on the start_offset field
+            content=Substr("index__content", F("start_offset"), 20000),
+        ).filter(distance__lt=5).order_by('distance')
+        return Response(list(embeddings.values("index__name", "index__id", "distance", "start_offset", "content")))
+
+        query = ContentIndex.objects.filter(pk__in=embeddings.values_list('index', flat=True))
 
         # Filter out unapproved resources
         query = query.exclude(resource__approved=False)
