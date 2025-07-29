@@ -42,7 +42,7 @@ const ssaSchema = [
             primary: true,
         },
         body: {
-            title: (statute) => `SSA Section ${statute.section}`,
+            title: (statute) => `Section ${statute.section}`,
             label: (statute) => `${statute.title} U.S.C. ${statute.usc}`,
             name: (statute) => `${statute.name}`,
             primary: true,
@@ -51,7 +51,8 @@ const ssaSchema = [
     {
         header: {
             testId: "house-gov-link",
-            title: "US Code House.gov",
+            title: "House.gov",
+            url: () => houseGovUrl(),
             secondary: true,
             subtitles: [
                 (columnDates) =>
@@ -69,6 +70,7 @@ const ssaSchema = [
         header: {
             testId: "statute-compilation-link",
             title: "Statute Compilation",
+            url: () => statuteCompilationUrl({ blank: true }),
             secondary: true,
             subtitles: [
                 (columnDates) =>
@@ -86,6 +88,7 @@ const ssaSchema = [
         header: {
             testId: "us-code-annual-link",
             title: "US Code Annual",
+            url: () => usCodeUrl(),
             secondary: true,
             subtitles: [
                 (columnDates) =>
@@ -102,7 +105,8 @@ const ssaSchema = [
     {
         header: {
             testId: "ssa-gov-link",
-            title: "SSA.gov Compilation",
+            title: "SSA.gov",
+            url: () => ssaGovUrl(),
             secondary: true,
             subtitles: [
                 (columnDates) =>

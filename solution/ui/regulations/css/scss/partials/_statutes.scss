@@ -4,237 +4,216 @@
 
 @import "../application_settings";
 
-.statute-page #statuteApp {
-    @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
-        h1 {
-            font-size: 36px;
-            margin-top: 24px;
+#statuteApp.statute-view {
+    @include eds-standard-layout;
+
+    h1 {
+        margin-bottom: var(--spacer-3);
+    }
+
+    h2 {
+        margin: 0 0 1.5rem !important; // !important to override the default h2 margin due to vuetify defaults
+
+        @media (max-width: $eds-width-md) {
+            font-size: var(--font-size-xl);
         }
     }
 
-    .statute__container {
-        @include eds-gutters;
+    p.p__description {
+        margin-bottom: var(--spacer-3) !important; // !important to override the default p margin due to vuetify defaults
+    }
 
-        .content {
-            display: flex;
-            flex-direction: row;
-            padding-top: 30px;
-            padding-bottom: 30px;
+    .content {
+        display: flex;
+        flex-direction: column;
 
-            @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
-                flex-direction: column;
-            }
+        @include custom-max(calc((calc($eds-width-md - 1px)) / 1px)) {
+            flex-direction: column;
+        }
 
-            .content__selector {
-                flex: 0 0 200px;
-                margin-right: 25px;
+        .content__selector {
+            position: sticky;
+            top: calc($header_height);
+            background-color: $white;
 
-                h3 {
-                    font-size: 1.5rem;
-                    line-height: 36px;
-                    margin: 0 0 16px;
-                }
+            .v-tabs.acts__tabs {
+                .v-tab {
+                    border-bottom: 5px solid $light_gray;
+                    font-size: 22px;
+                    color: $dark_blue;
+                    font-family: $secondary_site_font;
+                    font-weight: 700;
+                    letter-spacing: normal;
+                    text-transform: capitalize;
 
-                h4 {
-                    margin: 0 0 12px;
+                    .v-tab__slider {
+                        height: 5px;
+                        background-color: $dark_blue;
+                    }
 
-                    &.acts-item__heading {
-                        color: $mid_blue;
-                        transition: none;
-
-                        &--active {
-                            color: $dark_gray;
+                    .prefix__span {
+                        @media (max-width: $eds-width-md) {
+                            display: none;
                         }
                     }
                 }
+            }
+        }
 
-                .selector__parent {
-                    @include screen-eds-md {
-                        position: sticky;
-                        top: $header_height;
-                    }
-                }
+        .table__parent {
+            width: 100%;
 
-                .titles-list__link {
-                    text-decoration: none;
-                    transition: none;
-
-                    &:hover,
-                    &:focus,
-                    &--active {
-                        color: $dark_gray;
-                        border-bottom: 1px solid $dark_gray;
-                    }
-
-                    &--loading {
-                        pointer-events: none;
-                    }
-                }
-
-                ul {
-                    list-style-type: none;
-
-                    &.acts__list {
-                        padding-left: 0;
-                    }
-
-                    &.titles__list {
-                        margin: 0;
-                    }
-                }
+            &.loading {
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
 
-            .table__parent {
-                padding: 0.75rem;
-                border: 1px solid $table_border_color;
-                border-radius: 4px;
+            @mixin commonTableStyles {
                 width: 100%;
+                border-collapse: collapse;
+                border-spacing: 0;
+            }
 
-                &.loading {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-                .table__caption {
-                    padding-bottom: 1.5rem;
-                    color: $primary_text_color;
-                }
+            // statuteList-specific styles
+            #statuteList {
+                .statute__list-item {
+                    padding: 12px 0;
+                    border-bottom: 1px solid $table_border_color;
 
-                @mixin commonTableStyles {
-                    width: 100%;
-                    border-collapse: collapse;
-                    border-spacing: 0;
-                }
+                    &:first-of-type {
+                        padding-top: 0px;
+                    }
 
-                // statuteList-specific styles
-                #statuteList {
-                    .statute__list-item {
-                        padding: 12px 0;
+                    &:last-of-type {
+                        border: none;
+                    }
+
+                    table {
+                        @include commonTableStyles;
+
+                        .table__row {
+                            &:first-of-type {
+                                .row__cell--body {
+                                    padding-top: 0.5rem;
+                                }
+                            }
+
+                            .row__cell {
+                                &--body {
+                                    vertical-align: top;
+                                    padding-top: 0.5rem;
+                                    padding-bottom: 0.5rem;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            #statuteTable {
+                @include commonTableStyles;
+
+                border-collapse: separate;
+            }
+
+            #statuteList,
+            #statuteTable {
+                .table__row {
+                    &--header {
+                        position: sticky;
+                        top: calc($header_height + 48px);;
+                        z-index: 1;
+                    }
+
+                    &--body {
                         border-bottom: 1px solid $table_border_color;
+                    }
 
-                        &:first-of-type {
-                            padding-top: 0px;
-                        }
-
-                        &:last-of-type {
-                            border: none;
-                        }
-
-                        table {
-                            @include commonTableStyles;
-
-                            .table__row {
-                                &:first-of-type {
-                                    .row__cell--body {
-                                        padding-top: 0.5rem;
-                                    }
-                                }
-
-                                .row__cell {
-                                    &--body {
-                                        vertical-align: top;
-                                        padding-top: 0.5rem;
-                                        padding-bottom: 0.5rem;
-                                    }
-                                }
-                            }
+                    &:first-of-type {
+                        .row__cell--body {
+                            padding-top: 18px;
                         }
                     }
                 }
 
-                #statuteTable {
-                    @include commonTableStyles;
-                }
+                .row__cell {
+                    padding: 0.5rem 0 0.5rem 1.5rem;
 
-                #statuteList,
-                #statuteTable {
-                    .table__row {
-                        &--header {
-                            position: sticky;
-                            top: $header_height;
-                            z-index: 1;
+                    a {
+                        text-decoration: none;
+
+                        &:link.pdf {
+                            display: flex;
+                            align-items: center;
+                            gap: var(--spacer-half);
+                            white-space: nowrap;
                         }
 
-                        &--body {
-                            border-bottom: 1px solid $table_border_color;
-                        }
-
-                        &:first-of-type {
-                            .row__cell--body {
-                                padding-top: 18px;
-                            }
+                        &:hover {
+                            color: $primary_link_hover;
                         }
                     }
 
-                    .row__cell {
-                        padding: 0.5rem 0 0.5rem 1.5rem;
+                    .cell__title {
+                        font-weight: bold;
 
                         a {
-                            text-decoration: none;
+                            color: $table_header_link_color;
+                            text-decoration: underline;
 
-                            &:link.pdf {
-                                display: flex;
-                                align-items: center;
-                                gap: var(--spacer-half);
-                                white-space: nowrap;
+                            &:link.external::after {
+                                @include external-link($color: $table_header_link_color);
                             }
-
-                            &:hover {
-                                color: $primary_link_hover;
-                            }
-                        }
-
-                        .cell__title {
-                            font-weight: bold;
-                        }
-
-                        .cell__subtitle {
-                            font-size: 14px;
-                            line-height: 22px;
-                            font-weight: normal;
-                            font-style: italic;
-                            text-transform: capitalize;
-                        }
-
-                        .cell__usc-label {
-                            padding: 0.5rem 0;
-                        }
-
-                        .cell__name {
-                            font-size: 0.75rem;
-                            line-height: 18px;
-                        }
-
-                        &--header {
-                            background-color: $mid_blue_2;
-                            color: #fff;
-                            text-align: left;
-                            vertical-align: top;
-                        }
-
-                        &--body {
-                            padding-top: 0.75rem;
-                            padding-bottom: 0.75rem;
-                        }
-
-                        &--primary {
-                            width: 220px;
-                            box-sizing: border-box;
-                        }
-
-                        &:first-of-type {
-                            padding-left: 1rem;
-                            padding-right: 1rem;
-                        }
-
-                        &:last-of-type {
-                            padding-right: 1rem;
                         }
                     }
 
-                    .row__cell--body.row__cell--primary {
-                        background-color: $lightest_blue;
+                    .cell__subtitle {
+                        font-size: 14px;
+                        line-height: 22px;
+                        font-weight: normal;
+                        font-style: italic;
+                        text-transform: capitalize;
                     }
+
+                    .cell__usc-label {
+                        padding: 0.5rem 0;
+                    }
+
+                    .cell__name {
+                        font-size: 0.75rem;
+                        line-height: 18px;
+                    }
+
+                    &--header {
+                        background-color: $mid_blue_2;
+                        color: #fff;
+                        text-align: left;
+                        vertical-align: top;
+                    }
+
+                    &--body {
+                        padding-top: 0.75rem;
+                        padding-bottom: 0.75rem;
+                    }
+
+                    &--primary {
+                        width: 220px;
+                        box-sizing: border-box;
+                    }
+
+                    &:first-of-type {
+                        padding-left: 1rem;
+                        padding-right: 1rem;
+                    }
+
+                    &:last-of-type {
+                        padding-right: 1rem;
+                    }
+                }
+
+                .row__cell--body.row__cell--primary {
+                    background-color: $lightest_blue;
                 }
             }
         }

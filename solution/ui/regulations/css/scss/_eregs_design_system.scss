@@ -74,3 +74,11 @@ $eds-width-header-links: 1240px;
         margin: $top-bottom-margin auto;
     }
 }
+
+@mixin eds-standard-layout {
+    @include eds-gutters;
+    @include eds-width-with-gutters;
+    @include eds-max-width(var(--spacer-3));
+
+    box-sizing: content-box;
+}

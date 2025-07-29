@@ -10,7 +10,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          US Code House.gov
+          <a
+            class="external"
+            data-testid="house-gov-link-link"
+            href="https://uscode.house.gov/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            House.gov
+          </a>
         </div>
         
         <div
@@ -30,7 +38,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        US Code House.gov
+        <a
+          class="external"
+          data-testid="house-gov-link-link"
+          href="https://uscode.house.gov/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          House.gov
+        </a>
       </div>
       
       <div
@@ -108,7 +124,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          US Code House.gov
+          <a
+            class="external"
+            data-testid="house-gov-link-link"
+            href="https://uscode.house.gov/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            House.gov
+          </a>
         </div>
         
         <div
@@ -126,7 +150,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        US Code House.gov
+        <a
+          class="external"
+          data-testid="house-gov-link-link"
+          href="https://uscode.house.gov/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          House.gov
+        </a>
       </div>
       
       <div
@@ -202,7 +234,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          Statute Compilation
+          <a
+            class="external"
+            data-testid="statute-compilation-link-link"
+            href="https://www.govinfo.gov/app/collection/comps/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Statute Compilation
+          </a>
         </div>
         
         <div
@@ -222,7 +262,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        Statute Compilation
+        <a
+          class="external"
+          data-testid="statute-compilation-link-link"
+          href="https://www.govinfo.gov/app/collection/comps/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Statute Compilation
+        </a>
       </div>
       
       <div
@@ -300,7 +348,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          Statute Compilation
+          <a
+            class="external"
+            data-testid="statute-compilation-link-link"
+            href="https://www.govinfo.gov/app/collection/comps/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Statute Compilation
+          </a>
         </div>
         
         <div
@@ -318,7 +374,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        Statute Compilation
+        <a
+          class="external"
+          data-testid="statute-compilation-link-link"
+          href="https://www.govinfo.gov/app/collection/comps/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Statute Compilation
+        </a>
       </div>
       
       <div
@@ -394,7 +458,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          US Code Annual
+          <a
+            class="external"
+            data-testid="us-code-annual-link-link"
+            href="https://www.govinfo.gov/app/collection/uscode"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            US Code Annual
+          </a>
         </div>
         
         <div
@@ -414,7 +486,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        US Code Annual
+        <a
+          class="external"
+          data-testid="us-code-annual-link-link"
+          href="https://www.govinfo.gov/app/collection/uscode"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          US Code Annual
+        </a>
       </div>
       
       <div
@@ -492,7 +572,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          US Code Annual
+          <a
+            class="external"
+            data-testid="us-code-annual-link-link"
+            href="https://www.govinfo.gov/app/collection/uscode"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            US Code Annual
+          </a>
         </div>
         
         <div
@@ -510,7 +598,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        US Code Annual
+        <a
+          class="external"
+          data-testid="us-code-annual-link-link"
+          href="https://www.govinfo.gov/app/collection/uscode"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          US Code Annual
+        </a>
       </div>
       
       <div
@@ -586,7 +682,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          SSA.gov Compilation
+          <a
+            class="external"
+            data-testid="ssa-gov-link-link"
+            href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            SSA.gov
+          </a>
         </div>
         
         <div
@@ -606,7 +710,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        SSA.gov Compilation
+        <a
+          class="external"
+          data-testid="ssa-gov-link-link"
+          href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          SSA.gov
+        </a>
       </div>
       
       <div
@@ -684,7 +796,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
         <div
           class="cell__title"
         >
-          SSA.gov Compilation
+          <a
+            class="external"
+            data-testid="ssa-gov-link-link"
+            href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            SSA.gov
+          </a>
         </div>
         
         <div
@@ -702,7 +822,15 @@ exports[`Statute Table Header Cell > SSA table header > Creates a snapshot of he
       <div
         class="cell__title"
       >
-        SSA.gov Compilation
+        <a
+          class="external"
+          data-testid="ssa-gov-link-link"
+          href="https://www.ssa.gov/OP_Home/ssact/ssact.htm"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          SSA.gov
+        </a>
       </div>
       
       <div
