@@ -155,7 +155,7 @@ def _should_ignore_robots_txt(resource, allow_list):
     if isinstance(resource, FederalRegisterLink):
         return True
 
-    url = resource.url.strip().lower()
+    url = (resource.extract_url or resource.url).strip().lower()
     resource_domain = urlparse(url).hostname or ""
 
     for pattern in allow_list:

@@ -50,7 +50,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "detected_file_type", "file_type", "extract_text"],
+            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
@@ -112,7 +112,7 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type"],
         }),
         ("Document status", {
             "fields": ["approved"],
