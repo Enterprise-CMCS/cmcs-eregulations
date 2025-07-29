@@ -594,7 +594,7 @@ function addMarks(element, highlightString) {
 
             if (element?.parentNode?.nodeName === "A") {
                 const closestParagraph = element.parentNode.closest("p");
-                if (closestParagraph.className === "citation-node") {
+                if (closestParagraph?.className === "citation-node") {
                     return;
                 }
             }
