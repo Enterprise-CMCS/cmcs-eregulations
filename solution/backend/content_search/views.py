@@ -240,7 +240,7 @@ class PgVectorSearchView(TemplateView):
         embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
             **{"distance": distance_function('embedding', embedding)},
             **{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
-        ).filter(distance__lt=max_distance).order_by('distance')[:max_results]
+        ).filter(distance__lt=max_distance).order_by('distance')
 
         # Get values to return
         values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
@@ -259,6 +259,10 @@ class PgVectorSearchView(TemplateView):
                     seen.add(item["index__id"])
                     unique_results.append(item)
             results = unique_results
+
+        # Limit results
+        if max_results:
+            results = results[:max_results]
 
         # Return the results as a JSON response
         return JsonResponse([{
