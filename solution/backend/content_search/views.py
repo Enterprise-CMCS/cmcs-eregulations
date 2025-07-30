@@ -209,6 +209,7 @@ class PgVectorSearchView(TemplateView):
             return JsonResponse({"error": f"Invalid distance algorithm: {distance_algorithm}"}, status=400)
 
         include_content = "include_content" in request.POST
+        filter_duplicates = "filter_duplicates" in request.POST
         max_distance = float(request.POST.get("max_distance", 5))
         max_results = int(request.POST.get("max_results", 10))
 
@@ -249,6 +250,16 @@ class PgVectorSearchView(TemplateView):
             values += ("content",)
         results = embeddings.values(*values)
 
+        # Remove dupes
+        if filter_duplicates:
+            seen = set()
+            unique_results = []
+            for item in results:
+                if item["index__id"] not in seen:
+                    seen.add(item["index__id"])
+                    unique_results.append(item)
+            results = unique_results
+
         # Return the results as a JSON response
         return JsonResponse([{
             "name": i["index__name"],
@@ -268,7 +279,7 @@ class PgVectorSearchView(TemplateView):
             "distance": i["distance"],
             "start_offset": i["start_offset"],
             "content": i.get("content", None),
-        } for i in embeddings.values(*values)], safe=False)
+        } for i in results], safe=False)
 
 
 @extend_schema(
