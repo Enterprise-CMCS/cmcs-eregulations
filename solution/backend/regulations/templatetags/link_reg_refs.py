@@ -6,7 +6,7 @@ from django import template
 from django.urls import reverse
 
 from common.patterns import (
-    AND_OR_PATTERN,
+    CONJUNCTION_PATTERN,
     DASH_PATTERN,
     DASH_REGEX,
     PARAGRAPH_EXTRACT_REGEX,
@@ -22,7 +22,7 @@ REDIRECT_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" href="{}?{}
 SECTION_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 CFR_REF_EXTRACT_PATTERN = rf"(\d+)(?:\.({SECTION_PATTERN})((?:{PARAGRAPH_PATTERN})*))?"
 CFR_REF_PATTERN = rf"\d+(?:\.{SECTION_PATTERN}(?:{PARAGRAPH_PATTERN})*)?"
-CFR_PATTERN = rf"(\d+)\s*c.?f.?r.?\s*(?:parts?\s*)?((?:{CFR_REF_PATTERN}{AND_OR_PATTERN}(?!{USC_CFR_IGNORE_PATTERN}))+)"
+CFR_PATTERN = rf"(\d+)\s*c.?f.?r.?\s*(?:parts?\s*)?((?:{CFR_REF_PATTERN}{CONJUNCTION_PATTERN}(?!{USC_CFR_IGNORE_PATTERN}))+)"
 
 CFR_REF_EXTRACT_REGEX = re.compile(CFR_REF_EXTRACT_PATTERN, re.IGNORECASE)
 CFR_REGEX = re.compile(CFR_PATTERN, re.IGNORECASE)
