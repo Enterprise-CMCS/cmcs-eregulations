@@ -2,7 +2,7 @@ import re
 from functools import partial
 
 from common.patterns import (
-    AND_OR_PATTERN,
+    CONJUNCTION_PATTERN,
     DASH_PATTERN,
     DASH_REGEX,
     LINKED_PARAGRAPH_REGEX,
@@ -26,12 +26,12 @@ NUMBER_PATTERN = r"[0-9]+"
 SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
 # Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
-SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}{PARAGRAPH_PATTERN})*"
+SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
 # Will also match "Section 1902" if the section is contained within the DEFAULT_ACT. See tests for more complete examples.
-STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN})+)"\
+STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
 # Regex's are precompiled to improve page load time.
@@ -150,7 +150,7 @@ def replace_sections(match, link_conversions, exceptions):
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
 # "42 U.S.C. 1901(a) and 1902(b)" and more variations, similar to STATUTE_REF_PATTERN.
 # Negative lookahead ensures "42 U.S.C. 1234 and 41 U.S.C. 4567" doesn't register "1234" and "41" as two sections in one ref.
-USC_REF_PATTERN = rf"(\d+)\s*u.?\s*s.?\s*c.?\s*((?:{SECTION_PATTERN}{AND_OR_PATTERN}(?!{USC_CFR_IGNORE_PATTERN}))+)"
+USC_REF_PATTERN = rf"(\d+)\s*u.?\s*s.?\s*c.?\s*((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN}(?!{USC_CFR_IGNORE_PATTERN}))+)"
 USC_REF_REGEX = re.compile(USC_REF_PATTERN, re.IGNORECASE)
 
 

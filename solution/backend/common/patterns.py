@@ -6,7 +6,7 @@ import re
 USC_CFR_IGNORE_PATTERN = r"\d+\s*(?:u.?\s*s.?\s*c.?|c.?\s*f.?\s*r.?)\s*"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
-AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
+CONJUNCTION_PATTERN = r"(?:,?\s*(?:and|or|through|\&)?\s*)?"
 
 # Matches all forms of dashes.
 DASH_PATTERN = r"[-—–-–]|&#x2013;"
