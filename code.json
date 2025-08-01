@@ -19,7 +19,7 @@
   "repositoryHost": "github.com/Enterprise-CMCS",
   "repositoryVisibility": "public",
   "vcs": "git",
-  "laborHours": 21420,
+  "laborHours": 21462,
   "reuseFrequency": {
     "forks": 12
   },
@@ -39,16 +39,16 @@
     "TypeScript",
     "HTML",
     "Makefile",
-    "Dockerfile",
     "Shell",
+    "Dockerfile",
     "CSS"
   ],
   "maintenance": "contract",
   "contractNumber": "47QTCA21D006V:75FCMC21F0092",
   "date": {
     "created": "2020-09-28T15:44:46Z",
-    "lastModified": "2025-06-30T16:36:31Z",
-    "metaDataLastUpdated": "2025-07-01T00:20:36.960Z"
+    "lastModified": "2025-07-31T14:13:51Z",
+    "metaDataLastUpdated": "2025-08-01T00:21:26.716Z"
   },
   "tags": [
     "regulations",
