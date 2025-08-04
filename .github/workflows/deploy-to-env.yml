@@ -172,6 +172,39 @@ jobs:
           --app "npx ts-node bin/text-extractor.ts"
           popd
 
+  deploy-embedding-generator:
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+
+      - name: Deploy Embedding Generator
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          pushd cdk-eregs
+          npm install
+
+          EMBEDDING_GENERATOR_STACK="cms-eregs-${STAGE_NAME}-embedding-generator"
+
+          npx cdk deploy $EMBEDDING_GENERATOR_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/embedding-generator.ts"
+          popd
+
   deploy-fr-parser:
     needs: [deploy-site]
     runs-on: ubuntu-22.04
@@ -275,7 +308,7 @@ jobs:
           popd
 
   deploy-site:
-    needs: [deploy-static-assets, deploy-text-extractor]
+    needs: [deploy-static-assets, deploy-text-extractor, deploy-embedding-generator]
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
     outputs:
