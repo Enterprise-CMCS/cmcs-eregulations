@@ -48,10 +48,11 @@ SECTION_LABEL_PATTERN = r"((?:\bsec(?:tions?|t?s?)?|§|§){1,2}(?:\s)?)"
 # Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
 PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(\.\d+[a-z]?)?)"
 
-REGULATION_REF_PATTERN = rf"{SECTION_LABEL_PATTERN}?{PART_SECTION_PATTERN}"\
-    rf"(?:\s)?"\
+PART_SECTION_PARAGRAPH_PATTERN = rf"{PART_SECTION_PATTERN}"\
     rf"(?:{PARAGRAPH_PATTERN})*"\
-    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
+    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
+
+REGULATION_REF_PATTERN = rf"({SECTION_LABEL_PATTERN}?{PART_SECTION_PARAGRAPH_PATTERN})"
 
 #----- END NEW
 
