@@ -40,13 +40,20 @@ SECTION_PATTERN = rf"(?!{PART_SECTION_PATTERN}){SECTION_ID_PATTERN}(?:{CONJUNCTI
 STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
+#----- NEW
+
 # Matches one or two section symbols followed by an optional space.
 SECTION_LABEL_PATTERN = r"((?:\bsec(?:tions?|t?s?)?|§|§){1,2}(?:\s)?)"
 
 # Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
 PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(\.\d+[a-z]?)?)"
 
-REGULATION_REF_PATTERN = rf"({SECTION_LABEL_PATTERN}?{PART_SECTION_PATTERN}(?:{PARAGRAPH_PATTERN})*)"
+REGULATION_REF_PATTERN = rf"{SECTION_LABEL_PATTERN}?{PART_SECTION_PATTERN}"\
+    rf"(?:\s)?"\
+    rf"(?:{PARAGRAPH_PATTERN})*"\
+    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
+
+#----- END NEW
 
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
