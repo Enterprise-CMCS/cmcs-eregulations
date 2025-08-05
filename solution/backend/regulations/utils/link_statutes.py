@@ -25,8 +25,14 @@ NUMBER_PATTERN = r"[0-9]+"
 # Extracts the section ID only, for example "1902-1G" and its variations.
 SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
+# Matches part.section format, for example "123.456" or "123(a)(1)".
+# This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
+PART_SECTION_PATTERN = rf"{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}"
+
 # Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
-SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
+# Negative lookahead ensures that "§ 123.456" does not register as a link to section 123.
+# Another pattern is used to properly link to part 123 section 456.
+SECTION_PATTERN = rf"(?!{PART_SECTION_PATTERN}){SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
@@ -34,10 +40,19 @@ SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATT
 STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
+# Matches one or two section symbols followed by an optional space.
+SECTION_LABEL_PATTERN = r"((?:\bsec(?:tions?|t?s?)?|§|§){1,2}(?:\s)?)"
+
+# Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
+PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(\.\d+[a-z]?)?)"
+
+REGULATION_REF_PATTERN = rf"({SECTION_LABEL_PATTERN}?{PART_SECTION_PATTERN}(?:{PARAGRAPH_PATTERN})*)"
+
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
+REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
 NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
@@ -145,6 +160,10 @@ def replace_sections(match, link_conversions, exceptions):
         partial(replace_section, act=act, link_conversions=link_conversions, exceptions=exceptions.get(act, [])),
         match.group(),
     )
+
+
+def replace_regulation_ref(match, link_conversions, exceptions):
+    return f"<mark>{match.group()}</mark>"
 
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",

@@ -25,6 +25,7 @@ from resources.models import (
 class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, TemplateView):
 
     template_name = 'regulations/reader.html'
+    # template_name = 'regulations/reader_test.html'
 
     sectional_links = True
 
