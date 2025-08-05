@@ -26,7 +26,9 @@ NUMBER_PATTERN = r"[0-9]+"
 SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
 # Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
-SECTION_PATTERN = rf"{SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}{PARAGRAPH_PATTERN})*"
+# Negative lookahead ensures that "§ 1234.5678" does not register as a link to section 1234.
+# Another pattern is used to properly link to part 1234 section 5678.
+SECTION_PATTERN = rf"(?!{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}){SECTION_ID_PATTERN}(?:{AND_OR_PATTERN}{PARAGRAPH_PATTERN})*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
