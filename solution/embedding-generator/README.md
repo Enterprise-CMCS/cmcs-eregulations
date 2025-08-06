@@ -1,6 +1,13 @@
 # Contents
 
 1. [About](#about)
+2. [Running locally](#running-locally)
+3. [Request structure](#request-structure)
+    1. [Configuring authentication](#configuring-authentication)
+        1. [Basic auth](#basic-auth)
+        2. [AWS Secrets Manager](#aws-secrets-manager)
+        3. [Token auth](#token-auth)
+4. [Response structure](#response-structure)
 
 # About
 
