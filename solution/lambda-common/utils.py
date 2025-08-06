@@ -1,5 +1,12 @@
+# A collection of commonly used utility functions for AWS Lambda functions.
+#
+# This module includes functions for handling Lambda events, cleaning text output, retrieving secrets from AWS Secrets Manager,
+# configuring authorization, and sending data to external APIs.
+
 import json
 import logging
+import re
+import unicodedata
 import base64
 import os
 
@@ -38,6 +45,11 @@ def get_config(event: dict) -> dict:
     # Handle direct invocation via boto3 etc.
     logger.debug("No 'body' key present in the event, assuming direct AWS invocation.")
     return event
+
+
+def clean_output(text: str) -> str:
+    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def get_secret_from_aws(secret_name: str) -> dict:

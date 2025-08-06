@@ -1,22 +1,26 @@
 FROM public.ecr.aws/lambda/python:3.12
 
-ENV HOSTNAME="text-extractor"
+ENV HOSTNAME="embedding-generator"
 ENV EXTERNAL_PORT="6000"
 ENV PROXY_PARAMS="--enable-async"
+ENV LAMBDA_TASK_ROOT="${LAMBDA_TASK_ROOT}"
 ENV STARTUP_CMD="app.embedding_generator.handler"
 
 # Copy function code
 # Will be overridden locally
 COPY embedding-generator ${LAMBDA_TASK_ROOT}/app
 
+# Copy common code
+COPY lambda-common ${LAMBDA_TASK_ROOT}/lambda_common
+
 # Install the required packages
 RUN pip install -r app/requirements.txt
 
-# Copy lambda-proxy
-COPY lambda-proxy /proxy
+# Install packages required by lambda-common
+RUN pip install -r lambda_common/requirements.txt
 
 # Install packages required by lambda-proxy
-RUN pip install -r /proxy/requirements.txt
+RUN pip install -r lambda_common/lambda-proxy/requirements.txt
 
 # Set the custom entrypoint to run lambda-proxy on startup
-ENTRYPOINT /proxy/startup.sh
+ENTRYPOINT ${LAMBDA_TASK_ROOT}/lambda_common/lambda-proxy/startup.sh
