@@ -43,7 +43,7 @@ STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_P
 #----- NEW
 
 # Matches one or two section symbols followed by an optional space.
-SECTION_LABEL_PATTERN = r"((\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?)"
+SECTION_LABEL_PATTERN = r"(\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?"
 
 # Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
 PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(\.\d+[a-z]?)?)"
@@ -52,7 +52,9 @@ PART_SECTION_PARAGRAPH_PATTERN = rf"{PART_SECTION_PATTERN}"\
     rf"(?:{PARAGRAPH_PATTERN})*"\
     rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
 
-REGULATION_REF_PATTERN = rf"({SECTION_LABEL_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN})"
+REGULATION_REF_W_SECTION_PATTERN = rf"({SECTION_LABEL_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN})"
+
+REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}({CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"\
 
 #----- END NEW
 
