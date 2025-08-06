@@ -49,7 +49,7 @@ This project uses Lambda docker containers to further the goal of making our dep
 - They do not natively emulate API Gateway.
 - They do not accept more than one request at a time.
 
-These limitations are being worked on, but in the meantime there is an additional dependency found in the [lambda-proxy](../lambda-proxy) directory. This program is copied into the Docker container on build and is transparent to the user. It takes standard HTTP requests/responses and translates them into the type of JSON-based requests/responses that Lambda functions expect. In effect, this proxy partially emulates API Gateway. See [here](https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html) for more information on Lambda request/response payload structure.
+These limitations are being worked on, but in the meantime there is an additional dependency found in the [lambda-proxy](../lambda-common/lambda-proxy) directory. This program is copied into the Docker container on build and is transparent to the user. It takes standard HTTP requests/responses and translates them into the type of JSON-based requests/responses that Lambda functions expect. In effect, this proxy partially emulates API Gateway. See [here](https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html) for more information on Lambda request/response payload structure.
 
 The extractor will be automatically started when `docker-compose up -d --build` is run because eRegs depends on it.
 
@@ -82,7 +82,7 @@ The following data structure is required:
         "aws_storage_bucket_name": "xxxxxx", // The name of the bucket to retrieve objects from (only required for S3 backend).
         "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
         "aws_region": "us-east-1"            // AWS region to use, see below for details.
-    },
+    }
 }
 ```
 
