@@ -1,7 +1,22 @@
 import logging
+import os
 from typing import Any
 
 from .utils import lambda_response
+
+# Initialize the root logger. All other loggers will automatically inherit from this one.
+root_logger = logging.getLogger()
+if root_logger.handlers:
+    root_logger.removeHandler(root_logger.handlers[0])  # Remove the default handler to avoid duplicate logs
+ch = logging.StreamHandler()
+formatter = logging.Formatter('[%(levelname)s] [%(name)s] [%(asctime)s] %(message)s')
+ch.setFormatter(formatter)
+root_logger.addHandler(ch)
+root_logger.setLevel(logging.INFO)
+
+# Initialize the logger for this module
+logger = logging.getLogger(__name__)
+logger.setLevel(os.environ.get("LOG_LEVEL", "INFO"))
 
 
 def handler(event: dict, context: Any) -> dict:

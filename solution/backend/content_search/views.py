@@ -1,17 +1,15 @@
-import boto3
 import json
 
+import boto3
 from django.db.models import Count, F, Prefetch, Q
-from django.http import QueryDict
+from django.db.models.functions import Substr
+from django.http import JsonResponse, QueryDict
 from django.urls import reverse
+from django.views.generic import TemplateView
 from drf_spectacular.utils import OpenApiParameter, extend_schema
+from pgvector import django as pgvector_django
 from rest_framework import viewsets
 from rest_framework.response import Response
-
-from django.db.models.functions import Lower, Substr
-from django.views.generic import TemplateView
-from django.http import JsonResponse
-from pgvector import django as pgvector_django
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
