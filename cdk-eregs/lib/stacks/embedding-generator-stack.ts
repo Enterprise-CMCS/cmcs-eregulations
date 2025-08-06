@@ -69,7 +69,6 @@ export class EmbeddingGeneratorStack extends cdk.Stack {
             queueName: stageConfig.getResourceName('embedding-generator-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(14),
-            contentBasedDeduplication: true,
             deadLetterQueue: {
                 maxReceiveCount: 5,
                 queue: deadLetterQueue,
