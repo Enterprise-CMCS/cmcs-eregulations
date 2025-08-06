@@ -58,6 +58,12 @@ def handler(event: dict, context: Any) -> dict:
     model_id = config.get("model_id", "amazon.titan-embed-text-v2:0")
     dimensions = config.get("dimensions", 512)
     normalize = config.get("normalize", True)
+    max_text_length = config.get("max_text_length", 20000)  # Default to 20,000 characters to avoid the model's token limit
+
+    # Validate the text input
+    text = " ".join(text.split())  # Normalize whitespace
+    if not text or len(text) > max_text_length:
+        return lambda_response(400, f"Text must be a non-empty string and less than {max_text_length} characters long.")
 
     # Configure authorization
     authorization = None

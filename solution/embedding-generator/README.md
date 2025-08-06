@@ -38,6 +38,7 @@ The following data structure is required:
     "model_id": "amazon.titan-embed-text-v2:0", // Optional - the model to use, defaults to Titan V2.
     "dimensions": 512,                          // Optional - how many dimensions to use, defaults to 512.
     "normalize": true,                          // Optional - normalize the embeddings, defaults to true.
+    "max_text_length": 20000,                   // Optional - the max text length to accept, defaults to 20,000.
     // Only necessary to include if the PATCH endpoint uses authentication.
     "auth": {
         // See below for configuring authentication.
@@ -50,6 +51,8 @@ The following data structure is required:
     }
 }
 ```
+
+It is recommended to keep `max_text_length` at or around 20,000 characters. This is because the default model (Titan V2) only accepts a maximum of 8,192 tokens. AWS claims that the character to token ratio is approximately 4.7, which should theoretically permit around 38,000 characters, but in practice some text will hit the token limit at a much lower number of characters. This is a solved problem thanks to overlapped chunking.
 
 Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for Bedrock and SQS (if you're using it).
 
