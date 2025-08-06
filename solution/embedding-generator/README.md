@@ -22,7 +22,7 @@ This project uses Lambda docker containers to further the goal of making our dep
 
 These limitations are being worked on, but in the meantime there is an additional dependency found in the [lambda-proxy](../lambda-common/lambda-proxy) directory. This program is copied into the Docker container on build and is transparent to the user. It takes standard HTTP requests/responses and translates them into the type of JSON-based requests/responses that Lambda functions expect. In effect, this proxy partially emulates API Gateway. See [here](https://docs.aws.amazon.com/lambda/latest/dg/urls-invocation.html) for more information on Lambda request/response payload structure.
 
-The extractor will be automatically started when `docker-compose up -d --build` is run because eRegs depends on it.
+The generator will be automatically started when `docker-compose up -d --build` is run because eRegs depends on it.
 
 No further action is required, but if you want the code to hot-reload during development, you may install `watchfiles` with `pip3 install watchfiles` and then run `make watch-embedding-generator`.
 
@@ -136,7 +136,7 @@ To use token-based authentication, configure like this:
 
 # Response structure
 
-When the function completes, it will attempt to send a JSON PATCH request to the URL specified in `upload_url`. The request will be sent whether the extractor succeeds or fails. The contents will look like this:
+When the function completes, it will attempt to send a JSON PATCH request to the URL specified in `upload_url`. The request will be sent whether the generator succeeds or fails. The contents will look like this:
 
 ```jsonc
 {
