@@ -43,18 +43,21 @@ STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_P
 #----- NEW
 
 # Matches one or two section symbols followed by an optional space.
-SECTION_LABEL_PATTERN = r"(\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?"
+SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?"
 
 # Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
-PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(\.\d+[a-z]?)?)"
+PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(?:\.\d+[a-z]?)?)"
 
-PART_SECTION_PARAGRAPH_PATTERN = rf"{PART_SECTION_PATTERN}"\
-    rf"(?:{PARAGRAPH_PATTERN})*"\
+PART_SECTION_PARAGRAPH_PATTERN = (
+    rf"{PART_SECTION_PATTERN}"
+    rf"(?:{PARAGRAPH_PATTERN})*"
     rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
+)
 
-REGULATION_REF_W_SECTION_PATTERN = rf"({SECTION_LABEL_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN})"
+REGULATION_REF_W_SECTION_PATTERN = rf"{SECTION_LABEL_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN}"
 
-REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}({CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"\
+REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"
+# REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}"
 
 #----- END NEW
 
@@ -171,9 +174,17 @@ def replace_sections(match, link_conversions, exceptions):
         match.group(),
     )
 
+def mark_up(string):
+    return f'<mark>{string}</mark>'
+
+def multi_callback(match):
+    return mark_up(match.group())
 
 def replace_regulation_ref(match, link_conversions=[], exceptions={}):
-    return f"<mark>{match.group()}</mark>"
+    if re.search(f"{PART_SECTION_PARAGRAPH_PATTERN}{CONJUNCTION_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN}", match.group()):
+        return re.sub(PART_SECTION_PARAGRAPH_PATTERN, multi_callback, match.group())
+    else:
+        return mark_up(match.group())
 
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
