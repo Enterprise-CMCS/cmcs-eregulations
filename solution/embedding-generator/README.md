@@ -140,7 +140,7 @@ When the function completes, it will attempt to send a JSON PATCH request to the
 
 ```jsonc
 {
-    "id": 1234,                     // The unique ID of the resource
-    "embeddings": [1, 2, 3, ...]    // The generated embeddings
+    "id": 1234,                // The unique ID of the resource
+    "embeddings": [1, 2, 3]    // The generated embeddings
 }
 ```
