@@ -62,13 +62,11 @@ export class EmbeddingGeneratorStack extends cdk.Stack {
         // SQS QUEUES
         // ================================
         const deadLetterQueue = new sqs.Queue(this, 'DeadLetterQueue', {
-            queueName: stageConfig.getResourceName('embedding-generator-dl-queue.fifo'),
-            fifo: true,
+            queueName: stageConfig.getResourceName('embedding-generator-dl-queue'),
         });
 
         const queue = new sqs.Queue(this, 'EmbeddingGeneratorQueue', {
-            queueName: stageConfig.getResourceName('embedding-generator-queue.fifo'),
-            fifo: true,
+            queueName: stageConfig.getResourceName('embedding-generator-queue'),
             visibilityTimeout: cdk.Duration.seconds(900),
             retentionPeriod: cdk.Duration.days(14),
             contentBasedDeduplication: true,
