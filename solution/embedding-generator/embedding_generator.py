@@ -1,8 +1,15 @@
+import json
 import logging
 import os
 from typing import Any
 
-from .utils import lambda_response
+from lambda_common.utils import (
+    get_boto3_client,
+    get_config,
+    lambda_response,
+    configure_authorization,
+    send_results,
+)
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
 root_logger = logging.getLogger()
@@ -34,4 +41,68 @@ def handler(event: dict, context: Any) -> dict:
     """
 
     logger.info("Log level is set to %s.", logging.getLevelName(logger.getEffectiveLevel()))
-    return lambda_response(200, "Embedding generation handler is not yet implemented.")
+
+    # Get config
+    config = get_config(event)
+
+    # Check for required parameters in the event
+    logger.info("Retrieving required parameters from event.")
+    try:
+        chunk_id = config["id"]
+        upload_url = config["upload_url"]
+        text = config["text"]
+    except KeyError:
+        return lambda_response(400, "You must include 'id', 'upload_url', and 'text' in the request body.")
+
+    # Get optional parameters
+    model_id = config.get("model_id", "amazon.titan-embed-text-v2:0")
+    dimensions = config.get("dimensions", 512)
+    normalize = config.get("normalize", True)
+
+    # Configure authorization
+    authorization = None
+    if config.get("auth"):
+        try:
+            authorization = configure_authorization(config["auth"])
+        except Exception as e:
+            return lambda_response(400, f"Failed to configure authorization: {str(e)}")
+
+    # Initialize the Bedrock client
+    try:
+        bedrock_client = get_boto3_client("bedrock-runtime", config)
+    except Exception as e:
+        return lambda_response(500, f"Failed to initialize Bedrock client: {str(e)}")
+
+    # Create payload
+    payload = {
+        "inputText": text,
+        "dimensions": dimensions,
+        "normalize": normalize,
+    }
+
+    # Perform embedding generation and send results
+    try:
+        logger.info("Generating embeddings for chunk ID %s.", chunk_id)
+        response = bedrock_client.invoke_model(
+            modelId=model_id,
+            body=json.dumps(payload),
+            contentType='application/json',
+            accept='application/json',
+        )
+        embeddings = json.loads(response.get("body").read())["embedding"]
+
+        logger.info("Embeddings generated successfully for chunk ID %s. Sending results.", chunk_id)
+        send_results(
+            chunk_id,
+            upload_url,
+            authorization,
+            id=chunk_id,
+            embeddings=embeddings,
+        )
+    except Exception as e:
+        if "sqs_group" in config:
+            logger.error("An error occurred: %s", str(e))
+            raise e
+        return lambda_response(500, f"An error occurred: {str(e)}")
+
+    return lambda_response(200, "Embedding generation completed successfully.")

@@ -11,6 +11,7 @@ import base64
 import os
 
 import boto3
+from botocore.client import BaseClient
 from botocore.exceptions import ClientError
 import requests
 
@@ -142,3 +143,35 @@ def send_results(resource_id: int, upload_url: str, auth: str, **kwargs) -> None
             error = f"{error}{additional_error_text}"
             logger.error(error)
             raise Exception(error)
+
+
+def get_boto3_client(client_type: str, config: dict) -> type[BaseClient]:
+    """
+    Initialize a boto3 client with the provided configuration.
+
+    Args:
+        client_type (str): The type of the boto3 client to initialize (e.g., 's3').
+        config (dict): Configuration dictionary containing AWS credentials and region.
+
+    Returns:
+        boto3.client: An initialized boto3 client of the specified type.
+    """
+    logger.debug("Initializing boto3 %s client.", client_type)
+
+    try:
+        params = {
+            "aws_access_key_id": config["aws"]["aws_access_key_id"],
+            "aws_secret_access_key": config["aws"]["aws_secret_access_key"],
+            "region_name": config["aws"]["aws_region"],
+        }
+        logger.debug("Retrieved AWS parameters from config.")
+    except KeyError:
+        logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
+        params = {
+            "config": boto3.session.Config(signature_version='s3v4'),
+        }
+
+    return boto3.client(
+        client_type,
+        **params,
+    )
