@@ -45,9 +45,6 @@ STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_P
 # Matches one or two section symbols followed by an optional space.
 SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?"
 
-# Matches part and section numbers, for example "1.2", "1.2a", "1.2a.3", etc.
-PART_SECTION_PATTERN = r"(\d+[a-z]?(?=\.\d+)(?:\.\d+[a-z]?)?)"
-
 PART_SECTION_PARAGRAPH_PATTERN = (
     rf"{PART_SECTION_PATTERN}"
     rf"(?:{PARAGRAPH_PATTERN})*"
