@@ -1,6 +1,7 @@
 import json
 
 import boto3
+from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.models.functions import Substr
 from django.http import JsonResponse, QueryDict
@@ -9,10 +10,14 @@ from django.views.generic import TemplateView
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from pgvector import django as pgvector_django
 from rest_framework import viewsets
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from cmcs_regulations.utils.api_exceptions import BadRequest
+from cmcs_regulations.utils.api_exceptions import BadRequest, ExceptionSerializer
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from common.auth import SettingsAuthentication
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
@@ -23,7 +28,7 @@ from resources.models import (
 from resources.utils import get_citation_filter, string_to_bool
 
 from .models import ContentIndex, IndexedRegulationText, TextEmbedding
-from .serializers import ContentCountSerializer, ContentSearchSerializer
+from .serializers import ContentCountSerializer, ContentSearchSerializer, EmbeddingSerializer
 
 
 class ContentSearchPagination(ViewSetPagination):
@@ -404,3 +409,41 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # Serialize and return the results
         return Response(ContentCountSerializer(aggregates).data)
+
+
+@extend_schema(
+    tags=["content_search"],
+    description="Update an existing text embedding with new data. "
+                "This endpoint allows you to update the embedding of a specific text chunk by its ID.",
+    request=EmbeddingSerializer,
+    responses={200: str, 404: ExceptionSerializer},
+)
+class EmbeddingViewSet(APIView):
+    """
+    ViewSet for updating text embeddings.
+    This view allows for updating existing text embeddings with new data.
+    """
+
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SettingsAuthentication]
+
+    @transaction.atomic
+    def patch(self, request, *args, **kwargs):
+        serializer = EmbeddingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        pk = kwargs.get("id", data.get("id"))
+        if not pk:
+            raise NotFound("The ID of the object to update must be passed in.")
+
+        try:
+            chunk = TextEmbedding.objects.get(pk=pk)
+        except TextEmbedding.DoesNotExist:
+            raise NotFound(f"An embedding chunk matching ID {pk} does not exist.")
+
+        # Update the embedding chunk with the new data
+        chunk.embedding = data.get("embedding", chunk.embedding)
+        chunk.save()
+
+        return Response(data=f"Embedding chunk {pk} updated successfully.", status=200)

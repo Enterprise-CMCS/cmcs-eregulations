@@ -41,3 +41,12 @@ class ContentCountSerializer(serializers.Serializer):
 
     subjects = SubjectCountSerializer(many=True)
     categories = CategoryCountSerializer(many=True)
+
+
+class EmbeddingSerializer(serializers.Serializer):
+    """
+    Serializer for updating embeddings in the ContentIndex model.
+    """
+
+    id = serializers.IntegerField(required=True)
+    embedding = serializers.ListField(child=serializers.FloatField())

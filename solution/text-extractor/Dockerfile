@@ -7,7 +7,7 @@ COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 COPY lambda-common ${LAMBDA_TASK_ROOT}/lambda_common
 
 # Install binary dependencies
-# poppler-utils is required for converting PDFs to images for AWS Textract.
+# poppler-utils is required for converting images to a supported format for AWS Textract.
 RUN dnf install -y poppler-utils
 
 # Install the required packages
