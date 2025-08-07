@@ -34,18 +34,18 @@ PART_SECTION_PATTERN = rf"{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}"
 # Another pattern is used to properly link to part 123 section 456.
 SECTION_PATTERN = rf"(?!{PART_SECTION_PATTERN}){SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
 
+# Matches one or two section symbols followed by an optional space.
+SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
+
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
 # Will also match "Section 1902" if the section is contained within the DEFAULT_ACT. See tests for more complete examples.
-STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
+STATUTE_REF_PATTERN = rf"{SECTION_LABEL_PATTERN}((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
 #----- NEW
 
 LINKED_PART_SECTION_PATTERN = rf"{PART_SECTION_PATTERN}(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"
-
-# Matches one or two section symbols followed by an optional space.
-SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}\.?\s?"
 
 PART_SECTION_PARAGRAPH_PATTERN = (
     rf"{PART_SECTION_PATTERN}"
@@ -63,7 +63,7 @@ REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}(?:{CONJUNCTION_PA
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
-LINKED_PART_SECTION_REGEX = re.compile(rf"({LINKED_PART_SECTION_PATTERN})", re.IGNORECASE)
+LINKED_PART_SECTION_REGEX = re.compile(LINKED_PART_SECTION_PATTERN, re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
 PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
 REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
@@ -182,10 +182,7 @@ def replace_regulation_ref(match):
     return mark_up(match.group())
 
 def replace_regulation_refs(match, link_conversions=[], exceptions={}):
-    if LINKED_PART_SECTION_REGEX.search(match.group()):
-        return PART_SECTION_PARAGRAPH_REGEX.sub(replace_regulation_ref, match.group())
-    else:
-        return replace_regulation_ref(match.group())
+    return PART_SECTION_PARAGRAPH_REGEX.sub(replace_regulation_ref, match.group())
 
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
