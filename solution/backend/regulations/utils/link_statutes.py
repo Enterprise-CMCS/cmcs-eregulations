@@ -178,12 +178,16 @@ def replace_sections(match, link_conversions, exceptions):
 def mark_up(string):
     return f'<mark>{string}</mark>'
 
-def replace_regulation_ref(match):
-    return mark_up(match.group())
+def replace_regulation_ref(regulation_ref, link_conversions=[], exceptions={}):
+    regulation_text = regulation_ref.group()
+    return mark_up(regulation_text)
 
 # This function is run by re.sub() to replace regulation refs in "123.456" format with links.
 def replace_regulation_refs(match, link_conversions=[], exceptions={}):
-    return PART_SECTION_PARAGRAPH_REGEX.sub(replace_regulation_ref, match.group())
+    return PART_SECTION_PARAGRAPH_REGEX.sub(
+        partial(replace_regulation_ref, exceptions=exceptions),
+        match.group()
+    )
 
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",

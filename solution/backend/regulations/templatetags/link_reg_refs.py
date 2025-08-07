@@ -13,6 +13,10 @@ from common.patterns import (
     PARAGRAPH_PATTERN,
     USC_CFR_IGNORE_PATTERN,
 )
+from regulations.utils import (
+    REGULATION_REF_REGEX,
+    replace_regulation_refs,
+)
 
 register = template.Library()
 
@@ -70,6 +74,10 @@ def link_reg_refs(paragraph, link_config):
     if link_config["link_cfr_refs"]:
         paragraph = CFR_REGEX.sub(
             partial(replace_cfr_refs, exceptions=link_config["cfr_ref_exceptions"]),
+            paragraph,
+        )
+        paragraph = REGULATION_REF_REGEX.sub(
+                partial(replace_regulation_refs, exceptions=link_config["cfr_ref_exceptions"]),
             paragraph,
         )
     return paragraph
