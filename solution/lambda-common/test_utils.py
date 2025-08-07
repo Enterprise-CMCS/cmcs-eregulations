@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 import base64
 
-from utils import (
+from lambda_common.utils import (
     clean_output,
     get_config,
     lambda_response,

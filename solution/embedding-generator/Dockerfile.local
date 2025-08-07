@@ -1,21 +1,17 @@
 FROM public.ecr.aws/lambda/python:3.12
 
-ENV HOSTNAME="text-extractor"
+ENV HOSTNAME="embedding-generator"
 ENV EXTERNAL_PORT="6000"
 ENV PROXY_PARAMS="--enable-async"
 ENV LAMBDA_TASK_ROOT="${LAMBDA_TASK_ROOT}"
-ENV STARTUP_CMD="app.text_extractor.handler"
+ENV STARTUP_CMD="app.embedding_generator.handler"
 
 # Copy function code
 # Will be overridden locally
-COPY text-extractor ${LAMBDA_TASK_ROOT}/app
+COPY embedding-generator ${LAMBDA_TASK_ROOT}/app
 
 # Copy common code
 COPY lambda-common ${LAMBDA_TASK_ROOT}/lambda_common
-
-# Install binary dependencies
-# poppler-utils is required for converting PDFs to images for AWS Textract.
-RUN dnf install -y poppler-utils
 
 # Install the required packages
 RUN pip install -r app/requirements.txt

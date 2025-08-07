@@ -14,7 +14,7 @@ from .extractors import (
     ExtractorException,
     ExtractorInitException,
 )
-from .utils import (
+from lambda_common.utils import (
     clean_output,
     get_config,
     lambda_response,

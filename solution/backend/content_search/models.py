@@ -150,9 +150,6 @@ class ContentIndex(models.Model):
     rank_c_string = models.TextField(blank=True)
     rank_d_string = models.TextField(blank=True)
 
-    # Vector field for semantic search
-    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
-
     # OneToOne fields linked to possible indexed types
     resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
     reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
@@ -162,6 +159,22 @@ class ContentIndex(models.Model):
     class Meta:
         verbose_name = "Content Index"
         verbose_name_plural = "Content Indices"
+
+
+class TextEmbedding(models.Model):
+    index = models.ForeignKey(ContentIndex, on_delete=models.CASCADE, related_name="embeddings")
+    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
+    chunk_index = models.IntegerField()
+    start_offset = models.IntegerField()
+
+    class Meta:
+        unique_together = (("index", "chunk_index"),)
+        verbose_name = "Text Embedding"
+        verbose_name_plural = "Text Embeddings"
+        indexes = [
+            models.Index(fields=["index"]),
+            models.Index(fields=["embedding"]),
+        ]
 
 
 @receiver(post_save, sender=ResourceContent)

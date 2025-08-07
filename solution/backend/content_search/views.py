@@ -1,7 +1,13 @@
+import json
+
+import boto3
 from django.db.models import Count, F, Prefetch, Q
-from django.http import QueryDict
+from django.db.models.functions import Substr
+from django.http import JsonResponse, QueryDict
 from django.urls import reverse
+from django.views.generic import TemplateView
 from drf_spectacular.utils import OpenApiParameter, extend_schema
+from pgvector import django as pgvector_django
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -16,7 +22,7 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex, IndexedRegulationText
+from .models import ContentIndex, IndexedRegulationText, TextEmbedding
 from .serializers import ContentCountSerializer, ContentSearchSerializer
 
 
@@ -177,6 +183,105 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Serialize and return the results
         serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
         return self.get_paginated_response(serializer.data)
+
+
+class PgVectorSearchView(TemplateView):
+    template_name = "pgvector_search.html"
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        # Get query
+        query = request.POST.get("query")
+        if not query:
+            return JsonResponse({"error": "Query parameter 'query' is required."}, status=400)
+        if len(query) > 20000:
+            return JsonResponse({"error": "Query parameter 'query' must be less than 20,000 characters."}, status=400)
+        query = " ".join(query.split()).lower()  # Remove extra spaces and convert to lowercase
+
+        # Validate the distance algorithm
+        distance_algorithm = request.POST.get("distance_algorithm")
+        distance_function = getattr(pgvector_django, distance_algorithm, None)
+        if not distance_function:
+            return JsonResponse({"error": f"Invalid distance algorithm: {distance_algorithm}"}, status=400)
+
+        include_content = "include_content" in request.POST
+        filter_duplicates = "filter_duplicates" in request.POST
+        max_distance = float(request.POST.get("max_distance", 5))
+        max_results = int(request.POST.get("max_results", 10))
+
+        # Use Bedrock to perform a vector search
+        client = boto3.client(
+            'bedrock-runtime',
+            region_name="us-east-1",
+            # aws_access_key_id="",
+            # aws_secret_access_key="",
+            # aws_session_token="",
+        )
+        try:
+            payload = {
+                "inputText": query,
+                "dimensions": 512,
+            }
+            response = client.invoke_model(
+                modelId="amazon.titan-embed-text-v2:0",
+                body=json.dumps(payload),
+                contentType="application/json",
+                accept="application/json",
+            )
+            embedding = json.loads(response.get("body").read())["embedding"]
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+        # Perform the vector search using the embedding
+        embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
+            **{"distance": distance_function('embedding', embedding)},
+            **{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
+        ).filter(distance__lt=max_distance).order_by('distance')
+
+        # Get values to return
+        values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
+                  "index__resource__title", "index__reg_text__id", "index__reg_text__title", "index__reg_text__part",
+                  "index__reg_text__node_type", "index__reg_text__node_id", "distance", "start_offset")
+        if include_content:
+            values += ("content",)
+        results = embeddings.values(*values)
+
+        # Remove dupes
+        if filter_duplicates:
+            seen = set()
+            unique_results = []
+            for item in results:
+                if item["index__id"] not in seen:
+                    seen.add(item["index__id"])
+                    unique_results.append(item)
+            results = unique_results
+
+        # Limit results
+        if max_results:
+            results = results[:max_results]
+
+        # Return the results as a JSON response
+        return JsonResponse([{
+            "name": i["index__name"],
+            "id": i["index__id"],
+            "resource": {
+                "id": i["index__resource__id"],
+                "document_id": i["index__resource__document_id"],
+                "title": i["index__resource__title"],
+            } if i["index__resource__id"] else None,
+            "reg_text": {
+                "id": i["index__reg_text__id"],
+                "title": i["index__reg_text__title"],
+                "part": i["index__reg_text__part"],
+                "node_type": i["index__reg_text__node_type"],
+                "node_id": i["index__reg_text__node_id"],
+            } if i["index__reg_text__id"] else None,
+            "distance": i["distance"],
+            "start_offset": i["start_offset"],
+            "content": i.get("content", None),
+        } for i in results], safe=False)
 
 
 @extend_schema(
