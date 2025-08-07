@@ -3,11 +3,13 @@ from functools import partial
 
 from common.patterns import (
     CONJUNCTION_PATTERN,
-    DASH_PATTERN,
     DASH_REGEX,
     LINKED_PARAGRAPH_REGEX,
     PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
+    PART_SECTION_PATTERN,
+    SECTION_ID_PATTERN,
+    SECTION_LABEL_PATTERN,
     USC_CFR_IGNORE_PATTERN,
 )
 from regulations.models import (
@@ -22,20 +24,10 @@ USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
 NUMBER_PATTERN = r"[0-9]+"
 
-# Extracts the section ID only, for example "1902-1G" and its variations.
-SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
-
-# Matches part.section format, for example "123.456" or "123(a)(1)".
-# This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
-PART_SECTION_PATTERN = rf"{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}"
-
 # Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
 # Negative lookahead ensures that "§ 123.456" does not register as a link to section 123.
 # Another pattern is used to properly link to part 123 section 456.
 SECTION_PATTERN = rf"(?!{PART_SECTION_PATTERN}){SECTION_ID_PATTERN}(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*"
-
-# Matches "section", "sections", "sect", "sects", "§", "§.", and variations.
-SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
 
 # Matches entire statute references, including one or more sections and an optional Act.
 # For example, "Sections 1902(a)(2) and (b)(1) and 1903(b) of the Social Security Act" and its variations.
@@ -43,31 +35,11 @@ SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
 STATUTE_REF_PATTERN = rf"{SECTION_LABEL_PATTERN}((?:{SECTION_PATTERN}{CONJUNCTION_PATTERN})+)"\
                       r"(?:\s*of\s*the\s*([a-z0-9\s]*?(?=\bact\b)))?"
 
-#----- NEW
-
-PART_SECTION_PARAGRAPH_PATTERN = (
-    rf"{PART_SECTION_PATTERN}" # Matches "123.456"
-    rf"(?:{PARAGRAPH_PATTERN})*" # Matches "123.456(a)(1)(C)" or "123.456(a)(1)(C) and 123.789(b)"
-    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
-)
-
-# Matches regulation references with paragraphs and/or additional regulation references linked with a conjunction.
-# For example, "§ 123.456(a)(1)(C) and (2)" or "section 123.456 and section 789.012".
-REGULATION_REF_PATTERN = (
-    rf"{SECTION_LABEL_PATTERN}" # Matches "§" or "section" or "sections"
-    rf"{PART_SECTION_PARAGRAPH_PATTERN}"
-    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
-)
-#----- END NEW
-
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
 NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
-
-PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
-REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
 
 # The act to use if none is specified, for example "section 1902 of the act" defaults to this.
 DEFAULT_ACT = "Social Security Act"
@@ -173,20 +145,6 @@ def replace_sections(match, link_conversions, exceptions):
     return SECTION_REGEX.sub(
         partial(replace_section, act=act, link_conversions=link_conversions, exceptions=exceptions.get(act, [])),
         match.group(),
-    )
-
-def mark_up(string):
-    return f'<mark>{string}</mark>'
-
-def replace_regulation_ref(regulation_ref, link_conversions=[], exceptions={}):
-    regulation_text = regulation_ref.group()
-    return mark_up(regulation_text)
-
-# This function is run by re.sub() to replace regulation refs in "123.456" format with links.
-def replace_regulation_refs(match, link_conversions=[], exceptions={}):
-    return PART_SECTION_PARAGRAPH_REGEX.sub(
-        partial(replace_regulation_ref, exceptions=exceptions),
-        match.group()
     )
 
 

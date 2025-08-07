@@ -11,11 +11,9 @@ from common.patterns import (
     DASH_REGEX,
     PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
+    PART_SECTION_PATTERN,
+    SECTION_LABEL_PATTERN,
     USC_CFR_IGNORE_PATTERN,
-)
-from regulations.utils import (
-    REGULATION_REF_REGEX,
-    replace_regulation_refs,
 )
 
 register = template.Library()
@@ -66,6 +64,39 @@ def replace_cfr_refs(match, exceptions):
             partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
             refs,
         )
+    )
+
+
+PART_SECTION_PARAGRAPH_PATTERN = (
+    rf"{PART_SECTION_PATTERN}" # Matches "123.456"
+    rf"(?:{PARAGRAPH_PATTERN})*" # Matches "123.456(a)(1)(C)" or "123.456(a)(1)(C) and 123.789(b)"
+    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
+)
+
+# Matches regulation references with paragraphs and/or additional regulation references linked with a conjunction.
+# For example, "§ 123.456(a)(1)(C) and (2)" or "section 123.456 and section 789.012".
+REGULATION_REF_PATTERN = (
+    rf"{SECTION_LABEL_PATTERN}" # Matches "§" or "section" or "sections"
+    rf"{PART_SECTION_PARAGRAPH_PATTERN}"
+    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
+)
+
+PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
+REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
+
+
+def mark_up(string):
+    return f'<mark>{string}</mark>'
+
+def replace_regulation_ref(regulation_ref, link_conversions=[], exceptions={}):
+    regulation_text = regulation_ref.group()
+    return mark_up(regulation_text)
+
+# This function is run by re.sub() to replace regulation refs in "123.456" format with links.
+def replace_regulation_refs(match, link_conversions=[], exceptions={}):
+    return PART_SECTION_PARAGRAPH_REGEX.sub(
+        partial(replace_regulation_ref, exceptions=exceptions),
+        match.group()
     )
 
 
