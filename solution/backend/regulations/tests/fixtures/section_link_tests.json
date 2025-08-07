@@ -105,6 +105,11 @@
         "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act. §. <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the Act. &#xA7; <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the act. &#xA7;. <a target=\"_blank\" rel=\"noopener noreferrer\" class=\"external\" href=\"https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-sectionabc&num=0&edition=prelim#substructure-location_a\">123(a)</a> of the act."
     },
     {
+        "testing": "part.section format not matching section pattern",
+        "input": "§ 123.456 of the Act.",
+        "expected": "§ 123.456 of the Act."
+    },
+    {
         "testing": "proper word boundaries",
         "input": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that.",
         "expected": "intersection 123(a) of the act. intersects 123(a). intersect 123(a). And it intersects. 123(a) of the act states that."
