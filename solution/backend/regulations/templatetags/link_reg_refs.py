@@ -69,8 +69,7 @@ def replace_cfr_refs(match, exceptions):
 
 PART_SECTION_PARAGRAPH_PATTERN = (
     rf"{PART_SECTION_PATTERN}" # Matches "123.456"
-    rf"(?:{PARAGRAPH_PATTERN})*" # Matches "123.456(a)(1)(C)" or "123.456(a)(1)(C) and 123.789(b)"
-    rf"(?:{CONJUNCTION_PATTERN}{PARAGRAPH_PATTERN})*" # Matches "and (a)" or "or (b)" at the end of the ref.
+    rf"(?:(?:{CONJUNCTION_PATTERN})*({PARAGRAPH_PATTERN}))*" # Matches "and (a)" or "or (b)" at the end of the ref.
 )
 
 # Matches regulation references with paragraphs and/or additional regulation references linked with a conjunction.
@@ -94,8 +93,9 @@ def replace_regulation_ref(regulation_ref, link_conversions=[], exceptions={}):
 
 # This function is run by re.sub() to replace regulation refs in "123.456" format with links.
 def replace_regulation_refs(match, link_conversions=[], exceptions={}):
+    title = 42
     return PART_SECTION_PARAGRAPH_REGEX.sub(
-        partial(replace_regulation_ref, exceptions=exceptions),
+        partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
         match.group()
     )
 

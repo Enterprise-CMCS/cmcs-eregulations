@@ -30,4 +30,4 @@ SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 
 # Matches part.section format, for example "123.456" or "123(a)(1)".
 # This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
-PART_SECTION_PATTERN = rf"{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}"
+PART_SECTION_PATTERN = rf"({SECTION_ID_PATTERN})\.({SECTION_ID_PATTERN})"
