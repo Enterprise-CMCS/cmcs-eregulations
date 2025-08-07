@@ -6,7 +6,7 @@ from regulations.utils import (
     REGULATION_REF_REGEX,
     STATUTE_REF_REGEX,
     USC_REF_REGEX,
-    replace_regulation_ref,
+    replace_regulation_refs,
     replace_sections,
     replace_usc_citations,
 )
@@ -28,7 +28,7 @@ def link_statutes(paragraph, link_conversions, link_config):
         )
 
     paragraph = REGULATION_REF_REGEX.sub(
-        partial(replace_regulation_ref),
+        partial(replace_regulation_refs),
         paragraph,
     )
 

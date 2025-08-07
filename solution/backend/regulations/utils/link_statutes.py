@@ -42,8 +42,10 @@ STATUTE_REF_PATTERN = rf"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*((?:{SECTION_P
 
 #----- NEW
 
+LINKED_PART_SECTION_PATTERN = rf"{PART_SECTION_PATTERN}(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"
+
 # Matches one or two section symbols followed by an optional space.
-SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}(?:\s)?"
+SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;){1,2}\.?\s?"
 
 PART_SECTION_PARAGRAPH_PATTERN = (
     rf"{PART_SECTION_PATTERN}"
@@ -61,7 +63,9 @@ REGULATION_REF_PATTERN = rf"{REGULATION_REF_W_SECTION_PATTERN}(?:{CONJUNCTION_PA
 # Regex's are precompiled to improve page load time.
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
 SECTION_REGEX = re.compile(rf"({SECTION_PATTERN})", re.IGNORECASE)
+LINKED_PART_SECTION_REGEX = re.compile(rf"({LINKED_PART_SECTION_PATTERN})", re.IGNORECASE)
 STATUTE_REF_REGEX = re.compile(STATUTE_REF_PATTERN, re.IGNORECASE)
+PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
 REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
 NUMBER_REGEX = re.compile(NUMBER_PATTERN, re.IGNORECASE)
 
@@ -174,14 +178,14 @@ def replace_sections(match, link_conversions, exceptions):
 def mark_up(string):
     return f'<mark>{string}</mark>'
 
-def multi_callback(match):
+def replace_regulation_ref(match):
     return mark_up(match.group())
 
-def replace_regulation_ref(match, link_conversions=[], exceptions={}):
-    if re.search(f"{PART_SECTION_PARAGRAPH_PATTERN}{CONJUNCTION_PATTERN}{PART_SECTION_PARAGRAPH_PATTERN}", match.group()):
-        return re.sub(PART_SECTION_PARAGRAPH_PATTERN, multi_callback, match.group())
+def replace_regulation_refs(match, link_conversions=[], exceptions={}):
+    if LINKED_PART_SECTION_REGEX.search(match.group()):
+        return PART_SECTION_PARAGRAPH_REGEX.sub(replace_regulation_ref, match.group())
     else:
-        return mark_up(match.group())
+        return replace_regulation_ref(match.group())
 
 
 # This pattern matches USC citations such as "42 U.S.C. 1901(a)", "42 U.S.C. 1901(a) or (b)",
