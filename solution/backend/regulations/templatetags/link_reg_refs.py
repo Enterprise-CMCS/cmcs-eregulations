@@ -9,12 +9,13 @@ from common.patterns import (
     CONJUNCTION_PATTERN,
     DASH_PATTERN,
     DASH_REGEX,
-    LINKED_PARAGRAPH_REGEX,
-    PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
     PART_SECTION_PATTERN,
     SECTION_LABEL_PATTERN,
     USC_CFR_IGNORE_PATTERN,
+)
+from regulations.utils import (
+    extract_paragraphs,
 )
 
 register = template.Library()
@@ -42,11 +43,6 @@ def create_redirect_link(text, *args, **kwargs):
         urlencode(params),
         text,
     )
-# Returns a list containing the first paragraph chain in a section ref.
-# For example, if the section text is "Section 1902(a)(1)(C) and (b)(2)", this will return ["a", "1", "C"].
-def extract_paragraphs(section_text):
-    linked_paragraphs = LINKED_PARAGRAPH_REGEX.search(section_text)  # extract the first paragraph chain (e.g. (a)(1)(c)...)
-    return PARAGRAPH_EXTRACT_REGEX.findall(linked_paragraphs.group()) if linked_paragraphs else None
 
 
 def replace_cfr_ref(match, title, exceptions):
