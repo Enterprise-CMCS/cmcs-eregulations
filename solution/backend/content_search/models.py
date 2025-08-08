@@ -177,6 +177,104 @@ class TextEmbedding(models.Model):
         ]
 
 
+# Establishes an AWS client.
+#
+# client_type: the boto3-recognized AWS resource to create a client for.
+def establish_client(client_type):
+    if settings.USE_AWS_TOKEN:
+        return boto3.client(
+            client_type,
+            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
+            region_name="us-east-1",
+        )
+    else:
+        return boto3.client(client_type, region_name="us-east-1")
+
+
+def chunk_text(text, max_length=20000, overlap=1000):
+    """Split text into overlapping chunks."""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = min(start + max_length, len(text))
+        chunk = text[start:end]
+        chunks.append((start, chunk))
+        if end == len(text):
+            break
+        start += max_length - overlap
+    return chunks
+
+
+@receiver(post_save, sender=ContentIndex)
+def update_resource_text_embeddings(sender, instance, created, **kwargs):
+    """
+    Create or update text embeddings for the ContentIndex instance.
+    This is triggered whenever a ContentIndex instance is saved.
+    """
+
+    # Check if the instance has a resource and content
+    if not instance.resource or not instance.content:
+        return
+
+    # Delete existing embeddings for the instance
+    TextEmbedding.objects.filter(index=instance).delete()
+
+    # Prepare the text for embedding
+    act_citations = " ".join([f"{citation['act']} {citation['section']}" for citation in instance.resource.act_citations if citation])
+    usc_citations = " ".join([f"{citation['title']} {citation['section']}" for citation in instance.resource.usc_citations if citation])
+    document_id = instance.resource.document_id or ""
+    title = instance.resource.title or ""
+    text = f"{act_citations} {usc_citations} {document_id} {title} {instance.content}".lower()
+    text = " ".join(text.split())  # Normalize whitespace
+
+    # Split the text into chunks and create embeddings for each chunk
+    chunks = chunk_text(text)
+    embeddings = TextEmbedding.objects.bulk_create([
+        TextEmbedding(
+            index=instance,
+            text=chunk,
+            chunk_index=chunk_index,
+            start_offset=start,
+        ) for chunk_index, (start, chunk) in enumerate(chunks)
+    ])
+
+    # Return early if no embedding service is configured
+    if not settings.EMBEDDING_GENERATOR_QUEUE_URL:
+        return
+
+    client = establish_client("sqs")
+
+    # Send embeddings to the embedding generator queue
+    requests = [{
+        "id": embedding.id,
+        "upload_url": reverse("embedding_upload", kwargs={"id": embedding.id}),
+        "text": embedding.text,
+        "auth": {
+            "type": "basic",
+            "username": settings.HTTP_AUTH_USER,
+            "password": settings.HTTP_AUTH_PASSWORD,
+        } if settings.USE_LOCAL_EMBEDDING_GENERATOR else {
+            "type": "basic-secretsmanager-env",
+            "secret_name": "SECRET_NAME",
+            "username_key": "username",
+            "password_key": "password",
+        },
+    } for embedding in embeddings]
+
+    for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
+        # Send each batch to the embedding generator queue
+        response = client.send_message_batch(
+            QueueUrl=settings.EMBEDDING_GENERATOR_QUEUE_URL,
+            Entries=[{
+                "Id": str(request["id"]),
+                "MessageBody": json.dumps(request),
+            } for request in batch]
+        )
+        if "Failed" in response:
+            raise Exception(f"Failed to send embeddings: {response['Failed']}")
+
+
 @receiver(post_save, sender=ResourceContent)
 def update_content_field(sender, instance, created, **kwargs):
     index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)

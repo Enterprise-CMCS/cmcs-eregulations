@@ -1,58 +1,15 @@
-import json
+from functools import partial
 from urllib.parse import urlparse
 
-import boto3
-import requests
 from django.conf import settings
 from django.urls import reverse
 
+from common import external_lambda
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
     ResourcesConfiguration,
 )
-
-_LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
-_LOCAL_EREGS_URL = "http://host.docker.internal:8000"
-
-
-# Establishes an AWS client.
-#
-# client_type: the boto3-recognized AWS resource to create a client for.
-def establish_client(client_type):
-    if settings.USE_AWS_TOKEN:
-        return boto3.client(
-            client_type,
-            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-1",
-        )
-    else:
-        return boto3.client(client_type, region_name="us-east-1")
-
-
-def _extract_via_http(batch, client):
-    success = 0
-    fail = []
-
-    for request in batch:
-        try:
-            resp = requests.post(
-                _LOCAL_TEXT_EXTRACTOR_URL,
-                data=json.dumps(request),
-                timeout=60,
-            )
-            if resp.status_code != requests.codes.OK and hasattr(resp, "text") and resp.text:
-                raise RuntimeError(f"POST failed with {resp.status_code}: {resp.text}")
-            resp.raise_for_status()
-            success += 1
-        except Exception as e:
-            fail.append({
-                "id": request["id"],
-                "reason": str(e),
-            })
-
-    return success, fail
 
 
 def _get_message_group_id(request):
@@ -68,54 +25,6 @@ def _get_message_group_id(request):
         return f"web:{domain_name}"
     # Fallback for unknown backends
     return f"{backend}:default"
-
-
-def _extract_via_sqs(batch, client):
-    entries = [{
-        "Id": str(i["id"]),
-        "MessageBody": json.dumps(i),
-        "MessageGroupId": _get_message_group_id(i),
-    } for i in batch]
-
-    try:
-        resp = client.send_message_batch(
-            QueueUrl=settings.TEXT_EXTRACTOR_QUEUE_URL,
-            Entries=entries,
-        )
-        success = len(resp.get("Successful", []))
-        fail = [{
-            "id": int(i["Id"]),
-            "reason": f"Received code {i['Code']}: {i['Message']}",
-        } for i in resp.get("Failed", [])]
-    except Exception as e:
-        success = 0
-        fail = [{
-            "id": i["id"],
-            "reason": str(e),
-        } for i in batch]
-
-    return success, fail
-
-
-def _extract_via_lambda(batch, client):
-    success = 0
-    fail = []
-
-    for request in batch:
-        try:
-            client.invoke(
-                FunctionName=settings.TEXT_EXTRACTOR_ARN,
-                InvocationType="Event",
-                Payload=json.dumps(request),
-            )
-            success += 1
-        except Exception as e:
-            fail.append({
-                "id": request["id"],
-                "reason": str(e),
-            })
-
-    return success, fail
 
 
 # Internal function to compute the 2 keys needed for text-extractor requests: "uri" and "backend".
@@ -205,7 +114,7 @@ def call_text_extractor(request, resources):
         "ignore_robots_txt": _should_ignore_robots_txt(i, allow_list),
         "file_type": i.file_type or None,
         "upload_url": (
-            f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
+            f"{settings.LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
             request.build_absolute_uri(reverse("content", args=[i.pk]))
         ),
@@ -244,14 +153,23 @@ def call_text_extractor(request, resources):
     requests = [i for i in requests if i["uri"].strip()]
 
     if settings.USE_LOCAL_TEXT_EXTRACTOR:
-        extract_function = _extract_via_http
-        client = None
+        extract_function = partial(
+            external_lambda.invoke_via_http,
+            url=settings.LOCAL_TEXT_EXTRACTOR_URL,
+        )
     elif settings.TEXT_EXTRACTOR_QUEUE_URL:
-        extract_function = _extract_via_sqs
-        client = establish_client("sqs")
+        extract_function = partial(
+            external_lambda.invoke_via_sqs,
+            client=external_lambda.establish_client("sqs"),
+            url=settings.TEXT_EXTRACTOR_QUEUE_URL,
+            message_group_id_func=_get_message_group_id,
+        )
     elif settings.TEXT_EXTRACTOR_ARN:
-        extract_function = _extract_via_lambda
-        client = establish_client("lambda")
+        extract_function = partial(
+            external_lambda.invoke_via_lambda,
+            client=external_lambda.establish_client("lambda"),
+            arn=settings.TEXT_EXTRACTOR_ARN,
+        )
     else:
         failures += [{
             "id": i["id"],
@@ -260,7 +178,7 @@ def call_text_extractor(request, resources):
         requests = []
 
     for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
-        success, fail = extract_function(batch, client)
+        success, fail = extract_function(batch)
         succeed_count += success
         failures += fail
 

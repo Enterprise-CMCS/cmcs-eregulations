@@ -50,6 +50,7 @@ STORAGES = {
 }
 USE_AWS_TOKEN = True
 USE_LOCAL_TEXT_EXTRACTOR = True
+USE_LOCAL_EMBEDDING_GENERATOR = True
 BASE_URL = os.environ.get("BASE_URL", "")
 
 # EUA settings
