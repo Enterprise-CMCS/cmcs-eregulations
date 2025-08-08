@@ -93,7 +93,7 @@ REGULATION_REF_EXTRACT_REGEX = re.compile(REGULATION_REF_EXTRACT_PATTERN, re.IGN
 
 def replace_regulation_ref(match, title, exceptions={}):
     return REGULATION_REF_EXTRACT_REGEX.sub(
-        partial(replace_cfr_ref, title=title, exceptions=exceptions.get(42, [])),
+        partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
         match.group()
     )
 
