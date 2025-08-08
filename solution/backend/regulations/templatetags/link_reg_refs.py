@@ -69,33 +69,36 @@ def replace_cfr_refs(match, exceptions):
         )
     )
 
+
 PART_SECTION_PARAGRAPH_PATTERN = (
-    rf"{PART_SECTION_PATTERN}" # Matches "123.456"
-    rf"(?:(?:{CONJUNCTION_PATTERN})*({PARAGRAPH_PATTERN}))*" # Matches "and (a)" or "or (b)" at the end of the ref.
+    rf"{PART_SECTION_PATTERN}"  # Matches "123.456"
+    rf"(?:(?:{CONJUNCTION_PATTERN})*({PARAGRAPH_PATTERN}))*"  # Matches "and (a)" or "or (b)" at the end of the ref.
 )
 
 # Matches regulation references with paragraphs and/or additional regulation references linked with a conjunction.
 # For example, "§ 123.456(a)(1)(C) and (2)" or "section 123.456 and section 789.012".
 REGULATION_REF_PATTERN = (
-    rf"{SECTION_LABEL_PATTERN}" # Matches "§" or "section" or "sections"
+    rf"{SECTION_LABEL_PATTERN}"  # Matches "§" or "section" or "sections"
     rf"{PART_SECTION_PARAGRAPH_PATTERN}"
-    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
+    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
 )
 
 REGULATION_REF_EXTRACT_PATTERN = (
     rf"{PART_SECTION_PARAGRAPH_PATTERN}"
-    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
+    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
 )
 
 PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
 REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
 REGULATION_REF_EXTRACT_REGEX = re.compile(REGULATION_REF_EXTRACT_PATTERN, re.IGNORECASE)
 
+
 def replace_regulation_ref(match, title, exceptions={}):
     return REGULATION_REF_EXTRACT_REGEX.sub(
         partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
         match.group()
     )
+
 
 # This function is run by re.sub() to replace regulation refs in "123.456" format with links.
 def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
