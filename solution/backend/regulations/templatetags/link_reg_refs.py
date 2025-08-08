@@ -98,8 +98,7 @@ def replace_regulation_ref(match, title, exceptions={}):
     )
 
 # This function is run by re.sub() to replace regulation refs in "123.456" format with links.
-def replace_regulation_refs(match, link_conversions=[], exceptions={}):
-    title = 42
+def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
     return PART_SECTION_PARAGRAPH_REGEX.sub(
         partial(replace_regulation_ref, title=title, exceptions=exceptions),
         match.group()
@@ -107,14 +106,14 @@ def replace_regulation_refs(match, link_conversions=[], exceptions={}):
 
 
 @register.simple_tag
-def link_reg_refs(paragraph, link_config):
+def link_reg_refs(title, paragraph, link_config):
     if link_config["link_cfr_refs"]:
         paragraph = CFR_REGEX.sub(
             partial(replace_cfr_refs, exceptions=link_config["cfr_ref_exceptions"]),
             paragraph,
         )
         paragraph = REGULATION_REF_REGEX.sub(
-                partial(replace_regulation_refs, exceptions=link_config["cfr_ref_exceptions"]),
+                partial(replace_regulation_refs, title=title, exceptions=link_config["cfr_ref_exceptions"]),
             paragraph,
         )
     return paragraph
