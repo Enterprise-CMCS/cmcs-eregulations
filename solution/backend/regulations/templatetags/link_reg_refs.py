@@ -113,7 +113,7 @@ def link_reg_refs(title, paragraph, link_config):
             paragraph,
         )
         paragraph = REGULATION_REF_REGEX.sub(
-                partial(replace_regulation_refs, title=title, exceptions=link_config["cfr_ref_exceptions"]),
+            partial(replace_regulation_refs, title=title, exceptions=link_config["cfr_ref_exceptions"]),
             paragraph,
         )
     return paragraph
