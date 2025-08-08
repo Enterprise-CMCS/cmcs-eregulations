@@ -6,7 +6,7 @@ import re
 USC_CFR_IGNORE_PATTERN = r"\d+\s*(?:u.?\s*s.?\s*c.?|c.?\s*f.?\s*r.?)\s*"
 
 # Matches ", and", ", or", "and", "or", "&", and more variations.
-AND_OR_PATTERN = r"(?:,?\s*(?:and|or|\&)?\s*)?"
+CONJUNCTION_PATTERN = r"(?:,?\s*(?:and|or|through|\&)?\s*)?"
 
 # Matches all forms of dashes.
 DASH_PATTERN = r"[-—–-–]|&#x2013;"
@@ -21,3 +21,13 @@ LINKED_PARAGRAPH_REGEX = re.compile(LINKED_PARAGRAPH_PATTERN, re.IGNORECASE)
 # Extracts paragraph identifiers. Running findall() on "(a)(1)(C)" returns ["a", "1", "C"].
 PARAGRAPH_EXTRACT_PATTERN = r"\(([a-z0-9]+)\)"
 PARAGRAPH_EXTRACT_REGEX = re.compile(PARAGRAPH_EXTRACT_PATTERN, re.IGNORECASE)
+
+# Matches "section", "sections", "sect", "sects", "§", "§.", and variations.
+SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
+
+# Extracts the section ID only, for example "1902-1G" and its variations.
+SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
+
+# Matches part.section format, for example "123.456" or "123(a)(1)".
+# This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
+PART_SECTION_PATTERN = rf"({SECTION_ID_PATTERN})\.({SECTION_ID_PATTERN})"
