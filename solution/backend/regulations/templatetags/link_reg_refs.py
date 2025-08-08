@@ -9,6 +9,7 @@ from common.patterns import (
     CONJUNCTION_PATTERN,
     DASH_PATTERN,
     DASH_REGEX,
+    LINKED_PARAGRAPH_REGEX,
     PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
     PART_SECTION_PATTERN,
@@ -33,7 +34,7 @@ CFR_REGEX = re.compile(CFR_PATTERN, re.IGNORECASE)
 def create_redirect_link(text, *args, **kwargs):
     params = {i: kwargs[i] for i in kwargs if kwargs[i]}
     if "paragraph" in params:
-        params["paragraph"] = "-".join(PARAGRAPH_EXTRACT_REGEX.findall(params["paragraph"]))
+        params["paragraph"] = "-".join(params["paragraph"])
     if "section" in params:
         params["section"] = DASH_REGEX.sub("-", params["section"])
     return REDIRECT_LINK_FORMAT.format(
@@ -41,9 +42,15 @@ def create_redirect_link(text, *args, **kwargs):
         urlencode(params),
         text,
     )
+# Returns a list containing the first paragraph chain in a section ref.
+# For example, if the section text is "Section 1902(a)(1)(C) and (b)(2)", this will return ["a", "1", "C"].
+def extract_paragraphs(section_text):
+    linked_paragraphs = LINKED_PARAGRAPH_REGEX.search(section_text)  # extract the first paragraph chain (e.g. (a)(1)(c)...)
+    return PARAGRAPH_EXTRACT_REGEX.findall(linked_paragraphs.group()) if linked_paragraphs else None
 
 
 def replace_cfr_ref(match, title, exceptions):
+    match_text = match.group()
     if DASH_REGEX.sub("-", match.group()) in exceptions:
         return match.group()
     return create_redirect_link(
@@ -51,7 +58,7 @@ def replace_cfr_ref(match, title, exceptions):
         title=title,
         part=match.group(1),
         section=match.group(2),
-        paragraph=match.group(3),
+        paragraph=extract_paragraphs(match_text) or None,
     )
 
 
@@ -66,7 +73,6 @@ def replace_cfr_refs(match, exceptions):
         )
     )
 
-
 PART_SECTION_PARAGRAPH_PATTERN = (
     rf"{PART_SECTION_PATTERN}" # Matches "123.456"
     rf"(?:(?:{CONJUNCTION_PATTERN})*({PARAGRAPH_PATTERN}))*" # Matches "and (a)" or "or (b)" at the end of the ref.
@@ -80,22 +86,26 @@ REGULATION_REF_PATTERN = (
     rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
 )
 
+REGULATION_REF_EXTRACT_PATTERN = (
+    rf"{PART_SECTION_PARAGRAPH_PATTERN}"
+    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*" # Matches any number of "and 123.789" or "or 456.012" at the end
+)
+
 PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)
 REGULATION_REF_REGEX = re.compile(REGULATION_REF_PATTERN, re.IGNORECASE)
+REGULATION_REF_EXTRACT_REGEX = re.compile(REGULATION_REF_EXTRACT_PATTERN, re.IGNORECASE)
 
-
-def mark_up(string):
-    return f'<mark>{string}</mark>'
-
-def replace_regulation_ref(regulation_ref, link_conversions=[], exceptions={}):
-    regulation_text = regulation_ref.group()
-    return mark_up(regulation_text)
+def replace_regulation_ref(match, title, exceptions={}):
+    return REGULATION_REF_EXTRACT_REGEX.sub(
+        partial(replace_cfr_ref, title=title, exceptions=exceptions.get(42, [])),
+        match.group()
+    )
 
 # This function is run by re.sub() to replace regulation refs in "123.456" format with links.
 def replace_regulation_refs(match, link_conversions=[], exceptions={}):
     title = 42
     return PART_SECTION_PARAGRAPH_REGEX.sub(
-        partial(replace_cfr_ref, title=title, exceptions=exceptions.get(title, [])),
+        partial(replace_regulation_ref, title=title, exceptions=exceptions),
         match.group()
     )
 
