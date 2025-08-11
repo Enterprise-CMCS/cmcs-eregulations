@@ -29,7 +29,7 @@ class LinkRegRefsTestCase(SimpleTestCase):
             test_values = json.load(f)
 
         config = {
-            "cfr_ref_exceptions": {},
+            "cfr_ref_exceptions": {42: ["600.606"]},
             "link_cfr_refs": True,
         }
 

@@ -58,5 +58,10 @@
         "testing": "part.section(nested)(paragraph) format with conjunctions and trailing paragraphs",
         "input": "§ 123.456(a)(1)(i), (ii), and (iii)",
         "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456&paragraph=a-1-i\">123.456(a)(1)(i), (ii), and (iii)</a>"
+    },
+    {
+        "testing": "part.section format for exception",
+        "input": "§ 600.606",
+        "expected": "§ 600.606"
     }
 ]
