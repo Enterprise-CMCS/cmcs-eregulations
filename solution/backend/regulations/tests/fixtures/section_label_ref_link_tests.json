@@ -1,0 +1,62 @@
+[
+    {
+        "testing": "part.section format following section symbol",
+        "input": "§ 123.456",
+        "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>"
+    },
+    {
+        "testing": "part.section format following section label",
+        "input": "Section 123.456",
+        "expected": "Section <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>"
+    },
+    {
+        "testing": "part.section format following all lowercase section label",
+        "input": "section 123.456",
+        "expected": "section <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>"
+    },
+    {
+        "testing": "part.section format following section label abbreviated to sect.",
+        "input": "sect. 123.456",
+        "expected": "sect. <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>"
+    },
+    {
+        "testing": "part.section format without preceding section symbol or label",
+        "input": "123.456",
+        "expected": "123.456"
+    },
+    {
+        "testing": "part.section format with double section symbol and conjunctions",
+        "input": "§§ 123.456, 789.012, and 345.678",
+        "expected": "§§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=789&section=012\">789.012</a>, and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=345&section=678\">345.678</a>"
+    },
+    {
+        "testing": "part.section format with sections label and conjunctions",
+        "input": "Sections 123.456, 789.012, and 345.678",
+        "expected": "Sections <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=789&section=012\">789.012</a>, and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=345&section=678\">345.678</a>"
+    },
+    {
+        "testing": "part.section format with sections label abbreviated to sects. and conjunctions",
+        "input": "Sects. 123.456, 789.012, and 345.678",
+        "expected": "Sects. <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456\">123.456</a>, <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=789&section=012\">789.012</a>, and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=345&section=678\">345.678</a>"
+    },
+    {
+        "testing": "part.section(paragraph) format with section symbol",
+        "input": "§ 123.456(a)",
+        "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456&paragraph=a\">123.456(a)</a>"
+    },
+    {
+        "testing": "part.section(paragraph) format with section label",
+        "input": "Section 123.456(a)",
+        "expected": "Section <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456&paragraph=a\">123.456(a)</a>"
+    },
+    {
+        "testing": "part.section(nested)(paragraph) format",
+        "input": "§ 123.456(a)(1)",
+        "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456&paragraph=a-1\">123.456(a)(1)</a>"
+    },
+    {
+        "testing": "part.section(nested)(paragraph) format with conjunctions and trailing paragraphs",
+        "input": "§ 123.456(a)(1)(i), (ii), and (iii)",
+        "expected": "§ <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=123&section=456&paragraph=a-1-i\">123.456(a)(1)(i), (ii), and (iii)</a>"
+    }
+]
