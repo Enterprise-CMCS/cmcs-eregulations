@@ -109,7 +109,7 @@ def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
 
 
 @register.simple_tag
-def link_reg_refs(title, paragraph, link_config):
+def link_reg_refs(paragraph, link_config, title=None):
     if link_config["link_cfr_refs"]:
         paragraph = CFR_REGEX.sub(
             partial(replace_cfr_refs, exceptions=link_config["cfr_ref_exceptions"]),
