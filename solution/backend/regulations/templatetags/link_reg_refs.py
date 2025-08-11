@@ -69,6 +69,7 @@ def replace_cfr_refs(match, exceptions):
         )
     )
 
+
 # Matches part.section format, for example "123.456" or "123(a)(1)".
 # These need to be grouped for use in replace_cfr_ref() for part/section extraction.
 GROUPED_PART_SECTION_PATTERN = rf"({SECTION_ID_PATTERN})\.({SECTION_ID_PATTERN})"
