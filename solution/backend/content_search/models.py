@@ -200,7 +200,7 @@ def chunk_text(text, max_length=20000, overlap=1000):
 
 
 @receiver(post_save, sender=ContentIndex)
-def update_resource_text_embeddings(sender, instance, created, **kwargs):
+def update_text_embeddings(sender, instance, created, **kwargs):
     """
     Create or update text embeddings for the ContentIndex instance.
     This is triggered whenever a ContentIndex instance is saved.
@@ -213,35 +213,49 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
         logger.warning("No site URI found, cannot generate embeddings.")
         return
 
-    # Check if the instance has a resource and content
-    if not instance.resource or not instance.content:
+    # Prepare the text for embedding
+    if instance.resource and instance.content:
+        act_citations = " ".join([
+            f"{citation['act']} {citation['section']}"
+            for citation in instance.resource.act_citations
+            if citation
+        ])
+        usc_citations = " ".join([
+            f"{citation['title']} {citation['section']}"
+            for citation in instance.resource.usc_citations
+            if citation
+        ])
+        document_id = instance.resource.document_id or ""
+        title = instance.resource.title or ""
+        text = " ".join([
+            act_citations,
+            usc_citations,
+            document_id,
+            title,
+            instance.content.split(),
+        ]).lower()
+    elif instance.reg_text:
+        metadata = instance.reg_text
+        text = " ".join([
+            str(metadata.title),
+            "CFR",
+            str(metadata.part_number),
+            metadata.node_type,
+            metadata.node_id,
+            instance.content.split(),
+        ]).lower()
+    else:
+        logger.warning("No valid metadata found for ContentIndex instance %i", instance.id)
         return
 
     # Delete existing embeddings for the instance
     TextEmbedding.objects.filter(index=instance).delete()
-
-    # Prepare the text for embedding
-    act_citations = " ".join([
-        f"{citation['act']} {citation['section']}"
-        for citation in instance.resource.act_citations
-        if citation
-    ])
-    usc_citations = " ".join([
-        f"{citation['title']} {citation['section']}"
-        for citation in instance.resource.usc_citations
-        if citation
-    ])
-    document_id = instance.resource.document_id or ""
-    title = instance.resource.title or ""
-    text = f"{act_citations} {usc_citations} {document_id} {title} {instance.content}".lower()
-    text = " ".join(text.split())  # Normalize whitespace
 
     # Split the text into chunks and create embeddings for each chunk
     chunks = chunk_text(text)
     embeddings = TextEmbedding.objects.bulk_create([
         TextEmbedding(
             index=instance,
-            text=chunk,
             chunk_index=chunk_index,
             start_offset=start,
         ) for chunk_index, (start, chunk) in enumerate(chunks)
