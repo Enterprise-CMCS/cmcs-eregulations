@@ -5,8 +5,8 @@ from django.http import Http404
 from django.urls import reverse
 from django.views.generic.base import RedirectView
 
+from common.aws import get_aws_client
 from resources.models import AbstractResource, InternalFile
-from resources.utils import establish_client
 
 
 class InternalFileDownloadViewSet(LoginRequiredMixin, RedirectView):
@@ -23,7 +23,7 @@ class InternalFileDownloadViewSet(LoginRequiredMixin, RedirectView):
             raise Http404(f"A file matching UID '{uid}' does not exist.")
 
     def _get_download_link(self, file):
-        s3_client = establish_client('s3')
+        s3_client = get_aws_client('s3')
         params = {
             "Bucket": settings.AWS_STORAGE_BUCKET_NAME,
             "Key": file.key,

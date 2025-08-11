@@ -6,6 +6,7 @@ from django.views.generic.base import TemplateView
 
 from regcore.models import Part
 from regcore.serializers.toc import FrontPageTOCSerializer
+from regulations.middleware import get_hostname
 from resources.models import AbstractCategory, ResourcesConfiguration
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,8 @@ class HomepageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        raise Exception(get_hostname())
 
         c = {}
 

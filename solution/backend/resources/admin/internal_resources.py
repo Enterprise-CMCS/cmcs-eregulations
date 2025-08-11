@@ -5,11 +5,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.aws_utils import get_aws_client
 from resources.models import (
     InternalFile,
     InternalLink,
 )
-from resources.utils import establish_client
 
 from .resources import (
     AbstractInternalResourceAdmin,
@@ -109,7 +109,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
     # Most of these methods will be rewritten then.
 
     def get_upload_link(self, key):
-        s3_client = establish_client('s3')
+        s3_client = get_aws_client('s3')
         return s3_client.generate_presigned_post(
             Bucket=settings.AWS_STORAGE_BUCKET_NAME,
             Key=key,
@@ -128,7 +128,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         requests.post(result['url'], data=result['fields'], files={'file': file}, timeout=200)
 
     def del_file(self, obj):
-        s3_client = establish_client("s3")
+        s3_client = get_aws_client("s3")
         s3_client.delete_object(Bucket=settings.AWS_STORAGE_BUCKET_NAME, Key=obj.key)
 
     def delete_model(self, request, obj):

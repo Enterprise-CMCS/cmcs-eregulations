@@ -1,2 +1,2 @@
-from .aws_utils import *  # noqa
+from .text_extraction import *  # noqa
 from .general_purpose import *  # noqa

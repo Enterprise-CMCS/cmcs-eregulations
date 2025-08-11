@@ -4,7 +4,7 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.urls import reverse
 
-from common import external_lambda
+from common import aws_utils
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
@@ -154,20 +154,20 @@ def call_text_extractor(request, resources):
 
     if settings.USE_LOCAL_TEXT_EXTRACTOR:
         extract_function = partial(
-            external_lambda.invoke_via_http,
+            aws_utils.invoke_via_http,
             url=settings.LOCAL_TEXT_EXTRACTOR_URL,
         )
     elif settings.TEXT_EXTRACTOR_QUEUE_URL:
         extract_function = partial(
-            external_lambda.invoke_via_sqs,
-            client=external_lambda.establish_client("sqs"),
+            aws_utils.invoke_via_sqs,
+            client=aws_utils.establish_client("sqs"),
             url=settings.TEXT_EXTRACTOR_QUEUE_URL,
             message_group_id_func=_get_message_group_id,
         )
     elif settings.TEXT_EXTRACTOR_ARN:
         extract_function = partial(
-            external_lambda.invoke_via_lambda,
-            client=external_lambda.establish_client("lambda"),
+            aws_utils.invoke_via_lambda,
+            client=aws_utils.establish_client("lambda"),
             arn=settings.TEXT_EXTRACTOR_ARN,
         )
     else:

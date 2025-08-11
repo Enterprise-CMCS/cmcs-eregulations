@@ -5,7 +5,7 @@ import requests
 from django.conf import settings
 
 
-def get_aws_client(service_name, region_name=None):
+def get_aws_client(service_name, region_name="us-east-1"):
     """
     Create and return an AWS service client.
 
@@ -18,13 +18,13 @@ def get_aws_client(service_name, region_name=None):
             service_name,
             aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
             aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-1",
+            region_name=region_name,
         )
     else:
-        return boto3.client(service_name, region_name="us-east-1")
+        return boto3.client(service_name, region_name=region_name)
 
 
-def invoke_via_http(batch, url):
+def invoke_lambda_via_http(batch, url):
     success = 0
     fail = []
 
@@ -49,7 +49,7 @@ def invoke_via_http(batch, url):
     return success, fail
 
 
-def invoke_via_sqs(batch, client, url, get_message_group_id_func=None):
+def invoke_lambda_via_sqs(batch, client, url, get_message_group_id_func=None):
     """
     Send a batch of requests to an AWS SQS queue.
 
@@ -85,7 +85,7 @@ def invoke_via_sqs(batch, client, url, get_message_group_id_func=None):
     return success, fail
 
 
-def invoke_via_lambda(batch, client, arn):
+def invoke_lambda_via_lambda(batch, client, arn):
     """
     Invoke an AWS Lambda function with a batch of requests.
 

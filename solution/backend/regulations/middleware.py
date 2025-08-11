@@ -44,3 +44,21 @@ class JsonErrors:
             return HttpResponse(json.dumps(error), content_type="application/json", status=500)
         else:
             return None
+
+
+_hostname = None
+
+
+def get_hostname():
+    global _hostname
+    return _hostname
+
+
+class SiteHostnameMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        global _hostname
+        _hostname = request.build_absolute_uri("/")
+        return self.get_response(request)

@@ -1,3 +1,4 @@
+import json
 import re
 
 from django.conf import settings
@@ -13,11 +14,13 @@ from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from pgvector.django import VectorField
 
 from common.constants import QUOTE_TYPES
 from content_search.utils import remove_control_characters
 from regcore.models import Part
+from regulations.middleware import get_hostname
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
@@ -213,6 +216,8 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
     This is triggered whenever a ContentIndex instance is saved.
     """
 
+    raise Exception(get_hostname())
+
     # Check if the instance has a resource and content
     if not instance.resource or not instance.content:
         return
@@ -239,16 +244,14 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
         ) for chunk_index, (start, chunk) in enumerate(chunks)
     ])
 
-    # Return early if no embedding service is configured
-    if not settings.EMBEDDING_GENERATOR_QUEUE_URL:
-        return
-
-    client = establish_client("sqs")
-
     # Send embeddings to the embedding generator queue
     requests = [{
         "id": embedding.id,
-        "upload_url": reverse("embedding_upload", kwargs={"id": embedding.id}),
+        "upload_url": (
+            f"{settings.LOCAL_EREGS_URL}{reverse('embedding_upload', args=[embedding.id])}"
+            if settings.USE_LOCAL_EMBEDDING_GENERATOR else
+            "",
+        ),
         "text": embedding.text,
         "auth": {
             "type": "basic",
@@ -261,6 +264,8 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
             "password_key": "password",
         },
     } for embedding in embeddings]
+
+    client = None
 
     for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
         # Send each batch to the embedding generator queue
