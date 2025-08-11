@@ -7,7 +7,6 @@ from common.patterns import (
     LINKED_PARAGRAPH_REGEX,
     PARAGRAPH_EXTRACT_REGEX,
     PARAGRAPH_PATTERN,
-    PART_SECTION_PATTERN,
     SECTION_ID_PATTERN,
     SECTION_LABEL_PATTERN,
     USC_CFR_IGNORE_PATTERN,
@@ -23,6 +22,10 @@ USCODE_LINK_FORMAT = 'https://uscode.house.gov/view.xhtml?req=granuleid:USC-prel
 USCODE_SUBSTRUCT_FORMAT = "#substructure-location_{}"
 
 NUMBER_PATTERN = r"[0-9]+"
+
+# Matches part.section format, for example "123.456" or "123(a)(1)".
+# This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
+PART_SECTION_PATTERN = rf"{SECTION_ID_PATTERN}\.{SECTION_ID_PATTERN}"
 
 # Matches individual sections, for example "1902(a)(2) and (b)(1)" and its variations.
 # Negative lookahead ensures that "§ 123.456" does not register as a link to section 123.

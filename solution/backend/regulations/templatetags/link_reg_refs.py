@@ -10,7 +10,7 @@ from common.patterns import (
     DASH_PATTERN,
     DASH_REGEX,
     PARAGRAPH_PATTERN,
-    PART_SECTION_PATTERN,
+    SECTION_ID_PATTERN,
     SECTION_LABEL_PATTERN,
     USC_CFR_IGNORE_PATTERN,
 )
@@ -69,9 +69,12 @@ def replace_cfr_refs(match, exceptions):
         )
     )
 
+# Matches part.section format, for example "123.456" or "123(a)(1)".
+# These need to be grouped for use in replace_cfr_ref() for part/section extraction.
+GROUPED_PART_SECTION_PATTERN = rf"({SECTION_ID_PATTERN})\.({SECTION_ID_PATTERN})"
 
 PART_SECTION_PARAGRAPH_PATTERN = (
-    rf"{PART_SECTION_PATTERN}"  # Matches "123.456"
+    rf"{GROUPED_PART_SECTION_PATTERN}"  # Matches "123.456"
     rf"(?:(?:{CONJUNCTION_PATTERN})*({PARAGRAPH_PATTERN}))*"  # Matches "and (a)" or "or (b)" at the end of the ref.
 )
 
@@ -80,12 +83,12 @@ PART_SECTION_PARAGRAPH_PATTERN = (
 REGULATION_REF_PATTERN = (
     rf"{SECTION_LABEL_PATTERN}"  # Matches "§" or "section" or "sections"
     rf"{PART_SECTION_PARAGRAPH_PATTERN}"
-    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
+    rf"(?:{CONJUNCTION_PATTERN}{GROUPED_PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
 )
 
 REGULATION_REF_EXTRACT_PATTERN = (
     rf"{PART_SECTION_PARAGRAPH_PATTERN}"
-    rf"(?:{CONJUNCTION_PATTERN}{PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
+    rf"(?:{CONJUNCTION_PATTERN}{GROUPED_PART_SECTION_PATTERN})*"  # Matches any number of "and 123.789" or "or 456.012" at the end
 )
 
 PART_SECTION_PARAGRAPH_REGEX = re.compile(PART_SECTION_PARAGRAPH_PATTERN, re.IGNORECASE)

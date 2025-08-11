@@ -27,7 +27,3 @@ SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
 
 # Extracts the section ID only, for example "1902-1G" and its variations.
 SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
-
-# Matches part.section format, for example "123.456" or "123(a)(1)".
-# This is useful for negative lookahead to ensure that "123.456" does not register as a link to section 123.
-PART_SECTION_PATTERN = rf"({SECTION_ID_PATTERN})\.({SECTION_ID_PATTERN})"
