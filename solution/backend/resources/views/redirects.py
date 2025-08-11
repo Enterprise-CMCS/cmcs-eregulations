@@ -5,7 +5,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.views.generic.base import RedirectView
 
-from common.aws import get_aws_client
+from common.aws_utils import get_aws_client
 from resources.models import AbstractResource, InternalFile
 
 

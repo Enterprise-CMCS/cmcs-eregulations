@@ -73,7 +73,7 @@ MIDDLEWARE = [
     'csp.middleware.CSPMiddleware',
     'regulations.middleware.JsonErrors',
     'regulations.middleware.ProcessResponse',
-    'regulations.middleware.SiteHostnameMiddleware',
+    'regulations.middleware.SiteUriMiddleware',
     'regcore.middleware.HtmlApi',
 ]
 

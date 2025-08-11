@@ -154,20 +154,20 @@ def call_text_extractor(request, resources):
 
     if settings.USE_LOCAL_TEXT_EXTRACTOR:
         extract_function = partial(
-            aws_utils.invoke_via_http,
+            aws_utils.invoke_lambda_via_http,
             url=settings.LOCAL_TEXT_EXTRACTOR_URL,
         )
     elif settings.TEXT_EXTRACTOR_QUEUE_URL:
         extract_function = partial(
-            aws_utils.invoke_via_sqs,
-            client=aws_utils.establish_client("sqs"),
+            aws_utils.invoke_lambda_via_sqs,
+            client=aws_utils.get_aws_client("sqs"),
             url=settings.TEXT_EXTRACTOR_QUEUE_URL,
             message_group_id_func=_get_message_group_id,
         )
     elif settings.TEXT_EXTRACTOR_ARN:
         extract_function = partial(
-            aws_utils.invoke_via_lambda,
-            client=aws_utils.establish_client("lambda"),
+            aws_utils.invoke_lambda_via_lambda,
+            client=aws_utils.get_aws_client("lambda"),
             arn=settings.TEXT_EXTRACTOR_ARN,
         )
     else:

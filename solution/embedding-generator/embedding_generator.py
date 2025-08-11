@@ -59,6 +59,7 @@ def handler(event: dict, context: Any) -> dict:
     dimensions = config.get("dimensions", 512)
     normalize = config.get("normalize", True)
     max_text_length = config.get("max_text_length", 20000)  # Default to 20,000 characters to avoid the model's token limit
+    max_text_length += 2000  # Add room for the chunk overlap; 1,000 characters on each side
 
     # Validate the text input
     text = " ".join(text.split())  # Normalize whitespace

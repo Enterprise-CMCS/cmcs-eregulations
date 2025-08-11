@@ -46,19 +46,19 @@ class JsonErrors:
             return None
 
 
-_hostname = None
+_site_uri = None
 
 
-def get_hostname():
-    global _hostname
-    return _hostname
+def get_site_uri():
+    global _site_uri
+    return _site_uri
 
 
-class SiteHostnameMiddleware:
+class SiteUriMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        global _hostname
-        _hostname = request.build_absolute_uri("/")
+        global _site_uri
+        _site_uri = request.build_absolute_uri("/")
         return self.get_response(request)

@@ -1,5 +1,7 @@
-import json
+import logging
 import re
+from functools import partial
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -17,10 +19,11 @@ from django.dispatch import receiver
 from django.urls import reverse
 from pgvector.django import VectorField
 
+from common import aws_utils
 from common.constants import QUOTE_TYPES
 from content_search.utils import remove_control_characters
 from regcore.models import Part
-from regulations.middleware import get_hostname
+from regulations.middleware import get_site_uri
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
@@ -29,6 +32,8 @@ from resources.models import (
     PublicLink,
     ResourceContent,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class Synonym(models.Model):
@@ -180,21 +185,6 @@ class TextEmbedding(models.Model):
         ]
 
 
-# Establishes an AWS client.
-#
-# client_type: the boto3-recognized AWS resource to create a client for.
-def establish_client(client_type):
-    if settings.USE_AWS_TOKEN:
-        return boto3.client(
-            client_type,
-            aws_access_key_id=settings.S3_AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.S3_AWS_SECRET_ACCESS_KEY,
-            region_name="us-east-1",
-        )
-    else:
-        return boto3.client(client_type, region_name="us-east-1")
-
-
 def chunk_text(text, max_length=20000, overlap=1000):
     """Split text into overlapping chunks."""
     chunks = []
@@ -214,9 +204,14 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
     """
     Create or update text embeddings for the ContentIndex instance.
     This is triggered whenever a ContentIndex instance is saved.
+    If the site's URI is not available due to this save being invoked without a request,
+    the embeddings will not be generated.
     """
 
-    raise Exception(get_hostname())
+    site_uri = get_site_uri()
+    if not site_uri:
+        logger.warning("No site URI found, cannot generate embeddings.")
+        return
 
     # Check if the instance has a resource and content
     if not instance.resource or not instance.content:
@@ -226,8 +221,16 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
     TextEmbedding.objects.filter(index=instance).delete()
 
     # Prepare the text for embedding
-    act_citations = " ".join([f"{citation['act']} {citation['section']}" for citation in instance.resource.act_citations if citation])
-    usc_citations = " ".join([f"{citation['title']} {citation['section']}" for citation in instance.resource.usc_citations if citation])
+    act_citations = " ".join([
+        f"{citation['act']} {citation['section']}"
+        for citation in instance.resource.act_citations
+        if citation
+    ])
+    usc_citations = " ".join([
+        f"{citation['title']} {citation['section']}"
+        for citation in instance.resource.usc_citations
+        if citation
+    ])
     document_id = instance.resource.document_id or ""
     title = instance.resource.title or ""
     text = f"{act_citations} {usc_citations} {document_id} {title} {instance.content}".lower()
@@ -250,7 +253,7 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
         "upload_url": (
             f"{settings.LOCAL_EREGS_URL}{reverse('embedding_upload', args=[embedding.id])}"
             if settings.USE_LOCAL_EMBEDDING_GENERATOR else
-            "",
+            urljoin(site_uri, reverse('embedding_upload', args=[embedding.id]))
         ),
         "text": embedding.text,
         "auth": {
@@ -265,19 +268,34 @@ def update_resource_text_embeddings(sender, instance, created, **kwargs):
         },
     } for embedding in embeddings]
 
-    client = None
+    if settings.USE_LOCAL_EMBEDDING_GENERATOR:
+        invoke_function = partial(
+            aws_utils.invoke_via_http,
+            url=settings.LOCAL_EMBEDDING_GENERATOR_URL,
+        )
+    elif settings.EMBEDDING_GENERATOR_QUEUE_URL:
+        invoke_function = partial(
+            aws_utils.invoke_via_sqs,
+            client=aws_utils.get_aws_client("sqs"),
+            url=settings.EMBEDDING_GENERATOR_QUEUE_URL,
+        )
+    elif settings.EMBEDDING_GENERATOR_ARN:
+        invoke_function = partial(
+            aws_utils.invoke_via_lambda,
+            client=aws_utils.get_aws_client("lambda"),
+            arn=settings.EMBEDDING_GENERATOR_ARN,
+        )
+    else:
+        logger.warning("No valid embedding generator configuration found.")
+        return
 
     for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
         # Send each batch to the embedding generator queue
-        response = client.send_message_batch(
-            QueueUrl=settings.EMBEDDING_GENERATOR_QUEUE_URL,
-            Entries=[{
-                "Id": str(request["id"]),
-                "MessageBody": json.dumps(request),
-            } for request in batch]
-        )
-        if "Failed" in response:
-            raise Exception(f"Failed to send embeddings: {response['Failed']}")
+        _, failures = invoke_function(batch)
+        if failures:
+            # Log the failures
+            for failure in failures:
+                logger.error("Failed to send embedding for chunk %i: %s", failure["id"], failure["reason"])
 
 
 @receiver(post_save, sender=ResourceContent)
