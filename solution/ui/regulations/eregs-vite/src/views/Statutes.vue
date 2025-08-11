@@ -1,6 +1,6 @@
 <script setup>
-import { computed, inject, onMounted, onUnmounted, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { computed, inject, onMounted, onUnmounted, provide, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 import { ACT_TYPES } from "eregsComponentLib/src/components/shared-components/Statutes/utils/enums.js";
 import { getStatutes, getStatutesActs } from "utilities/api.js";
@@ -9,10 +9,8 @@ import { shapeTitlesResponse } from "utilities/utils.js";
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
 import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
-import TableCaption from "eregsComponentLib/src/components/shared-components/Statutes/TableCaption.vue";
 
 import AccessLink from "@/components/AccessLink.vue";
-import Banner from "@/components/Banner.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
 import HeaderSearch from "@/components/header/HeaderSearch.vue";
@@ -32,6 +30,11 @@ const username = inject("username");
 
 // get route query params
 const $route = useRoute();
+const $router = useRouter();
+
+provide("router", $router);
+
+const tabRef = ref();
 
 // validate query params to make sure they're in the enum?
 const queryParams = ref({
@@ -163,15 +166,27 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <Banner title="Look Up Statute Text" />
+            <h1>Look Up Statute Text</h1>
+            <h2 class="heading__sans">
+                Social Security Act Table of Contents
+            </h2>
+            <p class="p__description">
+                List of sections of
+                <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="external"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid%3AUSC-prelim-title42-chapter7&amp;saved=%7CZ3JhbnVsZWlkOlVTQy1wcmVsaW0tdGl0bGU0Mi1jaGFwdGVyNy1mcm9udA%3D%3D%7C%7C%7C0%7Cfalse%7Cprelim&amp;edition=prelim"
+                >42 U.S.C. Chapter 7</a>
+                enacted by the Social Security Act.
+            </p>
             <div id="main-content" class="statute__container">
                 <div class="content">
                     <div class="content__selector">
                         <div class="selector__parent">
-                            <h3>Included Statute</h3>
                             <StatuteSelector
                                 v-if="!acts.loading"
-                                :loading="statutes.loading"
+                                v-model:tab-model="tabRef"
                                 :selected-act="queryParams.act"
                                 :selected-title="queryParams.title"
                                 :titles="parsedTitles"
@@ -183,14 +198,10 @@ getStatutesArray();
                         :class="{ loading: statutes.loading }"
                     >
                         <SimpleSpinner
-                            v-if="statutes.loading"
+                            v-if="statutes.loading || acts.loading"
                             class="table__spinner"
                         />
                         <template v-else>
-                            <TableCaption
-                                :selected-act="ACT_TYPES[queryParams.act]"
-                                :selected-title="queryParams.title"
-                            />
                             <StatuteTable
                                 :display-type="isNarrow ? 'list' : 'table'"
                                 :filtered-statutes="statutes.results"

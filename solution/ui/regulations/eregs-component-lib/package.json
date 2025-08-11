@@ -16,12 +16,12 @@
     "mitt": "^3.0.1",
     "shelljs": "^0.8.5",
     "vue": "^3.5.18",
-    "vuetify": "^3.9.2"
+    "vuetify": "^3.9.3"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "~6.0.0",
     "fast-glob": "^3.2.12",
-    "vite": "^7.0.5",
+    "vite": "^7.1.1",
     "vite-plugin-vuetify": "^2.1.0"
   },
   "optionalDependencies": {

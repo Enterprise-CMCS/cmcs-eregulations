@@ -45,7 +45,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type"],
         }),
         ("Document status", {
             "fields": ["approved"],

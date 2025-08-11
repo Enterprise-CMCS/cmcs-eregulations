@@ -53,7 +53,7 @@ export class DatabaseConstruct extends Construct {
             'SecurityToolsSG',
             ssm.StringParameter.valueForStringParameter(this, '/eregulations/db/groups/cmscloud_security_tools')
         );
-    
+
         this.dbSecurityGroup.addIngressRule(
             serverlessSecurityGroup,
             ec2.Port.tcp(3306),
@@ -116,7 +116,7 @@ export class DatabaseConstruct extends Construct {
         // Create the database cluster
         this.cluster = new rds.DatabaseCluster(this, 'Database', {
             engine: rds.DatabaseClusterEngine.auroraPostgres({
-                version: rds.AuroraPostgresEngineVersion.VER_15_8,
+                version: rds.AuroraPostgresEngineVersion.VER_15_12,
             }),
             vpc,
             vpcSubnets: selectedSubnets,

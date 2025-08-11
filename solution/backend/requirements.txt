@@ -1,5 +1,5 @@
-cryptography>=42.0.2
-pyopenssl>=24,<25
+cryptography
+pyopenssl
 Werkzeug
 boto3
 django-debug-toolbar
@@ -26,6 +26,5 @@ django-storages
 pytest-cov
 djangorestframework_simplejwt
 olefile
-sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
-natsort==8.4.0
-pgvector==0.4.1
+natsort
+pgvector

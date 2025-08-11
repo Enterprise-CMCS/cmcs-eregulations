@@ -5,6 +5,11 @@ import aliases from "./alias.js";
 export default defineConfig({
     plugins: [vue()],
     test: {
+        server: {
+            deps: {
+                inline: ["vuetify"],
+            },
+        },
         globals: true,
         setupFiles: ["./test/configuration/setup-test.js"],
         environment: "jsdom",

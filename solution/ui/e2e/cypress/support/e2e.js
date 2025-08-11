@@ -33,7 +33,7 @@ import {
     jumpToRegulationPartSection,
 } from "./common-commands/jumpTo";
 import { eregsLogin, eregsLogout } from "./common-commands/login";
-import { clickStatuteLink } from "./common-commands/statutes";
+import { clickStatuteTab } from "./common-commands/statutes";
 import { checkLinkRel } from "./common-commands/checkLinks";
 import { checkPolicyDocs } from "./common-commands/policyDocs";
 import { validateSchema } from "./validate-schema-command";
@@ -41,7 +41,7 @@ import { validateSchema } from "./validate-schema-command";
 Cypress.Commands.add("checkLinkRel", checkLinkRel);
 Cypress.Commands.add("checkPolicyDocs", checkPolicyDocs);
 Cypress.Commands.add("clickHeaderLink", clickHeaderLink);
-Cypress.Commands.add("clickStatuteLink", clickStatuteLink);
+Cypress.Commands.add("clickStatuteTab", clickStatuteTab);
 Cypress.Commands.add("goHome", goHome);
 Cypress.Commands.add("jumpToRegulationPart", jumpToRegulationPart);
 Cypress.Commands.add(

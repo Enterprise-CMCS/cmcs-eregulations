@@ -1,3 +1,4 @@
+@use "sass:string";
 @import "./eregs_design_system.scss";
 
 // NOTE: Our variables use _ between words. CMS Design System variables use - between words. Sass will treat this the same, but it will help at a glance to know where the variable is coming from.
@@ -154,6 +155,7 @@ $reverse_background_color: $dark_blue;
 $reverse_background_darker: $darkest_blue;
 $reverse_background_lighter: $mid_dark_blue;
 $table_header_background_color: $lightest_gray;
+$table_header_link_color: $white;
 
 $hero_background_color: $teal;
 $hero_link_color: $white;
@@ -414,7 +416,6 @@ $tablet-max: $width-lg - 1; // 1023px
 // -------------------------
 // Links
 // -------------------------
-
 @mixin shared-link-rules {
     width: 0.8em;
     height: 0.8em;
@@ -422,10 +423,13 @@ $tablet-max: $width-lg - 1; // 1023px
     margin-left: 0.1em;
 }
 
-@mixin external-link {
+@mixin external-link($color: $primary_link_color) {
     @include shared-link-rules;
+    $hex_color_only: string.slice("#{$color}", 2);
 
-    content: url(#{$eregs-image-path}/external-link.svg);
+    display: inline-block;
+    background-size: contain;
+    content: url("data:image/svg+xml;utf8,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 6.333v3.2A1.067 1.067 0 0 1 7.933 10.6H2.067A1.067 1.067 0 0 1 1 9.533V3.666A1.067 1.067 0 0 1 2.067 2.6h3.2M7.4 1h3.2v3.2M4.733 6.867 10.6 1' stroke='%23#{$hex_color_only}' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 @mixin external-link-hover {

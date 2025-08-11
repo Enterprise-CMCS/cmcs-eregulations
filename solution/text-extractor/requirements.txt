@@ -4,16 +4,11 @@ boto3
 moto
 ruff
 extract-msg
-pillow>=10.3.0 # not directly required, pinned by Snyk to avoid a vulnerability
+pillow
 beautifulsoup4
 striprtf
 xlrd
 docx2txt
 openpyxl
 python-pptx
-magika==0.5.1 # new version causes unit test failures, need to investigate
-werkzeug>=3.0.3 # not directly required, pinned by Snyk to avoid a vulnerability
-certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
-cryptography>=42.0.2 # not directly required, pinned by Snyk to avoid a vulnerability
-idna>=3.7 # not directly required, pinned by Snyk to avoid a vulnerability
-jinja2>=3.1.4 # not directly required, pinned by Snyk to avoid a vulnerability
+magika==0.5.1 # newer versions still cause unit test failures- recheck next time we do dependency updates
