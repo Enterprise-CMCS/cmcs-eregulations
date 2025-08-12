@@ -380,6 +380,7 @@ export class BackendStack extends cdk.Stack {
         // ================================
         storageBucket.grantReadWrite(regSiteLambda);
         textExtractorQueue.grantSendMessages(regSiteLambda);
+        embeddingGeneratorQueue.grantSendMessages(regSiteLambda);
 
         // DB inspection permissions
         [createDbLambda, dropDbLambda, migrateLambda, createSuLambda].forEach(lambdaFn => {
