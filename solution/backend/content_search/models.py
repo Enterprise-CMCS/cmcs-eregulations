@@ -232,7 +232,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
             usc_citations,
             document_id,
             title,
-            instance.content.split(),
+            *instance.content.split(),
         ]).lower()
     elif instance.reg_text:
         metadata = instance.reg_text
@@ -242,7 +242,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
             str(metadata.part_number),
             metadata.node_type,
             metadata.node_id,
-            instance.content.split(),
+            *instance.content.split(),
         ]).lower()
     else:
         logger.warning("No valid metadata found for ContentIndex instance %i", instance.id)
