@@ -267,7 +267,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
         "upload_url": (
             f"{settings.LOCAL_EREGS_URL}{reverse('embedding_upload', args=[embedding.id])}"
             if settings.USE_LOCAL_EMBEDDING_GENERATOR else
-            urljoin(site_uri, reverse('embedding_upload', args=[embedding.id]))
+            urljoin(site_uri, reverse('embeddings', args=[embedding.id]))
         ),
         "text": embedding.text,
         "auth": {
