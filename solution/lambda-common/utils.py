@@ -77,6 +77,7 @@ def get_boto3_client(client_type: str, config: dict) -> type[BaseClient]:
         logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
         params = {
             "config": boto3.session.Config(signature_version='s3v4'),
+            "region_name": "us-east-1",
         }
 
     return boto3.client(
