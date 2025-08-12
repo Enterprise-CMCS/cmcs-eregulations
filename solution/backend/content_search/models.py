@@ -251,14 +251,19 @@ def update_text_embeddings(sender, instance, created, **kwargs):
     # Delete existing embeddings for the instance
     TextEmbedding.objects.filter(index=instance).delete()
 
-    # Split the text into chunks and create embeddings for each chunk
-    chunks = chunk_text(text)
+    # Split the text into chunks
+    chunks = {chunk_index: {
+        "text": chunk,
+        "start_offset": start,
+    } for chunk_index, (start, chunk) in enumerate(chunk_text(text))}
+
+    # Create embeddings for each chunk
     embeddings = TextEmbedding.objects.bulk_create([
         TextEmbedding(
             index=instance,
-            chunk_index=chunk_index,
-            start_offset=start,
-        ) for chunk_index, (start, chunk) in enumerate(chunks)
+            chunk_index=i["chunk_index"],
+            start_offset=i["start_offset"],
+        ) for i in chunks
     ])
 
     # Send embeddings to the embedding generator queue
@@ -269,7 +274,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
             if settings.USE_LOCAL_EMBEDDING_GENERATOR else
             urljoin(site_uri, reverse('embeddings', args=[embedding.id]))
         ),
-        "text": embedding.text,
+        "text": chunks[embedding.chunk_index]["text"],
         "auth": {
             "type": "basic",
             "username": settings.HTTP_AUTH_USER,
@@ -282,20 +287,21 @@ def update_text_embeddings(sender, instance, created, **kwargs):
         },
     } for embedding in embeddings]
 
+    # Determine which Lambda invocation function to use depending on environment settings
     if settings.USE_LOCAL_EMBEDDING_GENERATOR:
         invoke_function = partial(
-            aws_utils.invoke_via_http,
+            aws_utils.invoke_lambda_via_http,
             url=settings.LOCAL_EMBEDDING_GENERATOR_URL,
         )
     elif settings.EMBEDDING_GENERATOR_QUEUE_URL:
         invoke_function = partial(
-            aws_utils.invoke_via_sqs,
+            aws_utils.invoke_lambda_via_sqs,
             client=aws_utils.get_aws_client("sqs"),
             url=settings.EMBEDDING_GENERATOR_QUEUE_URL,
         )
     elif settings.EMBEDDING_GENERATOR_ARN:
         invoke_function = partial(
-            aws_utils.invoke_via_lambda,
+            aws_utils.invoke_lambda_via_lambda,
             client=aws_utils.get_aws_client("lambda"),
             arn=settings.EMBEDDING_GENERATOR_ARN,
         )
@@ -303,8 +309,8 @@ def update_text_embeddings(sender, instance, created, **kwargs):
         logger.warning("No valid embedding generator configuration found.")
         return
 
+    # Send batches of requests to the embedding generator
     for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
-        # Send each batch to the embedding generator queue
         _, failures = invoke_function(batch)
         if failures:
             # Log the failures
