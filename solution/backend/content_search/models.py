@@ -261,7 +261,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
     embeddings = TextEmbedding.objects.bulk_create([
         TextEmbedding(
             index=instance,
-            chunk_index=chunk["chunk_index"],
+            chunk_index=chunk_index,
             start_offset=chunk["start_offset"],
         ) for chunk_index, chunk in chunks.items()
     ])
@@ -270,7 +270,7 @@ def update_text_embeddings(sender, instance, created, **kwargs):
     requests = [{
         "id": embedding.id,
         "upload_url": (
-            f"{settings.LOCAL_EREGS_URL}{reverse('embedding_upload', args=[embedding.id])}"
+            f"{settings.LOCAL_EREGS_URL}{reverse('embeddings', args=[embedding.id])}"
             if settings.USE_LOCAL_EMBEDDING_GENERATOR else
             urljoin(site_uri, reverse('embeddings', args=[embedding.id]))
         ),
