@@ -70,7 +70,7 @@ def handler(event: dict, context: Any) -> dict:
     authorization = None
     if config.get("auth"):
         try:
-            authorization = configure_authorization(config["auth"])
+            authorization = configure_authorization(config)
         except Exception as e:
             return lambda_response(400, f"Failed to configure authorization: {str(e)}")
 

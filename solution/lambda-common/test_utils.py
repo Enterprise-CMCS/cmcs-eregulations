@@ -101,25 +101,29 @@ class UtilsTestCase(unittest.TestCase):
         })
 
     def test_config_auth_basic(self):
-        auth = {
-            "type": "basic",
-            "username": "abc",
-            "password": "123",
+        config = {
+            "auth": {
+                "type": "basic",
+                "username": "abc",
+                "password": "123",
+            }
         }
 
-        username = auth["username"]
-        password = auth["password"]
+        username = config["auth"]["username"]
+        password = config["auth"]["password"]
         creds = f"{username}:{password}"
         token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
         authorization = f"Basic {token}"
 
-        self.assertEqual(configure_authorization(auth), authorization)
+        self.assertEqual(configure_authorization(config), authorization)
 
     def test_config_auth_basic_env(self):
-        auth = {
-            "type": "basic-env",
-            "username": "USERNAME",
-            "password": "PASSWORD",
+        config = {
+            "auth": {
+                "type": "basic-env",
+                "username": "USERNAME",
+                "password": "PASSWORD",
+            }
         }
 
         username = "a-username"
@@ -131,23 +135,27 @@ class UtilsTestCase(unittest.TestCase):
         token = base64.b64encode(creds.encode("utf-8")).decode("utf-8")
         authorization = f"Basic {token}"
 
-        self.assertEqual(configure_authorization(auth), authorization)
+        self.assertEqual(configure_authorization(config), authorization)
 
     def test_config_auth_token(self):
-        auth = {
-            "type": "token",
-            "token": "some-token",
+        config = {
+            "auth": {
+                "type": "token",
+                "token": "some-token",
+            }
         }
-        authorization = f"Bearer {auth['token']}"
-        self.assertEqual(configure_authorization(auth), authorization)
+        authorization = f"Bearer {config['auth']['token']}"
+        self.assertEqual(configure_authorization(config), authorization)
 
     def test_config_auth_bad_type(self):
-        auth = {
-            "type": "unknown",
-            "token": "some-token",
+        config = {
+            "auth": {
+                "type": "unknown",
+                "token": "some-token",
+            }
         }
         with self.assertRaises(Exception):
-            configure_authorization(auth)
+            configure_authorization(config)
 
     def test_send_results(self):
         resource_id = 123
