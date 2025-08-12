@@ -207,11 +207,16 @@ export class BackendStack extends cdk.Stack {
         });
 
         // ================================
-        // SQS QUEUE
+        // SQS QUEUES
         // ================================
         const textExtractorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedTextExtractorQueue', {
             queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-url')),
             queueArn: cdk.Fn.importValue(stageConfig.getResourceName('text-extractor-queue-arn')),
+        });
+
+        const embeddingGeneratorQueue = sqs.Queue.fromQueueAttributes(this, 'ImportedEmbeddingGeneratorQueue', {
+            queueUrl: cdk.Fn.importValue(stageConfig.getResourceName('embedding-generator-queue-url')),
+            queueArn: cdk.Fn.importValue(stageConfig.getResourceName('embedding-generator-queue-arn')),
         });
 
         // ================================
@@ -280,6 +285,7 @@ export class BackendStack extends cdk.Stack {
             EUA_FEATUREFLAG: ssmParams.euaFeatureFlag,
             AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,
             TEXT_EXTRACTOR_QUEUE_URL: textExtractorQueue.queueUrl,
+            EMBEDDING_GENERATOR_QUEUE_URL: embeddingGeneratorQueue.queueUrl,
             DEPLOY_NUMBER: buildId,
             HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
             DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
