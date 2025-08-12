@@ -261,9 +261,9 @@ def update_text_embeddings(sender, instance, created, **kwargs):
     embeddings = TextEmbedding.objects.bulk_create([
         TextEmbedding(
             index=instance,
-            chunk_index=i["chunk_index"],
-            start_offset=i["start_offset"],
-        ) for i in chunks
+            chunk_index=chunk["chunk_index"],
+            start_offset=chunk["start_offset"],
+        ) for chunk_index, chunk in chunks.items()
     ])
 
     # Send embeddings to the embedding generator queue
