@@ -25,6 +25,6 @@
         </tooltip-container>
     {% endif %}
     {% link_statutes node.text link_conversions link_config as content %}
-    {% link_reg_refs content link_config as content2 %}
+    {% link_reg_refs content link_config cfr_title as content2 %}
     {{ content2 | safe}}
 </p>

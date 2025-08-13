@@ -24,6 +24,23 @@ class LinkRegRefsTestCase(SimpleTestCase):
             })
             self.assertEqual(template.render(context), test["expected"])
 
+    def test_section_label_reg_refs(self):
+        with open("regulations/tests/fixtures/section_label_ref_link_tests.json", "r") as f:
+            test_values = json.load(f)
+
+        config = {
+            "cfr_ref_exceptions": {42: ["600.606"]},
+            "link_cfr_refs": True,
+        }
+
+        for test in test_values:
+            template = Template("{% load link_reg_refs %}{% link_reg_refs paragraph link_config 42 as text %}{{ text | safe }}")
+            context = Context({
+                "paragraph": test["input"],
+                "link_config": config,
+            })
+            self.assertEqual(template.render(context), test["expected"])
+
     def test_reg_link_config(self):
         with open("regulations/tests/fixtures/reg_ref_config_tests.json", "r") as f:
             test_values = json.load(f)
