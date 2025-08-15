@@ -19,7 +19,7 @@ You need these to get started:
 -   git
 -   Docker, including Docker Compose (install [Docker Desktop](https://docs.docker.com/desktop/))
 -   Python 3.12 (consider using [Homebrew](https://docs.brew.sh/Homebrew-and-Python))
--   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v20, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
+-   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v22, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
 -   [go](https://go.dev/dl/) version 1.16
 -   **Prevent security incidents:** To stop yourself from accidentally pushing secrets to GitHub, you must set up pre-commit hooks in your local environment: [SECRETSCANNING.md](SECRETSCANNING.md#quick-start).
 
