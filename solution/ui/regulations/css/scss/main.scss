@@ -12,11 +12,6 @@ $additional-font-path: "../fonts" !default;
 @import '@cmsgov/design-system/dist/css/index';
 @import '@cmsgov/design-system/dist/css/core-theme';
 
-// Font Awesome
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import "@fortawesome/fontawesome-free/scss/solid.scss";
-@import "@fortawesome/fontawesome-free/scss/brands.scss";
-
 // Medicaid and CHIP eRegulations Site
 $eregs-image-path: "../images" !default;
 @import 'eregs_design_system';
