@@ -25,7 +25,6 @@ cdk-eregs/lib/stacks/layer-output-*/**
 # Django collected static
 staticfiles/
 static/
-solution/static-assets/regulations/
 solution/backend/staticfiles/
 solution/backend/static/
 
