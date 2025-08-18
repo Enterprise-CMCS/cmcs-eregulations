@@ -84,7 +84,7 @@ def handler(event: dict, context: Any) -> dict:
     payload = {
         "inputText": text,
         "dimensions": dimensions,
-        "normalize": normalize,
+        # "normalize": normalize,
     }
 
     # Perform embedding generation and send results

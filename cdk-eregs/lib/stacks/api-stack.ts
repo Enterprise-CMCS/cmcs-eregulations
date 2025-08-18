@@ -404,7 +404,7 @@ export class BackendStack extends cdk.Stack {
             );
         });
 
-        // TEMPORARY: Allow function to use Bedrock (Titan Embeddings model V2)
+        // Allow function to use Bedrock (Titan Embeddings model V2)
         regSiteLambda.addToRolePolicy(
             new iam.PolicyStatement({
                 effect: iam.Effect.ALLOW,
