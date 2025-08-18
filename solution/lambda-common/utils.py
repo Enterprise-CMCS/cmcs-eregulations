@@ -53,7 +53,7 @@ def clean_output(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def get_boto3_client(client_type: str, config: dict) -> type[BaseClient]:
+def get_boto3_client(client_type: str, config: dict, **kwargs) -> type[BaseClient]:
     """
     Initialize a boto3 client with the provided configuration.
 
@@ -61,10 +61,14 @@ def get_boto3_client(client_type: str, config: dict) -> type[BaseClient]:
         client_type (str): The type of the boto3 client to initialize (e.g., 's3').
         config (dict): Configuration dictionary containing AWS credentials and region.
 
+    Keyword args:
+        signature_version (str): The signature version to use (default is 's3v4'). Pass None to use boto3's default.
+
     Returns:
         boto3.client: An initialized boto3 client of the specified type.
     """
     logger.debug("Initializing boto3 %s client.", client_type)
+    signature_version = kwargs.get("signature_version", "s3v4")
 
     try:
         params = {
@@ -76,8 +80,8 @@ def get_boto3_client(client_type: str, config: dict) -> type[BaseClient]:
     except KeyError:
         logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
         params = {
-            "config": boto3.session.Config(signature_version='s3v4'),
-        }
+            "config": boto3.session.Config(signature_version=signature_version),
+        } if signature_version else {}
 
     return boto3.client(
         client_type,

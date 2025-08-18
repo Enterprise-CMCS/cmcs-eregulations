@@ -76,7 +76,7 @@ def handler(event: dict, context: Any) -> dict:
 
     # Initialize the Bedrock client
     try:
-        bedrock_client = get_boto3_client("bedrock-runtime", config)
+        bedrock_client = get_boto3_client("bedrock-runtime", config, signature_version=None)
     except Exception as e:
         return lambda_response(500, f"Failed to initialize Bedrock client: {str(e)}")
 
@@ -84,7 +84,7 @@ def handler(event: dict, context: Any) -> dict:
     payload = {
         "inputText": text,
         "dimensions": dimensions,
-        # "normalize": normalize,
+        "normalize": normalize,
     }
 
     # Perform embedding generation and send results
