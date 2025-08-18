@@ -9,9 +9,11 @@
 @use '@cmsgov/design-system/dist/css/index';
 @use '@cmsgov/design-system/dist/css/core-theme';
 
+$fa-font-path: "../fonts/webfonts" !default;
+
 // Font Awesome
 @use "@fortawesome/fontawesome-free/scss/variables" with (
-  $font-path: "../fonts/webfonts",
+  $font-path: $fa-font-path,
 );
 
 @use "@fortawesome/fontawesome-free/scss/fontawesome";
