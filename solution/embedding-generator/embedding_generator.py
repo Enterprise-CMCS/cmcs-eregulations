@@ -96,7 +96,7 @@ def handler(event: dict, context: Any) -> dict:
             contentType='application/json',
             accept='application/json',
         )
-        embeddings = json.loads(response.get("body").read())["embedding"]
+        embedding = json.loads(response.get("body").read())["embedding"]
 
         logger.info("Embeddings generated successfully for chunk ID %s. Sending results.", chunk_id)
         send_results(
@@ -104,7 +104,7 @@ def handler(event: dict, context: Any) -> dict:
             upload_url,
             authorization,
             id=chunk_id,
-            embeddings=embeddings,
+            embedding=embeddings,
         )
     except Exception as e:
         if "sqs_group" in config:
