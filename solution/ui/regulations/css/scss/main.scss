@@ -5,17 +5,26 @@
 
 @charset "UTF-8";
 
-$fa-font-path: "../fonts/webfonts" !default;
-$additional-font-path: "../fonts" !default;
-
 // CMS Design System
-@import '@cmsgov/design-system/dist/css/index';
-@import '@cmsgov/design-system/dist/css/core-theme';
+@use '@cmsgov/design-system/dist/css/index';
+@use '@cmsgov/design-system/dist/css/core-theme';
+
+$fa-font-path: "../fonts/webfonts" !default;
 
 // Font Awesome
-@import '@fortawesome/fontawesome-free/scss/fontawesome';
-@import "@fortawesome/fontawesome-free/scss/solid.scss";
-@import "@fortawesome/fontawesome-free/scss/brands.scss";
+@use "@fortawesome/fontawesome-free/scss/variables" with (
+  $font-path: $fa-font-path,
+);
+
+@use "@fortawesome/fontawesome-free/scss/fontawesome";
+
+@use "@fortawesome/fontawesome-free/scss/fa" as fa;
+
+@use "@fortawesome/fontawesome-free/scss/solid" as fa-solid;
+@use "@fortawesome/fontawesome-free/scss/brands" as fa-brands;
+
+$additional-font-path: "../fonts" !default;
+
 
 // Medicaid and CHIP eRegulations Site
 $eregs-image-path: "../images" !default;
