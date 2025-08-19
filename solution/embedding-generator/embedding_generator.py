@@ -104,7 +104,7 @@ def handler(event: dict, context: Any) -> dict:
             upload_url,
             authorization,
             id=chunk_id,
-            embedding=embeddings,
+            embedding=embedding,
         )
     except Exception as e:
         if "sqs_group" in config:
