@@ -80,6 +80,18 @@ class ActListViewSet(viewsets.ReadOnlyModelViewSet):
             .distinct("act", "statute_title")
 
 
+@extend_schema(
+    tags=["regulations/statutes"],
+    description="Get a link to a section of the Social Security Act that is passed in as a parameter.",
+    parameters=[
+        OpenApiQueryParameter(
+            "pattern",
+            r"The section of the Social Security Act for which you would like a link. Example: \"1923(A)(1)\"",
+            str,
+            False
+        ),
+    ],
+)
 class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
     def get(self, request):
         link_conversions = self.get_link_conversions()
