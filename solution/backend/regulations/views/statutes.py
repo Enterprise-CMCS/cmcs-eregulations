@@ -14,6 +14,7 @@ from common.patterns import (
 )
 from regulations.models import StatuteLinkConverter
 from regulations.utils import (
+    DEFAULT_ACT,
     STATUTE_REF_REGEX,
     LinkConversionsMixin,
     replace_sections,
@@ -83,10 +84,11 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
     def get(self, request):
         link_conversions = self.get_link_conversions()
         pattern_param = self.request.query_params.get("pattern", None)
-        pattern_string = f"Section {pattern_param} of the Social Security Act" if pattern_param else None
 
-        if not pattern_string:
+        if not pattern_param:
             raise ValidationError("You must enter a statute.")
+
+        pattern_string = f"Section {pattern_param} of the {DEFAULT_ACT}"
 
         result_link = STATUTE_REF_REGEX.sub(
                 partial(replace_sections, link_conversions=link_conversions, exceptions={}),
@@ -96,6 +98,10 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
         if result_link == pattern_string:
             raise ValidationError("No statute link found for the provided pattern.")
 
+        raw_link = ""
+        section_id = ""
+        usc_citation_string = ""
+
         HREF_CONTENTS_PATTERN = r"href=['\"]([^'\"]*)['\"]"
         HREF_CONTENTS_REGEX = re.compile(HREF_CONTENTS_PATTERN, re.IGNORECASE)
 
@@ -103,23 +109,20 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
 
         if section_id_match:
             section_id = section_id_match.group(1).strip()
-            usc_id = link_conversions.get("Social Security Act", {}).get(section_id, {}).get("usc", "")
+            usc_id = link_conversions.get(DEFAULT_ACT, {}).get(section_id, {}).get("usc", "")
+
             if usc_id:
-                usc_citation_string = rf"42 U.S.C {usc_id}"
+                usc_citation_string = f"42 U.S.C {usc_id}"
                 linked_paragraph_match = LINKED_PARAGRAPH_REGEX.search(pattern_param)
+
                 if linked_paragraph_match:
                     usc_citation_string += linked_paragraph_match.group(1)
                     section_id += linked_paragraph_match.group(1)
-            else:
-                usc_citation_string = ""
-        else:
-            usc_citation_string = ""
 
         link_match = HREF_CONTENTS_REGEX.search(result_link)
+
         if link_match:
             raw_link = link_match.group(1).strip()
-        else:
-            raw_link = ""
 
         return Response({
             "input": pattern_param,
