@@ -1,9 +1,18 @@
+from functools import partial
+
 from drf_spectacular.utils import extend_schema
-from rest_framework import serializers, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from common.api import OpenApiQueryParameter
 from regulations.models import StatuteLinkConverter
+from regulations.utils import (
+    STATUTE_REF_REGEX,
+    LinkConversionsMixin,
+    replace_sections,
+)
 
 
 class StatuteLinkConverterSerializer(serializers.Serializer):
@@ -63,3 +72,19 @@ class ActListViewSet(viewsets.ReadOnlyModelViewSet):
             .exclude(statute_title__isnull=True)\
             .order_by("act", "statute_title")\
             .distinct("act", "statute_title")
+
+
+class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
+    def get(self, request):
+        link_conversions = self.get_link_conversions()
+        pattern_param = self.request.query_params.get("pattern", None)
+
+        if not pattern_param:
+            raise ValidationError("You must enter a statute.")
+
+        result_link = STATUTE_REF_REGEX.sub(
+                partial(replace_sections, link_conversions=link_conversions, exceptions={}),
+                pattern_param
+        )
+
+        return Response({"link": result_link})
