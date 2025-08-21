@@ -174,9 +174,10 @@ class TextEmbedding(models.Model):
     embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
     chunk_index = models.IntegerField()
     start_offset = models.IntegerField()
+    embedding_type = models.IntegerField()
 
     class Meta:
-        unique_together = (("index", "chunk_index"),)
+        unique_together = (("index", "chunk_index", "embedding_type"),)
         verbose_name = "Text Embedding"
         verbose_name_plural = "Text Embeddings"
         indexes = [
