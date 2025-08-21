@@ -4,6 +4,8 @@ import io
 import json
 import time
 
+from lambda_common.utils import get_boto3_client
+
 from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
 
@@ -16,9 +18,9 @@ class PdfExtractor(Extractor):
 
     def __init__(self, file_type: str, config: dict, *args, **kwargs):
         super().__init__(file_type, config)
-        self.textract_client = self._get_boto3_client("textract")
-        self.s3_client = self._get_boto3_client("s3")
-        self.sqs_client = self._get_boto3_client("sqs")
+        self.textract_client = get_boto3_client("textract", config)
+        self.s3_client = get_boto3_client("s3", config)
+        self.sqs_client = get_boto3_client("sqs", config)
         self.bucket = os.environ.get("TEXTRACT_BUCKET")
         if not self.bucket:
             raise ExtractorInitException("TEXTRACT_BUCKET environment variable is not set.")

@@ -1,3 +1,8 @@
+# A collection of commonly used utility functions for AWS Lambda functions.
+#
+# This module includes functions for handling Lambda events, cleaning text output, retrieving secrets from AWS Secrets Manager,
+# configuring authorization, and sending data to external APIs.
+
 import json
 import logging
 import re
@@ -6,6 +11,7 @@ import base64
 import os
 
 import boto3
+from botocore.client import BaseClient
 from botocore.exceptions import ClientError
 import requests
 
@@ -47,10 +53,46 @@ def clean_output(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def get_secret_from_aws(secret_name: str) -> dict:
+def get_boto3_client(client_type: str, config: dict, **kwargs) -> type[BaseClient]:
+    """
+    Initialize a boto3 client with the provided configuration.
+
+    Args:
+        client_type (str): The type of the boto3 client to initialize (e.g., 's3').
+        config (dict): Configuration dictionary containing AWS credentials and region.
+
+    Keyword args:
+        signature_version (str): The signature version to use (default is 's3v4'). Pass None to use boto3's default.
+
+    Returns:
+        boto3.client: An initialized boto3 client of the specified type.
+    """
+    logger.debug("Initializing boto3 %s client.", client_type)
+    signature_version = kwargs.get("signature_version", "s3v4")
+
+    try:
+        params = {
+            "aws_access_key_id": config["aws"]["aws_access_key_id"],
+            "aws_secret_access_key": config["aws"]["aws_secret_access_key"],
+            "region_name": config["aws"]["aws_region"],
+        }
+        logger.debug("Retrieved AWS parameters from config.")
+    except KeyError:
+        logger.warning("Failed to retrieve AWS parameters from config, using default parameters.")
+        params = {
+            "config": boto3.session.Config(signature_version=signature_version),
+        } if signature_version else {}
+
+    return boto3.client(
+        client_type,
+        **params,
+    )
+
+
+def get_secret_from_aws(secret_name: str, config: dict) -> dict:
     logger.info("Retrieving secret from AWS Secrets Manager.")
 
-    client = boto3.client("secretsmanager")
+    client = get_boto3_client("secretsmanager", config)
     try:
         response = client.get_secret_value(SecretId=secret_name)
     except ClientError as e:
@@ -60,18 +102,19 @@ def get_secret_from_aws(secret_name: str) -> dict:
     return json.loads(response["SecretString"])
 
 
-def configure_authorization(auth: dict) -> str:
-    auth_type = auth["type"].lower().strip()
+def configure_authorization(config: dict) -> str:
+    auth_config = config["auth"]
+    auth_type = auth_config["type"].lower().strip()
 
     if auth_type == "token":
-        token = auth["token"]
+        token = auth_config["token"]
         return f"Bearer {token}"
 
     if auth_type in ["basic", "basic-env"]:
         username, password = (
-            (auth["username"], auth["password"])
+            (auth_config["username"], auth_config["password"])
             if auth_type == "basic" else
-            (os.environ[auth["username"]], os.environ[auth["password"]])
+            (os.environ[auth_config["username"]], os.environ[auth_config["password"]])
         )
         credentials = f"{username}:{password}"
         token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
@@ -79,13 +122,13 @@ def configure_authorization(auth: dict) -> str:
 
     if auth_type in ["basic-secretsmanager", "basic-secretsmanager-env"]:
         secret_name = (
-            auth["secret_name"]
+            auth_config["secret_name"]
             if auth_type == "basic-secretsmanager" else
-            os.environ[auth["secret_name"]]
+            os.environ[auth_config["secret_name"]]
         )
-        secret = get_secret_from_aws(secret_name)
-        username = secret[auth["username_key"]]
-        password = secret[auth["password_key"]]
+        secret = get_secret_from_aws(secret_name, config)
+        username = secret[auth_config["username_key"]]
+        password = secret[auth_config["password_key"]]
         credentials = f"{username}:{password}"
         token = base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
         return f"Basic {token}"
