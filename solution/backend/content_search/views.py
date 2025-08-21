@@ -221,9 +221,6 @@ class PgVectorSearchView(TemplateView):
         client = boto3.client(
             'bedrock-runtime',
             region_name="us-east-1",
-            # aws_access_key_id="",
-            # aws_secret_access_key="",
-            # aws_session_token="",
         )
         try:
             payload = {
@@ -243,15 +240,15 @@ class PgVectorSearchView(TemplateView):
         # Perform the vector search using the embedding
         embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
             **{"distance": distance_function('embedding', embedding)},
-            **{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
+            #**{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
         ).filter(Q(distance__lt=max_distance) & Q(embedding_type=embedding_type)).order_by('distance')
 
         # Get values to return
         values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
                   "index__resource__title", "index__reg_text__id", "index__reg_text__title", "index__reg_text__part",
                   "index__reg_text__node_type", "index__reg_text__node_id", "distance", "start_offset")
-        if include_content:
-            values += ("content",)
+        #if include_content:
+        #    values += ("content",)
         results = embeddings.values(*values)
 
         # Remove dupes
@@ -267,6 +264,19 @@ class PgVectorSearchView(TemplateView):
         # Limit results
         if max_results:
             results = results[:max_results]
+
+        # Get contents
+        if include_content:
+            contents = ContentIndex.objects.filter(id__in=[i["index__id"] for i in results]).values("id", "content")
+            contents = {i["id"]: i["content"] for i in contents}
+            for i in results:
+                text = contents.get(i["index__id"], None)
+                if not text:
+                    i["content"] = None
+                    continue
+                start = i['start_offset']
+                end = min(i['start_offset'] + 20000 + 2000, len(text))
+                i["content"] = text[start:end]
 
         # Return the results as a JSON response
         return JsonResponse([{
@@ -286,7 +296,7 @@ class PgVectorSearchView(TemplateView):
             } if i["index__reg_text__id"] else None,
             "distance": i["distance"],
             "start_offset": i["start_offset"],
-            "content": i.get("content", None),
+            "content": i["content"] if include_content else None,
         } for i in results], safe=False)
 
 
