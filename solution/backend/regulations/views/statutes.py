@@ -3,7 +3,7 @@ from functools import partial
 
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, viewsets
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -98,7 +98,7 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
         pattern_param = self.request.query_params.get("pattern", None)
 
         if not pattern_param:
-            raise ValidationError("You must enter a statute.")
+            raise serializers.ValidationError("You must enter a statute.")
 
         pattern_string = f"Section {pattern_param} of the {DEFAULT_ACT}"
 
@@ -108,7 +108,7 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
         )
 
         if result_link == pattern_string:
-            raise ValidationError("No statute link found for the provided pattern.")
+            raise NotFound("No statute link found for the provided pattern.")
 
         raw_link = ""
         section_id = ""
