@@ -80,27 +80,36 @@ class ActListViewSet(viewsets.ReadOnlyModelViewSet):
             .distinct("act", "statute_title")
 
 
+class StatuteLinkInputSerializer(serializers.Serializer):
+    pattern = serializers.CharField(
+        required=True,
+        help_text="The section of the Social Security Act for which you would like a link. Example: \"1923(A)(1)\""
+    )
+
+
+class StatuteLinkSerializer(serializers.Serializer):
+    input = serializers.CharField()
+    link = serializers.CharField()
+    section_citation = serializers.CharField()
+    usc_citation = serializers.CharField()
+
+
 @extend_schema(
     tags=["regulations/statutes"],
     description="Get a link to a section of the Social Security Act that is passed in as a parameter.",
-    parameters=[
-        OpenApiQueryParameter(
-            "pattern",
-            r"The section of the Social Security Act for which you would like a link. Example: \"1923(A)(1)\"",
-            str,
-            False
-        ),
-    ],
+    parameters=[StatuteLinkInputSerializer],
+    responses={200: StatuteLinkSerializer},
 )
 class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
+
     def get(self, request):
-        link_conversions = self.get_link_conversions()
-        pattern_param = self.request.query_params.get("pattern", None)
+        input_serializer = StatuteLinkInputSerializer(data=request.query_params)
+        input_serializer.is_valid(raise_exception=True)
 
-        if not pattern_param:
-            raise serializers.ValidationError("You must enter a statute.")
-
+        pattern_param = input_serializer.validated_data['pattern']
         pattern_string = f"Section {pattern_param} of the {DEFAULT_ACT}"
+
+        link_conversions = self.get_link_conversions()
 
         result_link = STATUTE_REF_REGEX.sub(
                 partial(replace_sections, link_conversions=link_conversions, exceptions={}),
@@ -136,9 +145,11 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
         if link_match:
             raw_link = link_match.group(1).strip()
 
-        return Response({
+        response_data = {
             "input": pattern_param,
             "link": raw_link,
             "section_citation": rf"Section {section_id} of the Social Security Act" if section_id else "",
             "usc_citation": usc_citation_string,
-        })
+        }
+
+        return Response(response_data)
