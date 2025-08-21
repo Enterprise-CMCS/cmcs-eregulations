@@ -215,6 +215,7 @@ class PgVectorSearchView(TemplateView):
         filter_duplicates = "filter_duplicates" in request.POST
         max_distance = float(request.POST.get("max_distance", 5))
         max_results = int(request.POST.get("max_results", 10))
+        embedding_type = int(request.POST.get("embedding_type", 1))
 
         # Use Bedrock to perform a vector search
         client = boto3.client(
@@ -243,7 +244,7 @@ class PgVectorSearchView(TemplateView):
         embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
             **{"distance": distance_function('embedding', embedding)},
             **{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
-        ).filter(distance__lt=max_distance).order_by('distance')
+        ).filter(Q(distance__lt=max_distance) & Q(embedding_type=embedding_type)).order_by('distance')
 
         # Get values to return
         values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
