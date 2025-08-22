@@ -7,6 +7,7 @@ import { getStatutes, getStatutesActs } from "utilities/api.js";
 import { shapeTitlesResponse } from "utilities/utils.js";
 
 import SimpleSpinner from "eregsComponentLib/src/components/SimpleSpinner.vue";
+import StatuteCitationLookup from "eregsComponentLib/src/components/shared-components/Statutes/StatuteCitationLookup.vue";
 import StatuteSelector from "eregsComponentLib/src/components/shared-components/Statutes/StatuteSelector.vue";
 import StatuteTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteTable.vue";
 
@@ -124,6 +125,11 @@ onMounted(() => {
 });
 onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
+const formClicked = () => {
+    // This is a placeholder for any future functionality
+    console.info("Form clicked");
+};
+
 // On load
 getActTitles();
 getStatutesArray();
@@ -166,9 +172,14 @@ getStatutesArray();
             </HeaderComponent>
         </header>
         <div id="statuteApp" class="statute-view">
-            <h1>Look Up Statute Text</h1>
-            <h2 class="heading__sans">
-                Social Security Act Table of Contents
+            <h1>Social Security Act</h1>
+            <h2>Look up Statute Text</h2>
+            <StatuteCitationLookup
+                class="statute-citation-lookup"
+                @lookup-citation="formClicked"
+            />
+            <h2>
+                Table of Contents
             </h2>
             <p class="p__description">
                 List of sections of
