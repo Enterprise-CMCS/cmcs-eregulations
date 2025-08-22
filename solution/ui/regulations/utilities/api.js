@@ -394,6 +394,9 @@ const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
 const getParts = async ({ title, apiUrl }) =>
     httpApiGet(`${apiUrl}title/${title}/parts`);
 
+const getStatuteCitationLink = async ({ citation, apiUrl }) =>
+    httpApiGet(`${apiUrl}statute-link/?pattern=${encodeURIComponent(citation)}`);
+
 /**
  * @param {Object} options - parameters needed for API call
  * @param {string} options.apiUrl - API base url passed in from Django template when component is used in Django template
@@ -567,6 +570,7 @@ export {
     getParts,
     getRecentResources,
     getRegSearchResults,
+    getStatuteCitationLink,
     getStatutes,
     getStatutesActs,
     getSubpartTOC,

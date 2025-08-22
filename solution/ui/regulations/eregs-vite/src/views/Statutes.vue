@@ -125,11 +125,6 @@ onMounted(() => {
 });
 onUnmounted(() => window.removeEventListener("resize", onWidthChange));
 
-const formClicked = () => {
-    // This is a placeholder for any future functionality
-    console.info("Form clicked");
-};
-
 // On load
 getActTitles();
 getStatutesArray();
@@ -176,7 +171,6 @@ getStatutesArray();
             <h2>Look up Statute Text</h2>
             <StatuteCitationLookup
                 class="statute-citation-lookup"
-                @lookup-citation="formClicked"
             />
             <h2>
                 Table of Contents

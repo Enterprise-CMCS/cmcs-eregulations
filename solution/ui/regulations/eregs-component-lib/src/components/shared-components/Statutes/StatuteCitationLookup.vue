@@ -1,12 +1,20 @@
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
+
+import useStatuteCitationLink from "composables/statuteCitationLink";
 
 const citation = ref("");
 
-const emit = defineEmits(["lookup-citation"]);
+const apiUrl = inject("apiUrl");
 
-const lookupCitation = () => {
-    emit("lookup-citation", citation.value);
+const { statuteCitationInfo, getStatuteCitationInfo } =
+    useStatuteCitationLink();
+
+const lookupCitation = async () => {
+    getStatuteCitationInfo({
+        apiUrl,
+        citation: citation.value,
+    });
 };
 </script>
 
@@ -24,6 +32,15 @@ const lookupCitation = () => {
             Get Citation Link
         </button>
     </form>
+    <div v-if="statuteCitationInfo.loading">
+        <p>Loading...</p>
+    </div>
+    <div v-if="statuteCitationInfo.error">
+        <p>Error: {{ statuteCitationInfo.error }}</p>
+    </div>
+    <div v-if="statuteCitationInfo.results">
+        <p>Text: {{ statuteCitationInfo.results }}</p>
+    </div>
 </template>
 
 <style scoped>
