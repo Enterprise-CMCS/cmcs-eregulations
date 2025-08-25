@@ -330,7 +330,7 @@ const $route = useRoute();
                             <span class="lbexIndentClause">(iii) by inserting after paragraph (87) the following new paragraph:
                                 <span class="lbexIndentClause">
                                     <a id="HE0BAE9757ADE4768A18598F8286BB37F" />
-                                    <span class="lbexIndentParagraph">“(88) provide—
+                                    <span class="lbexIndentParagraph annotated-text">“(88) provide—
                                         <a id="HECEF746EAAE942D1A09114F35257EEF1" />
                                         <span class="lbexIndentSubpar">“(A) beginning not later than January 1, 2027, in the case of 1 of the 50 States and the District of Columbia, for a process to regularly obtain address information for individuals enrolled under such plan (or a waiver of such plan) in accordance with subsection (vv); and</span>
                                         <a id="H110A23CCBB284B608C7D5A1C1ED7483A" />
@@ -351,56 +351,56 @@ const $route = useRoute();
                                 </span>
                             </span>
                         </span>
-                    </span>
-                </span>
-                <a id="H7D06E840F81642728077A429B81D4C50" />
-                <span class="lbexIndentSubpar">(B) by adding at the end the following new subsections:
-                    <span class="lbexIndentClause">
-                        <a id="H4F3055E7B7F54F369F040A997F87A278" />
-                        <span class="lbexIndentSubsection">
-                            <span class="lbexIndent">“(uu)
-                                <span class="lbexSectionLevelOLCnuclear">Prevention of enrollment under multiple State plans</span>.—
-                                <a id="H36E78966EB40404B91B8E0341205CFF2" />
-                                <span class="lbexIndentParagraph">“(1) IN GENERAL.—Not later than October 1, 2029, the Secretary shall establish a system to be utilized by the Secretary and States to prevent an individual from being simultaneously enrolled under the State plans (or waivers of such plans) of multiple States. Such system shall—
-                                    <a id="H215880F962994AB2B4A5E2D941A40957" />
-                                    <span class="lbexIndentSubpar">“(A) provide for the receipt of information submitted by a State under subsection (a)(88)(B)(i); and</span>
+                        <a id="H7D06E840F81642728077A429B81D4C50" />
+                        <span class="lbexIndentSubpar">(B) by adding at the end the following new subsections:
+                            <span class="lbexIndentClause">
+                                <a id="H4F3055E7B7F54F369F040A997F87A278" />
+                                <span class="lbexIndentSubsection">
+                                    <span class="lbexIndent">“(uu)
+                                        <span class="lbexSectionLevelOLCnuclear">Prevention of enrollment under multiple State plans</span>.—
+                                        <a id="H36E78966EB40404B91B8E0341205CFF2" />
+                                        <span class="lbexIndentParagraph">“(1) IN GENERAL.—Not later than October 1, 2029, the Secretary shall establish a system to be utilized by the Secretary and States to prevent an individual from being simultaneously enrolled under the State plans (or waivers of such plans) of multiple States. Such system shall—
+                                            <a id="H215880F962994AB2B4A5E2D941A40957" />
+                                            <span class="lbexIndentSubpar">“(A) provide for the receipt of information submitted by a State under subsection (a)(88)(B)(i); and</span>
+                                            <a id="H240A63FCCA3D4A2FBAC1ED935D96708E" />
+                                            <span class="lbexIndentSubpar">“(B) not less than once each month, transmit information to a State (or allow the Secretary to transmit information to a State) regarding whether an individual enrolled or seeking to enroll under the State plan of such State (or waiver of such plan) is enrolled under the State plan (or waiver of such plan) of another State.</span>
+                                        </span>
+                                    </span>
+                                    <a id="H7FF47C0405A14E4EBA8BA37D30D14502" />
+                                    <span class="lbexIndentParagraph">“(2) STANDARDS.—The Secretary shall establish such standards as determined necessary by the Secretary to limit and protect information submitted under such system and ensure the privacy of such information, consistent with subsection (a)(7).</span>
+                                    <a id="H76BFE964C8B343E88A803CB342319C58" />
+                                    <span class="lbexIndentParagraph">“(3) IMPLEMENTATION FUNDING.—There are appropriated to the Administrator of the Centers for Medicare &amp; Medicaid Services, out of amounts in the Treasury not otherwise appropriated, in addition to amounts otherwise available—
+                                        <a id="H4860126CACBA40D78E198D55A6F6DB19" />
+                                        <span class="lbexIndentSubpar">“(A) for fiscal year 2026, $10,000,000 for purposes of establishing the system and standards required under this subsection, to remain available until expended; and</span>
+                                        <a id="HE46C6A76F8E045E3A817FBDFFA067F65" />
+                                        <span class="lbexIndentSubpar">“(B) for fiscal year 2029, $20,000,000 for purposes of maintaining such system, to remain available until expended.</span>
+                                    </span>
                                 </span>
-                                <a id="H240A63FCCA3D4A2FBAC1ED935D96708E" />
-                                <span class="lbexIndentSubpar">“(B) not less than once each month, transmit information to a State (or allow the Secretary to transmit information to a State) regarding whether an individual enrolled or seeking to enroll under the State plan of such State (or waiver of such plan) is enrolled under the State plan (or waiver of such plan) of another State.</span>
+
+                                <a id="H9CF84C72551B43B8B0D1A446C36447CC" />
+                                <span class="lbexIndentSubsection">
+                                    <span class="lbexIndent">“(vv)
+                                        <span class="lbexSectionLevelOLCnuclear">Process to obtain enrollee address information</span>.—
+                                        <a id="H6B08E24A8558487DB44CFF6780A11E8A" />
+                                        <span class="lbexIndentParagraph">“(1) IN GENERAL.—For purposes of subsection (a)(88)(A), a process to regularly obtain address information for individuals enrolled under a State plan (or a waiver of such plan) shall obtain address information from reliable data sources described in <a href="#HB306F21862C44B0CA7EF4830FE6F617C">paragraph (2)</a> and take such actions as the Secretary shall specify with respect to any changes to such address based on such information.</span>
+                                    </span>
+                                    <a id="HB306F21862C44B0CA7EF4830FE6F617C" />
+                                    <span class="lbexIndentParagraph">“(2) RELIABLE DATA SOURCES DESCRIBED.—For purposes of <a href="#H6B08E24A8558487DB44CFF6780A11E8A">paragraph (1)</a>, the reliable data sources described in this paragraph are the following:
+                                        <a id="H11BF6C87222F4EBBAEE325155B8A597D" />
+                                        <span class="lbexIndentSubpar">“(A) Mail returned to the State by the United States Postal Service with a forwarding address.</span>
+                                        <a id="H11DA7B886BF546B6923A90930D97A2E9" />
+                                        <span class="lbexIndentSubpar">“(B) The National Change of Address Database maintained by the United States Postal Service.</span>
+                                        <a id="HFC1A5F2745554FB3B56DC1CE6815A65A" />
+                                        <span class="lbexIndentSubpar">“(C) A managed care entity (as defined in section 1932(a)(1)(B)) or prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D)) that has a contract under the State plan if the address information is provided to such entity or plan directly from, or verified by such entity or plan directly with, such individual.</span>
+
+                                        <a id="H83A1948F3D354BCFA30602589B2CB58B" />
+                                        <span class="lbexIndentSubpar">“(D) Other data sources as identified by the State and approved by the Secretary.”.</span>
+                                    </span>
+                                </span>
                             </span>
                         </span>
                     </span>
-                    <a id="H7FF47C0405A14E4EBA8BA37D30D14502" />
-                    <span class="lbexIndentParagraph">“(2) STANDARDS.—The Secretary shall establish such standards as determined necessary by the Secretary to limit and protect information submitted under such system and ensure the privacy of such information, consistent with subsection (a)(7).</span>
                 </span>
-                <a id="H76BFE964C8B343E88A803CB342319C58" />
-                <span class="lbexIndentParagraph">“(3) IMPLEMENTATION FUNDING.—There are appropriated to the Administrator of the Centers for Medicare &amp; Medicaid Services, out of amounts in the Treasury not otherwise appropriated, in addition to amounts otherwise available—
-                    <a id="H4860126CACBA40D78E198D55A6F6DB19" />
-                    <span class="lbexIndentSubpar">“(A) for fiscal year 2026, $10,000,000 for purposes of establishing the system and standards required under this subsection, to remain available until expended; and</span>
-                </span>
-                <a id="HE46C6A76F8E045E3A817FBDFFA067F65" />
-                <span class="lbexIndentSubpar">“(B) for fiscal year 2029, $20,000,000 for purposes of maintaining such system, to remain available until expended.</span>
-
-                <a id="H9CF84C72551B43B8B0D1A446C36447CC" />
-                <span class="lbexIndentSubsection">
-                    <span class="lbexIndent">“(vv)
-                        <span class="lbexSectionLevelOLCnuclear">Process to obtain enrollee address information</span>.—
-                        <a id="H6B08E24A8558487DB44CFF6780A11E8A" />
-                        <span class="lbexIndentParagraph">“(1) IN GENERAL.—For purposes of subsection (a)(88)(A), a process to regularly obtain address information for individuals enrolled under a State plan (or a waiver of such plan) shall obtain address information from reliable data sources described in <a href="#HB306F21862C44B0CA7EF4830FE6F617C">paragraph (2)</a> and take such actions as the Secretary shall specify with respect to any changes to such address based on such information.</span>
-                    </span>
-                    <a id="HB306F21862C44B0CA7EF4830FE6F617C" />
-                    <span class="lbexIndentParagraph">“(2) RELIABLE DATA SOURCES DESCRIBED.—For purposes of <a href="#H6B08E24A8558487DB44CFF6780A11E8A">paragraph (1)</a>, the reliable data sources described in this paragraph are the following:
-                        <a id="H11BF6C87222F4EBBAEE325155B8A597D" />
-                        <span class="lbexIndentSubpar">“(A) Mail returned to the State by the United States Postal Service with a forwarding address.</span>
-                    </span>
-                    <a id="H11DA7B886BF546B6923A90930D97A2E9" />
-                    <span class="lbexIndentSubpar">“(B) The National Change of Address Database maintained by the United States Postal Service.</span>
-                </span>
-                <a id="HFC1A5F2745554FB3B56DC1CE6815A65A" />
-                <span class="lbexIndentSubpar">“(C) A managed care entity (as defined in section 1932(a)(1)(B)) or prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D)) that has a contract under the State plan if the address information is provided to such entity or plan directly from, or verified by such entity or plan directly with, such individual.</span>
-
-                <a id="H83A1948F3D354BCFA30602589B2CB58B" />
-                <span class="lbexIndentSubpar">“(D) Other data sources as identified by the State and approved by the Secretary.”.</span>
 
                 <a id="HF4A376B90ABF4D5F8E0A240F9F2F11F4" />
                 <span class="lbexIndentParagraph">(2) CONFORMING AMENDMENTS.—
@@ -412,38 +412,38 @@ const $route = useRoute();
                     >42 U.S.C. 1396b(r)(3)</a>) is amended—
                         <a id="HAED89D0C277C406DB490421E38C54FF9" />
                         <span class="lbexIndentClause">(i) by striking “In order” and inserting  <a id="HAAEAC589BF8A461784A7ADC6C7EAF86E" />(A) In order”;</span>
-                    </span>
-                    <a id="HD80B61629C4348B98D2E52F0EC48BE1E" />
-                    <span class="lbexIndentClause">(ii) by striking “through the Public” and inserting  “through—
-                        <a id="H588E9E03B31C4B6DB3180012729864A1" />
-                        <span class="lbexIndentSubpar">“(i) the Public”;</span>
-                    </span>
-                </span>
+                        <a id="HD80B61629C4348B98D2E52F0EC48BE1E" />
+                        <span class="lbexIndentClause">(ii) by striking “through the Public” and inserting  “through—
+                            <a id="H588E9E03B31C4B6DB3180012729864A1" />
+                            <span class="lbexIndentSubpar">“(i) the Public”;</span>
+                        </span>
 
-                <a id="HD2B282B4E612493F800D88CD7B7C3FEE" />
-                <span class="lbexIndentClause">(iii) by striking the period at the end and inserting  “; and<a id="H1E443FA2F30F47C9A0F52C682AA33025" />
-                    <span class="lbexIndentSubpar">“(ii) beginning October 1, 2029, the system established by the Secretary under section 1902(uu).”; and</span>
-                </span>
+                        <a id="HD2B282B4E612493F800D88CD7B7C3FEE" />
+                        <span class="lbexIndentClause">(iii) by striking the period at the end and inserting  “; and<a id="H1E443FA2F30F47C9A0F52C682AA33025" />
+                            <span class="lbexIndentSubpar">“(ii) beginning October 1, 2029, the system established by the Secretary under section 1902(uu).”; and</span>
+                        </span>
 
-                <a id="H500874F55953484ABF8A11D6A03581A7" />
-                <span class="lbexIndentClause">(iv) by adding at the end the following new subparagraph:
-                    <span class="lbexIndentClause">
-                        <a id="HE17D24771B7140D9B1654596AF62C547" />
-                        <span class="lbexIndentParagraph">“(B) Beginning October 1, 2029, the Secretary may determine that a State is not required to have in operation an eligibility determination system which provides for data matching (for purposes of address verification under section 1902(vv)) through the system described in subparagraph (A)(i) to meet the requirements of this paragraph.”.</span>
+                        <a id="H500874F55953484ABF8A11D6A03581A7" />
+                        <span class="lbexIndentClause">(iv) by adding at the end the following new subparagraph:
+                            <span class="lbexIndentClause">
+                                <a id="HE17D24771B7140D9B1654596AF62C547" />
+                                <span class="lbexIndentParagraph annotated-text">“(B) Beginning October 1, 2029, the Secretary may determine that a State is not required to have in operation an eligibility determination system which provides for data matching (for purposes of address verification under section 1902(vv)) through the system described in subparagraph (A)(i) to meet the requirements of this paragraph.”.</span>
+                            </span>
+                        </span>
                     </span>
-                </span>
 
-                <a id="H29669828A6FE4AA8807F272ECC1881B0" />
-                <span class="lbexIndentSubpar">(B) MANAGED CARE.—Section 1932 of the Social Security Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1396u–2</a>) is amended by adding at the end the following new subsection:
-                    <span class="lbexIndentClause">
-                        <a id="H485D9261171A42E39982056C679E22E9" />
-                        <span class="lbexIndentSubsection">
-                            <span class="lbexIndent">“(j)
-                                <span class="lbexSectionLevelOLCnuclear">Transmission of address information</span>.—Beginning January 1, 2027, each contract under a State plan with a managed care entity (as defined in section 1932(a)(1)(B)) or with a prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D)), shall provide that such entity or plan shall promptly transmit to the State any address information for an individual enrolled with such entity or plan that is provided to such entity or plan directly from, or verified by such entity or plan directly with, such individual.”.</span>
+                    <a id="H29669828A6FE4AA8807F272ECC1881B0" />
+                    <span class="lbexIndentSubpar">(B) MANAGED CARE.—Section 1932 of the Social Security Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1396u–2</a>) is amended by adding at the end the following new subsection:
+                        <span class="lbexIndentClause">
+                            <a id="H485D9261171A42E39982056C679E22E9" />
+                            <span class="lbexIndentSubsection">
+                                <span class="lbexIndent">“(j)
+                                    <span class="lbexSectionLevelOLCnuclear">Transmission of address information</span>.—Beginning January 1, 2027, each contract under a State plan with a managed care entity (as defined in section 1932(a)(1)(B)) or with a prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D)), shall provide that such entity or plan shall promptly transmit to the State any address information for an individual enrolled with such entity or plan that is provided to such entity or plan directly from, or verified by such entity or plan directly with, such individual.”.</span>
+                            </span>
                         </span>
                     </span>
                 </span>
@@ -463,7 +463,7 @@ const $route = useRoute();
                         <span class="lbexIndentSubpar">(B) by inserting after subparagraph (G) the following new subparagraph:
                             <span class="lbexIndentClause">
                                 <a id="H484C499F3943455387EFDE07A6E1AFBE" />
-                                <span class="lbexIndentSubpar">“(H) Section 1902(a)(88) (relating to address information for enrollees and prevention of simultaneous enrollments).”.</span>
+                                <span class="lbexIndentSubpar annotated-text">“(H) Section 1902(a)(88) (relating to address information for enrollees and prevention of simultaneous enrollments).”.</span>
                             </span>
                         </span>
                     </span>
@@ -499,18 +499,17 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(1) in subsection (a)—
                     <a id="H93674B5332954A50A00A82CD77AEB615" />
                     <span class="lbexIndentSubpar">(A) in paragraph (87), by striking “; and” and inserting a semicolon;</span>
-                </span>
-                <a id="H75BEA9ADD42D45948A889F540489655A" />
-                <span class="lbexIndentSubpar">(B) in paragraph (88), by striking the period at the end and inserting “; and”; and</span>
+                    <a id="H75BEA9ADD42D45948A889F540489655A" />
+                    <span class="lbexIndentSubpar">(B) in paragraph (88), by striking the period at the end and inserting “; and”; and</span>
 
-                <a id="H28034D8913A949C491BD8972010E4D20" />
-                <span class="lbexIndentSubpar">(C) by inserting after paragraph (88) the following new paragraph:
-                    <span class="lbexIndent">
-                        <a id="HFEC8260E2A8941AA8BED96F1CD37E6E0" />
-                        <span class="lbexIndentParagraph">“(89) provide that the State shall comply with the eligibility verification requirements under subsection (ww), except that this paragraph shall apply only in the case of the 50 States and the District of Columbia.”; and</span>
+                    <a id="H28034D8913A949C491BD8972010E4D20" />
+                    <span class="lbexIndentSubpar">(C) by inserting after paragraph (88) the following new paragraph:
+                        <span class="lbexIndent">
+                            <a id="HFEC8260E2A8941AA8BED96F1CD37E6E0" />
+                            <span class="lbexIndentParagraph annotated-text">“(89) provide that the State shall comply with the eligibility verification requirements under subsection (ww), except that this paragraph shall apply only in the case of the 50 States and the District of Columbia.”; and</span>
+                        </span>
                     </span>
                 </span>
-
                 <a id="H0114D7B732AD4747A8D68538D3674EF8" />
                 <span class="lbexIndentParagraph">
                     <span class="lbexIndent">(2) by adding at the end the following new subsection:
@@ -522,25 +521,25 @@ const $route = useRoute();
                                 <span class="lbexIndentParagraph">“(1) IN GENERAL.—For purposes of subsection (a)(89), the eligibility verification requirements, beginning January 1, 2027, are as follows:
                                     <a id="H5C2B87985FC448F9926F2AE296802A3F" />
                                     <span class="lbexIndentSubpar">“(A) QUARTERLY SCREENING TO VERIFY ENROLLEE STATUS.—The State shall, not less frequently than quarterly, review the Death Master File (as such term is defined in section 203(d) of the Bipartisan Budget Act of 2013) or a successor system that provides such information needed to determine whether any individuals enrolled for medical assistance under the State plan (or waiver of such plan) are deceased.</span>
+                                    <a id="HB209D730BDD9449A8241021814B58A99" />
+                                    <span class="lbexIndentSubpar">“(B) DISENROLLMENT UNDER STATE PLAN.—If the State determines, based on information obtained from the Death Master File, that an individual enrolled for medical assistance under the State plan (or waiver of such plan) is deceased, the State shall—
+                                        <a id="H401463914CD047AC844756679456EB9B" />
+                                        <span class="lbexIndentClause">“(i) treat such information as factual information confirming the death of a beneficiary;</span>
+                                        <a id="H7D2BD2003F654F549613B646348B21E9" />
+                                        <span class="lbexIndentClause">“(ii) disenroll such individual from the State plan (or waiver of such plan) in accordance with subsection (a)(3); and</span>
+                                        <a id="H8E359A35940449659C2BD39E718D1EB7" />
+                                        <span class="lbexIndentClause">“(iii) discontinue any payments for medical assistance under this title made on behalf of such individual (other than payments for any items or services furnished to such individual prior to the death of such individual).</span>
+                                    </span>
+                                    <a id="H91FB921D901A42C5B89BE16269CF42A5" />
+                                    <span class="lbexIndentSubpar">“(C) REINSTATEMENT OF COVERAGE IN THE EVENT OF ERROR.—If a State determines that an individual was misidentified as deceased based on information obtained from the Death Master File and was erroneously disenrolled from medical assistance under the State plan (or waiver of such plan) based on such misidentification, the State shall immediately re-enroll such individual under the State plan (or waiver of such plan), retroactive to the date of such disenrollment.</span>
+
+                                    <a id="H713FB5BB431841E7A14C7FBB59FD30E8" />
+                                    <span class="lbexIndentParagraph">“(2) RULE OF CONSTRUCTION.—Nothing under this subsection shall be construed to preclude the ability of a State to use other electronic data sources to timely identify potentially deceased beneficiaries, so long as the State is also in compliance with the requirements of this subsection (and all other requirements under this title relating to Medicaid eligibility determination and redetermination).”.</span>
                                 </span>
-                                <a id="HB209D730BDD9449A8241021814B58A99" />
-                                <span class="lbexIndentSubpar">“(B) DISENROLLMENT UNDER STATE PLAN.—If the State determines, based on information obtained from the Death Master File, that an individual enrolled for medical assistance under the State plan (or waiver of such plan) is deceased, the State shall—
-                                    <a id="H401463914CD047AC844756679456EB9B" />
-                                    <span class="lbexIndentClause">“(i) treat such information as factual information confirming the death of a beneficiary;</span>
-                                </span>
-                                <a id="H7D2BD2003F654F549613B646348B21E9" />
-                                <span class="lbexIndentClause">“(ii) disenroll such individual from the State plan (or waiver of such plan) in accordance with subsection (a)(3); and</span>
                             </span>
-                            <a id="H8E359A35940449659C2BD39E718D1EB7" />
-                            <span class="lbexIndentClause">“(iii) discontinue any payments for medical assistance under this title made on behalf of such individual (other than payments for any items or services furnished to such individual prior to the death of such individual).</span>
                         </span>
                     </span>
                 </span>
-                <a id="H91FB921D901A42C5B89BE16269CF42A5" />
-                <span class="lbexIndentSubpar">“(C) REINSTATEMENT OF COVERAGE IN THE EVENT OF ERROR.—If a State determines that an individual was misidentified as deceased based on information obtained from the Death Master File and was erroneously disenrolled from medical assistance under the State plan (or waiver of such plan) based on such misidentification, the State shall immediately re-enroll such individual under the State plan (or waiver of such plan), retroactive to the date of such disenrollment.</span>
-
-                <a id="H713FB5BB431841E7A14C7FBB59FD30E8" />
-                <span class="lbexIndentParagraph">“(2) RULE OF CONSTRUCTION.—Nothing under this subsection shall be construed to preclude the ability of a State to use other electronic data sources to timely identify potentially deceased beneficiaries, so long as the State is also in compliance with the requirements of this subsection (and all other requirements under this title relating to Medicaid eligibility determination and redetermination).”.</span>
 
                 <span class="lbexIndentParagraph" />
 
@@ -567,7 +566,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(1) by striking “The State” and inserting:
                     <span class="ul">
                         <a id="H48181FB255E34F0CBFCA4DF07AC56942" />
-                        <span class="lbexIndentSubpar">“(A) IN GENERAL.—The State”; and</span>
+                        <span class="lbexIndentSubpar annotated-text">“(A) IN GENERAL.—The State”; and</span>
                     </span>
                 </span>
 
@@ -575,7 +574,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(2) by adding at the end the following new subparagraph:
                     <span class="ul">
                         <a id="HEA870FE36510417E9035410B46DF758A" />
-                        <span class="lbexIndentSubpar">“(B) PROVIDER SCREENING AGAINST DEATH MASTER FILE.—Beginning January 1, 2028, as part of the enrollment (or reenrollment or revalidation of enrollment) of a provider or supplier under this title, and not less frequently than quarterly during the period that such provider or supplier is so enrolled, the State conducts a check of the Death Master File (as such term is defined in section 203(d) of the Bipartisan Budget Act of 2013) to determine whether such provider or supplier is deceased.”.</span>
+                        <span class="lbexIndentSubpar annotated-text">“(B) PROVIDER SCREENING AGAINST DEATH MASTER FILE.—Beginning January 1, 2028, as part of the enrollment (or reenrollment or revalidation of enrollment) of a provider or supplier under this title, and not less frequently than quarterly during the period that such provider or supplier is so enrolled, the State conducts a check of the Death Master File (as such term is defined in section 203(d) of the Bipartisan Budget Act of 2013) to determine whether such provider or supplier is deceased.”.</span>
                     </span>
                 </span>
 
@@ -602,21 +601,21 @@ const $route = useRoute();
                     <span class="lbexIndentParagraph">(1) in subparagraph (A)—
                         <a id="H320636DB2653442A8D4CB2402575EC9B" />
                         <span class="lbexIndentSubpar">(A) by inserting “for audits conducted by the Secretary, or, at the option of the Secretary, audits conducted by the State” after “exceeds 0.03”; and</span>
+                        <a id="H1327C1E313D64E5E9483CAF10A9AEA2D" />
+                        <span class="lbexIndentSubpar">(B) by inserting “, to the extent practicable” before the period at the end;</span>
                     </span>
-                    <a id="H1327C1E313D64E5E9483CAF10A9AEA2D" />
-                    <span class="lbexIndentSubpar">(B) by inserting “, to the extent practicable” before the period at the end;</span>
                 </span>
 
                 <a id="H9F4052C1574343A9B5EBBB963994AB01" />
                 <span class="lbexIndentParagraph">(2) in subparagraph (B)—
                     <a id="H62624980F5B14CEBB6CBC24C04F18AFB" />
                     <span class="lbexIndentSubpar">(A) by striking “The Secretary” and inserting  <a id="H1EEF7073D128493D95B7DD59A52715B4" />(i) Subject to clause (ii), the Secretary”; and</span>
-                </span>
-                <a id="H578C033173624FFD9BD6E547177B4571" />
-                <span class="lbexIndentSubpar">(B) by adding at the end the following new clause:
-                    <span class="lbexIndentClause">
-                        <a id="HDEE2DAC6C3174262A3D30C3A5339A462" />
-                        <span class="lbexIndentParagraph">“(ii) The amount waived under clause (i) for a fiscal year may not exceed an amount equal to the erroneous excess payments for medical assistance described in subparagraph (D)(i)(II) made for such fiscal year that exceed the allowable error rate of 0.03.”.</span>
+                    <a id="H578C033173624FFD9BD6E547177B4571" />
+                    <span class="lbexIndentSubpar">(B) by adding at the end the following new clause:
+                        <span class="lbexIndentClause">
+                            <a id="HDEE2DAC6C3174262A3D30C3A5339A462" />
+                            <span class="lbexIndentParagraph annotated-text">“(ii) The amount waived under clause (i) for a fiscal year may not exceed an amount equal to the erroneous excess payments for medical assistance described in subparagraph (D)(i)(II) made for such fiscal year that exceed the allowable error rate of 0.03.”.</span>
+                        </span>
                     </span>
                 </span>
 
@@ -627,15 +626,14 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(4) in subparagraph (D)(i)—
                     <a id="H800494C02307471D9555A99DCB201917" />
                     <span class="lbexIndentSubpar">(A) in subclause (I), by striking “and” at the end;</span>
-                </span>
-                <a id="HDE92A8E3B7A44D3B8A813585DD3727ED" />
-                <span class="lbexIndentSubpar">(B) in subclause (II), by striking the period at the end and inserting “, or payments where insufficient information is available to confirm eligibility, and”; and</span>
-
-                <a id="H737E592431FF4C5B9BB4A352F478DDAC" />
-                <span class="lbexIndentSubpar">(C) by adding at the end the following new subclause:
-                    <span class="lbexIndentClause">
-                        <a id="H95A5F06B71B44967A102B4D9BC1B7D00" />
-                        <span class="lbexIndentParagraph">“(III) payments (other than payments described in subclause (I)) for items and services furnished to an individual who is not eligible for medical assistance under the State plan (or a waiver of such plan) with respect to such items and services, or payments where insufficient information is available to confirm eligibility.”.</span>
+                    <a id="HDE92A8E3B7A44D3B8A813585DD3727ED" />
+                    <span class="lbexIndentSubpar">(B) in subclause (II), by striking the period at the end and inserting “, or payments where insufficient information is available to confirm eligibility, and”; and</span>
+                    <a id="H737E592431FF4C5B9BB4A352F478DDAC" />
+                    <span class="lbexIndentSubpar">(C) by adding at the end the following new subclause:
+                        <span class="lbexIndentClause">
+                            <a id="H95A5F06B71B44967A102B4D9BC1B7D00" />
+                            <span class="lbexIndentParagraph annotated-text">“(III) payments (other than payments described in subclause (I)) for items and services furnished to an individual who is not eligible for medical assistance under the State plan (or a waiver of such plan) with respect to such items and services, or payments where insufficient information is available to confirm eligibility.”.</span>
+                        </span>
                     </span>
                 </span>
 
@@ -664,26 +662,26 @@ const $route = useRoute();
                     >42 U.S.C. 1396a(e)(14)</a>) is amended by adding at the end the following new subparagraph:
                     <span class="lbexIndent">
                         <a id="H2EB8DD9335D24D5A8B16BADFE2D61E52" />
-                        <span class="lbexIndentSubpar">“(L) FREQUENCY OF ELIGIBILITY REDETERMINATIONS FOR CERTAIN INDIVIDUALS.—
+                        <span class="lbexIndentSubpar annotated-text">“(L) FREQUENCY OF ELIGIBILITY REDETERMINATIONS FOR CERTAIN INDIVIDUALS.—
                             <a id="HFD6637C0F5224E02BEA2FA7F5DD88570" />
                             <span class="lbexIndentClause">“(i) IN GENERAL.—Subject to clause (ii), with respect to redeterminations of eligibility for medical assistance under a State plan (or waiver of such plan) scheduled on or after the first day of the first quarter that begins after December 31, 2026, a State shall make such a redetermination once every 6 months for the following individuals:
                                 <a id="H674E7D3A9DCE478593D331F9FE24910F" />
                                 <span class="lbexIndentSubclause">“(I) Individuals enrolled under subsection (a)(10)(A)(i)(VIII).</span>
+                                <a id="H44422F1978A4463FA00A5337D5FDFC64" />
+                                <span class="lbexIndentSubclause">“(II) Individuals described in such subsection who are otherwise enrolled under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
+                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    class="external"
+                                    target="_blank"
+                                >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in subsection (a)(10)(A)(i)(VIII).</span>
                             </span>
-                            <a id="H44422F1978A4463FA00A5337D5FDFC64" />
-                            <span class="lbexIndentSubclause">“(II) Individuals described in such subsection who are otherwise enrolled under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
-                                class="external"
-                                target="_blank"
-                            >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in subsection (a)(10)(A)(i)(VIII).</span>
+                            <a id="HCAE581DC60574A9390E4B2970B78EFE2" />
+                            <span class="lbexIndentClause">“(ii) EXEMPTION.—The requirements described in clause (i) shall not apply to any individual described in subsection (xx)(9)(A)(ii)(II).</span>
+
+                            <a id="H5B3F9FB19302417AB1FC202CFE641FDE" />
+                            <span class="lbexIndentClause">“(iii) STATE DEFINED.—For purposes of this subparagraph, the term ‘State’ means 1 of the 50 States or the District of Columbia.”.</span>
                         </span>
                     </span>
                 </span>
-                <a id="HCAE581DC60574A9390E4B2970B78EFE2" />
-                <span class="lbexIndentClause">“(ii) EXEMPTION.—The requirements described in clause (i) shall not apply to any individual described in subsection (xx)(9)(A)(ii)(II).</span>
-
-                <a id="H5B3F9FB19302417AB1FC202CFE641FDE" />
-                <span class="lbexIndentClause">“(iii) STATE DEFINED.—For purposes of this subparagraph, the term ‘State’ means 1 of the 50 States or the District of Columbia.”.</span>
 
                 <a id="H2FF54D1ABEFF4EE59EEA17996BA035C8" />
                 <span class="lbexIndent">(b)
@@ -715,32 +713,29 @@ const $route = useRoute();
                     <span class="lbexIndentParagraph">(1) in subparagraph (B)—
                         <a id="H10606F5F8B2A4A0380B43FF39F2FEBFC" />
                         <span class="lbexIndentSubpar">(A) by striking “A State” and inserting “(i) A State”; </span>
+                        <a id="H2D59538C96B344D798CB483F10AA8B90" />
+                        <span class="lbexIndentSubpar">(B) in clause (i), as inserted by subparagraph (A)—
+                            <a id="H1FC72A4476F24CAE94008B86F751AA96" />
+                            <span class="lbexIndentClause">(i) by striking “<span class="lbexThinSpace" />‘$500,000’” and inserting “the amount specified in subparagraph (A)”; and </span>
+                            <a id="H736A7B4BB6084DF99AE37BE1EEF5EABD" />
+                            <span class="lbexIndentClause">(ii) by inserting “, in the case of an individual’s home that is located on a lot that is zoned for agricultural use,” after “apply subparagraph (A)”; and</span>
+                        </span>
+                        <a id="H84EB889031B9425B8BF2A1A546D345B9" />
+                        <span class="lbexIndentSubpar">(C) by adding at the end the following new clause:
+                            <span class="lbexIndentClause">
+                                <a id="HB6BBF12010B443E984E90B1AB752D144" />
+                                <span class="lbexIndentParagraph annotated-text">“(ii) A State may elect, without regard to the requirements of section 1902(a)(1) (relating to statewideness) and section 1902(a)(10)(B) (relating to comparability), to apply subparagraph (A), in the case of an individual’s home that is not described in clause (i), by substituting for the amount specified in such subparagraph, an amount that exceeds such amount, but does not exceed $1,000,000.”; and</span>
+                            </span>
+                        </span>
                     </span>
-                    <a id="H2D59538C96B344D798CB483F10AA8B90" />
-                    <span class="lbexIndentSubpar">(B) in clause (i), as inserted by subparagraph (A)—
-                        <a id="H1FC72A4476F24CAE94008B86F751AA96" />
-                        <span class="lbexIndentClause">(i) by striking “<span class="lbexThinSpace" />‘$500,000’” and inserting “the amount specified in subparagraph (A)”; and </span>
-                    </span>
-                    <a id="H736A7B4BB6084DF99AE37BE1EEF5EABD" />
-                    <span class="lbexIndentClause">(ii) by inserting “, in the case of an individual’s home that is located on a lot that is zoned for agricultural use,” after “apply subparagraph (A)”; and</span>
                 </span>
-
-                <a id="H84EB889031B9425B8BF2A1A546D345B9" />
-                <span class="lbexIndentSubpar">(C) by adding at the end the following new clause:
-                    <span class="lbexIndentClause">
-                        <a id="HB6BBF12010B443E984E90B1AB752D144" />
-                        <span class="lbexIndentParagraph">“(ii) A State may elect, without regard to the requirements of section 1902(a)(1) (relating to statewideness) and section 1902(a)(10)(B) (relating to comparability), to apply subparagraph (A), in the case of an individual’s home that is not described in clause (i), by substituting for the amount specified in such subparagraph, an amount that exceeds such amount, but does not exceed $1,000,000.”; and</span>
-                    </span>
-                </span>
-
                 <a id="HB1364FFE24A24CC699667E9B4508C967" />
                 <span class="lbexIndentParagraph">(2) in subparagraph (C)—
                     <a id="HB9A2F5F5F71644AA84BC594D38552C1B" />
                     <span class="lbexIndentSubpar">(A) by inserting “(other than the amount specified in subparagraph (B)(ii) (relating to certain non-agricultural homes))” after “specified in this paragraph”; and</span>
+                    <a id="HE94B0F476E964210B1C6430F17B358FF" />
+                    <span class="lbexIndentSubpar">(B) by adding at the end the following new sentence: “In the case that application of the preceding sentence would result in a dollar amount (other than the amount specified in subparagraph (B)(i) (relating to certain agricultural homes)) exceeding $1,000,000, such amount shall be deemed to be equal to $1,000,000.”. </span>
                 </span>
-                <a id="HE94B0F476E964210B1C6430F17B358FF" />
-                <span class="lbexIndentSubpar">(B) by adding at the end the following new sentence: “In the case that application of the preceding sentence would result in a dollar amount (other than the amount specified in subparagraph (B)(i) (relating to certain agricultural homes)) exceeding $1,000,000, such amount shall be deemed to be equal to $1,000,000.”. </span>
-
                 <a id="HE9B43645948347829A70DCF2C7126573" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Clarification</span>.—Section 1902 of the Social Security Act (<a
@@ -756,22 +751,21 @@ const $route = useRoute();
                         </span>
                     </span>
                 </span>
-
                 <a id="H0A4A6572B23B4E77A87C1B87FDD3E562" />
                 <span class="lbexIndentParagraph">(2) in subsection (e)(14)(D)(iv)—
                     <a id="HBA4C203D7AA34B76AE24E32E6592A288" />
-                    <span class="lbexIndentSubpar">(A) by striking “Subparagraphs” and inserting <span class="lbexIndentClause">
-                        <a id="HA551CE75AEEC49DD93BC4AE73BD8541A" />
-                        <span class="lbexIndentSubclause">“(I) IN GENERAL.—Subparagraphs”; and</span>
+                    <span class="lbexIndentSubpar">(A) by striking “Subparagraphs” and inserting
+                        <span class="lbexIndentClause">
+                            <a id="HA551CE75AEEC49DD93BC4AE73BD8541A" />
+                            <span class="lbexIndentSubclause annotated-text">“(I) IN GENERAL.—Subparagraphs”; and</span>
+                        </span>
                     </span>
-                    </span>
-                </span>
-
-                <a id="HF12A37CF3E194A06A0627BAC9E51CDFB" />
-                <span class="lbexIndentSubpar">(B) by adding at the end the following new subclause:
-                    <span class="lbexIndentClause">
-                        <a id="H3DDDE3E0FEFE477BBF6CE1F27012D7E5" />
-                        <span class="lbexIndentSubclause">“(II) APPLICATION OF HOME EQUITY INTEREST LIMIT.—Section 1917(f) shall apply for purposes of determining the eligibility of an individual for medical assistance with respect to nursing facility services or other long-term care services.”.</span>
+                    <a id="HF12A37CF3E194A06A0627BAC9E51CDFB" />
+                    <span class="lbexIndentSubpar">(B) by adding at the end the following new subclause:
+                        <span class="lbexIndentClause">
+                            <a id="H3DDDE3E0FEFE477BBF6CE1F27012D7E5" />
+                            <span class="lbexIndentSubclause annotated-text">“(II) APPLICATION OF HOME EQUITY INTEREST LIMIT.—Section 1917(f) shall apply for purposes of determining the eligibility of an individual for medical assistance with respect to nursing facility services or other long-term care services.”.</span>
+                        </span>
                     </span>
                 </span>
 
@@ -813,15 +807,15 @@ const $route = useRoute();
                         <span class="lbexIndentParagraph">“(B) either—
                             <a id="HB65EC1BFA89A4F8D814CC40E101188B9" />
                             <span class="lbexIndentSubpar">“(i) a citizen or national of the United States;</span>
+                            <a id="H481189C32FBA49369E4D4C6C88471497" />
+                            <span class="lbexIndentSubpar">“(ii) an alien lawfully admitted for permanent residence as an immigrant as defined by sections 101(a)(15) and 101(a)(20) of the Immigration and Nationality Act, excluding, among others, alien visitors, tourists, diplomats, and students who enter the United States temporarily with no intention of abandoning their residence in a foreign country;</span>
+                            <a id="HFD723DC1E31B4F2CB929BED23707A23C" />
+                            <span class="lbexIndentSubpar">“(iii) an alien who has been granted the status of Cuban and Haitian entrant, as defined in section 501(e) of the Refugee Education Assistance Act of 1980 (Public Law 96–422); or</span>
+                            <a id="H93A65B7F5B164649BA9518C81EFD7879" />
+                            <span class="lbexIndentSubpar">“(iv) an individual who lawfully resides in the United States in accordance with a Compact of Free Association referred to in section 402(b)(2)(G) of the Personal Responsibility and Work Opportunity Reconciliation Act of 1996.”.</span>
                         </span>
-                        <a id="H481189C32FBA49369E4D4C6C88471497" />
-                        <span class="lbexIndentSubpar">“(ii) an alien lawfully admitted for permanent residence as an immigrant as defined by sections 101(a)(15) and 101(a)(20) of the Immigration and Nationality Act, excluding, among others, alien visitors, tourists, diplomats, and students who enter the United States temporarily with no intention of abandoning their residence in a foreign country;</span>
                     </span>
-                    <a id="HFD723DC1E31B4F2CB929BED23707A23C" />
-                    <span class="lbexIndentSubpar">“(iii) an alien who has been granted the status of Cuban and Haitian entrant, as defined in section 501(e) of the Refugee Education Assistance Act of 1980 (Public Law 96–422); or</span>
                 </span>
-                <a id="H93A65B7F5B164649BA9518C81EFD7879" />
-                <span class="lbexIndentSubpar">“(iv) an individual who lawfully resides in the United States in accordance with a Compact of Free Association referred to in section 402(b)(2)(G) of the Personal Responsibility and Work Opportunity Reconciliation Act of 1996.”.</span>
 
                 <a id="HC1F149850909487AA2B1B770D794CB52" />
                 <span class="lbexIndent">(b)
@@ -932,12 +926,12 @@ const $route = useRoute();
                     >42 U.S.C. 1396a(a)(34)</a>) is amended to read as follows:
                     <span class="lbexIndent">
                         <a id="HE18F24CA7F044890943FAC0DA62F8375" />
-                        <span class="lbexIndentParagraph">“(34) provide that in the case of any individual who has been determined to be eligible for medical assistance under the plan and—
+                        <span class="lbexIndentParagraph annotated-text">“(34) provide that in the case of any individual who has been determined to be eligible for medical assistance under the plan and—
                             <a id="HABF0243D137C4AA8B98F4D8875E2E04A" />
                             <span class="lbexIndentSubpar">“(A) is enrolled under paragraph (10)(A)(i)(VIII), such assistance will be made available to the individual for care and services included under the plan and furnished in or after the month before the month in which the individual made application (or application was made on the individual's behalf in the case of a deceased individual) for such assistance if such individual was (or upon application would have been) eligible for such assistance at the time such care and services were furnished; or</span>
+                            <a id="H55BFC9A247D3475FB96FE86F1273D8C6" />
+                            <span class="lbexIndentSubpar">“(B) is not described in subparagraph (A), such assistance will be made available to the individual for care and services included under the plan and furnished in or after the second month before the month in which the individual made application (or application was made on the individual's behalf in the case of a deceased individual) for such assistance if such individual was (or upon application would have been) eligible for such assistance at the time such care and services were furnished;”.</span>
                         </span>
-                        <a id="H55BFC9A247D3475FB96FE86F1273D8C6" />
-                        <span class="lbexIndentSubpar">“(B) is not described in subparagraph (A), such assistance will be made available to the individual for care and services included under the plan and furnished in or after the second month before the month in which the individual made application (or application was made on the individual's behalf in the case of a deceased individual) for such assistance if such individual was (or upon application would have been) eligible for such assistance at the time such care and services were furnished;”.</span>
                     </span>
                 </span>
 
@@ -1077,7 +1071,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(3) by adding at the end the following new subparagraph:
                     <span class="ul">
                         <a id="H36AE516BC3E34154A83C394837C26012" />
-                        <span class="lbexIndentSubpar">“(B) begins to expend amounts for all such individuals prior to January 1, 2026.”.</span>
+                        <span class="lbexIndentSubpar annotated-text">“(B) begins to expend amounts for all such individuals prior to January 1, 2026.”.</span>
                     </span>
                 </span>
 
@@ -1110,56 +1104,48 @@ const $route = useRoute();
                         <a id="H20D36E644A5540F5BB7E376E7A0ED2C1" />
                         <span class="lbexIndentParagraph">“(D)<a id="H7B64F6DB41074587B2D2EFF4CB2DB9C1" />(i) For purposes of subparagraph (C)(ii), the applicable percent determined under this subparagraph is—
                             <a id="HDF81F1D064A847118AB152C689CB7CD8" />
-                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a
-                                href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
-                                class="external"
-                                target="_blank"
-                            >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
+                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
                                 <a id="HF7E6031DCDD345F09E8D67BB87A018EB" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
                                 <a id="H3B56C17EC18642CAB67D1CED226B2213" />
                                 <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent; and</span>
                             </span>
-                        </span>
-                        <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
-                        <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a
-                            href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
-                            class="external"
-                            target="_blank"
-                        >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
-                            <a id="H475F82BE8791418DA85C5A6050B87FAA" />
-                            <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—<span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
+                            <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
+                            <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
+                                <a id="H475F82BE8791418DA85C5A6050B87FAA" />
+                                <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—
+                                    <span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
+                                    <span class="lbexIndentSubclause">“(BB) the applicable percent specified in clause (ii) for the fiscal year; and</span>
+                                </span>
                             </span>
-                            <span class="lbexIndentSubclause">“(BB) the applicable percent specified in clause (ii) for the fiscal year; and</span>
+                            <a id="H31D4183C227D4FF3AC96CD3170361C8D" />
+                            <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent.</span>
                         </span>
-
-                        <a id="H31D4183C227D4FF3AC96CD3170361C8D" />
-                        <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent.</span>
 
                         <a id="H9682CC4CB5524664AD922E612D0E6668" />
                         <span class="lbexIndentParagraph">“(ii) For purposes of clause (i)(II)(aa)(BB), the applicable percent is—
                             <a id="H1795ED55DE39419180474C5D289F2512" />
                             <span class="lbexIndentSubpar">“(I) for fiscal year 2028, 5.5 percent;</span>
+                            <a id="HE5B85442C03542B4A0A59778599CDA7E" />
+                            <span class="lbexIndentSubpar">“(II) for fiscal year 2029, 5 percent;</span>
+
+                            <a id="H27D124A726864BD99F79E6AFB9B165F5" />
+                            <span class="lbexIndentSubpar">“(III) for fiscal year 2030, 4.5 percent;</span>
+
+                            <a id="H6EF9FF5ECCD04B9EAC5AA5141100D135" />
+                            <span class="lbexIndentSubpar">“(IV) for fiscal year 2031, 4 percent; and</span>
+
+                            <a id="HB4A97C987A814518AE30249E41A45DD3" />
+                            <span class="lbexIndentSubpar">“(V) for fiscal year 2032 and each subsequent fiscal year, 3.5 percent.</span>
                         </span>
-                        <a id="HE5B85442C03542B4A0A59778599CDA7E" />
-                        <span class="lbexIndentSubpar">“(II) for fiscal year 2029, 5 percent;</span>
-
-                        <a id="H27D124A726864BD99F79E6AFB9B165F5" />
-                        <span class="lbexIndentSubpar">“(III) for fiscal year 2030, 4.5 percent;</span>
-
-                        <a id="H6EF9FF5ECCD04B9EAC5AA5141100D135" />
-                        <span class="lbexIndentSubpar">“(IV) for fiscal year 2031, 4 percent; and</span>
-
-                        <a id="HB4A97C987A814518AE30249E41A45DD3" />
-                        <span class="lbexIndentSubpar">“(V) for fiscal year 2032 and each subsequent fiscal year, 3.5 percent.</span>
 
                         <a id="H0BE4245A202F4BDFA3B58473D164FD77" />
                         <span class="lbexIndentParagraph">“(iii) For purposes of clause (i):
                             <a id="H6C67C761B200451BBE6763A113A8C37C" />
                             <span class="lbexIndentSubpar">“(I) EXPANSION STATE.—The term ‘expansion State’ means a State that, beginning on January 1, 2014, or on any date thereafter, elects to provide medical assistance to all individuals described in section 1902(a)(10)(A)(i)(VIII) under the State plan under this title or under a waiver of such plan.</span>
+                            <a id="H5569636C1AFD4C2D82534554D7EF807B" />
+                            <span class="lbexIndentSubpar">“(II) NON-EXPANSION STATE.—The term ‘non-expansion State’ means a State that is not an expansion State.</span>
                         </span>
-                        <a id="H5569636C1AFD4C2D82534554D7EF807B" />
-                        <span class="lbexIndentSubpar">“(II) NON-EXPANSION STATE.—The term ‘non-expansion State’ means a State that is not an expansion State.</span>
 
                         <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
                         <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a
@@ -1243,47 +1229,47 @@ const $route = useRoute();
                     >42 U.S.C. 1395ww(d)</a>)) that—
                         <a id="H28455D3F532248ED87C4D9CDD20A39DE" />
                         <span class="lbexIndentClause">(i) is located in a rural area (as defined in paragraph (2)(D) of such section); </span>
+                        <a id="HB42272FC99CE4B3F88E4380D89F8B993" />
+                        <span class="lbexIndentClause">(ii) is treated as being located in a rural area pursuant to paragraph (8)(E) of such section; or </span>
+                        <a id="H5FBFCFB21723476C85468AFB25F4CB75" />
+                        <span class="lbexIndentClause">(iii) is located in a rural census tract of a metropolitan statistical area (as determined under the most recent modification of the Goldsmith Modification, originally published in the Federal Register on February 27, 1992 (57 Fed. Reg. 6725)).</span>
                     </span>
-                    <a id="HB42272FC99CE4B3F88E4380D89F8B993" />
-                    <span class="lbexIndentClause">(ii) is treated as being located in a rural area pursuant to paragraph (8)(E) of such section; or </span>
+
+                    <a id="HCE59402B78ED4216834F2661B7AE124E" />
+                    <span class="lbexIndentSubpar">(B) A critical access hospital (as defined in section 1861(mm)(1) of such Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1395x(mm)(1)</a>)).</span>
+
+                    <a id="H469A0CCA86A648A08AC5D213366E217D" />
+                    <span class="lbexIndentSubpar">(C) A sole community hospital (as defined in section 1886(d)(5)(D)(iii) of such Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1395ww(d)(5)(D)(iii)</a>)).</span>
+
+                    <a id="HCB61C01C4F9041ED89418D3EB562E5C3" />
+                    <span class="lbexIndentSubpar">(D) A Medicare-dependent, small rural hospital (as defined in section 1886(d)(5)(G)(iv) of such Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1395ww(d)(5)(G)(iv)</a>)). </span>
+
+                    <a id="H141EDCA002E14CDE8BFBC3738961EB39" />
+                    <span class="lbexIndentSubpar">(E) A low-volume hospital (as defined in section 1886(d)(12)(C) of such Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1395ww(d)(12)(C)</a>)).</span>
+
+                    <a id="H99E320165DC64DC7B4E8DAEBFC4F42F1" />
+                    <span class="lbexIndentSubpar">(F) A rural emergency hospital (as defined in section 1861(kkk)(2) of such Act (<a
+                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
+                        class="external"
+                        target="_blank"
+                    >42 U.S.C. 1395x(kkk)(2)</a>)).</span>
                 </span>
-                <a id="H5FBFCFB21723476C85468AFB25F4CB75" />
-                <span class="lbexIndentClause">(iii) is located in a rural census tract of a metropolitan statistical area (as determined under the most recent modification of the Goldsmith Modification, originally published in the Federal Register on February 27, 1992 (57 Fed. Reg. 6725)).</span>
-
-                <a id="HCE59402B78ED4216834F2661B7AE124E" />
-                <span class="lbexIndentSubpar">(B) A critical access hospital (as defined in section 1861(mm)(1) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1395x(mm)(1)</a>)).</span>
-
-                <a id="H469A0CCA86A648A08AC5D213366E217D" />
-                <span class="lbexIndentSubpar">(C) A sole community hospital (as defined in section 1886(d)(5)(D)(iii) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1395ww(d)(5)(D)(iii)</a>)).</span>
-
-                <a id="HCB61C01C4F9041ED89418D3EB562E5C3" />
-                <span class="lbexIndentSubpar">(D) A Medicare-dependent, small rural hospital (as defined in section 1886(d)(5)(G)(iv) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1395ww(d)(5)(G)(iv)</a>)). </span>
-
-                <a id="H141EDCA002E14CDE8BFBC3738961EB39" />
-                <span class="lbexIndentSubpar">(E) A low-volume hospital (as defined in section 1886(d)(12)(C) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1395ww(d)(12)(C)</a>)).</span>
-
-                <a id="H99E320165DC64DC7B4E8DAEBFC4F42F1" />
-                <span class="lbexIndentSubpar">(F) A rural emergency hospital (as defined in section 1861(kkk)(2) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
-                    class="external"
-                    target="_blank"
-                >42 U.S.C. 1395x(kkk)(2)</a>)).</span>
 
                 <a id="H6851A087D44D4B6089749F3C3036FA8D" />
                 <span class="lbexIndentParagraph">(3) STATE.—The term “State” means 1 of the 50 States or the District of Columbia.</span>
@@ -1331,14 +1317,14 @@ const $route = useRoute();
                             </span>
                             <a id="HEE667679F8A44D00AE18E0B4FCDDBDED" />
                             <span class="lbexIndentParagraph">“(II) Within a permissible class, the tax rate imposed on any taxpayer or tax rate group (as so defined) based upon its Medicaid taxable units (as so defined) is higher than the tax rate imposed on any taxpayer or tax rate group based upon its non-Medicaid taxable unit (as defined in paragraph (7)(I)).</span>
+                            <a id="HD38362D5B66F48608C0D9DB6B705B431" />
+                            <span class="lbexIndentParagraph">“(III) The tax excludes or imposes a lower tax rate on a taxpayer or tax rate group (as so defined) based on or defined by any description that results in the same effect as described in subclause (I) or (II) for a taxpayer or tax rate group. Characteristics that may indicate such type of exclusion include the use of terminology to establish a tax rate group—
+                                <a id="H84E204309ADE408E861ADFBDD103BA7A" />
+                                <span class="lbexIndentSubpar">“(aa) based on payments or expenditures made under the program under this title without mentioning the term ‘Medicaid’ (or any similar term) to accomplish the same effect as described in subclause (I) or (II); or</span>
+                                <a id="HA149EE9707124B03975508A0CCD79871" />
+                                <span class="lbexIndentSubpar">“(bb) that closely approximates a taxpayer or tax rate group under the program under this title, to the same effect as described in subclause (I) or (II).”; and</span>
+                            </span>
                         </span>
-                        <a id="HD38362D5B66F48608C0D9DB6B705B431" />
-                        <span class="lbexIndentParagraph">“(III) The tax excludes or imposes a lower tax rate on a taxpayer or tax rate group (as so defined) based on or defined by any description that results in the same effect as described in subclause (I) or (II) for a taxpayer or tax rate group. Characteristics that may indicate such type of exclusion include the use of terminology to establish a tax rate group—
-                            <a id="H84E204309ADE408E861ADFBDD103BA7A" />
-                            <span class="lbexIndentSubpar">“(aa) based on payments or expenditures made under the program under this title without mentioning the term ‘Medicaid’ (or any similar term) to accomplish the same effect as described in subclause (I) or (II); or</span>
-                        </span>
-                        <a id="HA149EE9707124B03975508A0CCD79871" />
-                        <span class="lbexIndentSubpar">“(bb) that closely approximates a taxpayer or tax rate group under the program under this title, to the same effect as described in subclause (I) or (II).”; and</span>
                     </span>
                 </span>
 
@@ -1349,32 +1335,32 @@ const $route = useRoute();
                         <span class="lbexIndentParagraph">“(H) The term ‘Medicaid taxable unit’ means a unit that is being taxed within a health care related tax that is applicable to the program under this title. Such term includes a unit that is used as the basis for—
                             <a id="H507BE300DFF644A09B1F6742CBE72281" />
                             <span class="lbexIndentSubpar">“(i) payment under the program under this title (such as Medicaid bed days);</span>
+                            <a id="HBD128F1E08234D78B5923FBEB928ED7E" />
+                            <span class="lbexIndentSubpar">“(ii) Medicaid revenue;</span>
+                            <a id="HF4400ED94B994D478D523B5FB326E862" />
+                            <span class="lbexIndentSubpar">“(iii) costs associated with the program under this title (such as Medicaid charges, claims, or expenditures); and</span>
+                            <a id="H94059654E46E4F91AC99750788F30347" />
+                            <span class="lbexIndentSubpar">“(iv) other units associated with the program under this title, as determined by the Secretary.</span>
                         </span>
-                        <a id="HBD128F1E08234D78B5923FBEB928ED7E" />
-                        <span class="lbexIndentSubpar">“(ii) Medicaid revenue;</span>
+
+                        <a id="HCADD595F07A54FA6A8054198E164327D" />
+                        <span class="lbexIndentParagraph">“(I) The term ‘non-Medicaid taxable unit’ means a unit that is being taxed within a health care related tax that is not applicable to the program under this title. Such term includes a unit that is used as the basis for—
+                            <a id="H08032CDAE03C4AA6BF1C0A38D7B91F7B" />
+                            <span class="lbexIndentSubpar">“(i) payment by non-Medicaid payers (such as non-Medicaid bed days);</span>
+                            <a id="HA5ACC9EB52A84CCAAA09100779C9AE53" />
+                            <span class="lbexIndentSubpar">“(ii) non-Medicaid revenue;</span>
+
+                            <a id="H6261AA0436BA404A843D055D44E7D050" />
+                            <span class="lbexIndentSubpar">“(iii) costs that are not associated with the program under this title (such as non-Medicaid charges, non-Medicaid claims, or non-Medicaid expenditures); and</span>
+
+                            <a id="HE1C21B132F2647419AA92CACAAEC8637" />
+                            <span class="lbexIndentSubpar">“(iv) other units not associated with the program under this title, as determined by the Secretary.</span>
+                        </span>
+
+                        <a id="H5137386EA3604F4C9DD11528F9F5930D" />
+                        <span class="lbexIndentParagraph">“(J) The term ‘tax rate group’ means a group of entities contained within a permissible class of a health care related tax that are taxed at the same rate.”.</span>
                     </span>
-                    <a id="HF4400ED94B994D478D523B5FB326E862" />
-                    <span class="lbexIndentSubpar">“(iii) costs associated with the program under this title (such as Medicaid charges, claims, or expenditures); and</span>
                 </span>
-                <a id="H94059654E46E4F91AC99750788F30347" />
-                <span class="lbexIndentSubpar">“(iv) other units associated with the program under this title, as determined by the Secretary.</span>
-
-                <a id="HCADD595F07A54FA6A8054198E164327D" />
-                <span class="lbexIndentParagraph">“(I) The term ‘non-Medicaid taxable unit’ means a unit that is being taxed within a health care related tax that is not applicable to the program under this title. Such term includes a unit that is used as the basis for—
-                    <a id="H08032CDAE03C4AA6BF1C0A38D7B91F7B" />
-                    <span class="lbexIndentSubpar">“(i) payment by non-Medicaid payers (such as non-Medicaid bed days);</span>
-                </span>
-                <a id="HA5ACC9EB52A84CCAAA09100779C9AE53" />
-                <span class="lbexIndentSubpar">“(ii) non-Medicaid revenue;</span>
-
-                <a id="H6261AA0436BA404A843D055D44E7D050" />
-                <span class="lbexIndentSubpar">“(iii) costs that are not associated with the program under this title (such as non-Medicaid charges, non-Medicaid claims, or non-Medicaid expenditures); and</span>
-
-                <a id="HE1C21B132F2647419AA92CACAAEC8637" />
-                <span class="lbexIndentSubpar">“(iv) other units not associated with the program under this title, as determined by the Secretary.</span>
-
-                <a id="H5137386EA3604F4C9DD11528F9F5930D" />
-                <span class="lbexIndentParagraph">“(J) The term ‘tax rate group’ means a group of entities contained within a permissible class of a health care related tax that are taxed at the same rate.”.</span>
 
                 <a id="HA10AED42DB914622A660F6BA65C2AA3B" />
                 <span class="lbexIndent">(b)
@@ -1828,7 +1814,7 @@ const $route = useRoute();
                     <a id="toc-H4ADCA385302C45CCBDC2C4550A5A6759" href="#H4ADCA385302C45CCBDC2C4550A5A6759">
                         <span class="lbexHangWithMargin">
                             <span id="H4ADCA385302C45CCBDC2C4550A5A6759" />
-                            <span class="lbexSectionlevelOLC">Sec. 71120.</span>
+                            <span class="lbexSectionlevelOLC">Sec. 71120. </span>
                             <span class="lbexSectionlevelOLC">
                                 <span class="lbexAllcap">Modifying cost sharing requirements for certain expansion individuals under the Medicaid program</span>.
                             </span>
@@ -2068,8 +2054,8 @@ border-left: 1px solid #d0d0d0;*/
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left:  1px solid #d0d0d0;
 }
 .lbexIndentSectionText {
@@ -2081,44 +2067,45 @@ margin-bottom: 1em;
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left: 1px solid #d0d0d0;
 }
 .lbexIndentClause {
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubclause {
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubsection {
 display: block;
 background-color: #F2F2F2;
 }
+.annotated-text { background-color: #F2F2F2; }
 .lbexIndentItem {
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubItem {
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 2em;
-padding-left: 5px;
+margin-left: 0em;
+padding-left: 2em;
 border-left: 1px solid #d0d0d0;
 }
 .ul {
