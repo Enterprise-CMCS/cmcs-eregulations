@@ -21,7 +21,7 @@ from regulations.views.regulation_landing import RegulationLandingView
 from regulations.views.resources import ResourcesView
 from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
-from regulations.views.statutes import ActListViewSet, StatuteLinkConverterViewSet
+from regulations.views.statutes import ActListViewSet, GetStatuteLinkAPIView, StatuteLinkConverterViewSet
 from regulations.views.subjects import SubjectsView
 
 register_converter(converters.NumericConverter, 'numeric')
@@ -68,6 +68,7 @@ urlpatterns = [
         path("acts", ActListViewSet.as_view({
             "get": "list",
         })),
+        path("statute-link/", GetStatuteLinkAPIView.as_view(), name="statute-link"),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
