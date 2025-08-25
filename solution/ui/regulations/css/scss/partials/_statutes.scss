@@ -23,6 +23,30 @@
         margin-bottom: var(--spacer-3) !important; // !important to override the default p margin due to vuetify defaults
     }
 
+    .statute-citation-lookup__form {
+        display: flex;
+        align-items: baseline;
+        gap: var(--spacer-1);
+        flex-direction: row;
+        align-items: center;
+
+        input#citationInput {
+            margin-top: 0px;
+            width: 160px;
+        }
+
+
+        input#citationInput,
+        button#citationSubmit {
+            height: 2.5rem;
+        }
+
+        &--label,
+        button#citationSubmit {
+            font-weight: bold;
+        }
+    }
+
     .content {
         display: flex;
         flex-direction: column;

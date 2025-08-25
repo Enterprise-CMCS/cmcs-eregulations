@@ -20,7 +20,10 @@ const lookupCitation = async () => {
 
 <template>
     <form class="statute-citation-lookup__form" @submit.prevent="lookupCitation">
-        <label for="citation-input">Social Security Act §</label>
+        <label
+            class="statute-citation-lookup__form--label"
+            for="citationInput"
+        >Social Security Act §</label>
         <input
             id="citationInput"
             v-model="citation"
@@ -28,7 +31,11 @@ const lookupCitation = async () => {
             type="text"
             placeholder="1903(a)(3)(A)(i)"
         >
-        <button type="submit" class="action-btn default-btn">
+        <button
+            id="citationSubmit"
+            type="submit"
+            class="action-btn default-btn"
+        >
             Get Citation Link
         </button>
     </form>
@@ -42,16 +49,3 @@ const lookupCitation = async () => {
         <p>Text: {{ statuteCitationInfo.results }}</p>
     </div>
 </template>
-
-<style scoped>
-    .statute-citation-lookup__form {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-
-    label {
-        margin-right: 0.5rem;
-        font-weight: bold;
-    }
-</style>
