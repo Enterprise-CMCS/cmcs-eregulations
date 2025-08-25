@@ -74,7 +74,7 @@ watch(
         v-for="action in actions"
         :key="action"
         :selected-action="selectedAction"
-        :status="copyStatus"
+        status="idle"
         :action-type="action"
         @action-btn-click="handleActionClick"
     />
