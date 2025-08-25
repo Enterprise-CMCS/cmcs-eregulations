@@ -325,30 +325,30 @@ const $route = useRoute();
                             <a id="H92C72A7C36744FFD90024D4910C8DCEA" />
                             <span class="lbexIndentClause">(i) in paragraph (86), by striking “and” at the end;</span>
                             <a id="H7FC53B2F724B4ED8819238A68648C063" />
-                            <span class="lbexIndentClause">(ii) in paragraph (87), by striking the period and inserting “; and”; and</span>
+                            <span class="lbexIndentClause">(ii) in paragraph (87), by striking the period and inserting <span class="annotated-text">“; and”</span>; and</span>
                             <a id="H4A73910A19DC46759686010826F13E41" />
                             <span class="lbexIndentClause">(iii) by inserting after paragraph (87) the following new paragraph:
-                                <span class="lbexIndentClause">
-                                    <a id="HE0BAE9757ADE4768A18598F8286BB37F" />
-                                    <span class="lbexIndentParagraph annotated-text">“(88) provide—
-                                        <a id="HECEF746EAAE942D1A09114F35257EEF1" />
-                                        <span class="lbexIndentSubpar">“(A) beginning not later than January 1, 2027, in the case of 1 of the 50 States and the District of Columbia, for a process to regularly obtain address information for individuals enrolled under such plan (or a waiver of such plan) in accordance with subsection (vv); and</span>
-                                        <a id="H110A23CCBB284B608C7D5A1C1ED7483A" />
-                                        <span class="lbexIndentSubpar">“(B) beginning not later than October 1, 2029—
-                                            <a id="H8D634CB2B6D94DB8B17778E70B38490B" />
-                                            <span class="lbexIndentClause">“(i) for the State to submit to the system established by the Secretary under subsection (uu), with respect to an individual enrolled or seeking to enroll under such plan, not less frequently than once each month and during each determination or redetermination of the eligibility of such individual for medical assistance under such plan (or waiver of such plan)—
-                                                <a id="H990F35F42DB24DB5988C86B9B4C43507" />
-                                                <span class="lbexIndentSubclause">“(I) the social security number of such individual, if such individual has a social security number and is required to provide such number to enroll under such plan (or waiver); and</span>
-                                                <a id="H0C7AE05534094C259FCAA34CC99F1C7B" />
-                                                <span class="lbexIndentSubclause">“(II) such other information with respect to such individual as determined necessary by the Secretary for purposes of preventing individuals from simultaneously being enrolled under State plans (or waivers of such plans) of multiple States;</span>
-                                            </span>
-                                            <a id="H40F2D01C78E84EA7AE9F0070DBDF6812" />
-                                            <span class="lbexIndentClause">“(ii) for the use of such system to prevent such simultaneous enrollment; and</span>
-                                            <a id="HC5D6130D28B84780BC0FB8D63AEA5A61" />
-                                            <span class="lbexIndentClause">“(iii) in the case that such system indicates that an individual enrolled or seeking to enroll under such plan (or waiver of such plan) is enrolled under a State plan (or waiver of such a plan) of another State, for the taking of appropriate action (as determined by the Secretary) to identify whether such an individual resides in the State and disenroll an individual from the State plan of such State if such individual does not reside in such State (unless such individual meets such an exception as the Secretary may specify).”; and</span>
+                                <!--<span class="lbexIndentClause">-->
+                                <a id="HE0BAE9757ADE4768A18598F8286BB37F" />
+                                <span class="lbexIndentParagraph annotated-text">“(88) provide—
+                                    <a id="HECEF746EAAE942D1A09114F35257EEF1" />
+                                    <span class="lbexIndentSubpar">“(A) beginning not later than January 1, 2027, in the case of 1 of the 50 States and the District of Columbia, for a process to regularly obtain address information for individuals enrolled under such plan (or a waiver of such plan) in accordance with subsection (vv); and</span>
+                                    <a id="H110A23CCBB284B608C7D5A1C1ED7483A" />
+                                    <span class="lbexIndentSubpar">“(B) beginning not later than October 1, 2029—
+                                        <a id="H8D634CB2B6D94DB8B17778E70B38490B" />
+                                        <span class="lbexIndentClause">“(i) for the State to submit to the system established by the Secretary under subsection (uu), with respect to an individual enrolled or seeking to enroll under such plan, not less frequently than once each month and during each determination or redetermination of the eligibility of such individual for medical assistance under such plan (or waiver of such plan)—
+                                            <a id="H990F35F42DB24DB5988C86B9B4C43507" />
+                                            <span class="lbexIndentSubclause">“(I) the social security number of such individual, if such individual has a social security number and is required to provide such number to enroll under such plan (or waiver); and</span>
+                                            <a id="H0C7AE05534094C259FCAA34CC99F1C7B" />
+                                            <span class="lbexIndentSubclause">“(II) such other information with respect to such individual as determined necessary by the Secretary for purposes of preventing individuals from simultaneously being enrolled under State plans (or waivers of such plans) of multiple States;</span>
                                         </span>
+                                        <a id="H40F2D01C78E84EA7AE9F0070DBDF6812" />
+                                        <span class="lbexIndentClause">“(ii) for the use of such system to prevent such simultaneous enrollment; and</span>
+                                        <a id="HC5D6130D28B84780BC0FB8D63AEA5A61" />
+                                        <span class="lbexIndentClause">“(iii) in the case that such system indicates that an individual enrolled or seeking to enroll under such plan (or waiver of such plan) is enrolled under a State plan (or waiver of such a plan) of another State, for the taking of appropriate action (as determined by the Secretary) to identify whether such an individual resides in the State and disenroll an individual from the State plan of such State if such individual does not reside in such State (unless such individual meets such an exception as the Secretary may specify).”; and</span>
                                     </span>
                                 </span>
+                                <!--</span>-->
                             </span>
                         </span>
                         <a id="H7D06E840F81642728077A429B81D4C50" />
@@ -411,24 +411,24 @@ const $route = useRoute();
                         target="_blank"
                     >42 U.S.C. 1396b(r)(3)</a>) is amended—
                         <a id="HAED89D0C277C406DB490421E38C54FF9" />
-                        <span class="lbexIndentClause">(i) by striking “In order” and inserting  <a id="HAAEAC589BF8A461784A7ADC6C7EAF86E" />(A) In order”;</span>
+                        <span class="lbexIndentClause">(i) by striking “In order” and inserting <a id="HAAEAC589BF8A461784A7ADC6C7EAF86E" /><span class="annotated-text">“(A) In order”</span>;</span>
                         <a id="HD80B61629C4348B98D2E52F0EC48BE1E" />
-                        <span class="lbexIndentClause">(ii) by striking “through the Public” and inserting  “through—
+                        <span class="lbexIndentClause">(ii) by striking “through the Public” and inserting <span class="annotated-text">“through—</span>
                             <a id="H588E9E03B31C4B6DB3180012729864A1" />
-                            <span class="lbexIndentSubpar">“(i) the Public”;</span>
+                            <span class="lbexIndentSubpar"><span class="annotated-text">“(i) the Public”</span>;</span>
                         </span>
 
                         <a id="HD2B282B4E612493F800D88CD7B7C3FEE" />
-                        <span class="lbexIndentClause">(iii) by striking the period at the end and inserting  “; and<a id="H1E443FA2F30F47C9A0F52C682AA33025" />
-                            <span class="lbexIndentSubpar">“(ii) beginning October 1, 2029, the system established by the Secretary under section 1902(uu).”; and</span>
+                        <span class="lbexIndentClause">(iii) by striking the period at the end and inserting  <span class="annotated-text">“; and</span><a id="H1E443FA2F30F47C9A0F52C682AA33025" />
+                            <span class="lbexIndentSubpar"><span class="annotated-text">“(ii) beginning October 1, 2029, the system established by the Secretary under section 1902(uu).”</span>; and</span>
                         </span>
 
                         <a id="H500874F55953484ABF8A11D6A03581A7" />
                         <span class="lbexIndentClause">(iv) by adding at the end the following new subparagraph:
-                            <span class="lbexIndentClause">
-                                <a id="HE17D24771B7140D9B1654596AF62C547" />
-                                <span class="lbexIndentParagraph annotated-text">“(B) Beginning October 1, 2029, the Secretary may determine that a State is not required to have in operation an eligibility determination system which provides for data matching (for purposes of address verification under section 1902(vv)) through the system described in subparagraph (A)(i) to meet the requirements of this paragraph.”.</span>
-                            </span>
+                            <!--<span class="lbexIndentClause">-->
+                            <a id="HE17D24771B7140D9B1654596AF62C547" />
+                            <span class="lbexIndentParagraph annotated-text">“(B) Beginning October 1, 2029, the Secretary may determine that a State is not required to have in operation an eligibility determination system which provides for data matching (for purposes of address verification under section 1902(vv)) through the system described in subparagraph (A)(i) to meet the requirements of this paragraph.”.</span>
+                            <!--</span>-->
                         </span>
                     </span>
 
@@ -473,7 +473,7 @@ const $route = useRoute();
                         href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397cc"
                         class="external"
                         target="_blank"
-                    >42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting “(e), and (j)”. </span>
+                    >42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting <span class="annotated-text">“(e), and (j)”</span>. </span>
                 </span>
 
                 <span class="lbexHang">
@@ -500,13 +500,13 @@ const $route = useRoute();
                     <a id="H93674B5332954A50A00A82CD77AEB615" />
                     <span class="lbexIndentSubpar">(A) in paragraph (87), by striking “; and” and inserting a semicolon;</span>
                     <a id="H75BEA9ADD42D45948A889F540489655A" />
-                    <span class="lbexIndentSubpar">(B) in paragraph (88), by striking the period at the end and inserting “; and”; and</span>
+                    <span class="lbexIndentSubpar">(B) in paragraph (88), by striking the period at the end and inserting <span class="annotated-text">“; and”</span>; and</span>
 
                     <a id="H28034D8913A949C491BD8972010E4D20" />
                     <span class="lbexIndentSubpar">(C) by inserting after paragraph (88) the following new paragraph:
                         <span class="lbexIndent">
                             <a id="HFEC8260E2A8941AA8BED96F1CD37E6E0" />
-                            <span class="lbexIndentParagraph annotated-text">“(89) provide that the State shall comply with the eligibility verification requirements under subsection (ww), except that this paragraph shall apply only in the case of the 50 States and the District of Columbia.”; and</span>
+                            <span class="lbexIndentParagraph"><span class="annotated-text">“(89) provide that the State shall comply with the eligibility verification requirements under subsection (ww), except that this paragraph shall apply only in the case of the 50 States and the District of Columbia.”</span>; and</span>
                         </span>
                     </span>
                 </span>
@@ -566,7 +566,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(1) by striking “The State” and inserting:
                     <span class="ul">
                         <a id="H48181FB255E34F0CBFCA4DF07AC56942" />
-                        <span class="lbexIndentSubpar annotated-text">“(A) IN GENERAL.—The State”; and</span>
+                        <span class="lbexIndentSubpar"><span class="annotated-text">“(A) IN GENERAL.—The State”</span>; and</span>
                     </span>
                 </span>
 
@@ -600,16 +600,16 @@ const $route = useRoute();
                     <a id="H937661ADD6DD4AEF85F4B0D80F0F6BE5" />
                     <span class="lbexIndentParagraph">(1) in subparagraph (A)—
                         <a id="H320636DB2653442A8D4CB2402575EC9B" />
-                        <span class="lbexIndentSubpar">(A) by inserting “for audits conducted by the Secretary, or, at the option of the Secretary, audits conducted by the State” after “exceeds 0.03”; and</span>
+                        <span class="lbexIndentSubpar">(A) by inserting <span class="annotated-text">“for audits conducted by the Secretary, or, at the option of the Secretary, audits conducted by the State”</span> after “exceeds 0.03”; and</span>
                         <a id="H1327C1E313D64E5E9483CAF10A9AEA2D" />
-                        <span class="lbexIndentSubpar">(B) by inserting “, to the extent practicable” before the period at the end;</span>
+                        <span class="lbexIndentSubpar">(B) by inserting <span class="annotated-text">“, to the extent practicable”</span> before the period at the end;</span>
                     </span>
                 </span>
 
                 <a id="H9F4052C1574343A9B5EBBB963994AB01" />
                 <span class="lbexIndentParagraph">(2) in subparagraph (B)—
                     <a id="H62624980F5B14CEBB6CBC24C04F18AFB" />
-                    <span class="lbexIndentSubpar">(A) by striking “The Secretary” and inserting  <a id="H1EEF7073D128493D95B7DD59A52715B4" />(i) Subject to clause (ii), the Secretary”; and</span>
+                    <span class="lbexIndentSubpar">(A) by striking “The Secretary” and inserting  <a id="H1EEF7073D128493D95B7DD59A52715B4" /><span class="annotated-text">“(i) Subject to clause (ii), the Secretary”</span>; and</span>
                     <a id="H578C033173624FFD9BD6E547177B4571" />
                     <span class="lbexIndentSubpar">(B) by adding at the end the following new clause:
                         <span class="lbexIndentClause">
@@ -620,14 +620,14 @@ const $route = useRoute();
                 </span>
 
                 <a id="H4CB87149B0144BD8A00E1A8F686C830E" />
-                <span class="lbexIndentParagraph">(3) in subparagraph (C), by striking “he” in each place it appears and inserting “the Secretary” in each such place; and</span>
+                <span class="lbexIndentParagraph">(3) in subparagraph (C), by striking “he” in each place it appears and inserting <span class="annotated-text">“the Secretary”</span> in each such place; and</span>
 
                 <a id="HB5D63D3AFA4D4FB197D36B748A75AB6C" />
                 <span class="lbexIndentParagraph">(4) in subparagraph (D)(i)—
                     <a id="H800494C02307471D9555A99DCB201917" />
                     <span class="lbexIndentSubpar">(A) in subclause (I), by striking “and” at the end;</span>
                     <a id="HDE92A8E3B7A44D3B8A813585DD3727ED" />
-                    <span class="lbexIndentSubpar">(B) in subclause (II), by striking the period at the end and inserting “, or payments where insufficient information is available to confirm eligibility, and”; and</span>
+                    <span class="lbexIndentSubpar">(B) in subclause (II), by striking the period at the end and inserting <span class="annotated-text">“, or payments where insufficient information is available to confirm eligibility, and”</span>; and</span>
                     <a id="H737E592431FF4C5B9BB4A352F478DDAC" />
                     <span class="lbexIndentSubpar">(C) by adding at the end the following new subclause:
                         <span class="lbexIndentClause">
@@ -712,19 +712,19 @@ const $route = useRoute();
                     <a id="H1D7250775A944D8293EE8C07BD26B67F" />
                     <span class="lbexIndentParagraph">(1) in subparagraph (B)—
                         <a id="H10606F5F8B2A4A0380B43FF39F2FEBFC" />
-                        <span class="lbexIndentSubpar">(A) by striking “A State” and inserting “(i) A State”; </span>
+                        <span class="lbexIndentSubpar">(A) by striking “A State” and inserting <span class="annotated-text">“(i) A State”</span>; </span>
                         <a id="H2D59538C96B344D798CB483F10AA8B90" />
                         <span class="lbexIndentSubpar">(B) in clause (i), as inserted by subparagraph (A)—
                             <a id="H1FC72A4476F24CAE94008B86F751AA96" />
-                            <span class="lbexIndentClause">(i) by striking “<span class="lbexThinSpace" />‘$500,000’” and inserting “the amount specified in subparagraph (A)”; and </span>
+                            <span class="lbexIndentClause">(i) by striking “<span class="lbexThinSpace" />‘$500,000’” and inserting <span class="annotated-text">“the amount specified in subparagraph (A)”</span>; and </span>
                             <a id="H736A7B4BB6084DF99AE37BE1EEF5EABD" />
-                            <span class="lbexIndentClause">(ii) by inserting “, in the case of an individual’s home that is located on a lot that is zoned for agricultural use,” after “apply subparagraph (A)”; and</span>
+                            <span class="lbexIndentClause">(ii) by inserting <span class="annotated-text">“, in the case of an individual’s home that is located on a lot that is zoned for agricultural use,”</span> after “apply subparagraph (A)”; and</span>
                         </span>
                         <a id="H84EB889031B9425B8BF2A1A546D345B9" />
                         <span class="lbexIndentSubpar">(C) by adding at the end the following new clause:
                             <span class="lbexIndentClause">
                                 <a id="HB6BBF12010B443E984E90B1AB752D144" />
-                                <span class="lbexIndentParagraph annotated-text">“(ii) A State may elect, without regard to the requirements of section 1902(a)(1) (relating to statewideness) and section 1902(a)(10)(B) (relating to comparability), to apply subparagraph (A), in the case of an individual’s home that is not described in clause (i), by substituting for the amount specified in such subparagraph, an amount that exceeds such amount, but does not exceed $1,000,000.”; and</span>
+                                <span class="lbexIndentParagraph"><span class="annotated-text">“(ii) A State may elect, without regard to the requirements of section 1902(a)(1) (relating to statewideness) and section 1902(a)(10)(B) (relating to comparability), to apply subparagraph (A), in the case of an individual’s home that is not described in clause (i), by substituting for the amount specified in such subparagraph, an amount that exceeds such amount, but does not exceed $1,000,000.”</span>; and</span>
                             </span>
                         </span>
                     </span>
@@ -732,9 +732,9 @@ const $route = useRoute();
                 <a id="HB1364FFE24A24CC699667E9B4508C967" />
                 <span class="lbexIndentParagraph">(2) in subparagraph (C)—
                     <a id="HB9A2F5F5F71644AA84BC594D38552C1B" />
-                    <span class="lbexIndentSubpar">(A) by inserting “(other than the amount specified in subparagraph (B)(ii) (relating to certain non-agricultural homes))” after “specified in this paragraph”; and</span>
+                    <span class="lbexIndentSubpar">(A) by inserting <span class="annotated-text">“(other than the amount specified in subparagraph (B)(ii) (relating to certain non-agricultural homes))”</span> after “specified in this paragraph”; and</span>
                     <a id="HE94B0F476E964210B1C6430F17B358FF" />
-                    <span class="lbexIndentSubpar">(B) by adding at the end the following new sentence: “In the case that application of the preceding sentence would result in a dollar amount (other than the amount specified in subparagraph (B)(i) (relating to certain agricultural homes)) exceeding $1,000,000, such amount shall be deemed to be equal to $1,000,000.”. </span>
+                    <span class="lbexIndentSubpar">(B) by adding at the end the following new sentence: <span class="annotated-text">“In the case that application of the preceding sentence would result in a dollar amount (other than the amount specified in subparagraph (B)(i) (relating to certain agricultural homes)) exceeding $1,000,000, such amount shall be deemed to be equal to $1,000,000.”</span>.</span>
                 </span>
                 <a id="HE9B43645948347829A70DCF2C7126573" />
                 <span class="lbexIndent">(b)
@@ -747,7 +747,7 @@ const $route = useRoute();
                     <span class="lbexIndentParagraph">(1) in subsection (r)(2), by adding at the end the following new subparagraph:
                         <span class="lbexIndentSubsection">
                             <a id="H855DFEE9E5FF483C8E67D0292122ECEB" />
-                            <span class="lbexIndentSubsection">“(C) This paragraph shall not be construed as permitting a State to determine the eligibility of an individual for medical assistance with respect to nursing facility services or other long-term care services without application of the limit under section 1917(f)(1).”; and</span>
+                            <span class="lbexIndentParagraph">“(C) This paragraph shall not be construed as permitting a State to determine the eligibility of an individual for medical assistance with respect to nursing facility services or other long-term care services without application of the limit under section 1917(f)(1).”; and</span>
                         </span>
                     </span>
                 </span>
@@ -757,7 +757,7 @@ const $route = useRoute();
                     <span class="lbexIndentSubpar">(A) by striking “Subparagraphs” and inserting
                         <span class="lbexIndentClause">
                             <a id="HA551CE75AEEC49DD93BC4AE73BD8541A" />
-                            <span class="lbexIndentSubclause annotated-text">“(I) IN GENERAL.—Subparagraphs”; and</span>
+                            <span class="lbexIndentSubclause"><span class="annotated-text">“(I) IN GENERAL.—Subparagraphs”</span>; and</span>
                         </span>
                     </span>
                     <a id="HF12A37CF3E194A06A0627BAC9E51CDFB" />
@@ -793,26 +793,26 @@ const $route = useRoute();
                         target="_blank"
                     >42 U.S.C. 1396b(v)</a>) is amended—
                     <a id="HD4FE61EC0B304D7F858FCB05CBCA0AF1" />
-                    <span class="lbexIndentParagraph">(1) in paragraph (1), by striking “and (4)”and inserting “, (4), and (5)”; and</span>
+                    <span class="lbexIndentParagraph">(1) in paragraph (1), by striking “and (4)”and inserting <span class="annotated-text">“, (4), and (5)”</span>; and</span>
                 </span>
                 <a id="H81367C78DE704553ACB9308C562F84D6" />
                 <span class="lbexIndentParagraph">(2) by adding at the end the following new paragraph:
                     <span class="lbexIndentSubsection">
                         <a id="HD6D86B4AE5DF48A096908297692DE61A" />
-                        <span class="lbexIndentSubsection">“(5) Notwithstanding the preceding paragraphs of this subsection, beginning on October 1, 2026, except as provided in paragraphs (2) and (4), in no event shall payment be made to a State under this section for medical assistance furnished to an individual unless such individual is—
+                        <span class="lbexIndentParagraph">“(5) Notwithstanding the preceding paragraphs of this subsection, beginning on October 1, 2026, except as provided in paragraphs (2) and (4), in no event shall payment be made to a State under this section for medical assistance furnished to an individual unless such individual is—
                             <a id="HD8E5CEEE69824BD1ABF6C935870F92A6" />
                             <span class="lbexIndentParagraph">“(A) a resident of 1 of the 50 States, the District of Columbia, or a territory of the United States; and</span>
-                        </span>
-                        <a id="H4A93BA9E34214DD2A7D28DB2FB531FFB" />
-                        <span class="lbexIndentParagraph">“(B) either—
-                            <a id="HB65EC1BFA89A4F8D814CC40E101188B9" />
-                            <span class="lbexIndentSubpar">“(i) a citizen or national of the United States;</span>
-                            <a id="H481189C32FBA49369E4D4C6C88471497" />
-                            <span class="lbexIndentSubpar">“(ii) an alien lawfully admitted for permanent residence as an immigrant as defined by sections 101(a)(15) and 101(a)(20) of the Immigration and Nationality Act, excluding, among others, alien visitors, tourists, diplomats, and students who enter the United States temporarily with no intention of abandoning their residence in a foreign country;</span>
-                            <a id="HFD723DC1E31B4F2CB929BED23707A23C" />
-                            <span class="lbexIndentSubpar">“(iii) an alien who has been granted the status of Cuban and Haitian entrant, as defined in section 501(e) of the Refugee Education Assistance Act of 1980 (Public Law 96–422); or</span>
-                            <a id="H93A65B7F5B164649BA9518C81EFD7879" />
-                            <span class="lbexIndentSubpar">“(iv) an individual who lawfully resides in the United States in accordance with a Compact of Free Association referred to in section 402(b)(2)(G) of the Personal Responsibility and Work Opportunity Reconciliation Act of 1996.”.</span>
+                            <a id="H4A93BA9E34214DD2A7D28DB2FB531FFB" />
+                            <span class="lbexIndentParagraph">“(B) either—
+                                <a id="HB65EC1BFA89A4F8D814CC40E101188B9" />
+                                <span class="lbexIndentSubpar">“(i) a citizen or national of the United States;</span>
+                                <a id="H481189C32FBA49369E4D4C6C88471497" />
+                                <span class="lbexIndentSubpar">“(ii) an alien lawfully admitted for permanent residence as an immigrant as defined by sections 101(a)(15) and 101(a)(20) of the Immigration and Nationality Act, excluding, among others, alien visitors, tourists, diplomats, and students who enter the United States temporarily with no intention of abandoning their residence in a foreign country;</span>
+                                <a id="HFD723DC1E31B4F2CB929BED23707A23C" />
+                                <span class="lbexIndentSubpar">“(iii) an alien who has been granted the status of Cuban and Haitian entrant, as defined in section 501(e) of the Refugee Education Assistance Act of 1980 (Public Law 96–422); or</span>
+                                <a id="H93A65B7F5B164649BA9518C81EFD7879" />
+                                <span class="lbexIndentSubpar">“(iv) an individual who lawfully resides in the United States in accordance with a Compact of Free Association referred to in section 402(b)(2)(G) of the Personal Responsibility and Work Opportunity Reconciliation Act of 1996.”.</span>
+                            </span>
                         </span>
                     </span>
                 </span>
@@ -857,7 +857,7 @@ const $route = useRoute();
                     <span class="lbexIndent">
                         <a id="H9FB7AB9C8BC74E728D697815C49908A6" />
                         <span class="lbexIndentSubsection">
-                            <span class="lbexIndent">“(kk)
+                            <span class="lbexIndentParagraph">“(kk)
                                 <span class="lbexSectionLevelOLCnuclear">FMAP for treatment of an emergency Medical condition</span>.—Notwithstanding subsection (y) and (z), beginning on October 1, 2026, the Federal medical assistance percentage for payments for care and services described in paragraph (2) of subsection 1903(v) furnished to an alien described in paragraph (1) of such subsection shall not exceed the Federal medical assistance percentage determined under subsection (b) for such State.”.</span>
                         </span>
                     </span>
@@ -892,18 +892,10 @@ const $route = useRoute();
                     </span>
                 </span>
                 <a id="H7F27631AC8864ABFA997B72C9BC9AAAE" />
-                <span class="lbexIndentParagraph">(1) Section <a
-                    href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-483/subpart-B/section-483.5"
-                    class="external"
-                    target="_blank"
-                >483.5</a>.</span>
+                <span class="lbexIndentParagraph">(1) Section <a href="/42/483/Subpart-B/2025-01-01/#483-5">483.5</a>.</span>
 
                 <a id="H0BE34688028F490A991FA0D537331D4C" />
-                <span class="lbexIndentParagraph">(2) Section <a
-                    href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-483/subpart-B/section-483.35"
-                    class="external"
-                    target="_blank"
-                >483.35</a>.</span>
+                <span class="lbexIndentParagraph">(2) Section <a href="/42/483/Subpart-B/2025-01-01/#483-35">483.35</a>.</span>
 
                 <span class="lbexHang">
                     <a id="toc-H917F6C03CA464B319B70F26A163C0EE0" href="#H917F6C03CA464B319B70F26A163C0EE0">
@@ -941,7 +933,7 @@ const $route = useRoute();
                         href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
                         class="external"
                         target="_blank"
-                    >42 U.S.C. 1396d(a)</a>) is amended by striking “in or after the third month before the month in which the recipient makes application for assistance” and inserting “, with respect to an individual described in section 1902(a)(34)(A), in or after the month before the month in which the recipient makes application for assistance, and with respect to an individual described in section 1902(a)(34)(B), in or after the second month before the month in which the recipient makes application for assistance”.</span>
+                    >42 U.S.C. 1396d(a)</a>) is amended by striking “in or after the third month before the month in which the recipient makes application for assistance” and inserting <span class="annotated-text">“, with respect to an individual described in section 1902(a)(34)(A), in or after the month before the month in which the recipient makes application for assistance, and with respect to an individual described in section 1902(a)(34)(B), in or after the second month before the month in which the recipient makes application for assistance”</span>.</span>
                 <a id="H961706CDB4CE450EAD37A45CDA1206E3" />
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">CHIP</span>.—Section 2102(b)(1)(B) of the Social Security Act (<a
@@ -953,7 +945,7 @@ const $route = useRoute();
                     <span class="lbexIndentParagraph">(1) in clause (iv), by striking “and” at the end;</span>
                 </span>
                 <a id="HD94E93B3A7144BFC848CAF55069DA188" />
-                <span class="lbexIndentParagraph">(2) in clause (v), by striking the period and inserting “; and”; and</span>
+                <span class="lbexIndentParagraph">(2) in clause (v), by striking the period and inserting <span class="annotated-text">“; and”</span>; and</span>
 
                 <a id="HF55E911FC4D649C4984C7062780E3B55" />
                 <span class="lbexIndentParagraph">(3) by adding at the end the following new clause:
@@ -1059,13 +1051,13 @@ const $route = useRoute();
                     >42 U.S.C. 1396d(ii)(3)</a>) is amended—</span>
                 </span>
                 <a id="HD2439E0C48C04FDE8FE8FCE60D804E7A" />
-                <span class="lbexIndentParagraph">(1) by striking “which has not” and inserting the following:  “which—
+                <span class="lbexIndentParagraph">(1) by striking “which has not” and inserting the following: <span class="annotated-text">“which—</span>
                     <a id="HD95C82A823C2440EA841288A92B1A3D2" />
-                    <span class="lbexIndentSubpar">“(A) has not”; </span>
+                    <span class="lbexIndentSubpar"><span class="annotated-text">“(A) has not”</span>; </span>
                 </span>
 
                 <a id="H07790A8094C94E159B2B4E0A0C33CCEA" />
-                <span class="lbexIndentParagraph">(2) in subparagraph (A), as so inserted, by striking the period at the end and inserting “; and”; and</span>
+                <span class="lbexIndentParagraph">(2) in subparagraph (A), as so inserted, by striking the period at the end and inserting <span class="annotated-text">“; and”</span>; and</span>
 
                 <a id="H52643300F54D4B7F8442FDB4B4B6A9F3" />
                 <span class="lbexIndentParagraph">(3) by adding at the end the following new subparagraph:
@@ -1148,11 +1140,7 @@ const $route = useRoute();
                         </span>
 
                         <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
-                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a
-                            href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
-                            class="external"
-                            target="_blank"
-                        >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
+                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
                     </span>
                 </span>
 
@@ -1177,11 +1165,7 @@ const $route = useRoute();
 
                 <a id="H6081C5C3FF704314AFF57BA411E26DDE" />
                 <span class="lbexIndent">(a)
-                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a
-                        href="https://www.ecfr.gov/current/title-42/part-438/section-438.6#p-438.6(c)(2)(iii)"
-                        class="external"
-                        target="_blank"
-                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
+                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
                     <a id="HC7FA119FA48845338BE885CBFF7EB408" />
                     <span class="lbexIndentParagraph">(1) in the case of a State that provides coverage to all individuals described in section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
                         href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
@@ -1197,27 +1181,15 @@ const $route = useRoute();
                 </span>
                 <a id="HDF8733C85AF248F388EEB66529058959" />
                 <span class="lbexIndent">(b)
-                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a
-                        href="https://www.ecfr.gov/current/title-42/part-438/section-438.6#p-438.6(c)(2)(iii)"
-                        class="external"
-                        target="_blank"
-                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
+                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
                 <a id="HE5D55700A09E4588B22AD16BF89FE95D" />
                 <span class="lbexIndent">(c)
-                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a
-                        href="https://www.ecfr.gov/current/title-42/part-438/section-438.6#p-438.6(c)(2)(iii)"
-                        class="external"
-                        target="_blank"
-                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
+                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
                 <a id="HBEA8D8254C8D4E6FA9A9BB30161AF637" />
                 <span class="lbexIndent">(d)
                     <span class="lbexSectionLevelOLCnuclear">Definitions</span>.—In this section:
                     <a id="H0FA8895A2CF44F0F8F20C1B2127F7710" />
-                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a
-                        href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-C/part-438/subpart-A/section-438.2"
-                        class="external"
-                        target="_blank"
-                    >438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a href="/42/438/Subpart-A/2024-12-19/#438-2">438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
                 </span>
                 <a id="H853967811D0341A9BBAD7278E4F65755" />
                 <span class="lbexIndentParagraph">(2) RURAL HOSPITAL.—The term “rural hospital” means the following:
@@ -1278,11 +1250,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(4) TOTAL PUBLISHED MEDICARE PAYMENT RATE.—The term “total published Medicare payment rate” has the meaning given to such term in section 438.6(a) of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="H9334788623AB48D59AA5F48A7931A73A" />
-                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a
-                    href="https://www.ecfr.gov/current/title-42/part-438/section-438.6#p-438.6(c)(2)(i)"
-                    class="external"
-                    target="_blank"
-                >438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-i">438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="HC6803D86FB4C4A04AD9B3927CFBED342" />
                 <span class="lbexIndent">(e)
@@ -1311,7 +1279,7 @@ const $route = useRoute();
                     <span class="lbexIndentParagraph">(1) in paragraph (3)(E), by inserting after clause (ii)(II) the following new clause:
                         <span class="lbexIndentSubsection">
                             <a id="HDB84925810DC49BAB9F573C4A3D00F45" />
-                            <span class="lbexIndentSubsection">“(iii) For purposes of clause (ii)(I), a tax is not considered to be generally redistributive if any of the following conditions apply:
+                            <span class="lbexIndentParagraph">“(iii) For purposes of clause (ii)(I), a tax is not considered to be generally redistributive if any of the following conditions apply:
                                 <a id="H03B8A44D85AA40949002B8C098AAAEE8" />
                                 <span class="lbexIndentParagraph">“(I) Within a permissible class, the tax rate imposed on any taxpayer or tax rate group (as defined in paragraph (7)(J)) explicitly defined by its relatively lower volume or percentage of Medicaid taxable units (as defined in paragraph (7)(H)) is lower than the tax rate imposed on any other taxpayer or tax rate group explicitly defined by its relatively higher volume or percentage of Medicaid taxable units.</span>
                             </span>
@@ -1391,13 +1359,13 @@ const $route = useRoute();
                     <span class="lbexIndent">
                         <a id="H6F0FA9A5E62A4810A41334871123A247" />
                         <span class="lbexIndentSubsection">
-                            <span class="lbexIndent">“(g)
+                            <span class="lbexIndentParagraph">“(g)
                                 <span class="lbexSectionLevelOLCnuclear">Requirement of budget neutrality for Medicaid demonstration projects</span>.—
                                 <a id="HCE35A72C9ABE4327B977E3055671EDF7" />
                                 <span class="lbexIndentParagraph">“(1) IN GENERAL.—Beginning January 1 2027, the Secretary may not approve an application for (or renewal or amendment of) an experimental, pilot, or demonstration project undertaken under subsection (a) to promote the objectives of title XIX in a State (in this subsection referred to as a ‘Medicaid demonstration project’) unless the Chief Actuary for the Centers for Medicare &amp; Medicaid Services certifies that such project, or, in the case of a renewal, the duration of the preceding waiver, is not expected to result in an increase in the amount of Federal expenditures compared to the amount that such expenditures would otherwise be in the absence of such project. For purposes of this subsection, expenditures for the coverage of populations and services that the State could have otherwise provided through its Medicaid State plan or other authority under title XIX, including expenditures that could be made under such authority but for the provision of such services at a different site of service than authorized under such State plan or other authority, shall be considered expenditures in the absence of such a project.</span>
+                                <a id="H6273450F6A7C4E0AA6AF422F6CD1E5ED" />
+                                <span class="lbexIndentParagraph">“(2) TREATMENT OF SAVINGS.—In the event that expenditures with respect to a State under a Medicaid demonstration project are, during an approval period for such project, less than the amount of such expenditures that would have otherwise been made in the absence of such project, the Secretary shall specify the methodology to be used with respect to the subsequent approval period for such project for purposes of taking the difference between such expenditures into account.”.</span>
                             </span>
-                            <a id="H6273450F6A7C4E0AA6AF422F6CD1E5ED" />
-                            <span class="lbexIndentParagraph">“(2) TREATMENT OF SAVINGS.—In the event that expenditures with respect to a State under a Medicaid demonstration project are, during an approval period for such project, less than the amount of such expenditures that would have otherwise been made in the absence of such project, the Secretary shall specify the methodology to be used with respect to the subsequent approval period for such project for purposes of taking the difference between such expenditures into account.”.</span>
                         </span>
                     </span>
                 </span>
@@ -1433,7 +1401,7 @@ const $route = useRoute();
 
                     <a id="H8E766BAEAC77476D94E39EC929595539" />
                     <span class="lbexIndentSubsection">
-                        <span class="lbexIndent">“(xx)
+                        <span class="lbexIndentParagraph">“(xx)
                             <span class="lbexSectionLevelOLCnuclear">Community engagement requirement for applicable individuals</span>.—
                             <a id="HEE8799D1FF664550B27FE20B048550DA" />
 
@@ -1551,9 +1519,8 @@ const $route = useRoute();
                                         <span class="lbexIndentSubclause">“(aa) make a satisfactory showing to the State of compliance with such requirement (including, if applicable, by showing that such individual was or should be deemed to have demonstrated community engagement under <a href="#HB95A875567A74FBC9933837B304F0F9C">paragraph (3)</a>); or</span>
                                         <a id="H5521F2954AA048ADA2EDC3458DA0D273" />
                                         <span class="lbexIndentSubclause">“(bb) make a satisfactory showing to the State that such requirement does not apply to such individual on the basis that such individual does not meet the definition of applicable individual under <a href="#HC4EBE7D0D4884A48A3E91528D51709B3">paragraph (9)(A)</a>; and</span>
+                                        <a id="H93A78CB6EA0242F29E9CF2D51770FCD5" />
                                     </span>
-
-                                    <a id="H93A78CB6EA0242F29E9CF2D51770FCD5" />
                                     <span class="lbexIndentClause">“(II) if such individual is enrolled under the State plan (or a waiver of such plan) under this title, continue to provide such individual with medical assistance during such 30-calendar-day period; and</span>
 
                                     <a id="H6B3056BEBD4F41F3AC48EB381C681E9A" />
@@ -1773,7 +1740,7 @@ const $route = useRoute();
                         href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
-                    >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) is amended by striking “subject to subsection (k)” and inserting “subject to subsections (k) and (xx)”.</span>
+                    >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) is amended by striking “subject to subsection (k)” and inserting <span class="annotated-text">“subject to subsections (k) and (xx)”</span>.</span>
                 <a id="H214E8D10AFF84B56BA50969CE3326973" />
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Prohibiting conflicts of interest</span>.—A State shall not use a Medicaid managed care entity or other specified entity (as such terms are defined in section 1903(m)(9)(D)), or other contractor to determine beneficiary compliance under such section unless the contractor has no direct or indirect financial relationship with any Medicaid managed care entity or other specified entity that is responsible for providing or arranging for coverage of medical assistance for individuals enrolled with the entity pursuant to a contract with such State.</span>
@@ -1830,7 +1797,7 @@ const $route = useRoute();
                         target="_blank"
                     >42 U.S.C. 1396o</a>) is amended—
                     <a id="HD014FD8F280B45ED9B0BD903AD086525" />
-                    <span class="lbexIndentParagraph">(1) in subsection (a), in the matter preceding paragraph (1), by inserting “(other than, beginning October 1, 2028, specified individuals (as defined in subsection (k)(3)))” after “individuals”; and</span>
+                    <span class="lbexIndentParagraph">(1) in subsection (a), in the matter preceding paragraph (1), by inserting <span class="annotated-text">“(other than, beginning October 1, 2028, specified individuals (as defined in subsection (k)(3)))”</span> after “individuals”; and</span>
                 </span>
                 <a id="HA206E2E795374C2D9179A8C9AE42F25F" />
                 <span class="lbexIndentParagraph">
@@ -1847,45 +1814,40 @@ const $route = useRoute();
                                 <span class="lbexIndentParagraph">“(2) REQUIRED IMPOSITION OF COST SHARING.—
                                     <a id="HAA58CE7AE17A4E0CA5E123B5CAF77DA5" />
                                     <span class="lbexIndentSubpar">“(A) IN GENERAL.—Subject to subparagraph (B) and subsection (j), in the case of a specified individual, the State plan shall, beginning October 1, 2028, provide for the imposition of such deductions, cost sharing, or similar charges determined appropriate by the State (in an amount greater than $0) with respect to certain care, items, or services furnished to such an individual, as determined by the State.</span>
+                                    <a id="H1760FE922B784A9CB61C2AF4D6E40679" />
+                                    <span class="lbexIndentSubpar">“(B) LIMITATIONS.—
+                                        <a id="HF15E355164554DE599911EB91E57B310" />
+                                        <span class="lbexIndentClause">“(i) EXCLUSION OF CERTAIN SERVICES.—In no case may a deduction, cost sharing, or similar charge be imposed under the State plan with respect to care, items, or services described in any of subparagraphs (B) through (J) of subsection (a)(2), or any primary care services, mental health care services, substance use disorder services, or services provided by a Federally qualified health center (as defined in 1905(l)(2)), certified community behavioral health clinic (as defined in section 1905(jj)(2)), or rural health clinic (as defined in 1905(l)(1)), furnished to a specified individual.</span>
+                                        <a id="H951689DACC0C4034929314ADF4DF981F" />
+                                        <span class="lbexIndentClause">“(ii) ITEM AND SERVICE LIMITATION.—
+                                            <a id="H80370273AE4C4E099B54DCC7D2CA8721" />
+                                            <span class="lbexIndentSubclause">“(I) IN GENERAL.—Except as provided in subclause (II), in no case may a deduction, cost sharing, or similar charge imposed under the State plan with respect to care or an item or service furnished to a specified individual exceed $35.</span>
+                                            <a id="HE7C0B22D73BA46E9888F80D4CC75C03D" />
+                                            <span class="lbexIndentSubclause">“(II) SPECIAL RULES FOR PRESCRIPTION DRUGS.—In no case may a deduction, cost sharing, or similar charge imposed under the State plan with respect to a prescription drug furnished to a specified individual exceed the limit that would be applicable under paragraph (2)(A)(i) or (2)(B) of section 1916A(c) with respect to such drug and individual if such drug so furnished were subject to cost sharing under such section.</span>
+                                        </span>
+                                        <a id="H651CF257248543EBA0CB694FC147A56D" />
+                                        <span class="lbexIndentClause">“(iii) MAXIMUM LIMIT ON COST SHARING.—The total aggregate amount of deductions, cost sharing, or similar charges imposed under the State plan for all individuals in the family may not exceed 5 percent of the family income of the family involved, as applied on a quarterly or monthly basis (as specified by the State).</span>
+                                    </span>
+                                    <a id="H17CE0A4832B24FFEA553A9F4BE9A9AAE" />
+                                    <span class="lbexIndentSubpar">“(C) CASES OF NONPAYMENT.—Notwithstanding subsection (e), a State may permit a provider participating under the State plan to require, as a condition for the provision of care, items, or services to a specified individual entitled to medical assistance under this title for such care, items, or services, the payment of any deductions, cost sharing, or similar charges authorized to be imposed with respect to such care, items, or services. Nothing in this subparagraph shall be construed as preventing a provider from reducing or waiving the application of such deductions, cost sharing, or similar charges on a case-by-case basis.</span>
                                 </span>
-                                <a id="H1760FE922B784A9CB61C2AF4D6E40679" />
-                                <span class="lbexIndentSubpar">“(B) LIMITATIONS.—
-                                    <a id="HF15E355164554DE599911EB91E57B310" />
-                                    <span class="lbexIndentClause">“(i) EXCLUSION OF CERTAIN SERVICES.—In no case may a deduction, cost sharing, or similar charge be imposed under the State plan with respect to care, items, or services described in any of subparagraphs (B) through (J) of subsection (a)(2), or any primary care services, mental health care services, substance use disorder services, or services provided by a Federally qualified health center (as defined in 1905(l)(2)), certified community behavioral health clinic (as defined in section 1905(jj)(2)), or rural health clinic (as defined in 1905(l)(1)), furnished to a specified individual.</span>
-                                </span>
-                                <a id="H951689DACC0C4034929314ADF4DF981F" />
-                                <span class="lbexIndentClause">“(ii) ITEM AND SERVICE LIMITATION.—
-                                    <a id="H80370273AE4C4E099B54DCC7D2CA8721" />
-                                    <span class="lbexIndentSubclause">“(I) IN GENERAL.—Except as provided in subclause (II), in no case may a deduction, cost sharing, or similar charge imposed under the State plan with respect to care or an item or service furnished to a specified individual exceed $35.</span>
-                                </span>
-                                <a id="HE7C0B22D73BA46E9888F80D4CC75C03D" />
-                                <span class="lbexIndentSubclause">“(II) SPECIAL RULES FOR PRESCRIPTION DRUGS.—In no case may a deduction, cost sharing, or similar charge imposed under the State plan with respect to a prescription drug furnished to a specified individual exceed the limit that would be applicable under paragraph (2)(A)(i) or (2)(B) of section 1916A(c) with respect to such drug and individual if such drug so furnished were subject to cost sharing under such section.</span>
                             </span>
+                            <a id="HD6027B639CDB4F59B2E8071DBD8AA9D6" />
+                            <span class="lbexIndentParagraph">“(3) SPECIFIED INDIVIDUAL DEFINED.—For purposes of this subsection, the term ‘specified individual’ means an individual who has a family income (as determined in accordance with section 1902(e)(14)) that exceeds the poverty line (as defined in section 2110(c)(5)) applicable to a family of the size involved and—
+                                <a id="HA11A7B44D14E4554B38BFEAAF6CD5194" />
+                                <span class="lbexIndentSubpar">“(A) is enrolled under section 1902(a)(10)(A)(i)(VIII); or</span>
+                                <a id="HB5FBE619E4DD42D7B7EE7E5F949F42EF" />
+                                <span class="lbexIndentSubpar">“(B) is described in such subsection and otherwise enrolled under a waiver of the State plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
+                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    class="external"
+                                    target="_blank"
+                                >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in section 1902(a)(10)(A)(i)(VIII).</span>
+                            </span>
+                            <a id="HA50450ED039C4BD8A627283D1FCBBEEC" />
+                            <span class="lbexIndentParagraph">“(4) STATE DEFINED.—For purposes of this subsection, the term ‘State’ means 1 of the 50 States or the District of Columbia.”.</span>
                         </span>
                     </span>
-                    <a id="H651CF257248543EBA0CB694FC147A56D" />
-                    <span class="lbexIndentClause">“(iii) MAXIMUM LIMIT ON COST SHARING.—The total aggregate amount of deductions, cost sharing, or similar charges imposed under the State plan for all individuals in the family may not exceed 5 percent of the family income of the family involved, as applied on a quarterly or monthly basis (as specified by the State).</span>
                 </span>
-
-                <a id="H17CE0A4832B24FFEA553A9F4BE9A9AAE" />
-                <span class="lbexIndentSubpar">“(C) CASES OF NONPAYMENT.—Notwithstanding subsection (e), a State may permit a provider participating under the State plan to require, as a condition for the provision of care, items, or services to a specified individual entitled to medical assistance under this title for such care, items, or services, the payment of any deductions, cost sharing, or similar charges authorized to be imposed with respect to such care, items, or services. Nothing in this subparagraph shall be construed as preventing a provider from reducing or waiving the application of such deductions, cost sharing, or similar charges on a case-by-case basis.</span>
-
-                <a id="HD6027B639CDB4F59B2E8071DBD8AA9D6" />
-                <span class="lbexIndentParagraph">“(3) SPECIFIED INDIVIDUAL DEFINED.—For purposes of this subsection, the term ‘specified individual’ means an individual who has a family income (as determined in accordance with section 1902(e)(14)) that exceeds the poverty line (as defined in section 2110(c)(5)) applicable to a family of the size involved and—
-                    <a id="HA11A7B44D14E4554B38BFEAAF6CD5194" />
-                    <span class="lbexIndentSubpar">“(A) is enrolled under section 1902(a)(10)(A)(i)(VIII); or</span>
-                </span>
-                <a id="HB5FBE619E4DD42D7B7EE7E5F949F42EF" />
-                <span class="lbexIndentSubpar">“(B) is described in such subsection and otherwise enrolled under a waiver of the State plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
-                    class="external"
-                    target="_blank"
-                >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in section 1902(a)(10)(A)(i)(VIII).</span>
-
-                <a id="HA50450ED039C4BD8A627283D1FCBBEEC" />
-                <span class="lbexIndentParagraph">“(4) STATE DEFINED.—For purposes of this subsection, the term ‘State’ means 1 of the 50 States or the District of Columbia.”.</span>
-
-                <span class="lbexIndentParagraph" />
 
                 <a id="H831A10105D3A4B6A917790ECD97197FF" />
                 <span class="lbexIndent">(b)
@@ -1895,10 +1857,10 @@ const $route = useRoute();
                         href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
-                    >42 U.S.C. 1396a(a)(14)</a>) is amended by inserting “and provide for imposition of such deductions, cost sharing, or similar charges for care, items, or services furnished to specified individuals (as defined in paragraph (3) of section 1916(k)) in accordance with paragraph (2) of such section” after “section 1916”.</span>
+                    >42 U.S.C. 1396a(a)(14)</a>) is amended by inserting <span class="annotated-text">“and provide for imposition of such deductions, cost sharing, or similar charges for care, items, or services furnished to specified individuals (as defined in paragraph (3) of section 1916(k)) in accordance with paragraph (2) of such section”</span> after “section 1916”.</span>
                 </span>
                 <a id="H13A29E0011FC45E9819A7CF3D0D061EF" />
-                <span class="lbexIndentParagraph">(2) NONAPPLICABILITY OF ALTERNATIVE COST SHARING.—Section 1916A(a)(1) of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o-1">42 U.S.C. 1396o–1(a)(1)</a>) is amended, in the second sentence, by striking “or (j)” and inserting “(j), or (k)”.</span>
+                <span class="lbexIndentParagraph">(2) NONAPPLICABILITY OF ALTERNATIVE COST SHARING.—Section 1916A(a)(1) of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o-1">42 U.S.C. 1396o–1(a)(1)</a>) is amended, in the second sentence, by striking “or (j)” and inserting <span class="annotated-text">“(j), or (k)”</span>.</span>
 
                 <a id="H955C2E1C379E470A8E2C7F3DF31D1EB0" />
                 <span class="lbexIndent">(c)
@@ -1929,13 +1891,13 @@ const $route = useRoute();
                         target="_blank"
                     >42 U.S.C. 1396n(c)</a>) is amended—
                     <a id="H46B8515A24A24C50B92600B7B6C49E37" />
-                    <span class="lbexIndentParagraph">(1) in paragraph (3), by inserting “paragraph (11) or” before “subsection (h)(2)”; and</span>
+                    <span class="lbexIndentParagraph">(1) in paragraph (3), by inserting <span class="annotated-text">“paragraph (11) or”</span> before “subsection (h)(2)”; and</span>
 
                     <a id="HBED303E2D313405B8959D63E1A4BB49D" />
                     <span class="lbexIndentParagraph">(2) by adding at the end the following new paragraph:
                         <span class="lbexIndentSubsection">
                             <a id="H90CD96A9792646019CB5122BA4FE76E1" />
-                            <span class="lbexIndentSubsection">“(11)
+                            <span class="lbexIndentParagraph">“(11)
                                 <span class="lbexSectionTitleTrad">Expanding coverage for home or community-based services</span>.—
                                 <a id="H2227FAB9D9F64250A45B7F89F3617F73" />
                                 <span class="lbexIndentParagraph">“(A) IN GENERAL.—Beginning July 1, 2028, notwithstanding paragraph (1), the Secretary may approve a waiver that is standalone from any other waiver approved under this subsection to include as medical assistance under the State plan of such State payment for part or all of the cost of home or community-based services (other than room and board (as described in paragraph (1))) approved by the Secretary which are provided pursuant to a written plan of care to individuals described in subparagraph (B)(iii). A waiver approved under this paragraph shall be for an initial term of 3 years and, upon the request of the State, shall be extended for additional 5-year periods unless the Secretary determines that for the previous waiver period the requirements specified under this subsection (excluding those excepted under subparagraph (B)) have not been met.</span>
@@ -1944,39 +1906,38 @@ const $route = useRoute();
                             <span class="lbexIndentParagraph">“(B) STATE REQUIREMENTS.—In addition to the requirements specified under this subsection (except for the requirements described in subparagraphs (C) and (D) of paragraph (2) and any other requirement specified under this subsection that the Secretary determines to be inapplicable in the context of a waiver that does not require individuals to have a determination described in paragraph (1)), a State shall meet the following requirements as a condition of waiver approval:
                                 <a id="HEF0912F032314BD4AC4FD58367CEA229" />
                                 <span class="lbexIndentSubpar">“(i) As of the date that such State requests a waiver under this subsection to provide home or community-based services to individuals described in clause (iii), all other waivers (if any) granted under this subsection to such State meet the requirements of this subsection.</span>
+                                <a id="H5F7963A6D3AF40F28F286AFCFAE8626B" />
+                                <span class="lbexIndentSubpar">“(ii) The State demonstrates to the Secretary that approval of a waiver under this subsection with respect to individuals described in clause (iii) will not result in a material increase of the average amount of time that individuals with respect to whom a determination described in paragraph (1) has been made will need to wait to receive home or community-based services under any other waiver granted under this subsection, as determined by the Secretary.</span>
+                                <a id="H2FB92DA73A60468EB105D160634EBAFB" />
+                                <span class="lbexIndentSubpar">“(iii) The State establishes needs-based criteria, subject to the approval of the Secretary, regarding who will be eligible for home or community-based services under a waiver approved under this paragraph without requiring such individuals to have a determination described in paragraph (1), and specifies the home or community-based services such individuals so eligible will receive.</span>
+                                <a id="H2616B1B99DE6496284CB50C713B99DB1" />
+                                <span class="lbexIndentSubpar">“(iv) The State establishes needs-based criteria for determining whether an individual described in clause (iii) requires the level of care provided in a hospital, nursing facility, or an intermediate care facility for individuals with developmental disabilities under the State plan or under any waiver of such plan that are more stringent than the needs-based criteria established under clause (iii) for determining eligibility for home or community-based services.</span>
+
+                                <a id="H4205859E3C184896AAA33B5EEC24BB65" />
+                                <span class="lbexIndentSubpar">“(v) The State attests that the State’s average per capita expenditure for medical assistance under the State plan (or waiver of such plan) provided with respect to such individuals enrolled in a waiver under this paragraph will not exceed the State’s average per capita expenditure for medical assistance for individuals receiving institutional care under the State plan (or waiver of such plan) for the duration that the waiver under this paragraph is in effect.</span>
+
+                                <a id="H11C1AEC6C60E46B59482318AD8313EB4" />
+                                <span class="lbexIndentSubpar">“(vi) The State provides to the Secretary data (in such form and manner as the Secretary may specify) regarding the number of individuals described in clause (iii) with respect to a State seeking approval of a waiver under this subsection, to whom the State will make such services available under such waiver.</span>
+
+                                <a id="H357D33BA21984FE1AB843799A3A6324B" />
+                                <span class="lbexIndentSubpar">“(vii) The State agrees to provide to the Secretary, not less frequently than annually, data for purposes of paragraph (2)(E) (in such form and manner as the Secretary may specify) regarding, with respect to each preceding year in which a waiver under this subsection to provide home or community-based services to individuals described in clause (iii) was in effect—
+                                    <a id="H051739D6865D4786A795872BD2062BA0" />
+                                    <span class="lbexIndentClause">“(I) the cost (as such term is defined by the Secretary) of such services furnished to individuals described in clause (iii), broken down by type of service;</span>
+                                    <a id="HD86C4524B5A24D8CA3A3A29E55142494" />
+                                    <span class="lbexIndentClause">“(II) with respect to each type of home or community-based service provided under the waiver, the length of time that such individuals have received such service;</span>
+
+                                    <a id="H0F9F13CC9EB54022B3E7C30CDC8398C8" />
+                                    <span class="lbexIndentClause">“(III) a comparison between the data described in subclause (I) and any comparable data available with respect to individuals with respect to whom a determination described in paragraph (1) has been made and with respect to individuals receiving institutional care under this title; and</span>
+
+                                    <a id="H3A05A36F3D304D5C839298A5974E0441" />
+                                    <span class="lbexIndentClause">“(IV) the number of individuals who have received home or community-based services under the waiver during the preceding year.</span>
+                                </span>
                             </span>
-                            <a id="H5F7963A6D3AF40F28F286AFCFAE8626B" />
-                            <span class="lbexIndentSubpar">“(ii) The State demonstrates to the Secretary that approval of a waiver under this subsection with respect to individuals described in clause (iii) will not result in a material increase of the average amount of time that individuals with respect to whom a determination described in paragraph (1) has been made will need to wait to receive home or community-based services under any other waiver granted under this subsection, as determined by the Secretary.</span>
+
+                            <a id="HB2D6E9C2A73647078D00CFBAB80B0738" />
+                            <span class="lbexIndentParagraph">“(C) LIMITATION ON PAYMENTS.—No payments made to carry out this paragraph shall be used by a State to make payments to a third party on behalf of an individual practitioner for benefits such as health insurance, skills training, and other benefits customary for employees, in the case of a class of practitioners for which the program established under this title is the primary source of revenue.”.</span>
                         </span>
-                        <a id="H2FB92DA73A60468EB105D160634EBAFB" />
-                        <span class="lbexIndentSubpar">“(iii) The State establishes needs-based criteria, subject to the approval of the Secretary, regarding who will be eligible for home or community-based services under a waiver approved under this paragraph without requiring such individuals to have a determination described in paragraph (1), and specifies the home or community-based services such individuals so eligible will receive.</span>
                     </span>
-                    <a id="H2616B1B99DE6496284CB50C713B99DB1" />
-                    <span class="lbexIndentSubpar">“(iv) The State establishes needs-based criteria for determining whether an individual described in clause (iii) requires the level of care provided in a hospital, nursing facility, or an intermediate care facility for individuals with developmental disabilities under the State plan or under any waiver of such plan that are more stringent than the needs-based criteria established under clause (iii) for determining eligibility for home or community-based services.</span>
-
-                    <a id="H4205859E3C184896AAA33B5EEC24BB65" />
-                    <span class="lbexIndentSubpar">“(v) The State attests that the State’s average per capita expenditure for medical assistance under the State plan (or waiver of such plan) provided with respect to such individuals enrolled in a waiver under this paragraph will not exceed the State’s average per capita expenditure for medical assistance for individuals receiving institutional care under the State plan (or waiver of such plan) for the duration that the waiver under this paragraph is in effect.</span>
-
-                    <a id="H11C1AEC6C60E46B59482318AD8313EB4" />
-                    <span class="lbexIndentSubpar">“(vi) The State provides to the Secretary data (in such form and manner as the Secretary may specify) regarding the number of individuals described in clause (iii) with respect to a State seeking approval of a waiver under this subsection, to whom the State will make such services available under such waiver.</span>
-
-                    <a id="H357D33BA21984FE1AB843799A3A6324B" />
-                    <span class="lbexIndentSubpar">“(vii) The State agrees to provide to the Secretary, not less frequently than annually, data for purposes of paragraph (2)(E) (in such form and manner as the Secretary may specify) regarding, with respect to each preceding year in which a waiver under this subsection to provide home or community-based services to individuals described in clause (iii) was in effect—
-                        <a id="H051739D6865D4786A795872BD2062BA0" />
-                        <span class="lbexIndentClause">“(I) the cost (as such term is defined by the Secretary) of such services furnished to individuals described in clause (iii), broken down by type of service;</span>
-                    </span>
-                    <a id="HD86C4524B5A24D8CA3A3A29E55142494" />
-                    <span class="lbexIndentClause">“(II) with respect to each type of home or community-based service provided under the waiver, the length of time that such individuals have received such service;</span>
-
-                    <a id="H0F9F13CC9EB54022B3E7C30CDC8398C8" />
-                    <span class="lbexIndentClause">“(III) a comparison between the data described in subclause (I) and any comparable data available with respect to individuals with respect to whom a determination described in paragraph (1) has been made and with respect to individuals receiving institutional care under this title; and</span>
-
-                    <a id="H3A05A36F3D304D5C839298A5974E0441" />
-                    <span class="lbexIndentClause">“(IV) the number of individuals who have received home or community-based services under the waiver during the preceding year.</span>
-
-                    <a id="HB2D6E9C2A73647078D00CFBAB80B0738" />
-                    <span class="lbexIndentParagraph">“(C) LIMITATION ON PAYMENTS.—No payments made to carry out this paragraph shall be used by a State to make payments to a third party on behalf of an individual practitioner for benefits such as health insurance, skills training, and other benefits customary for employees, in the case of a class of practitioners for which the program established under this title is the primary source of revenue.”.</span>
-
                 </span>
 
                 <a id="H767CFA36946B47ACBB4C9703EB97EE6D" />
