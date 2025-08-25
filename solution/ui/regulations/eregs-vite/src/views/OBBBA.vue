@@ -259,24 +259,24 @@ const $route = useRoute();
 
 
 <a id="H7352215019274DF88BBA1292F84BB0AC"> </a>
-<span class="lbexIndentParagraph">(3) PART 447.—Section <a href="https://www.ecfr.gov/current/title-42/part-447#p-447.56(a)(1)(v)" class="external" target="_blank">447.56(a)(1)(v)</a>.</span>
+<span class="lbexIndentParagraph">(3) PART 447.—Section <a href="/42/447/Subpart-A/2024-11-19/#447-56-a-1-v">447.56(a)(1)(v)</a>.</span>
 
 <a id="H79BA1C0B1BC34A219585A104FE35B757"> </a>
 <span class="lbexIndentParagraph">(4) PART 457.—
     <a id="H218ABEFEACEC48048D19B9725B66DC3F"> </a>
-    <span class="lbexIndentSubpar">(A) Section <a href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-D/part-457/subpart-C/section-457.344" class="external" target="_blank">457.344</a>.</span>
+    <span class="lbexIndentSubpar">(A) Section <a href="/42/457/Subpart-C/2025-01-13/#457-344">457.344</a>.</span>
 
     <a id="HFFCC5AF3EAD546DB82645A047A623B28"> </a>
     <span class="lbexIndentSubpar">(B) Section <a href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-D/part-457/subpart-I/section-457.960" class="external" target="_blank">457.960</a>.</span>
 
     <a id="H1E0BF50F724843B2BE354F98D8490127"> </a>
-    <span class="lbexIndentSubpar">(C) Section <a href="https://www.ecfr.gov/current/title-42/part-457/section-457.1140#p-457.1140(d)(4)" class="external" target="_blank">457.1140(d)(4)</a>.</span>
+    <span class="lbexIndentSubpar">(C) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1140-d-4">457.1140(d)(4)</a>.</span>
 
     <a id="H82BF3A5429C2459D8CE8DE8BA7FDC46F"> </a>
-    <span class="lbexIndentSubpar">(D) Section <a href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-D/part-457/subpart-K/section-457.1170" class="external" target="_blank">457.1170</a>.</span>
+    <span class="lbexIndentSubpar">(D) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1170">457.1170</a>.</span>
 
     <a id="H59115532E4B94D6AB62D59E8A8D259B3"> </a>
-    <span class="lbexIndentSubpar">(E) Section <a href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-D/part-457/subpart-K/section-457.1180" class="external" target="_blank">457.1180</a>.</span>
+    <span class="lbexIndentSubpar">(E) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1180">457.1180</a>.</span>
 </span>
 
 <span class="lbexHang">
@@ -300,9 +300,9 @@ const $route = useRoute();
 <span class="lbexIndentSubpar">(A) in subsection (a)—
 <a id="H92C72A7C36744FFD90024D4910C8DCEA"> </a>
 <span class="lbexIndentClause">(i) in paragraph (86), by striking “and” at the end;</span>
-</span>
 <a id="H7FC53B2F724B4ED8819238A68648C063"> </a>
 <span class="lbexIndentClause">(ii) in paragraph (87), by striking the period and inserting “; and”; and</span>
+</span>
 </span>
 <a id="H4A73910A19DC46759686010826F13E41"> </a>
 <span class="lbexIndentClause">(iii) by inserting after paragraph (87) the following new paragraph:
@@ -424,7 +424,6 @@ const $route = useRoute();
 <span class="lbexIndentParagraph">(1) IN GENERAL.—Section 2107(e)(1) of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397gg" class="external" target="_blank">42 U.S.C. 1397gg(e)(1)</a>) is amended—
 <a id="H01E621F5CF5549EC9B37D6336CB88616"> </a>
 <span class="lbexIndentSubpar">(A) by redesignating subparagraphs (H) through (U) as subparagraphs (I) through (V), respectively; and</span>
-</span>
 <a id="H7601260C757B4E5CAFECB144B27B5582"> </a>
 <span class="lbexIndentSubpar">(B) by inserting after subparagraph (G) the following new subparagraph:
 <span class="lbexIndentClause">
@@ -436,6 +435,7 @@ const $route = useRoute();
 
 <a id="HC4AD55EEC3074DA5B1BFA04CB250B1DE"> </a>
 <span class="lbexIndentParagraph">(2) MANAGED CARE.—Section 2103(f)(3) of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397cc" class="external" target="_blank">42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting “(e), and (j)”. </span>
+</span>
 
 <span class="lbexHang">
     <a href="#H968D7B63B96D4B7F849C3F7D820864FE" id="toc-H968D7B63B96D4B7F849C3F7D820864FE">
