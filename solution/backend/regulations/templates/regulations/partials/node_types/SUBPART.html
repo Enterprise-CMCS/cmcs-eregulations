@@ -18,10 +18,12 @@
             click
         >
             <template #tooltip-content>
-                <copy-citation
-                    hash="{{node.label | join:'-'}}"
-                    formatted-citation="{{formatted_citation}}"
-                ></copy-citation>
+                <div class="action-btns">
+                    <copy-citation
+                        hash="{{node.label | join:'-'}}"
+                        formatted-citation="{{formatted_citation}}"
+                    ></copy-citation>
+                </div>
             </template>
         </tooltip-container>
         {{node.title}}

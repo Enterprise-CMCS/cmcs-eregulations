@@ -5,21 +5,44 @@ import ActionBtn from "./ActionBtn.vue";
 const props = defineProps({
     formattedCitation: {
         type: String,
-        required: true,
+        required: false,
+        default: undefined,
     },
     hash: {
         type: String,
-        required: true,
+        required: false,
+        default: undefined,
+    },
+    link: {
+        type: String,
+        required: false,
+        default: undefined,
+    },
+    actionType: {
+        type: String,
+        required: false,
+        default: undefined,
     },
 });
 
 const selectedAction = ref(null);
 const copyStatus = ref("idle");
 
+const POSSIBLE_ACTIONS = ["link", "citation"];
+const actions = computed(() => {
+    if (POSSIBLE_ACTIONS.includes(props.actionType)) {
+        return [props.actionType];
+    }
+
+    return POSSIBLE_ACTIONS;
+})
+
 const getCopyText = computed(() => {
     return selectedAction.value === "citation"
         ? props.formattedCitation
-        : `${new URL(window.location.href.split("#")[0]).toString()}#${props.hash}`;
+        : props.link
+            ? props.link
+            : `${new URL(window.location.href.split("#")[0]).toString()}#${props.hash}`;
 });
 
 const handleActionClick = (payload) => {
@@ -47,18 +70,12 @@ watch(
 </script>
 
 <template>
-    <div class="action-btns">
-        <ActionBtn
-            :selected-action="selectedAction"
-            :status="copyStatus"
-            action-type="link"
-            @action-btn-click="handleActionClick"
-        />
-        <ActionBtn
-            :selected-action="selectedAction"
-            :status="copyStatus"
-            action-type="citation"
-            @action-btn-click="handleActionClick"
-        />
-    </div>
+    <ActionBtn
+        v-for="action in actions"
+        :key="action"
+        :selected-action="selectedAction"
+        :status="copyStatus"
+        :action-type="action"
+        @action-btn-click="handleActionClick"
+    />
 </template>
