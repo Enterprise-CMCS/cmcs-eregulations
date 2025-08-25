@@ -37,6 +37,7 @@ const lookupCitation = async () => {
             id="citationSubmit"
             type="submit"
             class="action-btn default-btn"
+            :disabled="!citation.trim() || statuteCitationInfo.loading"
         >
             Get Citation Link
         </button>
@@ -44,11 +45,9 @@ const lookupCitation = async () => {
     <div v-if="statuteCitationInfo.loading">
         <p>Loading...</p>
     </div>
-    <div v-if="statuteCitationInfo.error">
-        <p>Error: {{ statuteCitationInfo.error }}</p>
-    </div>
     <StatuteCitationTable
-        v-if="!statuteCitationInfo.loading && statuteCitationInfo.results"
+        v-if="!statuteCitationInfo.loading"
         :citation-obj="statuteCitationInfo.results"
+        :error="statuteCitationInfo.error"
     />
 </template>

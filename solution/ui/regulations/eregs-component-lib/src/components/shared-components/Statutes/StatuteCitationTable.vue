@@ -5,11 +5,21 @@ import { computed } from "vue";
 const props = defineProps({
     citationObj: {
         type: Object,
-        required: true,
+        required: false,
+        default: () => ({}),
+    },
+    error: {
+        type: Boolean,
+        required: false,
+        default: false,
     },
 });
 
 const citationArr = computed(() => {
+    if (props.error || !props.citationObj) {
+        return [];
+    }
+
     return Object.entries(props.citationObj)
         .filter(([key, _value]) => key !== "input")
 });
@@ -17,12 +27,21 @@ const citationArr = computed(() => {
 
 <template>
     <div
-        v-if="citationArr.length"
+        v-if="citationArr.length > 0 || error"
         class="more-info__container citation-links"
     >
         <h3 class="more-info__title">
             Citation Link
         </h3>
+        <div
+            v-if="error"
+            class="more-info__row"
+            data-testid="error-row"
+        >
+            <span class="row__content">
+                No citation link found for the provided pattern.
+            </span>
+        </div>
         <div
             v-for="item in citationArr"
             :key="item[0]"
