@@ -5,7 +5,7 @@ import { getStatuteCitationLink } from "utilities/api.js";
 export default function useStatuteCitationLink() {
     const statuteCitationInfo = ref({
         results: {},
-        loading: true,
+        loading: false,
         error: false,
     });
 
