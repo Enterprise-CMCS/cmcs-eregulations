@@ -32,12 +32,12 @@ const lookupCitation = async () => {
             class="ds-c-field"
             type="text"
             placeholder="1903(a)(3)(A)(i)"
+            required
         >
         <button
             id="citationSubmit"
             type="submit"
             class="action-btn default-btn"
-            :disabled="!citation.trim() || statuteCitationInfo.loading"
         >
             Get Citation Link
         </button>
