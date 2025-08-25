@@ -326,34 +326,33 @@ const $route = useRoute();
                             <span class="lbexIndentClause">(i) in paragraph (86), by striking “and” at the end;</span>
                             <a id="H7FC53B2F724B4ED8819238A68648C063" />
                             <span class="lbexIndentClause">(ii) in paragraph (87), by striking the period and inserting “; and”; and</span>
-                        </span>
-                    </span>
-                    <a id="H4A73910A19DC46759686010826F13E41" />
-                    <span class="lbexIndentClause">(iii) by inserting after paragraph (87) the following new paragraph:
-                        <span class="lbexIndentClause">
-                            <a id="HE0BAE9757ADE4768A18598F8286BB37F" />
-                            <span class="lbexIndentParagraph">“(88) provide—
-                                <a id="HECEF746EAAE942D1A09114F35257EEF1" />
-                                <span class="lbexIndentSubpar">“(A) beginning not later than January 1, 2027, in the case of 1 of the 50 States and the District of Columbia, for a process to regularly obtain address information for individuals enrolled under such plan (or a waiver of such plan) in accordance with subsection (vv); and</span>
-                            </span>
-                            <a id="H110A23CCBB284B608C7D5A1C1ED7483A" />
-                            <span class="lbexIndentSubpar">“(B) beginning not later than October 1, 2029—
-                                <a id="H8D634CB2B6D94DB8B17778E70B38490B" />
-                                <span class="lbexIndentClause">“(i) for the State to submit to the system established by the Secretary under subsection (uu), with respect to an individual enrolled or seeking to enroll under such plan, not less frequently than once each month and during each determination or redetermination of the eligibility of such individual for medical assistance under such plan (or waiver of such plan)—
-                                    <a id="H990F35F42DB24DB5988C86B9B4C43507" />
-                                    <span class="lbexIndentSubclause">“(I) the social security number of such individual, if such individual has a social security number and is required to provide such number to enroll under such plan (or waiver); and</span>
+                            <a id="H4A73910A19DC46759686010826F13E41" />
+                            <span class="lbexIndentClause">(iii) by inserting after paragraph (87) the following new paragraph:
+                                <span class="lbexIndentClause">
+                                    <a id="HE0BAE9757ADE4768A18598F8286BB37F" />
+                                    <span class="lbexIndentParagraph">“(88) provide—
+                                        <a id="HECEF746EAAE942D1A09114F35257EEF1" />
+                                        <span class="lbexIndentSubpar">“(A) beginning not later than January 1, 2027, in the case of 1 of the 50 States and the District of Columbia, for a process to regularly obtain address information for individuals enrolled under such plan (or a waiver of such plan) in accordance with subsection (vv); and</span>
+                                        <a id="H110A23CCBB284B608C7D5A1C1ED7483A" />
+                                        <span class="lbexIndentSubpar">“(B) beginning not later than October 1, 2029—
+                                            <a id="H8D634CB2B6D94DB8B17778E70B38490B" />
+                                            <span class="lbexIndentClause">“(i) for the State to submit to the system established by the Secretary under subsection (uu), with respect to an individual enrolled or seeking to enroll under such plan, not less frequently than once each month and during each determination or redetermination of the eligibility of such individual for medical assistance under such plan (or waiver of such plan)—
+                                                <a id="H990F35F42DB24DB5988C86B9B4C43507" />
+                                                <span class="lbexIndentSubclause">“(I) the social security number of such individual, if such individual has a social security number and is required to provide such number to enroll under such plan (or waiver); and</span>
+                                                <a id="H0C7AE05534094C259FCAA34CC99F1C7B" />
+                                                <span class="lbexIndentSubclause">“(II) such other information with respect to such individual as determined necessary by the Secretary for purposes of preventing individuals from simultaneously being enrolled under State plans (or waivers of such plans) of multiple States;</span>
+                                            </span>
+                                            <a id="H40F2D01C78E84EA7AE9F0070DBDF6812" />
+                                            <span class="lbexIndentClause">“(ii) for the use of such system to prevent such simultaneous enrollment; and</span>
+                                            <a id="HC5D6130D28B84780BC0FB8D63AEA5A61" />
+                                            <span class="lbexIndentClause">“(iii) in the case that such system indicates that an individual enrolled or seeking to enroll under such plan (or waiver of such plan) is enrolled under a State plan (or waiver of such a plan) of another State, for the taking of appropriate action (as determined by the Secretary) to identify whether such an individual resides in the State and disenroll an individual from the State plan of such State if such individual does not reside in such State (unless such individual meets such an exception as the Secretary may specify).”; and</span>
+                                        </span>
+                                    </span>
                                 </span>
-                                <a id="H0C7AE05534094C259FCAA34CC99F1C7B" />
-                                <span class="lbexIndentSubclause">“(II) such other information with respect to such individual as determined necessary by the Secretary for purposes of preventing individuals from simultaneously being enrolled under State plans (or waivers of such plans) of multiple States;</span>
                             </span>
                         </span>
                     </span>
-                    <a id="H40F2D01C78E84EA7AE9F0070DBDF6812" />
-                    <span class="lbexIndentClause">“(ii) for the use of such system to prevent such simultaneous enrollment; and</span>
                 </span>
-                <a id="HC5D6130D28B84780BC0FB8D63AEA5A61" />
-                <span class="lbexIndentClause">“(iii) in the case that such system indicates that an individual enrolled or seeking to enroll under such plan (or waiver of such plan) is enrolled under a State plan (or waiver of such a plan) of another State, for the taking of appropriate action (as determined by the Secretary) to identify whether such an individual resides in the State and disenroll an individual from the State plan of such State if such individual does not reside in such State (unless such individual meets such an exception as the Secretary may specify).”; and</span>
-
                 <a id="H7D06E840F81642728077A429B81D4C50" />
                 <span class="lbexIndentSubpar">(B) by adding at the end the following new subsections:
                     <span class="lbexIndentClause">
@@ -1005,21 +1004,20 @@ const $route = useRoute();
                                 class="external"
                                 target="_blank"
                             >section 501(c)(3)</a> of the Internal Revenue Code of 1986 and exempt from tax under section 501(a) of such Code;</span>
+                            <a id="H589B5CE0C627419280D75FB2BB5AC0FB" />
+                            <span class="lbexIndentClause">(ii) is an essential community provider described in section 156.235 of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
+                            <a id="H7F2D87B146174050A9A298AB579A3CD5" />
+                            <span class="lbexIndentClause">(iii) provides for abortions, other than an abortion—
+                                <a id="H1BFF52D791314DCD94FA987EF6767212" />
+                                <span class="lbexIndentSubclause">(I) if the pregnancy is the result of an act of rape or incest; or</span>
+                                <a id="H3276284F5C9C4A14A04361BCB7172771" />
+                                <span class="lbexIndentSubclause">(II) in the case where a woman suffers from a physical disorder, physical injury, or physical illness, including a life-endangering physical condition caused by or arising from the pregnancy itself, that would, as certified by a physician, place the woman in danger of death unless an abortion is performed; and</span>
+                            </span>
                         </span>
-                        <a id="H589B5CE0C627419280D75FB2BB5AC0FB" />
-                        <span class="lbexIndentClause">(ii) is an essential community provider described in section 156.235 of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
+                        <a id="H9ED4D1C14CC84620A3DF5FA932CE0754" />
+                        <span class="lbexIndentSubpar">(B) for which the total amount of Federal and State expenditures under the Medicaid program under title XIX of the Social Security Act for medical assistance furnished in fiscal year 2023 made directly, or by a covered organization, to the entity or to any affiliates, subsidiaries, successors, or clinics of the entity, or made to the entity or to any affiliates, subsidiaries, successors, or clinics of the entity as part of a nationwide health care provider network, exceeded $800,000.</span>
                     </span>
-                    <a id="H7F2D87B146174050A9A298AB579A3CD5" />
-                    <span class="lbexIndentClause">(iii) provides for abortions, other than an abortion—
-                        <a id="H1BFF52D791314DCD94FA987EF6767212" />
-                        <span class="lbexIndentSubclause">(I) if the pregnancy is the result of an act of rape or incest; or</span>
-                    </span>
-                    <a id="H3276284F5C9C4A14A04361BCB7172771" />
-                    <span class="lbexIndentSubclause">(II) in the case where a woman suffers from a physical disorder, physical injury, or physical illness, including a life-endangering physical condition caused by or arising from the pregnancy itself, that would, as certified by a physician, place the woman in danger of death unless an abortion is performed; and</span>
                 </span>
-
-                <a id="H9ED4D1C14CC84620A3DF5FA932CE0754" />
-                <span class="lbexIndentSubpar">(B) for which the total amount of Federal and State expenditures under the Medicaid program under title XIX of the Social Security Act for medical assistance furnished in fiscal year 2023 made directly, or by a covered organization, to the entity or to any affiliates, subsidiaries, successors, or clinics of the entity, or made to the entity or to any affiliates, subsidiaries, successors, or clinics of the entity as part of a nationwide health care provider network, exceeded $800,000.</span>
 
                 <a id="HD88761F8ED344F4983817A5D46050378" />
                 <span class="lbexIndentParagraph">(2) DIRECT SPENDING.—The term “direct spending” has the meaning given that term under section 250(c) of the Balanced Budget and Emergency Deficit Control Act of 1985 (<a href="http://uscode.house.gov/quicksearch/get.plx?title=2&amp;section=900">2 U.S.C. 900(c)</a>).</span>
@@ -1119,58 +1117,58 @@ const $route = useRoute();
                             >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
                                 <a id="HF7E6031DCDD345F09E8D67BB87A018EB" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
+                                <a id="H3B56C17EC18642CAB67D1CED226B2213" />
+                                <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent; and</span>
                             </span>
-                            <a id="H3B56C17EC18642CAB67D1CED226B2213" />
-                            <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent; and</span>
                         </span>
+                        <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
+                        <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a
+                            href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
+                            class="external"
+                            target="_blank"
+                        >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
+                            <a id="H475F82BE8791418DA85C5A6050B87FAA" />
+                            <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—<span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
+                            </span>
+                            <span class="lbexIndentSubclause">“(BB) the applicable percent specified in clause (ii) for the fiscal year; and</span>
+                        </span>
+
+                        <a id="H31D4183C227D4FF3AC96CD3170361C8D" />
+                        <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent.</span>
+
+                        <a id="H9682CC4CB5524664AD922E612D0E6668" />
+                        <span class="lbexIndentParagraph">“(ii) For purposes of clause (i)(II)(aa)(BB), the applicable percent is—
+                            <a id="H1795ED55DE39419180474C5D289F2512" />
+                            <span class="lbexIndentSubpar">“(I) for fiscal year 2028, 5.5 percent;</span>
+                        </span>
+                        <a id="HE5B85442C03542B4A0A59778599CDA7E" />
+                        <span class="lbexIndentSubpar">“(II) for fiscal year 2029, 5 percent;</span>
+
+                        <a id="H27D124A726864BD99F79E6AFB9B165F5" />
+                        <span class="lbexIndentSubpar">“(III) for fiscal year 2030, 4.5 percent;</span>
+
+                        <a id="H6EF9FF5ECCD04B9EAC5AA5141100D135" />
+                        <span class="lbexIndentSubpar">“(IV) for fiscal year 2031, 4 percent; and</span>
+
+                        <a id="HB4A97C987A814518AE30249E41A45DD3" />
+                        <span class="lbexIndentSubpar">“(V) for fiscal year 2032 and each subsequent fiscal year, 3.5 percent.</span>
+
+                        <a id="H0BE4245A202F4BDFA3B58473D164FD77" />
+                        <span class="lbexIndentParagraph">“(iii) For purposes of clause (i):
+                            <a id="H6C67C761B200451BBE6763A113A8C37C" />
+                            <span class="lbexIndentSubpar">“(I) EXPANSION STATE.—The term ‘expansion State’ means a State that, beginning on January 1, 2014, or on any date thereafter, elects to provide medical assistance to all individuals described in section 1902(a)(10)(A)(i)(VIII) under the State plan under this title or under a waiver of such plan.</span>
+                        </span>
+                        <a id="H5569636C1AFD4C2D82534554D7EF807B" />
+                        <span class="lbexIndentSubpar">“(II) NON-EXPANSION STATE.—The term ‘non-expansion State’ means a State that is not an expansion State.</span>
+
+                        <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
+                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a
+                            href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
+                            class="external"
+                            target="_blank"
+                        >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
                     </span>
                 </span>
-                <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
-                <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a
-                    href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
-                    class="external"
-                    target="_blank"
-                >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
-                    <a id="H475F82BE8791418DA85C5A6050B87FAA" />
-                    <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—<span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
-                    </span>
-                    <span class="lbexIndentSubclause">“(BB) the applicable percent specified in clause (ii) for the fiscal year; and</span>
-                </span>
-
-                <a id="H31D4183C227D4FF3AC96CD3170361C8D" />
-                <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent.</span>
-
-                <a id="H9682CC4CB5524664AD922E612D0E6668" />
-                <span class="lbexIndentParagraph">“(ii) For purposes of clause (i)(II)(aa)(BB), the applicable percent is—
-                    <a id="H1795ED55DE39419180474C5D289F2512" />
-                    <span class="lbexIndentSubpar">“(I) for fiscal year 2028, 5.5 percent;</span>
-                </span>
-                <a id="HE5B85442C03542B4A0A59778599CDA7E" />
-                <span class="lbexIndentSubpar">“(II) for fiscal year 2029, 5 percent;</span>
-
-                <a id="H27D124A726864BD99F79E6AFB9B165F5" />
-                <span class="lbexIndentSubpar">“(III) for fiscal year 2030, 4.5 percent;</span>
-
-                <a id="H6EF9FF5ECCD04B9EAC5AA5141100D135" />
-                <span class="lbexIndentSubpar">“(IV) for fiscal year 2031, 4 percent; and</span>
-
-                <a id="HB4A97C987A814518AE30249E41A45DD3" />
-                <span class="lbexIndentSubpar">“(V) for fiscal year 2032 and each subsequent fiscal year, 3.5 percent.</span>
-
-                <a id="H0BE4245A202F4BDFA3B58473D164FD77" />
-                <span class="lbexIndentParagraph">“(iii) For purposes of clause (i):
-                    <a id="H6C67C761B200451BBE6763A113A8C37C" />
-                    <span class="lbexIndentSubpar">“(I) EXPANSION STATE.—The term ‘expansion State’ means a State that, beginning on January 1, 2014, or on any date thereafter, elects to provide medical assistance to all individuals described in section 1902(a)(10)(A)(i)(VIII) under the State plan under this title or under a waiver of such plan.</span>
-                </span>
-                <a id="H5569636C1AFD4C2D82534554D7EF807B" />
-                <span class="lbexIndentSubpar">“(II) NON-EXPANSION STATE.—The term ‘non-expansion State’ means a State that is not an expansion State.</span>
-
-                <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
-                <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a
-                    href="https://www.ecfr.gov/current/title-42/part-433/section-433.56#p-433.56(a)"
-                    class="external"
-                    target="_blank"
-                >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
 
                 <a id="H27E5FA086CCB4CF89AB296D727EF7A89" />
                 <span class="lbexIndent">(b)
@@ -1208,10 +1206,9 @@ const $route = useRoute();
                         class="external"
                         target="_blank"
                     >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) under the State plan (or waiver of such plan) of such State under title XIX of such Act, 100 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)); or</span>
+                    <a id="H68132C34E5FD46DEA1334425F00FCD72" />
+                    <span class="lbexIndentParagraph">(2) in the case of a State other than a State described in paragraph (1), 110 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)).</span>
                 </span>
-                <a id="H68132C34E5FD46DEA1334425F00FCD72" />
-                <span class="lbexIndentParagraph">(2) in the case of a State other than a State described in paragraph (1), 110 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)).</span>
-
                 <a id="HDF8733C85AF248F388EEB66529058959" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a
@@ -2063,9 +2060,9 @@ margin-bottom: 1em;
 display: block;
 margin-top: 1em;
 margin-bottom: 1em;
-margin-left: 1em;
+/*margin-left: 1em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;*/
 }
 .lbexIndentParagraph {
 display: block;
@@ -2073,7 +2070,7 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left:  1px solid #d6d7d9;
+border-left:  1px solid #d0d0d0;
 }
 .lbexIndentSectionText {
 display: block;
@@ -2086,7 +2083,7 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;
 }
 .lbexIndentClause {
 display: block;
@@ -2094,7 +2091,7 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubclause {
 display: block;
@@ -2102,10 +2099,11 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubsection {
 display: block;
+background-color: #F2F2F2;
 }
 .lbexIndentItem {
 display: block;
@@ -2113,7 +2111,7 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;
 }
 .lbexIndentSubItem {
 display: block;
@@ -2121,7 +2119,7 @@ margin-top: 1em;
 margin-bottom: 1em;
 margin-left: 2em;
 padding-left: 5px;
-border-left: 1px solid #d6d7d9;
+border-left: 1px solid #d0d0d0;
 }
 .ul {
 display: block;
@@ -2129,4 +2127,5 @@ margin-top: 1em;
 margin-bottom: 1em;
 }
 a { text-decoration: none;}
+.lbexSectionLevelOLCnuclear, .lbexSectionTitleTrad { font-weight: 700; }
 </style>
