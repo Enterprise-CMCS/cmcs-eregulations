@@ -26,5 +26,11 @@ export default function useStatuteCitationLink() {
         }
     };
 
-    return { statuteCitationInfo, getStatuteCitationInfo };
+    const clearStatuteCitationInfo = () => {
+        statuteCitationInfo.value.results = {};
+        statuteCitationInfo.value.loading = false;
+        statuteCitationInfo.value.error = false;
+    };
+
+    return { statuteCitationInfo, getStatuteCitationInfo, clearStatuteCitationInfo };
 }

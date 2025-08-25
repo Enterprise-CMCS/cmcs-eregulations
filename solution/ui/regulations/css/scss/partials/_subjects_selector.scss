@@ -3,6 +3,7 @@
 //-----------------------------
 
 @import "../application_settings";
+@import "./_buttons_and_tooltip.scss";
 
 @mixin filter-borders {
     border: 2px solid $border_color;
@@ -84,14 +85,7 @@
             }
 
             .subjects__filter-reset {
-                top: calc(50% - 1rem);
-                right: -3px;
-                transform: translate(-50%);
-                position: absolute;
-                width: 20px;
-                height: 20px;
-
-                @include common-remove-btn-styles;
+                @include input-clear-button-styles;
 
                 &--hidden {
                     display: none;

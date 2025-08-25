@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from "vue";
+import { computed, inject, ref } from "vue";
 
 import StatuteCitationTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteCitationTable.vue";
 
@@ -9,7 +9,7 @@ const citation = ref("");
 
 const apiUrl = inject("apiUrl");
 
-const { statuteCitationInfo, getStatuteCitationInfo } =
+const { statuteCitationInfo, getStatuteCitationInfo, clearStatuteCitationInfo } =
     useStatuteCitationLink();
 
 const lookupCitation = async () => {
@@ -18,6 +18,23 @@ const lookupCitation = async () => {
         citation: citation.value,
     });
 };
+
+const clearCitationClick = (event) => {
+    event.stopPropagation();
+    clearStatuteCitationInfo();
+    citation.value = "";
+};
+
+const getCitationClearClasses = ({ filter }) => ({
+    "citation-reset__button": true,
+    "citation-reset__button--hidden": !filter,
+});
+
+
+const citationClearClasses = computed(() =>
+    getCitationClearClasses({ filter: citation.value })
+);
+
 </script>
 
 <template>
@@ -26,14 +43,25 @@ const lookupCitation = async () => {
             class="statute-citation-lookup__form--label"
             for="citationInput"
         >Social Security Act §</label>
-        <input
-            id="citationInput"
-            v-model="citation"
-            class="ds-c-field"
-            type="text"
-            placeholder="1903(a)(3)(A)(i)"
-            required
-        >
+        <div class="statute-citation-lookup__form--input-group">
+            <input
+                id="citationInput"
+                v-model="citation"
+                class="ds-c-field"
+                type="text"
+                placeholder="1903(a)(3)(A)(i)"
+                required
+            >
+            <button
+                aria-label="Clear citation input"
+                data-testid="clear-citation-input"
+                type="reset"
+                :class="citationClearClasses"
+                class="mdi mdi-close"
+                @keydown.enter="clearCitationClick"
+                @click="clearCitationClick"
+            />
+        </div>
         <button
             id="citationSubmit"
             type="submit"

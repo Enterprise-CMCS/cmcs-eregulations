@@ -3,6 +3,7 @@
 //-----------------------------
 
 @import "../application_settings";
+@import "./_buttons_and_tooltip.scss";
 
 #statuteApp.statute-view {
     @include eds-standard-layout;
@@ -31,9 +32,24 @@
         flex-wrap: wrap;
         margin-bottom: var(--spacer-3);
 
+        &--input-group {
+            position: relative;
+            display: flex;
+        }
+
         input#citationInput {
             margin-top: 0px;
             width: 160px;
+        }
+
+        .citation-reset__button {
+            @include input-clear-button-styles;
+
+            top: calc(50% - 10px);
+
+            &--hidden {
+                display: none;
+            }
         }
 
 
