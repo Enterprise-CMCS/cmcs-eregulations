@@ -1,6 +1,8 @@
 <script setup>
 import { inject, ref } from "vue";
 
+import StatuteCitationTable from "eregsComponentLib/src/components/shared-components/Statutes/StatuteCitationTable.vue";
+
 import useStatuteCitationLink from "composables/statuteCitationLink";
 
 const citation = ref("");
@@ -46,6 +48,8 @@ const lookupCitation = async () => {
         <p>Error: {{ statuteCitationInfo.error }}</p>
     </div>
     <div v-if="statuteCitationInfo.results">
-        <p>Text: {{ statuteCitationInfo.results }}</p>
+        <StatuteCitationTable
+            :citation-obj="statuteCitationInfo.results"
+        />
     </div>
 </template>
