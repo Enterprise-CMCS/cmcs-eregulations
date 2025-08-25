@@ -29,6 +29,7 @@
         gap: var(--spacer-1);
         flex-direction: row;
         flex-wrap: wrap;
+        margin-bottom: var(--spacer-3);
 
         input#citationInput {
             margin-top: 0px;
@@ -44,6 +45,42 @@
         &--label,
         button#citationSubmit {
             font-weight: bold;
+        }
+    }
+
+    .citation-links {
+        margin-bottom: var(--spacer-3);
+
+        &.more-info__container {
+            .more-info__row {
+                padding: 0;
+            }
+        }
+
+        .more-info__row {
+            align-items: stretch;
+
+            .copy-btn__container {
+                flex: 0 0 175px;
+                border-right: 1px solid $light_gray;
+                display: flex;
+                align-items: center;
+
+                button {
+                    font-weight: bold;
+                }
+            }
+
+            .row__content {
+                a {
+                    word-break: break-all;
+                }
+            }
+
+            .copy-btn__container,
+            .row__content {
+                padding: var(--spacer-2);
+            }
         }
     }
 
