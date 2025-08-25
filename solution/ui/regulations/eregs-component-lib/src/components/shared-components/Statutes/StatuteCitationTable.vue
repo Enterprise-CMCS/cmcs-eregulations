@@ -14,17 +14,23 @@ const citationArr = computed(() => Object.entries(props.citationObj));
 <template>
     <div
         v-if="citationArr.length"
-        class="research__container"
+        class="more-info__container"
     >
-        <h3 class="research__title">
+        <h3 class="more-info__title">
             Citation Link
         </h3>
         <div
             v-for="item in citationArr"
             :key="item[0]"
-            class="research__row"
+            class="more-info__row"
         >
-            {{ item[1] }}
+            <div>
+                {{ item[0] }}
+            </div>
+            <div>
+                {{ item[1] }}
+            </div>
         </div>
+        <div />
     </div>
 </template>

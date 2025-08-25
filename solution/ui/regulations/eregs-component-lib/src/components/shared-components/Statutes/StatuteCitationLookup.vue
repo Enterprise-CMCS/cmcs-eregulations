@@ -47,7 +47,7 @@ const lookupCitation = async () => {
     <div v-if="statuteCitationInfo.error">
         <p>Error: {{ statuteCitationInfo.error }}</p>
     </div>
-    <div v-if="statuteCitationInfo.results">
+    <div v-if="!statuteCitationInfo.loading && statuteCitationInfo.results">
         <StatuteCitationTable
             :citation-obj="statuteCitationInfo.results"
         />

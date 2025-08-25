@@ -61,21 +61,21 @@ const props = defineProps({
 });
 
 const containerClasses = computed(() => ({
-    "research__container--results": props.resultsCount > 0,
-    "research__container--no-results": props.resultsCount == 0,
+    "more-info__container--results": props.resultsCount > 0,
+    "more-info__container--no-results": props.resultsCount == 0,
 }));
 
 const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 </script>
 
 <template>
-    <div class="research__container" :class="containerClasses">
-        <h3 class="research__title">
+    <div class="more-info__container" :class="containerClasses">
+        <h3 class="more-info__title">
             Continue Your Research
         </h3>
         <div
             v-if="resultsCount > 0 && !hasQuotes(query) && hasSpaces(query)"
-            class="research__row"
+            class="more-info__row"
             data-testid="research-row-1"
         >
             <span class="row__title">Make your search more specific</span>
@@ -100,7 +100,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
         </div>
         <div
             v-else-if="hasActiveFilters"
-            class="research__row"
+            class="more-info__row"
             data-testid="research-row-1"
         >
             <span class="row__title">Broaden your search on eRegulations</span>
@@ -117,7 +117,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                     reset all active filters</router-link>.
             </span>
         </div>
-        <div class="research__row" data-testid="research-row-2">
+        <div class="more-info__row" data-testid="research-row-2">
             <span class="row__title">Try your search for <strong>{{ query }}</strong> on other
                 websites</span>
             <ul class="row__content row__content--list">
