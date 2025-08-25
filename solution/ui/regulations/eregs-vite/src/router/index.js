@@ -3,6 +3,7 @@ import Search from "../views/Search.vue";
 import Statutes from "../views/Statutes.vue";
 import Subjects from "../views/Subjects.vue";
 import Manual from "../views/Manual.vue";
+import OBBBA from "../views/OBBBA.vue";
 
 const routes = [
     {
@@ -25,6 +26,11 @@ const routes = [
         path: "/manual",
         name: "manual",
         component: Manual,
+    },
+    {
+        path: "/obbba",
+        name: "obbba",
+        component: OBBBA,
     },
 ];
 

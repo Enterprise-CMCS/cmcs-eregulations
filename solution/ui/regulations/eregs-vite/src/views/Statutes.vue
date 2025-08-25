@@ -26,6 +26,7 @@ const isAuthenticated = inject("isAuthenticated");
 const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const subjectsUrl = inject("subjectsUrl");
+const obbbaUrl = inject("obbbaUrl");
 const username = inject("username");
 
 // get route query params
@@ -140,6 +141,7 @@ getStatutesArray();
                     <HeaderLinks
                         :manual-url="manualUrl"
                         :subjects-url="subjectsUrl"
+                        :obbba-url="obbbaUrl"
                     />
                 </template>
                 <template #search>

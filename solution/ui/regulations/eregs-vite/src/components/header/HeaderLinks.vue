@@ -19,11 +19,21 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    obbbaUrl: {
+        type: String,
+        required: true,
+    },
 });
 
 defineEmits(["link-clicked"]);
 
 const links = [
+    {
+        name: "obbba",
+        label: "OBBBA",
+        active: window.location.pathname.includes("obbba"),
+        href: props.obbbaUrl,
+    },
     {
         name: "statutes",
         label: "Social Security Act",

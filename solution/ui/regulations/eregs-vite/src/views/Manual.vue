@@ -25,6 +25,7 @@ const isAuthenticated = inject("isAuthenticated");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
+const obbbaUrl = inject("obbbaUrl");
 const username = inject("username");
 
 const $route = useRoute();
@@ -72,7 +73,7 @@ const executeSearch = (payload) => {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" />
+                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" :obbba-url="obbbaUrl" />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
