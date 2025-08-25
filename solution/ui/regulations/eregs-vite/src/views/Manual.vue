@@ -73,7 +73,11 @@ const executeSearch = (payload) => {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" :obbba-url="obbbaUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :subjects-url="subjectsUrl"
+                        :obbba-url="obbbaUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
