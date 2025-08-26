@@ -152,4 +152,4 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
             "usc_citation": usc_citation_string,
         }
 
-        return Response(response_data)
+        return Response(StatuteLinkSerializer(response_data).data)
