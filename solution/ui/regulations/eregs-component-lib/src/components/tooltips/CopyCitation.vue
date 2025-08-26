@@ -23,7 +23,19 @@ const props = defineProps({
         required: false,
         default: undefined,
     },
+    index: {
+        type: Number,
+        required: false,
+        default: undefined,
+    },
+    selectedIndex: {
+        type: Number,
+        required: false,
+        default: undefined,
+    },
 });
+
+const emit = defineEmits(["copy-clicked"]);
 
 const selectedAction = ref(null);
 const copyStatus = ref("idle");
@@ -48,6 +60,9 @@ const getCopyText = computed(() => {
 const handleActionClick = (payload) => {
     selectedAction.value = payload.actionType;
     copyStatus.value = "pending";
+    emit("copy-clicked", {
+        index: props.index,
+    });
 };
 
 watch(
@@ -64,6 +79,16 @@ watch(
                 console.info("Error copying to clipboard", err);
                 copyStatus.value = "idle";
             }
+        }
+    }
+);
+
+watch(
+    () => props.selectedIndex,
+    (newIndex) => {
+        if (newIndex !== props.index) {
+            selectedAction.value = null;
+            copyStatus.value = "idle";
         }
     }
 );

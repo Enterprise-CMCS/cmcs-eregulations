@@ -1,6 +1,6 @@
 <script setup>
 import CopyCitation from "eregsComponentLib/src/components/tooltips/CopyCitation.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps({
     citationObj: {
@@ -15,6 +15,8 @@ const props = defineProps({
     },
 });
 
+const selectedIndex = ref(null);
+
 const citationArr = computed(() => {
     if (props.error || !props.citationObj) {
         return [];
@@ -23,6 +25,10 @@ const citationArr = computed(() => {
     return Object.entries(props.citationObj)
         .filter(([key, _value]) => key !== "input")
 });
+
+const handleCopyClicked = (payload) => {
+    selectedIndex.value = payload.index;
+};
 </script>
 
 <template>
@@ -43,7 +49,7 @@ const citationArr = computed(() => {
             </span>
         </div>
         <div
-            v-for="item in citationArr"
+            v-for="(item, index) in citationArr"
             :key="item[0]"
             class="more-info__row"
         >
@@ -52,6 +58,9 @@ const citationArr = computed(() => {
                     :formatted-citation="item[0] !== 'link' ? item[1] : null"
                     :link="item[0] === 'link' ? item[1] : null"
                     :action-type="item[0] === 'link' ? 'link' : 'citation'"
+                    :index="index"
+                    :selected-index="selectedIndex"
+                    @copy-clicked="handleCopyClicked"
                 />
             </div>
             <div class="row__content">
