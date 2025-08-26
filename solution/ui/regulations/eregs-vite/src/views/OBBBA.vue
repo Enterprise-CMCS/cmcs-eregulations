@@ -64,7 +64,7 @@ const $route = useRoute();
             </HeaderComponent>
         </header>
         <div id="obbbaApp" class="site-container">
-            <div class="obbba__container">
+            <div class="obbba__container content">
                 <h1>One Big Beautiful Bill Act (OBBBA)</h1>
 
                 <p>
