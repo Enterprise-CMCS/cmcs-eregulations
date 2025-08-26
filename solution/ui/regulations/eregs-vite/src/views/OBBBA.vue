@@ -65,24 +65,27 @@ const $route = useRoute();
         </header>
         <div id="obbbaApp" class="site-container">
             <div class="obbba__container">
-                <h1>OBBBA</h1>
+                <h1>One Big Beautiful Bill Act (OBBBA)</h1>
 
                 <p>
-                    The following is an excerpt from <a
+                    Excerpt from <a
                         href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
                         class="external"
                         target="_blank"
-                    >H.R.1 - One Big Beautiful Bill Act</a>, Title VII — Finance, Subtitle B — Health.
+                    >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
+                </p>
+                <p>
+                    Additions to the Social Security Act are <span class="annotated-text">highlighted with a background color</span>.
                 </p>
 
                 <!--<div class="lbexTocSubTitleOLC">
                     <a href="#toc-H00A124B5E74D481E9C40B11626C9DADE" id="H00A124B5E74D481E9C40B11626C9DADE">Subtitle B—Health</a>
                 </div>-->
                 <div class="lbexTocDivisionOLC">
-                    <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1—Medicaid</a>
+                    <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
                 </div>
                 <div class="lbexTocSubChapterOLC">
-                    <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A—Reducing fraud and improving enrollment processes</a>
+                    <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A — Reducing fraud and improving enrollment processes</a>
                 </div>
                 <span class="lbexTocSectionOLC">
                     <a id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C" href="#toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C">Sec. 71101. Moratorium on implementation of rule relating to eligibility and enrollment in Medicare Savings Programs.</a>
@@ -115,7 +118,7 @@ const $route = useRoute();
                     <a id="H01B260BD1A734C8384AF364D82D3132E" href="#toc-H01B260BD1A734C8384AF364D82D3132E">Sec. 71110. Expansion FMAP for emergency Medicaid.</a>
                 </span>
                 <div class="lbexTocSubChapterOLC">
-                    <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B—Preventing wasteful spending</a>
+                    <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B — Preventing wasteful spending</a>
                 </div>
                 <span class="lbexTocSectionOLC">
                     <a id="H72D966A2232743E5A94F076C68AE84D0" href="#toc-H72D966A2232743E5A94F076C68AE84D0">Sec. 71111. Moratorium on implementation of rule relating to staffing standards for long-term care facilities under the Medicare and Medicaid programs.</a>
@@ -127,7 +130,7 @@ const $route = useRoute();
                     <a id="H4C4222AD5DC6485391D3BF42FAE4785C" href="#toc-H4C4222AD5DC6485391D3BF42FAE4785C">Sec. 71113. Federal payments to prohibited entities.</a>
                 </span>
                 <div class="lbexTocSubChapterOLC">
-                    <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C—Stopping abusive financing practices</a>
+                    <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C — Stopping abusive financing practices</a>
                 </div>
                 <span class="lbexTocSectionOLC">
                     <a id="H027BCCE030064EC1801736510E3BFF79" href="#toc-H027BCCE030064EC1801736510E3BFF79">Sec. 71114. Sunsetting increased FMAP incentive.</a>
@@ -145,7 +148,7 @@ const $route = useRoute();
                     <a id="H3DFC92C358834F5B82DE8AB81465692A" href="#toc-H3DFC92C358834F5B82DE8AB81465692A">Sec. 71118. Requiring budget neutrality for Medicaid demonstration projects under section 1115.</a>
                 </span>
                 <div class="lbexTocSubChapterOLC">
-                    <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D—Increasing personal accountability</a>
+                    <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D — Increasing personal accountability</a>
                 </div>
                 <span class="lbexTocSectionOLC">
                     <a id="HE10C293F1AD14FEE88FED90835BFBB2D" href="#toc-HE10C293F1AD14FEE88FED90835BFBB2D">Sec. 71119. Requirement for States to establish Medicaid community engagement requirements for certain individuals.</a>
@@ -154,7 +157,7 @@ const $route = useRoute();
                     <a id="H4ADCA385302C45CCBDC2C4550A5A6759" href="#toc-H4ADCA385302C45CCBDC2C4550A5A6759">Sec. 71120. Modifying cost sharing requirements for certain expansion individuals under the Medicaid program.</a>
                 </span>
                 <div class="lbexTocSubChapterOLC">
-                    <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E—Expanding Access to Care</a>
+                    <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E — Expanding Access to Care</a>
                 </div>
                 <span class="lbexTocSectionOLC">
                     <a id="H09652BCC85234E4FAAAC9D9A805494AF" href="#toc-H09652BCC85234E4FAAAC9D9A805494AF">Sec. 71121. Making certain adjustments to coverage of home or community-based services under Medicaid.</a>
@@ -201,13 +204,13 @@ const $route = useRoute();
                         target="_blank"
                     >406.21(c)</a>.</span>
                     <a id="HCE8D6997B5854B01ADD71E9E21FDC2BA" />
-                    <span class="lbexIndentParagraph">(2) Section <a href="/42/435/Subpart-A/2025-01-01/#435-4">435.4</a>.</span>
+                    <span class="lbexIndentParagraph">(2) Section <a href="/42/435/Subpart-A/#435-4">435.4</a>.</span>
                     <a id="H15487E3B744248DCAFBFE927D8DA0D58" />
-                    <span class="lbexIndentParagraph">(3) Section <a href="/42/435/Subpart-G/2025-01-01/#435-601">435.601</a>.</span>
+                    <span class="lbexIndentParagraph">(3) Section <a href="/42/435/Subpart-G/#435-601">435.601</a>.</span>
                     <a id="HE50E09359ADF43E3801583A7F93536AF" />
-                    <span class="lbexIndentParagraph">(4) Section <a href="/42/435/Subpart-J/2025-01-01/#435-911">435.911</a>.</span>
+                    <span class="lbexIndentParagraph">(4) Section <a href="/42/435/Subpart-J/#435-911">435.911</a>.</span>
                     <a id="H0118D4FC9FB141779DBAFFFC5D16CE70" />
-                    <span class="lbexIndentParagraph">(5) Section <a href="/42/435/Subpart-J/2025-01-01/#435-952">435.952</a>.</span>
+                    <span class="lbexIndentParagraph">(5) Section <a href="/42/435/Subpart-J/#435-952">435.952</a>.</span>
                 </span>
                 <a id="H598825FE57D945BF99919E631E2EB252" />
                 <span class="lbexIndent">(b)
@@ -236,51 +239,51 @@ const $route = useRoute();
                 <a id="H7D21A4884F4A482E92B6D806BB64376D" />
                 <span class="lbexIndentParagraph">(1) PART 431.—
                     <a id="H077E344340DA4CC1B6AE74AE55D63DA8" />
-                    <span class="lbexIndentSubpar">(A) Section <a href="/42/431/Subpart-E/2024-10-25/#431-213-d">431.213(d)</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a href="/42/431/Subpart-E/#431-213-d">431.213(d)</a>.</span>
                 </span>
 
 
                 <a id="H42237E815BFE4C90A3BA673ED5A0ED07" />
                 <span class="lbexIndentParagraph">(2) PART 435.—
                     <a id="H71F74C30E9514D2087EC3E585BF8CE25" />
-                    <span class="lbexIndentSubpar">(A) Section <a href="/42/435/Subpart-C/2025-01-01/#435-222">435.222</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a href="/42/435/Subpart-C/#435-222">435.222</a>.</span>
 
                     <a id="H832B46669A6A4A16B4FB89126EFD832D" />
-                    <span class="lbexIndentSubpar">(B) Section <a href="/42/435/Subpart-E/2025-01-01/#435-407">435.407</a>.</span>
+                    <span class="lbexIndentSubpar">(B) Section <a href="/42/435/Subpart-E/#435-407">435.407</a>.</span>
 
                     <a id="H97F1770CA51C4362A7342F5BC96622F4" />
-                    <span class="lbexIndentSubpar">(C) Section <a href="/42/435/Subpart-J/2025-01-01/#435-907">435.907</a>.</span>
+                    <span class="lbexIndentSubpar">(C) Section <a href="/42/435/Subpart-J/#435-907">435.907</a>.</span>
 
                     <a id="HDBE4C453DE744C719C74B723C40666E9" />
-                    <span class="lbexIndentSubpar">(D) Section <a href="/42/435/Subpart-J/2025-01-01/#435-911-c">435.911(c)</a>.</span>
+                    <span class="lbexIndentSubpar">(D) Section <a href="/42/435/Subpart-J/#435-911-c">435.911(c)</a>.</span>
 
                     <a id="H36BD5BABE098435794D3D3767A35C301" />
-                    <span class="lbexIndentSubpar">(E) Section <a href="/42/435/Subpart-J/2025-01-01/#435-912">435.912</a>.</span>
+                    <span class="lbexIndentSubpar">(E) Section <a href="/42/435/Subpart-J/#435-912">435.912</a>.</span>
 
                     <a id="H227480A09C3449659DC628114682795B" />
-                    <span class="lbexIndentSubpar">(F) Section <a href="/42/435/Subpart-J/2025-01-01/#435-916">435.916</a>.</span>
+                    <span class="lbexIndentSubpar">(F) Section <a href="/42/435/Subpart-J/#435-916">435.916</a>.</span>
 
                     <a id="H7C655D554F6B411287E964B71B34A247" />
-                    <span class="lbexIndentSubpar">(G) Section <a href="/42/435/Subpart-J/2025-01-01/#435-919">435.919</a>.</span>
+                    <span class="lbexIndentSubpar">(G) Section <a href="/42/435/Subpart-J/#435-919">435.919</a>.</span>
 
                     <a id="H4B4A827E4C334187A9A1A89EF051394C" />
-                    <span class="lbexIndentSubpar">(H) Section <a href="/42/435/Subpart-M/2025-01-01/#435-1200-b-3-i">435.1200(b)(3)(i)-(v)</a>.</span>
+                    <span class="lbexIndentSubpar">(H) Section <a href="/42/435/Subpart-M/#435-1200-b-3-i">435.1200(b)(3)(i)-(v)</a>.</span>
 
                     <a id="HECA656E702634947B790993D7C5800B3" />
-                    <span class="lbexIndentSubpar">(I) Section <a href="/42/435/Subpart-M/2025-01-01/#435-1200-e0a428659af526a4235cd9a2ecbb904a">435.1200(e )(1)(ii)</a>.</span>
+                    <span class="lbexIndentSubpar">(I) Section <a href="/42/435/Subpart-M/#435-1200-e0a428659af526a4235cd9a2ecbb904a">435.1200(e )(1)(ii)</a>.</span>
 
                     <a id="H79250E195F0843D2B9137692544CA717" />
-                    <span class="lbexIndentSubpar">(J) Section <a href="/42/435/Subpart-M/2025-01-01/#435-1200-h-1">435.1200(h)(1)</a>.</span>
+                    <span class="lbexIndentSubpar">(J) Section <a href="/42/435/Subpart-M/#435-1200-h-1">435.1200(h)(1)</a>.</span>
                 </span>
 
 
                 <a id="H7352215019274DF88BBA1292F84BB0AC" />
-                <span class="lbexIndentParagraph">(3) PART 447.—Section <a href="/42/447/Subpart-A/2024-11-19/#447-56-a-1-v">447.56(a)(1)(v)</a>.</span>
+                <span class="lbexIndentParagraph">(3) PART 447.—Section <a href="/42/447/Subpart-A/#447-56-a-1-v">447.56(a)(1)(v)</a>.</span>
 
                 <a id="H79BA1C0B1BC34A219585A104FE35B757" />
                 <span class="lbexIndentParagraph">(4) PART 457.—
                     <a id="H218ABEFEACEC48048D19B9725B66DC3F" />
-                    <span class="lbexIndentSubpar">(A) Section <a href="/42/457/Subpart-C/2025-01-13/#457-344">457.344</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a href="/42/457/Subpart-C/#457-344">457.344</a>.</span>
 
                     <a id="HFFCC5AF3EAD546DB82645A047A623B28" />
                     <span class="lbexIndentSubpar">(B) Section <a
@@ -290,13 +293,13 @@ const $route = useRoute();
                     >457.960</a>.</span>
 
                     <a id="H1E0BF50F724843B2BE354F98D8490127" />
-                    <span class="lbexIndentSubpar">(C) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1140-d-4">457.1140(d)(4)</a>.</span>
+                    <span class="lbexIndentSubpar">(C) Section <a href="/42/457/Subpart-K/#457-1140-d-4">457.1140(d)(4)</a>.</span>
 
                     <a id="H82BF3A5429C2459D8CE8DE8BA7FDC46F" />
-                    <span class="lbexIndentSubpar">(D) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1170">457.1170</a>.</span>
+                    <span class="lbexIndentSubpar">(D) Section <a href="/42/457/Subpart-K/#457-1170">457.1170</a>.</span>
 
                     <a id="H59115532E4B94D6AB62D59E8A8D259B3" />
-                    <span class="lbexIndentSubpar">(E) Section <a href="/42/457/Subpart-K/2025-01-13/#457-1180">457.1180</a>.</span>
+                    <span class="lbexIndentSubpar">(E) Section <a href="/42/457/Subpart-K/#457-1180">457.1180</a>.</span>
                 </span>
 
                 <span class="lbexHang">
@@ -316,7 +319,7 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Medicaid</span>.—
                     <a id="H4FE266775AFB4A558143D02CDF85AD60" />
                     <span class="lbexIndentParagraph">(1) IN GENERAL.—Section 1902 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a</a>) is amended—
@@ -406,7 +409,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(2) CONFORMING AMENDMENTS.—
                     <a id="HB74BBF87B95342CD9D5397956A44F7A8" />
                     <span class="lbexIndentSubpar">(A) PARIS.—Section 1903(r)(3) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_r_3"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396b(r)(3)</a>) is amended—
@@ -434,7 +437,7 @@ const $route = useRoute();
 
                     <a id="H29669828A6FE4AA8807F272ECC1881B0" />
                     <span class="lbexIndentSubpar">(B) MANAGED CARE.—Section 1932 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396u–2</a>) is amended by adding at the end the following new subsection:
@@ -453,7 +456,7 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">CHIP</span>.—
                     <a id="H5459CCDF4E1540A7A72D53384E8236A5" />
                     <span class="lbexIndentParagraph">(1) IN GENERAL.—Section 2107(e)(1) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397gg"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397gg&num=0&edition=prelim#substructure-location_e_1"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1397gg(e)(1)</a>) is amended—
@@ -470,7 +473,7 @@ const $route = useRoute();
 
                     <a id="HC4AD55EEC3074DA5B1BFA04CB250B1DE" />
                     <span class="lbexIndentParagraph">(2) MANAGED CARE.—Section 2103(f)(3) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397cc"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397cc&num=0&edition=prelim#substructure-location_f_3"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting <span class="annotated-text">“(e), and (j)”</span>. </span>
@@ -490,7 +493,7 @@ const $route = useRoute();
 
                 <span class="lbexIndent">
                     <span class="lbexIndent">Section 1902 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a</a>), as amended by section 71103, is further amended—</span>
@@ -557,7 +560,7 @@ const $route = useRoute();
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1902(kk)(1) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_kk_1"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(kk)(1)</a>) is amended—</span>
@@ -593,7 +596,7 @@ const $route = useRoute();
                 <a id="HC670A843FC9F4238A6146494C352067E" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1903(u)(1) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_u_1"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396b(u)(1)</a>) is amended—
@@ -656,7 +659,7 @@ const $route = useRoute();
                 <a id="H17BE0BEBA4774BD2AC044EDEDBDC0FDC" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902(e)(14) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_e_14"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(e)(14)</a>) is amended by adding at the end the following new subparagraph:
@@ -669,7 +672,7 @@ const $route = useRoute();
                                 <span class="lbexIndentSubclause">“(I) Individuals enrolled under subsection (a)(10)(A)(i)(VIII).</span>
                                 <a id="H44422F1978A4463FA00A5337D5FDFC64" />
                                 <span class="lbexIndentSubclause">“(II) Individuals described in such subsection who are otherwise enrolled under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                     class="external"
                                     target="_blank"
                                 >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in subsection (a)(10)(A)(i)(VIII).</span>
@@ -705,7 +708,7 @@ const $route = useRoute();
                 <a id="HAFFB5AB97A84416A8CA2844C876D3889" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Revising home equity limit</span>.—Section 1917(f)(1) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396p"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396p&num=0&edition=prelim#substructure-location_f_1"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396p(f)(1)</a>) is amended—
@@ -739,7 +742,7 @@ const $route = useRoute();
                 <a id="HE9B43645948347829A70DCF2C7126573" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Clarification</span>.—Section 1902 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a</a>) is amended—
@@ -788,7 +791,7 @@ const $route = useRoute();
                 <a id="HCEC62AA2268345DEB0305C1D76EE56A5" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Medicaid</span>.—Section 1903(v) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_v"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396b(v)</a>) is amended—
@@ -850,7 +853,7 @@ const $route = useRoute();
                 <a id="H050F12666B2B40318BF49AFC9987802E" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1905 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396d</a>) is amended by adding at the end the following new subsection:
@@ -892,10 +895,10 @@ const $route = useRoute();
                     </span>
                 </span>
                 <a id="H7F27631AC8864ABFA997B72C9BC9AAAE" />
-                <span class="lbexIndentParagraph">(1) Section <a href="/42/483/Subpart-B/2025-01-01/#483-5">483.5</a>.</span>
+                <span class="lbexIndentParagraph">(1) Section <a href="/42/483/Subpart-B/#483-5">483.5</a>.</span>
 
                 <a id="H0BE34688028F490A991FA0D537331D4C" />
-                <span class="lbexIndentParagraph">(2) Section <a href="/42/483/Subpart-B/2025-01-01/#483-35">483.35</a>.</span>
+                <span class="lbexIndentParagraph">(2) Section <a href="/42/483/Subpart-B/#483-35">483.35</a>.</span>
 
                 <span class="lbexHang">
                     <a id="toc-H917F6C03CA464B319B70F26A163C0EE0" href="#H917F6C03CA464B319B70F26A163C0EE0">
@@ -912,7 +915,7 @@ const $route = useRoute();
                 <a id="HD7F49CCDD9744A4C9F10E968B0298EB9" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902(a)(34) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_34"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(a)(34)</a>) is amended to read as follows:
@@ -930,14 +933,14 @@ const $route = useRoute();
                 <a id="HC7870E6A3EC949A3AB2EA6683E9D3219" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Definition of medical assistance</span>.—Section 1905(a) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396d&num=0&edition=prelim#substructure-location_a"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396d(a)</a>) is amended by striking “in or after the third month before the month in which the recipient makes application for assistance” and inserting <span class="annotated-text">“, with respect to an individual described in section 1902(a)(34)(A), in or after the month before the month in which the recipient makes application for assistance, and with respect to an individual described in section 1902(a)(34)(B), in or after the second month before the month in which the recipient makes application for assistance”</span>.</span>
                 <a id="H961706CDB4CE450EAD37A45CDA1206E3" />
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">CHIP</span>.—Section 2102(b)(1)(B) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1397bb"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397bb&num=0&edition=prelim#substructure-location_b_1_B"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1397bb(b)(1)(B)</a>) is amended—
@@ -986,12 +989,12 @@ const $route = useRoute();
                         <span class="lbexIndentSubpar">(A) that, as of the first day of the first quarter beginning after the date of enactment of this Act—
                             <a id="H608232A6175D4CD4BC1E3FB45CABE32C" />
                             <span class="lbexIndentClause">(i) is an organization described in <a
-                                href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=501"
+                                href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=501"
                                 class="external"
                                 target="_blank"
                             >section 501(c)(3)</a> of the Internal Revenue Code of 1986 and exempt from tax under section 501(a) of such Code;</span>
                             <a id="H589B5CE0C627419280D75FB2BB5AC0FB" />
-                            <span class="lbexIndentClause">(ii) is an essential community provider described in section 156.235 of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
+                            <span class="lbexIndentClause">(ii) is an essential community provider described in section <a href="/45/156/Subpart-C/#156-235">156.235</a> of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
                             <a id="H7F2D87B146174050A9A298AB579A3CD5" />
                             <span class="lbexIndentClause">(iii) provides for abortions, other than an abortion—
                                 <a id="H1BFF52D791314DCD94FA987EF6767212" />
@@ -1006,21 +1009,29 @@ const $route = useRoute();
                 </span>
 
                 <a id="HD88761F8ED344F4983817A5D46050378" />
-                <span class="lbexIndentParagraph">(2) DIRECT SPENDING.—The term “direct spending” has the meaning given that term under section 250(c) of the Balanced Budget and Emergency Deficit Control Act of 1985 (<a href="http://uscode.house.gov/quicksearch/get.plx?title=2&amp;section=900">2 U.S.C. 900(c)</a>).</span>
+                <span class="lbexIndentParagraph">(2) DIRECT SPENDING.—The term “direct spending” has the meaning given that term under section 250(c) of the Balanced Budget and Emergency Deficit Control Act of 1985 (<a
+                    href="https://uscode.house.gov/quicksearch/get.plx?title=2&amp;section=900"
+                    class="external"
+                    target="_blank"
+                >2 U.S.C. 900(c)</a>).</span>
 
                 <a id="HD46C0855B83542C4B5E1F07AC65444C4" />
                 <span class="lbexIndentParagraph">(3) COVERED ORGANIZATION.—The term “covered organization” means a managed care entity (as defined in section 1932(a)(1)(B) of the Social Security Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396u-2&num=0&edition=prelim#substructure-location_a_1_B"
                     class="external"
                     target="_blank"
                 >42 U.S.C. 1396u–2(a)(1)(B)</a>)) or a prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D) of such Act (<a
-                    href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_m_9_D"
                     class="external"
                     target="_blank"
                 >42 U.S.C. 1396b(m)(9)(D)</a>)).</span>
 
                 <a id="HB3D54CA27A1A43199BB46535DA7D0DD6" />
-                <span class="lbexIndentParagraph">(4) STATE.—The term “State” has the meaning given such term in section 1101 of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1301">42 U.S.C. 1301</a>).</span>
+                <span class="lbexIndentParagraph">(4) STATE.—The term “State” has the meaning given such term in section 1101 of the Social Security Act (<a
+                    href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1301"
+                    class="external"
+                    target="_blank"
+                >42 U.S.C. 1301</a>).</span>
 
                 <a id="H7E92C3D050394B7CA51BBA5B51CA775E" />
                 <span class="lbexIndent">(c)
@@ -1045,10 +1056,10 @@ const $route = useRoute();
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1905(ii)(3) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
                         class="external"
                         target="_blank"
-                    >42 U.S.C. 1396d(ii)(3)</a>) is amended—</span>
+                    >42 U.S.C. 1396d(ii)(3)</a>) is amended—</span> <!-- Did not update this link because the target doesn't work correctly on the US Code page -->
                 </span>
                 <a id="HD2439E0C48C04FDE8FE8FCE60D804E7A" />
                 <span class="lbexIndentParagraph">(1) by striking “which has not” and inserting the following: <span class="annotated-text">“which—</span>
@@ -1082,7 +1093,7 @@ const $route = useRoute();
                 <a id="HD1668A87651A42AEBD33453570189B7A" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Change in threshold for hold harmless provision of broad-based health care related taxes</span>.—Section 1903(w)(4) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w_4"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396b(w)(4)</a>) is amended—
@@ -1096,14 +1107,14 @@ const $route = useRoute();
                         <a id="H20D36E644A5540F5BB7E376E7A0ED2C1" />
                         <span class="lbexIndentParagraph">“(D)<a id="H7B64F6DB41074587B2D2EFF4CB2DB9C1" />(i) For purposes of subparagraph (C)(ii), the applicable percent determined under this subparagraph is—
                             <a id="HDF81F1D064A847118AB152C689CB7CD8" />
-                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
+                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
                                 <a id="HF7E6031DCDD345F09E8D67BB87A018EB" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
                                 <a id="H3B56C17EC18642CAB67D1CED226B2213" />
                                 <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent; and</span>
                             </span>
                             <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
-                            <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
+                            <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a href="/42/433/Subpart-B/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
                                 <a id="H475F82BE8791418DA85C5A6050B87FAA" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—
                                     <span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
@@ -1140,7 +1151,7 @@ const $route = useRoute();
                         </span>
 
                         <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
-                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a href="/42/433/Subpart-B/2024-11-19/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
+                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a href="/42/433/Subpart-B/#433-56-a">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
                     </span>
                 </span>
 
@@ -1165,14 +1176,14 @@ const $route = useRoute();
 
                 <a id="H6081C5C3FF704314AFF57BA411E26DDE" />
                 <span class="lbexIndent">(a)
-                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
+                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a href="/42/438/Subpart-A/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
                     <a id="HC7FA119FA48845338BE885CBFF7EB408" />
                     <span class="lbexIndentParagraph">(1) in the case of a State that provides coverage to all individuals described in section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) that is equivalent to minimum essential coverage (as described in <a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                         class="external"
                         target="_blank"
                     >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) under the State plan (or waiver of such plan) of such State under title XIX of such Act, 100 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)); or</span>
@@ -1181,21 +1192,21 @@ const $route = useRoute();
                 </span>
                 <a id="HDF8733C85AF248F388EEB66529058959" />
                 <span class="lbexIndent">(b)
-                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
+                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a href="/42/438/Subpart-A/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
                 <a id="HE5D55700A09E4588B22AD16BF89FE95D" />
                 <span class="lbexIndent">(c)
-                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
+                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a href="/42/438/Subpart-A/#438-6-i-2-iii">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
                 <a id="HBEA8D8254C8D4E6FA9A9BB30161AF637" />
                 <span class="lbexIndent">(d)
                     <span class="lbexSectionLevelOLCnuclear">Definitions</span>.—In this section:
                     <a id="H0FA8895A2CF44F0F8F20C1B2127F7710" />
-                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a href="/42/438/Subpart-A/2024-12-19/#438-2">438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a href="/42/438/Subpart-A/#438-2">438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
                 </span>
                 <a id="H853967811D0341A9BBAD7278E4F65755" />
                 <span class="lbexIndentParagraph">(2) RURAL HOSPITAL.—The term “rural hospital” means the following:
                     <a id="HB4B48C2C98234AA180146381EB0C9DE7" />
                     <span class="lbexIndentSubpar">(A) A subsection (d) hospital (as defined in paragraph (1)(B) of section 1886(d) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395ww(d)</a>)) that—
@@ -1204,40 +1215,44 @@ const $route = useRoute();
                         <a id="HB42272FC99CE4B3F88E4380D89F8B993" />
                         <span class="lbexIndentClause">(ii) is treated as being located in a rural area pursuant to paragraph (8)(E) of such section; or </span>
                         <a id="H5FBFCFB21723476C85468AFB25F4CB75" />
-                        <span class="lbexIndentClause">(iii) is located in a rural census tract of a metropolitan statistical area (as determined under the most recent modification of the Goldsmith Modification, originally published in the Federal Register on February 27, 1992 (57 Fed. Reg. 6725)).</span>
+                        <span class="lbexIndentClause">(iii) is located in a rural census tract of a metropolitan statistical area (as determined under the most recent modification of the Goldsmith Modification, originally published in the Federal Register on February 27, 1992 (<a
+                            href="https://www.federalregister.gov/citation/57-FR-6725"
+                            class="external"
+                            target="_blank"
+                        >57 Fed. Reg. 6725</a>)).</span>
                     </span>
 
                     <a id="HCE59402B78ED4216834F2661B7AE124E" />
                     <span class="lbexIndentSubpar">(B) A critical access hospital (as defined in section 1861(mm)(1) of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_mm_1"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395x(mm)(1)</a>)).</span>
 
                     <a id="H469A0CCA86A648A08AC5D213366E217D" />
                     <span class="lbexIndentSubpar">(C) A sole community hospital (as defined in section 1886(d)(5)(D)(iii) of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_D_iii"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395ww(d)(5)(D)(iii)</a>)).</span>
 
                     <a id="HCB61C01C4F9041ED89418D3EB562E5C3" />
                     <span class="lbexIndentSubpar">(D) A Medicare-dependent, small rural hospital (as defined in section 1886(d)(5)(G)(iv) of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_G_iv"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395ww(d)(5)(G)(iv)</a>)). </span>
 
                     <a id="H141EDCA002E14CDE8BFBC3738961EB39" />
                     <span class="lbexIndentSubpar">(E) A low-volume hospital (as defined in section 1886(d)(12)(C) of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395ww"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_12_C"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395ww(d)(12)(C)</a>)).</span>
 
                     <a id="H99E320165DC64DC7B4E8DAEBFC4F42F1" />
                     <span class="lbexIndentSubpar">(F) A rural emergency hospital (as defined in section 1861(kkk)(2) of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1395x"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_kkk_2"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1395x(kkk)(2)</a>)).</span>
@@ -1250,7 +1265,7 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(4) TOTAL PUBLISHED MEDICARE PAYMENT RATE.—The term “total published Medicare payment rate” has the meaning given to such term in section 438.6(a) of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="H9334788623AB48D59AA5F48A7931A73A" />
-                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a href="/42/438/Subpart-A/2024-12-19/#438-6-i-2-i">438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a href="/42/438/Subpart-A/#438-6-i-2-i">438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="HC6803D86FB4C4A04AD9B3927CFBED342" />
                 <span class="lbexIndent">(e)
@@ -1271,7 +1286,7 @@ const $route = useRoute();
                 <a id="H946D195148204135A731BDE8117729B1" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1903(w) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396b"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396b(w)</a>) is amended—
@@ -1352,7 +1367,7 @@ const $route = useRoute();
                 <a id="H05A306D8A48742AE85C93943E85D9BFD" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1115 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1315</a>) is amended by adding at the end the following new subsection:
@@ -1394,7 +1409,7 @@ const $route = useRoute();
                 <a id="H2B46E3225A4B47F5815B7CBC456D620D" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1902 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a</a>), as amended by sections 71103 and 71104, is further amended by adding at the end the following new subsection:
@@ -1442,7 +1457,7 @@ const $route = useRoute();
 
                                 <a id="H0DF1E2271CF94FE786EF1A1CEF2901C8" />
                                 <span class="lbexIndentSubpar">“(G) The individual had an average monthly income over the preceding 6 months that is not less than the applicable minimum wage requirement under section 6 of the Fair Labor Standards Act of 1938 multiplied by 80 hours, and is a seasonal worker, as described in <a
-                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=45R"
+                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=45R"
                                     class="external"
                                     target="_blank"
                                 >section 45R(d)(5)(B)</a> of the Internal Revenue Code of 1986 .</span>
@@ -1549,7 +1564,7 @@ const $route = useRoute();
                                 <span class="lbexIndentSubpar">“(A) CERTAIN FMAP INCREASES.—A State shall not be treated as not providing medical assistance to all individuals described in section 1902(a)(10)(A)(i)(VIII), or as not expending amounts for all such individuals under the State plan (or waiver of such plan), solely because such an individual is determined ineligible for medical assistance under the State plan (or waiver) on the basis of a failure to meet the requirement to demonstrate community engagement under <a href="#HEE8799D1FF664550B27FE20B048550DA">paragraph (1)</a>.</span>
                                 <a id="H75313C7D56A34AA6B2E121F20CE90BC0" />
                                 <span class="lbexIndentSubpar">“(B) OTHER PROVISIONS.—For purposes of <a
-                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=36B"
+                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=36B"
                                     class="external"
                                     target="_blank"
                                 >section 36B(c)(2)(B)</a> of the Internal Revenue Code of 1986, an individual shall be deemed to be eligible for minimum essential coverage described in section 5000A(f)(1)(A)(ii) of such Code for a month if such individual would have been eligible for medical assistance under a State plan (or a waiver of such plan) under this title but for a failure to meet the requirement to demonstrate community engagement under <a href="#HEE8799D1FF664550B27FE20B048550DA">paragraph (1)</a>.</span>
@@ -1597,7 +1612,7 @@ const $route = useRoute();
                                         <span class="lbexIndentSubclause">“(II) who—
                                             <a id="H6DA32B725062462FB83E1B64F8AA3B6A" />
                                             <span class="lbexIndentItem">“(aa) is otherwise eligible to enroll (or is enrolled) under a waiver of such plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                                href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                                href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                                 class="external"
                                                 target="_blank"
                                             >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and as determined in accordance with standards prescribed by the Secretary in regulations); and</span>
@@ -1737,7 +1752,7 @@ const $route = useRoute();
                 <a id="HD73A0A07C3EF48EE94CB56DC583A01D2" />
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Conforming amendment</span>.—Section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) is amended by striking “subject to subsection (k)” and inserting <span class="annotated-text">“subject to subsections (k) and (xx)”</span>.</span>
@@ -1792,7 +1807,7 @@ const $route = useRoute();
                 <a id="HD8C2EFE59E624828BEE359C477862C45" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">In general</span>.—Section 1916 of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396o</a>) is amended—
@@ -1838,7 +1853,7 @@ const $route = useRoute();
                                 <span class="lbexIndentSubpar">“(A) is enrolled under section 1902(a)(10)(A)(i)(VIII); or</span>
                                 <a id="HB5FBE619E4DD42D7B7EE7E5F949F42EF" />
                                 <span class="lbexIndentSubpar">“(B) is described in such subsection and otherwise enrolled under a waiver of the State plan that provides coverage that is equivalent to minimum essential coverage (as described in <a
-                                    href="http://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
+                                    href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                     class="external"
                                     target="_blank"
                                 >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in section 1902(a)(10)(A)(i)(VIII).</span>
@@ -1854,13 +1869,17 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Conforming amendments</span>.—
                     <a id="H09151CE0186646DC87BE91BBFE5EE99F" />
                     <span class="lbexIndentParagraph">(1) REQUIRED APPLICATION.—Section 1902(a)(14) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_14"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396a(a)(14)</a>) is amended by inserting <span class="annotated-text">“and provide for imposition of such deductions, cost sharing, or similar charges for care, items, or services furnished to specified individuals (as defined in paragraph (3) of section 1916(k)) in accordance with paragraph (2) of such section”</span> after “section 1916”.</span>
                 </span>
                 <a id="H13A29E0011FC45E9819A7CF3D0D061EF" />
-                <span class="lbexIndentParagraph">(2) NONAPPLICABILITY OF ALTERNATIVE COST SHARING.—Section 1916A(a)(1) of the Social Security Act (<a href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o-1">42 U.S.C. 1396o–1(a)(1)</a>) is amended, in the second sentence, by striking “or (j)” and inserting <span class="annotated-text">“(j), or (k)”</span>.</span>
+                <span class="lbexIndentParagraph">(2) NONAPPLICABILITY OF ALTERNATIVE COST SHARING.—Section 1916A(a)(1) of the Social Security Act (<a
+                    href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396o-1&num=0&edition=prelim#substructure-location_a_1"
+                    class="external"
+                    target="_blank"
+                >42 U.S.C. 1396o–1(a)(1)</a>) is amended, in the second sentence, by striking “or (j)” and inserting <span class="annotated-text">“(j), or (k)”</span>.</span>
 
                 <a id="H955C2E1C379E470A8E2C7F3DF31D1EB0" />
                 <span class="lbexIndent">(c)
@@ -1886,7 +1905,7 @@ const $route = useRoute();
                 <a id="H8F4E00E92C574C8D98E1F0E93E875667" />
                 <span class="lbexIndent">(a)
                     <span class="lbexSectionLevelOLCnuclear">Expanding HCBS coverage under section 1915(c) waivers</span>.—Section 1915(c) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396n"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396n(c)</a>) is amended—
@@ -1950,11 +1969,11 @@ const $route = useRoute();
 
                         <a id="H00AE6B0E31E3445183E405CA6E007DB5" />
                         <span class="lbexIndentSubpar">(B) for fiscal year 2027, $100,000,000 for purposes of making payments to States, subject to paragraph (2), to support State systems to deliver home or community-based services under section 1915(c) of the Social Security Act (<a
-                            href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396n"
+                            href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                             class="external"
                             target="_blank"
                         >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
-                            href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                            href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                             class="external"
                             target="_blank"
                         >42 U.S.C. 1315</a>), to remain available until expended.</span>
@@ -1962,11 +1981,11 @@ const $route = useRoute();
 
                     <a id="H049F6580A824403F9ACCBED4B8F41ED5" />
                     <span class="lbexIndentParagraph">(2) PAYMENTS BASED ON STATE HCBS ELIGIBLE POPULATION.—Payments to States from amounts made available by paragraph (1)(B) shall be made, with respect to a State, on the basis of the proportion of the population of the State that is receiving home or community-based services under section1915(c) of the Social Security Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396n"
+                        href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
-                        href="http://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
+                        href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                         class="external"
                         target="_blank"
                     >42 U.S.C. 1315</a>), as compared to all States. </span>
@@ -1982,8 +2001,15 @@ display: block;
 margin-top: 1em;
 margin-bottom: 1em;
 }
-.lbexTocSubChapterOLC, .lbexTocSubTitleOLC, .lbexTocDivisionOLC {
+.lbexTocSubChapterOLC, .lbexTocSubTitleOLC {
 font-size: 110%;
+font-weight: bold;
+display: block;
+margin-top: 1em;
+margin-bottom: 1em;
+}
+.lbexTocDivisionOLC {
+font-size: 120%;
 font-weight: bold;
 display: block;
 margin-top: 1em;
