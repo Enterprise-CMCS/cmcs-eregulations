@@ -117,7 +117,7 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
         )
 
         if result_link == pattern_string:
-            raise NotFound("No statute link found for the provided pattern.")
+            raise NotFound("No citation link found for the provided pattern.")
 
         raw_link = ""
         section_id = ""
