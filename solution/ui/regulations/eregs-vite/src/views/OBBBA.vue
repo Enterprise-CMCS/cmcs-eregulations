@@ -2008,110 +2008,64 @@ const $route = useRoute();
 </template>
 
 <style scoped>
-.lbexTocSectionOLC {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
+a { text-decoration: none; }
+
+.annotated-text {
+  background-color: #F2F2F2;
 }
-.lbexTocSubChapterOLC, .lbexTocSubTitleOLC {
-font-size: 110%;
-font-weight: bold;
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-}
-.lbexTocDivisionOLC {
-font-size: 120%;
-font-weight: bold;
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-}
-.lbexSubChapterLevelOLC, .lbexSubTitleLevelOLC, .lbexChapterLevelOLC {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-font-size: 150%;
-font-weight: bold;
-}
-.lbexHang {
-font-size: 120%;
-font-weight: bold;
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-}
-.lbexIndent {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-/*margin-left: 1em;
-padding-left: 5px;
-border-left: 1px solid #d0d0d0;*/
-}
-.lbexIndentParagraph {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left:  1px solid #d0d0d0;
-}
-.lbexIndentSectionText {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-}
-.lbexIndentSubpar {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left: 1px solid #d0d0d0;
-}
-.lbexIndentClause {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left: 1px solid #d0d0d0;
-}
-.lbexIndentSubclause {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left: 1px solid #d0d0d0;
-}
-.lbexIndentSubsection {
-display: block;
-background-color: #F2F2F2;
-}
-.annotated-text { background-color: #F2F2F2; }
-.lbexIndentItem {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left: 1px solid #d0d0d0;
-}
-.lbexIndentSubItem {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
-margin-left: 0em;
-padding-left: 2em;
-border-left: 1px solid #d0d0d0;
-}
+
+.lbexTocSectionOLC,
+.lbexIndent,
+.lbexIndentSectionText,
 .ul {
-display: block;
-margin-top: 1em;
-margin-bottom: 1em;
+  display: block;
+  margin: 1em 0;
 }
-a { text-decoration: none;}
-.lbexSectionLevelOLCnuclear, .lbexSectionTitleTrad { font-weight: 700; }
+
+.lbexTocSubChapterOLC,
+.lbexTocSubTitleOLC {
+  font-size: 110%;
+  font-weight: bold;
+  display: block;
+  margin: 1em 0;
+}
+
+.lbexTocDivisionOLC,
+.lbexHang {
+  font-size: 120%;
+  font-weight: bold;
+  display: block;
+  margin: 1em 0;
+}
+
+.lbexSubChapterLevelOLC,
+.lbexSubTitleLevelOLC,
+.lbexChapterLevelOLC {
+  font-size: 150%;
+  font-weight: bold;
+  display: block;
+  margin: 1em 0;
+}
+
+.lbexIndentParagraph,
+.lbexIndentSubpar,
+.lbexIndentClause,
+.lbexIndentSubclause,
+.lbexIndentItem,
+.lbexIndentSubItem {
+  display: block;
+  margin: 1em 0 1em 0;
+  padding-left: 2em;
+  border-left: 1px solid #d0d0d0;
+}
+
+.lbexIndentSubsection {
+  display: block;
+  background-color: #F2F2F2;
+}
+
+.lbexSectionLevelOLCnuclear,
+.lbexSectionTitleTrad {
+  font-weight: 700;
+}
 </style>
