@@ -23,7 +23,15 @@ describe("Statute Table", () => {
         });
         cy.url().should("include", "/statutes/");
 
-        cy.get("h1").contains("Look Up Statute Text");
+        cy.get("h1").contains("Social Security Act");
+
+        cy.get("h2")
+            .eq(0)
+            .contains("Look up Statute Text");
+
+        cy.get("h2")
+            .eq(1)
+            .contains("Table of Contents");
 
         cy.get(".p__description")
             .contains(
