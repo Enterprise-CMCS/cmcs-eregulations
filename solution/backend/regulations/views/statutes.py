@@ -133,7 +133,7 @@ class GetStatuteLinkAPIView(LinkConversionsMixin, APIView):
             usc_id = link_conversions.get(DEFAULT_ACT, {}).get(section_id, {}).get("usc", "")
 
             if usc_id:
-                usc_citation_string = f"42 U.S.C {usc_id}"
+                usc_citation_string = f"42 U.S.C. {usc_id}"
                 linked_paragraph_match = LINKED_PARAGRAPH_REGEX.search(pattern_param)
 
                 if linked_paragraph_match:
