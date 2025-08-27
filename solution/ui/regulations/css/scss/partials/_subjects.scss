@@ -3,25 +3,7 @@
 //-----------------------------
 
 @import "../application_settings";
-
-@mixin common-remove-btn-styles {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $policy_subject_close_background;
-    color: $policy_subject_selected_chip_background;
-    border-radius: 4px;
-
-    &:hover,
-    &:focus,
-    &:active {
-        background-color: #c0c1c3;
-    }
-
-    i {
-        pointer-events: none;
-    }
-}
+@import "./_buttons_and_tooltip.scss";
 
 .doc-type__toggle {
     fieldset {

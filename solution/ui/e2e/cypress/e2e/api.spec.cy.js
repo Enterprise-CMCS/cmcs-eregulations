@@ -5,6 +5,7 @@ const SECTION = 10;
 const VERSION = "latest";
 const SEARCH_TERM = "FMAP";
 const ACT = "Social Security Act";
+const PATTERN = "1903";
 
 // TODO: uncomment this and point it at the new synonyms endpoint under content-search
 // const SYNONYMS_ENDPOINT = "/v3/synonyms?q=";
@@ -22,6 +23,7 @@ const ACT = "Social Security Act";
 
 const API_ENDPOINTS_V3 = [
     `/v3/acts`,
+    `/v3/statute-link/?pattern=${PATTERN}`,
     `/v3/content-search?q=${SEARCH_TERM}`,
     `/v3/content-search/counts?q=${SEARCH_TERM}`,
     `/v3/ecfr_parser_result/${TITLE}`,

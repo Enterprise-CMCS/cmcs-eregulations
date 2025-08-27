@@ -554,8 +554,8 @@ describe("Search flow", () => {
     it("has a Continue Your Research section on the search page", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".research__title").should("exist");
-        cy.get(".research__title").should(
+        cy.get(".more-info__title").should("exist");
+        cy.get(".more-info__title").should(
             "have.text",
             " Continue Your Research ",
         );
@@ -567,8 +567,8 @@ describe("Search flow", () => {
     it("properly quotes searches and updates the Continue Your Research component when quoted", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SPACED_SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".research__title").should("exist");
-        cy.get(".research__title").should(
+        cy.get(".more-info__title").should("exist");
+        cy.get(".more-info__title").should(
             "have.text",
             " Continue Your Research ",
         );

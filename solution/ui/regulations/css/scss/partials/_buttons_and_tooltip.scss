@@ -11,6 +11,36 @@
     margin: 15px 0;
 }
 
+@mixin common-remove-btn-styles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $policy_subject_close_background;
+    color: $policy_subject_selected_chip_background;
+    border-radius: 4px;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: #c0c1c3;
+    }
+
+    i {
+        pointer-events: none;
+    }
+}
+
+@mixin input-clear-button-styles {
+    top: calc(50% - 1rem);
+    right: -3px;
+    transform: translate(-50%);
+    position: absolute;
+    width: 20px;
+    height: 20px;
+
+    @include common-remove-btn-styles;
+}
+
 .text-btn {
     border: none;
     background: none;

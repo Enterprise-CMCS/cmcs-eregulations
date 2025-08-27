@@ -8,6 +8,15 @@ describe("Statute Table", () => {
             fixture: "statutes.json",
         }).as("statutes");
 
+        cy.intercept(`**/v3/statute-link/?pattern=1903`, {
+            fixture: "statute-link.json",
+        }).as("statute-link");
+
+        cy.intercept(`**/v3/statute-link/?pattern=asdf`, {
+            fixture: "statute-link-not-found.json",
+            statusCode: 404,
+        }).as("statute-link-not-found");
+
         cy.intercept(`**/v3/acts`, {
             fixture: "acts.json",
         }).as("acts");
@@ -23,7 +32,15 @@ describe("Statute Table", () => {
         });
         cy.url().should("include", "/statutes/");
 
-        cy.get("h1").contains("Look Up Statute Text");
+        cy.get("h1").contains("Social Security Act");
+
+        cy.get("h2")
+            .eq(0)
+            .contains("Look up Statute Text");
+
+        cy.get("h2")
+            .eq(1)
+            .contains("Table of Contents");
 
         cy.get(".p__description")
             .contains(
@@ -40,6 +57,95 @@ describe("Statute Table", () => {
             "not.have.class",
             "v-tab-item--selected"
         );
+    });
+
+    it("looks up a statute citation as expected", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/statutes");
+
+        cy.get("form label.statute-citation-lookup__form--label")
+            .contains("Social Security Act §");
+
+        cy.get(".more-info__container")
+            .should("not.exist");
+
+        cy.get("button[data-testid=clear-citation-input]")
+            .should("not.be.visible");
+
+        cy.get("input#citationInput")
+            .should("exist")
+            .and("have.value", "")
+            .and("have.attr", "placeholder", "1903(a)(3)(A)(i)")
+            .type("1903", { force: true });
+
+        cy.get("button[data-testid=clear-citation-input]")
+            .should("be.visible");
+
+        cy.get("button#citationSubmit")
+            .should("exist")
+            .contains("Get Citation Link")
+            .click({ force: true });
+
+        cy.wait("@statute-link");
+
+        cy.get(".more-info__container").within(() => {
+            cy.get("h3").contains("Citation Link");
+            cy.get(".more-info__row")
+                .eq(0)
+                .within(() => {
+                    cy.get("button.action-btn")
+                        .should(($el) => {
+                            expect($el.text().trim()).to.equal(
+                                "copy link",
+                            );
+                        });
+                    cy.get("a")
+                        .should("have.attr", "href", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
+                        .and("have.attr", "target", "_blank")
+                        .and("have.attr", "rel", "noopener noreferrer")
+                        .and("have.attr", "class", "external")
+                        .and("contain", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
+                });
+        });
+
+        cy.injectAxe();
+        cy.checkAccessibility();
+
+        cy.get("button[data-testid=clear-citation-input]")
+            .click({ force: true });
+
+        cy.get("button[data-testid=clear-citation-input]")
+            .should("not.be.visible");
+
+        cy.get(".more-info__container")
+            .should("not.exist");
+
+        cy.get("input#citationInput")
+            .should("exist")
+            .and("have.value", "")
+            .type("asdf", { force: true });
+
+        cy.get("button#citationSubmit")
+            .should("exist")
+            .contains("Get Citation Link")
+            .click({ force: true });
+
+        cy.get(".more-info__container").within(() => {
+            cy.get("h3").contains("Citation Link");
+            cy.get(".more-info__row")
+                .eq(0)
+                .within(() => {
+                    cy.get(".row__content")
+                        .and("contain", "No citation link found for the provided pattern.");
+                });
+        });
+
+        cy.get(".more-info__container").within(() => {
+            cy.get("h3").contains("Citation Link");
+            cy.get(".more-info__row")
+                .eq(1)
+                .should("not.exist");
+        });
     });
 
     it("displays as a table at widths 1024px wide and greater", () => {

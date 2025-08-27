@@ -244,7 +244,7 @@
 
 // CONTINUE RESEARCH CONTAINER -----------------
 
-.research__container {
+.more-info__container {
     > * {
         padding: var(--spacer-2);
     }
@@ -257,7 +257,7 @@
         margin-bottom: var(--spacer-4);
     }
 
-    .research__title {
+    .more-info__title {
         display: flex;
         align-items: center;
         font-size: var(--font-size-lg);
@@ -269,7 +269,7 @@
         margin-block-end: 0;
     }
 
-    .research__row {
+    .more-info__row {
         display: flex;
         font-size: var(--font-size-md);
         border: 1px solid $light_gray;

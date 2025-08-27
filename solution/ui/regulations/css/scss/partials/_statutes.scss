@@ -3,6 +3,7 @@
 //-----------------------------
 
 @import "../application_settings";
+@import "./_buttons_and_tooltip.scss";
 
 #statuteApp.statute-view {
     @include eds-standard-layout;
@@ -21,6 +22,86 @@
 
     p.p__description {
         margin-bottom: var(--spacer-3) !important; // !important to override the default p margin due to vuetify defaults
+    }
+
+    .statute-citation-lookup__form {
+        display: flex;
+        align-items: center;
+        gap: var(--spacer-1);
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-bottom: var(--spacer-3);
+
+        &--input-group {
+            position: relative;
+            display: flex;
+        }
+
+        input#citationInput {
+            margin-top: 0px;
+            width: 160px;
+            border: 1px solid $border_color;
+        }
+
+        .citation-reset__button {
+            @include input-clear-button-styles;
+
+            top: calc(50% - 10px);
+
+            &--hidden {
+                display: none;
+            }
+        }
+
+
+        input#citationInput,
+        button#citationSubmit {
+            height: 2.5rem;
+        }
+
+        &--label,
+        button#citationSubmit {
+            font-weight: bold;
+        }
+    }
+
+    .citation-links {
+        margin-bottom: var(--spacer-3);
+
+        &.more-info__container {
+            .more-info__row {
+                padding: 0;
+            }
+        }
+
+        .more-info__row {
+            align-items: stretch;
+
+            .copy-btn__container {
+                flex: 0 0 190px;
+                border-right: 1px solid $light_gray;
+                display: flex;
+                align-items: center;
+
+                button {
+                    font-weight: bold;
+                }
+            }
+
+            .row__content {
+                display: flex;
+                align-items: center;
+
+                a {
+                    word-break: break-all;
+                }
+            }
+
+            .copy-btn__container,
+            .row__content {
+                padding: var(--spacer-2);
+            }
+        }
     }
 
     .content {
