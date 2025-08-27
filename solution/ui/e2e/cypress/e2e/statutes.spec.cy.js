@@ -108,6 +108,9 @@ describe("Statute Table", () => {
                 });
         });
 
+        cy.injectAxe();
+        cy.checkAccessibility();
+
         cy.get("button[data-testid=clear-citation-input]")
             .click({ force: true });
 

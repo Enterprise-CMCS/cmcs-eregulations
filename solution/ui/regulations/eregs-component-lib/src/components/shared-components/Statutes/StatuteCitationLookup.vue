@@ -30,7 +30,6 @@ const getCitationClearClasses = ({ filter }) => ({
     "citation-reset__button--hidden": !filter,
 });
 
-
 const citationClearClasses = computed(() =>
     getCitationClearClasses({ filter: citation.value })
 );
