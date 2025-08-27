@@ -39,7 +39,7 @@
     "whatwg-fetch": "^3.6.2"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "^4.45.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.48.1"
   },
   "msw": {
     "workerDirectory": "msw"
