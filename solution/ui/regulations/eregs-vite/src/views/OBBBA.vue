@@ -286,10 +286,10 @@ const $route = useRoute();
                     <span class="lbexIndentSubpar">(G) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=919'">435.919</a>.</span>
 
                     <a id="H4B4A827E4C334187A9A1A89EF051394C" />
-                    <span class="lbexIndentSubpar">(H) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=b-3-i">435.1200(b)(3)(i)-(v)</a>.</span>
+                    <span class="lbexIndentSubpar">(H) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=b-3-i'">435.1200(b)(3)(i)-(v)</a>.</span>
 
                     <a id="HECA656E702634947B790993D7C5800B3" />
-                    <span class="lbexIndentSubpar">(I) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=e-1-ii">435.1200(e )(1)(ii)</a>.</span>
+                    <span class="lbexIndentSubpar">(I) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=e-1-ii'">435.1200(e )(1)(ii)</a>.</span>
 
                     <a id="H79250E195F0843D2B9137692544CA717" />
                     <span class="lbexIndentSubpar">(J) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=h-1'">435.1200(h)(1)</a>.</span>
@@ -1031,7 +1031,7 @@ const $route = useRoute();
                                 target="_blank"
                             >section 501(c)(3)</a> of the Internal Revenue Code of 1986 and exempt from tax under section 501(a) of such Code;</span>
                             <a id="H589B5CE0C627419280D75FB2BB5AC0FB" />
-                            <span class="lbexIndentClause">(ii) is an essential community provider described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=156&section=235">156.235</a> of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
+                            <span class="lbexIndentClause">(ii) is an essential community provider described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=156&section=235'">156.235</a> of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
                             <a id="H7F2D87B146174050A9A298AB579A3CD5" />
                             <span class="lbexIndentClause">(iii) provides for abortions, other than an abortion—
                                 <a id="H1BFF52D791314DCD94FA987EF6767212" />
