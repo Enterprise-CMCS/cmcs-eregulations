@@ -33,6 +33,9 @@ updates:
           vitest:
             patterns:
               - "vitest*"
+          rollup:
+            patterns:
+              - "rollup*"
 
     # CDK specific updates
     - package-ecosystem: "npm"
