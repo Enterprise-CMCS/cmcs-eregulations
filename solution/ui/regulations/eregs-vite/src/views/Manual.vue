@@ -3,7 +3,6 @@ import { inject, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import AccessLink from "@/components/AccessLink.vue";
-import Banner from "@/components/Banner.vue";
 import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
@@ -103,7 +102,6 @@ const executeSearch = (payload) => {
             </HeaderComponent>
         </header>
         <div id="manualApp" class="site-container">
-            <!--<Banner title="State Medicaid Manual" />-->
             <h1>State Medicaid Manual</h1>
             <div id="main-content" class="manual__container">
                 <div class="">
