@@ -72,21 +72,25 @@ const $route = useRoute();
                         href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
                 </p>
                 <p>
-                    For ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted with a background color</span>. Statute citations are linked to the <a
+                    Additions to the Social Security Act are <span class="annotated-text">highlighted with a background color</span>. Statute citations are linked to the <a
                         href="https://uscode.house.gov/"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >U.S. Code on House.gov</a>, regulation citations are linked to eRegulations or the <a
                         href="https://www.ecfr.gov/"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >eCFR</a>, and rule citations are linked to the <a
                         href="https://www.federalregister.gov/"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >Federal Register</a>.
                 </p>
 
@@ -208,12 +212,14 @@ const $route = useRoute();
                         href="https://www.federalregister.gov/documents/2023/09/21/2023-20382/streamlining-medicaid-medicare-savings-program-eligibility-determination-and-enrollment"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >88 Fed. Reg. 65230</a>) to the following sections of title 42, Code of Federal Regulations:
                     <a id="HB1281369669C4648A3250EE470A075F2" />
                     <span class="lbexIndentParagraph">(1) Section <a
                         href="/reg_redirect/?title=42&part=406&section=21&paragraph=c"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >406.21(c)</a>.</span>
                     <a id="HCE8D6997B5854B01ADD71E9E21FDC2BA" />
                     <span class="lbexIndentParagraph">(2) Section <a href="/reg_redirect/?title=42&part=435&section=4">435.4</a>.</span>
@@ -245,6 +251,7 @@ const $route = useRoute();
                         href="https://www.federalregister.gov/documents/2024/04/02/2024-06566/medicaid-program-streamlining-the-medicaid-childrens-health-insurance-program-and-basic-health"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >89 Fed. Reg. 22780</a>) to the following sections of title 42, Code of Federal Regulations:
                     </span>
                 </span>
@@ -302,6 +309,7 @@ const $route = useRoute();
                         href="https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-D/part-457/subpart-I/section-457.960"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >457.960</a>.</span> <!-- Hardcoding this one because eCFR handles removed reg sections more gracefully than we do. -->
 
                     <a id="H1E0BF50F724843B2BE354F98D8490127" />
@@ -334,6 +342,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a</a>) is amended—
                         <a id="H29D75E6989BC4EFDAA7301B36F3938E0" />
                         <span class="lbexIndentSubpar">(A) in subsection (a)—
@@ -424,6 +433,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_r_3"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396b(r)(3)</a>) is amended—
                         <a id="HAED89D0C277C406DB490421E38C54FF9" />
                         <span class="lbexIndentClause">(i) by striking “In order” and inserting <a id="HAAEAC589BF8A461784A7ADC6C7EAF86E" /><span class="annotated-text">“(A) In order”</span>;</span>
@@ -452,6 +462,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396u-2"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396u–2</a>) is amended by adding at the end the following new subsection:
                         <span class="lbexIndentClause">
                             <a id="H485D9261171A42E39982056C679E22E9" />
@@ -471,6 +482,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397gg&num=0&edition=prelim#substructure-location_e_1"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1397gg(e)(1)</a>) is amended—
                         <a id="H01E621F5CF5549EC9B37D6336CB88616" />
                         <span class="lbexIndentSubpar">(A) by redesignating subparagraphs (H) through (U) as subparagraphs (I) through (V), respectively; and</span>
@@ -488,6 +500,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397cc&num=0&edition=prelim#substructure-location_f_3"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting <span class="annotated-text">“(e), and (j)”</span>. </span>
                 </span>
 
@@ -508,6 +521,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a</a>), as amended by section 71103, is further amended—</span>
                 </span>
                 <a id="H3CEA26DD1A90412181B5EB0CAD6C7A1D" />
@@ -575,6 +589,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_kk_1"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(kk)(1)</a>) is amended—</span>
                 </span>
                 <a id="H44B9AB1660C54E77A865E21461DA9417" />
@@ -611,6 +626,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_u_1"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396b(u)(1)</a>) is amended—
                     <a id="H937661ADD6DD4AEF85F4B0D80F0F6BE5" />
                     <span class="lbexIndentParagraph">(1) in subparagraph (A)—
@@ -674,6 +690,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_e_14"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(e)(14)</a>) is amended by adding at the end the following new subparagraph:
                     <span class="lbexIndent">
                         <a id="H2EB8DD9335D24D5A8B16BADFE2D61E52" />
@@ -723,6 +740,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396p&num=0&edition=prelim#substructure-location_f_1"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396p(f)(1)</a>) is amended—
                     <a id="H1D7250775A944D8293EE8C07BD26B67F" />
                     <span class="lbexIndentParagraph">(1) in subparagraph (B)—
@@ -757,6 +775,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a</a>) is amended—
                     <a id="H80D48AF8E729464185445F88D15F6E82" />
                     <span class="lbexIndentParagraph">(1) in subsection (r)(2), by adding at the end the following new subparagraph:
@@ -806,6 +825,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_v"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396b(v)</a>) is amended—
                     <a id="HD4FE61EC0B304D7F858FCB05CBCA0AF1" />
                     <span class="lbexIndentParagraph">(1) in paragraph (1), by striking “and (4)”and inserting <span class="annotated-text">“, (4), and (5)”</span>; and</span>
@@ -868,6 +888,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396d</a>) is amended by adding at the end the following new subsection:
                     <span class="lbexIndent">
                         <a id="H9FB7AB9C8BC74E728D697815C49908A6" />
@@ -903,6 +924,7 @@ const $route = useRoute();
                         href="https://www.federalregister.gov/documents/2024/05/10/2024-08273/medicare-and-medicaid-programs-minimum-staffing-standards-for-long-term-care-facilities-and-medicaid"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >89 Fed. Reg. 40876</a>) to the following sections of part 483 of title 42, Code of Federal Regulations:
                     </span>
                 </span>
@@ -930,6 +952,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_34"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(a)(34)</a>) is amended to read as follows:
                     <span class="lbexIndent">
                         <a id="HE18F24CA7F044890943FAC0DA62F8375" />
@@ -948,6 +971,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396d&num=0&edition=prelim#substructure-location_a"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396d(a)</a>) is amended by striking “in or after the third month before the month in which the recipient makes application for assistance” and inserting <span class="annotated-text">“, with respect to an individual described in section 1902(a)(34)(A), in or after the month before the month in which the recipient makes application for assistance, and with respect to an individual described in section 1902(a)(34)(B), in or after the second month before the month in which the recipient makes application for assistance”</span>.</span>
                 <a id="H961706CDB4CE450EAD37A45CDA1206E3" />
                 <span class="lbexIndent">(c)
@@ -955,6 +979,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1397bb&num=0&edition=prelim#substructure-location_b_1_B"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1397bb(b)(1)(B)</a>) is amended—
                     <a id="H2AA0CC0458554F91931A26C651EAEB34" />
                     <span class="lbexIndentParagraph">(1) in clause (iv), by striking “and” at the end;</span>
@@ -1071,6 +1096,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396d"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396d(ii)(3)</a>) is amended—</span> <!-- Did not update this link because the target doesn't work correctly on the US Code page -->
                 </span>
                 <a id="HD2439E0C48C04FDE8FE8FCE60D804E7A" />
@@ -1108,6 +1134,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w_4"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396b(w)(4)</a>) is amended—
                     <a id="H613FD416BE0242AA9BA15137AB8AB252" />
                     <span class="lbexIndentParagraph">(1) in subparagraph (C)(ii), by inserting “, and for fiscal years beginning on or after October 1, 2026, the applicable percent determined under subparagraph (D) shall be substituted for
@@ -1194,10 +1221,12 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) that is equivalent to minimum essential coverage (as described in <a
                         href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) under the State plan (or waiver of such plan) of such State under title XIX of such Act, 100 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)); or</span>
                     <a id="H68132C34E5FD46DEA1334425F00FCD72" />
                     <span class="lbexIndentParagraph">(2) in the case of a State other than a State described in paragraph (1), 110 percent of the specified total published Medicare payment rate (or, in the absence of a specified total published Medicare payment rate, the payment rate under a Medicaid State plan (or under a waiver of such plan)).</span>
@@ -1221,6 +1250,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395ww(d)</a>)) that—
                         <a id="H28455D3F532248ED87C4D9CDD20A39DE" />
                         <span class="lbexIndentClause">(i) is located in a rural area (as defined in paragraph (2)(D) of such section); </span>
@@ -1239,6 +1269,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_mm_1"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395x(mm)(1)</a>)).</span>
 
                     <a id="H469A0CCA86A648A08AC5D213366E217D" />
@@ -1246,6 +1277,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_D_iii"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395ww(d)(5)(D)(iii)</a>)).</span>
 
                     <a id="HCB61C01C4F9041ED89418D3EB562E5C3" />
@@ -1253,6 +1285,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_5_G_iv"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395ww(d)(5)(G)(iv)</a>)). </span>
 
                     <a id="H141EDCA002E14CDE8BFBC3738961EB39" />
@@ -1260,6 +1293,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395ww&num=0&edition=prelim#substructure-location_d_12_C"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395ww(d)(12)(C)</a>)).</span>
 
                     <a id="H99E320165DC64DC7B4E8DAEBFC4F42F1" />
@@ -1267,6 +1301,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1395x&num=0&edition=prelim#substructure-location_kkk_2"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1395x(kkk)(2)</a>)).</span>
                 </span>
 
@@ -1301,6 +1336,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_w"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396b(w)</a>) is amended—
                     <a id="H896B2C9E4844473CA7E37EFF871EF795" />
                     <span class="lbexIndentParagraph">(1) in paragraph (3)(E), by inserting after clause (ii)(II) the following new clause:
@@ -1382,6 +1418,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1315</a>) is amended by adding at the end the following new subsection:
                     <span class="lbexIndent">
                         <a id="H6F0FA9A5E62A4810A41334871123A247" />
@@ -1424,6 +1461,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396a"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a</a>), as amended by sections 71103 and 71104, is further amended by adding at the end the following new subsection:
 
                     <a id="H8E766BAEAC77476D94E39EC929595539" />
@@ -1767,6 +1805,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(a)(10)(A)(i)(VIII)</a>) is amended by striking “subject to subsection (k)” and inserting <span class="annotated-text">“subject to subsections (k) and (xx)”</span>.</span>
                 <a id="H214E8D10AFF84B56BA50969CE3326973" />
                 <span class="lbexIndent">(c)
@@ -1822,6 +1861,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1396o"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396o</a>) is amended—
                     <a id="HD014FD8F280B45ED9B0BD903AD086525" />
                     <span class="lbexIndentParagraph">(1) in subsection (a), in the matter preceding paragraph (1), by inserting <span class="annotated-text">“(other than, beginning October 1, 2028, specified individuals (as defined in subsection (k)(3)))”</span> after “individuals”; and</span>
@@ -1884,6 +1924,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_14"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396a(a)(14)</a>) is amended by inserting <span class="annotated-text">“and provide for imposition of such deductions, cost sharing, or similar charges for care, items, or services furnished to specified individuals (as defined in paragraph (3) of section 1916(k)) in accordance with paragraph (2) of such section”</span> after “section 1916”.</span>
                 </span>
                 <a id="H13A29E0011FC45E9819A7CF3D0D061EF" />
@@ -1920,6 +1961,7 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396n(c)</a>) is amended—
                     <a id="H46B8515A24A24C50B92600B7B6C49E37" />
                     <span class="lbexIndentParagraph">(1) in paragraph (3), by inserting <span class="annotated-text">“paragraph (11) or”</span> before “subsection (h)(2)”; and</span>
@@ -1996,10 +2038,12 @@ const $route = useRoute();
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
                         href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                         class="external"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >42 U.S.C. 1315</a>), as compared to all States. </span>
                 </span>
             </div>
