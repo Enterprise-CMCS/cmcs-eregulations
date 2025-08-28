@@ -76,22 +76,12 @@ const $route = useRoute();
                     >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
                 </p>
                 <p>
-                    Additions to the Social Security Act are <span class="annotated-text">highlighted with a background color</span>. Statute citations are linked to the <a
-                        href="https://uscode.house.gov/"
+                    As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
+                        href="https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf"
                         class="external"
                         target="_blank"
                         rel="noopener noreferrer"
-                    >U.S. Code on House.gov</a>, regulation citations are linked to eRegulations or the <a
-                        href="https://www.ecfr.gov/"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >eCFR</a>, and rule citations are linked to the <a
-                        href="https://www.federalregister.gov/"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >Federal Register</a>.
+                    >OBBBA PDF from Congress.gov</a>.
                 </p>
 
                 <!--<div class="lbexTocSubTitleOLC">
