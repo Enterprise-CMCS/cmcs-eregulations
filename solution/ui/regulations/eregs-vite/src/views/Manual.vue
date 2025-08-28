@@ -103,7 +103,8 @@ const executeSearch = (payload) => {
             </HeaderComponent>
         </header>
         <div id="manualApp" class="site-container">
-            <Banner title="State Medicaid Manual" />
+            <!--<Banner title="State Medicaid Manual" />-->
+            <h1>State Medicaid Manual</h1>
             <div id="main-content" class="manual__container">
                 <div class="">
                     <p class="manual-page-description">
@@ -413,8 +414,9 @@ const executeSearch = (payload) => {
 </template>
 
 <style scoped>
-.manual__container {
-    padding: 0 2rem;
+.site-container {
+    max-width: var(--content-max-width);
+    margin: var(--spacer-3) auto;
 }
 
 .search__container {

@@ -224,7 +224,7 @@ const $route = useRoute();
                     <a id="HCE8D6997B5854B01ADD71E9E21FDC2BA" />
                     <span class="lbexIndentParagraph">(2) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=4'" target="_blank">435.4</a>.</span>
                     <a id="H15487E3B744248DCAFBFE927D8DA0D58" />
-                    <span class="lbexIndentParagraph">(3) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=601' "target="_blank">435.601</a>.</span>
+                    <span class="lbexIndentParagraph">(3) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=601' " target="_blank">435.601</a>.</span>
                     <a id="HE50E09359ADF43E3801583A7F93536AF" />
                     <span class="lbexIndentParagraph">(4) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=911'" target="_blank">435.911</a>.</span>
                     <a id="H0118D4FC9FB141779DBAFFFC5D16CE70" />
@@ -929,10 +929,10 @@ const $route = useRoute();
                     </span>
                 </span>
                 <a id="H7F27631AC8864ABFA997B72C9BC9AAAE" />
-                <span class="lbexIndentParagraph">(1) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=5' "target="_blank">483.5</a>.</span>
+                <span class="lbexIndentParagraph">(1) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=5' " target="_blank">483.5</a>.</span>
 
                 <a id="H0BE34688028F490A991FA0D537331D4C" />
-                <span class="lbexIndentParagraph">(2) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=35' "target="_blank">483.35</a>.</span>
+                <span class="lbexIndentParagraph">(2) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=35' " target="_blank">483.35</a>.</span>
 
                 <span class="lbexHang">
                     <a id="toc-H917F6C03CA464B319B70F26A163C0EE0" href="#H917F6C03CA464B319B70F26A163C0EE0">
@@ -2053,6 +2053,11 @@ const $route = useRoute();
 
 <style scoped>
 a { text-decoration: none; }
+
+.obbba__container {
+    max-width: var(--content-max-width);
+    margin: var(--spacer-3) auto;
+}
 
 .annotated-text {
   background-color: #F2F2F2;
