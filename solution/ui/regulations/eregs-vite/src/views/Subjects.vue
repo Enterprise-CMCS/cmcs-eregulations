@@ -45,6 +45,8 @@ const isAuthenticated = inject("isAuthenticated");
 const manualUrl = inject("manualUrl");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
+const subjectsUrl = inject("subjectsUrl");
+const obbbaUrl = inject("obbbaUrl");
 const surveyUrl = inject("surveyUrl");
 const username = inject("username");
 
@@ -351,6 +353,8 @@ getDocSubjects();
                     <HeaderLinks
                         :manual-url="manualUrl"
                         :statutes-url="statutesUrl"
+                        :subjects-url="subjectsUrl"
+                        :obbba-url="obbbaUrl"
                         @link-clicked="resetSubjects"
                     />
                 </template>

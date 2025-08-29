@@ -3,16 +3,13 @@ export const goHome = () => {
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
 
-const checkLinkOrder = (listLocation) => {
-    cy.get(`${listLocation} > ul.links__list li a`)
-        .eq(0)
-        .should("have.text", "Social Security Act");
-    cy.get(`${listLocation} > ul.links__list li a`)
-        .eq(1)
-        .should("have.text", "State Medicaid Manual");
-    cy.get(`${listLocation} > ul.links__list li a`)
-        .eq(2)
-        .should("have.text", "Research a Subject");
+const expectedLabelsWide = ["OBBBA", "Social Security Act", "State Medicaid Manual", "Research a Subject"];
+
+const checkLinkOrder = (listLocation, expectedLabels = expectedLabelsWide) => {
+    cy.get(`${listLocation} > ul.links__list li a`).should(($links) => {
+        const texts = [...$links].map((a) => a.textContent.trim());
+        expect(texts).to.deep.equal(expectedLabels);
+    });
 };
 
 export const clickHeaderLink = ({

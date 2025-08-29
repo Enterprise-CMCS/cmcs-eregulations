@@ -3,7 +3,6 @@ import { inject, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import AccessLink from "@/components/AccessLink.vue";
-import Banner from "@/components/Banner.vue";
 import FetchItemsContainer from "@/components/dropdowns/FetchItemsContainer.vue";
 import HeaderComponent from "@/components/header/HeaderComponent.vue";
 import HeaderLinks from "@/components/header/HeaderLinks.vue";
@@ -25,6 +24,7 @@ const isAuthenticated = inject("isAuthenticated");
 const searchUrl = inject("searchUrl");
 const statutesUrl = inject("statutesUrl");
 const subjectsUrl = inject("subjectsUrl");
+const obbbaUrl = inject("obbbaUrl");
 const username = inject("username");
 
 const $route = useRoute();
@@ -72,7 +72,11 @@ const executeSearch = (payload) => {
                     <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
                 </template>
                 <template #links>
-                    <HeaderLinks :statutes-url="statutesUrl" :subjects-url="subjectsUrl" />
+                    <HeaderLinks
+                        :statutes-url="statutesUrl"
+                        :subjects-url="subjectsUrl"
+                        :obbba-url="obbbaUrl"
+                    />
                 </template>
                 <template #search>
                     <HeaderSearch :search-url="searchUrl" />
@@ -98,7 +102,7 @@ const executeSearch = (payload) => {
             </HeaderComponent>
         </header>
         <div id="manualApp" class="site-container">
-            <Banner title="State Medicaid Manual" />
+            <h1>State Medicaid Manual</h1>
             <div id="main-content" class="manual__container">
                 <div class="">
                     <p class="manual-page-description">
@@ -408,8 +412,9 @@ const executeSearch = (payload) => {
 </template>
 
 <style scoped>
-.manual__container {
-    padding: 0 2rem;
+.site-container {
+    max-width: var(--content-max-width);
+    margin: var(--spacer-3) auto;
 }
 
 .search__container {

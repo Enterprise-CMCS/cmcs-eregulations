@@ -2,7 +2,12 @@
 {% load static %}
 {% load string_formatters %}
 
-{% block title_prefix %}Search {% if q %}for {{ q }} {% endif %}| {% endblock %}
+{% block title_prefix %}OBBBA | {% endblock %}
+
+{% block outside_vue %}
+    {{ site_config|json_script:"site_config" }}
+    {{ block.super }}
+{% endblock %}
 
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
@@ -21,11 +26,10 @@
     data-host="{{ host }}"
     data-is-authenticated="{{ user.is_authenticated }}"
     data-manual-url="{% url 'manual' %}"
+    data-obbba-url="{% url 'obbba' %}"
     data-search-url="{% url 'search' %}"
     data-statutes-url="{% url 'statutes' %}"
     data-subjects-url="{% url 'subjects' %}"
-    data-obbba-url="{% url 'obbba' %}"
-    data-survey-url="{{ SURVEY_URL }}"
     data-username="{{ user.username }}"
 ></div>
 {% endblock %}

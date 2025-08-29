@@ -9,6 +9,7 @@ from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
 from regulations.views.login import LoginView
 from regulations.views.manual import ManualView
+from regulations.views.obbba import OBBBAView
 from regulations.views.policy_repository import PolicyRepositoryView
 from regulations.views.reader import (
     AppendixReaderView,
@@ -34,6 +35,7 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('get-account-access/', GetAccountAccessView.as_view(), name='get_account_access'),
     path('login/', LoginView.as_view(), name='custom_login'),
+    path('obbba/', OBBBAView.as_view(), name='obbba'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
     path('<numeric:title>/<numeric:part>/<numeric:section>/', SectionReaderView.as_view(), name='reader_view'),
