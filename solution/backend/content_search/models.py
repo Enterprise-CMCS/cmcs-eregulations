@@ -1,4 +1,7 @@
+import logging
 import re
+from functools import partial
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -13,11 +16,14 @@ from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.urls import reverse
 from pgvector.django import VectorField
 
+from common import aws_utils
 from common.constants import QUOTE_TYPES
 from content_search.utils import remove_control_characters
 from regcore.models import Part
+from regulations.middleware import get_site_uri
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
@@ -26,6 +32,8 @@ from resources.models import (
     PublicLink,
     ResourceContent,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class Synonym(models.Model):
@@ -150,9 +158,6 @@ class ContentIndex(models.Model):
     rank_c_string = models.TextField(blank=True)
     rank_d_string = models.TextField(blank=True)
 
-    # Vector field for semantic search
-    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
-
     # OneToOne fields linked to possible indexed types
     resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
     reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
@@ -162,6 +167,156 @@ class ContentIndex(models.Model):
     class Meta:
         verbose_name = "Content Index"
         verbose_name_plural = "Content Indices"
+
+
+class TextEmbedding(models.Model):
+    index = models.ForeignKey(ContentIndex, on_delete=models.CASCADE, related_name="embeddings")
+    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
+    chunk_index = models.IntegerField()
+    start_offset = models.IntegerField()
+    embedding_type = models.IntegerField()
+
+    class Meta:
+        unique_together = (("index", "chunk_index", "embedding_type"),)
+        verbose_name = "Text Embedding"
+        verbose_name_plural = "Text Embeddings"
+        indexes = [
+            models.Index(fields=["index"]),
+            models.Index(fields=["embedding"]),
+        ]
+
+
+def chunk_text(text, max_length=20000, overlap=1000):
+    """Split text into overlapping chunks."""
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = min(start + max_length, len(text))
+        chunk = text[start:end]
+        chunks.append((start, chunk))
+        if end == len(text):
+            break
+        start += max_length - overlap
+    return chunks
+
+
+@receiver(post_save, sender=ContentIndex)
+def update_text_embeddings(sender, instance, created, **kwargs):
+    """
+    Create or update text embeddings for the ContentIndex instance.
+    This is triggered whenever a ContentIndex instance is saved.
+    If the site's URI is not available due to this save being invoked without a request,
+    the embeddings will not be generated.
+    """
+
+    site_uri = get_site_uri()
+    if not site_uri:
+        logger.warning("No site URI found, cannot generate embeddings.")
+        return
+
+    # Prepare the text for embedding
+    if instance.resource and instance.content:
+        act_citations = " ".join([
+            f"{citation['act']} {citation['section']}"
+            for citation in instance.resource.act_citations
+            if citation
+        ])
+        usc_citations = " ".join([
+            f"{citation['title']} {citation['section']}"
+            for citation in instance.resource.usc_citations
+            if citation
+        ])
+        document_id = instance.resource.document_id or ""
+        title = instance.resource.title or ""
+        text = " ".join([
+            act_citations,
+            usc_citations,
+            document_id,
+            title,
+            *instance.content.split(),
+        ]).lower()
+    elif instance.reg_text:
+        metadata = instance.reg_text
+        text = " ".join([
+            str(metadata.title),
+            "CFR",
+            str(metadata.part_number),
+            metadata.node_type,
+            metadata.node_id,
+            *instance.content.split(),
+        ]).lower()
+    else:
+        logger.warning("No valid metadata found for ContentIndex instance %i", instance.id)
+        return
+
+    # Delete existing embeddings for the instance
+    TextEmbedding.objects.filter(index=instance).delete()
+
+    # Split the text into chunks
+    chunks = {chunk_index: {
+        "text": chunk,
+        "start_offset": start,
+    } for chunk_index, (start, chunk) in enumerate(chunk_text(text))}
+
+    # Create embeddings for each chunk
+    embeddings = TextEmbedding.objects.bulk_create([
+        TextEmbedding(
+            index=instance,
+            chunk_index=chunk_index,
+            start_offset=chunk["start_offset"],
+        ) for chunk_index, chunk in chunks.items()
+    ])
+
+    # Send embeddings to the embedding generator queue
+    requests = [{
+        "id": embedding.id,
+        "upload_url": (
+            f"{settings.LOCAL_EREGS_URL}{reverse('embeddings', args=[embedding.id])}"
+            if settings.USE_LOCAL_EMBEDDING_GENERATOR else
+            urljoin(site_uri, reverse('embeddings', args=[embedding.id]))
+        ),
+        "text": chunks[embedding.chunk_index]["text"],
+        "auth": {
+            "type": "basic",
+            "username": settings.HTTP_AUTH_USER,
+            "password": settings.HTTP_AUTH_PASSWORD,
+        } if settings.USE_LOCAL_EMBEDDING_GENERATOR else {
+            "type": "basic-secretsmanager-env",
+            "secret_name": "SECRET_NAME",
+            "username_key": "username",
+            "password_key": "password",
+        },
+    } for embedding in embeddings]
+
+    # Determine which Lambda invocation function to use depending on environment settings
+    if settings.USE_LOCAL_EMBEDDING_GENERATOR:
+        invoke_function = partial(
+            aws_utils.invoke_lambda_via_http,
+            url=settings.LOCAL_EMBEDDING_GENERATOR_URL,
+        )
+    elif settings.EMBEDDING_GENERATOR_QUEUE_URL:
+        invoke_function = partial(
+            aws_utils.invoke_lambda_via_sqs,
+            client=aws_utils.get_aws_client("sqs"),
+            url=settings.EMBEDDING_GENERATOR_QUEUE_URL,
+        )
+    elif settings.EMBEDDING_GENERATOR_ARN:
+        invoke_function = partial(
+            aws_utils.invoke_lambda_via_lambda,
+            client=aws_utils.get_aws_client("lambda"),
+            arn=settings.EMBEDDING_GENERATOR_ARN,
+        )
+    else:
+        logger.warning("No valid embedding generator configuration found.")
+        return
+
+    # Send batches of requests to the embedding generator
+    for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
+        _, failures = invoke_function(batch)
+        if failures:
+            # Log the failures
+            for failure in failures:
+                logger.error("Failed to send embedding for chunk %i: %s", failure["id"], failure["reason"])
 
 
 @receiver(post_save, sender=ResourceContent)

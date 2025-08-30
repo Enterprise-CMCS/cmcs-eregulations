@@ -44,3 +44,21 @@ class JsonErrors:
             return HttpResponse(json.dumps(error), content_type="application/json", status=500)
         else:
             return None
+
+
+_site_uri = None
+
+
+def get_site_uri():
+    global _site_uri
+    return _site_uri
+
+
+class SiteUriMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        global _site_uri
+        _site_uri = request.build_absolute_uri("/")
+        return self.get_response(request)
