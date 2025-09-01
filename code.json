@@ -19,9 +19,10 @@
   "repositoryHost": "github.com/Enterprise-CMCS",
   "repositoryVisibility": "public",
   "vcs": "git",
-  "laborHours": 21462,
+  "laborHours": 21789,
   "reuseFrequency": {
-    "forks": 12
+    "forks": 13,
+    "clones": 0
   },
   "platforms": [
     "web"
@@ -47,8 +48,8 @@
   "contractNumber": "47QTCA21D006V:75FCMC21F0092",
   "date": {
     "created": "2020-09-28T15:44:46Z",
-    "lastModified": "2025-07-31T14:13:51Z",
-    "metaDataLastUpdated": "2025-08-01T00:21:26.716Z"
+    "lastModified": "2025-08-29T17:28:16Z",
+    "metaDataLastUpdated": "2025-09-01T00:20:40.631Z"
   },
   "tags": [
     "regulations",
