@@ -111,6 +111,28 @@ def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
         match.group()
     )
 
+PART_PATTERN = rf"(\s*part\s*?\b{SECTION_PATTERN}\b)"
+PART_EXTRACT_PATTERN = rf"(?:\.({SECTION_PATTERN}))?"
+PART_CHILD_PATTERN = r"(?:\s*\b(?:sub)?(?:part|chapter)\b\s*?[A-Za-z0-9]+)?"
+OF_THIS_PATTERN = r"\s*(?:\s*of\s*this\s*?\b(?:sub)?(?:chapter|title)\b)"
+PART_OF_THIS_PATTERN = rf"{PART_PATTERN}(?=,?{PART_CHILD_PATTERN}{OF_THIS_PATTERN})"
+PART_OF_THIS_EXTRACT_PATTERN = rf"(?:\.({SECTION_PATTERN}))?"
+
+PART_OF_THIS_REGEX = re.compile(PART_OF_THIS_PATTERN, re.IGNORECASE)
+
+
+# def replace_part_of(match, title, exceptions={}):
+
+def replace_part_ofs(match, title, exceptions={}):
+    part = DASH_REGEX.sub("-", match.group(1).strip())
+    if part in exceptions:
+        return match.group()
+    return create_redirect_link(
+        match.group(),
+        title=title,
+        part=part,
+    )
+
 
 @register.simple_tag
 def link_reg_refs(paragraph, link_config, title=None):
@@ -121,6 +143,10 @@ def link_reg_refs(paragraph, link_config, title=None):
         )
         paragraph = REGULATION_REF_REGEX.sub(
             partial(replace_regulation_refs, title=title, exceptions=link_config["cfr_ref_exceptions"]),
+            paragraph,
+        )
+        paragraph = PART_OF_THIS_REGEX.sub(
+            partial(replace_part_ofs, title=title, exceptions=link_config["cfr_ref_exceptions"]),
             paragraph,
         )
     return paragraph
