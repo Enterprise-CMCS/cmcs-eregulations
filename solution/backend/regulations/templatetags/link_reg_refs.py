@@ -7,7 +7,6 @@ from django.urls import reverse
 
 from common.patterns import (
     CONJUNCTION_PATTERN,
-    DASH_PATTERN,
     DASH_REGEX,
     PARAGRAPH_PATTERN,
     SECTION_ID_PATTERN,
@@ -23,9 +22,8 @@ register = template.Library()
 
 REDIRECT_LINK_FORMAT = '<a target="_blank" rel="noopener noreferrer" href="{}?{}">{}</a>'
 
-SECTION_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
-CFR_REF_EXTRACT_PATTERN = rf"(\d+)(?:\.({SECTION_PATTERN})((?:{PARAGRAPH_PATTERN})*))?"
-CFR_REF_PATTERN = rf"\d+(?:\.{SECTION_PATTERN}(?:{PARAGRAPH_PATTERN})*)?"
+CFR_REF_EXTRACT_PATTERN = rf"(\d+)(?:\.({SECTION_ID_PATTERN})((?:{PARAGRAPH_PATTERN})*))?"
+CFR_REF_PATTERN = rf"\d+(?:\.{SECTION_ID_PATTERN}(?:{PARAGRAPH_PATTERN})*)?"
 CFR_PATTERN = rf"(\d+)\s*c.?f.?r.?\s*(?:parts?\s*)?((?:{CFR_REF_PATTERN}{CONJUNCTION_PATTERN}(?!{USC_CFR_IGNORE_PATTERN}))+)"
 
 CFR_REF_EXTRACT_REGEX = re.compile(CFR_REF_EXTRACT_PATTERN, re.IGNORECASE)
@@ -111,26 +109,29 @@ def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
         match.group()
     )
 
-PART_PATTERN = rf"(\s*part\s*?\b{SECTION_PATTERN}\b)"
-PART_EXTRACT_PATTERN = rf"(?:\.({SECTION_PATTERN}))?"
+PART_PATTERN = rf"(\s*part\s*?\b{SECTION_ID_PATTERN}\b)"
 PART_CHILD_PATTERN = r"(?:\s*\b(?:sub)?(?:part|chapter)\b\s*?[A-Za-z0-9]+)?"
 OF_THIS_PATTERN = r"\s*(?:\s*of\s*this\s*?\b(?:sub)?(?:chapter|title)\b)"
 PART_OF_THIS_PATTERN = rf"{PART_PATTERN}(?=,?{PART_CHILD_PATTERN}{OF_THIS_PATTERN})"
-PART_OF_THIS_EXTRACT_PATTERN = rf"(?:\.({SECTION_PATTERN}))?"
+SECTION_EXTRACT_PATTERN = rf"({SECTION_ID_PATTERN})"
 
 PART_OF_THIS_REGEX = re.compile(PART_OF_THIS_PATTERN, re.IGNORECASE)
+SECTION_EXTRACT_REGEX = re.compile(SECTION_EXTRACT_PATTERN, re.IGNORECASE)
 
 
-# def replace_part_of(match, title, exceptions={}):
-
-def replace_part_ofs(match, title, exceptions={}):
-    part = DASH_REGEX.sub("-", match.group(1).strip())
-    if part in exceptions:
+def replace_part_of(match, title, exceptions={}):
+    if DASH_REGEX.sub("-", match.group()) in exceptions:
         return match.group()
     return create_redirect_link(
         match.group(),
         title=title,
-        part=part,
+        part=match.group(1)
+    )
+
+def replace_part_ofs(match, title, exceptions={}):
+    return SECTION_EXTRACT_REGEX.sub(
+        partial(replace_part_of, title=title, exceptions=exceptions.get(title, [])),
+        match.group()
     )
 
 
