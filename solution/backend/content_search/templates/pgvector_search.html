@@ -88,19 +88,43 @@
             <legend>Search options</legend>
             <label>
                 <input type="checkbox" name="include_content" checked>
-                Include content chunk in results
+                Include content chunk in results (for full-text results, only the first 22,000 characters are returned)
             </label>
             <label>
                 <input type="checkbox" name="filter_duplicates" checked>
                 Filter out duplicate indexed resources or reg text
             </label>
             <label>
-                Max distance:
-                <input type="number" name="max_distance" min="0" step="any" value="5" required>
+                Semantic max distance:
+                <input type="number" name="max_distance" min="0" step="any" value="1.3" required>
             </label>
             <label>
                 Max results:
-                <input type="number" name="max_results" min="1" value="100" required>
+                <input type="number" name="max_results" min="0" value="100" required>
+            </label>
+            <label>
+                Search type:
+                <select name="search_type">
+                    <option value="semantic">Semantic Search</option>
+                    <option value="full_text">Full-text Search</option>
+                    <option value="hybrid">Hybrid Search</option>
+                    <option value="hybrid_reranked" selected>Reranked Hybrid Search</option>
+                </select>
+            </label>
+        </fieldset>
+        <fieldset id="search-options">
+            <legend>AWS access keys</legend>
+            <label>
+                Access key ID:
+                <input type="password" name="aws_access_key_id" size="30">
+            </label>
+            <label>
+                Secret access key:
+                <input type="password" name="aws_secret_access_key" size="50">
+            </label>
+            <label>
+                Session token:
+                <input type="password" name="aws_session_token" size="50">
             </label>
         </fieldset>
         <button type="submit">Search</button>

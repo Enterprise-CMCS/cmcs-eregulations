@@ -211,93 +211,124 @@ class PgVectorSearchView(TemplateView):
         if not distance_function:
             return JsonResponse({"error": f"Invalid distance algorithm: {distance_algorithm}"}, status=400)
 
+        # Get additional params
         include_content = "include_content" in request.POST
         filter_duplicates = "filter_duplicates" in request.POST
         max_distance = float(request.POST.get("max_distance", 5))
         max_results = int(request.POST.get("max_results", 10))
         embedding_type = int(request.POST.get("embedding_type", 1))
+        search_type = request.POST.get("search_type", "semantic")
 
-        # Use Bedrock to perform a vector search
-        client = boto3.client(
-            'bedrock-runtime',
-            region_name="us-east-1",
-        )
-        try:
-            payload = {
-                "inputText": query,
-                "dimensions": 512,
-            }
-            response = client.invoke_model(
-                modelId="amazon.titan-embed-text-v2:0",
-                body=json.dumps(payload),
-                contentType="application/json",
-                accept="application/json",
+        # Define a client factory with optional AWS keys
+        make_boto3_client = lambda client: boto3.client(client, **{k: v for k, v in {
+            "region_name": "us-east-1",
+            "aws_access_key_id": request.POST.get("aws_access_key_id"),
+            "aws_secret_access_key": request.POST.get("aws_secret_access_key"),
+            "aws_session_token": request.POST.get("aws_session_token"),
+        }.items() if v})
+
+        semantic_results = []
+        if search_type in ["semantic", "hybrid", "hybrid_reranked"]:
+            # Use Bedrock to perform a vector search
+            client = make_boto3_client('bedrock-runtime')
+            try:
+                payload = {
+                    "inputText": query,
+                    "dimensions": 512,
+                    "normalize": True,
+                }
+                response = client.invoke_model(
+                    modelId="amazon.titan-embed-text-v2:0",
+                    body=json.dumps(payload),
+                    contentType="application/json",
+                    accept="application/json",
+                )
+                embedding = json.loads(response.get("body").read())["embedding"]
+            except Exception as e:
+                return JsonResponse({"error": str(e)}, status=500)
+
+            # Perform the vector search using the embedding
+            embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
+                **{"distance": distance_function('embedding', embedding)},
+                #**{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
+            ).filter(Q(distance__lt=max_distance) & Q(embedding_type=embedding_type)).order_by('distance')
+
+            # Get values to return
+            values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
+                    "index__resource__title", "index__reg_text__id", "index__reg_text__title", "index__reg_text__part",
+                    "index__reg_text__node_type", "index__reg_text__node_id", "distance", "start_offset")
+            semantic_results = embeddings.values(*values)
+
+        psql_results = []
+        if search_type in ["full_text", "hybrid", "hybrid_reranked"]:
+            # Perform a standard psql search
+            queryset = ContentIndex.objects.defer_text().search(query)
+            psql_results = queryset.values(
+                "rank", "name", "id", "resource__id", "resource__document_id",
+                "resource__title", "reg_text__id", "reg_text__title",
+                "reg_text__part", "reg_text__node_type", "reg_text__node_id",
             )
-            embedding = json.loads(response.get("body").read())["embedding"]
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
 
-        # Perform the vector search using the embedding
-        embeddings = TextEmbedding.objects.prefetch_related(Prefetch("index", ContentIndex.objects.all())).annotate(
-            **{"distance": distance_function('embedding', embedding)},
-            #**{"content": Substr("index__content", F("start_offset"), 20000)} if include_content else {},
-        ).filter(Q(distance__lt=max_distance) & Q(embedding_type=embedding_type)).order_by('distance')
+        # Combine semantic and full text results into a single array
+        get_property = lambda obj, prop: obj[0].get(prop) or obj[0].get(f"index__{prop}")
+        combined_results = [{
+            "name": get_property(i, "name"),
+            "id": get_property(i, "id"),
+            "resource": {
+                "id": get_property(i, "resource__id"),
+                "document_id": get_property(i, "resource__document_id"),
+                "title": get_property(i, "resource__title"),
+            } if get_property(i, "resource__id") else None,
+            "reg_text": {
+                "id": get_property(i, "reg_text__id"),
+                "title": get_property(i, "reg_text__title"),
+                "part": get_property(i, "reg_text__part"),
+                "node_type": get_property(i, "reg_text__node_type"),
+                "node_id": get_property(i, "reg_text__node_id"),
+            } if get_property(i, "reg_text__id") else None,
+            "rank": get_property(i, "distance") or get_property(i, "rank"),
+            "start_offset": get_property(i, "start_offset"),
+            "source": i[1],
+            "content": None,
+        } for i in [(j, "semantic") for j in semantic_results] + [(j, "full_text") for j in psql_results]]
 
-        # Get values to return
-        values = ("index__name", "index__id", "index__resource__id", "index__resource__document_id",
-                  "index__resource__title", "index__reg_text__id", "index__reg_text__title", "index__reg_text__part",
-                  "index__reg_text__node_type", "index__reg_text__node_id", "distance", "start_offset")
-        #if include_content:
-        #    values += ("content",)
-        results = embeddings.values(*values)
-
-        # Remove dupes
+        # Ensure uniqueness if filter_duplicates is true
         if filter_duplicates:
             seen = set()
             unique_results = []
-            for item in results:
-                if item["index__id"] not in seen:
-                    seen.add(item["index__id"])
+            for item in combined_results:
+                if item["id"] not in seen:
+                    seen.add(item["id"])
                     unique_results.append(item)
-            results = unique_results
+            combined_results = unique_results
 
-        # Limit results
+        # Sort by rank
+        # Hacky normalization attempt for testing hybrid search only: if full text result, output rank = 2 - psql_rank
+        combined_results = sorted(combined_results, key=lambda x: (2 - x.get("rank", 0)) if x.get("source") == "full_text" else x.get("rank", 0))
+
+        # Limit the number of results
         if max_results:
-            results = results[:max_results]
+            combined_results = combined_results[:max_results]
 
         # Get contents
         if include_content:
-            contents = ContentIndex.objects.filter(id__in=[i["index__id"] for i in results]).values("id", "content")
+            contents = ContentIndex.objects.filter(id__in=[i["id"] for i in combined_results]).values("id", "content")
             contents = {i["id"]: i["content"] for i in contents}
-            for i in results:
-                text = contents.get(i["index__id"], None)
+            for i in combined_results:
+                text = contents.get(i["id"])
                 if not text:
                     i["content"] = None
                     continue
-                start = i['start_offset']
-                end = min(i['start_offset'] + 20000 + 2000, len(text))
+                start = i.get("start_offset") or 0
+                end = min(start + 20000 + 2000, len(text))
                 i["content"] = text[start:end]
 
+        if search_type == "hybrid_reranked":
+            # Do nothing yet
+            pass
+
         # Return the results as a JSON response
-        return JsonResponse([{
-            "name": i["index__name"],
-            "id": i["index__id"],
-            "resource": {
-                "id": i["index__resource__id"],
-                "document_id": i["index__resource__document_id"],
-                "title": i["index__resource__title"],
-            } if i["index__resource__id"] else None,
-            "reg_text": {
-                "id": i["index__reg_text__id"],
-                "title": i["index__reg_text__title"],
-                "part": i["index__reg_text__part"],
-                "node_type": i["index__reg_text__node_type"],
-                "node_id": i["index__reg_text__node_id"],
-            } if i["index__reg_text__id"] else None,
-            "distance": i["distance"],
-            "start_offset": i["start_offset"],
-            "content": i["content"] if include_content else None,
-        } for i in results], safe=False)
+        return JsonResponse(combined_results, safe=False)
 
 
 @extend_schema(
