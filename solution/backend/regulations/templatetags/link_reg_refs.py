@@ -109,6 +109,7 @@ def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
         match.group()
     )
 
+
 PART_PATTERN = rf"(\s*part\s*?\b{SECTION_ID_PATTERN}\b)"
 PART_CHILD_PATTERN = r"(?:\s*\b(?:sub)?(?:part|chapter)\b\s*?[A-Za-z0-9]+)?"
 OF_THIS_PATTERN = r"\s*(?:\s*of\s*this\s*?\b(?:sub)?(?:chapter|title)\b)"
@@ -127,6 +128,7 @@ def replace_part_of(match, title, exceptions={}):
         title=title,
         part=match.group(1)
     )
+
 
 def replace_part_ofs(match, title, exceptions={}):
     return SECTION_EXTRACT_REGEX.sub(
