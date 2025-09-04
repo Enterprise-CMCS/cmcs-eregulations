@@ -38,5 +38,15 @@
         "testing": "Part Z of this chapter (Z is in exceptions list)",
         "input": "Part 600 of this title",
         "expected": "Part 600 of this title"
+    },
+    {
+        "testing": "Should not match: Part Z of this entry (wrong trailing pattern)",
+        "input": "Part 600 of this entry",
+        "expected": "Part 600 of this entry"
+    },
+    {
+        "testing": "Should not match: Subpart Z of this chapter (wrong leading pattern)",
+        "input": "Subpart 600 of this chapter",
+        "expected": "Subpart 600 of this chapter"
     }
 ]
