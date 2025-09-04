@@ -279,10 +279,10 @@ class PgVectorSearchView(TemplateView):
                         "content_search_contentindex"."reg_text_id",
                         0 AS "start_offset",
                         ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank,
-                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) ASC) AS rank
+                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) DESC) AS rank
                     FROM "content_search_contentindex"
                     WHERE ts_rank((vector_column), plainto_tsquery('english', %(query)s)) > %(min_rank)s
-                    ORDER BY 7 DESC, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
+                    ORDER BY rank, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
                 )
             """
 
