@@ -46,44 +46,6 @@
     <form id="search-form" method="post" action="{% url 'pgvector_search_template' %}" target="_blank">
         {% csrf_token %}
         <textarea id="query" name="query" rows="10" placeholder="Search query" required></textarea>
-        <fieldset>
-            <legend>Distance algorithm</legend>
-            <label>
-                <input type="radio" name="distance_algorithm" value="L2Distance" checked>
-                L2 Distance
-            </label>
-            <label>
-                <input type="radio" name="distance_algorithm" value="MaxInnerProduct">
-                Max Inner Product
-            </label>
-            <label>
-                <input type="radio" name="distance_algorithm" value="CosineDistance">
-                Cosine Distance
-            </label>
-            <label>
-                <input type="radio" name="distance_algorithm" value="L1Distance">
-                L1 Distance
-            </label>
-            <label>
-                <input type="radio" name="distance_algorithm" value="HammingDistance">
-                Hamming Distance
-            </label>
-            <label>
-                <input type="radio" name="distance_algorithm" value="JaccardDistance">
-                Jaccard Distance
-            </label>
-        </fieldset>
-        <fieldset>
-            <legend>Embedding type</legend>
-            <label>
-                <input type="radio" name="embedding_type" value="1" checked>
-                Metadata at the start of the text
-            </label>
-            <label>
-                <input type="radio" name="embedding_type" value="2">
-                Metadata at the start of each chunk
-            </label>
-        </fieldset>
         <fieldset id="search-options">
             <legend>Search options</legend>
             <label>
@@ -95,8 +57,16 @@
                 Filter out duplicate indexed resources or reg text
             </label>
             <label>
+                Full-text smallest rank:
+                <input type="number" name="min_rank" min="0" step="any" value="0.1" required>
+            </label>
+            <label>
                 Semantic max distance:
                 <input type="number" name="max_distance" min="0" step="any" value="1.3" required>
+            </label>
+            <label>
+                <i>k</i>-value for hybrid search:
+                <input type="number" name="k_value" min="1" value="60" required>
             </label>
             <label>
                 Max results:
@@ -107,13 +77,12 @@
                 <select name="search_type">
                     <option value="semantic">Semantic Search</option>
                     <option value="full_text">Full-text Search</option>
-                    <option value="hybrid">Hybrid Search</option>
-                    <option value="hybrid_reranked" selected>Reranked Hybrid Search</option>
+                    <option value="hybrid" selected>Hybrid Search</option>
                 </select>
             </label>
         </fieldset>
         <fieldset id="search-options">
-            <legend>AWS access keys</legend>
+            <legend>AWS access keys <small>(Only required for local use)</small></legend>
             <label>
                 Access key ID:
                 <input type="password" name="aws_access_key_id" size="30">
