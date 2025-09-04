@@ -253,7 +253,7 @@ class PgVectorSearchView(TemplateView):
                         "content_search_contentindex"."resource_id" AS "resource_id",
                         "content_search_contentindex"."reg_text_id" AS "reg_text_id",
                         "content_search_textembedding"."start_offset",
-                        embedding <=> (%(embedding)s::vector) as raw_rank,
+                        embedding <=> (%(embedding)s::vector) AS raw_rank,
                         RANK () OVER (ORDER BY embedding <=> (%(embedding)s::vector)) AS rank
                     FROM content_search_textembedding
                     JOIN content_search_contentindex
@@ -278,8 +278,8 @@ class PgVectorSearchView(TemplateView):
                         "content_search_contentindex"."resource_id",
                         "content_search_contentindex"."reg_text_id",
                         0 AS "start_offset",
-                        ts_rank((vector_column), plainto_tsquery('english', %(query)s)) as raw_rank,
-                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) ASC) as rank
+                        ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank,
+                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) ASC) AS rank
                     FROM "content_search_contentindex"
                     WHERE ts_rank((vector_column), plainto_tsquery('english', %(query)s)) > %(min_rank)s
                     ORDER BY 7 DESC, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
