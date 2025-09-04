@@ -113,7 +113,7 @@ def replace_regulation_refs(match, title, link_conversions=[], exceptions={}):
 PART_PATTERN = rf"(\s*part\s*?\b{SECTION_ID_PATTERN}\b)"
 PART_CHILD_PATTERN = r"(?:\s*\b(?:sub)?(?:part|chapter)\b\s*?[A-Za-z0-9]+)?"
 OF_THIS_PATTERN = r"\s*(?:\s*of\s*this\s*?\b(?:sub)?(?:chapter|title)\b)"
-PART_OF_THIS_PATTERN = rf"({PART_PATTERN}(?:\s*or)?)*(?=,?{PART_CHILD_PATTERN},?{OF_THIS_PATTERN})"
+PART_OF_THIS_PATTERN = rf"({PART_PATTERN}{CONJUNCTION_PATTERN})*(?=,?{PART_CHILD_PATTERN},?{OF_THIS_PATTERN})"
 SECTION_EXTRACT_PATTERN = rf"({SECTION_ID_PATTERN})"
 
 PART_OF_THIS_REGEX = re.compile(PART_OF_THIS_PATTERN, re.IGNORECASE)
