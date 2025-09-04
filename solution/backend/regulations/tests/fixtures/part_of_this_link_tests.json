@@ -1,0 +1,42 @@
+[
+    {
+        "testing": "Part X of this chapter",
+        "input": "Part 100 of this chapter",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a> of this chapter"
+    },
+    {
+        "testing": "Part X of this subchapter",
+        "input": "Part 100 of this subchapter",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a> of this subchapter"
+    },
+    {
+        "testing": "Part X of this title",
+        "input": "Part 100 of this title",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a> of this title"
+    },
+    {
+        "testing": "Part X or Part Y of this title",
+        "input": "Part 100 or Part 200 of this title",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a> or Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=200\">200</a> of this title"
+    },
+    {
+        "testing": "Part X, subpart Y of this title (with comma)",
+        "input": "Part 100, subpart F of this title",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a>, subpart F of this title"
+    },
+    {
+        "testing": "Part X, subpart Y of this chapter (with double comma)",
+        "input": "Part 100, subpart F, of this title",
+        "expected": "Part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a>, subpart F, of this title"
+    },
+    {
+        "testing": "Subpart Y of part X of this chapter",
+        "input": "Subpart F of part 100 of this title",
+        "expected": "Subpart F of part <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/reg_redirect/?title=42&part=100\">100</a> of this title"
+    },
+    {
+        "testing": "Part Z of this chapter (Z is in exceptions list)",
+        "input": "Part 600 of this title",
+        "expected": "Part 600 of this title"
+    }
+]
