@@ -214,6 +214,12 @@ class PgVectorSearchView(TemplateView):
         max_results = int(request.POST.get("max_results", 10))
         search_type = request.POST.get("search_type", "hybrid")
 
+        # Rank ordering params
+        full_text_over_rank_order = request.POST.get("full_text_over_rank_order", "DESC")
+        full_text_final_rank_order = request.POST.get("full_text_final_rank_order", "ASC")
+        semantic_over_rank_order = request.POST.get("semantic_over_rank_order", "ASC")
+        semantic_final_rank_order = request.POST.get("semantic_final_rank_order", "ASC")
+
         # Define a client factory with optional AWS keys
         make_boto3_client = lambda client: boto3.client(client, **{k: v for k, v in {
             "region_name": "us-east-1",
@@ -244,22 +250,23 @@ class PgVectorSearchView(TemplateView):
         sql = "WITH "
 
         if search_type in ["semantic", "hybrid"]:
-            sql += """
+            sql += f"""
                 semantic_search AS (
                     SELECT
                         "content_search_textembedding"."id" AS "chunk_id",
                         "content_search_textembedding"."index_id" AS "id",
                         "content_search_contentindex"."name" AS "name",
+                        "content_search_contentindex"."summary" AS "summary",
                         "content_search_contentindex"."resource_id" AS "resource_id",
                         "content_search_contentindex"."reg_text_id" AS "reg_text_id",
                         "content_search_textembedding"."start_offset",
                         embedding <=> (%(embedding)s::vector) AS raw_rank,
-                        RANK () OVER (ORDER BY embedding <=> (%(embedding)s::vector)) AS rank
+                        RANK () OVER (ORDER BY embedding <=> (%(embedding)s::vector) {semantic_over_rank_order}) AS rank
                     FROM content_search_textembedding
                     JOIN content_search_contentindex
                         ON content_search_textembedding.index_id = content_search_contentindex.id
                     WHERE embedding <=> (%(embedding)s::vector) < %(max_distance)s
-                    ORDER BY embedding <=> (%(embedding)s::vector)
+                    ORDER BY embedding <=> (%(embedding)s::vector) {semantic_final_rank_order}
                 )
             """
 
@@ -270,19 +277,20 @@ class PgVectorSearchView(TemplateView):
         # ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS "rank" (ascending?)
 
         if search_type in ["full_text", "hybrid"]:
-            sql += """
+            sql += f"""
                 keyword_search AS (
                     SELECT
                         "content_search_contentindex"."id",
                         "content_search_contentindex"."name",
+                        "content_search_contentindex"."summary",
                         "content_search_contentindex"."resource_id",
                         "content_search_contentindex"."reg_text_id",
                         0 AS "start_offset",
                         ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank,
-                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) DESC) AS rank
+                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) {full_text_over_rank_order}) AS rank
                     FROM "content_search_contentindex"
                     WHERE ts_rank((vector_column), plainto_tsquery('english', %(query)s)) > %(min_rank)s
-                    ORDER BY rank, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
+                    ORDER BY rank {full_text_final_rank_order}, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
                 )
             """
 
@@ -290,6 +298,8 @@ class PgVectorSearchView(TemplateView):
             sql += """
                 SELECT
                     semantic_search.id,
+                    semantic_search.name,
+                    semantic_search.summary,
                     semantic_search.rank AS score,
                     semantic_search.raw_rank AS semantic_raw_rank,
                     null AS keyword_raw_rank,
@@ -303,6 +313,8 @@ class PgVectorSearchView(TemplateView):
             sql += """
                 SELECT
                     keyword_search.id,
+                    keyword_search.name,
+                    keyword_search.summary,
                     keyword_search.rank AS score,
                     null AS semantic_raw_rank,
                     keyword_search.raw_rank AS keyword_raw_rank,
@@ -316,6 +328,8 @@ class PgVectorSearchView(TemplateView):
             sql += """
                 SELECT
                     COALESCE(semantic_search.id, keyword_search.id) AS id,
+                    COALESCE(semantic_search.name, keyword_search.name) AS name,
+                    COALESCE(semantic_search.summary, keyword_search.summary) AS summary,
                     COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
                     COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score,
                     COALESCE(semantic_search.raw_rank, 0.0) AS semantic_raw_rank,
@@ -341,12 +355,14 @@ class PgVectorSearchView(TemplateView):
 
         results = [{
             "index_id": i[0],
-            "score": i[1],
-            "semantic_raw_rank": i[2],
-            "keyword_raw_rank": i[3],
-            "start_offset": i[4],
-            "resource_id": i[5],
-            "reg_text_id": i[6],
+            "name": i[1],
+            "summary": i[2],
+            "score": i[3],
+            "semantic_raw_rank": i[4],
+            "keyword_raw_rank": i[5],
+            "start_offset": i[6],
+            "resource_id": i[7],
+            "reg_text_id": i[8],
             "content": None,
         } for i in results]
 

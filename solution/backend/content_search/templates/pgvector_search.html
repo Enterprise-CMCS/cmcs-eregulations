@@ -45,7 +45,7 @@
 
     <form id="search-form" method="post" action="{% url 'pgvector_search_template' %}" target="_blank">
         {% csrf_token %}
-        <textarea id="query" name="query" rows="10" placeholder="Search query" required></textarea>
+        <textarea id="query" name="query" rows="6" placeholder="Search query" required></textarea>
         <fieldset id="search-options">
             <legend>Search options</legend>
             <label>
@@ -71,6 +71,26 @@
             <label>
                 Max results:
                 <input type="number" name="max_results" min="0" value="100" required>
+            </label>
+            <label>
+                Full-text OVER rank order:
+                <input type="radio" name="full_text_over_rank_order" value="DESC" checked>Descending
+                <input type="radio" name="full_text_over_rank_order" value="ASC">Ascending
+            </label>
+            <label>
+                Full-text final rank order:
+                <input type="radio" name="full_text_final_rank_order" value="DESC">Descending
+                <input type="radio" name="full_text_final_rank_order" value="ASC" checked>Ascending
+            </label>
+            <label>
+                Semantic OVER rank order:
+                <input type="radio" name="semantic_over_rank_order" value="DESC">Descending
+                <input type="radio" name="semantic_over_rank_order" value="ASC" checked>Ascending
+            </label>
+            <label>
+                Semantic final rank order:
+                <input type="radio" name="semantic_final_rank_order" value="DESC">Descending
+                <input type="radio" name="semantic_final_rank_order" value="ASC" checked>Ascending
             </label>
             <label>
                 Search type:
