@@ -408,7 +408,7 @@ class PgVectorSearchView(TemplateView):
         # Get contents field
         if include_content:
             contents = ContentIndex.objects.filter(id__in=[i["index_id"] for i in results]).values("id", "content")
-            contents = {i["id"]: preprocess_text(i["content"]) if i["content"] else "" for i in contents}
+            contents = {i["id"]: i["content"] for i in contents}
             for i in results:
                 text = contents.get(i["index_id"])
                 if not text:
