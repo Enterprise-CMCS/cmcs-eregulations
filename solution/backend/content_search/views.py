@@ -30,6 +30,27 @@ from resources.utils import get_citation_filter, string_to_bool
 from .models import ContentIndex, IndexedRegulationText, TextEmbedding
 from .serializers import ContentCountSerializer, ContentSearchSerializer, EmbeddingSerializer
 
+import unicodedata
+from bs4 import BeautifulSoup
+import html
+import re
+
+
+def preprocess_text(text: str) -> str:
+    # Remove unicode control characters
+    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text).strip()
+    # Re-encode as unicode-escaped
+    text = text.encode("unicode_escape").decode("unicode_escape")
+    # Remove HTML elements
+    text = html.unescape(text)
+    text = BeautifulSoup(text, "html.parser").get_text()
+    # Collapse whitespace and convert to lowercase
+    text = " ".join(text.split()).lower()
+    # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
+    # (e.g. -------------------- turns into ---)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
+    return text
+
 
 class ContentSearchPagination(ViewSetPagination):
     def get_additional_attributes(self):
@@ -197,13 +218,13 @@ class PgVectorSearchView(TemplateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        # Get query
+        # Get query and preprocess it
         query = request.POST.get("query")
         if not query:
             return JsonResponse({"error": "Query parameter 'query' is required."}, status=400)
-        if len(query) > 20000:
-            return JsonResponse({"error": "Query parameter 'query' must be less than 20,000 characters."}, status=400)
-        query = " ".join(query.split()).lower()  # Remove extra spaces and convert to lowercase
+        if len(query) > 10000:
+            return JsonResponse({"error": "Query parameter 'query' must be less than 10,000 characters."}, status=400)
+        query = preprocess_text(query)
 
         # Get additional params
         include_content = "include_content" in request.POST
@@ -249,6 +270,7 @@ class PgVectorSearchView(TemplateView):
         # Define initial SQL
         sql = "WITH "
 
+        # If semantic is enabled, add semantic search CTE
         if search_type in ["semantic", "hybrid"]:
             sql += f"""
                 semantic_search AS (
@@ -270,12 +292,11 @@ class PgVectorSearchView(TemplateView):
                 )
             """
 
+        # If hybrid search is enabled, add a comma to separate the semantic and full-text CTEs
         if search_type == "hybrid":
             sql += ", "
 
-        # Current ranking method via Django ORM:
-        # ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS "rank" (ascending?)
-
+        # If full-text search is enabled, add full-text search CTE
         if search_type in ["full_text", "hybrid"]:
             sql += f"""
                 keyword_search AS (
@@ -294,6 +315,7 @@ class PgVectorSearchView(TemplateView):
                 )
             """
 
+        # Retrieve data for semantic search only
         if search_type == "semantic":
             sql += """
                 SELECT
@@ -309,6 +331,7 @@ class PgVectorSearchView(TemplateView):
                 FROM semantic_search
             """
 
+        # Retrieve data for full-text search only
         if search_type == "full_text":
             sql += """
                 SELECT
@@ -324,6 +347,7 @@ class PgVectorSearchView(TemplateView):
                 FROM keyword_search
             """
 
+        # Combine and retrieve both semantic and full-text results
         if search_type == "hybrid":
             sql += """
                 SELECT
@@ -342,6 +366,7 @@ class PgVectorSearchView(TemplateView):
                 ORDER BY score DESC
             """
 
+        # Execute the query and retrieve the results
         with connection.cursor() as cursor:
             cursor.execute(sql, {
                 "embedding": embedding,
@@ -380,17 +405,18 @@ class PgVectorSearchView(TemplateView):
         if max_results:
             results = results[:max_results]
 
-        # Get contents
+        # Get contents field
         if include_content:
             contents = ContentIndex.objects.filter(id__in=[i["index_id"] for i in results]).values("id", "content")
-            contents = {i["id"]: i["content"] for i in contents}
+            contents = {i["id"]: preprocess_text(i["content"]) if i["content"] else "" for i in contents}
             for i in results:
                 text = contents.get(i["index_id"])
                 if not text:
                     i["content"] = None
                     continue
                 start = i.get("start_offset") or 0
-                end = min(start + 20000 + 2000, len(text))
+                # In reality, the chunk goes to the end of the nearest word, however an explicit 11,000 is sufficient for testing
+                end = min(start + 10000 + 1000, len(text))
                 i["content"] = text[start:end]
 
         # Return the results as a JSON response
