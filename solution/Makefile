@@ -65,6 +65,11 @@ watch-text-extractor: ## Watch text extractor lambda for changes
 watch-text-extractor:
 	watchfiles --filter python 'make text-extractor.restart'
 
+.PHONY: watch-embedding-generator
+watch-embedding-generator: ## Watch embedding generator lambda for changes
+watch-embedding-generator:
+	watchfiles --filter python 'make embedding-generator.restart'
+
 .PHONY: watch
 watch: ## watch non-SPA pages for changes
 watch:
@@ -73,7 +78,7 @@ watch:
 .PHONY: watch-all
 watch-all: ## watch everything for changes
 watch-all:
-	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor
+	${MAKE} -j4 watch-css watch-component-lib watch-eregs-main watch-spa watch-text-extractor watch-embedding-generator
 
 .PHONY: eslint
 eslint: ## Run eslint
@@ -87,9 +92,11 @@ lint:
 ruff:
 	docker compose exec regulations ruff check --preview .
 	docker compose exec text-extractor ruff check --preview .
+	docker compose exec embedding-generator ruff check --preview .
 ruff-fix:
 	docker compose exec regulations ruff check --preview --fix .
 	docker compose exec text-extractor ruff check --preview --fix .
+	docker compose exec embedding-generator ruff check --preview --fix .
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000
@@ -213,7 +220,22 @@ text-extractor.restart:
 	make text-extractor.stop; make text-extractor.start
 
 text-extractor.test:
-	docker compose exec text-extractor sh -c 'cd app; python -m unittest'
+	docker compose exec text-extractor sh -c 'python -m unittest'
+
+embedding-generator.build:
+	docker compose up -d --build embedding-generator
+
+embedding-generator.stop:
+	docker compose stop embedding-generator
+
+embedding-generator.start:
+	docker compose start embedding-generator
+
+embedding-generator.restart:
+	make embedding-generator.stop; make embedding-generator.start
+
+embedding-generator.test:
+	docker compose exec embedding-generator sh -c 'python -m unittest'
 
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
