@@ -1,0 +1,52 @@
+[tool.ruff]
+
+# Same as Black.
+line-length = 130
+
+[lint]
+# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
+select = ["E", "F", "G", "I", "S", "W", "ASYNC",
+          "E111", "E112", "E113", "E114", "E115", "E116", "E117", "E201", "E202", "E203", "E211", "E222", "E222", "E223",
+          "E224", "E225", "E226", "E227", "E228", "E231", "E241", "E242", "E251", "E252", "E261", "E262", "E265", "E266",
+          "E271", "E272", "E273", "E274", "E275",
+        ]
+ignore = ['S101']
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+fixable = ["E", "F", "I", "W",
+           "E201", "E202", "E203", "E211", "E231",
+          ]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "migrations",
+    "__init__.py",
+]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.12.
+target-version = "py312"
