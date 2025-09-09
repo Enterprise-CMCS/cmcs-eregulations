@@ -250,7 +250,7 @@ func (s *Section) PostProcess() {
 	}
 }
 
-var splitNextMarker = regexp.MustCompile(`^\([^\)]+\)\s*<I>[^<]+<\/I>(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))`)
+var splitNextMarker = regexp.MustCompile(`^\([^\)]+\)\s*(?:<I>[^<]+<\/I>)?(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))`)
 
 // SectionChildren is an array of interface
 type SectionChildren []interface{}
