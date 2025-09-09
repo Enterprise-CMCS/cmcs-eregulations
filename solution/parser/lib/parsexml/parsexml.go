@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"strings"
 	"regexp"
+	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
 
