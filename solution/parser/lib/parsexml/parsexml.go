@@ -263,8 +263,11 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
 		}
-		nextMarkerIndex := splitNextMarker.FindStringSubmatchIndex(child.Content)
-		if nextMarkerIndex != nil {
+		for {
+			nextMarkerIndex := splitNextMarker.FindStringSubmatchIndex(child.Content)
+			if nextMarkerIndex == nil {
+				break
+			}
 			// We have multiple paragraph markers in one <P> tag, so split them out
 			first := child.Content[0:nextMarkerIndex[2]]
 			second := child.Content[nextMarkerIndex[2]:]
