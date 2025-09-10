@@ -265,7 +265,7 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		}
 		for {
 			nextMarkerIndex := splitNextMarker.FindStringSubmatchIndex(child.Content)
-			if nextMarkerIndex == nil {
+			if nextMarkerIndex == nil || strings.HasPrefix(strings.TrimSpace(child.Content[nextMarkerIndex[3]:]), "[Reserved]") {
 				break
 			}
 			// We have multiple paragraph markers in one <P> tag, so split them out
