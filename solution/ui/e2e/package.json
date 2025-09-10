@@ -10,9 +10,9 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@testing-library/cypress": "^10.0.3",
+    "@testing-library/cypress": "^10.1.0",
     "axe-core": "^4.10.3",
-    "cypress": "^14.5.4",
+    "cypress": "^15.2.0",
     "cypress-plugin-tab": "^1.0.5"
   },
   "dependencies": {
