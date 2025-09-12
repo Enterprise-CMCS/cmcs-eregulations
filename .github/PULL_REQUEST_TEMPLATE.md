@@ -1,12 +1,15 @@
-Resolves #
+Resolves [EREGCSC-XXXX](https://jiraent.cms.gov/browse/EREGCSC-XXXX)
 
-**Description-**
+**Description:**
 
-**This pull request changes...**
+TBD
 
-- expected change 1
+**This pull request changes:**
 
-**Steps to manually verify this change...**
+- TBD
 
-1. steps to view and verify change
+**Steps to manually verify this change:**
+
+1. Green check marks
+2. TBD
 
