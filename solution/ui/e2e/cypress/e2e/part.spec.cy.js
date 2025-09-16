@@ -288,7 +288,7 @@ describe("Part View", () => {
     it("loads a part view", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
-        cy.findByRole("link", { name: "433.1 Purpose." }).click({
+        cy.get("a#landing-nav-433-1").click({
             force: true,
         });
         cy.checkLinkRel();
@@ -310,9 +310,7 @@ describe("Part View", () => {
         cy.contains("433.10").click({ force: true });
 
         cy.get(".latest-version").should("exist");
-        cy.findByRole("button", { name: /View Past Versions/i }).should(
-            "not.exist",
-        );
+        cy.get("#view-button").should("not.exist");
     });
 
     it("should allow the user to return to the current version if they visit a link to a previous version", () => {
@@ -321,9 +319,7 @@ describe("Part View", () => {
 
         cy.url().should("include", "2020-12-31");
         cy.get(".latest-version").should("not.exist");
-        cy.findByRole("button", { name: /View Past Versions/i }).should(
-            "not.exist",
-        );
+        cy.get("#view-button").should("not.exist");
 
         cy.get(".view-and-compare").should("be.visible");
         cy.get("#close-link").click({ force: true });

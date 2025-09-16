@@ -108,7 +108,7 @@ describe("Search flow", () => {
             .should("exist")
             .type("test", { force: true });
 
-        cy.findByDisplayValue("test")
+        cy.get("input#main-content")
             .should("be.visible")
             .should("have.value", "test");
 

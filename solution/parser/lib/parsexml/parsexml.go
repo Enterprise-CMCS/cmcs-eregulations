@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"regexp"
 	"strings"
 
 	"github.com/cmsgov/cmcs-eregulations/lib/ecfr"
@@ -249,6 +250,8 @@ func (s *Section) PostProcess() {
 	}
 }
 
+var splitNextMarker = regexp.MustCompile(`^\([^\)]+\)\s*(?:<I>[^<]+<\/I>)?(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))`)
+
 // SectionChildren is an array of interface
 type SectionChildren []interface{}
 
@@ -259,6 +262,19 @@ func (c *SectionChildren) UnmarshalXML(d *xml.Decoder, start xml.StartElement) e
 		child := &Paragraph{Type: "Paragraph"}
 		if err := d.DecodeElement(child, &start); err != nil {
 			return err
+		}
+		for {
+			nextMarkerIndex := splitNextMarker.FindStringSubmatchIndex(child.Content)
+			if nextMarkerIndex == nil || strings.HasPrefix(strings.TrimSpace(child.Content[nextMarkerIndex[3]:]), "[Reserved]") {
+				break
+			}
+			// We have multiple paragraph markers in one <P> tag, so split them out
+			first := child.Content[0:nextMarkerIndex[2]]
+			second := child.Content[nextMarkerIndex[2]:]
+			child.Content = second
+
+			firstParagraph := &Paragraph{Type: "Paragraph", Content: first}
+			*c = append(*c, firstParagraph)
 		}
 		*c = append(*c, child)
 	case "FP":
