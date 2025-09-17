@@ -70,7 +70,337 @@ const $route = useRoute();
             <LeftNavCollapse
                 contents-description="OBBBA Table of Contents"
             >
-                Hello
+                <template #nav-contents>
+                    <div class="toc__container">
+                        <div class="lbexTocDivisionOLC toc-title__container">
+                            <h2 class="toc-title__heading">
+                                <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
+                            </h2>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A — Reducing fraud and improving enrollment processes</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C"
+                                    class="toc-part__anchor"
+                                    href="#toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71101.
+                                        </span>
+                                        Moratorium on implementation of rule relating to eligibility and enrollment in Medicare Savings Programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H6CCF8B8A04E04A36847FD683A259E8DC"
+                                    class="toc-part__anchor"
+                                    href="#toc-H6CCF8B8A04E04A36847FD683A259E8DC"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71102.
+                                        </span>
+                                        Moratorium on implementation of rule relating to eligibility and enrollment for Medicaid, CHIP, and the Basic Health Program.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HA52179FF1EA542DA88936E2159BEFC99"
+                                    class="toc-part__anchor"
+                                    href="#toc-HA52179FF1EA542DA88936E2159BEFC99"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71103.
+                                        </span>
+                                        Reducing duplicate enrollment under the Medicaid and CHIP programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H968D7B63B96D4B7F849C3F7D820864FE"
+                                    class="toc-part__anchor"
+                                    href="#toc-H968D7B63B96D4B7F849C3F7D820864FE"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71104.
+                                        </span>
+                                        Ensuring deceased individuals do not remain enrolled.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HCA190EE79A494B7B807E4370E04565D6"
+                                    class="toc-part__anchor"
+                                    href="#toc-HCA190EE79A494B7B807E4370E04565D6"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71105.
+                                        </span>
+                                        Ensuring deceased providers do not remain enrolled.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HE4C5D821764A4ED89B23CB28D9795390"
+                                    class="toc-part__anchor"
+                                    href="#toc-HE4C5D821764A4ED89B23CB28D9795390"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71106.
+                                        </span>
+                                        Payment reduction related to certain erroneous excess payments under Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H606041EC9E7F4E47BF27FA785F990CD4"
+                                    class="toc-part__anchor"
+                                    href="#toc-H606041EC9E7F4E47BF27FA785F990CD4"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71107.
+                                        </span>
+                                        Eligibility redeterminations.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HAC580CB2660842A98524C26BC39A0B5D"
+                                    class="toc-part__anchor"
+                                    href="#toc-HAC580CB2660842A98524C26BC39A0B5D"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71108.
+                                        </span>
+                                        Revising home equity limit for determining eligibility for long-term care services under the Medicaid program.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H81AF8E812F034407AFF9A4E9B8533848"
+
+                                    class="toc-part__anchor"
+                                    href="#toc-H81AF8E812F034407AFF9A4E9B8533848"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71109.
+                                        </span>
+                                        Alien Medicaid eligibility.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H01B260BD1A734C8384AF364D82D3132E"
+
+                                    class="toc-part__anchor"
+                                    href="#toc-H01B260BD1A734C8384AF364D82D3132E"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71110.
+                                        </span>
+                                        Expansion FMAP for emergency Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B — Preventing wasteful spending</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H72D966A2232743E5A94F076C68AE84D0"
+                                    class="toc-part__anchor"
+                                    href="#toc-H72D966A2232743E5A94F076C68AE84D0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71111
+                                        </span>
+                                        Moratorium on implementation of rule relating to staffing standards for long-term care facilities under the Medicare and Medicaid programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H917F6C03CA464B319B70F26A163C0EE0"
+                                    class="toc-part__anchor"
+                                    href="#toc-H917F6C03CA464B319B70F26A163C0EE0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71112.
+                                        </span>
+                                        Reducing State Medicaid costs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H4C4222AD5DC6485391D3BF42FAE4785C"
+                                    class="toc-part__anchor"
+                                    href="#toc-H4C4222AD5DC6485391D3BF42FAE4785C"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71113.
+                                        </span>
+                                        Federal payments to prohibited entities.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C — Stopping abusive financing practices</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H027BCCE030064EC1801736510E3BFF79"
+                                    class="toc-part__anchor"
+                                    href="#toc-H027BCCE030064EC1801736510E3BFF79"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71114.
+                                        </span>
+                                        Sunsetting increased FMAP incentive.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HC5CF4567712D420786321990FC6F05A3"
+                                    class="toc-part__anchor"
+                                    href="#toc-HC5CF4567712D420786321990FC6F05A3"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71115.
+                                        </span>
+                                        Provider taxes.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H5095A31A390141E1AF3A2DAD32DD6532"
+
+                                    class="toc-part__anchor"
+                                    href="#toc-H5095A31A390141E1AF3A2DAD32DD6532"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71116.
+                                        </span>
+                                        State directed payments.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HFC9712978086448A884AD4DA6242CFF0"
+                                    class="toc-part__anchor"
+                                    href="#toc-HFC9712978086448A884AD4DA6242CFF0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71117.
+                                        </span>
+                                        Requirements regarding waiver of uniform tax requirement for Medicaid provider tax.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H3DFC92C358834F5B82DE8AB81465692A"
+                                    class="toc-part__anchor"
+                                    href="#toc-H3DFC92C358834F5B82DE8AB81465692A"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71118.
+                                        </span>
+                                        Requiring budget neutrality for Medicaid demonstration projects under section 1115.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D — Increasing personal accountability</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HE10C293F1AD14FEE88FED90835BFBB2D"
+                                    class="toc-part__anchor"
+                                    href="#toc-HE10C293F1AD14FEE88FED90835BFBB2D"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71119
+                                        </span>
+                                        Requirement for States to establish Medicaid community engagement requirements for certain individuals.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H4ADCA385302C45CCBDC2C4550A5A6759"
+                                    class="toc-part__anchor"
+                                    href="#toc-H4ADCA385302C45CCBDC2C4550A5A6759"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71120.
+                                        </span>
+                                        Modifying cost sharing requirements for certain expansion individuals under the Medicaid program.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E — Expanding Access to Care</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H09652BCC85234E4FAAAC9D9A805494AF"
+                                    class="toc-part__anchor"
+                                    href="#toc-H09652BCC85234E4FAAAC9D9A805494AF"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71121.
+                                        </span>
+                                        Making certain adjustments to coverage of home or community-based services under Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </LeftNavCollapse>
             <div class="obbba__container content site-container">
                 <h1>One Big Beautiful Bill Act (OBBBA)</h1>
@@ -95,88 +425,6 @@ const $route = useRoute();
                 <!--<div class="lbexTocSubTitleOLC">
                     <a href="#toc-H00A124B5E74D481E9C40B11626C9DADE" id="H00A124B5E74D481E9C40B11626C9DADE">Subtitle B—Health</a>
                 </div>-->
-                <div class="lbexTocDivisionOLC">
-                    <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
-                </div>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A — Reducing fraud and improving enrollment processes</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C" href="#toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C">Sec. 71101. Moratorium on implementation of rule relating to eligibility and enrollment in Medicare Savings Programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H6CCF8B8A04E04A36847FD683A259E8DC" href="#toc-H6CCF8B8A04E04A36847FD683A259E8DC">Sec. 71102. Moratorium on implementation of rule relating to eligibility and enrollment for Medicaid, CHIP, and the Basic Health Program.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HA52179FF1EA542DA88936E2159BEFC99" href="#toc-HA52179FF1EA542DA88936E2159BEFC99">Sec. 71103. Reducing duplicate enrollment under the Medicaid and CHIP programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H968D7B63B96D4B7F849C3F7D820864FE" href="#toc-H968D7B63B96D4B7F849C3F7D820864FE">Sec. 71104. Ensuring deceased individuals do not remain enrolled.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HCA190EE79A494B7B807E4370E04565D6" href="#toc-HCA190EE79A494B7B807E4370E04565D6">Sec. 71105. Ensuring deceased providers do not remain enrolled.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HE4C5D821764A4ED89B23CB28D9795390" href="#toc-HE4C5D821764A4ED89B23CB28D9795390">Sec. 71106. Payment reduction related to certain erroneous excess payments under Medicaid.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H606041EC9E7F4E47BF27FA785F990CD4" href="#toc-H606041EC9E7F4E47BF27FA785F990CD4">Sec. 71107. Eligibility redeterminations.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HAC580CB2660842A98524C26BC39A0B5D" href="#toc-HAC580CB2660842A98524C26BC39A0B5D">Sec. 71108. Revising home equity limit for determining eligibility for long-term care services under the Medicaid program.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H81AF8E812F034407AFF9A4E9B8533848" href="#toc-H81AF8E812F034407AFF9A4E9B8533848">Sec. 71109. Alien Medicaid eligibility.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H01B260BD1A734C8384AF364D82D3132E" href="#toc-H01B260BD1A734C8384AF364D82D3132E">Sec. 71110. Expansion FMAP for emergency Medicaid.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B — Preventing wasteful spending</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H72D966A2232743E5A94F076C68AE84D0" href="#toc-H72D966A2232743E5A94F076C68AE84D0">Sec. 71111. Moratorium on implementation of rule relating to staffing standards for long-term care facilities under the Medicare and Medicaid programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H917F6C03CA464B319B70F26A163C0EE0" href="#toc-H917F6C03CA464B319B70F26A163C0EE0">Sec. 71112. Reducing State Medicaid costs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H4C4222AD5DC6485391D3BF42FAE4785C" href="#toc-H4C4222AD5DC6485391D3BF42FAE4785C">Sec. 71113. Federal payments to prohibited entities.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C — Stopping abusive financing practices</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H027BCCE030064EC1801736510E3BFF79" href="#toc-H027BCCE030064EC1801736510E3BFF79">Sec. 71114. Sunsetting increased FMAP incentive.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HC5CF4567712D420786321990FC6F05A3" href="#toc-HC5CF4567712D420786321990FC6F05A3">Sec. 71115. Provider taxes.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H5095A31A390141E1AF3A2DAD32DD6532" href="#toc-H5095A31A390141E1AF3A2DAD32DD6532">Sec. 71116. State directed payments.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HFC9712978086448A884AD4DA6242CFF0" href="#toc-HFC9712978086448A884AD4DA6242CFF0">Sec. 71117. Requirements regarding waiver of uniform tax requirement for Medicaid provider tax.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H3DFC92C358834F5B82DE8AB81465692A" href="#toc-H3DFC92C358834F5B82DE8AB81465692A">Sec. 71118. Requiring budget neutrality for Medicaid demonstration projects under section 1115.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D — Increasing personal accountability</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="HE10C293F1AD14FEE88FED90835BFBB2D" href="#toc-HE10C293F1AD14FEE88FED90835BFBB2D">Sec. 71119. Requirement for States to establish Medicaid community engagement requirements for certain individuals.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H4ADCA385302C45CCBDC2C4550A5A6759" href="#toc-H4ADCA385302C45CCBDC2C4550A5A6759">Sec. 71120. Modifying cost sharing requirements for certain expansion individuals under the Medicaid program.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E — Expanding Access to Care</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H09652BCC85234E4FAAAC9D9A805494AF" href="#toc-H09652BCC85234E4FAAAC9D9A805494AF">Sec. 71121. Making certain adjustments to coverage of home or community-based services under Medicaid.</a>
-                </span>
-
                 <!--<div>
                     <a href="#H00A124B5E74D481E9C40B11626C9DADE" id="toc-H00A124B5E74D481E9C40B11626C9DADE">
                     <span class="lbexSubTitleLevelOLC">Subtitle B — Health</span>
