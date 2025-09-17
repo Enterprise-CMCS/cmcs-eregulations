@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 nav {
-    .toc__nav {
+    &.toc__nav {
         position: relative;
         color: white;
         background-color: $dark_blue;
