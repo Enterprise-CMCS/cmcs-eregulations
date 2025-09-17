@@ -10,6 +10,8 @@ import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 
+import LeftNavCollapse from "eregsComponentLib/src/components/shared-components/LeftNavCollapse.vue";
+
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
@@ -63,8 +65,14 @@ const $route = useRoute();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="obbbaApp" class="site-container">
-            <div class="obbba__container content">
+        <div id="obbbaApp">
+            <nav id="placeholderNav" class="toc__nav" />
+            <LeftNavCollapse
+                contents-description="OBBBA Table of Contents"
+            >
+                Hello
+            </LeftNavCollapse>
+            <div class="obbba__container content site-container">
                 <h1>One Big Beautiful Bill Act (OBBBA)</h1>
 
                 <p>
@@ -2043,6 +2051,10 @@ const $route = useRoute();
 
 <style scoped>
 a { text-decoration: none; }
+
+#obbbaApp {
+    display: flex;
+}
 
 .obbba__container {
     max-width: var(--content-max-width);
