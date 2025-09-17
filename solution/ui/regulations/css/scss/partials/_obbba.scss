@@ -1,0 +1,79 @@
+//-----------------------------
+// OBBBA specific styles
+//-----------------------------
+
+@import "../application_settings";
+
+a { text-decoration: none; }
+
+#obbbaApp {
+    display: flex;
+
+    @media (max-width: $eds-xs-max) {
+        flex-direction: column;
+    }
+}
+
+.obbba__container {
+    max-width: var(--content-max-width);
+    margin: var(--spacer-3) auto;
+}
+
+.annotated-text {
+  background-color: #F2F2F2;
+}
+
+.lbexTocSectionOLC,
+.lbexIndent,
+.lbexIndentSectionText,
+.ul {
+    display: block;
+    margin: 1em 0;
+}
+
+.lbexTocSubChapterOLC,
+.lbexTocSubTitleOLC {
+    font-size: 110%;
+    font-weight: bold;
+    display: block;
+    margin: 1em 0;
+}
+
+.lbexTocDivisionOLC,
+.lbexHang {
+    font-size: 120%;
+    font-weight: bold;
+    display: block;
+    margin: 1em 0;
+}
+
+.lbexSubChapterLevelOLC,
+.lbexSubTitleLevelOLC,
+.lbexChapterLevelOLC {
+    font-size: 150%;
+    font-weight: bold;
+    display: block;
+    margin: 1em 0;
+}
+
+.lbexIndentParagraph,
+.lbexIndentSubpar,
+.lbexIndentClause,
+.lbexIndentSubclause,
+.lbexIndentItem,
+.lbexIndentSubItem {
+    display: block;
+    margin: 1em 0 1em 0;
+    padding-left: 2em;
+    border-left: 1px solid #d0d0d0;
+}
+
+.lbexIndentSubsection {
+    display: block;
+    background-color: #F2F2F2;
+}
+
+.lbexSectionLevelOLCnuclear,
+.lbexSectionTitleTrad {
+    font-weight: 700;
+}
