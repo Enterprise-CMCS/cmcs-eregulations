@@ -404,23 +404,24 @@ const $route = useRoute();
             </LeftNavCollapse>
             <div class="obbba__container content site-container">
                 <h1>One Big Beautiful Bill Act (OBBBA)</h1>
-
-                <p>
-                    Excerpt from <a
-                        href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
-                </p>
-                <p>
-                    As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
-                        href="https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >OBBBA PDF from Congress.gov</a>.
-                </p>
+                <div class="obbba__context">
+                    <p>
+                        Excerpt from <a
+                            href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
+                    </p>
+                    <p>
+                        As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
+                            href="https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf"
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >OBBBA PDF from Congress.gov</a>.
+                    </p>
+                </div>
 
                 <!--<div class="lbexTocSubTitleOLC">
                     <a href="#toc-H00A124B5E74D481E9C40B11626C9DADE" id="H00A124B5E74D481E9C40B11626C9DADE">Subtitle B—Health</a>

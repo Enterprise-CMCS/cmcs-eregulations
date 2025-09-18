@@ -21,6 +21,14 @@
     .obbba__container {
         max-width: var(--content-max-width);
         margin: var(--spacer-3) auto;
+
+        a {
+            text-decoration: none;
+        }
+
+        .obbba__context {
+            font-style: italic;
+        }
     }
 
     .annotated-text {
