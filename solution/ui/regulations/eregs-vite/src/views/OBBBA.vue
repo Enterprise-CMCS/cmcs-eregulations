@@ -448,13 +448,19 @@ onMounted(() => {
                     </a>
                 </div>-->
                 <div>
-                    <a id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#H1F2AC7DAAC144B50AAB0E9E039D9BE3C">
-                        <span class="lbexChapterLevelOLC">Chapter 1 — Medicaid</span>
+                    <a
+                        id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
+                        href="#H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
+                        class="lbexChapterLevelOLC"
+                    >Chapter 1 — Medicaid
                     </a>
                 </div>
                 <div>
-                    <a id="toc-H92BA8B5040914BF4B6F9A50225F8E976" href="#H92BA8B5040914BF4B6F9A50225F8E976">
-                        <span class="lbexSubChapterLevelOLC">Subchapter A — Reducing fraud and improving enrollment processes</span>
+                    <a
+                        id="toc-H92BA8B5040914BF4B6F9A50225F8E976"
+                        href="#H92BA8B5040914BF4B6F9A50225F8E976"
+                        class="lbexSubChapterLevelOLC"
+                    >Subchapter A — Reducing fraud and improving enrollment processes
                     </a>
                 </div>
 
@@ -1166,8 +1172,11 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H7D8B025C07364BD8B6BD2B6E5C3D1861" />
 
-                <a id="toc-H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#H7D8B025C07364BD8B6BD2B6E5C3D1861">
-                    <span class="lbexSubChapterLevelOLC">Subchapter B — Preventing wasteful spending</span>
+                <a
+                    id="toc-H7D8B025C07364BD8B6BD2B6E5C3D1861"
+                    href="#H7D8B025C07364BD8B6BD2B6E5C3D1861"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter B — Preventing wasteful spending
                 </a>
 
                 <span class="lbexHang">
@@ -1338,8 +1347,11 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H33AAEB14AE494C8981C870486D3E3901" />
 
-                <a id="toc-H33AAEB14AE494C8981C870486D3E3901" href="#H33AAEB14AE494C8981C870486D3E3901">
-                    <span class="lbexSubChapterLevelOLC">Subchapter C — Stopping abusive financing practices</span>
+                <a
+                    id="toc-H33AAEB14AE494C8981C870486D3E3901"
+                    href="#H33AAEB14AE494C8981C870486D3E3901"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter C — Stopping abusive financing practices
                 </a>
 
                 <span class="lbexHang">
@@ -1702,8 +1714,11 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $5,000,000 for each of fiscal years 2026 and 2027, to remain available until expended.</span>
                 <span id="H41B4BE6053784F329BB924FD89F29721" />
 
-                <a id="toc-H41B4BE6053784F329BB924FD89F29721" href="#H41B4BE6053784F329BB924FD89F29721">
-                    <span class="lbexSubChapterLevelOLC">Subchapter D — Increasing personal accountability</span>
+                <a
+                    id="toc-H41B4BE6053784F329BB924FD89F29721"
+                    href="#H41B4BE6053784F329BB924FD89F29721"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter D — Increasing personal accountability
                 </a>
 
                 <span class="lbexHang">
@@ -2202,8 +2217,11 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $15,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <a id="H2388F94754554D3C9E54A32152DEE520" />
 
-                <a id="toc-H2388F94754554D3C9E54A32152DEE520" href="#H2388F94754554D3C9E54A32152DEE520">
-                    <span class="lbexSubChapterLevelOLC">Subchapter E — Expanding Access to Care</span>
+                <a
+                    id="toc-H2388F94754554D3C9E54A32152DEE520"
+                    href="#H2388F94754554D3C9E54A32152DEE520"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter E — Expanding Access to Care
                 </a>
 
                 <span class="lbexHang">

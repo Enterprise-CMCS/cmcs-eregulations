@@ -29,10 +29,6 @@
         max-width: var(--content-max-width);
         margin: var(--spacer-3) auto;
 
-        a {
-            text-decoration: none;
-        }
-
         .obbba__context {
             font-style: italic;
         }
@@ -64,6 +60,13 @@
         font-weight: bold;
         display: block;
         margin: 1em 0;
+    }
+
+    a.lbexChapterLevelOLC,
+    a.lbexSubChapterLevelOLC,
+    a:has(> .lbexSubTitleLevelOLC),
+    a:has(> .lbexHangWithMargin) {
+        text-decoration: none;
     }
 
     .lbexSubChapterLevelOLC,
