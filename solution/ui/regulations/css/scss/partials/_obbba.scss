@@ -12,6 +12,13 @@
     }
 
     nav {
+        @include custom-min(calc((calc($eds-xs-max - 1px)) / 1px)) {
+            height: calc(100vh - $header_height);
+            top: $header_height;
+            overflow-y: scroll;
+            position: sticky;
+        }
+
         a {
             color: white;
             text-decoration: none;
@@ -32,7 +39,7 @@
     }
 
     .annotated-text {
-      background-color: #F2F2F2;
+        background-color: #F2F2F2;
     }
 
     .lbexTocSectionOLC,
