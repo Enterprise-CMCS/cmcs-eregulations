@@ -73,6 +73,9 @@ const $route = useRoute();
                 <template #nav-contents>
                     <div class="toc__container">
                         <div class="lbexTocDivisionOLC toc-title__container">
+                            <span class="toc-title__subheading">
+                                H.R.1 — One Big Beautiful Bill Act
+                            </span>
                             <h2 class="toc-title__heading">
                                 <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
                             </h2>
