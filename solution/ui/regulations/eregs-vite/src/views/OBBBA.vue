@@ -1,5 +1,5 @@
 <script setup>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import AccessLink from "@/components/AccessLink.vue";
@@ -25,6 +25,14 @@ const obbbaUrl = inject("obbbaUrl");
 const username = inject("username");
 
 const $route = useRoute();
+
+const fontsLoaded = ref(false);
+
+onMounted(() => {
+    document.fonts.ready.then(() => {
+        fontsLoaded.value = true;
+    });
+});
 </script>
 
 <template>
@@ -71,8 +79,13 @@ const $route = useRoute();
                 contents-description="OBBBA Table of Contents"
             >
                 <template #nav-contents>
-                    <div class="toc__container">
-                        <div class="lbexTocDivisionOLC toc-title__container">
+                    <div
+                        v-if="fontsLoaded"
+                        class="toc__container"
+                    >
+                        <div
+                            class="lbexTocDivisionOLC toc-title__container"
+                        >
                             <span class="toc-title__subheading">
                                 H.R.1 — One Big Beautiful Bill Act
                             </span>
