@@ -4,137 +4,8 @@
 
 @import "../application_settings";
 
-.homepage__demo-cards {
-    gap: var(--homepage-card-gap);
-    margin-bottom: var(--spacer-1-5);
-
-    .icon-card {
-        flex: 1;
-        background: $secondary_background_color;
-        border: 0;
-
-      a {
-          color: $primary_link_color;
-          text-decoration: none;
-
-          &:hover,
-          &:focus,
-          &:focus-visible,
-          &:visited {
-              color: $primary_link_color;
-          }
-      }
-
-        .icon-card__header {
-            background-color: $teal;
-            padding: 15px 20px;
-
-            .icon-card__title-container {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-
-              container: title-container / inline-size;
-
-              @container title-container (max-width: 199px) {
-                  .icon-card__title {
-                      width: 120px;
-                      max-width: 120px;
-                      font-size: var(--font-size-md);
-                  }
-
-                  .icon-card__icon {
-                      svg {
-                          width: 80%;
-                      }
-                  }
-              }
-
-                .icon-card__title {
-                    width: 135px;
-                    line-height: var(--font-line-height-heading);
-                    white-space: normal;
-                }
-
-                .icon-card__icon {
-                    display: flex;
-                    justify-content: flex-end;
-                }
-            }
-        }
-
-        .icon-card__content {
-            ul li {
-                line-height: var(--font-line-height-lead);
-
-                &::marker {
-                    color: $primary_link_color;
-                    font-size: var(--font-size-xs);
-                }
-            }
-        }
-    }
-}
-
-.site-homepage--update {
-    @mixin link-common {
-        text-decoration: none;
-        cursor: pointer;
-    }
-
-    main {
-        display: flex;
-        flex-direction: row;
-
-        @media (max-width: $eds-xs-max) {
-            flex-direction: column;
-        }
-
-        h1.homepage__title {
-            margin-bottom: 6px;
-            font-size: 30px;
-        }
-
-        p.homepage__subtitle {
-            margin-top: 6px;
-            margin-block-start: 6px !important;
-        }
-
-        .link-btn {
-            @include link-common;
-
-            width: fit-content;
-            color: white;
-            padding-top: 8px;
-            padding-bottom: 8px;
-
-            &:hover,
-            &:visited {
-                color: white;
-            }
-        }
-
-        a.contact {
-            @include link-common;
-            text-decoration: underline;
-
-            color: $contact_link_color;
-
-            &:link::after {
-                filter: brightness(0.02) invert(1);
-            }
-
-            &:visited {
-                color: $contact_link_color;
-
-                &::after {
-                    filter: brightness(0.02) invert(1);
-                }
-            }
-        }
-    }
-
-    nav {
+nav {
+    &.toc__nav {
         position: relative;
         color: white;
         background-color: $dark_blue;
@@ -383,6 +254,138 @@
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+
+.homepage__demo-cards {
+    gap: var(--homepage-card-gap);
+    margin-bottom: var(--spacer-1-5);
+
+    .icon-card {
+        flex: 1;
+        background: $secondary_background_color;
+        border: 0;
+
+      a {
+          color: $primary_link_color;
+          text-decoration: none;
+
+          &:hover,
+          &:focus,
+          &:focus-visible,
+          &:visited {
+              color: $primary_link_color;
+          }
+      }
+
+        .icon-card__header {
+            background-color: $teal;
+            padding: 15px 20px;
+
+            .icon-card__title-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+              container: title-container / inline-size;
+
+              @container title-container (max-width: 199px) {
+                  .icon-card__title {
+                      width: 120px;
+                      max-width: 120px;
+                      font-size: var(--font-size-md);
+                  }
+
+                  .icon-card__icon {
+                      svg {
+                          width: 80%;
+                      }
+                  }
+              }
+
+                .icon-card__title {
+                    width: 135px;
+                    line-height: var(--font-line-height-heading);
+                    white-space: normal;
+                }
+
+                .icon-card__icon {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+            }
+        }
+
+        .icon-card__content {
+            ul li {
+                line-height: var(--font-line-height-lead);
+
+                &::marker {
+                    color: $primary_link_color;
+                    font-size: var(--font-size-xs);
+                }
+            }
+        }
+    }
+}
+
+.site-homepage--update {
+    @mixin link-common {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    main {
+        display: flex;
+        flex-direction: row;
+
+        @media (max-width: $eds-xs-max) {
+            flex-direction: column;
+        }
+
+        h1.homepage__title {
+            margin-bottom: 6px;
+            font-size: 30px;
+        }
+
+        p.homepage__subtitle {
+            margin-top: 6px;
+            margin-block-start: 6px !important;
+        }
+
+        .link-btn {
+            @include link-common;
+
+            width: fit-content;
+            color: white;
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            &:hover,
+            &:visited {
+                color: white;
+            }
+        }
+
+        a.contact {
+            @include link-common;
+            text-decoration: underline;
+
+            color: $contact_link_color;
+
+            &:link::after {
+                filter: brightness(0.02) invert(1);
+            }
+
+            &:visited {
+                color: $contact_link_color;
+
+                &::after {
+                    filter: brightness(0.02) invert(1);
                 }
             }
         }
