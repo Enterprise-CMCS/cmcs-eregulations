@@ -1,12 +1,23 @@
-from django.db.models import Count, F, Prefetch, Q
-from django.http import QueryDict
-from django.urls import reverse
-from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import viewsets
-from rest_framework.response import Response
+import json
 
-from cmcs_regulations.utils.api_exceptions import BadRequest
+import boto3
+from django.db import transaction, connection
+from django.db.models import Count, F, Prefetch, Q
+from django.db.models.functions import Substr
+from django.http import JsonResponse, QueryDict
+from django.urls import reverse
+from django.views.generic import TemplateView
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from pgvector import django as pgvector_django
+from rest_framework import viewsets
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from cmcs_regulations.utils.api_exceptions import BadRequest, ExceptionSerializer
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from common.auth import SettingsAuthentication
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
@@ -16,8 +27,29 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex, IndexedRegulationText
-from .serializers import ContentCountSerializer, ContentSearchSerializer
+from .models import ContentIndex, IndexedRegulationText, TextEmbedding
+from .serializers import ContentCountSerializer, ContentSearchSerializer, EmbeddingSerializer
+
+import unicodedata
+from bs4 import BeautifulSoup
+import html
+import re
+
+
+def preprocess_text(text: str) -> str:
+    # Remove unicode control characters
+    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text).strip()
+    # Re-encode as unicode-escaped
+    text = text.encode("unicode_escape").decode("unicode_escape")
+    # Remove HTML elements
+    text = html.unescape(text)
+    text = BeautifulSoup(text, "html.parser").get_text()
+    # Collapse whitespace and convert to lowercase
+    text = " ".join(text.split()).lower()
+    # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
+    # (e.g. -------------------- turns into ---)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
+    return text
 
 
 class ContentSearchPagination(ViewSetPagination):
@@ -179,6 +211,218 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         return self.get_paginated_response(serializer.data)
 
 
+class PgVectorSearchView(TemplateView):
+    template_name = "pgvector_search.html"
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        # Get query and preprocess it
+        query = request.POST.get("query")
+        if not query:
+            return JsonResponse({"error": "Query parameter 'query' is required."}, status=400)
+        if len(query) > 10000:
+            return JsonResponse({"error": "Query parameter 'query' must be less than 10,000 characters."}, status=400)
+        query = preprocess_text(query)
+
+        # Get additional params
+        include_content = "include_content" in request.POST
+        filter_duplicates = "filter_duplicates" in request.POST
+        min_rank = float(request.POST.get("min_rank", 0.1))
+        max_distance = float(request.POST.get("max_distance", 1.3))
+        k_value = int(request.POST.get("k_value", 60))
+        max_results = int(request.POST.get("max_results", 10))
+        search_type = request.POST.get("search_type", "hybrid")
+
+        # Rank ordering params
+        full_text_over_rank_order = request.POST.get("full_text_over_rank_order", "DESC")
+        full_text_final_rank_order = request.POST.get("full_text_final_rank_order", "ASC")
+        semantic_over_rank_order = request.POST.get("semantic_over_rank_order", "ASC")
+        semantic_final_rank_order = request.POST.get("semantic_final_rank_order", "ASC")
+
+        # Define a client factory with optional AWS keys
+        make_boto3_client = lambda client: boto3.client(client, **{k: v for k, v in {
+            "region_name": "us-east-1",
+            "aws_access_key_id": request.POST.get("aws_access_key_id"),
+            "aws_secret_access_key": request.POST.get("aws_secret_access_key"),
+            "aws_session_token": request.POST.get("aws_session_token"),
+        }.items() if v})
+
+        # Use Bedrock to generate embedding for query
+        client = make_boto3_client('bedrock-runtime')
+        try:
+            payload = {
+                "inputText": query,
+                "dimensions": 512,
+                "normalize": True,
+            }
+            response = client.invoke_model(
+                modelId="amazon.titan-embed-text-v2:0",
+                body=json.dumps(payload),
+                contentType="application/json",
+                accept="application/json",
+            )
+            embedding = json.loads(response.get("body").read())["embedding"]
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+
+        # Define initial SQL
+        sql = "WITH "
+
+        # If semantic is enabled, add semantic search CTE
+        if search_type in ["semantic", "hybrid"]:
+            sql += f"""
+                semantic_search AS (
+                    SELECT
+                        "content_search_textembedding"."id" AS "chunk_id",
+                        "content_search_textembedding"."index_id" AS "id",
+                        "content_search_contentindex"."name" AS "name",
+                        "content_search_contentindex"."summary" AS "summary",
+                        "content_search_contentindex"."resource_id" AS "resource_id",
+                        "content_search_contentindex"."reg_text_id" AS "reg_text_id",
+                        "content_search_textembedding"."start_offset",
+                        embedding <=> (%(embedding)s::vector) AS raw_rank,
+                        RANK () OVER (ORDER BY embedding <=> (%(embedding)s::vector) {semantic_over_rank_order}) AS rank
+                    FROM content_search_textembedding
+                    JOIN content_search_contentindex
+                        ON content_search_textembedding.index_id = content_search_contentindex.id
+                    WHERE embedding <=> (%(embedding)s::vector) < %(max_distance)s
+                    ORDER BY embedding <=> (%(embedding)s::vector) {semantic_final_rank_order}
+                )
+            """
+
+        # If hybrid search is enabled, add a comma to separate the semantic and full-text CTEs
+        if search_type == "hybrid":
+            sql += ", "
+
+        # If full-text search is enabled, add full-text search CTE
+        if search_type in ["full_text", "hybrid"]:
+            sql += f"""
+                keyword_search AS (
+                    SELECT
+                        "content_search_contentindex"."id",
+                        "content_search_contentindex"."name",
+                        "content_search_contentindex"."summary",
+                        "content_search_contentindex"."resource_id",
+                        "content_search_contentindex"."reg_text_id",
+                        0 AS "start_offset",
+                        ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank,
+                        RANK () OVER (ORDER BY ts_rank((vector_column), plainto_tsquery('english', %(query)s)) {full_text_over_rank_order}) AS rank
+                    FROM "content_search_contentindex"
+                    WHERE ts_rank((vector_column), plainto_tsquery('english', %(query)s)) > %(min_rank)s
+                    ORDER BY rank {full_text_final_rank_order}, "content_search_contentindex"."date" DESC, "content_search_contentindex"."id" DESC
+                )
+            """
+
+        # Retrieve data for semantic search only
+        if search_type == "semantic":
+            sql += """
+                SELECT
+                    semantic_search.id,
+                    semantic_search.name,
+                    semantic_search.summary,
+                    semantic_search.rank AS score,
+                    semantic_search.raw_rank AS semantic_raw_rank,
+                    null AS keyword_raw_rank,
+                    semantic_search.start_offset,
+                    semantic_search.resource_id,
+                    semantic_search.reg_text_id
+                FROM semantic_search
+            """
+
+        # Retrieve data for full-text search only
+        if search_type == "full_text":
+            sql += """
+                SELECT
+                    keyword_search.id,
+                    keyword_search.name,
+                    keyword_search.summary,
+                    keyword_search.rank AS score,
+                    null AS semantic_raw_rank,
+                    keyword_search.raw_rank AS keyword_raw_rank,
+                    keyword_search.start_offset,
+                    keyword_search.resource_id,
+                    keyword_search.reg_text_id
+                FROM keyword_search
+            """
+
+        # Combine and retrieve both semantic and full-text results
+        if search_type == "hybrid":
+            sql += """
+                SELECT
+                    COALESCE(semantic_search.id, keyword_search.id) AS id,
+                    COALESCE(semantic_search.name, keyword_search.name) AS name,
+                    COALESCE(semantic_search.summary, keyword_search.summary) AS summary,
+                    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+                    COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score,
+                    COALESCE(semantic_search.raw_rank, 0.0) AS semantic_raw_rank,
+                    COALESCE(keyword_search.raw_rank, 0.0) AS keyword_raw_rank,
+                    COALESCE(semantic_search.start_offset, keyword_search.start_offset) AS start_offset,
+                    COALESCE(semantic_search.resource_id, keyword_search.resource_id) AS resource_id,
+                    COALESCE(semantic_search.reg_text_id, keyword_search.reg_text_id) AS reg_text_id
+                FROM semantic_search
+                FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+                ORDER BY score DESC
+            """
+
+        # Execute the query and retrieve the results
+        with connection.cursor() as cursor:
+            cursor.execute(sql, {
+                "embedding": embedding,
+                "query": query,
+                "k": k_value,
+                "max_results": max_results,
+                "max_distance": max_distance,
+                "min_rank": min_rank,
+            })
+            results = cursor.fetchall()
+
+        results = [{
+            "index_id": i[0],
+            "name": i[1],
+            "summary": i[2],
+            "score": i[3],
+            "semantic_raw_rank": i[4],
+            "keyword_raw_rank": i[5],
+            "start_offset": i[6],
+            "resource_id": i[7],
+            "reg_text_id": i[8],
+            "content": None,
+        } for i in results]
+
+        # Ensure uniqueness if filter_duplicates is true
+        if filter_duplicates:
+            seen = set()
+            unique_results = []
+            for item in results:
+                if item["index_id"] not in seen:
+                    seen.add(item["index_id"])
+                    unique_results.append(item)
+            results = unique_results
+
+        # Limit the number of results
+        if max_results:
+            results = results[:max_results]
+
+        # Get contents field
+        if include_content:
+            contents = ContentIndex.objects.filter(id__in=[i["index_id"] for i in results]).values("id", "content")
+            contents = {i["id"]: i["content"] for i in contents}
+            for i in results:
+                text = contents.get(i["index_id"])
+                if not text:
+                    i["content"] = None
+                    continue
+                start = i.get("start_offset") or 0
+                # In reality, the chunk goes to the end of the nearest word, however an explicit 11,000 is sufficient for testing
+                end = min(start + 10000 + 1000, len(text))
+                i["content"] = text[start:end]
+
+        # Return the results as a JSON response
+        return JsonResponse(results, safe=False)
+
+
 @extend_schema(
     tags=["content_search"],
     description="Retrieve the number of results for a given set of filters. "
@@ -299,3 +543,41 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # Serialize and return the results
         return Response(ContentCountSerializer(aggregates).data)
+
+
+@extend_schema(
+    tags=["content_search"],
+    description="Update an existing text embedding with new data. "
+                "This endpoint allows you to update the embedding of a specific text chunk by its ID.",
+    request=EmbeddingSerializer,
+    responses={200: str, 404: ExceptionSerializer},
+)
+class EmbeddingViewSet(APIView):
+    """
+    ViewSet for updating text embeddings.
+    This view allows for updating existing text embeddings with new data.
+    """
+
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SettingsAuthentication]
+
+    @transaction.atomic
+    def patch(self, request, *args, **kwargs):
+        serializer = EmbeddingSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        pk = kwargs.get("id", data.get("id"))
+        if not pk:
+            raise NotFound("The ID of the object to update must be passed in.")
+
+        try:
+            chunk = TextEmbedding.objects.get(pk=pk)
+        except TextEmbedding.DoesNotExist:
+            raise NotFound(f"An embedding chunk matching ID {pk} does not exist.")
+
+        # Update the embedding chunk with the new data
+        chunk.embedding = data.get("embedding", chunk.embedding)
+        chunk.save()
+
+        return Response(data=f"Embedding chunk {pk} updated successfully.", status=200)

@@ -73,6 +73,7 @@ MIDDLEWARE = [
     'csp.middleware.CSPMiddleware',
     'regulations.middleware.JsonErrors',
     'regulations.middleware.ProcessResponse',
+    'regulations.middleware.SiteUriMiddleware',
     'regcore.middleware.HtmlApi',
 ]
 
@@ -232,9 +233,17 @@ DEMO_VIDEO_URL = os.environ.get(
 
 DEPLOY_NUMBER = os.environ.get("DEPLOY_NUMBER", datetime.now())
 
+LOCAL_EREGS_URL = "http://host.docker.internal:8000"
+
 USE_LOCAL_TEXT_EXTRACTOR = False
 TEXT_EXTRACTOR_ARN = os.environ.get("TEXT_EXTRACTOR_ARN", "")
 TEXT_EXTRACTOR_QUEUE_URL = os.environ.get("TEXT_EXTRACTOR_QUEUE_URL", "")
+LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
+
+USE_LOCAL_EMBEDDING_GENERATOR = False
+EMBEDDING_GENERATOR_ARN = os.environ.get("EMBEDDING_GENERATOR_ARN", "")
+EMBEDDING_GENERATOR_QUEUE_URL = os.environ.get("EMBEDDING_GENERATOR_QUEUE_URL", "")
+LOCAL_EMBEDDING_GENERATOR_URL = "http://host.docker.internal:8002/"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8081",

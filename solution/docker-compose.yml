@@ -64,6 +64,25 @@ services:
       - EREGS_API_URL_V3=${EREGS_API_URL_V3:-}
     volumes:
       - ./text-extractor:/var/task/app
+      - ./lambda-common:/var/task/lambda_common
+    networks:
+      - eregs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  embedding-generator:
+    build:
+      context: .
+      dockerfile: embedding-generator/Dockerfile.local
+    ports:
+      - 9001:8080
+      - 8002:6000
+    environment:
+      - EREGS_USERNAME=${EREGS_USERNAME:-}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_API_URL_V3=${EREGS_API_URL_V3:-}
+    volumes:
+      - ./embedding-generator:/var/task/app
+      - ./lambda-common:/var/task/lambda_common
     networks:
       - eregs
     extra_hosts:

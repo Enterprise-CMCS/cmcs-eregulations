@@ -4,6 +4,8 @@ import logging
 
 from PIL import Image
 
+from lambda_common.utils import get_boto3_client
+
 from .exceptions import ExtractorException, ExtractorInitException
 from .extractor import Extractor
 
@@ -18,7 +20,7 @@ class ImageExtractor(Extractor):
     def __init__(self, file_type: str, config: dict):
         super().__init__(file_type, config)
         try:
-            self.client = self._get_boto3_client("textract")
+            self.client = get_boto3_client("textract", config)
         except Exception as e:
             raise ExtractorInitException(f"failed to initialize Textract client: {str(e)}")
 
