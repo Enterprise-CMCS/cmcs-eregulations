@@ -26,6 +26,7 @@ const username = inject("username");
 
 const $route = useRoute();
 
+// Track when fonts are loaded to avoid Flash of Unstyled Text (FOUT) in ToC
 const fontsLoaded = ref(false);
 
 onMounted(() => {
