@@ -6,7 +6,7 @@ export const tocResponsiveChecks = ({
     cy.visit(page);
     cy.get("nav#leftNav").should("have.attr", "class", "toc__nav open");
 
-    // it should have a closed left nav on load on tablet"
+    // it should have a closed left nav on load on tablet
     cy.viewport(800, 1024);
     cy.visit(page);
     cy.get("nav#leftNav").should("have.attr", "class", "toc__nav closed");

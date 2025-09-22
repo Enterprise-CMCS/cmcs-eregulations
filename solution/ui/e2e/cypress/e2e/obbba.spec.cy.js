@@ -1,4 +1,4 @@
-describe("Homepage", { scrollBehavior: "center" }, () => {
+describe("OBBBA", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
