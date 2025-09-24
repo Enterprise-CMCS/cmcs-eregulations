@@ -5,6 +5,8 @@ from solo.models import SingletonModel
 
 from resources.models import AbstractCategory
 
+# TODO: Remove search config fields from this singleton in a followup PR
+
 
 class ResourcesConfiguration(SingletonModel):
     fr_link_category = models.ForeignKey(

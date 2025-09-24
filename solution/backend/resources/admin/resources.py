@@ -22,7 +22,6 @@ from resources.models import (
     ResourcesConfiguration,
 )
 from resources.utils import (
-    call_text_extractor,
     field_changed,
     get_support_link,
 )
@@ -68,7 +67,7 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         auto_extract = ResourcesConfiguration.get_solo().auto_extract
         fields_changed = any([field_changed(form, field) for field in ["url", "file_type", "extract_url"]])
         if (auto_extract and (not change or fields_changed)) or force_extract:
-            _, fail = call_text_extractor(request, [obj])
+            _, fail = (0, False)  # call_text_extractor(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])

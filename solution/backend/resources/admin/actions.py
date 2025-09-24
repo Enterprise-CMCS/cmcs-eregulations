@@ -1,10 +1,11 @@
 import logging
 
+from django.apps import apps
 from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import format_html
 
-from resources.utils import call_text_extractor, get_support_link
+from resources.utils import get_support_link
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,16 @@ def mark_not_approved(modeladmin, request, queryset):
 
 @admin.action(description="Extract text from selected resources")
 def extract_text(modeladmin, request, queryset):
+    if not apps.is_installed("content_search"):
+        modeladmin.message_user(
+            request,
+            "The Content Search app is not installed, so text extraction cannot be performed.",
+            messages.ERROR,
+        )
+        return
+
+    from content_search.utils import call_text_extractor  # Imported here to avoid circular import issues
+
     successes, failures = call_text_extractor(request, queryset)
 
     failure_urls = []

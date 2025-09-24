@@ -5,11 +5,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.aws import establish_client
 from resources.models import (
     InternalFile,
     InternalLink,
 )
-from resources.utils import establish_client
 
 from .resources import (
     AbstractInternalResourceAdmin,
