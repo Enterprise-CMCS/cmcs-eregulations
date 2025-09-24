@@ -136,7 +136,7 @@ class IndexedRegulationText(models.Model):
 
 # This model is an all encompassing searchable index allowing different models to share an index.
 # Instead of recalculating the vector column each time a change in weights are done the values will be stored
-# in the rank_{}_string fields.
+# in the rank_{}_string fields. Also supports vector embeddings via pgvector.
 class ContentIndex(models.Model):
     # Fields used for generating search headlines
     name = models.TextField(blank=True)
@@ -153,9 +153,9 @@ class ContentIndex(models.Model):
     # Vector field for semantic search
     embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
 
-    # OneToOne fields linked to possible indexed types
-    resource = models.OneToOneField(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
-    reg_text = models.OneToOneField(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="index")
+    # ForeignKey fields linked to possible indexed types (arbitrary # of indices per document)
+    resource = models.ForeignKey(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
+    reg_text = models.ForeignKey(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
 
     objects = ContentIndexManager()
 
