@@ -30,6 +30,9 @@ updates:
           vue:
             patterns:
               - "vue*"
+          plugin-vue:
+            patterns:
+              - "@vitejs/plugin-vue*"
           vitest:
             patterns:
               - "vitest*"

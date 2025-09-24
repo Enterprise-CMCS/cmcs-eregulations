@@ -18,7 +18,7 @@
   "dependencies": {
     "@cmsgov/design-system": "12.4.2",
     "@fortawesome/fontawesome-free": "7.0.1",
-    "@vitejs/plugin-vue": "6.0.0",
+    "@vitejs/plugin-vue": "6.0.1",
     "@vue/test-utils": "2.4.6",
     "dompurify": "3.2.6",
     "flush-promises": "1.0.2",
@@ -34,7 +34,7 @@
     "jsdom": "27.0.0",
     "msw": "2.11.2",
     "resize-observer-polyfill": "1.5.1",
-    "vite": "7.1.6",
+    "vite": "7.1.7",
     "vitest": "3.2.4",
     "whatwg-fetch": "3.6.2"
   },
