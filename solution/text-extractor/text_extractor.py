@@ -14,7 +14,7 @@ from .extractors import (
     ExtractorException,
     ExtractorInitException,
 )
-from .utils import (
+from lambda_common.utils import (
     clean_output,
     get_config,
     lambda_response,
@@ -157,7 +157,7 @@ def handler(event: dict, context: Any) -> dict:
     authorization = None
     if config.get("auth"):
         try:
-            authorization = configure_authorization(config["auth"])
+            authorization = configure_authorization(config)
         except Exception as e:
             return lambda_response(400, f"Failed to configure authorization: {str(e)}")
 
