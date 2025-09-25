@@ -208,13 +208,16 @@ const executeSearch = (payload) => {
                                     <tr class="table__row table__row--body main-row">
                                         <td class="table__cell">
                                             <button
+                                                v-if="section.subsections && section.subsections.length"
                                                 class="expand-btn"
+                                                aria-label="Expand section"
                                                 @click="toggleExpand(section.id)"
                                             >
-                                                <span v-if="section.subsections && section.subsections.length">
+                                                <span>
                                                     <i :class="['fa', expanded[section.id] ? 'fa-angle-down' : 'fa-angle-right']" />
                                                 </span>
                                             </button>
+                                            <span v-else class="expand-btn-placeholder" />
                                             <span
                                                 v-if="section.id || section.title"
                                                 :class="['section-text', { 'section-link': section.subsections }]"
@@ -513,6 +516,11 @@ const executeSearch = (payload) => {
     margin-right: 0.5rem;
     font-size: 1rem;
     color: #1a355e;
+}
+
+.expand-btn-placeholder {
+    display: inline-block;
+    width: 6px;
 }
 
 .fa-angle-right {
