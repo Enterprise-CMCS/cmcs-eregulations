@@ -22,6 +22,14 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();
+
+        cy.get("td.table__cell").contains("Part 2").click();
+        cy.checkLinkRel();
+        cy.checkAccessibility();
+
+        cy.get("td.subsection-cell").contains("2080").click();
+        cy.checkLinkRel();
+        cy.checkAccessibility();
     });
 
     it("goes to the Subjects page using header link", () => {
