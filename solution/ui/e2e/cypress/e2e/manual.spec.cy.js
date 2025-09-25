@@ -16,7 +16,7 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
     });
 
     // remove skip after addressing a11y issues
-    it.skip("checks a11y for Get Account Access page", () => {
+    it("checks a11y for Get Account Access page", () => {
         cy.viewport("macbook-15");
         cy.visit("/manual", { timeout: 60000 });
         cy.checkLinkRel();
