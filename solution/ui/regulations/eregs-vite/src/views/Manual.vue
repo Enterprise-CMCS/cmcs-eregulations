@@ -279,6 +279,7 @@ const executeSearch = (payload) => {
                                                     <button
                                                         v-if="sub.subsections"
                                                         class="expand-btn"
+                                                        aria-label="Expand section"
                                                         @click="toggleExpand(sub.id)"
                                                     >
                                                         <i :class="['fa', expanded[sub.id] ? 'fa-angle-down' : 'fa-angle-right']" />
