@@ -16,11 +16,19 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
     });
 
     // remove skip after addressing a11y issues
-    it.skip("checks a11y for Get Account Access page", () => {
+    it("checks a11y for Get Account Access page", () => {
         cy.viewport("macbook-15");
         cy.visit("/manual", { timeout: 60000 });
         cy.checkLinkRel();
         cy.injectAxe();
+        cy.checkAccessibility();
+
+        cy.get("td.table__cell").contains("Part 2").click();
+        cy.checkLinkRel();
+        cy.checkAccessibility();
+
+        cy.get("td.subsection-cell").contains("2080").click();
+        cy.checkLinkRel();
         cy.checkAccessibility();
     });
 
