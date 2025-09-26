@@ -27,7 +27,6 @@ from resources.models import (
     InternalFile,
     InternalLink,
     PublicLink,
-    ResourceContent,
 )
 
 
@@ -212,6 +211,26 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
     pass
 
 
+class IndexedResource(models.Model):
+    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="index")
+    is_indexed = models.BooleanField(default=False)
+    last_indexed = models.DateTimeField(blank=True, null=True)
+    detected_file_type = models.CharField(
+        max_length=32,
+        blank=True,
+        help_text="The file type that the text extractor detected for this resource.",
+        editable=False,
+    )
+    extraction_error = models.TextField(
+        blank=True,
+        help_text="If the text extractor failed to extract text from this resource, the error message will be stored here.",
+        editable=False,
+    )
+
+    def __str__(self):
+        return f"Indexed Resource: {self.resource}"
+
+
 class IndexedRegulationText(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     title = models.IntegerField(default=0)
@@ -243,7 +262,7 @@ class ContentIndex(models.Model):
     embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
 
     # ForeignKey fields linked to possible indexed types (arbitrary # of indices per document)
-    resource = models.ForeignKey(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
+    resource = models.ForeignKey(IndexedResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
     reg_text = models.ForeignKey(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
 
     objects = ContentIndexManager()
@@ -253,11 +272,11 @@ class ContentIndex(models.Model):
         verbose_name_plural = "Content Indices"
 
 
-@receiver(post_save, sender=ResourceContent)
-def update_content_field(sender, instance, created, **kwargs):
-    index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
-    index.content = instance.value
-    index.save()
+# @receiver(post_save, sender=ResourceContent)
+# def update_content_field(sender, instance, created, **kwargs):
+#     index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
+#     index.content = instance.value
+#     index.save()
 
 
 @receiver(post_save, sender=PublicLink)
