@@ -38,14 +38,18 @@ const router = ({ siteRoot = "/" }) =>
     createRouter({
         history: createWebHistory(siteRoot),
         routes,
-        scrollBehavior(to) {
-            if (to.hash) {
-                return {
-                    selector: to.hash,
-                    offset: { left: 0, top: 80 },
-                };
+        scrollBehavior(to, from) {
+            // if coming from obbba, do not adjust scroll.
+            // this had been causing issues in Firefox for OBBBA page
+            if (from.name !== "obbba") {
+                if (to.hash) {
+                    return {
+                        selector: to.hash,
+                        offset: { left: 0, top: 80 },
+                    };
+                }
+                return { left: 0, top: 0 };
             }
-            return { left: 0, top: 0 };
         },
     });
 
