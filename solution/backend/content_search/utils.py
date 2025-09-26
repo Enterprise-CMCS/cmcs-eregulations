@@ -183,7 +183,7 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Two values; successes by count, and failures by dict: {"id": x, "reason": "y"}.
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
-def call_text_extractor(request, resources):
+def call_text_extractor_for_resources(request, resources):
     # Blank the error field for all resources before processing
     AbstractResource.objects.filter(pk__in=[i.pk for i in resources]).update(extraction_error="")
 

@@ -1,5 +1,6 @@
 import logging
 
+from django.apps import apps
 from django.db import transaction
 from django.db.models import F, Prefetch, Q
 from django.http import JsonResponse
@@ -246,12 +247,16 @@ class FederalRegisterLinkViewSet(PublicResourceViewSet):
         sc = self.get_serializer(link, data=data, context={**self.get_serializer_context(), **{"created": created}})
         sc.is_valid(raise_exception=True)
         sc.save()
-        # if ResourcesConfiguration.get_solo().auto_extract:
-        #    _, fail = call_text_extractor(request, FederalRegisterLink.objects.filter(pk=link.pk))
-        if True:  # TODO FIX THIS
-            _, fail = (0, False)
-            if fail:
-                logger.warning("Failed to extract text for Federal Register Link %i: %s", link.pk, fail[0]["reason"])
+
+        # If content search is installed, run the text extractor
+        if apps.is_installed("content_search"):
+            from content_search.models import ContentSearchConfiguration
+            from content_search.utils import call_text_extractor_for_resources
+            if ContentSearchConfiguration.get_solo().auto_extract:
+                _, fail = call_text_extractor_for_resources(request, FederalRegisterLink.objects.filter(pk=link.pk))
+                if fail:
+                    logger.warning("Failed to extract text for Federal Register Link %i: %s", link.pk, fail[0]["reason"])
+
         return JsonResponse(sc.validated_data)
 
 

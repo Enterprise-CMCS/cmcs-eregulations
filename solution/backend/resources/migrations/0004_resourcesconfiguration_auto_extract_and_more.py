@@ -3,8 +3,12 @@
 # Modified by Caleb Godwin on 2024-08-07 to copy the content field from content-search app,
 # so that we can enable a decoupling of text extraction and search functionality.
 
+import logging
+
 import django.db.models.deletion
 from django.db import migrations, models
+
+logger = logging.getLogger(__name__)
 
 
 TIMEOUT_MINUTES = 10

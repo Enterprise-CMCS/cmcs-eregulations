@@ -281,7 +281,7 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # List of subjects that are in the results and the number of resources in the result set that are associated with them
         aggregates["subjects"] = AbstractResource.objects \
-            .filter(index__pk__in=pks) \
+            .filter(indices__pk__in=pks) \
             .exclude(subjects__isnull=True) \
             .values("subjects") \
             .annotate(subject=F("subjects"), count=Count("subjects")) \
@@ -291,7 +291,7 @@ class ContentCountViewSet(viewsets.ViewSet):
         # List of categories that are in the results and the number of resources in the result set that are associated with them
         # Note that resources are already filtered by user visibility, so by extension, we don't need to filter categories
         aggregates["categories"] = AbstractResource.objects \
-            .filter(index__pk__in=pks) \
+            .filter(indices__pk__in=pks) \
             .exclude(category__isnull=True) \
             .values("category") \
             .annotate(parent=F("category__parent"), count=Count("category")) \

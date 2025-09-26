@@ -1,6 +1,7 @@
 import logging
 
 from django import forms
+from django.apps import apps
 from django.contrib import admin, messages
 from django.db.models import (
     F,
@@ -19,7 +20,6 @@ from resources.models import (
     AbstractInternalCategory,
     AbstractPublicCategory,
     AbstractResource,
-    ResourcesConfiguration,
 )
 from resources.utils import (
     field_changed,
@@ -64,10 +64,18 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         force_extract = kwargs.pop("force_extract", False) or form.cleaned_data.get("extract_text", False)
 
         super().save_model(request, obj, form, change, *args, **kwargs)
-        auto_extract = ResourcesConfiguration.get_solo().auto_extract
+
+        # Return early if content search is not installed
+        if not apps.is_installed("content_search"):
+            return
+
+        from content_search.models import ContentSearchConfiguration
+        from content_search.utils import call_text_extractor_for_resources
+
+        auto_extract = ContentSearchConfiguration.get_solo().auto_extract
         fields_changed = any([field_changed(form, field) for field in ["url", "file_type", "extract_url"]])
         if (auto_extract and (not change or fields_changed)) or force_extract:
-            _, fail = (0, False)  # call_text_extractor(request, [obj])
+            _, fail = call_text_extractor_for_resources(request, [obj])
             url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
             if fail:
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])

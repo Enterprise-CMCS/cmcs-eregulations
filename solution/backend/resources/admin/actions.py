@@ -30,9 +30,9 @@ def extract_text(modeladmin, request, queryset):
         )
         return
 
-    from content_search.utils import call_text_extractor  # Imported here to avoid circular import issues
+    from content_search.utils import call_text_extractor_for_resources  # Imported here to avoid circular import issues
 
-    successes, failures = call_text_extractor(request, queryset)
+    successes, failures = call_text_extractor_for_resources(request, queryset)
 
     failure_urls = []
     for i in failures:

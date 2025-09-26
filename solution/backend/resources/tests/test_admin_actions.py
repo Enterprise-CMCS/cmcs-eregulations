@@ -37,7 +37,7 @@ class AdminActionsTestCase(TestCase):
         resource = PublicLink.objects.get(id=self.resource1.id)
         self.assertFalse(resource.approved)
 
-    @patch('resources.admin.actions.call_text_extractor')
+    @patch('content_search.utils.call_text_extractor_for_resources')
     def test_extract_text_single_fail_single_success(self, mock_call_text_extractor):
         mock_call_text_extractor.return_value = (1, [{"id": self.resource2.id, "reason": "Invalid URL"}])
 
@@ -62,7 +62,7 @@ class AdminActionsTestCase(TestCase):
         for i in expected:
             self.assertIn(i, messages)
 
-    @patch('resources.admin.actions.call_text_extractor')
+    @patch('content_search.utils.call_text_extractor_for_resources')
     def test_extract_text_multiple_success_single_fail(self, mock_call_text_extractor):
         mock_call_text_extractor.return_value = (2, [{"id": self.resource2.id, "reason": "Invalid URL"}])
 
@@ -87,7 +87,7 @@ class AdminActionsTestCase(TestCase):
         for i in expected:
             self.assertIn(i, messages)
 
-    @patch('resources.admin.actions.call_text_extractor')
+    @patch('content_search.utils.call_text_extractor_for_resources')
     def test_extract_text_multiple_success_multiple_fail(self, mock_call_text_extractor):
         mock_call_text_extractor.return_value = (2, [
             {"id": self.resource2.id, "reason": "Invalid URL"},
@@ -116,7 +116,7 @@ class AdminActionsTestCase(TestCase):
         for i in expected:
             self.assertIn(i, messages)
 
-    @patch('resources.admin.actions.call_text_extractor')
+    @patch('content_search.utils.call_text_extractor_for_resources')
     def test_extract_text_multiple_failures(self, mock_call_text_extractor):
         mock_call_text_extractor.return_value = (0, [
             {"id": self.resource2.id, "reason": "Invalid URL"},

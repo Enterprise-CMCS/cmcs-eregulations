@@ -41,7 +41,7 @@ class IndexPopulatedFilter(SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "yes":
-            return queryset.filter(Q(index__content__isnull=False) & ~Q(index__content__exact=""))
+            return queryset.filter(Q(indices__content__isnull=False) & ~Q(indices__content__exact=""))
         if self.value() == "no":
-            return queryset.filter(Q(index__content__isnull=True) | Q(index__content__exact=""))
+            return queryset.filter(Q(indices__content__isnull=True) | Q(indices__content__exact=""))
         return queryset
