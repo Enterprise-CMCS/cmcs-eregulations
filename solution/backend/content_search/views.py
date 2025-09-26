@@ -126,30 +126,30 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         query = ContentIndex.objects.defer_text()
 
         # Filter out unapproved resources
-        query = query.exclude(resource__approved=False)
+        query = query.exclude(resource__resource__approved=False)
 
         # Filter inclusively by citations if this array exists
-        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
+        citation_filter = get_citation_filter(citations, "resource__resource__cfr_citations__")
         if citation_filter:
             query = query.filter(citation_filter)
 
         # Filter by subject pks if subjects array is present
         if subjects:
-            query = query.filter(resource__subjects__pk__in=subjects)
+            query = query.filter(resource__resource__subjects__pk__in=subjects)
 
         # Filter by categories (both parent and subcategories) if the categories array is present
         if categories:
             query = query.filter(
-                Q(resource__category__pk__in=categories) |
-                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
-                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+                Q(resource__resource__category__pk__in=categories) |
+                Q(resource__resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+                Q(resource__resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
             )
 
         # Filter by public, internal, and regulation text
         if not show_public:
-            query = query.exclude(resource__abstractpublicresource__isnull=False)
+            query = query.exclude(resource__resource__abstractpublicresource__isnull=False)
         if not show_internal or not self.request.user.is_authenticated:
-            query = query.exclude(resource__abstractinternalresource__isnull=False)
+            query = query.exclude(resource__resource__abstractinternalresource__isnull=False)
         if not show_regulations:
             query = query.exclude(reg_text__isnull=False)
 

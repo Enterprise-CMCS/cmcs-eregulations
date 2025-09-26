@@ -1,4 +1,3 @@
-import re
 
 from django.conf import settings
 from django.contrib.postgres.search import (
@@ -12,21 +11,14 @@ from django.db import models
 from django.db.models import F
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django_jsonform.models.fields import JSONField
 from pgvector.django import VectorField
 from solo.models import SingletonModel
 
 from common.constants import QUOTE_TYPES
-from content_search.utils import remove_control_characters
 from regcore.models import Part
 from resources.models import (
     AbstractResource,
-    FederalRegisterLink,
-    InternalFile,
-    InternalLink,
-    PublicLink,
 )
 
 
@@ -211,8 +203,8 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
     pass
 
 
-class IndexedResource(models.Model):
-    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="index")
+class ResourceMetadata(models.Model):
+    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="index_metadata")
     is_indexed = models.BooleanField(default=False)
     last_indexed = models.DateTimeField(blank=True, null=True)
     detected_file_type = models.CharField(
@@ -262,8 +254,17 @@ class ContentIndex(models.Model):
     embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
 
     # ForeignKey fields linked to possible indexed types (arbitrary # of indices per document)
-    resource = models.ForeignKey(IndexedResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
+    resource = models.ForeignKey(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
     reg_text = models.ForeignKey(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
+
+    # Text extraction metadata for resources only
+    resource_metadata = models.OneToOneField(
+        ResourceMetadata,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="index",
+    )
 
     objects = ContentIndexManager()
 
@@ -279,105 +280,105 @@ class ContentIndex(models.Model):
 #     index.save()
 
 
-@receiver(post_save, sender=PublicLink)
-@receiver(post_save, sender=FederalRegisterLink)
-def update_indexed_public_resource(sender, instance, created, **kwargs):
-    index, _ = ContentIndex.objects.get_or_create(resource=instance)
-    index.name = instance.document_id
-    index.summary = instance.title
-    index.date = instance.date or None
-    index.rank_a_string = "{} {}".format(
-        instance.document_id,
-        instance.title,
-    )
-    index.rank_b_string = ""
-    index.rank_c_string = instance.date
-    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-    index.save()
+# @receiver(post_save, sender=PublicLink)
+# @receiver(post_save, sender=FederalRegisterLink)
+# def update_indexed_public_resource(sender, instance, created, **kwargs):
+#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
+#     index.name = instance.document_id
+#     index.summary = instance.title
+#     index.date = instance.date or None
+#     index.rank_a_string = "{} {}".format(
+#         instance.document_id,
+#         instance.title,
+#     )
+#     index.rank_b_string = ""
+#     index.rank_c_string = instance.date
+#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+#     index.save()
 
 
-@receiver(post_save, sender=InternalFile)
-def update_indexed_internal_file(sender, instance, created, **kwargs):
-    index, _ = ContentIndex.objects.get_or_create(resource=instance)
-    index.name = instance.title
-    index.summary = instance.summary
-    index.date = instance.date or None
-    index.rank_a_string = instance.title
-    index.rank_b_string = instance.summary
-    index.rank_c_string = "{} {}".format(
-        instance.date,
-        instance.file_name,
-    )
-    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-    index.save()
+# @receiver(post_save, sender=InternalFile)
+# def update_indexed_internal_file(sender, instance, created, **kwargs):
+#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
+#     index.name = instance.title
+#     index.summary = instance.summary
+#     index.date = instance.date or None
+#     index.rank_a_string = instance.title
+#     index.rank_b_string = instance.summary
+#     index.rank_c_string = "{} {}".format(
+#         instance.date,
+#         instance.file_name,
+#     )
+#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+#     index.save()
 
 
-@receiver(post_save, sender=InternalLink)
-def update_indexed_internal_link(sender, instance, created, **kwargs):
-    index, _ = ContentIndex.objects.get_or_create(resource=instance)
-    index.name = instance.title
-    index.summary = instance.summary
-    index.date = instance.date or None
-    index.rank_a_string = instance.title
-    index.rank_b_string = instance.summary
-    index.rank_c_string = instance.date
-    index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-    index.save()
+# @receiver(post_save, sender=InternalLink)
+# def update_indexed_internal_link(sender, instance, created, **kwargs):
+#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
+#     index.name = instance.title
+#     index.summary = instance.summary
+#     index.date = instance.date or None
+#     index.rank_a_string = instance.title
+#     index.rank_b_string = instance.summary
+#     index.rank_c_string = instance.date
+#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
+#     index.save()
 
 
-def index_part_node(part, piece, indices, contents, parent=None):
-    try:
-        node_type = piece.get("node_type", "").lower()
-        part_number, node_id = {
-            "section": (0, 1),
-            "appendix": (6, 3),
-        }[node_type]
+# def index_part_node(part, piece, indices, contents, parent=None):
+#     try:
+#         node_type = piece.get("node_type", "").lower()
+#         part_number, node_id = {
+#             "section": (0, 1),
+#             "appendix": (6, 3),
+#         }[node_type]
 
-        label = piece["label"]
-        part_number = int(label[part_number])
-        node_id = remove_control_characters(label[node_id])
+#         label = piece["label"]
+#         part_number = int(label[part_number])
+#         node_id = remove_control_characters(label[node_id])
 
-        content = piece.get("title", piece.get("text", ""))
-        children = piece.pop("children", []) or []
-        for child in children:
-            content += child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
+#         content = piece.get("title", piece.get("text", ""))
+#         children = piece.pop("children", []) or []
+#         for child in children:
+#             content += child.get("text", "") + re.sub('<[^<]+?>', "", child.get("content", ""))
 
-        contents.append(remove_control_characters(content))
-        indices.append(IndexedRegulationText(
-            part=part,
-            title=part.title,
-            date=part.date,
-            part_title=remove_control_characters(part.document["title"]),
-            part_number=part_number,
-            node_type=node_type,
-            node_id=node_id,
-            node_title=remove_control_characters(piece["title"]),
-        ))
+#         contents.append(remove_control_characters(content))
+#         indices.append(IndexedRegulationText(
+#             part=part,
+#             title=part.title,
+#             date=part.date,
+#             part_title=remove_control_characters(part.document["title"]),
+#             part_number=part_number,
+#             node_type=node_type,
+#             node_id=node_id,
+#             node_title=remove_control_characters(piece["title"]),
+#         ))
 
-    except Exception:
-        children = piece.pop("children", []) or []
-        for child in children:
-            index_part_node(part, child, indices, contents, parent=piece)
+#     except Exception:
+#         children = piece.pop("children", []) or []
+#         for child in children:
+#             index_part_node(part, child, indices, contents, parent=piece)
 
-    return indices, contents
+#     return indices, contents
 
 
-@receiver(post_save, sender=Part)
-def update_indexed_part(sender, instance, created, **kwargs):
-    # Delete all previously indexed parts with the same name and title
-    parts = Part.objects.filter(name=instance.name, title=instance.title)
-    IndexedRegulationText.objects.filter(part__in=parts).delete()
+# @receiver(post_save, sender=Part)
+# def update_indexed_part(sender, instance, created, **kwargs):
+#     # Delete all previously indexed parts with the same name and title
+#     parts = Part.objects.filter(name=instance.name, title=instance.title)
+#     IndexedRegulationText.objects.filter(part__in=parts).delete()
 
-    # Only index the latest version of the part
-    part = parts.latest("date")
-    indices, contents = index_part_node(part, part.document, [], [])
-    indices = IndexedRegulationText.objects.bulk_create(indices)
-    ContentIndex.objects.bulk_create([ContentIndex(
-        name=i.node_title,
-        content=c,
-        reg_text=i,
-        rank_a_string=f"{i.node_id} {i.node_title}",
-        rank_b_string=f"{i.part_title}",
-        rank_c_string=f"{c}",
-        rank_d_string="",
-    ) for i, c in zip(indices, contents)])
+#     # Only index the latest version of the part
+#     part = parts.latest("date")
+#     indices, contents = index_part_node(part, part.document, [], [])
+#     indices = IndexedRegulationText.objects.bulk_create(indices)
+#     ContentIndex.objects.bulk_create([ContentIndex(
+#         name=i.node_title,
+#         content=c,
+#         reg_text=i,
+#         rank_a_string=f"{i.node_id} {i.node_title}",
+#         rank_b_string=f"{i.part_title}",
+#         rank_c_string=f"{c}",
+#         rank_d_string="",
+#     ) for i, c in zip(indices, contents)])

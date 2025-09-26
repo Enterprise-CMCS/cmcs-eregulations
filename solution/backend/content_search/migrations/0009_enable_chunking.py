@@ -23,20 +23,20 @@ def create_content_search_configuration(apps, schema_editor):
         ContentSearchConfiguration.objects.create()
 
 
-def create_indexed_resource(apps, schema_editor):
-    IndexedResource = apps.get_model('content_search', 'IndexedResource')
+def create_resource_metadata(apps, schema_editor):
+    ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
     ContentIndex = apps.get_model('content_search', 'ContentIndex')
 
     for index in ContentIndex.objects.filter(resource__isnull=False):
         resource = index.resource
-        indexed_resource = IndexedResource.objects.create(
+        resource_metadata = ResourceMetadata.objects.create(
             resource=resource,
             is_indexed=bool(index.content),
             last_indexed=None,
             detected_file_type=getattr(resource, 'detected_file_type', ''),
             extraction_error=getattr(resource, 'extraction_error', ''),
         )
-        index.resource_new = indexed_resource
+        index.resource_metadata = resource_metadata
         index.save()
 
 
@@ -51,6 +51,11 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             name='reg_text',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='indices', to='content_search.indexedregulationtext'),
+        ),
+        migrations.AlterField(
+            model_name='contentindex',
+            name='resource',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='indices', to='resources.abstractresource'),
         ),
         migrations.CreateModel(
             name='ContentSearchConfiguration',
@@ -68,29 +73,20 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(create_content_search_configuration, reverse_code=migrations.RunPython.noop),
         migrations.CreateModel(
-            name='IndexedResource',
+            name='ResourceMetadata',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_indexed', models.BooleanField(default=False)),
                 ('last_indexed', models.DateTimeField(blank=True, null=True)),
                 ('detected_file_type', models.CharField(blank=True, editable=False, help_text='The file type that the text extractor detected for this resource.', max_length=32)),
                 ('extraction_error', models.TextField(blank=True, editable=False, help_text='If the text extractor failed to extract text from this resource, the error message will be stored here.')),
-                ('resource', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='index', to='resources.abstractresource')),
+                ('resource', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='index_metadata', to='resources.abstractresource')),
             ],
         ),
         migrations.AddField(
             model_name='contentindex',
-            name='resource_new',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='indices', to='content_search.indexedresource'),
+            name='resource_metadata',
+            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='index', to='content_search.resourcemetadata'),
         ),
-        migrations.RunPython(create_indexed_resource, reverse_code=migrations.RunPython.noop),
-        migrations.RemoveField(
-            model_name='contentindex',
-            name='resource',
-        ),
-        migrations.RenameField(
-            model_name='contentindex',
-            old_name='resource_new',
-            new_name='resource',
-        ),
+        migrations.RunPython(create_resource_metadata, reverse_code=migrations.RunPython.noop),
     ]
