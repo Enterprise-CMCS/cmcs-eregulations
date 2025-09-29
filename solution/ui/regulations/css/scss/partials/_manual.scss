@@ -5,7 +5,7 @@
 @import "../application_settings";
 
 #manualApp {
-    .site-container {
+    &.site-container {
         max-width: var(--content-max-width);
         margin: var(--spacer-3) auto;
     }
