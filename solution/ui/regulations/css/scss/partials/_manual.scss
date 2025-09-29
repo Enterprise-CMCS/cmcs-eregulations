@@ -1,0 +1,138 @@
+//-----------------------------
+// State Medical Manual Styles
+//-----------------------------
+
+@import "../application_settings";
+
+#manualApp {
+    &.site-container {
+        max-width: var(--content-max-width);
+        margin: var(--spacer-3) auto;
+    }
+
+    .search__container {
+        margin-bottom: 1rem;
+    }
+
+    .search__container .search-input__div {
+        width: 320px;
+    }
+
+    .table__parent {
+        border-radius: 4px;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    #manualTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table__header {
+        text-align: left;
+        vertical-align: top;
+        padding: 0.5rem 0 0.5rem 1.5rem;
+        background-color: $secondary_table_header_background_color;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    /* Fixed widths for document type columns */
+    .table__header:nth-child(2),
+    .table__header:nth-child(3),
+    .table__header:nth-child(4) {
+        width: 130px;
+        padding: 0.5rem 0 0.5rem 1rem;
+    }
+
+    .cell__subtitle {
+        font-weight: normal;
+        font-style: italic;
+        font-size: 14px;
+    }
+
+    .table__cell {
+        padding: 1rem;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: top;
+    }
+
+    /* Fixed widths for document type columns */
+    .table__cell:nth-child(2),
+    .table__cell:nth-child(3),
+    .table__cell:nth-child(4) {
+        width: 130px;
+    }
+
+    .table__row--body.main-row {
+        background: $secondary_table_row_background_color;
+        font-weight: 600;
+    }
+
+    .table__row--body.subsection-row {
+        background: #f8f9fa;
+    }
+
+    .table__row--body.nested-subsection-row {
+        background: #fff;
+    }
+
+    .subsection-cell {
+        padding-left: 3rem;
+        font-size: 0.98rem;
+    }
+
+    .subsection-cell .expand-btn {
+        margin-left: -1rem;
+    }
+
+    .nested-subsection-cell {
+        padding-left: 4rem;
+        font-size: 0.95rem;
+    }
+
+    .link-btn {
+        color: $primary_link_color;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .expand-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-right: 0.5rem;
+        font-size: 1rem;
+        color: #1a355e;
+    }
+
+    .expand-btn-placeholder {
+        display: inline-block;
+        width: 6px;
+    }
+
+    .fa-angle-right {
+        margin-right: 2px; /* adjust for the right-arrow and down-arrow being slightly different sizes */
+    }
+
+    .section-text {
+        text-decoration: none;
+    }
+
+    .section-link {
+        cursor: pointer;
+    }
+
+    .section-number {
+        font-weight: 600;
+    }
+
+    .date-stamp {
+        font-size: 0.8em;
+        color: #5b616b;
+        margin-left: 4px;
+        font-weight: 500;
+    }
+}
