@@ -216,9 +216,16 @@ nav {
 
             .toc-title__subheading {
                 font-weight: 400;
-                font-size: 16px;
-                line-height: 24px;
+                font-size: 1rem;
+                line-height: 1.5rem;
                 margin: 0 0 24px !important;
+
+                &--smaller {
+                    display: block;
+                    font-size: 14px;
+                    line-height: 1rem;
+                    margin-bottom: 8px !important;
+                }
             }
 
             .toc-subchapter__container {

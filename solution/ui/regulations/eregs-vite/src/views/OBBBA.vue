@@ -90,6 +90,9 @@ onMounted(() => {
                             <span class="toc-title__subheading">
                                 H.R.1 — One Big Beautiful Bill Act
                             </span>
+                            <span class="toc-title__subheading toc-title__subheading--smaller">
+                                Title VII — Finance, Subtitle B — Health
+                            </span>
                             <h2 class="toc-title__heading">
                                 <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
                             </h2>
