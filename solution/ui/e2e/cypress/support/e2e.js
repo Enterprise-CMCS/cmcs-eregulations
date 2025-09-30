@@ -35,6 +35,7 @@ import { eregsLogin, eregsLogout } from "./common-commands/login";
 import { clickStatuteTab } from "./common-commands/statutes";
 import { checkLinkRel } from "./common-commands/checkLinks";
 import { checkPolicyDocs } from "./common-commands/policyDocs";
+import { tocResponsiveChecks } from "./common-commands/toc";
 import { validateSchema } from "./validate-schema-command";
 
 Cypress.Commands.add("checkLinkRel", checkLinkRel);
@@ -50,6 +51,7 @@ Cypress.Commands.add(
 Cypress.Commands.add("eregsLogin", eregsLogin);
 Cypress.Commands.add("eregsLogout", eregsLogout);
 Cypress.Commands.add("validateSchema", validateSchema);
+Cypress.Commands.add("tocResponsiveChecks", tocResponsiveChecks);
 
 // Print cypress-axe violations to the terminal
 function printA11yViolations(violations) {
