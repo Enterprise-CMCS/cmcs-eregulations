@@ -9,6 +9,8 @@ class IndexedRegulationTextSerializer(serializers.Serializer):
     date = serializers.CharField()
     part_title = serializers.CharField()
     part_number = serializers.IntegerField()
+    subpart_title = serializers.CharField()
+    subpart_id = serializers.CharField()
     node_type = serializers.CharField()
     node_id = serializers.CharField()
     node_title = serializers.CharField()
