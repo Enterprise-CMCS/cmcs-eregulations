@@ -39,6 +39,7 @@ updates:
           rollup:
             patterns:
               - "rollup*"
+              - "@rollup*"
 
     # CDK specific updates
     - package-ecosystem: "npm"
