@@ -104,6 +104,13 @@ jobs:
           --app "npx ts-node bin/static-assets.ts"
           popd
 
+      - name: Create CloudFront invalidation
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          DISTRIBUTION_ID=$(aws cloudformation list-stack-resources --stack-name cms-eregs-${STAGE_NAME}-static-assets | jq -r '.StackResourceSummaries[] | select(.ResourceType == "AWS::CloudFront::Distribution") | .PhysicalResourceId')
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+
   deploy-alternate-sites:
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
