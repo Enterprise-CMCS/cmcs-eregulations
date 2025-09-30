@@ -129,6 +129,8 @@ class IndexedRegulationText(models.Model):
     date = models.DateField(blank=True, null=True)
     part_title = models.TextField(blank=True)
     part_number = models.IntegerField(default=0)
+    subpart_title = models.TextField(blank=True)
+    subpart_id = models.CharField(max_length=8, blank=True)
     node_type = models.CharField(max_length=32, blank=True)
     node_id = models.CharField(max_length=32, blank=True)
     node_title = models.TextField(blank=True)
