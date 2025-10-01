@@ -31,6 +31,7 @@ jobs:
       environment: val
       stage_name: val
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
+      invalidate_cache: true
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
