@@ -285,14 +285,23 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     "
                     :type="getFrDocType(doc)"
                 />
-                <span v-if="doc.part_title" class="result__context--date">{{
+                <span
+                    v-if="doc.part_title"
+                    class="result__context--date"
+                    data-testid="part-title"
+                >{{
                     partDocumentTitleLabel(doc.part_title)
                 }}</span>
                 <span
                     v-if="doc.subpart_title"
                     class="result__context--division result__context--division--bar"
+                    data-testid="subpart-bar"
                 />
-                <span v-if="doc.subpart_title" class="result__context--division">
+                <span
+                    v-if="doc.subpart_title"
+                    class="result__context--division"
+                    data-testid="subpart-title"
+                >
                     {{ doc.subpart_title }}
                 </span>
                 <span
