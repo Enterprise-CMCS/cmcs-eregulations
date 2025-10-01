@@ -16,6 +16,11 @@ on:
       aws_default_region:
         required: true
         type: string
+      invalidate_cache:
+        required: false
+        type: boolean
+        description: 'Whether to invalidate the CloudFront cache after deployment'
+        default: false
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
@@ -103,6 +108,14 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/static-assets.ts"
           popd
+
+      - name: Create CloudFront invalidation
+        if: ${{ inputs.invalidate_cache }}
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+        run: |
+          DISTRIBUTION_ID=$(aws cloudformation list-stack-resources --stack-name cms-eregs-${STAGE_NAME}-static-assets | jq -r '.StackResourceSummaries[] | select(.ResourceType == "AWS::CloudFront::Distribution") | .PhysicalResourceId')
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
 
   deploy-alternate-sites:
     runs-on: ubuntu-22.04
