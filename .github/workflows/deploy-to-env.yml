@@ -17,7 +17,7 @@ on:
         required: true
         type: string
       invalidate_cache:
-        required: true
+        required: false
         type: boolean
         description: 'Whether to invalidate the CloudFront cache after deployment'
         default: false
