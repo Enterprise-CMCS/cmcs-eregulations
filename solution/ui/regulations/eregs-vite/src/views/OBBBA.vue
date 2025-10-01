@@ -1,5 +1,5 @@
 <script setup>
-import { inject } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 
 import AccessLink from "@/components/AccessLink.vue";
@@ -9,6 +9,8 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
+
+import LeftNavCollapse from "eregsComponentLib/src/components/shared-components/LeftNavCollapse.vue";
 
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
@@ -23,6 +25,15 @@ const obbbaUrl = inject("obbbaUrl");
 const username = inject("username");
 
 const $route = useRoute();
+
+// Track when fonts are loaded to avoid Flash of Unstyled Text (FOUT) in ToC
+const fontsLoaded = ref(false);
+
+onMounted(() => {
+    document.fonts.ready.then(() => {
+        fontsLoaded.value = true;
+    });
+});
 </script>
 
 <template>
@@ -63,125 +74,397 @@ const $route = useRoute();
                 </template>
             </HeaderComponent>
         </header>
-        <div id="obbbaApp" class="site-container">
-            <div class="obbba__container content">
-                <h1>One Big Beautiful Bill Act (OBBBA)</h1>
+        <div id="obbbaApp">
+            <nav id="placeholderNav" class="toc__nav" />
+            <LeftNavCollapse
+                contents-description="OBBBA Table of Contents"
+            >
+                <template #nav-contents>
+                    <div
+                        v-if="fontsLoaded"
+                        class="toc__container"
+                    >
+                        <div
+                            class="lbexTocDivisionOLC toc-title__container"
+                        >
+                            <span class="toc-title__subheading">
+                                H.R.1 — One Big Beautiful Bill Act
+                            </span>
+                            <span class="toc-title__subheading toc-title__subheading--smaller">
+                                Title VII — Finance, Subtitle B — Health
+                            </span>
+                            <h2 class="toc-title__heading">
+                                <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
+                            </h2>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A — Reducing fraud and improving enrollment processes</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C"
+                                    class="toc-part__anchor"
+                                    href="#toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71101.
+                                        </span>
+                                        Moratorium on implementation of rule relating to eligibility and enrollment in Medicare Savings Programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H6CCF8B8A04E04A36847FD683A259E8DC"
+                                    class="toc-part__anchor"
+                                    href="#toc-H6CCF8B8A04E04A36847FD683A259E8DC"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71102.
+                                        </span>
+                                        Moratorium on implementation of rule relating to eligibility and enrollment for Medicaid, CHIP, and the Basic Health Program.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HA52179FF1EA542DA88936E2159BEFC99"
+                                    class="toc-part__anchor"
+                                    href="#toc-HA52179FF1EA542DA88936E2159BEFC99"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71103.
+                                        </span>
+                                        Reducing duplicate enrollment under the Medicaid and CHIP programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H968D7B63B96D4B7F849C3F7D820864FE"
+                                    class="toc-part__anchor"
+                                    href="#toc-H968D7B63B96D4B7F849C3F7D820864FE"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71104.
+                                        </span>
+                                        Ensuring deceased individuals do not remain enrolled.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HCA190EE79A494B7B807E4370E04565D6"
+                                    class="toc-part__anchor"
+                                    href="#toc-HCA190EE79A494B7B807E4370E04565D6"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71105.
+                                        </span>
+                                        Ensuring deceased providers do not remain enrolled.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HE4C5D821764A4ED89B23CB28D9795390"
+                                    class="toc-part__anchor"
+                                    href="#toc-HE4C5D821764A4ED89B23CB28D9795390"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71106.
+                                        </span>
+                                        Payment reduction related to certain erroneous excess payments under Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H606041EC9E7F4E47BF27FA785F990CD4"
+                                    class="toc-part__anchor"
+                                    href="#toc-H606041EC9E7F4E47BF27FA785F990CD4"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71107.
+                                        </span>
+                                        Eligibility redeterminations.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HAC580CB2660842A98524C26BC39A0B5D"
+                                    class="toc-part__anchor"
+                                    href="#toc-HAC580CB2660842A98524C26BC39A0B5D"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71108.
+                                        </span>
+                                        Revising home equity limit for determining eligibility for long-term care services under the Medicaid program.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H81AF8E812F034407AFF9A4E9B8533848"
 
-                <p>
-                    Excerpt from <a
-                        href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
-                </p>
-                <p>
-                    As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
-                        href="https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >OBBBA PDF from Congress.gov</a>.
-                </p>
+                                    class="toc-part__anchor"
+                                    href="#toc-H81AF8E812F034407AFF9A4E9B8533848"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71109.
+                                        </span>
+                                        Alien Medicaid eligibility.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H01B260BD1A734C8384AF364D82D3132E"
+
+                                    class="toc-part__anchor"
+                                    href="#toc-H01B260BD1A734C8384AF364D82D3132E"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71110.
+                                        </span>
+                                        Expansion FMAP for emergency Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B — Preventing wasteful spending</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H72D966A2232743E5A94F076C68AE84D0"
+                                    class="toc-part__anchor"
+                                    href="#toc-H72D966A2232743E5A94F076C68AE84D0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71111
+                                        </span>
+                                        Moratorium on implementation of rule relating to staffing standards for long-term care facilities under the Medicare and Medicaid programs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H917F6C03CA464B319B70F26A163C0EE0"
+                                    class="toc-part__anchor"
+                                    href="#toc-H917F6C03CA464B319B70F26A163C0EE0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71112.
+                                        </span>
+                                        Reducing State Medicaid costs.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H4C4222AD5DC6485391D3BF42FAE4785C"
+                                    class="toc-part__anchor"
+                                    href="#toc-H4C4222AD5DC6485391D3BF42FAE4785C"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71113.
+                                        </span>
+                                        Federal payments to prohibited entities.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C — Stopping abusive financing practices</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H027BCCE030064EC1801736510E3BFF79"
+                                    class="toc-part__anchor"
+                                    href="#toc-H027BCCE030064EC1801736510E3BFF79"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71114.
+                                        </span>
+                                        Sunsetting increased FMAP incentive.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HC5CF4567712D420786321990FC6F05A3"
+                                    class="toc-part__anchor"
+                                    href="#toc-HC5CF4567712D420786321990FC6F05A3"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71115.
+                                        </span>
+                                        Provider taxes.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H5095A31A390141E1AF3A2DAD32DD6532"
+
+                                    class="toc-part__anchor"
+                                    href="#toc-H5095A31A390141E1AF3A2DAD32DD6532"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71116.
+                                        </span>
+                                        State directed payments.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HFC9712978086448A884AD4DA6242CFF0"
+                                    class="toc-part__anchor"
+                                    href="#toc-HFC9712978086448A884AD4DA6242CFF0"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71117.
+                                        </span>
+                                        Requirements regarding waiver of uniform tax requirement for Medicaid provider tax.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H3DFC92C358834F5B82DE8AB81465692A"
+                                    class="toc-part__anchor"
+                                    href="#toc-H3DFC92C358834F5B82DE8AB81465692A"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71118.
+                                        </span>
+                                        Requiring budget neutrality for Medicaid demonstration projects under section 1115.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D — Increasing personal accountability</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="HE10C293F1AD14FEE88FED90835BFBB2D"
+                                    class="toc-part__anchor"
+                                    href="#toc-HE10C293F1AD14FEE88FED90835BFBB2D"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71119
+                                        </span>
+                                        Requirement for States to establish Medicaid community engagement requirements for certain individuals.
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H4ADCA385302C45CCBDC2C4550A5A6759"
+                                    class="toc-part__anchor"
+                                    href="#toc-H4ADCA385302C45CCBDC2C4550A5A6759"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71120.
+                                        </span>
+                                        Modifying cost sharing requirements for certain expansion individuals under the Medicaid program.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="toc-subchapter__container">
+                            <div class="lbexTocSubChapterOLC toc-subchapter__label">
+                                <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E — Expanding Access to Care</a>
+                            </div>
+                            <div class="toc-part__container">
+                                <a
+                                    id="H09652BCC85234E4FAAAC9D9A805494AF"
+                                    class="toc-part__anchor"
+                                    href="#toc-H09652BCC85234E4FAAAC9D9A805494AF"
+                                >
+                                    <div class="toc-part__label">
+                                        <span class="toc-part__label--bold">
+                                            Sec. 71121.
+                                        </span>
+                                        Making certain adjustments to coverage of home or community-based services under Medicaid.
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </LeftNavCollapse>
+            <div class="obbba__container content site-container">
+                <h1>One Big Beautiful Bill Act (OBBBA)</h1>
+                <div class="obbba__context">
+                    <p>
+                        Excerpt from <a
+                            href="https://www.congress.gov/bill/119th-congress/house-bill/1/text"
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
+                    </p>
+                    <p>
+                        As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
+                            href="https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf"
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >OBBBA PDF from Congress.gov</a>.
+                    </p>
+                </div>
 
                 <!--<div class="lbexTocSubTitleOLC">
                     <a href="#toc-H00A124B5E74D481E9C40B11626C9DADE" id="H00A124B5E74D481E9C40B11626C9DADE">Subtitle B—Health</a>
                 </div>-->
-                <div class="lbexTocDivisionOLC">
-                    <a id="H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C">Chapter 1 — Medicaid</a>
-                </div>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H92BA8B5040914BF4B6F9A50225F8E976" href="#toc-H92BA8B5040914BF4B6F9A50225F8E976">Subchapter A — Reducing fraud and improving enrollment processes</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C" href="#toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C">Sec. 71101. Moratorium on implementation of rule relating to eligibility and enrollment in Medicare Savings Programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H6CCF8B8A04E04A36847FD683A259E8DC" href="#toc-H6CCF8B8A04E04A36847FD683A259E8DC">Sec. 71102. Moratorium on implementation of rule relating to eligibility and enrollment for Medicaid, CHIP, and the Basic Health Program.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HA52179FF1EA542DA88936E2159BEFC99" href="#toc-HA52179FF1EA542DA88936E2159BEFC99">Sec. 71103. Reducing duplicate enrollment under the Medicaid and CHIP programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H968D7B63B96D4B7F849C3F7D820864FE" href="#toc-H968D7B63B96D4B7F849C3F7D820864FE">Sec. 71104. Ensuring deceased individuals do not remain enrolled.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HCA190EE79A494B7B807E4370E04565D6" href="#toc-HCA190EE79A494B7B807E4370E04565D6">Sec. 71105. Ensuring deceased providers do not remain enrolled.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HE4C5D821764A4ED89B23CB28D9795390" href="#toc-HE4C5D821764A4ED89B23CB28D9795390">Sec. 71106. Payment reduction related to certain erroneous excess payments under Medicaid.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H606041EC9E7F4E47BF27FA785F990CD4" href="#toc-H606041EC9E7F4E47BF27FA785F990CD4">Sec. 71107. Eligibility redeterminations.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HAC580CB2660842A98524C26BC39A0B5D" href="#toc-HAC580CB2660842A98524C26BC39A0B5D">Sec. 71108. Revising home equity limit for determining eligibility for long-term care services under the Medicaid program.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H81AF8E812F034407AFF9A4E9B8533848" href="#toc-H81AF8E812F034407AFF9A4E9B8533848">Sec. 71109. Alien Medicaid eligibility.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H01B260BD1A734C8384AF364D82D3132E" href="#toc-H01B260BD1A734C8384AF364D82D3132E">Sec. 71110. Expansion FMAP for emergency Medicaid.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#toc-H7D8B025C07364BD8B6BD2B6E5C3D1861">Subchapter B — Preventing wasteful spending</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H72D966A2232743E5A94F076C68AE84D0" href="#toc-H72D966A2232743E5A94F076C68AE84D0">Sec. 71111. Moratorium on implementation of rule relating to staffing standards for long-term care facilities under the Medicare and Medicaid programs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H917F6C03CA464B319B70F26A163C0EE0" href="#toc-H917F6C03CA464B319B70F26A163C0EE0">Sec. 71112. Reducing State Medicaid costs.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H4C4222AD5DC6485391D3BF42FAE4785C" href="#toc-H4C4222AD5DC6485391D3BF42FAE4785C">Sec. 71113. Federal payments to prohibited entities.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H33AAEB14AE494C8981C870486D3E3901" href="#toc-H33AAEB14AE494C8981C870486D3E3901">Subchapter C — Stopping abusive financing practices</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H027BCCE030064EC1801736510E3BFF79" href="#toc-H027BCCE030064EC1801736510E3BFF79">Sec. 71114. Sunsetting increased FMAP incentive.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HC5CF4567712D420786321990FC6F05A3" href="#toc-HC5CF4567712D420786321990FC6F05A3">Sec. 71115. Provider taxes.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H5095A31A390141E1AF3A2DAD32DD6532" href="#toc-H5095A31A390141E1AF3A2DAD32DD6532">Sec. 71116. State directed payments.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="HFC9712978086448A884AD4DA6242CFF0" href="#toc-HFC9712978086448A884AD4DA6242CFF0">Sec. 71117. Requirements regarding waiver of uniform tax requirement for Medicaid provider tax.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H3DFC92C358834F5B82DE8AB81465692A" href="#toc-H3DFC92C358834F5B82DE8AB81465692A">Sec. 71118. Requiring budget neutrality for Medicaid demonstration projects under section 1115.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H41B4BE6053784F329BB924FD89F29721" href="#toc-H41B4BE6053784F329BB924FD89F29721">Subchapter D — Increasing personal accountability</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="HE10C293F1AD14FEE88FED90835BFBB2D" href="#toc-HE10C293F1AD14FEE88FED90835BFBB2D">Sec. 71119. Requirement for States to establish Medicaid community engagement requirements for certain individuals.</a>
-                </span>
-                <span class="lbexTocSectionOLC">
-                    <a id="H4ADCA385302C45CCBDC2C4550A5A6759" href="#toc-H4ADCA385302C45CCBDC2C4550A5A6759">Sec. 71120. Modifying cost sharing requirements for certain expansion individuals under the Medicaid program.</a>
-                </span>
-                <div class="lbexTocSubChapterOLC">
-                    <a id="H2388F94754554D3C9E54A32152DEE520" href="#toc-H2388F94754554D3C9E54A32152DEE520">Subchapter E — Expanding Access to Care</a>
-                </div>
-                <span class="lbexTocSectionOLC">
-                    <a id="H09652BCC85234E4FAAAC9D9A805494AF" href="#toc-H09652BCC85234E4FAAAC9D9A805494AF">Sec. 71121. Making certain adjustments to coverage of home or community-based services under Medicaid.</a>
-                </span>
-
                 <!--<div>
                     <a href="#H00A124B5E74D481E9C40B11626C9DADE" id="toc-H00A124B5E74D481E9C40B11626C9DADE">
                     <span class="lbexSubTitleLevelOLC">Subtitle B — Health</span>
                     </a>
                 </div>-->
                 <div>
-                    <a id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C" href="#H1F2AC7DAAC144B50AAB0E9E039D9BE3C">
-                        <span class="lbexChapterLevelOLC">Chapter 1 — Medicaid</span>
+                    <a
+                        id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
+                        href="#H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
+                        class="lbexChapterLevelOLC"
+                    >Chapter 1 — Medicaid
                     </a>
                 </div>
                 <div>
-                    <a id="toc-H92BA8B5040914BF4B6F9A50225F8E976" href="#H92BA8B5040914BF4B6F9A50225F8E976">
-                        <span class="lbexSubChapterLevelOLC">Subchapter A — Reducing fraud and improving enrollment processes</span>
+                    <a
+                        id="toc-H92BA8B5040914BF4B6F9A50225F8E976"
+                        href="#H92BA8B5040914BF4B6F9A50225F8E976"
+                        class="lbexSubChapterLevelOLC"
+                    >Subchapter A — Reducing fraud and improving enrollment processes
                     </a>
                 </div>
 
@@ -212,13 +495,29 @@ const $route = useRoute();
                         rel="noopener noreferrer"
                     >406.21(c)</a>.</span>
                     <a id="HCE8D6997B5854B01ADD71E9E21FDC2BA" />
-                    <span class="lbexIndentParagraph">(2) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=4'" target="_blank">435.4</a>.</span>
+                    <span class="lbexIndentParagraph">(2) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=4'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.4</a>.</span>
                     <a id="H15487E3B744248DCAFBFE927D8DA0D58" />
-                    <span class="lbexIndentParagraph">(3) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=601' " target="_blank">435.601</a>.</span>
+                    <span class="lbexIndentParagraph">(3) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=601' "
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.601</a>.</span>
                     <a id="HE50E09359ADF43E3801583A7F93536AF" />
-                    <span class="lbexIndentParagraph">(4) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=911'" target="_blank">435.911</a>.</span>
+                    <span class="lbexIndentParagraph">(4) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=911'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.911</a>.</span>
                     <a id="H0118D4FC9FB141779DBAFFFC5D16CE70" />
-                    <span class="lbexIndentParagraph">(5) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=952'" target="_blank">435.952</a>.</span>
+                    <span class="lbexIndentParagraph">(5) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=952'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.952</a>.</span>
                 </span>
                 <a id="H598825FE57D945BF99919E631E2EB252" />
                 <span class="lbexIndent">(b)
@@ -248,51 +547,103 @@ const $route = useRoute();
                 <a id="H7D21A4884F4A482E92B6D806BB64376D" />
                 <span class="lbexIndentParagraph">(1) PART 431.—
                     <a id="H077E344340DA4CC1B6AE74AE55D63DA8" />
-                    <span class="lbexIndentSubpar">(A) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=431&section=213&paragraph=d'" target="_blank">431.213(d)</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=431&section=213&paragraph=d'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >431.213(d)</a>.</span>
                 </span>
 
 
                 <a id="H42237E815BFE4C90A3BA673ED5A0ED07" />
                 <span class="lbexIndentParagraph">(2) PART 435.—
                     <a id="H71F74C30E9514D2087EC3E585BF8CE25" />
-                    <span class="lbexIndentSubpar">(A) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=222'" target="_blank">435.222</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=222'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.222</a>.</span>
 
                     <a id="H832B46669A6A4A16B4FB89126EFD832D" />
-                    <span class="lbexIndentSubpar">(B) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=407'" target="_blank">435.407</a>.</span>
+                    <span class="lbexIndentSubpar">(B) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=407'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.407</a>.</span>
 
                     <a id="H97F1770CA51C4362A7342F5BC96622F4" />
-                    <span class="lbexIndentSubpar">(C) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=907'" target="_blank">435.907</a>.</span>
+                    <span class="lbexIndentSubpar">(C) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=907'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.907</a>.</span>
 
                     <a id="HDBE4C453DE744C719C74B723C40666E9" />
-                    <span class="lbexIndentSubpar">(D) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=911&paragraph=c'" target="_blank">435.911(c)</a>.</span>
+                    <span class="lbexIndentSubpar">(D) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=911&paragraph=c'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.911(c)</a>.</span>
 
                     <a id="H36BD5BABE098435794D3D3767A35C301" />
-                    <span class="lbexIndentSubpar">(E) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=912'" target="_blank">435.912</a>.</span>
+                    <span class="lbexIndentSubpar">(E) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=912'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.912</a>.</span>
 
                     <a id="H227480A09C3449659DC628114682795B" />
-                    <span class="lbexIndentSubpar">(F) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=916'" target="_blank">435.916</a>.</span>
+                    <span class="lbexIndentSubpar">(F) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=916'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.916</a>.</span>
 
                     <a id="H7C655D554F6B411287E964B71B34A247" />
-                    <span class="lbexIndentSubpar">(G) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=919'" target="_blank">435.919</a>.</span>
+                    <span class="lbexIndentSubpar">(G) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=919'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.919</a>.</span>
 
                     <a id="H4B4A827E4C334187A9A1A89EF051394C" />
-                    <span class="lbexIndentSubpar">(H) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=b-3-i'" target="_blank">435.1200(b)(3)(i)-(v)</a>.</span>
+                    <span class="lbexIndentSubpar">(H) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=b-3-i'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.1200(b)(3)(i)-(v)</a>.</span>
 
                     <a id="HECA656E702634947B790993D7C5800B3" />
-                    <span class="lbexIndentSubpar">(I) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=e-1-ii'" target="_blank">435.1200(e )(1)(ii)</a>.</span>
+                    <span class="lbexIndentSubpar">(I) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=e-1-ii'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.1200(e )(1)(ii)</a>.</span>
 
                     <a id="H79250E195F0843D2B9137692544CA717" />
-                    <span class="lbexIndentSubpar">(J) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=h-1'" target="_blank">435.1200(h)(1)</a>.</span>
+                    <span class="lbexIndentSubpar">(J) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=435&section=1200&paragraph=h-1'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >435.1200(h)(1)</a>.</span>
                 </span>
 
 
                 <a id="H7352215019274DF88BBA1292F84BB0AC" />
-                <span class="lbexIndentParagraph">(3) PART 447.—Section <a :href="homeUrl + 'reg_redirect/?title=42&part=447&section=56&paragraph=a-1-v'" target="_blank">447.56(a)(1)(v)</a>.</span>
+                <span class="lbexIndentParagraph">(3) PART 447.—Section <a
+                    :href="homeUrl + 'reg_redirect/?title=42&part=447&section=56&paragraph=a-1-v'"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >447.56(a)(1)(v)</a>.</span>
 
                 <a id="H79BA1C0B1BC34A219585A104FE35B757" />
                 <span class="lbexIndentParagraph">(4) PART 457.—
                     <a id="H218ABEFEACEC48048D19B9725B66DC3F" />
-                    <span class="lbexIndentSubpar">(A) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=457&section=344'" target="_blank">457.344</a>.</span>
+                    <span class="lbexIndentSubpar">(A) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=457&section=344'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >457.344</a>.</span>
 
                     <a id="HFFCC5AF3EAD546DB82645A047A623B28" />
                     <span class="lbexIndentSubpar">(B) Section <a
@@ -303,13 +654,25 @@ const $route = useRoute();
                     >457.960</a>.</span> <!-- Hardcoding this one because eCFR handles removed reg sections more gracefully than we do. -->
 
                     <a id="H1E0BF50F724843B2BE354F98D8490127" />
-                    <span class="lbexIndentSubpar">(C) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1140&paragraph=d-4'" target="_blank">457.1140(d)(4)</a>.</span>
+                    <span class="lbexIndentSubpar">(C) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1140&paragraph=d-4'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >457.1140(d)(4)</a>.</span>
 
                     <a id="H82BF3A5429C2459D8CE8DE8BA7FDC46F" />
-                    <span class="lbexIndentSubpar">(D) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1170'" target="_blank">457.1170</a>.</span>
+                    <span class="lbexIndentSubpar">(D) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1170'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >457.1170</a>.</span>
 
                     <a id="H59115532E4B94D6AB62D59E8A8D259B3" />
-                    <span class="lbexIndentSubpar">(E) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1180'" target="_blank">457.1180</a>.</span>
+                    <span class="lbexIndentSubpar">(E) Section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=457&section=1180'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >457.1180</a>.</span>
                 </span>
 
                 <span class="lbexHang">
@@ -694,6 +1057,7 @@ const $route = useRoute();
                                     href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                     class="external"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in subsection (a)(10)(A)(i)(VIII).</span>
                             </span>
                             <a id="HCAE581DC60574A9390E4B2970B78EFE2" />
@@ -893,8 +1257,11 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H7D8B025C07364BD8B6BD2B6E5C3D1861" />
 
-                <a id="toc-H7D8B025C07364BD8B6BD2B6E5C3D1861" href="#H7D8B025C07364BD8B6BD2B6E5C3D1861">
-                    <span class="lbexSubChapterLevelOLC">Subchapter B — Preventing wasteful spending</span>
+                <a
+                    id="toc-H7D8B025C07364BD8B6BD2B6E5C3D1861"
+                    href="#H7D8B025C07364BD8B6BD2B6E5C3D1861"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter B — Preventing wasteful spending
                 </a>
 
                 <span class="lbexHang">
@@ -919,10 +1286,18 @@ const $route = useRoute();
                     </span>
                 </span>
                 <a id="H7F27631AC8864ABFA997B72C9BC9AAAE" />
-                <span class="lbexIndentParagraph">(1) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=5' " target="_blank">483.5</a>.</span>
+                <span class="lbexIndentParagraph">(1) Section <a
+                    :href="homeUrl + 'reg_redirect/?title=42&part=483&section=5' "
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >483.5</a>.</span>
 
                 <a id="H0BE34688028F490A991FA0D537331D4C" />
-                <span class="lbexIndentParagraph">(2) Section <a :href="homeUrl + 'reg_redirect/?title=42&part=483&section=35' " target="_blank">483.35</a>.</span>
+                <span class="lbexIndentParagraph">(2) Section <a
+                    :href="homeUrl + 'reg_redirect/?title=42&part=483&section=35' "
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >483.35</a>.</span>
 
                 <span class="lbexHang">
                     <a id="toc-H917F6C03CA464B319B70F26A163C0EE0" href="#H917F6C03CA464B319B70F26A163C0EE0">
@@ -1019,9 +1394,14 @@ const $route = useRoute();
                                 href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=501"
                                 class="external"
                                 target="_blank"
+                                rel="noopener noreferrer"
                             >section 501(c)(3)</a> of the Internal Revenue Code of 1986 and exempt from tax under section 501(a) of such Code;</span>
                             <a id="H589B5CE0C627419280D75FB2BB5AC0FB" />
-                            <span class="lbexIndentClause">(ii) is an essential community provider described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=156&section=235'" target="_blank">156.235</a> of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
+                            <span class="lbexIndentClause">(ii) is an essential community provider described in section <a
+                                :href="homeUrl + 'reg_redirect/?title=42&part=156&section=235'"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >156.235</a> of title 45, Code of Federal Regulations (as in effect on the date of enactment of this Act), that is primarily engaged in family planning services, reproductive health, and related medical care; and</span>
                             <a id="H7F2D87B146174050A9A298AB579A3CD5" />
                             <span class="lbexIndentClause">(iii) provides for abortions, other than an abortion—
                                 <a id="H1BFF52D791314DCD94FA987EF6767212" />
@@ -1040,6 +1420,7 @@ const $route = useRoute();
                     href="https://uscode.house.gov/quicksearch/get.plx?title=2&amp;section=900"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >2 U.S.C. 900(c)</a>).</span>
 
                 <a id="HD46C0855B83542C4B5E1F07AC65444C4" />
@@ -1047,10 +1428,12 @@ const $route = useRoute();
                     href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396u-2&num=0&edition=prelim#substructure-location_a_1_B"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >42 U.S.C. 1396u–2(a)(1)(B)</a>)) or a prepaid inpatient health plan or prepaid ambulatory health plan (as such terms are defined in section 1903(m)(9)(D) of such Act (<a
                     href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim#substructure-location_m_9_D"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >42 U.S.C. 1396b(m)(9)(D)</a>)).</span>
 
                 <a id="HB3D54CA27A1A43199BB46535DA7D0DD6" />
@@ -1058,6 +1441,7 @@ const $route = useRoute();
                     href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1301"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >42 U.S.C. 1301</a>).</span>
 
                 <a id="H7E92C3D050394B7CA51BBA5B51CA775E" />
@@ -1065,8 +1449,11 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H33AAEB14AE494C8981C870486D3E3901" />
 
-                <a id="toc-H33AAEB14AE494C8981C870486D3E3901" href="#H33AAEB14AE494C8981C870486D3E3901">
-                    <span class="lbexSubChapterLevelOLC">Subchapter C — Stopping abusive financing practices</span>
+                <a
+                    id="toc-H33AAEB14AE494C8981C870486D3E3901"
+                    href="#H33AAEB14AE494C8981C870486D3E3901"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter C — Stopping abusive financing practices
                 </a>
 
                 <span class="lbexHang">
@@ -1136,14 +1523,22 @@ const $route = useRoute();
                         <a id="H20D36E644A5540F5BB7E376E7A0ED2C1" />
                         <span class="lbexIndentParagraph">“(D)<a id="H7B64F6DB41074587B2D2EFF4CB2DB9C1" />(i) For purposes of subparagraph (C)(ii), the applicable percent determined under this subparagraph is—
                             <a id="HDF81F1D064A847118AB152C689CB7CD8" />
-                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'" target="_blank">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
+                            <span class="lbexIndentSubpar">“(I) in the case of a non-expansion State or unit of local government in such State and a class of health care items or services described in section <a
+                                :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025)—
                                 <a id="HF7E6031DCDD345F09E8D67BB87A018EB" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
                                 <a id="H3B56C17EC18642CAB67D1CED226B2213" />
                                 <span class="lbexIndentClause">“(bb) if, on the date of enactment of this subparagraph, the non-expansion State or unit of local government in such State has not enacted or does not impose a tax with respect to such class, 0 percent; and</span>
                             </span>
                             <a id="H33CC9AADE0694967B28F38ADA6724BDA" />
-                            <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'" target="_blank">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
+                            <span class="lbexIndentSubpar">“(II) in the case of an expansion State or unit of local government in such State and a class of health care items or services described in section <a
+                                :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), subject to clause (iv)—
                                 <a id="H475F82BE8791418DA85C5A6050B87FAA" />
                                 <span class="lbexIndentClause">“(aa) if, on the date of enactment of this subparagraph, the expansion State or unit of local government in such State has enacted a tax and imposes such tax on such class and the Secretary determines that the tax is within the hold harmless threshold as of that date, the lower of—
                                     <span class="lbexIndentSubclause">“(AA) the applicable percent of net patient revenue attributable to such class that has been so determined; and</span>
@@ -1180,7 +1575,11 @@ const $route = useRoute();
                         </span>
 
                         <a id="HC3E6BE91A4DD4081B90C2CB16E1B27A9" />
-                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'" target="_blank">433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
+                        <span class="lbexIndentParagraph">“(iv) In the case of a tax of an expansion State or unit of local government in such State in effect on the date of enactment of this clause, that applies to a class of health care items or services that is described in paragraph (3) or (4) of section <a
+                            :href="homeUrl + 'reg_redirect/?title=42&part=433&section=56&paragraph=a'"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >433.56(a)</a> of title 42, Code of Federal Regulations (as in effect on May 1, 2025), and for which, on such date of enactment, is within the hold harmless threshold (as determined by the Secretary), the applicable percent of net patient revenue attributable to such class that has been so determined shall apply for a fiscal year instead of the applicable percent specified in clause (ii) for the fiscal year.”.</span>
                     </span>
                 </span>
 
@@ -1205,7 +1604,11 @@ const $route = useRoute();
 
                 <a id="H6081C5C3FF704314AFF57BA411E26DDE" />
                 <span class="lbexIndent">(a)
-                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'" target="_blank">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
+                    <span class="lbexSectionLevelOLCnuclear">In general</span>.—Subject to subsection (b), the Secretary of Health and Human Services (in this section referred to as the Secretary) shall revise section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) such that, with respect to a payment described in such section made for a service furnished during a rating period beginning on or after the date of the enactment of this Act, the total payment rate for such service is limited to—
                     <a id="HC7FA119FA48845338BE885CBFF7EB408" />
                     <span class="lbexIndentParagraph">(1) in the case of a State that provides coverage to all individuals described in section 1902(a)(10)(A)(i)(VIII) of the Social Security Act (<a
                         href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396a&num=0&edition=prelim#substructure-location_a_10_A_i_VIII"
@@ -1223,15 +1626,27 @@ const $route = useRoute();
                 </span>
                 <a id="HDF8733C85AF248F388EEB66529058959" />
                 <span class="lbexIndent">(b)
-                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'" target="_blank">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
+                    <span class="lbexSectionLevelOLCnuclear">Grandfathering certain payments</span>.—In the case of a payment described in section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made before May 1, 2025, or a payment described in such section for a rural hospital (as defined in subsection (d)(2)) for which written prior approval (or a good faith effort to receive such approval, as determined by the Secretary) was made by the date of enactment of this Act, for the rating period occurring within 180 days of the date of the enactment of this Act, or a payment so described for such rating period for which a completed preprint was submitted to the Secretary prior to the date of enactment of this Act, beginning with the rating period on or after January 1, 2028, the total amount of such payment shall be reduced by 10 percentage points each year until the total payment rate for such service is equal to the rate for such service specified in subsection (a).</span>
                 <a id="HE5D55700A09E4588B22AD16BF89FE95D" />
                 <span class="lbexIndent">(c)
-                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'" target="_blank">438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
+                    <span class="lbexSectionLevelOLCnuclear">Treatment of expansion states</span>.—The revisions described in subsection (a) shall provide that, with respect to a State that begins providing the coverage described in paragraph (1) of such subsection on or after the date of the enactment of this Act, the limitation described in such paragraph shall apply to such State with respect to a payment described in section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-iii'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >438.6(c)(2)(iii)</a> of title 42, Code of Federal Regulations (or a successor regulation) for a service furnished during a rating period beginning on or after the date of enactment of this Act.</span>
                 <a id="HBEA8D8254C8D4E6FA9A9BB30161AF637" />
                 <span class="lbexIndent">(d)
                     <span class="lbexSectionLevelOLCnuclear">Definitions</span>.—In this section:
                     <a id="H0FA8895A2CF44F0F8F20C1B2127F7710" />
-                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a :href="homeUrl + 'reg_redirect/?title=42&part=438&section=2'" target="_blank">438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                    <span class="lbexIndentParagraph">(1) RATING PERIOD.—The term “rating period” has the meaning given such term in section <a
+                        :href="homeUrl + 'reg_redirect/?title=42&part=438&section=2'"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >438.2</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
                 </span>
                 <a id="H853967811D0341A9BBAD7278E4F65755" />
                 <span class="lbexIndentParagraph">(2) RURAL HOSPITAL.—The term “rural hospital” means the following:
@@ -1251,6 +1666,7 @@ const $route = useRoute();
                             href="https://www.federalregister.gov/citation/57-FR-6725"
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                         >57 Fed. Reg. 6725</a>)).</span>
                     </span>
 
@@ -1302,7 +1718,11 @@ const $route = useRoute();
                 <span class="lbexIndentParagraph">(4) TOTAL PUBLISHED MEDICARE PAYMENT RATE.—The term “total published Medicare payment rate” has the meaning given to such term in section 438.6(a) of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="H9334788623AB48D59AA5F48A7931A73A" />
-                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-i'" target="_blank">438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
+                <span class="lbexIndentParagraph">(5) WRITTEN PRIOR APPROVAL.—The term “written prior approval” has the meaning given to such term in section <a
+                    :href="homeUrl + 'reg_redirect/?title=42&part=438&section=6&paragraph=c-2-i'"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >438.6(c)(2)(i)</a> of title 42, Code of Federal Regulations (or a successor regulation).</span>
 
                 <a id="HC6803D86FB4C4A04AD9B3927CFBED342" />
                 <span class="lbexIndent">(e)
@@ -1429,8 +1849,11 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $5,000,000 for each of fiscal years 2026 and 2027, to remain available until expended.</span>
                 <span id="H41B4BE6053784F329BB924FD89F29721" />
 
-                <a id="toc-H41B4BE6053784F329BB924FD89F29721" href="#H41B4BE6053784F329BB924FD89F29721">
-                    <span class="lbexSubChapterLevelOLC">Subchapter D — Increasing personal accountability</span>
+                <a
+                    id="toc-H41B4BE6053784F329BB924FD89F29721"
+                    href="#H41B4BE6053784F329BB924FD89F29721"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter D — Increasing personal accountability
                 </a>
 
                 <span class="lbexHang">
@@ -1500,6 +1923,7 @@ const $route = useRoute();
                                     href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=45R"
                                     class="external"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >section 45R(d)(5)(B)</a> of the Internal Revenue Code of 1986 .</span>
                             </span>
 
@@ -1607,6 +2031,7 @@ const $route = useRoute();
                                     href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=36B"
                                     class="external"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >section 36B(c)(2)(B)</a> of the Internal Revenue Code of 1986, an individual shall be deemed to be eligible for minimum essential coverage described in section 5000A(f)(1)(A)(ii) of such Code for a month if such individual would have been eligible for medical assistance under a State plan (or a waiver of such plan) under this title but for a failure to meet the requirement to demonstrate community engagement under <a href="#HEE8799D1FF664550B27FE20B048550DA">paragraph (1)</a>.</span>
                             </span>
 
@@ -1655,6 +2080,7 @@ const $route = useRoute();
                                                 href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                                 class="external"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and as determined in accordance with standards prescribed by the Secretary in regulations); and</span>
                                             <a id="H0AB05EB87B934F82830CD629F93DAAD6" />
                                             <span class="lbexIndentItem">“(bb) has attained the age of 19 and is under 65 years of age, is not pregnant, is not entitled to, or enrolled for, benefits under part A of title XVIII, or enrolled for benefits under part B of title XVIII, and is not otherwise eligible to enroll under such plan.</span>
@@ -1898,6 +2324,7 @@ const $route = useRoute();
                                     href="https://uscode.house.gov/quicksearch/get.plx?title=26&amp;section=5000A"
                                     class="external"
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >section 5000A(f)(1)(A)</a> of the Internal Revenue Code of 1986 and determined in accordance with standards prescribed by the Secretary in regulations) to all individuals described in section 1902(a)(10)(A)(i)(VIII).</span>
                             </span>
                             <a id="HA50450ED039C4BD8A627283D1FCBBEEC" />
@@ -1922,6 +2349,7 @@ const $route = useRoute();
                     href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396o-1&num=0&edition=prelim#substructure-location_a_1"
                     class="external"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >42 U.S.C. 1396o–1(a)(1)</a>) is amended, in the second sentence, by striking “or (j)” and inserting <span class="annotated-text">“(j), or (k)”</span>.</span>
 
                 <a id="H955C2E1C379E470A8E2C7F3DF31D1EB0" />
@@ -1929,8 +2357,11 @@ const $route = useRoute();
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $15,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <a id="H2388F94754554D3C9E54A32152DEE520" />
 
-                <a id="toc-H2388F94754554D3C9E54A32152DEE520" href="#H2388F94754554D3C9E54A32152DEE520">
-                    <span class="lbexSubChapterLevelOLC">Subchapter E — Expanding Access to Care</span>
+                <a
+                    id="toc-H2388F94754554D3C9E54A32152DEE520"
+                    href="#H2388F94754554D3C9E54A32152DEE520"
+                    class="lbexSubChapterLevelOLC"
+                >Subchapter E — Expanding Access to Care
                 </a>
 
                 <span class="lbexHang">
@@ -2016,10 +2447,12 @@ const $route = useRoute();
                             href="https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396n&num=0&edition=prelim#substructure-location_c"
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                         >42 U.S.C. 1396n(c)</a>) (as amended by this section) or under section 1115 of such Act (<a
                             href="https://uscode.house.gov/quicksearch/get.plx?title=42&amp;section=1315"
                             class="external"
                             target="_blank"
+                            rel="noopener noreferrer"
                         >42 U.S.C. 1315</a>), to remain available until expended.</span>
                     </span>
 
@@ -2040,71 +2473,3 @@ const $route = useRoute();
         </div>
     </div>
 </template>
-
-<style scoped>
-a { text-decoration: none; }
-
-.obbba__container {
-    max-width: var(--content-max-width);
-    margin: var(--spacer-3) auto;
-}
-
-.annotated-text {
-  background-color: #F2F2F2;
-}
-
-.lbexTocSectionOLC,
-.lbexIndent,
-.lbexIndentSectionText,
-.ul {
-  display: block;
-  margin: 1em 0;
-}
-
-.lbexTocSubChapterOLC,
-.lbexTocSubTitleOLC {
-  font-size: 110%;
-  font-weight: bold;
-  display: block;
-  margin: 1em 0;
-}
-
-.lbexTocDivisionOLC,
-.lbexHang {
-  font-size: 120%;
-  font-weight: bold;
-  display: block;
-  margin: 1em 0;
-}
-
-.lbexSubChapterLevelOLC,
-.lbexSubTitleLevelOLC,
-.lbexChapterLevelOLC {
-  font-size: 150%;
-  font-weight: bold;
-  display: block;
-  margin: 1em 0;
-}
-
-.lbexIndentParagraph,
-.lbexIndentSubpar,
-.lbexIndentClause,
-.lbexIndentSubclause,
-.lbexIndentItem,
-.lbexIndentSubItem {
-  display: block;
-  margin: 1em 0 1em 0;
-  padding-left: 2em;
-  border-left: 1px solid #d0d0d0;
-}
-
-.lbexIndentSubsection {
-  display: block;
-  background-color: #F2F2F2;
-}
-
-.lbexSectionLevelOLCnuclear,
-.lbexSectionTitleTrad {
-  font-weight: 700;
-}
-</style>

@@ -100,6 +100,7 @@ const btnAriaLabel = computed(() =>
     <nav
         id="leftNav"
         ref="$rootNav"
+        class="toc__nav"
         :class="navClasses"
     >
         <v-btn
@@ -127,5 +128,3 @@ const btnAriaLabel = computed(() =>
         </div>
     </nav>
 </template>
-
-<style></style>

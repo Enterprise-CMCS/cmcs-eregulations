@@ -64,4 +64,13 @@ describe("Print Styles", () => {
         cy.get(".print-view-container").should("have.css", "display", "block");
         cy.get(".view-container").should("have.css", "display", "none");
     })
+
+    it("has proper print styles for OBBBA", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/obbba");
+
+        cy.setCssMedia("print");
+
+        cy.get(".toc__nav").should("not.be.visible");
+    })
 });
