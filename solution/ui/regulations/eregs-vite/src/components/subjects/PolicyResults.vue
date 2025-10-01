@@ -289,6 +289,13 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     partDocumentTitleLabel(doc.part_title)
                 }}</span>
                 <span
+                    v-if="doc.subpart_title"
+                    class="result__context--division result__context--division--bar"
+                />
+                <span v-if="doc.subpart_title" class="result__context--division">
+                    {{ doc.subpart_title }}
+                </span>
+                <span
                     v-else-if="doc.date"
                     class="result__context--date"
                     :class="needsBar(doc) && 'result__context--date--bar'"
