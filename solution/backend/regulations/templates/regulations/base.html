@@ -48,6 +48,16 @@ CSS/Javascript etc., should inherit from this template.
             <div id="app-container">
                 {% block pre_header %}{% endblock %}
 
+                {% block flash_banner %}
+                    {% if show_flash_banner %}
+                        <div class="banner--container">
+                            <div class="flash-banner" role="banner">
+                                <p>{{ flash_banner_text | safe }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
                 {% block header %}
                 {% endblock %}
 
