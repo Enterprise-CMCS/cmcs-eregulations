@@ -86,7 +86,43 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentindex',
             name='resource_metadata',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='index', to='content_search.resourcemetadata'),
+            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='index_metadata', to='content_search.resourcemetadata'),
+        ),
+        migrations.AddField(
+            model_name='contentindex',
+            name='chunk_index',
+            field=models.IntegerField(default=0),
+        ),
+        migrations.AlterModelOptions(
+            name='contentindex',
+            options={'ordering': ('resource', 'reg_text', 'chunk_index'), 'verbose_name': 'Content Index', 'verbose_name_plural': 'Content Indices'},
+        ),
+        migrations.AlterUniqueTogether(
+            name='contentindex',
+            unique_together={('reg_text', 'chunk_index'), ('resource', 'chunk_index')},
+        ),
+        migrations.AddIndex(
+            model_name='contentindex',
+            index=models.Index(fields=['-date'], name='content_sea_date_0c54a7_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='contentindex',
+            index=models.Index(fields=['resource'], name='content_sea_resourc_76375a_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='contentindex',
+            index=models.Index(fields=['reg_text'], name='content_sea_reg_tex_a76755_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='contentindex',
+            index=models.Index(fields=['chunk_index'], name='content_sea_chunk_i_190500_idx'),
+        ),
+        migrations.AddIndex(
+            model_name='contentindex',
+            index=models.Index(fields=['embedding'], name='content_sea_embeddi_3aff99_idx'),
         ),
         migrations.RunPython(create_resource_metadata, reverse_code=migrations.RunPython.noop),
+        migrations.DeleteModel(
+            name='Synonym',
+        ),
     ]

@@ -108,15 +108,6 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name = "Content Search Configuration"
 
 
-class Synonym(models.Model):
-    is_active = models.BooleanField(default=True)
-    base_word = models.CharField(max_length=128)
-    synonyms = models.ManyToManyField("self", blank=True)
-
-    def __str__(self):
-        return self.base_word if self.is_active else f'{self.base_word} (inactive)'
-
-
 class ContentIndexQuerySet(models.QuerySet):
     _text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
     _min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
@@ -241,7 +232,6 @@ class ContentIndex(models.Model):
     # Fields used for generating search headlines
     name = models.TextField(blank=True)
     summary = models.TextField(blank=True)
-    content = models.TextField(blank=True)
     date = models.CharField(max_length=10, null=True)
 
     # Rank fields for searching
@@ -249,9 +239,6 @@ class ContentIndex(models.Model):
     rank_b_string = models.TextField(blank=True)
     rank_c_string = models.TextField(blank=True)
     rank_d_string = models.TextField(blank=True)
-
-    # Vector field for semantic search
-    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
 
     # ForeignKey fields linked to possible indexed types (arbitrary # of indices per document)
     resource = models.ForeignKey(AbstractResource, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
@@ -263,14 +250,31 @@ class ContentIndex(models.Model):
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="index",
+        related_name="index_metadata",
     )
+
+    # Fields for managing chunks
+    content = models.TextField(blank=True)
+    embedding = VectorField(dimensions=512, default=None, null=True, blank=True)
+    chunk_index = models.IntegerField(default=0)
 
     objects = ContentIndexManager()
 
     class Meta:
         verbose_name = "Content Index"
         verbose_name_plural = "Content Indices"
+        indexes = [
+            models.Index(fields=["-date"]),
+            models.Index(fields=["resource"]),
+            models.Index(fields=["reg_text"]),
+            models.Index(fields=["chunk_index"]),
+            models.Index(fields=["embedding"]),
+        ]
+        unique_together = (
+            ("resource", "chunk_index"),
+            ("reg_text", "chunk_index"),
+        )
+        ordering = ("resource", "reg_text", "chunk_index")
 
 
 # @receiver(post_save, sender=ResourceContent)

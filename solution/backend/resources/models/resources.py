@@ -89,18 +89,22 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     @property
     def indexing_status(self):
-        if self.extraction_error:
-            return f"Error: {self.extraction_error}"
-        if not getattr(self, "content", None):
+        index_metadata = getattr(self, "index_metadata")
+        if not index_metadata:
             return "Not indexed"
-        if self.content.value:
-            return f"Indexed: {self.content.value[:100]}..."
-        return "Not indexed or no content found"
+        if index_metadata.extraction_error:
+            return f"Error: {index_metadata.extraction_error}"
+        indices = getattr(self, "indices")
+        if not indices or not indices.exists():
+            return "Not indexed"
+        index = indices.first()
+        return f"Indexed: {index.content.value[:100]}..."
 
     @property
     def detected_file_type(self):
-        if hasattr(self, "index") and self.index and self.index.detected_file_type:
-            return self.index.detected_file_type
+        index_metadata = getattr(self, "index_metadata")
+        if index_metadata and index_metadata.detected_file_type:
+            return index_metadata.detected_file_type
         return "Not detected"
 
     def save(self, *args, **kwargs):
