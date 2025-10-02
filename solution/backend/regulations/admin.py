@@ -181,6 +181,8 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
         (None, {
             "fields": (
                 'allow_indexing',
+                'show_flash_banner',
+                'flash_banner_text',
                 ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
                 ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
                 ('statute_compilation_date_type', 'statute_compilation_date'),

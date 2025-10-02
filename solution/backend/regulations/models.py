@@ -29,6 +29,9 @@ ROMAN_TABLE = [
 class SiteConfiguration(SingletonModel):
     allow_indexing = models.BooleanField(default=False, help_text="Should robots be allowed to index this website?")
 
+    show_flash_banner = models.BooleanField(default=False, help_text="Should a flash banner be displayed at the top of every page?")
+    flash_banner_text = models.TextField(blank=True, help_text="The text to display in the flash banner.")
+
     DATE_TYPE_CHOICES = (
         ('effective', 'Effective'),
         ('amended', 'Amended'),
