@@ -23,7 +23,7 @@
     "dompurify": "3.2.6",
     "flush-promises": "1.0.2",
     "lodash": "4.17.21",
-    "sass": "1.92.1",
+    "sass": "1.93.2",
     "vue": "3.5.22",
     "vuetify": "3.9.3"
   },
