@@ -1,5 +1,5 @@
 {
-    "count": 4,
+    "count": 5,
     "next": null,
     "previous": null,
     "results": [
@@ -91,6 +91,8 @@
                 "node_type": "section",
                 "part_number": 435,
                 "part_title": "PART 435—ELIGIBILITY IN THE STATES, DISTRICT OF COLUMBIA, THE NORTHERN MARIANA ISLANDS, AND AMERICAN SAMOA",
+                "subpart_title": "Subpart X—Fixture Data",
+                "subpart_id": "X",
                 "title": 42
             },
             "resource": null,
@@ -244,6 +246,23 @@
                 "withdrawal": true
             },
             "summary_headline": "Medicaid Program; Temporary Increase in Federal Medical Assistance Percentage (<span class='search-highlight'>FMAP</span>) in Response to the COVID-19 Public Health Emergency (PHE); Reopening of Public Comment Period"
+        },
+        {
+            "content_headline": "<span class='search-highlight'>Orpaned</span> section used for testing",
+            "name_headline": "This is an orphaned section used for testing",
+            "reg_text": {
+                "date": "2024-06-17",
+                "node_id": "928",
+                "node_title": "This is an orphaned section used for testing",
+                "node_type": "section",
+                "part_number": 435,
+                "part_title": "ORPHANED SECTION FOR TESTING",
+                "subpart_title": "",
+                "subpart_id": "",
+                "title": 42
+            },
+            "resource": null,
+            "summary_headline": ""
         }
     ]
 }

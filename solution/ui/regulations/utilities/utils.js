@@ -788,6 +788,7 @@ const deserializeResult = (obj) => {
     returnObj.node_type = obj.reg_text?.node_type;
     returnObj.part_number = obj.reg_text?.part_number;
     returnObj.part_title = obj.reg_text?.part_title;
+    returnObj.subpart_title = obj.reg_text?.subpart_title;
     returnObj.reg_title = obj.reg_text?.title;
     returnObj.subjects = getFieldVal({ item: obj, fieldName: "subjects" });
     returnObj.summary = obj.summary;

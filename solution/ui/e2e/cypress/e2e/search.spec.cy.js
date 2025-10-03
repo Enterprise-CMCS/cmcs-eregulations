@@ -487,9 +487,12 @@ describe("Search flow", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
         cy.get("a.document__link--regulations")
+            .first()
             .should("have.attr", "href")
             .and("include", `${SEARCH_TERM}#435-928`);
-        cy.get("a.document__link--regulations").click({ force: true });
+        cy.get("a.document__link--regulations")
+            .first()
+            .click({ force: true });
         cy.url().should("include", `${SEARCH_TERM}#435-928`);
         cy.focused().then(($el) => {
             cy.get($el).within((_$focusedEl) => {
