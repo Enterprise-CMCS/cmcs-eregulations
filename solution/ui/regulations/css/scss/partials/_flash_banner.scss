@@ -1,0 +1,45 @@
+//-----------------------------
+// Flash Banner
+//-----------------------------
+
+@import "../application_settings";
+
+.banner--container {
+    display: flex;
+    justify-content: center;
+    min-height: 34px;
+    background: $teritary_background_color;
+}
+
+.flash-banner {
+    @include eds-gutters;
+    @include eds-width-with-gutters;
+
+    display: flex;
+    box-sizing: unset;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: $font-size-xs;
+    padding: 8px 0;
+    position: relative;
+    line-height: 1.5;
+    flex-wrap: wrap;
+
+    p {
+        margin-block-start: 0 !important;
+        margin-block-end: 0 !important;
+    }
+
+    a {
+        font-weight: bold;
+
+        &:visited {
+            color: $primary_link_color;
+
+            &:hover {
+                color: $primary_link_hover;
+            }
+        }
+    }
+}
