@@ -362,7 +362,7 @@ jobs:
     needs: deploy-site
     steps:
       - name: Create deployment comment
-        uses: peter-evans/create-or-update-comment@v4
+        uses: peter-evans/create-or-update-comment@v5
         env:
           SITE_URL: ${{ needs.deploy-site.outputs.api_url }}
         with:
