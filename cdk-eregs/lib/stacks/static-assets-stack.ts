@@ -47,7 +47,7 @@ export class StaticAssetsStack extends cdk.Stack {
         let certificateArn = props.certificateArn;
         if (!certificateArn) {
             certificateArn = ssm.StringParameter.valueFromLookup(this, '/eregulations/acm-cert-arn');
-      
+
             if (certificateArn.startsWith('dummy-value-for-') || !certificateArn.startsWith('arn:aws:')) {
                 // Use any valid ARN placeholder temporarily during synthesis
                 certificateArn = 'arn:aws:acm:us-east-1:123456789012:certificate/dummy-placeholder';
@@ -63,7 +63,7 @@ export class StaticAssetsStack extends cdk.Stack {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             enforceSSL: true,
             autoDeleteObjects: isEphemeral,
-            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
             cors: [{
                 allowedMethods: [s3.HttpMethods.GET, s3.HttpMethods.HEAD],
                 allowedOrigins: ['*'],
@@ -80,7 +80,7 @@ export class StaticAssetsStack extends cdk.Stack {
             objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
             enforceSSL: true,
             autoDeleteObjects: isEphemeral,
-            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,      
+            removalPolicy: isEphemeral ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
             accessControl: s3.BucketAccessControl.LOG_DELIVERY_WRITE,
         });
 
@@ -143,17 +143,18 @@ export class StaticAssetsStack extends cdk.Stack {
                     ttl: cdk.Duration.minutes(30),
                 },
             ],
+            priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
         };
 
         // Add certificate and domain configuration if certificate is available
         if (certificateArn) {
             // Create certificate reference
             const certificate = acm.Certificate.fromCertificateArn(
-                this, 
-                'Certificate', 
+                this,
+                'Certificate',
                 certificateArn
             );
-      
+
             // Include certificate in initial props
             distributionProps = {
                 ...distributionProps,
@@ -189,7 +190,7 @@ export class StaticAssetsStack extends cdk.Stack {
             exportName: stageConfig.getResourceName('cloudfront-id'),
             description: 'CloudFront Distribution ID',
         });
-    
+
         new cdk.CfnOutput(this, 'StaticURL', {
             value: `https://${distribution.domainName}`,
             exportName: stageConfig.getResourceName('static-url'),
