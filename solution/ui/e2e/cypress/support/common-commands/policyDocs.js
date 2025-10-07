@@ -40,6 +40,21 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .first()
         .should("include.text", "TestCat");
 
+    cy.get("[data-testid='results-item-context']")
+        .first()
+        .find('[data-testid="part-title"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .first()
+        .find('[data-testid="subpart-bar"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .first()
+        .find('[data-testid="subpart-title"]')
+        .should("not.exist");
+
     // should have show related citations button 3541
     cy.get(".doc-list__document")
         .first()
@@ -89,7 +104,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .should("have.class", "invisible")
         .and("not.be.visible");
 
-    //----- Regulations Doc
+    //----- Regulations Doc(s)
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
         .eq(1)
         .should("include.text", "Public");
@@ -101,6 +116,42 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.get('[data-testid="results-item-categories"] .category-label')
         .eq(1)
         .should("include.text", "Regulations");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(1)
+        .find('[data-testid="part-title"]')
+        .should("include.text", "part 435—eligibility in the states, district of columbia, the northern mariana islands, and american samoa");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(1)
+        .find('[data-testid="subpart-bar"]')
+        .should("exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(1)
+        .find('[data-testid="subpart-title"]')
+        .should("include.text", "Subpart X—Fixture Data");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(4)
+        .find('[data-testid="part-title"]')
+        .should("include.text", "orphaned section for testing");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(4)
+        .find('[data-testid="part-title"]')
+        .find(".result__context--datae")
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(4)
+        .find('[data-testid="subpart-bar"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(4)
+        .find('[data-testid="subpart-title"]')
+        .should("not.exist");
 
     // should NOT have show/hide related citations button
     cy.get(".doc-list__document")
@@ -130,6 +181,21 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         .eq(1)
         .should("include.text", "State Medicaid Director Letter (SMDL)");
 
+    cy.get("[data-testid='results-item-context']")
+        .eq(2)
+        .find('[data-testid="part-title"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(2)
+        .find('[data-testid="subpart-bar"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(2)
+        .find('[data-testid="subpart-title"]')
+        .should("not.exist");
+
     // should have show/hide related citations button 2057
     cy.get(".doc-list__document")
         .eq(2)
@@ -153,6 +219,21 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.get('[data-testid="results-item-categories"] .category-label')
         .eq(2)
         .should("include.text", "Proposed and Final Rules");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(3)
+        .find('[data-testid="part-title"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(3)
+        .find('[data-testid="subpart-bar"]')
+        .should("not.exist");
+
+    cy.get("[data-testid='results-item-context']")
+        .eq(3)
+        .find('[data-testid="subpart-title"]')
+        .should("not.exist");
 
     // should have show/hide related citations button 2302
     cy.get(".doc-list__document")

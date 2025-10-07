@@ -30,12 +30,16 @@ updates:
           vue:
             patterns:
               - "vue*"
+          plugin-vue:
+            patterns:
+              - "@vitejs/plugin-vue*"
           vitest:
             patterns:
               - "vitest*"
           rollup:
             patterns:
               - "rollup*"
+              - "@rollup*"
 
     # CDK specific updates
     - package-ecosystem: "npm"

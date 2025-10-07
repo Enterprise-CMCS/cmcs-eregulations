@@ -25,7 +25,6 @@ $fa-font-path: "../fonts/webfonts" !default;
 
 $additional-font-path: "../fonts" !default;
 
-
 // Medicaid and CHIP eRegulations Site
 $eregs-image-path: "../images" !default;
 @import 'eregs_design_system';
@@ -36,6 +35,7 @@ $eregs-image-path: "../images" !default;
 @import "partials/search";
 @import "partials/statutes";
 @import "partials/compare";
+@import "partials/flash_banner";
 @import "partials/header";
 @import "partials/sidebar_left";
 @import "partials/sidebar_right";
@@ -54,4 +54,7 @@ $eregs-image-path: "../images" !default;
 @import "partials/banner";
 @import "partials/subjects_selector";
 @import "partials/pagination";
+@import "partials/obbba";
+@import "partials/manual";
+@import "partials/toc";
 @import 'print';

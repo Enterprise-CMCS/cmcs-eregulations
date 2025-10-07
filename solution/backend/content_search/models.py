@@ -234,6 +234,8 @@ class IndexedRegulationText(models.Model):
     date = models.DateField(blank=True, null=True)
     part_title = models.TextField(blank=True)
     part_number = models.IntegerField(default=0)
+    subpart_title = models.TextField(blank=True)
+    subpart_id = models.CharField(max_length=8, blank=True)
     node_type = models.CharField(max_length=32, blank=True)
     node_id = models.CharField(max_length=32, blank=True)
     node_title = models.TextField(blank=True)
@@ -342,7 +344,7 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
     })
 
 
-# def index_part_node(part, piece, indices, contents, parent=None):
+# def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", subpart_title=""):
 #     try:
 #         node_type = piece.get("node_type", "").lower()
 #         part_number, node_id = {
@@ -366,6 +368,8 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
 #             date=part.date,
 #             part_title=remove_control_characters(part.document["title"]),
 #             part_number=part_number,
+#             subpart_title=remove_control_characters(subpart_title),
+#             subpart_id=subpart_id,
 #             node_type=node_type,
 #             node_id=node_id,
 #             node_title=remove_control_characters(piece["title"]),
@@ -373,8 +377,10 @@ def update_indexed_internal_link(sender, instance, created, **kwargs):
 
 #     except Exception:
 #         children = piece.pop("children", []) or []
+#         subpart_id = piece.get("label", [])[0] if piece.get("node_type", "").lower() == "subpart" else ""
+#         subpart_title = piece.get("title", "") if piece.get("node_type", "").lower() == "subpart" else ""
 #         for child in children:
-#             index_part_node(part, child, indices, contents, parent=piece)
+#             index_part_node(part, child, indices, contents, parent=piece, subpart_id=subpart_id, subpart_title=subpart_title)
 
 #     return indices, contents
 
