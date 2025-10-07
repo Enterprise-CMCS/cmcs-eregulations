@@ -16,8 +16,16 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex, IndexedRegulationText
-from .serializers import ContentCountSerializer, ContentSearchSerializer
+from .models import (
+    ContentIndex,
+    IndexedRegulationText,
+    ResourceMetadata,
+)
+from .serializers import (
+    ContentCountSerializer,
+    ContentSearchSerializer,
+    ResourceChunkUpdateSerializer,
+)
 
 
 class ContentSearchPagination(ViewSetPagination):
@@ -126,30 +134,30 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         query = ContentIndex.objects.defer_text()
 
         # Filter out unapproved resources
-        query = query.exclude(resource__resource__approved=False)
+        query = query.exclude(resource__approved=False)
 
         # Filter inclusively by citations if this array exists
-        citation_filter = get_citation_filter(citations, "resource__resource__cfr_citations__")
+        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
         if citation_filter:
             query = query.filter(citation_filter)
 
         # Filter by subject pks if subjects array is present
         if subjects:
-            query = query.filter(resource__resource__subjects__pk__in=subjects)
+            query = query.filter(resource__subjects__pk__in=subjects)
 
         # Filter by categories (both parent and subcategories) if the categories array is present
         if categories:
             query = query.filter(
-                Q(resource__resource__category__pk__in=categories) |
-                Q(resource__resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
-                Q(resource__resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+                Q(resource__category__pk__in=categories) |
+                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
             )
 
         # Filter by public, internal, and regulation text
         if not show_public:
-            query = query.exclude(resource__resource__abstractpublicresource__isnull=False)
+            query = query.exclude(resource__abstractpublicresource__isnull=False)
         if not show_internal or not self.request.user.is_authenticated:
-            query = query.exclude(resource__resource__abstractinternalresource__isnull=False)
+            query = query.exclude(resource__abstractinternalresource__isnull=False)
         if not show_regulations:
             query = query.exclude(reg_text__isnull=False)
 
@@ -299,3 +307,62 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # Serialize and return the results
         return Response(ContentCountSerializer(aggregates).data)
+
+
+class ResourceChunkUpdateViewSet(viewsets.ViewSet):
+    def update(self, request, *args, **kwargs):
+        # Validate the request body
+        serializer = ResourceChunkUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        # Get data from the request body
+        resource_id = data["id"]
+        chunk_index = data["chunk_index"]
+        total_chunks = data["total_chunks"]
+        file_type = data["file_type"]
+        error = data["error"]
+        text = data["text"]
+        embedding = data["embedding"]
+
+        # Get the resource (and ensure it exists, otherwise fail)
+        try:
+            resource = AbstractResource.objects.get(pk=resource_id)
+        except AbstractResource.DoesNotExist:
+            raise BadRequest(f"Resource with id {resource_id} does not exist.")
+
+        # Update resource metadata (and ensure it exists, otherwise fail)
+        try:
+            metadata = ResourceMetadata.objects.get(resource=resource)
+            if metadata.detected_file_type != file_type or metadata.extraction_error != error:
+                metadata.detected_file_type = file_type
+                metadata.extraction_error = error
+                metadata.save()
+        except ResourceMetadata.DoesNotExist:
+            raise BadRequest(f"Resource with id {resource_id} does not have associated metadata.")
+
+        # Delete any extra chunks that may exist beyond the new total_chunks value
+        deleted, _ = ContentIndex.objects.filter(Q(resource=resource) & Q(chunk_index__gte=total_chunks)).delete()
+
+        # Update or create the chunk
+        index, created = ContentIndex.objects.update_or_create(
+            resource=resource,
+            chunk_index=chunk_index,
+            defaults={
+                "name": metadata.name,
+                "summary": metadata.summary,
+                "date": metadata.date,
+                "rank_a_string": metadata.rank_a_string,
+                "rank_b_string": metadata.rank_b_string,
+                "rank_c_string": metadata.rank_c_string,
+                "rank_d_string": metadata.rank_d_string,
+                "resource_metadata": metadata,
+                "content": text,
+                "embedding": embedding,
+            }
+        )
+
+        response_text = f"Chunk {index.pk} for {resource._meta.verbose_name} {resource.pk} successfully" \
+                        f"{'created' if created else 'updated'}."
+        response_text += f" {deleted} extra chunks deleted." if deleted else ""
+        return Response(response_text)

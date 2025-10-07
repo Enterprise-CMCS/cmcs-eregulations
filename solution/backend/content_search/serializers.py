@@ -41,3 +41,13 @@ class ContentCountSerializer(serializers.Serializer):
 
     subjects = SubjectCountSerializer(many=True)
     categories = CategoryCountSerializer(many=True)
+
+
+class ResourceChunkUpdateSerializer(serializers.Serializer):
+    id = serializers.IntegerField(required=True)
+    chunk_index = serializers.IntegerField(required=True)
+    total_chunks = serializers.IntegerField(required=True)
+    file_type = serializers.CharField(required=False, default="")
+    error = serializers.CharField(required=False, default="")
+    text = serializers.CharField(required=False, default="")
+    embedding = serializers.ListField(child=serializers.FloatField(), required=False, default=list)

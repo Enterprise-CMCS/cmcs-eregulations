@@ -11,6 +11,8 @@ from django.db import models
 from django.db.models import F
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Substr
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django_jsonform.models.fields import JSONField
 from pgvector.django import VectorField
 from solo.models import SingletonModel
@@ -19,6 +21,10 @@ from common.constants import QUOTE_TYPES
 from regcore.models import Part
 from resources.models import (
     AbstractResource,
+    FederalRegisterLink,
+    InternalFile,
+    InternalLink,
+    PublicLink,
 )
 
 
@@ -196,8 +202,16 @@ class ContentIndexManager(models.Manager.from_queryset(ContentIndexQuerySet)):
 
 class ResourceMetadata(models.Model):
     resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="index_metadata")
-    is_indexed = models.BooleanField(default=False)
-    last_indexed = models.DateTimeField(blank=True, null=True)
+
+    # Fields populated using a post-save hook on the eRegs side
+    name = models.TextField(blank=True)
+    summary = models.TextField(blank=True)
+    date = models.CharField(max_length=10, null=True)
+    rank_a_string = models.TextField(blank=True)
+    rank_b_string = models.TextField(blank=True)
+    rank_c_string = models.TextField(blank=True)
+    rank_d_string = models.TextField(blank=True)
+
     detected_file_type = models.CharField(
         max_length=32,
         blank=True,
@@ -277,57 +291,55 @@ class ContentIndex(models.Model):
         ordering = ("resource", "reg_text", "chunk_index")
 
 
-# @receiver(post_save, sender=ResourceContent)
-# def update_content_field(sender, instance, created, **kwargs):
-#     index, _ = ContentIndex.objects.get_or_create(resource=instance.resource)
-#     index.content = instance.value
-#     index.save()
+def update_indexed_resource(resource, fields):
+    metadata, _ = ResourceMetadata.objects.update_or_create(resource=resource, defaults=fields)
+    ContentIndex.objects.filter(resource_metadata=metadata).update(**fields)
 
 
-# @receiver(post_save, sender=PublicLink)
-# @receiver(post_save, sender=FederalRegisterLink)
-# def update_indexed_public_resource(sender, instance, created, **kwargs):
-#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
-#     index.name = instance.document_id
-#     index.summary = instance.title
-#     index.date = instance.date or None
-#     index.rank_a_string = "{} {}".format(
-#         instance.document_id,
-#         instance.title,
-#     )
-#     index.rank_b_string = ""
-#     index.rank_c_string = instance.date
-#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-#     index.save()
+@receiver(post_save, sender=PublicLink)
+@receiver(post_save, sender=FederalRegisterLink)
+def update_indexed_public_resource(sender, instance, created, **kwargs):
+    update_indexed_resource(instance, {
+        "name": instance.document_id,
+        "summary": instance.title,
+        "date": instance.date or None,
+        "rank_a_string": "{} {}".format(
+            instance.document_id,
+            instance.title,
+        ),
+        "rank_b_string": "",
+        "rank_c_string": instance.date,
+        "rank_d_string": " ".join([str(i) for i in instance.subjects.all()]),
+    })
 
 
-# @receiver(post_save, sender=InternalFile)
-# def update_indexed_internal_file(sender, instance, created, **kwargs):
-#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
-#     index.name = instance.title
-#     index.summary = instance.summary
-#     index.date = instance.date or None
-#     index.rank_a_string = instance.title
-#     index.rank_b_string = instance.summary
-#     index.rank_c_string = "{} {}".format(
-#         instance.date,
-#         instance.file_name,
-#     )
-#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-#     index.save()
+@receiver(post_save, sender=InternalFile)
+def update_indexed_internal_file(sender, instance, created, **kwargs):
+    update_indexed_resource(instance, {
+        "name": instance.title,
+        "summary": instance.summary,
+        "date": instance.date or None,
+        "rank_a_string": instance.title,
+        "rank_b_string": instance.summary,
+        "rank_c_string": "{} {}".format(
+            instance.date,
+            instance.file_name,
+        ),
+        "rank_d_string": " ".join([str(i) for i in instance.subjects.all()]),
+    })
 
 
-# @receiver(post_save, sender=InternalLink)
-# def update_indexed_internal_link(sender, instance, created, **kwargs):
-#     index, _ = ContentIndex.objects.get_or_create(resource=instance)
-#     index.name = instance.title
-#     index.summary = instance.summary
-#     index.date = instance.date or None
-#     index.rank_a_string = instance.title
-#     index.rank_b_string = instance.summary
-#     index.rank_c_string = instance.date
-#     index.rank_d_string = " ".join([str(i) for i in instance.subjects.all()])
-#     index.save()
+@receiver(post_save, sender=InternalLink)
+def update_indexed_internal_link(sender, instance, created, **kwargs):
+    update_indexed_resource(instance, {
+        "name": instance.title,
+        "summary": instance.summary,
+        "date": instance.date or None,
+        "rank_a_string": instance.title,
+        "rank_b_string": instance.summary,
+        "rank_c_string": instance.date,
+        "rank_d_string": " ".join([str(i) for i in instance.subjects.all()]),
+    })
 
 
 # def index_part_node(part, piece, indices, contents, parent=None):

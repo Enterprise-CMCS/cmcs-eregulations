@@ -31,8 +31,13 @@ def create_resource_metadata(apps, schema_editor):
         resource = index.resource
         resource_metadata = ResourceMetadata.objects.create(
             resource=resource,
-            is_indexed=bool(index.content),
-            last_indexed=None,
+            name=index.name,
+            date=index.date,
+            summary=index.summary,
+            rank_a_string=index.rank_a_string,
+            rank_b_string=index.rank_b_string,
+            rank_c_string=index.rank_c_string,
+            rank_d_string=index.rank_d_string,
             detected_file_type=getattr(resource, 'detected_file_type', ''),
             extraction_error=getattr(resource, 'extraction_error', ''),
         )
@@ -76,11 +81,16 @@ class Migration(migrations.Migration):
             name='ResourceMetadata',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_indexed', models.BooleanField(default=False)),
-                ('last_indexed', models.DateTimeField(blank=True, null=True)),
                 ('detected_file_type', models.CharField(blank=True, editable=False, help_text='The file type that the text extractor detected for this resource.', max_length=32)),
                 ('extraction_error', models.TextField(blank=True, editable=False, help_text='If the text extractor failed to extract text from this resource, the error message will be stored here.')),
                 ('resource', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='index_metadata', to='resources.abstractresource')),
+                ('date', models.CharField(max_length=10, null=True)),
+                ('name', models.TextField(blank=True)),
+                ('rank_a_string', models.TextField(blank=True)),
+                ('rank_b_string', models.TextField(blank=True)),
+                ('rank_c_string', models.TextField(blank=True)),
+                ('rank_d_string', models.TextField(blank=True)),
+                ('summary', models.TextField(blank=True)),
             ],
         ),
         migrations.AddField(
