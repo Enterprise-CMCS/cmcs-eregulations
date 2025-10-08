@@ -182,8 +182,10 @@ class DefaultTitleSelect(widgets.Select):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    def get_context(self, name, value, attrs):
         queryset = Part.objects.order_by("title").distinct("title").values_list("title", flat=True)
         self.choices = [(title, title) for title in list(queryset)]
+        return super().get_context(name, value, attrs)
 
 
 class SiteConfigurationForm(forms.ModelForm):
