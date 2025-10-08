@@ -2,6 +2,7 @@ import re
 
 import requests
 from defusedxml.minidom import parseString
+from django import forms
 from django.apps import apps
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
@@ -9,12 +10,14 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
+from django.forms import widgets
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
 
+from regcore.models import Part
 from user.models import set_department_group_and_division
 
 from .models import (
@@ -175,8 +178,27 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         return user
 
 
+class DefaultTitleSelect(widgets.Select):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        queryset = Part.objects.order_by("title").distinct("title").values_list("title", flat=True)
+        self.choices = [(title, title) for title in list(queryset)]
+
+
+class SiteConfigurationForm(forms.ModelForm):
+    class Meta:
+        model = SiteConfiguration
+        fields = '__all__'
+        widgets = {
+            'default_title': DefaultTitleSelect(),
+        }
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
+    form = SiteConfigurationForm
+
     fieldsets = (
         (None, {
             "fields": (
