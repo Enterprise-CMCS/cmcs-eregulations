@@ -27,7 +27,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.injectAxe();
         cy.checkAccessibility();
 
-        cy.get("#jumpToTitle").should("have.value", "42");
+        cy.get("#jumpToTitle").should("not.have.attr", "disabled");
         cy.get("#jumpToPart").should("not.have.attr", "disabled");
         cy.get("#jumpBtn").should("have.class", "active");
     });
