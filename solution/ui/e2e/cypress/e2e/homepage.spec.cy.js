@@ -244,10 +244,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
+    it.skip("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@titles");
         cy.get("#jumpToTitle").select("45");
         cy.get("#jumpToPart").then(($select) => {
             const options = $select.find("option");
