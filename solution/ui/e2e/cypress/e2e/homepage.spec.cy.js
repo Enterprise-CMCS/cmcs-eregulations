@@ -285,6 +285,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".toc__container .v-tabs").contains("Title 42").click();
         cy.get(".toc__container").contains("Part 430").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/430/");
