@@ -16,7 +16,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/resources/public/links?page=1&page_size=7**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
-        cy.intercept("**/v3/title/42/parts").as("title42parts");
+        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("loads the homepage", () => {
@@ -247,7 +247,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
+        cy.wait("@titles");
         cy.get("#jumpToTitle").select("45");
         cy.get("#jumpToPart").then(($select) => {
             const options = $select.find("option");
@@ -259,14 +259,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",
