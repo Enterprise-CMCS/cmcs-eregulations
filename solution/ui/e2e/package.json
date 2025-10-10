@@ -11,7 +11,7 @@
   "license": "ISC",
   "devDependencies": {
     "axe-core": "4.10.3",
-    "cypress": "15.3.0",
+    "cypress": "15.4.0",
     "cypress-plugin-tab": "1.0.5"
   },
   "dependencies": {
