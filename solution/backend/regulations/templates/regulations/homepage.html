@@ -21,6 +21,7 @@
     <left-nav-collapse contents-description="table of contents">
         <template #nav-contents>
             <toc-container
+                default-title={{ default_title }}
                 api-url="{{ API_BASE }}"
                 home-url="{% url 'homepage' %}"
             ></toc-container>

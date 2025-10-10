@@ -4,7 +4,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-        cy.intercept("**/v3/title/42/parts").as("title42parts");
+        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("loads the page", () => {
@@ -24,7 +24,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/obbba");
-        cy.wait("@title42parts");
+        cy.wait("@titles");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",

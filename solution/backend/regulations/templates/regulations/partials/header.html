@@ -4,7 +4,9 @@
             <jump-to
                 api-url="{{ API_BASE }}"
                 home-url="{% url 'homepage' %}"
-                {% if title %}title="{{ title }}"{% endif %}
+                {% if title %}title="{{ title }}"
+                {% elif default_title %}title="{{ default_title}}"
+                {% endif %}
                 {% if part %}part="{{ part }}"{% endif %}
             ></jump-to>
         </template>

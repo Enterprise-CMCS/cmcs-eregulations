@@ -35,6 +35,11 @@ class SiteConfiguration(SingletonModel):
     )
     flash_banner_text = models.TextField(blank=True, help_text="The text to display in the flash banner.")
 
+    default_title = models.IntegerField(
+        default=42,
+        help_text="The default title to use for dropdowns, selects, and tabs throughout the site.",
+    )
+
     DATE_TYPE_CHOICES = (
         ('effective', 'Effective'),
         ('amended', 'Amended'),

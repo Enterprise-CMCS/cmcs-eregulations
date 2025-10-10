@@ -4,7 +4,7 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
         cy.intercept("/**", (req) => {
             req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
         });
-        cy.intercept("**/v3/title/42/parts").as("title42parts");
+        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("custom-login-page - does not render an anchor for header Sign In link when on login page", () => {
@@ -43,14 +43,14 @@ describe("custom login page", { scrollBehavior: "center" }, () => {
     it("custom-login-page - jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
-        cy.wait("@title42parts");
+        cy.wait("@titles");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
     it("custom-login-page - jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/login");
-        cy.wait("@title42parts");
+        cy.wait("@titles");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",

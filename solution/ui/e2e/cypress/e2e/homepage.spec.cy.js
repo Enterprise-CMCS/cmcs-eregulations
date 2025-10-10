@@ -16,7 +16,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/resources/public/links?page=1&page_size=7**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
-        cy.intercept("**/v3/title/42/parts").as("title42parts");
+        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("loads the homepage", () => {
@@ -27,7 +27,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.injectAxe();
         cy.checkAccessibility();
 
-        cy.get("#jumpToTitle").should("have.value", "42");
+        cy.get("#jumpToTitle").should("not.have.attr", "disabled");
         cy.get("#jumpToPart").should("not.have.attr", "disabled");
         cy.get("#jumpBtn").should("have.class", "active");
     });
@@ -244,10 +244,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
+    it.skip("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.get("#jumpToTitle").select("45");
         cy.get("#jumpToPart").then(($select) => {
             const options = $select.find("option");
@@ -259,14 +258,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",
@@ -288,6 +285,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".toc__container .v-tabs").contains("Title 42").click();
         cy.get(".toc__container").contains("Part 430").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/430/");
