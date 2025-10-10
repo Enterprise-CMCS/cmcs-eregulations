@@ -17,9 +17,7 @@ const makeFederalRegisterLink = (query) =>
     )}`;
 
 const makeMedicaidGovLink = (query) =>
-    `https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=${encodeURIComponent(
-        query
-    )}&gsc.sort=`;
+    `https://www.medicaid.gov/search/content?keys=${encodeURIComponent(query)}`;
 
 const makeUsCodeLink = (query) => {
     const urlEncodedQuery = encodeURIComponent(query);

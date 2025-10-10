@@ -35,7 +35,7 @@ describe("Search Continue Research", () => {
 
     it("makes the expected Medicaid.gov link", () => {
         expect(SearchContinueResearch.makeMedicaidGovLink("test query")).toBe(
-            "https://www.medicaid.gov/search-gsc?&gsc.sort=#gsc.tab=0&gsc.q=test%20query&gsc.sort="
+            "https://www.medicaid.gov/search/content?keys=test%20query"
         );
     });
 
