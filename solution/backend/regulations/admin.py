@@ -179,9 +179,6 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
 
 
 class DefaultTitleSelect(widgets.Select):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def get_context(self, name, value, attrs):
         queryset = Part.objects.titles_list()
         self.choices = [(title, title) for title in list(queryset)]
