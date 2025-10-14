@@ -30,7 +30,7 @@ class TOCViewSet(viewsets.ReadOnlyModelViewSet):
     responses={(200, "application/json"): {"type": "string"}},
 )
 class TitlesViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Part.objects.order_by("title").distinct("title").values_list("title", flat=True)
+    queryset = Part.objects.titles_list()
     serializer_class = StringListSerializer
 
 
