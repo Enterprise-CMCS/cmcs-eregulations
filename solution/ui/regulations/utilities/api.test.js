@@ -72,7 +72,7 @@ describe("api.js", () => {
                 "http://localhost:9000/title/42/part/431/version/latest/toc",
                 fetchBoilerplate
             );
-        }
+        });
     });
     describe("getSynonyms", () => {
         it("is called with proper param string", async () => {
