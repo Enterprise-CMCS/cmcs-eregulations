@@ -25,7 +25,6 @@ const props = defineProps({
 
 const titles = ref([]);
 const selectedPart = ref("");
-const defaultTitle = ref("");
 const selectedTitle = ref("");
 const selectedSection = ref("");
 const namedParts = ref([]);
@@ -50,7 +49,6 @@ onMounted(async () => {
         selectedTitle.value = props.title;
     } else {
         selectedTitle.value = titles.value[0];
-        defaultTitle.value = selectedTitle.value;
     }
 
     if (props.part !== "") {

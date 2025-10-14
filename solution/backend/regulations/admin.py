@@ -2,6 +2,7 @@ import re
 
 import requests
 from defusedxml.minidom import parseString
+from django import forms
 from django.apps import apps
 from django.contrib import admin, messages
 from django.contrib.admin.sites import site
@@ -9,12 +10,14 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
+from django.forms import widgets
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import path, reverse
 from mozilla_django_oidc.auth import OIDCAuthenticationBackend
 from solo.admin import SingletonModelAdmin
 
+from regcore.models import Part
 from user.models import set_department_group_and_division
 
 from .models import (
@@ -175,14 +178,33 @@ class OidcAdminAuthenticationBackend(OIDCAuthenticationBackend):
         return user
 
 
+class DefaultTitleSelect(widgets.Select):
+    def get_context(self, name, value, attrs):
+        queryset = Part.objects.titles_list()
+        self.choices = [(title, title) for title in list(queryset)]
+        return super().get_context(name, value, attrs)
+
+
+class SiteConfigurationForm(forms.ModelForm):
+    class Meta:
+        model = SiteConfiguration
+        fields = '__all__'
+        widgets = {
+            'default_title': DefaultTitleSelect(),
+        }
+
+
 @admin.register(SiteConfiguration)
 class SiteConfigurationAdmin(SingletonModelAdmin):
+    form = SiteConfigurationForm
+
     fieldsets = (
         (None, {
             "fields": (
                 'allow_indexing',
                 'show_flash_banner',
                 'flash_banner_text',
+                'default_title',
                 ('us_code_house_gov_date_type', 'us_code_house_gov_date'),
                 ('ssa_gov_compilation_date_type', 'ssa_gov_compilation_date'),
                 ('statute_compilation_date_type', 'statute_compilation_date'),
