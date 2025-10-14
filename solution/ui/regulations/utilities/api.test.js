@@ -15,7 +15,7 @@ import {
     getStatutes,
     getStatutesActs,
     getSubjects,
-    getSubpartTOC,
+    getChildTOC,
     getSynonyms,
     getTitles,
     throwGenericError,
@@ -47,9 +47,9 @@ describe("api.js", () => {
     afterEach(() => {
         vi.clearAllMocks();
     });
-    describe("getSubpartTOC", () => {
+    describe("getChildTOC", () => {
         it("is called with proper param string", async () => {
-            await getSubpartTOC({
+            await getChildTOC({
                 apiUrl: "http://localhost:9000/",
                 title: "42",
                 part: "431",
@@ -61,6 +61,18 @@ describe("api.js", () => {
                 fetchBoilerplate
             );
         });
+        it("is called without subPart param", async () => {
+            await getChildTOC({
+                apiUrl: "http://localhost:9000/",
+                title: "42",
+                part: "431",
+            });
+            await flushPromises();
+            expect(fetch).toHaveBeenCalledWith(
+                "http://localhost:9000/title/42/part/431/version/latest/toc",
+                fetchBoilerplate
+            );
+        }
     });
     describe("getSynonyms", () => {
         it("is called with proper param string", async () => {
