@@ -23,11 +23,9 @@ const titleLabel = computed(() =>
     )
 );
 
-const directChildren = computed(() => {
-    return props.structure.children.filter(
-        (child) => child.type === "chapter" || child.type === "subtitle"
-    )
-});
+const directChildren = computed(() => props.structure.children.filter(
+    (child) => child.type === "chapter" || child.type === "subtitle"
+));
 
 const titleSubheadings = computed(() => {
     return directChildren.value
@@ -48,9 +46,7 @@ const titleSubheadings = computed(() => {
             :key="'toc' + i"
         >
             <TocSubheading
-                :subheading="titleSubheadings
-                    ? titleSubheadings[i]
-                    : undefined"
+                :subheading="titleSubheadings?.[i] ? titleSubheadings[i] : undefined"
             />
             <TocSubchapter
                 v-for="(subchapter, j) in directChild.children"
