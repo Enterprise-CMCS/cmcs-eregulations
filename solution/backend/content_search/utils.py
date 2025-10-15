@@ -1,3 +1,4 @@
+import base64
 import json
 import unicodedata
 from urllib.parse import urlparse
@@ -7,10 +8,16 @@ from django.conf import settings
 from django.urls import reverse
 
 from common.aws import establish_client
+from regcore.models import Part
 from resources.models import (
     AbstractResource,
     FederalRegisterLink,
     ResourcesConfiguration,
+)
+
+from .models import (
+    ContentIndex,
+    IndexedRegulationText,
 )
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
@@ -199,9 +206,9 @@ def call_text_extractor_for_resources(request, resources):
         "ignore_robots_txt": _should_ignore_robots_txt(i, allow_list),
         "file_type": i.file_type or None,
         "upload_url": (
-            f"{_LOCAL_EREGS_URL}{reverse('content', args=[i.pk])}"
+            f"{_LOCAL_EREGS_URL}{reverse('resource_chunk_update', args=[i.pk])}"
             if settings.USE_LOCAL_TEXT_EXTRACTOR else
-            request.build_absolute_uri(reverse("content", args=[i.pk]))
+            request.build_absolute_uri(reverse("resource_chunk_update", args=[i.pk]))
         ),
         "auth": {
             "type": "basic",
@@ -236,6 +243,141 @@ def call_text_extractor_for_resources(request, resources):
         "reason": "The URI field is blank for this resource.",
     } for i in requests if not i["uri"].strip()]
     requests = [i for i in requests if i["uri"].strip()]
+
+    if settings.USE_LOCAL_TEXT_EXTRACTOR:
+        extract_function = _extract_via_http
+        client = None
+    elif settings.TEXT_EXTRACTOR_QUEUE_URL:
+        extract_function = _extract_via_sqs
+        client = establish_client("sqs")
+    elif settings.TEXT_EXTRACTOR_ARN:
+        extract_function = _extract_via_lambda
+        client = establish_client("lambda")
+    else:
+        failures += [{
+            "id": i["id"],
+            "reason": "The text extractor destination is not configured.",
+        } for i in requests]
+        requests = []
+
+    for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
+        success, fail = extract_function(batch, client)
+        succeed_count += success
+        failures += fail
+
+    return succeed_count, failures
+
+
+def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", subpart_title=""):
+    try:
+        node_type = piece.get("node_type", "").lower()
+        part_number, node_id = {
+            "section": (0, 1),
+            "appendix": (6, 3),
+        }[node_type]
+
+        label = piece["label"]
+        part_number = int(label[part_number])
+        node_id = remove_control_characters(label[node_id])
+
+        content = piece.get("title", piece.get("text", ""))
+        children = piece.pop("children", []) or []
+        for child in children:
+            content += child.get("text", "") + child.get("content", "")
+
+        contents.append(remove_control_characters(content))
+        indices.append(IndexedRegulationText(
+            part=part,
+            title=part.title,
+            date=part.date,
+            part_title=remove_control_characters(part.document["title"]),
+            part_number=part_number,
+            subpart_title=remove_control_characters(subpart_title),
+            subpart_id=subpart_id,
+            node_type=node_type,
+            node_id=node_id,
+            node_title=remove_control_characters(piece["title"]),
+        ))
+
+    except Exception:
+        children = piece.pop("children", []) or []
+        subpart_id = piece.get("label", [])[0] if piece.get("node_type", "").lower() == "subpart" else ""
+        subpart_title = piece.get("title", "") if piece.get("node_type", "").lower() == "subpart" else ""
+        for child in children:
+            index_part_node(part, child, indices, contents, parent=piece, subpart_id=subpart_id, subpart_title=subpart_title)
+
+    return indices, contents
+
+
+# Run the text extractor for the given Part instances.
+# For SQS, requests are batched by groups of 10.
+#
+# Note the choice of execution path based on the three Django settings:
+#   - USE_LOCAL_TEXT_EXTRACTOR: if true will use the local dockerized text extractor instead of the AWS client.
+#   - TEXT_EXTRACTOR_QUEUE_URL: if set will use the SQS queue instead of invoking the Lambda directly.
+#   - TEXT_EXTRACTOR_ARN: if the above is not set and this is, will invoke the Lamba directly.
+# If none of these are set, extraction will fail for all Part instances.
+#
+# Arguments:
+# request: the Django Request object that caused this call to occur.
+# parts: a list containing Part instances to process.
+#
+# Returns:
+# Two values; successes by count, and failures by dict: {"id": x, "reason": "y"}.
+# Note that a successful return does not necessarily indicate a successful extraction;
+# Check text-extractor logs to verify extraction.
+def call_text_extractor_for_reg_text(request, parts):
+    # Blank the error field for all IndexedRegulationText instances before processing
+    IndexedRegulationText.objects.filter(pk__in=[i.pk for i in parts]).update(extraction_error="")
+
+    # Delete all previously indexed text for the given parts, including previous versions
+    affected_indices = IndexedRegulationText.objects.filter(
+        part__title__in=[i.title for i in parts],
+        part__name__in=[i.name for i in parts],
+    )
+    ContentIndex.objects.filter(reg_text__in=affected_indices).delete()
+
+    # Only index the latest version of each part
+    parts = Part.objects.filter(
+        title__in=[i.title for i in parts],
+        name__in=[i.name for i in parts],
+    ).order_by("title", "name", "-date").distinct("title", "name")
+
+    # Build the IndexedRegulationText instances and the text contents to be indexed
+    indices, contents = [], []
+    for part in parts:
+        i, c = index_part_node(part, part.document, [], [])
+        indices += i
+        contents += c
+
+    # Create the IndexedRegulationText instances in bulk and encode the contents
+    indices = IndexedRegulationText.objects.bulk_create(indices)
+    contents = [base64.b64encode(i.encode("utf-8")).decode("utf-8") for i in contents]
+
+    # Build the requests for the text extractor
+    requests = [{
+        "id": index.pk,
+        "ignore_robots_txt": True,
+        "content": content,
+        "upload_url": (
+            f"{_LOCAL_EREGS_URL}{reverse("reg_text_chunk_update", args=[index.pk])}"
+            if settings.USE_LOCAL_TEXT_EXTRACTOR else
+            request.build_absolute_uri(reverse("reg_text_chunk_update", args=[index.pk]))
+        ),
+        "auth": {
+            "type": "basic",
+            "username": settings.HTTP_AUTH_USER,
+            "password": settings.HTTP_AUTH_PASSWORD,
+        } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
+            "type": "basic-secretsmanager-env",
+            "secret_name": "SECRET_NAME",
+            "username_key": "username",
+            "password_key": "password",
+        },
+    } for index, content in zip(indices, contents)]
+
+    succeed_count = 0
+    failures = []
 
     if settings.USE_LOCAL_TEXT_EXTRACTOR:
         extract_function = _extract_via_http

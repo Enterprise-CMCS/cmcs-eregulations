@@ -22,9 +22,9 @@ from .models import (
     ResourceMetadata,
 )
 from .serializers import (
+    ChunkUpdateSerializer,
     ContentCountSerializer,
     ContentSearchSerializer,
-    ResourceChunkUpdateSerializer,
 )
 
 
@@ -312,7 +312,7 @@ class ContentCountViewSet(viewsets.ViewSet):
 class ResourceChunkUpdateViewSet(viewsets.ViewSet):
     def update(self, request, *args, **kwargs):
         # Validate the request body
-        serializer = ResourceChunkUpdateSerializer(data=request.data)
+        serializer = ChunkUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
 
@@ -364,5 +364,51 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
 
         response_text = f"Chunk {index.pk} for {resource._meta.verbose_name} {resource.pk} successfully" \
                         f"{'created' if created else 'updated'}."
-        response_text += f" {deleted} extra chunks deleted." if deleted else ""
+        response_text += f" {deleted} extra chunk(s) deleted." if deleted else ""
+        return Response(response_text)
+
+
+class RegTextChunkUpdateViewSet(viewsets.ViewSet):
+    def update(self, request, *args, **kwargs):
+        # Validate the request body
+        serializer = ChunkUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        # Get data from the request body
+        reg_text_id = data["id"]
+        chunk_index = data["chunk_index"]
+        total_chunks = data["total_chunks"]
+        text = data["text"]
+        embedding = data["embedding"]
+
+        # Retrieve reg text metadata (and ensure it exists, otherwise fail)
+        try:
+            reg_text = IndexedRegulationText.objects.get(pk=reg_text_id)
+        except IndexedRegulationText.DoesNotExist:
+            raise BadRequest(f"Reg text metadata object with id {reg_text_id} does not exist.")
+
+        # Delete any extra chunks that may exist beyond the new total_chunks value
+        deleted, _ = ContentIndex.objects.filter(Q(reg_text=reg_text) & Q(chunk_index__gte=total_chunks)).delete()
+
+        # Update or create the chunk
+        index, created = ContentIndex.objects.update_or_create(
+            reg_text=reg_text,
+            chunk_index=chunk_index,
+            defaults={
+                "name": reg_text.name,
+                "summary": reg_text.summary,
+                "date": reg_text.date,
+                "rank_a_string": f"{reg_text.node_id} {reg_text.node_title}",
+                "rank_b_string": f"{reg_text.part_title}",
+                "rank_c_string": f"{text}",
+                "rank_d_string": "",
+                "content": text,
+                "embedding": embedding,
+            }
+        )
+
+        response_text = f"Chunk {index.pk} for {reg_text.title} CFR {reg_text.part_number} {reg_text.node_type} " \
+                        f"{reg_text.node_id} successfully {'created' if created else 'updated'}."
+        response_text += f" {deleted} extra chunk(s) deleted." if deleted else ""
         return Response(response_text)

@@ -45,7 +45,7 @@ class ContentCountSerializer(serializers.Serializer):
     categories = CategoryCountSerializer(many=True)
 
 
-class ResourceChunkUpdateSerializer(serializers.Serializer):
+class ChunkUpdateSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=True)
     chunk_index = serializers.IntegerField(required=True)
     total_chunks = serializers.IntegerField(required=True)
