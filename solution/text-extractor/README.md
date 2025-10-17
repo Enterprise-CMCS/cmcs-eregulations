@@ -83,10 +83,23 @@ The following data structure is required:
         "use_lambda": true,                  // Set to "false" if you are local, "true" otherwise.
         "aws_region": "us-east-1"            // AWS region to use, see below for details.
     },
+    // Include if you want to split the output text.
+    "chunking": {
+        "enabled": true,
+        "chunk_size": 10000,                 // The number of characters for each chunk, default is 10,000.
+        "chunk_overlap": 1000                // The max overlap to allow between chunks. Will round to the nearest whole word.
+    },
+    // Include if you want to generate text embeddings for e.g. semantic search.
+    "embedding": {
+        "generate": true,
+        "model": "your-model",               // The AWS Bedrock model to use.
+        "dimensions": 1024,                  // Output dimensions, defaults to 1,024.
+        "normalize": true                    // Specify whether to normalize the output.
+    }
 }
 ```
 
-Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for AWS Textract, S3, and SQS (if you are using it).
+Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for AWS Textract, S3, SQS (if you are using it), and Bedrock (if you are generating embeddings).
 
 It is recommended to run this asynchronously as it could take time to run, up to several minutes for large PDF files, for example. If you are running this through API Gateway, set the request body to a stringified version of the structure above.
 
@@ -199,16 +212,21 @@ When the function completes, it will attempt to send a JSON PATCH request to the
 
 ```jsonc
 {
-    "id": 1234,           // The unique ID of the resource
-    "text": "xxxxxx",     // The text extracted
-    "file_type": "type",  // The Magika-supported detected file type
-    "error": "error str"  // An error if any occured
+    "id": 1234,                         // The unique ID of the resource
+    "text": "xxxxxx",                   // The text extracted
+    "embedding": [0.1, 0.2, 0.3, ...],  // Generated embeddings if requested
+    "chunk_index": 0,                   // Index of the current chunk (if chunking is enabled)
+    "total_chunks": 1,                  // Total number of chunks (if chunking is enabled)
+    "file_type": "type",                // The Magika-supported detected file type
+    "error": "error str"                // An error if any occured
 }
 ```
 
-The fields `text`, `file_type`, and `error` are all optional and their existence indicates the status of the extraction:
+The fields `text`, `embedding`, `chunk_index`, `total_chunks`, `file_type`, and `error` are all optional and their existence indicates the status of the extraction:
 
 * If `text` exists, then text extraction was successful and the contents may be used.
+* If `embedding` exists, then embedding generation is enabled and successful.
+* If `chunk_index` and `total_chunks` exist, then text chunking is enabled.
 * If `file_type` exists, then Magika was able to detect a valid file type.
 * If `error` exists, then text extraction did not complete successfully and this will contain the reason why.
 
