@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.db import transaction
 from django.http import Http404, JsonResponse
 from drf_spectacular.utils import extend_schema
@@ -76,9 +77,16 @@ class PartUploadViewSet(viewsets.ModelViewSet):
         part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
         data["id"] = part.pk
         sc = self.get_serializer(part, data=data)
-        if sc.is_valid(raise_exception=True):
-            instance = sc.save()
-            response = sc.validated_data
-            if not data.get("upload_reg_text", False):
-                instance.delete()
-            return JsonResponse(response)
+        sc.is_valid(raise_exception=True)
+        instance = sc.save()
+        response = sc.validated_data
+        if not data.get("upload_reg_text", False):
+            instance.delete()
+
+        if apps.is_installed("content_search"):
+            from content_search.utils import call_text_extractor_for_reg_text
+            _, fail = call_text_extractor_for_reg_text(request, [instance])
+            if fail:
+                raise RuntimeError("Text extraction job could not be started.")
+
+        return JsonResponse(response)

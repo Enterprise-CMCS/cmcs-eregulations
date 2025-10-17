@@ -16,8 +16,16 @@ from resources.models import (
 )
 from resources.utils import get_citation_filter, string_to_bool
 
-from .models import ContentIndex, IndexedRegulationText
-from .serializers import ContentCountSerializer, ContentSearchSerializer
+from .models import (
+    ContentIndex,
+    IndexedRegulationText,
+    ResourceMetadata,
+)
+from .serializers import (
+    ChunkUpdateSerializer,
+    ContentCountSerializer,
+    ContentSearchSerializer,
+)
 
 
 class ContentSearchPagination(ViewSetPagination):
@@ -281,7 +289,7 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # List of subjects that are in the results and the number of resources in the result set that are associated with them
         aggregates["subjects"] = AbstractResource.objects \
-            .filter(index__pk__in=pks) \
+            .filter(indices__pk__in=pks) \
             .exclude(subjects__isnull=True) \
             .values("subjects") \
             .annotate(subject=F("subjects"), count=Count("subjects")) \
@@ -291,7 +299,7 @@ class ContentCountViewSet(viewsets.ViewSet):
         # List of categories that are in the results and the number of resources in the result set that are associated with them
         # Note that resources are already filtered by user visibility, so by extension, we don't need to filter categories
         aggregates["categories"] = AbstractResource.objects \
-            .filter(index__pk__in=pks) \
+            .filter(indices__pk__in=pks) \
             .exclude(category__isnull=True) \
             .values("category") \
             .annotate(parent=F("category__parent"), count=Count("category")) \
@@ -299,3 +307,108 @@ class ContentCountViewSet(viewsets.ViewSet):
 
         # Serialize and return the results
         return Response(ContentCountSerializer(aggregates).data)
+
+
+class ResourceChunkUpdateViewSet(viewsets.ViewSet):
+    def update(self, request, *args, **kwargs):
+        # Validate the request body
+        serializer = ChunkUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        # Get data from the request body
+        resource_id = data["id"]
+        chunk_index = data["chunk_index"]
+        total_chunks = data["total_chunks"]
+        file_type = data["file_type"]
+        error = data["error"]
+        text = data["text"]
+        embedding = data["embedding"]
+
+        # Get the resource (and ensure it exists, otherwise fail)
+        try:
+            resource = AbstractResource.objects.get(pk=resource_id)
+        except AbstractResource.DoesNotExist:
+            raise BadRequest(f"Resource with id {resource_id} does not exist.")
+
+        # Update resource metadata (and ensure it exists, otherwise fail)
+        try:
+            metadata = ResourceMetadata.objects.get(resource=resource)
+            if metadata.detected_file_type != file_type or metadata.extraction_error != error:
+                metadata.detected_file_type = file_type
+                metadata.extraction_error = error
+                metadata.save()
+        except ResourceMetadata.DoesNotExist:
+            raise BadRequest(f"Resource with id {resource_id} does not have associated metadata.")
+
+        # Delete any extra chunks that may exist beyond the new total_chunks value
+        deleted, _ = ContentIndex.objects.filter(Q(resource=resource) & Q(chunk_index__gte=total_chunks)).delete()
+
+        # Update or create the chunk
+        index, created = ContentIndex.objects.update_or_create(
+            resource=resource,
+            chunk_index=chunk_index,
+            defaults={
+                "name": metadata.name,
+                "summary": metadata.summary,
+                "date": metadata.date,
+                "rank_a_string": metadata.rank_a_string,
+                "rank_b_string": metadata.rank_b_string,
+                "rank_c_string": metadata.rank_c_string,
+                "rank_d_string": metadata.rank_d_string,
+                "resource_metadata": metadata,
+                "content": text,
+                "embedding": embedding,
+            }
+        )
+
+        response_text = f"Chunk {index.pk} for {resource._meta.verbose_name} {resource.pk} successfully" \
+                        f"{'created' if created else 'updated'}."
+        response_text += f" {deleted} extra chunk(s) deleted." if deleted else ""
+        return Response(response_text)
+
+
+class RegTextChunkUpdateViewSet(viewsets.ViewSet):
+    def update(self, request, *args, **kwargs):
+        # Validate the request body
+        serializer = ChunkUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        # Get data from the request body
+        reg_text_id = data["id"]
+        chunk_index = data["chunk_index"]
+        total_chunks = data["total_chunks"]
+        text = data["text"]
+        embedding = data["embedding"]
+
+        # Retrieve reg text metadata (and ensure it exists, otherwise fail)
+        try:
+            reg_text = IndexedRegulationText.objects.get(pk=reg_text_id)
+        except IndexedRegulationText.DoesNotExist:
+            raise BadRequest(f"Reg text metadata object with id {reg_text_id} does not exist.")
+
+        # Delete any extra chunks that may exist beyond the new total_chunks value
+        deleted, _ = ContentIndex.objects.filter(Q(reg_text=reg_text) & Q(chunk_index__gte=total_chunks)).delete()
+
+        # Update or create the chunk
+        index, created = ContentIndex.objects.update_or_create(
+            reg_text=reg_text,
+            chunk_index=chunk_index,
+            defaults={
+                "name": reg_text.name,
+                "summary": reg_text.summary,
+                "date": reg_text.date,
+                "rank_a_string": f"{reg_text.node_id} {reg_text.node_title}",
+                "rank_b_string": f"{reg_text.part_title}",
+                "rank_c_string": f"{text}",
+                "rank_d_string": "",
+                "content": text,
+                "embedding": embedding,
+            }
+        )
+
+        response_text = f"Chunk {index.pk} for {reg_text.title} CFR {reg_text.part_number} {reg_text.node_type} " \
+                        f"{reg_text.node_id} successfully {'created' if created else 'updated'}."
+        response_text += f" {deleted} extra chunk(s) deleted." if deleted else ""
+        return Response(response_text)
