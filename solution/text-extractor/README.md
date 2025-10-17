@@ -215,18 +215,17 @@ When the function completes, it will attempt to send a JSON PATCH request to the
     "id": 1234,                         // The unique ID of the resource
     "text": "xxxxxx",                   // The text extracted
     "embedding": [0.1, 0.2, 0.3, ...],  // Generated embeddings if requested
-    "chunk_index": 0,                   // Index of the current chunk (if chunking is enabled)
-    "total_chunks": 1,                  // Total number of chunks (if chunking is enabled)
+    "chunk_index": 0,                   // Index of the current chunk
+    "total_chunks": 1,                  // Total number of chunks
     "file_type": "type",                // The Magika-supported detected file type
     "error": "error str"                // An error if any occured
 }
 ```
 
-The fields `text`, `embedding`, `chunk_index`, `total_chunks`, `file_type`, and `error` are all optional and their existence indicates the status of the extraction:
+The fields `text`, `embedding`, `file_type`, and `error` are all optional and their existence indicates the status of the extraction:
 
 * If `text` exists, then text extraction was successful and the contents may be used.
 * If `embedding` exists, then embedding generation is enabled and successful.
-* If `chunk_index` and `total_chunks` exist, then text chunking is enabled.
 * If `file_type` exists, then Magika was able to detect a valid file type.
 * If `error` exists, then text extraction did not complete successfully and this will contain the reason why.
 
