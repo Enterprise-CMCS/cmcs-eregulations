@@ -62,7 +62,8 @@ The following data structure is required:
 ```jsonc
 {
     "id": 1234,                              // A unique integer ID to identify the resource.
-    "uri": "object_uri",                     // The web URL or object name to extract text from.
+    "uri": "object_uri",                     // The web URL or object name to extract text from, or,
+    "content": "base64 str",                 // The base64-encoded bytes of data to extract text from.
     "upload_url": "https://api-url-here/",   // The API URL to PATCH the text to.
     "backend": "s3",                         // Optional - defaults to 'web'.
     "ignore_max_size": true,                 // Optional - include in request to ignore any size restrictions.
@@ -98,6 +99,8 @@ The following data structure is required:
     }
 }
 ```
+
+Generally, extractions are performed on files downloaded or stored somewhere, and so the `uri` parameter will be used. However, it is also possible to pass in the data directly in the request by specifying the `content` parameter and explicitly omitting the `uri` parameter. The `content` parameter must contain a string of base64-encoded bytes.
 
 Note that under a typical setup, `aws_access_key_id`, `aws_secret_access_key`, and `aws_region` are not needed when running in AWS. This is true as long as your Lambda function has the appropriate permissions for AWS Textract, S3, SQS (if you are using it), and Bedrock (if you are generating embeddings).
 
