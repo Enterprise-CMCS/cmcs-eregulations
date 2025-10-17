@@ -230,6 +230,17 @@ def call_text_extractor_for_resources(request, resources):
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
         },
+        "chunking": {
+            "enabled": True,
+            "chunk_size": 10000,
+            "chunk_overlap": 1000,
+        },
+        "embedding": {
+            "generate": True,
+            "model": "amazon.titan-embed-text-v2:0",
+            "dimensions": 512,
+            "normalize": True,
+        },
     }, **_get_resource_keys(
         i,
         user_agent_override_list=user_agent_override_list,
@@ -301,8 +312,9 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 
     except Exception:
         children = piece.pop("children", []) or []
-        subpart_id = piece.get("label", [])[0] if piece.get("node_type", "").lower() == "subpart" else ""
-        subpart_title = piece.get("title", "") if piece.get("node_type", "").lower() == "subpart" else ""
+        if piece.get("node_type", "").lower() == "subpart":
+            subpart_id = piece.get("label", [])[0]
+            subpart_title = piece.get("title", "")
         for child in children:
             index_part_node(part, child, indices, contents, parent=piece, subpart_id=subpart_id, subpart_title=subpart_title)
 
@@ -373,6 +385,27 @@ def call_text_extractor_for_reg_text(request, parts):
             "secret_name": "SECRET_NAME",
             "username_key": "username",
             "password_key": "password",
+        },
+        "aws": {
+            "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
+            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+            "use_lambda": False,
+            "aws_region": "us-east-1",
+        } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
+            "use_lambda": True,
+            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+        },
+        "chunking": {
+            "enabled": True,
+            "chunk_size": 10000,
+            "chunk_overlap": 1000,
+        },
+        "embedding": {
+            "generate": True,
+            "model": "amazon.titan-embed-text-v2:0",
+            "dimensions": 512,
+            "normalize": True,
         },
     } for index, content in zip(indices, contents)]
 

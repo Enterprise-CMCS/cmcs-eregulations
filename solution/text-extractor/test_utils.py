@@ -11,6 +11,7 @@ from utils import (
     lambda_response,
     configure_authorization,
     send_results,
+    chunk_text,
 )
 
 logging.disable(logging.CRITICAL)
@@ -19,7 +20,7 @@ logging.disable(logging.CRITICAL)
 class UtilsTestCase(unittest.TestCase):
     def test_clean_output(self):
         text = "Hello   \n  \n\n world \0 \t\r \x00"
-        expected = "Hello world"
+        expected = "hello world"
         output = clean_output(text)
         self.assertEqual(output, expected)
 
@@ -209,3 +210,22 @@ class UtilsTestCase(unittest.TestCase):
                 json=expected_data,
                 timeout=60,
             )
+
+    def test_chunk_text(self):
+        text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore " \
+                "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo" \
+                " consequat."
+
+        expected = [
+            'Lorem ipsum dolor sit amet, consectetur',
+            'consectetur adipiscing elit, sed do eiusmod',
+            'sed do eiusmod tempor incididunt ut labore et',
+            'ut labore et dolore magna aliqua. Ut enim ad',
+            'Ut enim ad minim veniam, quis nostrud',
+            'quis nostrud exercitation ullamco laboris nisi ut',
+            'nisi ut aliquip ex ea commodo consequat.',
+        ]
+
+        output = chunk_text(text, max_length=50, overlap=15)
+
+        self.assertEqual(output, expected)
