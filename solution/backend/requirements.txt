@@ -28,3 +28,4 @@ djangorestframework_simplejwt
 olefile
 natsort
 pgvector
+beautifulsoup4
