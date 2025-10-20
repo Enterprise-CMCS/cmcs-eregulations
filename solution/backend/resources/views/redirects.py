@@ -5,8 +5,8 @@ from django.http import Http404
 from django.urls import reverse
 from django.views.generic.base import RedirectView
 
+from common.aws import establish_client
 from resources.models import AbstractResource, InternalFile
-from resources.utils import establish_client
 
 
 class InternalFileDownloadViewSet(LoginRequiredMixin, RedirectView):
