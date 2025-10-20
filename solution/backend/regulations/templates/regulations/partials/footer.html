@@ -13,7 +13,7 @@
         <h5 class="ds-text-heading--sm">Centers for Medicare &amp; Medicaid Services</h5>
         <div class="address">7500 Security Boulevard, Baltimore MD 21244</div>
         <div class="social">
-            <a href="https://twitter.com/cmsgov" target="_blank" rel="noopener noreferrer" aria-label="CMSgov Twitter page"><i class="fab fa-twitter fa-2x"></i></a>
+            <a href="https://x.com/cmsgov" target="_blank" rel="noopener noreferrer" aria-label="CMSgov X page"><i class="fab fa-twitter fa-2x"></i></a>
             <a href="http://www.youtube.com/user/CMSHHSgov" target="_blank" rel="noopener noreferrer" aria-label="CMSgov YouTube page"><i class="fab fa-youtube fa-2x"></i></a>
         </div>
     </div>
@@ -36,6 +36,15 @@
                 {% endif %}
         </h4>
         <div class="about-footer"><a href="{% url 'about' %}">About Medicaid &amp; CHIP eRegulations</a></div>
+        <div class="about-footer">
+            <a
+                class="contact external"
+                href="{{ SURVEY_URL }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Contact the team</a
+            >
+        </div>
         <p>A federal government managed website by the Centers for Medicare &amp; Medicaid Services.</p>
     </div>
 </div>
