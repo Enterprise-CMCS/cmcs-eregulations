@@ -345,12 +345,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--regs a")
             .first()
-            .contains("§ 435.908 Assistance with application and renewal.")
+            .contains("§ 435.907 Application.")
             .click({ force: true });
         cy.url()
             .should("contain", Cypress.config().baseUrl)
             .and("contain", "/42/435")
-            .and("contain", "#435-908");
+            .and("contain", "#435-907");
     });
 
     it("takes you to the proper subject from demo card", () => {
@@ -358,14 +358,14 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--subjects a")
             .first()
-            .contains("Maternal Health")
+            .contains("Community Engagement")
             .click({ force: true });
         cy.url()
             .should(
                 "contain",
                 Cypress.config().baseUrl + `/subjects/?subjects=`
             );
-        cy.get("h1").should("have.text", "Maternal Health");
+        cy.get("h1").should("have.text", "Community Engagement");
     });
 
     it("takes you to the proper sample search from demo card", () => {
@@ -373,12 +373,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--search a")
             .first()
-            .contains("dental examinations")
+            .contains("targeted case management")
             .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/search/?q=dental+examinations`,
+                `/search/?q=targeted+case+management`,
         );
     });
 
