@@ -252,8 +252,11 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 
     except Exception:
         children = piece.pop("children", []) or []
-        subpart_id = piece.get("label", [])[0] if piece.get("node_type", "").lower() == "subpart" else ""
-        subpart_title = piece.get("title", "") if piece.get("node_type", "").lower() == "subpart" else ""
+
+        if piece.get("node_type", "").lower() == "subpart":
+            subpart_id = piece.get("label", [])[0]
+            subpart_title = piece.get("title", "")
+
         for child in children:
             index_part_node(part, child, indices, contents, parent=piece, subpart_id=subpart_id, subpart_title=subpart_title)
 
