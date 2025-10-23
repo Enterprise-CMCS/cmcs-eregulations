@@ -35,7 +35,7 @@
     "msw": "2.11.3",
     "resize-observer-polyfill": "1.5.1",
     "vite": "7.1.11",
-    "vitest": "3.2.4"
+    "vitest": "4.0.1"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.52.4"
