@@ -30,7 +30,7 @@
                 <p class="up-to-date{{ subpart|yesno:" subpart," }}{{ appendix|yesno:" appendix," }}">
                 <a href="{{ecfr_part_url}}" target="_blank" rel="noopener noreferrer" class="external">
                     {{ toc.label_level }} up to date from eCFR
-                </a> as of {{ parser_last_success|parser_success_date_formatter }}{% if is_latest_version and has_meaningful_latest_version_date %}<span class="latest-version">; last amended </span>{{ formatted_latest_version }}{% endif %}.
+                </a> as of {{ reg_title_parser_success_date|parser_success_date_formatter }}{% if is_latest_version and has_meaningful_latest_version_date %}<span class="latest-version">; last amended </span>{{ formatted_latest_version }}{% endif %}.
                 </p>
                 {% include "regulations/partials/node_types/node.html" with resource_count=resource_count node=tree cfr_title=title citation=citation version=version %}
                 {% include "regulations/partials/navigation.html" %}
