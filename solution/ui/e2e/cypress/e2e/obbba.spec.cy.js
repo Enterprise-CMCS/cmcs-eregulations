@@ -10,7 +10,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
     it("loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/obbba");
-        cy.get("h1").contains("One Big Beautiful Bill Act (OBBBA)");
+        cy.get("h1").contains("H.R.1 (Public Law No. 119-21, July 4, 2025)");
         cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();

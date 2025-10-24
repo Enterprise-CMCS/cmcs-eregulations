@@ -3,7 +3,7 @@ export const goHome = () => {
     cy.url().should("eq", Cypress.config().baseUrl + "/");
 };
 
-const expectedLabelsWide = ["OBBBA", "Social Security Act", "State Medicaid Manual", "Research a Subject"];
+const expectedLabelsWide = ["H.R.1", "Social Security Act", "State Medicaid Manual", "Research a Subject"];
 
 const checkLinkOrder = (listLocation, expectedLabels = expectedLabelsWide) => {
     cy.get(`${listLocation} > ul.links__list li a`).should(($links) => {
