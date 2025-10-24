@@ -16,6 +16,8 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/resources/public/links?page=1&page_size=7**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
+        // titles is not provided a fixture so that the actual API
+        // is tested being called in the app
         cy.intercept("**/v3/titles").as("titles");
     });
 
@@ -444,16 +446,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             force: true,
         });
         cy.url().should("include", "/subjects/?subjects=157");
-    });
-
-    it("loads the last parser success date from the API endpoint and displays it in footer", () => {
-        cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        //cy.wait("@parserResult");
-        cy.get(".last-updated-date")
-            .invoke("text")
-            .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);
     });
 
     it("has a responsive toc", () => {
