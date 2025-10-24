@@ -18,6 +18,7 @@ from resources.models import (
 from .models import (
     ContentIndex,
     IndexedRegulationText,
+    ResourceMetadata,
 )
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
@@ -192,7 +193,7 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Check text-extractor logs to verify extraction.
 def call_text_extractor_for_resources(request, resources):
     # Blank the error field for all resources before processing
-    AbstractResource.objects.filter(pk__in=[i.pk for i in resources]).update(extraction_error="")
+    ResourceMetadata.objects.filter(resource__pk__in=[i.pk for i in resources]).update(extraction_error="")
 
     # Retrieve relevant configuration from the ResourcesConfiguration solo model
     config = ResourcesConfiguration.get_solo()
