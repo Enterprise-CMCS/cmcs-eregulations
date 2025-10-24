@@ -4,9 +4,11 @@ import re
 import unicodedata
 import base64
 import os
+import html
 
 import boto3
 from botocore.exceptions import ClientError
+from bs4 import BeautifulSoup
 import requests
 
 logger = logging.getLogger(__name__)
@@ -43,8 +45,29 @@ def get_config(event: dict) -> dict:
 
 
 def clean_output(text: str) -> str:
-    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text)
-    return re.sub(r"\s+", " ", text).strip()
+    """
+    Clean extracted text by removing control characters, HTML elements,
+    collapsing whitespace, and normalizing case.
+
+    Args:
+        text (str): The raw extracted text.
+    Returns:
+        str: The cleaned text.
+    """
+
+    # Remove unicode control characters
+    text = "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text).strip()
+    # Re-encode as unicode-escaped
+    text = text.encode("unicode_escape").decode("unicode_escape")
+    # Remove HTML elements
+    text = html.unescape(text)
+    text = BeautifulSoup(text, "html.parser").get_text()
+    # Collapse whitespace and convert to lowercase
+    text = " ".join(text.split()).lower()
+    # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
+    # (e.g. -------------------- turns into ---)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
+    return text
 
 
 def get_secret_from_aws(secret_name: str) -> dict:
@@ -137,3 +160,76 @@ def send_results(resource_id: int, upload_url: str, auth: str, **kwargs) -> None
             error = f"{error}{additional_error_text}"
             logger.error(error)
             raise Exception(error)
+
+
+def chunk_text(text, max_length, overlap, chunk_metadata=""):
+    """
+    Split text into overlapping chunks, ensuring overlap is at word boundaries.
+
+    Args:
+        text (str): The text to be chunked.
+        max_length (int): Maximum length of each chunk including metadata.
+        overlap (int): Number of overlapping characters between chunks.
+        chunk_metadata (str): Metadata to prepend to each chunk.
+    Returns:
+        List of tuples containing (start_index, chunk_text).
+    """
+
+    chunks = []
+    start = 0
+    max_length = max(0, max_length - len(chunk_metadata))
+    if not max_length:
+        return []
+    while start < len(text):
+        # Find end index for chunk
+        end = min(start + max_length, len(text))
+        # Move end back to last whitespace before end (if not at end of text)
+        if end < len(text):
+            ws = text.rfind(' ', start, end)
+            if ws != -1 and ws > start:
+                end = ws
+        # Prepare chunk
+        chunk = (chunk_metadata + " " if chunk_metadata else "") + text[start:end]
+        chunks.append(chunk)
+        if end == len(text):
+            break
+        # Calculate next start index for overlap
+        overlap_start = max(start, end - overlap)
+        # Move overlap_start forward to next whitespace (to avoid splitting words)
+        if overlap_start < len(text):
+            ws_next = text.find(' ', overlap_start)
+            if ws_next != -1 and ws_next + 1 < len(text):
+                overlap_start = ws_next + 1
+        start = overlap_start
+    return chunks
+
+
+def generate_embedding(client: boto3.client, text: str, model: str, dimensions: int, normalize: bool) -> list[float]:
+    """
+    Generate an embedding for the given text using the specified model.
+
+    Args:
+        client (boto3.client): The boto3 client for the embedding service.
+        text (str): The text to generate an embedding for.
+        model (str): The embedding model to use.
+        dimensions (int): The expected dimensionality of the embedding.
+        normalize (bool): Whether to normalize the embedding vector.
+
+    Returns:
+        list[float]: The generated embedding vector.
+    """
+
+    payload = {
+        "inputText": text,
+        "dimensions": dimensions,
+        "normalize" : normalize,
+    }
+
+    response = client.invoke_model(
+        modelId=model,
+        body=json.dumps(payload),
+        contentType="application/json",
+        accept="application/json",
+    )
+
+    return json.loads(response.get("body").read())["embedding"]
