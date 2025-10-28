@@ -23,7 +23,7 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
-import SearchInput from "@/components/SearchInput.vue";
+import SearchTextArea from "@/components/SearchTextArea.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SortDropdown from "@/components/dropdowns/Sort.vue";
@@ -281,7 +281,7 @@ getDocsOnLoad();
         <main id="searchApp" class="search-view">
             <h1>Search Results</h1>
             <section class="query-filters__section" role="search">
-                <SearchInput
+                <SearchTextArea
                     form-class="search-form"
                     label="Search for a document"
                     parent="search"
