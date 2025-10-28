@@ -50,11 +50,13 @@ const multiWordQuery = computed(() => {
 });
 
 const submitForm = () => {
+    console.info("submitting form");
     emit('execute-search', { query: searchInputValue.value });
     searchInputValue.value = undefined;
 };
 
 const clearForm = () => {
+    console.info("Clearing form");
     searchInputValue.value = undefined;
     emit('clear-form');
 };
@@ -104,27 +106,25 @@ watch(
             ref="searchInput"
             v-model="searchInputValue"
             :disabled="disabled"
-            clearable
             variant="outlined"
             density="compact"
+            rows="3"
+            auto-grow
+            max-rows="8"
             :label="label"
             :aria-label="label"
-            class="search-field"
-            clear-icon="mdi-close"
+            class="search__textarea"
             hide-details
             @update:model-value="updateSearchValue"
         >
-            <template #clear>
+            <template #append>
                 <v-icon
                     title="Clear All"
                     aria-label="Clear search form"
                     icon="mdi-close"
                     data-testid="clear-search-form"
-                    tabindex="-1"
                     @click="clearForm"
                 />
-            </template>
-            <template #append>
                 <v-icon
                     icon="mdi-magnify"
                     :aria-label="`Search${searchInputValue ? ' for ' + searchInputValue : ''}`"

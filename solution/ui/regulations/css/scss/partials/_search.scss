@@ -242,6 +242,21 @@
     }
 }
 
+// SEARCH TEXT-AREA ----------------------------
+
+.search__textarea {
+    textarea {
+        margin-block: 0;
+    }
+
+    .v-input__append {
+        padding-top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
 // CONTINUE RESEARCH CONTAINER -----------------
 
 .more-info__container {
