@@ -283,7 +283,7 @@ getDocsOnLoad();
             <section class="query-filters__section" role="search">
                 <SearchTextArea
                     form-class="search-form"
-                    label="Search for a document"
+                    label="Enter keywords, or paste entire paragraphs to find similar documents"
                     parent="search"
                     :search-query="searchQuery"
                     @execute-search="executeSearch"
