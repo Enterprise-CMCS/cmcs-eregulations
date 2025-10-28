@@ -22,6 +22,7 @@ import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
+const defaultTitle = inject("defaultTitle");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
 const manualUrl = inject("manualUrl");
@@ -136,7 +137,11 @@ getStatutesArray();
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
+                    <JumpTo
+                        :title="defaultTitle"
+                        :api-url="apiUrl"
+                        :home-url="homeUrl"
+                    />
                 </template>
                 <template #links>
                     <HeaderLinks

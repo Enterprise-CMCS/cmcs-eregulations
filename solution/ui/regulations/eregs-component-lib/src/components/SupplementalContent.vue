@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
 import {
     getExternalCategories,
     getSupplementalContent,
-    getSubpartTOC,
+    getChildTOC,
 } from "utilities/api";
 import {
     EventCodes,
@@ -182,7 +182,7 @@ const fetchContent = async (location) => {
 };
 
 const getPartDictionary = async () => {
-    const sections = await getSubpartTOC({
+    const sections = await getChildTOC({
         apiUrl: props.apiUrl,
         title: props.title,
         part: props.part,

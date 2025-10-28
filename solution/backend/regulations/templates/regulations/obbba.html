@@ -2,7 +2,7 @@
 {% load static %}
 {% load string_formatters %}
 
-{% block title_prefix %}OBBBA | {% endblock %}
+{% block title_prefix %}H.R.1 | {% endblock %}
 
 {% block outside_vue %}
     {{ site_config|json_script:"site_config" }}
@@ -21,6 +21,7 @@
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
     data-custom-login-url="{% url 'custom_login' %}"
+    data-default-title="{{ default_title }}"
     data-site-root="{{ SITE_ROOT }}"
     data-home-url="{% url 'homepage' %}"
     data-host="{{ host }}"

@@ -2,6 +2,7 @@
 import { computed, provide } from "vue";
 
 import TocTitle from "sharedComponents/TOC/TocTitle.vue";
+import TocSubheading from "sharedComponents/TOC/TocSubheading.vue";
 import TocSubchapter from "sharedComponents/TOC/TocSubchapter.vue";
 
 const props = defineProps({
@@ -22,29 +23,37 @@ const titleLabel = computed(() =>
     )
 );
 
-const directChild = computed(() =>
-    props.structure.children.find(
-        (child) => child.type === "chapter" || child.type === "subtitle"
-    )
-);
+const directChildren = computed(() => props.structure.children.filter(
+    (child) => child.type === "chapter" || child.type === "subtitle"
+));
 
-const titleSubheading = computed(() =>
-    directChild.value
-        ? `${directChild.value.label_level} - ${directChild.value.label_description}`.replace(
-            /&amp;/g,
-            "&"
-        )
-        : undefined
+const titleSubheadings = computed(() =>
+    directChildren.value
+        ? directChildren.value
+            .map(directChild =>`${directChild.label_level} - ${directChild.label_description}`.replace(
+                /&amp;/g,
+                "&"
+            ))
+        : []
 );
 </script>
 
 <template>
     <div class="toc__container--inner">
-        <TocTitle :title="titleLabel" :subheading="titleSubheading" />
-        <TocSubchapter
-            v-for="subchapter in directChild.children"
-            :key="subchapter.label_lebel"
-            :subchapter="subchapter"
-        />
+        <TocTitle :title="titleLabel" />
+        <template
+            v-for="(directChild, i) in directChildren"
+            :key="'toc' + i"
+        >
+            <TocSubheading
+                v-if="titleSubheadings[i]"
+                :subheading="titleSubheadings[i]"
+            />
+            <TocSubchapter
+                v-for="(subchapter, j) in directChild.children"
+                :key="'subchapter' + j"
+                :subchapter="subchapter"
+            />
+        </template>
     </div>
 </template>

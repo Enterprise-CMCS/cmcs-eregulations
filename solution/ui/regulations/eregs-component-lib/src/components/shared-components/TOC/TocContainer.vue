@@ -18,17 +18,28 @@ const getTOCs = async ({ apiUrl, titlesArr, TOCs }) => {
     TOCs.value = tocArray;
 };
 
+const getSelectedTitleIndex = ({ titles, defaultTitle }) => {
+    return titles.findIndex(
+        (title) => title == defaultTitle
+    );
+};
+
+
 export default { getTitlesArray, getTOCs };
 </script>
 
 <script setup>
-import { provide, ref, watch } from "vue";
+import { provide, ref, watch, onBeforeMount } from "vue";
 
 import { getTitles, getTOC } from "utilities/api";
 
 import Toc from "sharedComponents/TOC/Toc.vue";
 
 const props = defineProps({
+    defaultTitle: {
+        type: String,
+        default: undefined,
+    },
     apiUrl: {
         type: String,
         default: undefined,
@@ -48,16 +59,20 @@ const titles = ref([]);
 // Table of Contents for each title
 const TOCs = ref([]);
 
-watch(titles, (newArr) => {
-    const unformattedTitles = newArr.map((title) => title.split(" ")[1]);
-    getTOCs({ apiUrl: props.apiUrl, titlesArr: unformattedTitles, TOCs });
-});
-
 // tab state, etc
 const selectedTitle = ref(0);
 
-// On load
-getTitlesArray({ apiUrl: props.apiUrl, titles });
+watch(titles, (newArr) => {
+    if (newArr.length === 0) return;
+
+    const unformattedTitles = newArr.map((title) => title.split(" ")[1]);
+    selectedTitle.value = getSelectedTitleIndex({ titles: unformattedTitles, defaultTitle: props.defaultTitle });
+    getTOCs({ apiUrl: props.apiUrl, titlesArr: unformattedTitles, TOCs });
+}, { once: true });
+
+onBeforeMount(() => {
+    getTitlesArray({ apiUrl: props.apiUrl, titles });
+});
 </script>
 
 <template>

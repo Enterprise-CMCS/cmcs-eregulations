@@ -10,6 +10,9 @@ class PartQuerySet(models.QuerySet):
     def versions(self, title, part):
         return self.filter(name=part, title=title).order_by('-date').values("date")
 
+    def titles_list(self):
+        return self.order_by("title").distinct("title").values_list("title", flat=True)
+
 
 class PartManager(models.Manager.from_queryset(PartQuerySet)):
     pass
