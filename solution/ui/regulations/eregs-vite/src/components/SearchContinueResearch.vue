@@ -21,7 +21,14 @@ const makeMedicaidGovLink = (query) =>
 
 const makeUsCodeLink = (query) => {
     const urlEncodedQuery = encodeURIComponent(query);
-    const base64Query = btoa(query);
+
+    let base64Query;
+    try {
+        base64Query = btoa(query);
+    } catch (_error) {
+        base64Query = "";
+    }
+
     const urlEncodedBase64Query = encodeURIComponent(base64Query);
 
     return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=%28${urlEncodedQuery}%29+AND+%28%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2819%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2821%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2818%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2816%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2811%29%29%29&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Ctrue%7C%5B42%3A%3A%3A%3A7%3A19%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A21%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A18%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A16%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A11%3A%3A%3Atrue%3A%5D%7C%5BQWxsIEZpZWxkcw%3D%3D%3A%5D`;
@@ -57,6 +64,8 @@ const props = defineProps({
         default: () => [],
     },
 });
+
+// TODO: truncate very long queries for display
 
 const containerClasses = computed(() => ({
     "more-info__container--results": props.resultsCount > 0,
