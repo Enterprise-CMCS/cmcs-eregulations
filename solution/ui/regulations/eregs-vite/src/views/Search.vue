@@ -8,7 +8,12 @@ import useSearchResults from "composables/searchResults.js";
 
 import isEmpty from "lodash/isEmpty";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
+import {
+    compressQueryString,
+    decompressQueryString,
+    getRequestParams,
+    PARAM_VALIDATION_DICT
+} from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -102,12 +107,16 @@ const allDocTypesOnly = (queryParams) => {
 };
 
 // search query refs and methods
-const searchQuery = ref($route.query.q || "");
+const searchQuery = $route.query.q
+    ? ref(decompressQueryString($route.query.q))
+    : ref("");
+
 const clearSearchQuery = () => {
     searchQuery.value = "";
 };
 
 const executeSearch = (payload) => {
+    console.info("executeSearch payload:", payload);
     const routeClone = { ...$route.query };
 
     const cleanedRoute = useRemoveList({
@@ -119,7 +128,7 @@ const executeSearch = (payload) => {
         name: "search",
         query: {
             ...cleanedRoute,
-            q: payload.query,
+            q: compressQueryString(payload.query),
         },
     });
 };
@@ -142,13 +151,14 @@ const setSelectedParams = (param) => {
     }
 
     if (paramType === "q") {
-        searchQuery.value = paramValue;
+        searchQuery.value = decompressQueryString(paramValue);
         return;
     }
 };
 
+// TODO: Truncate long titles
 const setTitle = (query) => {
-    const querySubString = query ? `for ${query} ` : "";
+    const querySubString = query ? `for ${decompressQueryString(query)} ` : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
@@ -170,7 +180,7 @@ const getDocsOnLoad = async () => {
         apiUrl,
         pageSize,
         requestParamString: getRequestParams({ queryParams: $route.query }),
-        query: $route.query.q,
+        query: decompressQueryString($route.query.q),
         type: $route.query.type,
     });
 };
@@ -230,7 +240,7 @@ watch(
             apiUrl,
             pageSize,
             requestParamString: newRequestParams,
-            query: $route.query.q,
+            query: decompressQueryString($route.query.q),
             type: $route.query.type,
         });
     }

@@ -6,6 +6,11 @@ import lodashDifference from "lodash/difference";
 import lodashEndsWith from "lodash/endsWith";
 import lodashGet from "lodash/get";
 
+import {
+    compressToEncodedURIComponent,
+    decompressFromEncodedURIComponent,
+} from "lz-string";
+
 const EventCodes = {
     SetSection: "SetSection",
     ClearSections: "ClearSections",
@@ -89,7 +94,34 @@ const PARAM_VALIDATION_DICT = {
  * console.log(encodedQuery); // "SMDL%20%2312-002"
  */
 const PARAM_ENCODE_DICT = {
-    q: (query) => encodeURIComponent(query),
+    q: (query) => encodeURIComponent(decompressQueryString(query)),
+};
+
+/**
+ * @param {Object} str - object to be compressed
+ * @returns {string} - compressed and encoded string suitable for use in a URL query parameter
+ * @example
+ * const obj = { name: "John", age: 30 };
+ * const compressed = compressQueryString(obj);
+ * console.log(compressed); // "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
+ */
+const compressQueryString = (str) => {
+    const jsonString = JSON.stringify(str);
+    return compressToEncodedURIComponent(jsonString);
+};
+
+/**
+ * @param {string} compressedStr - compressed and encoded string from URL query parameter
+ * @returns {Object} - decompressed object
+ * @example
+ * const compressedStr = "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
+ * const obj = decompressQueryString(compressedStr);
+ * console.log(obj); // { name: "John", age: 30 }
+ */
+const decompressQueryString = (compressedStr) => {
+    console.info("compressedStr:", compressedStr);
+    const jsonString = decompressFromEncodedURIComponent(compressedStr);
+    return JSON.parse(jsonString);
 };
 
 /**
@@ -303,8 +335,13 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
 
                         return paramsArray.join("&");
                     } else {
+                        console.info("key", key);
+                        console.info("PARAM_ENCODE_DICT", PARAM_ENCODE_DICT);
+                        console.info("key in PARAM_ENCODE_DICT", key in PARAM_ENCODE_DICT);
                         return `${PARAM_MAP[key]}=${
-                            PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
+                            key in PARAM_ENCODE_DICT
+                                ? PARAM_ENCODE_DICT[key](v)
+                                : v
                         }`;
                     }
                 })
@@ -835,10 +872,12 @@ const hasStatuteCitations = ({ doc }) => {
 
 export {
     addMarks,
+    compressQueryString,
     createLastUpdatedDates,
     createRegResultLink,
     COUNT_TYPES_MAP,
     createOneIndexedArray,
+    decompressQueryString,
     delay,
     deserializeResult,
     DOCUMENT_TYPES,
