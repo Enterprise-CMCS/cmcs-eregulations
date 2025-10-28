@@ -38,7 +38,7 @@
     "vitest": "4.0.4"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.52.4"
+    "@rollup/rollup-linux-x64-gnu": "4.52.5"
   },
   "msw": {
     "workerDirectory": "msw"
