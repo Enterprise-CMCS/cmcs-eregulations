@@ -10,7 +10,6 @@ from django.urls import reverse
 from common.aws import establish_client
 from regcore.models import Part
 from resources.models import (
-    AbstractResource,
     FederalRegisterLink,
     ResourcesConfiguration,
 )
