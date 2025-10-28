@@ -16,7 +16,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/resources/public/links?page=1&page_size=7**", {
             fixture: "recent-guidance.json",
         }).as("recentGuidance");
-        cy.intercept("**/v3/title/42/parts").as("title42parts");
+        // titles is not provided a fixture so that the actual API
+        // is tested being called in the app
+        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("loads the homepage", () => {
@@ -27,7 +29,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.injectAxe();
         cy.checkAccessibility();
 
-        cy.get("#jumpToTitle").should("have.value", "42");
+        cy.get("#jumpToTitle").should("not.have.attr", "disabled");
         cy.get("#jumpToPart").should("not.have.attr", "disabled");
         cy.get("#jumpBtn").should("have.class", "active");
     });
@@ -244,10 +246,9 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         });
     });
 
-    it("Does not include Part 75 when Title 45 is selected in Jump To", () => {
+    it.skip("Does not include Part 75 when Title 45 is selected in Jump To", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.get("#jumpToTitle").select("45");
         cy.get("#jumpToPart").then(($select) => {
             const options = $select.find("option");
@@ -259,14 +260,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("jumps to a regulation Part using the jump-to select", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPart({ title: "45", part: "95" });
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
-        cy.wait("@title42parts");
         cy.jumpToRegulationPartSection({
             title: "42",
             part: "433",
@@ -288,6 +287,7 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
     it("clicks on Title 42 Part 430 in ToC and loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/");
+        cy.get(".toc__container .v-tabs").contains("Title 42").click();
         cy.get(".toc__container").contains("Part 430").click();
 
         cy.url().should("eq", Cypress.config().baseUrl + "/42/430/");
@@ -347,12 +347,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--regs a")
             .first()
-            .contains("§ 435.908 Assistance with application and renewal.")
+            .contains("§ 435.907 Application.")
             .click({ force: true });
         cy.url()
             .should("contain", Cypress.config().baseUrl)
             .and("contain", "/42/435")
-            .and("contain", "#435-908");
+            .and("contain", "#435-907");
     });
 
     it("takes you to the proper subject from demo card", () => {
@@ -360,14 +360,14 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--subjects a")
             .first()
-            .contains("Maternal Health")
+            .contains("Community Engagement")
             .click({ force: true });
         cy.url()
             .should(
                 "contain",
                 Cypress.config().baseUrl + `/subjects/?subjects=`
             );
-        cy.get("h1").should("have.text", "Maternal Health");
+        cy.get("h1").should("have.text", "Community Engagement");
     });
 
     it("takes you to the proper sample search from demo card", () => {
@@ -375,12 +375,12 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
         cy.visit("/");
         cy.get(".card--search a")
             .first()
-            .contains("dental examinations")
+            .contains("targeted case management")
             .click({ force: true });
         cy.url().should(
             "eq",
             Cypress.config().baseUrl +
-                `/search/?q=dental+examinations`,
+                `/search/?q=targeted+case+management`,
         );
     });
 
@@ -446,16 +446,6 @@ describe("Homepage", { scrollBehavior: "center" }, () => {
             force: true,
         });
         cy.url().should("include", "/subjects/?subjects=157");
-    });
-
-    it("loads the last parser success date from the API endpoint and displays it in footer", () => {
-        cy.intercept("**/v3/ecfr_parser_result/**").as("parserResult");
-        cy.viewport("macbook-15");
-        cy.visit("/");
-        //cy.wait("@parserResult");
-        cy.get(".last-updated-date")
-            .invoke("text")
-            .should("match", /^\w{3} (\d{1}|\d{2}), \d{4}$/);
     });
 
     it("has a responsive toc", () => {

@@ -9,7 +9,7 @@
     {{ toc.label_description }}
 </h1>
 {% ecfr_part_url_formatter title reg_part as ecfr_part_url %}
-<p class="last-updated"><a href="{{ecfr_part_url}}" class="external" target="_blank" rel="noopener noreferrer">{{ toc.label_level }} up to date from eCFR</a> as of {{ parser_last_success|parser_success_date_formatter }}{% if has_meaningful_latest_version_date %}<span class="latest-version">; last amended </span>{{ version_string }}{% endif %}.</p>
+<p class="last-updated"><a href="{{ecfr_part_url}}" class="external" target="_blank" rel="noopener noreferrer">{{ toc.label_level }} up to date from eCFR</a> as of {{ title_parser_success_date|parser_success_date_formatter }}{% if has_meaningful_latest_version_date %}<span class="latest-version">; last amended </span>{{ version_string }}{% endif %}.</p>
 
 <section class="part-meta"><b>{{ authority.header }}</b> {{ authority.content }}</section>
 <section class="part-meta"><b>{{ source.header }}</b> {{ source.content | citation }}</section>

@@ -36,6 +36,7 @@ updates:
           vitest:
             patterns:
               - "vitest*"
+              - "@vitest*"
           rollup:
             patterns:
               - "rollup*"

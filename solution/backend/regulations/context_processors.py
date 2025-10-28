@@ -9,6 +9,7 @@ def site_config(request):
         "allow_indexing": config.allow_indexing,
         "show_flash_banner": config.show_flash_banner,
         "flash_banner_text": config.flash_banner_text,
+        "default_title": config.default_title,
     }
 
 
