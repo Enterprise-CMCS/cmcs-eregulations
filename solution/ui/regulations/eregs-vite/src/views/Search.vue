@@ -9,8 +9,7 @@ import useSearchResults from "composables/searchResults.js";
 import isEmpty from "lodash/isEmpty";
 
 import {
-    compressQueryString,
-    decompressQueryString,
+    decompressRouteQuery,
     getRequestParams,
     PARAM_VALIDATION_DICT
 } from "utilities/utils.js";
@@ -108,7 +107,7 @@ const allDocTypesOnly = (queryParams) => {
 
 // search query refs and methods
 const searchQuery = $route.query.q
-    ? ref(decompressQueryString($route.query.q))
+    ? ref(decompressRouteQuery($route))
     : ref("");
 
 const clearSearchQuery = () => {
@@ -116,8 +115,7 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
-    console.info("executeSearch payload:", payload);
-    const routeClone = { ...$route.query };
+    const { compressed: _compressed, ...routeClone } = $route.query;
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
@@ -128,7 +126,7 @@ const executeSearch = (payload) => {
         name: "search",
         query: {
             ...cleanedRoute,
-            q: compressQueryString(payload.query),
+            q: payload.query,
         },
     });
 };
@@ -151,14 +149,17 @@ const setSelectedParams = (param) => {
     }
 
     if (paramType === "q") {
-        searchQuery.value = decompressQueryString(paramValue);
+        searchQuery.value = decompressRouteQuery({
+            compressed: $route.query.compressed,
+            q: paramValue,
+        });
         return;
     }
 };
 
 // TODO: Truncate long titles
 const setTitle = (query) => {
-    const querySubString = query ? `for ${decompressQueryString(query)} ` : "";
+    const querySubString = query ? `for ${decompressRouteQuery(query)} ` : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
@@ -180,7 +181,7 @@ const getDocsOnLoad = async () => {
         apiUrl,
         pageSize,
         requestParamString: getRequestParams({ queryParams: $route.query }),
-        query: decompressQueryString($route.query.q),
+        query: $route.query.q,
         type: $route.query.type,
     });
 };
@@ -207,7 +208,7 @@ watch(
         clearSearchQuery();
 
         // set document title
-        setTitle(q);
+        setTitle(decompressRouteQuery(newQueryParams));
 
         // early return if there's no query
         if (!q) {
@@ -240,7 +241,7 @@ watch(
             apiUrl,
             pageSize,
             requestParamString: newRequestParams,
-            query: decompressQueryString($route.query.q),
+            query: $route.query.q,
             type: $route.query.type,
         });
     }

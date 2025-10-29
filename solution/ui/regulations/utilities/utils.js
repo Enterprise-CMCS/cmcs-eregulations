@@ -94,7 +94,7 @@ const PARAM_VALIDATION_DICT = {
  * console.log(encodedQuery); // "SMDL%20%2312-002"
  */
 const PARAM_ENCODE_DICT = {
-    q: (query) => encodeURIComponent(decompressQueryString(query)),
+    q: (query) => encodeURIComponent(query),
 };
 
 /**
@@ -119,10 +119,21 @@ const compressQueryString = (str) => {
  * console.log(obj); // { name: "John", age: 30 }
  */
 const decompressQueryString = (compressedStr) => {
-    console.info("compressedStr:", compressedStr);
     const jsonString = decompressFromEncodedURIComponent(compressedStr);
     return JSON.parse(jsonString);
 };
+
+/**
+ * @param {Object} route - Vue Router route object
+ * @param {?string} route.compressed - "true" if the query string is compressed
+ * @param {?string} route.q - search query string
+ */
+const decompressRouteQuery = ({ compressed, q }) => {
+    if (compressed === "true" && q) {
+        return decompressQueryString(q);
+    }
+    return q;
+}
 
 /**
  * @param {string} fileName - name of the file or link to the file
@@ -878,6 +889,7 @@ export {
     COUNT_TYPES_MAP,
     createOneIndexedArray,
     decompressQueryString,
+    decompressRouteQuery,
     delay,
     deserializeResult,
     DOCUMENT_TYPES,

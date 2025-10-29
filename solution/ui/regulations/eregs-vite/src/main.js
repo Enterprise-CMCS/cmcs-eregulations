@@ -2,6 +2,9 @@ import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
 import SanitizeHtml from "directives/sanitizeHtml";
+import {
+    compressQueryString,
+} from "utilities/utils.js";
 import vuetify from "./plugins/vuetify";
 
 import App from "./App.vue";
@@ -29,7 +32,7 @@ app.directive("sanitize-html", SanitizeHtml);
 
 const router = vueRouter({ siteRoot });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     // If you pass multiple query params in the URL, Vue Router will parse them as arrays.
@@ -57,6 +60,17 @@ router.beforeEach((to) => {
         if (q) {
             return { name: "subjects", query: qlessQuery };
         }
+    } else if (
+        to.name === "search"
+            && to.query?.q
+            && to.query.q.length > 5
+            && to.query.compressed !== "true"
+    ) {
+        let returnQuery = { ...to.query };
+        returnQuery.q = compressQueryString(to.query.q);
+        returnQuery.compressed = "true";
+
+        return { name: to.name, query: returnQuery };
     }
 
     return true;
