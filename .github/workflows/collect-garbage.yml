@@ -20,8 +20,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: ["dev", "val", "prod"]
+        #environment: ["dev", "val", "prod"]
+        environment: ["dev"]
         app: ["docker-lambdas", "static-assets", "text-extractor", "zip-lambdas"]
+
+    environment:
+      name: ${{ matrix.environment }}
 
     steps:
       - name: Checkout repository
