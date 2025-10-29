@@ -1,8 +1,11 @@
 name: Collect Garbage
+
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 0" # weekly
+  pull_request:
+    types: [opened, synchronize, reopened]
+  #workflow_dispatch:
+  #schedule:
+  #  - cron: "0 0 * * 0" # weekly
 
 permissions:
   id-token: write
