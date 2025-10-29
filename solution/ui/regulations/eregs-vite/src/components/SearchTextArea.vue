@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, inject } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { decompressRouteQuery } from "utilities/utils.js";
 
 const props = defineProps({
     disabled: {
@@ -36,7 +37,8 @@ const props = defineProps({
 const emit = defineEmits(['execute-search', 'clear-form']);
 
 const parent = inject('parent', 'search');
-const router = useRouter();
+const $route = useRoute();
+const $router = useRouter();
 
 const searchInputValue = ref(props.searchQuery);
 
@@ -50,6 +52,16 @@ const multiWordQuery = computed(() => {
 });
 
 const submitForm = () => {
+    if (!searchInputValue.value || searchInputValue.value.trim() === "") {
+        console.info("Search input is empty, not submitting");
+        return;
+    }
+
+    if (decompressRouteQuery($route.query) === searchInputValue.value.trim()) {
+        console.info("Search query is the same as current, not submitting");
+        return;
+    }
+
     console.info("submitting form");
     emit('execute-search', { query: searchInputValue.value });
     searchInputValue.value = undefined;
@@ -66,10 +78,10 @@ const updateSearchValue = (value) => {
 };
 
 const synonymLink = (synonym) => {
-    router.push({
+    $router.push({
         name: props.redirectTo || parent,
         query: {
-            ...router.currentRoute.value.query,
+            ...$router.currentRoute.value.query,
             page: undefined,
             q: `"${synonym}"`,
         },
@@ -77,10 +89,10 @@ const synonymLink = (synonym) => {
 };
 
 const quotedLink = () => {
-    router.push({
+    $router.push({
         name: props.redirectTo || parent,
         query: {
-            ...router.currentRoute.value.query,
+            ...$router.currentRoute.value.query,
             page: undefined,
             q: `"${props.searchQuery}"`,
         },
