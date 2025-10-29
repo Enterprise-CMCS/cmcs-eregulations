@@ -8,7 +8,11 @@ import useSearchResults from "composables/searchResults.js";
 
 import isEmpty from "lodash/isEmpty";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
+import {
+    decompressRouteQuery,
+    getRequestParams,
+    PARAM_VALIDATION_DICT
+} from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -23,7 +27,7 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
-import SearchInput from "@/components/SearchInput.vue";
+import SearchTextArea from "@/components/SearchTextArea.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SortDropdown from "@/components/dropdowns/Sort.vue";
@@ -102,13 +106,16 @@ const allDocTypesOnly = (queryParams) => {
 };
 
 // search query refs and methods
-const searchQuery = ref($route.query.q || "");
+const searchQuery = $route.query.q
+    ? ref(decompressRouteQuery($route.query))
+    : ref("");
+
 const clearSearchQuery = () => {
     searchQuery.value = "";
 };
 
 const executeSearch = (payload) => {
-    const routeClone = { ...$route.query };
+    const { compressed: _compressed, ...routeClone } = $route.query;
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
@@ -142,11 +149,15 @@ const setSelectedParams = (param) => {
     }
 
     if (paramType === "q") {
-        searchQuery.value = paramValue;
+        searchQuery.value = decompressRouteQuery({
+            compressed: $route.query.compressed,
+            q: paramValue,
+        });
         return;
     }
 };
 
+// TODO: Truncate long titles
 const setTitle = (query) => {
     const querySubString = query ? `for ${query} ` : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
@@ -197,7 +208,7 @@ watch(
         clearSearchQuery();
 
         // set document title
-        setTitle(q);
+        setTitle(decompressRouteQuery(newQueryParams));
 
         // early return if there's no query
         if (!q) {
@@ -286,9 +297,9 @@ getDocsOnLoad();
         <main id="searchApp" class="search-view">
             <h1>Search Results</h1>
             <section class="query-filters__section" role="search">
-                <SearchInput
+                <SearchTextArea
                     form-class="search-form"
-                    label="Search for a document"
+                    label="Enter keywords, or paste entire paragraphs to find similar documents"
                     parent="search"
                     :search-query="searchQuery"
                     @execute-search="executeSearch"
