@@ -5,11 +5,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.aws import establish_client
 from resources.models import (
     InternalFile,
     InternalLink,
 )
-from resources.utils import establish_client
 
 from .resources import (
     AbstractInternalResourceAdmin,
@@ -45,7 +45,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
@@ -93,7 +93,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
