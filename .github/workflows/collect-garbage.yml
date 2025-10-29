@@ -36,7 +36,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
+          aws-region: ${{ vars.AWS_DEFAULT_REGION }}
 
       - name: Run garbage collection
         env:
