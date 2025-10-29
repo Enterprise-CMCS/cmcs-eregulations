@@ -107,7 +107,7 @@ const allDocTypesOnly = (queryParams) => {
 
 // search query refs and methods
 const searchQuery = $route.query.q
-    ? ref(decompressRouteQuery($route))
+    ? ref(decompressRouteQuery($route.query))
     : ref("");
 
 const clearSearchQuery = () => {
@@ -159,7 +159,7 @@ const setSelectedParams = (param) => {
 
 // TODO: Truncate long titles
 const setTitle = (query) => {
-    const querySubString = query ? `for ${decompressRouteQuery(query)} ` : "";
+    const querySubString = query ? `for ${query} ` : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
