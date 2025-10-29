@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        env: ["dev", "val", "prod"]
+        environment: ["dev", "val", "prod"]
         app: ["docker-lambdas", "static-assets", "text-extractor", "zip-lambdas"]
 
     steps:
@@ -40,7 +40,7 @@ jobs:
 
       - name: Run garbage collection
         env:
-          ENVIRONMENT: ${{ matrix.env }}
+          ENVIRONMENT: ${{ matrix.environment }}
           APP: ${{ matrix.app }}
         run: |
           pushd cdk-eregs
