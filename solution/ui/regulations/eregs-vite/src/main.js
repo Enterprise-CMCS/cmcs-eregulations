@@ -44,36 +44,42 @@ router.beforeEach(async (to) => {
         }
     });
 
-    if (to.name === "subjects") {
-        if (!to.query?.subject) {
-            document.title = pageTitle;
+    switch (to.name) {
+        case "subjects": {
+            if (!to.query?.subject) {
+                document.title = pageTitle;
+            }
+
+            // strip out q param if it exists; it's not needed for subjects
+            const { q, ...qlessQuery } = to.query;
+
+            if (isAuthenticated === "False" && to.query?.type) {
+                const { type: _type, ...typelessQuery } = qlessQuery;
+                return { name: "subjects", query: typelessQuery };
+            }
+
+            if (q) {
+                return { name: "subjects", query: qlessQuery };
+            }
+            break;
         }
+        case "search": {
+            if (
+                to.query?.q
+                    && to.query.q.length > 5
+                    && to.query.compressed !== "true"
+            ) {
+                let returnQuery = { ...to.query };
+                returnQuery.q = compressQueryString(to.query.q);
+                returnQuery.compressed = "true";
 
-        // strip out q param if it exists; it's not needed for subjects
-        const { q, ...qlessQuery } = to.query;
-
-        if (isAuthenticated === "False" && to.query?.type) {
-            const { type: _type, ...typelessQuery } = qlessQuery;
-            return { name: "subjects", query: typelessQuery };
+                return { name: to.name, query: returnQuery };
+            }
+            break;
         }
-
-        if (q) {
-            return { name: "subjects", query: qlessQuery };
-        }
-    } else if (
-        to.name === "search"
-            && to.query?.q
-            && to.query.q.length > 5
-            && to.query.compressed !== "true"
-    ) {
-        let returnQuery = { ...to.query };
-        returnQuery.q = compressQueryString(to.query.q);
-        returnQuery.compressed = "true";
-
-        return { name: to.name, query: returnQuery };
+        default:
+            return true;
     }
-
-    return true;
 });
 
 // Silence duplicate navigation errors
