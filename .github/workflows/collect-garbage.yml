@@ -1,11 +1,9 @@
 name: Collect Garbage
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-  #workflow_dispatch:
-  #schedule:
-  #  - cron: "0 0 * * 0" # weekly
+  workflow_dispatch:
+  schedule:
+   - cron: "0 0 * * 0" # weekly
 
 permissions:
   id-token: write
@@ -20,8 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #environment: ["dev", "val", "prod"]
-        environment: ["dev"]
+        environment: ["dev", "val", "prod"]
         app: ["docker-lambdas", "static-assets", "text-extractor", "zip-lambdas"]
 
     environment:
