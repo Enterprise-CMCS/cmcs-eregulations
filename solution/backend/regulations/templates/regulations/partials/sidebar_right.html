@@ -12,6 +12,14 @@
             <template #login-banner>
                 {% include "regulations/partials/login_sidebar_banner.html" %}
             </template>
+            <template #context-banner>
+                <div class="context-banner" role="note" aria-label="Context">
+                    <span class="context-banner-title">Notes</span><br>
+                    <p><b><a href="#75-104">§ 435.4</a></b>: Moratorium at <a href="/obbba/#H8DEEC3F1F40E4CD390DAC8E9F3F90B6C">H.R.1 Sec. 71101</a>.</p>
+                    <p><b><a href="#75-104">§ 435.222</a></b>: Moratorium at <a href="/obbba/#H6CCF8B8A04E04A36847FD683A259E8DC">H.R.1 Sec. 71102</a>.</p>
+                    <p><b><a href="#75-104">§ 435.907</a></b>: Final rule effective Oct. 1, 2025, at <a href="https://www.federalregister.gov/documents/2024/10/02/2024-21984/health-and-human-services-adoption-of-the-uniform-administrative-requirements-cost-principles-and" class="external" target="_blank" rel="noopener noreferrer">89 FR 80055</a>.</p>
+                </div>
+            </template>
             {% if user.is_authenticated %}
                 <template #public-label>
                     <div class="label__container">
