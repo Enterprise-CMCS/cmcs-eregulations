@@ -53,6 +53,7 @@ const selectedPart = ref(undefined);
 const resourceCount = ref(0);
 const partDict = ref({});
 const location = ref("");
+const banners = ref([]);
 
 const activePart = computed(() => {
     if (selectedPart.value !== undefined) {
@@ -97,6 +98,7 @@ onMounted(() => {
         selectedPart.value = args.section;
     });
     categories.value = getDefaultCategories();
+    fetchBanners();
 });
 
 onUnmounted(() => {
@@ -107,6 +109,13 @@ onUnmounted(() => {
 const handleHashChange = () => {
     location.value = parseHash(window.location.hash);
     fetchContent(location.value);
+    // Also fetch context banners for the current section if present
+    const sectionKey = getSectionKeyFromHash(window.location.hash);
+    if (sectionKey) {
+        fetchBanners(sectionKey);
+    } else if (props.subparts && props.subparts.length === 1) {
+        fetchBanners();
+    }
 };
 
 const parseHash = (locationHash) => {
@@ -130,6 +139,20 @@ const parseHash = (locationHash) => {
     selectedPart.value = `§ ${section}`;
     return `citations=${props.title}.${section}`;
 };
+
+function getSectionKeyFromHash(hash) {
+    if (!hash || hash === "#main-content") return "";
+    const trimmed = hash.startsWith("#") ? hash.substring(1) : hash;
+    const parts = trimmed.split("-");
+    if (parts.length >= 2 && !Number.isNaN(Number(parts[0])) && !Number.isNaN(Number(parts[1]))) {
+        return `${props.part}.${parts[1]}`;
+    }
+    // Handles hashes like #75.104
+    if (trimmed.includes(".")) {
+        return trimmed;
+    }
+    return "";
+}
 
 const fetchContent = async (location) => {
     try {
@@ -218,6 +241,44 @@ function getDefaultCategories() {
     });
 }
 
+async function fetchBanners(sectionKey) {
+    try {
+        const params = new URLSearchParams();
+        params.set("title", String(props.title));
+        params.set("part", String(props.part));
+        if (sectionKey) {
+            params.set("section", sectionKey);
+        } else if (props.subparts && props.subparts.length === 1) {
+            params.set("subpart", String(props.subparts[0]));
+        }
+        const base = props.apiUrl.replace(/\/$/, "");
+        const resp = await fetch(`${base}/context-banners?${params.toString()}`);
+        if (!resp.ok) throw new Error("Failed to fetch context banners");
+        const data = await resp.json();
+        banners.value = data.results || [];
+    } catch (e) {
+        console.error(e);
+        banners.value = [];
+    }
+}
+
+const filteredBanners = computed(() => {
+    if (!banners.value || banners.value.length === 0) return [];
+    // If a section is selected, show only that section's banner
+    if (selectedPart.value) {
+        const sectionText = selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
+        const cleaned = sectionText.split(" ").pop();
+        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
+        return banners.value.filter((b) => b.section === key);
+    }
+    // Otherwise, on subpart view, show all banners matching the current subpart
+    if (props.subparts && props.subparts.length === 1) {
+        const sp = props.subparts[0];
+        return banners.value.filter((b) => (b.subpart === sp) || !b.subpart);
+    }
+    return [];
+});
+
 const getCategories = async (apiUrl) => {
     let categories = [];
 
@@ -238,6 +299,24 @@ const getCategories = async (apiUrl) => {
         <h1 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h1>
+        <div v-if="filteredBanners.length" class="context-banner" role="note" aria-label="Context">
+            <span class="context-banner-title">Notes</span>
+            <p
+                v-for="item in filteredBanners"
+                :key="item.section"
+                class="context-banner__item"
+            >
+                <template v-if="!selectedPart">
+                    <strong>
+                        <a :href="`#${item.section.replace('.', '-')}`">§ {{ item.section }}</a>:
+                    </strong>
+                    <span v-html="item.html" />
+                </template>
+                <template v-else>
+                    <span v-html="item.html" />
+                </template>
+            </p>
+        </div>
         <slot name="context-banner" />
         <h2>Documents</h2>
         <slot name="login-banner" />

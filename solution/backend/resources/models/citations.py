@@ -12,6 +12,12 @@ class AbstractCitation(models.Model, DisplayNameFieldMixin):
 
     objects = InheritanceManager()
 
+    def __str__(self):
+        try:
+            return self.display_name
+        except Exception:
+            return f"{self.title} CFR {self.part} ({self.child_id})"
+
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)

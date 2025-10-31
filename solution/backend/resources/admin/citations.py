@@ -3,15 +3,23 @@ from django.db.models import Prefetch
 
 from common.admin import CustomAdminMixin
 from resources.models import (
+    AbstractCitation,
     Section,
     Subpart,
 )
 
 
+@admin.register(AbstractCitation)
 class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
+    list_display = ["title", "part", "child_id"]
+    search_fields = ["title", "part", "child_id"]
     def get_search_results(self, request, queryset, search_term):
         # TODO: use regex extract title, part, and section/subpart to search
         return super().get_search_results(request, queryset, search_term)
+
+    # Hide from the admin index and app list while keeping it registered for autocomplete
+    def get_model_perms(self, request):
+        return {}
 
 
 @admin.register(Section)

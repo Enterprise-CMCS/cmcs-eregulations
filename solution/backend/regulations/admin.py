@@ -25,6 +25,7 @@ from .models import (
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
+    SectionContextBanner,
 )
 
 admin.site.logout_template = 'admin/logged_out.html'
@@ -422,3 +423,41 @@ class StatuteLinkConverterAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(reverse(f"admin:{app}_{model}_changelist"))
 
         return render(request, "admin/import_conversions.html", context={})
+
+
+@admin.register(SectionContextBanner)
+class SectionContextBannerAdmin(admin.ModelAdmin):
+    list_display = ("get_title", "get_part", "get_section", "is_active")
+    list_filter = ("citation__title", "citation__part", "is_active")
+    search_fields = ("citation__part", "banner_html")
+    ordering = ("citation__title", "citation__part", "citation__child_id")
+    autocomplete_fields = ("citation",)
+    fieldsets = (
+        (None, {
+            "fields": ("citation", "is_active", "banner_html"),
+            "description": "Attach contextual notes to a Section or Subpart.",
+        }),
+    )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "citation":
+            from resources.models import Section, Subpart, AbstractCitation
+            kwargs["queryset"] = AbstractCitation.objects.select_subclasses(Section, Subpart)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def get_title(self, obj):
+        return obj.citation.title
+    get_title.short_description = "Title"
+
+    def get_part(self, obj):
+        return obj.citation.part
+    get_part.short_description = "Part"
+
+    def get_section(self, obj):
+        # For Sections, show section_id; for Subparts, show subpart_id/child_id
+        try:
+            # Section has attribute section_id; Subpart has subpart_id
+            return getattr(obj.citation, "section_id", getattr(obj.citation, "subpart_id", obj.citation.child_id))
+        except Exception:
+            return ""
+    get_section.short_description = "Section/Subpart"

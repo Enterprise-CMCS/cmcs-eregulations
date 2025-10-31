@@ -24,6 +24,7 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, GetStatuteLinkAPIView, StatuteLinkConverterViewSet
 from regulations.views.subjects import SubjectsView
+from regulations.views.banners import ContextBannersView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
@@ -71,6 +72,7 @@ urlpatterns = [
             "get": "list",
         })),
         path("statute-link/", GetStatuteLinkAPIView.as_view(), name="statute-link"),
+        path("context-banners", ContextBannersView.as_view()),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
