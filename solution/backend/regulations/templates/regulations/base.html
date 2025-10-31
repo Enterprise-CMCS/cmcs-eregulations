@@ -34,13 +34,13 @@ CSS/Javascript etc., should inherit from this template.
         </title>
         {% include "regulations/partials/favicon.html" %}
         {% block custom_styles %}
-            <link rel="stylesheet" href="{% static '/bundles/eregs-component-lib.css' %}?{{ DEPLOY_NUMBER }}" />
+            <link rel="stylesheet" href="{% static 'bundles/eregs-component-lib.css' %}?{{ DEPLOY_NUMBER }}" />
         {% endblock %}
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css"
         />
-        <link rel="stylesheet" href="{% static '/css/main.css' %}?{{ DEPLOY_NUMBER }}" />
+        <link rel="stylesheet" href="{% static 'css/main.css' %}?{{ DEPLOY_NUMBER }}" />
     </head>
     <body class="ds-base {% block body_class %}{% endblock %}">
         {% block outside_vue %}{% endblock %}
@@ -73,7 +73,7 @@ CSS/Javascript etc., should inherit from this template.
         </div>
         {% block post_footer %}
             <script src="https://cdn.jsdelivr.net/npm/vue@3.5.22/dist/vue.global.prod.js"></script>
-            <script src="{% static '/bundles/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
+            <script src="{% static 'bundles/eregs-main.iife.js' %}?{{ DEPLOY_NUMBER }}"></script>
         {% endblock %}
     </body>
 </html>
