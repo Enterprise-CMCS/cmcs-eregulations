@@ -642,3 +642,6 @@ select {
 .context-banner p {
     margin: var(--spacer-half) 0px !important;
 }
+.context-banner a {
+    text-decoration: none;
+}
