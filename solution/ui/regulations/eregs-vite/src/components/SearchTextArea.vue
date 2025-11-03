@@ -23,14 +23,6 @@ const props = defineProps({
         type: String,
         default: undefined,
     },
-    synonyms: {
-        type: Array,
-        default: () => [],
-    },
-    showSuggestions: {
-        type: Boolean,
-        default: false,
-    },
     redirectTo: {
         type: String,
         default: undefined,
@@ -44,15 +36,6 @@ const $route = useRoute();
 const $router = useRouter();
 
 const searchInputValue = ref(props.searchQuery);
-
-const multiWordQuery = computed(() => {
-    if (props.searchQuery === undefined) return false;
-    return (
-        props.searchQuery.split(' ').length > 1 &&
-        props.searchQuery[0] !== '"' &&
-        props.searchQuery[props.searchQuery.length - 1] !== '"'
-    );
-});
 
 const submitForm = () => {
     if (!searchInputValue.value || searchInputValue.value.trim() === "") {
@@ -93,17 +76,6 @@ const updateSearchValue = (value) => {
 
 const addNewLine = () => {
     searchInputValue.value += "";
-};
-
-const synonymLink = (synonym) => {
-    $router.push({
-        name: props.redirectTo || parent,
-        query: {
-            ...$router.currentRoute.value.query,
-            page: undefined,
-            q: `"${synonym}"`,
-        },
-    });
 };
 
 const quotedLink = () => {
@@ -169,36 +141,5 @@ watch(
                 />
             </template>
         </v-textarea>
-        <div class="form-helper-text">
-            <template v-if="showSuggestions && multiWordQuery">
-                <div class="search-suggestion">
-                    Didn't find what you were looking for? Try searching for
-                    <a
-                        tabindex="0"
-                        @click="quotedLink"
-                        @keydown.enter.space.prevent="quotedLink"
-                    >"{{ searchQuery }}"</a>
-                </div>
-            </template>
-            <template v-if="synonyms.length > 0">
-                <div class="search-suggestion">
-                    <span v-if="showSuggestions && multiWordQuery">
-                        Or search
-                    </span>
-                    <span v-else> Search </span>
-                    for similar terms:
-                    <template v-for="(syn, i) in synonyms" :key="i">
-                        <a
-                            tabindex="0"
-                            @click="synonymLink(syn)"
-                            @keydown.enter.space.prevent="synonymLink(syn)"
-                        >{{ syn }}</a><span
-                            v-if="synonyms[synonyms.length - 1] != syn"
-                        >,
-                        </span>
-                    </template>
-                </div>
-            </template>
-        </div>
     </form>
 </template>
