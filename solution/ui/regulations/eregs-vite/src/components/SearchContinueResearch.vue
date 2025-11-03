@@ -84,7 +84,11 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
 </script>
 
 <template>
-    <div class="more-info__container" :class="containerClasses">
+    <div
+        v-if="query && query.length <= SEARCH_STRING_TRUNCATE_THRESHOLD"
+        class="more-info__container"
+        :class="containerClasses"
+    >
         <h3 class="more-info__title">
             Continue Your Research
         </h3>
@@ -133,7 +137,6 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
             </span>
         </div>
         <div
-            v-if="query && query.length <= SEARCH_STRING_TRUNCATE_THRESHOLD"
             class="more-info__row"
             data-testid="research-row-2"
         >
