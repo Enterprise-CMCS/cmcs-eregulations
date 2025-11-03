@@ -71,7 +71,7 @@ router.beforeEach(async (to) => {
                     && !to.query.q.startsWith(".")
             ) {
                 let { q, ...returnQuery } = to.query;
-                returnQuery.q = compressRouteQuery(q);
+                returnQuery.q = compressRouteQuery({ q });
 
                 return { name: to.name, query: returnQuery };
             }

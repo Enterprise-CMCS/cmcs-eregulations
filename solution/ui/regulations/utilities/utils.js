@@ -125,14 +125,31 @@ const decompressQueryString = (compressedStr) => {
     return JSON.parse(jsonString);
 };
 
-const compressRouteQuery = (query) => {
-    return `.${compressQueryString(query)}`;
+/**
+ * @param {Object} args - search query string
+ * @param {string} args.q - search query string
+ * @returns {string} - compressed query string prefixed with a dot
+ * @example
+ * const query = "This is a very long search query that needs to be compressed for URL usage.";
+ * const compressedQuery = compressRouteQuery({ q: query });
+ * console.log(compressedQuery); // ".N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
+ */
+const compressRouteQuery = ({ q }) => {
+    return `.${compressQueryString(q)}`;
 };
 
 /**
- * @param {Object} route - Vue Router route object
- * @param {?string} route.compressed - "true" if the query string is compressed
- * @param {?string} route.q - search query string
+ * @param {Object} args - Arguments object
+ * @param {string} args.q - search query string
+ * @returns {string} - decompressed query string if it was compressed; otherwise returns the original query string
+ * @example
+ * const compressedQuery = ".N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
+ * const query = decompressRouteQuery({ q: compressedQuery });
+ * console.log(query); // "This is a very long search query that needs to be compressed for URL usage."
+ * @example
+ * const query = "This is a normal search query.";
+ * const decompressedQuery = decompressRouteQuery({ q: query });
+ * console.log(decompressedQuery); // "This is a normal search query."
  */
 const decompressRouteQuery = ({ q }) => {
     if (q && q.startsWith(".")) {
@@ -141,6 +158,20 @@ const decompressRouteQuery = ({ q }) => {
     return q;
 }
 
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.query - search query string
+ * @param {number} args.maxLength - maximum length of the returned string
+ * @returns {string} - truncated query string for display purposes
+ * @example
+ * const query = "This is a very long search query that needs to be truncated for display purposes.";
+ * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
+ * console.log(truncatedQuery); // "This is a very lo...play purposes."
+ * @example
+ * const query = "Short query";
+ * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
+ * console.log(truncatedQuery); // "Short query"
+ */
 const truncateQueryForDisplay = ({
     query = "",
     maxLength = SEARCH_STRING_COMPRESSION_THRESHOLD
