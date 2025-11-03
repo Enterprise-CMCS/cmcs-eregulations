@@ -1,7 +1,10 @@
 <script setup>
 import { ref, computed, watch, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { decompressRouteQuery } from "utilities/utils.js";
+import {
+    decompressRouteQuery,
+    MAX_QUERY_LENGTH,
+} from "utilities/utils.js";
 
 const props = defineProps({
     disabled: {
@@ -62,8 +65,19 @@ const submitForm = () => {
         return;
     }
 
+    const truncatedQuery = searchInputValue.value.slice(0, MAX_QUERY_LENGTH);
+
+    if (
+        truncatedQuery.length < searchInputValue.value.length
+            && decompressRouteQuery($route.query) === truncatedQuery.trim()
+    ) {
+        console.info("Search query is the same as current, not submitting");
+        searchInputValue.value = decompressRouteQuery($route.query);
+        return;
+    }
+
     console.info("submitting form");
-    emit('execute-search', { query: searchInputValue.value });
+    emit('execute-search', { query: truncatedQuery });
     searchInputValue.value = undefined;
 };
 

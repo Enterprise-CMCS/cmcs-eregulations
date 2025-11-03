@@ -178,9 +178,6 @@ const truncateQueryForDisplay = ({
     query = "",
     maxLength = SEARCH_STRING_COMPRESSION_THRESHOLD
 }) => {
-    console.info(
-        `Truncating query for display. Original length: ${query.length}, Max length: ${maxLength}`
-    );
     if (query.length <= maxLength) return query;
     // return half from start and half from end with ellipsis in middle
     const halfLength = Math.floor(maxLength / 2) - 2; // account for ellipsis
@@ -403,9 +400,6 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
 
                         return paramsArray.join("&");
                     } else {
-                        console.info("key", key);
-                        console.info("PARAM_ENCODE_DICT", PARAM_ENCODE_DICT);
-                        console.info("key in PARAM_ENCODE_DICT", key in PARAM_ENCODE_DICT);
                         return `${PARAM_MAP[key]}=${
                             key in PARAM_ENCODE_DICT
                                 ? PARAM_ENCODE_DICT[key](v)

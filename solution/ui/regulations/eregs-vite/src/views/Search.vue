@@ -116,7 +116,7 @@ const clearSearchQuery = () => {
 };
 
 const executeSearch = (payload) => {
-    const { compressed: _compressed, ...routeClone } = $route.query;
+    const { ...routeClone } = $route.query;
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
