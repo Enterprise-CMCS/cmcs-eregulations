@@ -266,6 +266,32 @@
         }
     }
 
+    .v-input__control {
+        .v-field--variant-outlined.v-field--focused .v-field__outline {
+            color: $secondary_border_color;
+
+        }
+
+        .v-field__field {
+            color: black;
+
+            .v-label {
+                opacity: 1;
+                color: $secondary_text_color;
+            }
+        }
+
+        .v-field__outline {
+            color: $border_color;
+            --v-field-border-opacity: 1;
+
+            .v-label {
+                opacity: 1;
+                color: $secondary_text_color;
+            }
+        }
+    }
+
     textarea {
         margin-block: 0;
     }
