@@ -299,7 +299,12 @@ const getCategories = async (apiUrl) => {
         <h1 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h1>
-        <div v-if="filteredBanners.length" class="context-banner" role="note" aria-label="Context">
+        <div
+            v-if="filteredBanners.length"
+            class="context-banner"
+            role="note"
+            aria-label="Context"
+        >
             <span class="context-banner-title">Notes</span>
             <p
                 v-for="item in filteredBanners"
