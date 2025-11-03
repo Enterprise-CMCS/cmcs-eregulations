@@ -11,7 +11,8 @@ import isEmpty from "lodash/isEmpty";
 import {
     decompressRouteQuery,
     getRequestParams,
-    PARAM_VALIDATION_DICT
+    PARAM_VALIDATION_DICT,
+    truncateQueryForDisplay,
 } from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
@@ -391,7 +392,7 @@ getDocsOnLoad();
                             </template>
                         </SignInCTA>
                         <span class="no-results__span">Your search for
-                            <strong>{{ searchQuery }}</strong> did not match any
+                            <strong>{{ truncateQueryForDisplay({ query: searchQuery}) }}</strong> did not match any
                             results
                             <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>

@@ -2,26 +2,12 @@
 import { computed } from "vue";
 
 import {
-    SEARCH_STRING_COMPRESSION_THRESHOLD,
     stripQuotes,
+    truncateQueryForDisplay,
 } from "utilities/utils";
 
 const hasSpaces = (str) => /[\s]/.test(str);
 const hasQuotes = (str) => /["']/.test(str);
-
-const truncateQueryForDisplay = ({ query = "", maxLength = 50 }) => {
-    console.info(
-        `Truncating query for display. Original length: ${query.length}, Max length: ${maxLength}`
-    );
-    if (query.length <= maxLength) return query;
-    // return half from start and half from end with ellipsis in middle
-    const halfLength = Math.floor(maxLength / 2) - 2; // account for ellipsis
-    return (
-        query.slice(0, halfLength) +
-        "..." +
-        query.slice(query.length - halfLength)
-    );
-};
 
 const makeEcfrLink = ({ query, title }) =>
     `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${encodeURIComponent(
@@ -58,7 +44,6 @@ export default {
     makeFederalRegisterLink,
     makeMedicaidGovLink,
     makeUsCodeLink,
-    truncateQueryForDisplay,
 };
 </script>
 
@@ -92,16 +77,7 @@ const containerClasses = computed(() => ({
 
 const hasActiveFilters = computed(() => props.activeFilters.length > 0);
 
-const truncatedQuery = computed(() => {
-    if (props.query.length <= SEARCH_STRING_COMPRESSION_THRESHOLD) {
-        return props.query;
-    }
-
-    return truncateQueryForDisplay({
-        query: props.query,
-        maxLength: SEARCH_STRING_COMPRESSION_THRESHOLD,
-    });
-});
+const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.query }));
 </script>
 
 <template>

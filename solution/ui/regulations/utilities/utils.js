@@ -141,6 +141,24 @@ const decompressRouteQuery = ({ q }) => {
     return q;
 }
 
+const truncateQueryForDisplay = ({
+    query = "",
+    maxLength = SEARCH_STRING_COMPRESSION_THRESHOLD
+}) => {
+    console.info(
+        `Truncating query for display. Original length: ${query.length}, Max length: ${maxLength}`
+    );
+    if (query.length <= maxLength) return query;
+    // return half from start and half from end with ellipsis in middle
+    const halfLength = Math.floor(maxLength / 2) - 2; // account for ellipsis
+    return (
+        query.slice(0, halfLength) +
+        "..." +
+        query.slice(query.length - halfLength)
+    );
+};
+
+
 /**
  * @param {string} fileName - name of the file or link to the file
  * @returns {?string} - returns suffix of filename if the file name is a string and passes validation; otherwise returns undefined
@@ -929,4 +947,5 @@ export {
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,
+    truncateQueryForDisplay,
 };
