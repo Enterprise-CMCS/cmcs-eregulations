@@ -16,6 +16,8 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
+const SEARCH_STRING_COMPRESSION_THRESHOLD = 5;
+
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
 const DOCUMENT_TYPES_MAP = {
@@ -923,6 +925,7 @@ export {
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,

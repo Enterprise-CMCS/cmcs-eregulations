@@ -4,6 +4,7 @@ import Clickaway from "directives/clickaway";
 import SanitizeHtml from "directives/sanitizeHtml";
 import {
     compressRouteQuery,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
 } from "utilities/utils.js";
 import vuetify from "./plugins/vuetify";
 
@@ -66,7 +67,7 @@ router.beforeEach(async (to) => {
         case "search": {
             if (
                 to.query?.q
-                    && to.query.q.length > 5
+                    && to.query.q.length > SEARCH_STRING_COMPRESSION_THRESHOLD
                     && !to.query.q.startsWith(".")
             ) {
                 let { q, ...returnQuery } = to.query;
