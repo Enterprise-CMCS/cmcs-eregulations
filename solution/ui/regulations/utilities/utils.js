@@ -16,9 +16,9 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
-const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
 const MAX_QUERY_LENGTH = 10000;
-const MAX_CONTINUE_SEARCH_LENGTH = 1000;
+const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
+const SEARCH_STRING_TRUNCATE_THRESHOLD = 1000;
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
@@ -966,13 +966,13 @@ export {
     hasRegulationCitations,
     hasStatuteCitations,
     highlightText,
-    MAX_CONTINUE_SEARCH_LENGTH,
     MAX_QUERY_LENGTH,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
     SEARCH_STRING_COMPRESSION_THRESHOLD,
+    SEARCH_STRING_TRUNCATE_THRESHOLD,
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,

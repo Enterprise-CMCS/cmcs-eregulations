@@ -12,6 +12,7 @@ import {
     decompressRouteQuery,
     getRequestParams,
     PARAM_VALIDATION_DICT,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
     truncateQueryForDisplay,
 } from "utilities/utils.js";
 
@@ -160,7 +161,9 @@ const setSelectedParams = (param) => {
 
 // TODO: Truncate long titles
 const setTitle = (query) => {
-    const querySubString = query ? `for ${query} ` : "";
+    const querySubString = query && query.length <= SEARCH_STRING_COMPRESSION_THRESHOLD
+        ? `for ${query} `
+        : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 

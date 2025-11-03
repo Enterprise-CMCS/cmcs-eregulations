@@ -50,7 +50,7 @@ export default {
 
 <script setup>
 import {
-    MAX_CONTINUE_SEARCH_LENGTH,
+    SEARCH_STRING_TRUNCATE_THRESHOLD,
 } from "utilities/utils";
 
 const props = defineProps({
@@ -72,8 +72,6 @@ const props = defineProps({
         default: () => [],
     },
 });
-
-// TODO: truncate very long queries for display
 
 const containerClasses = computed(() => ({
     "more-info__container--results": props.resultsCount > 0,
@@ -135,7 +133,7 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
             </span>
         </div>
         <div
-            v-if="query && query.length <= MAX_CONTINUE_SEARCH_LENGTH"
+            v-if="query && query.length <= SEARCH_STRING_TRUNCATE_THRESHOLD"
             class="more-info__row"
             data-testid="research-row-2"
         >
