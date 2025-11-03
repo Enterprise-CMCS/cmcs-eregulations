@@ -77,6 +77,10 @@ const updateSearchValue = (value) => {
     searchInputValue.value = value;
 };
 
+const addNewLine = () => {
+    searchInputValue.value += "";
+};
+
 const synonymLink = (synonym) => {
     $router.push({
         name: props.redirectTo || parent,
@@ -128,6 +132,8 @@ watch(
             class="search__textarea"
             hide-details
             @update:model-value="updateSearchValue"
+            @keydown.enter.exact.prevent="submitForm"
+            @keydown.enter.shift.exact="addNewLine"
         >
             <template #append>
                 <v-icon
@@ -136,6 +142,7 @@ watch(
                     icon="mdi-close"
                     data-testid="clear-search-form"
                     @click="clearForm"
+                    @keydown.enter.space.prevent="clearForm"
                 />
                 <v-icon
                     icon="mdi-magnify"
