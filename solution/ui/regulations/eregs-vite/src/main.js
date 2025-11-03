@@ -3,7 +3,7 @@ import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
 import SanitizeHtml from "directives/sanitizeHtml";
 import {
-    compressQueryString,
+    compressRouteQuery,
 } from "utilities/utils.js";
 import vuetify from "./plugins/vuetify";
 
@@ -67,11 +67,10 @@ router.beforeEach(async (to) => {
             if (
                 to.query?.q
                     && to.query.q.length > 5
-                    && to.query.compressed !== "true"
+                    && !to.query.q.startsWith(".")
             ) {
-                let returnQuery = { ...to.query };
-                returnQuery.q = compressQueryString(to.query.q);
-                returnQuery.compressed = "true";
+                let { q, ...returnQuery } = to.query;
+                returnQuery.q = compressRouteQuery(q);
 
                 return { name: to.name, query: returnQuery };
             }

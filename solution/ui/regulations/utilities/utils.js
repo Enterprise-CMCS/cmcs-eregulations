@@ -123,14 +123,18 @@ const decompressQueryString = (compressedStr) => {
     return JSON.parse(jsonString);
 };
 
+const compressRouteQuery = (query) => {
+    return `.${compressQueryString(query)}`;
+};
+
 /**
  * @param {Object} route - Vue Router route object
  * @param {?string} route.compressed - "true" if the query string is compressed
  * @param {?string} route.q - search query string
  */
-const decompressRouteQuery = ({ compressed, q }) => {
-    if (compressed === "true" && q) {
-        return decompressQueryString(q);
+const decompressRouteQuery = ({ q }) => {
+    if (q && q.startsWith(".")) {
+        return decompressQueryString(q.substring(1));
     }
     return q;
 }
@@ -884,6 +888,7 @@ const hasStatuteCitations = ({ doc }) => {
 export {
     addMarks,
     compressQueryString,
+    compressRouteQuery,
     createLastUpdatedDates,
     createRegResultLink,
     COUNT_TYPES_MAP,
