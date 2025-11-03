@@ -16,7 +16,7 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
-const SEARCH_STRING_COMPRESSION_THRESHOLD = 5;
+const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 

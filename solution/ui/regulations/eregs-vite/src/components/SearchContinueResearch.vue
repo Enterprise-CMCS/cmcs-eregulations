@@ -1,10 +1,27 @@
 <script>
 import { computed } from "vue";
 
-import { stripQuotes } from "utilities/utils";
+import {
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
+    stripQuotes,
+} from "utilities/utils";
 
 const hasSpaces = (str) => /[\s]/.test(str);
 const hasQuotes = (str) => /["']/.test(str);
+
+const truncateQueryForDisplay = ({ query = "", maxLength = 50 }) => {
+    console.info(
+        `Truncating query for display. Original length: ${query.length}, Max length: ${maxLength}`
+    );
+    if (query.length <= maxLength) return query;
+    // return half from start and half from end with ellipsis in middle
+    const halfLength = Math.floor(maxLength / 2) - 2; // account for ellipsis
+    return (
+        query.slice(0, halfLength) +
+        "..." +
+        query.slice(query.length - halfLength)
+    );
+};
 
 const makeEcfrLink = ({ query, title }) =>
     `https://www.ecfr.gov/search?search[hierarchy][title]=${title}&search[query]=${encodeURIComponent(
@@ -41,6 +58,7 @@ export default {
     makeFederalRegisterLink,
     makeMedicaidGovLink,
     makeUsCodeLink,
+    truncateQueryForDisplay,
 };
 </script>
 
@@ -73,6 +91,17 @@ const containerClasses = computed(() => ({
 }));
 
 const hasActiveFilters = computed(() => props.activeFilters.length > 0);
+
+const truncatedQuery = computed(() => {
+    if (props.query.length <= SEARCH_STRING_COMPRESSION_THRESHOLD) {
+        return props.query;
+    }
+
+    return truncateQueryForDisplay({
+        query: props.query,
+        maxLength: SEARCH_STRING_COMPRESSION_THRESHOLD,
+    });
+});
 </script>
 
 <template>
@@ -102,7 +131,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                             q: `&quot;${stripQuotes(query)}&quot;`,
                         },
                     }"
-                >"{{ stripQuotes(query) }}"</router-link>
+                >"{{ truncatedQuery }}"</router-link>
             </span>
         </div>
         <div
@@ -125,8 +154,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
             </span>
         </div>
         <div class="more-info__row" data-testid="research-row-2">
-            <span class="row__title">Try your search for <strong>{{ query }}</strong> on other
-                websites</span>
+            <span class="row__title">Try your search for <strong>{{ truncatedQuery }}</strong> on other websites</span>
             <ul class="row__content row__content--list">
                 <li>
                     <a
