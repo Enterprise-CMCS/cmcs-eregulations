@@ -17,6 +17,8 @@ const EventCodes = {
 };
 
 const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
+const MAX_QUERY_LENGTH = 10000;
+const MAX_CONTINUE_SEARCH_LENGTH = 1000;
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
@@ -970,6 +972,8 @@ export {
     hasRegulationCitations,
     hasStatuteCitations,
     highlightText,
+    MAX_CONTINUE_SEARCH_LENGTH,
+    MAX_QUERY_LENGTH,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,

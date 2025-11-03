@@ -49,6 +49,10 @@ export default {
 </script>
 
 <script setup>
+import {
+    MAX_CONTINUE_SEARCH_LENGTH,
+} from "utilities/utils";
+
 const props = defineProps({
     query: {
         type: String,
@@ -130,7 +134,11 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
                     reset all active filters</router-link>.
             </span>
         </div>
-        <div class="more-info__row" data-testid="research-row-2">
+        <div
+            v-if="query && query.length <= MAX_CONTINUE_SEARCH_LENGTH"
+            class="more-info__row"
+            data-testid="research-row-2"
+        >
             <span class="row__title">Try your search for <strong>{{ truncatedQuery }}</strong> on other websites</span>
             <ul class="row__content row__content--list">
                 <li>
