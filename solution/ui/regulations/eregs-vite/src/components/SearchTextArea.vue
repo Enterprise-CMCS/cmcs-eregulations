@@ -138,6 +138,7 @@ watch(
             <template #append>
                 <v-icon
                     title="Clear All"
+                    class="textarea__clear"
                     aria-label="Clear search form"
                     icon="mdi-close"
                     data-testid="clear-search-form"
@@ -146,7 +147,8 @@ watch(
                 />
                 <v-icon
                     icon="mdi-magnify"
-                    :aria-label="`Search${searchInputValue ? ' for ' + searchInputValue : ''}`"
+                    class="default-btn"
+                    aria-label="Submit search"
                     data-testid="search-form-submit"
                     @click="submitForm"
                     @keydown.enter.space.prevent="submitForm"

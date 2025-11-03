@@ -3,6 +3,7 @@
 //-----------------------------
 
 @import "../application_settings";
+@import "./_buttons_and_tooltip.scss";
 
 .error-msg__container {
     font-size: var(--font-size-lg);
@@ -247,11 +248,21 @@
 .search__textarea {
     &.v-input--horizontal {
         .v-input__append {
-            margin-inline-start: 0;
+            margin-inline-start: var(--spacer-half);
             padding-top: 0;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+
+            i {
+                opacity: 1;
+            }
+
+            .textarea__clear {
+                @include common-remove-btn-styles;
+
+                color: $main_button_color;
+            }
         }
     }
 
