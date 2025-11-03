@@ -29,7 +29,8 @@ const makeUsCodeLink = (query) => {
     try {
         base64Query = btoa(query);
     } catch (_error) {
-        base64Query = "";
+        console.error("Failed to encode US Code query to base64");
+        return false;
     }
 
     const urlEncodedBase64Query = encodeURIComponent(base64Query);
@@ -164,7 +165,7 @@ const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.que
                         rel="noopener noreferrer"
                     >Federal Register</a>
                 </li>
-                <li>
+                <li v-if="makeUsCodeLink(query)">
                     <a
                         :href="makeUsCodeLink(query)"
                         class="external"
