@@ -3,6 +3,7 @@ import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
 import SanitizeHtml from "directives/sanitizeHtml";
 import {
+    COMPRESSION_PREFIX,
     compressRouteQuery,
     SEARCH_STRING_COMPRESSION_THRESHOLD,
 } from "utilities/utils.js";
@@ -68,7 +69,7 @@ router.beforeEach(async (to) => {
             if (
                 to.query?.q
                     && to.query.q.length > SEARCH_STRING_COMPRESSION_THRESHOLD
-                    && !to.query.q.startsWith(".")
+                    && !to.query.q.startsWith(COMPRESSION_PREFIX)
             ) {
                 let { q, ...returnQuery } = to.query;
                 returnQuery.q = compressRouteQuery({ q });

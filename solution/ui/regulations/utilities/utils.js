@@ -19,6 +19,7 @@ const EventCodes = {
 const MAX_QUERY_LENGTH = 10000;
 const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
 const SEARCH_STRING_TRUNCATE_THRESHOLD = 1000;
+const COMPRESSION_PREFIX = ".!~";
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
@@ -134,10 +135,10 @@ const decompressQueryString = (compressedStr) => {
  * @example
  * const query = "This is a very long search query that needs to be compressed for URL usage.";
  * const compressedQuery = compressRouteQuery({ q: query });
- * console.log(compressedQuery); // ".N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
+ * console.log(compressedQuery); // ".!~N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
  */
 const compressRouteQuery = ({ q }) => {
-    return `.${compressQueryString(q)}`;
+    return `${COMPRESSION_PREFIX}${compressQueryString(q)}`;
 };
 
 /**
@@ -145,7 +146,7 @@ const compressRouteQuery = ({ q }) => {
  * @param {string} args.q - search query string
  * @returns {string} - decompressed query string if it was compressed; otherwise returns the original query string
  * @example
- * const compressedQuery = ".N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
+ * const compressedQuery = ".!~N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
  * const query = decompressRouteQuery({ q: compressedQuery });
  * console.log(query); // "This is a very long search query that needs to be compressed for URL usage."
  * @example
@@ -154,8 +155,8 @@ const compressRouteQuery = ({ q }) => {
  * console.log(decompressedQuery); // "This is a normal search query."
  */
 const decompressRouteQuery = ({ q }) => {
-    if (q && q.startsWith(".")) {
-        return decompressQueryString(q.substring(1));
+    if (q && q.startsWith(COMPRESSION_PREFIX)) {
+        return decompressQueryString(q.substring(3));
     }
     return q;
 }
@@ -938,6 +939,7 @@ export {
     compressRouteQuery,
     createLastUpdatedDates,
     createRegResultLink,
+    COMPRESSION_PREFIX,
     COUNT_TYPES_MAP,
     createOneIndexedArray,
     decompressQueryString,
