@@ -43,7 +43,7 @@ jobs:
           submodules: true
 
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -401,7 +401,7 @@ jobs:
 
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -413,16 +413,3 @@ jobs:
           config: baseUrl=${{ needs.deploy-site.outputs.api_url }}
         env:
           CYPRESS_DEPLOYING: true
-
-      - uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/screenshots/*/*
-
-      # Test run video was always captured, so this action uses "always()" condition
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-videos
-          path: /home/runner/work/cmcs-eregulations/cmcs-eregulations/solution/ui/e2e/cypress/videos/*

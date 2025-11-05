@@ -21,6 +21,7 @@
     <left-nav-collapse contents-description="table of contents">
         <template #nav-contents>
             <toc-container
+                default-title={{ default_title }}
                 api-url="{{ API_BASE }}"
                 home-url="{% url 'homepage' %}"
             ></toc-container>
@@ -54,17 +55,17 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}42/435/Subpart-J#435-908"
+                                        href="{% url 'homepage' %}42/435/Subpart-J#435-907"
                                     >
-                                        § 435.908 Assistance with application and renewal.
+                                        § 435.907 Application.
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}42/438/Subpart-A#438-8"
+                                        href="{% url 'homepage' %}42/438/Subpart-A#438-3"
                                     >
-                                        § 438.8 Medical loss ratio (MLR) standards.
+                                        § 438.3 Standard contract requirements.
                                     </a>
                                 </li>
                             </ul>
@@ -83,25 +84,25 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Maternal Health" %}"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Community Engagement" %}"
                                     >
-                                        Maternal Health
+                                        Community Engagement
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Preventive Services" %}"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "State Directed Payments" %}"
                                     >
-                                        Preventive Services
+                                        State Directed Payments
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Home Health" %}"
+                                        href="{% url 'homepage' %}subjects?subjects={% get_subject_id "Substance Use Disorder" %}"
                                     >
-                                        Home Health
+                                        Substance Use Disorder
                                     </a>
                                 </li>
                             </ul>
@@ -120,25 +121,25 @@
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}search?q=dental+examinations"
+                                        href="{% url 'homepage' %}search?q=targeted+case+management"
                                     >
-                                        dental examinations
+                                        targeted case management
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}search?q=spousal+support"
+                                        href="{% url 'homepage' %}search?q=%22ex+parte%22"
                                     >
-                                        spousal support
+                                        ex parte
                                     </a>
                                 </li>
                                 <li>
                                     <a
                                         class="card__link"
-                                        href="{% url 'homepage' %}search?q=timely+claim"
+                                        href="{% url 'homepage' %}search?q=%22self+employment%22"
                                     >
-                                        timely claim
+                                        self employment
                                     </a>
                                 </li>
                             </ul>

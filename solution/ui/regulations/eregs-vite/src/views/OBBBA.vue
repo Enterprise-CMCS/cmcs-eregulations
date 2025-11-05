@@ -15,6 +15,7 @@ import LeftNavCollapse from "eregsComponentLib/src/components/shared-components/
 const adminUrl = inject("adminUrl");
 const apiUrl = inject("apiUrl");
 const customLoginUrl = inject("customLoginUrl");
+const defaultTitle = inject("defaultTitle");
 const homeUrl = inject("homeUrl");
 const isAuthenticated = inject("isAuthenticated");
 const manualUrl = inject("manualUrl");
@@ -41,7 +42,11 @@ onMounted(() => {
         <header id="header" class="sticky">
             <HeaderComponent :home-url="homeUrl">
                 <template #jump-to>
-                    <JumpTo :api-url="apiUrl" :home-url="homeUrl" />
+                    <JumpTo
+                        :title="defaultTitle"
+                        :api-url="apiUrl"
+                        :home-url="homeUrl"
+                    />
                 </template>
                 <template #links>
                     <HeaderLinks
@@ -88,7 +93,7 @@ onMounted(() => {
                             class="lbexTocDivisionOLC toc-title__container"
                         >
                             <span class="toc-title__subheading">
-                                H.R.1 — One Big Beautiful Bill Act
+                                H.R.1 (Public Law No. 119-21, July 4, 2025)
                             </span>
                             <span class="toc-title__subheading toc-title__subheading--smaller">
                                 Title VII — Finance, Subtitle B — Health
@@ -423,7 +428,7 @@ onMounted(() => {
                 </template>
             </LeftNavCollapse>
             <div class="obbba__container content site-container">
-                <h1>One Big Beautiful Bill Act (OBBBA)</h1>
+                <h1>H.R.1 (Public Law No. 119-21, July 4, 2025)</h1>
                 <div class="obbba__context">
                     <p>
                         Excerpt from <a
@@ -431,7 +436,7 @@ onMounted(() => {
                             class="external"
                             target="_blank"
                             rel="noopener noreferrer"
-                        >H.R.1 — One Big Beautiful Bill Act</a> (Public Law No. 119-21, July 4, 2025), Title VII — Finance, Subtitle B — Health.
+                        >H.R.1 (Public Law No. 119-21, July 4, 2025)</a>, Title VII — Finance, Subtitle B — Health.
                     </p>
                     <p>
                         As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
@@ -439,7 +444,7 @@ onMounted(() => {
                             class="external"
                             target="_blank"
                             rel="noopener noreferrer"
-                        >OBBBA PDF from Congress.gov</a>.
+                        >PDF from Congress.gov</a>.
                     </p>
                 </div>
 
@@ -1514,8 +1519,8 @@ onMounted(() => {
                         rel="noopener noreferrer"
                     >42 U.S.C. 1396b(w)(4)</a>) is amended—
                     <a id="H613FD416BE0242AA9BA15137AB8AB252" />
-                    <span class="lbexIndentParagraph">(1) in subparagraph (C)(ii), by inserting “, and for fiscal years beginning on or after October 1, 2026, the applicable percent determined under subparagraph (D) shall be substituted for
-                        <span class="lbexThinSpace" />‘6 percent’ each place it appears” after “each place it appears”; and</span>
+                    <span class="lbexIndentParagraph">(1) in subparagraph (C)(ii), by inserting <span class="annotated-text">“, and for fiscal years beginning on or after October 1, 2026, the applicable percent determined under subparagraph (D) shall be substituted for
+                        <span class="lbexThinSpace" />‘6 percent’ each place it appears” after “each place it appears”</span>; and</span>
                 </span>
                 <a id="HBAD00B00430C4973AE151228A6710CCE" />
                 <span class="lbexIndentParagraph">(2) by inserting after subparagraph (C)(ii), the following new subparagraph:

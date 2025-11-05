@@ -719,7 +719,7 @@ const getCurrentSectionFromHash = (windowHash) => {
 };
 
 /**
- * @param {Array<object>} sectionList - array of Table of Contents objects from getSubpartTOC
+ * @param {Array<object>} sectionList - array of Table of Contents objects from getChildTOC
  * @returns {Array<string>} - array of section identifier numbers as strings
  */
 const getSectionsRecursive = (tocPartsList) => {

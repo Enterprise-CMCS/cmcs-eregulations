@@ -217,10 +217,12 @@ const getTOC = async ({ title, apiUrl }) =>
  * @param {string} options.subPart - Subpart letter within part.
  * @returns {Promise<TocSection[]>} - Promise that contains object with TOC structure when fulfilled
  **/
-const getSubpartTOC = async ({ apiUrl, title, part, subPart }) =>
-    httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/version/latest/subpart/${subPart}/toc`
+const getChildTOC = async ({ apiUrl, title, part, subPart }) => {
+    const subpartPattern = subPart ? `subpart/${subPart}/` : "";
+    return httpApiGet(
+        `${apiUrl}title/${title}/part/${part}/version/latest/${subpartPattern}toc`
     );
+}
 
 /**
  * @typedef {Object} SynonymType
@@ -573,7 +575,7 @@ export {
     getStatuteCitationLink,
     getStatutes,
     getStatutesActs,
-    getSubpartTOC,
+    getChildTOC,
     getSupplementalContent,
     getSynonyms,
     getTOC,
