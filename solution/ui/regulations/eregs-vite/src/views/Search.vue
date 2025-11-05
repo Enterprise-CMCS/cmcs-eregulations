@@ -10,7 +10,7 @@ import isEmpty from "lodash/isEmpty";
 
 import {
     decompressRouteQuery,
-    getRequestParams,
+    getPostBody,
     PARAM_VALIDATION_DICT,
     SEARCH_STRING_COMPRESSION_THRESHOLD,
     truncateQueryForDisplay,
@@ -184,7 +184,7 @@ const getDocsOnLoad = async () => {
     getDocList({
         apiUrl,
         pageSize,
-        requestParamString: getRequestParams({ queryParams: $route.query }),
+        data: getPostBody({ queryParams: $route.query }),
         query: $route.query.q,
         type: $route.query.type,
     });
@@ -235,16 +235,10 @@ watch(
         // now that everything is cleaned, iterate over new query params
         Object.entries(newQueryParams).forEach(setSelectedParams);
 
-        // parse $route.query to return `${key}=${value}` string
-        // and provide to getDocList
-        const newRequestParams = getRequestParams({
-            queryParams: newQueryParams,
-        });
-
         getDocList({
             apiUrl,
             pageSize,
-            requestParamString: newRequestParams,
+            data: getPostBody({ queryParams: newQueryParams }),
             query: $route.query.q,
             type: $route.query.type,
         });

@@ -339,6 +339,30 @@ const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     return `<span class='result__label--title'>${linkTitle}</span><span class='spacer__span'> </span>${domainFileTypeEl}`;
 };
 
+
+const getPostBody = ({ queryParams }) => {
+    const rawParams = Object.entries(queryParams).filter(
+        ([key, _value]) => PARAM_VALIDATION_DICT[key]
+    );
+
+    const formattedParams = {};
+
+    rawParams.forEach(([key, value]) => {
+        const valueArray = Array.isArray(value) ? value : [value];
+        const filteredValues = valueArray.filter((value) =>
+            PARAM_VALIDATION_DICT[key](value)
+        );
+
+        if (filteredValues.length > 0) {
+            formattedParams[key] = filteredValues;
+        }
+    });
+
+    console.log("formattedParams", formattedParams);
+
+    return formattedParams;
+};
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -961,6 +985,7 @@ export {
     getLinkDomain,
     getLinkDomainFileTypeEl,
     getLinkDomainString,
+    getPostBody,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,

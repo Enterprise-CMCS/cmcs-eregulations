@@ -29,11 +29,11 @@ const fetchJson = ({
     };
     const body = {};
     const merged = {
-        method: "GET",
+        method: "GET", // default, can be overridden by options.method
         cache: "no-cache",
         mode: config.fetchMode,
         redirect: "follow",
-        body,
+        body, // default empty body, can be overridden by options.body
         ...options,
         headers: { ...headers, ...options.headers },
     };
@@ -170,6 +170,20 @@ const httpApiGet = (
         retryCount: 0, // retryCount, default
     });
 };
+
+function httpApiPost(
+    urlPath,
+    { data = {}, params } = {},
+) {
+    return fetchJson({
+        url: `${urlPath}`,
+        options: {
+            method: "POST",
+            params,
+            body: JSON.stringify(data),
+        },
+    });
+}
 
 // ---------- api calls ---------------
 /**
@@ -506,6 +520,10 @@ const getCombinedContent = async ({
         {},
     );
 
+const getSemanticSearchResults = async ({ apiUrl, data }) =>
+    httpApiPost(`${apiUrl}content-search/`, { data });
+
+
 const getGranularCounts = async ({
     apiUrl,
     requestParams = "",
@@ -572,6 +590,7 @@ export {
     getParts,
     getRecentResources,
     getRegSearchResults,
+    getSemanticSearchResults,
     getStatuteCitationLink,
     getStatutes,
     getStatutesActs,
