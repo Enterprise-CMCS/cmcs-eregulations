@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch, inject } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import {
     decompressRouteQuery,
     MAX_QUERY_LENGTH,
@@ -31,9 +31,7 @@ const props = defineProps({
 
 const emit = defineEmits(['execute-search', 'clear-form']);
 
-const parent = inject('parent', 'search');
 const $route = useRoute();
-const $router = useRouter();
 
 const searchInputValue = ref(props.searchQuery);
 
@@ -76,17 +74,6 @@ const updateSearchValue = (value) => {
 
 const addNewLine = () => {
     searchInputValue.value += "";
-};
-
-const quotedLink = () => {
-    $router.push({
-        name: props.redirectTo || parent,
-        query: {
-            ...$router.currentRoute.value.query,
-            page: undefined,
-            q: `"${props.searchQuery}"`,
-        },
-    });
 };
 
 watch(
