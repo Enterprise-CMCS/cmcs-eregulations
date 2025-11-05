@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('resources', '0013_remove_internalfile_file_type_and_more'),
-        ('content_search', '0010_enable_chunking'),
+        ('content_search', '0011_enable_chunking'),
     ]
 
     operations = [

@@ -48,7 +48,7 @@ def create_resource_metadata(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content_search', '0009_indexedregulationtext_subpart_id_and_more'),
+        ('content_search', '0010_remove_empty_subpart_info'),
     ]
 
     operations = [
