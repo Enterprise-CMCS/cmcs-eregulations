@@ -112,6 +112,10 @@ const searchQuery = $route.query.q
     ? ref(decompressRouteQuery($route.query))
     : ref("");
 
+const truncatedQuery = computed(() =>
+    truncateQueryForDisplay({ query: searchQuery.value })
+);
+
 const clearSearchQuery = () => {
     searchQuery.value = "";
 };
@@ -159,7 +163,6 @@ const setSelectedParams = (param) => {
     }
 };
 
-// TODO: Truncate long titles
 const setTitle = (query) => {
     const querySubString = query && query.length <= SEARCH_STRING_COMPRESSION_THRESHOLD
         ? `for ${query} `
@@ -370,7 +373,7 @@ getDocsOnLoad();
                 <template v-else-if="policyDocList.error">
                     <div class="doc__list">
                         <SearchErrorMsg
-                            :search-query="searchQuery"
+                            :search-query="truncatedQuery"
                             show-apology
                             :survey-url="surveyUrl"
                         />
@@ -395,7 +398,7 @@ getDocsOnLoad();
                             </template>
                         </SignInCTA>
                         <span class="no-results__span">Your search for
-                            <strong>{{ truncateQueryForDisplay({ query: searchQuery}) }}</strong> did not match any
+                            <strong>{{ truncatedQuery }}</strong> did not match any
                             results
                             <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>
