@@ -210,7 +210,7 @@ def handler(event: dict, context: Any) -> dict:
             logger.info("Generating embeddings using model '%s' with %d dimensions.", embedding_model, embedding_dimensions)
             embeddings = [generate_embedding(
                 client,
-                chunk,
+                chunk.lower(),  # Lowercase the chunk for embedding generation only
                 embedding_model,
                 embedding_dimensions,
                 normalize_embeddings,

@@ -20,7 +20,7 @@ logging.disable(logging.CRITICAL)
 class UtilsTestCase(unittest.TestCase):
     def test_clean_output(self):
         text = "Hello   \n  \n\n world \0 \t\r \x00"
-        expected = "hello world"
+        expected = "Hello world"
         output = clean_output(text)
         self.assertEqual(output, expected)
 

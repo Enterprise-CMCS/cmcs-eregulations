@@ -62,8 +62,8 @@ def clean_output(text: str) -> str:
     # Remove HTML elements
     text = html.unescape(text)
     text = BeautifulSoup(text, "html.parser").get_text()
-    # Collapse whitespace and convert to lowercase
-    text = " ".join(text.split()).lower()
+    # Collapse whitespace
+    text = " ".join(text.split())
     # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
     # (e.g. -------------------- turns into ---)
     text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
@@ -172,7 +172,7 @@ def chunk_text(text, max_length, overlap, chunk_metadata=""):
         overlap (int): Number of overlapping characters between chunks.
         chunk_metadata (str): Metadata to prepend to each chunk.
     Returns:
-        List of tuples containing (start_index, chunk_text).
+        List of text chunks. (list[str])
     """
 
     chunks = []
