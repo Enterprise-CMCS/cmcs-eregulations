@@ -16,10 +16,12 @@ const EventCodes = {
     ClearSections: "ClearSections",
 };
 
+const COMPRESSION_PREFIX = ".!~";
+const COMPRESSION_INDEX = COMPRESSION_PREFIX.length;
+
 const MAX_QUERY_LENGTH = 10000;
 const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
 const SEARCH_STRING_TRUNCATE_THRESHOLD = 1000;
-const COMPRESSION_PREFIX = ".!~";
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
@@ -156,7 +158,7 @@ const compressRouteQuery = ({ q }) => {
  */
 const decompressRouteQuery = ({ q }) => {
     if (q && q.startsWith(COMPRESSION_PREFIX)) {
-        return decompressQueryString(q.substring(3));
+        return decompressQueryString(q.substring(COMPRESSION_INDEX));
     }
     return q;
 }
