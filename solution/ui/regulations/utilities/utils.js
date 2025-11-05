@@ -101,7 +101,7 @@ const PARAM_VALIDATION_DICT = {
  * console.log(encodedQuery); // "SMDL%20%2312-002"
  */
 const PARAM_ENCODE_DICT = {
-    q: (query) => encodeURIComponent(query),
+    q: (query) => encodeURIComponent(decompressRouteQuery({ q: query })),
 };
 
 /**
@@ -369,8 +369,6 @@ const getPostBody = ({ queryParams }) => {
             formattedParams[key] = filteredValues;
         }
     });
-
-    console.log("formattedParams", formattedParams);
 
     return formattedParams;
 };
