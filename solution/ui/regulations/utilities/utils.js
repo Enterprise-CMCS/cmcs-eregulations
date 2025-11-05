@@ -113,8 +113,13 @@ const PARAM_ENCODE_DICT = {
  * console.log(compressed); // "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
  */
 const compressQueryString = (str) => {
-    const jsonString = JSON.stringify(str);
-    return compressToEncodedURIComponent(jsonString);
+    try {
+        const jsonString = JSON.stringify(str);
+        return compressToEncodedURIComponent(jsonString);
+    } catch (error) {
+        console.error("Error compressing query string:", error);
+        return "";
+    }
 };
 
 /**
@@ -126,8 +131,13 @@ const compressQueryString = (str) => {
  * console.log(obj); // { name: "John", age: 30 }
  */
 const decompressQueryString = (compressedStr) => {
-    const jsonString = decompressFromEncodedURIComponent(compressedStr);
-    return JSON.parse(jsonString);
+    try {
+        const jsonString = decompressFromEncodedURIComponent(compressedStr);
+        return JSON.parse(jsonString);
+    } catch (error) {
+        console.error("Error decompressing query string:", error);
+        return "";
+    }
 };
 
 /**
