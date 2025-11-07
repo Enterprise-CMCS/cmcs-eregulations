@@ -1,10 +1,12 @@
+from django.db import connection
 from django.db.models import Count, F, Prefetch, Q
-from django.http import QueryDict
+from django.http import JsonResponse, QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import viewsets
+from rest_framework import viewsets, exceptions
 from rest_framework.response import Response
 
+from common.aws import establish_client
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
@@ -26,6 +28,7 @@ from .serializers import (
     ContentCountSerializer,
     ContentSearchSerializer,
 )
+from .utils import preprocess_text
 
 
 class ContentSearchPagination(ViewSetPagination):
@@ -45,78 +48,163 @@ class ContentSearchPagination(ViewSetPagination):
         }}
 
 
-@extend_schema(
-    tags=["content_search"],
-    description="Search and retrieve content with highlighted matching terms. "
-                "This endpoint allows you to search through both resources and regulation texts, "
-                "returning relevant content with highlighted matches in the name, summary, and content fields.",
-    responses={200: ContentSearchSerializer(many=True)},
-    parameters=[
-        OpenApiParameter(
-            name="subjects",
-            required=False,
-            type=int,
-            description="Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
-                        "Use \"&subjects=1&subjects=2\" for multiple.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="categories",
-            required=False,
-            type=int,
-            description="Limit results to only resources found within these categories. Categories are referenced by ID, not "
-                        "name. Use \"&categories=1&categories=2\" for multiple.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="q",
-            required=True,
-            type=str,
-            description="Search for this text within public and internal resources, and regulation text. "
-                        "Fields searched depends on the underlying data type.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="show_public",
-            required=False,
-            type=str,
-            description="Show ('true') or hide ('false') public resources, including Federal Register and other public links. "
-                        "Default is true.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="show_internal",
-            required=False,
-            type=str,
-            description="Show ('true') or hide ('false') internal resources, including files and internal links. "
-                        "Default is true. Note that internal resources are only shown if the user is authenticated. "
-                        "If the user is not authenticated, this flag will have no effect.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="show_regulations",
-            required=False,
-            type=str,
-            description="Show ('true') or hide ('false') regulation text, including sections and appendices. "
-                        "Default is true.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="citations",
-            required=False,
-            type=int,
-            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
-            location=OpenApiParameter.QUERY,
-        ),
-    ] + ViewSetPagination.QUERY_PARAMETERS,
-)
-class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
-    model = ContentIndex
-    serializer_class = ContentSearchSerializer
-    pagination_class = ContentSearchPagination
+# @extend_schema(
+#     tags=["content_search"],
+#     description="Search and retrieve content with highlighted matching terms. "
+#                 "This endpoint allows you to search through both resources and regulation texts, "
+#                 "returning relevant content with highlighted matches in the name, summary, and content fields.",
+#     responses={200: ContentSearchSerializer(many=True)},
+#     parameters=[
+#         OpenApiParameter(
+#             name="subjects",
+#             required=False,
+#             type=int,
+#             description="Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
+#                         "Use \"&subjects=1&subjects=2\" for multiple.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="categories",
+#             required=False,
+#             type=int,
+#             description="Limit results to only resources found within these categories. Categories are referenced by ID, not "
+#                         "name. Use \"&categories=1&categories=2\" for multiple.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="q",
+#             required=True,
+#             type=str,
+#             description="Search for this text within public and internal resources, and regulation text. "
+#                         "Fields searched depends on the underlying data type.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="show_public",
+#             required=False,
+#             type=str,
+#             description="Show ('true') or hide ('false') public resources, including Federal Register and other public links. "
+#                         "Default is true.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="show_internal",
+#             required=False,
+#             type=str,
+#             description="Show ('true') or hide ('false') internal resources, including files and internal links. "
+#                         "Default is true. Note that internal resources are only shown if the user is authenticated. "
+#                         "If the user is not authenticated, this flag will have no effect.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="show_regulations",
+#             required=False,
+#             type=str,
+#             description="Show ('true') or hide ('false') regulation text, including sections and appendices. "
+#                         "Default is true.",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#         OpenApiParameter(
+#             name="citations",
+#             required=False,
+#             type=int,
+#             description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+#                         "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
+#             location=OpenApiParameter.QUERY,
+#         ),
+#     ] + ViewSetPagination.QUERY_PARAMETERS,
+# )
+# class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+#     model = ContentIndex
+#     serializer_class = ContentSearchSerializer
+#     pagination_class = ContentSearchPagination
+
+#     def list(self, request, *args, **kwargs):
+#         citations = request.GET.getlist("citations")
+#         subjects = request.GET.getlist("subjects")
+#         categories = request.GET.getlist("categories")
+#         sort = request.GET.get("sort")
+#         show_public = string_to_bool(request.GET.get("show_public"), True)
+#         show_internal = string_to_bool(request.GET.get("show_internal"), True)
+#         show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
+
+#         # Retrieve the required search query param from GET or body
+#         search_query = request.GET.get("q") or request.
+#         if not search_query:
+#             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
+
+#         # Defer all unnecessary text fields to reduce database load and memory usage
+#         query = ContentIndex.objects.defer_text()
+
+#         # Filter out unapproved resources
+#         query = query.exclude(resource__approved=False)
+
+#         # Filter inclusively by citations if this array exists
+#         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
+#         if citation_filter:
+#             query = query.filter(citation_filter)
+
+#         # Filter by subject pks if subjects array is present
+#         if subjects:
+#             query = query.filter(resource__subjects__pk__in=subjects)
+
+#         # Filter by categories (both parent and subcategories) if the categories array is present
+#         if categories:
+#             query = query.filter(
+#                 Q(resource__category__pk__in=categories) |
+#                 Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
+#                 Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
+#             )
+
+#         # Filter by public, internal, and regulation text
+#         if not show_public:
+#             query = query.exclude(resource__abstractpublicresource__isnull=False)
+#         if not show_internal or not self.request.user.is_authenticated:
+#             query = query.exclude(resource__abstractinternalresource__isnull=False)
+#         if not show_regulations:
+#             query = query.exclude(reg_text__isnull=False)
+
+#         # Perform search and headline generation
+#         query = query.search(search_query, sort)
+
+#         current_page = [i.pk for i in self.paginate_queryset(query)]
+#         query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
+
+#         # Prefetch all related data
+#         query = query.prefetch_related(
+#             Prefetch("reg_text", IndexedRegulationText.objects.all()),
+#             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
+#                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+#                 Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
+#                     Prefetch("parent", AbstractCategory.objects.select_subclasses()),
+#                 )),
+#                 Prefetch("subjects", Subject.objects.all()),
+#             )),
+#         )
+
+#         # Sort the current page by rank
+#         query = sorted(query, key=lambda x: current_page.index(x.pk))
+
+#         # Serialize and return the results
+#         serializer = self.get_serializer_class()(query, many=True, context=self.get_serializer_context())
+#         return self.get_paginated_response(serializer.data)
+
+
+from rest_framework.parsers import FormParser
+
+class ContentSearchViewSet(viewsets.ViewSet):
+    parser_classes = (FormParser,)
 
     def list(self, request, *args, **kwargs):
+        # Get query and preprocess it
+        query = request.POST.get("query") or request.GET.get("query")
+        if not query:
+            raise exceptions.ValidationError("Query parameter 'query' is required.")
+        if len(query) > 10000:
+            raise exceptions.ValidationError("Query parameter 'query' must be less than 10,000 characters.")
+        query = preprocess_text(query)
+
+        # Get optional parameters
         citations = request.GET.getlist("citations")
         subjects = request.GET.getlist("subjects")
         categories = request.GET.getlist("categories")
@@ -124,17 +212,129 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         show_public = string_to_bool(request.GET.get("show_public"), True)
         show_internal = string_to_bool(request.GET.get("show_internal"), True)
         show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
+        max_results = int(request.GET.get("max_results", 30))
+        offset = int(request.GET.get("page", 0)) * max_results
 
-        # Retrieve the required search query param
-        search_query = request.GET.get("q")
-        if not search_query:
-            raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
+        # Semantic and RRF parameters
+        min_rank = 0.1
+        max_distance = 1.3
+        k_value = 60
+        enable_semantic = True
+        enable_keyword = True
 
-        # Defer all unnecessary text fields to reduce database load and memory usage
-        query = ContentIndex.objects.defer_text()
+        # Generate embedding if needed
+        embedding = [0.0] * 512  # Dummy embedding
 
-        # Filter out unapproved resources
-        query = query.exclude(resource__approved=False)
+        sql = "WITH "  # Initial SQL
+
+        if enable_semantic:
+            sql += f"""
+                semantic_search AS (
+                    SELECT
+                        id,
+                        rank
+                    FROM (
+                        SELECT
+                            id,
+                            resource_id,
+                            reg_text_id,
+                            embedding,
+                            raw_rank,
+                            RANK () OVER (ORDER BY raw_rank ASC) AS rank
+                        FROM (
+                            SELECT
+                                id,
+                                resource_id,
+                                reg_text_id,
+                                embedding,
+                                embedding <=> (%(embedding)s::vector) AS raw_rank
+                            FROM content_search_contentindex
+                        ) AS t2
+                    ) AS t1
+                    WHERE embedding IS NOT NULL
+                    AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
+                    AND raw_rank < %(max_distance)s
+                    ORDER BY raw_rank ASC
+                )
+            """
+
+        if enable_semantic and enable_keyword:
+            sql += ", "
+
+        if enable_keyword:
+            sql += f"""
+                keyword_search AS (
+                    SELECT
+                        id,
+                        rank
+                    FROM (
+                        SELECT
+                            id,
+                            resource_id,
+                            reg_text_id,
+                            raw_rank,
+                            RANK () OVER (ORDER BY raw_rank DESC) AS rank
+                        FROM (
+                            SELECT
+                                id,
+                                resource_id,
+                                reg_text_id,
+                                ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank
+                            FROM content_search_contentindex
+                        ) AS t2
+                    ) AS t1
+                    WHERE (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
+                    AND raw_rank > %(min_rank)s
+                    ORDER BY rank ASC
+                )
+            """
+
+        if enable_semantic and not enable_keyword:
+            sql += """
+                SELECT
+                    id,
+                    rank AS score
+                FROM semantic_search
+            """
+
+        if enable_keyword and not enable_semantic:
+            sql += """
+                SELECT
+                    id,
+                    rank AS score
+                FROM keyword_search
+            """
+
+        if enable_semantic and enable_keyword:
+            sql += """
+                SELECT
+                    COALESCE(semantic_search.id, keyword_search.id) AS id,
+                    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) + COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+                FROM semantic_search
+                FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+            """
+
+        sql += """
+            ORDER BY score DESC
+        """
+        #    LIMIT %(max_results)s OFFSET %(offset)s
+        #"""
+
+        ids = [i.id for i in ContentIndex.objects.raw(sql, {
+            "embedding": embedding,
+            "query": query,
+            "k": k_value,
+            "max_distance": max_distance,
+            "min_rank": min_rank,
+            "max_results": max_results,
+            "offset": offset,
+        })]
+
+        # With a list of IDs, now we can head back to ORM-land for filtering and serialization
+        query = ContentIndex.objects\
+                .defer_text()\
+                .filter(id__in=ids)\
+                .exclude(resource__approved=False)
 
         # Filter inclusively by citations if this array exists
         citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
@@ -161,9 +361,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         if not show_regulations:
             query = query.exclude(reg_text__isnull=False)
 
-        # Perform search and headline generation
-        query = query.search(search_query, sort)
+        # Filter out duplicates
+        query = query.distinct("resource_id", "reg_text_id")
 
+        query = sorted([i for i in query], key=lambda x: ids.index(x.id))
         current_page = [i.pk for i in self.paginate_queryset(query)]
         query = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(search_query)
 

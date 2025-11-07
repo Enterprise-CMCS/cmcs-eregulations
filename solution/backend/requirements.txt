@@ -2,6 +2,7 @@ cryptography
 pyopenssl
 Werkzeug
 boto3
+beautifulsoup4
 django-debug-toolbar
 django>=5.1
 requests
