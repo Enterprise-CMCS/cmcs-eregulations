@@ -3,6 +3,7 @@ from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
+from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
@@ -112,21 +113,22 @@ class ContentSearchPagination(ViewSetPagination):
     ] + ViewSetPagination.QUERY_PARAMETERS,
 )
 class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    parser_classes = [FormParser]
     model = ContentIndex
     serializer_class = ContentSearchSerializer
     pagination_class = ContentSearchPagination
 
     def list(self, request, *args, **kwargs):
-        citations = request.GET.getlist("citations")
-        subjects = request.GET.getlist("subjects")
-        categories = request.GET.getlist("categories")
-        sort = request.GET.get("sort")
-        show_public = string_to_bool(request.GET.get("show_public"), True)
-        show_internal = string_to_bool(request.GET.get("show_internal"), True)
-        show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
+        citations = request.GET.getlist("citations") or request.POST.getlist("citations")
+        subjects = request.GET.getlist("subjects") or request.POST.getlist("subjects")
+        categories = request.GET.getlist("categories") or request.POST.getlist("categories")
+        sort = request.GET.get("sort") or request.POST.get("sort")
+        show_public = string_to_bool(request.GET.get("show_public") or request.POST.get("show_public"), True)
+        show_internal = string_to_bool(request.GET.get("show_internal") or request.POST.get("show_internal"), True)
+        show_regulations = string_to_bool(request.GET.get("show_regulations") or request.POST.get("show_regulations"), True)
 
         # Retrieve the required search query param
-        search_query = request.GET.get("q")
+        search_query = request.GET.get("q") or request.POST.get("q")
         if not search_query:
             raise BadRequest("A search query is required; provide 'q' parameter in the query string.")
 
