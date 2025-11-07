@@ -1,8 +1,13 @@
 import isEqual from "lodash/isEqual";
 
 import {
+    COMPRESSION_PREFIX,
+    compressQueryString,
+    compressRouteQuery,
     createLastUpdatedDates,
     createOneIndexedArray,
+    decompressQueryString,
+    decompressRouteQuery,
     delay,
     formatDate,
     formatResourceCategories,
@@ -27,6 +32,7 @@ import {
     parseError,
     shapeTitlesResponse,
     stripQuotes,
+    truncateQueryForDisplay,
 } from "utilities/utils.js";
 
 import { afterEach, describe, it, expect, vi } from "vitest";
@@ -43,6 +49,76 @@ import subjectGroupsFixture from "cypress/fixtures/42.431.E.toc.parts.json";
 import subjectGroupsExpectedSectionsFixture from "cypress/fixtures/42.431.E.sections-list.json";
 
 describe("Utilities.js", () => {
+    describe("compressQueryString", () => {
+        it("compresses long query strings properly", async () => {
+            const longQuery =
+                "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes.";
+            const compressed = compressQueryString(longQuery);
+            expect(compressed).toBe("EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA");
+        });
+
+        it("returns an empty string if the str parameter cannot stringified or compressed", async () => {
+            const invalidQuery = 123n; // bigint
+            const compressed = compressQueryString(invalidQuery);
+            expect(compressed).toBe("");
+        });
+    });
+
+    describe("compressRouteQuery", () => {
+        it("compresses long route query strings properly with the expected prefix", async () => {
+            const longQuery =
+                "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes.";
+            const compressedRoute = compressRouteQuery({q: longQuery });
+            expect(compressedRoute.startsWith(COMPRESSION_PREFIX)).toBe(true);
+
+            const compressed = compressQueryString(longQuery);
+            expect(compressedRoute).toBe(`${COMPRESSION_PREFIX}${compressed}`);
+        });
+    });
+
+    describe("decompressQueryString", () => {
+        it("decompresses compressed query strings properly", async () => {
+            const compressedQuery =
+                "EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA";
+            const decompressed = decompressQueryString(compressedQuery);
+            expect(decompressed).toBe(
+                "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes."
+            );
+        });
+
+        it("returns an empty string if the compressedStr parameter cannot be decompressed", async () => {
+            const invalidCompressedQuery = "EQFQFglgzgBNMEMYDcCmAnAnjANA";
+            const decompressed = decompressQueryString(invalidCompressedQuery);
+            expect(decompressed).toBe("");
+        });
+    });
+
+    describe("decompressRouteQuery", () => {
+        it("decompresses compressed route query strings properly", async () => {
+            const longQuery =
+                "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes.";
+            const compressedRoute = compressRouteQuery({ q: longQuery });
+            const decompressedRoute = decompressRouteQuery({ q: compressedRoute });
+            expect(decompressedRoute).toBe(longQuery);
+        });
+    });
+
+    describe("truncateQueryForDisplay", () => {
+        it("truncates long queries properly", async () => {
+            const longQuery =
+                "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes.";
+            const truncated = truncateQueryForDisplay({query: longQuery, maxLength: 30 });
+            expect(truncated).toBe(
+                "This is a ver...lay purposes."
+            );
+        });
+        it("does not truncate short queries", async () => {
+            const shortQuery = "Short query";
+            const truncated = truncateQueryForDisplay({query: shortQuery, maxLength: 30 });
+            expect(truncated).toBe("Short query");
+        });
+    });
+
     describe("formatResourceCategories", () => {
         it("formats public resources", async () => {
             const formattedResources = formatResourceCategories({

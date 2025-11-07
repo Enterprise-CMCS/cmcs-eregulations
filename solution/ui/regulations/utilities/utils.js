@@ -105,16 +105,16 @@ const PARAM_ENCODE_DICT = {
 };
 
 /**
- * @param {Object} str - object to be compressed
+ * @param {*} data - data to be compressed
  * @returns {string} - compressed and encoded string suitable for use in a URL query parameter
  * @example
- * const obj = { name: "John", age: 30 };
+ * const data = "This is a very long search query that needs to be compressed for URL usage.";
  * const compressed = compressQueryString(obj);
- * console.log(compressed); // "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
+ * console.log(compressed); // "EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA"
  */
-const compressQueryString = (str) => {
+const compressQueryString = (data) => {
     try {
-        const jsonString = JSON.stringify(str);
+        const jsonString = JSON.stringify(data);
         return compressToEncodedURIComponent(jsonString);
     } catch (error) {
         console.error("Error compressing query string:", error);
@@ -124,7 +124,7 @@ const compressQueryString = (str) => {
 
 /**
  * @param {string} compressedStr - compressed and encoded string from URL query parameter
- * @returns {Object} - decompressed object
+ * @returns {*} - decompressed data
  * @example
  * const compressedStr = "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
  * const obj = decompressQueryString(compressedStr);
@@ -150,7 +150,9 @@ const decompressQueryString = (compressedStr) => {
  * console.log(compressedQuery); // ".!~N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
  */
 const compressRouteQuery = ({ q }) => {
-    return `${COMPRESSION_PREFIX}${compressQueryString(q)}`;
+    if (q) return `${COMPRESSION_PREFIX}${compressQueryString(q)}`;
+
+    return "";
 };
 
 /**
@@ -181,7 +183,7 @@ const decompressRouteQuery = ({ q }) => {
  * @example
  * const query = "This is a very long search query that needs to be truncated for display purposes.";
  * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
- * console.log(truncatedQuery); // "This is a very lo...play purposes."
+ * console.log(truncatedQuery); // "This is a ver...lay purposes."
  * @example
  * const query = "Short query";
  * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
@@ -351,27 +353,6 @@ const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     return `<span class='result__label--title'>${linkTitle}</span><span class='spacer__span'> </span>${domainFileTypeEl}`;
 };
 
-
-const getPostBody = ({ queryParams }) => {
-    const rawParams = Object.entries(queryParams).filter(
-        ([key, _value]) => PARAM_VALIDATION_DICT[key]
-    );
-
-    const formattedParams = {};
-
-    rawParams.forEach(([key, value]) => {
-        const valueArray = Array.isArray(value) ? value : [value];
-        const filteredValues = valueArray.filter((value) =>
-            PARAM_VALIDATION_DICT[key](value)
-        );
-
-        if (filteredValues.length > 0) {
-            formattedParams[key] = filteredValues;
-        }
-    });
-
-    return formattedParams;
-};
 
 /*
  * @param {Object} query - $route.query object from Vue Router
@@ -995,7 +976,6 @@ export {
     getLinkDomain,
     getLinkDomainFileTypeEl,
     getLinkDomainString,
-    getPostBody,
     getQueryParam,
     getRequestParams,
     getSectionsRecursive,
