@@ -30,6 +30,14 @@ from .serializers import (
 from .utils import preprocess_text
 
 
+def _get_parameter(name, request, default=None):
+    return request.GET.get(name) or request.POST.get(name) or default
+
+
+def _get_parameter_list(name, request):
+    return request.GET.getlist(name) or request.POST.getlist(name)
+
+
 class ContentSearchPagination(ViewSetPagination):
     def get_additional_attributes(self):
         return {**super().get_additional_attributes(), **{
@@ -55,23 +63,23 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
     def list(self, request, *args, **kwargs):
         # Get query and preprocess it
-        query = request.POST.get("query") or request.GET.get("query")
+        query = _get_parameter("query", request) or _get_parameter("q", request)
         if not query:
-            raise exceptions.ValidationError("Query parameter 'query' is required.")
+            raise exceptions.ValidationError("Query parameter 'query' or 'q' is required.")
         if len(query) > 10000:
-            raise exceptions.ValidationError("Query parameter 'query' must be less than 10,000 characters.")
+            raise exceptions.ValidationError("Query parameter 'query' or 'q' must be less than 10,000 characters.")
         query = preprocess_text(query)
 
         # Get optional parameters
-        citations = request.GET.getlist("citations")
-        subjects = request.GET.getlist("subjects")
-        categories = request.GET.getlist("categories")
-        sort = request.GET.get("sort")
-        show_public = string_to_bool(request.GET.get("show_public"), True)
-        show_internal = string_to_bool(request.GET.get("show_internal"), True)
-        show_regulations = string_to_bool(request.GET.get("show_regulations"), True)
-        max_results = int(request.GET.get("max_results", 30))
-        offset = int(request.GET.get("page", 0)) * max_results
+        citations = _get_parameter_list("citations", request)
+        subjects = _get_parameter_list("subjects", request)
+        categories = _get_parameter_list("categories", request)
+        sort = _get_parameter("sort", request)
+        show_public = string_to_bool(_get_parameter("show_public", request), True)
+        show_internal = string_to_bool(_get_parameter("show_internal", request), True)
+        show_regulations = string_to_bool(_get_parameter("show_regulations", request), True)
+        max_results = int(_get_parameter("max_results", request, 30))
+        offset = int(_get_parameter("page", request, 0)) * max_results
 
         # Semantic and RRF parameters
         min_rank = 0.1
@@ -207,7 +215,6 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
         sql += """
             ORDER BY score DESC
-            LIMIT %(max_results)s OFFSET %(offset)s
         """
 
         queryset = ContentIndex.objects.raw(sql, {
@@ -216,8 +223,6 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
             "k": k_value,
             "max_distance": max_distance,
             "min_rank": min_rank,
-            "max_results": max_results,
-            "offset": offset,
             "ids": ids,
         })
 
