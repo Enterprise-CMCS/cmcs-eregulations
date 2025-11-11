@@ -1,7 +1,10 @@
 <script>
 import { computed } from "vue";
 
-import { stripQuotes } from "utilities/utils";
+import {
+    stripQuotes,
+    truncateQueryForDisplay,
+} from "utilities/utils";
 
 const hasSpaces = (str) => /[\s]/.test(str);
 const hasQuotes = (str) => /["']/.test(str);
@@ -21,7 +24,15 @@ const makeMedicaidGovLink = (query) =>
 
 const makeUsCodeLink = (query) => {
     const urlEncodedQuery = encodeURIComponent(query);
-    const base64Query = btoa(query);
+
+    let base64Query;
+    try {
+        base64Query = btoa(query);
+    } catch (_error) {
+        console.error("Failed to encode US Code query to base64");
+        return false;
+    }
+
     const urlEncodedBase64Query = encodeURIComponent(base64Query);
 
     return `https://uscode.house.gov/search.xhtml?edition=prelim&searchString=%28${urlEncodedQuery}%29+AND+%28%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2819%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2821%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2818%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2816%29%29+OR+%28title%3A%2842%29+AND+chapter%3A%287%29+AND+subchapter%3A%2811%29%29%29&pageNumber=1&itemsPerPage=100&sortField=RELEVANCE&displayType=CONTEXT&action=search&q=${urlEncodedBase64Query}%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7C%3A%3A%3A%3A%3A%3A%3A%3Afalse%3A%7Ctrue%7C%5B42%3A%3A%3A%3A7%3A19%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A21%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A18%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A16%3A%3A%3Atrue%3A%3B42%3A%3A%3A%3A7%3A11%3A%3A%3Atrue%3A%5D%7C%5BQWxsIEZpZWxkcw%3D%3D%3A%5D`;
@@ -38,6 +49,10 @@ export default {
 </script>
 
 <script setup>
+import {
+    SEARCH_STRING_TRUNCATE_THRESHOLD,
+} from "utilities/utils";
+
 const props = defineProps({
     query: {
         type: String,
@@ -64,10 +79,16 @@ const containerClasses = computed(() => ({
 }));
 
 const hasActiveFilters = computed(() => props.activeFilters.length > 0);
+
+const truncatedQuery = computed(() => truncateQueryForDisplay({ query: props.query }));
 </script>
 
 <template>
-    <div class="more-info__container" :class="containerClasses">
+    <div
+        v-if="query && query.length <= SEARCH_STRING_TRUNCATE_THRESHOLD"
+        class="more-info__container"
+        :class="containerClasses"
+    >
         <h3 class="more-info__title">
             Continue Your Research
         </h3>
@@ -93,7 +114,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                             q: `&quot;${stripQuotes(query)}&quot;`,
                         },
                     }"
-                >"{{ stripQuotes(query) }}"</router-link>
+                >"{{ truncatedQuery }}"</router-link>
             </span>
         </div>
         <div
@@ -115,9 +136,11 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                     reset all active filters</router-link>.
             </span>
         </div>
-        <div class="more-info__row" data-testid="research-row-2">
-            <span class="row__title">Try your search for <strong>{{ query }}</strong> on other
-                websites</span>
+        <div
+            class="more-info__row"
+            data-testid="research-row-2"
+        >
+            <span class="row__title">Try your search for <strong>{{ truncatedQuery }}</strong> on other websites</span>
             <ul class="row__content row__content--list">
                 <li>
                     <a
@@ -151,7 +174,7 @@ const hasActiveFilters = computed(() => props.activeFilters.length > 0);
                         rel="noopener noreferrer"
                     >Federal Register</a>
                 </li>
-                <li>
+                <li v-if="makeUsCodeLink(query)">
                     <a
                         :href="makeUsCodeLink(query)"
                         class="external"
