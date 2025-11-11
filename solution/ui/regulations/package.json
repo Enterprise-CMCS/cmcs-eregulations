@@ -34,7 +34,7 @@
     "jsdom": "27.0.0",
     "msw": "2.11.3",
     "resize-observer-polyfill": "1.5.1",
-    "vite": "7.1.12",
+    "vite": "7.2.2",
     "vitest": "4.0.6"
   },
   "optionalDependencies": {
