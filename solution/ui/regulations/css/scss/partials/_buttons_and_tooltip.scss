@@ -11,13 +11,18 @@
     margin: 15px 0;
 }
 
-@mixin common-remove-btn-styles {
+@mixin common-btn-styles {
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+@mixin common-remove-btn-styles {
+    @include common-btn-styles;
+
     background-color: $policy_subject_close_background;
     color: $policy_subject_selected_chip_background;
-    border-radius: 4px;
 
     &:hover,
     &:focus,

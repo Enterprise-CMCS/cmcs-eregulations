@@ -2,7 +2,11 @@ from django.db.models import Count, F, Prefetch, Q
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
+<<<<<<< HEAD
 from rest_framework import exceptions, viewsets
+=======
+from rest_framework import viewsets
+>>>>>>> 3009-text-extractor-enable-hybrid-search
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
@@ -56,6 +60,7 @@ class ContentSearchPagination(ViewSetPagination):
 
 
 class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    parser_classes = [FormParser]
     model = ContentIndex
     serializer_class = ContentSearchSerializer
     pagination_class = ContentSearchPagination
