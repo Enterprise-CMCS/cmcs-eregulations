@@ -128,6 +128,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 semantic_search AS (
                     SELECT
                         id,
+                        resource_id,
+                        reg_text_id,
                         rank
                     FROM (
                         SELECT
@@ -165,6 +167,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 keyword_search AS (
                     SELECT
                         id,
+                        resource_id,
+                        reg_text_id,
                         rank
                     FROM (
                         SELECT
@@ -192,7 +196,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Retrieve data for semantic search only
         if enable_semantic and not enable_keyword:
             sql += """
-                SELECT
+                SELECT DISTINCT ON (resource_id, reg_text_id)
                     id,
                     rank AS score
                 FROM semantic_search
@@ -201,7 +205,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Retrieve data for full-text search only
         if enable_keyword and not enable_semantic:
             sql += """
-                SELECT
+                SELECT DISTINCT ON (resource_id, reg_text_id)
                     id,
                     rank AS score
                 FROM keyword_search
@@ -210,17 +214,24 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Combine and retrieve both semantic and full-text results
         if enable_semantic and enable_keyword:
             sql += """
-                SELECT
-                    COALESCE(semantic_search.id, keyword_search.id) AS id,
-                    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
-                        COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
-                FROM semantic_search
-                FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+                SELECT DISTINCT ON (resource_id, reg_text_id)
+                    id,
+                    score
+                FROM (
+                    SELECT
+                        COALESCE(semantic_search.id, keyword_search.id) AS id,
+                        COALESCE(semantic_search.resource_id, keyword_search.resource_id) AS resource_id,
+                        COALESCE(semantic_search.reg_text_id, keyword_search.reg_text_id) AS reg_text_id,
+                        COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+                            COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+                    FROM semantic_search
+                    FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+                ) as t1
             """
 
-        # Final ordering
+        # Final order
         sql += """
-            ORDER BY score DESC
+            ORDER BY resource_id ASC, reg_text_id ASC, score DESC
         """
 
         # Execute the raw SQL query
