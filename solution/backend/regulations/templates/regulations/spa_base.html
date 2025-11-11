@@ -1,6 +1,5 @@
 {% extends "regulations/base.html" %}
 {% load static %}
-{% csrf_token %}
 
 {% block custom_styles %}
     <link rel="stylesheet" href="{% static '/vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
