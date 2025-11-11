@@ -263,6 +263,10 @@
 
                 color: $main_button_color;
             }
+
+            .textarea__submit {
+                @include common-btn-styles;
+            }
         }
     }
 

@@ -120,7 +120,7 @@ watch(
                 />
                 <v-icon
                     icon="mdi-magnify"
-                    class="default-btn"
+                    class="textarea__submit default-btn"
                     aria-label="Submit search"
                     data-testid="search-form-submit"
                     @click="submitForm"
