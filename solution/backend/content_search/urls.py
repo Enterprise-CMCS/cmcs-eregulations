@@ -10,6 +10,7 @@ from .views import (
 urlpatterns = [
     path("", ContentSearchViewSet.as_view({
         "get": "list",
+        "post": "list",
     })),
     path("counts", ContentCountViewSet.as_view({
         "get": "list",

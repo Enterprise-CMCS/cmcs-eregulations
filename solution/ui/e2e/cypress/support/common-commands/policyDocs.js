@@ -2,7 +2,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     cy.intercept("**/v3/title/42/parts", {
         fixture: "parts-last-updated.json",
     }).as("partsLastUpdated");
-    cy.intercept("**/v3/content-search/?q=mock**", {
+    cy.intercept("POST", "**/v3/content-search**", {
         fixture: "policy-docs-search.json",
     }).as("queriedFiles");
     cy.intercept("**/v3/resources/public/categories**", {
@@ -18,7 +18,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         password,
         landingPage,
     });
-    cy.get("input#main-content")
+    cy.get("textarea#main-content")
         .should("exist")
         .type("mock", { force: true });
     cy.get('[data-testid="search-form-submit"]').click({

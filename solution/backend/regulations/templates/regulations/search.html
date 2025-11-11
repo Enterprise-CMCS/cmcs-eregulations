@@ -1,6 +1,7 @@
 {% extends "regulations/spa_base.html" %}
 {% load static %}
 {% load string_formatters %}
+{% csrf_token %}
 
 {% block title_prefix %}Search {% if q %}for {{ q }} {% endif %}| {% endblock %}
 
