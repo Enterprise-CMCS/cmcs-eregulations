@@ -1,15 +1,12 @@
 import base64
+import html
 import json
+import re
 import unicodedata
 from urllib.parse import urlparse
-import unicodedata
-import base64
-import os
-import html
-import re
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.urls import reverse
 
@@ -60,7 +57,7 @@ def preprocess_text(text: str) -> str:
     text = " ".join(text.split())
     # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
     # (e.g. -------------------- turns into ---)
-    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0] * 3, string=text)
     return text
 
 
