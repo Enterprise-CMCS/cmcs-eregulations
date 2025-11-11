@@ -74,12 +74,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         citations = _get_parameter_list("citations", request)
         subjects = _get_parameter_list("subjects", request)
         categories = _get_parameter_list("categories", request)
-        sort = _get_parameter("sort", request)
+        # sort = _get_parameter("sort", request)
         show_public = string_to_bool(_get_parameter("show_public", request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", request), True)
-        max_results = int(_get_parameter("max_results", request, 30))
-        offset = int(_get_parameter("page", request, 0)) * max_results
 
         # Semantic and RRF parameters
         min_rank = 0.1
@@ -124,6 +122,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
         sql = "WITH "  # Initial SQL
 
+        # If semantic is enabled, add semantic search CTE
         if enable_semantic:
             sql += """
                 semantic_search AS (
@@ -156,9 +155,11 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 )
             """
 
+        # If hybrid search is enabled, add a comma to separate the semantic and full-text CTEs
         if enable_semantic and enable_keyword:
             sql += ", "
 
+        # If full-text search is enabled, add full-text search CTE
         if enable_keyword:
             sql += """
                 keyword_search AS (
@@ -188,6 +189,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 )
             """
 
+        # Retrieve data for semantic search only
         if enable_semantic and not enable_keyword:
             sql += """
                 SELECT
@@ -196,6 +198,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 FROM semantic_search
             """
 
+        # Retrieve data for full-text search only
         if enable_keyword and not enable_semantic:
             sql += """
                 SELECT
@@ -204,19 +207,23 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 FROM keyword_search
             """
 
+        # Combine and retrieve both semantic and full-text results
         if enable_semantic and enable_keyword:
             sql += """
                 SELECT
                     COALESCE(semantic_search.id, keyword_search.id) AS id,
-                    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) + COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+                    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+                        COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
                 FROM semantic_search
                 FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
             """
 
+        # Final ordering
         sql += """
             ORDER BY score DESC
         """
 
+        # Execute the raw SQL query
         queryset = ContentIndex.objects.raw(sql, {
             "embedding": embedding,
             "query": query,
@@ -226,6 +233,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
             "ids": ids,
         })
 
+        # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(queryset)]
         queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(query)
 
