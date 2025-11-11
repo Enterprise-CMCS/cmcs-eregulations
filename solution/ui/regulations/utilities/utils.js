@@ -105,17 +105,16 @@ const PARAM_ENCODE_DICT = {
 };
 
 /**
- * @param {*} data - data to be compressed
+ * @param {string} string - data to be compressed
  * @returns {string} - compressed and encoded string suitable for use in a URL query parameter
  * @example
  * const data = "This is a very long search query that needs to be compressed for URL usage.";
- * const compressed = compressQueryString(obj);
- * console.log(compressed); // "EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA"
+ * const compressed = compressQueryString(string);
+ * console.log(compressed); // "CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA"
  */
-const compressQueryString = (data) => {
+const compressQueryString = (string) => {
     try {
-        const jsonString = JSON.stringify(data);
-        return compressToEncodedURIComponent(jsonString);
+        return compressToEncodedURIComponent(string);
     } catch (error) {
         console.error("Error compressing query string:", error);
         return "";
@@ -124,16 +123,15 @@ const compressQueryString = (data) => {
 
 /**
  * @param {string} compressedStr - compressed and encoded string from URL query parameter
- * @returns {*} - decompressed data
+ * @returns {string} - decompressed data
  * @example
- * const compressedStr = "N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
- * const obj = decompressQueryString(compressedStr);
- * console.log(obj); // { name: "John", age: 30 }
+ * const compressedStr = "CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA";
+ * const string = decompressQueryString(compressedStr);
+ * console.log(string); // "This is a very long search query that needs to be compressed for URL usage."
  */
 const decompressQueryString = (compressedStr) => {
     try {
-        const jsonString = decompressFromEncodedURIComponent(compressedStr);
-        return JSON.parse(jsonString);
+        return decompressFromEncodedURIComponent(compressedStr);
     } catch (error) {
         console.error("Error decompressing query string:", error);
         return "";
@@ -147,7 +145,7 @@ const decompressQueryString = (compressedStr) => {
  * @example
  * const query = "This is a very long search query that needs to be compressed for URL usage.";
  * const compressedQuery = compressRouteQuery({ q: query });
- * console.log(compressedQuery); // ".!~N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA"
+ * console.log(compressedQuery); // ".!~CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA"
  */
 const compressRouteQuery = ({ q }) => {
     if (q) return `${COMPRESSION_PREFIX}${compressQueryString(q)}`;
@@ -160,7 +158,7 @@ const compressRouteQuery = ({ q }) => {
  * @param {string} args.q - search query string
  * @returns {string} - decompressed query string if it was compressed; otherwise returns the original query string
  * @example
- * const compressedQuery = ".!~N4IgDgpgTgpiBcIAuBLA9gOwM4QwM4A2AlgHYDmUAnAewFcBLAOwFcIA";
+ * const compressedQuery = ".!~CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA";
  * const query = decompressRouteQuery({ q: compressedQuery });
  * console.log(query); // "This is a very long search query that needs to be compressed for URL usage."
  * @example

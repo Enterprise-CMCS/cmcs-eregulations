@@ -54,13 +54,7 @@ describe("Utilities.js", () => {
             const longQuery =
                 "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes.";
             const compressed = compressQueryString(longQuery);
-            expect(compressed).toBe("EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA");
-        });
-
-        it("returns an empty string if the str parameter cannot stringified or compressed", async () => {
-            const invalidQuery = 123n; // bigint
-            const compressed = compressQueryString(invalidQuery);
-            expect(compressed).toBe("");
+            expect(compressed).toBe("CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoBHAVzUwBcQ5KZoATZAMzDzEuS0wJzaMo4oyAB4BjZMgZRqyKAFs4IsPNLzsyQtXhZcAdylRmOVFAaQADljiYLpVBZwRkEAHRA");
         });
     });
 
@@ -79,7 +73,7 @@ describe("Utilities.js", () => {
     describe("decompressQueryString", () => {
         it("decompresses compressed query strings properly", async () => {
             const compressedQuery =
-                "EQFQFglgzgBNMEMYDcCmAnAnjANgewDsBzGARwFcNsAXMBauWAE1QDMICJrUdsi8OJanhioAHgGNUqJjFqoYAWwRiIi8otypitRDnwB3GTFZ50MJtAAOOBNivl0VvFFRQAdMCA";
+                "CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoBHAVzUwBcQ5KZoATZAMzDzEuS0wJzaMo4oyAB4BjZMgZRqyKAFs4IsPNLzsyQtXhZcAdylRmOVFAaQADljiYLpVBZwRkEAHRA";
             const decompressed = decompressQueryString(compressedQuery);
             expect(decompressed).toBe(
                 "This is a very long query that is definitely going to exceed the maximum length allowed for display purposes."
