@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
 import {
+    getContextBanners,
     getExternalCategories,
     getSupplementalContent,
     getChildTOC,
@@ -251,10 +252,10 @@ async function fetchBanners(sectionKey) {
         } else if (props.subparts && props.subparts.length === 1) {
             params.set("subpart", String(props.subparts[0]));
         }
-        const base = props.apiUrl.replace(/\/$/, "");
-        const resp = await fetch(`${base}/context-banners?${params.toString()}`);
-        if (!resp.ok) throw new Error("Failed to fetch context banners");
-        const data = await resp.json();
+        const data = await getContextBanners({
+            apiUrl: props.apiUrl,
+            requestParams: params.toString(),
+        });
         banners.value = data.results || [];
     } catch (e) {
         console.error(e);
