@@ -12,11 +12,11 @@
             <template #login-banner>
                 {% include "regulations/partials/login_sidebar_banner.html" %}
             </template>
-<template #context-banner>
-    {% if section_banners %}
-        {{ section_banners|json_script:"context-banners" }}
-    {% endif %}
-</template>
+            <template #context-banner>
+                {% if section_banners %}
+                    {{ section_banners|json_script:"context-banners" }}
+                {% endif %}
+            </template>
             {% if user.is_authenticated %}
                 <template #public-label>
                     <div class="label__container">

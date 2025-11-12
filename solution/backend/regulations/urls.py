@@ -4,6 +4,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
 from regulations.views.about import AboutView
+from regulations.views.banners import ContextBannersView
 from regulations.views.get_account_access import GetAccountAccessView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
@@ -24,7 +25,6 @@ from regulations.views.search import SearchView
 from regulations.views.statute import StatuteView
 from regulations.views.statutes import ActListViewSet, GetStatuteLinkAPIView, StatuteLinkConverterViewSet
 from regulations.views.subjects import SubjectsView
-from regulations.views.banners import ContextBannersView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')

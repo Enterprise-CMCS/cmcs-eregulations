@@ -22,10 +22,10 @@ from user.models import set_department_group_and_division
 
 from .models import (
     RegulationLinkConfiguration,
+    SectionContextBanner,
     SiteConfiguration,
     StatuteLinkConfiguration,
     StatuteLinkConverter,
-    SectionContextBanner,
 )
 
 admin.site.logout_template = 'admin/logged_out.html'
@@ -441,7 +441,7 @@ class SectionContextBannerAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "citation":
-            from resources.models import Section, Subpart, AbstractCitation
+            from resources.models import AbstractCitation, Section, Subpart
             kwargs["queryset"] = AbstractCitation.objects.select_subclasses(Section, Subpart)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 

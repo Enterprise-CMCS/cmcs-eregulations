@@ -56,5 +56,3 @@ class ContextBannersView(View):
         ]
 
         return JsonResponse({"results": results})
-
-

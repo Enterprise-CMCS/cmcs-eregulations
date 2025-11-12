@@ -12,8 +12,8 @@ from django.views.generic.base import (
 )
 
 from regcore.models import ECFRParserResult, Part
-from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from regulations.models import SectionContextBanner
+from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin
 from regulations.views.utils import find_subpart
