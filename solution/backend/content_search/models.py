@@ -29,6 +29,46 @@ from resources.models import (
 
 
 class ContentSearchConfiguration(SingletonModel):
+    enable_keyword_search = models.BooleanField(
+        default=True,
+        help_text="Enable traditional keyword-based search for precise matching of search terms.",
+        verbose_name="Enable Keyword Search",
+    )
+
+    enable_semantic_search = models.BooleanField(
+        default=True,
+        help_text="Enable semantic search using vector embeddings for more relevant search results.",
+        verbose_name="Enable Semantic Search",
+    )
+
+    keyword_search_min_rank = models.FloatField(
+        default=0.1,
+        validators=[MinValueValidator(0.0)],
+        help_text="Minimum rank threshold for keyword search results to be included.",
+        verbose_name="Keyword Search Minimum Rank",
+    )
+
+    semantic_search_max_distance = models.FloatField(
+        default=1.3,
+        validators=[MinValueValidator(0.0)],
+        help_text="Maximum distance threshold for semantic search results to be included.",
+        verbose_name="Semantic Search Maximum Distance",
+    )
+
+    rrf_k_value = models.IntegerField(
+        default=60,
+        validators=[MinValueValidator(1)],
+        help_text="The 'k' value used in the Reciprocal Rank Fusion (RRF) "
+                  "algorithm to combine keyword and semantic search results.",
+        verbose_name="RRF K Value",
+    )
+
+    generate_embeddings = models.BooleanField(
+        default=True,
+        help_text="Generate vector embeddings during text extraction to enable semantic search.",
+        verbose_name="Generate Embeddings",
+    )
+
     auto_extract = models.BooleanField(
         default=False,
         help_text="Check this box if eRegs should automatically request text extraction on any resource when it is originally "
