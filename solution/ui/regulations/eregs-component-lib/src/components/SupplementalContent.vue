@@ -101,12 +101,7 @@ onMounted(() => {
         selectedPart.value = args.section;
     });
     categories.value = getDefaultCategories();
-    fetchBanners({
-        apiUrl: props.apiUrl,
-        title: props.title,
-        part: props.part,
-        subparts: props.subparts,
-    });
+    getBanners()
 });
 
 onUnmounted(() => {
@@ -120,20 +115,9 @@ const handleHashChange = () => {
     // Also fetch context banners for the current section if present
     const sectionKey = getSectionKeyFromHash(window.location.hash);
     if (sectionKey) {
-        fetchBanners({
-            apiUrl: props.apiUrl,
-            title: props.title,
-            part: props.part,
-            sectionKey,
-            subparts: props.subparts,
-        });
+        getBanners(sectionKey);
     } else if (props.subparts && props.subparts.length === 1) {
-        fetchBanners({
-            apiUrl: props.apiUrl,
-            title: props.title,
-            part: props.part,
-            subparts: props.subparts,
-        });
+        getBanners()
     }
 };
 
@@ -260,17 +244,24 @@ function getDefaultCategories() {
     });
 }
 
+function getBanners(sectionKey) {
+    fetchBanners({
+        apiUrl: props.apiUrl,
+        title: props.title,
+        part: props.part,
+        sectionKey,
+        subparts: props.subparts,
+    });
+}
+
 const filteredBanners = computed(() => {
-    console.log(contextBanners.value);
     if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [];
     // If a section is selected, show only that section's banner
     if (selectedPart.value) {
         const sectionText = selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
         const cleaned = sectionText.split(" ").pop();
         const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        console.log("key", key);
         const banners = contextBanners.value.results;
-        console.log("banners", banners);
         return contextBanners.value.results.filter((b) => b.section === key);
     }
     // Otherwise, on subpart view, show all banners matching the current subpart
@@ -302,7 +293,7 @@ const getCategories = async (apiUrl) => {
             {{ activePart }} Resources
         </h1>
         <div
-            v-if="filteredBanners.length"
+            v-if="filteredBanners.length && !isFetching && !contextBanners.loading"
             class="context-banner"
             role="note"
             aria-label="Context"
@@ -336,7 +327,7 @@ const getCategories = async (apiUrl) => {
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :subcategories="category.subcategories"
-                :is-fetching="isFetching"
+                :is-fetching="isFetching || contextBanners.loading"
                 :is-fr-link-category="category.is_fr_link_category"
                 :show-if-empty="category.show_if_empty"
             />
