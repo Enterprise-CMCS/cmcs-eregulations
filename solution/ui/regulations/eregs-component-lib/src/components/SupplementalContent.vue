@@ -322,7 +322,6 @@ const getCategories = async (apiUrl) => {
                 </template>
             </p>
         </div>
-        <slot name="context-banner" />
         <h2>Documents</h2>
         <slot name="login-banner" />
         <slot name="public-label" />

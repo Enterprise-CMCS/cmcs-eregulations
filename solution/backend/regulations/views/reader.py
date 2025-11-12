@@ -12,7 +12,6 @@ from django.views.generic.base import (
 )
 
 from regcore.models import ECFRParserResult, Part
-from regulations.models import SectionContextBanner
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin
@@ -62,37 +61,8 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         for location in locations:
             resource_count[location.display_name] = location.num_locations
 
-        # Section-specific context banners: only for Section citations in this Title/Part
-        # Build map part.section_id -> banner_html using multi-table inheritance join to Section
-        banners_qs = (
-            SectionContextBanner.objects
-            .filter(is_active=True, citation__title=reg_title, citation__part=reg_part, citation__section__isnull=False)
-            .values(
-                "citation__part",
-                "citation__section__section_id",
-                "citation__section__parent__subpart_id",
-                "banner_html",
-            )
-        )
-        section_banners_list = [
-            {
-                "section": f"{row['citation__part']}.{row['citation__section__section_id']}",
-                "subpart": row["citation__section__parent__subpart_id"],
-                "html": row["banner_html"],
-            }
-            for row in banners_qs
-        ]
-
-        # Reduce payload: only include banners for the current subpart (if present); otherwise none
-        if context.get("subpart"):
-            section_banners_list = [b for b in section_banners_list if b.get("subpart") == context["subpart"]]
-        else:
-            section_banners_list = []
-
         user = self.request.user
         is_user_authenticated = user.is_authenticated
-
-        current_subpart = context.get("subpart")
 
         c = {
             'tree':         tree,
@@ -102,14 +72,12 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
             'part_label':   part_label,
             'toc':          toc,
             'subchapter':   subchapter,
-            'subpart':      current_subpart,
             'parts':        parts,
             'versions':     versions,
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
             'resource_count': resource_count,
-            'section_banners': section_banners_list,
             'link_conversions': self.get_link_conversions(),
             'link_config': self.get_link_config(),
             'is_user_authenticated': is_user_authenticated,
