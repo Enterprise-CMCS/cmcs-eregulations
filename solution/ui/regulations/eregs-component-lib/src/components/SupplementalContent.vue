@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
 import {
-    getContextBanners,
     getExternalCategories,
     getSupplementalContent,
     getChildTOC,
@@ -11,6 +10,8 @@ import {
     formatResourceCategories,
     getSectionsRecursive,
 } from "utilities/utils";
+
+import useContextBanners from "composables/contextBanners";
 
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
@@ -54,7 +55,8 @@ const selectedPart = ref(undefined);
 const resourceCount = ref(0);
 const partDict = ref({});
 const location = ref("");
-const banners = ref([]);
+
+const { contextBanners, fetchBanners } = useContextBanners();
 
 const activePart = computed(() => {
     if (selectedPart.value !== undefined) {
@@ -99,7 +101,12 @@ onMounted(() => {
         selectedPart.value = args.section;
     });
     categories.value = getDefaultCategories();
-    fetchBanners();
+    fetchBanners({
+        apiUrl: props.apiUrl,
+        title: props.title,
+        part: props.part,
+        subparts: props.subparts,
+    });
 });
 
 onUnmounted(() => {
@@ -113,9 +120,20 @@ const handleHashChange = () => {
     // Also fetch context banners for the current section if present
     const sectionKey = getSectionKeyFromHash(window.location.hash);
     if (sectionKey) {
-        fetchBanners(sectionKey);
+        fetchBanners({
+            apiUrl: props.apiUrl,
+            title: props.title,
+            part: props.part,
+            sectionKey,
+            subparts: props.subparts,
+        });
     } else if (props.subparts && props.subparts.length === 1) {
-        fetchBanners();
+        fetchBanners({
+            apiUrl: props.apiUrl,
+            title: props.title,
+            part: props.part,
+            subparts: props.subparts,
+        });
     }
 };
 
@@ -242,40 +260,23 @@ function getDefaultCategories() {
     });
 }
 
-async function fetchBanners(sectionKey) {
-    try {
-        const params = new URLSearchParams();
-        params.set("title", String(props.title));
-        params.set("part", String(props.part));
-        if (sectionKey) {
-            params.set("section", sectionKey);
-        } else if (props.subparts && props.subparts.length === 1) {
-            params.set("subpart", String(props.subparts[0]));
-        }
-        const data = await getContextBanners({
-            apiUrl: props.apiUrl,
-            requestParams: params.toString(),
-        });
-        banners.value = data.results || [];
-    } catch (e) {
-        console.error(e);
-        banners.value = [];
-    }
-}
-
 const filteredBanners = computed(() => {
-    if (!banners.value || banners.value.length === 0) return [];
+    console.log(contextBanners.value);
+    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [];
     // If a section is selected, show only that section's banner
     if (selectedPart.value) {
         const sectionText = selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
         const cleaned = sectionText.split(" ").pop();
         const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        return banners.value.filter((b) => b.section === key);
+        console.log("key", key);
+        const banners = contextBanners.value.results;
+        console.log("banners", banners);
+        return contextBanners.value.results.filter((b) => b.section === key);
     }
     // Otherwise, on subpart view, show all banners matching the current subpart
     if (props.subparts && props.subparts.length === 1) {
         const sp = props.subparts[0];
-        return banners.value.filter((b) => (b.subpart === sp) || !b.subpart);
+        return contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
     }
     return [];
 });
