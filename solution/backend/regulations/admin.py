@@ -457,7 +457,8 @@ class SectionContextBannerAdmin(admin.ModelAdmin):
         # For Sections, show section_id; for Subparts, show subpart_id/child_id
         try:
             # Section has attribute section_id; Subpart has subpart_id
-            return getattr(obj.citation, "section_id", getattr(obj.citation, "subpart_id", obj.citation.child_id))
+            section_string = getattr(obj.citation, "section_id", getattr(obj.citation, "subpart_id", obj.citation.child_id))
+            return section_string.lstrip("0")  # Remove leading zeros for display
         except Exception:
             return ""
     get_section.short_description = "Section/Subpart"
