@@ -11,8 +11,7 @@ import {
     getSectionsRecursive,
 } from "utilities/utils";
 
-import useContextBanners from "composables/contextBanners";
-
+import ContextBanners from "./reader-sidebar/ContextBanners.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
@@ -56,8 +55,6 @@ const resourceCount = ref(0);
 const partDict = ref({});
 const location = ref("");
 
-const { contextBanners, fetchBanners } = useContextBanners();
-
 const activePart = computed(() => {
     if (selectedPart.value !== undefined) {
         return selectedPart.value;
@@ -91,17 +88,16 @@ watch(selectedPart, () => {
 onMounted(() => {
     if (window.location.hash) {
         location.value = parseHash(window.location.hash);
+        fetchContent(location.value);
     } else {
         fetchContent();
     }
-    fetchContent(location.value);
     window.addEventListener("hashchange", handleHashChange);
 
     eventbus.on(EventCodes.SetSection, (args) => {
         selectedPart.value = args.section;
     });
     categories.value = getDefaultCategories();
-    getBanners()
 });
 
 onUnmounted(() => {
@@ -112,13 +108,6 @@ onUnmounted(() => {
 const handleHashChange = () => {
     location.value = parseHash(window.location.hash);
     fetchContent(location.value);
-    // Also fetch context banners for the current section if present
-    const sectionKey = getSectionKeyFromHash(window.location.hash);
-    if (sectionKey) {
-        getBanners(sectionKey);
-    } else if (props.subparts && props.subparts.length === 1) {
-        getBanners()
-    }
 };
 
 const parseHash = (locationHash) => {
@@ -142,20 +131,6 @@ const parseHash = (locationHash) => {
     selectedPart.value = `§ ${section}`;
     return `citations=${props.title}.${section}`;
 };
-
-function getSectionKeyFromHash(hash) {
-    if (!hash || hash === "#main-content") return "";
-    const trimmed = hash.startsWith("#") ? hash.substring(1) : hash;
-    const parts = trimmed.split("-");
-    if (parts.length >= 2 && !Number.isNaN(Number(parts[0])) && !Number.isNaN(Number(parts[1]))) {
-        return `${props.part}.${parts[1]}`;
-    }
-    // Handles hashes like #75.104
-    if (trimmed.includes(".")) {
-        return trimmed;
-    }
-    return "";
-}
 
 const fetchContent = async (location) => {
     try {
@@ -244,33 +219,6 @@ function getDefaultCategories() {
     });
 }
 
-function getBanners(sectionKey) {
-    fetchBanners({
-        apiUrl: props.apiUrl,
-        title: props.title,
-        part: props.part,
-        sectionKey,
-        subparts: props.subparts,
-    });
-}
-
-const filteredBanners = computed(() => {
-    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [];
-    // If a section is selected, show only that section's banner
-    if (selectedPart.value) {
-        const sectionText = selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
-        const cleaned = sectionText.split(" ").pop();
-        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        return contextBanners.value.results.filter((b) => b.section === key);
-    }
-    // Otherwise, on subpart view, show all banners matching the current subpart
-    if (props.subparts && props.subparts.length === 1) {
-        const sp = props.subparts[0];
-        return contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
-    }
-    return [];
-});
-
 const getCategories = async (apiUrl) => {
     let categories = [];
 
@@ -284,6 +232,7 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
+
 </script>
 
 <template>
@@ -291,29 +240,13 @@ const getCategories = async (apiUrl) => {
         <h1 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h1>
-        <div
-            v-if="filteredBanners.length && !isFetching && !contextBanners.loading"
-            class="context-banner"
-            role="note"
-            aria-label="Context"
-        >
-            <span class="context-banner-title">Notes</span>
-            <p
-                v-for="item in filteredBanners"
-                :key="item.section"
-                class="context-banner__item"
-            >
-                <template v-if="!selectedPart">
-                    <strong>
-                        <a :href="`#${item.section.replace('.', '-')}`">§ {{ item.section }}</a>:
-                    </strong>
-                    <span v-html="item.html" />
-                </template>
-                <template v-else>
-                    <span v-html="item.html" />
-                </template>
-            </p>
-        </div>
+        <ContextBanners
+            :api-url="props.apiUrl"
+            :title="props.title"
+            :part="props.part"
+            :selected-part="selectedPart"
+            :subparts="props.subparts"
+        />
         <h2>Documents</h2>
         <slot name="login-banner" />
         <slot name="public-label" />
@@ -326,7 +259,7 @@ const getCategories = async (apiUrl) => {
                 :description="category.description"
                 :supplemental_content="category.supplemental_content"
                 :subcategories="category.subcategories"
-                :is-fetching="isFetching || contextBanners.loading"
+                :is-fetching="isFetching"
                 :is-fr-link-category="category.is_fr_link_category"
                 :show-if-empty="category.show_if_empty"
             />
