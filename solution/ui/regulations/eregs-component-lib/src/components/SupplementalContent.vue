@@ -261,7 +261,6 @@ const filteredBanners = computed(() => {
         const sectionText = selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
         const cleaned = sectionText.split(" ").pop();
         const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        const banners = contextBanners.value.results;
         return contextBanners.value.results.filter((b) => b.section === key);
     }
     // Otherwise, on subpart view, show all banners matching the current subpart
