@@ -6,6 +6,7 @@ from rest_framework import exceptions, viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
+from common.constants import QUOTE_TYPES
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
@@ -21,6 +22,7 @@ from .models import (
     ContentIndex,
     IndexedRegulationText,
     ResourceMetadata,
+    ContentSearchConfiguration,
 )
 from .serializers import (
     ChunkUpdateSerializer,
@@ -80,12 +82,34 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         show_internal = string_to_bool(_get_parameter("show_internal", request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", request), True)
 
-        # Semantic and RRF parameters
-        min_rank = 0.1
-        max_distance = 1.3
-        k_value = 60
-        enable_semantic = True
-        enable_keyword = True
+        # Retrieve content search configuration
+        config = ContentSearchConfiguration.get_solo()
+        min_rank = config.keyword_search_min_rank
+        max_distance = config.semantic_search_max_distance
+        k_value = config.rrf_k_value
+        enable_semantic = config.enable_semantic_search
+        enable_keyword = config.enable_keyword_search
+        keyword_search_max_words = config.keyword_search_max_words
+        semantic_search_min_words = config.semantic_search_min_words
+        use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
+
+        # Determine the search and headline generation strategy
+        keyword_rank_func = "ts_rank"
+        keyword_search_type = "plain"
+        query_words = len(query.split())
+
+        if enable_semantic and query_words > keyword_search_max_words:
+            enable_keyword = False
+
+        if enable_keyword and query_words < semantic_search_min_words:
+            enable_semantic = False
+
+        if query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES) and enable_keyword:
+            keyword_rank_func = "ts_rank_cd"
+            keyword_search_type = "phrase"
+            query = query.strip("".join(QUOTE_TYPES))
+            if use_keyword_search_for_quoted:
+                enable_semantic = False
 
         # Generate embedding if needed
         embedding = [0.0] * 512  # Dummy embedding
@@ -164,7 +188,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
         # If full-text search is enabled, add full-text search CTE
         if enable_keyword:
-            sql += """
+            sql += f"""
                 keyword_search AS (
                     SELECT
                         id,
@@ -183,7 +207,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                                 id,
                                 resource_id,
                                 reg_text_id,
-                                ts_rank((vector_column), plainto_tsquery('english', %(query)s)) AS raw_rank
+                                {keyword_rank_func}(
+                                    (vector_column),
+                                    {keyword_search_type}to_tsquery('english', %(query)s)
+                                ) AS raw_rank
                             FROM content_search_contentindex
                         ) AS t2
                     ) AS t1

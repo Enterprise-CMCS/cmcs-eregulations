@@ -63,6 +63,26 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="RRF K Value",
     )
 
+    semantic_search_min_words = models.IntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        help_text="Minimum number of words required in the search query to allow semantic search if keyword search is enabled.",
+        verbose_name="Semantic Search Minimum Words",
+    )
+
+    keyword_search_max_words = models.IntegerField(
+        default=15,
+        validators=[MinValueValidator(1)],
+        help_text="Maximum number of words allowed in the search query to enable keyword search if semantic search is enabled.",
+        verbose_name="Keyword Search Maximum Words",
+    )
+
+    use_keyword_search_for_quoted = models.BooleanField(
+        default=True,
+        help_text="Use keyword search for quoted search queries to ensure exact phrase matching.",
+        verbose_name="Use Keyword Search for Quoted Queries",
+    )
+
     generate_embeddings = models.BooleanField(
         default=True,
         help_text="Generate vector embeddings during text extraction to enable semantic search.",
@@ -163,8 +183,7 @@ class ContentIndexQuerySet(models.QuerySet):
     def _is_quoted(self, query):
         return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
 
-    def _get_search_query_object(self, search_query):
-        search_type = "phrase" if self._is_quoted(search_query) else "plain"
+    def _get_search_query_object(self, search_query, search_type="plain"):
         return SearchQuery(search_query, search_type=search_type, config='english')
 
     def defer_text(self):
@@ -201,8 +220,8 @@ class ContentIndexQuerySet(models.QuerySet):
         .order_by(*order_by)\
 
 
-    def generate_headlines(self, search_query):
-        query_object = self._get_search_query_object(search_query)
+    def generate_headlines(self, search_query, search_type="plain"):
+        query_object = self._get_search_query_object(search_query, search_type)
         return self.annotate(content_short=Substr("content", 1, self._text_max)).annotate(
             summary_headline=SearchHeadline(
                 "summary",
