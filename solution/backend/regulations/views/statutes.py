@@ -54,7 +54,7 @@ class StatuteLinkConverterViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.filter(act__iexact=act)
         if title:
             queryset = queryset.filter(statute_title__iexact=title)
-        return queryset.order_by("act", "statute_title", "usc_sort")
+        return queryset.order_by("act", "statute_title", "section", "usc_sort")
 
 
 class ActListSerializer(serializers.Serializer):
