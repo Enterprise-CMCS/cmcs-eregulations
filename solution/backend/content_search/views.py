@@ -84,29 +84,37 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         show_public = string_to_bool(_get_parameter("show_public", request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", request), True)
+        enable_keyword = _get_parameter("enable_keyword", request)
+        enable_semantic = _get_parameter("enable_semantic", request)
 
         # Retrieve content search configuration
         config = ContentSearchConfiguration.get_solo()
         min_rank = config.keyword_search_min_rank
         max_distance = config.semantic_search_max_distance
         k_value = config.rrf_k_value
-        enable_semantic = config.enable_semantic_search
-        enable_keyword = config.enable_keyword_search
+        enable_semantic = string_to_bool(enable_semantic, config.enable_semantic_search)
+        enable_keyword = string_to_bool(enable_keyword, config.enable_keyword_search)
         keyword_search_max_words = config.keyword_search_max_words
         semantic_search_min_words = config.semantic_search_min_words
         use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
 
         # Determine the search and headline generation strategy
+
+        # Default (unquoted) keyword search config
         keyword_rank_func = "ts_rank"
         keyword_search_type = "plain"
-        query_words = len(query.split())
 
+        query_words = len(query.split())  # Rough word count
+
+        # Disable keyword search for long queries if semantic is enabled (keyword search is too slow for very long queries)
         if enable_semantic and query_words > keyword_search_max_words:
             enable_keyword = False
 
+        # Disable semantic search for short queries if keyword is enabled (results aren't meaningful for very short queries)
         if enable_keyword and query_words < semantic_search_min_words:
             enable_semantic = False
 
+        # Adjust strategy for quoted queries
         if query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES) and enable_keyword:
             keyword_rank_func = "ts_rank_cd"
             keyword_search_type = "phrase"
@@ -151,31 +159,53 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
         # Perform initial filtering (by citation, subject, etc.)
+        # Note that we disable the S608 warning here because the WHERE clause that is injected is properly parameterized
+        # and therefore is completely safe from SQL injection attacks.
         sql = f"""
             WITH indices AS (
                 SELECT content_search_contentindex.id AS id
                 FROM content_search_contentindex
-                INNER JOIN "resources_abstractresource" ON ("content_search_contentindex"."resource_id" = "resources_abstractresource"."id")
-                INNER JOIN "resources_abstractresource_cfr_citations" ON ("resources_abstractresource"."id" = "resources_abstractresource_cfr_citations"."abstractresource_id")
-                INNER JOIN "resources_abstractcitation" ON ("resources_abstractresource_cfr_citations"."abstractcitation_id" = "resources_abstractcitation"."id")
-                LEFT OUTER JOIN "resources_subpart" ON ("resources_abstractcitation"."id" = "resources_subpart"."abstractcitation_ptr_id")
-                LEFT OUTER JOIN "resources_section" ON ("resources_abstractcitation"."id" = "resources_section"."abstractcitation_ptr_id")
-                LEFT OUTER JOIN "resources_subpart" T7 ON ("resources_section"."parent_id" = T7."abstractcitation_ptr_id")
-                INNER JOIN "resources_abstractresource_subjects" ON ("resources_abstractresource"."id" = "resources_abstractresource_subjects"."abstractresource_id")
-                INNER JOIN "resources_abstractcategory" ON ("resources_abstractresource"."category_id" = "resources_abstractcategory"."id")
-                LEFT OUTER JOIN "resources_abstractpubliccategory" ON ("resources_abstractcategory"."id" = "resources_abstractpubliccategory"."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_publicsubcategory" ON ("resources_abstractpubliccategory"."abstractcategory_ptr_id" = "resources_publicsubcategory"."abstractpubliccategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractpubliccategory" T13 ON ("resources_publicsubcategory"."abstractpubliccategory_ptr_id" = T13."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractcategory" T14 ON (T13."abstractcategory_ptr_id" = T14."id")
-                LEFT OUTER JOIN "resources_abstractinternalcategory" ON ("resources_abstractcategory"."id" = "resources_abstractinternalcategory"."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_internalsubcategory" ON ("resources_abstractinternalcategory"."abstractcategory_ptr_id" = "resources_internalsubcategory"."abstractinternalcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractinternalcategory" T18 ON ("resources_internalsubcategory"."abstractinternalcategory_ptr_id" = T18."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractcategory" T19 ON (T18."abstractcategory_ptr_id" = T19."id")
-                LEFT OUTER JOIN "resources_abstractpublicresource" ON ("resources_abstractresource"."id" = "resources_abstractpublicresource"."abstractresource_ptr_id")
-                LEFT OUTER JOIN "resources_abstractinternalresource" ON ("resources_abstractresource"."id" = "resources_abstractinternalresource"."abstractresource_ptr_id")
+                INNER JOIN "resources_abstractresource"
+                    ON ("content_search_contentindex"."resource_id" = "resources_abstractresource"."id")
+                INNER JOIN "resources_abstractresource_cfr_citations"
+                    ON ("resources_abstractresource"."id" = "resources_abstractresource_cfr_citations"."abstractresource_id")
+                INNER JOIN "resources_abstractcitation"
+                    ON ("resources_abstractresource_cfr_citations"."abstractcitation_id" = "resources_abstractcitation"."id")
+                LEFT OUTER JOIN "resources_subpart"
+                    ON ("resources_abstractcitation"."id" = "resources_subpart"."abstractcitation_ptr_id")
+                LEFT OUTER JOIN "resources_section"
+                    ON ("resources_abstractcitation"."id" = "resources_section"."abstractcitation_ptr_id")
+                LEFT OUTER JOIN "resources_subpart" T7
+                    ON ("resources_section"."parent_id" = T7."abstractcitation_ptr_id")
+                INNER JOIN "resources_abstractresource_subjects"
+                    ON ("resources_abstractresource"."id" = "resources_abstractresource_subjects"."abstractresource_id")
+                INNER JOIN "resources_abstractcategory"
+                    ON ("resources_abstractresource"."category_id" = "resources_abstractcategory"."id")
+                LEFT OUTER JOIN "resources_abstractpubliccategory"
+                    ON ("resources_abstractcategory"."id" = "resources_abstractpubliccategory"."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_publicsubcategory"
+                    ON ("resources_abstractpubliccategory"."abstractcategory_ptr_id" =
+                        "resources_publicsubcategory"."abstractpubliccategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractpubliccategory" T13
+                    ON ("resources_publicsubcategory"."abstractpubliccategory_ptr_id" = T13."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractcategory" T14
+                    ON (T13."abstractcategory_ptr_id" = T14."id")
+                LEFT OUTER JOIN "resources_abstractinternalcategory"
+                    ON ("resources_abstractcategory"."id" = "resources_abstractinternalcategory"."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_internalsubcategory"
+                    ON ("resources_abstractinternalcategory"."abstractcategory_ptr_id" =
+                        "resources_internalsubcategory"."abstractinternalcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractinternalcategory" T18
+                    ON ("resources_internalsubcategory"."abstractinternalcategory_ptr_id" = T18."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractcategory" T19
+                    ON (T18."abstractcategory_ptr_id" = T19."id")
+                LEFT OUTER JOIN "resources_abstractpublicresource"
+                    ON ("resources_abstractresource"."id" = "resources_abstractpublicresource"."abstractresource_ptr_id")
+                LEFT OUTER JOIN "resources_abstractinternalresource"
+                    ON ("resources_abstractresource"."id" = "resources_abstractinternalresource"."abstractresource_ptr_id")
                 WHERE {sql_filter or "TRUE"}
             ),
-        """
+        """  # noqa: S608
 
         # If semantic is enabled, add semantic search CTE
         if enable_semantic:
@@ -203,8 +233,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                                 embedding <=> (%(embedding)s::vector) AS raw_rank
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
-                        ) AS t2
-                    ) AS t1
+                        ) AS raw_rank_table
+                    ) AS rank_table
                     WHERE embedding IS NOT NULL
                     AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank < %(max_distance)s
@@ -244,8 +274,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                                 ) AS raw_rank
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
-                        ) AS t2
-                    ) AS t1
+                        ) AS raw_rank_table
+                    ) AS rank_table
                     WHERE (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank > %(min_rank)s
                     ORDER BY rank ASC
@@ -375,7 +405,7 @@ class ContentCountViewSet(viewsets.ViewSet):
     # Used for automatically generating a URL to the count endpoint
     def generate_url(request):
         new_get = QueryDict(mutable=True)
-        [new_get.update({i: j}) for i, j in request.GET.items() if i in ["q", "citations", "subjects", "categories"]]
+        [new_get.update({i: j}) for i, j in request.GET.items() if i in ["q", "query", "citations", "subjects", "categories"]]
         return request.build_absolute_uri(reverse("content_count")) + f"?{new_get.urlencode()}"
 
     def list(self, request, *args, **kwargs):
