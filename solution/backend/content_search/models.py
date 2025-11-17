@@ -37,6 +37,13 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="Keyword Search Minimum Rank",
     )
 
+    keyword_search_min_rank_quoted = models.FloatField(
+        default=0.01,
+        validators=[MinValueValidator(0.0)],
+        help_text="Minimum rank threshold for keyword search results to be included when the query is quoted.",
+        verbose_name="Keyword Search Minimum Rank for Quoted Queries",
+    )
+
     semantic_search_max_distance = models.FloatField(
         default=1.3,
         validators=[MinValueValidator(0.0)],
