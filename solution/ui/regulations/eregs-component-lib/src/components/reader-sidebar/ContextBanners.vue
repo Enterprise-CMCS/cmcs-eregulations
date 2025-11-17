@@ -119,10 +119,10 @@ onUnmounted(() => {
                 <strong>
                     <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
                 </strong>
-                <span v-html="item.html" />
+                <span v-sanitize-html="item.html" />
             </template>
             <template v-else>
-                <span v-html="item.html" />
+                <span v-sanitize-html="item.html" />
             </template>
         </p>
     </div>
