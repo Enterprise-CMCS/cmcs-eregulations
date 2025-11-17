@@ -1,3 +1,26 @@
+<script>
+const getSectionKeyFromHash = ({ hash, part }) => {
+    if (!hash || hash === "#main-content") return "";
+    const trimmed = hash.startsWith("#") ? hash.substring(1) : hash;
+    const parts = trimmed.split("-");
+    if (parts.length >= 2 && !Number.isNaN(Number(parts[0])) && !Number.isNaN(Number(parts[1]))) {
+        return `${part}.${parts[1]}`;
+    }
+    // Handles hashes like #75.104
+    if (trimmed.includes(".")) {
+        return trimmed;
+    }
+    return "";
+};
+
+const getSectionLink = ({ section }) => `#${section.replace('.', '-')}`;
+
+export default {
+    getSectionKeyFromHash,
+    getSectionLink,
+};
+</script>
+
 <script setup>
 import { onMounted, onUnmounted, computed } from 'vue';
 
@@ -33,22 +56,8 @@ const props = defineProps({
 
 const { contextBanners, fetchBanners } = useContextBanners();
 
-function getSectionKeyFromHash(hash) {
-    if (!hash || hash === "#main-content") return "";
-    const trimmed = hash.startsWith("#") ? hash.substring(1) : hash;
-    const parts = trimmed.split("-");
-    if (parts.length >= 2 && !Number.isNaN(Number(parts[0])) && !Number.isNaN(Number(parts[1]))) {
-        return `${props.part}.${parts[1]}`;
-    }
-    // Handles hashes like #75.104
-    if (trimmed.includes(".")) {
-        return trimmed;
-    }
-    return "";
-}
-
 const handleHash = () => {
-    const sectionKey = getSectionKeyFromHash(window.location.hash);
+    const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
     if (sectionKey) {
         getBanners(sectionKey);
     } else if (props.subparts && props.subparts.length === 1) {
@@ -108,7 +117,7 @@ onUnmounted(() => {
         >
             <template v-if="!props.selectedPart">
                 <strong>
-                    <a :href="`#${item.section.replace('.', '-')}`">§ {{ item.section }}</a>:
+                    <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
                 </strong>
                 <span v-html="item.html" />
             </template>
