@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='semantic_search_min_words',
-            field=models.IntegerField(default=1, help_text='Minimum number of words required in the search query to allow semantic search if keyword search is enabled.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Semantic Search Minimum Words'),
+            field=models.IntegerField(default=2, help_text='Minimum number of words required in the search query to allow semantic search if keyword search is enabled.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Semantic Search Minimum Words'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',

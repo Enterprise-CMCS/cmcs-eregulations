@@ -1,7 +1,5 @@
 from django.db import connection
 from django.db.models import Count, F, Prefetch, Q
-from django.db.models.sql.compiler import SQLCompiler
-from django.db.models.sql.query import Query
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -151,61 +149,15 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         if not show_regulations:
             q_filter &= ~Q(reg_text__isnull=False)
 
-        # Convert the Q object to raw SQL while preserving safe parameterization
-        query_object = Query(ContentIndex)
-        sql_compiler = SQLCompiler(query_object, connection, None)
-        sql_filter, sql_params = q_filter.resolve_expression(query_object).as_sql(sql_compiler, connection)
+        # Convert the queryset to raw SQL while preserving safe parameterization
+        query_object = ContentIndex.objects.filter(q_filter).only("id").query
+        sql_compiler = query_object.get_compiler(connection=connection)
+        sql_filter, sql_params = query_object.as_sql(sql_compiler, connection)
         sql_filter = sql_filter.replace("%s", "{}").format(*[f"%(pos{i})s" for i in range(len(sql_params))])
         sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
-        # Perform initial filtering (by citation, subject, etc.)
-        # Note that we disable the S608 warning here because the WHERE clause that is injected is properly parameterized
-        # and therefore is completely safe from SQL injection attacks.
-        sql = f"""
-            WITH indices AS (
-                SELECT content_search_contentindex.id AS id
-                FROM content_search_contentindex
-                INNER JOIN "resources_abstractresource"
-                    ON ("content_search_contentindex"."resource_id" = "resources_abstractresource"."id")
-                INNER JOIN "resources_abstractresource_cfr_citations"
-                    ON ("resources_abstractresource"."id" = "resources_abstractresource_cfr_citations"."abstractresource_id")
-                INNER JOIN "resources_abstractcitation"
-                    ON ("resources_abstractresource_cfr_citations"."abstractcitation_id" = "resources_abstractcitation"."id")
-                LEFT OUTER JOIN "resources_subpart"
-                    ON ("resources_abstractcitation"."id" = "resources_subpart"."abstractcitation_ptr_id")
-                LEFT OUTER JOIN "resources_section"
-                    ON ("resources_abstractcitation"."id" = "resources_section"."abstractcitation_ptr_id")
-                LEFT OUTER JOIN "resources_subpart" T7
-                    ON ("resources_section"."parent_id" = T7."abstractcitation_ptr_id")
-                INNER JOIN "resources_abstractresource_subjects"
-                    ON ("resources_abstractresource"."id" = "resources_abstractresource_subjects"."abstractresource_id")
-                INNER JOIN "resources_abstractcategory"
-                    ON ("resources_abstractresource"."category_id" = "resources_abstractcategory"."id")
-                LEFT OUTER JOIN "resources_abstractpubliccategory"
-                    ON ("resources_abstractcategory"."id" = "resources_abstractpubliccategory"."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_publicsubcategory"
-                    ON ("resources_abstractpubliccategory"."abstractcategory_ptr_id" =
-                        "resources_publicsubcategory"."abstractpubliccategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractpubliccategory" T13
-                    ON ("resources_publicsubcategory"."abstractpubliccategory_ptr_id" = T13."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractcategory" T14
-                    ON (T13."abstractcategory_ptr_id" = T14."id")
-                LEFT OUTER JOIN "resources_abstractinternalcategory"
-                    ON ("resources_abstractcategory"."id" = "resources_abstractinternalcategory"."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_internalsubcategory"
-                    ON ("resources_abstractinternalcategory"."abstractcategory_ptr_id" =
-                        "resources_internalsubcategory"."abstractinternalcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractinternalcategory" T18
-                    ON ("resources_internalsubcategory"."abstractinternalcategory_ptr_id" = T18."abstractcategory_ptr_id")
-                LEFT OUTER JOIN "resources_abstractcategory" T19
-                    ON (T18."abstractcategory_ptr_id" = T19."id")
-                LEFT OUTER JOIN "resources_abstractpublicresource"
-                    ON ("resources_abstractresource"."id" = "resources_abstractpublicresource"."abstractresource_ptr_id")
-                LEFT OUTER JOIN "resources_abstractinternalresource"
-                    ON ("resources_abstractresource"."id" = "resources_abstractinternalresource"."abstractresource_ptr_id")
-                WHERE {sql_filter or "TRUE"}
-            ),
-        """  # noqa: S608
+        # Define initial CTE that filters by the above criteria
+        sql = "WITH indices AS ( " + sql_filter + " ), "
 
         # If semantic is enabled, add semantic search CTE
         if enable_semantic:
@@ -285,29 +237,41 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Retrieve data for semantic search only
         if enable_semantic and not enable_keyword:
             sql += """
-                SELECT DISTINCT ON (resource_id, reg_text_id)
+                SELECT
                     id,
                     rank AS score
-                FROM semantic_search
+                FROM (
+                    SELECT DISTINCT ON (resource_id, reg_text_id)
+                        id,
+                        rank
+                    FROM semantic_search
+                    ORDER BY resource_id ASC, reg_text_id ASC
+                ) AS distinct_table
             """
 
         # Retrieve data for full-text search only
         if enable_keyword and not enable_semantic:
             sql += """
-                SELECT DISTINCT ON (resource_id, reg_text_id)
+                SELECT
                     id,
                     rank AS score
-                FROM keyword_search
+                FROM (
+                    SELECT DISTINCT ON (resource_id, reg_text_id)
+                        id,
+                        rank
+                    FROM keyword_search
+                    ORDER BY resource_id ASC, reg_text_id ASC
+                ) AS distinct_table
             """
 
         # Combine and retrieve both semantic and full-text results
         if enable_semantic and enable_keyword:
             sql += """
-                SELECT DISTINCT ON (resource_id, reg_text_id)
+                SELECT
                     id,
                     score
                 FROM (
-                    SELECT
+                    SELECT DISTINCT ON (resource_id, reg_text_id)
                         COALESCE(semantic_search.id, keyword_search.id) AS id,
                         COALESCE(semantic_search.resource_id, keyword_search.resource_id) AS resource_id,
                         COALESCE(semantic_search.reg_text_id, keyword_search.reg_text_id) AS reg_text_id,
@@ -315,12 +279,13 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                             COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
                     FROM semantic_search
                     FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
-                ) as t1
+                    ORDER BY resource_id ASC, reg_text_id ASC
+                ) AS combined_table
             """
 
         # Final order
         sql += """
-            ORDER BY resource_id ASC, reg_text_id ASC, score DESC
+            ORDER BY score DESC
         """
 
         # Execute the raw SQL query

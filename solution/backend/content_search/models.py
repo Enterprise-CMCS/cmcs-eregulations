@@ -64,7 +64,7 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     semantic_search_min_words = models.IntegerField(
-        default=1,
+        default=2,
         validators=[MinValueValidator(1)],
         help_text="Minimum number of words required in the search query to allow semantic search if keyword search is enabled.",
         verbose_name="Semantic Search Minimum Words",
