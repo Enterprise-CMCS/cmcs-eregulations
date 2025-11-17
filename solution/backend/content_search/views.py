@@ -65,9 +65,9 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
     pagination_class = ContentSearchPagination
     parser_classes = (FormParser,)
 
-    def list(self, request, *args, **kwargs):
+    def get_queryset(self):
         # Get query and preprocess it
-        query = _get_parameter("query", request) or _get_parameter("q", request)
+        query = _get_parameter("query", self.request) or _get_parameter("q", self.request)
         if not query:
             raise exceptions.ValidationError("Query parameter 'query' or 'q' is required.")
         if len(query) > 10000:
@@ -75,15 +75,15 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         query = preprocess_text(query)
 
         # Get optional parameters
-        citations = _get_parameter_list("citations", request)
-        subjects = _get_parameter_list("subjects", request)
-        categories = _get_parameter_list("categories", request)
-        # sort = _get_parameter("sort", request)
-        show_public = string_to_bool(_get_parameter("show_public", request), True)
-        show_internal = string_to_bool(_get_parameter("show_internal", request), True)
-        show_regulations = string_to_bool(_get_parameter("show_regulations", request), True)
-        enable_keyword = _get_parameter("enable_keyword", request)
-        enable_semantic = _get_parameter("enable_semantic", request)
+        citations = _get_parameter_list("citations", self.request)
+        subjects = _get_parameter_list("subjects", self.request)
+        categories = _get_parameter_list("categories", self.request)
+        # sort = _get_parameter("sort", self.request)
+        show_public = string_to_bool(_get_parameter("show_public", self.request), True)
+        show_internal = string_to_bool(_get_parameter("show_internal", self.request), True)
+        show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
+        enable_keyword = _get_parameter("enable_keyword", self.request)
+        enable_semantic = _get_parameter("enable_semantic", self.request)
 
         # Retrieve content search configuration
         config = ContentSearchConfiguration.get_solo()
@@ -289,13 +289,17 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         """
 
         # Execute the raw SQL query
-        queryset = ContentIndex.objects.raw(sql, {**sql_params, **{
+        return ContentIndex.objects.raw(sql, {**sql_params, **{
             "embedding": embedding,
             "query": query,
             "k": k_value,
             "max_distance": max_distance,
             "min_rank": min_rank,
         }})
+
+    def list(self, request, *args, **kwargs):
+        query = _get_parameter("query", request) or _get_parameter("q", request)
+        queryset = self.get_queryset()
 
         # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(queryset)]
@@ -366,7 +370,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         ),
     ],
 )
-class ContentCountViewSet(viewsets.ViewSet):
+class ContentCountViewSet(ContentSearchViewSet):
     # Used for automatically generating a URL to the count endpoint
     def generate_url(request):
         new_get = QueryDict(mutable=True)
@@ -374,45 +378,10 @@ class ContentCountViewSet(viewsets.ViewSet):
         return request.build_absolute_uri(reverse("content_count")) + f"?{new_get.urlencode()}"
 
     def list(self, request, *args, **kwargs):
-        # Retrieve optional parameters
-        citations = request.GET.getlist("citations")
-        subjects = request.GET.getlist("subjects")
-        categories = request.GET.getlist("categories")
-        search_query = request.GET.get("q")
-
-        # Defer all unnecessary text fields to reduce database load and memory usage
-        query = ContentIndex.objects.defer_text()
-
-        # Filter out unapproved resources
-        query = query.exclude(resource__approved=False)
-
-        # Filter inclusively by citations if this array exists
-        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
-        if citation_filter:
-            query = query.filter(citation_filter)
-
-        # Filter by subject pks if subjects array is present
-        if subjects:
-            query = query.filter(resource__subjects__pk__in=subjects)
-
-        # Filter by categories (both parent and subcategories) if the categories array is present
-        if categories:
-            query = query.filter(
-                Q(resource__category__pk__in=categories) |
-                Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
-                Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
-            )
-
-        # Filter out internal resources if the user is not authenticated
-        if not self.request.user.is_authenticated:
-            query = query.exclude(resource__abstractinternalresource__isnull=False)
-
-        # Perform search if 'q' parameter exists
-        if search_query:
-            query = query.search(search_query)
+        queryset = self.get_queryset()
 
         # Retrieve the primary keys of the filtered results to speed up the following queries
-        pks = list(query.values_list("pk", flat=True))
+        pks = [i.id for i in queryset]
 
         # Aggregate the counts of internal, public, and reg text
         aggregates = ContentIndex.objects.filter(pk__in=pks).aggregate(
