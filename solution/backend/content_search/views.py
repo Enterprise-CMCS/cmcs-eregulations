@@ -150,9 +150,6 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         sql_filter = sql_filter.replace("%s", "{}").format(*[f"%(pos{i})s" for i in range(len(sql_params))])
         sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
-        # enable_semantic = False
-        # enable_keyword = False
-
         # Perform initial filtering (by citation, subject, etc.)
         sql = f"""
             WITH indices AS (
@@ -220,6 +217,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
             sql += ", "
 
         # If full-text search is enabled, add full-text search CTE
+        # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
         if enable_keyword:
             sql += f"""
                 keyword_search AS (
