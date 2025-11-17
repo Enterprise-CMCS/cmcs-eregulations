@@ -1,4 +1,7 @@
+from django.db import connection
 from django.db.models import Count, F, Prefetch, Q
+from django.db.models.sql.compiler import SQLCompiler
+from django.db.models.sql.query import Query
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -6,9 +9,9 @@ from rest_framework import exceptions, viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
-from common.constants import QUOTE_TYPES
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from common.constants import QUOTE_TYPES
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
@@ -20,9 +23,9 @@ from resources.utils import get_citation_filter, string_to_bool
 
 from .models import (
     ContentIndex,
+    ContentSearchConfiguration,
     IndexedRegulationText,
     ResourceMetadata,
-    ContentSearchConfiguration,
 )
 from .serializers import (
     ChunkUpdateSerializer,
@@ -115,20 +118,18 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         embedding = [0.0] * 512  # Dummy embedding
 
         # Perform initial filtering
-        queryset = ContentIndex.objects.defer_text().exclude(resource__approved=False)
+        q_filter = ~Q(resource__approved=False)
 
         # Filter inclusively by citations if this array exists
-        citation_filter = get_citation_filter(citations, "resource__cfr_citations__")
-        if citation_filter:
-            queryset = queryset.filter(citation_filter)
+        q_filter &= get_citation_filter(citations, "resource__cfr_citations__")
 
         # Filter by subject pks if subjects array is present
         if subjects:
-            queryset = queryset.filter(resource__subjects__pk__in=subjects)
+            q_filter &= Q(resource__subjects__pk__in=subjects)
 
         # Filter by categories (both parent and subcategories) if the categories array is present
         if categories:
-            queryset = queryset.filter(
+            q_filter &= (
                 Q(resource__category__pk__in=categories) |
                 Q(resource__category__abstractpubliccategory__publicsubcategory__parent__pk__in=categories) |
                 Q(resource__category__abstractinternalcategory__internalsubcategory__parent__pk__in=categories)
@@ -136,16 +137,48 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
 
         # Filter by public, internal, and regulation text
         if not show_public:
-            queryset = queryset.exclude(resource__abstractpublicresource__isnull=False)
+            q_filter &= ~Q(resource__abstractpublicresource__isnull=False)
         if not show_internal or not self.request.user.is_authenticated:
-            queryset = queryset.exclude(resource__abstractinternalresource__isnull=False)
+            q_filter &= ~Q(resource__abstractinternalresource__isnull=False)
         if not show_regulations:
-            queryset = queryset.exclude(reg_text__isnull=False)
+            q_filter &= ~Q(reg_text__isnull=False)
 
-        # Retrieve the IDs of possible valid results to limit the search scope
-        ids = list(set(queryset.values_list("id", flat=True)))
+        # Convert the Q object to raw SQL while preserving safe parameterization
+        query_object = Query(ContentIndex)
+        sql_compiler = SQLCompiler(query_object, connection, None)
+        sql_filter, sql_params = q_filter.resolve_expression(query_object).as_sql(sql_compiler, connection)
+        sql_filter = sql_filter.replace("%s", "{}").format(*[f"%(pos{i})s" for i in range(len(sql_params))])
+        sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
-        sql = "WITH "  # Initial SQL
+        # enable_semantic = False
+        # enable_keyword = False
+
+        # Perform initial filtering (by citation, subject, etc.)
+        sql = f"""
+            WITH indices AS (
+                SELECT content_search_contentindex.id AS id
+                FROM content_search_contentindex
+                INNER JOIN "resources_abstractresource" ON ("content_search_contentindex"."resource_id" = "resources_abstractresource"."id")
+                INNER JOIN "resources_abstractresource_cfr_citations" ON ("resources_abstractresource"."id" = "resources_abstractresource_cfr_citations"."abstractresource_id")
+                INNER JOIN "resources_abstractcitation" ON ("resources_abstractresource_cfr_citations"."abstractcitation_id" = "resources_abstractcitation"."id")
+                LEFT OUTER JOIN "resources_subpart" ON ("resources_abstractcitation"."id" = "resources_subpart"."abstractcitation_ptr_id")
+                LEFT OUTER JOIN "resources_section" ON ("resources_abstractcitation"."id" = "resources_section"."abstractcitation_ptr_id")
+                LEFT OUTER JOIN "resources_subpart" T7 ON ("resources_section"."parent_id" = T7."abstractcitation_ptr_id")
+                INNER JOIN "resources_abstractresource_subjects" ON ("resources_abstractresource"."id" = "resources_abstractresource_subjects"."abstractresource_id")
+                INNER JOIN "resources_abstractcategory" ON ("resources_abstractresource"."category_id" = "resources_abstractcategory"."id")
+                LEFT OUTER JOIN "resources_abstractpubliccategory" ON ("resources_abstractcategory"."id" = "resources_abstractpubliccategory"."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_publicsubcategory" ON ("resources_abstractpubliccategory"."abstractcategory_ptr_id" = "resources_publicsubcategory"."abstractpubliccategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractpubliccategory" T13 ON ("resources_publicsubcategory"."abstractpubliccategory_ptr_id" = T13."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractcategory" T14 ON (T13."abstractcategory_ptr_id" = T14."id")
+                LEFT OUTER JOIN "resources_abstractinternalcategory" ON ("resources_abstractcategory"."id" = "resources_abstractinternalcategory"."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_internalsubcategory" ON ("resources_abstractinternalcategory"."abstractcategory_ptr_id" = "resources_internalsubcategory"."abstractinternalcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractinternalcategory" T18 ON ("resources_internalsubcategory"."abstractinternalcategory_ptr_id" = T18."abstractcategory_ptr_id")
+                LEFT OUTER JOIN "resources_abstractcategory" T19 ON (T18."abstractcategory_ptr_id" = T19."id")
+                LEFT OUTER JOIN "resources_abstractpublicresource" ON ("resources_abstractresource"."id" = "resources_abstractpublicresource"."abstractresource_ptr_id")
+                LEFT OUTER JOIN "resources_abstractinternalresource" ON ("resources_abstractresource"."id" = "resources_abstractinternalresource"."abstractresource_ptr_id")
+                WHERE {sql_filter or "TRUE"}
+            ),
+        """
 
         # If semantic is enabled, add semantic search CTE
         if enable_semantic:
@@ -172,10 +205,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                                 embedding,
                                 embedding <=> (%(embedding)s::vector) AS raw_rank
                             FROM content_search_contentindex
+                            WHERE id IN (SELECT id FROM indices)
                         ) AS t2
                     ) AS t1
-                    WHERE id = ANY(%(ids)s)
-                    AND embedding IS NOT NULL
+                    WHERE embedding IS NOT NULL
                     AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank < %(max_distance)s
                     ORDER BY raw_rank ASC
@@ -212,14 +245,14 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                                     {keyword_search_type}to_tsquery('english', %(query)s)
                                 ) AS raw_rank
                             FROM content_search_contentindex
+                            WHERE id IN (SELECT id FROM indices)
                         ) AS t2
                     ) AS t1
-                    WHERE id = ANY(%(ids)s)
-                    AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
+                    WHERE (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank > %(min_rank)s
                     ORDER BY rank ASC
                 )
-            """
+            """  # noqa S608
 
         # Retrieve data for semantic search only
         if enable_semantic and not enable_keyword:
@@ -263,14 +296,13 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         """
 
         # Execute the raw SQL query
-        queryset = ContentIndex.objects.raw(sql, {
+        queryset = ContentIndex.objects.raw(sql, {**sql_params, **{
             "embedding": embedding,
             "query": query,
             "k": k_value,
             "max_distance": max_distance,
             "min_rank": min_rank,
-            "ids": ids,
-        })
+        }})
 
         # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(queryset)]
