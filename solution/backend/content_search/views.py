@@ -82,16 +82,14 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", self.request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
-        enable_keyword = _get_parameter("enable_keyword", self.request)
-        enable_semantic = _get_parameter("enable_semantic", self.request)
 
         # Retrieve content search configuration
         config = ContentSearchConfiguration.get_solo()
         min_rank = config.keyword_search_min_rank
         max_distance = config.semantic_search_max_distance
         k_value = config.rrf_k_value
-        enable_semantic = string_to_bool(enable_semantic, config.enable_semantic_search)
-        enable_keyword = string_to_bool(enable_keyword, config.enable_keyword_search)
+        enable_semantic = config.enable_semantic_search
+        enable_keyword = config.enable_keyword_search
         keyword_search_max_words = config.keyword_search_max_words
         semantic_search_min_words = config.semantic_search_min_words
         use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
@@ -190,7 +188,6 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                     WHERE embedding IS NOT NULL
                     AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank < %(max_distance)s
-                    ORDER BY raw_rank ASC
                 )
             """
 
@@ -230,7 +227,6 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                     ) AS rank_table
                     WHERE (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank > %(min_rank)s
-                    ORDER BY rank ASC
                 )
             """  # noqa S608
 
@@ -247,6 +243,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                     FROM semantic_search
                     ORDER BY resource_id ASC, reg_text_id ASC
                 ) AS distinct_table
+                ORDER BY score ASC
             """
 
         # Retrieve data for full-text search only
@@ -262,6 +259,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                     FROM keyword_search
                     ORDER BY resource_id ASC, reg_text_id ASC
                 ) AS distinct_table
+                ORDER BY score ASC
             """
 
         # Combine and retrieve both semantic and full-text results
@@ -281,12 +279,8 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                     FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
                     ORDER BY resource_id ASC, reg_text_id ASC
                 ) AS combined_table
+                ORDER BY score DESC
             """
-
-        # Final order
-        sql += """
-            ORDER BY score DESC
-        """
 
         # Execute the raw SQL query
         return ContentIndex.objects.raw(sql, {**sql_params, **{
