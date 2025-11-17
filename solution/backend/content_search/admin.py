@@ -22,6 +22,14 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
                 "use_keyword_search_for_quoted",
             ],
         }),
+        ("Headline Settings", {
+            "fields": [
+                "headline_text_max_length",
+                "headline_min_words",
+                "headline_max_words",
+                "headline_max_fragments",
+            ],
+        }),
         ("Extraction Settings", {
             "fields": [
                 "auto_extract",

@@ -1,5 +1,10 @@
+from django.contrib.postgres.search import (
+    SearchHeadline,
+    SearchQuery,
+)
 from django.db import connection
 from django.db.models import Count, F, Prefetch, Q
+from django.db.models.functions import Substr
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
@@ -65,14 +70,18 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
     pagination_class = ContentSearchPagination
     parser_classes = (FormParser,)
 
+    def _is_quoted(self, query):
+        return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
+
     def get_queryset(self):
         # Get query and preprocess it
-        query = _get_parameter("query", self.request) or _get_parameter("q", self.request)
-        if not query:
+        if not hasattr(self, "query"):
+            self.query = _get_parameter("query", self.request) or _get_parameter("q", self.request)
+        if not self.query:
             raise exceptions.ValidationError("Query parameter 'query' or 'q' is required.")
-        if len(query) > 10000:
+        if len(self.query) > 10000:
             raise exceptions.ValidationError("Query parameter 'query' or 'q' must be less than 10,000 characters.")
-        query = preprocess_text(query)
+        self.query = preprocess_text(self.query)
 
         # Get optional parameters
         citations = _get_parameter_list("citations", self.request)
@@ -84,15 +93,16 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
 
         # Retrieve content search configuration
-        config = ContentSearchConfiguration.get_solo()
-        min_rank = config.keyword_search_min_rank
-        max_distance = config.semantic_search_max_distance
-        k_value = config.rrf_k_value
-        enable_semantic = config.enable_semantic_search
-        enable_keyword = config.enable_keyword_search
-        keyword_search_max_words = config.keyword_search_max_words
-        semantic_search_min_words = config.semantic_search_min_words
-        use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
+        if not hasattr(self, "config"):
+            self.config = ContentSearchConfiguration.get_solo()
+        min_rank = self.config.keyword_search_min_rank
+        max_distance = self.config.semantic_search_max_distance
+        k_value = self.config.rrf_k_value
+        enable_semantic = self.config.enable_semantic_search
+        enable_keyword = self.config.enable_keyword_search
+        keyword_search_max_words = self.config.keyword_search_max_words
+        semantic_search_min_words = self.config.semantic_search_min_words
+        use_keyword_search_for_quoted = self.config.use_keyword_search_for_quoted
 
         # Determine the search and headline generation strategy
 
@@ -100,7 +110,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         keyword_rank_func = "ts_rank"
         keyword_search_type = "plain"
 
-        query_words = len(query.split())  # Rough word count
+        query_words = len(self.query.split())  # Rough word count
 
         # Disable keyword search for long queries if semantic is enabled (keyword search is too slow for very long queries)
         if enable_semantic and query_words > keyword_search_max_words:
@@ -111,10 +121,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
             enable_semantic = False
 
         # Adjust strategy for quoted queries
-        if query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES) and enable_keyword:
+        if self._is_quoted(self.query) and enable_keyword:
             keyword_rank_func = "ts_rank_cd"
             keyword_search_type = "phrase"
-            query = query.strip("".join(QUOTE_TYPES))
+            self.query = self.query.strip("".join(QUOTE_TYPES))
             if use_keyword_search_for_quoted:
                 enable_semantic = False
 
@@ -285,19 +295,58 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Execute the raw SQL query
         return ContentIndex.objects.raw(sql, {**sql_params, **{
             "embedding": embedding,
-            "query": query,
+            "query": self.query,
             "k": k_value,
             "max_distance": max_distance,
             "min_rank": min_rank,
         }})
 
     def list(self, request, *args, **kwargs):
-        query = _get_parameter("query", request) or _get_parameter("q", request)
+        self.config = ContentSearchConfiguration.get_solo()
+        headline_text_max = self.config.headline_text_max_length
+        headline_min_words = self.config.headline_min_words
+        headline_max_words = self.config.headline_max_words
+        headline_max_fragments = self.config.headline_max_fragments
+        self.query = _get_parameter("query", request) or _get_parameter("q", request)
+
         queryset = self.get_queryset()
 
         # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(queryset)]
-        queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).generate_headlines(query)
+        search_type = "phrase" if self._is_quoted(self.query) else "plain"
+        query_object = SearchQuery(self.query, search_type=search_type, config="english")
+        queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).annotate(
+            content_short=Substr("content", 1, headline_text_max),
+            summary_headline=SearchHeadline(
+                "summary",
+                query_object,
+                start_sel="<span class='search-highlight'>",
+                stop_sel='</span>',
+                config='english',
+                highlight_all=True,
+                fragment_delimiter='...',
+            ),
+            name_headline=SearchHeadline(
+                "name",
+                query_object,
+                start_sel="<span class='search-highlight'>",
+                stop_sel="</span>",
+                config='english',
+                highlight_all=True,
+                fragment_delimiter='...',
+            ),
+            content_headline=SearchHeadline(
+                "content_short",
+                query_object,
+                start_sel="<span class='search-highlight'>",
+                stop_sel="</span>",
+                config='english',
+                min_words=headline_min_words,
+                max_words=headline_max_words,
+                fragment_delimiter='...',
+                max_fragments=headline_max_fragments,
+            ),
+        )
 
         # Prefetch all related data
         queryset = queryset.prefetch_related(
