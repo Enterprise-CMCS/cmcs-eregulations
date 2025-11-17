@@ -232,7 +232,6 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
-
 </script>
 
 <template>
