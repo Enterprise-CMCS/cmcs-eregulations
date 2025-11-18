@@ -16,6 +16,42 @@ class IndexedRegulationTextSerializer(serializers.Serializer):
     node_title = serializers.CharField()
 
 
+class ContentSearchQuerySerializer(serializers.Serializer):
+    q = serializers.CharField(max_length=10000, help_text="The search query string.")
+    page = serializers.IntegerField(required=False, default=1, help_text="The page number for paginated results.")
+    page_size = serializers.IntegerField(required=False, default=30, help_text="The number of results per page.")
+    show_public = serializers.BooleanField(
+        required=False,
+        default=True,
+        help_text="Whether to include public resources in the search results.",
+    )
+    show_internal = serializers.BooleanField(
+        required=False,
+        default=True,
+        help_text="Whether to include internal resources in the search results.",
+    )
+    show_regulations = serializers.BooleanField(
+        required=False,
+        default=True,
+        help_text="Whether to include regulation text in the search results.",
+    )
+    categories = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        help_text="List of category IDs to filter results by.",
+    )
+    citations = serializers.ListField(
+        child=serializers.CharField(),
+        required=False,
+        help_text="List of citation strings to filter results by.",
+    )
+    subjects = serializers.ListField(
+        child=serializers.IntegerField(),
+        required=False,
+        help_text="List of subject IDs to filter results by.",
+    )
+
+
 class ContentSearchSerializer(serializers.Serializer):
     name_headline = HeadlineField()
     summary_headline = HeadlineField()

@@ -33,6 +33,7 @@ from .models import (
 from .serializers import (
     ChunkUpdateSerializer,
     ContentCountSerializer,
+    ContentSearchQuerySerializer,
     ContentSearchSerializer,
 )
 from .utils import preprocess_text
@@ -63,46 +64,100 @@ class ContentSearchPagination(ViewSetPagination):
         }}
 
 
-class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
-    parser_classes = [FormParser]
-    model = ContentIndex
-    serializer_class = ContentSearchSerializer
-    pagination_class = ContentSearchPagination
-    parser_classes = (FormParser,)
+class ContentSearchMixin:
+    PARAMETERS = [
+        OpenApiParameter(
+            name="q",
+            required=False,
+            type=str,
+            description=(
+                "Search for this text within public and internal resources, and regulation text. "
+                "Fields searched depends on the underlying data type. "
+                "Use either 'q' or 'query' as the parameter name."
+            ),
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="citations",
+            required=False,
+            type=int,
+            description=(
+                "Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
+                "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D."
+            ),
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="subjects",
+            required=False,
+            type=int,
+            description=(
+                "Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
+                "Use \"&subjects=1&subjects=2\" for multiple."
+            ),
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="categories",
+            required=False,
+            type=int,
+            description=(
+                "Limit results to only resources found within these categories. Categories are referenced by ID, not "
+                "name. Use \"&categories=1&categories=2\" for multiple."
+            ),
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_public",
+            required=False,
+            type=bool,
+            description="Whether to include public resources in the search results.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_internal",
+            required=False,
+            type=bool,
+            description="Whether to include internal resources in the search results.",
+            location=OpenApiParameter.QUERY,
+        ),
+        OpenApiParameter(
+            name="show_regulations",
+            required=False,
+            type=bool,
+            description="Whether to include regulation text in the search results.",
+            location=OpenApiParameter.QUERY,
+        ),
+    ]
 
     def _is_quoted(self, query):
         return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
 
-    def get_queryset(self):
+    def search(self, query, config):
         # Get query and preprocess it
-        if not hasattr(self, "query"):
-            self.query = _get_parameter("query", self.request) or _get_parameter("q", self.request)
-        if not self.query:
-            raise exceptions.ValidationError("Query parameter 'query' or 'q' is required.")
-        if len(self.query) > 10000:
+        if not query:
+            raise exceptions.ValidationError("Query parameter 'query' or 'q' is required (in query string or form body).")
+        if len(query) > 10000:
             raise exceptions.ValidationError("Query parameter 'query' or 'q' must be less than 10,000 characters.")
-        self.query = preprocess_text(self.query)
+        query = preprocess_text(query)
 
-        # Get optional parameters
+        # Get optional parameters (from query string or form body)
         citations = _get_parameter_list("citations", self.request)
         subjects = _get_parameter_list("subjects", self.request)
         categories = _get_parameter_list("categories", self.request)
-        # sort = _get_parameter("sort", self.request)
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", self.request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
 
         # Retrieve content search configuration
-        if not hasattr(self, "config"):
-            self.config = ContentSearchConfiguration.get_solo()
-        min_rank = self.config.keyword_search_min_rank
-        max_distance = self.config.semantic_search_max_distance
-        k_value = self.config.rrf_k_value
-        enable_semantic = self.config.enable_semantic_search
-        enable_keyword = self.config.enable_keyword_search
-        keyword_search_max_words = self.config.keyword_search_max_words
-        semantic_search_min_words = self.config.semantic_search_min_words
-        use_keyword_search_for_quoted = self.config.use_keyword_search_for_quoted
+        min_rank = config.keyword_search_min_rank
+        max_distance = config.semantic_search_max_distance
+        k_value = config.rrf_k_value
+        enable_semantic = config.enable_semantic_search
+        enable_keyword = config.enable_keyword_search
+        keyword_search_max_words = config.keyword_search_max_words
+        semantic_search_min_words = config.semantic_search_min_words
+        use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
 
         # Determine the search and headline generation strategy
 
@@ -110,7 +165,7 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         keyword_rank_func = "ts_rank"
         keyword_search_type = "plain"
 
-        query_words = len(self.query.split())  # Rough word count
+        query_words = len(query.split())  # Rough word count
 
         # Disable keyword search for long queries if semantic is enabled (keyword search is too slow for very long queries)
         if enable_semantic and query_words > keyword_search_max_words:
@@ -121,10 +176,10 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
             enable_semantic = False
 
         # Adjust strategy for quoted queries
-        if self._is_quoted(self.query) and enable_keyword:
+        if self._is_quoted(query) and enable_keyword:
             keyword_rank_func = "ts_rank_cd"
             keyword_search_type = "phrase"
-            self.query = self.query.strip("".join(QUOTE_TYPES))
+            query = query.strip("".join(QUOTE_TYPES))
             if use_keyword_search_for_quoted:
                 enable_semantic = False
 
@@ -295,26 +350,49 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
         # Execute the raw SQL query
         return ContentIndex.objects.raw(sql, {**sql_params, **{
             "embedding": embedding,
-            "query": self.query,
+            "query": query,
             "k": k_value,
             "max_distance": max_distance,
             "min_rank": min_rank,
         }})
 
-    def list(self, request, *args, **kwargs):
-        self.config = ContentSearchConfiguration.get_solo()
-        headline_text_max = self.config.headline_text_max_length
-        headline_min_words = self.config.headline_min_words
-        headline_max_words = self.config.headline_max_words
-        headline_max_fragments = self.config.headline_max_fragments
-        self.query = _get_parameter("query", request) or _get_parameter("q", request)
 
-        queryset = self.get_queryset()
+@extend_schema(
+    tags=["content_search"],
+    description=(
+        "Retrieve search results for a given set of filters. "
+        "Searches public and internal resources, and regulation text. "
+        "Note that internal resources are only shown if the user is authenticated. "
+        "Subjects and categories are listed only by PK. To retrieve more metadata about these types, use the subjects "
+        "and categories endpoints available within the Resources app."
+    ),
+    responses={200: ContentSearchSerializer},
+    parameters=ContentSearchMixin.PARAMETERS,
+    methods=["GET", "POST"],
+    request=ContentSearchQuerySerializer,
+)
+class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    model = ContentIndex
+    serializer_class = ContentSearchSerializer
+    pagination_class = ContentSearchPagination
+    parser_classes = (FormParser,)
+
+    def list(self, request, *args, **kwargs):
+        # Retrieve content search configuration and query
+        config = ContentSearchConfiguration.get_solo()
+        headline_text_max = config.headline_text_max_length
+        headline_min_words = config.headline_min_words
+        headline_max_words = config.headline_max_words
+        headline_max_fragments = config.headline_max_fragments
+        query = _get_parameter("query", request) or _get_parameter("q", request)
+
+        # Get the initial filtered and ranked search results
+        search_results = self.search(query, config)
 
         # Paginate, then generate headlines on the current page only (for performance)
-        current_page = [i.pk for i in self.paginate_queryset(queryset)]
-        search_type = "phrase" if self._is_quoted(self.query) else "plain"
-        query_object = SearchQuery(self.query, search_type=search_type, config="english")
+        current_page = [i.pk for i in self.paginate_queryset(search_results)]
+        search_type = "phrase" if self._is_quoted(query) else "plain"
+        query_object = SearchQuery(query, search_type=search_type, config="english")
         queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).annotate(
             content_short=Substr("content", 1, headline_text_max),
             summary_headline=SearchHeadline(
@@ -378,42 +456,13 @@ class ContentSearchViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadO
                 "Subjects and categories are listed only by PK. To retrieve more metadata about these types, use the subjects "
                 "and categories endpoints available within the Resources app.",
     responses={200: ContentCountSerializer},
-    parameters=[
-        OpenApiParameter(
-            name="q",
-            required=False,
-            type=str,
-            description="Search for this text within public and internal resources, and regulation text. "
-                        "Fields searched depends on the underlying data type.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="citations",
-            required=False,
-            type=int,
-            description="Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                        "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="subjects",
-            required=False,
-            type=int,
-            description="Limit results to only resources found within these subjects. Subjects are referenced by ID, not name. "
-                        "Use \"&subjects=1&subjects=2\" for multiple.",
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="categories",
-            required=False,
-            type=int,
-            description="Limit results to only resources found within these categories. Categories are referenced by ID, not "
-                        "name. Use \"&categories=1&categories=2\" for multiple.",
-            location=OpenApiParameter.QUERY,
-        ),
-    ],
+    request=ContentSearchQuerySerializer,
+    parameters=ContentSearchMixin.PARAMETERS,
+    methods=["GET", "POST"],
 )
-class ContentCountViewSet(ContentSearchViewSet):
+class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
+    parser_classes = (FormParser,)
+
     # Used for automatically generating a URL to the count endpoint
     def generate_url(request):
         new_get = QueryDict(mutable=True)
