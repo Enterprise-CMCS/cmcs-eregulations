@@ -130,8 +130,21 @@ class ContentSearchMixin:
         ),
     ]
 
-    def _is_quoted(self, query):
+    def is_quoted(self, query):
         return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
+
+    def generate_embedding(self, query):
+        response = establish_client("bedrock-runtime").invoke_model(
+            modelId="amazon.titan-embed-text-v2:0",
+            body=json.dumps({
+                "inputText": query,
+                "dimensions": 512,
+                "normalize" : True,
+            }),
+            contentType="application/json",
+            accept="application/json",
+        )
+        return json.loads(response.get("body").read())["embedding"]
 
     def search(self, query, config):
         # Get query and preprocess it
@@ -176,7 +189,7 @@ class ContentSearchMixin:
             enable_semantic = False
 
         # Adjust strategy for quoted queries
-        if self._is_quoted(query) and enable_keyword:
+        if self.is_quoted(query) and enable_keyword:
             keyword_rank_func = "ts_rank_cd"
             keyword_search_type = "phrase"
             query = query.strip("".join(QUOTE_TYPES))
@@ -184,7 +197,13 @@ class ContentSearchMixin:
                 enable_semantic = False
 
         # Generate embedding if needed
-        embedding = [0.0] * 512  # Dummy embedding
+        embedding = None
+        if enable_semantic:
+            try:
+                embedding = self.generate_embedding(query)
+            except Exception as e:
+                # If embedding generation fails, fallback to keyword search only
+                enable_semantic = False
 
         # Perform initial filtering
         q_filter = ~Q(resource__approved=False)
@@ -391,7 +410,7 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
 
         # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(search_results)]
-        search_type = "phrase" if self._is_quoted(query) else "plain"
+        search_type = "phrase" if self.is_quoted(query) else "plain"
         query_object = SearchQuery(query, search_type=search_type, config="english")
         queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).annotate(
             content_short=Substr("content", 1, headline_text_max),
@@ -470,10 +489,15 @@ class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
         return request.build_absolute_uri(reverse("content_count")) + f"?{new_get.urlencode()}"
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        # Retrieve content search configuration and query
+        config = ContentSearchConfiguration.get_solo()
+        query = _get_parameter("query", request) or _get_parameter("q", request)
+
+        # Get the initial filtered and ranked search results
+        search_results = self.search(query, config)
 
         # Retrieve the primary keys of the filtered results to speed up the following queries
-        pks = [i.id for i in queryset]
+        pks = [i.id for i in search_results]
 
         # Aggregate the counts of internal, public, and reg text
         aggregates = ContentIndex.objects.filter(pk__in=pks).aggregate(
