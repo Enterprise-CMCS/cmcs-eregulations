@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.postgres.search import (
     SearchHeadline,
     SearchQuery,
@@ -14,6 +16,7 @@ from rest_framework.response import Response
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from common.aws import establish_client
 from common.constants import QUOTE_TYPES
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
@@ -139,7 +142,7 @@ class ContentSearchMixin:
             body=json.dumps({
                 "inputText": query,
                 "dimensions": 512,
-                "normalize" : True,
+                "normalize": True,
             }),
             contentType="application/json",
             accept="application/json",
@@ -201,7 +204,7 @@ class ContentSearchMixin:
         if enable_semantic:
             try:
                 embedding = self.generate_embedding(query)
-            except Exception as e:
+            except Exception:
                 # If embedding generation fails, fallback to keyword search only
                 enable_semantic = False
 
