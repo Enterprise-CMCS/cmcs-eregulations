@@ -27,22 +27,19 @@ def create_resource_metadata(apps, schema_editor):
     ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
     ContentIndex = apps.get_model('content_search', 'ContentIndex')
 
-    for index in ContentIndex.objects.filter(resource__isnull=False):
-        resource = index.resource
-        resource_metadata = ResourceMetadata.objects.create(
-            resource=resource,
-            name=index.name,
-            date=index.date,
-            summary=index.summary,
-            rank_a_string=index.rank_a_string,
-            rank_b_string=index.rank_b_string,
-            rank_c_string=index.rank_c_string,
-            rank_d_string=index.rank_d_string,
-            detected_file_type=getattr(resource, 'detected_file_type', ''),
-            extraction_error=getattr(resource, 'extraction_error', ''),
-        )
-        index.resource_metadata = resource_metadata
-        index.save()
+    ResourceMetadata.objects.bulk_create([ResourceMetadata(
+        resource=index.resource,
+        index_metadata=index,
+        name=index.name,
+        date=index.date,
+        summary=index.summary,
+        rank_a_string=index.rank_a_string,
+        rank_b_string=index.rank_b_string,
+        rank_c_string=index.rank_c_string,
+        rank_d_string=index.rank_d_string,
+        detected_file_type=getattr(index.resource, 'detected_file_type', ''),
+        extraction_error=getattr(index.resource, 'extraction_error', ''),
+    ) for index in ContentIndex.objects.filter(resource__isnull=False)])
 
 
 class Migration(migrations.Migration):
