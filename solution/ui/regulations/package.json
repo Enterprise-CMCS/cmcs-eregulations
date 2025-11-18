@@ -29,13 +29,13 @@
   },
   "devDependencies": {
     "@testing-library/vue": "8.1.0",
-    "@vitest/coverage-v8": "4.0.8",
-    "@vitest/ui": "4.0.8",
+    "@vitest/coverage-v8": "4.0.10",
+    "@vitest/ui": "4.0.10",
     "jsdom": "27.0.0",
     "msw": "2.11.3",
     "resize-observer-polyfill": "1.5.1",
     "vite": "7.2.2",
-    "vitest": "4.0.8"
+    "vitest": "4.0.10"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.53.2"
