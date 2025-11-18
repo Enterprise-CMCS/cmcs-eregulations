@@ -52,6 +52,150 @@ class VariableDateField(models.CharField):
         return super().clean(value, model_instance)
 
 
+# Begin Gemini code
+
+# --- Core Logic Helpers (Adapted from natural_sort.py) ---
+
+def split_natural_parts(s):
+    """
+    Splits a string into a list of number segments (kept as strings) and text segments.
+    """
+    if not isinstance(s, str):
+        s = str(s)
+
+    # The regex splits by sequences of digits but keeps the digits in the result.
+    parts = re.split(r'(\d+)', s)
+    # Filter out empty strings that result from the split (e.g., at the start/end)
+    return [item for item in parts if item]
+
+def natural_sort_key_builder(value: str, padding_length: int = 20) -> str:
+    """
+    Generates a single, highly sortable string key by zero-padding all number segments.
+
+    Args:
+        value: The string to be converted (e.g., '1860D-11').
+        padding_length: The fixed width to pad numerical segments to.
+
+    Returns:
+        A single string (e.g., '1860D-00000000000000000011').
+    """
+    # 1. Split the value into natural parts
+    parts = split_natural_parts(value)
+
+    # 2. Process parts: pad numbers, keep text as is
+    processed_parts = []
+    for part in parts:
+        # Check if the part is a digit sequence
+        if part.isdigit():
+            # Pad the number with leading zeros to the fixed length
+            processed_parts.append(part.zfill(padding_length))
+        else:
+            # Keep text segments as is
+            processed_parts.append(part)
+
+    # 3. Join the processed parts into a single key string
+    return "".join(processed_parts)
+
+# --- Django Custom Field Implementation ---
+
+class NaturalSortGeminiField(models.CharField):
+    """
+    A custom CharField that manages a hidden sort key column for natural ordering.
+
+    The key is generated from:
+    1. The field itself (default).
+    2. An external field specified by the `source_field` argument.
+
+    Usage Examples:
+
+    # 1. Default (sorts by 'item_name')
+    # Use 'item_name_key' for sorting
+    class MyModel(models.Model):
+        item_name = NaturalSortGeminiField(max_length=100)
+
+    # 2. Explicit (sorts by 'item_code')
+    # Use 'item_name_key' for sorting, which is derived from 'item_code'
+    class MyOtherModel(models.Model):
+        item_code = models.CharField(max_length=50)
+        item_name = NaturalSortGeminiField(
+            max_length=100,
+            source_field='item_code'
+        )
+        # Note: In this case, 'item_name' would typically be editable=False
+        # or used only for display.
+
+    To sort naturally, use: MyModel.objects.all().order_by('item_name_key')
+    """
+
+    def __init__(self, *args, **kwargs):
+        # New argument: the name of the model field to use as the source for the key calculation.
+        self.source_field_name = kwargs.pop('source_field', None)
+
+        # The internal sort key column will be a TextField
+        self.sort_key_field = models.TextField(editable=False, null=True, blank=True)
+        # Attribute name of the field this class is attached to (e.g., 'item_name')
+        self.main_attname = None
+        # Name for the hidden sort key column (e.g., 'item_name_key')
+        self.sort_key_attname = None
+
+        # Define the padding length for numbers in the sort key
+        self.padding_length = kwargs.pop('padding_length', 20)
+
+        super().__init__(*args, **kwargs)
+
+    def contribute_to_class(self, cls, name, **kwargs):
+        # 1. Capture the attribute name of the field itself (e.g., 'item_name')
+        self.main_attname = name
+
+        # 2. Set the name for the hidden sort key column
+        self.sort_key_attname = f'{name}_key'
+        self.sort_key_field.attname = self.sort_key_attname
+        self.sort_key_field.column = self.sort_key_attname
+
+        # 3. Add the sort key field to the model
+        cls.add_to_class(self.sort_key_attname, self.sort_key_field)
+
+        # 4. Call the parent's contribution method for the main field
+        super().contribute_to_class(cls, name, **kwargs)
+
+    def pre_save(self, model_instance, add):
+        """
+        Called before the model is saved. Calculates the natural sort key and
+        sets the value of the hidden field.
+        """
+        # Determine the source of the value for key generation.
+        # Defaults to the field this class is attached to (self.main_attname).
+        source_attname = self.source_field_name if self.source_field_name else self.main_attname
+
+        # Retrieve the raw value from the model instance
+        raw_value = getattr(model_instance, source_attname)
+
+        # In default mode, we need the parent class to clean and validate the value
+        # before we use it, but we MUST do this *after* retrieving the raw_value
+        # if the source is external.
+        if source_attname == self.main_attname:
+            value = super().pre_save(model_instance, add)
+        else:
+            value = raw_value
+
+        # Only proceed if the value is not None/empty
+        if value:
+            # Generate the padded sort key
+            # Ensure value is a string before passing to key builder
+            sort_key = natural_sort_key_builder(str(value), self.padding_length)
+        else:
+            sort_key = None
+
+        # Set the generated key on the model instance's hidden field attribute
+        setattr(model_instance, self.sort_key_attname, sort_key)
+
+        # Return the value for the field's own column (what the parent CharField handles)
+        # If we used an external source, the value of this field should be whatever
+        # the user set, or None. We still call pre_save to get the cleaned result.
+        return super().pre_save(model_instance, add) if source_attname != self.main_attname else value
+# End Gemini code
+
+
 class NaturalSortField(models.CharField):
     def __init__(self, for_field, **kwargs):
         self.for_field = for_field

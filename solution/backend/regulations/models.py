@@ -3,7 +3,7 @@ from solo.models import SingletonModel
 
 from common.fields import (
     CfrRefField,
-    NaturalSortField,
+    NaturalSortGeminiField,
     StatuteRefField,
     UscRefField,
     VariableDateField,
@@ -141,7 +141,8 @@ class StatuteLinkConverter(models.Model):
     statute_title = models.IntegerField(verbose_name="Statute Title", null=True)
     source_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")
 
-    usc_sort = NaturalSortField("usc", null=True)
+    usc_sort = NaturalSortGeminiField(source_field="usc", null=True)
+    section_sort = NaturalSortGeminiField(source_field="section", null=True)
 
     @property
     def statute_title_roman(self):
