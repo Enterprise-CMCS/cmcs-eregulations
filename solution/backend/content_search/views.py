@@ -504,6 +504,12 @@ class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
         return Response(ContentCountSerializer(aggregates).data)
 
 
+@extend_schema(
+    tags=["content_search"],
+    description="Update or create a content index chunk for a given resource.",
+    request=ChunkUpdateSerializer,
+    responses={200: str},
+)
 class ResourceChunkUpdateViewSet(viewsets.ViewSet):
     def update(self, request, *args, **kwargs):
         # Validate the request body
@@ -563,6 +569,12 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
         return Response(response_text)
 
 
+@extend_schema(
+    tags=["content_search"],
+    description="Update or create a content index chunk for a given slice of regulation text, e.g., a section or appendix.",
+    request=ChunkUpdateSerializer,
+    responses={200: str},
+)
 class RegTextChunkUpdateViewSet(viewsets.ViewSet):
     def update(self, request, *args, **kwargs):
         # Validate the request body
