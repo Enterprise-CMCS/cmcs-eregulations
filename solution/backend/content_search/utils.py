@@ -368,9 +368,6 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor_for_reg_text(request, parts):
-    # Blank the error field for all IndexedRegulationText instances before processing
-    IndexedRegulationText.objects.filter(pk__in=[i.pk for i in parts]).update(extraction_error="")
-
     # Delete all previously indexed text for the given parts, including previous versions
     affected_indices = IndexedRegulationText.objects.filter(
         part__title__in=[i.title for i in parts],
