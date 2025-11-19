@@ -35,6 +35,19 @@ const fetchBoilerplate = {
     redirect: "follow",
 };
 
+const fetchPostBoilerplate = {
+    cache: "no-cache",
+    headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": null,
+    },
+    method: "POST",
+    mode: "cors",
+    params: undefined,
+    redirect: "follow",
+};
+
 describe("api.js", () => {
     beforeEach(() => {
         // mock global fetch for our single async call
@@ -293,24 +306,29 @@ describe("api.js", () => {
     });
     describe("getGranularCounts", () => {
         it("is called with requestParams param string", async () => {
+            const data = "q=test";
+            const boilerplateWithData = {...fetchPostBoilerplate, body: data };
+
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
-                requestParams: "locations=42.431.10",
+                data,
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
-                "http://localhost:9000/content-search/counts?locations=42.431.10",
-                fetchBoilerplate
+                "http://localhost:9000/content-search/counts",
+                boilerplateWithData
             );
         });
         it("is called without requestParams param string", async () => {
+            const boilerplateWithData = {...fetchPostBoilerplate, body: {} };
+
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts",
-                fetchBoilerplate
+                boilerplateWithData
             );
         });
     });
