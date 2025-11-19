@@ -18,7 +18,7 @@
   "dependencies": {
     "@cmsgov/design-system": "13.0.0",
     "@fortawesome/fontawesome-free": "7.1.0",
-    "@vitejs/plugin-vue": "6.0.1",
+    "@vitejs/plugin-vue": "6.0.2",
     "@vue/test-utils": "2.4.6",
     "dompurify": "3.3.0",
     "flush-promises": "1.0.2",
