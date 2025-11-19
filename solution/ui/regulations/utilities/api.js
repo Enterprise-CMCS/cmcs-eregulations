@@ -539,6 +539,12 @@ const getCombinedContent = async ({
         {},
     );
 
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {Object} options.data - Data to be sent in the POST request body
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
 const getSemanticSearchResults = async ({ apiUrl, data }) =>
     httpApiPost(`${apiUrl}content-search/`, { data });
 
