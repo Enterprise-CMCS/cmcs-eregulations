@@ -12,6 +12,7 @@ import {
     getParts,
     getRecentResources,
     getRegSearchResults,
+    getSemanticSearchResults,
     getStatutes,
     getStatutesActs,
     getSubjects,
@@ -278,6 +279,22 @@ describe("api.js", () => {
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/public/categories?page_size=1000",
                 fetchBoilerplate
+            );
+        });
+    });
+    describe("getSemanticSearchResults", () => {
+        it("is called with proper param string", async () => {
+            const data = "q=test";
+            const boilerplateWithData = {...fetchPostBoilerplate, body: data };
+
+            await getSemanticSearchResults({
+                apiUrl: "http://localhost:9000/",
+                data,
+            });
+            await flushPromises();
+            expect(fetch).toHaveBeenCalledWith(
+                "http://localhost:9000/content-search/",
+                boilerplateWithData
             );
         });
     });
