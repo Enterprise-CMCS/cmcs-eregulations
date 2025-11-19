@@ -3,10 +3,10 @@ from typing import List
 from django.http import JsonResponse
 from django.views import View
 
-from regulations.models import SectionContextBanner
+from resources.models import SectionContextBanner
 
 
-class ContextBannersView(View):
+class ContextBannersViewSet(View):
     def get(self, request):
         try:
             title = int(request.GET.get("title"))

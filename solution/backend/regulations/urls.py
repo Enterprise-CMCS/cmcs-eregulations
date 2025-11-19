@@ -4,7 +4,6 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from regulations import converters
 from regulations.views.about import AboutView
-from regulations.views.banners import ContextBannersView
 from regulations.views.get_account_access import GetAccountAccessView
 from regulations.views.goto import GoToRedirectView
 from regulations.views.homepage import HomepageView
@@ -72,7 +71,6 @@ urlpatterns = [
             "get": "list",
         })),
         path("statute-link/", GetStatuteLinkAPIView.as_view(), name="statute-link"),
-        path("context-banners", ContextBannersView.as_view()),
     ])),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]
