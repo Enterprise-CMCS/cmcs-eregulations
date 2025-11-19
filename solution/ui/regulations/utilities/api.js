@@ -542,14 +542,8 @@ const getCombinedContent = async ({
 const getSemanticSearchResults = async ({ apiUrl, data }) =>
     httpApiPost(`${apiUrl}content-search/`, { data });
 
-const getGranularCounts = async ({
-    apiUrl,
-    requestParams = "",
-}) =>
-    httpApiGet(
-        `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
-        {},
-    );
+const getGranularCounts = async ({ apiUrl, data, }) =>
+    httpApiPost(`${apiUrl}content-search/counts`, { data });
 
 /**
  * @param {Object} options - parameters needed for API call
