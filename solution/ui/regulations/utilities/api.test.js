@@ -285,7 +285,7 @@ describe("api.js", () => {
     describe("getSemanticSearchResults", () => {
         it("is called with proper param string", async () => {
             const data = "q=test";
-            const boilerplateWithData = {...fetchPostBoilerplate, body: data };
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: data };
 
             await getSemanticSearchResults({
                 apiUrl: "http://localhost:9000/",
@@ -294,7 +294,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/",
-                boilerplateWithData
+                fetchBoilerplateWithData
             );
         });
     });
@@ -324,7 +324,7 @@ describe("api.js", () => {
     describe("getGranularCounts", () => {
         it("is called with requestParams param string", async () => {
             const data = "q=test";
-            const boilerplateWithData = {...fetchPostBoilerplate, body: data };
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: data };
 
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
@@ -333,11 +333,11 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts",
-                boilerplateWithData
+                fetchBoilerplateWithData
             );
         });
         it("is called without requestParams param string", async () => {
-            const boilerplateWithData = {...fetchPostBoilerplate, body: {} };
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: {} };
 
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
@@ -345,7 +345,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts",
-                boilerplateWithData
+                fetchBoilerplateWithData
             );
         });
     });
