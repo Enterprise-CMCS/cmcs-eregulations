@@ -14,6 +14,7 @@ urlpatterns = [
     })),
     path("counts", ContentCountViewSet.as_view({
         "get": "list",
+        "post": "list",
     }), name="content_count"),
     path("resource/<int:pk>/chunk", ResourceChunkUpdateViewSet.as_view({
         "put": "update",

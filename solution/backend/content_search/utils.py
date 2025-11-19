@@ -1,9 +1,12 @@
 import base64
+import html
 import json
+import re
 import unicodedata
 from urllib.parse import urlparse
 
 import requests
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.urls import reverse
 
@@ -30,6 +33,32 @@ _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
 # returns: str - the text with control characters removed
 def remove_control_characters(text: str) -> str:
     return "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text).strip()
+
+
+def preprocess_text(text: str) -> str:
+    """
+    Preprocess text by removing control characters, HTML elements,
+    collapsing whitespace, and normalizing case.
+
+    Args:
+        text (str): The raw extracted text.
+    Returns:
+        str: The cleaned text.
+    """
+
+    # Remove unicode control characters
+    text = remove_control_characters(text)
+    # Re-encode as unicode-escaped
+    text = text.encode("unicode_escape").decode("unicode_escape")
+    # Remove HTML elements
+    text = html.unescape(text)
+    text = BeautifulSoup(text, "html.parser").get_text()
+    # Collapse whitespace
+    text = " ".join(text.split())
+    # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
+    # (e.g. -------------------- turns into ---)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0] * 3, string=text)
+    return text
 
 
 def _extract_via_http(batch, client):
@@ -339,9 +368,6 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor_for_reg_text(request, parts):
-    # Blank the error field for all IndexedRegulationText instances before processing
-    IndexedRegulationText.objects.filter(pk__in=[i.pk for i in parts]).update(extraction_error="")
-
     # Delete all previously indexed text for the given parts, including previous versions
     affected_indices = IndexedRegulationText.objects.filter(
         part__title__in=[i.title for i in parts],
