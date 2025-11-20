@@ -4,7 +4,7 @@ from django.contrib.postgres.search import (
     SearchHeadline,
     SearchQuery,
 )
-from django.db import connection
+from django.db import connection, transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.models.functions import Substr
 from django.http import QueryDict
@@ -538,7 +538,8 @@ class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
     responses={200: str},
 )
 class ResourceChunkUpdateViewSet(viewsets.ViewSet):
-    def update(self, request, *args, **kwargs):
+    @transaction.atomic
+    def patch(self, request, *args, **kwargs):
         # Validate the request body
         serializer = ChunkUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -603,7 +604,8 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
     responses={200: str},
 )
 class RegTextChunkUpdateViewSet(viewsets.ViewSet):
-    def update(self, request, *args, **kwargs):
+    @transaction.atomic
+    def patch(self, request, *args, **kwargs):
         # Validate the request body
         serializer = ChunkUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
