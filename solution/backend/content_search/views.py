@@ -18,6 +18,7 @@ from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
 from common.aws import establish_client
 from common.constants import QUOTE_TYPES
+from common.exceptions import ServiceUnavailable
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCategory,
@@ -205,8 +206,7 @@ class ContentSearchMixin:
             try:
                 embedding = self.generate_embedding(query)
             except Exception:
-                # If embedding generation fails, fallback to keyword search only
-                enable_semantic = False
+                raise ServiceUnavailable("Failed to generate embedding for semantic search. Please try again later.")
 
         # Perform initial filtering
         q_filter = ~Q(resource__approved=False)

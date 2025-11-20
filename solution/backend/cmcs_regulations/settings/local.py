@@ -6,6 +6,7 @@ from secret_manager import get_username, get_password
 
 
 DEBUG = os.environ.get("DEBUG", False)
+DEBUG = False
 
 # turns on django toolbar if debug is true
 if DEBUG:
