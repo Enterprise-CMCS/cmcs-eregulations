@@ -30,8 +30,6 @@ class StatuteLinkConverterSerializer(serializers.Serializer):
     statute_title = serializers.IntegerField()
     statute_title_roman = serializers.CharField()
     source_url = serializers.CharField()
-    usc_sort = serializers.CharField()
-    section_sort = serializers.CharField()
 
 
 @extend_schema(
