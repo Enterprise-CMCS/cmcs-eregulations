@@ -3,6 +3,7 @@ import { beforeEach, afterEach, describe, it, expect, vi } from "vitest";
 import {
     getCombinedContent,
     getContentWithoutQuery,
+    getContextBanners,
     getExternalCategories,
     getGovInfoLinks,
     getGranularCounts,
@@ -23,7 +24,7 @@ import {
 
 import flushPromises from "flush-promises";
 
-const fetchBoilerplate = {
+const fetchGetBoilerplate = {
     cache: "no-cache",
     headers: {
         Accept: "application/json",
@@ -58,7 +59,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/title/42/part/431/version/latest/subpart/10/toc",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called without subPart param", async () => {
@@ -70,7 +71,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/title/42/part/431/version/latest/toc",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -83,7 +84,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/synonyms?q=test%20query",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -96,7 +97,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/search?q=test%20query&paginate=true&page_size=100&page=1",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -111,12 +112,12 @@ describe("api.js", () => {
             expect(fetch).toHaveBeenNthCalledWith(
                 1,
                 "http://localhost:9000/title/42/parts",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
             expect(fetch).toHaveBeenNthCalledWith(
                 2,
                 "http://localhost:9000/title/45/parts",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -134,7 +135,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/public/federal_register_links?page=1&page_size=3",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called with type != rules", async () => {
@@ -150,7 +151,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/public/links?page=2&page_size=5&categories=1",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -167,7 +168,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/title/42/part/431/history/section/10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -179,7 +180,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/titles",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -192,7 +193,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/title/42/parts",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -204,7 +205,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/acts",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -216,7 +217,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/statutes?act=Social%20Security%20Act&title=19",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called properly with all named params present", async () => {
@@ -228,7 +229,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/statutes?act=test%20act&title=42",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -240,7 +241,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/subjects?page_size=1000",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -252,7 +253,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/internal/categories?page_size=1000",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -264,7 +265,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/public/categories?page_size=1000",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -277,7 +278,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/?locations=42.431.10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called without requestParams param string", async () => {
@@ -287,7 +288,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -300,7 +301,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts?locations=42.431.10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called without requestParams param string", async () => {
@@ -310,7 +311,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -323,7 +324,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/?locations=42.431.10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called with docType", async () => {
@@ -334,7 +335,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/test",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called with requestParams param string and docType", async () => {
@@ -346,7 +347,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/test?locations=42.431.10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called without requestParams param string or docType", async () => {
@@ -356,7 +357,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
     });
@@ -369,7 +370,7 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/internal?locations=42.431.10",
-                fetchBoilerplate
+                fetchGetBoilerplate
             );
         });
         it("is called without requestParams param string", async () => {
@@ -379,7 +380,20 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/internal",
-                fetchBoilerplate
+                fetchGetBoilerplate
+            );
+        });
+    });
+    describe("getContextBanners", () => {
+        it("is called with proper param string", async () => {
+            await getContextBanners({
+                apiUrl: "http://localhost:9000/",
+                requestParams: "title=42&part=433&section=433.10",
+            });
+            await flushPromises();
+            expect(fetch).toHaveBeenCalledWith(
+                "http://localhost:9000/context-banners?title=42&part=433&section=433.10",
+                fetchGetBoilerplate
             );
         });
     });

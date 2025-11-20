@@ -552,6 +552,23 @@ const getInternalDocs = async ({
         {},
     );
 
+/**
+ * @param {Object} options - parameters needed for API call
+    * @param {string} options.apiUrl - API base url passed in from Django template
+    * @param {string} [options.requestParams] - Query string parameters to pass to API
+    * @returns {Promise<{[results]: Array<{html: string, section: string, subpart: string}>}>} - Promise that contains array of banners when fulfilled
+*/
+const getContextBanners = async ({
+    apiUrl,
+    requestParams = "",
+}) =>
+    httpApiGet(
+        `${apiUrl}context-banners${
+            requestParams ? `?${requestParams}` : ""
+        }`,
+        {},
+    );
+
 const throwGenericError = async () =>
     new Promise((_resolve, reject) => {
         setTimeout(() => reject(new Error("Contrived error")), 2000);
@@ -561,6 +578,7 @@ export {
     config,
     getCombinedContent,
     getContentWithoutQuery,
+    getContextBanners,
     getExternalCategories,
     getGovInfoLinks,
     getGranularCounts,
