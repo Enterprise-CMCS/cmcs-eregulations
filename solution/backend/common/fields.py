@@ -68,6 +68,7 @@ def split_natural_parts(s):
     # Filter out empty strings that result from the split (e.g., at the start/end)
     return [item for item in parts if item]
 
+
 def natural_sort_key_builder(value: str, padding_length: int = 20) -> str:
     """
     Generates a single, highly sortable string key by zero-padding all number segments.
@@ -97,6 +98,7 @@ def natural_sort_key_builder(value: str, padding_length: int = 20) -> str:
     return "".join(processed_parts)
 
 # --- Django Custom Field Implementation ---
+
 
 class NaturalSortGeminiField(models.CharField):
     """
