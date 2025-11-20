@@ -133,7 +133,7 @@ def send_results(resource_id: int, upload_url: str, auth: str, **kwargs) -> None
     # Prepare the data to send
     error = None
     headers = {'Authorization': auth} if auth else {}
-    data = {"id": resource_id, **{k: v for k, v in kwargs.items() if v}}
+    data = {"id": resource_id, **{k: v for k, v in kwargs.items() if v or (not v and type(v) is int)}}
 
     # Send the PATCH request to eRegs
     logger.info("Sending results to eRegs at %s for resource ID %d.", upload_url, resource_id)
