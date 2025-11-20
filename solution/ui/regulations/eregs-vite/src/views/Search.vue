@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, provide, ref, watch } from "vue";
+import { computed, inject, onMounted, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import usePartsLastUpdated from "composables/partsLastUpdated.js";
@@ -255,8 +255,11 @@ watch(
 );
 
 // fetches on page load
-getPartsLastUpdated({ apiUrl });
-getDocsOnLoad();
+onMounted(() => {
+    setTitle(decompressRouteQuery($route.query));
+    getPartsLastUpdated({ apiUrl });
+    getDocsOnLoad();
+})
 </script>
 
 <template>
