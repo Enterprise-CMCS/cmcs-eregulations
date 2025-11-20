@@ -276,12 +276,12 @@ class ContentIndex(models.Model):
     reg_text = models.ForeignKey(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
 
     # Text extraction metadata for resources only
-    resource_metadata = models.OneToOneField(
+    resource_metadata = models.ForeignKey(
         ResourceMetadata,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="index_metadata",
+        related_name="indices",
     )
 
     # Fields for managing chunks

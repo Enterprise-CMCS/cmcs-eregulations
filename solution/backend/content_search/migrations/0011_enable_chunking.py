@@ -27,9 +27,8 @@ def create_resource_metadata(apps, schema_editor):
     ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
     ContentIndex = apps.get_model('content_search', 'ContentIndex')
 
-    ResourceMetadata.objects.bulk_create([ResourceMetadata(
+    objects = ResourceMetadata.objects.bulk_create([ResourceMetadata(
         resource=index.resource,
-        index_metadata=index,
         name=index.name,
         date=index.date,
         summary=index.summary,
@@ -40,6 +39,12 @@ def create_resource_metadata(apps, schema_editor):
         detected_file_type=getattr(index.resource, 'detected_file_type', ''),
         extraction_error=getattr(index.resource, 'extraction_error', ''),
     ) for index in ContentIndex.objects.filter(resource__isnull=False)])
+
+    # Prepare a list of ContentIndex objects to update their resource_metadata field
+    content_indices = list(ContentIndex.objects.filter(resource__isnull=False))
+    for obj, index in zip(objects, content_indices):
+        index.resource_metadata = obj
+    ContentIndex.objects.bulk_update(content_indices, ['resource_metadata'])
 
 
 class Migration(migrations.Migration):
@@ -93,7 +98,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentindex',
             name='resource_metadata',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='index_metadata', to='content_search.resourcemetadata'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='indices', to='content_search.resourcemetadata'),
         ),
         migrations.AddField(
             model_name='contentindex',
