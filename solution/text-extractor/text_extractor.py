@@ -23,6 +23,7 @@ from .utils import (
     configure_authorization,
     send_results,
     chunk_text,
+    generate_embedding,
 )
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
@@ -183,7 +184,7 @@ def handler(event: dict, context: Any) -> dict:
 
     # Embedding configuration
     embeddings = config.get("embedding", {})
-    generate_embedding = embeddings.get("generate", False)
+    enable_embeddings = embeddings.get("generate", False)
     embedding_model = embeddings.get("model", "amazon.titan-embed-text-v2:0")
     embedding_dimensions = embeddings.get("dimensions", 1024)
     normalize_embeddings = embeddings.get("normalize", True)
@@ -205,7 +206,7 @@ def handler(event: dict, context: Any) -> dict:
 
         # If embeddings are enabled, generate embeddings for the text or chunks
         embeddings = [None] * len(chunks)  # Default to no embeddings
-        if text and generate_embedding:
+        if text and enable_embeddings:
             client = boto3.client("bedrock-runtime")
             logger.info("Generating embeddings using model '%s' with %d dimensions.", embedding_model, embedding_dimensions)
             embeddings = [generate_embedding(
