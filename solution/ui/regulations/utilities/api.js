@@ -539,17 +539,23 @@ const getCombinedContent = async ({
         {},
     );
 
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {Object} options.data - Data to be sent in the POST request body
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
 const getSemanticSearchResults = async ({ apiUrl, data }) =>
     httpApiPost(`${apiUrl}content-search/`, { data });
 
-const getGranularCounts = async ({
-    apiUrl,
-    requestParams = "",
-}) =>
-    httpApiGet(
-        `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
-        {},
-    );
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {Object} options.data - Data to be sent in the POST request body
+ * @returns {Promise<{categories: Array<Object>, internal_resource_count: number, public_resource_count: number, regulation_text_count: number, subjects: Array<Object>}>} - Promise that contains counts information
+ */
+const getGranularCounts = async ({ apiUrl, data, }) =>
+    httpApiPost(`${apiUrl}content-search/counts`, { data });
 
 /**
  * @param {Object} options - parameters needed for API call

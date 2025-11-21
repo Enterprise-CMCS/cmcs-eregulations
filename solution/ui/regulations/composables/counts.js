@@ -18,7 +18,7 @@ export default function useCounts() {
         try {
             const response = await getGranularCounts({
                 apiUrl,
-                requestParams: getRequestParams({ queryParams }),
+                data: getRequestParams({ queryParams }),
             });
 
             counts.value.results = response;

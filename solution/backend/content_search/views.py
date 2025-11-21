@@ -51,23 +51,6 @@ def _get_parameter_list(name, request):
     return request.GET.getlist(name) or request.POST.getlist(name)
 
 
-class ContentSearchPagination(ViewSetPagination):
-    def get_additional_attributes(self):
-        return {**super().get_additional_attributes(), **{
-            "count_url": ContentCountViewSet.generate_url(self.request),
-        }}
-
-    def get_additional_attribute_schemas(self):
-        return {**super().get_additional_attribute_schemas(), **{
-            "count_url": {
-                "type": "string",
-                "format": "uri",
-                "nullable": True,
-                "example": "http://api.example.org/content_count/?q=example",
-            },
-        }}
-
-
 class ContentSearchMixin:
     PARAMETERS = [
         OpenApiParameter(
@@ -397,7 +380,7 @@ class ContentSearchMixin:
 class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
     model = ContentIndex
     serializer_class = ContentSearchSerializer
-    pagination_class = ContentSearchPagination
+    pagination_class = ViewSetPagination
     parser_classes = (FormParser,)
 
     def list(self, request, *args, **kwargs):
