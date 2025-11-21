@@ -198,6 +198,18 @@ export class TextExtractorStack extends cdk.Stack {
                         `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${props.environmentConfig.secretName}*`,
                     ],
                 }),
+                // Allow function to use Bedrock (Titan Embeddings model V2)
+                new iam.PolicyStatement({
+                    effect: iam.Effect.ALLOW,
+                    actions: [
+                        'bedrock:InvokeModel',
+                        'bedrock:BatchInvokeModel',
+                        'bedrock:ListModels',
+                    ],
+                    resources: [
+                        'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0',
+                    ],
+                }),
             ],
         });
 

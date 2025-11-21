@@ -33,7 +33,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "url"]
-    readonly_fields = ["indexing_status", "detected_file_type"]
+    readonly_fields = ["indexing_status", "number_of_chunks", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -50,7 +50,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type", "extract_text"],
+            "fields": ["indexing_status", "number_of_chunks", "extract_url", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
@@ -94,7 +94,7 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
                     "action_type", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "docket_numbers", "document_number", "updated_at"]
     search_fields = ["date", "document_id", "title", "docket_numbers", "document_number", "url"]
-    readonly_fields = ["indexing_status", "detected_file_type"]
+    readonly_fields = ["indexing_status", "number_of_chunks", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -112,7 +112,7 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type", "extract_text"],
+            "fields": ["indexing_status", "number_of_chunks", "extract_url", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],

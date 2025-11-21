@@ -1,23 +1,12 @@
 
-from django.conf import settings
-from django.contrib.postgres.search import (
-    SearchHeadline,
-    SearchQuery,
-    SearchRank,
-    SearchVectorField,
-)
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import F
-from django.db.models.expressions import RawSQL
-from django.db.models.functions import Substr
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django_jsonform.models.fields import JSONField
 from pgvector.django import VectorField
 from solo.models import SingletonModel
 
-from common.constants import QUOTE_TYPES
 from regcore.models import Part
 from resources.models import (
     AbstractResource,
@@ -29,6 +18,101 @@ from resources.models import (
 
 
 class ContentSearchConfiguration(SingletonModel):
+    enable_keyword_search = models.BooleanField(
+        default=True,
+        help_text="Enable traditional keyword-based search for precise matching of search terms.",
+        verbose_name="Enable Keyword Search",
+    )
+
+    enable_semantic_search = models.BooleanField(
+        default=True,
+        help_text="Enable semantic search using vector embeddings for more relevant search results.",
+        verbose_name="Enable Semantic Search",
+    )
+
+    keyword_search_min_rank = models.FloatField(
+        default=0.05,
+        validators=[MinValueValidator(0.0)],
+        help_text="Minimum rank threshold for keyword search results to be included.",
+        verbose_name="Keyword Search Minimum Rank",
+    )
+
+    keyword_search_min_rank_quoted = models.FloatField(
+        default=0.05,
+        validators=[MinValueValidator(0.0)],
+        help_text="Minimum rank threshold for keyword search results to be included when the query is quoted.",
+        verbose_name="Keyword Search Minimum Rank for Quoted Queries",
+    )
+
+    semantic_search_max_distance = models.FloatField(
+        default=1.3,
+        validators=[MinValueValidator(0.0)],
+        help_text="Maximum distance threshold for semantic search results to be included.",
+        verbose_name="Semantic Search Maximum Distance",
+    )
+
+    rrf_k_value = models.IntegerField(
+        default=60,
+        validators=[MinValueValidator(1)],
+        help_text="The 'k' value used in the Reciprocal Rank Fusion (RRF) "
+                  "algorithm to combine keyword and semantic search results.",
+        verbose_name="RRF K Value",
+    )
+
+    semantic_search_min_words = models.IntegerField(
+        default=2,
+        validators=[MinValueValidator(1)],
+        help_text="Minimum number of words required in the search query to allow semantic search if keyword search is enabled.",
+        verbose_name="Semantic Search Minimum Words",
+    )
+
+    keyword_search_max_words = models.IntegerField(
+        default=15,
+        validators=[MinValueValidator(1)],
+        help_text="Maximum number of words allowed in the search query to enable keyword search if semantic search is enabled.",
+        verbose_name="Keyword Search Maximum Words",
+    )
+
+    use_keyword_search_for_quoted = models.BooleanField(
+        default=True,
+        help_text="Use keyword search for quoted search queries to ensure exact phrase matching.",
+        verbose_name="Use Keyword Search for Quoted Queries",
+    )
+
+    headline_text_max_length = models.IntegerField(
+        default=150000,
+        validators=[MinValueValidator(1)],
+        help_text="Maximum length of text to consider when generating search result headlines.",
+        verbose_name="Headline Text Maximum Length",
+    )
+
+    headline_min_words = models.IntegerField(
+        default=30,
+        validators=[MinValueValidator(1)],
+        help_text="Minimum number of words in each headline fragment.",
+        verbose_name="Headline Minimum Words",
+    )
+
+    headline_max_words = models.IntegerField(
+        default=50,
+        validators=[MinValueValidator(1)],
+        help_text="Maximum number of words in each headline fragment.",
+        verbose_name="Headline Maximum Words",
+    )
+
+    headline_max_fragments = models.IntegerField(
+        default=2,
+        validators=[MinValueValidator(0)],
+        help_text="Maximum number of headline fragments to generate. Set to 0 for no limit.",
+        verbose_name="Headline Maximum Fragments",
+    )
+
+    generate_embeddings = models.BooleanField(
+        default=True,
+        help_text="Generate vector embeddings during text extraction to enable semantic search.",
+        verbose_name="Generate Embeddings",
+    )
+
     auto_extract = models.BooleanField(
         default=False,
         help_text="Check this box if eRegs should automatically request text extraction on any resource when it is originally "
@@ -115,18 +199,6 @@ class ContentSearchConfiguration(SingletonModel):
 
 
 class ContentIndexQuerySet(models.QuerySet):
-    _text_max = int(settings.SEARCH_HEADLINE_TEXT_MAX)
-    _min_words = int(settings.SEARCH_HEADLINE_MIN_WORDS)
-    _max_words = int(settings.SEARCH_HEADLINE_MAX_WORDS)
-    _max_fragments = int(settings.SEARCH_HEADLINE_MAX_FRAGMENTS) or None
-
-    def _is_quoted(self, query):
-        return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
-
-    def _get_search_query_object(self, search_query):
-        search_type = "phrase" if self._is_quoted(search_query) else "plain"
-        return SearchQuery(search_query, search_type=search_type, config='english')
-
     def defer_text(self):
         return self.defer(
             "name",
@@ -136,63 +208,6 @@ class ContentIndexQuerySet(models.QuerySet):
             "rank_b_string",
             "rank_c_string",
             "rank_d_string",
-        )
-
-    def search(self, search_query, sort_method="-rank"):
-        cover_density = self._is_quoted(search_query)
-        rank_filter = float(settings.QUOTED_SEARCH_FILTER if cover_density else settings.BASIC_SEARCH_FILTER)
-
-        if sort_method == "-date":
-            order_by = (F("date").desc(nulls_last=True), F("resource__title").asc(nulls_last=True))
-
-        elif sort_method == "date":
-            order_by = (F("date").asc(nulls_last=True), F("resource__title").asc(nulls_last=True))
-
-        else:
-            order_by = ("-rank", "-date", "-id")
-
-        return self.annotate(
-            rank=SearchRank(
-                RawSQL("vector_column", [], output_field=SearchVectorField()),
-                self._get_search_query_object(search_query), cover_density=cover_density
-            )
-        )\
-        .filter(rank__gt=rank_filter)\
-        .order_by(*order_by)\
-
-
-    def generate_headlines(self, search_query):
-        query_object = self._get_search_query_object(search_query)
-        return self.annotate(content_short=Substr("content", 1, self._text_max)).annotate(
-            summary_headline=SearchHeadline(
-                "summary",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel='</span>',
-                config='english',
-                highlight_all=True,
-                fragment_delimiter='...',
-            ),
-            name_headline=SearchHeadline(
-                "name",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel="</span>",
-                config='english',
-                highlight_all=True,
-                fragment_delimiter='...',
-            ),
-            content_headline=SearchHeadline(
-                "content_short",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel="</span>",
-                config='english',
-                min_words=self._min_words,
-                max_words=self._max_words,
-                fragment_delimiter='...',
-                max_fragments=self._max_fragments,
-            ),
         )
 
 
@@ -261,12 +276,12 @@ class ContentIndex(models.Model):
     reg_text = models.ForeignKey(IndexedRegulationText, blank=True, null=True, on_delete=models.CASCADE, related_name="indices")
 
     # Text extraction metadata for resources only
-    resource_metadata = models.OneToOneField(
+    resource_metadata = models.ForeignKey(
         ResourceMetadata,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
-        related_name="index_metadata",
+        related_name="indices",
     )
 
     # Fields for managing chunks

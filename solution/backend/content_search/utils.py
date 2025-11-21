@@ -1,16 +1,18 @@
 import base64
+import html
 import json
+import re
 import unicodedata
 from urllib.parse import urlparse
 
 import requests
+from bs4 import BeautifulSoup
 from django.conf import settings
 from django.urls import reverse
 
 from common.aws import establish_client
 from regcore.models import Part
 from resources.models import (
-    AbstractResource,
     FederalRegisterLink,
     ResourcesConfiguration,
 )
@@ -18,6 +20,7 @@ from resources.models import (
 from .models import (
     ContentIndex,
     IndexedRegulationText,
+    ResourceMetadata,
 )
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
@@ -30,6 +33,32 @@ _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
 # returns: str - the text with control characters removed
 def remove_control_characters(text: str) -> str:
     return "".join(ch if not unicodedata.category(ch).lower().startswith("c") else " " for ch in text).strip()
+
+
+def preprocess_text(text: str) -> str:
+    """
+    Preprocess text by removing control characters, HTML elements,
+    collapsing whitespace, and normalizing case.
+
+    Args:
+        text (str): The raw extracted text.
+    Returns:
+        str: The cleaned text.
+    """
+
+    # Remove unicode control characters
+    text = remove_control_characters(text)
+    # Re-encode as unicode-escaped
+    text = text.encode("unicode_escape").decode("unicode_escape")
+    # Remove HTML elements
+    text = html.unescape(text)
+    text = BeautifulSoup(text, "html.parser").get_text()
+    # Collapse whitespace
+    text = " ".join(text.split())
+    # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
+    # (e.g. -------------------- turns into ---)
+    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0] * 3, string=text)
+    return text
 
 
 def _extract_via_http(batch, client):
@@ -192,7 +221,7 @@ def _should_ignore_robots_txt(resource, allow_list):
 # Check text-extractor logs to verify extraction.
 def call_text_extractor_for_resources(request, resources):
     # Blank the error field for all resources before processing
-    AbstractResource.objects.filter(pk__in=[i.pk for i in resources]).update(extraction_error="")
+    ResourceMetadata.objects.filter(resource__pk__in=[i.pk for i in resources]).update(extraction_error="")
 
     # Retrieve relevant configuration from the ResourcesConfiguration solo model
     config = ResourcesConfiguration.get_solo()
@@ -229,6 +258,17 @@ def call_text_extractor_for_resources(request, resources):
         } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
             "use_lambda": True,
             "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+        },
+        "chunking": {
+            "enabled": True,
+            "chunk_size": 10000,
+            "chunk_overlap": 1000,
+        },
+        "embedding": {
+            "generate": True,
+            "model": "amazon.titan-embed-text-v2:0",
+            "dimensions": 512,
+            "normalize": True,
         },
     }, **_get_resource_keys(
         i,
@@ -301,8 +341,9 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 
     except Exception:
         children = piece.pop("children", []) or []
-        subpart_id = piece.get("label", [])[0] if piece.get("node_type", "").lower() == "subpart" else ""
-        subpart_title = piece.get("title", "") if piece.get("node_type", "").lower() == "subpart" else ""
+        if piece.get("node_type", "").lower() == "subpart":
+            subpart_id = piece.get("label", [])[0]
+            subpart_title = piece.get("title", "")
         for child in children:
             index_part_node(part, child, indices, contents, parent=piece, subpart_id=subpart_id, subpart_title=subpart_title)
 
@@ -327,9 +368,6 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 # Note that a successful return does not necessarily indicate a successful extraction;
 # Check text-extractor logs to verify extraction.
 def call_text_extractor_for_reg_text(request, parts):
-    # Blank the error field for all IndexedRegulationText instances before processing
-    IndexedRegulationText.objects.filter(pk__in=[i.pk for i in parts]).update(extraction_error="")
-
     # Delete all previously indexed text for the given parts, including previous versions
     affected_indices = IndexedRegulationText.objects.filter(
         part__title__in=[i.title for i in parts],
@@ -373,6 +411,27 @@ def call_text_extractor_for_reg_text(request, parts):
             "secret_name": "SECRET_NAME",
             "username_key": "username",
             "password_key": "password",
+        },
+        "aws": {
+            "aws_access_key_id": settings.S3_AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": settings.S3_AWS_SECRET_ACCESS_KEY,
+            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+            "use_lambda": False,
+            "aws_region": "us-east-1",
+        } if settings.USE_LOCAL_TEXT_EXTRACTOR else {
+            "use_lambda": True,
+            "aws_storage_bucket_name": settings.AWS_STORAGE_BUCKET_NAME,
+        },
+        "chunking": {
+            "enabled": True,
+            "chunk_size": 10000,
+            "chunk_overlap": 1000,
+        },
+        "embedding": {
+            "generate": True,
+            "model": "amazon.titan-embed-text-v2:0",
+            "dimensions": 512,
+            "normalize": True,
         },
     } for index, content in zip(indices, contents)]
 

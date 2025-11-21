@@ -89,16 +89,26 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     @property
     def indexing_status(self):
-        index_metadata = getattr(self, "index_metadata")
-        if not index_metadata:
-            return "Not indexed"
-        if index_metadata.extraction_error:
-            return f"Error: {index_metadata.extraction_error}"
+        try:
+            index_metadata = getattr(self, "index_metadata")
+            if not index_metadata:
+                return "Not indexed"
+            if index_metadata.extraction_error:
+                return f"Error: {index_metadata.extraction_error}"
+            indices = getattr(self, "indices")
+            if not indices or not indices.exists():
+                return "Not indexed"
+            index = indices.first()
+            return f"Indexed: {index.content[:100]}..."
+        except Exception as e:
+            return str(e)
+
+    @property
+    def number_of_chunks(self):
         indices = getattr(self, "indices")
         if not indices or not indices.exists():
-            return "Not indexed"
-        index = indices.first()
-        return f"Indexed: {index.content.value[:100]}..."
+            return 0
+        return indices.count()
 
     @property
     def detected_file_type(self):

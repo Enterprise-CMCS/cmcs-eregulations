@@ -23,28 +23,6 @@ def create_content_search_configuration(apps, schema_editor):
         ContentSearchConfiguration.objects.create()
 
 
-def create_resource_metadata(apps, schema_editor):
-    ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
-    ContentIndex = apps.get_model('content_search', 'ContentIndex')
-
-    for index in ContentIndex.objects.filter(resource__isnull=False):
-        resource = index.resource
-        resource_metadata = ResourceMetadata.objects.create(
-            resource=resource,
-            name=index.name,
-            date=index.date,
-            summary=index.summary,
-            rank_a_string=index.rank_a_string,
-            rank_b_string=index.rank_b_string,
-            rank_c_string=index.rank_c_string,
-            rank_d_string=index.rank_d_string,
-            detected_file_type=getattr(resource, 'detected_file_type', ''),
-            extraction_error=getattr(resource, 'extraction_error', ''),
-        )
-        index.resource_metadata = resource_metadata
-        index.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -96,7 +74,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentindex',
             name='resource_metadata',
-            field=models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='index_metadata', to='content_search.resourcemetadata'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='indices', to='content_search.resourcemetadata'),
         ),
         migrations.AddField(
             model_name='contentindex',
@@ -131,7 +109,6 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             index=models.Index(fields=['embedding'], name='content_sea_embeddi_3aff99_idx'),
         ),
-        migrations.RunPython(create_resource_metadata, reverse_code=migrations.RunPython.noop),
         migrations.DeleteModel(
             name='Synonym',
         ),
