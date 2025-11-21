@@ -15,8 +15,6 @@ def create_resource_metadata(apps, schema_editor):
             if not indices:
                 break
 
-            pk = indices[-1].pk  # Update pk to the last processed index
-
             objects = ResourceMetadata.objects.bulk_create([ResourceMetadata(
                 resource=index.resource,
                 name=index.name,
@@ -34,6 +32,8 @@ def create_resource_metadata(apps, schema_editor):
             for obj, index in zip(objects, list(indices)):
                 index.resource_metadata = obj
             ContentIndex.objects.bulk_update(indices, ['resource_metadata'])
+
+            pk = indices.last().pk
 
 
 class Migration(migrations.Migration):

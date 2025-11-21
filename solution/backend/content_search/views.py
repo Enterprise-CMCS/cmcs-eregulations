@@ -284,6 +284,7 @@ class ContentSearchMixin:
 
         # If full-text search is enabled, add full-text search CTE
         # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
+        # The linter is complaining because we insert the function names dynamically, but those are set by us and not user input
         if enable_keyword:
             sql += f"""
                 keyword_search AS (
