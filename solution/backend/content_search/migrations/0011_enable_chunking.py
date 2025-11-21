@@ -23,30 +23,6 @@ def create_content_search_configuration(apps, schema_editor):
         ContentSearchConfiguration.objects.create()
 
 
-def create_resource_metadata(apps, schema_editor):
-    ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
-    ContentIndex = apps.get_model('content_search', 'ContentIndex')
-
-    objects = ResourceMetadata.objects.bulk_create([ResourceMetadata(
-        resource=index.resource,
-        name=index.name,
-        date=index.date,
-        summary=index.summary,
-        rank_a_string=index.rank_a_string,
-        rank_b_string=index.rank_b_string,
-        rank_c_string=index.rank_c_string,
-        rank_d_string=index.rank_d_string,
-        detected_file_type=getattr(index.resource, 'detected_file_type', ''),
-        extraction_error=getattr(index.resource, 'extraction_error', ''),
-    ) for index in ContentIndex.objects.filter(resource__isnull=False)])
-
-    # Prepare a list of ContentIndex objects to update their resource_metadata field
-    content_indices = list(ContentIndex.objects.filter(resource__isnull=False))
-    for obj, index in zip(objects, content_indices):
-        index.resource_metadata = obj
-    ContentIndex.objects.bulk_update(content_indices, ['resource_metadata'])
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -133,7 +109,6 @@ class Migration(migrations.Migration):
             model_name='contentindex',
             index=models.Index(fields=['embedding'], name='content_sea_embeddi_3aff99_idx'),
         ),
-        migrations.RunPython(create_resource_metadata, reverse_code=migrations.RunPython.noop),
         migrations.DeleteModel(
             name='Synonym',
         ),

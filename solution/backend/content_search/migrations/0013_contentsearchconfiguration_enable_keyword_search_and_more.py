@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('content_search', '0011_enable_chunking'),
+        ('content_search', '0012_create_metadata'),
     ]
 
     operations = [
