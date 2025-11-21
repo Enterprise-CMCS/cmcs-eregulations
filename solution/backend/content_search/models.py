@@ -31,14 +31,14 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     keyword_search_min_rank = models.FloatField(
-        default=0.1,
+        default=0.05,
         validators=[MinValueValidator(0.0)],
         help_text="Minimum rank threshold for keyword search results to be included.",
         verbose_name="Keyword Search Minimum Rank",
     )
 
     keyword_search_min_rank_quoted = models.FloatField(
-        default=0.01,
+        default=0.05,
         validators=[MinValueValidator(0.0)],
         help_text="Minimum rank threshold for keyword search results to be included when the query is quoted.",
         verbose_name="Keyword Search Minimum Rank for Quoted Queries",
@@ -80,28 +80,28 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     headline_text_max_length = models.IntegerField(
-        default=10000,
+        default=150000,
         validators=[MinValueValidator(1)],
         help_text="Maximum length of text to consider when generating search result headlines.",
         verbose_name="Headline Text Maximum Length",
     )
 
     headline_min_words = models.IntegerField(
-        default=50,
+        default=30,
         validators=[MinValueValidator(1)],
         help_text="Minimum number of words in each headline fragment.",
         verbose_name="Headline Minimum Words",
     )
 
     headline_max_words = models.IntegerField(
-        default=51,
+        default=50,
         validators=[MinValueValidator(1)],
         help_text="Maximum number of words in each headline fragment.",
         verbose_name="Headline Maximum Words",
     )
 
     headline_max_fragments = models.IntegerField(
-        default=0,
+        default=2,
         validators=[MinValueValidator(0)],
         help_text="Maximum number of headline fragments to generate. Set to 0 for no limit.",
         verbose_name="Headline Maximum Fragments",

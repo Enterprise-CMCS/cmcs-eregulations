@@ -29,22 +29,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='headline_max_fragments',
-            field=models.IntegerField(default=0, help_text='Maximum number of headline fragments to generate. Set to 0 for no limit.', validators=[django.core.validators.MinValueValidator(0)], verbose_name='Headline Maximum Fragments'),
+            field=models.IntegerField(default=2, help_text='Maximum number of headline fragments to generate. Set to 0 for no limit.', validators=[django.core.validators.MinValueValidator(0)], verbose_name='Headline Maximum Fragments'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='headline_max_words',
-            field=models.IntegerField(default=51, help_text='Maximum number of words in each headline fragment.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Maximum Words'),
+            field=models.IntegerField(default=50, help_text='Maximum number of words in each headline fragment.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Maximum Words'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='headline_min_words',
-            field=models.IntegerField(default=50, help_text='Minimum number of words in each headline fragment.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Minimum Words'),
+            field=models.IntegerField(default=30, help_text='Minimum number of words in each headline fragment.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Minimum Words'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='headline_text_max_length',
-            field=models.IntegerField(default=10000, help_text='Maximum length of text to consider when generating search result headlines.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Text Maximum Length'),
+            field=models.IntegerField(default=150000, help_text='Maximum length of text to consider when generating search result headlines.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Text Maximum Length'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
@@ -54,12 +54,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='keyword_search_min_rank',
-            field=models.FloatField(default=0.1, help_text='Minimum rank threshold for keyword search results to be included.', validators=[django.core.validators.MinValueValidator(0.0)], verbose_name='Keyword Search Minimum Rank'),
+            field=models.FloatField(default=0.05, help_text='Minimum rank threshold for keyword search results to be included.', validators=[django.core.validators.MinValueValidator(0.0)], verbose_name='Keyword Search Minimum Rank'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='keyword_search_min_rank_quoted',
-            field=models.FloatField(default=0.01, help_text='Minimum rank threshold for keyword search results to be included when the query is quoted.', validators=[django.core.validators.MinValueValidator(0.0)], verbose_name='Keyword Search Minimum Rank for Quoted Queries'),
+            field=models.FloatField(default=0.05, help_text='Minimum rank threshold for keyword search results to be included when the query is quoted.', validators=[django.core.validators.MinValueValidator(0.0)], verbose_name='Keyword Search Minimum Rank for Quoted Queries'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
