@@ -17,7 +17,7 @@ describe("Search flow", () => {
 
         cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
 
-        cy.intercept(`**/v3/content-search/**`, {
+        cy.intercept("POST", `**/v3/content-search**`, {
             fixture: "policy-docs-search.json",
         }).as("subjectFiles");
 
@@ -85,7 +85,7 @@ describe("Search flow", () => {
     it("should have a working searchbox", () => {
         cy.viewport("macbook-15");
         cy.visit(`/search`, { timeout: 60000 });
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .should("exist")
             .type("test search", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
@@ -104,11 +104,11 @@ describe("Search flow", () => {
             force: true,
         });
 
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .should("exist")
             .type("test", { force: true });
 
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .should("be.visible")
             .should("have.value", "test");
 
@@ -118,9 +118,11 @@ describe("Search flow", () => {
 
         cy.url().should("include", "/search?q=test");
 
-        cy.get("input#main-content").clear();
+        cy.get('[data-testid="clear-search-form"]').click({
+            force: true,
+        });
 
-        cy.get("input#main-content").should("have.value", "");
+        cy.get("textarea#main-content").should("have.value", "");
 
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -212,7 +214,7 @@ describe("Search flow", () => {
             landingPage: "/search/",
         });
 
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .should("exist")
             .type(`${SEARCH_TERM_2}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
@@ -248,7 +250,7 @@ describe("Search flow", () => {
             landingPage: "/search/",
         });
 
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .should("exist")
             .type(`${SEARCH_TERM}`, { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
@@ -469,9 +471,9 @@ describe("Search flow", () => {
             .and("include", "categories=1");
 
         // Update search term
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .clear();
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .type("new search term");
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
@@ -674,7 +676,7 @@ describe("Search flow", () => {
     });
 
     it("should not show sort dropdown if there are no results", () => {
-        cy.intercept(`**/v3/content-search/**`, {
+        cy.intercept("POST", `**/v3/content-search**`, {
             next: null,
             previous: null,
             count: 0,
@@ -751,9 +753,9 @@ describe("Search flow", () => {
             `/search?q=${SEARCH_TERM}&sort=-date`,
         );
 
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .clear();
-        cy.get("input#main-content")
+        cy.get("textarea#main-content")
             .type("new search term");
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,

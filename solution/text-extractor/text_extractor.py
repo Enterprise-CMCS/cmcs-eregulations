@@ -1,8 +1,10 @@
+import base64
 import logging
 import os
 import time
 from typing import Any
 
+import boto3
 
 from .backends import (
     BackendException,
@@ -20,6 +22,8 @@ from .utils import (
     lambda_response,
     configure_authorization,
     send_results,
+    chunk_text,
+    generate_embedding,
 )
 
 # Initialize the root logger. All other loggers will automatically inherit from this one.
@@ -55,20 +59,28 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
     """
 
     retrieval_finished_time = None
-    uri = config["uri"]
 
     if config.get("job_id"):
         # If a job ID is provided, we assume this invocation is a continuation of a previous job being processed
         # by an external service, and so we skip the file retrieval step.
         logger.info("Job ID found in config: %s, skipping file retrieval.", config["job_id"])
         file = None
-    else:
+    elif config.get("content"):
+        # If content is provided directly, we decode it from base64
+        logger.info("Decoding file content from base64.")
+        try:
+            file = base64.b64decode(config["content"].encode("utf-8"))
+            retrieval_finished_time = time.time()
+            logger.info("File content decoded successfully. Size: %d bytes", len(file))
+        except Exception as e:
+            return None, None, None, f"Failed to decode file content: {str(e)}"
+    elif config.get("uri"):
         # Retrieve the file
-        logger.info("Starting file retrieval from URI: %s", uri)
+        logger.info("Starting file retrieval from URI: %s", config["uri"])
         try:
             backend_type = config.get("backend", "web").lower()
             backend = FileBackend.get_backend(backend_type, config)
-            file = backend.get_file(uri)
+            file = backend.get_file(config["uri"])
             # Set the retrieval finished time
             retrieval_finished_time = time.time()
             logger.info("File retrieved successfully. Size: %d bytes", len(file))
@@ -80,6 +92,8 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
         except Exception as e:
             # If retrieval fails for an unexpected reason, we should still delay if configured to do so
             return None, None, time.time(), f"Backend unexpectedly failed: {str(e)}"
+    else:
+        return None, None, None, "You must include either 'uri' or 'content' in the request body."
 
     detected_file_type = None
     if config.get("file_type"):
@@ -118,9 +132,6 @@ def extract_text(config: dict, context: Any) -> tuple[str, str, float, str]:
             time.sleep(60)
         return None, detected_file_type, retrieval_finished_time, None
 
-    # Strip control characters and unneeded data out of the extracted text
-    text = clean_output(text)
-
     # Return the extracted text, file type, time that retrieval finished, and no error
     return text, detected_file_type, retrieval_finished_time, None
 
@@ -147,11 +158,12 @@ def handler(event: dict, context: Any) -> dict:
     # Check for required parameters in the event
     logger.info("Retrieving required parameters from event.")
     try:
-        resource_id = config["id"]
-        _ = config["uri"]
+        index_id = config["id"]
         upload_url = config["upload_url"]
+        if not any([i in config for i in ["uri", "content"]]):
+            raise KeyError
     except KeyError:
-        return lambda_response(400, "You must include 'id', 'uri', and 'upload_url' in the request body.")
+        return lambda_response(400, "You must include 'id', 'upload_url', and either 'uri' or 'content' in the request body.")
 
     # Configure authorization
     authorization = None
@@ -164,19 +176,60 @@ def handler(event: dict, context: Any) -> dict:
     sqs_group = config.get("sqs_group")
     retrieval_delay = config.get("retrieval_delay", 0)
 
+    # Chunking configuration
+    chunking = config.get("chunking", {})
+    enable_chunking = chunking.get("enabled", False)
+    chunk_size = chunking.get("chunk_size", 10000)
+    chunk_overlap = chunking.get("chunk_overlap", 1000)
+
+    # Embedding configuration
+    embeddings = config.get("embedding", {})
+    enable_embeddings = embeddings.get("generate", False)
+    embedding_model = embeddings.get("model", "amazon.titan-embed-text-v2:0")
+    embedding_dimensions = embeddings.get("dimensions", 1024)
+    normalize_embeddings = embeddings.get("normalize", True)
+
     try:
         # Perform text extraction
         text, file_type, retrieval_finished_time, error = extract_text(config, context)
 
-        # Attempt to send results to eRegs
-        send_results(
-            resource_id,
-            upload_url,
-            authorization,
-            text=text,
-            file_type=file_type,
-            error=error,
-        )
+        # Strip control characters and unneeded data out of the extracted text
+        if text:
+            text = clean_output(text)
+
+        # If chunking is enabled, split text into chunks
+        chunks = [text]  # Default to single chunk with full text
+        if text and enable_chunking:
+            logger.info("Chunking extracted text into chunks of size %d with overlap %d.", chunk_size, chunk_overlap)
+            chunks = chunk_text(text, chunk_size, chunk_overlap)
+            logger.info("Text chunked into %d chunks.", len(chunks))
+
+        # If embeddings are enabled, generate embeddings for the text or chunks
+        embeddings = [None] * len(chunks)  # Default to no embeddings
+        if text and enable_embeddings:
+            client = boto3.client("bedrock-runtime")
+            logger.info("Generating embeddings using model '%s' with %d dimensions.", embedding_model, embedding_dimensions)
+            embeddings = [generate_embedding(
+                client,
+                chunk.lower(),  # Lowercase the chunk for embedding generation only
+                embedding_model,
+                embedding_dimensions,
+                normalize_embeddings,
+            ) for chunk in chunks]
+
+        # Send results to eRegs for each chunk
+        for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+            send_results(
+                index_id,
+                upload_url,
+                authorization,
+                text=chunk,
+                embedding=embedding,
+                chunk_index=i,
+                total_chunks=len(chunks),
+                file_type=file_type,
+                error=error,
+            )
 
         if error:
             raise Exception(error)
