@@ -30,10 +30,9 @@ def create_resource_metadata(apps, schema_editor):
 
             # Prepare a list of ContentIndex objects to update their resource_metadata field
             for obj, index in zip(objects, list(indices)):
+                pk = index.pk
                 index.resource_metadata = obj
             ContentIndex.objects.bulk_update(indices, ['resource_metadata'])
-
-            pk = indices.last().pk
 
 
 class Migration(migrations.Migration):
