@@ -9,6 +9,7 @@ import {
     createRegResultLink,
     deserializeResult,
     getCurrentPageResultsRange,
+    getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
     getLinkDomainFileTypeEl,
@@ -317,6 +318,8 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             <template #link>
                 <a
                     v-sanitize-html="getResultLinkText(doc)"
+                    :data-file-name="doc.file_name ? doc.file_name : null"
+                    :data-file-extension="doc.file_name ? getFileNameSuffix(doc.file_name) : null"
                     :href="getUrl(doc)"
                     :target="doc.type === 'reg_text' ? undefined : '_blank'"
                     :rel="
