@@ -211,7 +211,7 @@ const needsBar = (item) => item.date && item.document_id;
 const resultLinkClasses = (doc) => ({
     "document__link--search": !!$route?.query?.q,
     "document__link--regulations": doc.type === "reg_text",
-    "document__link--internal": DOCUMENT_TYPES_MAP[doc.type] === "Internal",
+    "document__link--internal-file": doc.file_name && DOCUMENT_TYPES_MAP[doc.type] === "Internal",
 });
 
 const currentPageResultsRange = getCurrentPageResultsRange({
