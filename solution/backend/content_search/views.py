@@ -187,7 +187,7 @@ class ContentSearchMixin:
         embedding = None
         if enable_semantic:
             try:
-                embedding = self.generate_embedding(query)
+                embedding = self.generate_embedding(query.lower())
             except Exception:
                 raise ServiceUnavailable("Failed to generate embedding for semantic search. Please try again later.")
 
