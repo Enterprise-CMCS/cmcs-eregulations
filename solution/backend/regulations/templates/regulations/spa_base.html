@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block custom_styles %}
-    <link rel="stylesheet" href="{% static '/vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
+    <link rel="stylesheet" href="{% static 'vite/index.css' %}?{{ DEPLOY_NUMBER }}" />
 {% endblock %}
 
 {% block outside_vue %}
@@ -18,5 +18,5 @@
 {% endblock %}
 
 {% block post_footer %}
-    <script src="{% static '/vite/index.js' %}?{{ DEPLOY_NUMBER }}"></script>
+    <script src="{% static 'vite/index.js' %}?{{ DEPLOY_NUMBER }}"></script>
 {% endblock %}

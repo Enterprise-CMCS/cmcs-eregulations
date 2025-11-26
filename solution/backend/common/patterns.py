@@ -28,3 +28,7 @@ SECTION_LABEL_PATTERN = r"(?:\bsec(?:tions?|t?s?)?|§|&#xA7;)\.?\s*"
 # Extracts the section ID only, for example "1902-1G" and its variations.
 SECTION_ID_PATTERN = rf"\d+[a-z]*(?:(?:{DASH_PATTERN})+[a-z0-9]+)?"
 SECTION_ID_REGEX = re.compile(rf"({SECTION_ID_PATTERN})", re.IGNORECASE)
+
+# Pattern for matching citation strings like "42 CFR 431.10" or "42 CFR 431 Subpart B"
+CITATION_PATTERN = r"(\d+)(?:[\s.]+(?:cfr\s+)?(\d+)(?:[\s.]+(?:(?:subpart|section)\s+)?(\w+))?)?"
+CITATION_REGEX = re.compile(CITATION_PATTERN, re.IGNORECASE)

@@ -5,3 +5,4 @@ from .subjects import *  # noqa
 from .resources import *  # noqa
 from .redirects import *  # noqa
 from .text_extraction import *  # noqa
+from .context_banners import *  # noqa
