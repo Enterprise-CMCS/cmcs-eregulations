@@ -9,6 +9,7 @@ import {
     createRegResultLink,
     deserializeResult,
     getCurrentPageResultsRange,
+    getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
     getLinkDomainFileTypeEl,
@@ -211,6 +212,7 @@ const needsBar = (item) => item.date && item.document_id;
 const resultLinkClasses = (doc) => ({
     "document__link--search": !!$route?.query?.q,
     "document__link--regulations": doc.type === "reg_text",
+    "document__link--internal-file": doc.file_name && DOCUMENT_TYPES_MAP[doc.type] === "Internal",
 });
 
 const currentPageResultsRange = getCurrentPageResultsRange({
@@ -218,6 +220,21 @@ const currentPageResultsRange = getCurrentPageResultsRange({
     page: props.page,
     pageSize: props.pageSize,
 });
+
+const handleResultLinkClick = (doc) => {
+    if (
+        window.gtag
+            && typeof gtag === "function"
+            && doc.file_name
+            && DOCUMENT_TYPES_MAP[doc.type] === "Internal"
+    ) {
+        window.gtag("event", "internal_file_download", {
+            search_query: $route?.query?.q || "",
+            file_name: doc.file_name,
+            file_extension: getFileNameSuffix(doc.file_name),
+        });
+    }
+};
 </script>
 
 <template>
@@ -325,6 +342,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
+                    @click="handleResultLinkClick(doc)"
                 />
             </template>
             <template #snippet>
