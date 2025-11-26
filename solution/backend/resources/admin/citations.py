@@ -17,7 +17,6 @@ class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
     search_fields = ["title", "part", "child_id"]
 
     def get_search_results(self, request, queryset, search_term):
-        # TODO: use regex extract title, part, and section/subpart to search
         match = CITATION_REGEX.match(search_term)
         if match:
             title = match.group(1)
