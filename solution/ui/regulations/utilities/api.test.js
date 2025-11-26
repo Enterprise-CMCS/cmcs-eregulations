@@ -392,7 +392,7 @@ describe("api.js", () => {
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
-                "http://localhost:9000/context-banners?title=42&part=433&section=433.10",
+                "http://localhost:9000/resources/context-banners?title=42&part=433&section=433.10",
                 fetchGetBoilerplate
             );
         });

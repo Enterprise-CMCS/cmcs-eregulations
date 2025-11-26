@@ -563,7 +563,7 @@ const getContextBanners = async ({
     requestParams = "",
 }) =>
     httpApiGet(
-        `${apiUrl}context-banners${
+        `${apiUrl}resources/context-banners${
             requestParams ? `?${requestParams}` : ""
         }`,
         {},
