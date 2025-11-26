@@ -6,10 +6,22 @@ import lodashDifference from "lodash/difference";
 import lodashEndsWith from "lodash/endsWith";
 import lodashGet from "lodash/get";
 
+import {
+    compressToEncodedURIComponent,
+    decompressFromEncodedURIComponent,
+} from "lz-string";
+
 const EventCodes = {
     SetSection: "SetSection",
     ClearSections: "ClearSections",
 };
+
+const COMPRESSION_PREFIX = ".!~";
+const COMPRESSION_INDEX = COMPRESSION_PREFIX.length;
+
+const MAX_QUERY_LENGTH = 7500;
+const SEARCH_STRING_COMPRESSION_THRESHOLD = 200;
+const SEARCH_STRING_TRUNCATE_THRESHOLD = 1000;
 
 const DOCUMENT_TYPES = ["regulations", "external", "internal"];
 
@@ -89,8 +101,106 @@ const PARAM_VALIDATION_DICT = {
  * console.log(encodedQuery); // "SMDL%20%2312-002"
  */
 const PARAM_ENCODE_DICT = {
-    q: (query) => encodeURIComponent(query),
+    q: (query) => encodeURIComponent(decompressRouteQuery({ q: query })),
 };
+
+/**
+ * @param {string} string - data to be compressed
+ * @returns {string} - compressed and encoded string suitable for use in a URL query parameter
+ * @example
+ * const data = "This is a very long search query that needs to be compressed for URL usage.";
+ * const compressed = compressQueryString(string);
+ * console.log(compressed); // "CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA"
+ */
+const compressQueryString = (string) => {
+    try {
+        return compressToEncodedURIComponent(string);
+    } catch (error) {
+        console.error("Error compressing query string:", error);
+        return "";
+    }
+};
+
+/**
+ * @param {string} compressedStr - compressed and encoded string from URL query parameter
+ * @returns {string} - decompressed data
+ * @example
+ * const compressedStr = "CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA";
+ * const string = decompressQueryString(compressedStr);
+ * console.log(string); // "This is a very long search query that needs to be compressed for URL usage."
+ */
+const decompressQueryString = (compressedStr) => {
+    try {
+        return decompressFromEncodedURIComponent(compressedStr);
+    } catch (error) {
+        console.error("Error decompressing query string:", error);
+        return "";
+    }
+};
+
+/**
+ * @param {Object} args - search query string
+ * @param {string} args.q - search query string
+ * @returns {string} - compressed query string prefixed with a dot
+ * @example
+ * const query = "This is a very long search query that needs to be compressed for URL usage.";
+ * const compressedQuery = compressRouteQuery({ q: query });
+ * console.log(compressedQuery); // ".!~CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA"
+ */
+const compressRouteQuery = ({ q }) => {
+    if (q) return `${COMPRESSION_PREFIX}${compressQueryString(q)}`;
+
+    return "";
+};
+
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.q - search query string
+ * @returns {string} - decompressed query string if it was compressed; otherwise returns the original query string
+ * @example
+ * const compressedQuery = ".!~CoCwlgzgBJUIZQG4FMBOBPKAbA9gOwHMoJk5UBjEKARwFc1MAXEORqPZZAE2kZygBGyKORwBbAA6pkEElygAzHKigBVAEoAZKLQhwCyAHRA";
+ * const query = decompressRouteQuery({ q: compressedQuery });
+ * console.log(query); // "This is a very long search query that needs to be compressed for URL usage."
+ * @example
+ * const query = "This is a normal search query.";
+ * const decompressedQuery = decompressRouteQuery({ q: query });
+ * console.log(decompressedQuery); // "This is a normal search query."
+ */
+const decompressRouteQuery = ({ q }) => {
+    if (q && q.startsWith(COMPRESSION_PREFIX)) {
+        return decompressQueryString(q.substring(COMPRESSION_INDEX));
+    }
+    return q;
+}
+
+/**
+ * @param {Object} args - Arguments object
+ * @param {string} args.query - search query string
+ * @param {number} args.maxLength - maximum length of the returned string
+ * @returns {string} - truncated query string for display purposes
+ * @example
+ * const query = "This is a very long search query that needs to be truncated for display purposes.";
+ * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
+ * console.log(truncatedQuery); // "This is a ver...lay purposes."
+ * @example
+ * const query = "Short query";
+ * const truncatedQuery = truncateQueryForDisplay({ query, maxLength: 30 });
+ * console.log(truncatedQuery); // "Short query"
+ */
+const truncateQueryForDisplay = ({
+    query = "",
+    maxLength = SEARCH_STRING_COMPRESSION_THRESHOLD
+}) => {
+    if (query.length <= maxLength) return query;
+    // return half from start and half from end with ellipsis in middle
+    const halfLength = Math.floor(maxLength / 2) - 2; // account for ellipsis
+    return (
+        query.slice(0, halfLength) +
+        "..." +
+        query.slice(query.length - halfLength)
+    );
+};
+
 
 /**
  * @param {string} fileName - name of the file or link to the file
@@ -241,6 +351,7 @@ const getLinkDomainFileTypeEl = (linkTitle, domainString, fileTypeButton) => {
     return `<span class='result__label--title'>${linkTitle}</span><span class='spacer__span'> </span>${domainFileTypeEl}`;
 };
 
+
 /*
  * @param {Object} query - $route.query object from Vue Router
  * @returns {string} - query string in `${key}=${value}&${key}=${value}` format
@@ -304,7 +415,9 @@ const getRequestParams = ({ queryParams, disallowList = [] }) => {
                         return paramsArray.join("&");
                     } else {
                         return `${PARAM_MAP[key]}=${
-                            PARAM_ENCODE_DICT[key] ? encodeURIComponent(v) : v
+                            key in PARAM_ENCODE_DICT
+                                ? PARAM_ENCODE_DICT[key](v)
+                                : v
                         }`;
                     }
                 })
@@ -835,10 +948,15 @@ const hasStatuteCitations = ({ doc }) => {
 
 export {
     addMarks,
+    compressQueryString,
+    compressRouteQuery,
     createLastUpdatedDates,
     createRegResultLink,
+    COMPRESSION_PREFIX,
     COUNT_TYPES_MAP,
     createOneIndexedArray,
+    decompressQueryString,
+    decompressRouteQuery,
     delay,
     deserializeResult,
     DOCUMENT_TYPES,
@@ -863,11 +981,15 @@ export {
     hasRegulationCitations,
     hasStatuteCitations,
     highlightText,
+    MAX_QUERY_LENGTH,
     niceDate,
     PARAM_ENCODE_DICT,
     PARAM_VALIDATION_DICT,
     parseError,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
+    SEARCH_STRING_TRUNCATE_THRESHOLD,
     scrollToElement,
     shapeTitlesResponse,
     stripQuotes,
+    truncateQueryForDisplay,
 };
