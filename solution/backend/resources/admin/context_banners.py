@@ -12,6 +12,7 @@ class SectionContextBannerAdmin(CustomAdminMixin, admin.ModelAdmin):
     search_fields = ("citation__part", "banner_html")
     ordering = ("citation__title", "citation__part", "citation__child_id")
     autocomplete_fields = ("citation",)
+
     fieldsets = (
         (None, {
             "fields": ("citation", "is_active", "banner_html"),
