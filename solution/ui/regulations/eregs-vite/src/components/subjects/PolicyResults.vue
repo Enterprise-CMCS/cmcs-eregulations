@@ -220,6 +220,21 @@ const currentPageResultsRange = getCurrentPageResultsRange({
     page: props.page,
     pageSize: props.pageSize,
 });
+
+const handleResultLinkClick = (doc) => {
+    if (
+        window.gtag
+            && typeof gtag === "function"
+            && doc.file_name
+            && DOCUMENT_TYPES_MAP[doc.type] === "Internal"
+    ) {
+        window.gtag("event", "internal_file_download", {
+            search_query: $route?.query?.q || "",
+            file_name: doc.file_name,
+            file_extension: getFileNameSuffix(doc.file_name),
+        });
+    }
+};
 </script>
 
 <template>
@@ -318,8 +333,6 @@ const currentPageResultsRange = getCurrentPageResultsRange({
             <template #link>
                 <a
                     v-sanitize-html="getResultLinkText(doc)"
-                    :data-file-name="doc.file_name ? doc.file_name : null"
-                    :data-file-extension="doc.file_name ? getFileNameSuffix(doc.file_name) : null"
                     :href="getUrl(doc)"
                     :target="doc.type === 'reg_text' ? undefined : '_blank'"
                     :rel="
@@ -329,6 +342,7 @@ const currentPageResultsRange = getCurrentPageResultsRange({
                     "
                     class="document__link document__link--filename"
                     :class="resultLinkClasses(doc)"
+                    @click="handleResultLinkClick(doc)"
                 />
             </template>
             <template #snippet>
