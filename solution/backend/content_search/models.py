@@ -244,6 +244,10 @@ class ResourceMetadata(models.Model):
 
 
 class IndexedRegulationText(models.Model):
+    # Fields populated on the eRegs side
+    name = models.TextField(blank=True)
+    summary = models.TextField(blank=True)
+
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     title = models.IntegerField(default=0)
     date = models.DateField(blank=True, null=True)
