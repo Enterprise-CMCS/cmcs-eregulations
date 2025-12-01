@@ -1,9 +1,9 @@
-
 from django.contrib import admin
-from django.db.models import Prefetch, Q
+from django.db.models import CharField, Prefetch, Value
+from django.db.models.expressions import RawSQL
+from django.db.models.functions import Concat
 
 from common.admin import CustomAdminMixin
-from common.patterns import CITATION_REGEX
 from resources.models import (
     AbstractCitation,
     Section,
@@ -17,26 +17,19 @@ class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
     search_fields = ["title", "part", "child_id"]
 
     def get_search_results(self, request, queryset, search_term):
-        match = CITATION_REGEX.match(search_term)
-        if match:
-            title = match.group(1)
-            part = match.group(2)
-            node_id = match.group(3)
+        search_term = " ".join(search_term.lower()
+            .replace("section", " ")
+            .replace("subpart", " ")
+            .replace("cfr", " ")
+            .replace(".", " ")
+            .split()
+        )
 
-            q = Q(**{"title" if part or node_id else "title__startswith": title})
-
-            if part:
-                q &= Q(**{"part" if node_id else "part__startswith": part})
-
-            if node_id:
-                q &= Q(section__section_id__startswith=node_id) | Q(subpart__subpart_id__startswith=node_id)
-
-            queryset = queryset.filter(q).select_subclasses()
-            return queryset, False  # False indicates no need for distinct
-
-        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        queryset = queryset.select_subclasses()
-        return queryset, use_distinct
+        queryset = queryset.annotate(
+            child_id_trimmed=RawSQL("LTRIM(child_id, '0')", ()),
+            string=Concat("title", Value(" "), "part", Value(" "), "child_id_trimmed", output_field=CharField()),
+        )
+        return queryset.filter(string__icontains=search_term).select_subclasses(), True
 
     # Hide from the admin index and app list while keeping it registered for autocomplete
     def get_model_perms(self, request):
