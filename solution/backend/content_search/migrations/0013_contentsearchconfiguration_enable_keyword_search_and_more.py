@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='semantic_search_max_distance',
-            field=models.FloatField(default=1.3, help_text='Maximum distance threshold for semantic search results to be included.', validators=[django.core.validators.MinValueValidator(0.0)], verbose_name='Semantic Search Maximum Distance'),
+            field=models.FloatField(default=0.5, help_text='Maximum distance threshold for semantic search results to be included.', validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(1.0)], verbose_name='Semantic Search Maximum Distance'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',

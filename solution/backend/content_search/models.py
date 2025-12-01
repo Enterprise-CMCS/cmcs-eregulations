@@ -1,5 +1,5 @@
 
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -45,8 +45,11 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     semantic_search_max_distance = models.FloatField(
-        default=1.3,
-        validators=[MinValueValidator(0.0)],
+        default=0.5,
+        validators=[
+            MinValueValidator(0.0),
+            MaxValueValidator(1.0),
+        ],
         help_text="Maximum distance threshold for semantic search results to be included.",
         verbose_name="Semantic Search Maximum Distance",
     )
