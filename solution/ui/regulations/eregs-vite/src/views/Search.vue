@@ -341,8 +341,10 @@ getDocsOnLoad();
                     v-if="searchQuery && !policyDocList.error && policyDocList.results.length > 0"
                     class="sort__div"
                 >
-                    <span class="sort__label">Sort by</span>
-                    <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
+                    <label class="sort__label--wrapper">
+                        <span class="sort__label">Sort by</span>
+                        <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
+                    </label>
                 </div>
                 <template v-if="!searchQuery" />
                 <template
