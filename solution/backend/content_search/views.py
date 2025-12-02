@@ -10,7 +10,7 @@ from django.db.models.functions import Substr
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import exceptions, viewsets
+from rest_framework import viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
@@ -117,6 +117,10 @@ class ContentSearchMixin:
         ),
     ]
 
+    serializer_context = {
+        "blank_headline_fields": [],
+    }
+
     def is_quoted(self, query):
         return query.startswith(QUOTE_TYPES) and query.endswith(QUOTE_TYPES)
 
@@ -132,6 +136,12 @@ class ContentSearchMixin:
             accept="application/json",
         )
         return json.loads(response.get("body").read())["embedding"]
+
+    def get_serializer_context(self):
+        return {
+            **super().get_serializer_context(),
+            **self.serializer_context,
+        }
 
     def search(self, query, config):
         query = query or ""  # Ensure query is a string
@@ -182,6 +192,11 @@ class ContentSearchMixin:
             query = query.strip("".join(QUOTE_TYPES))
             if use_keyword_search_for_quoted:
                 enable_semantic = False
+
+        # Adjust serializer context to blank headline fields if no highlights are expected
+        # if enable_keyword and not enable_semantic:
+        if True:
+            self.serializer_context["blank_headline_fields"].append("content_headline")
 
         # Generate embedding if needed
         embedding = None
