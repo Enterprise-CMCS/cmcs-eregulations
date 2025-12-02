@@ -19,6 +19,10 @@ select {
     box-sizing: border-box !important;
 }
 
+[hidden] {
+    display: none !important;
+}
+
 label {
     margin-block-start: 0 !important;
 }

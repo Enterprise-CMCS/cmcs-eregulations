@@ -20,7 +20,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
           >
             
             
-            
             <button
               aria-selected="false"
               class="v-btn v-theme--light v-btn--density-default v-btn--size-default v-btn--variant-text v-tab content-tabs"
@@ -233,7 +232,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
             </button>
             
             
-            
           </div>
         </div>
         <!---->
@@ -256,7 +254,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
         <div
           class="v-slide-group__content"
         >
-          
           
           
           <button
@@ -469,7 +466,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
             <!---->
             <!---->
           </button>
-          
           
           
         </div>
@@ -554,7 +550,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
           >
             
             
-            
             <button
               aria-selected="false"
               class="v-btn v-theme--light v-btn--density-default v-btn--size-default v-btn--variant-text v-tab content-tabs"
@@ -767,7 +762,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
             </button>
             
             
-            
           </div>
         </div>
         <!---->
@@ -790,7 +784,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
         <div
           class="v-slide-group__content"
         >
-          
           
           
           <button
@@ -1003,7 +996,6 @@ exports[`Statute Table Selector > SSA table type > Creates a snapshot of the Sta
             <!---->
             <!---->
           </button>
-          
           
           
         </div>
