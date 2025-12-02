@@ -55,7 +55,7 @@ class ContentSearchQuerySerializer(serializers.Serializer):
 class ContentSearchSerializer(serializers.Serializer):
     name_headline = HeadlineField()
     summary_headline = HeadlineField()
-    content_headline = HeadlineField(blank_when_no_highlight=True)
+    content_headline = HeadlineField()
 
     resource = AbstractResourceSerializer()
     reg_text = IndexedRegulationTextSerializer()
