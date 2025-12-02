@@ -26,6 +26,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/statute-link/?pattern=${PATTERN}`,
     `/v3/content-search?q=${SEARCH_TERM}`,
     `/v3/content-search/counts?q=${SEARCH_TERM}`,
+    `/v3/resources/context-banners`,
     `/v3/ecfr_parser_result/${TITLE}`,
     `/v3/parser_config`,
     `/v3/resources/`,
