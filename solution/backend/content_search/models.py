@@ -25,7 +25,7 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     enable_semantic_search = models.BooleanField(
-        default=True,
+        default=False,
         help_text="Enable semantic search using vector embeddings for more relevant search results.",
         verbose_name="Enable Semantic Search",
     )

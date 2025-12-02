@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='enable_semantic_search',
-            field=models.BooleanField(default=True, help_text='Enable semantic search using vector embeddings for more relevant search results.', verbose_name='Enable Semantic Search'),
+            field=models.BooleanField(default=False, help_text='Enable semantic search using vector embeddings for more relevant search results.', verbose_name='Enable Semantic Search'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',
