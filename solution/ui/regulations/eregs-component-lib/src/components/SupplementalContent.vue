@@ -11,6 +11,7 @@ import {
     getSectionsRecursive,
 } from "utilities/utils";
 
+import ContextBanners from "./reader-sidebar/ContextBanners.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
@@ -87,10 +88,10 @@ watch(selectedPart, () => {
 onMounted(() => {
     if (window.location.hash) {
         location.value = parseHash(window.location.hash);
+        fetchContent(location.value);
     } else {
         fetchContent();
     }
-    fetchContent(location.value);
     window.addEventListener("hashchange", handleHashChange);
 
     eventbus.on(EventCodes.SetSection, (args) => {
@@ -238,6 +239,13 @@ const getCategories = async (apiUrl) => {
         <h1 id="subpart-resources-heading">
             {{ activePart }} Resources
         </h1>
+        <ContextBanners
+            :api-url="props.apiUrl"
+            :title="props.title"
+            :part="props.part"
+            :selected-part="selectedPart"
+            :subparts="props.subparts"
+        />
         <h2>Documents</h2>
         <slot name="login-banner" />
         <slot name="public-label" />
