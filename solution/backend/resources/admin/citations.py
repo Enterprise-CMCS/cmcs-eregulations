@@ -17,7 +17,17 @@ class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
     search_fields = ["title", "part", "child_id"]
 
     def get_search_results(self, request, queryset, search_term):
-        search_term = " ".join(search_term.lower()
+        search_term = search_term.lower()
+
+        if "subpart" in search_term:
+            queryset = Subpart
+        elif "section" in search_term:
+            queryset = Section
+        else:
+            queryset = AbstractCitation
+        queryset = queryset.objects
+
+        search_term = " ".join(search_term
             .replace("section", " ")
             .replace("subpart", " ")
             .replace("cfr", " ")
@@ -29,6 +39,7 @@ class AbstractCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
             child_id_trimmed=RawSQL("LTRIM(child_id, '0')", ()),
             string=Concat("title", Value(" "), "part", Value(" "), "child_id_trimmed", output_field=CharField()),
         )
+
         return queryset.filter(string__icontains=search_term).select_subclasses(), True
 
     # Hide from the admin index and app list while keeping it registered for autocomplete
