@@ -134,12 +134,7 @@ class ContentSearchMixin:
         return json.loads(response.get("body").read())["embedding"]
 
     def search(self, query, config):
-        # Get query and preprocess it
-        if not query:
-            raise exceptions.ValidationError("Query parameter 'query' or 'q' is required (in query string or form body).")
-        if len(query) > 10000:
-            raise exceptions.ValidationError("Query parameter 'query' or 'q' must be less than 10,000 characters.")
-        query = preprocess_text(query)
+        query = query or ""  # Ensure query is a string
 
         # Get optional parameters (from query string or form body)
         citations = _get_parameter_list("citations", self.request)
@@ -174,6 +169,11 @@ class ContentSearchMixin:
         # Disable semantic search for short queries if keyword is enabled (results aren't meaningful for very short queries)
         if enable_keyword and query_words < semantic_search_min_words:
             enable_semantic = False
+
+        if query:
+            query = preprocess_text(query)
+        else:
+            enable_keyword = enable_semantic = False
 
         # Adjust strategy for quoted queries
         if self.is_quoted(query) and enable_keyword:
@@ -225,7 +225,21 @@ class ContentSearchMixin:
         sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
         # Define initial CTE that filters by the above criteria
-        sql = "WITH indices AS ( " + sql_filter + " ), "
+        sql = "WITH indices AS ( " + sql_filter + " )"
+
+        if enable_semantic or enable_keyword:
+            sql += ", "
+
+        # If neither semantic nor keyword search is enabled, return all filtered results with a score of 0.0
+        if not (enable_semantic or enable_keyword):
+            sql += """
+                SELECT
+                    id,
+                    0.0 AS score
+                FROM content_search_contentindex
+                WHERE id IN (SELECT id FROM indices)
+                ORDER BY date DESC NULLS LAST, id DESC
+            """
 
         # If semantic is enabled, add semantic search CTE
         if enable_semantic:
@@ -390,7 +404,7 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
         headline_min_words = config.headline_min_words
         headline_max_words = config.headline_max_words
         headline_max_fragments = config.headline_max_fragments
-        query = _get_parameter("query", request) or _get_parameter("q", request)
+        query = _get_parameter("query", request) or _get_parameter("q", request) or ""
 
         # Get the initial filtered and ranked search results
         search_results = self.search(query, config)
