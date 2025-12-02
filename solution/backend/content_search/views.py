@@ -10,7 +10,7 @@ from django.db.models.functions import Substr
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import viewsets
+from rest_framework import exceptions, viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
@@ -194,8 +194,7 @@ class ContentSearchMixin:
                 enable_semantic = False
 
         # Adjust serializer context to blank headline fields if no highlights are expected
-        # if enable_keyword and not enable_semantic:
-        if True:
+        if enable_keyword and not enable_semantic:
             self.serializer_context["blank_headline_fields"].append("content_headline")
 
         # Generate embedding if needed
