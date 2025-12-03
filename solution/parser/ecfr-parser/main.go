@@ -146,8 +146,6 @@ func parseTitle(title int, rawParts []*eregs.PartConfig) error {
 	ctx, cancel := context.WithTimeout(context.Background(), TIMELIMIT)
 	defer cancel()
 
-	unusedVar := struct{}{}
-
 	start := time.Now()
 	result := eregs.ParserResult{
 		Start:   start.Format(time.RFC3339),
