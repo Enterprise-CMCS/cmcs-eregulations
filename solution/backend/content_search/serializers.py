@@ -60,14 +60,6 @@ class ContentSearchSerializer(serializers.Serializer):
     resource = AbstractResourceSerializer()
     reg_text = IndexedRegulationTextSerializer()
 
-    def to_representation(self, instance):
-        blank_headline_fields = self.context.get("blank_headline_fields", [])
-        for field in blank_headline_fields:
-            if field in self.fields:
-                self.fields[field].blank_when_no_highlight = True
-        representation = super().to_representation(instance)
-        return representation
-
 
 class SubjectCountSerializer(serializers.Serializer):
     subject = serializers.IntegerField()
