@@ -17,7 +17,7 @@ class IndexedRegulationTextSerializer(serializers.Serializer):
 
 
 class ContentSearchQuerySerializer(serializers.Serializer):
-    q = serializers.CharField(max_length=10000, help_text="The search query string.")
+    q = serializers.CharField(required=False, max_length=10000, help_text="The search query string.")
     page = serializers.IntegerField(required=False, default=1, help_text="The page number for paginated results.")
     page_size = serializers.IntegerField(required=False, default=30, help_text="The number of results per page.")
     show_public = serializers.BooleanField(
