@@ -10,7 +10,7 @@ from django.db.models.functions import Substr
 from django.http import QueryDict
 from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import exceptions, viewsets
+from rest_framework import viewsets
 from rest_framework.parsers import FormParser
 from rest_framework.response import Response
 
