@@ -21,7 +21,7 @@ jobs:
 
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     # Setup Go
     - name: Setup Go
@@ -41,16 +41,16 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-      # Run go fmt on the code
+      # Run go fmt and Staticcheck on the code
     - name: Run gofmt
       uses: Jerome1337/gofmt-action@v1.0.5
       with:
         gofmt-path: './solution/parser/${{ matrix.dir }}'
         gofmt-flags: '-l -d'
 
-    - uses: dominikh/staticcheck-action@v1.3.0
+    - uses: dominikh/staticcheck-action@v1.4.0
       with:
-        version: "2022.1.3"
+        version: "2025.1.1"
         working-directory: "./solution/parser/${{ matrix.dir }}"
 
     # Run lint on the code

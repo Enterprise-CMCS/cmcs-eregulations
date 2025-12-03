@@ -170,14 +170,6 @@ Note that specifying `prod` as an environment will prompt for confirmation. Be a
 3. Enter the password to the local database.
 4. Wait for the script to restore the local database from the file. This may take a few minutes.d
 
-## Add a new model
-
-If adding a new model, update the following files:
-
-- In populate_content.py add it to both the add it to the fixtures list.  First part of it is the JSON file, the other is the model.
-- In the make file, either add it to the list of objects, or add a new line for the model.
-- In the emptyseedtables.py add the model to the handler command.
-
 ## Update CSS for admin site
 
 To change the styling of the admin site, add custom style rules to `solution/ui/regulations/css/admin/custom_admin.css`.

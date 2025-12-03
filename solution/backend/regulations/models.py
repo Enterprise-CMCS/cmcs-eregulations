@@ -141,6 +141,7 @@ class StatuteLinkConverter(models.Model):
     statute_title = models.IntegerField(verbose_name="Statute Title", null=True)
     source_url = models.CharField(max_length=512, blank=True, null=True, verbose_name="Source URL")
 
+    section_sort = NaturalSortField("section", null=True)
     usc_sort = NaturalSortField("usc", null=True)
 
     @property

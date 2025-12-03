@@ -345,14 +345,16 @@ onMounted(() => {
                             items-to-fetch="categories"
                             :items-capture-function="setCategories"
                         >
-                            <CategoriesDropdown
-                                :list="slotProps.data"
-                                :error="slotProps.error"
-                                :loading="
-                                    slotProps.loading || policyDocList.loading
-                                "
-                                parent="search"
-                            />
+                            <label aria-label="Categories Dropdown">
+                                <CategoriesDropdown
+                                    :list="slotProps.data"
+                                    :error="slotProps.error"
+                                    :loading="
+                                        slotProps.loading || policyDocList.loading
+                                    "
+                                    parent="search"
+                                />
+                            </label>
                         </FetchItemsContainer>
                     </div>
                 </fieldset>
@@ -362,8 +364,10 @@ onMounted(() => {
                     v-if="searchQuery && !policyDocList.error && policyDocList.results.length > 0"
                     class="sort__div"
                 >
-                    <span class="sort__label">Sort by</span>
-                    <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
+                    <label class="sort__label--wrapper">
+                        <span class="sort__label">Sort by</span>
+                        <SortDropdown :loading="policyDocList.loading || partsLastUpdated.loading" />
+                    </label>
                 </div>
                 <template v-if="!searchQuery" />
                 <template
