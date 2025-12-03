@@ -41,7 +41,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-go-
 
-      # Run go fmt on the code
+      # Run go fmt and Staticcheck on the code
     - name: Run gofmt
       uses: Jerome1337/gofmt-action@v1.0.5
       with:
