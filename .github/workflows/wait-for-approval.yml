@@ -1,7 +1,7 @@
 name: Wait for Approval
 
 on:
-  worflow_call:
+  workflow_call:
     inputs:
       environment:
         required: true
