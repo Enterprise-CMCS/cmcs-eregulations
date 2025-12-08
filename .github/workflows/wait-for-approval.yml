@@ -14,5 +14,3 @@ jobs:
     steps:
       - name: Wait for approval
         run: echo "Waiting for approval to proceed to the next stage"
-
-
