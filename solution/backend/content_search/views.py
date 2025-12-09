@@ -155,9 +155,9 @@ class ContentSearchMixin:
         use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
 
         # Get the semantic distance algorithm
-        semantic_distance_algorithm = config.semantic_distance_algorithm
-        if semantic_distance_algorithm not in ["<=>", "<#>", "<->", "<+>"]:
-            semantic_distance_algorithm = "<=>"  # Default to cosine distance if invalid
+        semantic_search_distance_algorithm = config.semantic_search_distance_algorithm
+        if semantic_search_distance_algorithm not in ["<=>", "<#>", "<->", "<+>"]:
+            semantic_search_distance_algorithm = "<=>"  # Default to cosine distance if invalid
 
         # Determine the search and headline generation strategy
 
@@ -271,7 +271,7 @@ class ContentSearchMixin:
                                 resource_id,
                                 reg_text_id,
                                 embedding,
-                                embedding {semantic_distance_algorithm} (%(embedding)s::vector) AS raw_rank
+                                embedding {semantic_search_distance_algorithm} (%(embedding)s::vector) AS raw_rank
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
                         ) AS raw_rank_table
