@@ -44,7 +44,7 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="Keyword Search Minimum Rank for Quoted Queries",
     )
 
-    semantic_distance_algorithm = models.CharField(
+    semantic_search_distance_algorithm = models.CharField(
         max_length=16,
         choices=[
             ("<=>", "Cosine Distance"),
@@ -55,7 +55,7 @@ class ContentSearchConfiguration(SingletonModel):
         default="<=>",
         help_text="The distance algorithm to use for semantic search comparisons. "
                   "Note that your choice here will affect the interpretation of the maximum distance threshold.",
-        verbose_name="Semantic Distance Algorithm",
+        verbose_name="Semantic Search Distance Algorithm",
     )
 
     semantic_search_max_distance = models.FloatField(
