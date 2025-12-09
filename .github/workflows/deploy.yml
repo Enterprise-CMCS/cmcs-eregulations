@@ -37,11 +37,7 @@ jobs:
 
   wait-for-approval:
     needs: val-deploy
-    runs-on: ubuntu-latest
-    environment: approval
-    steps:
-      - name: Wait for approval
-        run: echo "Waiting for approval to proceed to production deployment"
+    uses: ./.github/workflows/wait-for-approval.yml
 
   prod-deploy:
     needs: wait-for-approval

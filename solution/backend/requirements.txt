@@ -4,7 +4,7 @@ Werkzeug
 boto3
 beautifulsoup4
 django-debug-toolbar
-django<6
+django==5.2.9
 requests
 djangorestframework
 psycopg2-binary
