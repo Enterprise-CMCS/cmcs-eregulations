@@ -13,6 +13,11 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  wait-for-approval:
+    uses: ./.github/workflows/wait-for-approval.yml
+    with:
+      environment: dev
+
   deploy-experimental:
     uses: ./.github/workflows/deploy-to-env.yml
     with:
@@ -22,9 +27,3 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-
-  wait-for-approval:
-    needs: deploy-experimental
-    uses: ./.github/workflows/wait-for-approval.yml
-    with:
-      environment: dev
