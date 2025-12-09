@@ -154,6 +154,11 @@ class ContentSearchMixin:
         semantic_search_min_words = config.semantic_search_min_words
         use_keyword_search_for_quoted = config.use_keyword_search_for_quoted
 
+        # Get the semantic distance algorithm
+        semantic_distance_algorithm = config.semantic_distance_algorithm
+        if semantic_distance_algorithm not in ["<=>", "<#>", "<->", "<+>"]:
+            semantic_distance_algorithm = "<=>"  # Default to cosine distance if invalid
+
         # Determine the search and headline generation strategy
 
         # Default (unquoted) keyword search config
@@ -242,8 +247,10 @@ class ContentSearchMixin:
             """
 
         # If semantic is enabled, add semantic search CTE
+        # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
+        # The linter is complaining because we insert the distance algorithm dynamically, but we validate this ahead of time
         if enable_semantic:
-            sql += """
+            sql += f"""
                 semantic_search AS (
                     SELECT
                         id,
@@ -264,7 +271,7 @@ class ContentSearchMixin:
                                 resource_id,
                                 reg_text_id,
                                 embedding,
-                                embedding <=> (%(embedding)s::vector) AS raw_rank
+                                embedding {semantic_distance_algorithm} (%(embedding)s::vector) AS raw_rank
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
                         ) AS raw_rank_table
@@ -273,7 +280,7 @@ class ContentSearchMixin:
                     AND (resource_id IS NOT NULL OR reg_text_id IS NOT NULL)
                     AND raw_rank < %(max_distance)s
                 )
-            """
+            """  # noqa S608
 
         # If hybrid search is enabled, add a comma to separate the semantic and full-text CTEs
         if enable_semantic and enable_keyword:

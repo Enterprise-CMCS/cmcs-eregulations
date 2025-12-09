@@ -62,17 +62,33 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="RRF K Value",
     )
 
+    semantic_distance_algorithm = models.CharField(
+        max_length=16,
+        choices=[
+            ("<=>", "Cosine Distance"),
+            ("<->", "L2 Distance"),
+            ("<+>", "L1 Distance"),
+            ("<#>", "Inner Product"),
+        ],
+        default="<=>",
+        help_text="The distance algorithm to use for semantic search comparisons. "
+                  "Note that your choice here will affect the interpretation of the maximum distance threshold.",
+        verbose_name="Semantic Distance Algorithm",
+    )
+
     semantic_search_min_words = models.IntegerField(
         default=2,
         validators=[MinValueValidator(1)],
-        help_text="Minimum number of words required in the search query to allow semantic search if keyword search is enabled.",
+        help_text="Minimum number of words in a query where semantic search will be allowed. "
+                  "Queries with fewer words will use keyword search only, if enabled.",
         verbose_name="Semantic Search Minimum Words",
     )
 
     keyword_search_max_words = models.IntegerField(
         default=15,
         validators=[MinValueValidator(1)],
-        help_text="Maximum number of words allowed in the search query to enable keyword search if semantic search is enabled.",
+        help_text="Maximum number of words in a query where keyword search will be allowed. "
+                  "Queries exceeding this limit will use semantic search only, if enabled.",
         verbose_name="Keyword Search Maximum Words",
     )
 

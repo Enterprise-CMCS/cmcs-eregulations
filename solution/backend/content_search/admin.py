@@ -18,6 +18,7 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
                 "keyword_search_min_rank_quoted",
                 "semantic_search_max_distance",
                 "rrf_k_value",
+                "semantic_distance_algorithm",
                 "keyword_search_max_words",
                 "semantic_search_min_words",
                 "use_keyword_search_for_quoted",
