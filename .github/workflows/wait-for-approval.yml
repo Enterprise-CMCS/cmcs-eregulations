@@ -2,10 +2,6 @@ name: Wait for Approval
 
 on:
   workflow_call:
-    inputs:
-      environment:
-        required: true
-        type: string
 
 permissions:
   id-token: write
@@ -15,7 +11,7 @@ permissions:
 jobs:
   wait-for-approval:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: approval
     steps:
       - name: Wait for approval
         run: echo "Waiting for approval to proceed to the next stage"
