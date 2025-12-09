@@ -44,6 +44,20 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="Keyword Search Minimum Rank for Quoted Queries",
     )
 
+    semantic_distance_algorithm = models.CharField(
+        max_length=16,
+        choices=[
+            ("<=>", "Cosine Distance"),
+            ("<->", "L2 Distance"),
+            ("<+>", "L1 Distance"),
+            ("<#>", "Inner Product"),
+        ],
+        default="<=>",
+        help_text="The distance algorithm to use for semantic search comparisons. "
+                  "Note that your choice here will affect the interpretation of the maximum distance threshold.",
+        verbose_name="Semantic Distance Algorithm",
+    )
+
     semantic_search_max_distance = models.FloatField(
         default=0.5,
         validators=[
@@ -60,20 +74,6 @@ class ContentSearchConfiguration(SingletonModel):
         help_text="The 'k' value used in the Reciprocal Rank Fusion (RRF) "
                   "algorithm to combine keyword and semantic search results.",
         verbose_name="RRF K Value",
-    )
-
-    semantic_distance_algorithm = models.CharField(
-        max_length=16,
-        choices=[
-            ("<=>", "Cosine Distance"),
-            ("<->", "L2 Distance"),
-            ("<+>", "L1 Distance"),
-            ("<#>", "Inner Product"),
-        ],
-        default="<=>",
-        help_text="The distance algorithm to use for semantic search comparisons. "
-                  "Note that your choice here will affect the interpretation of the maximum distance threshold.",
-        verbose_name="Semantic Distance Algorithm",
     )
 
     semantic_search_min_words = models.IntegerField(
