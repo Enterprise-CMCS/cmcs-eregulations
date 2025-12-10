@@ -9,6 +9,13 @@ permissions:
   actions: read
 
 jobs:
+  notify-slack:
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      message: "⏳ A deployment to production is awaiting approval"
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+
   wait-for-approval:
     runs-on: ubuntu-latest
     environment: approval
