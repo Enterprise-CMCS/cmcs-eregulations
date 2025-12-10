@@ -49,3 +49,11 @@ jobs:
       invalidate_cache: true
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+
+  job-failed-notification:
+    if: failure()
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      message: "❌ Deployment to production has failed. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}

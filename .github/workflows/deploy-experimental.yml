@@ -13,6 +13,12 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  failing-job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: failing step
+      run: exit 1
+
   deploy-experimental:
     uses: ./.github/workflows/deploy-to-env.yml
     with:
@@ -22,3 +28,11 @@ jobs:
       aws_default_region: ${{ vars.AWS_DEFAULT_REGION }}
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+
+  job-failed-notification:
+    if: failure()
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      message: "❌ This is an induced and contrived failure for testing purposes. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
