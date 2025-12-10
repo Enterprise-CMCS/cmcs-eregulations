@@ -60,10 +60,7 @@ class ContentSearchConfiguration(SingletonModel):
 
     semantic_search_max_distance = models.FloatField(
         default=0.5,
-        validators=[
-            MinValueValidator(0.0),
-            MaxValueValidator(1.0),
-        ],
+        validators=[MinValueValidator(0.0)],
         help_text="Maximum distance threshold for semantic search results to be included.",
         verbose_name="Semantic Search Maximum Distance",
     )
