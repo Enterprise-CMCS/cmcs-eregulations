@@ -14,17 +14,16 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   notify-slack:
-    uses: slackapi/slack-github-action@v2.1.1
-    with:
-      webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-      webhook-type: incoming-webhook
-      payload: |
-        text: "*GitHub Action build result*: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-        blocks:
-          - type: "section"
-            text:
-              type: "mrkdwn"
-              text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+    name: Leave a kind message after updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet the reader
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "Greetings!"
 
   deploy-experimental:
     uses: ./.github/workflows/deploy-to-env.yml
