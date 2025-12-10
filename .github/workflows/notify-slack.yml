@@ -1,0 +1,32 @@
+name: Notify Slack
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        description: "The message to send to Slack"
+        required: true
+        type: string
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL:
+        description: "The Slack webhook URL for PR observer notifications"
+        required: true
+
+  permissions:
+    id-token: write
+    contents: read
+    actions: read
+    pull-requests: write
+
+jobs:
+  notify-slack:
+    name: Notify Slack
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Slack
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "@channel ${{ inputs.message }}"
