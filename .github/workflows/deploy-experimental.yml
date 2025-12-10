@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify on Cancellation
-        if: ${{ cancelled() }}
+        if: cancelled()
         uses: ./.github/workflows/notify-slack.yml
         with:
           message: "❌ This is an induced and contrived cancellation for testing purposes. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
