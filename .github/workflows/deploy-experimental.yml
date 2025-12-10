@@ -13,13 +13,6 @@ permissions:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  notify-slack:
-    uses: ./.github/workflows/notify-slack.yml
-    with:
-      message: "🚀 Deploying experimental environment for PR #${{ github.event.pull_request.number }}"
-    secrets:
-      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-
   deploy-experimental:
     uses: ./.github/workflows/deploy-to-env.yml
     with:
