@@ -24,7 +24,7 @@ jobs:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
   job-failed-notification:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Notify on Cancellation
         if: ${{ cancelled() }}
