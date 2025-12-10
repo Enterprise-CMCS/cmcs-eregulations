@@ -30,7 +30,7 @@ jobs:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
   job-failed-notification:
-    if: failure()
+    if: failure() || cancelled()
     uses: ./.github/workflows/notify-slack.yml
     with:
       message: "❌ This is an induced and contrived failure for testing purposes. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
