@@ -12,7 +12,7 @@ jobs:
   notify-slack:
     uses: ./.github/workflows/notify-slack.yml
     with:
-      message: "⏳ A deployment to production is awaiting approval"
+      message: "⏳ A deployment to production is awaiting approval."
     secrets:
       PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
 
