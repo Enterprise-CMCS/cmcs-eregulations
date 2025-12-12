@@ -21,4 +21,3 @@ jobs:
         uses: ./.github/workflows/notify-slack.yml
         with:
           message: "Testing inside job step"
-        secrets: inherit
