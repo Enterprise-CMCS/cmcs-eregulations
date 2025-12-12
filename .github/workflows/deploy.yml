@@ -44,7 +44,7 @@ jobs:
       PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
 
   wait-for-approval:
-    needs: val-deploy
+    needs: notify-slack
     uses: ./.github/workflows/wait-for-approval.yml
     secrets:
       PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
