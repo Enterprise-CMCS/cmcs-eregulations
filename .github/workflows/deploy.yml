@@ -35,11 +35,17 @@ jobs:
     secrets:
       AWS_OIDC_ROLE_TO_ASSUME: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
 
-  wait-for-approval:
+  notify-slack:
     needs: val-deploy
-    uses: ./.github/workflows/wait-for-approval.yml
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      message: "<!channel> ⏳ A deployment to production is awaiting approval. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Click here to approve or reject this deployment.>"
     secrets:
       PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+
+  wait-for-approval:
+    needs: notify-slack
+    uses: ./.github/workflows/wait-for-approval.yml
 
   prod-deploy:
     needs: wait-for-approval
