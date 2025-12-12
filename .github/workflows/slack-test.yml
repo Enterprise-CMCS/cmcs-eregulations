@@ -9,9 +9,6 @@ jobs:
   slack-test:
     runs-on: ubuntu-22.04
     steps:
-      - name: Failing step
-        run: exit 1
-
       - name: Send message to Slack
         if: success()
         uses: slackapi/slack-github-action@v2.1.1
@@ -19,4 +16,4 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Slack integration test with actual message text. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
+            text: "This is a success, so you should see the message. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
