@@ -38,6 +38,8 @@ jobs:
   wait-for-approval:
     needs: val-deploy
     uses: ./.github/workflows/wait-for-approval.yml
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
 
   prod-deploy:
     needs: wait-for-approval
