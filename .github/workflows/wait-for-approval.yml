@@ -19,7 +19,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "⏳ A deployment to production is awaiting approval."
+            text: "⏳ A deployment to production is awaiting approval. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Click here to approve or reject this deployment.>"
 
       - name: Wait for approval
         run: echo "Waiting for approval to proceed to the next stage"
