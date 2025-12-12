@@ -25,7 +25,7 @@
     "lodash": "4.17.21",
     "sass": "1.93.2",
     "vue": "3.5.25",
-    "vuetify": "3.11.2"
+    "vuetify": "3.11.3"
   },
   "devDependencies": {
     "@testing-library/vue": "8.1.0",
