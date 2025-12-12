@@ -21,5 +21,4 @@ jobs:
         uses: ./.github/workflows/notify-slack.yml
         with:
           message: "Testing inside job step"
-        secrets:
-          PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+        secrets: inherit
