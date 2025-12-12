@@ -13,7 +13,7 @@ jobs:
         run: exit 1
 
       - name: Send message to Slack
-        if: failure()
+        if: success()
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
