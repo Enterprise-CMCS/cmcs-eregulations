@@ -2,6 +2,10 @@ name: Wait for Approval
 
 on:
   workflow_call:
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL:
+        description: "The Slack webhook URL for PR observer notifications"
+        required: true
 
 permissions:
   id-token: write
