@@ -2,10 +2,6 @@ name: Wait for Approval
 
 on:
   workflow_call:
-    secrets:
-      PR_OBSERVER_SLACK_WEBHOOK_URL:
-        description: "The Slack webhook URL for PR observer notifications"
-        required: true
 
 permissions:
   id-token: write
@@ -17,13 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     environment: approval
     steps:
-      - name: Send message to Slack
-        uses: slackapi/slack-github-action@v2.1.1
-        with:
-          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "<!channel> ⏳ A deployment to production is awaiting approval. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|Click here to approve or reject this deployment.>"
-
       - name: Wait for approval
         run: echo "Waiting for approval to proceed to the next stage"
