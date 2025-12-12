@@ -17,7 +17,13 @@ jobs:
       - name: Slack Test Step
         run: echo "This is a test step for Slack integration."
 
-      - name: Reusable workflow within a job step testing
-        uses: ./.github/workflows/notify-slack.yml
-        with:
-          message: "Testing inside job step"
+      - name: Notify Slack
+        runs-on: ubuntu-latest
+        steps:
+          - name: Send message to Slack
+            uses: slackapi/slack-github-action@v2.1.1
+            with:
+              webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+              webhook-type: incoming-webhook
+              payload: |
+                text: "${{ inputs.message }}"
