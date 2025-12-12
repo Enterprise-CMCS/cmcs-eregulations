@@ -28,4 +28,4 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "<!channel> ${{ inputs.message }}"
+            text: "${{ inputs.message }}"

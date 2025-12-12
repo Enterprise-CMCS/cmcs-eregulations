@@ -1,13 +1,18 @@
 name: Slack Testing
 
 on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
   push:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
+  notify-slack:
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      message: "Testing"
+    secrets:
+      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+
   slack-test:
     runs-on: ubuntu-22.04
     steps:
