@@ -6,13 +6,6 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  notify-slack:
-    uses: ./.github/workflows/notify-slack.yml
-    with:
-      message: "Testing"
-    secrets:
-      PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-
   slack-test:
     runs-on: ubuntu-22.04
     steps:
@@ -23,3 +16,10 @@ jobs:
 
       - name: Slack Test Step
         run: echo "This is a test step for Slack integration."
+
+      - name: Reusable workflow within a job step testing
+        uses: ./.github/workflows/notify-slack.yml
+        with:
+          message: "Testing inside job step"
+        secrets:
+          PR_OBSERVER_SLACK_WEBHOOK_URL: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
