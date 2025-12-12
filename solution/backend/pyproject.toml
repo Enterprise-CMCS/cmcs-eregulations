@@ -1,5 +1,12 @@
-[tool.pytest.ini_options]
+[project]
+name = "eregulations-backend"
+version = "3.0.0"
+description = "Django site, backend, and API for eRegs"
+readme = "../../README.md"
+requires-python = "==3.12.12"
+dependencies = []
 
+[tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "cmcs_regulations.settings.test_settings"
 
 [tool.coverage.run]
@@ -7,7 +14,6 @@ omit = [
     "*/migrations/*",
     "*/tests/*"
 ]
-
 
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
