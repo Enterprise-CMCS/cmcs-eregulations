@@ -9,15 +9,11 @@ jobs:
   slack-test:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          submodules: true
-
-      - name: Slack Test Step
-        run: echo "This is a test step for Slack integration."
+      - name: Failing step
+        run: exit 1
 
       - name: Send message to Slack
+        if: failure()
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
