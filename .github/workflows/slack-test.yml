@@ -23,4 +23,4 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "Slack integration test with actual message text"
+            text: "Slack integration test with actual message text. Click <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|here> for details."
