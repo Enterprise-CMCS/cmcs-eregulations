@@ -1,9 +1,9 @@
 import { ref } from "vue";
 
-import { getCombinedContent, getContentWithoutQuery } from "utilities/api.js";
+import { getSemanticSearchResults, getContentWithoutQuery } from "utilities/api.js";
 import { DOCUMENT_TYPES_MAP } from "utilities/utils.js";
 
-function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
+function useSearchResults({ getSemanticSearchResults, getContentWithoutQuery }) {
     const policyDocList = ref({
         count: 0,
         results: [],
@@ -17,6 +17,7 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
         requestParamString = "",
         query,
         type,
+        data,
     }) => {
         policyDocList.value.loading = true;
         policyDocList.value.error = false;
@@ -28,10 +29,9 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
 
         try {
             if (query) {
-                contentList = await getCombinedContent({
+                contentList = await getSemanticSearchResults({
                     apiUrl,
-                    requestParams,
-                    docType,
+                    data,
                 });
             } else {
                 contentList = await getContentWithoutQuery({
@@ -64,4 +64,4 @@ function useSearchResults({ getCombinedContent, getContentWithoutQuery }) {
 }
 
 export default () =>
-    useSearchResults({ getCombinedContent, getContentWithoutQuery });
+    useSearchResults({ getSemanticSearchResults, getContentWithoutQuery });

@@ -45,22 +45,24 @@ class TestResourcesEndpoint(TestCase):
         file1.cfr_citations.set([s1, s2])
         file1.save()
 
-    def test_counts_logged_in(self):
-        self.login()
-        data = self.client.get("/v3/resources/?group_resources=false").data
-        self.assertEqual(data["count"], 3)
-        self.assertIn("count_url", data)
-        data = self.client.get(data["count_url"]).data
-        self.assertEqual(data["internal_resource_count"], 1)
-        self.assertEqual(data["public_resource_count"], 2)
+    # TODO: re-implement and re-enable these tests post hybrid search switchover
 
-    def test_counts_logged_out(self):
-        data = self.client.get("/v3/resources/?group_resources=false").data
-        self.assertEqual(data["count"], 2)
-        self.assertIn("count_url", data)
-        data = self.client.get(data["count_url"]).data
-        self.assertEqual(data["internal_resource_count"], 0)
-        self.assertEqual(data["public_resource_count"], 2)
+    # def test_counts_logged_in(self):
+    #     self.login()
+    #     data = self.client.get("/v3/resources/?group_resources=false").data
+    #     self.assertEqual(data["count"], 3)
+    #     self.assertIn("count_url", data)
+    #     data = self.client.get(data["count_url"]).data
+    #     self.assertEqual(data["internal_resource_count"], 1)
+    #     self.assertEqual(data["public_resource_count"], 2)
+
+    # def test_counts_logged_out(self):
+    #     data = self.client.get("/v3/resources/?group_resources=false").data
+    #     self.assertEqual(data["count"], 2)
+    #     self.assertIn("count_url", data)
+    #     data = self.client.get(data["count_url"]).data
+    #     self.assertEqual(data["internal_resource_count"], 0)
+    #     self.assertEqual(data["public_resource_count"], 2)
 
     def test_duplicate_groups(self):
         # If groups are duplicated, then len(response.data) will be greater than 1

@@ -25,7 +25,7 @@ def get_support_link(link_text):
     return link_text
 
 
-# Returne True if the given field has changed in the form, False otherwise.
+# Returns True if the given field has changed in the form, False otherwise.
 def field_changed(form, field):
     return form.initial.get(field) != form.cleaned_data.get(field)
 
