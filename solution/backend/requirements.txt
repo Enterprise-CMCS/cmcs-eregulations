@@ -1,30 +1,30 @@
 cryptography
 pyopenssl
-Werkzeug
-boto3
-django-debug-toolbar
-django==5.2.9
-requests
-djangorestframework
+# Werkzeug
+# boto3
+# django-debug-toolbar
+# django==5.2.9
+# requests
+# djangorestframework
 psycopg2-binary
-django-solo
+# django-solo
 python-dateutil
 django-cors-headers
-drf-spectacular
-django-model-utils
-django-jsonform
+# drf-spectacular
+# django-model-utils
+# django-jsonform
 django-csp
-httpx
+# httpx
 ruff
-pytest
+# pytest
 pytest-django
 pre-commit
-defusedxml
-mozilla-django-oidc
-boto3
-django-storages
+# defusedxml
+# mozilla-django-oidc
+# boto3
+# django-storages
 pytest-cov
-djangorestframework_simplejwt
-olefile
-natsort
-pgvector
+# djangorestframework_simplejwt
+# olefile
+# natsort
+# pgvector
