@@ -26,9 +26,8 @@ on:
         required: true
         description: 'AWS OIDC role to assume for deployment'
       PR_OBSERVER_SLACK_WEBHOOK_URL:
-        description: "The Slack webhook URL for PR observer notifications"
         required: false
-        default: ""
+        description: "The Slack webhook URL for PR observer notifications"
 
 permissions:
   id-token: write
