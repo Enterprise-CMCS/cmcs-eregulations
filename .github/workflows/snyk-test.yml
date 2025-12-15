@@ -22,4 +22,4 @@ jobs:
           npm install -g snyk
           snyk test --all-projects --json > snyk_output.txt || true
         env:
-:         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
