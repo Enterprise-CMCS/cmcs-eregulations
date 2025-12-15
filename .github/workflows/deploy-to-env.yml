@@ -25,6 +25,10 @@ on:
       AWS_OIDC_ROLE_TO_ASSUME:
         required: true
         description: 'AWS OIDC role to assume for deployment'
+      PR_OBSERVER_SLACK_WEBHOOK_URL:
+        description: "The Slack webhook URL for PR observer notifications"
+        required: false
+        default: ""
 
 permissions:
   id-token: write
@@ -117,6 +121,17 @@ jobs:
           DISTRIBUTION_ID=$(aws cloudformation list-stack-resources --stack-name cms-eregs-${STAGE_NAME}-static-assets | jq -r '.StackResourceSummaries[] | select(.ResourceType == "AWS::CloudFront::Distribution") | .PhysicalResourceId')
           aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
 
+      - name: Notify Slack if failure occurs during cache invalidation
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during CloudFront cache invalidation. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
+
+
   deploy-alternate-sites:
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
@@ -152,6 +167,15 @@ jobs:
           --app "npx ts-node bin/zip-lambdas.ts"
           popd
 
+      - name: Notify Slack if failure occurs during deploy-alternate-sites
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during alternate sites deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
   deploy-text-extractor:
     runs-on: ubuntu-22.04
     environment: ${{ inputs.environment }}
@@ -184,6 +208,15 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/text-extractor.ts"
           popd
+
+      - name: Notify Slack if failure occurs during text extractor deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during text extractor deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-fr-parser:
     needs: [deploy-site]
@@ -219,6 +252,15 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+      - name: Notify Slack if failure occurs during fr parser deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during FR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
   deploy-ecfr-parser:
     needs: [deploy-site]
     runs-on: ubuntu-22.04
@@ -253,6 +295,15 @@ jobs:
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
 
+      - name: Notify Slack if failure occurs during ecfr parser deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during eCFR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
   deploy-parser-launcher:
     needs: [deploy-ecfr-parser, deploy-fr-parser]
     runs-on: ubuntu-22.04
@@ -286,6 +337,15 @@ jobs:
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts"
           popd
+
+      - name: Notify Slack if failure occurs during deploy-parser-launcher
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during parser launcher deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-site:
     needs: [deploy-static-assets, deploy-text-extractor]
@@ -354,6 +414,15 @@ jobs:
           cat $GITHUB_OUTPUT
           popd
 
+      - name: Notify Slack if failure occurs during site deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during site deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
   add-pr-comment:
     if: ${{ inputs.pr_number != '' }}
     permissions:
@@ -413,3 +482,12 @@ jobs:
           config: baseUrl=${{ needs.deploy-site.outputs.api_url }}
         env:
           CYPRESS_DEPLOYING: true
+
+      - name: Notify Slack if failure occurs cypress tests
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: ":warning: Deployment to *${{ inputs.environment }}* failed during Cypress end-to-end tests. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
