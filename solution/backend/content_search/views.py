@@ -333,7 +333,7 @@ class ContentSearchMixin:
                         id,
                         rank
                     FROM semantic_search
-                    ORDER BY resource_id ASC, reg_text_id ASC
+                    ORDER BY resource_id ASC, reg_text_id ASC, rank ASC
                 ) AS distinct_table
                 ORDER BY score ASC
             """
@@ -349,7 +349,7 @@ class ContentSearchMixin:
                         id,
                         rank
                     FROM keyword_search
-                    ORDER BY resource_id ASC, reg_text_id ASC
+                    ORDER BY resource_id ASC, reg_text_id ASC, rank ASC
                 ) AS distinct_table
                 ORDER BY score ASC
             """
@@ -369,7 +369,7 @@ class ContentSearchMixin:
                             COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
                     FROM semantic_search
                     FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
-                    ORDER BY resource_id ASC, reg_text_id ASC
+                    ORDER BY resource_id ASC, reg_text_id ASC, score DESC
                 ) AS combined_table
                 ORDER BY score DESC
             """
