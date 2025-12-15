@@ -127,7 +127,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during CloudFront cache invalidation. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during CloudFront cache invalidation. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
 
 
@@ -173,7 +173,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during alternate sites deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during alternate sites deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-text-extractor:
     runs-on: ubuntu-22.04
@@ -215,7 +215,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during text extractor deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during text extractor deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-fr-parser:
     needs: [deploy-site]
@@ -258,7 +258,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during FR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during FR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-ecfr-parser:
     needs: [deploy-site]
@@ -301,7 +301,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during eCFR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during eCFR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-parser-launcher:
     needs: [deploy-ecfr-parser, deploy-fr-parser]
@@ -344,7 +344,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during parser launcher deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during parser launcher deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-site:
     needs: [deploy-static-assets, deploy-text-extractor]
@@ -420,7 +420,7 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during site deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during site deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   add-pr-comment:
     if: ${{ inputs.pr_number != '' }}
@@ -489,4 +489,4 @@ jobs:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: ":warning: Deployment to *${{ inputs.environment }}* failed during Cypress end-to-end tests. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during Cypress end-to-end tests. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
