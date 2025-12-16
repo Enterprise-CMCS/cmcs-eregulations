@@ -82,7 +82,7 @@ onMounted(() => {
         <div id="obbbaApp">
             <nav id="placeholderNav" class="toc__nav" />
             <LeftNavCollapse
-                contents-description="OBBBA Table of Contents"
+                contents-description="P.L. 119-21 Table of Contents"
             >
                 <template #nav-contents>
                     <div
