@@ -30,7 +30,7 @@ defineEmits(["link-clicked"]);
 const links = [
     {
         name: "obbba",
-        label: "H.R.1",
+        label: "Pub. L. 119-21",
         active: window.location.pathname.includes("obbba"),
         href: props.obbbaUrl,
     },
