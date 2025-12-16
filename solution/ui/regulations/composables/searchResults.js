@@ -22,7 +22,6 @@ function useSearchResults({ getSemanticSearchResults, getContentWithoutQuery }) 
         policyDocList.value.loading = true;
         policyDocList.value.error = false;
 
-        const requestParams = `${requestParamString}&page_size=${pageSize}&group_resources=false`;
         const docType = type ? DOCUMENT_TYPES_MAP[type] : undefined;
 
         let contentList;
@@ -31,12 +30,12 @@ function useSearchResults({ getSemanticSearchResults, getContentWithoutQuery }) 
             if (query) {
                 contentList = await getSemanticSearchResults({
                     apiUrl,
-                    data,
+                    data: `${data}&page_size=${pageSize}`,
                 });
             } else {
                 contentList = await getContentWithoutQuery({
                     apiUrl,
-                    requestParams,
+                    requestParams: `${requestParamString}&page_size=${pageSize}&group_resources=false`,
                     docType,
                 });
             }

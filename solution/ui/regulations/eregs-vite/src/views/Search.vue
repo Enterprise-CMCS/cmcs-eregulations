@@ -50,12 +50,13 @@ const subjectsUrl = inject("subjectsUrl");
 const obbbaUrl = inject("obbbaUrl");
 const surveyUrl = inject("surveyUrl");
 const username = inject("username");
+const defaultPageSize = inject("defaultPageSize");
 
 // Router and Route
 const $route = useRoute();
 const $router = useRouter();
 
-const pageSize = 50;
+const pageSize = defaultPageSize || 50;
 
 // show/hide categories dropdown
 const showDropdownsRef = ref();
