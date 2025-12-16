@@ -1,4 +1,4 @@
-describe("OBBBA", { scrollBehavior: "center" }, () => {
+describe("Public Law 119-21 (OBBBBA)", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
@@ -9,8 +9,8 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("loads the page", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
-        cy.get("h1").contains("H.R.1 (Public Law No. 119-21, July 4, 2025)");
+        cy.visit("/pl119-21");
+        cy.get("h1").contains("Public Law No. 119-21, July 4, 2025");
         cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();
@@ -23,7 +23,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.wait("@titles");
         cy.jumpToRegulationPartSection({
             title: "42",
@@ -34,7 +34,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("goes to the State Medicaid Manual page using header link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.clickHeaderLink({
             page: "manual",
             label: "State Medicaid Manual",
@@ -45,13 +45,13 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.goHome();
     });
 
     it("has a responsive toc", () => {
         cy.tocResponsiveChecks({
-            page: "/obbba"
+            page: "/pl119-21"
         });
     });
 });
