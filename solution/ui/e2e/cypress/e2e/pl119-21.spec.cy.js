@@ -7,6 +7,12 @@ describe("Public Law 119-21 (OBBBBA)", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/titles").as("titles");
     });
 
+    it("should redirect /obbba to /pl119-21", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/obbba");
+        cy.url().should("include", "/pl119-21");
+    });
+
     it("loads the page", () => {
         cy.viewport("macbook-15");
         cy.visit("/pl119-21");
@@ -18,6 +24,14 @@ describe("Public Law 119-21 (OBBBBA)", { scrollBehavior: "center" }, () => {
         cy.get(".obbba__context")
             .then(($el) => {
                 expect($el).to.have.css("font-style").and.eq("italic");
+                cy.wrap($el)
+                    .find("a")
+                    .first()
+                    .then(($link) => {
+                        expect($link).to.include.text(
+                            "Working Families Tax Cut legislation (Public Law No. 119-21, July 4, 2025)"
+                        )
+                    });
             });
     });
 
@@ -50,6 +64,12 @@ describe("Public Law 119-21 (OBBBBA)", { scrollBehavior: "center" }, () => {
     });
 
     it("has a responsive toc", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/pl119-21");
+        cy.get("#leftNav .toc-title__subheading")
+            .first()
+            .should("contain.text", "Public Law No. 119-21, July 4, 2025");
+
         cy.tocResponsiveChecks({
             page: "/pl119-21"
         });

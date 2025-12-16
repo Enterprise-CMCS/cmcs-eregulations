@@ -28,6 +28,15 @@ describe("Updated HTML Title Tags", { scrollBehavior: "center" }, () => {
         cy.title().should("eq", "Get Account Access | Medicaid & CHIP eRegulations");
     });
 
+    it("Public Law No. 119-21 (OBBBBA) page title tags", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/pl119-21/");
+        cy.title().should(
+            "eq",
+            "Pub. L. 119-21 | Medicaid & CHIP eRegulations",
+        );
+    });
+
     it("Statutes page title tags", () => {
         cy.viewport("macbook-15");
         cy.visit("/statutes/");
