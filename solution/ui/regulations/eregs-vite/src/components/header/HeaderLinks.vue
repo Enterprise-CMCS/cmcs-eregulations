@@ -31,7 +31,7 @@ const links = [
     {
         name: "obbba",
         label: "Pub. L. 119-21",
-        active: window.location.pathname.includes("obbba"),
+        active: window.location.pathname.includes("pl119-21"),
         href: props.obbbaUrl,
     },
     {
