@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='headline_text_max_length',
-            field=models.IntegerField(default=150000, help_text='Maximum length of text to consider when generating search result headlines.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Text Maximum Length'),
+            field=models.IntegerField(default=0, help_text='Maximum length of text to consider when generating search result headlines.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Headline Text Maximum Length'),
         ),
         migrations.AddField(
             model_name='contentsearchconfiguration',

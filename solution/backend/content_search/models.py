@@ -18,6 +18,13 @@ from resources.models import (
 
 
 class ContentSearchConfiguration(SingletonModel):
+    default_page_size = models.IntegerField(
+        default=50,
+        validators=[MinValueValidator(1)],
+        help_text="The default number of search results to return per page if the client does not specify a page size.",
+        verbose_name="Default Page Size",
+    )
+
     enable_keyword_search = models.BooleanField(
         default=True,
         help_text="Enable traditional keyword-based search for precise matching of search terms.",
@@ -96,10 +103,17 @@ class ContentSearchConfiguration(SingletonModel):
     )
 
     headline_text_max_length = models.IntegerField(
-        default=150000,
-        validators=[MinValueValidator(1)],
-        help_text="Maximum length of text to consider when generating search result headlines.",
+        default=0,
+        validators=[MinValueValidator(0)],
+        help_text="Maximum length of document text to consider when generating search result headlines. Set to 0 for no limit.",
         verbose_name="Headline Text Maximum Length",
+    )
+
+    query_text_max_length = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0)],
+        help_text="Maximum length of query text to consider when generating search result headlines. Set to 0 for no limit.",
+        verbose_name="Query Text Maximum Length",
     )
 
     headline_min_words = models.IntegerField(

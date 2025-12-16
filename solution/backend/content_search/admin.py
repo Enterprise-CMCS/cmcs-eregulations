@@ -12,6 +12,7 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
     fieldsets = [
         ("Search Settings", {
             "fields": [
+                "default_page_size",
                 "enable_keyword_search",
                 "enable_semantic_search",
                 "keyword_search_min_rank",
@@ -26,6 +27,7 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
         }),
         ("Headline Settings", {
             "fields": [
+                "query_text_max_length",
                 "headline_text_max_length",
                 "headline_min_words",
                 "headline_max_words",
