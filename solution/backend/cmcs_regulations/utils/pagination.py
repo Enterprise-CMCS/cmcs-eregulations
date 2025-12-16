@@ -1,6 +1,9 @@
+import contextlib
+
 from drf_spectacular.utils import OpenApiParameter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.pagination import _positive_int
 
 
 # Generic pagination for viewsets.
@@ -31,6 +34,24 @@ class ViewSetPagination(PageNumberPagination):
     page_size_query_param = "page_size"
     max_page_size = 1000
     page_size = 100
+
+    # Overridden from DRF to get page size from query or body
+    def get_page_size(self, request):
+        if self.page_size_query_param:
+            with contextlib.suppress(ValueError):
+                return _positive_int(
+                    request.GET.get(self.page_size_query_param) or request.POST.get(self.page_size_query_param),
+                    strict=True,
+                    cutoff=self.max_page_size
+                )
+        return self.page_size
+
+    # Overridden from DRF to get page number from query or body
+    def get_page_number(self, request, paginator):
+        page_number = request.GET.get(self.page_query_param) or request.POST.get(self.page_query_param) or 1
+        if page_number in self.last_page_strings:
+            page_number = paginator.num_pages
+        return page_number
 
     def get_additional_attributes(self):
         return {}
