@@ -109,11 +109,12 @@ class ContentSearchConfiguration(SingletonModel):
         verbose_name="Headline Text Maximum Length",
     )
 
-    query_text_max_length = models.IntegerField(
+    query_text_max_words = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
-        help_text="Maximum length of query text to consider when generating search result headlines. Set to 0 for no limit.",
-        verbose_name="Query Text Maximum Length",
+        help_text="Maximum number of words of query text to consider when generating search result headlines. "
+                  "Set to 0 for no limit.",
+        verbose_name="Query Text Maximum Words",
     )
 
     headline_min_words = models.IntegerField(

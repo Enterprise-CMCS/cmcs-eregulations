@@ -27,7 +27,7 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
         }),
         ("Headline Settings", {
             "fields": [
-                "query_text_max_length",
+                "query_text_max_words",
                 "headline_text_max_length",
                 "headline_min_words",
                 "headline_max_words",

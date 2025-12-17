@@ -408,6 +408,7 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
         # Retrieve content search configuration and query
         config = ContentSearchConfiguration.get_solo()
         headline_text_max = config.headline_text_max_length
+        query_text_max = config.query_text_max_words
         headline_min_words = config.headline_min_words
         headline_max_words = config.headline_max_words
         headline_max_fragments = config.headline_max_fragments
@@ -419,39 +420,43 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
         # Paginate, then generate headlines on the current page only (for performance)
         current_page = [i.pk for i in self.paginate_queryset(search_results)]
         search_type = "phrase" if self.is_quoted(query) else "plain"
+        query = " ".join(query.split()[:query_text_max]) if query_text_max else query
         query_object = SearchQuery(query, search_type=search_type, config="english")
-        queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).annotate(
-            content_short=Substr("content", 1, headline_text_max),
-            summary_headline=SearchHeadline(
-                "summary",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel='</span>',
-                config='english',
-                highlight_all=True,
-                fragment_delimiter='...',
-            ),
-            name_headline=SearchHeadline(
-                "name",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel="</span>",
-                config='english',
-                highlight_all=True,
-                fragment_delimiter='...',
-            ),
-            content_headline=SearchHeadline(
-                "content_short",
-                query_object,
-                start_sel="<span class='search-highlight'>",
-                stop_sel="</span>",
-                config='english',
-                min_words=headline_min_words,
-                max_words=headline_max_words,
-                fragment_delimiter='...',
-                max_fragments=headline_max_fragments,
-            ),
-        )
+
+        queryset = ContentIndex.objects.defer_text().filter(pk__in=current_page).annotate(**{
+            **({"content_short": Substr("content", 1, headline_text_max)} if headline_text_max else {}),
+            **{
+                "summary_headline": SearchHeadline(
+                    "summary",
+                    query_object,
+                    start_sel="<span class='search-highlight'>",
+                    stop_sel='</span>',
+                    config='english',
+                    highlight_all=True,
+                    fragment_delimiter='...',
+                ),
+                "name_headline": SearchHeadline(
+                    "name",
+                    query_object,
+                    start_sel="<span class='search-highlight'>",
+                    stop_sel="</span>",
+                    config='english',
+                    highlight_all=True,
+                    fragment_delimiter='...',
+                ),
+                "content_headline": SearchHeadline(
+                    "content_short" if headline_text_max else "content",
+                    query_object,
+                    start_sel="<span class='search-highlight'>",
+                    stop_sel="</span>",
+                    config='english',
+                    min_words=headline_min_words,
+                    max_words=headline_max_words,
+                    fragment_delimiter='...',
+                    max_fragments=headline_max_fragments,
+                ),
+            },
+        })
 
         # Prefetch all related data
         queryset = queryset.prefetch_related(

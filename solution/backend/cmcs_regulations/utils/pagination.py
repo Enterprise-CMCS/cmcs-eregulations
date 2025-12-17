@@ -40,7 +40,13 @@ class ViewSetPagination(PageNumberPagination):
         if self.page_size_query_param:
             with contextlib.suppress(ValueError):
                 return _positive_int(
-                    request.GET.get(self.page_size_query_param) or request.POST.get(self.page_size_query_param),
+                    request.GET.get(
+                        self.page_size_query_param,
+                        request.POST.get(
+                            self.page_size_query_param,
+                            self.page_size,
+                        )
+                    ),
                     strict=True,
                     cutoff=self.max_page_size
                 )
