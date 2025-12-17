@@ -28,7 +28,7 @@ const routes = [
         component: Manual,
     },
     {
-        path: "/obbba",
+        path: "/pl119-21",
         name: "obbba",
         component: OBBBA,
     },

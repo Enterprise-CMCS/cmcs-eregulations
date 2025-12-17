@@ -2,7 +2,7 @@
 {% load static %}
 {% load string_formatters %}
 
-{% block title_prefix %}H.R.1 | {% endblock %}
+{% block title_prefix %}Pub. L. 119-21 | {% endblock %}
 
 {% block outside_vue %}
     {{ site_config|json_script:"site_config" }}
@@ -27,7 +27,7 @@
     data-host="{{ host }}"
     data-is-authenticated="{{ user.is_authenticated }}"
     data-manual-url="{% url 'manual' %}"
-    data-obbba-url="{% url 'obbba' %}"
+    data-obbba-url="{% url 'pl_119_21' %}"
     data-search-url="{% url 'search' %}"
     data-statutes-url="{% url 'statutes' %}"
     data-subjects-url="{% url 'subjects' %}"

@@ -1,6 +1,6 @@
-from django.views.generic.base import TemplateView
+from django.http import HttpResponsePermanentRedirect
+from django.urls import reverse
 
 
-class OBBBAView(TemplateView):
-
-    template_name = 'regulations/obbba.html'
+def OBBBAView(request):
+    return HttpResponsePermanentRedirect(reverse('pl_119_21'))
