@@ -1,4 +1,4 @@
-describe("Public Law 119-21 (OBBBBA)", { scrollBehavior: "center" }, () => {
+describe("Public Law 119-21 (OBBBA)", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
