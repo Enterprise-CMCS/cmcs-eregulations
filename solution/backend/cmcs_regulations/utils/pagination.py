@@ -1,9 +1,8 @@
 import contextlib
 
 from drf_spectacular.utils import OpenApiParameter
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, _positive_int
 from rest_framework.response import Response
-from rest_framework.pagination import _positive_int
 
 
 # Generic pagination for viewsets.

@@ -115,6 +115,16 @@ class ContentSearchMixin:
             description="Whether to include regulation text in the search results.",
             location=OpenApiParameter.QUERY,
         ),
+        OpenApiParameter(
+            name="sort",
+            required=False,
+            type=str,
+            description=(
+                "Sort the results by a specified field. Use \"date\" for ascending date order, "
+                "\"-date\" for descending date order, or omit for default score-based sorting."
+            ),
+            location=OpenApiParameter.QUERY,
+        ),
     ]
 
     def is_quoted(self, query):
@@ -143,6 +153,7 @@ class ContentSearchMixin:
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", self.request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
+        sort = _get_parameter("sort", self.request, "-rank")
 
         # Retrieve content search configuration
         min_rank = config.keyword_search_min_rank
@@ -237,14 +248,15 @@ class ContentSearchMixin:
 
         # If neither semantic nor keyword search is enabled, return all filtered results with a score of 0.0
         if not (enable_semantic or enable_keyword):
-            sql += """
+            sort = "date ASC" if sort == "date" else "date DESC"
+            sql += f"""
                 SELECT
                     id,
                     0.0 AS score
                 FROM content_search_contentindex
                 WHERE id IN (SELECT id FROM indices)
-                ORDER BY date DESC NULLS LAST, id DESC
-            """
+                ORDER BY {sort} NULLS LAST, id DESC
+            """  # noqa S608
 
         # If semantic is enabled, add semantic search CTE
         # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
@@ -256,7 +268,8 @@ class ContentSearchMixin:
                         id,
                         resource_id,
                         reg_text_id,
-                        rank
+                        rank,
+                        date
                     FROM (
                         SELECT
                             id,
@@ -264,14 +277,16 @@ class ContentSearchMixin:
                             reg_text_id,
                             embedding,
                             raw_rank,
-                            RANK () OVER (ORDER BY raw_rank ASC) AS rank
+                            RANK () OVER (ORDER BY raw_rank ASC) AS rank,
+                            date
                         FROM (
                             SELECT
                                 id,
                                 resource_id,
                                 reg_text_id,
                                 embedding,
-                                embedding {semantic_search_distance_algorithm} (%(embedding)s::vector) AS raw_rank
+                                embedding {semantic_search_distance_algorithm} (%(embedding)s::vector) AS raw_rank,
+                                date
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
                         ) AS raw_rank_table
@@ -296,14 +311,16 @@ class ContentSearchMixin:
                         id,
                         resource_id,
                         reg_text_id,
-                        rank
+                        rank,
+                        date
                     FROM (
                         SELECT
                             id,
                             resource_id,
                             reg_text_id,
                             raw_rank,
-                            RANK () OVER (ORDER BY raw_rank DESC) AS rank
+                            RANK () OVER (ORDER BY raw_rank DESC) AS rank,
+                            date
                         FROM (
                             SELECT
                                 id,
@@ -312,7 +329,8 @@ class ContentSearchMixin:
                                 {keyword_rank_func}(
                                     (vector_column),
                                     {keyword_search_type}to_tsquery('english', %(query)s)
-                                ) AS raw_rank
+                                ) AS raw_rank,
+                                date
                             FROM content_search_contentindex
                             WHERE id IN (SELECT id FROM indices)
                         ) AS raw_rank_table
@@ -322,57 +340,73 @@ class ContentSearchMixin:
                 )
             """  # noqa S608
 
+        if sort == "date":
+            sort = "date ASC"
+        elif sort == "-date":
+            sort = "date DESC"
+
         # Retrieve data for semantic search only
         if enable_semantic and not enable_keyword:
+            sort = sort if "date" in sort else "score ASC"
             sql += """
                 SELECT
                     id,
-                    rank AS score
+                    rank AS score,
+                    date
                 FROM (
                     SELECT DISTINCT ON (resource_id, reg_text_id)
                         id,
-                        rank
+                        rank,
+                        date
                     FROM semantic_search
                     ORDER BY resource_id ASC, reg_text_id ASC, rank ASC
                 ) AS distinct_table
-                ORDER BY score ASC
             """
 
         # Retrieve data for full-text search only
         if enable_keyword and not enable_semantic:
+            sort = sort if "date" in sort else "score ASC"
             sql += """
                 SELECT
                     id,
-                    rank AS score
+                    rank AS score,
+                    date
                 FROM (
                     SELECT DISTINCT ON (resource_id, reg_text_id)
                         id,
-                        rank
+                        rank,
+                        date
                     FROM keyword_search
                     ORDER BY resource_id ASC, reg_text_id ASC, rank ASC
                 ) AS distinct_table
-                ORDER BY score ASC
             """
 
         # Combine and retrieve both semantic and full-text results
         if enable_semantic and enable_keyword:
+            sort = sort if "date" in sort else "score DESC"
             sql += """
                 SELECT
                     id,
-                    score
+                    score,
+                    date
                 FROM (
                     SELECT DISTINCT ON (resource_id, reg_text_id)
                         COALESCE(semantic_search.id, keyword_search.id) AS id,
                         COALESCE(semantic_search.resource_id, keyword_search.resource_id) AS resource_id,
                         COALESCE(semantic_search.reg_text_id, keyword_search.reg_text_id) AS reg_text_id,
                         COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
-                            COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+                            COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score,
+                        COALESCE(semantic_search.date, keyword_search.date) AS date
                     FROM semantic_search
                     FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
                     ORDER BY resource_id ASC, reg_text_id ASC, score DESC
                 ) AS combined_table
-                ORDER BY score DESC
             """
+
+        # Final sort
+        sql += f"""
+            ORDER BY {sort} NULLS LAST, id DESC
+        """  # noqa S608
 
         # Execute the raw SQL query
         return ContentIndex.objects.raw(sql, {**sql_params, **{
