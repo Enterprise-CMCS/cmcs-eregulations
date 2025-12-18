@@ -153,7 +153,11 @@ class ContentSearchMixin:
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
         show_internal = string_to_bool(_get_parameter("show_internal", self.request), True)
         show_regulations = string_to_bool(_get_parameter("show_regulations", self.request), True)
+
+        # Retrieve and validate sort parameter
         sort = _get_parameter("sort", self.request, "-rank")
+        if sort not in ["date", "-date", "rank", "-rank"]:
+            sort = "-rank"  # Default sort if invalid
 
         # Retrieve content search configuration
         min_rank = config.keyword_search_min_rank
