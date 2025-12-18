@@ -1,6 +1,5 @@
 FROM python:3.12-alpine
 
-COPY ["backend/requirements.txt", "/app/src/"]
 COPY ["backend/pyproject.toml", "/app/src/"]
 COPY ["backend/.python-version", "/app/src/"]
 COPY ["backend/uv.lock", "/app/src/"]
@@ -15,11 +14,9 @@ RUN apk --update add ca-certificates build-base postgresql-dev \
 
 RUN pip install --no-cache-dir --upgrade pip setuptools uv
 
-# Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
-
-# Copy from the cache instead of linking since it's a mounted volume
 ENV UV_LINK_MODE=copy
+ENV UV_PROJECT_ENVIRONMENT=/app/venv
 
 RUN uv sync --locked --no-install-project
 
