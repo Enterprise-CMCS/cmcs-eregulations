@@ -1,6 +1,10 @@
 FROM python:3.12-alpine
 
 COPY ["backend/requirements.txt", "/app/src/"]
+COPY ["backend/pyproject.toml", "/app/src/"]
+COPY ["backend/.python-version", "/app/src/"]
+COPY ["backend/uv.lock", "/app/src/"]
+
 WORKDIR /app/src/
 
 RUN apk add libffi-dev
@@ -9,24 +13,30 @@ RUN apk --update add ca-certificates build-base postgresql-dev \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/*
 
-RUN pip install --no-cache-dir --upgrade pip setuptools \
-    && pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip setuptools uv
+
+# Enable bytecode compilation
+ENV UV_COMPILE_BYTECODE=1
+
+# Copy from the cache instead of linking since it's a mounted volume
+ENV UV_LINK_MODE=copy
+
+RUN uv sync --locked --no-install-project
 
 ENV EREGS_USERNAME=""
 ENV EREGS_PASSWORD=""
 ENV HTTP_AUTH_USER=""
 ENV HTTP_AUTH_PASSWORD=""
-ENV OIDC_RP_CLIENT_ID=''
-ENV OIDC_RP_CLIENT_SECRET=''
-ENV OIDC_OP_AUTHORIZATION_ENDPOINT=''
-ENV OIDC_OP_TOKEN_ENDPOINT=''
-ENV OIDC_OP_USER_ENDPOINT=''
-ENV OIDC_OP_JWKS_ENDPOINT=''
+ENV OIDC_RP_CLIENT_ID=""
+ENV OIDC_RP_CLIENT_SECRET=""
+ENV OIDC_OP_AUTHORIZATION_ENDPOINT=""
+ENV OIDC_OP_TOKEN_ENDPOINT=""
+ENV OIDC_OP_USER_ENDPOINT=""
+ENV OIDC_OP_JWKS_ENDPOINT=""
 ENV FILE_MANAGER_AWS_ACCESS_KEY_ID=""
 ENV FILE_MANAGER_AWS_SECRET_ACCESS_KEY=""
-ENV FILE_MANAGER_AWS_BUCKET_NAME="" 
+ENV FILE_MANAGER_AWS_BUCKET_NAME=""
 ENV SERVER_USER=""
 ENV SERVER_PASSWORD=""
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
-
+CMD ["uv", "run", "python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -22,6 +22,7 @@ services:
       network: host
     volumes:
       - ./backend:/app/src
+      - /app/src/.venv
       - ./static-assets:/app/static-assets
     environment:
       ALLOWED_HOST: regulations
