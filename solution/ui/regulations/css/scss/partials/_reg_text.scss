@@ -77,10 +77,10 @@
     .info-links {
         font-size: 12px;
         display: flex;
+        align-items: center;
         flex-direction: column;
         flex-wrap: wrap;
         margin-top: -10px;
-        padding-left: 5px;
         line-height: 20px;
 
         > div {

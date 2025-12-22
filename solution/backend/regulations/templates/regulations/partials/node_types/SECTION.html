@@ -34,7 +34,7 @@
     {% if node.label|length <= 2 %}
         <div class="section-info-row">
             <div class="info-links">
-                <view-resources-link type="link" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+                <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
                 <tooltip-container
                     btn-type="link"
                     btn-class="reg-history-link"
