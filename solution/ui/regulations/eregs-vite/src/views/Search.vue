@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, provide, ref, watch } from "vue";
+import { computed, inject, onMounted, provide, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 import usePartsLastUpdated from "composables/partsLastUpdated.js";
@@ -8,7 +8,13 @@ import useSearchResults from "composables/searchResults.js";
 
 import isEmpty from "lodash/isEmpty";
 
-import { getRequestParams, PARAM_VALIDATION_DICT } from "utilities/utils.js";
+import {
+    decompressRouteQuery,
+    getRequestParams,
+    PARAM_VALIDATION_DICT,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
+    truncateQueryForDisplay,
+} from "utilities/utils.js";
 
 import AccessLink from "@/components/AccessLink.vue";
 import CategoriesDropdown from "@/components/dropdowns/Categories.vue";
@@ -23,7 +29,7 @@ import PaginationController from "@/components/pagination/PaginationController.v
 import PolicyResults from "@/components/subjects/PolicyResults.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
-import SearchInput from "@/components/SearchInput.vue";
+import SearchTextArea from "@/components/SearchTextArea.vue";
 import SignInCTA from "@/components/SignInCTA.vue";
 import SignInLink from "@/components/SignInLink.vue";
 import SortDropdown from "@/components/dropdowns/Sort.vue";
@@ -44,12 +50,13 @@ const subjectsUrl = inject("subjectsUrl");
 const obbbaUrl = inject("obbbaUrl");
 const surveyUrl = inject("surveyUrl");
 const username = inject("username");
+const defaultPageSize = inject("defaultPageSize");
 
 // Router and Route
 const $route = useRoute();
 const $router = useRouter();
 
-const pageSize = 50;
+const pageSize = defaultPageSize || 50;
 
 // show/hide categories dropdown
 const showDropdownsRef = ref();
@@ -102,13 +109,20 @@ const allDocTypesOnly = (queryParams) => {
 };
 
 // search query refs and methods
-const searchQuery = ref($route.query.q || "");
+const searchQuery = $route.query.q
+    ? ref(decompressRouteQuery($route.query))
+    : ref("");
+
+const truncatedQuery = computed(() =>
+    truncateQueryForDisplay({ query: searchQuery.value })
+);
+
 const clearSearchQuery = () => {
     searchQuery.value = "";
 };
 
 const executeSearch = (payload) => {
-    const routeClone = { ...$route.query };
+    const { ...routeClone } = $route.query;
 
     const cleanedRoute = useRemoveList({
         route: routeClone,
@@ -142,13 +156,18 @@ const setSelectedParams = (param) => {
     }
 
     if (paramType === "q") {
-        searchQuery.value = paramValue;
+        searchQuery.value = decompressRouteQuery({
+            compressed: $route.query.compressed,
+            q: paramValue,
+        });
         return;
     }
 };
 
 const setTitle = (query) => {
-    const querySubString = query ? `for ${query} ` : "";
+    const querySubString = query && query.length <= SEARCH_STRING_COMPRESSION_THRESHOLD
+        ? `for ${query} `
+        : "";
     document.title = `Search ${querySubString}| Medicaid & CHIP eRegulations`;
 };
 
@@ -169,7 +188,7 @@ const getDocsOnLoad = async () => {
     getDocList({
         apiUrl,
         pageSize,
-        requestParamString: getRequestParams({ queryParams: $route.query }),
+        data: getRequestParams({ queryParams: $route.query }),
         query: $route.query.q,
         type: $route.query.type,
     });
@@ -197,7 +216,7 @@ watch(
         clearSearchQuery();
 
         // set document title
-        setTitle(q);
+        setTitle(decompressRouteQuery(newQueryParams));
 
         // early return if there's no query
         if (!q) {
@@ -229,7 +248,7 @@ watch(
         getDocList({
             apiUrl,
             pageSize,
-            requestParamString: newRequestParams,
+            data: newRequestParams,
             query: $route.query.q,
             type: $route.query.type,
         });
@@ -237,8 +256,11 @@ watch(
 );
 
 // fetches on page load
-getPartsLastUpdated({ apiUrl });
-getDocsOnLoad();
+onMounted(() => {
+    setTitle(decompressRouteQuery($route.query));
+    getPartsLastUpdated({ apiUrl });
+    getDocsOnLoad();
+})
 </script>
 
 <template>
@@ -286,9 +308,9 @@ getDocsOnLoad();
         <main id="searchApp" class="search-view">
             <h1>Search Results</h1>
             <section class="query-filters__section" role="search">
-                <SearchInput
+                <SearchTextArea
                     form-class="search-form"
-                    label="Search for a document"
+                    label="Enter keywords, or paste entire paragraphs to find similar documents"
                     parent="search"
                     :search-query="searchQuery"
                     @execute-search="executeSearch"
@@ -359,7 +381,7 @@ getDocsOnLoad();
                 <template v-else-if="policyDocList.error">
                     <div class="doc__list">
                         <SearchErrorMsg
-                            :search-query="searchQuery"
+                            :search-query="truncatedQuery"
                             show-apology
                             :survey-url="surveyUrl"
                         />
@@ -384,7 +406,7 @@ getDocsOnLoad();
                             </template>
                         </SignInCTA>
                         <span class="no-results__span">Your search for
-                            <strong>{{ searchQuery }}</strong> did not match any
+                            <strong>{{ truncatedQuery }}</strong> did not match any
                             results
                             <span v-if="hasActiveFilters">with the selected filters</span><span v-else>on eRegulations</span>.</span>
                     </div>

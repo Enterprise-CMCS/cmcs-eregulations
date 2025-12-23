@@ -5,11 +5,11 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import format_html
 
+from common.aws import establish_client
 from resources.models import (
     InternalFile,
     InternalLink,
 )
-from resources.utils import establish_client
 
 from .resources import (
     AbstractInternalResourceAdmin,
@@ -28,7 +28,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
-    readonly_fields = ["indexing_status", "detected_file_type"]
+    readonly_fields = ["indexing_status", "number_of_chunks", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -45,7 +45,7 @@ class InternalLinkAdmin(AbstractInternalResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "extract_url", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "number_of_chunks", "extract_url", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],
@@ -76,7 +76,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
     list_display = ["date", "document_id", "title", "category__name", "updated_at", "approved"]
     list_display_links = ["date", "document_id", "title", "updated_at"]
     search_fields = ["date", "document_id", "title", "summary"]
-    readonly_fields = ["download_file", "file_name", "indexing_status", "detected_file_type"]
+    readonly_fields = ["download_file", "file_name", "indexing_status", "number_of_chunks", "detected_file_type"]
 
     fieldsets = [
         ("Basics", {
@@ -93,7 +93,7 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
         }),
         ("Search indexing", {
             "classes": ("collapse",),
-            "fields": ["indexing_status", "detected_file_type", "file_type"],
+            "fields": ["indexing_status", "number_of_chunks", "detected_file_type", "file_type", "extract_text"],
         }),
         ("Document status", {
             "fields": ["approved"],

@@ -28,6 +28,8 @@ def handler(self, *args, **options):
                                                    django_admin_password)
     else:
         admin_user = User.objects.get(username=django_admin_username)
+        admin_user.set_password(django_admin_password)
+        admin_user.save()
 
     if not User.objects.filter(username=django_username).exists():
         user = User.objects.create_superuser(django_username,
@@ -35,6 +37,8 @@ def handler(self, *args, **options):
                                              django_password)
     else:
         user = User.objects.get(username=django_username)
+        user.set_password(django_password)
+        user.save()
 
     admin_user.groups.set([e_regs_admin_group])
     user.groups.set([e_regs_reader_group])
