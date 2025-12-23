@@ -24,7 +24,7 @@
     "flush-promises": "1.0.2",
     "lodash": "4.17.21",
     "sass": "1.93.2",
-    "vue": "3.5.25",
+    "vue": "3.5.26",
     "vuetify": "3.11.4"
   },
   "devDependencies": {
