@@ -1,11 +1,10 @@
-version: '3'
 networks:
   eregs:
     external: false
     name: eregs
 services:
   db:
-    image: pgvector/pgvector:pg15
+    image: docker.io/pgvector/pgvector:pg15
     environment:
       POSTGRES_USER: eregsuser
       POSTGRES_PASSWORD: sgere
@@ -19,7 +18,6 @@ services:
   regulations:
     build:
       context: .
-      network: host
     volumes:
       - ./backend:/app/src
       - ./static-assets:/app/static-assets
@@ -35,7 +33,7 @@ services:
       DJANGO_SETTINGS_MODULE: ${DJANGO_SETTINGS_MODULE:-cmcs_regulations.settings.local}
     ports:
       - 8000:8000
-    links:
+    depends_on:
       - db
       - text-extractor
     networks:
@@ -43,7 +41,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
   static-assets:
-    image: nginx
+    image: docker.io/nginx
     ports:
       - 8888:80
     volumes:
