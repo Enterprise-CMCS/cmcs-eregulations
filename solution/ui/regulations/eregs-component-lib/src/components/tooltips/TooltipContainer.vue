@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted} from 'vue';
+
+import eventbus from '../../eventbus';
 
 // Props
 const props = defineProps({
@@ -183,6 +185,30 @@ const handleCloseClick = () => {
         leftSafe.value = true;
     }
 };
+
+const handleScrollEnd = () => {
+    console.info("scroll end reached");
+};
+
+const handleScrollTo = ({ trigger }) => {
+    if (props.title.includes(trigger)) {
+        window.addEventListener("scrollend", handleScrollEnd, { once: true });
+        const element = document.querySelector(`[data-scroll-target='${trigger}']`);
+        if (element) {
+            console.info("scrolling to this", trigger);
+            console.info(props);
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+};
+
+onMounted(() => {
+    eventbus.on("trigger-scroll-to", handleScrollTo);
+});
+
+onUnmounted(() => {
+    eventbus.off("trigger-scroll-to", handleScrollTo);
+});
 </script>
 
 <template>
