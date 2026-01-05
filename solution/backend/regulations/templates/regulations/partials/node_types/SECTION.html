@@ -32,7 +32,7 @@
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
     {% if node.label|length <= 2 %}
-        <div class="section-info-row">
+        <div class="section-info-row section-info-row--top">
             <div class="info-links">
                 <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
                 <tooltip-container
@@ -67,7 +67,30 @@
     </div>
 
     {% if node.label|length <= 2 %}
-        <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+        <div class="section-info-row section-info-row--bottom">
+            <div class="info-links">
+                <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+                <tooltip-container
+                    btn-type="link"
+                    btn-class="reg-history-link"
+                    title="View § {{node.label | join:'.'}} Regulation History"
+                    label="Regulation History"
+                    button-icon="link"
+                    tooltip-title="View § {{node.label | join:'.'}} Effective In"
+                    position="under"
+                    click
+                >
+                    <template #tooltip-content>
+                        <gov-info-links
+                            title="{{cfr_title}}"
+                            part="{{node.label.0}}"
+                            section="{{node.label.1}}"
+                            api-url="{{ API_BASE }}"
+                        ></gov-info-links>
+                    </template>
+                </tooltip-container>
+            </div>
+        </div>
     {% endif %}
 
 </section>
