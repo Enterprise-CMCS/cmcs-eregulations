@@ -1,4 +1,4 @@
-describe("OBBBA", { scrollBehavior: "center" }, () => {
+describe("Public Law 119-21 (OBBBA)", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
         cy.intercept("/**", (req) => {
@@ -7,10 +7,16 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
         cy.intercept("**/v3/titles").as("titles");
     });
 
-    it("loads the page", () => {
+    it("should redirect /obbba to /pl119-21", () => {
         cy.viewport("macbook-15");
         cy.visit("/obbba");
-        cy.get("h1").contains("H.R.1 (Public Law No. 119-21, July 4, 2025)");
+        cy.url().should("include", "/pl119-21");
+    });
+
+    it("loads the page", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/pl119-21");
+        cy.get("h1").contains("Public Law No. 119-21, July 4, 2025");
         cy.checkLinkRel();
         cy.injectAxe();
         cy.checkAccessibility();
@@ -18,12 +24,20 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
         cy.get(".obbba__context")
             .then(($el) => {
                 expect($el).to.have.css("font-style").and.eq("italic");
+                cy.wrap($el)
+                    .find("a")
+                    .first()
+                    .then(($link) => {
+                        expect($link).to.include.text(
+                            "Working Families Tax Cut legislation (Public Law No. 119-21, July 4, 2025)"
+                        )
+                    });
             });
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.wait("@titles");
         cy.jumpToRegulationPartSection({
             title: "42",
@@ -34,7 +48,7 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("goes to the State Medicaid Manual page using header link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.clickHeaderLink({
             page: "manual",
             label: "State Medicaid Manual",
@@ -45,13 +59,19 @@ describe("OBBBA", { scrollBehavior: "center" }, () => {
 
     it("allows a user to go back to the homepage by clicking the top left link", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
         cy.goHome();
     });
 
     it("has a responsive toc", () => {
+        cy.viewport("macbook-15");
+        cy.visit("/pl119-21");
+        cy.get("#leftNav .toc-title__subheading")
+            .first()
+            .should("contain.text", "Public Law No. 119-21, July 4, 2025");
+
         cy.tocResponsiveChecks({
-            page: "/obbba"
+            page: "/pl119-21"
         });
     });
 });
