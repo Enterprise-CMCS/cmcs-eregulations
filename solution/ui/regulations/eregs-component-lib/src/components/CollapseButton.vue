@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount, inject } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount, inject, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -19,6 +19,8 @@ const props = defineProps({
     },
 });
 
+const button = useTemplateRef("button");
+
 const getStateOverride = inject("getStateOverride", null);
 
 const dataName = ref(props.name);
@@ -34,13 +36,14 @@ const click = () => {
 };
 
 const toggle = ({ name, action = "toggle" }) => {
+    if (dataName.value !== name) return;
+
+    button.value.focus();
+
     if (
-        dataName.value !== name
-        || (action === "expand" && visible.value)
+        (action === "expand" && visible.value)
         || (action === "collapse" && !visible.value)
-    ) {
-        return;
-    }
+    ) return;
 
     visible.value = !visible.value;
 };
@@ -64,6 +67,7 @@ onBeforeUnmount(() => {
 
 <template>
     <button
+        ref="button"
         :class="{ visible: visible }"
         :data-test="dataName"
         :aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"
