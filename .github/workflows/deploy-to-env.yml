@@ -71,7 +71,7 @@ jobs:
           VITE_ENV: ${{ inputs.stage_name }}
         run: |
           pushd solution/backend
-          python manage.py collectstatic --noinput
+          uv run python manage.py collectstatic --noinput
           cd ..
           popd
 
