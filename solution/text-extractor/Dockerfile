@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir --upgrade pip setuptools uv
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_LINK_MODE=copy
 ENV UV_PROJECT_ENVIRONMENT=${LAMBDA_TASK_ROOT}/venv
-ENV UV_PROJECT=${LAMBDA_TASK_ROOT}/app/text-extractor
+ENV UV_PROJECT=${LAMBDA_TASK_ROOT}/app
 RUN uv sync --locked --no-install-project
 
 CMD [ "app.text-extractor.handler" ]

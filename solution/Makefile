@@ -85,11 +85,11 @@ eslint: ## Run eslint
 lint:
 	flake8;
 ruff:
-	docker compose exec regulations ruff check --preview .
-	docker compose exec text-extractor ruff check --preview .
+	docker compose exec regulations uv run ruff check --preview .
+	docker compose exec text-extractor uv run ruff check --preview .
 ruff-fix:
-	docker compose exec regulations ruff check --preview --fix .
-	docker compose exec text-extractor ruff check --preview --fix .
+	docker compose exec regulations uv run ruff check --preview --fix .
+	docker compose exec text-extractor uv run ruff check --preview --fix .
 local: ## Start a local environment with parts 400 and 433 loaded.
 local: regulations local.docker data.local
 	@echo Local environment started. Visit http://localhost:8000
@@ -101,12 +101,11 @@ local.docker:
 		make local.regulations;
 
 local.regulations: ## Run migrations and restart the regulations-core
-	docker compose exec regulations python manage.py migrate; \
+	docker compose exec regulations uv run python manage.py migrate; \
 		docker compose restart regulations; \
 		sleep 5;
 local.spectacular: ## Run swagger locally
-	docker compose exec regulations python manage.py spectacular --file schema.yaml
-
+	docker compose exec regulations uv run python manage.py spectacular --file schema.yaml
 tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**/*.go
 	cd tools/ecfr-parser; go build -o build/ecfr-parser .
 
@@ -143,10 +142,10 @@ local.clean: ## Remove the local environment entirely.
 	docker compose down --remove-orphans --volumes
 
 local.createadmin: ## Create a local admin account.
-	docker compose exec regulations python manage.py createsuperuser
+	docker compose exec regulations uv run python manage.py createsuperuser
 
 local.collectstatic: ## Create static assets.
-	docker compose exec regulations python manage.py collectstatic --noinput
+	docker compose exec regulations uv run python manage.py collectstatic --noinput
 
 local.opensearch: ## Run a local opensearch environment
 	docker compose -f docker-compose.opensearch.yml up -d
@@ -175,30 +174,31 @@ test.vitest.ui:
 ##uncomment the -vvv if there are errors running pytest.
 test.pytest:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec regulations pytest -v
+	docker compose exec uv run regulations pytest -v
 	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
+
 test.pytest.cov:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec regulations pytest --cov
+	docker compose exec uv run regulations pytest --cov
 	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
+
 python.shell:
-	docker compose exec regulations python manage.py shell
+	docker compose exec uv run regulations python manage.py shell
 
 python.emptyseedtables:
-	docker compose exec regulations python manage.py emptyseedtables
+	docker compose exec uv run regulations python manage.py emptyseedtables
 
 python.makemigrations:
-	docker compose exec regulations python manage.py makemigrations
+	docker compose exec uv run regulations python manage.py makemigrations
 
 python.migrate:
-	docker compose exec regulations python manage.py migrate
+	docker compose exec uv run regulations python manage.py migrate
 
 local.seed:
-	docker compose exec regulations python manage.py populateseeddata
-	docker compose exec regulations python manage.py index_resources
-
+	docker compose exec uv run regulations python manage.py populateseeddata
+	docker compose exec uv run regulations python manage.py index_resources
 local.cleanseeddata:
-	docker compose exec regulations python manage.py cleanseeddata
+	docker compose exec uv run regulations python manage.py cleanseeddata
 
 text-extractor.build:
 	docker compose up -d --build text-extractor
@@ -213,7 +213,7 @@ text-extractor.restart:
 	make text-extractor.stop; make text-extractor.start
 
 text-extractor.test:
-	docker compose exec text-extractor sh -c 'cd app; python -m unittest'
+	docker compose exec text-extractor uv run --directory app python -m unittest
 
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
@@ -222,9 +222,9 @@ file_manager_objects = file_manager.subject
 auth_objects = contenttypes.contenttype auth.permission auth.group
 
 local.dump:
-	$(foreach object, $(resource_objects), docker compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
-	$(foreach object, $(reg_objects), docker compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
-	$(foreach object, $(file_manager_objects), docker compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
-	$(foreach object, $(auth_objects), docker compose exec regulations python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \
-	docker compose exec regulations python manage.py dumpdata contenttypes.contenttype --indent 4 > ./backend/cmcs_regulations/fixtures/contenttypes.contenttype.json
-	docker compose exec regulations python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json
+	$(foreach object, $(resource_objects), docker compose exec regulations uv run python manage.py dumpdata $(object) --indent 4 > ./backend/resources/fixtures/$(object).json;) \
+	$(foreach object, $(reg_objects), docker compose exec regulations uv run python manage.py dumpdata $(object) --indent 4 > ./backend/regulations/fixtures/$(object).json;) \
+	$(foreach object, $(file_manager_objects), docker compose exec regulations uv run python manage.py dumpdata $(object) --indent 4 > ./backend/file_manager/fixtures/$(object).json;) \
+	$(foreach object, $(auth_objects), docker compose exec regulations uv run python manage.py dumpdata $(object) --indent 4 > ./backend/cmcs_regulations/fixtures/$(object).json;) \
+	docker compose exec regulations uv run python manage.py dumpdata contenttypes.contenttype --indent 4 > ./backend/cmcs_regulations/fixtures/contenttypes.contenttype.json
+	docker compose exec regulations uv run python manage.py dumpdata search.synonym --indent 4 > ./backend/regcore/search/fixtures/search.synonym.json
