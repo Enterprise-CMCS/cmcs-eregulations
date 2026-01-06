@@ -78,7 +78,14 @@
             name="{{node.label | join:'.'}} section history"
             class="collapse-content"
             state="collapsed"
-        > Hi </collapsible>
+        >
+            <gov-info-links
+                title="{{cfr_title}}"
+                part="{{node.label.0}}"
+                section="{{node.label.1}}"
+                api-url="{{ API_BASE }}"
+            ></gov-info-links>
+        </collapsible>
     {% endif %}
 
 </section>
