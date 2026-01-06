@@ -1,6 +1,4 @@
 <script setup>
-import { computed, ref } from "vue";
-
 import eventbus from "../eventbus";
 
 const props = defineProps({

@@ -53,27 +53,30 @@
         <div class="section-info-row section-info-row--bottom" data-scroll-target="{{node.label | join:'.'}}">
             <div class="info-links">
                 <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
-                <tooltip-container
-                    btn-type="link"
-                    btn-class="reg-history-link"
-                    title="View § {{node.label | join:'.'}} Regulation History"
-                    label="Regulation History"
-                    button-icon="link"
-                    tooltip-title="View § {{node.label | join:'.'}} Effective In"
-                    position="under"
-                    click
+                <scroll-target-container
+                    trigger="{{ node.label | join:'.'}}"
                 >
-                    <template #tooltip-content>
-                        <gov-info-links
-                            title="{{cfr_title}}"
-                            part="{{node.label.0}}"
-                            section="{{node.label.1}}"
-                            api-url="{{ API_BASE }}"
-                        ></gov-info-links>
-                    </template>
-                </tooltip-container>
+                    <collapse-button
+                        name="{{node.label | join:'.'}} section history"
+                        state="collapsed"
+                    >
+                        <template #expanded>
+                            View § {{ node.label | join:'.' }} Version History
+                            <i class="fa fa-chevron-up" />
+                        </template>
+                        <template #collapsed>
+                            View § {{ node.label | join:'.' }} Version History
+                            <i class="fa fa-chevron-down" />
+                        </template>
+                    </collapse-button>
+                </scroll-target-container>
             </div>
         </div>
+        <collapsible
+            name="{{node.label | join:'.'}} section history"
+            class="collapse-content"
+            state="collapsed"
+        > Hi </collapsible>
     {% endif %}
 
 </section>
