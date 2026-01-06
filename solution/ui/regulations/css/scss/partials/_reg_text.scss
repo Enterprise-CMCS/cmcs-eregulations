@@ -68,6 +68,12 @@
 
     .section-info-row {
         display: flex;
+
+        &--bottom {
+            .info-links {
+                align-items: center;
+            }
+        }
     }
 
     .view-resources-link  {
@@ -88,6 +94,12 @@
 
         > div {
             display: inline;
+        }
+
+        button.collapsible-title {
+            margin-top: 0;
+            font-size: var(--font-size-sm);
+            gap: var(--spacer-half)
         }
 
         @include custom-max(calc($mobile-max / 1px)) {
