@@ -48,33 +48,39 @@ const toggleDisplay = () => {
 
 // Accurately measuring height of dynamic content and transitioning smoothly:
 // https://dev.to/nikneym/getcomputedstyle-the-good-the-bad-and-the-ugly-parts-1l34
-const toggle = (targetName) => {
-    if (dataName.value === targetName) {
-        if (!visible.value && target.value) {
-            target.value.classList.remove("display-none");
-            target.value.style.overflow = "hidden";
-            target.value.classList.remove("invisible");
-        }
+const toggle = ({ name, action = "toggle" }) => {
+    if (
+        dataName.value !== name
+        || (action === "expand" && visible.value)
+        || (action === "collapse" && !visible.value)
+    ) {
+        return;
+    }
 
-        target.value.style.height = "auto";
+    if (!visible.value && target.value) {
+        target.value.classList.remove("display-none");
+        target.value.style.overflow = "hidden";
+        target.value.classList.remove("invisible");
+    }
 
-        const height = getComputedStyle(target.value).height;
+    target.value.style.height = "auto";
 
-        if (!visible.value && target.value) {
-            target.value.style.height = "0px";
-        } else if (target.value) {
-            target.value.style.height = "";
-        }
+    const height = getComputedStyle(target.value).height;
 
+    if (!visible.value && target.value) {
+        target.value.style.height = "0px";
+    } else if (target.value) {
+        target.value.style.height = "";
+    }
+
+    requestAnimationFrame(() => {
         requestAnimationFrame(() => {
+            target.value.style.height = height;
             requestAnimationFrame(() => {
-                target.value.style.height = height;
-                requestAnimationFrame(() => {
-                    visible.value = !visible.value;
-                });
+                visible.value = !visible.value;
             });
         });
-    }
+    });
 };
 
 onMounted(() => {

@@ -589,6 +589,14 @@ select {
     }
 }
 
+.scroll-target-container {
+    scroll-margin-top: $header_height_mobile + 5px;
+
+    @include screen-eds-sm {
+        scroll-margin-top: $header_height + 5px;
+    }
+}
+
 // -------------------------
 // Other Common Settings
 // -------------------------

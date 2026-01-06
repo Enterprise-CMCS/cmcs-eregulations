@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, useTemplateRef } from 'vue';
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -9,16 +9,22 @@ const props = defineProps({
     },
 });
 
+const target = useTemplateRef(`scroll-target-${props.trigger}`);
+
 const handleScrollEnd = () => {
-    console.info("scroll end reached");
-    eventbus.emit("collapse-toggle", `${props.trigger} section history`);
+    eventbus.emit(
+        "collapse-toggle",
+        {
+            name: `${props.trigger} section history`,
+            action: "expand",
+        }
+    );
 };
 
 const handleScrollTo = ({ trigger }) => {
-    const element = document.querySelector(`[data-scroll-target='${trigger}']`);
-    if (element && trigger === props.trigger) {
+    if (trigger === props.trigger) {
         window.addEventListener("scrollend", handleScrollEnd, { once: true });
-        element.scrollIntoView({ behavior: "smooth" });
+        target.value.scrollIntoView({ behavior: "smooth" });
     }
 };
 
@@ -32,5 +38,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <slot />
+    <div
+        ref="target"
+        class="scroll-target-container"
+    >
+        <slot />
+    </div>
 </template>

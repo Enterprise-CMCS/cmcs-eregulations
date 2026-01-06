@@ -30,12 +30,27 @@ const stateOverrideValue = computed(() => {
 });
 
 const click = () => {
-    eventbus.emit("collapse-toggle", dataName.value);
+    eventbus.emit("collapse-toggle", { name: dataName.value });
 };
 
-const toggle = (target) => {
-    if (dataName.value === target) {
+const toggle = ({ name, action = "toggle" }) => {
+    if (dataName.value !== name) {
+        return;
+    }
+
+    if (action === "toggle") {
         visible.value = !visible.value;
+        return;
+    }
+
+    if (action === "expand") {
+        visible.value = true;
+        return;
+    }
+
+    if (action === "collapse") {
+        visible.value = false;
+        return;
     }
 };
 

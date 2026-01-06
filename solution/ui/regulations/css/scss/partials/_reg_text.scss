@@ -68,14 +68,6 @@
 
     .section-info-row {
         display: flex;
-
-        &--bottom {
-          scroll-margin-top: $header_height_mobile + 30px;
-
-          @include screen-eds-sm {
-              scroll-margin-top: $header_height + 30px;
-    }
-        }
     }
 
     .view-resources-link .count {
