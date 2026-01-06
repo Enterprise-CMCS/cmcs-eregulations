@@ -1,5 +1,27 @@
-[tool.ruff]
+[project]
+name = "text-extractor"
+version = "1.0.0"
+description = "Lambda function to extract text and generate embeddings from a variety of file types"
+readme = "README.md"
+requires-python = "==3.12.12"
+dependencies = [
+    "beautifulsoup4>=4.13.5",
+    "boto3>=1.42.22",
+    "docx2txt>=0.9",
+    "extract-msg>=0.55.0",
+    "magika==0.5.1",
+    "moto>=5.1.19",
+    "openpyxl>=3.1.5",
+    "pillow>=12.1.0",
+    "pytest>=9.0.2",
+    "python-pptx>=1.0.2",
+    "requests>=2.32.5",
+    "ruff>=0.14.10",
+    "striprtf>=0.0.29",
+    "xlrd>=2.0.2",
+]
 
+[tool.ruff]
 # Same as Black.
 line-length = 130
 
