@@ -1,7 +1,6 @@
-version: '3'
 services:
     e2e:
-        image: cypress/included:12.4.1
+        image: docker.io/cypress/included:12.4.1
         container_name: cypress
         network_mode: host
         depends_on:
