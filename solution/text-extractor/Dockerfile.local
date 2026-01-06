@@ -9,11 +9,6 @@ ENV STARTUP_CMD="app.text_extractor.handler"
 # Will be overridden locally
 COPY text-extractor ${LAMBDA_TASK_ROOT}/app
 
-# Install binary dependencies
-# poppler-utils is required for converting PDFs to images for AWS Textract.
-# liberation-fonts is required because the default installed fonts are not sufficient for some PDFs and introduce rendering issues.
-RUN dnf install -y poppler-utils liberation-fonts
-
 # Install and run UV
 RUN pip install --no-cache-dir --upgrade pip setuptools uv
 ENV UV_COMPILE_BYTECODE=1
