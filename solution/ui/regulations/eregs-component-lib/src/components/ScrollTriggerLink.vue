@@ -2,6 +2,10 @@
 import eventbus from "../eventbus";
 
 const props = defineProps({
+    label: {
+        type: String,
+        required: true,
+    },
     trigger: {
         type: String,
         required: true,
@@ -9,7 +13,6 @@ const props = defineProps({
 });
 
 const clickHandler = () => {
-    console.info("Emitting scroll to trigger:", props.trigger);
     eventbus.emit("trigger-scroll-to", {
         trigger: props.trigger,
     });
@@ -17,10 +20,10 @@ const clickHandler = () => {
 </script>
 
 <template>
-    <div
-        class="skeleton"
+    <button
+        class="btn link-btn scroll-trigger__button"
         @click="clickHandler"
     >
-        Click me
-    </div>
+        {{ label }}
+    </button>
 </template>

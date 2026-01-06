@@ -561,16 +561,9 @@ select {
     }
 }
 
-#main-content:target {
-    // Moves content down so it's not covered by the sticky header
-    scroll-margin-top: $header_height_mobile + 5px;
-
-    @include screen-eds-sm {
-        scroll-margin-top: $header_height + 5px;
-    }
-}
-
-.content :target {
+#main-content:target,
+.content :target,
+.scroll-target-container {
     // Moves content down so it's not covered by the sticky header
     scroll-margin-top: $header_height_mobile + 5px;
 
@@ -586,14 +579,6 @@ select {
 
     @include screen-eds-sm {
         scroll-margin-top: $header_height + $view_compare_height + 37px;
-    }
-}
-
-.scroll-target-container {
-    scroll-margin-top: $header_height_mobile + 5px;
-
-    @include screen-eds-sm {
-        scroll-margin-top: $header_height + 5px;
     }
 }
 

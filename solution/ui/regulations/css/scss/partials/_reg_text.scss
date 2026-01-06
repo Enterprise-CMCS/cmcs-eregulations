@@ -70,17 +70,20 @@
         display: flex;
     }
 
-    .view-resources-link .count {
-        font-size: 12px;
+    .view-resources-link  {
+        .count {
+            font-size: 12px;
+        }
     }
 
     .info-links {
         font-size: 12px;
         display: flex;
-        align-items: center;
         flex-direction: column;
         flex-wrap: wrap;
+        gap: 1rem;
         margin-top: -10px;
+        padding-left: 5px;
         line-height: 20px;
 
         > div {
@@ -95,21 +98,10 @@
 
         @include screen-lg {
             flex-direction: row;
-
-            > div:first-child {
-                padding-right: 15px;
-                margin-right: 15px;
-            }
         }
 
         @include screen-xl {
             flex-direction: row;
-
-            > div:first-child {
-                padding-right: 15px;
-                margin-right: 15px;
-                border-right: 1px solid $light_gray;
-            }
         }
     }
 

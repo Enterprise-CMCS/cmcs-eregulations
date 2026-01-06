@@ -32,11 +32,13 @@
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
     {% if node.label|length <= 2 %}
-    {{ node.label| join:'.' }}
         <div class="section-info-row section-info-row--top">
             <div class="info-links">
                 <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
-            <scroll-trigger-link trigger="{{ node.label | join:'.'}}" />
+            <scroll-trigger-link
+                label="Jump to § {{ node.label | join:'.' }} Version History"
+                trigger="{{ node.label | join:'.'}}"
+            />
             </div>
         </div>
     {% endif %}
