@@ -65,9 +65,9 @@ describe("Print Styles", () => {
         cy.get(".view-container").should("have.css", "display", "none");
     })
 
-    it("has proper print styles for OBBBA", () => {
+    it("has proper print styles for Public Law 119-21 (OBBBA)", () => {
         cy.viewport("macbook-15");
-        cy.visit("/obbba");
+        cy.visit("/pl119-21");
 
         cy.setCssMedia("print");
 

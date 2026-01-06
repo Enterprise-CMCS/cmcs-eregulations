@@ -82,7 +82,7 @@ onMounted(() => {
         <div id="obbbaApp">
             <nav id="placeholderNav" class="toc__nav" />
             <LeftNavCollapse
-                contents-description="OBBBA Table of Contents"
+                contents-description="P.L. 119-21 Table of Contents"
             >
                 <template #nav-contents>
                     <div
@@ -93,7 +93,7 @@ onMounted(() => {
                             class="lbexTocDivisionOLC toc-title__container"
                         >
                             <span class="toc-title__subheading">
-                                H.R.1 (Public Law No. 119-21, July 4, 2025)
+                                Public Law No. 119-21, July 4, 2025
                             </span>
                             <span class="toc-title__subheading toc-title__subheading--smaller">
                                 Title VII — Finance, Subtitle B — Health
@@ -428,7 +428,7 @@ onMounted(() => {
                 </template>
             </LeftNavCollapse>
             <div class="obbba__container content site-container">
-                <h1>H.R.1 (Public Law No. 119-21, July 4, 2025)</h1>
+                <h1>Public Law No. 119-21, July 4, 2025</h1>
                 <div class="obbba__context">
                     <p>
                         Excerpt from <a
@@ -436,7 +436,7 @@ onMounted(() => {
                             class="external"
                             target="_blank"
                             rel="noopener noreferrer"
-                        >H.R.1 (Public Law No. 119-21, July 4, 2025)</a>, Title VII — Finance, Subtitle B — Health.
+                        >Working Families Tax Cut legislation (Public Law No. 119-21, July 4, 2025)</a>, Title VII — Finance, Subtitle B — Health.
                     </p>
                     <p>
                         As an informal copy for ease of reading, additions to the Social Security Act are <span class="annotated-text">highlighted in gray</span>, and citations to statutes, regulations, and rules are linked. For authoritative reference or quoting, see the <a
