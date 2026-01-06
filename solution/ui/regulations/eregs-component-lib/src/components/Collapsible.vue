@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -24,7 +24,7 @@ const props = defineProps({
     },
 });
 
-const target = ref(null);
+const target = useTemplateRef("target");
 const dataName = ref(props.name);
 const visible = ref(false);
 const styles = {
