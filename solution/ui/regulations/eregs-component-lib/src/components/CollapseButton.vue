@@ -34,24 +34,15 @@ const click = () => {
 };
 
 const toggle = ({ name, action = "toggle" }) => {
-    if (dataName.value !== name) {
+    if (
+        dataName.value !== name
+        || (action === "expand" && visible.value)
+        || (action === "collapse" && !visible.value)
+    ) {
         return;
     }
 
-    if (action === "toggle") {
-        visible.value = !visible.value;
-        return;
-    }
-
-    if (action === "expand") {
-        visible.value = true;
-        return;
-    }
-
-    if (action === "collapse") {
-        visible.value = false;
-        return;
-    }
+    visible.value = !visible.value;
 };
 
 watch(stateOverrideValue, (newStateOverrideValue) => {
