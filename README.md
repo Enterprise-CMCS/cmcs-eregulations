@@ -17,6 +17,7 @@ We have public documentation about our product, design, and research processes i
 You need these to get started:
 
 -   git
+-   [uv](https://docs.astral.sh/uv/#installation) for dependency management
 -   Docker, including Docker Compose (install [Docker Desktop](https://docs.docker.com/desktop/))
 -   Python 3.12 (consider using [Homebrew](https://docs.brew.sh/Homebrew-and-Python))
 -   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v22, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
@@ -133,6 +134,19 @@ To use our Okta identity provider on an experimental (ephemeral) deployment, see
 
 # Development tips
 
+## Managing Python dependencies
+
+Python dependencies (i.e. for the eRegs main application and the text extractor) are managed with `uv`.
+
+For operations relating to the eRegs site, first `cd` into `solution/backend`. For operations relating to the text-extractor, `cd` instead into `solution/text-extractor`.
+
+Common operations (for more see `uv help`):
+
+* You can add a dependency with `uv add new-dependency`.
+* You can remove one with `uv remove old-dependency`.
+* Sync your local virtual environment with `uv sync`.
+* Run commands inside requiring a dependency with `uv run ...`. (Note that this is separate from running a command in the eRegs Docker container!)
+
 ## Backing up and restoring the database
 
 The scripts `backup_db.sh`, `restore_remote_db.sh`, and `restore_local_db.sh` can be used for the following purposes:
@@ -194,7 +208,7 @@ $ pip3 install boto3
 $ ./run/scripts/below
 ```
 
-You can also use `uv` to install and manage `boto3`. If you haven't already, [install uv]() and then from the `backend` directory run `uv sync`. You can then run the scripts below like this, from the `backend` directory:
+You can also use `uv` to install and manage `boto3`. If you haven't already, [install uv](https://docs.astral.sh/uv/#installation) and then from the `backend` directory run `uv sync`. You can then run the scripts below like this, from the `backend` directory:
 
 ```bash
 $ uv run ../../scripts/a_script.py
