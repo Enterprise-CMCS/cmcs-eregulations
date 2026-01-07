@@ -8,22 +8,6 @@ const props = defineProps({
         type: String,
         required: true,
     },
-    title: {
-        type: String,
-        required: true,
-    },
-    part: {
-        type: String,
-        required: true,
-    },
-    section: {
-        type: String,
-        required: true,
-    },
-    apiUrl: {
-        type: String,
-        required: true,
-    },
 });
 
 const visibleRef = ref(false);
@@ -42,12 +26,8 @@ watch(
 <template>
     <div class="version-history-container">
         Tabbed Content Placeholder
-        <GovInfoLinks
-            v-if="visibleRef"
-            :title="title"
-            :part="part"
-            :section="section"
-            :api-url="apiUrl"
-        />
+        <template v-if="visibleRef">
+            <slot name="annual-editions" />
+        </template>
     </div>
 </template>
