@@ -40,11 +40,24 @@ const toggleDisplay = (event) => {
         return;
     }
 
+    // new
+    // if (visible.value) {
+    //     if (target.value) {
+    //         const targetHeight = getComputedStyle(target.value.children[0]).height;
+    //         target.value.style.height = targetHeight;
+    //     }
+    // }
+
     if (visible.value) {
         if (target.value) {
-            const targetHeight = getComputedStyle(target.value.children[0]).height;
-            target.value.style.height = targetHeight;
+            target.value.style.height = "auto";
+            if (props.state === "collapsed" && props.overflow) {
+                target.value.style.overflow = "visible";
+            }
         }
+    } else if (target.value) {
+        target.value.classList.add("display-none");
+        target.value.style.overflow = "hidden";
     }
 };
 
