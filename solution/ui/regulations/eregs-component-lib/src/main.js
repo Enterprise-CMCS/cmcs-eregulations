@@ -42,6 +42,7 @@ import {
     TocTitle,
     TooltipContainer,
     HeaderUserWidget,
+    VersionHistoryContainer,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
 
@@ -242,6 +243,7 @@ function main() {
             TocTitle,
             TooltipContainer,
             HeaderUserWidget,
+            VersionHistoryContainer,
             ViewResourcesLink,
         },
     });

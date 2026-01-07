@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getGovInfoLinks } from "utilities/api";
 import SimpleSpinner from "../SimpleSpinner.vue";
-import eventbus from "../../eventbus";
 
 const props = defineProps({
     apiUrl: {
@@ -26,35 +25,25 @@ const props = defineProps({
 const govInfoLinks = ref([]);
 const loading = ref(true);
 
-const handleScrollTriggerVisible = ({ trigger }) => {
-    if (trigger === `${props.part}.${props.section}`) {
-        getGovInfoLinks({
-            apiUrl: props.apiUrl,
-            filterParams: {
-                title: props.title,
-                part: props.part,
-                section: props.section,
-            },
-        })
-            .then((response) => {
-                govInfoLinks.value = response.sort((a, b) => b.year - a.year);
-            })
-            .catch((error) => {
-                console.error("Error", error);
-                govInfoLinks.value = [];
-            })
-            .finally(() => {
-                loading.value = false;
-            });
-    }
-};
-
 onMounted(() => {
-    eventbus.on("scroll-trigger-visible", handleScrollTriggerVisible);
-});
-
-onUnmounted(() => {
-    eventbus.off("scroll-trigger-visible", handleScrollTriggerVisible);
+    getGovInfoLinks({
+        apiUrl: props.apiUrl,
+        filterParams: {
+            title: props.title,
+            part: props.part,
+            section: props.section,
+        },
+    })
+        .then((response) => {
+            govInfoLinks.value = response.sort((a, b) => b.year - a.year);
+        })
+        .catch((error) => {
+            console.error("Error", error);
+            govInfoLinks.value = [];
+        })
+        .finally(() => {
+            loading.value = false;
+        });
 });
 </script>
 

@@ -107,6 +107,8 @@ onUnmounted(() => {
         :class="{ invisible: !visible }"
         :style="[styles]"
     >
-        <slot />
+        <slot
+            :visible="visible"
+        />
     </div>
 </template>

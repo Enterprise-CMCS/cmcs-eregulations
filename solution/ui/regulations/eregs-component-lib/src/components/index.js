@@ -15,6 +15,7 @@ export { default as SupplementalContentCategory } from "./SupplementalContentCat
 export { default as SupplementalContentList } from "./SupplementalContentList.vue";
 export { default as SupplementalContentObject } from "./SupplementalContentObject.vue";
 export { default as TableComponent } from "./TableComponent.vue";
+export { default as VersionHistoryContainer } from "./VersionHistoryContainer.vue";
 export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
 
 // Tooltips

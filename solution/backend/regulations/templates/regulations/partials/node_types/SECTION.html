@@ -80,16 +80,18 @@
             </div>
         </div>
         <collapsible
+            v-slot="slotProps"
             name="{{node.label | join:'.'}} section history"
             class="collapse-content"
             state="collapsed"
         >
-            <gov-info-links
+            <version-history-container
                 title="{{cfr_title}}"
                 part="{{node.label.0}}"
                 section="{{node.label.1}}"
                 api-url="{{ API_BASE }}"
-            ></gov-info-links>
+                :visible="slotProps.visible"
+            ></version-history-container>
         </collapsible>
     {% endif %}
 
