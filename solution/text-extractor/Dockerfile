@@ -33,4 +33,4 @@ COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 COPY ./text-extractor ${LAMBDA_TASK_ROOT}/app
 
 # Set the AWS Lambda handler.
-CMD ["app.handler"]
+CMD ["app.text_extractor.handler"]
