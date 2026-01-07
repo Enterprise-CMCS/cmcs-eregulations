@@ -145,7 +145,7 @@ Common operations (for more see `uv help`):
 * You can add a dependency with `uv add new-dependency`.
 * You can remove one with `uv remove old-dependency`.
 * Sync your local virtual environment with `uv sync`.
-* Run commands inside requiring a dependency with `uv run ...`. (Note that this is separate from running a command in the eRegs Docker container!)
+* Run commands requiring a dependency with `uv run ...`. (Note that this is separate from running a command in the eRegs Docker container!)
 
 ## Backing up and restoring the database
 
