@@ -79,7 +79,7 @@ You may also need [Docker compose commands](https://docs.docker.com/compose/). F
 
 If you add or update Python dependencies, you may need to rebuild the site: `docker compose up -d --build regulations`
 
-In general, `make local` will run any migrations that need to run, but if you need to run migrations on their own: `docker compose exec regulations python manage.py migrate`
+In general, `make local` will run any migrations that need to run, but if you need to run migrations on their own: `docker compose exec regulations uv run python manage.py migrate`.
 
 ## Run tests
 
@@ -181,7 +181,7 @@ You will need to restart the local environment to see the changes. The Makefile 
 For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
 
 ## Deleting old CloudFormation stacks
-Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can built up and become a nuisance.
+Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can build up and become a nuisance.
 
 We have 2 scripts in our repo that can assist with cleaning up unused stacks and resources. Both are contained in the `./scripts` directory. Both scripts require the `boto3` library to be installed on your machine, and an AWS account must be configured either via CLI profile or environment variables. Be sure to run `export AWS_REGION=<your_region>` as well.
 
@@ -192,6 +192,12 @@ $ python3 -m venv /path/to/new/venv_directory
 $ source /path/to/new/venv_directory/bin/activate
 $ pip3 install boto3
 $ ./run/scripts/below
+```
+
+You can also use `uv` to install and manage `boto3`. If you haven't already, [install uv]() and then from the `backend` directory run `uv sync`. You can then run the scripts below like this, from the `backend` directory:
+
+```bash
+$ uv run ../../scripts/a_script.py
 ```
 
 ### delete_stacks.py
