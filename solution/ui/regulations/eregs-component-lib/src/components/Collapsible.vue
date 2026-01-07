@@ -32,17 +32,19 @@ const styles = {
     overflow: "hidden",
 };
 
-const toggleDisplay = () => {
+const toggleDisplay = (event) => {
+    const eventName = event.target.getAttribute("name");
+    const targetName = target.value.getAttribute("name");
+
+    if (eventName !== targetName) {
+        return;
+    }
+
     if (visible.value) {
         if (target.value) {
-            target.value.style.height = "auto";
-            if (props.state === "collapsed" && props.overflow) {
-                target.value.style.overflow = "visible";
-            }
+            const targetHeight = getComputedStyle(target.value.children[0]).height;
+            target.value.style.height = targetHeight;
         }
-    } else if (target.value) {
-        target.value.classList.add("display-none");
-        target.value.style.overflow = "hidden";
     }
 };
 
@@ -103,6 +105,7 @@ onUnmounted(() => {
 <template>
     <div
         ref="target"
+        :name="dataName"
         :data-test="dataName"
         :class="{ invisible: !visible }"
         :style="[styles]"

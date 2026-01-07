@@ -85,16 +85,13 @@
             class="collapse-content"
             state="collapsed"
         >
-            <version-history-container :visible="slotProps.visible">
-                <template #annual-editions>
-                    <gov-info-links
-                        title="{{cfr_title}}"
-                        part="{{node.label.0}}"
-                        section="{{node.label.1}}"
-                        api-url="{{ API_BASE }}"
-                    ></gov-info-links>
-                </template>
-            </version-history-container>
+            <version-history-container
+                :visible="slotProps.visible"
+                title="{{cfr_title}}"
+                part="{{node.label.0}}"
+                section="{{node.label.1}}"
+                api-url="{{ API_BASE }}"
+            />
         </collapsible>
     {% endif %}
 

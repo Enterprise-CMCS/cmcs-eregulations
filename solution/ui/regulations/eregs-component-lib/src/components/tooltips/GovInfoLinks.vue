@@ -22,6 +22,8 @@ const props = defineProps({
     },
 });
 
+const emit = defineEmits(["annual-editions-loaded"]);
+
 const govInfoLinks = ref([]);
 const loading = ref(true);
 
@@ -43,6 +45,7 @@ onMounted(() => {
         })
         .finally(() => {
             loading.value = false;
+            emit("annual-editions-loaded", { name: `${props.part}.${props.section}` });
         });
 });
 </script>
