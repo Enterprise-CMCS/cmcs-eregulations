@@ -12,6 +12,9 @@ ENV UV_NO_INSTALLER_METADATA=1
 # Enable copy mode to support bind mount caching.
 ENV UV_LINK_MODE=copy
 
+# Set the venv path to the Lambda task root
+ENV UV_PROJECT_ENVIRONMENT=${LAMBDA_TASK_ROOT}/app/.venv
+
 # Bundle the dependencies into the Lambda task root via `uv pip install --target`.
 #
 # Omit any local packages (`--no-emit-workspace`).
@@ -21,8 +24,11 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=text-extractor/uv.lock,target=uv.lock \
     --mount=type=bind,source=text-extractor/pyproject.toml,target=pyproject.toml \
+    --mount=type=bind,source=lambda-proxy/requirements.txt,target=lambda-proxy-requirements.txt \
     uv export --frozen --no-emit-workspace --no-editable -o requirements.txt && \
-    uv pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
+    uv pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}" && \
+    uv pip install -r lambda-proxy-requirements.txt --target "${LAMBDA_TASK_ROOT}" && \
+    uv sync --locked --no-install-project
 
 FROM public.ecr.aws/lambda/python:3.12
 
@@ -34,13 +40,14 @@ ENV STARTUP_CMD="app.text_extractor.handler"
 # Copy the runtime dependencies from the builder stage.
 COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 
-# Install lambda-proxy for local testing
+# Install lambda-proxy for dev use
 COPY lambda-proxy /proxy
-RUN pip install -r /proxy/requirements.txt
+
+# Install uv for dev use
+COPY --from=uv /uv /bin/uv
 
 # Copy the application code.
 COPY ./text-extractor ${LAMBDA_TASK_ROOT}/app
 
 # Set the AWS Lambda handler.
-#CMD ["app.text_extractor.handler"]
 ENTRYPOINT /proxy/startup.sh
