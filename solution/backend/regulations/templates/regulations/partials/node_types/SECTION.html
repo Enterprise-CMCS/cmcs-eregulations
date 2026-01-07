@@ -31,7 +31,7 @@
     </h2>
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
-    {% if node.label|length <= 2 %}
+    {% if node.label|length <= 2 and "[Reserved]" not in node.title %}
         <div class="section-info-row section-info-row--top">
             <div class="info-links">
                 <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
