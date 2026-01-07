@@ -17,10 +17,19 @@ const clickHandler = () => {
         trigger: props.trigger,
     });
 };
+
+const onIntersect = (isIntersecting) => {
+    if (isIntersecting) {
+        eventbus.emit("scroll-trigger-visible", {
+            trigger: props.trigger,
+        });
+    }
+};
 </script>
 
 <template>
     <button
+        v-intersect.once="onIntersect"
         class="btn link-btn scroll-trigger__button"
         @click="clickHandler"
     >
