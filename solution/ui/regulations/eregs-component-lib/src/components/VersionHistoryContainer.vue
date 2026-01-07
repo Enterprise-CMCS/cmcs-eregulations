@@ -1,7 +1,5 @@
 <script setup>
-import { computed, ref, watch} from "vue";
-
-import GovInfoLinks from "./tooltips/GovInfoLinks.vue";
+import { ref, watch} from "vue";
 
 const props = defineProps({
     visible: {
@@ -16,7 +14,7 @@ const visibleRef = ref(false);
 watch(
     () => props.visible,
     (newVal, oldVal) => {
-        if (!oldVal && newVal) {
+        if (!visibleRef.value && !oldVal && newVal) {
             visibleRef.value = true;
         }
     }
