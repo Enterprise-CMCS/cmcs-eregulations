@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = "==3.12.12"
 dependencies = [
     "beautifulsoup4==4.13.5",
-    "boto3==1.42.22",
+    "boto3==1.42.24",
     "docx2txt==0.9",
     "extract-msg==0.55.0",
     "magika==0.5.1",
