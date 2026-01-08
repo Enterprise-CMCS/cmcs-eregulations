@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
+import { getFullComputedHeight } from "utilities/utils";
 
 const props = defineProps({
     name: {
@@ -40,24 +41,11 @@ const toggleDisplay = (event) => {
         return;
     }
 
-    // new
-    // if (visible.value) {
-    //     if (target.value) {
-    //         const targetHeight = getComputedStyle(target.value.children[0]).height;
-    //         target.value.style.height = targetHeight;
-    //     }
-    // }
-
     if (visible.value) {
         if (target.value) {
-            target.value.style.height = "auto";
-            if (props.state === "collapsed" && props.overflow) {
-                target.value.style.overflow = "visible";
-            }
+            const targetHeight = getFullComputedHeight(target.value.children[0]) + "px";
+            target.value.style.height = targetHeight;
         }
-    } else if (target.value) {
-        target.value.classList.add("display-none");
-        target.value.style.overflow = "hidden";
     }
 };
 
