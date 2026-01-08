@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch} from "vue";
 import GovInfoLinks from "./tooltips/GovInfoLinks.vue";
+import eventbus from "../eventbus";
 
 const props = defineProps({
     title: {
@@ -30,8 +31,9 @@ const loadedRef = ref(false);
 const tab = ref(1);
 
 const handleAnnualEditionsLoaded = ({ name }) => {
-    console.info("Annual editions loaded for:", name + " section history");
     loadedRef.value = true;
+    // figure out if parent element is as tall as this element. If not, adjust height of parent.
+    eventbus.emit("refresh-height", { name: `${name} section history` });
 };
 
 // Keep the GovInfoLinks component mounted after it becomes visible
@@ -60,8 +62,7 @@ watch(
             </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item>
-            </v-window-item>
+            <v-window-item />
             <v-window-item>
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>

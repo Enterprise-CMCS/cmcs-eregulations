@@ -23,6 +23,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    dynamic: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const target = useTemplateRef("target");
@@ -43,9 +48,38 @@ const toggleDisplay = (event) => {
 
     if (visible.value) {
         if (target.value) {
+            target.value.style.height = "auto";
+            if (props.state === "collapsed" && props.overflow) {
+                target.value.style.overflow = "visible";
+            }
+        }
+    } else if (target.value) {
+        target.value.classList.add("display-none");
+        target.value.style.overflow = "hidden";
+    }
+};
+
+const toggleDisplayDynamic = (event) => {
+    const eventName = event.target.getAttribute("name");
+    const targetName = target.value.getAttribute("name");
+
+    if (eventName !== targetName) {
+        return;
+    }
+
+    if (visible.value) {
+        if (target.value) {
             const targetHeight = getFullComputedHeight(target.value.children[0]) + "px";
             target.value.style.height = targetHeight;
         }
+    }
+};
+
+const onTransitionEnd = (event) => {
+    if (props.dynamic) {
+        toggleDisplayDynamic(event);
+    } else {
+        toggleDisplay(event);
     }
 };
 
@@ -94,11 +128,11 @@ onMounted(() => {
         }
     });
     eventbus.on("collapse-toggle", toggle);
-    window.addEventListener("transitionend", toggleDisplay);
+    window.addEventListener("transitionend", onTransitionEnd);
 });
 
 onUnmounted(() => {
-    window.removeEventListener("transitionend", toggleDisplay);
+    window.removeEventListener("transitionend", onTransitionEnd);
     eventbus.off("collapse-toggle", toggle);
 });
 </script>

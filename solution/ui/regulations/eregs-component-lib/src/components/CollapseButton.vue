@@ -17,6 +17,11 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    discontiguous: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const button = useTemplateRef("button");
@@ -38,7 +43,7 @@ const click = () => {
 const toggle = ({ name, action = "toggle" }) => {
     if (dataName.value !== name) return;
 
-    button.value.focus();
+    if (props.discontiguous)  button.value.focus();
 
     if (
         (action === "expand" && visible.value)

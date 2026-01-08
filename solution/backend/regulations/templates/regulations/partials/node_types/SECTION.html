@@ -66,6 +66,7 @@
                     <collapse-button
                         name="{{node.label | join:'.'}} section history"
                         state="collapsed"
+                        discontiguous
                     >
                         <template #expanded>
                             View § {{ node.label | join:'.' }} Version History
@@ -84,6 +85,7 @@
             name="{{node.label | join:'.'}} section history"
             class="collapse-content"
             state="collapsed"
+            dynamic
         >
             <version-history-container
                 :visible="slotProps.visible"
