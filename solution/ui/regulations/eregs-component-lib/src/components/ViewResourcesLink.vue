@@ -51,7 +51,7 @@ const isLink = computed(() => props.type === "link");
             class="btn default-btn"
             @click="clickHandler"
         >
-            <span class="bold">View {{ section }} resources</span>
+            <span class="bold">View {{ section }} Resources</span>
             <span class="count"> ({{ count }})</span>
         </button>
         <button v-else class="btn disabled">
