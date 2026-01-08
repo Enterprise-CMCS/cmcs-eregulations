@@ -43,8 +43,10 @@ jobs:
       - name: Install Python dependencies
         if: success()
         run: |
-          python -m pip install --upgrade pip
-          pip install -r ./solution/backend/requirements.txt
+          python -m pip install --upgrade pip uv
+          pushd solution/backend
+          uv sync --locked --no-install-project
+          popd
           
       # Execute the Python tests
       - name: Run Python unit tests
@@ -60,4 +62,4 @@ jobs:
           HTTP_AUTH_PASSWORD: sgere
         working-directory: ./solution/backend
         run: |
-          pytest -vv
+          uv run pytest -vv

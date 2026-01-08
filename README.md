@@ -17,6 +17,7 @@ We have public documentation about our product, design, and research processes i
 You need these to get started:
 
 -   git
+-   [uv](https://docs.astral.sh/uv/#installation) for dependency management
 -   Docker, including Docker Compose (install [Docker Desktop](https://docs.docker.com/desktop/))
 -   Python 3.12 (consider using [Homebrew](https://docs.brew.sh/Homebrew-and-Python))
 -   [Node](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) >= v22, which includes npm (we suggest using [nvm](https://github.com/nvm-sh/nvm))
@@ -79,7 +80,7 @@ You may also need [Docker compose commands](https://docs.docker.com/compose/). F
 
 If you add or update Python dependencies, you may need to rebuild the site: `docker compose up -d --build regulations`
 
-In general, `make local` will run any migrations that need to run, but if you need to run migrations on their own: `docker compose exec regulations python manage.py migrate`
+In general, `make local` will run any migrations that need to run, but if you need to run migrations on their own: `docker compose exec regulations uv run python manage.py migrate`.
 
 ## Run tests
 
@@ -133,6 +134,19 @@ To use our Okta identity provider on an experimental (ephemeral) deployment, see
 
 # Development tips
 
+## Managing Python dependencies
+
+Python dependencies (i.e. for the eRegs main application and the text extractor) are managed with `uv`.
+
+For operations relating to the eRegs site, first `cd` into `solution/backend`. For operations relating to the text-extractor, `cd` instead into `solution/text-extractor`.
+
+Common operations (for more see `uv help`):
+
+* You can add a dependency with `uv add new-dependency`.
+* You can remove one with `uv remove old-dependency`.
+* Sync your local virtual environment with `uv sync`.
+* Run commands requiring a dependency with `uv run ...`. (Note that this is separate from running a command in the eRegs Docker container!)
+
 ## Backing up and restoring the database
 
 The scripts `backup_db.sh`, `restore_remote_db.sh`, and `restore_local_db.sh` can be used for the following purposes:
@@ -181,7 +195,7 @@ You will need to restart the local environment to see the changes. The Makefile 
 For admin site customizations, use the icon set at [Boxicons](https://boxicons.com).
 
 ## Deleting old CloudFormation stacks
-Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can built up and become a nuisance.
+Sometimes, the `remove-experimental.yml` Github Action fails to complete, leaving some resources left in AWS. Over time these resources can build up and become a nuisance.
 
 We have 2 scripts in our repo that can assist with cleaning up unused stacks and resources. Both are contained in the `./scripts` directory. Both scripts require the `boto3` library to be installed on your machine, and an AWS account must be configured either via CLI profile or environment variables. Be sure to run `export AWS_REGION=<your_region>` as well.
 
@@ -192,6 +206,12 @@ $ python3 -m venv /path/to/new/venv_directory
 $ source /path/to/new/venv_directory/bin/activate
 $ pip3 install boto3
 $ ./run/scripts/below
+```
+
+You can also use `uv` to install and manage `boto3`. If you haven't already, [install uv](https://docs.astral.sh/uv/#installation) and then from the `backend` directory run `uv sync`. You can then run the scripts below like this, from the `backend` directory:
+
+```bash
+$ uv run ../../scripts/a_script.py
 ```
 
 ### delete_stacks.py
