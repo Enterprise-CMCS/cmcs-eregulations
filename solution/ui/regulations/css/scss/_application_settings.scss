@@ -617,6 +617,18 @@ select {
     font-style: italic;
 }
 
+@mixin common-tab-styles {
+    font-family: $secondary_site_font;
+    letter-spacing: 0;
+    color: $dark_blue;
+    text-transform: none !important;
+    font-weight: 700;
+
+    &:focus-visible {
+        outline: none;
+    }
+}
+
 .login-cta__div {
     background-color: $secondary_background_color;
     border: 1px solid $border_color;

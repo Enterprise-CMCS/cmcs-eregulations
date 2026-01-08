@@ -25,13 +25,14 @@ const props = defineProps({
     },
 });
 
-const handleAnnualEditionsLoaded = ({ name }) => {
-    // Placeholder for any actions needed when annual editions are loaded
-    console.info("Annual editions loaded for:", name + " section history");
-    // emit eventbus event to refresh collapsible content height?
-};
-
 const visibleRef = ref(false);
+const loadedRef = ref(false);
+const tab = ref(1);
+
+const handleAnnualEditionsLoaded = ({ name }) => {
+    console.info("Annual editions loaded for:", name + " section history");
+    loadedRef.value = true;
+};
 
 // Keep the GovInfoLinks component mounted after it becomes visible
 watch(
@@ -46,15 +47,35 @@ watch(
 
 <template>
     <div class="version-history-container">
-        Tabbed Content Placeholder
-        <template v-if="visibleRef">
-            <GovInfoLinks
-                :api-url="apiUrl"
-                :title="title"
-                :part="part"
-                :section="section"
-                @annual-editions-loaded="handleAnnualEditionsLoaded"
-            />
-        </template>
+        <v-tabs v-model="tab">
+            <v-tab
+                class="content-tabs"
+                tabindex="0"
+                disabled
+            >
+                Version History
+            </v-tab>
+            <v-tab class="content-tabs" tabindex="0">
+                Annual Editions
+            </v-tab>
+        </v-tabs>
+        <v-window v-model="tab">
+            <v-window-item>
+            </v-window-item>
+            <v-window-item>
+                <div v-if="!visibleRef" class="rules-container">
+                    <p>Loading annual editions...</p>
+                </div>
+                <template v-else>
+                    <GovInfoLinks
+                        :api-url="apiUrl"
+                        :title="title"
+                        :part="part"
+                        :section="section"
+                        @annual-editions-loaded="handleAnnualEditionsLoaded"
+                    />
+                </template>
+            </v-window-item>
+        </v-window>
     </div>
 </template>
