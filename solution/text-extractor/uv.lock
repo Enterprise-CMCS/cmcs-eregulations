@@ -819,20 +819,20 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "beautifulsoup4", specifier = ">=4.13.5" },
-    { name = "boto3", specifier = ">=1.42.22" },
-    { name = "docx2txt", specifier = ">=0.9" },
-    { name = "extract-msg", specifier = ">=0.55.0" },
+    { name = "beautifulsoup4", specifier = "==4.13.5" },
+    { name = "boto3", specifier = "==1.42.22" },
+    { name = "docx2txt", specifier = "==0.9" },
+    { name = "extract-msg", specifier = "==0.55.0" },
     { name = "magika", specifier = "==0.5.1" },
-    { name = "moto", specifier = ">=5.1.19" },
-    { name = "openpyxl", specifier = ">=3.1.5" },
-    { name = "pillow", specifier = ">=12.1.0" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "python-pptx", specifier = ">=1.0.2" },
-    { name = "requests", specifier = ">=2.32.5" },
-    { name = "ruff", specifier = ">=0.14.10" },
-    { name = "striprtf", specifier = ">=0.0.29" },
-    { name = "xlrd", specifier = ">=2.0.2" },
+    { name = "moto", specifier = "==5.1.19" },
+    { name = "openpyxl", specifier = "==3.1.5" },
+    { name = "pillow", specifier = "==12.1.0" },
+    { name = "pytest", specifier = "==9.0.2" },
+    { name = "python-pptx", specifier = "==1.0.2" },
+    { name = "requests", specifier = "==2.32.5" },
+    { name = "ruff", specifier = "==0.14.10" },
+    { name = "striprtf", specifier = "==0.0.29" },
+    { name = "xlrd", specifier = "==2.0.2" },
 ]
 
 [[package]]
