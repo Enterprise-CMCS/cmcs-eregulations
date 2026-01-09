@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
-import { getFullComputedHeight } from "utilities/utils";
 
 const props = defineProps({
     name: {
@@ -54,8 +53,21 @@ const toggleDisplay = () => {
 
 const toggleDisplayDynamic = () => {
     if (visible.value && target.value) {
-        const targetHeight = target.value.scrollHeight;
-        target.value.style.height = targetHeight + "px";
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                target.value.style.height = target.value.scrollHeight + "px";
+            });
+        });
+    }
+};
+
+const refreshHeight = ({ name }) => {
+    if (dataName.value !== name) {
+        return;
+    }
+
+    if (props.dynamic) {
+        toggleDisplayDynamic();
     }
 };
 
@@ -117,11 +129,13 @@ onMounted(() => {
         }
     });
     eventbus.on("collapse-toggle", toggle);
+    eventbus.on("refresh-height", refreshHeight);
     window.addEventListener("transitionend", onTransitionEnd);
 });
 
 onUnmounted(() => {
     window.removeEventListener("transitionend", onTransitionEnd);
+    eventbus.off("refresh-height", refreshHeight);
     eventbus.off("collapse-toggle", toggle);
 });
 </script>
