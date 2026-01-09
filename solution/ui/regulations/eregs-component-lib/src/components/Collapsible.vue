@@ -55,8 +55,8 @@ const toggleDisplay = () => {
 const toggleDisplayDynamic = () => {
     if (visible.value) {
         if (target.value) {
-            const targetHeight = getFullComputedHeight(target.value.children[0]) + "px";
-            target.value.style.height = targetHeight;
+            const targetHeight = target.value.scrollHeight;
+            target.value.style.height = targetHeight + "px";
         }
     }
 };
@@ -69,11 +69,9 @@ const onTransitionEnd = (event) => {
         return;
     }
 
-    if (props.dynamic) {
-        toggleDisplayDynamic();
-    } else {
-        toggleDisplay();
-    }
+    props.dynamic
+        ? toggleDisplayDynamic()
+        : toggleDisplay();
 };
 
 // Accurately measuring height of dynamic content and transitioning smoothly:
