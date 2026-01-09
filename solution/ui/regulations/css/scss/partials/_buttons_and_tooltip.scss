@@ -296,6 +296,16 @@
         .v-tabs {
             height: 38px;
             border-bottom: 2px solid $light_gray;
+
+            .v-tab {
+                &:focus-visible {
+                    &:before,
+                    &:after {
+                        border: none;
+                        opacity: 0;
+                    }
+                }
+            }
         }
 
         .content-tabs.v-tab {
