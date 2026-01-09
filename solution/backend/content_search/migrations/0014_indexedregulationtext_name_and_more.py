@@ -40,5 +40,5 @@ class Migration(migrations.Migration):
             name='summary',
             field=models.TextField(blank=True),
         ),
-        migrations.RunPython(populate_name_and_summary),
+        migrations.RunPython(populate_name_and_summary, reverse_code=migrations.RunPython.noop),
     ]
