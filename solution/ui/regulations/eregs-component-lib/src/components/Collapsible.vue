@@ -38,14 +38,7 @@ const styles = {
     overflow: "hidden",
 };
 
-const toggleDisplay = (event) => {
-    const eventName = event.target.getAttribute("name");
-    const targetName = target.value.getAttribute("name");
-
-    if (eventName !== targetName) {
-        return;
-    }
-
+const toggleDisplay = () => {
     if (visible.value) {
         if (target.value) {
             target.value.style.height = "auto";
@@ -59,14 +52,7 @@ const toggleDisplay = (event) => {
     }
 };
 
-const toggleDisplayDynamic = (event) => {
-    const eventName = event.target.getAttribute("name");
-    const targetName = target.value.getAttribute("name");
-
-    if (eventName !== targetName) {
-        return;
-    }
-
+const toggleDisplayDynamic = () => {
     if (visible.value) {
         if (target.value) {
             const targetHeight = getFullComputedHeight(target.value.children[0]) + "px";
@@ -76,10 +62,17 @@ const toggleDisplayDynamic = (event) => {
 };
 
 const onTransitionEnd = (event) => {
+    const eventName = event.target.getAttribute("name");
+    const targetName = target.value.getAttribute("name");
+
+    if (eventName !== targetName) {
+        return;
+    }
+
     if (props.dynamic) {
-        toggleDisplayDynamic(event);
+        toggleDisplayDynamic();
     } else {
-        toggleDisplay(event);
+        toggleDisplay();
     }
 };
 
