@@ -1,7 +1,6 @@
-version: '3'
 services:
     fr-parser:
-        image: golang:1.16
+        image: docker.io/golang:1.16
         container_name: fr-parser
         network_mode: host
         environment:

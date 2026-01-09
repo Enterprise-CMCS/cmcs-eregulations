@@ -7,7 +7,7 @@ TIMEOUT_MINUTES = 10
 
 
 def generate_related(apps, schema_editor):
-    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+    schema_editor.execute(f"SET statement_timeout = '{TIMEOUT_MINUTES}min';")
     AbstractResource = apps.get_model("resources", "AbstractResource")
     ResourceGroup = apps.get_model("resources", "ResourceGroup")
 
