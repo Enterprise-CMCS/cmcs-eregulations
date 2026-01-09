@@ -53,11 +53,9 @@ const toggleDisplay = () => {
 };
 
 const toggleDisplayDynamic = () => {
-    if (visible.value) {
-        if (target.value) {
-            const targetHeight = target.value.scrollHeight;
-            target.value.style.height = targetHeight + "px";
-        }
+    if (visible.value && target.value) {
+        const targetHeight = target.value.scrollHeight;
+        target.value.style.height = targetHeight + "px";
     }
 };
 
