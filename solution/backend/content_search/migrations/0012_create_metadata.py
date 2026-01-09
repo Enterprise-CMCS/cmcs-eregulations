@@ -1,6 +1,8 @@
 from django.db import migrations, models, transaction
 from django.db.models import Q
 
+TIMEOUT_MINUTES = 15
+
 
 def create_resource_metadata(apps, schema_editor):
     ResourceMetadata = apps.get_model('content_search', 'ResourceMetadata')
@@ -43,5 +45,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            sql=f"SET statement_timeout = '{TIMEOUT_MINUTES}min';",
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.RunPython(create_resource_metadata, reverse_code=migrations.RunPython.noop),
     ]

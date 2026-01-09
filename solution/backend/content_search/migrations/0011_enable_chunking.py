@@ -5,6 +5,8 @@ import django_jsonform.models.fields
 import django.db.models.deletion
 from django.db import migrations, models
 
+TIMEOUT_MINUTES = 15
+
 
 def create_content_search_configuration(apps, schema_editor):
     ContentSearchConfiguration = apps.get_model('content_search', 'ContentSearchConfiguration')
@@ -30,6 +32,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            sql=f"SET statement_timeout = '{TIMEOUT_MINUTES}min';",
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.AlterField(
             model_name='contentindex',
             name='reg_text',

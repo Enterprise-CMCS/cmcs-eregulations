@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 
+TIMEOUT_MINUTES = 15
+
 
 def populate_name_and_summary(apps, schema_editor):
     IndexedRegulationText = apps.get_model('content_search', 'IndexedRegulationText')
@@ -24,6 +26,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunSQL(
+            sql=f"SET statement_timeout = '{TIMEOUT_MINUTES}min';",
+            reverse_sql=migrations.RunSQL.noop,
+        ),
         migrations.AddField(
             model_name='indexedregulationtext',
             name='name',
