@@ -97,9 +97,15 @@
         }
 
         button.collapsible-title {
+            display: flex;
+            align-items: center;
             margin-top: 0;
             font-size: var(--font-size-sm);
-            gap: var(--spacer-half)
+            gap: var(--spacer-half);
+
+            &.visible {
+                color: $primary_link_color;
+            }
         }
 
         @include custom-max(calc($mobile-max / 1px)) {
