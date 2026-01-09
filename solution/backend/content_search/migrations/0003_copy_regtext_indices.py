@@ -18,7 +18,7 @@ def remove_control_characters(text: str) -> str:
 
 def copy_indexed_regulation_text(apps, schema_editor):
     # Lessen the likelihood of this migration timing out during the copy operation
-    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+    schema_editor.execute(f"SET statement_timeout = '{TIMEOUT_MINUTES}min';")
 
     if not apps.is_installed("search"):
         logger.warning("Skipping copy_indexed_regulation_text data migration because 'search' app is no longer installed.")

@@ -12,7 +12,7 @@ TIMEOUT_MINUTES = 10
 
 def copy_content(apps, schema_editor):
     # Lessen the likelihood of this migration timing out during the copy operation
-    schema_editor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+    schema_editor.execute(f"SET statement_timeout = '{TIMEOUT_MINUTES}min';")
 
     # This check ensures the apps stay decoupled, we do not want to introduce a circular dependency
     if not apps.is_installed("content_search"):

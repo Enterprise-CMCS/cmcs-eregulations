@@ -27,7 +27,7 @@ def handler(event, context):
 
     try:
         with connection.cursor() as cursor:
-            cursor.execute(f"SET LOCAL statement_timeout TO {TIMEOUT_MINUTES * 60000};")
+            cursor.execute(f"SET statement_timeout = '{TIMEOUT_MINUTES}min';")
             cursor.execute(
                 "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid <> pg_backend_pid() AND datname = 'eregs'"
             )
