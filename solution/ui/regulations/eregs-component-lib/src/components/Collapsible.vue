@@ -95,7 +95,6 @@ const onTransitionEnd = (event) => {
 
 const onResize = () => {
     if (props.dynamic && visible.value) {
-        console.log("resize detected");
         toggleDisplayDynamic();
     }
 };
