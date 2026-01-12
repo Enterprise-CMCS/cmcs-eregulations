@@ -1,6 +1,6 @@
 import pytest
 
-from resources.utils.aws_utils import _should_ignore_robots_txt
+from content_search.utils import _should_ignore_robots_txt
 
 
 @pytest.mark.parametrize(

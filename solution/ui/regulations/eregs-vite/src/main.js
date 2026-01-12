@@ -2,6 +2,11 @@ import { createApp } from "vue";
 import { isNavigationFailure, NavigationFailureType } from "vue-router";
 import Clickaway from "directives/clickaway";
 import SanitizeHtml from "directives/sanitizeHtml";
+import {
+    COMPRESSION_PREFIX,
+    compressRouteQuery,
+    SEARCH_STRING_COMPRESSION_THRESHOLD,
+} from "utilities/utils.js";
 import vuetify from "./plugins/vuetify";
 
 import App from "./App.vue";
@@ -29,7 +34,7 @@ app.directive("sanitize-html", SanitizeHtml);
 
 const router = vueRouter({ siteRoot });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
     const pageTitle = "Find by Subject | Medicaid & CHIP eRegulations";
 
     // If you pass multiple query params in the URL, Vue Router will parse them as arrays.
@@ -41,25 +46,41 @@ router.beforeEach((to) => {
         }
     });
 
-    if (to.name === "subjects") {
-        if (!to.query?.subject) {
-            document.title = pageTitle;
-        }
+    switch (to.name) {
+        case "subjects": {
+            if (!to.query?.subject) {
+                document.title = pageTitle;
+            }
 
-        // strip out q param if it exists; it's not needed for subjects
-        const { q, ...qlessQuery } = to.query;
+            // strip out q param if it exists; it's not needed for subjects
+            const { q, ...qlessQuery } = to.query;
 
-        if (isAuthenticated === "False" && to.query?.type) {
-            const { type: _type, ...typelessQuery } = qlessQuery;
-            return { name: "subjects", query: typelessQuery };
-        }
+            if (isAuthenticated === "False" && to.query?.type) {
+                const { type: _type, ...typelessQuery } = qlessQuery;
+                return { name: "subjects", query: typelessQuery };
+            }
 
-        if (q) {
-            return { name: "subjects", query: qlessQuery };
+            if (q) {
+                return { name: "subjects", query: qlessQuery };
+            }
+            break;
         }
+        case "search": {
+            if (
+                to.query?.q
+                    && to.query.q.length > SEARCH_STRING_COMPRESSION_THRESHOLD
+                    && !to.query.q.startsWith(COMPRESSION_PREFIX)
+            ) {
+                let { q, ...returnQuery } = to.query;
+                returnQuery.q = compressRouteQuery({ q });
+
+                return { name: to.name, query: returnQuery };
+            }
+            break;
+        }
+        default:
+            return true;
     }
-
-    return true;
 });
 
 // Silence duplicate navigation errors

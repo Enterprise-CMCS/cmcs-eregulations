@@ -13,6 +13,7 @@ import {
     getParts,
     getRecentResources,
     getRegSearchResults,
+    getSemanticSearchResults,
     getStatutes,
     getStatutesActs,
     getSubjects,
@@ -31,6 +32,19 @@ const fetchGetBoilerplate = {
         "Content-Type": "application/json",
     },
     method: "GET",
+    mode: "cors",
+    params: undefined,
+    redirect: "follow",
+};
+
+const fetchPostBoilerplate = {
+    cache: "no-cache",
+    headers: {
+        Accept: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": null,
+    },
+    method: "POST",
     mode: "cors",
     params: undefined,
     redirect: "follow",
@@ -269,6 +283,22 @@ describe("api.js", () => {
             );
         });
     });
+    describe("getSemanticSearchResults", () => {
+        it("is called with proper param string", async () => {
+            const data = "q=test";
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: data };
+
+            await getSemanticSearchResults({
+                apiUrl: "http://localhost:9000/",
+                data,
+            });
+            await flushPromises();
+            expect(fetch).toHaveBeenCalledWith(
+                "http://localhost:9000/content-search/",
+                fetchBoilerplateWithData
+            );
+        });
+    });
     describe("getCombinedContent", () => {
         it("is called with requestParams param string", async () => {
             await getCombinedContent({
@@ -294,24 +324,29 @@ describe("api.js", () => {
     });
     describe("getGranularCounts", () => {
         it("is called with requestParams param string", async () => {
+            const data = "q=test";
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: data };
+
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
-                requestParams: "locations=42.431.10",
+                data,
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
-                "http://localhost:9000/content-search/counts?locations=42.431.10",
-                fetchGetBoilerplate
+                "http://localhost:9000/content-search/counts",
+                fetchBoilerplateWithData
             );
         });
         it("is called without requestParams param string", async () => {
+            const fetchBoilerplateWithData = {...fetchPostBoilerplate, body: {} };
+
             await getGranularCounts({
                 apiUrl: "http://localhost:9000/",
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/content-search/counts",
-                fetchGetBoilerplate
+                fetchBoilerplateWithData
             );
         });
     });

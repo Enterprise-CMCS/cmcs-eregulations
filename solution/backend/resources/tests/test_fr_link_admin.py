@@ -22,13 +22,13 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.link = FederalRegisterLink.objects.create(title='Test Link')
 
     @patch('resources.admin.requests.get')
-    @patch('resources.admin.resources.call_text_extractor')
-    def test_save_model_new_link(self, mock_call_text_extractor, mock_get):
+    @patch('content_search.utils.call_text_extractor_for_resources')
+    def test_save_model_new_link(self, mock_call_text_extractor_for_resources, mock_get):
         mock_get.return_value = MockResponse(
             content=json.dumps({"raw_text_url": "https://example.com/raw_text"}),
             status_code=200
         )
-        mock_call_text_extractor.return_value = (1, [])
+        mock_call_text_extractor_for_resources.return_value = (1, [])
 
         request = self.factory.post(reverse('admin:resources_federalregisterlink_add'))
         session_middleware = SessionMiddleware(request)
@@ -57,13 +57,13 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(len(response_messages), 1)
 
     @patch('resources.admin.requests.get')
-    @patch('resources.admin.resources.call_text_extractor')
-    def test_save_model_existing_link(self, mock_call_text_extractor, mock_get):
+    @patch('content_search.utils.call_text_extractor_for_resources')
+    def test_save_model_existing_link(self, mock_call_text_extractor_for_resources, mock_get):
         mock_get.return_value = MockResponse(
             content=json.dumps({"raw_text_url": "https://example.com/raw_text"}),
             status_code=200
         )
-        mock_call_text_extractor.return_value = (1, [])
+        mock_call_text_extractor_for_resources.return_value = (1, [])
 
         request = self.factory.post(reverse('admin:resources_federalregisterlink_change', args=[self.link.id]))
         session_middleware = SessionMiddleware(request)
@@ -92,10 +92,10 @@ class FederalRegisterLinkExtractUrlTestCase(TestCase):
         self.assertEqual(len(response_messages), 1)
 
     @patch('resources.admin.requests.get')
-    @patch('resources.admin.resources.call_text_extractor')
-    def test_save_model_failed_request(self, mock_call_text_extractor, mock_get):
+    @patch('content_search.utils.call_text_extractor_for_resources')
+    def test_save_model_failed_request(self, mock_call_text_extractor_for_resources, mock_get):
         mock_get.return_value = MockResponse(status_code=500)
-        mock_call_text_extractor.return_value = (1, [])
+        mock_call_text_extractor_for_resources.return_value = (1, [])
 
         request = self.factory.post(reverse('admin:resources_federalregisterlink_add'))
         session_middleware = SessionMiddleware(request)

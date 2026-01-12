@@ -5,6 +5,7 @@ description = "Django site, backend, and API for eRegs"
 readme = "../../README.md"
 requires-python = "==3.12.12"
 dependencies = [
+    "beautifulsoup4==4.14.3",
     "boto3==1.42.24",
     "defusedxml==0.7.1",
     "django==5.2.9",

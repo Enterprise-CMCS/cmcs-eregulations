@@ -78,17 +78,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="The file type of the document. Only use this field if the automatically detected file type is incorrect, "
                   "and the document content is not extracting correctly as a result.",
     )
-    detected_file_type = models.CharField(
-        max_length=32,
-        blank=True,
-        help_text="The file type that the text extractor detected for this resource.",
-        editable=False,
-    )
-    extraction_error = models.TextField(
-        blank=True,
-        help_text="If the text extractor failed to extract text from this resource, the error message will be stored here.",
-        editable=False,
-    )
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
@@ -100,25 +89,37 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     @property
     def indexing_status(self):
-        if self.extraction_error:
-            return f"Error: {self.extraction_error}"
-        if not getattr(self, "content", None):
-            return "Not indexed"
-        if self.content.value:
-            return f"Indexed: {self.content.value[:100]}..."
-        return "Not indexed or no content found"
+        try:
+            index_metadata = getattr(self, "index_metadata")
+            if not index_metadata:
+                return "Not indexed"
+            if index_metadata.extraction_error:
+                return f"Error: {index_metadata.extraction_error}"
+            indices = getattr(self, "indices")
+            if not indices or not indices.exists():
+                return "Not indexed"
+            index = indices.first()
+            return f"Indexed: {index.content[:100]}..."
+        except Exception as e:
+            return str(e)
+
+    @property
+    def number_of_chunks(self):
+        indices = getattr(self, "indices")
+        if not indices or not indices.exists():
+            return 0
+        return indices.count()
+
+    @property
+    def detected_file_type(self):
+        index_metadata = getattr(self, "index_metadata")
+        if index_metadata and index_metadata.detected_file_type:
+            return index_metadata.detected_file_type
+        return "Not detected"
 
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
-
-
-class ResourceContent(models.Model):
-    value = models.TextField(blank=True)
-    resource = models.OneToOneField(AbstractResource, on_delete=models.CASCADE, related_name="content")
-
-    def __str__(self):
-        return self.value[:100] + "..." if len(self.value) > 100 else self.value
 
 
 class AbstractPublicResource(AbstractResource):

@@ -1,8 +1,9 @@
 {% extends "regulations/spa_base.html" %}
 {% load static %}
 {% load string_formatters %}
+{% csrf_token %}
 
-{% block title_prefix %}Search {% if q %}for {{ q }} {% endif %}| {% endblock %}
+{% block title_prefix %}{% endblock %}
 
 {% block pre_header %}
     <a class="ds-c-skip-nav" href="#main-content">Skip to main content</a>
@@ -16,6 +17,7 @@
     data-api-url="{{ API_BASE }}"
     data-about-url="{% url 'about' %}"
     data-custom-login-url="{% url 'custom_login' %}"
+    data-default-page-size="{{ default_page_size }}"
     data-default-title="{{ default_title }}"
     data-site-root="{{ SITE_ROOT }}"
     data-home-url="{% url 'homepage' %}"

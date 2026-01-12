@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue";
 
+import { MAX_QUERY_LENGTH } from "utilities/utils";
+
 import HeaderSearchIcon from "../svgs/header-search-icon.vue";
 import HeaderChevronLeft from "../svgs/header-chevron-left.vue";
 
@@ -51,6 +53,7 @@ const expandButtonAriaLabel = computed(
             type="search"
             name="q"
             placeholder="Search"
+            :maxlength="MAX_QUERY_LENGTH"
         >
         <button
             type="submit"

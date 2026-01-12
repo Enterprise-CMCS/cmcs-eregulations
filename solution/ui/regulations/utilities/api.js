@@ -14,6 +14,21 @@ let config = {
     maxRetryCount: 2,
 };
 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 const fetchJson = ({
     url,
     options = {},
@@ -29,11 +44,11 @@ const fetchJson = ({
     };
     const body = {};
     const merged = {
-        method: "GET",
+        method: "GET", // default, can be overridden by options.method
         cache: "no-cache",
         mode: config.fetchMode,
         redirect: "follow",
-        body,
+        body, // default empty body, can be overridden by options.body
         ...options,
         headers: { ...headers, ...options.headers },
     };
@@ -170,6 +185,24 @@ const httpApiGet = (
         retryCount: 0, // retryCount, default
     });
 };
+
+function httpApiPost(
+    urlPath,
+    { data = {}, params } = {},
+) {
+    return fetchJson({
+        url: `${urlPath}`,
+        options: {
+            method: "POST",
+            params,
+            body: data,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": getCookie("csrftoken"),
+            },
+        },
+    });
+}
 
 // ---------- api calls ---------------
 /**
@@ -506,14 +539,23 @@ const getCombinedContent = async ({
         {},
     );
 
-const getGranularCounts = async ({
-    apiUrl,
-    requestParams = "",
-}) =>
-    httpApiGet(
-        `${apiUrl}content-search/counts${requestParams ? `?${requestParams}` : ""}`,
-        {},
-    );
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {Object} options.data - Data to be sent in the POST request body
+ * @returns {Promise<{count: number, next: ?string, previous: ?string, results: Array<Object>}>} - Promise that contains array of file items when fulfilled
+ */
+const getSemanticSearchResults = async ({ apiUrl, data }) =>
+    httpApiPost(`${apiUrl}content-search/`, { data });
+
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {Object} options.data - Data to be sent in the POST request body
+ * @returns {Promise<{categories: Array<Object>, internal_resource_count: number, public_resource_count: number, regulation_text_count: number, subjects: Array<Object>}>} - Promise that contains counts information
+ */
+const getGranularCounts = async ({ apiUrl, data, }) =>
+    httpApiPost(`${apiUrl}content-search/counts`, { data });
 
 /**
  * @param {Object} options - parameters needed for API call
@@ -590,6 +632,7 @@ export {
     getParts,
     getRecentResources,
     getRegSearchResults,
+    getSemanticSearchResults,
     getStatuteCitationLink,
     getStatutes,
     getStatutesActs,
