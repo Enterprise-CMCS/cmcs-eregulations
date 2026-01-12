@@ -71,7 +71,9 @@
 
         &--bottom {
             .info-links {
-                align-items: center;
+                @include screen-lg {
+                    align-items: center;
+                }
             }
         }
     }
@@ -115,10 +117,6 @@
         }
 
         @include screen-lg {
-            flex-direction: row;
-        }
-
-        @include screen-xl {
             flex-direction: row;
         }
     }
