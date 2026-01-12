@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
+import debounce from "lodash/debounce";
 import { getFullComputedHeight } from "utilities/utils";
 
 const props = defineProps({
@@ -99,6 +100,8 @@ const onResize = () => {
     }
 };
 
+const debouncedOnResize = debounce(onResize, 100);
+
 // Accurately measuring height of dynamic content and transitioning smoothly:
 // https://dev.to/nikneym/getcomputedstyle-the-good-the-bad-and-the-ugly-parts-1l34
 const toggle = ({ name, action = "toggle" }) => {
@@ -146,12 +149,12 @@ onMounted(() => {
     eventbus.on("collapse-toggle", toggle);
     eventbus.on("refresh-height", refreshHeight);
     window.addEventListener("transitionend", onTransitionEnd);
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", debouncedOnResize);
 });
 
 onUnmounted(() => {
     window.removeEventListener("transitionend", onTransitionEnd);
-    window.removeEventListener("resize", onResize);
+    window.removeEventListener("resize", debouncedOnResize);
     eventbus.off("refresh-height", refreshHeight);
     eventbus.off("collapse-toggle", toggle);
 });
