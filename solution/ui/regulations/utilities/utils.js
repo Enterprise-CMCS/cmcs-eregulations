@@ -833,6 +833,13 @@ const hasStatuteCitations = ({ doc }) => {
     return doc.act_citations.length > 0 || doc.usc_citations.length > 0;
 };
 
+const getFullComputedHeight = (element) => {
+    const style = window.getComputedStyle(element);
+    const marginTop = parseFloat(style.marginTop) || 0;
+    const marginBottom = parseFloat(style.marginBottom) || 0;
+    return element.offsetHeight + marginTop + marginBottom;
+}
+
 export {
     addMarks,
     createLastUpdatedDates,
@@ -853,6 +860,7 @@ export {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getFullComputedHeight,
     getLinkDomain,
     getLinkDomainFileTypeEl,
     getLinkDomainString,

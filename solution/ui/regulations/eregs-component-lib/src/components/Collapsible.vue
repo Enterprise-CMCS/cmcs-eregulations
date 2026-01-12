@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
+import { getFullComputedHeight } from "utilities/utils";
 
 const props = defineProps({
     name: {
@@ -53,9 +54,16 @@ const toggleDisplay = () => {
 
 const toggleDisplayDynamic = () => {
     if (visible.value && target.value) {
+        let desiredHeight;
+        if (target.value.children.length === 1) {
+            desiredHeight = getFullComputedHeight(target.value.children[0]);
+        } else {
+            desiredHeight = target.value.scrollHeight;
+        }
+
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                target.value.style.height = target.value.scrollHeight + "px";
+                target.value.style.height = `${desiredHeight}px`;
             });
         });
     }
@@ -66,7 +74,7 @@ const refreshHeight = ({ name }) => {
         return;
     }
 
-    if (props.dynamic) {
+    if (props.dynamic && visible.value) {
         toggleDisplayDynamic();
     }
 };
@@ -82,6 +90,13 @@ const onTransitionEnd = (event) => {
     props.dynamic
         ? toggleDisplayDynamic()
         : toggleDisplay();
+};
+
+const onResize = () => {
+    if (props.dynamic && visible.value) {
+        console.log("resize detected");
+        toggleDisplayDynamic();
+    }
 };
 
 // Accurately measuring height of dynamic content and transitioning smoothly:
@@ -131,10 +146,12 @@ onMounted(() => {
     eventbus.on("collapse-toggle", toggle);
     eventbus.on("refresh-height", refreshHeight);
     window.addEventListener("transitionend", onTransitionEnd);
+    window.addEventListener("resize", onResize);
 });
 
 onUnmounted(() => {
     window.removeEventListener("transitionend", onTransitionEnd);
+    window.removeEventListener("resize", onResize);
     eventbus.off("refresh-height", refreshHeight);
     eventbus.off("collapse-toggle", toggle);
 });
