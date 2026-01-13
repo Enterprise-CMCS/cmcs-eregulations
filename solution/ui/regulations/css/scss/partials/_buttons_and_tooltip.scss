@@ -75,11 +75,27 @@
     background: $mid-blue;
     border-color: rgba(0, 0, 0, 0);
 
+    span.bold {
+        font-weight: 700;
+    }
+
     &:hover,
     &:focus,
     &:focus:visited {
         background: $mid-dark-blue;
         background-color: $mid-dark-blue;
+    }
+
+    &--outlined {
+        background: none;
+        color: $mid_blue;
+        border: 1px solid $mid_blue;
+
+        &:hover,
+        &:focus,
+        &:focus:visited {
+            background: unset;
+        }
     }
 }
 

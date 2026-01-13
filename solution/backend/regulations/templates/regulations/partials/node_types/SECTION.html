@@ -39,7 +39,12 @@
             {% endif %}
         >
             <div class="info-links">
-                <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+                <view-resources-link
+                    type="button"
+                    section="§ {{node.label | join:'.'}}"
+                    count="{% get_item resource_count simple_citation '0' %}"
+                    outlined
+                ></view-resources-link>
             <scroll-trigger-link
                 label="Jump to § {{ node.label | join:'.' }} Version History"
                 trigger="{{ node.label | join:'.'}}"
