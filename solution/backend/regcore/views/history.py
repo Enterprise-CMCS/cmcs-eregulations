@@ -6,8 +6,8 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from regcore.serializers.history import EcfrHistorySerializer, HistorySerializer
 from common.exceptions import ServiceUnavailable
+from regcore.serializers.history import EcfrHistorySerializer, HistorySerializer
 
 from .utils import OpenApiPathParameter
 
@@ -93,18 +93,17 @@ class EcfrHistoryViewSet(viewsets.ViewSet):
 
         try:
             client = httpx.Client(timeout=httpx.Timeout(HTTPX_TIMEOUT))
-            response = client.get(ECFR_API_LINK.format(**citation)).raise_for_status()
-            data = response.json()
-        except:
+            data = client.get(ECFR_API_LINK.format(**citation)).raise_for_status().json()
+        except Exception:
             raise ServiceUnavailable()
-        
+
         versions = data.get("content_versions", [])
         links = []
 
         for i in range(len(versions)):
             current = versions[0]
             this = versions[i]
-            previous = versions[i+1] if i + 1 < len(versions) else None
+            previous = versions[i + 1] if i + 1 < len(versions) else None
 
             links.append({
                 "version": this["amendment_date"],
@@ -123,5 +122,5 @@ class EcfrHistoryViewSet(viewsets.ViewSet):
                     **citation,
                 ) if this != current else None,
             })
-        
+
         return Response(self.serializer_class(instance=links, many=True).data)
