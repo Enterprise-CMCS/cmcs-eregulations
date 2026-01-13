@@ -75,6 +75,12 @@ class SectionHistoryViewSet(viewsets.ViewSet):
         return Response(self.serializer_class(instance=years, many=True).data)
 
 
+def date_minus_one(date_string):
+    date_obj = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+    date_obj_minus_one = date_obj - datetime.timedelta(days=1)
+    return date_obj_minus_one.strftime("%Y-%m-%d")
+
+
 @extend_schema(
     tags=["regcore/metadata"],
     description="Retrieve a list of links to GovInfo PDFs for historical versions of a regulation section.",
@@ -97,30 +103,32 @@ class EcfrHistoryViewSet(viewsets.ViewSet):
         except Exception:
             raise ServiceUnavailable()
 
-        versions = data.get("content_versions", [])
+        versions = [i["amendment_date"] for i in data.get("content_versions", [])]
+        versions = sorted(list(set(versions)), reverse=True)
         links = []
 
         for i in range(len(versions)):
             current = versions[0]
+            next = versions[i - 1] if i - 1 >= 0 else None
             this = versions[i]
             previous = versions[i + 1] if i + 1 < len(versions) else None
 
             links.append({
-                "version": this["amendment_date"],
+                "version": this,
                 "version_link": ECFR_VIEW_ON_LINK.format(
-                    date=this["amendment_date"],
+                    date=this,
                     **citation,
                 ),
                 "compare_to_previous_link": ECFR_VIEW_DIFF_LINK.format(
-                    newer=this["amendment_date"],
-                    older=previous["amendment_date"],
+                    newer=this,
+                    older=date_minus_one(this),
                     **citation,
-                ) if previous else None,
+                ) if previous and this else None,
                 "compare_to_current_link": ECFR_VIEW_DIFF_LINK.format(
                     newer="current",
-                    older=this["amendment_date"],
+                    older=date_minus_one(next),
                     **citation,
-                ) if this != current else None,
+                ) if next and this != current else None,
             })
 
         return Response(self.serializer_class(instance=links, many=True).data)
