@@ -66,7 +66,7 @@ def clean_output(text: str) -> str:
     text = " ".join(text.split())
     # Replace non-alphanumeric but repeated characters with max 3 instances if repeated 3 or more times
     # (e.g. -------------------- turns into ---)
-    text = re.sub(r"([^\s\w]{3,})", repl=lambda match: match.group()[0]*3, string=text)
+    text = re.sub(r"([^\s\w])\1{3,}", repl=lambda match: match.group(1)*3, string=text)
     return text
 
 
