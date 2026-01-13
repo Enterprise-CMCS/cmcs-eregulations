@@ -31,6 +31,9 @@ urlpatterns = [
         path("title/<title>/part/<part>/history/section/<section>", history.SectionHistoryViewSet.as_view({
             "get": "list",
         })),
+        path("title/<title>/part/<part>/versions/section/<section>", history.EcfrHistoryViewSet.as_view({
+            "get": "list",
+        })),
         path("title/<title>/part/<part>/versions", part.VersionsViewSet.as_view({
             "get": "list",
         })),
