@@ -32,7 +32,6 @@ const tab = ref(1);
 
 const handleAnnualEditionsLoaded = ({ name }) => {
     loadedRef.value = true;
-    // figure out if parent element is as tall as this element. If not, adjust height of parent.
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
 
