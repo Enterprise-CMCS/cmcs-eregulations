@@ -140,10 +140,11 @@ export class WafConstruct extends Construct {
      * @param apiGateway The API Gateway to associate with the WAF
      */
     public associateWithApiGateway(apiGateway: apigw.RestApi): void {
-        new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
+        const association = new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
             resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
             webAclArn: this.webAcl.attrArn,  // Using attrArn from webAcl
         });
+        association.node.addDependency(apiGateway.deploymentStage);
     }
 
     /**
@@ -162,4 +163,3 @@ export class WafConstruct extends Construct {
         return this.logGroup.logGroupArn;
     }
 }
-
