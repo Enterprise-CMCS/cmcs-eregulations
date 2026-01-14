@@ -187,7 +187,8 @@ describe("Part View", () => {
         cy.get("button[data-test='State Medicaid Director Letter (SMDL)']")
             .click({ force: true });
 
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .should("be.visible")
             .and("contain.text", "Show Related Subjects");
 
@@ -207,10 +208,12 @@ describe("Part View", () => {
             .should("not.exist");
 
         // click to show subjects
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .click({ force: true });
 
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .should("contain.text", "Hide Related Subjects");
 
         // Assert that subjects are visible
