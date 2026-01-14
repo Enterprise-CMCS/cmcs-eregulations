@@ -833,6 +833,16 @@ const hasStatuteCitations = ({ doc }) => {
     return doc.act_citations.length > 0 || doc.usc_citations.length > 0;
 };
 
+/**
+ * Calculates the full computed height of an element, including margins.
+ * @param {HTMLElement} element - The HTML element to calculate the height for.
+ * @returns {number} - The full computed height of the element in pixels.
+ *
+ * @example
+ * const element = document.getElementById("my-element");
+ * const fullHeight = getFullComputedHeight(element);
+ * console.log(`Full height including margins: ${fullHeight}px`);
+ */
 const getFullComputedHeight = (element) => {
     const style = window.getComputedStyle(element);
     const marginTop = parseFloat(style.marginTop) || 0;

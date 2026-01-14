@@ -12,6 +12,7 @@ import {
     getFileNameSuffix,
     getFileTypeButton,
     getFrDocType,
+    getFullComputedHeight,
     getLinkDomain,
     getLinkDomainFileTypeEl,
     getLinkDomainString,
@@ -1053,5 +1054,25 @@ describe("hasStatuteCitations", () => {
                 },
             })
         ).toBe(true);
+    });
+});
+
+describe("getFullComputedHeight", () => {
+    it("returns the correct full computed height of an element", async () => {
+        // Create a mock element with specific styles
+        const mockElement = document.createElement("div");
+        Object.defineProperty(mockElement, 'offsetHeight', {
+            configurable: true,
+            value: 100 // Assume the element is 100px tall
+        });
+        mockElement.style.marginTop = "10px";
+        mockElement.style.marginBottom = "15px";
+        document.body.appendChild(mockElement);
+
+        const fullHeight = getFullComputedHeight(mockElement);
+        expect(fullHeight).toBe(125); // 100 + 10 + 15
+
+        // Clean up
+        document.body.removeChild(mockElement);
     });
 });
