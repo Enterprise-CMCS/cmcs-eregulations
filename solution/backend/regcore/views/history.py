@@ -83,7 +83,8 @@ def date_minus_one(date_string):
 
 @extend_schema(
     tags=["regcore/metadata"],
-    description="Retrieve a list of links to GovInfo PDFs for historical versions of a regulation section.",
+    description="Retrieve a list of historical versions of a regulation section as recorded by eCFR."
+                "The response contains links to view each version and compare it to the previous and current versions.",
     parameters=[
         OpenApiPathParameter("title", "The title containing the regulation section.", int),
         OpenApiPathParameter("part", "The part containing the regulation section.", int),
