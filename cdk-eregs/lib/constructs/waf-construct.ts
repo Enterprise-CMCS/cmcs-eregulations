@@ -144,7 +144,7 @@ export class WafConstruct extends Construct {
             resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
             webAclArn: this.webAcl.attrArn,  // Using attrArn from webAcl
         });
-        association.node.addDependency(apiGateway.deploymentStage);
+        //association.node.addDependency(apiGateway.deploymentStage);
     }
 
     /**
