@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import SupplementalContentObject from "./SupplementalContentObject.vue";
 import ShowMoreButton from "./ShowMoreButton.vue";
 import CollapseButton from "./CollapseButton.vue";
@@ -22,7 +22,7 @@ const props = defineProps({
 });
 
 const subcategory = ref("");
-const innerName = ref("SupplementalContentCollapsible");
+const innerName = useId()
 
 const limitedContent = computed(() => props.supplemental_content.slice(0, props.limit));
 const additionalContent = computed(() => props.supplemental_content.slice(props.limit));

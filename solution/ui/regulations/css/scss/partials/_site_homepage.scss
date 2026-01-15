@@ -243,17 +243,10 @@
                     }
 
                     .content-tabs {
-                        font-family: $secondary_site_font;
-                        letter-spacing: 0;
-                        color: $dark_blue;
-                        text-transform: none !important;
                         line-height: 36px;
 
+                        @include common-tab-styles;
                         @include clamp-title;
-
-                        &:focus-visible {
-                            outline: none;
-                        }
                     }
 
                     .recent-date {

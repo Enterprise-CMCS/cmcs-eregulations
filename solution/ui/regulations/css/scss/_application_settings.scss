@@ -561,16 +561,9 @@ select {
     }
 }
 
-#main-content:target {
-    // Moves content down so it's not covered by the sticky header
-    scroll-margin-top: $header_height_mobile + 5px;
-
-    @include screen-eds-sm {
-        scroll-margin-top: $header_height + 5px;
-    }
-}
-
-.content :target {
+#main-content:target,
+.content :target,
+.scroll-target-container {
     // Moves content down so it's not covered by the sticky header
     scroll-margin-top: $header_height_mobile + 5px;
 
@@ -622,6 +615,18 @@ select {
     font-size: var(--font-size-xs);
     color: $mid_gray;
     font-style: italic;
+}
+
+@mixin common-tab-styles {
+    font-family: $secondary_site_font;
+    letter-spacing: 0;
+    color: $dark_blue;
+    text-transform: none !important;
+    font-weight: 700;
+
+    &:focus-visible {
+        outline: none;
+    }
 }
 
 .login-cta__div {

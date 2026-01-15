@@ -80,11 +80,27 @@
     background: $mid-blue;
     border-color: rgba(0, 0, 0, 0);
 
+    span.bold {
+        font-weight: 700;
+    }
+
     &:hover,
     &:focus,
     &:focus:visited {
         background: $mid-dark-blue;
         background-color: $mid-dark-blue;
+    }
+
+    &--outlined {
+        background: none;
+        color: $mid_blue;
+        border: 1px solid $mid_blue;
+
+        &:hover,
+        &:focus,
+        &:focus:visited {
+            background: unset;
+        }
     }
 }
 
@@ -103,6 +119,11 @@
         stroke: $copy_button_success;
         fill: $copy_button_success;
     }
+}
+
+.scroll-trigger__button {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
 }
 
 .loading-icon {
@@ -252,56 +273,6 @@
             position: absolute;
         }
 
-        &.reg-history-link-container {
-            .tooltip.clicked {
-                width: calc(
-                    80% - var(--spacer-1) - var(--spacer-1) - $collapsed-sidebar-width -
-                        40px
-                );
-
-                @include screen-md {
-                    width: calc(100% - var(--spacer-1) - var(--spacer-1));
-                    max-width: 440px;
-                }
-
-                .gov-info-links {
-                    .no-results {
-                        font-size: 14px;
-                        padding-bottom: 20px;
-                    }
-
-                    .loading-spinner {
-                        padding-bottom: 20px;
-                    }
-
-                    .links-container {
-                        display: flex;
-                        flex-wrap: wrap;
-                        flex-direction: row;
-                        padding: 10px 10px 0;
-                        box-sizing: content-box;
-
-                        a {
-                            font-size: 14px;
-                            font-weight: 600;
-                            padding-bottom: 20px;
-                            width: 50px;
-
-                            @include custom-min(420) {
-                                width: 60px;
-                            }
-                        }
-                    }
-                }
-
-                .gov-info-source {
-                    font-size: var(--font-size-sm);
-                    font-weight: 400;
-                    line-height: 20px;
-                    color: $secondary_text_color;
-                }
-            }
-        }
 
         .trigger-btn {
             display: flex;
@@ -310,11 +281,6 @@
             &.trigger-btn-link {
                 display: inline-block;
                 text-decoration: underline;
-            }
-
-            &.reg-history-link {
-                font-size: var(--font-size-sm);
-                font-weight: 600;
             }
 
             &.copy-btn {
@@ -342,6 +308,71 @@
         > .trigger-btn-container.copy-btn-container .trigger-btn {
             opacity: 1;
         }
+    }
+
+    .version-history-container {
+        padding-left: 5px;
+        margin-top: 1rem;
+
+        .v-tabs {
+            height: 38px;
+            border-bottom: 2px solid $light_gray;
+
+            .v-tab {
+                &:focus-visible {
+                    &:before,
+                    &:after {
+                        border: none;
+                        opacity: 0;
+                    }
+                }
+            }
+        }
+
+        .content-tabs.v-tab {
+            font-size: var(--font-size-sm);
+            line-height: 20px;
+            height: 36px;
+
+            @include common-tab-styles;
+        }
+    }
+
+    .gov-info-links {
+        .no-results {
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .loading-spinner {
+            padding-bottom: 20px;
+        }
+
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            padding: 10px 10px 0;
+            box-sizing: content-box;
+
+            a {
+                font-size: 14px;
+                font-weight: 600;
+                padding-bottom: 20px;
+                width: 50px;
+
+                @include custom-min(420) {
+                    width: 60px;
+                }
+            }
+        }
+    }
+
+    .gov-info-source {
+        font-size: var(--font-size-sm);
+        font-weight: 400;
+        line-height: 20px;
+        color: $secondary_text_color;
     }
 }
 

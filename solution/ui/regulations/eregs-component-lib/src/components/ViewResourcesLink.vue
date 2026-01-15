@@ -17,6 +17,11 @@ const props = defineProps({
         required: false,
         default: "link",
     },
+    outlined: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 const clickHandler = () => {
@@ -45,14 +50,14 @@ const isLink = computed(() => props.type === "link");
     <div
         v-else
         class="view-resources-link"
-        style="padding-left: 5px"
     >
         <button
             v-if="count !== '0'"
             class="btn default-btn"
+            :class="{ 'default-btn--outlined': outlined }"
             @click="clickHandler"
         >
-            <span class="bold">View {{ section }} resources</span>
+            <span class="bold">View {{ section }} Resources</span>
             <span class="count"> ({{ count }})</span>
         </button>
         <button v-else class="btn disabled">

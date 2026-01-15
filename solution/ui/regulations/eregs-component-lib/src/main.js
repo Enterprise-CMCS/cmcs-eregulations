@@ -26,6 +26,8 @@ import {
     RelatedRule,
     RelatedRuleList,
     RelatedSectionsCollapse,
+    ScrollTargetContainer,
+    ScrollTriggerLink,
     ShowMoreButton,
     SimpleSpinner,
     SupplementalContent,
@@ -40,6 +42,7 @@ import {
     TocTitle,
     TooltipContainer,
     HeaderUserWidget,
+    VersionHistoryContainer,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
 
@@ -224,6 +227,8 @@ function main() {
             RelatedRule,
             RelatedRuleList,
             RelatedSectionsCollapse,
+            ScrollTargetContainer,
+            ScrollTriggerLink,
             ShowMoreButton,
             SimpleSpinner,
             SupplementalContent,
@@ -238,6 +243,7 @@ function main() {
             TocTitle,
             TooltipContainer,
             HeaderUserWidget,
+            VersionHistoryContainer,
             ViewResourcesLink,
         },
     });

@@ -6,6 +6,8 @@ export { default as RecentChangesContainer } from "./RecentChangesContainer.vue"
 export { default as RecentResources } from "./RecentResources.vue";
 export { default as RelatedRule } from "./RelatedRule.vue";
 export { default as RelatedRuleList } from "./RelatedRuleList.vue";
+export { default as ScrollTargetContainer } from "./ScrollTargetContainer.vue";
+export { default as ScrollTriggerLink } from "./ScrollTriggerLink.vue";
 export { default as ShowMoreButton } from "./ShowMoreButton.vue";
 export { default as SimpleSpinner } from "./SimpleSpinner.vue";
 export { default as SupplementalContent } from "./SupplementalContent.vue";
@@ -13,6 +15,7 @@ export { default as SupplementalContentCategory } from "./SupplementalContentCat
 export { default as SupplementalContentList } from "./SupplementalContentList.vue";
 export { default as SupplementalContentObject } from "./SupplementalContentObject.vue";
 export { default as TableComponent } from "./TableComponent.vue";
+export { default as VersionHistoryContainer } from "./VersionHistoryContainer.vue";
 export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
 
 // Tooltips

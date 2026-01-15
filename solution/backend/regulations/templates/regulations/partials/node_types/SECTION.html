@@ -31,29 +31,19 @@
     </h2>
 
     {% simple_section_formatter cfr_title node.label as simple_citation %}
-    {% if node.label|length <= 2 %}
-        <div class="section-info-row">
+    {% if node.label|length <= 2 and "[Reserved]" not in node.title %}
+        <div class="section-info-row section-info-row--top">
             <div class="info-links">
-                <view-resources-link type="link" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
-                <tooltip-container
-                    btn-type="link"
-                    btn-class="reg-history-link"
-                    title="View § {{node.label | join:'.'}} Regulation History"
-                    label="Regulation History"
-                    button-icon="link"
-                    tooltip-title="View § {{node.label | join:'.'}} Effective In"
-                    position="under"
-                    click
-                >
-                    <template #tooltip-content>
-                        <gov-info-links
-                            title="{{cfr_title}}"
-                            part="{{node.label.0}}"
-                            section="{{node.label.1}}"
-                            api-url="{{ API_BASE }}"
-                        ></gov-info-links>
-                    </template>
-                </tooltip-container>
+                <view-resources-link
+                    type="button"
+                    section="§ {{node.label | join:'.'}}"
+                    count="{% get_item resource_count simple_citation '0' %}"
+                    outlined
+                ></view-resources-link>
+            <scroll-trigger-link
+                label="Jump to § {{ node.label | join:'.' }} Version History"
+                trigger="{{ node.label | join:'.'}}"
+            />
             </div>
         </div>
     {% endif %}
@@ -67,7 +57,45 @@
     </div>
 
     {% if node.label|length <= 2 %}
-        <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+        <div class="section-info-row section-info-row--bottom" data-scroll-target="{{node.label | join:'.'}}">
+            <div class="info-links">
+                <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+                <scroll-target-container
+                    class="reg-history-link"
+                    trigger="{{ node.label | join:'.'}}"
+                >
+                    <collapse-button
+                        name="{{node.label | join:'.'}} section history"
+                        state="collapsed"
+                        discontiguous
+                    >
+                        <template #expanded>
+                            View § {{ node.label | join:'.' }} Version History
+                            <i class="fa fa-chevron-up" />
+                        </template>
+                        <template #collapsed>
+                            View § {{ node.label | join:'.' }} Version History
+                            <i class="fa fa-chevron-down" />
+                        </template>
+                    </collapse-button>
+                </scroll-target-container>
+            </div>
+        </div>
+        <collapsible
+            v-slot="slotProps"
+            name="{{node.label | join:'.'}} section history"
+            class="collapse-content"
+            state="collapsed"
+            dynamic
+        >
+            <version-history-container
+                :visible="slotProps.visible"
+                title="{{cfr_title}}"
+                part="{{node.label.0}}"
+                section="{{node.label.1}}"
+                api-url="{{ API_BASE }}"
+            />
+        </collapsible>
     {% endif %}
 
 </section>

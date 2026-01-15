@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount, inject } from "vue";
+import { ref, computed, watch, onMounted, onBeforeUnmount, inject, useTemplateRef } from "vue";
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -17,7 +17,14 @@ const props = defineProps({
         required: false,
         default: false,
     },
+    discontiguous: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
+
+const button = useTemplateRef("button");
 
 const getStateOverride = inject("getStateOverride", null);
 
@@ -30,13 +37,20 @@ const stateOverrideValue = computed(() => {
 });
 
 const click = () => {
-    eventbus.emit("collapse-toggle", dataName.value);
+    eventbus.emit("collapse-toggle", { name: dataName.value });
 };
 
-const toggle = (target) => {
-    if (dataName.value === target) {
-        visible.value = !visible.value;
-    }
+const toggle = ({ name, action = "toggle" }) => {
+    if (dataName.value !== name) return;
+
+    if (props.discontiguous)  button.value.focus();
+
+    if (
+        (action === "expand" && visible.value)
+        || (action === "collapse" && !visible.value)
+    ) return;
+
+    visible.value = !visible.value;
 };
 
 watch(stateOverrideValue, (newStateOverrideValue) => {
@@ -58,6 +72,7 @@ onBeforeUnmount(() => {
 
 <template>
     <button
+        ref="button"
         :class="{ visible: visible }"
         :data-test="dataName"
         :aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"

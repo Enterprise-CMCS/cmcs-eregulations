@@ -187,7 +187,8 @@ describe("Part View", () => {
         cy.get("button[data-test='State Medicaid Director Letter (SMDL)']")
             .click({ force: true });
 
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .should("be.visible")
             .and("contain.text", "Show Related Subjects");
 
@@ -207,10 +208,12 @@ describe("Part View", () => {
             .should("not.exist");
 
         // click to show subjects
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .click({ force: true });
 
-        cy.get("button[data-test='subjects-v-0']")
+        cy.get("button.supplemental-content-subjects")
+            .first()
             .should("contain.text", "Hide Related Subjects");
 
         // Assert that subjects are visible
@@ -372,27 +375,30 @@ describe("Part View", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("Subpart A").click({ force: true });
-        cy.get("#433-8 .reg-history-link-container button.trigger-btn").click({
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
+        );
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
             force: true,
         });
-        cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
             "be.visible",
         );
         cy.checkLinkRel();
         cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked .tooltip-title",
-        ).contains("View § 433.8 Effective In");
+            "#433-8 .version-history-container .gov-info-links-container",
+        ).contains("Source: CFR Annual Edition");
         cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked .gov-info-links a:nth-child(1)",
+            "#433-8 .version-history-container .gov-info-links a:nth-child(1)",
         )
             .should("have.attr", "href")
             .and("include", "govinfo.gov")
             .and("include", "CFR-1997");
-        cy.get(
-            "#433-8 .reg-history-link-container .tooltip.clicked button.close-btn",
-        ).click({ force: true });
-        cy.get("#433-8 .reg-history-link-container .tooltip.clicked").should(
-            "not.exist",
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
+            force: true,
+        });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
         );
     });
 

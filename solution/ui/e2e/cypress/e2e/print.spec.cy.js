@@ -1,5 +1,5 @@
 describe("Print Styles", () => {
-    const destination = "/42/433/Subpart-A/2021-03-01/";
+    const destination = "/42/433/Subpart-A/";
     const previousVersion = "/42/433/Subpart-A/2020-12-31/";
 
     beforeEach(() => {
@@ -9,12 +9,6 @@ describe("Print Styles", () => {
         }).as("headers");
 
         cy.setCssMedia("screen");
-    });
-
-    it("does not have a print button in subpart view", () => {
-        cy.viewport("macbook-15");
-        cy.visit(destination);
-        cy.get(".print-btn").should("not.exist");
     });
 
     it("has proper print styles for latest version", () => {
