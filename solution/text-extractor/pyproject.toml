@@ -9,7 +9,7 @@ dependencies = [
     "boto3==1.42.26",
     "docx2txt==0.9",
     "extract-msg==0.55.0",
-    "magika==0.5.1",
+    "magika==1.0.1",
     "moto==5.1.19",
     "openpyxl==3.1.5",
     "pillow==12.1.0",
