@@ -18,6 +18,7 @@ import { StageConfig } from '../../config/stage-config';
 import { ApiConstruct } from '../constructs/api-construct';
 import { DatabaseConstruct } from '../constructs/database-construct';
 import { WafConstruct } from '../constructs/waf-construct';
+import { WafAssociationStack } from './waf-association-stack';
 import * as path from 'path';
 
 /**
@@ -416,7 +417,15 @@ export class BackendStack extends cdk.Stack {
         // WAF
         // ================================
         const waf = new WafConstruct(this, 'Waf', stageConfig);
-        waf.associateWithApiGateway(api.api);
+
+        // Build the API Gateway stage ARN for WAF association
+        const apiStageArn = `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${api.api.restApiId}/stages/${api.api.deploymentStage.stageName}`;
+
+        // Create the WAF association in a separate stack to avoid circular dependency
+        new WafAssociationStack(this, 'WafAssociationStack', {
+            apiStageArn,
+            webAclArn: waf.webAcl.attrArn,
+        });
 
         // ================================
         // STACK OUTPUTS
