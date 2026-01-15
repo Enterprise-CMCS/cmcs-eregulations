@@ -164,6 +164,22 @@ export class ApiConstruct extends Construct {
 
         // Add CORS configuration
         this.addCorsOptions(this.api.root);
+
+        // Force a new deployment and stage on every CDK deploy
+        const deployment = new apigateway.Deployment(this, 'ApiDeployment', {
+            api: this.api,
+            // Add a unique logical ID to force a new deployment
+            description: `Deployment ${Date.now()}`,
+        });
+        deployment.node.addDependency(this.api.root);
+
+        const stage = new apigateway.Stage(this, 'ApiStage', {
+            deployment,
+            stageName: stageName,
+        });
+
+        // Set this as the deployment stage for the API
+        (this.api as any).deploymentStage = stage;
     }
 
     /**
