@@ -6,17 +6,26 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from regcore.serializers.history import HistorySerializer
+from common.exceptions import ServiceUnavailable
+from regcore.serializers.history import EcfrHistorySerializer, HistorySerializer
 
 from .utils import OpenApiPathParameter
 
 HTTPX_TIMEOUT = 10
 GOVINFO_YEAR_MIN = 1996
-GOVINFO_LINK = "https://www.govinfo.gov/link/cfr/{}/{}?sectionnum={}&year={}&link-type=pdf"
+GOVINFO_LINK = "https://www.govinfo.gov/link/cfr/{title}/{part}?sectionnum={section}&year={year}&link-type=pdf"
+ECFR_API_LINK = "https://www.ecfr.gov/api/versioner/v1/versions/title-{title}.json?section={part}.{section}"
+ECFR_VIEW_ON_LINK = "https://www.ecfr.gov/on/{date}/title-{title}/section-{part}.{section}"
+ECFR_VIEW_DIFF_LINK = "https://www.ecfr.gov/compare/{newer}/to/{older}/title-{title}/section-{part}.{section}"
 
 
 async def get_year_data(section, year, client):
-    return await client.head(GOVINFO_LINK.format(section["title"], section["part"], section["section"], year))
+    return await client.head(GOVINFO_LINK.format(
+        title=section["title"],
+        part=section["part"],
+        section=section["section"],
+        year=year,
+    ))
 
 
 async def check_year(section, year, client):
@@ -64,3 +73,63 @@ class SectionHistoryViewSet(viewsets.ViewSet):
         title, part, section = [self.kwargs.get(i) for i in ["title", "part", "section"]]
         years = asyncio.run(get_years(title, part, section))
         return Response(self.serializer_class(instance=years, many=True).data)
+
+
+def date_minus_one(date_string):
+    date_obj = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+    date_obj_minus_one = date_obj - datetime.timedelta(days=1)
+    return date_obj_minus_one.strftime("%Y-%m-%d")
+
+
+@extend_schema(
+    tags=["regcore/metadata"],
+    description="Retrieve a list of historical versions of a regulation section as recorded by eCFR."
+                "The response contains links to view each version and compare it to the previous and current versions.",
+    parameters=[
+        OpenApiPathParameter("title", "The title containing the regulation section.", int),
+        OpenApiPathParameter("part", "The part containing the regulation section.", int),
+        OpenApiPathParameter("section", "The section to get historical versions of.", int),
+    ]
+)
+class EcfrHistoryViewSet(viewsets.ViewSet):
+    serializer_class = EcfrHistorySerializer
+
+    def list(self, request, *args, **kwargs):
+        title, part, section = [self.kwargs.get(i) for i in ["title", "part", "section"]]
+        citation = {"title": title, "part": part, "section": section}
+
+        try:
+            client = httpx.Client(timeout=httpx.Timeout(HTTPX_TIMEOUT))
+            data = client.get(ECFR_API_LINK.format(**citation)).raise_for_status().json()
+        except Exception:
+            raise ServiceUnavailable()
+
+        versions = [i["amendment_date"] for i in data.get("content_versions", [])]
+        versions = sorted(list(set(versions)), reverse=True)
+        links = []
+
+        for i in range(len(versions)):
+            current = versions[0]
+            next = versions[i - 1] if i - 1 >= 0 else None
+            this = versions[i]
+            previous = versions[i + 1] if i + 1 < len(versions) else None
+
+            links.append({
+                "version": this,
+                "version_link": ECFR_VIEW_ON_LINK.format(
+                    date=this,
+                    **citation,
+                ),
+                "compare_to_previous_link": ECFR_VIEW_DIFF_LINK.format(
+                    newer=this,
+                    older=date_minus_one(this),
+                    **citation,
+                ) if previous and this else None,
+                "compare_to_current_link": ECFR_VIEW_DIFF_LINK.format(
+                    newer="current",
+                    older=date_minus_one(next),
+                    **citation,
+                ) if next and this != current else None,
+            })
+
+        return Response(self.serializer_class(instance=links, many=True).data)
