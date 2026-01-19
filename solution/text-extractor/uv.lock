@@ -1,6 +1,10 @@
 version = 1
 revision = 3
 requires-python = "==3.12.12"
+resolution-markers = [
+    "sys_platform == 'win32'",
+    "sys_platform != 'win32'",
+]
 
 [[package]]
 name = "beautifulsoup4"
@@ -341,19 +345,21 @@ wheels = [
 
 [[package]]
 name = "magika"
-version = "0.5.1"
+version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "numpy" },
-    { name = "onnxruntime" },
+    { name = "onnxruntime", version = "1.20.1", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform == 'win32'" },
+    { name = "onnxruntime", version = "1.23.2", source = { registry = "https://pypi.org/simple" }, marker = "sys_platform != 'win32'" },
     { name = "python-dotenv" },
-    { name = "tabulate" },
-    { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/1a/58/c1d8887354d0ff2256d4d78d08a69bcc55719a0189afa706c51da04390f2/magika-0.5.1.tar.gz", hash = "sha256:43dc1153a1637327225a626a1550c0a395a1d45ea33ec1f5d46b9b080238bee0", size = 1005077, upload-time = "2024-03-07T16:44:24.377Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a3/f3/3d1dcdd7b9c41d589f5cff252d32ed91cdf86ba84391cfc81d9d8773571d/magika-0.6.3.tar.gz", hash = "sha256:7cc52aa7359af861957043e2bf7265ed4741067251c104532765cd668c0c0cb1", size = 3042784, upload-time = "2025-10-30T15:22:34.499Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/66/79/e1c167ec35060692b70bfc4f2d0aa9314dd7e37ba8e30c1c27965e2f1daa/magika-0.5.1-py3-none-any.whl", hash = "sha256:a4d1f64f71460f335841c13c3d16cfc2cb21e839c1898a1ae9bd5adc8d66cb2b", size = 1008301, upload-time = "2024-03-07T16:44:22.222Z" },
+    { url = "https://files.pythonhosted.org/packages/a2/e4/35c323beb3280482c94299d61626116856ac2d4ec16ecef50afc4fdd4291/magika-0.6.3-py3-none-any.whl", hash = "sha256:eda443d08006ee495e02083b32e51b98cb3696ab595a7d13900d8e2ef506ec9d", size = 2969474, upload-time = "2025-10-30T15:22:25.298Z" },
+    { url = "https://files.pythonhosted.org/packages/25/8f/132b0d7cd51c02c39fd52658a5896276c30c8cc2fd453270b19db8c40f7e/magika-0.6.3-py3-none-macosx_11_0_arm64.whl", hash = "sha256:86901e64b05dde5faff408c9b8245495b2e1fd4c226e3393d3d2a3fee65c504b", size = 13358841, upload-time = "2025-10-30T15:22:27.413Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/03/5ed859be502903a68b7b393b17ae0283bf34195cfcca79ce2dc25b9290e7/magika-0.6.3-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:3d9661eedbdf445ac9567e97e7ceefb93545d77a6a32858139ea966b5806fb64", size = 15367335, upload-time = "2025-10-30T15:22:29.907Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/9e/f8ee7d644affa3b80efdd623a3d75865c8f058f3950cb87fb0c48e3559bc/magika-0.6.3-py3-none-win_amd64.whl", hash = "sha256:e57f75674447b20cab4db928ae58ab264d7d8582b55183a0b876711c2b2787f3", size = 12692831, upload-time = "2025-10-30T15:22:32.063Z" },
 ]
 
 [[package]]
@@ -461,22 +467,44 @@ wheels = [
 
 [[package]]
 name = "onnxruntime"
+version = "1.20.1"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "sys_platform == 'win32'",
+]
+dependencies = [
+    { name = "coloredlogs", marker = "sys_platform == 'win32'" },
+    { name = "flatbuffers", marker = "sys_platform == 'win32'" },
+    { name = "numpy", marker = "sys_platform == 'win32'" },
+    { name = "packaging", marker = "sys_platform == 'win32'" },
+    { name = "protobuf", marker = "sys_platform == 'win32'" },
+    { name = "sympy", marker = "sys_platform == 'win32'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c8/f1/aabfdf91d013320aa2fc46cf43c88ca0182860ff15df872b4552254a9680/onnxruntime-1.20.1-cp312-cp312-win32.whl", hash = "sha256:bd386cc9ee5f686ee8a75ba74037750aca55183085bf1941da8efcfe12d5b120", size = 9814562, upload-time = "2024-11-21T00:49:15.453Z" },
+    { url = "https://files.pythonhosted.org/packages/dd/80/76979e0b744307d488c79e41051117634b956612cc731f1028eb17ee7294/onnxruntime-1.20.1-cp312-cp312-win_amd64.whl", hash = "sha256:19c2d843eb074f385e8bbb753a40df780511061a63f9def1b216bf53860223fb", size = 11331482, upload-time = "2024-11-21T00:49:19.412Z" },
+]
+
+[[package]]
+name = "onnxruntime"
 version = "1.23.2"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "sys_platform != 'win32'",
+]
 dependencies = [
-    { name = "coloredlogs" },
-    { name = "flatbuffers" },
-    { name = "numpy" },
-    { name = "packaging" },
-    { name = "protobuf" },
-    { name = "sympy" },
+    { name = "coloredlogs", marker = "sys_platform != 'win32'" },
+    { name = "flatbuffers", marker = "sys_platform != 'win32'" },
+    { name = "numpy", marker = "sys_platform != 'win32'" },
+    { name = "packaging", marker = "sys_platform != 'win32'" },
+    { name = "protobuf", marker = "sys_platform != 'win32'" },
+    { name = "sympy", marker = "sys_platform != 'win32'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1b/9e/f748cd64161213adeef83d0cb16cb8ace1e62fa501033acdd9f9341fff57/onnxruntime-1.23.2-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:b8f029a6b98d3cf5be564d52802bb50a8489ab73409fa9db0bf583eabb7c2321", size = 17195929, upload-time = "2025-10-22T03:47:36.24Z" },
     { url = "https://files.pythonhosted.org/packages/91/9d/a81aafd899b900101988ead7fb14974c8a58695338ab6a0f3d6b0100f30b/onnxruntime-1.23.2-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:218295a8acae83905f6f1aed8cacb8e3eb3bd7513a13fe4ba3b2664a19fc4a6b", size = 19157705, upload-time = "2025-10-22T03:46:40.415Z" },
     { url = "https://files.pythonhosted.org/packages/3c/35/4e40f2fba272a6698d62be2cd21ddc3675edfc1a4b9ddefcc4648f115315/onnxruntime-1.23.2-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:76ff670550dc23e58ea9bc53b5149b99a44e63b34b524f7b8547469aaa0dcb8c", size = 15226915, upload-time = "2025-10-22T03:46:27.773Z" },
     { url = "https://files.pythonhosted.org/packages/ef/88/9cc25d2bafe6bc0d4d3c1db3ade98196d5b355c0b273e6a5dc09c5d5d0d5/onnxruntime-1.23.2-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:0f9b4ae77f8e3c9bee50c27bc1beede83f786fe1d52e99ac85aa8d65a01e9b77", size = 17382649, upload-time = "2025-10-22T03:47:02.782Z" },
-    { url = "https://files.pythonhosted.org/packages/c0/b4/569d298f9fc4d286c11c45e85d9ffa9e877af12ace98af8cab52396e8f46/onnxruntime-1.23.2-cp312-cp312-win_amd64.whl", hash = "sha256:25de5214923ce941a3523739d34a520aac30f21e631de53bba9174dc9c004435", size = 13470528, upload-time = "2025-10-22T03:47:28.106Z" },
 ]
 
 [[package]]
@@ -788,15 +816,6 @@ wheels = [
 ]
 
 [[package]]
-name = "tabulate"
-version = "0.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ec/fe/802052aecb21e3797b8f7902564ab6ea0d60ff8ca23952079064155d1ae1/tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c", size = 81090, upload-time = "2022-10-06T17:21:48.54Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/40/44/4a5f08c96eb108af5cb50b41f76142f0afa346dfa99d5296fe7202a11854/tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f", size = 35252, upload-time = "2022-10-06T17:21:44.262Z" },
-]
-
-[[package]]
 name = "text-extractor"
 version = "1.0.0"
 source = { virtual = "." }
@@ -823,7 +842,7 @@ requires-dist = [
     { name = "boto3", specifier = "==1.42.26" },
     { name = "docx2txt", specifier = "==0.9" },
     { name = "extract-msg", specifier = "==0.55.0" },
-    { name = "magika", specifier = "==0.5.1" },
+    { name = "magika", specifier = "==0.6.3" },
     { name = "moto", specifier = "==5.1.19" },
     { name = "openpyxl", specifier = "==3.1.5" },
     { name = "pillow", specifier = "==12.1.0" },
@@ -833,18 +852,6 @@ requires-dist = [
     { name = "ruff", specifier = "==0.14.10" },
     { name = "striprtf", specifier = "==0.0.29" },
     { name = "xlrd", specifier = "==2.0.2" },
-]
-
-[[package]]
-name = "tqdm"
-version = "4.67.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/a8/4b/29b4ef32e036bb34e4ab51796dd745cdba7ed47ad142a9f4a1eb8e0c744d/tqdm-4.67.1.tar.gz", hash = "sha256:f8aef9c52c08c13a65f30ea34f4e5aac3fd1a34959879d7e59e63027286627f2", size = 169737, upload-time = "2024-11-24T20:12:22.481Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/30/dc54f88dd4a2b5dc8a0279bdd7270e735851848b762aeb1c1184ed1f6b14/tqdm-4.67.1-py3-none-any.whl", hash = "sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2", size = 78540, upload-time = "2024-11-24T20:12:19.698Z" },
 ]
 
 [[package]]
