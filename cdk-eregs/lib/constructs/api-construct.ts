@@ -80,6 +80,7 @@ export class ApiConstruct extends Construct {
 
         // Create API Gateway
         this.api = new apigateway.RestApi(this, 'API', {
+            deploy: false,
             restApiName: props.stageConfig.getResourceName('api'),
             description: 'eRegulations API Gateway',
             deployOptions: {
@@ -168,14 +169,15 @@ export class ApiConstruct extends Construct {
         // Force a deployment
         // Use a context variable to force deployment
         const forceDeploy = cdk.Stack.of(this).node.tryGetContext('forceDeploy') || 'none';
+        // Deployment logical ID changes with forceDeploy, Stage logical ID is stable
         const deployment = new apigateway.Deployment(this, `ApiDeployment${forceDeploy}`, {
             api: this.api,
             description: `Force deployment: ${forceDeploy}`,
         });
         deployment.node.addDependency(this.api.methods[0]);
 
-        // Explicitly manage the Stage so it always points to the latest Deployment
-        new apigateway.Stage(this, `ApiStage${forceDeploy}`, {
+        // Stage logical ID is stable so it is updated, not replaced
+        new apigateway.Stage(this, 'ApiStage', {
             deployment,
             stageName: stageName,
         });
