@@ -36,6 +36,10 @@ const handleLoaded = ({ name }) => {
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
 
+const handleTransitionEnd = () => {
+    eventbus.emit("refresh-height", { name: `${props.part}.${props.section} section history` });
+};
+
 // Keep the GovInfoLinks component mounted after it becomes visible
 watch(
     () => props.visible,
@@ -61,7 +65,7 @@ watch(
             </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item>
+            <v-window-item @transitionend="handleTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading version history...</p>
                 </div>
@@ -75,7 +79,7 @@ watch(
                     />
                 </template>
             </v-window-item>
-            <v-window-item>
+            <v-window-item @transitionend="handleTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
                 </div>
