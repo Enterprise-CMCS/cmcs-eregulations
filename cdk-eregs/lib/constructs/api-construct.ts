@@ -164,6 +164,17 @@ export class ApiConstruct extends Construct {
 
         // Add CORS configuration
         this.addCorsOptions(this.api.root);
+
+        // Force a deployment
+        const deployment = new apigateway.Deployment(this, 'ApiDeployment' + new Date().toISOString(), {
+            api: this.api,
+        });
+        deployment.node.addDependency(this.api.methods[0]);
+
+        new apigateway.Stage(this, 'ApiStage', {
+            deployment,
+            stageName: stageName,
+        });
     }
 
     /**
