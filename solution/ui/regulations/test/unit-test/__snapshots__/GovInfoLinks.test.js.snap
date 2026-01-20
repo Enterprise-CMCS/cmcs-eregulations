@@ -234,7 +234,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
           </div>
         </div>
         <div
-          class="gov-info-source"
+          class="version-history-source"
         >
            Source: CFR Annual Edition from 
           <a
@@ -481,7 +481,7 @@ exports[`Gov Info Links > Creates a snapshot of GovInfo 1`] = `
         </div>
       </div>
       <div
-        class="gov-info-source"
+        class="version-history-source"
       >
          Source: CFR Annual Edition from 
         <a
