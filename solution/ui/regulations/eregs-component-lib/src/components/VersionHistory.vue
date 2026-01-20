@@ -57,23 +57,23 @@ onMounted(() => {
             <div v-else-if="versionHistoryItems.length === 0" class="no-results">
                 No results found.
             </div>
-            <div v-else>
+            <div v-else class="items-container">
                 <div
                     v-for="item in versionHistoryItems"
                     :key="item.id"
                     class="version-history-item"
                 >
-                    <span>
+                    <div>
                         <a
                             :href="item.version_link"
-                            class="external"
+                            class="external bold"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             {{ niceDate(item.version) }}
                         </a>
-                    </span>
-                    <span
+                    </div>
+                    <div
                         v-if="item.compare_to_previous_link || item.compare_to_current_link"
                     >
                         Compare to
@@ -83,9 +83,7 @@ onMounted(() => {
                                 class="external"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            >
-                                Previous Version
-                            </a>
+                            >Previous Version</a>
                         </span>
                         <span
                             v-if="item.compare_to_previous_link && item.compare_to_current_link"
@@ -98,24 +96,22 @@ onMounted(() => {
                                 class="external"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            >
-                                Most Recent Version
-                            </a>
+                            >Most Recent Version</a>
 
                         </span>
-                    </span>
+                    </div>
                 </div>
-                <div class="version-history-source">
-                    Source:
-                    <a
-                        href="https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time"
-                        class="external"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        eCFR Point-in-Time System</a>
-                    (2017–Present)
-                </div>
+            </div>
+            <div class="version-history-source">
+                Source:
+                <a
+                    href="https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time"
+                    class="external"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    eCFR Point-in-Time System</a>
+                (2017–Present)
             </div>
         </div>
     </div>
