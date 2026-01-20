@@ -145,6 +145,7 @@ export class WafConstruct extends Construct {
             webAclArn: this.webAcl.attrArn,  // Using attrArn from webAcl
         });
         association.node.addDependency(apiGateway.deploymentStage);
+        //apiGateway.latestDeployment?.addToLogicalId(cdk.Token.asAny(association));
     }
 
     /**
