@@ -115,6 +115,9 @@ export class ApiConstruct extends Construct {
             tracingEnabled: true,
         });
 
+        // Set deploymentStage so CDK knows which stage to use
+        this.api.deploymentStage = this.stage;
+
         // Create request authorizer if Lambda is provided (non-prod environments)
         let authorizer: apigateway.IAuthorizer | undefined;
         if (props.authorizerLambda) {
