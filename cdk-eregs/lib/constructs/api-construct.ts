@@ -50,6 +50,8 @@ export interface ApiConstructProps {
 export class ApiConstruct extends Construct {
     /** The created API Gateway REST API */
     public readonly api: apigateway.RestApi;
+    /** The API Gateway deployment stage */
+    public readonly stage: apigateway.Stage;
     /** The main Lambda function */
     public readonly lambda: lambda.Function;
 
@@ -168,7 +170,7 @@ export class ApiConstruct extends Construct {
         deployment.node.addDependency(this.api.methods[0]);
 
         // Stage logical ID is stable so it is updated, not replaced
-        new apigateway.Stage(this, 'ApiStage', {
+        this.stage = new apigateway.Stage(this, 'ApiStage', {
             deployment,
             stageName: stageName,
             loggingLevel: apigateway.MethodLoggingLevel.INFO,

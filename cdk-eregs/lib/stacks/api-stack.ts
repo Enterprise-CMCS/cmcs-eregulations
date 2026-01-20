@@ -416,7 +416,7 @@ export class BackendStack extends cdk.Stack {
         // WAF
         // ================================
         const waf = new WafConstruct(this, 'Waf', stageConfig);
-        waf.associateWithApiGateway(api.api);
+        waf.associateWithApiGateway(api.api, api.stage);
 
         // ================================
         // STACK OUTPUTS
