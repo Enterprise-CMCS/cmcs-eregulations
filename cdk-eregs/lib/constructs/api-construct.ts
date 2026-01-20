@@ -166,9 +166,11 @@ export class ApiConstruct extends Construct {
         this.addCorsOptions(this.api.root);
 
         // Force a deployment
-        const deployment = new apigateway.Deployment(this, 'ApiDeployment', {
+        // Use a context variable to force deployment
+        const forceDeploy = cdk.Stack.of(this).node.tryGetContext('forceDeploy') || 'none';
+        const deployment = new apigateway.Deployment(this, `ApiDeployment${forceDeploy}`, {
             api: this.api,
-            description: `Force deployment: ${Date.now()}`,
+            description: `Force deployment: ${forceDeploy}`,
         });
         deployment.node.addDependency(this.api.methods[0]);
     }

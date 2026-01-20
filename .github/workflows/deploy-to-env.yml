@@ -381,6 +381,7 @@ jobs:
           npx cdk deploy $API_STACK \
           -c environment=${ENVIRONMENT} \
           -c buildId="${GITHUB_RUN_ID}" \
+          -c forceDeploy=$(date +%s) \
           --require-approval never \
           --exclusively \
           --app "npx ts-node bin/docker-lambdas.ts" \
