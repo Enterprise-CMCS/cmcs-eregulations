@@ -102,7 +102,6 @@ export class ApiConstruct extends Construct {
             api: this.api,
             description: `Force deployment: ${forceDeploy}`,
         });
-        deployment.node.addDependency(this.api.methods[0]);
 
         // Stage logical ID is stable so it is updated, not replaced
         this.stage = new apigateway.Stage(this, 'ApiStage', {
