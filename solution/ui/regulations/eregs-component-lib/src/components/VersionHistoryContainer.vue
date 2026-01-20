@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch} from "vue";
-import GovInfoLinks from "./tooltips/GovInfoLinks.vue";
+import GovInfoLinks from "./GovInfoLinks.vue";
 import eventbus from "../eventbus";
 
 const props = defineProps({
