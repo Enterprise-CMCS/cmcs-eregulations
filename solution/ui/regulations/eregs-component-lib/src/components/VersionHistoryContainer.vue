@@ -3,6 +3,7 @@ import { ref, watch} from "vue";
 import GovInfoLinks from "./GovInfoLinks.vue";
 import VersionHistory from "./VersionHistory.vue";
 import eventbus from "../eventbus";
+import debounce from "lodash/debounce";
 
 const props = defineProps({
     title: {
@@ -36,9 +37,11 @@ const handleLoaded = ({ name }) => {
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
 
-const handleTransitionEnd = () => {
+const onTransitionEnd = () => {
     eventbus.emit("refresh-height", { name: `${props.part}.${props.section} section history` });
 };
+
+const debouncedOnTransitionEnd = debounce(onTransitionEnd, 100);
 
 // Keep the GovInfoLinks component mounted after it becomes visible
 watch(
@@ -65,7 +68,7 @@ watch(
             </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item @transitionend="handleTransitionEnd">
+            <v-window-item @transitionend="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading version history...</p>
                 </div>
@@ -79,7 +82,7 @@ watch(
                     />
                 </template>
             </v-window-item>
-            <v-window-item @transitionend="handleTransitionEnd">
+            <v-window-item @transitionend="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
                 </div>
