@@ -94,6 +94,28 @@ export class ApiConstruct extends Construct {
             ],
         });
 
+        // Force a deployment
+        // Use a context variable to force deployment
+        const forceDeploy = cdk.Stack.of(this).node.tryGetContext('forceDeploy') || 'none';
+        // Deployment logical ID changes with forceDeploy, Stage logical ID is stable
+        const deployment = new apigateway.Deployment(this, `ApiDeployment${forceDeploy}`, {
+            api: this.api,
+            description: `Force deployment: ${forceDeploy}`,
+        });
+        deployment.node.addDependency(this.api.methods[0]);
+
+        // Stage logical ID is stable so it is updated, not replaced
+        this.stage = new apigateway.Stage(this, 'ApiStage', {
+            deployment,
+            stageName: stageName,
+            loggingLevel: apigateway.MethodLoggingLevel.INFO,
+            dataTraceEnabled: true,
+            accessLogDestination: new apigateway.LogGroupLogDestination(apiLogGroup),
+            accessLogFormat: apigateway.AccessLogFormat.clf(),
+            metricsEnabled: true,
+            tracingEnabled: true,
+        });
+
         // Create request authorizer if Lambda is provided (non-prod environments)
         let authorizer: apigateway.IAuthorizer | undefined;
         if (props.authorizerLambda) {
@@ -158,28 +180,6 @@ export class ApiConstruct extends Construct {
 
         // Add CORS configuration
         this.addCorsOptions(this.api.root);
-
-        // Force a deployment
-        // Use a context variable to force deployment
-        const forceDeploy = cdk.Stack.of(this).node.tryGetContext('forceDeploy') || 'none';
-        // Deployment logical ID changes with forceDeploy, Stage logical ID is stable
-        const deployment = new apigateway.Deployment(this, `ApiDeployment${forceDeploy}`, {
-            api: this.api,
-            description: `Force deployment: ${forceDeploy}`,
-        });
-        deployment.node.addDependency(this.api.methods[0]);
-
-        // Stage logical ID is stable so it is updated, not replaced
-        this.stage = new apigateway.Stage(this, 'ApiStage', {
-            deployment,
-            stageName: stageName,
-            loggingLevel: apigateway.MethodLoggingLevel.INFO,
-            dataTraceEnabled: true,
-            accessLogDestination: new apigateway.LogGroupLogDestination(apiLogGroup),
-            accessLogFormat: apigateway.AccessLogFormat.clf(),
-            metricsEnabled: true,
-            tracingEnabled: true,
-        });
     }
 
     /**
