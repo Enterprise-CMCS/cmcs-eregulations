@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getGovInfoLinks } from "utilities/api";
-import SimpleSpinner from "../SimpleSpinner.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 const props = defineProps({
     apiUrl: {

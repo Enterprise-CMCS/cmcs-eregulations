@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch} from "vue";
 import GovInfoLinks from "./GovInfoLinks.vue";
+import VersionHistory from "./VersionHistory.vue";
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -28,9 +29,9 @@ const props = defineProps({
 
 const visibleRef = ref(false);
 const loadedRef = ref(false);
-const tab = ref(1);
+const tab = ref(0);
 
-const handleAnnualEditionsLoaded = ({ name }) => {
+const handleLoaded = ({ name }) => {
     loadedRef.value = true;
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
@@ -52,7 +53,6 @@ watch(
             <v-tab
                 class="content-tabs"
                 tabindex="0"
-                disabled
             >
                 Version History
             </v-tab>
@@ -61,7 +61,20 @@ watch(
             </v-tab>
         </v-tabs>
         <v-window v-model="tab">
-            <v-window-item />
+            <v-window-item>
+                <div v-if="!visibleRef" class="rules-container">
+                    <p>Loading version history...</p>
+                </div>
+                <template v-else>
+                    <VersionHistory
+                        :api-url="apiUrl"
+                        :title="title"
+                        :part="part"
+                        :section="section"
+                        @version-history-loaded="handleLoaded"
+                    />
+                </template>
+            </v-window-item>
             <v-window-item>
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
@@ -72,7 +85,7 @@ watch(
                         :title="title"
                         :part="part"
                         :section="section"
-                        @annual-editions-loaded="handleAnnualEditionsLoaded"
+                        @annual-editions-loaded="handleLoaded"
                     />
                 </template>
             </v-window-item>
