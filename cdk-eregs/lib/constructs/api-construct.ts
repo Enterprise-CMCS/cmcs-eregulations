@@ -173,6 +173,12 @@ export class ApiConstruct extends Construct {
             description: `Force deployment: ${forceDeploy}`,
         });
         deployment.node.addDependency(this.api.methods[0]);
+
+        // Explicitly manage the Stage so it always points to the latest Deployment
+        new apigateway.Stage(this, `ApiStage${forceDeploy}`, {
+            deployment,
+            stageName: stageName,
+        });
     }
 
     /**
