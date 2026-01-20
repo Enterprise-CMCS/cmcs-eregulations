@@ -83,15 +83,6 @@ export class ApiConstruct extends Construct {
             deploy: false,
             restApiName: props.stageConfig.getResourceName('api'),
             description: 'eRegulations API Gateway',
-            deployOptions: {
-                stageName: stageName,
-                loggingLevel: apigateway.MethodLoggingLevel.INFO,
-                dataTraceEnabled: true,
-                accessLogDestination: new apigateway.LogGroupLogDestination(apiLogGroup),
-                accessLogFormat: apigateway.AccessLogFormat.clf(),
-                metricsEnabled: true,
-                tracingEnabled: true,
-            },
             binaryMediaTypes: [
                 'multipart/form-data',
                 'application/pdf',
@@ -180,6 +171,12 @@ export class ApiConstruct extends Construct {
         new apigateway.Stage(this, 'ApiStage', {
             deployment,
             stageName: stageName,
+            loggingLevel: apigateway.MethodLoggingLevel.INFO,
+            dataTraceEnabled: true,
+            accessLogDestination: new apigateway.LogGroupLogDestination(apiLogGroup),
+            accessLogFormat: apigateway.AccessLogFormat.clf(),
+            metricsEnabled: true,
+            tracingEnabled: true,
         });
     }
 
