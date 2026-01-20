@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getVersionHistory } from "utilities/api";
+import { niceDate } from "utilities/utils";
 import SimpleSpinner from "./SimpleSpinner.vue";
 
 const props = defineProps({
@@ -36,7 +37,7 @@ onMounted(() => {
         section: props.section,
     })
         .then((response) => {
-            versionHistoryItems.value = response.sort((a, b) => b.year - a.year);
+            versionHistoryItems.value = response;
         })
         .catch((error) => {
             console.error("Error", error);
@@ -62,13 +63,58 @@ onMounted(() => {
                     :key="item.id"
                     class="version-history-item"
                 >
+                    <span>
+                        <a
+                            :href="item.version_link"
+                            class="external"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ niceDate(item.version) }}
+                        </a>
+                    </span>
+                    <span
+                        v-if="item.compare_to_previous_link || item.compare_to_current_link"
+                    >
+                        Compare to
+                        <span v-if="item.compare_to_previous_link">
+                            <a
+                                :href="item.compare_to_previous_link"
+                                class="external"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Previous Version
+                            </a>
+                        </span>
+                        <span
+                            v-if="item.compare_to_previous_link && item.compare_to_current_link"
+                        >
+                            or
+                        </span>
+                        <span v-if="item.compare_to_current_link">
+                            <a
+                                :href="item.compare_to_current_link"
+                                class="external"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Most Recent Version
+                            </a>
+
+                        </span>
+                    </span>
+                </div>
+                <div class="version-history-source">
+                    Source:
                     <a
-                        :href="item.version_link"
+                        href="https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time"
+                        class="external"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        {{ item.version }} Edition
-                    </a>
+                        eCFR Point-in-Time System</a>
+                    (2017–Present)
                 </div>
             </div>
         </div>
