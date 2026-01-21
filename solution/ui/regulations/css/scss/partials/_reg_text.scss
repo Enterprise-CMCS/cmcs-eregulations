@@ -451,12 +451,12 @@ article {
     }
 }
 
-.version-history-container {
+.version-history__container {
     a {
         text-decoration: none;
     }
 
-    .version-history-items {
+    .version-history__items {
         font-size: var(--font-size-sm);
         line-height: 150%;
 
@@ -464,12 +464,12 @@ article {
             text-decoration: none;
         }
 
-        .items-container {
+        .items__container {
             display: grid;
             gap: 1rem;
             padding: 1rem 0;
 
-            .version-history-item {
+            .version-history__item {
                 display: grid;
                 grid-template-columns: [first] 110px [second] auto;
                 grid-template-rows: auto;
@@ -481,7 +481,7 @@ article {
 
     }
 
-    .version-history-source {
+    .version-history__source {
         font-size: var(--font-size-sm);
         font-weight: 400;
         line-height: 20px;

@@ -50,19 +50,19 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="version-history-items-container">
-        <div class="version-history-items">
+    <div class="version-history-items__container">
+        <div class="version-history__items">
             <SimpleSpinner v-if="loading" size="medium" />
             <div v-else-if="versionHistoryItems.length === 0" class="no-results">
                 No results found.
             </div>
-            <div v-else class="items-container">
+            <div v-else class="items__container">
                 <div
                     v-for="item in versionHistoryItems"
                     :key="item.id"
-                    class="version-history-item"
+                    class="version-history__item"
                 >
-                    <div>
+                    <div class="version-history-item__date">
                         <a
                             :href="item.version_link"
                             class="external bold"
@@ -101,7 +101,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-            <div class="version-history-source">
+            <div class="version-history__source">
                 Source:
                 <a
                     href="https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time"

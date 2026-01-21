@@ -55,7 +55,7 @@ watch(
 </script>
 
 <template>
-    <div class="version-history-container">
+    <div class="version-history__container">
         <v-tabs v-model="tab">
             <v-tab
                 class="content-tabs"
