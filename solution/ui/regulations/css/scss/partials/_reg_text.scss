@@ -454,36 +454,42 @@ article {
     }
 }
 
-.version-history-items {
-    font-size: var(--font-size-sm);
-    line-height: 150%;
-
+.version-history-container {
     a {
         text-decoration: none;
     }
 
-    .items-container {
-        display: grid;
-        gap: 1rem;
-        padding: 1rem 0;
+    .version-history-items {
+        font-size: var(--font-size-sm);
+        line-height: 150%;
 
-        .version-history-item {
-            display: grid;
-            grid-template-columns: [first] 100px [second] auto;
-            grid-template-rows: auto;
-            grid-template-areas:
-                "date compare";
-            gap: 1rem;
+        a {
+            text-decoration: none;
         }
+
+        .items-container {
+            display: grid;
+            gap: 1rem;
+            padding: 1rem 0;
+
+            .version-history-item {
+                display: grid;
+                grid-template-columns: [first] 110px [second] auto;
+                grid-template-rows: auto;
+                grid-template-areas:
+                    "date compare";
+                gap: 1rem;
+            }
+        }
+
     }
 
-}
-
-.version-history-source {
-    font-size: var(--font-size-sm);
-    font-weight: 400;
-    line-height: 20px;
-    color: $secondary_text_color;
+    .version-history-source {
+        font-size: var(--font-size-sm);
+        font-weight: 400;
+        line-height: 20px;
+        color: $secondary_text_color;
+    }
 }
 
 .effective-date-note {
