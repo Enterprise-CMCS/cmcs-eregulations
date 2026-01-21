@@ -9,51 +9,6 @@ describe("Part View", () => {
         }).as("headers");
     });
 
-    it("loads version history content correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/history/section/8", {
-            fixture: "42.433.8.annual-editions.json",
-        }).as("history433");
-        cy.intercept("**/v3/title/42/part/433/annual_editions/section/8", {
-            fixture: "42.433.8.version-history.json",
-        }).as("history433");
-        cy.viewport("macbook-15");
-        cy.visit("/42/433/");
-        cy.contains("Subpart A").click({ force: true });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "not.be.visible",
-        );
-        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
-            force: true,
-        });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "be.visible",
-        );
-        cy.get("#433-8 button[data-testid='version-history-tab']")
-            .invoke("attr", "aria-selected")
-            .should("eq", "true");
-        cy.get("#433-8 button[data-testid='annual-editions-tab']")
-            .invoke("attr", "aria-selected")
-            .should("eq", "false");
-        cy.checkLinkRel();
-        cy.get("#433-8 button[data-testid='annual-editions-tab']")
-            .click({ force: true });
-        cy.get(
-            "#433-8 .version-history-container .gov-info-links-container",
-        ).contains("Source: CFR Annual Edition");
-        cy.get(
-            "#433-8 .version-history-container .gov-info-links a:nth-child(1)",
-        )
-            .should("have.attr", "href")
-            .and("include", "govinfo.gov")
-            .and("include", "CFR-1997");
-        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
-            force: true,
-        });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "not.be.visible",
-        );
-    });
-
     it("loads part 433", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
@@ -450,4 +405,65 @@ describe("Part View", () => {
         );
     });
 
+    it("loads version history content correctly", () => {
+        cy.intercept("**/v3/title/42/part/433/history/section/8", {
+            fixture: "42.433.8.annual-editions.json",
+        }).as("history433");
+        cy.intercept("**/v3/title/42/part/433/versions/section/8", {
+            fixture: "42.433.8.version-history.json",
+        }).as("history433");
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("Subpart A").click({ force: true });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
+        );
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
+            force: true,
+        });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "be.visible",
+        );
+        cy.get("#433-8 button[data-testid='version-history-tab']")
+            .invoke("attr", "aria-selected")
+            .should("eq", "true");
+        cy.get("#433-8 button[data-testid='annual-editions-tab']")
+            .invoke("attr", "aria-selected")
+            .should("eq", "false");
+        cy.checkLinkRel();
+        cy.get(
+            "#433-8 .version-history__container .version-history-items__container .version-history-item__date",
+        ).contains("Jan 1, 2020");
+        cy.get(
+            "#433-8 .version-history__container .version-history-items__container .version-history-item__date a",
+        )
+            .should("have.attr", "href")
+            .and("include", "https://www.ecfr.gov/on/2020-01-01/title-42/section-433.8");
+        cy.get(
+            "#433-8 .version-history__container .version-history-items__container .version-history__source",
+        ).contains("Source: eCFR Point-in-Time System");
+        cy.get(
+            "#433-8 .version-history__container .version-history-items__container .version-history__source a",
+        )
+            .should("have.attr", "href")
+            .and("include", "https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time");
+        cy.get("#433-8 button[data-testid='annual-editions-tab']")
+            .click({ force: true });
+        cy.checkLinkRel();
+        cy.get(
+            "#433-8 .version-history__container .gov-info-links-container",
+        ).contains("Source: CFR Annual Edition");
+        cy.get(
+            "#433-8 .version-history__container .gov-info-links a:nth-child(1)",
+        )
+            .should("have.attr", "href")
+            .and("include", "govinfo.gov")
+            .and("include", "CFR-1997");
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
+            force: true,
+        });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
+        );
+    });
 });
