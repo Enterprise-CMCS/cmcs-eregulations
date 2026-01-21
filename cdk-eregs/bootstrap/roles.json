@@ -15,11 +15,6 @@
         "update_policy": true
     },
     {
-        "name": "ImagePublishingRole",
-        "nested_policy": true,
-        "update_policy": true
-    },
-    {
         "name": "CloudFormationExecutionRole",
         "nested_policy": false,
         "update_policy": false
