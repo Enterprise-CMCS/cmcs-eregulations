@@ -9,6 +9,51 @@ describe("Part View", () => {
         }).as("headers");
     });
 
+    it("loads version history content correctly", () => {
+        cy.intercept("**/v3/title/42/part/433/history/section/8", {
+            fixture: "42.433.8.annual-editions.json",
+        }).as("history433");
+        cy.intercept("**/v3/title/42/part/433/annual_editions/section/8", {
+            fixture: "42.433.8.version-history.json",
+        }).as("history433");
+        cy.viewport("macbook-15");
+        cy.visit("/42/433/");
+        cy.contains("Subpart A").click({ force: true });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
+        );
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
+            force: true,
+        });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "be.visible",
+        );
+        cy.get("#433-8 button[data-testid='version-history-tab']")
+            .invoke("attr", "aria-selected")
+            .should("eq", "true");
+        cy.get("#433-8 button[data-testid='annual-editions-tab']")
+            .invoke("attr", "aria-selected")
+            .should("eq", "false");
+        cy.checkLinkRel();
+        cy.get("#433-8 button[data-testid='annual-editions-tab']")
+            .click({ force: true });
+        cy.get(
+            "#433-8 .version-history-container .gov-info-links-container",
+        ).contains("Source: CFR Annual Edition");
+        cy.get(
+            "#433-8 .version-history-container .gov-info-links a:nth-child(1)",
+        )
+            .should("have.attr", "href")
+            .and("include", "govinfo.gov")
+            .and("include", "CFR-1997");
+        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
+            force: true,
+        });
+        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
+            "not.be.visible",
+        );
+    });
+
     it("loads part 433", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
@@ -365,40 +410,6 @@ describe("Part View", () => {
         ).click({ force: true });
         cy.get("#433-8-title .copy-btn-container .tooltip.clicked").should(
             "not.exist",
-        );
-    });
-
-    it("loads reg history tooltip correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/history/section/8", {
-            fixture: "42.433.history.json",
-        }).as("history433");
-        cy.viewport("macbook-15");
-        cy.visit("/42/433/");
-        cy.contains("Subpart A").click({ force: true });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "not.be.visible",
-        );
-        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
-            force: true,
-        });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "be.visible",
-        );
-        cy.checkLinkRel();
-        cy.get(
-            "#433-8 .version-history-container .gov-info-links-container",
-        ).contains("Source: CFR Annual Edition");
-        cy.get(
-            "#433-8 .version-history-container .gov-info-links a:nth-child(1)",
-        )
-            .should("have.attr", "href")
-            .and("include", "govinfo.gov")
-            .and("include", "CFR-1997");
-        cy.get("#433-8 .reg-history-link button.collapsible-title").click({
-            force: true,
-        });
-        cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
-            "not.be.visible",
         );
     });
 

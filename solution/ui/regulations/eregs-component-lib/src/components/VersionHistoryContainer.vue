@@ -60,10 +60,15 @@ watch(
             <v-tab
                 class="content-tabs"
                 tabindex="0"
+                data-testid="version-history-tab"
             >
                 Version History
             </v-tab>
-            <v-tab class="content-tabs" tabindex="0">
+            <v-tab
+                class="content-tabs"
+                tabindex="0"
+                data-testid="annual-editions-tab"
+            >
                 Annual Editions
             </v-tab>
         </v-tabs>
