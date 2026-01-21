@@ -6,11 +6,22 @@ import json
 import argparse
 
 
-# Default values for the role to assume prefix, and role path
+# Default values for the permissions boundary policy prefix & name, role to assume prefix, and role path
 # You can use CLI flags to change these values; run the script with "-h" for more information
+BOUNDARY_POLICY_ARN_PREFIX = "arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/"
+BOUNDARY_POLICY_NAME = "cms-cloud-admin/ct-ado-poweruser-permissions-boundary-policy"
 ROLE_TO_ASSUME_ARN_PREFIX = "arn:aws:iam::${AWS::AccountId}:role/"
 ROLE_TO_ASSUME_NAME = None
 ROLE_PATH = "/delegatedadmin/developer/"
+
+
+# Update the role properties to add the correct path and permissions boundary
+def update_role_properties(properties: dict):
+    properties["Path"] = ROLE_PATH
+    properties["PermissionsBoundary"] = {
+        "Fn::Sub": BOUNDARY_POLICY_ARN_PREFIX + BOUNDARY_POLICY_NAME,
+    }
+    return properties
 
 
 # Check if the statement matches the expected format for adding the role
@@ -50,6 +61,12 @@ def update_policy_doc_statements(yaml_statements: type[list | dict], nested: boo
 
 # Process the role data to update the role properties and policy document statements
 def process_role(role: dict, data: dict):
+    try:
+        data["Properties"] = update_role_properties(data["Properties"])
+    except Exception as e:
+        print(f'Error updating role properties for {role["name"]}: {e}')
+        sys.exit(1)
+
     if role["update_policy"]:
         try:
             data["Properties"]["AssumeRolePolicyDocument"]["Statement"] = update_policy_doc_statements(
@@ -86,6 +103,12 @@ if __name__ == '__main__':
     parser.add_argument('input_template', type=str, help='YAML file containing the default CDK bootstrapping template.')
     parser.add_argument('output_template', type=str, help='YAML file to write the updated CDK bootstrapping template to.')
     parser.add_argument('role_to_assume_name', type=str, help='Name of the role to be added to the AssumeRolePolicyDocument.')
+    parser.add_argument('--boundary-policy-arn-prefix', type=str, default=BOUNDARY_POLICY_ARN_PREFIX,
+                        help='ARN prefix of the permissions boundary policy to attach to the roles. '
+                             f'Default: "{BOUNDARY_POLICY_ARN_PREFIX}".')
+    parser.add_argument('--boundary-policy-name', type=str, default=BOUNDARY_POLICY_NAME,
+                        help='Name of the permissions boundary policy to attach to the roles. '
+                             f'Default: "{BOUNDARY_POLICY_NAME}".')
     parser.add_argument('--role-to-assume-arn-prefix', type=str, default=ROLE_TO_ASSUME_ARN_PREFIX,
                         help='ARN prefix of the role to be added to the AssumeRolePolicyDocument. '
                              f'Default: "{ROLE_TO_ASSUME_ARN_PREFIX}".')
@@ -93,6 +116,8 @@ if __name__ == '__main__':
                         help=f'Path to be added to the role properties. Default: "{ROLE_PATH}".')
     args = parser.parse_args()
 
+    BOUNDARY_POLICY_ARN_PREFIX = args.boundary_policy_arn_prefix
+    BOUNDARY_POLICY_NAME = args.boundary_policy_name
     ROLE_TO_ASSUME_ARN_PREFIX = args.role_to_assume_arn_prefix
     ROLE_TO_ASSUME_NAME = args.role_to_assume_name
     ROLE_PATH = args.role_path
