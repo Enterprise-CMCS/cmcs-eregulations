@@ -29,7 +29,6 @@ const versionHistoryItems = ref([]);
 const loading = ref(true);
 
 onMounted(() => {
-    console.info("Version History mounted");
     getVersionHistory({
         apiUrl: props.apiUrl,
         title: props.title,
