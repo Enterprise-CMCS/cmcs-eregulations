@@ -425,13 +425,11 @@ article {
 }
 
 .gov-info-links {
-    .no-results {
-        font-size: 14px;
-        padding-bottom: 20px;
-    }
+    font-size: var(--font-size-sm);
 
+    .no-results,
     .loading-spinner {
-        padding-bottom: 20px;
+        padding: 1rem 0;
     }
 
     .links-container {
@@ -442,7 +440,6 @@ article {
         box-sizing: content-box;
 
         a {
-            font-size: 14px;
             font-weight: 600;
             padding-bottom: 20px;
             width: 50px;
