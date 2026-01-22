@@ -41,6 +41,9 @@ updates:
             patterns:
               - "rollup*"
               - "@rollup*"
+          lodash:
+            patterns:
+              - "lodash*"
 
     # CDK specific updates
     - package-ecosystem: "npm"
