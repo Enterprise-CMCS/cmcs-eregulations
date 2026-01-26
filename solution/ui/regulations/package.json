@@ -20,7 +20,7 @@
     "@fortawesome/fontawesome-free": "7.1.0",
     "@vitejs/plugin-vue": "6.0.3",
     "@vue/test-utils": "2.4.6",
-    "dompurify": "3.3.0",
+    "dompurify": "3.3.1",
     "flush-promises": "1.0.2",
     "lodash": "4.17.23",
     "lz-string": "1.5.0",
