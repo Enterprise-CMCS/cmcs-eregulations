@@ -95,7 +95,7 @@ onMounted(() => {
                                 class="external"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                            >Most Recent Version</a>
+                            >Current Version</a>
 
                         </span>
                     </div>
