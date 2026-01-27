@@ -18,6 +18,13 @@ from resources.models import (
 
 
 class ContentSearchConfiguration(SingletonModel):
+    database_timeout = models.IntegerField(
+        default=10,
+        validators=[MinValueValidator(1)],
+        help_text="The maximum number of seconds to wait for the database to respond to search queries.",
+        verbose_name="Database Timeout",
+    )
+
     default_page_size = models.IntegerField(
         default=50,
         validators=[MinValueValidator(1)],
