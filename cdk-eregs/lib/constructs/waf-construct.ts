@@ -35,19 +35,23 @@ export class WafConstruct extends Construct {
                 sampledRequestsEnabled: true,
             },
             rules: [
-                // GeoMatch Rule
+                // GeoMatch Rule (Block non-USA and territories)
                 {
-                    name: stageConfig.getResourceName('allow-usa-territories'),
+                    name: stageConfig.getResourceName('block-non-usa-territories'),
                     priority: 0,
                     statement: {
-                        geoMatchStatement: {
-                            countryCodes: ['US', 'GU', 'PR', 'VI', 'MP', 'AS', 'UM'],
+                        notStatement: {
+                            statement: {
+                                geoMatchStatement: {
+                                    countryCodes: ['US', 'GU', 'PR', 'VI', 'MP', 'AS', 'UM'],
+                                },
+                            },
                         },
                     },
-                    action: { allow: {} },
+                    action: { block: {} },
                     visibilityConfig: {
                         cloudWatchMetricsEnabled: true,
-                        metricName: stageConfig.getResourceName('usa-territories-metric'),
+                        metricName: stageConfig.getResourceName('non-usa-territories-metric'),
                         sampledRequestsEnabled: true,
                     },
                 },
