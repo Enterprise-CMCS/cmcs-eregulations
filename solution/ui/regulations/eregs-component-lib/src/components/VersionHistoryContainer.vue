@@ -37,6 +37,8 @@ const handleLoaded = ({ name }) => {
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
 
+const debouncedHandleLoaded = debounce(handleLoaded, 100);
+
 const onTransitionEnd = () => {
     eventbus.emit("refresh-height", { name: `${props.part}.${props.section} section history` });
 };
@@ -83,7 +85,7 @@ watch(
                         :title="title"
                         :part="part"
                         :section="section"
-                        @version-history-loaded="handleLoaded"
+                        @version-history-loaded="debouncedHandleLoaded"
                     />
                 </template>
             </v-window-item>
@@ -97,7 +99,7 @@ watch(
                         :title="title"
                         :part="part"
                         :section="section"
-                        @annual-editions-loaded="handleLoaded"
+                        @annual-editions-loaded="debouncedHandleLoaded"
                     />
                 </template>
             </v-window-item>
