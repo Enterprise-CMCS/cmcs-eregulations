@@ -68,7 +68,7 @@ onMounted(() => {
                 >{{ yearObj.year }}</a>
             </div>
         </div>
-        <div class="version-history-source">
+        <div class="version-history__source">
             Source: CFR Annual Edition from
             <a
                 href="https://www.govinfo.gov/app/collection/cfr"
