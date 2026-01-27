@@ -35,19 +35,23 @@ export class WafConstruct extends Construct {
                 sampledRequestsEnabled: true,
             },
             rules: [
-                // GeoMatch Rule
+                // GeoMatch Rule (Block non-USA and territories)
                 {
-                    name: stageConfig.getResourceName('allow-usa-territories'),
+                    name: stageConfig.getResourceName('block-non-usa-territories'),
                     priority: 0,
                     statement: {
-                        geoMatchStatement: {
-                            countryCodes: ['US', 'GU', 'PR', 'VI', 'MP', 'AS', 'UM'],
+                        notStatement: {
+                            statement: {
+                                geoMatchStatement: {
+                                    countryCodes: ['US', 'GU', 'PR', 'VI', 'MP', 'AS', 'UM'],
+                                },
+                            },
                         },
                     },
-                    action: { allow: {} },
+                    action: { block: {} },
                     visibilityConfig: {
                         cloudWatchMetricsEnabled: true,
-                        metricName: stageConfig.getResourceName('usa-territories-metric'),
+                        metricName: stageConfig.getResourceName('non-usa-territories-metric'),
                         sampledRequestsEnabled: true,
                     },
                 },
@@ -140,11 +144,11 @@ export class WafConstruct extends Construct {
      * @param apiGateway The API Gateway to associate with the WAF
      */
     public associateWithApiGateway(apiGateway: apigw.RestApi): void {
-        const association = new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
+        new wafv2.CfnWebACLAssociation(this, 'ApiGatewayWAFAssociation', {
             resourceArn: `arn:aws:apigateway:${cdk.Stack.of(this).region}::/restapis/${apiGateway.restApiId}/stages/${apiGateway.deploymentStage.stageName}`,
             webAclArn: this.webAcl.attrArn,  // Using attrArn from webAcl
         });
-        association.node.addDependency(apiGateway.deploymentStage);
+        apiGateway.latestDeployment?.addToLogicalId(this.webAcl.attrArn);
     }
 
     /**
