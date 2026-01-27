@@ -424,28 +424,32 @@ article {
     }
 }
 
-.gov-info-links {
-    font-size: var(--font-size-sm);
+.gov-info-links-container {
+    padding-left: 10px;
 
-    .no-results,
-    .loading-spinner {
-        padding: 1rem 0;
-    }
+    .gov-info-links {
+        font-size: var(--font-size-sm);
 
-    .links-container {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        padding: 10px 10px 0;
-        box-sizing: content-box;
+        .no-results,
+        .loading-spinner {
+            padding: 1rem 0;
+        }
 
-        a {
-            font-weight: 600;
-            padding-bottom: 20px;
-            width: 50px;
+        .links-container {
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            padding: 10px 10px 0 0;
+            box-sizing: content-box;
 
-            @include custom-min(420) {
-                width: 60px;
+            a {
+                font-weight: 600;
+                padding-bottom: 20px;
+                width: 50px;
+
+                @include custom-min(420) {
+                    width: 60px;
+                }
             }
         }
     }
@@ -456,29 +460,33 @@ article {
         text-decoration: none;
     }
 
-    .version-history__items {
-        font-size: var(--font-size-sm);
-        line-height: 150%;
+    .version-history-items__container {
+        padding-left: 10px;
 
-        a {
-            text-decoration: none;
-        }
+        .version-history__items {
+            font-size: var(--font-size-sm);
+            line-height: 150%;
 
-        .items__container {
-            display: grid;
-            gap: 1rem;
-            padding: 1rem 0;
-
-            .version-history__item {
-                display: grid;
-                grid-template-columns: [first] 110px [second] auto;
-                grid-template-rows: auto;
-                grid-template-areas:
-                    "date compare";
-                gap: 1rem;
+            a {
+                text-decoration: none;
             }
-        }
 
+            .items__container {
+                display: grid;
+                gap: 1rem;
+                padding: 1rem 0;
+
+                .version-history__item {
+                    display: grid;
+                    grid-template-columns: [first] 110px [second] auto;
+                    grid-template-rows: auto;
+                    grid-template-areas:
+                        "date compare";
+                    gap: 1rem;
+                }
+            }
+
+        }
     }
 
     .version-history__source {
