@@ -259,8 +259,7 @@ class ContentSearchMixin:
                     0.0 AS score
                 FROM content_search_contentindex
                 WHERE id IN (SELECT id FROM indices)
-                ORDER BY {sort} NULLS LAST, id DESC
-            """  # noqa S608
+            """
 
         # If semantic is enabled, add semantic search CTE
         # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
