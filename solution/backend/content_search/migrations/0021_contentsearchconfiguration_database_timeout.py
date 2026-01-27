@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contentsearchconfiguration',
             name='database_timeout',
-            field=models.IntegerField(default=10, help_text='The maximum number of seconds to wait for the database to respond to search queries.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Database Timeout'),
+            field=models.IntegerField(default=30, help_text='The maximum number of seconds to wait for the database to respond to search queries.', validators=[django.core.validators.MinValueValidator(1)], verbose_name='Database Timeout'),
         ),
     ]
