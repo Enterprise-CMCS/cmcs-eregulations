@@ -69,22 +69,6 @@ const customElementTags = [
     "fp-6",
 ];
 
-function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-            (window.innerHeight ||
-                document.documentElement
-                    .clientHeight) /* or $(window).height() */ &&
-        rect.right <=
-            (window.innerWidth ||
-                document.documentElement.clientWidth) /* or $(window).width() */
-    );
-}
-
 // scroll to anchor to accommodate FF's bad behavior
 function onPageShow() {
     // some magic number constants to scroll to top
@@ -110,17 +94,16 @@ function onPageShow() {
 
         const offsetPx = headerHeight - versionSelectHeight;
 
-        if (isHighlighted) {
-            const highlightedEls = document.getElementsByClassName("highlight");
-            const highlightedEl = highlightedEls[0];
-            if (highlightedEl) {
-                scrollToElement(highlightedEl, offsetPx);
-            }
-        } else if (hasHash) {
-            const el = document.getElementById(elId.substring(1));
-            if (el) {
-                scrollToElement(el, offsetPx);
-            }
+        const section = elId.substring(1);
+
+        const sidebarEl = document.querySelector(`[data-section-id='${section}']`);
+        const readerEl = isHighlighted
+            ? document.getElementsByClassName("highlight")[0]
+            : document.getElementById(section);
+
+        if (readerEl) {
+            scrollToElement(readerEl, offsetPx);
+            sidebarEl?.scrollIntoViewIfNeeded();
         }
     }
 }
@@ -132,16 +115,19 @@ function deactivateAllTOCLinks() {
     });
 }
 
-function activateTOCLink() {
+function activateTOCLink(event) {
     deactivateAllTOCLinks();
+
     const section = getCurrentSectionFromHash(window.location.hash);
 
     const el = document.querySelector(`[data-section-id='${section}']`);
+
     if (!el) return;
 
     el.classList.add("active");
-    if (!isElementInViewport(el)) {
-        el.scrollIntoView();
+
+    if (event) {
+        el.scrollIntoViewIfNeeded();
     }
 }
 
