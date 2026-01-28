@@ -75,7 +75,7 @@ watch(
             </v-tab>
         </v-tabs>
         <v-tabs-window v-model="tab">
-            <v-tabs-window-item @transitionend="debouncedOnTransitionEnd">
+            <v-tabs-window-item @after-enter="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading version history...</p>
                 </div>
@@ -89,7 +89,7 @@ watch(
                     />
                 </template>
             </v-tabs-window-item>
-            <v-tabs-window-item @transitionend="debouncedOnTransitionEnd">
+            <v-tabs-window-item @after-enter="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
                 </div>
