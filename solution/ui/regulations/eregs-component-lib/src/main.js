@@ -90,8 +90,7 @@ function onPageShow() {
     // some magic number constants to scroll to top
     // with room for sticky header and some breathing room for content
     // investigate pulling in SCSS variables instead
-    const HEADER_HEIGHT = 102;
-    const HEADER_HEIGHT_MOBILE = 81;
+    const HEADER_HEIGHT = 104;
 
     const elId = window.location.hash;
     const hasHash = elId.length > 1;
@@ -107,8 +106,7 @@ function onPageShow() {
             ? versionSelectBar[0].offsetHeight
             : 0;
 
-        const headerHeight =
-            window.innerWidth >= 1024 ? HEADER_HEIGHT : HEADER_HEIGHT_MOBILE;
+        const headerHeight = HEADER_HEIGHT;
 
         const offsetPx = headerHeight - versionSelectHeight;
 
@@ -119,7 +117,7 @@ function onPageShow() {
                 scrollToElement(highlightedEl, offsetPx);
             }
         } else if (hasHash) {
-            const el = document.getElementById(elId.substr(1));
+            const el = document.getElementById(elId.substring(1));
             if (el) {
                 scrollToElement(el, offsetPx);
             }
