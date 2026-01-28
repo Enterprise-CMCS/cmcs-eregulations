@@ -1,5 +1,5 @@
 
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -20,7 +20,7 @@ from resources.models import (
 class ContentSearchConfiguration(SingletonModel):
     database_timeout = models.IntegerField(
         default=10,
-        validators=[MinValueValidator(1)],
+        validators=[MinValueValidator(1), MaxValueValidator(300)],
         help_text="The maximum number of seconds to wait for the database to respond to search queries.",
         verbose_name="Database Timeout",
     )
