@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount, inject, useTemplateRef } from "vue";
+import { EventCodes } from "utilities/utils";
 import eventbus from "../eventbus";
 
 const props = defineProps({
@@ -16,6 +17,16 @@ const props = defineProps({
         type: Boolean,
         required: false,
         default: false,
+    },
+    section: {
+        type: String,
+        required: false,
+        default: undefined,
+    },
+    count: {
+        type: String,
+        required: false,
+        default: undefined,
     },
     discontiguous: {
         type: Boolean,
@@ -36,6 +47,15 @@ const stateOverrideValue = computed(() => {
     return getStateOverride();
 });
 
+const emitSetSection = () => {
+    if (props.section && props.count !== "0") {
+        eventbus.emit(EventCodes.SetSection, {
+            section: props.section,
+            count: props.count,
+        });
+    }
+};
+
 const click = () => {
     eventbus.emit("collapse-toggle", { name: dataName.value });
 };
@@ -44,6 +64,8 @@ const toggle = ({ name, action = "toggle" }) => {
     if (dataName.value !== name) return;
 
     if (props.discontiguous)  button.value.focus();
+
+    emitSetSection();
 
     if (
         (action === "expand" && visible.value)

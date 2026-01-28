@@ -611,6 +611,19 @@ const getContextBanners = async ({
         {},
     );
 
+/**
+ * @param {Object} options - parameters needed for API call
+ * @param {string} options.apiUrl - API base url passed in from Django template
+ * @param {string} options.title - Title number.  Ex: `42` or `45`
+ * @param {string} options.part - Part number within title.
+ * @param {string} options.section - Section number within part.
+ * @returns {Promise<results: Array<{version: string, version_link: string, compare_to_previous_link: string, compare_to_current_link: string}>} - Promise that contains array of version history objects when fulfilled
+*/
+const getVersionHistory = async ({ apiUrl, title, part, section }) =>
+    httpApiGet(
+        `${apiUrl}title/${title}/part/${part}/versions/section/${section}`
+    );
+
 const throwGenericError = async () =>
     new Promise((_resolve, reject) => {
         setTimeout(() => reject(new Error("Contrived error")), 2000);
@@ -641,5 +654,6 @@ export {
     getSynonyms,
     getTOC,
     getTitles,
+    getVersionHistory,
     throwGenericError,
 };

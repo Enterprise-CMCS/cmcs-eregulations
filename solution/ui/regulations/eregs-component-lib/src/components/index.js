@@ -1,5 +1,6 @@
 export { default as CollapseButton } from "./CollapseButton.vue";
 export { default as Collapsible } from "./Collapsible.vue";
+export { default as GovInfoLinks } from "./GovInfoLinks.vue";
 export { default as InternalDocsContainer } from "./reader-sidebar/InternalDocsContainer.vue";
 export { default as LastParserSuccessDate } from "./LastParserSuccessDate.vue";
 export { default as RecentChangesContainer } from "./RecentChangesContainer.vue";
@@ -21,7 +22,6 @@ export { default as ViewResourcesLink } from "./ViewResourcesLink.vue";
 // Tooltips
 export { default as ActionBtn } from "./tooltips/ActionBtn.vue";
 export { default as CopyCitation } from "./tooltips/CopyCitation.vue";
-export { default as GovInfoLinks } from "./tooltips/GovInfoLinks.vue";
 export { default as TooltipContainer } from "./tooltips/TooltipContainer.vue";
 
 // Shared Components

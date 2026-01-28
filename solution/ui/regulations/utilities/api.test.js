@@ -20,6 +20,7 @@ import {
     getChildTOC,
     getSynonyms,
     getTitles,
+    getVersionHistory,
     throwGenericError,
 } from "utilities/api.js";
 
@@ -428,6 +429,21 @@ describe("api.js", () => {
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
                 "http://localhost:9000/resources/context-banners?title=42&part=433&section=433.10",
+                fetchGetBoilerplate
+            );
+        });
+    });
+    describe("getVersionHistory", () => {
+        it("is called with proper param string", async () => {
+            await getVersionHistory({
+                apiUrl: "http://localhost:9000/",
+                title: "42",
+                part: "431",
+                section: "10",
+            });
+            await flushPromises();
+            expect(fetch).toHaveBeenCalledWith(
+                "http://localhost:9000/title/42/part/431/versions/section/10",
                 fetchGetBoilerplate
             );
         });

@@ -59,7 +59,11 @@
     {% if node.label|length <= 2 %}
         <div class="section-info-row section-info-row--bottom" data-scroll-target="{{node.label | join:'.'}}">
             <div class="info-links">
-                <view-resources-link type="button" section="§ {{node.label | join:'.'}}" count="{% get_item resource_count simple_citation '0' %}"></view-resources-link>
+                <view-resources-link
+                    type="button"
+                    section="§ {{node.label | join:'.'}}"
+                    count="{% get_item resource_count simple_citation '0' %}"
+                ></view-resources-link>
                 <scroll-target-container
                     class="reg-history-link"
                     trigger="{{ node.label | join:'.'}}"
@@ -67,6 +71,8 @@
                     <collapse-button
                         name="{{node.label | join:'.'}} section history"
                         state="collapsed"
+                        section="§ {{node.label | join:'.'}}"
+                        count="{% get_item resource_count simple_citation '0' %}"
                         discontiguous
                     >
                         <template #expanded>

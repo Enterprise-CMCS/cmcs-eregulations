@@ -1,7 +1,9 @@
 <script setup>
 import { ref, watch} from "vue";
-import GovInfoLinks from "./tooltips/GovInfoLinks.vue";
+import GovInfoLinks from "./GovInfoLinks.vue";
+import VersionHistory from "./VersionHistory.vue";
 import eventbus from "../eventbus";
+import debounce from "lodash/debounce";
 
 const props = defineProps({
     title: {
@@ -28,12 +30,20 @@ const props = defineProps({
 
 const visibleRef = ref(false);
 const loadedRef = ref(false);
-const tab = ref(1);
+const tab = ref(0);
 
-const handleAnnualEditionsLoaded = ({ name }) => {
+const handleLoaded = ({ name }) => {
     loadedRef.value = true;
     eventbus.emit("refresh-height", { name: `${name} section history` });
 };
+
+const debouncedHandleLoaded = debounce(handleLoaded, 100);
+
+const onTransitionEnd = () => {
+    eventbus.emit("refresh-height", { name: `${props.part}.${props.section} section history` });
+};
+
+const debouncedOnTransitionEnd = debounce(onTransitionEnd, 100);
 
 // Keep the GovInfoLinks component mounted after it becomes visible
 watch(
@@ -47,22 +57,39 @@ watch(
 </script>
 
 <template>
-    <div class="version-history-container">
+    <div class="version-history__container">
         <v-tabs v-model="tab">
             <v-tab
                 class="content-tabs"
                 tabindex="0"
-                disabled
+                data-testid="version-history-tab"
             >
                 Version History
             </v-tab>
-            <v-tab class="content-tabs" tabindex="0">
+            <v-tab
+                class="content-tabs"
+                tabindex="0"
+                data-testid="annual-editions-tab"
+            >
                 Annual Editions
             </v-tab>
         </v-tabs>
-        <v-window v-model="tab">
-            <v-window-item />
-            <v-window-item>
+        <v-tabs-window v-model="tab">
+            <v-tabs-window-item @after-enter="debouncedOnTransitionEnd">
+                <div v-if="!visibleRef" class="rules-container">
+                    <p>Loading version history...</p>
+                </div>
+                <template v-else>
+                    <VersionHistory
+                        :api-url="apiUrl"
+                        :title="title"
+                        :part="part"
+                        :section="section"
+                        @version-history-loaded="debouncedHandleLoaded"
+                    />
+                </template>
+            </v-tabs-window-item>
+            <v-tabs-window-item @after-enter="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
                 </div>
@@ -72,10 +99,10 @@ watch(
                         :title="title"
                         :part="part"
                         :section="section"
-                        @annual-editions-loaded="handleAnnualEditionsLoaded"
+                        @annual-editions-loaded="debouncedHandleLoaded"
                     />
                 </template>
-            </v-window-item>
-        </v-window>
+            </v-tabs-window-item>
+        </v-tabs-window>
     </div>
 </template>

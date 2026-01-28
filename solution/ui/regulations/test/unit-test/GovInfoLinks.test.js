@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/vue";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import GovInfoLinks from "eregsComponentLib/src/components/tooltips/GovInfoLinks.vue";
+import GovInfoLinks from "eregsComponentLib/src/components/GovInfoLinks.vue";
 import flushPromises from "flush-promises";
 
 describe("Gov Info Links", () => {

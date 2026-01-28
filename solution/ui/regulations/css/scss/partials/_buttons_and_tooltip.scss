@@ -310,7 +310,7 @@
         }
     }
 
-    .version-history-container {
+    .version-history__container {
         padding-left: 5px;
         margin-top: 1rem;
 
@@ -336,43 +336,6 @@
 
             @include common-tab-styles;
         }
-    }
-
-    .gov-info-links {
-        .no-results {
-            font-size: 14px;
-            padding-bottom: 20px;
-        }
-
-        .loading-spinner {
-            padding-bottom: 20px;
-        }
-
-        .links-container {
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            padding: 10px 10px 0;
-            box-sizing: content-box;
-
-            a {
-                font-size: 14px;
-                font-weight: 600;
-                padding-bottom: 20px;
-                width: 50px;
-
-                @include custom-min(420) {
-                    width: 60px;
-                }
-            }
-        }
-    }
-
-    .gov-info-source {
-        font-size: var(--font-size-sm);
-        font-weight: 400;
-        line-height: 20px;
-        color: $secondary_text_color;
     }
 }
 
