@@ -458,6 +458,10 @@ article {
 .version-history__container {
     a {
         text-decoration: none;
+
+        &:link.external::after {
+            margin-right: 1px;
+        }
     }
 
     .version-history-items__container {

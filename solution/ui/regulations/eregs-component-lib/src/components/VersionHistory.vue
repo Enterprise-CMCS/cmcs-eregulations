@@ -96,7 +96,6 @@ onMounted(() => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >Current Version</a>
-
                         </span>
                     </div>
                 </div>
