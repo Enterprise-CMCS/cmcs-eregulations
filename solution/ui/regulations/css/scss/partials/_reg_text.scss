@@ -70,6 +70,7 @@
         display: flex;
 
         &--bottom {
+            padding-bottom: var(--spacer-half);
             .info-links {
                 @include screen-lg {
                     align-items: center;
