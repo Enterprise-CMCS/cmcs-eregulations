@@ -74,8 +74,8 @@ watch(
                 Annual Editions
             </v-tab>
         </v-tabs>
-        <v-window v-model="tab">
-            <v-window-item @transitionend="debouncedOnTransitionEnd">
+        <v-tabs-window v-model="tab">
+            <v-tabs-window-item @transitionend="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading version history...</p>
                 </div>
@@ -88,8 +88,8 @@ watch(
                         @version-history-loaded="debouncedHandleLoaded"
                     />
                 </template>
-            </v-window-item>
-            <v-window-item @transitionend="debouncedOnTransitionEnd">
+            </v-tabs-window-item>
+            <v-tabs-window-item @transitionend="debouncedOnTransitionEnd">
                 <div v-if="!visibleRef" class="rules-container">
                     <p>Loading annual editions...</p>
                 </div>
@@ -102,7 +102,7 @@ watch(
                         @annual-editions-loaded="debouncedHandleLoaded"
                     />
                 </template>
-            </v-window-item>
-        </v-window>
+            </v-tabs-window-item>
+        </v-tabs-window>
     </div>
 </template>
