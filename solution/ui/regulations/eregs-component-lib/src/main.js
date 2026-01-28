@@ -103,7 +103,14 @@ function onPageShow() {
 
         if (readerEl) {
             scrollToElement(readerEl, offsetPx);
-            sidebarEl?.scrollIntoViewIfNeeded();
+            if (sidebarEl.scrollIntoViewIfNeeded) {
+                // Chrome
+                sidebarEl.scrollIntoViewIfNeeded();
+            } else {
+                // Firefox
+                sidebarEl?.scrollIntoView({ block: "nearest" });
+            }
+
         }
     }
 }
@@ -127,7 +134,13 @@ function activateTOCLink(event) {
     el.classList.add("active");
 
     if (event) {
-        el.scrollIntoViewIfNeeded();
+        if (el.scrollIntoViewIfNeeded) {
+            // Chrome
+            el.scrollIntoViewIfNeeded();
+        } else {
+            // Firefox
+            el.scrollIntoView({ block: "nearest" });
+        }
     }
 }
 
