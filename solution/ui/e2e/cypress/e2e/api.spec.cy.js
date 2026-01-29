@@ -54,6 +54,7 @@ const API_ENDPOINTS_V3 = [
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/subparts`,
     `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/toc`,
     `/v3/title/${TITLE}/part/${PART}/versions`,
+    `/v3/title/${TITLE}/part/${PART}/versions/section/${SECTION}`,
     `/v3/title/${TITLE}/parts`,
     `/v3/title/${TITLE}/versions`,
     `/v3/title/${TITLE}/toc`,
