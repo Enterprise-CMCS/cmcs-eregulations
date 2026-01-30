@@ -24,6 +24,9 @@ export default {
 <script setup>
 import { onMounted, onUnmounted, computed } from 'vue';
 import { EventCodes, } from "utilities/utils";
+import ShowMoreButton from "../ShowMoreButton.vue";
+import CollapseButton from "../CollapseButton.vue";
+import Collapsible from "../Collapsible.vue";
 
 import useContextBanners from "composables/contextBanners";
 
@@ -136,21 +139,46 @@ onUnmounted(() => {
             </template>
         </p>
         <template v-if="filteredBanners[1].length">
-            <p
-                v-for="item in filteredBanners[1]"
-                :key="item.section"
-                class="context-banner__item"
+            <Collapsible
+                name="context-banners-collapse"
+                state="collapsed"
+                class="collapse-content show-more-content"
             >
-                <template v-if="!props.selectedPart">
-                    <strong>
-                        <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
-                    </strong>
-                    <span v-sanitize-html="item.html" />
+                <p
+                    v-for="item in filteredBanners[1]"
+                    :key="item.section"
+                    class="context-banner__item"
+                >
+                    <template v-if="!props.selectedPart">
+                        <strong>
+                            <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
+                        </strong>
+                        <span v-sanitize-html="item.html" />
+                    </template>
+                    <template v-else>
+                        <span v-sanitize-html="item.html" />
+                    </template>
+                </p>
+            </Collapsible>
+            <CollapseButton
+                :class="{ subcategory: subcategory }"
+                name="context-banners-collapse"
+                state="collapsed"
+                class="category-title"
+            >
+                <template #expanded>
+                    <ShowMoreButton
+                        button-text="- Show Less"
+                        :count="filteredBanners[1].length"
+                    />
                 </template>
-                <template v-else>
-                    <span v-sanitize-html="item.html" />
+                <template #collapsed>
+                    <ShowMoreButton
+                        button-text="+ Show More"
+                        :count="filteredBanners[1].length"
+                    />
                 </template>
-            </p>
+            </CollapseButton>
         </template>
     </div>
 </template>
