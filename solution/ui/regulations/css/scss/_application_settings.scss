@@ -658,6 +658,8 @@ select {
     }
 
     .show-more-button {
+        margin-bottom: var(--spacer-1);
+
         &__count-span {
             font-weight: 400;
         }
