@@ -69,20 +69,23 @@ const handleHash = () => {
 };
 
 const filteredBanners = computed(() => {
-    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [];
+    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [[], []];
+
     // If a section is selected, show only that section's banner
     if (props.selectedPart?.value) {
         const sectionText = props.selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
         const cleaned = sectionText.split(" ").pop();
         const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        return contextBanners.value.results.filter((b) => b.section === key);
+        const filteredList = contextBanners.value.results.filter((b) => b.section === key);
+        return [filteredList.slice(0,2), filteredList.slice(2)];
     }
     // Otherwise, on subpart view, show all banners matching the current subpart
     if (props.subparts && props.subparts.length === 1) {
         const sp = props.subparts[0];
-        return contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
+        const filteredList =  contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
+        return [filteredList.slice(0,2), filteredList.slice(2)];
     }
-    return [];
+    return [[], []];
 });
 
 function getBanners(sectionKey) {
@@ -111,14 +114,14 @@ onUnmounted(() => {
 
 <template>
     <div
-        v-if="filteredBanners.length && !contextBanners.loading"
+        v-if="filteredBanners[0].length && !contextBanners.loading"
         class="context-banner"
         role="note"
         aria-label="Context"
     >
         <span class="context-banner-title">Notes</span>
         <p
-            v-for="item in filteredBanners"
+            v-for="item in filteredBanners[0]"
             :key="item.section"
             class="context-banner__item"
         >
@@ -132,5 +135,22 @@ onUnmounted(() => {
                 <span v-sanitize-html="item.html" />
             </template>
         </p>
+        <template v-if="filteredBanners[1].length">
+            <p
+                v-for="item in filteredBanners[1]"
+                :key="item.section"
+                class="context-banner__item"
+            >
+                <template v-if="!props.selectedPart">
+                    <strong>
+                        <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
+                    </strong>
+                    <span v-sanitize-html="item.html" />
+                </template>
+                <template v-else>
+                    <span v-sanitize-html="item.html" />
+                </template>
+            </p>
+        </template>
     </div>
 </template>
