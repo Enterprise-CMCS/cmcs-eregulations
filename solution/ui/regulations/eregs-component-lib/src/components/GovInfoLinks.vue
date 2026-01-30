@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getGovInfoLinks } from "utilities/api";
-import SimpleSpinner from "../SimpleSpinner.vue";
+import SimpleSpinner from "./SimpleSpinner.vue";
 
 const props = defineProps({
     apiUrl: {
@@ -68,7 +68,7 @@ onMounted(() => {
                 >{{ yearObj.year }}</a>
             </div>
         </div>
-        <div class="gov-info-source">
+        <div class="version-history__source">
             Source: CFR Annual Edition from
             <a
                 href="https://www.govinfo.gov/app/collection/cfr"

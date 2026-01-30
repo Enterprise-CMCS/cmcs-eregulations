@@ -12,6 +12,7 @@ class ContentSearchConfigurationAdmin(CustomAdminMixin, SingletonModelAdmin):
     fieldsets = [
         ("Search Settings", {
             "fields": [
+                "database_timeout",
                 "default_page_size",
                 "enable_keyword_search",
                 "enable_semantic_search",

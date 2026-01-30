@@ -244,8 +244,12 @@ class ContentSearchMixin:
         sql_filter = sql_filter.replace("%s", "{}").format(*[f"%(pos{i})s" for i in range(len(sql_params))])
         sql_params = {f"pos{i}": param for i, param in enumerate(sql_params)}
 
+        # Set the statement timeout based on configuration
+        timeout_ms = config.database_timeout * 1000  # Convert seconds to milliseconds
+        sql = f"SET LOCAL statement_timeout = {timeout_ms};"  # noqa S608
+
         # Define initial CTE that filters by the above criteria
-        sql = "WITH indices AS ( " + sql_filter + " )"
+        sql += "WITH indices AS ( " + sql_filter + " )"
 
         if enable_semantic or enable_keyword:
             sql += ", "
@@ -253,14 +257,13 @@ class ContentSearchMixin:
         # If neither semantic nor keyword search is enabled, return all filtered results with a score of 0.0
         if not (enable_semantic or enable_keyword):
             sort = "date ASC" if sort == "date" else "date DESC"
-            sql += f"""
+            sql += """
                 SELECT
                     id,
                     0.0 AS score
                 FROM content_search_contentindex
                 WHERE id IN (SELECT id FROM indices)
-                ORDER BY {sort} NULLS LAST, id DESC
-            """  # noqa S608
+            """
 
         # If semantic is enabled, add semantic search CTE
         # Note that we disable S608 warning here because the query is properly parameterized therefore is safe from SQL injection
@@ -409,7 +412,7 @@ class ContentSearchMixin:
 
         # Final sort
         sql += f"""
-            ORDER BY {sort} NULLS LAST, id DESC
+            ORDER BY {sort} NULLS LAST, id DESC;
         """  # noqa S608
 
         # Execute the raw SQL query
@@ -442,6 +445,7 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
     pagination_class = ViewSetPagination
     parser_classes = (FormParser,)
 
+    @transaction.atomic
     def list(self, request, *args, **kwargs):
         # Retrieve content search configuration and query
         config = ContentSearchConfiguration.get_solo()
@@ -539,6 +543,7 @@ class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
         [new_get.update({i: j}) for i, j in request.GET.items() if i in ["q", "query", "citations", "subjects", "categories"]]
         return request.build_absolute_uri(reverse("content_count")) + f"?{new_get.urlencode()}"
 
+    @transaction.atomic
     def list(self, request, *args, **kwargs):
         # Retrieve content search configuration and query
         config = ContentSearchConfiguration.get_solo()
