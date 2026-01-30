@@ -23,8 +23,11 @@ export default {
 
 <script setup>
 import { onMounted, onUnmounted, computed } from 'vue';
+import { EventCodes, } from "utilities/utils";
 
 import useContextBanners from "composables/contextBanners";
+
+import eventbus from "../../eventbus";
 
 const props = defineProps({
     apiUrl: {
@@ -95,10 +98,14 @@ function getBanners(sectionKey) {
 onMounted(() => {
     window.addEventListener("hashchange", handleHash);
     handleHash();
+    eventbus.on(EventCodes.ClearSections, () => {
+        getBanners();
+    });
 });
 
 onUnmounted(() => {
     window.removeEventListener("hashchange", handleHash);
+    eventbus.off(EventCodes.ClearSections);
 });
 </script>
 
