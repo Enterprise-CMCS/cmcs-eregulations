@@ -22,7 +22,7 @@ export default {
 </script>
 
 <script setup>
-import { onMounted, onUnmounted, computed } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { EventCodes, } from "utilities/utils";
 import ShowMoreButton from "../ShowMoreButton.vue";
 import CollapseButton from "../CollapseButton.vue";
@@ -49,7 +49,7 @@ const props = defineProps({
     selectedPart: {
         type: String,
         required: false,
-        default: null,
+        default: undefined,
     },
     subparts: {
         type: Array,
@@ -61,15 +61,6 @@ const props = defineProps({
 });
 
 const { contextBanners, fetchBanners } = useContextBanners();
-
-const handleHash = () => {
-    const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
-    if (sectionKey) {
-        getBanners(sectionKey);
-    } else if (props.subparts && props.subparts.length === 1) {
-        getBanners()
-    }
-};
 
 const filteredBanners = computed(() => {
     if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [[], []];
@@ -102,17 +93,36 @@ function getBanners(sectionKey) {
 }
 
 onMounted(() => {
-    window.addEventListener("hashchange", handleHash);
-    handleHash();
     eventbus.on(EventCodes.ClearSections, () => {
         getBanners();
     });
 });
 
 onUnmounted(() => {
-    window.removeEventListener("hashchange", handleHash);
     eventbus.off(EventCodes.ClearSections);
 });
+
+watch(
+    () => props.selectedPart,
+    (newVal, oldVal) => {
+        const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
+        if (newVal && newVal !== oldVal) {
+            getBanners(props.selectedPart);
+            return;
+        }
+
+        if (!newVal && !oldVal && !sectionKey) {
+            getBanners();
+            return;
+        }
+
+        if (!newVal && oldVal && !sectionKey) {
+            getBanners();
+            return;
+        }
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
