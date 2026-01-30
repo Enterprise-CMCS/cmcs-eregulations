@@ -13,20 +13,18 @@ const getSectionKeyFromHash = ({ hash, part }) => {
     return "";
 };
 
-const getSectionLink = ({ section }) => `#${section.replace('.', '-')}`;
-
 export default {
     getSectionKeyFromHash,
-    getSectionLink,
 };
 </script>
 
 <script setup>
 import { computed, onMounted, onUnmounted, watch } from 'vue';
 import { EventCodes, } from "utilities/utils";
-import ShowMoreButton from "../ShowMoreButton.vue";
 import CollapseButton from "../CollapseButton.vue";
 import Collapsible from "../Collapsible.vue";
+import ContextBannerItem from "./ContextBannerItem.vue";
+import ShowMoreButton from "../ShowMoreButton.vue";
 
 import useContextBanners from "composables/contextBanners";
 
@@ -140,42 +138,24 @@ watch(
         aria-label="Context"
     >
         <span class="context-banner-title">Notes</span>
-        <p
+        <ContextBannerItem
             v-for="item in filteredBanners[0]"
             :key="item.section"
-            class="context-banner__item"
-        >
-            <template v-if="!props.selectedPart">
-                <strong>
-                    <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
-                </strong>
-                <span v-sanitize-html="item.html" />
-            </template>
-            <template v-else>
-                <span v-sanitize-html="item.html" />
-            </template>
-        </p>
+            :item="item"
+            :selected-part="props.selectedPart"
+        />
         <template v-if="filteredBanners[1].length">
             <Collapsible
                 name="context-banners-collapse"
                 state="collapsed"
                 class="collapse-content show-more-content"
             >
-                <p
+                <ContextBannerItem
                     v-for="item in filteredBanners[1]"
                     :key="item.section"
-                    class="context-banner__item"
-                >
-                    <template v-if="!props.selectedPart">
-                        <strong>
-                            <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
-                        </strong>
-                        <span v-sanitize-html="item.html" />
-                    </template>
-                    <template v-else>
-                        <span v-sanitize-html="item.html" />
-                    </template>
-                </p>
+                    :item="item"
+                    :selected-part="props.selectedPart"
+                />
             </Collapsible>
             <CollapseButton
                 :class="{ subcategory: subcategory }"
