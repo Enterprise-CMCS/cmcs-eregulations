@@ -107,16 +107,23 @@ watch(
     (newVal, oldVal) => {
         const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
         if (newVal && newVal !== oldVal) {
+            // Reached when visiting a secion hash
+            // while already having a different section in hash
             getBanners(props.selectedPart);
             return;
         }
 
         if (!newVal && !oldVal && !sectionKey) {
+            // Reached on load with no selected part and no section in hash.
+            // Should only fire once on initial load due to immediate: true below
             getBanners();
             return;
         }
 
         if (!newVal && oldVal && !sectionKey) {
+            // Reached when clearing selected part and no section in hash.
+            // Usually reached by clicked Back button from a hashed section URL
+            // to a subpart view without section in hash
             getBanners();
             return;
         }
