@@ -2,7 +2,8 @@
 defineProps({
     count: {
         type: Number,
-        default: 1,
+        required: false,
+        default: undefined
     },
     buttonText: {
         type: String,
@@ -13,6 +14,6 @@ defineProps({
 
 <template>
     <div class="show-more-button">
-        <b>{{ buttonText }}</b> ({{ count }})
+        <b>{{ buttonText }}</b> <span v-if="count" class="show-more-button__count-span">({{ count }})</span>
     </div>
 </template>

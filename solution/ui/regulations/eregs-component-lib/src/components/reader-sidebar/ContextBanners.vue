@@ -167,10 +167,7 @@ onUnmounted(() => {
                 class="category-title"
             >
                 <template #expanded>
-                    <ShowMoreButton
-                        button-text="- Show Less"
-                        :count="filteredBanners[1].length"
-                    />
+                    <ShowMoreButton button-text="- Show Less" />
                 </template>
                 <template #collapsed>
                     <ShowMoreButton
