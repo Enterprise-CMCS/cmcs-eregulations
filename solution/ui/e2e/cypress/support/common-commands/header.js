@@ -6,9 +6,9 @@ export const goHome = () => {
 const expectedLabelsWide = ["Pub. L. 119-21", "Social Security Act", "State Medicaid Manual", "Research a Subject"];
 
 const checkLinkOrder = (listLocation, expectedLabels = expectedLabelsWide) => {
-    cy.get(`${listLocation} > ul.links__list li a`).should(($links) => {
-        const texts = [...$links].map((a) => a.textContent.trim());
-        expect(texts).to.deep.equal(expectedLabels);
+    cy.get(`${listLocation} > ul.links__list li a`).each(($el, index, _$links) => {
+        const expectedLabel = expectedLabels[index];
+        expect($el).to.have.text(expectedLabel);
     });
 };
 

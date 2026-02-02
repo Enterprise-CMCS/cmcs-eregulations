@@ -22,17 +22,10 @@ describe("Public Law 119-21 (OBBBA)", { scrollBehavior: "center" }, () => {
         cy.checkAccessibility();
 
         cy.get(".obbba__context")
-            .then(($el) => {
-                expect($el).to.have.css("font-style").and.eq("italic");
-                cy.wrap($el)
-                    .find("a")
-                    .first()
-                    .then(($link) => {
-                        expect($link).to.include.text(
-                            "Working Families Tax Cut legislation (Public Law No. 119-21, July 4, 2025)"
-                        )
-                    });
-            });
+            .should("have.css", "font-style", "italic")
+            .find("a")
+            .first()
+            .should("include.text", "Working Families Tax Cut legislation (Public Law No. 119-21, July 4, 2025)");
     });
 
     it("jumps to a regulation Part section using the section number text input", () => {
