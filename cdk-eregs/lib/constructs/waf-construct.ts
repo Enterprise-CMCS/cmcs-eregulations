@@ -85,7 +85,7 @@ export class WafConstruct extends Construct {
                             ruleActionOverrides: [
                                 {
                                     name: 'SizeRestrictions_BODY',
-                                    actionToUse: { allow: {} },
+                                    actionToUse: { count: {} },
                                 },
                             ],
                         },
