@@ -63,21 +63,22 @@ const { contextBanners, fetchBanners } = useContextBanners();
 const filteredBanners = computed(() => {
     if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [[], []];
 
-    // If a section is selected, show only that section's banner
-    if (props.selectedPart?.value) {
-        const sectionText = props.selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
-        const cleaned = sectionText.split(" ").pop();
-        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        const filteredList = contextBanners.value.results.filter((b) => b.section === key);
-        return [filteredList.slice(0,2), filteredList.slice(2)];
-    }
-    // Otherwise, on subpart view, show all banners matching the current subpart
     if (props.subparts && props.subparts.length === 1) {
         const sp = props.subparts[0];
         const filteredList =  contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
         return [filteredList.slice(0,2), filteredList.slice(2)];
     }
-    return [[], []];
+
+    if (props.selectedPart) {
+        const sectionText = props.selectedPart.replace("§", "").trim(); // e.g., "75.104" or just "104"
+        const cleaned = sectionText.split(" ").pop();
+        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
+        const filteredList = contextBanners.value.results.filter((b) => b.section === key);
+        return [filteredList.slice(0,2), filteredList.slice(2)];
+    }
+
+    const list = contextBanners.value.results;
+    return [list.slice(0,2), list.slice(2)];
 });
 
 function getBanners(sectionKey) {
