@@ -90,22 +90,17 @@ describe("Statute Table", () => {
 
         cy.get(".more-info__container").within(() => {
             cy.get("h3").contains("Citation Link");
-            cy.get(".more-info__row")
+            cy.get(".more-info__row .copy-btn__container button")
                 .eq(0)
-                .within(() => {
-                    cy.get("button.action-btn")
-                        .should(($el) => {
-                            expect($el.text().trim()).to.equal(
-                                "copy link",
-                            );
-                        });
-                    cy.get("a")
-                        .should("have.attr", "href", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
-                        .and("have.attr", "target", "_blank")
-                        .and("have.attr", "rel", "noopener noreferrer")
-                        .and("have.attr", "class", "external")
-                        .and("contain", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
-                });
+                .should("include.text", "copy link"); // include not an alias for contains
+            cy.get(".more-info__row .row__content")
+                .eq(0)
+                .find("a")
+                .should("have.attr", "href", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
+                .and("have.attr", "target", "_blank")
+                .and("have.attr", "rel", "noopener noreferrer")
+                .and("have.attr", "class", "external")
+                .and("contain", "https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title42-section1396b&num=0&edition=prelim")
         });
 
         cy.injectAxe();
