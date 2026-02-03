@@ -22,6 +22,7 @@ class SectionContextBanner(models.Model):
     class Meta:
         verbose_name = "Context Banner"
         verbose_name_plural = "Context Banners"
+        ordering = ["citation"]
 
     def __str__(self):
         return f"Banner for {self.citation.display_name}"
