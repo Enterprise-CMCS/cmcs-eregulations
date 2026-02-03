@@ -92,7 +92,7 @@ describe("Statute Table", () => {
             cy.get("h3").contains("Citation Link");
             cy.get(".more-info__row .copy-btn__container button")
                 .eq(0)
-                .should("include.text", "copy link");
+                .should("include.text", "copy link"); // include not an alias for contains
             cy.get(".more-info__row .row__content")
                 .eq(0)
                 .find("a")
