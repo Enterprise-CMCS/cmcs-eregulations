@@ -1,3 +1,5 @@
+import re
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.managers import InheritanceManager
@@ -69,6 +71,9 @@ class Section(AbstractCitation):
 class Act(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def clean(self):
+        self.name = self.name.strip()
+
     def __str__(self):
         return self.name
 
@@ -77,23 +82,29 @@ class StatuteCitation(models.Model):
     act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="statute_citations")
     section = models.CharField(max_length=32)
 
+    def clean(self):
+        self.section = re.sub(r"\s", "", self.section)
+
+    def __str__(self):
+        return f"{self.act.name} §{self.section}"
+
     class Meta:
         verbose_name = "Statute Citation"
         verbose_name_plural = "Statute Citations"
         unique_together = ("act", "section")
-
-    def __str__(self):
-        return f"{self.act.name} §{self.section}"
 
 
 class UscCitation(models.Model):
     title = models.IntegerField()
     section = models.CharField(max_length=32)
 
+    def clean(self):
+        self.section = re.sub(r"\s", "", self.section)
+
+    def __str__(self):
+        return f"{self.title} USC §{self.section}"
+
     class Meta:
         verbose_name = "USC Citation"
         verbose_name_plural = "USC Citations"
         unique_together = ("title", "section")
-
-    def __str__(self):
-        return f"{self.title} USC §{self.section}"
