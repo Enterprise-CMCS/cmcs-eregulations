@@ -24,7 +24,10 @@ from resources.models import (
     AbstractCategory,
     AbstractCitation,
     AbstractResource,
+    Act,
+    StatuteCitation,
     Subject,
+    UscCitation,
 )
 from resources.utils import get_citation_filter, string_to_bool
 
@@ -505,6 +508,10 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
             Prefetch("reg_text", IndexedRegulationText.objects.all()),
             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("act_citations", StatuteCitation.objects.prefetch_related(
+                    Prefetch("act", Act.objects.all()),
+                )),
+                Prefetch("usc_citations", UscCitation.objects.all()),
                 Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
                     Prefetch("parent", AbstractCategory.objects.select_subclasses()),
                 )),

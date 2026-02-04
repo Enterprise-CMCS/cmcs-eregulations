@@ -6,10 +6,10 @@ from django.db.models.functions import Concat
 from common.admin import CustomAdminMixin
 from resources.models import (
     AbstractCitation,
-    Section,
-    Subpart,
     Act,
+    Section,
     StatuteCitation,
+    Subpart,
     UscCitation,
 )
 
