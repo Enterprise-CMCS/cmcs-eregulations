@@ -64,3 +64,29 @@ class Section(AbstractCitation):
         verbose_name = "Section"
         verbose_name_plural = "Sections"
         ordering = ["title", "part", "section_id"]
+
+
+class Act(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+
+class StatuteCitation(models.Model):
+    act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="statute_citations")
+    section = models.CharField(max_length=32)
+
+    class Meta:
+        unique_together = ("act", "section")
+
+    def __str__(self):
+        return f"{self.act.name} §{self.section}"
+
+
+class UscCitation(models.Model):
+    title = models.IntegerField()
+    section = models.CharField(max_length=32)
+
+    class Meta:
+        unique_together = ("title", "section")
+
+    def __str__(self):
+        return f"{self.title} USC §{self.section}"
