@@ -69,12 +69,17 @@ class Section(AbstractCitation):
 class Act(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class StatuteCitation(models.Model):
     act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="statute_citations")
     section = models.CharField(max_length=32)
 
     class Meta:
+        verbose_name = "Statute Citation"
+        verbose_name_plural = "Statute Citations"
         unique_together = ("act", "section")
 
     def __str__(self):
@@ -86,6 +91,8 @@ class UscCitation(models.Model):
     section = models.CharField(max_length=32)
 
     class Meta:
+        verbose_name = "USC Citation"
+        verbose_name_plural = "USC Citations"
         unique_together = ("title", "section")
 
     def __str__(self):

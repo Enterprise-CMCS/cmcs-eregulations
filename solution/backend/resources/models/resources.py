@@ -51,12 +51,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     act_citations = models.ManyToManyField(StatuteCitation, blank=True, related_name="resources")
     usc_citations = models.ManyToManyField(UscCitation, blank=True, related_name="resources")
 
-    act_citations_old = StatuteRefField()
-    usc_citations_old = UscRefField(verbose_name="U.S. Code citations")
-    # TODO somehow add combined help text for these fields:
-    # help_text="Designate statute citations that are related to this document."
-    #           "You can use either the Act and Section of the Act, or the Title and Section of the U.S. Code."
-
     editor_notes = models.TextField(
         blank=True,
         help_text="Use this field to store notes meant for other editors. "
