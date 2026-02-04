@@ -456,24 +456,20 @@ onMounted(() => {
                     <span class="lbexSubTitleLevelOLC">Subtitle B — Health</span>
                     </a>
                 </div>-->
-                <div>
-                    <a
-                        id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
-                        href="#H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
-                        class="lbexChapterLevelOLC"
-                    >Chapter 1 — Medicaid
-                    </a>
-                </div>
-                <div>
-                    <a
-                        id="toc-H92BA8B5040914BF4B6F9A50225F8E976"
-                        href="#H92BA8B5040914BF4B6F9A50225F8E976"
-                        class="lbexSubChapterLevelOLC"
-                    >Subchapter A — Reducing fraud and improving enrollment processes
-                    </a>
-                </div>
+                <h2
+                    id="toc-H1F2AC7DAAC144B50AAB0E9E039D9BE3C"
+                    class="lbexChapterLevelOLC"
+                >
+                    Chapter 1 — Medicaid
+                </h2>
+                <h2
+                    id="toc-H92BA8B5040914BF4B6F9A50225F8E976"
+                    class="lbexSubChapterLevelOLC"
+                >
+                    Subchapter A — Reducing fraud and improving enrollment processes
+                </h2>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H8DEEC3F1F40E4CD390DAC8E9F3F90B6C" href="#H8DEEC3F1F40E4CD390DAC8E9F3F90B6C">
                         <span id="H8DEEC3F1F40E4CD390DAC8E9F3F90B6C" class="lbexHangWithMargin">
                             <span class="lbexSectionlevelOLC">Sec. 71101. </span>
@@ -482,7 +478,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HDCE6E7E5FDA94A8285704957AF3AC72B" />
                 <span class="lbexIndent">(a)
@@ -529,7 +525,7 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of this section and section 71102, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.
                 </span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H6CCF8B8A04E04A36847FD683A259E8DC" href="#H6CCF8B8A04E04A36847FD683A259E8DC">
                         <span id="H6CCF8B8A04E04A36847FD683A259E8DC" class="lbexHangWithMargin">
                             <span class="lbexSectionlevelOLC">Sec. 71102. </span>
@@ -538,7 +534,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">The Secretary of Health and Human Services shall not, during the period beginning on the date of the enactment of this section and ending September 30, 2034, implement, administer, or enforce the amendments made by the provisions of the final rule published by the Centers for Medicare &amp; Medicaid Services on April 2, 2024, and titled “Medicaid Program; Streamlining the Medicaid, Children's Health Insurance Program, and Basic Health Program Application, Eligibility Determination, Enrollment, and Renewal Processes” (<a
@@ -680,7 +676,7 @@ onMounted(() => {
                     >457.1180</a>.</span>
                 </span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HA52179FF1EA542DA88936E2159BEFC99" href="#HA52179FF1EA542DA88936E2159BEFC99">
                         <span class="lbexHangWithMargin">
                             <span id="HA52179FF1EA542DA88936E2159BEFC99" />
@@ -690,7 +686,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H1F7ABBF243574F56885FF65CE98A5BB4" />
                 <span class="lbexIndent">(a)
@@ -862,7 +858,7 @@ onMounted(() => {
                     >42 U.S.C. 1397cc(f)(3)</a>) is amended by striking “and (e)” and inserting <span class="annotated-text">“(e), and (j)”</span>. </span>
                 </span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H968D7B63B96D4B7F849C3F7D820864FE" href="#H968D7B63B96D4B7F849C3F7D820864FE">
                         <span class="lbexHangWithMargin">
                             <span id="H968D7B63B96D4B7F849C3F7D820864FE" />
@@ -872,7 +868,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <span class="lbexIndent">
                     <span class="lbexIndent">Section 1902 of the Social Security Act (<a
@@ -930,7 +926,7 @@ onMounted(() => {
 
                 <span class="lbexIndentParagraph" />
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HCA190EE79A494B7B807E4370E04565D6" href="#HCA190EE79A494B7B807E4370E04565D6">
                         <span class="lbexHangWithMargin">
                             <span id="HCA190EE79A494B7B807E4370E04565D6" />
@@ -940,7 +936,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1902(kk)(1) of the Social Security Act (<a
@@ -966,7 +962,7 @@ onMounted(() => {
                     </span>
                 </span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HE4C5D821764A4ED89B23CB28D9795390" href="#HE4C5D821764A4ED89B23CB28D9795390">
                         <span class="lbexHangWithMargin">
                             <span id="HE4C5D821764A4ED89B23CB28D9795390" />
@@ -976,7 +972,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HC670A843FC9F4238A6146494C352067E" />
                 <span class="lbexIndent">(a)
@@ -1030,7 +1026,7 @@ onMounted(() => {
                 <span class="lbexIndent">(b)
                     <span class="lbexSectionLevelOLCnuclear">Effective date</span>.—The amendments made by subsection (a) shall apply beginning with respect to fiscal year 2030.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H606041EC9E7F4E47BF27FA785F990CD4" href="#H606041EC9E7F4E47BF27FA785F990CD4">
                         <span class="lbexHangWithMargin">
                             <span id="H606041EC9E7F4E47BF27FA785F990CD4" />
@@ -1040,7 +1036,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H17BE0BEBA4774BD2AC044EDEDBDC0FDC" />
                 <span class="lbexIndent">(a)
@@ -1081,7 +1077,7 @@ onMounted(() => {
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $75,000,000 for fiscal year 2026, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HAC580CB2660842A98524C26BC39A0B5D" href="#HAC580CB2660842A98524C26BC39A0B5D">
                         <span class="lbexHangWithMargin">
                             <span id="HAC580CB2660842A98524C26BC39A0B5D" />
@@ -1091,7 +1087,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HAFFB5AB97A84416A8CA2844C876D3889" />
                 <span class="lbexIndent">(a)
@@ -1166,7 +1162,7 @@ onMounted(() => {
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Effective date</span>.—The amendments made by subsection (a) shall apply beginning on January 1, 2028.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H81AF8E812F034407AFF9A4E9B8533848" href="#H81AF8E812F034407AFF9A4E9B8533848">
                         <span class="lbexHangWithMargin">
                             <span id="H81AF8E812F034407AFF9A4E9B8533848" />
@@ -1176,7 +1172,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HCEC62AA2268345DEB0305C1D76EE56A5" />
                 <span class="lbexIndent">(a)
@@ -1229,7 +1225,7 @@ onMounted(() => {
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $15,000,000 for fiscal year 2026, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H01B260BD1A734C8384AF364D82D3132E" href="#H01B260BD1A734C8384AF364D82D3132E">
                         <span class="lbexHangWithMargin">
                             <span id="H01B260BD1A734C8384AF364D82D3132E" />
@@ -1239,7 +1235,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H050F12666B2B40318BF49AFC9987802E" />
                 <span class="lbexIndent">(a)
@@ -1269,7 +1265,7 @@ onMounted(() => {
                 >Subchapter B — Preventing wasteful spending
                 </a>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H72D966A2232743E5A94F076C68AE84D0" href="#H72D966A2232743E5A94F076C68AE84D0">
                         <span class="lbexHangWithMargin">
                             <span id="H72D966A2232743E5A94F076C68AE84D0" />
@@ -1279,7 +1275,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">The Secretary of Health and Human Services shall not, during the period beginning on the date of the enactment of this section and ending September 30, 2034, implement, administer, or enforce the amendments made by the provisions of the final rule published by the Centers for Medicare &amp; Medicaid Services on May 10, 2024, and titled “Medicare and Medicaid Programs; Minimum Staffing Standards for Long-Term Care Facilities and Medicaid Institutional Payment Transparency Reporting” (<a
@@ -1304,7 +1300,7 @@ onMounted(() => {
                     rel="noopener noreferrer"
                 >483.35</a>.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H917F6C03CA464B319B70F26A163C0EE0" href="#H917F6C03CA464B319B70F26A163C0EE0">
                         <span class="lbexHangWithMargin">
                             <span id="H917F6C03CA464B319B70F26A163C0EE0" />
@@ -1314,7 +1310,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HD7F49CCDD9744A4C9F10E968B0298EB9" />
                 <span class="lbexIndent">(a)
@@ -1372,7 +1368,7 @@ onMounted(() => {
                 <span class="lbexIndent">(e)
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $10,000,000 for fiscal year 2026, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H4C4222AD5DC6485391D3BF42FAE4785C" href="#H4C4222AD5DC6485391D3BF42FAE4785C">
                         <span class="lbexHangWithMargin">
                             <span id="H4C4222AD5DC6485391D3BF42FAE4785C" />
@@ -1382,7 +1378,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HDEFFE6B6222A4E929E0ACD10E910758E" />
                 <span class="lbexIndent">(a)
@@ -1461,7 +1457,7 @@ onMounted(() => {
                 >Subchapter C — Stopping abusive financing practices
                 </a>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H027BCCE030064EC1801736510E3BFF79" href="#H027BCCE030064EC1801736510E3BFF79">
                         <span class="lbexHangWithMargin">
                             <span id="H027BCCE030064EC1801736510E3BFF79" />
@@ -1471,7 +1467,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <span class="lbexIndent">
                     <span class="lbexIndentSectionText">Section 1905(ii)(3) of the Social Security Act (<a
@@ -1498,7 +1494,7 @@ onMounted(() => {
                     </span>
                 </span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HC5CF4567712D420786321990FC6F05A3" href="#HC5CF4567712D420786321990FC6F05A3">
                         <span class="lbexHangWithMargin">
                             <span id="HC5CF4567712D420786321990FC6F05A3" />
@@ -1508,7 +1504,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HD1668A87651A42AEBD33453570189B7A" />
                 <span class="lbexIndent">(a)
@@ -1595,7 +1591,7 @@ onMounted(() => {
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $20,000,000 for fiscal year 2026, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H5095A31A390141E1AF3A2DAD32DD6532" href="#H5095A31A390141E1AF3A2DAD32DD6532">
                         <span class="lbexHangWithMargin">
                             <span id="H5095A31A390141E1AF3A2DAD32DD6532" />
@@ -1605,7 +1601,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H6081C5C3FF704314AFF57BA411E26DDE" />
                 <span class="lbexIndent">(a)
@@ -1733,7 +1729,7 @@ onMounted(() => {
                 <span class="lbexIndent">(e)
                     <span class="lbexSectionLevelOLCnuclear">Funding</span>.—There are appropriated out of any monies in the Treasury not otherwise appropriated $7,000,000 for each of fiscal years 2026 through 2033 for purposes of carrying out this section, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HFC9712978086448A884AD4DA6242CFF0" href="#HFC9712978086448A884AD4DA6242CFF0">
                         <span class="lbexHangWithMargin">
                             <span id="HFC9712978086448A884AD4DA6242CFF0" />
@@ -1743,7 +1739,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H946D195148204135A731BDE8117729B1" />
                 <span class="lbexIndent">(a)
@@ -1815,7 +1811,7 @@ onMounted(() => {
                 <span class="lbexIndent">(c)
                     <span class="lbexSectionLevelOLCnuclear">Effective date</span>.—The amendments made by this section shall take effect upon the date of enactment of this Act, subject to any applicable transition period determined appropriate by the Secretary of Health and Human Services, not to exceed 3 fiscal years.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H3DFC92C358834F5B82DE8AB81465692A" href="#H3DFC92C358834F5B82DE8AB81465692A">
                         <span class="lbexHangWithMargin">
                             <span id="H3DFC92C358834F5B82DE8AB81465692A" />
@@ -1825,7 +1821,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H05A306D8A48742AE85C93943E85D9BFD" />
                 <span class="lbexIndent">(a)
@@ -1861,7 +1857,7 @@ onMounted(() => {
                 >Subchapter D — Increasing personal accountability
                 </a>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-HE10C293F1AD14FEE88FED90835BFBB2D" href="#HE10C293F1AD14FEE88FED90835BFBB2D">
                         <span class="lbexHangWithMargin">
                             <span id="HE10C293F1AD14FEE88FED90835BFBB2D" />
@@ -1871,7 +1867,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H2B46E3225A4B47F5815B7CBC456D620D" />
                 <span class="lbexIndent">(a)
@@ -2264,7 +2260,7 @@ onMounted(() => {
                 <span class="lbexIndent">(f)
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $200,000,000 for fiscal year 2026, to remain available until expended.</span>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H4ADCA385302C45CCBDC2C4550A5A6759" href="#H4ADCA385302C45CCBDC2C4550A5A6759">
                         <span class="lbexHangWithMargin">
                             <span id="H4ADCA385302C45CCBDC2C4550A5A6759" />
@@ -2274,7 +2270,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="HD8C2EFE59E624828BEE359C477862C45" />
                 <span class="lbexIndent">(a)
@@ -2369,7 +2365,7 @@ onMounted(() => {
                 >Subchapter E — Expanding Access to Care
                 </a>
 
-                <span class="lbexHang">
+                <h2 class="lbexHang section-title">
                     <a id="toc-H09652BCC85234E4FAAAC9D9A805494AF" href="#H09652BCC85234E4FAAAC9D9A805494AF">
                         <span class="lbexHangWithMargin">
                             <span id="H09652BCC85234E4FAAAC9D9A805494AF" />
@@ -2379,7 +2375,7 @@ onMounted(() => {
                             </span>
                         </span>
                     </a>
-                </span>
+                </h2>
 
                 <a id="H8F4E00E92C574C8D98E1F0E93E875667" />
                 <span class="lbexIndent">(a)
