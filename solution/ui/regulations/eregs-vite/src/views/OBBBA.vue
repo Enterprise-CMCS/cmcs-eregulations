@@ -1258,12 +1258,12 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H7D8B025C07364BD8B6BD2B6E5C3D1861" />
 
-                <a
+                <h2
                     id="toc-H7D8B025C07364BD8B6BD2B6E5C3D1861"
-                    href="#H7D8B025C07364BD8B6BD2B6E5C3D1861"
                     class="lbexSubChapterLevelOLC"
-                >Subchapter B — Preventing wasteful spending
-                </a>
+                >
+                    Subchapter B — Preventing wasteful spending
+                </h2>
 
                 <h2 class="lbexHang section-title">
                     <a id="toc-H72D966A2232743E5A94F076C68AE84D0" href="#H72D966A2232743E5A94F076C68AE84D0">
@@ -1450,12 +1450,12 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $1,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <span id="H33AAEB14AE494C8981C870486D3E3901" />
 
-                <a
+                <h2
                     id="toc-H33AAEB14AE494C8981C870486D3E3901"
-                    href="#H33AAEB14AE494C8981C870486D3E3901"
                     class="lbexSubChapterLevelOLC"
-                >Subchapter C — Stopping abusive financing practices
-                </a>
+                >
+                    Subchapter C — Stopping abusive financing practices
+                </h2>
 
                 <h2 class="lbexHang section-title">
                     <a id="toc-H027BCCE030064EC1801736510E3BFF79" href="#H027BCCE030064EC1801736510E3BFF79">
@@ -1850,12 +1850,12 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $5,000,000 for each of fiscal years 2026 and 2027, to remain available until expended.</span>
                 <span id="H41B4BE6053784F329BB924FD89F29721" />
 
-                <a
+                <h2
                     id="toc-H41B4BE6053784F329BB924FD89F29721"
-                    href="#H41B4BE6053784F329BB924FD89F29721"
                     class="lbexSubChapterLevelOLC"
-                >Subchapter D — Increasing personal accountability
-                </a>
+                >
+                    Subchapter D — Increasing personal accountability
+                </h2>
 
                 <h2 class="lbexHang section-title">
                     <a id="toc-HE10C293F1AD14FEE88FED90835BFBB2D" href="#HE10C293F1AD14FEE88FED90835BFBB2D">
@@ -2358,12 +2358,12 @@ onMounted(() => {
                     <span class="lbexSectionLevelOLCnuclear">Implementation funding</span>.—For the purposes of carrying out the provisions of, and the amendments made by, this section, there are appropriated, out of any monies in the Treasury not otherwise appropriated, to the Administrator of the Centers for Medicare &amp; Medicaid Services, $15,000,000 for fiscal year 2026, to remain available until expended.</span>
                 <a id="H2388F94754554D3C9E54A32152DEE520" />
 
-                <a
+                <h2
                     id="toc-H2388F94754554D3C9E54A32152DEE520"
-                    href="#H2388F94754554D3C9E54A32152DEE520"
                     class="lbexSubChapterLevelOLC"
-                >Subchapter E — Expanding Access to Care
-                </a>
+                >
+                    Subchapter E — Expanding Access to Care
+                </h2>
 
                 <h2 class="lbexHang section-title">
                     <a id="toc-H09652BCC85234E4FAAAC9D9A805494AF" href="#H09652BCC85234E4FAAAC9D9A805494AF">
