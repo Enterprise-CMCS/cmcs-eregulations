@@ -18,11 +18,14 @@ from resources.models import (
     AbstractInternalResource,
     AbstractPublicResource,
     AbstractResource,
+    Act,
     FederalRegisterLink,
     InternalFile,
     InternalLink,
     PublicLink,
+    StatuteCitation,
     Subject,
+    UscCitation,
 )
 from resources.serializers import (
     AbstractResourceSerializer,
@@ -132,6 +135,10 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
         group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
 
         citation_prefetch = AbstractCitation.objects.select_subclasses()
+        statute_citation_prefetch = StatuteCitation.objects.prefetch_related(
+            Prefetch("act", Act.objects.all()),
+        )
+        usc_citation_prefetch = UscCitation.objects.all()
         subject_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.select_subclasses().prefetch_related(
             Prefetch("parent", AbstractCategory.objects.select_subclasses()),
@@ -140,6 +147,8 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
         query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
             Prefetch("category", category_prefetch),
             Prefetch("cfr_citations", citation_prefetch),
+            Prefetch("act_citations", statute_citation_prefetch),
+            Prefetch("usc_citations", usc_citation_prefetch),
             Prefetch("subjects", subject_prefetch),
         )
 
@@ -154,6 +163,8 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
                 Prefetch("related_resources", AbstractResource.objects.filter(approved=True).prefetch_related(
                     Prefetch("category", category_prefetch),
                     Prefetch("cfr_citations", citation_prefetch),
+                    Prefetch("act_citations", statute_citation_prefetch),
+                    Prefetch("usc_citations", usc_citation_prefetch),
                     Prefetch("subjects", subject_prefetch),
                 ).order_by(F("date").desc(nulls_last=True)).select_subclasses()),
             ).filter(Q(group_parent=True) | Q(related_resources__isnull=True))
