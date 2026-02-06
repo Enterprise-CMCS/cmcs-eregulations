@@ -1,10 +1,12 @@
 describe("Public Law 119-21 (OBBBA)", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
+            cy.intercept("**/v3/titles").as("titles");
         });
-        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("should redirect /obbba to /pl119-21", () => {

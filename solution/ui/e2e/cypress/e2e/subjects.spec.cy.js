@@ -7,31 +7,33 @@ const readerUsername = Cypress.env("READER_USERNAME");
 const readerPassword = Cypress.env("READER_PASSWORD");
 
 const _beforeEach = () => {
-    cy.intercept("/**", (req) => {
-        req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+    cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+        cy.intercept("/**", (req) => {
+            req.headers["x-automated-test"] = DEPLOYING;
+        });
+
+        cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
+
+        cy.intercept(`**/v3/title/${TITLE_42}/parts`, {
+            fixture: "parts-42.json",
+        }).as("parts42");
+
+        cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
+            fixture: "parts-45.json",
+        }).as("parts45");
+
+        cy.intercept("**/v3/resources/subjects**", {
+            fixture: "subjects.json",
+        }).as("subjects");
+
+        cy.intercept("**/v3/resources/internal/categories**", {
+            fixture: "categories-internal.json",
+        }).as("internalCategories");
+
+        cy.intercept("**/v3/resources/public/categories**", {
+            fixture: "categories.json",
+        }).as("categories");
     });
-
-    cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
-
-    cy.intercept(`**/v3/title/${TITLE_42}/parts`, {
-        fixture: "parts-42.json",
-    }).as("parts42");
-
-    cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
-        fixture: "parts-45.json",
-    }).as("parts45");
-
-    cy.intercept("**/v3/resources/subjects**", {
-        fixture: "subjects.json",
-    }).as("subjects");
-
-    cy.intercept("**/v3/resources/internal/categories**", {
-        fixture: "categories-internal.json",
-    }).as("internalCategories");
-
-    cy.intercept("**/v3/resources/public/categories**", {
-        fixture: "categories.json",
-    }).as("categories");
 };
 
 const _beforePaginate = () => {
