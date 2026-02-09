@@ -10,7 +10,7 @@ describe("Search flow", () => {
     beforeEach(() => {
         cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
             cy.intercept("/**", (req) => {
-                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+                req.headers["x-automated-test"] = DEPLOYING;
             });
 
             cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
