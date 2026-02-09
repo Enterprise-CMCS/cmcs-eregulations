@@ -396,48 +396,53 @@ describe("Find by Subjects", () => {
     });
 
     it("should display and fetch the correct subjects on load if they are included in URL", () => {
-        cy.getPolicyDocs({ username, password });
-        cy.get(".result__link") // internal_file
-            .eq(0)
-            .find("a")
-            .should("not.have.class", "external")
-            .find(
-                "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]",
-            )
-            .should("include.text", "Outlook");
-        cy.get(".result__link") // internal_file
-            .eq(0)
-            .find("a")
-            .find("span.result__link--domain")
-            .should("not.exist");
-        cy.get(".result__link") // regulations link
-            .eq(1)
-            .find("a")
-            .find("span.result__link--file-type")
-            .should("include.text", "PDF");
-        cy.get(".result__link") // regulations link
-            .eq(1)
-            .find("a")
-            .find("span.result__link--domain")
-            .should("include.text", "medicaid.gov");
-        cy.get(".result__link") // internal_link
-            .eq(2)
-            .find("a")
-            .should("not.have.class", "external")
-            .find("span.result__link--file-type")
-            .should("include.text", "DOCX");
-        cy.get(".doc-type__label")
-            .eq(0)
-            .should("include.text", " Internal")
-            .find("i")
-            .should("have.class", "fa-key");
-        cy.get(".doc-type__label")
-            .eq(1)
-            .should("include.text", " Public")
-            .find("i")
-            .should("have.class", "fa-users");
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.getPolicyDocs({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD
+            });
+            cy.get(".result__link") // internal_file
+                .eq(0)
+                .find("a")
+                .should("not.have.class", "external")
+                .find(
+                    "span[data-testid=download-chip-868e968c-d1f5-4518-b458-b6e735ef0f3d]",
+                )
+                .should("include.text", "Outlook");
+            cy.get(".result__link") // internal_file
+                .eq(0)
+                .find("a")
+                .find("span.result__link--domain")
+                .should("not.exist");
+            cy.get(".result__link") // regulations link
+                .eq(1)
+                .find("a")
+                .find("span.result__link--file-type")
+                .should("include.text", "PDF");
+            cy.get(".result__link") // regulations link
+                .eq(1)
+                .find("a")
+                .find("span.result__link--domain")
+                .should("include.text", "medicaid.gov");
+            cy.get(".result__link") // internal_link
+                .eq(2)
+                .find("a")
+                .should("not.have.class", "external")
+                .find("span.result__link--file-type")
+                .should("include.text", "DOCX");
+            cy.get(".doc-type__label")
+                .eq(0)
+                .should("include.text", " Internal")
+                .find("i")
+                .should("have.class", "fa-key");
+            cy.get(".doc-type__label")
+                .eq(1)
+                .should("include.text", " Public")
+                .find("i")
+                .should("have.class", "fa-users");
 
-        cy.checkAccessibility();
+            cy.checkAccessibility();
+        });
     });
 
     it("should not display edit button for individual uploaded items if signed in and authorized to edit", () => {
@@ -964,7 +969,7 @@ describe("Subjects Page -- Pagination", () => {
         cy.viewport("macbook-15");
         cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
             cy.eregsLogin({
-                username, TEST_USERNAME,
+                username: TEST_USERNAME,
                 password: TEST_PASSWORD,
                 landingPage: "/"
             });
@@ -998,7 +1003,7 @@ describe("Subjects Page -- Pagination", () => {
         cy.viewport("macbook-15");
         cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
             cy.eregsLogin({
-                username, TEST_USERNAME,
+                username: TEST_USERNAME,
                 password: TEST_PASSWORD,
                 landingPage: "/"
             });
