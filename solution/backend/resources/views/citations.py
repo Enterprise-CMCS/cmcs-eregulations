@@ -3,16 +3,23 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 
 from cmcs_regulations.utils import ViewSetPagination
+from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCitation,
+    Act,
     Section,
+    StatuteCitation,
     Subpart,
+    UscCitation,
 )
 from resources.serializers import (
     AbstractCitationSerializer,
+    ActCitationSerializer,
+    ActSerializer,
     MetaCitationSerializer,
     SectionWithParentSerializer,
     SubpartWithChildrenSerializer,
+    UscCitationSerializer,
 )
 
 
@@ -57,3 +64,23 @@ class SubpartViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Subpart.objects.prefetch_related(
         Prefetch("children", Section.objects.all()),
     )
+
+
+class StatuteCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    pagination_class = ViewSetPagination
+    serializer_class = ActCitationSerializer
+    queryset = StatuteCitation.objects.prefetch_related(
+        Prefetch("act", Act.objects.all()),
+    )
+
+
+class UscCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+    pagination_class = ViewSetPagination
+    serializer_class = UscCitationSerializer
+    queryset = UscCitation.objects.all()
+
+
+class ActViewSet(viewsets.ReadOnlyModelViewSet):
+    pagination_class = ViewSetPagination
+    serializer_class = ActSerializer
+    queryset = Act.objects.all()

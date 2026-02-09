@@ -74,6 +74,7 @@ MetaCitationSerializer = ProxySerializerWrapper(
 
 
 class ActCitationSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     act = serializers.CharField()
     section = serializers.CharField()
     url = serializers.SerializerMethodField()
@@ -97,6 +98,7 @@ class ActCitationSerializer(serializers.Serializer):
 
 
 class UscCitationSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     title = serializers.CharField()
     section = serializers.CharField()
     url = serializers.SerializerMethodField()
@@ -114,3 +116,8 @@ class UscCitationSerializer(serializers.Serializer):
                 obj.section
             )
         return None
+
+
+class ActSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
