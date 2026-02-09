@@ -3,7 +3,7 @@ from django.db.models import Value, Q
 from django.contrib.postgres.aggregates import ArrayAgg
 
 
-TIMEOUT_MINUTES = 10
+TIMEOUT_MINUTES = 15
 
 
 def generate_related(apps, schema_editor):
@@ -60,15 +60,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='abstractresource',
-            name='related_act_citations',
-            field=models.ManyToManyField(blank=True, to='resources.statutecitation'),
-        ),
-        migrations.AddField(
-            model_name='abstractresource',
-            name='related_usc_citations',
-            field=models.ManyToManyField(blank=True, to='resources.usccitation'),
-        ),
         migrations.RunPython(generate_related, reverse_code=migrations.RunPython.noop),
     ]

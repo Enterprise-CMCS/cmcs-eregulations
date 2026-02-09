@@ -109,6 +109,16 @@ class Migration(migrations.Migration):
             name='usc_citations',
             field=models.ManyToManyField(blank=True, help_text='Select USC citations related to this document. Hold down "Control", or "Command" on a Mac, to select more than one.', related_name='resources', to='resources.usccitation', verbose_name='USC citations'),
         ),
+        migrations.AddField(
+            model_name='abstractresource',
+            name='related_act_citations',
+            field=models.ManyToManyField(blank=True, to='resources.statutecitation'),
+        ),
+        migrations.AddField(
+            model_name='abstractresource',
+            name='related_usc_citations',
+            field=models.ManyToManyField(blank=True, to='resources.usccitation'),
+        ),
         migrations.RunPython(convert_citations),
         migrations.RemoveField(
             model_name='abstractresource',
