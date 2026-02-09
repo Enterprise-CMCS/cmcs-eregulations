@@ -38,6 +38,23 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
                   "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
 
+    act_citations = models.ManyToManyField(
+        StatuteCitation,
+        blank=True,
+        related_name="resources",
+        help_text="Select act citations related to this document. "
+                  "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
+    )
+
+    usc_citations = models.ManyToManyField(
+        UscCitation,
+        blank=True,
+        related_name="resources",
+        verbose_name="USC citations",
+        help_text="Select USC citations related to this document. "
+                  "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
+    )
+
     subjects = models.ManyToManyField(
         Subject,
         blank=True,
@@ -45,9 +62,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Select subjects related to this document. Hold down \"Control\", "
                   "or \"Command\" on a Mac, to select more than one.",
     )
-
-    act_citations = models.ManyToManyField(StatuteCitation, blank=True, related_name="resources")
-    usc_citations = models.ManyToManyField(UscCitation, blank=True, related_name="resources", verbose_name="USC citations")
 
     editor_notes = models.TextField(
         blank=True,

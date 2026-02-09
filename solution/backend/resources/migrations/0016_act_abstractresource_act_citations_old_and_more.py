@@ -102,12 +102,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='abstractresource',
             name='act_citations',
-            field=models.ManyToManyField(blank=True, related_name='resources', to='resources.statutecitation'),
+            field=models.ManyToManyField(blank=True, help_text='Select act citations related to this document. Hold down "Control", or "Command" on a Mac, to select more than one.', related_name='resources', to='resources.statutecitation'),
         ),
         migrations.AddField(
             model_name='abstractresource',
             name='usc_citations',
-            field=models.ManyToManyField(blank=True, related_name='resources', to='resources.usccitation', verbose_name='USC citations'),
+            field=models.ManyToManyField(blank=True, help_text='Select USC citations related to this document. Hold down "Control", or "Command" on a Mac, to select more than one.', related_name='resources', to='resources.usccitation', verbose_name='USC citations'),
         ),
         migrations.RunPython(convert_citations),
         migrations.RemoveField(
