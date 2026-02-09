@@ -6,44 +6,43 @@ const SEARCH_TERM_2 = "almond";
 const NO_RESULTS_SEARCH_TERM = "no results";
 const SPACED_SEARCH_TERM = "test query";
 
-const username = Cypress.env("TEST_USERNAME");
-const password = Cypress.env("TEST_PASSWORD");
-
 describe("Search flow", () => {
     beforeEach(() => {
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+            });
+
+            cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
+
+            cy.intercept("POST", `**/v3/content-search**`, {
+                fixture: "policy-docs-search.json",
+            }).as("subjectFiles");
+
+            cy.intercept("**/v3/title/${TITLE_42}/parts", {
+                fixture: "parts-42.json",
+            }).as("parts42");
+
+            cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
+                fixture: "parts-45.json",
+            }).as("parts45");
+
+            cy.intercept("**/v3/resources/subjects**", {
+                fixture: "subjects.json",
+            }).as("subjects");
+
+            cy.intercept("**/v3/resources/internal/categories**", {
+                fixture: "categories-internal.json",
+            }).as("internalCategories");
+
+            cy.intercept("**/v3/resources/public/categories**", {
+                fixture: "categories.json",
+            }).as("categories");
+
+            cy.intercept(`**/v3/content-search/counts**`, {
+                fixture: "counts.json",
+            }).as("counts");
         });
-
-        cy.intercept("**/v3/titles", [TITLE_42, TITLE_45]).as("titles");
-
-        cy.intercept("POST", `**/v3/content-search**`, {
-            fixture: "policy-docs-search.json",
-        }).as("subjectFiles");
-
-        cy.intercept("**/v3/title/${TITLE_42}/parts", {
-            fixture: "parts-42.json",
-        }).as("parts42");
-
-        cy.intercept(`**/v3/title/${TITLE_45}/parts`, {
-            fixture: "parts-45.json",
-        }).as("parts45");
-
-        cy.intercept("**/v3/resources/subjects**", {
-            fixture: "subjects.json",
-        }).as("subjects");
-
-        cy.intercept("**/v3/resources/internal/categories**", {
-            fixture: "categories-internal.json",
-        }).as("internalCategories");
-
-        cy.intercept("**/v3/resources/public/categories**", {
-            fixture: "categories.json",
-        }).as("categories");
-
-        cy.intercept(`**/v3/content-search/counts**`, {
-            fixture: "counts.json",
-        }).as("counts");
     });
 
     it("has a working search box on the homepage on desktop", () => {
@@ -150,15 +149,17 @@ describe("Search flow", () => {
             .should("have.attr", "href")
             .and("include", "/get-account-access/");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
+            cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+            cy.get(".search-results-count .login-cta__div--search-results").should(
+                "not.exist",
+            );
         });
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".search-results-count .login-cta__div--search-results").should(
-            "not.exist",
-        );
     });
 
     it("shows the sign in Call to Action when there are no search results", () => {
@@ -186,49 +187,55 @@ describe("Search flow", () => {
             .should("have.attr", "href")
             .and("include", "/get-account-access/");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
+            cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
+            cy.get(".doc__list .login-cta__div--search-no-results").should(
+                "not.exist",
+            );
         });
-        cy.visit(`/search/?q=${NO_RESULTS_SEARCH_TERM}`, { timeout: 60000 });
-        cy.get(".doc__list .login-cta__div--search-no-results").should(
-            "not.exist",
-        );
     });
 
     it("should have the correct labels for public, regulations, and internal documents", () => {
-        cy.checkPolicyDocs({
-            username,
-            password,
-            landingPage: "/search/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.checkPolicyDocs({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
         });
     });
 
     it("should go to the Subjects page with a selected subject when a subject chip is clicked", () => {
         cy.viewport("macbook-15");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
-        });
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
 
-        cy.get("textarea#main-content")
-            .should("exist")
-            .type(`${SEARCH_TERM_2}`, { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
+            cy.get("textarea#main-content")
+                .should("exist")
+                .type(`${SEARCH_TERM_2}`, { force: true });
+            cy.get('[data-testid="search-form-submit"]').click({
+                force: true,
+            });
 
-        cy.get(`a[data-testid=add-subject-chip-9]`).first().click({
-            force: true,
-        });
+            cy.get(`a[data-testid=add-subject-chip-9]`).first().click({
+                force: true,
+            });
 
-        cy.url().should("include", "/subjects/?subjects=9");
-        cy.get(".subject__heading")
-            .should("exist")
-            .and("have.text", "Care Coordination");
+            cy.url().should("include", "/subjects/?subjects=9");
+            cy.get(".subject__heading")
+                .should("exist")
+                .and("have.text", "Care Coordination");
+        });
     });
 
     it("should not show internal checkbox when not logged in", () => {
@@ -244,94 +251,100 @@ describe("Search flow", () => {
             .should("have.text", "Public Resources");
         cy.get(".doc-type__toggle fieldset > div").eq(2).should("not.exist");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
-        });
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
 
-        cy.get("textarea#main-content")
-            .should("exist")
-            .type(`${SEARCH_TERM}`, { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
-        });
+            cy.get("textarea#main-content")
+                .should("exist")
+                .type(`${SEARCH_TERM}`, { force: true });
+            cy.get('[data-testid="search-form-submit"]').click({
+                force: true,
+            });
 
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(2)
-            .find("label")
-            .should("have.text", "Internal Resources(1)");
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(2)
+                .find("label")
+                .should("have.text", "Internal Resources(1)");
+        });
     });
 
     it("should not show the categories or subjects dropdowns when only regulations are selected", () => {
         cy.viewport("macbook-15");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
-        });
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
 
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-        cy.get("div[data-testid='category-select']").should("be.visible");
-        cy.get("button[data-testid='subjects-activator']").should("be.visible");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .check({ force: true });
-        cy.get("div[data-testid='category-select']").should("not.be.visible");
-        cy.get("button[data-testid='subjects-activator']").should(
-            "not.be.visible",
-        );
-        cy.get(".doc-type__toggle fieldset > div");
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .check({ force: true });
-        cy.get("div[data-testid='category-select']").should("be.visible");
-        cy.get("button[data-testid='subjects-activator']").should("be.visible");
+            cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+            cy.get("div[data-testid='category-select']").should("be.visible");
+            cy.get("button[data-testid='subjects-activator']").should("be.visible");
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(0)
+                .find("input")
+                .check({ force: true });
+            cy.get("div[data-testid='category-select']").should("not.be.visible");
+            cy.get("button[data-testid='subjects-activator']").should(
+                "not.be.visible",
+            );
+            cy.get(".doc-type__toggle fieldset > div");
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(1)
+                .find("input")
+                .check({ force: true });
+            cy.get("div[data-testid='category-select']").should("be.visible");
+            cy.get("button[data-testid='subjects-activator']").should("be.visible");
+        });
     });
 
     it("has the correct type params in URL for each doc type combination", () => {
         cy.viewport("macbook-15");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
+
+            cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(0)
+                .find("input")
+                .check({ force: true });
+
+            cy.url().should("include", `/search?q=${SEARCH_TERM}&type=regulations`);
+            cy.url().should("not.include", "external");
+            cy.url().should("not.include", "internal");
+
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(1)
+                .find("input")
+                .check({ force: true });
+
+            cy.url().should(
+                "include",
+                `/search?q=${SEARCH_TERM}&type=regulations,external`,
+            );
+            cy.url().should("not.include", "internal");
+
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(2)
+                .find("input")
+                .check({ force: true });
+
+            cy.url().should(
+                "include",
+                `/search?q=${SEARCH_TERM}&type=regulations,external,internal`,
+            );
         });
-
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(0)
-            .find("input")
-            .check({ force: true });
-
-        cy.url().should("include", `/search?q=${SEARCH_TERM}&type=regulations`);
-        cy.url().should("not.include", "external");
-        cy.url().should("not.include", "internal");
-
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(1)
-            .find("input")
-            .check({ force: true });
-
-        cy.url().should(
-            "include",
-            `/search?q=${SEARCH_TERM}&type=regulations,external`,
-        );
-        cy.url().should("not.include", "internal");
-
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(2)
-            .find("input")
-            .check({ force: true });
-
-        cy.url().should(
-            "include",
-            `/search?q=${SEARCH_TERM}&type=regulations,external,internal`,
-        );
     });
 
     it("category should be selected on load if included in URL", () => {
@@ -714,31 +727,33 @@ describe("Search flow", () => {
 
     it("should keep sort selection if internal resources are selected", () => {
         cy.viewport("macbook-15");
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/search/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/search/",
+            });
+
+            cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
+
+            cy.get("div[data-testid='sort-select']").click();
+            cy.get("div[data-testid='sort-newest']").click({ force: true });
+
+            cy.url().should(
+                "include",
+                `/search?q=${SEARCH_TERM}&sort=-date`,
+            );
+
+            cy.get(".doc-type__toggle fieldset > div")
+                .eq(2)
+                .find("input")
+                .check({ force: true });
+
+            cy.url().should(
+                "include",
+                `/search?q=${SEARCH_TERM}&sort=-date&type=internal`,
+            );
         });
-
-        cy.visit(`/search/?q=${SEARCH_TERM}`, { timeout: 60000 });
-
-        cy.get("div[data-testid='sort-select']").click();
-        cy.get("div[data-testid='sort-newest']").click({ force: true });
-
-        cy.url().should(
-            "include",
-            `/search?q=${SEARCH_TERM}&sort=-date`,
-        );
-
-        cy.get(".doc-type__toggle fieldset > div")
-            .eq(2)
-            .find("input")
-            .check({ force: true });
-
-        cy.url().should(
-            "include",
-            `/search?q=${SEARCH_TERM}&sort=-date&type=internal`,
-        );
     });
 
     it("should keep sort selection if new search term is entered", () => {
