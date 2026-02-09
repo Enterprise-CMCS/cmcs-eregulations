@@ -90,6 +90,8 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
+    related_act_citations = models.ManyToManyField(StatuteCitation, blank=True)
+    related_usc_citations = models.ManyToManyField(UscCitation, blank=True)
     related_categories = models.ManyToManyField(AbstractCategory, blank=True)
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)
