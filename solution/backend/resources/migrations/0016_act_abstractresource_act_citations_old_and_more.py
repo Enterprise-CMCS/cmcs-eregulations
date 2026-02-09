@@ -107,7 +107,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='abstractresource',
             name='usc_citations',
-            field=models.ManyToManyField(blank=True, related_name='resources', to='resources.usccitation'),
+            field=models.ManyToManyField(blank=True, related_name='resources', to='resources.usccitation', verbose_name='USC citations'),
         ),
         migrations.RunPython(convert_citations),
         migrations.RemoveField(

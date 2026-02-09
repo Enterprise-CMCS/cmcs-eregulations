@@ -88,6 +88,83 @@ def get_citation_filter(citations, filter_prefix, max_depth=100):
     return q_obj
 
 
+# Generates an OR'd together Q query of all Act citations passed in via the "act_citations" argument.
+# The results of this function may be passed directly into a Django 'filter' call or manipulated like any Q object.
+#
+# citations: list of citation strings
+# filter_prefix: query prefix for nested citations (e.g. "act_citations__" or "resources__act_citations__")
+#
+# Valid act citation formats:
+# * <Name Of Act>.<Section> (e.g. "Consumer Credit Protection Act.1026(a)")
+# * <Name Of Act> (e.g. "Consumer Credit Protection Act")
+# * ActID:<Act DB ID>.<Section> (e.g. "ActID:1.1026(a)")
+# * ActID:<Act DB ID> (e.g. "ActID:1")
+# * CitationID:<Statute Citation DB ID> (e.g. "CitationID:123")
+def get_act_citation_filter(citations, filter_prefix):
+    queries = []
+    for loc in citations:
+        if loc.lower().startswith("actid:"):
+            split = loc[6:].split(".")
+            if len(split) < 1 or not is_int(split[0]):
+                raise BadRequest(f"\"{loc}\" is not a valid act citation!")
+            q = Q(**{f"{filter_prefix}act__id": split[0]})
+            if len(split) > 1:
+                q &= Q(**{f"{filter_prefix}section__iexact": split[1]})
+        elif loc.lower().startswith("citationid:"):
+            split = loc[11:].split(".")
+            if len(split) != 1 or not is_int(split[0]):
+                raise BadRequest(f"\"{loc}\" is not a valid act citation!")
+            q = Q(**{f"{filter_prefix}id": split[0]})
+        else:
+            split = loc.split(".")
+            if len(split) < 1:
+                raise BadRequest(f"\"{loc}\" is not a valid act citation!")
+            q = Q(**{f"{filter_prefix}act__name__iexact": split[0]})
+            if len(split) > 1:
+                q &= Q(**{f"{filter_prefix}section__iexact": split[1]})
+
+        queries.append(q)
+
+    q_obj = Q()
+    for q in queries:
+        q_obj |= q
+    return q_obj
+
+
+# Generates an OR'd together Q query of all USC citations passed in via the "usc_citations" argument.
+# The results of this function may be passed directly into a Django 'filter' call or manipulated like any Q object.
+#
+# citations: list of citation strings
+# filter_prefix: query prefix for nested citations (e.g. "usc_citations__" or "resources__usc_citations__")
+#
+# Valid USC citation formats:
+# * <Title Number>.<Section> (e.g. "15.1681")
+# * <Title Number> (e.g. "15")
+# * CitationID:<USC Citation DB ID> (e.g. "CitationID:123")
+def get_usc_citation_filter(citations, filter_prefix):
+    queries = []
+    for loc in citations:
+        if loc.lower().startswith("citationid:"):
+            citation_id = loc[11:]
+            if not is_int(citation_id):
+                raise BadRequest(f"\"{loc}\" is not a valid USC citation!")
+            q = Q(**{f"{filter_prefix}id": citation_id})
+        else:
+            split = loc.split(".")
+            if len(split) < 1 or not is_int(split[0]):
+                raise BadRequest(f"\"{loc}\" is not a valid title or section!")
+            q = Q(**{f"{filter_prefix}title": split[0]})
+            if len(split) > 1:
+                q &= Q(**{f"{filter_prefix}section__iexact": split[1]})
+
+        queries.append(q)
+
+    q_obj = Q()
+    for q in queries:
+        q_obj |= q
+    return q_obj
+
+
 # Convert a boolean value encoded as a string to a bool.
 #
 # 'true', 't', 'y', 'yes', '1' all return True.

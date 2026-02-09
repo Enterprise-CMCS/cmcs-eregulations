@@ -29,7 +29,12 @@ from resources.models import (
     Subject,
     UscCitation,
 )
-from resources.utils import get_citation_filter, string_to_bool
+from resources.utils import (
+    get_act_citation_filter,
+    get_citation_filter,
+    get_usc_citation_filter,
+    string_to_bool,
+)
 
 from .models import (
     ContentIndex,
@@ -151,6 +156,8 @@ class ContentSearchMixin:
 
         # Get optional parameters (from query string or form body)
         citations = _get_parameter_list("citations", self.request)
+        act_citations = _get_parameter_list("act_citations", self.request)
+        usc_citations = _get_parameter_list("usc_citations", self.request)
         subjects = _get_parameter_list("subjects", self.request)
         categories = _get_parameter_list("categories", self.request)
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
@@ -219,6 +226,12 @@ class ContentSearchMixin:
 
         # Filter inclusively by citations if this array exists
         q_filter &= get_citation_filter(citations, "resource__cfr_citations__")
+
+        # Filter inclusively by act citations if this array exists
+        q_filter &= get_act_citation_filter(act_citations, "resource__act_citations__")
+
+        # Filter inclusively by usc citations if this array exists
+        q_filter &= get_usc_citation_filter(usc_citations, "resource__usc_citations__")
 
         # Filter by subject pks if subjects array is present
         if subjects:

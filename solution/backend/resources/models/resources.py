@@ -47,7 +47,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     )
 
     act_citations = models.ManyToManyField(StatuteCitation, blank=True, related_name="resources")
-    usc_citations = models.ManyToManyField(UscCitation, blank=True, related_name="resources")
+    usc_citations = models.ManyToManyField(UscCitation, blank=True, related_name="resources", verbose_name="USC citations")
 
     editor_notes = models.TextField(
         blank=True,
