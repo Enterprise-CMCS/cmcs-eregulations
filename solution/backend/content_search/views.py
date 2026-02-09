@@ -30,6 +30,9 @@ from resources.models import (
     UscCitation,
 )
 from resources.utils import (
+    ACT_CITATION_FILTER_PARAMETER,
+    CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
     get_act_citation_filter,
     get_citation_filter,
     get_usc_citation_filter,
@@ -69,16 +72,6 @@ class ContentSearchMixin:
                 "Search for this text within public and internal resources, and regulation text. "
                 "Fields searched depends on the underlying data type. "
                 "Use either 'q' or 'query' as the parameter name."
-            ),
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="citations",
-            required=False,
-            type=int,
-            description=(
-                "Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D."
             ),
             location=OpenApiParameter.QUERY,
         ),
@@ -133,6 +126,9 @@ class ContentSearchMixin:
             ),
             location=OpenApiParameter.QUERY,
         ),
+        CITATION_FILTER_PARAMETER,
+        ACT_CITATION_FILTER_PARAMETER,
+        USC_CITATION_FILTER_PARAMETER,
     ]
 
     def is_quoted(self, query):

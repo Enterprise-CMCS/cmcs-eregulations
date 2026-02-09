@@ -40,7 +40,9 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import (
+    ACT_CITATION_FILTER_PARAMETER,
     CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
     get_act_citation_filter,
     get_citation_filter,
     get_usc_citation_filter,
@@ -77,6 +79,8 @@ class ResourceCountPagination(ViewSetPagination):
 
 RESOURCE_ENDPOINT_PARAMETERS = [
     CITATION_FILTER_PARAMETER,
+    ACT_CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
     OpenApiParameter(
         name="categories",
         type=OpenApiTypes.STR,

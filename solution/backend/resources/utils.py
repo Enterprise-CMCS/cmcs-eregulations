@@ -88,6 +88,18 @@ def get_citation_filter(citations, filter_prefix, max_depth=100):
     return q_obj
 
 
+ACT_CITATION_FILTER_PARAMETER = OpenApiParameter(
+    name="act_citations",
+    type=OpenApiTypes.STR,
+    location=OpenApiParameter.QUERY,
+    description="Limit results to only items linked to these act citations. Use \"&act_citations=X&act_citations=Y\" "
+                "for multiple. Example formats: \"Social Security Act\", \"Social Security Act.1234(a)\", "
+                "\"ActID:1\", \"ActID:1.1026(a)\", and \"CitationID:1\".",
+    required=False,
+    explode=True,
+)
+
+
 # Generates an OR'd together Q query of all Act citations passed in via the "act_citations" argument.
 # The results of this function may be passed directly into a Django 'filter' call or manipulated like any Q object.
 #
@@ -129,6 +141,17 @@ def get_act_citation_filter(citations, filter_prefix):
     for q in queries:
         q_obj |= q
     return q_obj
+
+
+USC_CITATION_FILTER_PARAMETER = OpenApiParameter(
+    name="usc_citations",
+    type=OpenApiTypes.STR,
+    location=OpenApiParameter.QUERY,
+    description="Limit results to only items linked to these USC citations. Use \"&usc_citations=X&usc_citations=Y\" "
+                "for multiple. Example formats: \"42\", \"42.1234\", and \"CitationID:1\".",
+    required=False,
+    explode=True,
+)
 
 
 # Generates an OR'd together Q query of all USC citations passed in via the "usc_citations" argument.

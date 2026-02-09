@@ -66,6 +66,11 @@ class SubpartViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
 
+@extend_schema(
+    tags=["resources/metadata"],
+    description="Retrieve a list of statute (act) citations.",
+    responses={200: ActCitationSerializer(many=True)},
+)
 class StatuteCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = ActCitationSerializer
@@ -74,12 +79,23 @@ class StatuteCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.Rea
     )
 
 
+@extend_schema(
+    tags=["resources/metadata"],
+    description="Retrieve a list of United States Code (USC) citations.",
+    responses={200: UscCitationSerializer(many=True)},
+)
 class UscCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = UscCitationSerializer
     queryset = UscCitation.objects.all()
 
 
+@extend_schema(
+    tags=["resources/metadata"],
+    description="Retrieve a list of acts. Acts are the highest level of organization for statute citations, "
+                "and can be associated with multiple statute citations.",
+    responses={200: ActSerializer(many=True)},
+)
 class ActViewSet(viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = ActSerializer
