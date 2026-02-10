@@ -6,11 +6,11 @@ describe("Left sidebar", () => {
     const testId = "Subpart-A";
 
     beforeEach(() => {
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] =
-                Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
         });
-
     })
 
     it("opens the section when the left nav subsection is clicked", () => {

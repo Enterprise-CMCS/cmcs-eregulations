@@ -1,6 +1,3 @@
-const username = Cypress.env("TEST_USERNAME");
-const password = Cypress.env("TEST_PASSWORD");
-
 Cypress.Commands.add("checkHeaderLink", ({ shouldBeVisible = false }) => {
     const desiredState = shouldBeVisible ? "exist" : "not.exist";
     cy.get("a[data-testid='get-account-access-wide']").should(desiredState);
@@ -9,9 +6,11 @@ Cypress.Commands.add("checkHeaderLink", ({ shouldBeVisible = false }) => {
 
 describe("Get Account Access page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
         });
     });
 
@@ -79,17 +78,23 @@ describe("Get Account Access page", { scrollBehavior: "center" }, () => {
         cy.visit("/statutes");
         cy.checkHeaderLink({ shouldBeVisible: true });
 
-        cy.eregsLogin({ username, password, landingPage: "/" });
-        cy.checkHeaderLink({ shouldBeVisible: false });
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/"
+            });
+            cy.checkHeaderLink({ shouldBeVisible: false });
 
-        cy.visit("/search");
-        cy.checkHeaderLink({ shouldBeVisible: false });
+            cy.visit("/search");
+            cy.checkHeaderLink({ shouldBeVisible: false });
 
-        cy.visit("/subjects");
-        cy.checkHeaderLink({ shouldBeVisible: false });
+            cy.visit("/subjects");
+            cy.checkHeaderLink({ shouldBeVisible: false });
 
-        cy.visit("/statutes");
-        cy.checkHeaderLink({ shouldBeVisible: false });
+            cy.visit("/statutes");
+            cy.checkHeaderLink({ shouldBeVisible: false });
+        });
     });
 
     // if subjects page works, statutes and search do as well

@@ -1,25 +1,27 @@
 describe("Statute Table", () => {
     beforeEach(() => {
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
+
+            cy.intercept(`**/v3/statutes**`, {
+                fixture: "statutes.json",
+            }).as("statutes");
+
+            cy.intercept(`**/v3/statute-link/?pattern=1903`, {
+                fixture: "statute-link.json",
+            }).as("statute-link");
+
+            cy.intercept(`**/v3/statute-link/?pattern=asdf`, {
+                fixture: "statute-link-not-found.json",
+                statusCode: 404,
+            }).as("statute-link-not-found");
+
+            cy.intercept(`**/v3/acts`, {
+                fixture: "acts.json",
+            }).as("acts");
         });
-
-        cy.intercept(`**/v3/statutes**`, {
-            fixture: "statutes.json",
-        }).as("statutes");
-
-        cy.intercept(`**/v3/statute-link/?pattern=1903`, {
-            fixture: "statute-link.json",
-        }).as("statute-link");
-
-        cy.intercept(`**/v3/statute-link/?pattern=asdf`, {
-            fixture: "statute-link-not-found.json",
-            statusCode: 404,
-        }).as("statute-link-not-found");
-
-        cy.intercept(`**/v3/acts`, {
-            fixture: "acts.json",
-        }).as("acts");
     });
 
     it("goes to statutes page from homepage and has SSA Title 19 selected by default", () => {

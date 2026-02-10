@@ -1,10 +1,12 @@
 describe("custom login page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
+            cy.intercept("**/v3/titles").as("titles");
         });
-        cy.intercept("**/v3/titles").as("titles");
     });
 
     it("custom-login-page - does not render an anchor for header Sign In link when on login page", () => {

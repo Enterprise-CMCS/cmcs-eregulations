@@ -3,12 +3,14 @@ describe("Print Styles", () => {
     const previousVersion = "/42/433/Subpart-A/2020-12-31/";
 
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-        }).as("headers");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            }).as("headers");
 
-        cy.setCssMedia("screen");
+            cy.setCssMedia("screen");
+        });
     });
 
     it("has proper print styles for latest version", () => {
