@@ -3,7 +3,7 @@ from django_jsonform.models.fields import ArrayField
 
 from .resources import AbstractPublicResource
 
-FR_ACTION_TYPES = [("RFI", "RFI"), ("NPRM", "NPRM"), ("Final", "Final")]
+FR_ACTION_TYPES = [("Notice", "Notice"), ("RFI", "RFI"), ("NPRM", "NPRM"), ("Final", "Final")]
 
 
 class FederalRegisterLink(AbstractPublicResource):
