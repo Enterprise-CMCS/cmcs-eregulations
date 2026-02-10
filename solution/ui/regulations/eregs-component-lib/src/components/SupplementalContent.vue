@@ -246,7 +246,6 @@ const getCategories = async (apiUrl) => {
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <h2>Documents</h2>
         <slot name="login-banner" />
         <slot name="public-label" />
         <div class="supplemental-content-container">
