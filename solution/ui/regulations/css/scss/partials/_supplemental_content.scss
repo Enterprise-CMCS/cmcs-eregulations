@@ -5,6 +5,10 @@
 
 @import "../application_settings";
 
+.filter__container {
+    margin-top: var(--spacer-2);
+}
+
 .related-rule-domain,
 .supplemental-content-domain {
     @include common-link-domain;

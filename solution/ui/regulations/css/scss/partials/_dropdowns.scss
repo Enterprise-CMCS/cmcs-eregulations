@@ -1,0 +1,16 @@
+//-----------------------------
+// Dropdowns and related styles
+//-----------------------------
+
+@import "../application_settings";
+@import "./_buttons_and_tooltip.scss";
+
+.sort__label--wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacer-1);
+}
+
+.sort__label {
+    font-weight: bold;
+}

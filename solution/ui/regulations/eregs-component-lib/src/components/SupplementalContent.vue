@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
+
+import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
+
 import {
     getExternalCategories,
     getSupplementalContent,
@@ -232,6 +235,27 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
+
+// Sort dropdown related code
+
+const selectedSortMethod = defineModel({ default: "default", type: String });
+
+const itemProps = (item) => {
+    return {
+        title: item.label,
+        subtitle: item.label,
+        value: item.method,
+        disabled: item.disabled,
+        "data-testid": `sort-${item.label.toLowerCase()}`,
+    };
+};
+
+const sortOptions = ref([
+    { method: "default", label: "Categories" },
+    { method: "-date", label: "Newest" },
+    { method: "date", label: "Oldest" },
+]);
+
 </script>
 
 <template>
@@ -248,6 +272,20 @@ const getCategories = async (apiUrl) => {
         />
         <slot name="login-banner" />
         <slot name="public-label" />
+        <div class="filter__container">
+            <label class="sort__label--wrapper">
+                <span class="sort__label">Sort by</span>
+                <GenericDropdown
+                    v-model="selectedSortMethod"
+                    class="filter__select--sort"
+                    :clearable="false"
+                    data-testid="sort-select"
+                    :item-props="itemProps"
+                    :items="sortOptions"
+                    :disabled="loading"
+                />
+            </label>
+        </div>
         <div class="supplemental-content-container">
             <supplemental-content-category
                 v-for="category in categories"
