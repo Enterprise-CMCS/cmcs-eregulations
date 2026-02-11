@@ -5,6 +5,7 @@ from django.db import models
 from model_utils.managers import InheritanceManager
 
 from common.mixins import DisplayNameFieldMixin
+from common.fields import NaturalSortField
 
 
 class AbstractCitation(models.Model, DisplayNameFieldMixin):
@@ -76,11 +77,17 @@ class Act(models.Model):
 
     def __str__(self):
         return self.name
+    
+    class Meta:
+        verbose_name = "Act"
+        verbose_name_plural = "Acts"
+        ordering = ["name"]
 
 
 class StatuteCitation(models.Model):
     act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="statute_citations")
     section = models.CharField(max_length=32)
+    section_sort = NaturalSortField("section")
 
     def clean(self):
         self.section = re.sub(r"\s", "", self.section)
@@ -92,11 +99,13 @@ class StatuteCitation(models.Model):
         verbose_name = "Statute Citation"
         verbose_name_plural = "Statute Citations"
         unique_together = ("act", "section")
+        ordering = ["act__name", "section_sort"]
 
 
 class UscCitation(models.Model):
     title = models.IntegerField()
     section = models.CharField(max_length=32)
+    section_sort = NaturalSortField("section")
 
     def clean(self):
         self.section = re.sub(r"\s", "", self.section)
@@ -108,3 +117,4 @@ class UscCitation(models.Model):
         verbose_name = "USC Citation"
         verbose_name_plural = "USC Citations"
         unique_together = ("title", "section")
+        ordering = ["title", "section_sort"]
