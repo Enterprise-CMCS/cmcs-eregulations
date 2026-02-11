@@ -93,7 +93,7 @@ class ActCitation(models.Model):
         self.section = re.sub(r"\s", "", self.section)
 
     def __str__(self):
-        return f"{self.act.name} §{self.section}"
+        return f"{self.act.name} § {self.section}"
 
     class Meta:
         verbose_name = "Act Citation"
@@ -111,7 +111,7 @@ class UscCitation(models.Model):
         self.section = re.sub(r"\s", "", self.section)
 
     def __str__(self):
-        return f"{self.title} USC §{self.section}"
+        return f"{self.title} USC § {self.section}"
 
     class Meta:
         verbose_name = "USC Citation"
