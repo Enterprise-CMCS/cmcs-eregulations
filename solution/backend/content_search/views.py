@@ -25,7 +25,7 @@ from resources.models import (
     AbstractCitation,
     AbstractResource,
     Act,
-    StatuteCitation,
+    ActCitation,
     Subject,
     UscCitation,
 )
@@ -517,7 +517,7 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
             Prefetch("reg_text", IndexedRegulationText.objects.all()),
             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
-                Prefetch("act_citations", StatuteCitation.objects.prefetch_related(
+                Prefetch("act_citations", ActCitation.objects.prefetch_related(
                     Prefetch("act", Act.objects.all()),
                 )),
                 Prefetch("usc_citations", UscCitation.objects.all()),

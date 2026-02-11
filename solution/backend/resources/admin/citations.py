@@ -8,7 +8,7 @@ from resources.models import (
     AbstractCitation,
     Act,
     Section,
-    StatuteCitation,
+    ActCitation,
     Subpart,
     UscCitation,
 )
@@ -85,8 +85,8 @@ class ActAdmin(CustomAdminMixin, admin.ModelAdmin):
     search_fields = ["name"]
 
 
-@admin.register(StatuteCitation)
-class StatuteCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
+@admin.register(ActCitation)
+class ActCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
     admin_priority = 9993
     list_display = ["act", "section"]
     search_fields = ["act__name", "section"]

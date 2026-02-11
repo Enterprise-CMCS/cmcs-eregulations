@@ -8,7 +8,7 @@ from resources.models import (
     AbstractCitation,
     Act,
     Section,
-    StatuteCitation,
+    ActCitation,
     Subpart,
     UscCitation,
 )
@@ -71,10 +71,10 @@ class SubpartViewSet(viewsets.ReadOnlyModelViewSet):
     description="Retrieve a list of statute (act) citations.",
     responses={200: ActCitationSerializer(many=True)},
 )
-class StatuteCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
+class ActCitationViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ReadOnlyModelViewSet):
     pagination_class = ViewSetPagination
     serializer_class = ActCitationSerializer
-    queryset = StatuteCitation.objects.prefetch_related(
+    queryset = ActCitation.objects.prefetch_related(
         Prefetch("act", Act.objects.all()),
     )
 

@@ -10,7 +10,7 @@ from resources.models import (
     AbstractResource,
     Act,
     ResourceGroup,
-    StatuteCitation,
+    ActCitation,
     Subject,
     UscCitation,
 )
@@ -38,7 +38,7 @@ class ResourceGroupViewSet(viewsets.ReadOnlyModelViewSet):
             Prefetch("resources", queryset=resource_filter.prefetch_related(
                 Prefetch("category", AbstractCategory.objects.select_subclasses()),
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
-                Prefetch("act_citations", StatuteCitation.objects.prefetch_related(
+                Prefetch("act_citations", ActCitation.objects.prefetch_related(
                     Prefetch("act", Act.objects.all()),
                 )),
                 Prefetch("usc_citations", UscCitation.objects.all()),

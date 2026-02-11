@@ -111,7 +111,7 @@ ACT_CITATION_FILTER_PARAMETER = OpenApiParameter(
 # * <Name Of Act> (e.g. "Consumer Credit Protection Act")
 # * ActID:<Act DB ID>.<Section> (e.g. "ActID:1.1026(a)")
 # * ActID:<Act DB ID> (e.g. "ActID:1")
-# * CitationID:<Statute Citation DB ID> (e.g. "CitationID:123")
+# * CitationID:<Act Citation DB ID> (e.g. "CitationID:123")
 def get_act_citation_filter(citations, filter_prefix):
     queries = []
     for loc in citations:

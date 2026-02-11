@@ -18,7 +18,7 @@ from resources.views import (
     ResourceGroupViewSet,
     ResourceViewSet,
     SectionViewSet,
-    StatuteCitationViewSet,
+    ActCitationViewSet,
     SubjectViewSet,
     SubpartViewSet,
     UscCitationViewSet,
@@ -74,7 +74,7 @@ urlpatterns = [
     path("citations/subparts", SubpartViewSet.as_view({
         "get": "list",
     })),
-    path("statute_citations", StatuteCitationViewSet.as_view({
+    path("act_citations", ActCitationViewSet.as_view({
         "get": "list",
     })),
     path("usc_citations", UscCitationViewSet.as_view({

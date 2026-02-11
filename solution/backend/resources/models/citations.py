@@ -84,8 +84,8 @@ class Act(models.Model):
         ordering = ["name"]
 
 
-class StatuteCitation(models.Model):
-    act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="statute_citations")
+class ActCitation(models.Model):
+    act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="act_citations")
     section = models.CharField(max_length=32)
     section_sort = NaturalSortField("section")
 
@@ -96,8 +96,8 @@ class StatuteCitation(models.Model):
         return f"{self.act.name} §{self.section}"
 
     class Meta:
-        verbose_name = "Statute Citation"
-        verbose_name_plural = "Statute Citations"
+        verbose_name = "Act Citation"
+        verbose_name_plural = "Act Citations"
         unique_together = ("act", "section")
         ordering = ["act__name", "section_sort"]
 

@@ -21,7 +21,7 @@ from resources.models import (
     AbstractPublicCategory,
     AbstractResource,
     Act,
-    StatuteCitation,
+    ActCitation,
     UscCitation,
 )
 from resources.utils import (
@@ -51,7 +51,7 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
 
     manytomany_lookups = {
         "cfr_citations": lambda: AbstractCitation.objects.all().select_subclasses(),
-        "act_citations": lambda: StatuteCitation.objects.prefetch_related(
+        "act_citations": lambda: ActCitation.objects.prefetch_related(
             Prefetch("act", Act.objects.all()),
         ),
         "usc_citations": lambda: UscCitation.objects.all(),

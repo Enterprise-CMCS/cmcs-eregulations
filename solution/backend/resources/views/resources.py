@@ -23,7 +23,7 @@ from resources.models import (
     InternalFile,
     InternalLink,
     PublicLink,
-    StatuteCitation,
+    ActCitation,
     Subject,
     UscCitation,
 )
@@ -143,7 +143,7 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
         group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
 
         citation_prefetch = AbstractCitation.objects.select_subclasses()
-        statute_citation_prefetch = StatuteCitation.objects.prefetch_related(
+        statute_citation_prefetch = ActCitation.objects.prefetch_related(
             Prefetch("act", Act.objects.all()),
         )
         usc_citation_prefetch = UscCitation.objects.all()

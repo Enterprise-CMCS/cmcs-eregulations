@@ -8,7 +8,7 @@ from common.fields import (
 from common.mixins import DisplayNameFieldMixin
 
 from .categories import AbstractCategory
-from .citations import AbstractCitation, StatuteCitation, UscCitation
+from .citations import AbstractCitation, ActCitation, UscCitation
 from .subjects import Subject
 
 
@@ -39,7 +39,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
     )
 
     act_citations = models.ManyToManyField(
-        StatuteCitation,
+        ActCitation,
         blank=True,
         related_name="resources",
         help_text="Select act citations related to this document. "
@@ -90,7 +90,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
-    related_act_citations = models.ManyToManyField(StatuteCitation, blank=True)
+    related_act_citations = models.ManyToManyField(ActCitation, blank=True)
     related_usc_citations = models.ManyToManyField(UscCitation, blank=True)
     related_categories = models.ManyToManyField(AbstractCategory, blank=True)
     related_subjects = models.ManyToManyField(Subject, blank=True)
