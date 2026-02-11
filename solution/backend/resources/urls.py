@@ -1,6 +1,7 @@
 from django.urls import path
 
 from resources.views import (
+    ActCitationViewSet,
     ActViewSet,
     CitationViewSet,
     ContextBannersViewSet,
@@ -18,7 +19,6 @@ from resources.views import (
     ResourceGroupViewSet,
     ResourceViewSet,
     SectionViewSet,
-    ActCitationViewSet,
     SubjectViewSet,
     SubpartViewSet,
     UscCitationViewSet,

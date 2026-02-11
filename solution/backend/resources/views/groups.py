@@ -9,8 +9,8 @@ from resources.models import (
     AbstractPublicResource,
     AbstractResource,
     Act,
-    ResourceGroup,
     ActCitation,
+    ResourceGroup,
     Subject,
     UscCitation,
 )

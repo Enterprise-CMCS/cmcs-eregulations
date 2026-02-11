@@ -19,11 +19,11 @@ from resources.models import (
     AbstractPublicResource,
     AbstractResource,
     Act,
+    ActCitation,
     FederalRegisterLink,
     InternalFile,
     InternalLink,
     PublicLink,
-    ActCitation,
     Subject,
     UscCitation,
 )

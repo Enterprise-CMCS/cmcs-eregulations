@@ -7,8 +7,8 @@ from common.admin import CustomAdminMixin
 from resources.models import (
     AbstractCitation,
     Act,
-    Section,
     ActCitation,
+    Section,
     Subpart,
     UscCitation,
 )

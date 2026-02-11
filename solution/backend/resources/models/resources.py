@@ -42,7 +42,7 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         ActCitation,
         blank=True,
         related_name="resources",
-        help_text="Select act citations related to this document. "
+        help_text="Select Act citations related to this document. "
                   "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
 

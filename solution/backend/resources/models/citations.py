@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.managers import InheritanceManager
 
-from common.mixins import DisplayNameFieldMixin
 from common.fields import NaturalSortField
+from common.mixins import DisplayNameFieldMixin
 
 
 class AbstractCitation(models.Model, DisplayNameFieldMixin):
@@ -77,7 +77,7 @@ class Act(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         verbose_name = "Act"
         verbose_name_plural = "Acts"

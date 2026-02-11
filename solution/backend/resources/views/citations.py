@@ -7,8 +7,8 @@ from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from resources.models import (
     AbstractCitation,
     Act,
-    Section,
     ActCitation,
+    Section,
     Subpart,
     UscCitation,
 )
