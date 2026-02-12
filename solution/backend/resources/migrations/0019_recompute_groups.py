@@ -56,7 +56,7 @@ def generate_related(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0016_act_abstractresource_act_citations_old_and_more'),
+        ('resources', '0018_act_abstractresource_act_citations_old_and_more'),
     ]
 
     operations = [

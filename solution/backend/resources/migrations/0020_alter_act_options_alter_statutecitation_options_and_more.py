@@ -20,7 +20,7 @@ def populate_sort_fields(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0017_recompute_groups'),
+        ('resources', '0019_recompute_groups'),
     ]
 
     operations = [

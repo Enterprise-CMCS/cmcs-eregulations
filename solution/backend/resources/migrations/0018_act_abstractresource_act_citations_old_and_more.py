@@ -52,7 +52,7 @@ def convert_citations(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0015_merge_20251203_1158'),
+        ('resources', '0017_alter_federalregisterlink_action_type'),
     ]
 
     operations = [

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0018_alter_act_options_alter_statutecitation_options_and_more'),
+        ('resources', '0020_alter_act_options_alter_statutecitation_options_and_more'),
     ]
 
     operations = [
