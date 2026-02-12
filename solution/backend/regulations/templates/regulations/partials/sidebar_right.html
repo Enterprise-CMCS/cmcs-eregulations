@@ -15,7 +15,7 @@
                         <doc-type-label icon-type="external" doc-type="Public" />
                     </div>
                 </template>
-                <template #authed-documents>
+                <template #authed-documents="{ sortMethod }">
                     <div class="authed__container">
                         <hr />
                         <div class="label__container label__container--internal">
@@ -28,6 +28,7 @@
                             api-url="{{ API_BASE }}"
                             title="{{ title }}"
                             part="{{ reg_part }}"
+                            :sort-method="sortMethod"
                         ></internal-docs-container>
                     </div>
                 </template>

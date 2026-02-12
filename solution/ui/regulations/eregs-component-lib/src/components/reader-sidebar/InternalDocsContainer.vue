@@ -27,6 +27,11 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    sortMethod: {
+        type: String,
+        required: false,
+        default: "default",
+    },
 });
 
 const getSectionNumber = (hash) => {

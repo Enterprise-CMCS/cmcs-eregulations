@@ -306,7 +306,7 @@ const sortOptions = ref([
             <simple-spinner v-if="isFetching" />
         </div>
     </div>
-    <slot name="authed-documents" />
+    <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
             v-if="selectedPart && subparts.length === 1"
