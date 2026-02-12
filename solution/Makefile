@@ -174,31 +174,31 @@ test.vitest.ui:
 ##uncomment the -vvv if there are errors running pytest.
 test.pytest:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec uv run regulations pytest -v
+	docker compose exec regulations uv run pytest -v
 	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 
 test.pytest.cov:
 	DJANGO_SETTINGS_MODULE="cmcs_regulations.settings.test_settings" docker compose -f docker-compose.yml up -d
-	docker compose exec uv run regulations pytest --cov
+	docker compose exec regulations uv run pytest --cov
 	docker compose -f docker-compose.yml up -d  ## resets the django_settings_module to the default
 
 python.shell:
-	docker compose exec uv run regulations python manage.py shell
+	docker compose exec regulations uv run python manage.py shell
 
 python.emptyseedtables:
-	docker compose exec uv run regulations python manage.py emptyseedtables
+	docker compose exec regulations uv run python manage.py emptyseedtables
 
 python.makemigrations:
-	docker compose exec uv run regulations python manage.py makemigrations
+	docker compose exec regulations uv run python manage.py makemigrations
 
 python.migrate:
-	docker compose exec uv run regulations python manage.py migrate
+	docker compose exec regulations uv run python manage.py migrate
 
 local.seed:
-	docker compose exec uv run regulations python manage.py populateseeddata
-	docker compose exec uv run regulations python manage.py index_resources
+	docker compose exec regulations uv run python manage.py populateseeddata
+	docker compose exec regulations uv run python manage.py index_resources
 local.cleanseeddata:
-	docker compose exec uv run regulations python manage.py cleanseeddata
+	docker compose exec regulations uv run python manage.py cleanseeddata
 
 text-extractor.build:
 	docker compose up -d --build text-extractor
