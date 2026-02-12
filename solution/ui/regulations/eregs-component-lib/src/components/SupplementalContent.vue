@@ -275,7 +275,6 @@ const sortOptions = ref([
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <slot name="login-banner" />
         <slot name="public-label" />
         <div class="filter__container">
             <label class="sort__label--wrapper">

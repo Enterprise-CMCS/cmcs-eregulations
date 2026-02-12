@@ -9,9 +9,6 @@
             part="{{ reg_part }}"
             :subparts="{{ node_list.subparts }}"
         >
-            <template #login-banner>
-                {% include "regulations/partials/login_sidebar_banner.html" %}
-            </template>
             {% if user.is_authenticated %}
                 <template #public-label>
                     <div class="label__container">
@@ -25,6 +22,8 @@
                             <doc-type-label icon-type="internal" doc-type="Internal" />
                         </div>
 
+                        {% include "regulations/partials/login_sidebar_banner.html" %}
+
                         <internal-docs-container
                             api-url="{{ API_BASE }}"
                             title="{{ title }}"
@@ -34,8 +33,15 @@
                 </template>
             {% endif %}
         </supplemental-content>
+
         {% if user.is_authenticated %}
             <div class="login__spacer"></div>
+        {% else %}
+            <hr />
+            <div class="label__container label__container--internal">
+                <doc-type-label icon-type="internal" doc-type="Internal" />
+            </div>
+            {% include "regulations/partials/login_sidebar_banner.html" %}
         {% endif %}
     {% endif %}
 </section>
