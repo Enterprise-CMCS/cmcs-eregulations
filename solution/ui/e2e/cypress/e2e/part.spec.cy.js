@@ -1,12 +1,11 @@
-const username = Cypress.env("TEST_USERNAME");
-const password = Cypress.env("TEST_PASSWORD");
-
 describe("Part View", () => {
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
-        }).as("headers");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            }).as("headers");
+        });
     });
 
     it("loads part 433", () => {
@@ -95,79 +94,84 @@ describe("Part View", () => {
             fixture: "42.431.internal.json",
         }).as("internal431");
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/42/431/10");
-
-        cy.get(".login-cta__div--sidebar").contains(
-            "Resources you can access include policy documents internal to CMCS.",
-        );
-        cy.get("button[data-testid='user-account-button']").should(
-            "be.visible",
-        );
-        cy.get("span[data-testid=loginSidebar]").should("not.exist");
-
-        cy.wait("@resources").then(() => {
-            cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(`button[data-test=TestCat]`).click({
-                force: true,
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD
             });
-            cy.wait(250);
-            cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(`button[data-test=TestSubCat]`).click({
-                force: true,
+            cy.visit("/42/431/10");
+
+            cy.get(".login-cta__div--sidebar").contains(
+                "Resources you can access include policy documents internal to CMCS.",
+            );
+            cy.get("button[data-testid='user-account-button']").should(
+                "be.visible",
+            );
+            cy.get("span[data-testid=loginSidebar]").should("not.exist");
+
+            cy.wait("@resources").then(() => {
+                cy.get(".right-sidebar").scrollTo("bottom");
+                cy.get(`button[data-test=TestCat]`).click({
+                    force: true,
+                });
+                cy.wait(250);
+                cy.get(".right-sidebar").scrollTo("bottom");
+                cy.get(`button[data-test=TestSubCat]`).click({
+                    force: true,
+                });
+                cy.wait(250);
+                cy.get(".right-sidebar").scrollTo("bottom");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .first()
+                    .find(".supplemental-content-date")
+                    .contains("June 6, 2024");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .first()
+                    .find(".supplemental-content-description")
+                    .contains("[Mock] Internal PDF");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .first()
+                    .find(".supplemental-content-description .result__link--file-type")
+                    .should("include.text", "PDF");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .first()
+                    .find(".supplemental-content-description .result__link--domain")
+                    .should("not.exist");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .eq(1)
+                    .find(".supplemental-content-description")
+                    .should("have.class", "supplemental-content-external-link")
+                    .and("include.text", "[Mock] Test 1 -- internal link");
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
+                )
+                    .eq(1)
+                    .find(".supplemental-content-description .result__link--file-type")
+                    .should("include.text", "PDF");
+                cy.get(".internal-docs__container div[data-test=TestSubCat]")
+                    .find(".show-more-button")
+                    .contains("+ Show More (6)")
+                    .click({ force: true });
+                cy.get(
+                    ".internal-docs__container div[data-test=TestSubCat] .show-more-content .supplemental-content",
+                )
+                    .first()
+                    .find(".supplemental-content-description .result__link--file-type")
+                    .should("include.text", "PDF");
+                cy.get(".internal-docs__container div[data-test=TestSubCat]")
+                    .find(".show-more-button")
+                    .contains("- Show Less (6)");
             });
-            cy.wait(250);
-            cy.get(".right-sidebar").scrollTo("bottom");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .first()
-                .find(".supplemental-content-date")
-                .contains("June 6, 2024");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .first()
-                .find(".supplemental-content-description")
-                .contains("[Mock] Internal PDF");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .first()
-                .find(".supplemental-content-description .result__link--file-type")
-                .should("include.text", "PDF");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .first()
-                .find(".supplemental-content-description .result__link--domain")
-                .should("not.exist");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .eq(1)
-                .find(".supplemental-content-description")
-                .should("have.class", "supplemental-content-external-link")
-                .and("include.text", "[Mock] Test 1 -- internal link");
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
-            )
-                .eq(1)
-                .find(".supplemental-content-description .result__link--file-type")
-                .should("include.text", "PDF");
-            cy.get(".internal-docs__container div[data-test=TestSubCat]")
-                .find(".show-more-button")
-                .contains("+ Show More (6)")
-                .click({ force: true });
-            cy.get(
-                ".internal-docs__container div[data-test=TestSubCat] .show-more-content .supplemental-content",
-            )
-                .first()
-                .find(".supplemental-content-description .result__link--file-type")
-                .should("include.text", "PDF");
-            cy.get(".internal-docs__container div[data-test=TestSubCat]")
-                .find(".show-more-button")
-                .contains("- Show Less (6)");
         });
     });
 
@@ -238,38 +242,43 @@ describe("Part View", () => {
         }).as("internal433A");
 
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/42/433/Subpart-A");
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD
+            });
+            cy.visit("/42/433/Subpart-A");
 
-        // Find and expand Subregulatory Guidance category
-        cy.get("button[data-test='Subregulatory Guidance']")
-            .scrollIntoView();
-        cy.get("button[data-test='Subregulatory Guidance']")
-            .click({ force: true });
+            // Find and expand Subregulatory Guidance category
+            cy.get("button[data-test='Subregulatory Guidance']")
+                .scrollIntoView();
+            cy.get("button[data-test='Subregulatory Guidance']")
+                .click({ force: true });
 
-        // Assert that subcategory is visible
-        cy.get(
-            "button[data-test='State Medicaid Director Letter (SMDL)']",
-        ).should("be.visible");
+            // Assert that subcategory is visible
+            cy.get(
+                "button[data-test='State Medicaid Director Letter (SMDL)']",
+            ).should("be.visible");
 
-        // Assert that supplemental content list is visible alongside subcategories
-        cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list",
-        ).should("exist");
+            // Assert that supplemental content list is visible alongside subcategories
+            cy.get(
+                "div[data-test='Subregulatory Guidance'] > .supplemental-content-list",
+            ).should("exist");
 
-        // Assert that supplemental content that is not in a subcategory is visible
-        // and contains expected text
-        cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
-        )
-            .should("exist")
-            .scrollIntoView();
+            // Assert that supplemental content that is not in a subcategory is visible
+            // and contains expected text
+            cy.get(
+                "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
+            )
+                .should("exist")
+                .scrollIntoView();
 
-        cy.get(
-            "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
-        )
-            .and("be.visible")
-            .and("contain.text", "Mock title");
+            cy.get(
+                "div[data-test='Subregulatory Guidance'] > .supplemental-content-list a .supplemental-content-description",
+            )
+                .and("be.visible")
+                .and("contain.text", "Mock title");
+        });
     });
 
     it("loads a subpart view in a mobile width", () => {

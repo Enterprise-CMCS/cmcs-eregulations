@@ -128,8 +128,13 @@ const parseHash = (locationHash) => {
         return `citations=${props.title}.${props.part}.${section}`;
     }
 
-    selectedPart.value = `§ ${section}`;
-    return `citations=${props.title}.${section}`;
+    if (section) {
+        selectedPart.value = `§ ${section}`;
+        return `citations=${props.title}.${section}`;
+    } else {
+        selectedPart.value = undefined;
+        return "";
+    }
 };
 
 const fetchContent = async (location) => {

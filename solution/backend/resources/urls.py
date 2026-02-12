@@ -28,7 +28,9 @@ urlpatterns = [
     path("", ResourceViewSet.as_view({
         "get": "list",
     })),
-    path("context-banners", ContextBannersViewSet.as_view()),
+    path("context-banners", ContextBannersViewSet.as_view({
+        "get": "list",
+    })),
     path("<int:id>/edit", ResourceEditViewSet.as_view(), name="edit"),
     path("public", PublicResourceViewSet.as_view({
         "get": "list",

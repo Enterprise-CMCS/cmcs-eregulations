@@ -81,6 +81,13 @@ export class WafConstruct extends Construct {
                         managedRuleGroupStatement: {
                             vendorName: 'AWS',
                             name: 'AWSManagedRulesCommonRuleSet',
+                            // Add ruleActionOverrides to allow oversize bodies
+                            ruleActionOverrides: [
+                                {
+                                    name: 'SizeRestrictions_BODY',
+                                    actionToUse: { count: {} },
+                                },
+                            ],
                         },
                     },
                     visibilityConfig: {

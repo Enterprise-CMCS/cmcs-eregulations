@@ -403,7 +403,7 @@ $tablet-max: $width-lg - 1; // 1023px
     border-radius: var(--radius-default);
     margin-right: 7px !important;
     display: inline-block;
-    width: 42px;
+    width: 50px;
     text-align: center;
 }
 
@@ -644,13 +644,24 @@ select {
     font-size: var(--font-size-sm);
     margin-top: var(--spacer-2);
     padding: var(--spacer-half) var(--spacer-1);
-}
-.context-banner-title {
-    font-style: italic;
-}
-.context-banner p {
-    margin: var(--spacer-half) 0px !important;
-}
-.context-banner a {
-    text-decoration: none;
+
+    p {
+        margin: var(--spacer-half) 0px !important;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .context-banner-title {
+        font-style: italic;
+    }
+
+    .show-more-button {
+        margin-bottom: var(--spacer-1);
+
+        &__count-span {
+            font-weight: 400;
+        }
+    }
 }

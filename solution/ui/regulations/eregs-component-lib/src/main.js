@@ -69,29 +69,12 @@ const customElementTags = [
     "fp-6",
 ];
 
-function isElementInViewport(el) {
-    const rect = el.getBoundingClientRect();
-
-    return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <=
-            (window.innerHeight ||
-                document.documentElement
-                    .clientHeight) /* or $(window).height() */ &&
-        rect.right <=
-            (window.innerWidth ||
-                document.documentElement.clientWidth) /* or $(window).width() */
-    );
-}
-
 // scroll to anchor to accommodate FF's bad behavior
 function onPageShow() {
     // some magic number constants to scroll to top
     // with room for sticky header and some breathing room for content
     // investigate pulling in SCSS variables instead
-    const HEADER_HEIGHT = 102;
-    const HEADER_HEIGHT_MOBILE = 81;
+    const HEADER_HEIGHT = 104;
 
     const elId = window.location.hash;
     const hasHash = elId.length > 1;
@@ -107,22 +90,27 @@ function onPageShow() {
             ? versionSelectBar[0].offsetHeight
             : 0;
 
-        const headerHeight =
-            window.innerWidth >= 1024 ? HEADER_HEIGHT : HEADER_HEIGHT_MOBILE;
+        const headerHeight = HEADER_HEIGHT;
 
         const offsetPx = headerHeight - versionSelectHeight;
 
-        if (isHighlighted) {
-            const highlightedEls = document.getElementsByClassName("highlight");
-            const highlightedEl = highlightedEls[0];
-            if (highlightedEl) {
-                scrollToElement(highlightedEl, offsetPx);
+        const section = elId.substring(1);
+
+        const sidebarEl = document.querySelector(`[data-section-id='${section}']`);
+        const readerEl = isHighlighted
+            ? document.getElementsByClassName("highlight")[0]
+            : document.getElementById(section);
+
+        if (readerEl) {
+            scrollToElement(readerEl, offsetPx);
+            if (sidebarEl.scrollIntoViewIfNeeded) {
+                // Chrome
+                sidebarEl.scrollIntoViewIfNeeded();
+            } else {
+                // Firefox
+                sidebarEl?.scrollIntoView({ block: "nearest" });
             }
-        } else if (hasHash) {
-            const el = document.getElementById(elId.substr(1));
-            if (el) {
-                scrollToElement(el, offsetPx);
-            }
+
         }
     }
 }
@@ -134,16 +122,25 @@ function deactivateAllTOCLinks() {
     });
 }
 
-function activateTOCLink() {
+function activateTOCLink(event) {
     deactivateAllTOCLinks();
+
     const section = getCurrentSectionFromHash(window.location.hash);
 
     const el = document.querySelector(`[data-section-id='${section}']`);
+
     if (!el) return;
 
     el.classList.add("active");
-    if (!isElementInViewport(el)) {
-        el.scrollIntoView();
+
+    if (event) {
+        if (el.scrollIntoViewIfNeeded) {
+            // Chrome
+            el.scrollIntoViewIfNeeded();
+        } else {
+            // Firefox
+            el.scrollIntoView({ block: "nearest" });
+        }
     }
 }
 

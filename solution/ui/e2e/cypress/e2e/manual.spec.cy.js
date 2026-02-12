@@ -1,11 +1,10 @@
-const username = Cypress.env("TEST_USERNAME");
-const password = Cypress.env("TEST_PASSWORD");
-
 describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
-        cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.clearIndexedDB();
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
         });
     });
 
@@ -57,13 +56,15 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
             .should("have.attr", "href")
             .and("include", "/get-account-access/");
 
-        cy.eregsLogin({
-            username,
-            password,
-            landingPage: "/",
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+                landingPage: "/",
+            });
+            cy.visit("/manual");
+            cy.get(".subj-landing__container .login-cta__div").should("not.exist");
         });
-        cy.visit("/manual");
-        cy.get(".subj-landing__container .login-cta__div").should("not.exist");
     });
 
     it("should redirect to the Search page with the correct selected subject and filters when a search term is entered", () => {
@@ -75,22 +76,27 @@ describe("State Medicaid Manual page", { scrollBehavior: "center" }, () => {
         }).as("intcategories");
 
         cy.viewport("macbook-15");
-        cy.eregsLogin({ username, password });
-        cy.visit("/manual");
+        cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.eregsLogin({
+                username: TEST_USERNAME,
+                password: TEST_PASSWORD,
+            });
+            cy.visit("/manual");
 
-        cy.get("label[for='main-content']")
-            .should("contain", "Search within the manual");
+            cy.get("label[for='main-content']")
+                .should("contain", "Search within the manual");
 
-        // Search for a term
-        cy.get("input#main-content").type("mock", { force: true });
-        cy.get('[data-testid="search-form-submit"]').click({
-            force: true,
+            // Search for a term
+            cy.get("input#main-content").type("mock", { force: true });
+            cy.get('[data-testid="search-form-submit"]').click({
+                force: true,
+            });
+
+            // Assert URL
+            cy.url()
+                .should("include", "/search")
+                .and("include", "type=internal")
+                .and("include", "intcategories=60");
         });
-
-        // Assert URL
-        cy.url()
-            .should("include", "/search")
-            .and("include", "type=internal")
-            .and("include", "intcategories=60");
     });
 });
