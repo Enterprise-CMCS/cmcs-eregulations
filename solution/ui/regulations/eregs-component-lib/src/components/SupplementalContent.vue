@@ -291,6 +291,7 @@ const sortOptions = ref([
             </label>
         </div>
         <div class="supplemental-content-container">
+            Current sort method: {{ selectedSortMethod }}
             <supplemental-content-category
                 v-for="category in categories"
                 :key="category.name"

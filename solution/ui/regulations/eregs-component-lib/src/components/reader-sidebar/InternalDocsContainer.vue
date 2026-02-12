@@ -144,16 +144,21 @@ watch(selectedSection, (newValue) => {
     <div class="internal-docs__container">
         <SimpleSpinner v-if="internalDocuments.loading" />
         <template v-else>
-            <supplemental-content-category
-                v-for="category in internalDocuments.results"
-                :key="category.name"
-                :is-fetching="internalDocuments.loading"
-                :name="category.name"
-                :description="category.description"
-                :supplemental_content="category.supplemental_content"
-                :subcategories="category.subcategories"
-                :show-if-empty="category.show_if_empty"
-            />
+            <template v-if="sortMethod === 'default'">
+                <supplemental-content-category
+                    v-for="category in internalDocuments.results"
+                    :key="category.name"
+                    :is-fetching="internalDocuments.loading"
+                    :name="category.name"
+                    :description="category.description"
+                    :supplemental_content="category.supplemental_content"
+                    :subcategories="category.subcategories"
+                    :show-if-empty="category.show_if_empty"
+                />
+            </template>
+            <template v-else>
+                New or Old Sorting goes here. Current sort method: {{ sortMethod }}
+            </template>
         </template>
     </div>
 </template>
