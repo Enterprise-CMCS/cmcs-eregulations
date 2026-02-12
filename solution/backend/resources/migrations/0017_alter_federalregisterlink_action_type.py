@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('resources', '0015_merge_20251203_1158'),
+        ('resources', '0016_alter_sectioncontextbanner_options'),
     ]
 
     operations = [
