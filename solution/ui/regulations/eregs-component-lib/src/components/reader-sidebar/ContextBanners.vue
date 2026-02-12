@@ -13,18 +13,22 @@ const getSectionKeyFromHash = ({ hash, part }) => {
     return "";
 };
 
-const getSectionLink = ({ section }) => `#${section.replace('.', '-')}`;
-
 export default {
     getSectionKeyFromHash,
-    getSectionLink,
 };
 </script>
 
 <script setup>
-import { onMounted, onUnmounted, computed } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { EventCodes, } from "utilities/utils";
+import CollapseButton from "../CollapseButton.vue";
+import Collapsible from "../Collapsible.vue";
+import ContextBannerItem from "./ContextBannerItem.vue";
+import ShowMoreButton from "../ShowMoreButton.vue";
 
 import useContextBanners from "composables/contextBanners";
+
+import eventbus from "../../eventbus";
 
 const props = defineProps({
     apiUrl: {
@@ -43,7 +47,7 @@ const props = defineProps({
     selectedPart: {
         type: String,
         required: false,
-        default: null,
+        default: undefined,
     },
     subparts: {
         type: Array,
@@ -56,30 +60,25 @@ const props = defineProps({
 
 const { contextBanners, fetchBanners } = useContextBanners();
 
-const handleHash = () => {
-    const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
-    if (sectionKey) {
-        getBanners(sectionKey);
-    } else if (props.subparts && props.subparts.length === 1) {
-        getBanners()
-    }
-};
-
 const filteredBanners = computed(() => {
-    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [];
-    // If a section is selected, show only that section's banner
-    if (props.selectedPart?.value) {
-        const sectionText = props.selectedPart.value.replace("§", "").trim(); // e.g., "75.104" or just "104"
-        const cleaned = sectionText.split(" ").pop();
-        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
-        return contextBanners.value.results.filter((b) => b.section === key);
-    }
-    // Otherwise, on subpart view, show all banners matching the current subpart
+    if (!contextBanners.value.results || contextBanners.value.results.length === 0) return [[], []];
+
     if (props.subparts && props.subparts.length === 1) {
         const sp = props.subparts[0];
-        return contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
+        const filteredList =  contextBanners.value.results.filter((b) => (b.subpart === sp) || !b.subpart);
+        return [filteredList.slice(0,2), filteredList.slice(2)];
     }
-    return [];
+
+    if (props.selectedPart) {
+        const sectionText = props.selectedPart.replace("§", "").trim(); // e.g., "75.104" or just "104"
+        const cleaned = sectionText.split(" ").pop();
+        const key = cleaned.includes(".") ? cleaned : `${props.part}.${cleaned}`;
+        const filteredList = contextBanners.value.results.filter((b) => b.section === key);
+        return [filteredList.slice(0,2), filteredList.slice(2)];
+    }
+
+    const list = contextBanners.value.results;
+    return [list.slice(0,2), list.slice(2)];
 });
 
 function getBanners(sectionKey) {
@@ -93,37 +92,88 @@ function getBanners(sectionKey) {
 }
 
 onMounted(() => {
-    window.addEventListener("hashchange", handleHash);
-    handleHash();
+    eventbus.on(EventCodes.ClearSections, () => {
+        getBanners();
+    });
 });
 
 onUnmounted(() => {
-    window.removeEventListener("hashchange", handleHash);
+    eventbus.off(EventCodes.ClearSections);
 });
+
+watch(
+    () => props.selectedPart,
+    (newVal, oldVal) => {
+        const sectionKey = getSectionKeyFromHash({ hash: window.location.hash, part: props.part });
+        if (newVal && newVal !== oldVal) {
+            // Reached when visiting a secion hash
+            // while already having a different section in hash
+            getBanners(props.selectedPart);
+            return;
+        }
+
+        if (!newVal && !oldVal && !sectionKey) {
+            // Reached on load with no selected part and no section in hash.
+            // Should only fire once on initial load due to immediate: true below
+            getBanners();
+            return;
+        }
+
+        if (!newVal && oldVal && !sectionKey) {
+            // Reached when clearing selected part and no section in hash.
+            // Usually reached by clicked Back button from a hashed section URL
+            // to a subpart view without section in hash
+            getBanners();
+            return;
+        }
+    },
+    { immediate: true }
+);
 </script>
 
 <template>
     <div
-        v-if="filteredBanners.length && !contextBanners.loading"
+        v-if="filteredBanners[0].length && !contextBanners.loading"
         class="context-banner"
         role="note"
         aria-label="Context"
     >
         <span class="context-banner-title">Notes</span>
-        <p
-            v-for="item in filteredBanners"
+        <ContextBannerItem
+            v-for="item in filteredBanners[0]"
             :key="item.section"
-            class="context-banner__item"
-        >
-            <template v-if="!props.selectedPart">
-                <strong>
-                    <a :href="getSectionLink({section: item.section})">§ {{ item.section }}</a>:
-                </strong>
-                <span v-sanitize-html="item.html" />
-            </template>
-            <template v-else>
-                <span v-sanitize-html="item.html" />
-            </template>
-        </p>
+            :item="item"
+            :selected-part="props.selectedPart"
+        />
+        <template v-if="filteredBanners[1].length">
+            <Collapsible
+                name="context-banners-collapse"
+                state="collapsed"
+                class="collapse-content show-more-content"
+            >
+                <ContextBannerItem
+                    v-for="item in filteredBanners[1]"
+                    :key="item.section"
+                    :item="item"
+                    :selected-part="props.selectedPart"
+                />
+            </Collapsible>
+            <CollapseButton
+                :class="{ subcategory: subcategory }"
+                name="context-banners-collapse"
+                state="collapsed"
+                class="category-title"
+            >
+                <template #expanded>
+                    <ShowMoreButton button-text="- Show Less" />
+                </template>
+                <template #collapsed>
+                    <ShowMoreButton
+                        button-text="+ Show More"
+                        :count="filteredBanners[1].length"
+                    />
+                </template>
+            </CollapseButton>
+        </template>
     </div>
 </template>
