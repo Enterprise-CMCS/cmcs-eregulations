@@ -35,14 +35,13 @@
             {% endif %}
         </supplemental-content>
 
-        {% if user.is_authenticated %}
-            <div class="login__spacer"></div>
-        {% else %}
+        {% if not user.is_authenticated %}
             <hr />
             <div class="label__container label__container--internal">
                 <doc-type-label icon-type="internal" doc-type="Internal" />
             </div>
             {% include "regulations/partials/login_sidebar_banner.html" %}
         {% endif %}
+        <div class="login__spacer"></div>
     {% endif %}
 </section>
