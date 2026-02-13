@@ -191,8 +191,6 @@ const props = defineProps({
     },
 });
 
-console.info("results in PolicyResults.vue", props.results);
-
 const $route = useRoute();
 
 const apiUrl = inject("apiUrl");

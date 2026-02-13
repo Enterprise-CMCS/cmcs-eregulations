@@ -7,7 +7,10 @@ import {
     EventCodes,
     formatResourceCategories,
     getCurrentSectionFromHash,
+    getRequestParams,
 } from "utilities/utils";
+
+import useSearchResults from "composables/searchResults.js";
 
 import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
@@ -56,20 +59,20 @@ const getCategories = async () => {
     return categories;
 };
 
+const { policyDocList, getDocList } = useSearchResults();
+
 const internalDocuments = ref({
     results: [],
+    categories: [],
     loading: true,
 });
 
 const getDocuments = async ({ section, sort = "default" }) => {
-    console.info("section in getDocuments", section);
     internalDocuments.value.loading = true;
 
     const rawNodeList = JSON.parse(
         document.getElementById("node_list").textContent
     );
-
-    console.info("rawNodeList in getDocuments", rawNodeList);
 
     let locationString;
 
@@ -85,19 +88,31 @@ const getDocuments = async ({ section, sort = "default" }) => {
     }
 
     try {
-        const results = await Promise.all([
-            getCategories(),
-            getInternalDocs({
-                apiUrl: props.apiUrl,
-                requestParams: `${locationString}`,
-            }),
+        const categoriesPromise = [getCategories()];
+        const resultsPromise = props.sortMethod === "default"
+            ? [
+                getInternalDocs({
+                    apiUrl: props.apiUrl,
+                    requestParams: `${locationString}`,
+                }),
+            ]
+            : [
+                getDocList({
+                    apiUrl: props.apiUrl,
+                    forceQuerySearch: true,
+                    data: `${locationString}&${getRequestParams({ queryParams: { type: "internal", sort: props.sortMethod } })}`,
+                }),
+            ];
+
+        const resultsArr = await Promise.all([
+            ...categoriesPromise,
+            ...resultsPromise,
         ]);
 
-        const categories = results[0];
-        const documents = results[1];
-
-        console.info("documents.results in getDocuments", documents.results);
-        console.info("sortArg in getDocuments", sort);
+        const categories = resultsArr[0];
+        const documents = props.sortMethod === "default"
+            ? resultsArr[1]
+            : policyDocList.value;
 
         if (sort === "default") {
             internalDocuments.value.results = formatResourceCategories({
