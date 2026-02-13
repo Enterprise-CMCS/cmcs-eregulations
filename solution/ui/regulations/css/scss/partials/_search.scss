@@ -90,16 +90,6 @@
                     width: unset;
                     margin-bottom: unset;
                 }
-
-                .sort__label--wrapper {
-                    display: flex;
-                    align-items: center;
-                    gap: var(--spacer-1);
-                }
-
-                .sort__label {
-                    font-weight: bold;
-                }
             }
 
             .loading__span {

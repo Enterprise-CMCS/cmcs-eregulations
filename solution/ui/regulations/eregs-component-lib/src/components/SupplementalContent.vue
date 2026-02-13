@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
+
+import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
+
 import {
     getExternalCategories,
     getSupplementalContent,
@@ -237,6 +240,27 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
+
+// Sort dropdown related code
+
+const selectedSortMethod = defineModel({ default: "default", type: String });
+
+const itemProps = (item) => {
+    return {
+        title: item.label,
+        subtitle: item.label,
+        value: item.method,
+        disabled: item.disabled,
+        "data-testid": `sort-${item.label.toLowerCase()}`,
+    };
+};
+
+const sortOptions = ref([
+    { method: "default", label: "Categories" },
+    { method: "-date", label: "Newest" },
+    { method: "date", label: "Oldest" },
+]);
+
 </script>
 
 <template>
@@ -251,10 +275,23 @@ const getCategories = async (apiUrl) => {
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <h2>Documents</h2>
-        <slot name="login-banner" />
         <slot name="public-label" />
+        <div class="filter__container">
+            <label class="sort__label--wrapper">
+                <span class="sort__label">Sort by</span>
+                <GenericDropdown
+                    v-model="selectedSortMethod"
+                    class="filter__select--sort"
+                    :clearable="false"
+                    data-testid="sort-select"
+                    :item-props="itemProps"
+                    :items="sortOptions"
+                    :disabled="loading"
+                />
+            </label>
+        </div>
         <div class="supplemental-content-container">
+            Current sort method: {{ selectedSortMethod }}
             <supplemental-content-category
                 v-for="category in categories"
                 :key="category.name"
@@ -270,7 +307,7 @@ const getCategories = async (apiUrl) => {
             <simple-spinner v-if="isFetching" />
         </div>
     </div>
-    <slot name="authed-documents" />
+    <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
             v-if="selectedPart && subparts.length === 1"

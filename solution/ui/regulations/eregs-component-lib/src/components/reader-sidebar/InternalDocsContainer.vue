@@ -7,8 +7,12 @@ import {
     EventCodes,
     formatResourceCategories,
     getCurrentSectionFromHash,
+    getRequestParams,
 } from "utilities/utils";
 
+import useSearchResults from "composables/searchResults.js";
+
+import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
@@ -26,6 +30,11 @@ const props = defineProps({
     part: {
         type: String,
         required: true,
+    },
+    sortMethod: {
+        type: String,
+        required: false,
+        default: "default",
     },
 });
 
@@ -50,12 +59,15 @@ const getCategories = async () => {
     return categories;
 };
 
+const { policyDocList, getDocList } = useSearchResults();
+
 const internalDocuments = ref({
     results: [],
+    categories: [],
     loading: true,
 });
 
-const getDocuments = async ({ section }) => {
+const getDocuments = async ({ section, sort = "default" }) => {
     internalDocuments.value.loading = true;
 
     const rawNodeList = JSON.parse(
@@ -76,22 +88,42 @@ const getDocuments = async ({ section }) => {
     }
 
     try {
-        const results = await Promise.all([
-            getCategories(),
-            getInternalDocs({
-                apiUrl: props.apiUrl,
-                requestParams: `${locationString}`,
-            }),
+        const categoriesPromise = [getCategories()];
+        const resultsPromise = props.sortMethod === "default"
+            ? [
+                getInternalDocs({
+                    apiUrl: props.apiUrl,
+                    requestParams: `${locationString}`,
+                }),
+            ]
+            : [
+                getDocList({
+                    apiUrl: props.apiUrl,
+                    forceQuerySearch: true,
+                    data: `${locationString}&${getRequestParams({ queryParams: { type: "internal", sort: props.sortMethod } })}`,
+                }),
+            ];
+
+        const resultsArr = await Promise.all([
+            ...categoriesPromise,
+            ...resultsPromise,
         ]);
 
-        const categories = results[0];
-        const documents = results[1];
+        const categories = resultsArr[0];
+        const documents = props.sortMethod === "default"
+            ? resultsArr[1]
+            : policyDocList.value;
 
-        internalDocuments.value.results = formatResourceCategories({
-            categories: categories.results,
-            resources: documents.results,
-            apiUrl: props.apiUrl,
-        });
+        if (sort === "default") {
+            internalDocuments.value.results = formatResourceCategories({
+                categories: categories.results,
+                resources: documents.results,
+                apiUrl: props.apiUrl,
+            });
+        } else {
+            internalDocuments.value.results = documents.results;
+            internalDocuments.value.categories = categories.results;
+        }
     } catch (error) {
         console.error(error);
         internalDocuments.value.results = [];
@@ -133,22 +165,35 @@ onUnmounted(() => {
 watch(selectedSection, (newValue) => {
     getDocuments({ section: newValue });
 });
+
+watch(() => props.sortMethod, (newValue) => {
+    getDocuments({ section: selectedSection.value, sort: newValue });
+});
 </script>
 
 <template>
     <div class="internal-docs__container">
         <SimpleSpinner v-if="internalDocuments.loading" />
         <template v-else>
-            <supplemental-content-category
-                v-for="category in internalDocuments.results"
-                :key="category.name"
-                :is-fetching="internalDocuments.loading"
-                :name="category.name"
-                :description="category.description"
-                :supplemental_content="category.supplemental_content"
-                :subcategories="category.subcategories"
-                :show-if-empty="category.show_if_empty"
-            />
+            <template v-if="sortMethod === 'default'">
+                <supplemental-content-category
+                    v-for="category in internalDocuments.results"
+                    :key="category.name"
+                    :is-fetching="internalDocuments.loading"
+                    :name="category.name"
+                    :description="category.description"
+                    :supplemental_content="category.supplemental_content"
+                    :subcategories="category.subcategories"
+                    :show-if-empty="category.show_if_empty"
+                />
+            </template>
+            <template v-else>
+                <PolicyResults
+                    :categories="internalDocuments.categories"
+                    :results="internalDocuments.results"
+                    collapse-subjects
+                />
+            </template>
         </template>
     </div>
 </template>
