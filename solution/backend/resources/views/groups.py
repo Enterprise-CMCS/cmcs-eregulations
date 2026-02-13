@@ -8,8 +8,11 @@ from resources.models import (
     AbstractCitation,
     AbstractPublicResource,
     AbstractResource,
+    Act,
+    ActCitation,
     ResourceGroup,
     Subject,
+    UscCitation,
 )
 from resources.serializers import ResourceGroupSerializer
 
@@ -35,6 +38,10 @@ class ResourceGroupViewSet(viewsets.ReadOnlyModelViewSet):
             Prefetch("resources", queryset=resource_filter.prefetch_related(
                 Prefetch("category", AbstractCategory.objects.select_subclasses()),
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("act_citations", ActCitation.objects.prefetch_related(
+                    Prefetch("act", Act.objects.all()),
+                )),
+                Prefetch("usc_citations", UscCitation.objects.all()),
                 Prefetch("subjects", Subject.objects.all()),
             )),
         )

@@ -24,9 +24,20 @@ from resources.models import (
     AbstractCategory,
     AbstractCitation,
     AbstractResource,
+    Act,
+    ActCitation,
     Subject,
+    UscCitation,
 )
-from resources.utils import get_citation_filter, string_to_bool
+from resources.utils import (
+    ACT_CITATION_FILTER_PARAMETER,
+    CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
+    get_act_citation_filter,
+    get_citation_filter,
+    get_usc_citation_filter,
+    string_to_bool,
+)
 
 from .models import (
     ContentIndex,
@@ -61,16 +72,6 @@ class ContentSearchMixin:
                 "Search for this text within public and internal resources, and regulation text. "
                 "Fields searched depends on the underlying data type. "
                 "Use either 'q' or 'query' as the parameter name."
-            ),
-            location=OpenApiParameter.QUERY,
-        ),
-        OpenApiParameter(
-            name="citations",
-            required=False,
-            type=int,
-            description=(
-                "Limit results to only resources linked to these citations. Use \"&citations=X&citations=Y\" "
-                "for multiple. Examples: 42, 42.433, 42.433.15, 42.433.D."
             ),
             location=OpenApiParameter.QUERY,
         ),
@@ -125,6 +126,9 @@ class ContentSearchMixin:
             ),
             location=OpenApiParameter.QUERY,
         ),
+        CITATION_FILTER_PARAMETER,
+        ACT_CITATION_FILTER_PARAMETER,
+        USC_CITATION_FILTER_PARAMETER,
     ]
 
     def is_quoted(self, query):
@@ -148,6 +152,8 @@ class ContentSearchMixin:
 
         # Get optional parameters (from query string or form body)
         citations = _get_parameter_list("citations", self.request)
+        act_citations = _get_parameter_list("act_citations", self.request)
+        usc_citations = _get_parameter_list("usc_citations", self.request)
         subjects = _get_parameter_list("subjects", self.request)
         categories = _get_parameter_list("categories", self.request)
         show_public = string_to_bool(_get_parameter("show_public", self.request), True)
@@ -216,6 +222,12 @@ class ContentSearchMixin:
 
         # Filter inclusively by citations if this array exists
         q_filter &= get_citation_filter(citations, "resource__cfr_citations__")
+
+        # Filter inclusively by act citations if this array exists
+        q_filter &= get_act_citation_filter(act_citations, "resource__act_citations__")
+
+        # Filter inclusively by usc citations if this array exists
+        q_filter &= get_usc_citation_filter(usc_citations, "resource__usc_citations__")
 
         # Filter by subject pks if subjects array is present
         if subjects:
@@ -505,6 +517,10 @@ class ContentSearchViewSet(ContentSearchMixin, LinkConfigMixin, LinkConversionsM
             Prefetch("reg_text", IndexedRegulationText.objects.all()),
             Prefetch("resource", AbstractResource.objects.select_subclasses().prefetch_related(
                 Prefetch("cfr_citations", AbstractCitation.objects.select_subclasses()),
+                Prefetch("act_citations", ActCitation.objects.prefetch_related(
+                    Prefetch("act", Act.objects.all()),
+                )),
+                Prefetch("usc_citations", UscCitation.objects.all()),
                 Prefetch("category", AbstractCategory.objects.select_subclasses().prefetch_related(
                     Prefetch("parent", AbstractCategory.objects.select_subclasses()),
                 )),

@@ -20,6 +20,9 @@ from resources.models import (
     AbstractInternalCategory,
     AbstractPublicCategory,
     AbstractResource,
+    Act,
+    ActCitation,
+    UscCitation,
 )
 from resources.utils import (
     field_changed,
@@ -37,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
     actions = [actions.mark_approved, actions.mark_not_approved, actions.extract_text]
-    filter_horizontal = ["cfr_citations", "subjects"]
+    filter_horizontal = ["cfr_citations", "act_citations", "usc_citations", "subjects"]
     empty_value_display = "NONE"
     ordering = ["-updated_at"]
 
@@ -48,6 +51,10 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
 
     manytomany_lookups = {
         "cfr_citations": lambda: AbstractCitation.objects.all().select_subclasses(),
+        "act_citations": lambda: ActCitation.objects.prefetch_related(
+            Prefetch("act", Act.objects.all()),
+        ),
+        "usc_citations": lambda: UscCitation.objects.all(),
     }
 
     def get_queryset(self, request):

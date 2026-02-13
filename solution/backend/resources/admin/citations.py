@@ -6,8 +6,11 @@ from django.db.models.functions import Concat
 from common.admin import CustomAdminMixin
 from resources.models import (
     AbstractCitation,
+    Act,
+    ActCitation,
     Section,
     Subpart,
+    UscCitation,
 )
 
 
@@ -73,3 +76,31 @@ class SubpartAdmin(AbstractCitationAdmin):
     search_fields = ["title", "part", "subpart_id"]
     ordering = ["title", "part", "subpart_id"]
     fields = ["title", "part", "subpart_id"]
+
+
+@admin.register(Act)
+class ActAdmin(CustomAdminMixin, admin.ModelAdmin):
+    admin_priority = 9992
+    list_display = ["name"]
+    search_fields = ["name"]
+
+
+@admin.register(ActCitation)
+class ActCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
+    admin_priority = 9993
+    list_display = ["act", "section"]
+    search_fields = ["act__name", "section"]
+    ordering = ["act__name", "section"]
+    fields = ["act", "section"]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("act")
+
+
+@admin.register(UscCitation)
+class UscCitationAdmin(CustomAdminMixin, admin.ModelAdmin):
+    admin_priority = 9994
+    list_display = ["title", "section"]
+    search_fields = ["title", "section"]
+    ordering = ["title", "section"]
+    fields = ["title", "section"]

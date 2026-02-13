@@ -3,14 +3,12 @@ from django.db import models
 from model_utils.managers import InheritanceManager
 
 from common.fields import (
-    StatuteRefField,
-    UscRefField,
     VariableDateField,
 )
 from common.mixins import DisplayNameFieldMixin
 
 from .categories import AbstractCategory
-from .citations import AbstractCitation
+from .citations import AbstractCitation, ActCitation, UscCitation
 from .subjects import Subject
 
 
@@ -40,6 +38,23 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
                   "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
     )
 
+    act_citations = models.ManyToManyField(
+        ActCitation,
+        blank=True,
+        related_name="resources",
+        help_text="Select Act citations related to this document. "
+                  "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
+    )
+
+    usc_citations = models.ManyToManyField(
+        UscCitation,
+        blank=True,
+        related_name="resources",
+        verbose_name="USC citations",
+        help_text="Select USC citations related to this document. "
+                  "Hold down \"Control\", or \"Command\" on a Mac, to select more than one.",
+    )
+
     subjects = models.ManyToManyField(
         Subject,
         blank=True,
@@ -47,12 +62,6 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
         help_text="Select subjects related to this document. Hold down \"Control\", "
                   "or \"Command\" on a Mac, to select more than one.",
     )
-
-    act_citations = StatuteRefField()
-    usc_citations = UscRefField(verbose_name="U.S. Code citations")
-    # TODO somehow add combined help text for these fields:
-    # help_text="Designate statute citations that are related to this document."
-    #           "You can use either the Act and Section of the Act, or the Title and Section of the U.S. Code."
 
     editor_notes = models.TextField(
         blank=True,
@@ -81,6 +90,8 @@ class AbstractResource(models.Model, DisplayNameFieldMixin):
 
     related_resources = models.ManyToManyField("self", blank=True, symmetrical=False)
     related_citations = models.ManyToManyField(AbstractCitation, blank=True)
+    related_act_citations = models.ManyToManyField(ActCitation, blank=True)
+    related_usc_citations = models.ManyToManyField(UscCitation, blank=True)
     related_categories = models.ManyToManyField(AbstractCategory, blank=True)
     related_subjects = models.ManyToManyField(Subject, blank=True)
     group_parent = models.BooleanField(default=True)

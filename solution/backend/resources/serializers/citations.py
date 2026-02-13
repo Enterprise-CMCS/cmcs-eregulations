@@ -74,6 +74,7 @@ MetaCitationSerializer = ProxySerializerWrapper(
 
 
 class ActCitationSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     act = serializers.CharField()
     section = serializers.CharField()
     url = serializers.SerializerMethodField()
@@ -82,35 +83,41 @@ class ActCitationSerializer(serializers.Serializer):
         conversions = self.context.get("link_conversions")
         link_config = self.context.get("link_config")
         statute_ref_exceptions = link_config["statute_ref_exceptions"]
-        if conversions and link_config["link_statute_refs"] and obj["act"] and obj["section"]:
+        if conversions and link_config["link_statute_refs"] and obj.act and obj.section:
             return SECTION_REGEX.sub(
                 partial(
                     replace_section,
-                    act=obj["act"],
+                    act=obj.act.name,
                     link_conversions=conversions,
-                    exceptions=statute_ref_exceptions.get(obj["act"], []),
+                    exceptions=statute_ref_exceptions.get(obj.act.name, []),
                     generate_url_only=True
                 ),
-                obj["section"]
+                obj.section
             )
         return None
 
 
 class UscCitationSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     title = serializers.CharField()
     section = serializers.CharField()
     url = serializers.SerializerMethodField()
 
     def get_url(self, obj):
         link_config = self.context.get("link_config")
-        if link_config["link_usc_refs"] and obj["title"] and obj["section"]:
+        if link_config["link_usc_refs"] and obj.title and obj.section:
             return SECTION_REGEX.sub(
                 partial(
                     replace_usc_citation,
-                    title=obj["title"],
-                    exceptions=link_config["usc_ref_exceptions"].get(obj["title"], []),
+                    title=obj.title,
+                    exceptions=link_config["usc_ref_exceptions"].get(obj.title, []),
                     generate_url_only=True
                 ),
-                obj["section"]
+                obj.section
             )
         return None
+
+
+class ActSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()

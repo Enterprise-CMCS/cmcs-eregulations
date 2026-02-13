@@ -46,7 +46,7 @@ class PublicLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["category", "subjects"],
         }),
         ("Related citations", {
-            "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+            "fields": ["cfr_citations", "act_citations", "usc_citations"],
         }),
         ("Search indexing", {
             "classes": ("collapse",),
@@ -108,7 +108,7 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
             "fields": ["category", "subjects"],
         }),
         ("Related citations", {
-            "fields": ["cfr_citations", ("act_citations", "usc_citations")],
+            "fields": ["cfr_citations", "act_citations", "usc_citations"],
         }),
         ("Search indexing", {
             "classes": ("collapse",),

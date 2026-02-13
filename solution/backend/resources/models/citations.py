@@ -1,7 +1,10 @@
+import re
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils.managers import InheritanceManager
 
+from common.fields import NaturalSortField
 from common.mixins import DisplayNameFieldMixin
 
 
@@ -64,3 +67,54 @@ class Section(AbstractCitation):
         verbose_name = "Section"
         verbose_name_plural = "Sections"
         ordering = ["title", "part", "section_id"]
+
+
+class Act(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+
+    def clean(self):
+        self.name = self.name.strip()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Act"
+        verbose_name_plural = "Acts"
+        ordering = ["name"]
+
+
+class ActCitation(models.Model):
+    act = models.ForeignKey(Act, on_delete=models.CASCADE, related_name="act_citations")
+    section = models.CharField(max_length=32)
+    section_sort = NaturalSortField("section")
+
+    def clean(self):
+        self.section = re.sub(r"\s", "", self.section)
+
+    def __str__(self):
+        return f"{self.act.name} § {self.section}"
+
+    class Meta:
+        verbose_name = "Act Citation"
+        verbose_name_plural = "Act Citations"
+        unique_together = ("act", "section")
+        ordering = ["act__name", "section_sort"]
+
+
+class UscCitation(models.Model):
+    title = models.IntegerField()
+    section = models.CharField(max_length=32)
+    section_sort = NaturalSortField("section")
+
+    def clean(self):
+        self.section = re.sub(r"\s", "", self.section)
+
+    def __str__(self):
+        return f"{self.title} USC § {self.section}"
+
+    class Meta:
+        verbose_name = "USC Citation"
+        verbose_name_plural = "USC Citations"
+        unique_together = ("title", "section")
+        ordering = ["title", "section_sort"]
