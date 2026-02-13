@@ -37,6 +37,10 @@ export default defineConfig({
         alias: {
             composables: path.resolve(__dirname, "../composables"),
             directives: path.resolve(__dirname, "../directives"),
+            eregsComponentLib: path.resolve(
+                __dirname,
+                "../eregs-component-lib"
+            ),
             sharedComponents: path.resolve(
                 __dirname,
                 "./src/components/shared-components"

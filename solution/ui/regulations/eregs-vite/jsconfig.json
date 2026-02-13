@@ -7,7 +7,7 @@
             ],
             "composables/*": ["../composables/*"],
             "directives/*": ["../directives/*"],
-            "eregsComponentLib/*": ["../eregsComponentLib/*"],
+            "eregsComponentLib/*": ["../eregs-component-lib/*"],
             "legacy/*": ["../../regulations/*"],
             "sharedComponents/*": ["../eregs-component-lib/src/components/shared-components/*"],
             "utilities/*": ["../utilities/*"]

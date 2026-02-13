@@ -19,14 +19,6 @@ import {
     DOCUMENT_TYPES_MAP,
 } from "utilities/utils";
 
-import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
-import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
-import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
-import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
-import ResultsItem from "sharedComponents/ResultsItem.vue";
-
-import SubjectChips from "./SubjectChips.vue";
-
 const addSurroundingEllipses = (str) => {
     if (!str) return "";
 
@@ -34,6 +26,9 @@ const addSurroundingEllipses = (str) => {
 
     return str;
 };
+
+const getCollapseName = (doc) =>
+    `related subjects collapsible ${doc.uid ?? doc.id ?? doc.node_id}`;
 
 const getParentCategoryName = ({ itemCategory, categoriesArr }) => {
     if (!itemCategory) return null;
@@ -132,6 +127,7 @@ const partDocumentTitleLabel = (string) => string.toLowerCase();
 
 export default {
     addSurroundingEllipses,
+    getCollapseName,
     getParentCategoryName,
     getResultLinkText,
     getResultSnippet,
@@ -141,6 +137,17 @@ export default {
 </script>
 
 <script setup>
+import CategoryLabel from "sharedComponents/results-item-parts/CategoryLabel.vue";
+import DocTypeLabel from "sharedComponents/results-item-parts/DocTypeLabel.vue";
+import IndicatorLabel from "sharedComponents/results-item-parts/IndicatorLabel.vue";
+import RelatedSectionsCollapse from "sharedComponents/results-item-parts/RelatedSectionsCollapse.vue";
+import ResultsItem from "sharedComponents/ResultsItem.vue";
+
+import CollapseButton from "eregsComponentLib/src/components/CollapseButton.vue";
+import Collapsible from "eregsComponentLib/src/components/Collapsible.vue";
+
+import SubjectChips from "./SubjectChips.vue";
+
 const props = defineProps({
     categories: {
         type: Array,
@@ -177,6 +184,10 @@ const props = defineProps({
     selectedSubjectParts: {
         type: Array,
         default: () => [],
+    },
+    collapseSubjects: {
+        type: Boolean,
+        default: false,
     },
 });
 
@@ -354,12 +365,42 @@ const handleResultLinkClick = (doc) => {
                 />
             </template>
             <template #chips>
-                <div
-                    v-if="doc.subjects?.length > 0"
-                    class="document__info-block"
-                >
-                    <SubjectChips :subjects="doc.subjects" />
-                </div>
+                <template v-if="collapseSubjects && doc.subjects?.length > 0">
+                    <CollapseButton
+                        :name="getCollapseName(doc)"
+                        state="collapsed"
+                        class="supplemental-content__subjects"
+                    >
+                        <template #expanded>
+                            Hide Related Subjects
+                            <i class="fa fa-chevron-up" />
+                        </template>
+                        <template #collapsed>
+                            Show Related Subjects
+                            <i class="fa fa-chevron-down" />
+                        </template>
+                    </CollapseButton>
+                    <Collapsible
+                        :name="getCollapseName(doc)"
+                        state="collapsed"
+                        class="collapse-content"
+                        overflow
+                    >
+                        <div
+                            v-if="doc.subjects?.length > 0"
+                            class="document__info-block"
+                        >
+                            <SubjectChips :subjects="doc.subjects" />
+                        </div>
+                    </Collapsible>
+                </template>
+                <template v-else-if="doc.subjects?.length > 0">
+                    <div
+                        class="document__info-block"
+                    >
+                        <SubjectChips :subjects="doc.subjects" />
+                    </div>
+                </template>
             </template>
             <template #sections>
                 <RelatedSectionsCollapse

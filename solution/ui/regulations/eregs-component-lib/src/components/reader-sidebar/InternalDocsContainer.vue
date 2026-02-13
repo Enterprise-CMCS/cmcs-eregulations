@@ -176,6 +176,7 @@ watch(() => props.sortMethod, (newValue) => {
                 <PolicyResults
                     :categories="internalDocuments.categories"
                     :results="internalDocuments.results"
+                    collapse-subjects
                 />
             </template>
         </template>
