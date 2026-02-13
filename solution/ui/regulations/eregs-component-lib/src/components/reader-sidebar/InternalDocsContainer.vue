@@ -9,6 +9,7 @@ import {
     getCurrentSectionFromHash,
 } from "utilities/utils";
 
+import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
@@ -60,12 +61,15 @@ const internalDocuments = ref({
     loading: true,
 });
 
-const getDocuments = async ({ section }) => {
+const getDocuments = async ({ section, sort = "default" }) => {
+    console.info("section in getDocuments", section);
     internalDocuments.value.loading = true;
 
     const rawNodeList = JSON.parse(
         document.getElementById("node_list").textContent
     );
+
+    console.info("rawNodeList in getDocuments", rawNodeList);
 
     let locationString;
 
@@ -92,11 +96,19 @@ const getDocuments = async ({ section }) => {
         const categories = results[0];
         const documents = results[1];
 
-        internalDocuments.value.results = formatResourceCategories({
-            categories: categories.results,
-            resources: documents.results,
-            apiUrl: props.apiUrl,
-        });
+        console.info("documents.results in getDocuments", documents.results);
+        console.info("sortArg in getDocuments", sort);
+
+        if (sort === "default") {
+            internalDocuments.value.results = formatResourceCategories({
+                categories: categories.results,
+                resources: documents.results,
+                apiUrl: props.apiUrl,
+            });
+        } else {
+            internalDocuments.value.results = documents.results;
+            internalDocuments.value.categories = categories.results;
+        }
     } catch (error) {
         console.error(error);
         internalDocuments.value.results = [];
@@ -138,6 +150,10 @@ onUnmounted(() => {
 watch(selectedSection, (newValue) => {
     getDocuments({ section: newValue });
 });
+
+watch(() => props.sortMethod, (newValue) => {
+    getDocuments({ section: selectedSection.value, sort: newValue });
+});
 </script>
 
 <template>
@@ -157,7 +173,10 @@ watch(selectedSection, (newValue) => {
                 />
             </template>
             <template v-else>
-                New or Old Sorting goes here. Current sort method: {{ sortMethod }}
+                <PolicyResults
+                    :categories="internalDocuments.categories"
+                    :results="internalDocuments.results"
+                />
             </template>
         </template>
     </div>

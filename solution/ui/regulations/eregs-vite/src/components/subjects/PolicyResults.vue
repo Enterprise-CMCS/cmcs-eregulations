@@ -180,6 +180,8 @@ const props = defineProps({
     },
 });
 
+console.info("results in PolicyResults.vue", props.results);
+
 const $route = useRoute();
 
 const apiUrl = inject("apiUrl");
@@ -362,7 +364,7 @@ const handleResultLinkClick = (doc) => {
             <template #sections>
                 <RelatedSectionsCollapse
                     v-if="
-                        doc.type !== 'reg_text' &&
+                        doc.type !== 'reg_text' && partsLastUpdated &&
                             (hasRegulationCitations({ doc, partsLastUpdated })
                                 || hasStatuteCitations({ doc }))"
                     :item="doc"
