@@ -63,22 +63,19 @@ updates:
               - "*aws*"
 
     - package-ecosystem: "uv"
-      directory: "/solution/backend"
+      directories:
+        - "/solution/backend"
+        - "/solution/text-extractor"
       schedule:
-        interval: "daily"
+          interval: "daily"
       open-pull-requests-limit: 1
       ignore:
           - dependency-name: "*"
             update-types: ["version-update:semver-patch"]
-
-    - package-ecosystem: "uv"
-      directory: "/solution/text-extractor"
-      schedule:
-        interval: "daily"
-      open-pull-requests-limit: 1
-      ignore:
-          - dependency-name: "*"
-            update-types: ["version-update:semver-patch"]
+      groups:
+          cryptography:
+            patterns:
+              - "cryptography*"
 
     - package-ecosystem: "github-actions"
       directory: "/"
