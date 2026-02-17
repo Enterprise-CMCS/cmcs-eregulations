@@ -157,6 +157,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    collapseSubjects: {
+        type: Boolean,
+        default: false,
+    },
     hasEditableJobCode: {
         type: Boolean,
         default: false,

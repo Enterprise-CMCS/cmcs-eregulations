@@ -12,7 +12,7 @@ import {
 
 import useSearchResults from "composables/searchResults.js";
 
-//import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
+import PolicyResultsList from "spaComponents/subjects/PolicyResultsList.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
@@ -20,6 +20,10 @@ import eventbus from "../../eventbus";
 
 const props = defineProps({
     apiUrl: {
+        type: String,
+        required: true,
+    },
+    homeUrl: {
         type: String,
         required: true,
     },
@@ -189,11 +193,13 @@ watch(() => props.sortMethod, (newValue) => {
             </template>
             <template v-else>
                 Policy Results here
-                <!--PolicyResults
+                <PolicyResultsList
+                    :api-url="apiUrl"
                     :categories="internalDocuments.categories"
-                    :results="internalDocuments.results"
+                    :home-url="homeUrl"
+                    :results-list="internalDocuments.results"
                     collapse-subjects
-                /-->
+                />
             </template>
         </template>
     </div>
