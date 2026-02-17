@@ -12,7 +12,10 @@ import {
 
 import useSearchResults from "composables/searchResults.js";
 
+import CollapseButton from "../CollapseButton.vue";
+import Collapsible from "../Collapsible.vue";
 import PolicyResultsList from "spaComponents/subjects/PolicyResultsList.vue";
+import ShowMoreButton from "../ShowMoreButton.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
@@ -192,14 +195,46 @@ watch(() => props.sortMethod, (newValue) => {
                 />
             </template>
             <template v-else>
-                Policy Results here
                 <PolicyResultsList
                     :api-url="apiUrl"
                     :categories="internalDocuments.categories"
                     :home-url="homeUrl"
-                    :results-list="internalDocuments.results"
+                    :results-list="internalDocuments.results.slice(0, 5)"
                     collapse-subjects
                 />
+                <template v-if="internalDocuments.results.length > 5">
+                    <CollapseButton
+                        name="internal-chronological-collapse"
+                        state="collapsed"
+                        class="category-title"
+                    >
+                        <template #expanded>
+                            <ShowMoreButton
+                                button-text="- Show Less"
+                                :count="internalDocuments.results.length"
+                            />
+                        </template>
+                        <template #collapsed>
+                            <ShowMoreButton
+                                button-text="+ Show More"
+                                :count="internalDocuments.results.length"
+                            />
+                        </template>
+                    </CollapseButton>
+                    <Collapsible
+                        name="internal-chronological-collapse"
+                        state="collapsed"
+                        class="collapse-content show-more-content"
+                    >
+                        <PolicyResultsList
+                            :api-url="apiUrl"
+                            :categories="internalDocuments.categories"
+                            :home-url="homeUrl"
+                            :results-list="internalDocuments.results.slice(5)"
+                            collapse-subjects
+                        />
+                    </Collapsible>
+                </template>
             </template>
         </template>
     </div>
