@@ -12,7 +12,7 @@ dependencies = [
     "magika==0.5.1",
     "moto==5.1.19",
     "openpyxl==3.1.5",
-    "pillow==12.1.0",
+    "pillow==12.1.1",
     "pytest==9.0.2",
     "python-pptx==1.0.2",
     "requests==2.32.5",
