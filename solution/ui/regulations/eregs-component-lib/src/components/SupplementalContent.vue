@@ -14,7 +14,11 @@ import {
     getSectionsRecursive,
 } from "utilities/utils";
 
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
 import ContextBanners from "./reader-sidebar/ContextBanners.vue";
+import PolicyResultsList from "spaComponents/subjects/PolicyResultsList.vue";
+import ShowMoreButton from "./ShowMoreButton.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
@@ -52,6 +56,7 @@ provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "reader-view");
 
 const categories = ref([]);
+const resultsList = ref([]);
 const isFetching = ref(true);
 const selectedPart = ref(undefined);
 const resourceCount = ref(0);
@@ -63,49 +68,6 @@ const activePart = computed(() => {
         return selectedPart.value;
     }
     return `Subpart ${props.subparts[0]}`;
-});
-
-watch(
-    () => props.subparts,
-    () => {
-        categories.value = [];
-        isFetching.value = true;
-        fetchContent();
-    }
-);
-
-watch(selectedPart, () => {
-    categories.value = [];
-    isFetching.value = true;
-    if (selectedPart.value) {
-        fetchContent(
-            `citations=${props.title}.${props.part}.${
-                selectedPart.value.split(".")[1]
-            }`
-        );
-    } else {
-        fetchContent();
-    }
-});
-
-onMounted(() => {
-    if (window.location.hash) {
-        location.value = parseHash(window.location.hash);
-        fetchContent(location.value);
-    } else {
-        fetchContent();
-    }
-    window.addEventListener("hashchange", handleHashChange);
-
-    eventbus.on(EventCodes.SetSection, (args) => {
-        selectedPart.value = args.section;
-    });
-    categories.value = getDefaultCategories();
-});
-
-onUnmounted(() => {
-    eventbus.off(EventCodes.SetSection);
-    window.removeEventListener("hashchange", handleHashChange);
 });
 
 const handleHashChange = () => {
@@ -137,56 +99,6 @@ const parseHash = (locationHash) => {
     } else {
         selectedPart.value = undefined;
         return "";
-    }
-};
-
-const fetchContent = async (location) => {
-    try {
-        // Page size is set to 1000 to attempt to get all resources.
-        // Defualt page size of 100 was omitting resources from the right sidebar.
-        // Right now no single subpart hits this number so this shouldn't be an issue
-
-        let response = "";
-        if (location) {
-            response = await getSupplementalContent({
-                apiUrl: props.apiUrl,
-                builtCitationString: location,
-                pageSize: 1000,
-            });
-        }
-        await getPartDictionary();
-
-        const results = await Promise.all([
-            getCategories(props.apiUrl),
-            getSupplementalContent({
-                apiUrl: props.apiUrl,
-                partDict: partDict.value,
-                pageSize: 1000,
-            }),
-        ]);
-
-        const categoryData = results[0];
-        const subpartResponse = results[1];
-
-        resourceCount.value = subpartResponse.count;
-
-        if (response !== "") {
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: response.results,
-            });
-        } else {
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: subpartResponse.results,
-            });
-        }
-    } catch (error) {
-        console.error(error);
-    } finally {
-        isFetching.value = false;
     }
 };
 
@@ -261,6 +173,116 @@ const sortOptions = ref([
     { method: "date", label: "Oldest" },
 ]);
 
+const fetchContent = async (location, sort = "default") => {
+    console.info("fetching content with location", location, "and sort method", sort);
+    try {
+        // Page size is set to 1000 to attempt to get all resources.
+        // Defualt page size of 100 was omitting resources from the right sidebar.
+        // Right now no single subpart hits this number so this shouldn't be an issue
+
+        let response = "";
+        if (location) {
+            response = await getSupplementalContent({
+                apiUrl: props.apiUrl,
+                builtCitationString: location,
+                pageSize: 1000,
+            });
+        }
+        await getPartDictionary();
+
+        const results = await Promise.all([
+            getCategories(props.apiUrl),
+            getSupplementalContent({
+                apiUrl: props.apiUrl,
+                partDict: partDict.value,
+                pageSize: 1000,
+            }),
+        ]);
+
+        const categoryData = results[0];
+        const subpartResponse = results[1];
+
+        resourceCount.value = subpartResponse.count;
+
+        if (response !== "") {
+            resultsList.value = response.results;
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: categoryData.results,
+                resources: response.results,
+            });
+        } else {
+            resultsList.value = subpartResponse.results;
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: categoryData.results,
+                resources: subpartResponse.results,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isFetching.value = false;
+    }
+};
+
+onMounted(() => {
+    if (window.location.hash) {
+        location.value = parseHash(window.location.hash);
+        fetchContent(location.value);
+    } else {
+        fetchContent();
+    }
+    window.addEventListener("hashchange", handleHashChange);
+
+    eventbus.on(EventCodes.SetSection, (args) => {
+        selectedPart.value = args.section;
+    });
+    categories.value = getDefaultCategories();
+});
+
+onUnmounted(() => {
+    eventbus.off(EventCodes.SetSection);
+    window.removeEventListener("hashchange", handleHashChange);
+});
+
+watch(
+    () => props.subparts,
+    () => {
+        categories.value = [];
+        isFetching.value = true;
+        fetchContent();
+    }
+);
+
+watch(selectedPart, () => {
+    categories.value = [];
+    isFetching.value = true;
+    if (selectedPart.value) {
+        fetchContent(
+            `citations=${props.title}.${props.part}.${
+                selectedPart.value.split(".")[1]
+            }`
+        );
+    } else {
+        fetchContent();
+    }
+});
+
+watch(selectedSortMethod, (newValue) => {
+    categories.value = [];
+    isFetching.value = true;
+    if (selectedPart.value) {
+        fetchContent(
+            `citations=${props.title}.${props.part}.${
+                selectedPart.value.split(".")[1]
+            }`,
+            newValue
+        );
+    } else {
+        fetchContent(undefined, newValue);
+    }
+});
 </script>
 
 <template>
@@ -292,19 +314,32 @@ const sortOptions = ref([
         </div>
         <div class="supplemental-content-container">
             Current sort method: {{ selectedSortMethod }}
-            <supplemental-content-category
-                v-for="category in categories"
-                :key="category.name"
-                :name="category.name"
-                :subcategory="false"
-                :description="category.description"
-                :supplemental_content="category.supplemental_content"
-                :subcategories="category.subcategories"
-                :is-fetching="isFetching"
-                :is-fr-link-category="category.is_fr_link_category"
-                :show-if-empty="category.show_if_empty"
-            />
-            <simple-spinner v-if="isFetching" />
+            <template v-if="selectedSortMethod === 'default'">
+                <supplemental-content-category
+                    v-for="category in categories"
+                    :key="category.name"
+                    :name="category.name"
+                    :subcategory="false"
+                    :description="category.description"
+                    :supplemental_content="category.supplemental_content"
+                    :subcategories="category.subcategories"
+                    :is-fetching="isFetching"
+                    :is-fr-link-category="category.is_fr_link_category"
+                    :show-if-empty="category.show_if_empty"
+                />
+                <simple-spinner v-if="isFetching" />
+            </template>
+            <template v-else>
+                {{ resultsList.length }} results found.
+                <PolicyResultsList
+                    :api-url="apiUrl"
+                    :categories="categories"
+                    :home-url="homeUrl"
+                    :results-list="resultsList"
+                    collapse-subjects
+                />
+                <simple-spinner v-if="isFetching" />
+            </template>
         </div>
     </div>
     <slot name="authed-documents" :sort-method="selectedSortMethod" />
