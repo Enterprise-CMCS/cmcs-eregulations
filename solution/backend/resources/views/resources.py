@@ -18,11 +18,14 @@ from resources.models import (
     AbstractInternalResource,
     AbstractPublicResource,
     AbstractResource,
+    Act,
+    ActCitation,
     FederalRegisterLink,
     InternalFile,
     InternalLink,
     PublicLink,
     Subject,
+    UscCitation,
 )
 from resources.serializers import (
     AbstractResourceSerializer,
@@ -37,8 +40,12 @@ from resources.serializers import (
     StringListSerializer,
 )
 from resources.utils import (
+    ACT_CITATION_FILTER_PARAMETER,
     CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
+    get_act_citation_filter,
     get_citation_filter,
+    get_usc_citation_filter,
     string_to_bool,
 )
 
@@ -72,6 +79,8 @@ class ResourceCountPagination(ViewSetPagination):
 
 RESOURCE_ENDPOINT_PARAMETERS = [
     CITATION_FILTER_PARAMETER,
+    ACT_CITATION_FILTER_PARAMETER,
+    USC_CITATION_FILTER_PARAMETER,
     OpenApiParameter(
         name="categories",
         type=OpenApiTypes.STR,
@@ -127,11 +136,17 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
 
     def get_queryset(self):
         citations = self.request.GET.getlist("citations")
+        act_citations = self.request.GET.getlist("act_citations")
+        usc_citations = self.request.GET.getlist("usc_citations")
         categories = self.request.GET.getlist("categories")
         subjects = self.request.GET.getlist("subjects")
         group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
 
         citation_prefetch = AbstractCitation.objects.select_subclasses()
+        statute_citation_prefetch = ActCitation.objects.prefetch_related(
+            Prefetch("act", Act.objects.all()),
+        )
+        usc_citation_prefetch = UscCitation.objects.all()
         subject_prefetch = Subject.objects.all()
         category_prefetch = AbstractCategory.objects.select_subclasses().prefetch_related(
             Prefetch("parent", AbstractCategory.objects.select_subclasses()),
@@ -140,6 +155,8 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
         query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
             Prefetch("category", category_prefetch),
             Prefetch("cfr_citations", citation_prefetch),
+            Prefetch("act_citations", statute_citation_prefetch),
+            Prefetch("usc_citations", usc_citation_prefetch),
             Prefetch("subjects", subject_prefetch),
         )
 
@@ -154,19 +171,27 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
                 Prefetch("related_resources", AbstractResource.objects.filter(approved=True).prefetch_related(
                     Prefetch("category", category_prefetch),
                     Prefetch("cfr_citations", citation_prefetch),
+                    Prefetch("act_citations", statute_citation_prefetch),
+                    Prefetch("usc_citations", usc_citation_prefetch),
                     Prefetch("subjects", subject_prefetch),
                 ).order_by(F("date").desc(nulls_last=True)).select_subclasses()),
             ).filter(Q(group_parent=True) | Q(related_resources__isnull=True))
             citation_prefix = "related_citations__"
+            act_citation_prefix = "related_act_citations__"
+            usc_citation_prefix = "related_usc_citations__"
             category_prefix = "related_categories__"
             subject_prefix = "related_subjects__"
         else:
             citation_prefix = "cfr_citations__"
+            act_citation_prefix = "act_citations__"
+            usc_citation_prefix = "usc_citations__"
             category_prefix = "category__"
             subject_prefix = "subjects__"
 
         # Filter by citations
         query = query.filter(get_citation_filter(citations, citation_prefix))
+        query = query.filter(get_act_citation_filter(act_citations, act_citation_prefix))
+        query = query.filter(get_usc_citation_filter(usc_citations, usc_citation_prefix))
 
         # Filter by categories (both parent and subcategories) if the categories array is present
         if categories:

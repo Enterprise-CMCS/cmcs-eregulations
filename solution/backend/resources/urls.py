@@ -1,6 +1,8 @@
 from django.urls import path
 
 from resources.views import (
+    ActCitationViewSet,
+    ActViewSet,
     CitationViewSet,
     ContextBannersViewSet,
     FederalRegisterLinksNumberViewSet,
@@ -19,6 +21,7 @@ from resources.views import (
     SectionViewSet,
     SubjectViewSet,
     SubpartViewSet,
+    UscCitationViewSet,
 )
 
 urlpatterns = [
@@ -71,6 +74,15 @@ urlpatterns = [
         "get": "list",
     })),
     path("citations/subparts", SubpartViewSet.as_view({
+        "get": "list",
+    })),
+    path("act_citations", ActCitationViewSet.as_view({
+        "get": "list",
+    })),
+    path("usc_citations", UscCitationViewSet.as_view({
+        "get": "list",
+    })),
+    path("acts", ActViewSet.as_view({
         "get": "list",
     })),
 ]

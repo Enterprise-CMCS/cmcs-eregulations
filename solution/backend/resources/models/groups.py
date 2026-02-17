@@ -75,6 +75,8 @@ def update_related_resources(resource, first=True):
         related_resources = AbstractResource.objects.filter(resource_groups__in=new_groups)
         related_aggregates = related_resources.aggregate(
             all_citations=ArrayAgg("cfr_citations", distinct=True, filter=Q(cfr_citations__isnull=False), default=Value([])),
+            all_act_citations=ArrayAgg("act_citations", distinct=True, filter=Q(act_citations__isnull=False), default=Value([])),
+            all_usc_citations=ArrayAgg("usc_citations", distinct=True, filter=Q(usc_citations__isnull=False), default=Value([])),
             all_categories=ArrayAgg("category", distinct=True, filter=Q(category__isnull=False), default=Value([])),
             all_subjects=ArrayAgg("subjects", distinct=True, filter=Q(subjects__isnull=False), default=Value([])),
         )
@@ -83,6 +85,8 @@ def update_related_resources(resource, first=True):
         # Set related_X fields for this resource
         resource.related_resources.set(related_resources)
         resource.related_citations.set(related_aggregates["all_citations"])
+        resource.related_act_citations.set(related_aggregates["all_act_citations"])
+        resource.related_usc_citations.set(related_aggregates["all_usc_citations"])
         resource.related_categories.set(related_aggregates["all_categories"])
         resource.related_subjects.set(related_aggregates["all_subjects"])
     else:
@@ -90,6 +94,8 @@ def update_related_resources(resource, first=True):
         # We must do this for filtering purposes when `group_resources=true` on resource endpoints.
         resource.related_resources.clear()
         resource.related_citations.set(resource.cfr_citations.all())
+        resource.related_act_citations.set(resource.act_citations.all())
+        resource.related_usc_citations.set(resource.usc_citations.all())
         resource.related_categories.set([resource.category] if resource.category else [])
         resource.related_subjects.set(resource.subjects.all())
 
