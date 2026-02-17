@@ -12,7 +12,7 @@ import {
 
 import useSearchResults from "composables/searchResults.js";
 
-import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
+//import PolicyResults from "spaComponents/subjects/PolicyResults.vue";
 import SimpleSpinner from "../SimpleSpinner.vue";
 import SupplementalContentCategory from "../SupplementalContentCategory.vue";
 
@@ -188,11 +188,12 @@ watch(() => props.sortMethod, (newValue) => {
                 />
             </template>
             <template v-else>
-                <PolicyResults
+                Policy Results here
+                <!--PolicyResults
                     :categories="internalDocuments.categories"
                     :results="internalDocuments.results"
                     collapse-subjects
-                />
+                /-->
             </template>
         </template>
     </div>
