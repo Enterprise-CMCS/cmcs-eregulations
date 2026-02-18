@@ -7,7 +7,13 @@ import lodashGet from "lodash/get";
 import lodashKeys from "lodash/keys";
 import lodashMap from "lodash/map";
 
-import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
+import {
+    createLastUpdatedDates,
+    citationStringFromPartDict,
+    delay,
+    niceDate,
+    parseError
+} from "./utils";
 
 let config = {
     fetchMode: "cors",
@@ -374,18 +380,8 @@ const getSupplementalContent = async ({
     } else if (builtCitationString !== "") {
         sString = `${sString}&${builtCitationString}`;
     } else {
-        Object.keys(partDict).forEach((partKey) => {
-            const part = partDict[partKey];
-            part.subparts.forEach((subPart) => {
-                sString = `${sString}&citations=${part.title}.${partKey}.${subPart}`;
-            });
-            part.sections.forEach((section) => {
-                sString = `${sString}&citations=${part.title}.${partKey}.${section}`;
-            });
-            if (part.sections.length === 0 && part.subparts.length === 0) {
-                sString = `${sString}&citations=${part.title}.${partKey}`;
-            }
-        });
+        sString = citationStringFromPartDict(partDict);
+        console.log("sstring", sString);
     }
 
     sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
