@@ -9,10 +9,14 @@ import {
     getChildTOC,
 } from "utilities/api";
 import {
+    citationStringFromPartDict,
     EventCodes,
     formatResourceCategories,
+    getRequestParams,
     getSectionsRecursive,
 } from "utilities/utils";
+
+import useSearchResults from "composables/searchResults.js";
 
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
@@ -54,6 +58,8 @@ const props = defineProps({
 
 provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "reader-view");
+
+const { policyDocList, getDocList } = useSearchResults();
 
 const categories = ref([]);
 const resultsList = ref([]);
@@ -174,7 +180,7 @@ const sortOptions = ref([
 ]);
 
 const fetchContent = async (location, sort = "default") => {
-    console.info("fetching content with location", location, "and sort method", sort);
+    isFetching.value = true;
     try {
         // Page size is set to 1000 to attempt to get all resources.
         // Defualt page size of 100 was omitting resources from the right sidebar.
@@ -182,29 +188,51 @@ const fetchContent = async (location, sort = "default") => {
 
         let response = "";
         if (location) {
-            response = await getSupplementalContent({
-                apiUrl: props.apiUrl,
-                builtCitationString: location,
-                pageSize: 1000,
-            });
+            // it looks like we're getting a count here
+            if (sort === "default") {
+                response = await getSupplementalContent({
+                    apiUrl: props.apiUrl,
+                    builtCitationString: location,
+                    pageSize: 1000,
+                })
+
+            } else {
+                await getDocList({
+                    apiUrl: props.apiUrl,
+                    forceQuerySearch: true,
+                    data: `${location}&${getRequestParams(
+                        { queryParams: { type: "external", sort } }
+                    )}`
+                })
+                response = policyDocList.value;
+            }
         }
+
         await getPartDictionary();
 
-        const results = await Promise.all([
-            getCategories(props.apiUrl),
-            getSupplementalContent({
+        const resultsPromise = sort === "default"
+            ? getSupplementalContent({
                 apiUrl: props.apiUrl,
                 partDict: partDict.value,
                 pageSize: 1000,
-            }),
+            })
+            : getDocList({
+                apiUrl: props.apiUrl,
+                forceQuerySearch: true,
+                data: `${citationStringFromPartDict(partDict.value)}&${getRequestParams({ queryParams: { type: "external", sort } })}`,
+            });
+
+        const results = await Promise.all([
+            getCategories(props.apiUrl),
+            resultsPromise,
         ]);
 
         const categoryData = results[0];
-        const subpartResponse = results[1];
+        const subpartResponse = sort === "default" ? results[1] : policyDocList.value;
 
         resourceCount.value = subpartResponse.count;
 
-        if (response !== "") {
+        if (response) {
             resultsList.value = response.results;
             categories.value = formatResourceCategories({
                 apiUrl: props.apiUrl,
@@ -250,14 +278,12 @@ watch(
     () => props.subparts,
     () => {
         categories.value = [];
-        isFetching.value = true;
         fetchContent();
     }
 );
 
 watch(selectedPart, () => {
     categories.value = [];
-    isFetching.value = true;
     if (selectedPart.value) {
         fetchContent(
             `citations=${props.title}.${props.part}.${
@@ -271,7 +297,6 @@ watch(selectedPart, () => {
 
 watch(selectedSortMethod, (newValue) => {
     categories.value = [];
-    isFetching.value = true;
     if (selectedPart.value) {
         fetchContent(
             `citations=${props.title}.${props.part}.${
@@ -308,7 +333,7 @@ watch(selectedSortMethod, (newValue) => {
                     data-testid="sort-select"
                     :item-props="itemProps"
                     :items="sortOptions"
-                    :disabled="loading"
+                    :disabled="isFetching"
                 />
             </label>
         </div>
@@ -330,15 +355,15 @@ watch(selectedSortMethod, (newValue) => {
                 <simple-spinner v-if="isFetching" />
             </template>
             <template v-else>
-                {{ resultsList.length }} results found.
+                <simple-spinner v-if="isFetching" />
                 <PolicyResultsList
+                    v-else
                     :api-url="apiUrl"
                     :categories="categories"
                     :home-url="homeUrl"
                     :results-list="resultsList"
                     collapse-subjects
                 />
-                <simple-spinner v-if="isFetching" />
             </template>
         </div>
     </div>

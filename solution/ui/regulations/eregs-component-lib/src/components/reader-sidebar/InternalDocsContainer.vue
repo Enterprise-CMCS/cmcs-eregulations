@@ -52,12 +52,12 @@ const getSectionNumber = (hash) => {
 
 const selectedSection = ref(getSectionNumber(window.location.hash));
 
-const getCategories = async () => {
+const getCategories = async (apiUrl) => {
     let categories = [];
 
     try {
         categories = await getInternalCategories({
-            apiUrl: props.apiUrl,
+            apiUrl,
         });
     } catch (error) {
         console.error(error);
@@ -95,25 +95,20 @@ const getDocuments = async ({ section, sort = "default" }) => {
     }
 
     try {
-        const categoriesPromise = [getCategories()];
         const resultsPromise = props.sortMethod === "default"
-            ? [
-                getInternalDocs({
-                    apiUrl: props.apiUrl,
-                    requestParams: `${locationString}`,
-                }),
-            ]
-            : [
-                getDocList({
-                    apiUrl: props.apiUrl,
-                    forceQuerySearch: true,
-                    data: `${locationString}&${getRequestParams({ queryParams: { type: "internal", sort: props.sortMethod } })}`,
-                }),
-            ];
+            ? getInternalDocs({
+                apiUrl: props.apiUrl,
+                requestParams: `${locationString}`,
+            })
+            : getDocList({
+                apiUrl: props.apiUrl,
+                forceQuerySearch: true,
+                data: `${locationString}&${getRequestParams({ queryParams: { type: "internal", sort: props.sortMethod } })}`,
+            })
 
         const resultsArr = await Promise.all([
-            ...categoriesPromise,
-            ...resultsPromise,
+            getCategories(props.apiUrl),
+            resultsPromise,
         ]);
 
         const categories = resultsArr[0];
@@ -158,7 +153,7 @@ onMounted(() => {
     eventbus.on(EventCodes.SetSection, sectionChangeHandler);
     eventbus.on(EventCodes.ClearSections, clearSectionsHandler);
 
-    getCategories();
+    getCategories(props.apiUrl);
     getDocuments({ section: selectedSection.value });
 });
 
