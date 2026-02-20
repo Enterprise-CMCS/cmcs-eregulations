@@ -963,8 +963,41 @@ const getFullComputedHeight = (element) => {
     return element.offsetHeight + marginTop + marginBottom;
 }
 
+/**
+ * Generates a citation string from a part dictionary object.
+ * @param {Object} partDict - An object where keys are part numbers and values are objects containing part title, subparts, and sections.
+ * @returns {string} - A string in the format `&citations=PartTitle.PartNumber.Subpart` or `&citations=PartTitle.PartNumber.Section` for each subpart and section, concatenated together.
+*/
+const citationStringFromPartDict = (partDict) => {
+    let citationString = "";
+
+    Object.keys(partDict).forEach((partKey) => {
+        const part = partDict[partKey];
+
+        if (part.sections.length === 0 && part.subparts.length === 0) {
+            citationString = `${citationString}&citations=${part.title}.${partKey}`;
+        } else {
+            if (part.subparts.length > 0) {
+                part.subparts
+                    .forEach((subPart) => {
+                        citationString = `${citationString}&citations=${part.title}.${partKey}.${subPart}`;
+                    });
+            }
+            if (part.sections.length > 0) {
+                part.sections
+                    .forEach((section) => {
+                        citationString = `${citationString}&citations=${part.title}.${partKey}.${section}`;
+                    });
+            }
+        }
+    });
+
+    return citationString;
+};
+
 export {
     addMarks,
+    citationStringFromPartDict,
     compressQueryString,
     compressRouteQuery,
     createLastUpdatedDates,

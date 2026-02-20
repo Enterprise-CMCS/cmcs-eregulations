@@ -13,6 +13,7 @@ function useSearchResults({ getSemanticSearchResults, getContentWithoutQuery }) 
 
     const getDocList = async ({
         apiUrl,
+        forceQuerySearch = false,
         pageSize,
         requestParamString = "",
         query,
@@ -27,7 +28,7 @@ function useSearchResults({ getSemanticSearchResults, getContentWithoutQuery }) 
         let contentList;
 
         try {
-            if (query) {
+            if (query || forceQuerySearch) {
                 contentList = await getSemanticSearchResults({
                     apiUrl,
                     data: `${data}&page_size=${pageSize}`,
