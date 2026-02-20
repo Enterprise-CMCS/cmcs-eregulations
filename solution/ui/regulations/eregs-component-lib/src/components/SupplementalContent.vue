@@ -404,7 +404,7 @@ watch(selectedSortMethod, (newValue) => {
     <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
-            v-if="selectedPart && subparts.length === 1"
+            v-if="selectedPart && subparts.length === 1 && !isFetching"
             class="show-subpart-resources"
             data-testid="view-all-subpart-resources"
             @click="clearSection"
