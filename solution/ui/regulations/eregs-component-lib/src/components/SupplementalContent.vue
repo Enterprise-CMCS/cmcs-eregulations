@@ -305,7 +305,7 @@ watch(selectedSortMethod, (newValue) => {
             newValue
         );
     } else {
-        fetchContent(undefined, newValue);
+        fetchContent(location.value, newValue);
     }
 });
 </script>
@@ -356,14 +356,48 @@ watch(selectedSortMethod, (newValue) => {
             </template>
             <template v-else>
                 <simple-spinner v-if="isFetching" />
-                <PolicyResultsList
-                    v-else
-                    :api-url="apiUrl"
-                    :categories="categories"
-                    :home-url="homeUrl"
-                    :results-list="resultsList"
-                    collapse-subjects
-                />
+                <template v-else>
+                    <PolicyResultsList
+                        :api-url="apiUrl"
+                        :categories="categories"
+                        :home-url="homeUrl"
+                        :results-list="resultsList.slice(0, 5)"
+                        collapse-subjects
+                    />
+                    <template v-if="resultsList.length > 5">
+                        <CollapseButton
+                            name="external-chronological-collapse"
+                            state="collapsed"
+                            class="category-title"
+                        >
+                            <template #expanded>
+                                <ShowMoreButton
+                                    button-text="- Show Less"
+                                    :count="resultsList.length"
+                                />
+                            </template>
+                            <template #collapsed>
+                                <ShowMoreButton
+                                    button-text="+ Show More"
+                                    :count="resultsList.length"
+                                />
+                            </template>
+                        </CollapseButton>
+                        <Collapsible
+                            name="external-chronological-collapse"
+                            state="collapsed"
+                            class="collapse-content show-more-content"
+                        >
+                            <PolicyResultsList
+                                :api-url="apiUrl"
+                                :categories="categories"
+                                :home-url="homeUrl"
+                                :results-list="resultsList.slice(5)"
+                                collapse-subjects
+                            />
+                        </Collapsible>
+                    </template>
+                </template>
             </template>
         </div>
     </div>
