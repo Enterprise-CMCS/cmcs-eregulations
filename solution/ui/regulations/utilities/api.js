@@ -381,7 +381,6 @@ const getSupplementalContent = async ({
         sString = `${sString}&${builtCitationString}`;
     } else {
         sString = citationStringFromPartDict(partDict);
-        console.log("sstring", sString);
     }
 
     sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;

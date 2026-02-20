@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
+import clone from "lodash/clone";
 
 import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
 
@@ -62,7 +63,10 @@ provide("currentRouteName", "reader-view");
 const { policyDocList, getDocList } = useSearchResults();
 
 const categories = ref([]);
-const resultsList = ref([]);
+const publicDocuments = ref({
+    results: [],
+    categories: [],
+});
 const isFetching = ref(true);
 const selectedPart = ref(undefined);
 const resourceCount = ref(0);
@@ -186,67 +190,69 @@ const fetchContent = async (location, sort = "default") => {
         // Defualt page size of 100 was omitting resources from the right sidebar.
         // Right now no single subpart hits this number so this shouldn't be an issue
 
-        let response = "";
-        if (location) {
-            // it looks like we're getting a count here
-            if (sort === "default") {
-                response = await getSupplementalContent({
-                    apiUrl: props.apiUrl,
-                    builtCitationString: location,
-                    pageSize: 1000,
-                })
+        // get categories and part dict in parallel since both are needed
+        // before we can render anything and they don't depend on each other
+        const prefetchNeededValues = await Promise.all([
+            getCategories(props.apiUrl),
+            getPartDictionary(),
+        ]);
 
-            } else {
-                await getDocList({
-                    apiUrl: props.apiUrl,
-                    forceQuerySearch: true,
-                    data: `${location}&${getRequestParams(
-                        { queryParams: { type: "external", sort } }
-                    )}`
-                })
-                response = policyDocList.value;
-            }
-        }
+        const categoryData = prefetchNeededValues[0];
 
-        await getPartDictionary();
-
-        const resultsPromise = sort === "default"
-            ? getSupplementalContent({
+        // Get subpart level counts
+        const fetchSubpartResults = sort === "default"
+            ? await getSupplementalContent({
                 apiUrl: props.apiUrl,
                 partDict: partDict.value,
                 pageSize: 1000,
             })
-            : getDocList({
+            : await getDocList({
                 apiUrl: props.apiUrl,
                 forceQuerySearch: true,
                 data: `${citationStringFromPartDict(partDict.value)}&${getRequestParams({ queryParams: { type: "external", sort } })}`,
             });
 
-        const results = await Promise.all([
-            getCategories(props.apiUrl),
-            resultsPromise,
-        ]);
+        resourceCount.value = sort === "default"
+            ? fetchSubpartResults.count
+            : clone(policyDocList.value.count);
 
-        const categoryData = results[0];
-        const subpartResponse = sort === "default" ? results[1] : policyDocList.value;
-
-        resourceCount.value = subpartResponse.count;
-
-        if (response) {
-            resultsList.value = response.results;
+        // Early return to get display results if default sort without location
+        if (!location && sort === "default") {
+            publicDocuments.value.results = fetchSubpartResults.results;
             categories.value = formatResourceCategories({
                 apiUrl: props.apiUrl,
                 categories: categoryData.results,
-                resources: response.results,
+                resources: fetchSubpartResults.results,
             });
-        } else {
-            resultsList.value = subpartResponse.results;
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: subpartResponse.results,
-            });
+            return;
         }
+
+        // otherwise, conditions to get display results
+        let response;
+        if (sort === "default") {
+            response = await getSupplementalContent({
+                apiUrl: props.apiUrl,
+                builtCitationString: location,
+                pageSize: 1000,
+            })
+        } else {
+            await getDocList({
+                apiUrl: props.apiUrl,
+                forceQuerySearch: true,
+                data: `${location}&${getRequestParams(
+                    { queryParams: { type: "external", sort } }
+                )}`
+            })
+            response = policyDocList.value;
+        }
+
+        publicDocuments.value.results = response.results;
+        publicDocuments.value.categories = categoryData.results;
+        categories.value = formatResourceCategories({
+            apiUrl: props.apiUrl,
+            categories: categoryData.results,
+            resources: response.results,
+        });
     } catch (error) {
         console.error(error);
     } finally {
@@ -359,12 +365,12 @@ watch(selectedSortMethod, (newValue) => {
                 <template v-else>
                     <PolicyResultsList
                         :api-url="apiUrl"
-                        :categories="categories"
+                        :categories="publicDocuments.categories"
                         :home-url="homeUrl"
-                        :results-list="resultsList.slice(0, 5)"
+                        :results-list="publicDocuments.results.slice(0, 5)"
                         collapse-subjects
                     />
-                    <template v-if="resultsList.length > 5">
+                    <template v-if="publicDocuments.results.length > 5">
                         <CollapseButton
                             name="external-chronological-collapse"
                             state="collapsed"
@@ -373,13 +379,13 @@ watch(selectedSortMethod, (newValue) => {
                             <template #expanded>
                                 <ShowMoreButton
                                     button-text="- Show Less"
-                                    :count="resultsList.length"
+                                    :count="publicDocuments.results.length"
                                 />
                             </template>
                             <template #collapsed>
                                 <ShowMoreButton
                                     button-text="+ Show More"
-                                    :count="resultsList.length"
+                                    :count="publicDocuments.results.length"
                                 />
                             </template>
                         </CollapseButton>
@@ -390,9 +396,9 @@ watch(selectedSortMethod, (newValue) => {
                         >
                             <PolicyResultsList
                                 :api-url="apiUrl"
-                                :categories="categories"
+                                :categories="publicDocuments.categories"
                                 :home-url="homeUrl"
-                                :results-list="resultsList.slice(5)"
+                                :results-list="publicDocuments.results.slice(5)"
                                 collapse-subjects
                             />
                         </Collapsible>
