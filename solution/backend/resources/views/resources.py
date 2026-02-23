@@ -108,6 +108,15 @@ RESOURCE_ENDPOINT_PARAMETERS = [
         required=False,
         default=True,
     ),
+    OpenApiParameter(
+        name="sort",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Field to sort by, with optional '-' prefix for descending. "
+                    "Defaults to '-date'.",
+        required=False,
+        default="-date",
+    ),
 ] + ViewSetPagination.QUERY_PARAMETERS
 
 
