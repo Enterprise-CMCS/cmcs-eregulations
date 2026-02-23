@@ -360,7 +360,7 @@ const getRegSearchResults = async ({
  * @param {string} [options.sortMethod="-date"] - Method by which to sort results.
  * @param {string} [options.builtCitationString=""] - string of citations on which to filter
  * @param {string} [options.apiUrl=""] - API base url passed in from Django template
- * @param {string} [options.documentType="/public"] - document type to filter by. Ex: "public" or "internal"
+ * @param {string} [options.documentType="public"] - document type to filter by. Ex: "public" or "internal"
  * @returns {Promise<Object>} - Promise that contains supplemental content when fulfilled
  **/
 const getSupplementalContent = async ({
@@ -372,7 +372,7 @@ const getSupplementalContent = async ({
     pageSize = 100,
     sortMethod = "-date",
     builtCitationString = "",
-    documentType = "/public",
+    documentType = "public",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
@@ -387,7 +387,7 @@ const getSupplementalContent = async ({
 
     sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
 
-    return await httpApiGet(`${apiUrl}resources${documentType}?${sString}`);
+    return await httpApiGet(`${apiUrl}resources/?${documentType}${sString}`);
 };
 
 /**

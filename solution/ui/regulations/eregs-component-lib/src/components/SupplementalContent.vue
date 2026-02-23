@@ -221,7 +221,7 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
         const countsPromise = getSupplementalContent({
             ...sharedParamsObj,
             partDict: partDict.value,
-            documentType: props.isAuthenticated ? "" : "/public",
+            documentType: props.isAuthenticated ? "" : "public",
         });
 
         const contentResponse = await Promise.all([

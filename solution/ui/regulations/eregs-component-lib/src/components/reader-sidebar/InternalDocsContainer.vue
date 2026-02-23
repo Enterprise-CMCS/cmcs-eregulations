@@ -7,7 +7,6 @@ import {
     EventCodes,
     formatResourceCategories,
     getCurrentSectionFromHash,
-    getRequestParams,
 } from "utilities/utils";
 
 import CollapseButton from "../CollapseButton.vue";
