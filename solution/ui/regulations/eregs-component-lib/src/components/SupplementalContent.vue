@@ -75,7 +75,7 @@ const activePart = computed(() => {
 
 const handleHashChange = () => {
     location.value = parseHash(window.location.hash);
-    fetchContent(location.value);
+    fetchContent({ location: location.value });
 };
 
 const parseHash = (locationHash) => {
@@ -176,7 +176,7 @@ const sortOptions = ref([
     { method: "date", label: "Oldest" },
 ]);
 
-const fetchContent = async (location, sort = "default") => {
+const fetchContent = async ({ location, sort = "default" } = {}) => {
     isFetching.value = true;
     try {
         // Page size is set to 1000 to attempt to get all resources.
@@ -246,7 +246,7 @@ const fetchContent = async (location, sort = "default") => {
 onMounted(() => {
     if (window.location.hash) {
         location.value = parseHash(window.location.hash);
-        fetchContent(location.value);
+        fetchContent({ location: location.value });
     } else {
         fetchContent();
     }
@@ -274,11 +274,11 @@ watch(
 watch(selectedPart, () => {
     categories.value = [];
     if (selectedPart.value) {
-        fetchContent(
-            `citations=${props.title}.${props.part}.${
+        fetchContent({
+            location: `citations=${props.title}.${props.part}.${
                 selectedPart.value.split(".")[1]
             }`
-        );
+        });
     } else {
         fetchContent();
     }
@@ -287,14 +287,14 @@ watch(selectedPart, () => {
 watch(selectedSortMethod, (newValue) => {
     categories.value = [];
     if (selectedPart.value) {
-        fetchContent(
-            `citations=${props.title}.${props.part}.${
+        fetchContent({
+            location: `citations=${props.title}.${props.part}.${
                 selectedPart.value.split(".")[1]
             }`,
-            newValue
-        );
+            sort: newValue
+        });
     } else {
-        fetchContent(location.value, newValue);
+        fetchContent({ location: location.value, sort: newValue });
     }
 });
 </script>
