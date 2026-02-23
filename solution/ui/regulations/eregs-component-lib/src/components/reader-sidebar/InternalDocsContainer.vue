@@ -10,8 +10,6 @@ import {
     getRequestParams,
 } from "utilities/utils";
 
-import useSearchResults from "composables/searchResults.js";
-
 import CollapseButton from "../CollapseButton.vue";
 import Collapsible from "../Collapsible.vue";
 import PolicyResultsList from "spaComponents/subjects/PolicyResultsList.vue";
@@ -66,8 +64,6 @@ const getCategories = async (apiUrl) => {
     return categories;
 };
 
-const { policyDocList, getDocList } = useSearchResults();
-
 const internalDocuments = ref({
     results: [],
     categories: [],
@@ -94,27 +90,22 @@ const getDocuments = async ({ section, sort = "default" }) => {
         );
     }
 
+    if (sort !== "default") {
+        locationString = `${locationString}&sort=${sort}`;
+    }
+
     try {
-        const resultsPromise = props.sortMethod === "default"
-            ? getInternalDocs({
+        const resultsArr = await Promise.all([
+            getCategories(props.apiUrl),
+            getInternalDocs({
                 apiUrl: props.apiUrl,
                 requestParams: `${locationString}`,
             })
-            : getDocList({
-                apiUrl: props.apiUrl,
-                forceQuerySearch: true,
-                data: `${locationString}&${getRequestParams({ queryParams: { type: "internal", sort: props.sortMethod } })}`,
-            })
 
-        const resultsArr = await Promise.all([
-            getCategories(props.apiUrl),
-            resultsPromise,
         ]);
 
         const categories = resultsArr[0];
-        const documents = props.sortMethod === "default"
-            ? resultsArr[1]
-            : policyDocList.value;
+        const documents = resultsArr[1]
 
         if (sort === "default") {
             internalDocuments.value.results = formatResourceCategories({
