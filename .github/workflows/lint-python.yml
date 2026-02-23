@@ -14,17 +14,29 @@ jobs:
         with:
           submodules: true
 
-      # Build the Docker images
-      - name: Build Docker images
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # Install uv
+      - name: Install uv
         run: |
-          pushd solution
-          make local.docker
-          make text-extractor.build
+          python -m pip install --upgrade pip uv
+
+      # Lint the backend Python code
+      - name: Lint backend code
+        run: |
+          pushd solution/backend
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
           popd
 
-      # Run the unit tests in the Docker containers
-      - name: Run unit tests in Docker containers
+      # Lint the text-extractor Python code
+      - name: Lint text-extractor code
         run: |
-          pushd solution
-          make ruff
+          pushd solution/text-extractor
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
           popd
