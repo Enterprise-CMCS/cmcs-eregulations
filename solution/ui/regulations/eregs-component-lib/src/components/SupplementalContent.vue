@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
-import clone from "lodash/clone";
 
 import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
 
@@ -10,14 +9,10 @@ import {
     getChildTOC,
 } from "utilities/api";
 import {
-    citationStringFromPartDict,
     EventCodes,
     formatResourceCategories,
-    getRequestParams,
     getSectionsRecursive,
 } from "utilities/utils";
-
-import useSearchResults from "composables/searchResults.js";
 
 import CollapseButton from "./CollapseButton.vue";
 import Collapsible from "./Collapsible.vue";
@@ -59,8 +54,6 @@ const props = defineProps({
 
 provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "reader-view");
-
-const { policyDocList, getDocList } = useSearchResults();
 
 const categories = ref([]);
 const publicDocuments = ref({
@@ -194,65 +187,55 @@ const fetchContent = async (location, sort = "default") => {
         // before we can render anything and they don't depend on each other
         const prefetchNeededValues = await Promise.all([
             getCategories(props.apiUrl),
-            getPartDictionary(),
+            getPartDictionary(), // sets partDict ref
         ]);
 
         const categoryData = prefetchNeededValues[0];
 
+        publicDocuments.value.categories = categoryData.results;
+
+        const sortParam = sort === "default" ? "-date" : sort;
+
         // Get subpart level counts
-        const fetchSubpartResults = sort === "default"
-            ? await getSupplementalContent({
-                apiUrl: props.apiUrl,
-                partDict: partDict.value,
-                pageSize: 1000,
-            })
-            : await getDocList({
-                apiUrl: props.apiUrl,
-                forceQuerySearch: true,
-                data: `${citationStringFromPartDict(partDict.value)}&${getRequestParams({ queryParams: { type: "external", sort } })}`,
-            });
+        const fetchSubpartResults = await getSupplementalContent({
+            apiUrl: props.apiUrl,
+            partDict: partDict.value,
+            pageSize: 1000,
+            sortMethod: sortParam,
+        })
 
-        resourceCount.value = sort === "default"
-            ? fetchSubpartResults.count
-            : clone(policyDocList.value.count);
+        resourceCount.value = fetchSubpartResults.count;
 
-        // Early return to get display results if default sort without location
-        if (!location && sort === "default") {
+        // Early return to get display results if no location
+        if (!location) {
             publicDocuments.value.results = fetchSubpartResults.results;
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: fetchSubpartResults.results,
-            });
+
+            if (sort === "default") {
+                categories.value = formatResourceCategories({
+                    apiUrl: props.apiUrl,
+                    categories: categoryData.results,
+                    resources: fetchSubpartResults.results,
+                });
+            }
             return;
         }
 
-        // otherwise, conditions to get display results
-        let response;
-        if (sort === "default") {
-            response = await getSupplementalContent({
-                apiUrl: props.apiUrl,
-                builtCitationString: location,
-                pageSize: 1000,
-            })
-        } else {
-            await getDocList({
-                apiUrl: props.apiUrl,
-                forceQuerySearch: true,
-                data: `${location}&${getRequestParams(
-                    { queryParams: { type: "external", sort } }
-                )}`
-            })
-            response = policyDocList.value;
-        }
+        const response = await getSupplementalContent({
+            apiUrl: props.apiUrl,
+            builtCitationString: location,
+            pageSize: 1000,
+            sortMethod: sortParam,
+        })
 
         publicDocuments.value.results = response.results;
-        publicDocuments.value.categories = categoryData.results;
-        categories.value = formatResourceCategories({
-            apiUrl: props.apiUrl,
-            categories: categoryData.results,
-            resources: response.results,
-        });
+
+        if (sort === "default") {
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: categoryData.results,
+                resources: response.results,
+            });
+        }
     } catch (error) {
         console.error(error);
     } finally {
