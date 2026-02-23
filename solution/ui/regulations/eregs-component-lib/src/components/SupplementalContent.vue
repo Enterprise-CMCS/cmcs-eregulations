@@ -75,7 +75,7 @@ const activePart = computed(() => {
 
 const handleHashChange = () => {
     location.value = parseHash(window.location.hash);
-    fetchContent({ location: location.value });
+    selectedSortMethod.value = "default";
 };
 
 const parseHash = (locationHash) => {
