@@ -3,11 +3,28 @@ name: Lint Python Code
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-  ruff:
+  lint-python:
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: true
     steps:
-      - uses: actions/checkout@v6
-      - uses: chartboost/ruff-action@v1
+      # Checkout the code
+      - name: Checkout
+        uses: actions/checkout@v6
         with:
-          src: "./solution"
-          args: "check --preview"
+          submodules: true
+
+      # Build the Docker images
+      - name: Build Docker images
+        run: |
+          pushd solution
+          make local.docker
+          make text-extractor.build
+          popd
+
+      # Run the unit tests in the Docker containers
+      - name: Run unit tests in Docker containers
+        run: |
+          pushd solution
+          make ruff
+          popd
