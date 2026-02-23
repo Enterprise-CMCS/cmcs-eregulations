@@ -50,6 +50,11 @@ const props = defineProps({
             return [];
         },
     },
+    isAuthenticated: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 provide("homeUrl", props.homeUrl);
@@ -79,7 +84,10 @@ const handleHashChange = () => {
 };
 
 const parseHash = (locationHash) => {
-    if (window.location.hash === "#main-content") return "";
+    if (window.location.hash === "#main-content") {
+        selectedPart.value = "";
+        return "";
+    }
     if (locationHash.toLowerCase().includes("appendix")) {
         selectedPart.value = undefined;
         return "";
@@ -93,6 +101,7 @@ const parseHash = (locationHash) => {
     }
 
     if (Number.isNaN(section)) {
+        selectedPart.value = `§ ${section}`;
         return `citations=${props.title}.${props.part}.${section}`;
     }
 
@@ -191,49 +200,43 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
         ]);
 
         const categoryData = prefetchNeededValues[0];
-
         publicDocuments.value.categories = categoryData.results;
 
-        const sortParam = sort === "default" ? "-date" : sort;
-
-        // Get subpart level counts
-        const fetchSubpartResults = await getSupplementalContent({
+        const sharedParamsObj = {
             apiUrl: props.apiUrl,
-            partDict: partDict.value,
             pageSize: 1000,
-            sortMethod: sortParam,
-        })
-
-        resourceCount.value = fetchSubpartResults.count;
-
-        // Early return to get display results if no location
-        if (!location) {
-            publicDocuments.value.results = fetchSubpartResults.results;
-
-            if (sort === "default") {
-                categories.value = formatResourceCategories({
-                    apiUrl: props.apiUrl,
-                    categories: categoryData.results,
-                    resources: fetchSubpartResults.results,
-                });
-            }
-            return;
+            sortMethod: sort === "default" ? "-date" : sort,
         }
 
-        const response = await getSupplementalContent({
-            apiUrl: props.apiUrl,
-            builtCitationString: location,
-            pageSize: 1000,
-            sortMethod: sortParam,
-        })
+        const requestParamsObj = location
+            ? {
+                ...sharedParamsObj,
+                builtCitationString: location,
+            }
+            : {
+                ...sharedParamsObj,
+                partDict: partDict.value,
+            };
 
-        publicDocuments.value.results = response.results;
+        const countsPromise = getSupplementalContent({
+            ...sharedParamsObj,
+            partDict: partDict.value,
+            documentType: props.isAuthenticated ? "" : "/public",
+        });
+
+        const contentResponse = await Promise.all([
+            countsPromise,                            // subpart counts
+            getSupplementalContent(requestParamsObj), // display results
+        ]);
+
+        resourceCount.value = contentResponse[0].count;
+        publicDocuments.value.results = contentResponse[1].results;
 
         if (sort === "default") {
             categories.value = formatResourceCategories({
                 apiUrl: props.apiUrl,
                 categories: categoryData.results,
-                resources: response.results,
+                resources: publicDocuments.value.results,
             });
         }
     } catch (error) {
@@ -246,7 +249,6 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
 onMounted(() => {
     if (window.location.hash) {
         location.value = parseHash(window.location.hash);
-        fetchContent({ location: location.value });
     } else {
         fetchContent();
     }

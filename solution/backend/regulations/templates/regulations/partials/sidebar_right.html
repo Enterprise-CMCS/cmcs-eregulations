@@ -8,6 +8,7 @@
             title="{{ title }}"
             part="{{ reg_part }}"
             :subparts="{{ node_list.subparts }}"
+            :is-authenticated="{{ user.is_authenticated|yesno:'true,false' }}"
         >
             {% if user.is_authenticated %}
                 <template #public-label>
