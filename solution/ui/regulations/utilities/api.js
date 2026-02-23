@@ -357,7 +357,7 @@ const getRegSearchResults = async ({
  * @param {string} [options.q=""] - Search query string.
  * @param {number} [options.page=1] - Page number to retrieve.
  * @param {number} [options.pageSize=100] - Number of items to retrieve.
- * @param {string} [options.sortMethod="newest"] - Method by which to sort results.
+ * @param {string} [options.sortMethod="-date"] - Method by which to sort results.
  * @param {string} [options.builtCitationString=""] - string of citations on which to filter
  * @param {string} [options.apiUrl=""] - API base url passed in from Django template
  * @returns {Promise<Object>} - Promise that contains supplemental content when fulfilled
@@ -369,7 +369,7 @@ const getSupplementalContent = async ({
     q = "",
     page = 1,
     pageSize = 100,
-    sortMethod = "newest",
+    sortMethod = "-date",
     builtCitationString = "",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
