@@ -180,48 +180,50 @@ watch(() => props.sortMethod, (newValue) => {
                 />
             </template>
             <template v-else>
-                <PolicyResultsList
-                    :api-url="apiUrl"
-                    :categories="internalDocuments.categories"
-                    :home-url="homeUrl"
-                    :results-list="internalDocuments.results.slice(0, 5)"
-                    :show-doc-type-labels="false"
-                    collapse-subjects
-                />
-                <template v-if="internalDocuments.results.length > 5">
-                    <CollapseButton
-                        name="internal-chronological-collapse"
-                        state="collapsed"
-                        class="category-title"
-                    >
-                        <template #expanded>
-                            <ShowMoreButton
-                                button-text="- Show Less"
-                                :count="internalDocuments.results.length"
+                <div class="sort__list--chrono">
+                    <PolicyResultsList
+                        :api-url="apiUrl"
+                        :categories="internalDocuments.categories"
+                        :home-url="homeUrl"
+                        :results-list="internalDocuments.results.slice(0, 5)"
+                        :show-doc-type-labels="false"
+                        collapse-subjects
+                    />
+                    <template v-if="internalDocuments.results.length > 5">
+                        <CollapseButton
+                            name="internal-chronological-collapse"
+                            state="collapsed"
+                            class="category-title"
+                        >
+                            <template #expanded>
+                                <ShowMoreButton
+                                    button-text="- Show Less"
+                                    :count="internalDocuments.results.length"
+                                />
+                            </template>
+                            <template #collapsed>
+                                <ShowMoreButton
+                                    button-text="+ Show More"
+                                    :count="internalDocuments.results.length"
+                                />
+                            </template>
+                        </CollapseButton>
+                        <Collapsible
+                            name="internal-chronological-collapse"
+                            state="collapsed"
+                            class="collapse-content show-more-content"
+                        >
+                            <PolicyResultsList
+                                :api-url="apiUrl"
+                                :categories="internalDocuments.categories"
+                                :home-url="homeUrl"
+                                :results-list="internalDocuments.results.slice(5)"
+                                :show-doc-type-labels="false"
+                                collapse-subjects
                             />
-                        </template>
-                        <template #collapsed>
-                            <ShowMoreButton
-                                button-text="+ Show More"
-                                :count="internalDocuments.results.length"
-                            />
-                        </template>
-                    </CollapseButton>
-                    <Collapsible
-                        name="internal-chronological-collapse"
-                        state="collapsed"
-                        class="collapse-content show-more-content"
-                    >
-                        <PolicyResultsList
-                            :api-url="apiUrl"
-                            :categories="internalDocuments.categories"
-                            :home-url="homeUrl"
-                            :results-list="internalDocuments.results.slice(5)"
-                            :show-doc-type-labels="false"
-                            collapse-subjects
-                        />
-                    </Collapsible>
-                </template>
+                        </Collapsible>
+                    </template>
+                </div>
             </template>
         </template>
     </div>
