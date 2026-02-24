@@ -387,7 +387,7 @@ const getSupplementalContent = async ({
 
     sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
 
-    return await httpApiGet(`${apiUrl}resources/?${documentType}${sString}`);
+    return await httpApiGet(`${apiUrl}resources/${documentType}?${sString}`);
 };
 
 /**
