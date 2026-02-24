@@ -181,7 +181,11 @@ watch(() => props.sortMethod, (newValue) => {
             </template>
             <template v-else>
                 <div class="sort__list--chrono">
+                    <template v-if="internalDocuments.results.length === 0">
+                        <p class="no-results childless">No Results</p>
+                    </template>
                     <PolicyResultsList
+                        v-else
                         :api-url="apiUrl"
                         :categories="internalDocuments.categories"
                         :home-url="homeUrl"
