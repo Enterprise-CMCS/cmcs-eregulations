@@ -226,6 +226,10 @@
     }
 }
 
+.sort__list--chrono {
+    margin-top: var(--spacer-2);
+}
+
 .collapse-content {
     &.additional-rules .related-rule:first-child {
         padding: 0;

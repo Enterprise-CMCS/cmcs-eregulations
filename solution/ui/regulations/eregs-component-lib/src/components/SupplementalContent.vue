@@ -329,7 +329,6 @@ watch(selectedSortMethod, (newValue) => {
             </label>
         </div>
         <div class="supplemental-content-container">
-            Current sort method: {{ selectedSortMethod }}
             <template v-if="selectedSortMethod === 'default'">
                 <supplemental-content-category
                     v-for="category in categories"
@@ -346,49 +345,51 @@ watch(selectedSortMethod, (newValue) => {
                 <simple-spinner v-if="isFetching" />
             </template>
             <template v-else>
-                <simple-spinner v-if="isFetching" />
-                <template v-else>
-                    <PolicyResultsList
-                        :api-url="apiUrl"
-                        :categories="publicDocuments.categories"
-                        :home-url="homeUrl"
-                        :results-list="publicDocuments.results.slice(0, 5)"
-                        collapse-subjects
-                    />
-                    <template v-if="publicDocuments.results.length > 5">
-                        <CollapseButton
-                            name="external-chronological-collapse"
-                            state="collapsed"
-                            class="category-title"
-                        >
-                            <template #expanded>
-                                <ShowMoreButton
-                                    button-text="- Show Less"
-                                    :count="publicDocuments.results.length"
+                <div class="sort__list--chrono">
+                    <simple-spinner v-if="isFetching" />
+                    <template v-else>
+                        <PolicyResultsList
+                            :api-url="apiUrl"
+                            :categories="publicDocuments.categories"
+                            :home-url="homeUrl"
+                            :results-list="publicDocuments.results.slice(0, 5)"
+                            collapse-subjects
+                        />
+                        <template v-if="publicDocuments.results.length > 5">
+                            <CollapseButton
+                                name="external-chronological-collapse"
+                                state="collapsed"
+                                class="category-title"
+                            >
+                                <template #expanded>
+                                    <ShowMoreButton
+                                        button-text="- Show Less"
+                                        :count="publicDocuments.results.length"
+                                    />
+                                </template>
+                                <template #collapsed>
+                                    <ShowMoreButton
+                                        button-text="+ Show More"
+                                        :count="publicDocuments.results.length"
+                                    />
+                                </template>
+                            </CollapseButton>
+                            <Collapsible
+                                name="external-chronological-collapse"
+                                state="collapsed"
+                                class="collapse-content show-more-content"
+                            >
+                                <PolicyResultsList
+                                    :api-url="apiUrl"
+                                    :categories="publicDocuments.categories"
+                                    :home-url="homeUrl"
+                                    :results-list="publicDocuments.results.slice(5)"
+                                    collapse-subjects
                                 />
-                            </template>
-                            <template #collapsed>
-                                <ShowMoreButton
-                                    button-text="+ Show More"
-                                    :count="publicDocuments.results.length"
-                                />
-                            </template>
-                        </CollapseButton>
-                        <Collapsible
-                            name="external-chronological-collapse"
-                            state="collapsed"
-                            class="collapse-content show-more-content"
-                        >
-                            <PolicyResultsList
-                                :api-url="apiUrl"
-                                :categories="publicDocuments.categories"
-                                :home-url="homeUrl"
-                                :results-list="publicDocuments.results.slice(5)"
-                                collapse-subjects
-                            />
-                        </Collapsible>
+                            </Collapsible>
+                        </template>
                     </template>
-                </template>
+                </div>
             </template>
         </div>
     </div>
