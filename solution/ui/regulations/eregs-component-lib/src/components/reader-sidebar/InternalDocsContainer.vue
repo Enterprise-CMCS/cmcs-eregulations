@@ -189,7 +189,6 @@ watchEffect(() => {
                         :categories="internalDocuments.categories"
                         :home-url="homeUrl"
                         :results-list="internalDocuments.results.slice(0, 5)"
-                        :show-doc-type-labels="false"
                         collapse-subjects
                     />
                     <template v-if="internalDocuments.results.length > 5">
@@ -221,7 +220,6 @@ watchEffect(() => {
                                 :categories="internalDocuments.categories"
                                 :home-url="homeUrl"
                                 :results-list="internalDocuments.results.slice(5)"
-                                :show-doc-type-labels="false"
                                 collapse-subjects
                             />
                         </Collapsible>

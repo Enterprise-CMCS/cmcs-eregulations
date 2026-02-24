@@ -326,7 +326,9 @@ watch(selectedSortMethod, (newValue) => {
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <slot name="public-label" />
+        <template v-if="selectedSortMethod === 'default'">
+            <slot name="public-label" />
+        </template>
         <div class="filter__container">
             <label class="sort__label--wrapper">
                 <span class="sort__label">Sort by</span>
@@ -366,7 +368,6 @@ watch(selectedSortMethod, (newValue) => {
                             :categories="publicDocuments.categories"
                             :home-url="homeUrl"
                             :results-list="publicDocuments.results.slice(0, 5)"
-                            :show-doc-type-labels="false"
                             collapse-subjects
                         />
                         <template v-if="publicDocuments.results.length > 5">
@@ -398,7 +399,6 @@ watch(selectedSortMethod, (newValue) => {
                                     :categories="publicDocuments.categories"
                                     :home-url="homeUrl"
                                     :results-list="publicDocuments.results.slice(5)"
-                                    :show-doc-type-labels="false"
                                     collapse-subjects
                                 />
                             </Collapsible>
@@ -408,6 +408,10 @@ watch(selectedSortMethod, (newValue) => {
             </template>
         </div>
     </div>
+    <hr>
+    <template v-if="selectedSortMethod === 'default'">
+        <slot name="internal-label" />
+    </template>
     <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
