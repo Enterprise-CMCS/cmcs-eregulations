@@ -183,6 +183,10 @@ const props = defineProps({
         required: false,
         default: () => [],
     },
+    showDocTypeLabels: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const transformedResults = computed(() =>
@@ -249,7 +253,7 @@ const handleResultLinkClick = (doc) => {
         </template>
         <template #labels>
             <DocTypeLabel
-                v-if="doc.type"
+                v-if="showDocTypeLabels && doc.type"
                 :icon-type="doc.type"
                 :doc-type="DOCUMENT_TYPES_MAP[doc.type]"
             />

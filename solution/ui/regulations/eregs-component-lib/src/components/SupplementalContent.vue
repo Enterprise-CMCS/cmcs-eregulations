@@ -358,6 +358,7 @@ watch(selectedSortMethod, (newValue) => {
                             :categories="publicDocuments.categories"
                             :home-url="homeUrl"
                             :results-list="publicDocuments.results.slice(0, 5)"
+                            :show-doc-type-labels="false"
                             collapse-subjects
                         />
                         <template v-if="publicDocuments.results.length > 5">
@@ -389,6 +390,7 @@ watch(selectedSortMethod, (newValue) => {
                                     :categories="publicDocuments.categories"
                                     :home-url="homeUrl"
                                     :results-list="publicDocuments.results.slice(5)"
+                                    :show-doc-type-labels="false"
                                     collapse-subjects
                                 />
                             </Collapsible>
