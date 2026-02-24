@@ -75,6 +75,11 @@ const activePart = computed(() => {
     if (selectedPart.value !== undefined) {
         return selectedPart.value;
     }
+
+    if (!window?.location?.pathname?.toLowerCase().includes("subpart")) {
+        return `Part ${props.part}`;
+    }
+
     return `Subpart ${props.subparts[0]}`;
 });
 
