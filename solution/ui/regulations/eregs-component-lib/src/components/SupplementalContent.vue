@@ -281,11 +281,19 @@ watch(
 watch(selectedPart, () => {
     categories.value = [];
     if (selectedPart.value) {
-        fetchContent({
-            location: `citations=${props.title}.${props.part}.${
-                selectedPart.value.split(".")[1]
-            }`
-        });
+        // we want to reset sort method to default
+        // which will trigger the fetchContent watcher
+        // and fetch the data in the correct format for the selected part
+        if (selectedSortMethod.value !== "default") {
+            selectedSortMethod.value = "default";
+        } else {
+            // if already at default, just fetch the content for the selected part
+            fetchContent({
+                location: `citations=${props.title}.${props.part}.${
+                    selectedPart.value.split(".")[1]
+                }`
+            });
+        }
     } else {
         fetchContent();
     }
