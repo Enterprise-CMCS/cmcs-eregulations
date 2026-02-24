@@ -198,13 +198,13 @@ watch(() => props.sortMethod, (newValue) => {
                             <template #expanded>
                                 <ShowMoreButton
                                     button-text="- Show Less"
-                                    :count="internalDocuments.results.length"
+                                    :count="internalDocuments.results.length - 5"
                                 />
                             </template>
                             <template #collapsed>
                                 <ShowMoreButton
                                     button-text="+ Show More"
-                                    :count="internalDocuments.results.length"
+                                    :count="internalDocuments.results.length - 5"
                                 />
                             </template>
                         </CollapseButton>

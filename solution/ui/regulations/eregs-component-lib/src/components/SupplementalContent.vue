@@ -370,13 +370,13 @@ watch(selectedSortMethod, (newValue) => {
                                 <template #expanded>
                                     <ShowMoreButton
                                         button-text="- Show Less"
-                                        :count="publicDocuments.results.length"
+                                        :count="publicDocuments.results.length - 5"
                                     />
                                 </template>
                                 <template #collapsed>
                                     <ShowMoreButton
                                         button-text="+ Show More"
-                                        :count="publicDocuments.results.length"
+                                        :count="publicDocuments.results.length - 5"
                                     />
                                 </template>
                             </CollapseButton>
