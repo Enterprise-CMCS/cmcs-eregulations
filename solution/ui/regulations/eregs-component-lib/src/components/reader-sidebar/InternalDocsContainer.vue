@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watchEffect } from "vue";
 
 import { getInternalCategories, getInternalDocs } from "utilities/api";
 
@@ -154,12 +154,11 @@ onUnmounted(() => {
     eventbus.off(EventCodes.ClearSections, clearSectionsHandler);
 });
 
-watch(selectedSection, (newValue) => {
-    getDocuments({ section: newValue });
-});
-
-watch(() => props.sortMethod, (newValue) => {
-    getDocuments({ section: selectedSection.value, sort: newValue });
+watchEffect(() => {
+    // watches for changes to selectedSection and props.sortMethod
+    // and refetches documents when either changes
+    // but only once if both change
+    getDocuments({ section: selectedSection.value, sort: props.sortMethod });
 });
 </script>
 
@@ -232,5 +231,3 @@ watch(() => props.sortMethod, (newValue) => {
         </template>
     </div>
 </template>
-
-<style></style>
