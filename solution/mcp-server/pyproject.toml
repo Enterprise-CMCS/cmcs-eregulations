@@ -1,0 +1,7 @@
+[project]
+name = "mcp-server"
+version = "0.1.0"
+description = "MCP server on a Lambda for eRegulations"
+readme = "README.md"
+requires-python = ">=3.12.12"
+dependencies = []
