@@ -278,9 +278,9 @@ watch(
     }
 );
 
-watch(selectedPart, () => {
+watch(selectedPart, (newValue, oldValue) => {
     categories.value = [];
-    if (selectedPart.value) {
+    if (newValue) {
         // we want to reset sort method to default
         // which will trigger the fetchContent watcher
         // and fetch the data in the correct format for the selected part
@@ -290,10 +290,13 @@ watch(selectedPart, () => {
             // if already at default, just fetch the content for the selected part
             fetchContent({
                 location: `citations=${props.title}.${props.part}.${
-                    selectedPart.value.split(".")[1]
+                    newValue.split(".")[1]
                 }`
             });
         }
+    } else if (oldValue) {
+        // if newValue is undefined but oldValue exists, that means we cleared the selected part
+        selectedSortMethod.value = "default";
     } else {
         fetchContent();
     }
