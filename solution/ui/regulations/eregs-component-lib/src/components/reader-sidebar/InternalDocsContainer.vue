@@ -181,7 +181,9 @@ watchEffect(() => {
             <template v-else>
                 <div class="sort__list--chrono">
                     <template v-if="internalDocuments.results.length === 0">
-                        <p class="no-results childless">No Results</p>
+                        <p class="no-results childless">
+                            No Results
+                        </p>
                     </template>
                     <PolicyResultsList
                         v-else
