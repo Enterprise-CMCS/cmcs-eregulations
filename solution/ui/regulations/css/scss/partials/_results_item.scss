@@ -116,8 +116,18 @@
     }
 }
 
+.sort__list--chrono {
+    .result {
+        &__context,
+        &__link {
+            font-size: var(--font-size-sm);
+        }
+    }
+}
+
 .result,
-.supplemental-content-list {
+.supplemental-content-list,
+.sort__list--chrono {
   .collapsible-title {
       font-size: var(--font-size-sm);
       line-height: 22px;
@@ -136,7 +146,8 @@
   }
 }
 
-.supplemental-content-list {
+.supplemental-content-list,
+.sort__list--chrono {
     .collapsible-title,
     .related-sections,
     .related-sections .related-sections-title,
