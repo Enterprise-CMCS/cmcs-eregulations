@@ -33,8 +33,8 @@ RUN --mount=from=uv,source=/uv,target=/bin/uv \
 FROM public.ecr.aws/lambda/python:3.12
 
 ENV HOSTNAME="mcp-server"
-ENV EXTERNAL_PORT="6001"
-ENV PROXY_PARAMS="--enable-async"
+ENV EXTERNAL_PORT="6000"
+ENV PROXY_PARAMS=""
 ENV STARTUP_CMD="app.mcp_server.handler"
 
 # Copy the runtime dependencies from the builder stage.

@@ -10,6 +10,7 @@ import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
 import { BackendStack } from '../lib/stacks/api-stack';
 import { ParserLauncherStack } from '../lib/stacks/parser-launcher-stack';
+import { McpServerStack } from '../lib/stacks/mcp-server-stack';
 
 async function main() {
     const synthesizerConfig = JSON.parse(await getParameterValue('/eregulations/cdk_config'));
@@ -55,6 +56,17 @@ async function main() {
         ephemeralId,
         synthesizerConfig.iamPermissionsBoundary
     );
+
+    new McpServerStack(app, stageConfig.getResourceName('mcp-server'), {
+        env,
+        lambdaConfig: {
+            timeout: 900,
+            memorySize: 1024,
+        },
+        environmentConfig: {
+            logLevel,
+        }
+    }, stageConfig);
 
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
         env,
