@@ -30,8 +30,6 @@ interface LambdaConfig {
 interface EnvironmentConfig {
     /** Log level for the Lambda function (e.g., DEBUG, INFO) */
     logLevel: string;
-    /** Name of secret for authentication **/
-    secretName: string;
 }
 
 /**
