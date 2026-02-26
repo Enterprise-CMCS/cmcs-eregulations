@@ -137,6 +137,9 @@ export class McpServerStack extends cdk.Stack {
             code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
                 file: 'mcp-server/Dockerfile',
             }),
+            vpc,
+            vpcSubnets: selectedSubnets,
+            securityGroups: [serverlessSG],
             memorySize: props.lambdaConfig.memorySize,
             timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
             reservedConcurrentExecutions: props.lambdaConfig.reservedConcurrentExecutions,
