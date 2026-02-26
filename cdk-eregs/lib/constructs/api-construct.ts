@@ -122,8 +122,8 @@ export class ApiConstruct extends Construct {
             });
 
             // Set environment variables for the authorizer
-            props.authorizerLambda.addEnvironment('HTTP_AUTH_USER', props.environmentVariables.HTTP_AUTH_USER);
-            props.authorizerLambda.addEnvironment('HTTP_AUTH_PASSWORD', props.environmentVariables.HTTP_AUTH_PASSWORD);
+            props.authorizerLambda.addEnvironment('HTTP_AUTH_USER', props.environmentVariables?.HTTP_AUTH_USER);
+            props.authorizerLambda.addEnvironment('HTTP_AUTH_PASSWORD', props.environmentVariables?.HTTP_AUTH_PASSWORD);
         }
 
         // Create Lambda integration
