@@ -122,6 +122,11 @@
         &__link {
             font-size: var(--font-size-sm);
         }
+
+        &__context {
+            display: flex;
+            align-items: center;
+        }
     }
 }
 
