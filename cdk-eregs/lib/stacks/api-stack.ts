@@ -437,6 +437,11 @@ export class BackendStack extends cdk.Stack {
                 description: 'Storage bucket name',
                 exportName: stageConfig.getResourceName('storage-bucket-name'),
             },
+            SecurityGroup: {
+                value: serverlessSG.securityGroupId,
+                description: 'Security group ID for serverless functions',
+                exportName: stageConfig.getResourceName('serverless-security-group-id'),
+            }
         };
 
         // Lambda ARN outputs

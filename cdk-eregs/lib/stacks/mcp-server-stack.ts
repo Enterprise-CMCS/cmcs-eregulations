@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import {
+    aws_ec2 as ec2,
     aws_iam as iam,
     aws_logs as logs,
     aws_lambda as lambda,
@@ -8,6 +9,8 @@ import {
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
+import { ApiConstruct } from '../constructs/api-construct';
+import { WafConstruct } from '../constructs/waf-construct';
 import * as path from 'path';
 
 /**
@@ -28,8 +31,12 @@ interface LambdaConfig {
  * Contains all the external configuration values needed for the stack.
  */
 interface EnvironmentConfig {
-    /** Log level for the Lambda function (e.g., DEBUG, INFO) */
+    /** VPC ID where resources will be deployed */
+    vpcId: string;
+    /** Logging level for the application */
     logLevel: string;
+    /** List of subnet IDs for resource placement */
+    subnetIds: string[];
 }
 
 /**
@@ -54,6 +61,27 @@ export interface McpServerStackProps extends cdk.StackProps {
 export class McpServerStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props: McpServerStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
+
+        // ================================
+        // VPC & NETWORKING
+        // ================================
+        const vpc = ec2.Vpc.fromLookup(this, 'VPC', {
+            vpcId: props.environmentConfig.vpcId,
+        });
+
+        const selectedSubnets: ec2.SubnetSelection = {
+            subnets: props.environmentConfig.subnetIds.map(
+                (subnetId, index) => ec2.Subnet.fromSubnetId(
+                    this,
+                    `PrivateSubnet${index + 1}`,
+                    subnetId
+                )
+            ),
+        };
+
+        // Import security group from the API stack to ensure consistent security group usage across services
+        const securityGroupId = cdk.Fn.importValue(stageConfig.getResourceName('serverless-security-group-id'));
+        const serverlessSG = ec2.SecurityGroup.fromSecurityGroupId(this, 'ServerlessSecurityGroup', securityGroupId);
 
         // ================================
         // LOG GROUP
@@ -120,6 +148,24 @@ export class McpServerStack extends cdk.Stack {
         });
 
         // ================================
+        // API GATEWAY
+        // ================================
+        const api = new ApiConstruct(this, 'Api', {
+            vpc,
+            securityGroup: serverlessSG,
+            lambdaConfig: props.lambdaConfig,
+            stageConfig,
+            vpcSubnets: selectedSubnets,
+            lambda: lambdaFunction,
+        });
+
+        // ================================
+        // WAF
+        // ================================
+        const waf = new WafConstruct(this, 'Waf', stageConfig);
+        waf.associateWithApiGateway(api.api);
+
+        // ================================
         // STACK OUTPUTS
         // ================================
         const outputs: Record<string, cdk.CfnOutputProps> = {
@@ -127,6 +173,11 @@ export class McpServerStack extends cdk.Stack {
                 value: lambdaFunction.functionArn,
                 description: 'Current Lambda function version',
                 exportName: stageConfig.getResourceName('mcp-server-lambda-arn'),
+            },
+            ApiEndpoint: {
+                value: api.api.url,
+                description: 'API Gateway endpoint URL',
+                exportName: stageConfig.getResourceName('api-endpoint'),
             },
         };
 

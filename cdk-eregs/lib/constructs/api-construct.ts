@@ -19,11 +19,11 @@ export interface ApiConstructProps {
     /** Security group for API resources */
     securityGroup: ec2.ISecurityGroup;
     /** Environment variables for Lambda functions */
-    environmentVariables: Record<string, string>;
+    environmentVariables?: Record<string, string>;
     /** Name of the S3 bucket for storage */
-    storageBucketName: string;
+    storageBucketName?: string;
     /** URL of the SQS queue */
-    queueUrl: string;
+    queueUrl?: string;
     /** Configuration for Lambda functions */
     lambdaConfig: {
         /** Memory size in MB */

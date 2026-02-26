@@ -64,7 +64,9 @@ async function main() {
             memorySize: 1024,
         },
         environmentConfig: {
-            logLevel,
+            vpcId,
+            logLevel: logLevel,
+            subnetIds: [privateSubnetAId, privateSubnetBId],
         }
     }, stageConfig);
 
