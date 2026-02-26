@@ -7,6 +7,10 @@
 
 .filter__container {
     margin-top: var(--spacer-2);
+
+    .sort__label {
+        font-size: var(--font-size-sm);
+    }
 }
 
 .related-rule-domain,
