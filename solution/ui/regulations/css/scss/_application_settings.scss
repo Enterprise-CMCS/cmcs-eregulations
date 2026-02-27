@@ -14,6 +14,21 @@
 // various !importants will be here and throughout our style sheets to combat Vuetify's aggressive styles
 // Discussion about Vuetify's "styling eccentricities": https://stackoverflow.com/questions/52310060/how-to-override-vuetify-styles
 
+button {
+    padding-block-start: 0;
+    padding-block-end: 0;
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+}
+
+button,
+input,
+select,
+textarea {
+    background-color: transparent;
+    border-style: none;
+}
+
 input,
 select {
     box-sizing: border-box !important;
