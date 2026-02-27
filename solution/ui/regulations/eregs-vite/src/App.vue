@@ -40,9 +40,5 @@ ul {
 
 .v-application {
     font-family: Open Sans, Helvetica, sans-serif;
-
-    .v-application--wrap {
-        min-height: unset;
-    }
 }
 </style>
