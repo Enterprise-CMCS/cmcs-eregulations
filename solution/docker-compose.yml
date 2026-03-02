@@ -71,7 +71,7 @@ services:
       context: .
       dockerfile: mcp-server/Dockerfile.local
     ports:
-      - 6002:6000
+      - 8002:6000
     volumes:
       - ./mcp-server:/var/task/app
     networks:

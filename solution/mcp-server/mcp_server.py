@@ -31,7 +31,6 @@ def create_app():
 
 
 def handler(event: dict, context: Any) -> Any:
-    logger.error(f"Received event: {event}")
     try:
         app = create_app()
         asgi_handler = Mangum(app, lifespan="on")
