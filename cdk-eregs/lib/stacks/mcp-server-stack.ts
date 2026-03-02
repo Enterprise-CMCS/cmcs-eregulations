@@ -180,7 +180,7 @@ export class McpServerStack extends cdk.Stack {
             ApiEndpoint: {
                 value: api.api.url,
                 description: 'API Gateway endpoint URL',
-                exportName: stageConfig.getResourceName('api-endpoint'),
+                exportName: stageConfig.getResourceName('mcp-server-api-endpoint'),
             },
         };
 
