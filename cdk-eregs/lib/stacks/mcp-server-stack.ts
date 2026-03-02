@@ -93,37 +93,37 @@ export class McpServerStack extends cdk.Stack {
         // LAMBDA ROLE
         // ================================
 
-        const lambdaPolicy = new iam.PolicyDocument({
-            statements: [
-                new iam.PolicyStatement({
-                    effect: iam.Effect.ALLOW,
-                    actions: [
-                        'logs:CreateLogGroup',
-                        'logs:CreateLogStream',
-                        'logs:PutLogEvents'
-                    ],
-                    resources: [
-                        `arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`,
-                    ],
-                }),
-            ],
-        });
+        // const lambdaPolicy = new iam.PolicyDocument({
+        //     statements: [
+        //         new iam.PolicyStatement({
+        //             effect: iam.Effect.ALLOW,
+        //             actions: [
+        //                 'logs:CreateLogGroup',
+        //                 'logs:CreateLogStream',
+        //                 'logs:PutLogEvents'
+        //             ],
+        //             resources: [
+        //                 `arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`,
+        //             ],
+        //         }),
+        //     ],
+        // });
 
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            path: stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'PermissionsBoundary',
-                stageConfig.permissionsBoundaryArn
-            ),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-            ],
-            inlinePolicies: {
-                LambdaPolicy: lambdaPolicy,
-            },
-        });
+        // const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
+        //     path: stageConfig.iamPath,
+        //     assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
+        //     permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
+        //         this,
+        //         'PermissionsBoundary',
+        //         stageConfig.permissionsBoundaryArn
+        //     ),
+        //     managedPolicies: [
+        //         iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
+        //     ],
+        //     inlinePolicies: {
+        //         LambdaPolicy: lambdaPolicy,
+        //     },
+        // });
 
         // ================================
         // LAMBDA FUNCTION
@@ -145,7 +145,7 @@ export class McpServerStack extends cdk.Stack {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
             },
-            role: lambdaRole,
+            //role: lambdaRole,
         });
 
         // ================================
