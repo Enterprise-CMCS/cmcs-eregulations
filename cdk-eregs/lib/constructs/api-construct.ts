@@ -110,9 +110,11 @@ export class ApiConstruct extends Construct {
                 resultsCacheTtl: cdk.Duration.seconds(0),
             });
 
-            // Grant API Gateway permission to invoke the authorizer
-            props.authorizerLambda.addPermission('ApiGatewayInvoke', {
-                principal: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+            // Grant API Gateway permission to invoke the authorizer Lambda
+            new lambda.CfnPermission(this, 'AuthorizerLambdaPermission', {
+                action: "lambda:InvokeFunction",
+                principal: 'apigateway.amazonaws.com',
+                functionName: props.authorizerLambda.functionArn,
                 sourceArn: cdk.Fn.join(':', [
                     'arn:aws:execute-api',
                     cdk.Stack.of(this).region,
