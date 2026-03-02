@@ -102,7 +102,7 @@ jobs:
           ! grep -q FunctionError aws.log
 
           # Generate the stack names for this PR
-          MCP_SERVER_STACK="cms-eregs-eph-${PR_NUMBER}-mcp-server"
+          MCP_SERVER_STACK="cms-eregs-${STAGE_NAME}-api-mcp-server"
           PARSER_LAUNCHER_STACK="cms-eregs-eph-${PR_NUMBER}-parser-launcher"
           TEXT_EXTRACTOR_STACK="cms-eregs-eph-${PR_NUMBER}-text-extractor"
           FR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-fr-parser"
