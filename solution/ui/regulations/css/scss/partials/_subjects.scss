@@ -181,6 +181,10 @@
                     min-height: 30px;
                     padding-top: 0px;
                     padding-bottom: 0px;
+
+                    input:focus-visible {
+                        outline: none;
+                    }
                 }
 
                 .v-select__selection-text,
