@@ -110,9 +110,21 @@ export class McpServerStack extends cdk.Stack {
             },
         });
 
+        // Create authorizer Lambda for non-prod environments
+        let authorizerLambda;
+        if (stageConfig.environment !== 'prod') {
+            // get authorizer Lambda from API stack output
+            authorizerLambda = lambda.Function.fromFunctionArn(
+                this,
+                'Authorizer',
+                cdk.Fn.importValue(stageConfig.getResourceNameWithoutSuffix('authorizer-lambda-arn'))
+            );
+        }
+
         // ================================
         // API GATEWAY
         // ================================
+
         const api = new ApiConstruct(this, 'McpServerApi', {
             vpc,
             securityGroup: serverlessSG,
@@ -120,6 +132,7 @@ export class McpServerStack extends cdk.Stack {
             stageConfig,
             vpcSubnets: selectedSubnets,
             lambda: lambdaFunction,
+            authorizerLambda: authorizerLambda,
         });
 
         // ================================

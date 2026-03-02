@@ -40,7 +40,7 @@ export interface ApiConstructProps {
     /** Main Lambda function for API */
     lambda: lambda.Function;
     /** Optional authorizer Lambda function */
-    authorizerLambda?: lambda.Function;
+    authorizerLambda?: lambda.IFunction;
 }
 
 /**
