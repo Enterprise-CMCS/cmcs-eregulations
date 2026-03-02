@@ -1,9 +1,11 @@
+import os
 from typing import Any
 import logging
 import traceback
 
 from fastmcp import FastMCP
 from mangum import Mangum
+import requests
 
 
 logger = logging.getLogger()
@@ -26,6 +28,25 @@ def create_app():
         """
         logger.error("====== hello_world tool called with name: %s ======", name)
         return f"Hello, {name}!"
+
+    @mcp.tool
+    async def list_titles() -> list[int]:
+        """
+        A simple tool that returns a list of titles contained in eRegs.
+        
+        Returns:
+            list[int]: A list of titles as integers.
+        """
+        logger.error("====== list_titles tool called ======")
+        api = os.environ.get("EREGS_API_URL_V3")
+        if not api:
+            logger.error("EREGS_API_URL_V3 environment variable is not set")
+            raise Exception("EREGS_API_URL_V3 environment variable is not set")
+        response = requests.get(f"{api}titles")
+        if response.status_code != 200:
+            logger.error(f"Error fetching titles: {response.status_code} - {response.text}")
+            raise Exception("Failed to fetch titles from eRegs API")
+        return response.json()
     
     return mcp_app
 

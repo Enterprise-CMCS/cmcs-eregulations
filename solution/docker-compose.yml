@@ -80,5 +80,7 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - regulations
+    environment:
+      - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
 volumes:
   eregs-data:
