@@ -72,7 +72,7 @@ export class ApiConstruct extends Construct {
 
         // Determine stage name based on environment type
         const stageName = props.stageConfig.isEphemeral() 
-            ? props.stageConfig.getResourceName('')
+            ? props.stageConfig.getResourceNameWithoutSuffix('')
                 .replace(`${StageConfig.projectName}-`, '')
                 .split('-resource')[0]
                 .replace(/-$/, '')
