@@ -4,7 +4,6 @@ import {
     aws_lambda as lambda,
     aws_apigateway as apigateway,
     aws_logs as logs,
-    aws_iam as iam,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
