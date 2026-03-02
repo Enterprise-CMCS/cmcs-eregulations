@@ -57,7 +57,14 @@ async function main() {
         synthesizerConfig.iamPermissionsBoundary
     );
 
-    new McpServerStack(app, stageConfig.getResourceName('mcp-server'), {
+    const mcpServerStageConfig = await StageConfig.create(
+        context.environment,
+        ephemeralId,
+        synthesizerConfig.iamPermissionsBoundary,
+        'mcp-server'
+    );
+
+    new McpServerStack(app, mcpServerStageConfig.getResourceName('api'), {
         env,
         lambdaConfig: {
             timeout: 900,
@@ -68,7 +75,7 @@ async function main() {
             logLevel: logLevel,
             subnetIds: [privateSubnetAId, privateSubnetBId],
         }
-    }, stageConfig);
+    }, mcpServerStageConfig);
 
     new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
         env,

@@ -151,7 +151,7 @@ export class McpServerStack extends cdk.Stack {
         // ================================
         // API GATEWAY
         // ================================
-        const api = new ApiConstruct(this, 'Api', {
+        const api = new ApiConstruct(this, 'McpServerApi', {
             vpc,
             securityGroup: serverlessSG,
             lambdaConfig: props.lambdaConfig,
@@ -163,7 +163,7 @@ export class McpServerStack extends cdk.Stack {
         // ================================
         // WAF
         // ================================
-        const waf = new WafConstruct(this, 'Waf', stageConfig);
+        const waf = new WafConstruct(this, 'McpServerWaf', stageConfig);
         waf.associateWithApiGateway(api.api);
 
         // ================================
