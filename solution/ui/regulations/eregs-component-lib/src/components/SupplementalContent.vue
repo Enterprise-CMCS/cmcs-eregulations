@@ -294,7 +294,7 @@ watch(selectedPart, (newValue, oldValue) => {
                 }`
             });
         }
-    } else if (oldValue) {
+    } else if (oldValue && selectedSortMethod.value !== "default") {
         // if newValue is undefined but oldValue exists, that means we cleared the selected part
         selectedSortMethod.value = "default";
     } else {
