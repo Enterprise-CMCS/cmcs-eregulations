@@ -221,9 +221,10 @@
         box-shadow: unset;
         max-width: 300px !important;
 
-        & > .v-list {
+        .v-list {
             margin-top: 8px;
             border: 1px solid $border_color;
+            border-radius: 4px;
             box-shadow: unset;
             overflow-x: hidden;
         }
@@ -232,6 +233,7 @@
     .v-list-item {
         min-height: unset;
         padding: 0;
+        padding-inline: 1rem;
 
         &::after {
             opacity: 0;
