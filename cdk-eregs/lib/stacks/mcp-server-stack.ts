@@ -78,7 +78,7 @@ export class McpServerStack extends cdk.Stack {
         };
 
         // Import security group from the API stack to ensure consistent security group usage across services
-        const securityGroupId = cdk.Fn.importValue(stageConfig.getResourceName('serverless-security-group-id'));
+        const securityGroupId = cdk.Fn.importValue(stageConfig.getResourceNameWithoutSuffix('serverless-security-group-id'));
         const serverlessSG = ec2.SecurityGroup.fromSecurityGroupId(this, 'ServerlessSecurityGroup', securityGroupId);
 
         // ================================
@@ -128,7 +128,7 @@ export class McpServerStack extends cdk.Stack {
         // ================================
         // LAMBDA FUNCTION
         // ================================
-        const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'))
+        const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceNameWithoutSuffix('api-endpoint'))
 
         const lambdaFunction = new lambda.DockerImageFunction(this, 'McpServerFunction', {
             functionName: stageConfig.getResourceName('mcp-server'),

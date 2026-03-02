@@ -97,9 +97,13 @@ export class StageConfig {
     }
 
     public getResourceName(resource: string): string {
-        const environmentPart = this.ephemeralId || this.environment;
         const suffixPart = this.suffix ? `-${this.suffix}` : '';
-        return `${StageConfig.projectName}-${environmentPart}-${resource}${suffixPart}`.toLowerCase();
+        return `${this.getResourceNameWithoutSuffix(resource)}${suffixPart}`;
+    }
+
+    public getResourceNameWithoutSuffix(resource: string): string {
+        const environmentPart = this.ephemeralId || this.environment;
+        return `${StageConfig.projectName}-${environmentPart}-${resource}`.toLowerCase();
     }
 
     public getStackTags(): Record<string, string> {
