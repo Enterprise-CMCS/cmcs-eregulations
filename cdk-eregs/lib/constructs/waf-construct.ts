@@ -19,7 +19,7 @@ export class WafConstruct extends Construct {
 
         // Create the log group with required prefix
         this.logGroup = new logs.LogGroup(this, 'WafLogGroup', {
-            logGroupName: stageConfig.getResourceName('waf-logs'),
+            logGroupName: `aws-waf-logs-${stageConfig.getResourceName('waf')}`,
             retention: logs.RetentionDays.ONE_MONTH,
             removalPolicy: cdk.RemovalPolicy.DESTROY,
         });
