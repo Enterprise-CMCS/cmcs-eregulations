@@ -4,8 +4,6 @@ import {
     aws_iam as iam,
     aws_logs as logs,
     aws_lambda as lambda,
-    aws_sqs as sqs,
-    aws_s3 as s3,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
