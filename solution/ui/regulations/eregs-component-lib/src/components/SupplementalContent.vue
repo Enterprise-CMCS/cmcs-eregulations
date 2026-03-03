@@ -398,7 +398,7 @@ watch(selectedSortMethod, (newValue) => {
                             :categories="documents.categories"
                             :home-url="homeUrl"
                             :results-list="documents.results.slice(0, 5)"
-                            collapse-subjects
+                            condensed-items
                         />
                         <template v-if="documents.results.length > 5">
                             <CollapseButton
@@ -429,7 +429,7 @@ watch(selectedSortMethod, (newValue) => {
                                     :categories="documents.categories"
                                     :home-url="homeUrl"
                                     :results-list="documents.results.slice(5)"
-                                    collapse-subjects
+                                    condensed-items
                                 />
                             </Collapsible>
                         </template>

@@ -157,7 +157,7 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
-    collapseSubjects: {
+    condensedItems: {
         type: Boolean,
         default: false,
     },
@@ -332,12 +332,12 @@ const handleResultLinkClick = (doc) => {
         </template>
         <template #snippet>
             <div
-                v-if="showResultSnippet(doc)"
+                v-if="!condensedItems && showResultSnippet(doc)"
                 v-sanitize-html="getResultSnippet(doc)"
             />
         </template>
         <template #chips>
-            <template v-if="collapseSubjects && doc.subjects?.length > 0">
+            <template v-if="condensedItems && doc.subjects?.length > 0">
                 <CollapseButton
                     :name="getCollapseName(doc)"
                     state="collapsed"
