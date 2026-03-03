@@ -27,11 +27,11 @@
                         {% include "regulations/partials/login_sidebar_banner.html" %}
 
                         <internal-docs-container
+                            v-if="sortMethod === 'default'"
                             api-url="{{ API_BASE }}"
                             home-url="{% url 'homepage' %}"
                             title="{{ title }}"
                             part="{{ reg_part }}"
-                            :sort-method="sortMethod"
                         ></internal-docs-container>
                     </div>
                 </template>

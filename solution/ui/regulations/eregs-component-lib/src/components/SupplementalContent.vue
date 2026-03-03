@@ -5,6 +5,7 @@ import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
 
 import {
     getExternalCategories,
+    getInternalCategories,
     getSupplementalContent,
     getChildTOC,
 } from "utilities/api";
@@ -61,7 +62,7 @@ provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "reader-view");
 
 const categories = ref([]);
-const publicDocuments = ref({
+const documents = ref({
     results: [],
     categories: [],
 });
@@ -156,7 +157,7 @@ function getDefaultCategories() {
     });
 }
 
-const getCategories = async (apiUrl) => {
+const getPublicCategories = async (apiUrl) => {
     let categories = [];
 
     try {
@@ -169,6 +170,21 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
+
+const getAuthedCategories = async (apiUrl) => {
+    let categories = [];
+
+    try {
+        categories = await getInternalCategories({
+            apiUrl,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return categories;
+};
+
 
 // Sort dropdown related code
 
@@ -199,18 +215,29 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
 
         // get categories and part dict in parallel since both are needed
         // before we can render anything and they don't depend on each other
+        const authedCategoriesPromise = sort !== "default" && props.isAuthenticated
+            ? [ getAuthedCategories(props.apiUrl) ]
+            : []
         const prefetchNeededValues = await Promise.all([
-            getCategories(props.apiUrl),
             getPartDictionary(), // sets partDict ref
+            getPublicCategories(props.apiUrl),
+            ...authedCategoriesPromise,
         ]);
 
-        const categoryData = prefetchNeededValues[0];
-        publicDocuments.value.categories = categoryData.results;
+        const publicCategories = prefetchNeededValues[1].results;
+        const internalCategories = prefetchNeededValues[2]?.results || [];
+
+
+        const neededCategories = sort !== "default" && props.isAuthenticated
+            ? [...publicCategories, ...internalCategories]
+            : publicCategories;
+        documents.value.categories = neededCategories;
 
         const sharedParamsObj = {
             apiUrl: props.apiUrl,
             pageSize: 1000,
             sortMethod: sort === "default" ? "-date" : sort,
+            documentType: sort !== "default" && props.isAuthenticated ? "" : "public",
         }
 
         const requestParamsObj = location
@@ -235,13 +262,13 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
         ]);
 
         resourceCount.value = contentResponse[0].count;
-        publicDocuments.value.results = contentResponse[1].results;
+        documents.value.results = contentResponse[1].results;
 
         if (sort === "default") {
             categories.value = formatResourceCategories({
                 apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: publicDocuments.value.results,
+                categories: publicCategories,
+                resources: documents.value.results,
             });
         }
     } catch (error) {
@@ -368,12 +395,12 @@ watch(selectedSortMethod, (newValue) => {
                     <template v-else>
                         <PolicyResultsList
                             :api-url="apiUrl"
-                            :categories="publicDocuments.categories"
+                            :categories="documents.categories"
                             :home-url="homeUrl"
-                            :results-list="publicDocuments.results.slice(0, 5)"
+                            :results-list="documents.results.slice(0, 5)"
                             collapse-subjects
                         />
-                        <template v-if="publicDocuments.results.length > 5">
+                        <template v-if="documents.results.length > 5">
                             <CollapseButton
                                 name="external-chronological-collapse"
                                 state="collapsed"
@@ -382,13 +409,13 @@ watch(selectedSortMethod, (newValue) => {
                                 <template #expanded>
                                     <ShowMoreButton
                                         button-text="- Show Less"
-                                        :count="publicDocuments.results.length - 5"
+                                        :count="documents.results.length - 5"
                                     />
                                 </template>
                                 <template #collapsed>
                                     <ShowMoreButton
                                         button-text="+ Show More"
-                                        :count="publicDocuments.results.length - 5"
+                                        :count="documents.results.length - 5"
                                     />
                                 </template>
                             </CollapseButton>
@@ -399,9 +426,9 @@ watch(selectedSortMethod, (newValue) => {
                             >
                                 <PolicyResultsList
                                     :api-url="apiUrl"
-                                    :categories="publicDocuments.categories"
+                                    :categories="documents.categories"
                                     :home-url="homeUrl"
-                                    :results-list="publicDocuments.results.slice(5)"
+                                    :results-list="documents.results.slice(5)"
                                     collapse-subjects
                                 />
                             </Collapsible>
@@ -411,8 +438,8 @@ watch(selectedSortMethod, (newValue) => {
             </template>
         </div>
     </div>
-    <hr>
     <template v-if="selectedSortMethod === 'default'">
+        <hr>
         <slot name="internal-label" />
     </template>
     <slot name="authed-documents" :sort-method="selectedSortMethod" />
