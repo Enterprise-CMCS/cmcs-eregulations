@@ -356,9 +356,6 @@ watch(selectedSortMethod, (newValue) => {
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <template v-if="selectedSortMethod === 'default'">
-            <slot name="public-label" />
-        </template>
         <div class="filter__container">
             <label class="sort__label--wrapper">
                 <span class="sort__label">Sort by</span>
@@ -373,6 +370,9 @@ watch(selectedSortMethod, (newValue) => {
                 />
             </label>
         </div>
+        <template v-if="selectedSortMethod === 'default'">
+            <slot name="public-label" />
+        </template>
         <div class="supplemental-content-container">
             <template v-if="selectedSortMethod === 'default'">
                 <supplemental-content-category

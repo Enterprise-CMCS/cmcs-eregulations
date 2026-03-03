@@ -10,17 +10,17 @@
             :subparts="{{ node_list.subparts }}"
             :is-authenticated="{{ user.is_authenticated|yesno:'true,false' }}"
         >
+            <template #public-label>
+                <div class="label__container">
+                    <doc-type-label icon-type="external" doc-type="Public" />
+                </div>
+            </template>
+            <template #internal-label>
+                <div class="label__container label__container--internal">
+                    <doc-type-label icon-type="internal" doc-type="Internal" />
+                </div>
+            </template>
             {% if user.is_authenticated %}
-                <template #public-label>
-                    <div class="label__container">
-                        <doc-type-label icon-type="external" doc-type="Public" />
-                    </div>
-                </template>
-                <template #internal-label>
-                    <div class="label__container label__container--internal">
-                        <doc-type-label icon-type="internal" doc-type="Internal" />
-                    </div>
-                </template>
                 <template #authed-documents="{ sortMethod }">
                     <div class="authed__container">
 
@@ -36,11 +36,6 @@
                     </div>
                 </template>
             {% else %}
-                <template #internal-label>
-                    <div class="label__container label__container--internal">
-                        <doc-type-label icon-type="internal" doc-type="Internal" />
-                    </div>
-                </template>
                 <template #authed-documents>
                     {% include "regulations/partials/login_sidebar_banner.html" %}
                 </template>
