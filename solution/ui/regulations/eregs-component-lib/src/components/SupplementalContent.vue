@@ -68,7 +68,10 @@ const documents = ref({
 });
 const isFetching = ref(true);
 const selectedPart = ref(undefined);
-const resourceCount = ref(0);
+const resourceCount = ref({
+    count: 0,
+    loading: false,
+});
 const partDict = ref({});
 const location = ref("");
 
@@ -208,6 +211,8 @@ const sortOptions = ref([
 
 const fetchContent = async ({ location, sort = "default" } = {}) => {
     isFetching.value = true;
+    resourceCount.value.loading = true;
+
     try {
         // Page size is set to 1000 to attempt to get all resources.
         // Defualt page size of 100 was omitting resources from the right sidebar.
@@ -256,13 +261,17 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
             documentType: props.isAuthenticated ? "" : "public",
         });
 
-        const contentResponse = await Promise.all([
-            countsPromise,                            // subpart counts
-            getSupplementalContent(requestParamsObj), // display results
-        ]);
+        countsPromise.then((response) => {
+            resourceCount.value.count = response.count;
+        }).catch((error) => {
+            console.error("Error fetching resource counts:", error);
+        }).finally(() => {
+            resourceCount.value.loading = false;
+        });
 
-        resourceCount.value = contentResponse[0].count;
-        documents.value.results = contentResponse[1].results;
+        const contentResponse = await getSupplementalContent(requestParamsObj);
+
+        documents.value.results = contentResponse.results;
 
         if (sort === "default") {
             categories.value = formatResourceCategories({
@@ -445,14 +454,17 @@ watch(selectedSortMethod, (newValue) => {
     <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
-            v-if="selectedPart && subparts.length === 1 && !isFetching"
+            v-if=" selectedPart
+                && subparts.length === 1
+                && !resourceCount.loading
+            "
             class="show-subpart-resources"
             data-testid="view-all-subpart-resources"
             @click="clearSection"
         >
             <span class="bold">
                 View All Subpart {{ subparts[0] }} Documents</span>
-            ({{ resourceCount }})
+            ({{ resourceCount.count }})
         </a>
     </div>
 </template>
