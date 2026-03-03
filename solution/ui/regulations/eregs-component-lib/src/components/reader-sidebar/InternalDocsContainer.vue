@@ -142,9 +142,6 @@ onMounted(() => {
 
     eventbus.on(EventCodes.SetSection, sectionChangeHandler);
     eventbus.on(EventCodes.ClearSections, clearSectionsHandler);
-
-    getCategories(props.apiUrl);
-    getDocuments({ section: selectedSection.value });
 });
 
 onUnmounted(() => {
