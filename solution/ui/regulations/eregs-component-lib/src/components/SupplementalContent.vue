@@ -255,19 +255,21 @@ const fetchContent = async ({ location, sort = "default" } = {}) => {
                 partDict: partDict.value,
             };
 
-        const countsPromise = getSupplementalContent({
-            ...sharedParamsObj,
-            partDict: partDict.value,
-            documentType: props.isAuthenticated ? "" : "public",
-        });
+        if (location) {
+            const countsPromise = getSupplementalContent({
+                ...sharedParamsObj,
+                partDict: partDict.value,
+                documentType: props.isAuthenticated ? "" : "public",
+            });
 
-        countsPromise.then((response) => {
-            resourceCount.value.count = response.count;
-        }).catch((error) => {
-            console.error("Error fetching resource counts:", error);
-        }).finally(() => {
-            resourceCount.value.loading = false;
-        });
+            countsPromise.then((response) => {
+                resourceCount.value.count = response.count;
+            }).catch((error) => {
+                console.error("Error fetching resource counts:", error);
+            }).finally(() => {
+                resourceCount.value.loading = false;
+            });
+        }
 
         const contentResponse = await getSupplementalContent(requestParamsObj);
 
