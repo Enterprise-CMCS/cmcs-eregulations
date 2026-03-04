@@ -4,7 +4,6 @@ import {
     aws_lambda as lambda,
     aws_apigateway as apigateway,
     aws_logs as logs,
-    aws_iam as iam,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
@@ -19,11 +18,11 @@ export interface ApiConstructProps {
     /** Security group for API resources */
     securityGroup: ec2.ISecurityGroup;
     /** Environment variables for Lambda functions */
-    environmentVariables: Record<string, string>;
+    environmentVariables?: Record<string, string>;
     /** Name of the S3 bucket for storage */
-    storageBucketName: string;
+    storageBucketName?: string;
     /** URL of the SQS queue */
-    queueUrl: string;
+    queueUrl?: string;
     /** Configuration for Lambda functions */
     lambdaConfig: {
         /** Memory size in MB */
@@ -40,7 +39,7 @@ export interface ApiConstructProps {
     /** Main Lambda function for API */
     lambda: lambda.Function;
     /** Optional authorizer Lambda function */
-    authorizerLambda?: lambda.Function;
+    authorizerLambda?: lambda.IFunction;
 }
 
 /**
@@ -72,7 +71,7 @@ export class ApiConstruct extends Construct {
 
         // Determine stage name based on environment type
         const stageName = props.stageConfig.isEphemeral() 
-            ? props.stageConfig.getResourceName('')
+            ? props.stageConfig.getResourceNameWithoutSuffix('')
                 .replace(`${StageConfig.projectName}-`, '')
                 .split('-resource')[0]
                 .replace(/-$/, '')
@@ -110,9 +109,11 @@ export class ApiConstruct extends Construct {
                 resultsCacheTtl: cdk.Duration.seconds(0),
             });
 
-            // Grant API Gateway permission to invoke the authorizer
-            props.authorizerLambda.addPermission('ApiGatewayInvoke', {
-                principal: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+            // Grant API Gateway permission to invoke the authorizer Lambda
+            new lambda.CfnPermission(this, 'AuthorizerLambdaPermission', {
+                action: "lambda:InvokeFunction",
+                principal: 'apigateway.amazonaws.com',
+                functionName: props.authorizerLambda.functionArn,
                 sourceArn: cdk.Fn.join(':', [
                     'arn:aws:execute-api',
                     cdk.Stack.of(this).region,
@@ -120,10 +121,6 @@ export class ApiConstruct extends Construct {
                     `${this.api.restApiId}/authorizers/*`
                 ])
             });
-
-            // Set environment variables for the authorizer
-            props.authorizerLambda.addEnvironment('HTTP_AUTH_USER', props.environmentVariables.HTTP_AUTH_USER);
-            props.authorizerLambda.addEnvironment('HTTP_AUTH_PASSWORD', props.environmentVariables.HTTP_AUTH_PASSWORD);
         }
 
         // Create Lambda integration

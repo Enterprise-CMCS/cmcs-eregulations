@@ -40,6 +40,7 @@ export class StageConfig {
     public readonly iamPath: string;
     public readonly permissionsBoundaryArn: string;
     private readonly ephemeralId?: string;
+    private readonly suffix?: string;
 
     /**
      * Creates a new StageConfig instance
@@ -50,7 +51,8 @@ export class StageConfig {
     public static async create(
         environment: string, 
         ephemeralId?: string,
-        synthesizerPermissionsBoundary?: string
+        synthesizerPermissionsBoundary?: string,
+        suffix?: string
     ): Promise<StageConfig> {
         // Only fetch IAM path from parameter store
         const iamPath = await getParameterValue('/account_vars/iam/path');
@@ -60,14 +62,15 @@ export class StageConfig {
             throw new Error('Permissions boundary must be provided from synthesizer config');
         }
 
-        return new StageConfig(environment, iamPath, synthesizerPermissionsBoundary, ephemeralId);
+        return new StageConfig(environment, iamPath, synthesizerPermissionsBoundary, ephemeralId, suffix);
     }
 
     constructor(
         environment: string,
         iamPath: string,
         permissionsBoundaryArn: string,
-        ephemeralId?: string
+        ephemeralId?: string,
+        suffix?: string
     ) {
         if (!permissionsBoundaryArn) {
             throw new Error('Permissions boundary ARN is required');
@@ -77,6 +80,7 @@ export class StageConfig {
         this.iamPath = iamPath;
         this.permissionsBoundaryArn = permissionsBoundaryArn;
         this.ephemeralId = ephemeralId;
+        this.suffix = suffix;
     }
 
     public get stageName(): string {
@@ -93,6 +97,11 @@ export class StageConfig {
     }
 
     public getResourceName(resource: string): string {
+        const suffixPart = this.suffix ? `-${this.suffix}` : '';
+        return `${this.getResourceNameWithoutSuffix(resource)}${suffixPart}`;
+    }
+
+    public getResourceNameWithoutSuffix(resource: string): string {
         const environmentPart = this.ephemeralId || this.environment;
         return `${StageConfig.projectName}-${environmentPart}-${resource}`.toLowerCase();
     }
