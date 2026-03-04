@@ -108,6 +108,15 @@ RESOURCE_ENDPOINT_PARAMETERS = [
         required=False,
         default=True,
     ),
+    OpenApiParameter(
+        name="sort",
+        type=OpenApiTypes.STR,
+        location=OpenApiParameter.QUERY,
+        description="Field to sort by, with optional '-' prefix for descending. "
+                    "Defaults to '-date'.",
+        required=False,
+        default="-date",
+    ),
 ] + ViewSetPagination.QUERY_PARAMETERS
 
 
@@ -141,6 +150,7 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
         categories = self.request.GET.getlist("categories")
         subjects = self.request.GET.getlist("subjects")
         group_resources = string_to_bool(self.request.GET.get("group_resources"), True)
+        sort = self.request.GET.get("sort", "-date")
 
         citation_prefetch = AbstractCitation.objects.select_subclasses()
         statute_citation_prefetch = ActCitation.objects.prefetch_related(
@@ -152,7 +162,9 @@ class ResourceViewSet(LinkConfigMixin, LinkConversionsMixin, viewsets.ModelViewS
             Prefetch("parent", AbstractCategory.objects.select_subclasses()),
         )
 
-        query = self.model.objects.filter(approved=True).order_by(F("date").desc(nulls_last=True)).prefetch_related(
+        sort_field = sort.lstrip("-")
+        sort_order = F(sort_field).desc(nulls_last=True) if sort.startswith("-") else F(sort_field).asc(nulls_last=True)
+        query = self.model.objects.filter(approved=True).order_by(sort_order).prefetch_related(
             Prefetch("category", category_prefetch),
             Prefetch("cfr_citations", citation_prefetch),
             Prefetch("act_citations", statute_citation_prefetch),

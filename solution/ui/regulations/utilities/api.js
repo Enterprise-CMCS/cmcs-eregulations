@@ -7,7 +7,13 @@ import lodashGet from "lodash/get";
 import lodashKeys from "lodash/keys";
 import lodashMap from "lodash/map";
 
-import { createLastUpdatedDates, delay, niceDate, parseError } from "./utils";
+import {
+    createLastUpdatedDates,
+    citationStringFromPartDict,
+    delay,
+    niceDate,
+    parseError
+} from "./utils";
 
 let config = {
     fetchMode: "cors",
@@ -351,9 +357,10 @@ const getRegSearchResults = async ({
  * @param {string} [options.q=""] - Search query string.
  * @param {number} [options.page=1] - Page number to retrieve.
  * @param {number} [options.pageSize=100] - Number of items to retrieve.
- * @param {string} [options.sortMethod="newest"] - Method by which to sort results.
+ * @param {string} [options.sortMethod="-date"] - Method by which to sort results.
  * @param {string} [options.builtCitationString=""] - string of citations on which to filter
  * @param {string} [options.apiUrl=""] - API base url passed in from Django template
+ * @param {string} [options.documentType="public"] - document type to filter by. Ex: "public" or "internal"
  * @returns {Promise<Object>} - Promise that contains supplemental content when fulfilled
  **/
 const getSupplementalContent = async ({
@@ -363,8 +370,9 @@ const getSupplementalContent = async ({
     q = "",
     page = 1,
     pageSize = 100,
-    sortMethod = "newest",
+    sortMethod = "-date",
     builtCitationString = "",
+    documentType = "public",
 }) => {
     const queryString = q ? `&q=${encodeURIComponent(q)}` : "";
     let sString = "";
@@ -374,23 +382,12 @@ const getSupplementalContent = async ({
     } else if (builtCitationString !== "") {
         sString = `${sString}&${builtCitationString}`;
     } else {
-        Object.keys(partDict).forEach((partKey) => {
-            const part = partDict[partKey];
-            part.subparts.forEach((subPart) => {
-                sString = `${sString}&citations=${part.title}.${partKey}.${subPart}`;
-            });
-            part.sections.forEach((section) => {
-                sString = `${sString}&citations=${part.title}.${partKey}.${section}`;
-            });
-            if (part.sections.length === 0 && part.subparts.length === 0) {
-                sString = `${sString}&citations=${part.title}.${partKey}`;
-            }
-        });
+        sString = citationStringFromPartDict(partDict);
     }
 
     sString = `${sString}${queryString}&sort=${sortMethod}&page_size=${pageSize}&page=${page}`;
 
-    return await httpApiGet(`${apiUrl}resources/public?${sString}`);
+    return await httpApiGet(`${apiUrl}resources/${documentType}?${sString}`);
 };
 
 /**
