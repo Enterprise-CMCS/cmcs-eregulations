@@ -10,7 +10,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Concat
 from django.urls import reverse
-from django.utils.html import escape, format_html
+from django.utils.html import escape, mark_safe
 
 from common.admin import CustomAdminMixin
 from common.filters import IndexPopulatedFilter
@@ -93,7 +93,7 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
             else:
                 message = f"Text extraction requested for {obj._meta.verbose_name} \"{url}\"."
                 level = messages.SUCCESS
-            self.message_user(request, format_html(message), level=level)
+            self.message_user(request, mark_safe(message), level=level)
 
     # This override allows the grouping post-save hook to work properly.
     # Normally Django saves the model before updating related fields, but this causes aggregates of citations etc to not

@@ -3,7 +3,7 @@ import logging
 from django.apps import apps
 from django.contrib import admin, messages
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.html import mark_safe
 
 from resources.utils import get_support_link
 
@@ -43,7 +43,7 @@ def extract_text(modeladmin, request, queryset):
     if successes:
         modeladmin.message_user(
             request,
-            format_html(f"Text extraction requested for {successes} resource{'s' if successes > 1 else ''}."),
+            mark_safe(f"Text extraction requested for {successes} resource{'s' if successes > 1 else ''}."),
             messages.SUCCESS,
         )
 
@@ -54,4 +54,4 @@ def extract_text(modeladmin, request, queryset):
             if len(failures) > 1 else
             "this item has a valid URL or attached file"
         ) + f", then {get_support_link('contact support')} for assistance if needed."
-        modeladmin.message_user(request, format_html(message), messages.ERROR)
+        modeladmin.message_user(request, mark_safe(message), messages.ERROR)
