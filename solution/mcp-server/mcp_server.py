@@ -12,7 +12,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
-def create_app():
+def create_app(auth):
     mcp = FastMCP(name="eregs-mcp-server")
     mcp_app = mcp.http_app(stateless_http=True)
 
@@ -42,7 +42,8 @@ def create_app():
         if not api:
             logger.error("EREGS_API_URL_V3 environment variable is not set")
             raise Exception("EREGS_API_URL_V3 environment variable is not set")
-        response = requests.get(f"{api}titles")
+        headers = {"Authorization": auth} if auth else {}
+        response = requests.get(f"{api}titles", headers=headers)
         if response.status_code != 200:
             logger.error(f"Error fetching titles: {response.status_code} - {response.text}")
             raise Exception("Failed to fetch titles from eRegs API")
@@ -53,7 +54,9 @@ def create_app():
 
 def handler(event: dict, context: Any) -> Any:
     try:
-        app = create_app()
+        headers = event.get("headers", {})
+        auth = headers.get("Authorization") or headers.get("authorization")
+        app = create_app(auth)
         asgi_handler = Mangum(app, lifespan="on")
         return asgi_handler(event, context)
     except Exception as e:
