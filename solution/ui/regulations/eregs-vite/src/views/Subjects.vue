@@ -24,7 +24,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
-import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import PolicyResultsContainer from "@/components/subjects/PolicyResultsContainer.vue";
 import PolicySelections from "@/components/subjects/PolicySelections.vue";
 import PolicySidebar from "@/components/subjects/PolicySidebar.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
@@ -505,7 +505,7 @@ getDocSubjects();
                             </div>
                         </template>
                         <template v-else>
-                            <PolicyResults
+                            <PolicyResultsContainer
                                 :categories="categoriesRef"
                                 :results="policyDocList.results"
                                 :results-count="policyDocList.count"

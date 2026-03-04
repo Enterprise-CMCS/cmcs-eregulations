@@ -5,6 +5,14 @@
 
 @import "../application_settings";
 
+.filter__container {
+    margin-top: var(--spacer-2);
+
+    .sort__label {
+        font-size: var(--font-size-sm);
+    }
+}
+
 .related-rule-domain,
 .supplemental-content-domain {
     @include common-link-domain;
@@ -220,6 +228,10 @@
     .collapse-content {
         margin-top: 1em;
     }
+}
+
+.sort__list--chrono {
+    margin-top: var(--spacer-2);
 }
 
 .collapse-content {
