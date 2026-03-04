@@ -1,7 +1,11 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, provide, watch } from 'vue';
+
+import GenericDropdown from "spaComponents/dropdowns/GenericDropdown.vue";
+
 import {
     getExternalCategories,
+    getInternalCategories,
     getSupplementalContent,
     getChildTOC,
 } from "utilities/api";
@@ -11,7 +15,11 @@ import {
     getSectionsRecursive,
 } from "utilities/utils";
 
+import CollapseButton from "./CollapseButton.vue";
+import Collapsible from "./Collapsible.vue";
 import ContextBanners from "./reader-sidebar/ContextBanners.vue";
+import PolicyResultsList from "spaComponents/subjects/PolicyResultsList.vue";
+import ShowMoreButton from "./ShowMoreButton.vue";
 import SimpleSpinner from "./SimpleSpinner.vue";
 import SupplementalContentCategory from "./SupplementalContentCategory.vue";
 
@@ -43,15 +51,27 @@ const props = defineProps({
             return [];
         },
     },
+    isAuthenticated: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
 });
 
 provide("homeUrl", props.homeUrl);
 provide("currentRouteName", "reader-view");
 
 const categories = ref([]);
+const documents = ref({
+    results: [],
+    categories: [],
+});
 const isFetching = ref(true);
 const selectedPart = ref(undefined);
-const resourceCount = ref(0);
+const resourceCount = ref({
+    count: 0,
+    loading: false,
+});
 const partDict = ref({});
 const location = ref("");
 
@@ -59,59 +79,24 @@ const activePart = computed(() => {
     if (selectedPart.value !== undefined) {
         return selectedPart.value;
     }
+
+    if (!window?.location?.pathname?.toLowerCase().includes("subpart")) {
+        return `Part ${props.part}`;
+    }
+
     return `Subpart ${props.subparts[0]}`;
-});
-
-watch(
-    () => props.subparts,
-    () => {
-        categories.value = [];
-        isFetching.value = true;
-        fetchContent();
-    }
-);
-
-watch(selectedPart, () => {
-    categories.value = [];
-    isFetching.value = true;
-    if (selectedPart.value) {
-        fetchContent(
-            `citations=${props.title}.${props.part}.${
-                selectedPart.value.split(".")[1]
-            }`
-        );
-    } else {
-        fetchContent();
-    }
-});
-
-onMounted(() => {
-    if (window.location.hash) {
-        location.value = parseHash(window.location.hash);
-        fetchContent(location.value);
-    } else {
-        fetchContent();
-    }
-    window.addEventListener("hashchange", handleHashChange);
-
-    eventbus.on(EventCodes.SetSection, (args) => {
-        selectedPart.value = args.section;
-    });
-    categories.value = getDefaultCategories();
-});
-
-onUnmounted(() => {
-    eventbus.off(EventCodes.SetSection);
-    window.removeEventListener("hashchange", handleHashChange);
 });
 
 const handleHashChange = () => {
     location.value = parseHash(window.location.hash);
-    fetchContent(location.value);
+    selectedSortMethod.value = "default";
 };
 
 const parseHash = (locationHash) => {
-    if (window.location.hash === "#main-content") return "";
+    if (window.location.hash === "#main-content") {
+        selectedPart.value = "";
+        return "";
+    }
     if (locationHash.toLowerCase().includes("appendix")) {
         selectedPart.value = undefined;
         return "";
@@ -125,6 +110,7 @@ const parseHash = (locationHash) => {
     }
 
     if (Number.isNaN(section)) {
+        selectedPart.value = `§ ${section}`;
         return `citations=${props.title}.${props.part}.${section}`;
     }
 
@@ -134,56 +120,6 @@ const parseHash = (locationHash) => {
     } else {
         selectedPart.value = undefined;
         return "";
-    }
-};
-
-const fetchContent = async (location) => {
-    try {
-        // Page size is set to 1000 to attempt to get all resources.
-        // Defualt page size of 100 was omitting resources from the right sidebar.
-        // Right now no single subpart hits this number so this shouldn't be an issue
-
-        let response = "";
-        if (location) {
-            response = await getSupplementalContent({
-                apiUrl: props.apiUrl,
-                builtCitationString: location,
-                pageSize: 1000,
-            });
-        }
-        await getPartDictionary();
-
-        const results = await Promise.all([
-            getCategories(props.apiUrl),
-            getSupplementalContent({
-                apiUrl: props.apiUrl,
-                partDict: partDict.value,
-                pageSize: 1000,
-            }),
-        ]);
-
-        const categoryData = results[0];
-        const subpartResponse = results[1];
-
-        resourceCount.value = subpartResponse.count;
-
-        if (response !== "") {
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: response.results,
-            });
-        } else {
-            categories.value = formatResourceCategories({
-                apiUrl: props.apiUrl,
-                categories: categoryData.results,
-                resources: subpartResponse.results,
-            });
-        }
-    } catch (error) {
-        console.error(error);
-    } finally {
-        isFetching.value = false;
     }
 };
 
@@ -224,7 +160,7 @@ function getDefaultCategories() {
     });
 }
 
-const getCategories = async (apiUrl) => {
+const getPublicCategories = async (apiUrl) => {
     let categories = [];
 
     try {
@@ -237,6 +173,186 @@ const getCategories = async (apiUrl) => {
 
     return categories;
 };
+
+const getAuthedCategories = async (apiUrl) => {
+    let categories = [];
+
+    try {
+        categories = await getInternalCategories({
+            apiUrl,
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    return categories;
+};
+
+
+// Sort dropdown related code
+
+const selectedSortMethod = defineModel({ default: "default", type: String });
+
+const itemProps = (item) => {
+    return {
+        title: item.label,
+        subtitle: item.label,
+        value: item.method,
+        disabled: item.disabled,
+        "data-testid": `sort-${item.label.toLowerCase()}`,
+    };
+};
+
+const sortOptions = ref([
+    { method: "default", label: "Categories" },
+    { method: "-date", label: "Newest" },
+    { method: "date", label: "Oldest" },
+]);
+
+const fetchContent = async ({ location, sort = "default" } = {}) => {
+    isFetching.value = true;
+    resourceCount.value.loading = true;
+
+    try {
+        // Page size is set to 1000 to attempt to get all resources.
+        // Defualt page size of 100 was omitting resources from the right sidebar.
+        // Right now no single subpart hits this number so this shouldn't be an issue
+
+        // get categories and part dict in parallel since both are needed
+        // before we can render anything and they don't depend on each other
+        const authedCategoriesPromise = sort !== "default" && props.isAuthenticated
+            ? [ getAuthedCategories(props.apiUrl) ]
+            : []
+        const prefetchNeededValues = await Promise.all([
+            getPartDictionary(), // sets partDict ref
+            getPublicCategories(props.apiUrl),
+            ...authedCategoriesPromise,
+        ]);
+
+        const publicCategories = prefetchNeededValues[1].results;
+        const internalCategories = prefetchNeededValues[2]?.results || [];
+
+
+        const neededCategories = sort !== "default" && props.isAuthenticated
+            ? [...publicCategories, ...internalCategories]
+            : publicCategories;
+        documents.value.categories = neededCategories;
+
+        const sharedParamsObj = {
+            apiUrl: props.apiUrl,
+            pageSize: 1000,
+            sortMethod: sort === "default" ? "-date" : sort,
+            documentType: sort !== "default" && props.isAuthenticated ? "" : "public",
+        }
+
+        const requestParamsObj = location
+            ? {
+                ...sharedParamsObj,
+                builtCitationString: location,
+            }
+            : {
+                ...sharedParamsObj,
+                partDict: partDict.value,
+            };
+
+        if (location) {
+            const countsPromise = getSupplementalContent({
+                ...sharedParamsObj,
+                partDict: partDict.value,
+                documentType: props.isAuthenticated ? "" : "public",
+            });
+
+            countsPromise.then((response) => {
+                resourceCount.value.count = response.count;
+            }).catch((error) => {
+                console.error("Error fetching resource counts:", error);
+            }).finally(() => {
+                resourceCount.value.loading = false;
+            });
+        }
+
+        const contentResponse = await getSupplementalContent(requestParamsObj);
+
+        documents.value.results = contentResponse.results;
+
+        if (sort === "default") {
+            categories.value = formatResourceCategories({
+                apiUrl: props.apiUrl,
+                categories: publicCategories,
+                resources: documents.value.results,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isFetching.value = false;
+    }
+};
+
+onMounted(() => {
+    if (window.location.hash) {
+        location.value = parseHash(window.location.hash);
+    } else {
+        fetchContent();
+    }
+    window.addEventListener("hashchange", handleHashChange);
+
+    eventbus.on(EventCodes.SetSection, (args) => {
+        selectedPart.value = args.section;
+    });
+    categories.value = getDefaultCategories();
+});
+
+onUnmounted(() => {
+    eventbus.off(EventCodes.SetSection);
+    window.removeEventListener("hashchange", handleHashChange);
+});
+
+watch(
+    () => props.subparts,
+    () => {
+        categories.value = [];
+        fetchContent();
+    }
+);
+
+watch(selectedPart, (newValue, oldValue) => {
+    categories.value = [];
+    if (newValue) {
+        // we want to reset sort method to default
+        // which will trigger the fetchContent watcher
+        // and fetch the data in the correct format for the selected part
+        if (selectedSortMethod.value !== "default") {
+            selectedSortMethod.value = "default";
+        } else {
+            // if already at default, just fetch the content for the selected part
+            fetchContent({
+                location: `citations=${props.title}.${props.part}.${
+                    newValue.split(".")[1]
+                }`
+            });
+        }
+    } else if (oldValue && selectedSortMethod.value !== "default") {
+        // if newValue is undefined but oldValue exists, that means we cleared the selected part
+        selectedSortMethod.value = "default";
+    } else {
+        fetchContent();
+    }
+});
+
+watch(selectedSortMethod, (newValue) => {
+    categories.value = [];
+    if (selectedPart.value) {
+        fetchContent({
+            location: `citations=${props.title}.${props.part}.${
+                selectedPart.value.split(".")[1]
+            }`,
+            sort: newValue
+        });
+    } else {
+        fetchContent({ location: location.value, sort: newValue });
+    }
+});
 </script>
 
 <template>
@@ -251,36 +367,106 @@ const getCategories = async (apiUrl) => {
             :selected-part="selectedPart"
             :subparts="props.subparts"
         />
-        <h2>Documents</h2>
-        <slot name="login-banner" />
-        <slot name="public-label" />
+        <div class="filter__container">
+            <label class="sort__label--wrapper">
+                <span class="sort__label">Sort by</span>
+                <GenericDropdown
+                    v-model="selectedSortMethod"
+                    class="filter__select--sort"
+                    :clearable="false"
+                    data-testid="sort-select"
+                    :item-props="itemProps"
+                    :items="sortOptions"
+                    :disabled="isFetching"
+                />
+            </label>
+        </div>
+        <template v-if="selectedSortMethod === 'default'">
+            <slot name="public-label" />
+        </template>
         <div class="supplemental-content-container">
-            <supplemental-content-category
-                v-for="category in categories"
-                :key="category.name"
-                :name="category.name"
-                :subcategory="false"
-                :description="category.description"
-                :supplemental_content="category.supplemental_content"
-                :subcategories="category.subcategories"
-                :is-fetching="isFetching"
-                :is-fr-link-category="category.is_fr_link_category"
-                :show-if-empty="category.show_if_empty"
-            />
-            <simple-spinner v-if="isFetching" />
+            <template v-if="selectedSortMethod === 'default'">
+                <supplemental-content-category
+                    v-for="category in categories"
+                    :key="category.name"
+                    :name="category.name"
+                    :subcategory="false"
+                    :description="category.description"
+                    :supplemental_content="category.supplemental_content"
+                    :subcategories="category.subcategories"
+                    :is-fetching="isFetching"
+                    :is-fr-link-category="category.is_fr_link_category"
+                    :show-if-empty="category.show_if_empty"
+                />
+                <simple-spinner v-if="isFetching" />
+            </template>
+            <template v-else>
+                <div class="sort__list--chrono">
+                    <simple-spinner v-if="isFetching" />
+                    <template v-else>
+                        <PolicyResultsList
+                            :api-url="apiUrl"
+                            :categories="documents.categories"
+                            :home-url="homeUrl"
+                            :results-list="documents.results.slice(0, 5)"
+                            condensed-items
+                        />
+                        <template v-if="documents.results.length > 5">
+                            <CollapseButton
+                                name="external-chronological-collapse"
+                                state="collapsed"
+                                class="category-title"
+                            >
+                                <template #expanded>
+                                    <ShowMoreButton
+                                        button-text="- Show Less"
+                                        :count="documents.results.length - 5"
+                                    />
+                                </template>
+                                <template #collapsed>
+                                    <ShowMoreButton
+                                        button-text="+ Show More"
+                                        :count="documents.results.length - 5"
+                                    />
+                                </template>
+                            </CollapseButton>
+                            <Collapsible
+                                name="external-chronological-collapse"
+                                state="collapsed"
+                                class="collapse-content show-more-content"
+                            >
+                                <PolicyResultsList
+                                    :api-url="apiUrl"
+                                    :categories="documents.categories"
+                                    :home-url="homeUrl"
+                                    :results-list="documents.results.slice(5)"
+                                    condensed-items
+                                />
+                            </Collapsible>
+                        </template>
+                    </template>
+                </div>
+            </template>
         </div>
     </div>
-    <slot name="authed-documents" />
+    <template v-if="selectedSortMethod === 'default'">
+        <hr>
+        <slot name="internal-label" />
+    </template>
+    <slot name="authed-documents" :sort-method="selectedSortMethod" />
     <div class="view-all__container">
         <a
-            v-if="selectedPart && subparts.length === 1"
+            v-if=" selectedPart
+                && subparts.length === 1
+                && !resourceCount.loading
+            "
             class="show-subpart-resources"
             data-testid="view-all-subpart-resources"
             @click="clearSection"
         >
             <span class="bold">
                 View All Subpart {{ subparts[0] }} Documents</span>
-            ({{ resourceCount }})
+            ({{ resourceCount.count }})
         </a>
     </div>
 </template>

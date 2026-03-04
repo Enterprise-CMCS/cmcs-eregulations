@@ -103,7 +103,7 @@ function onPageShow() {
 
         if (readerEl) {
             scrollToElement(readerEl, offsetPx);
-            if (sidebarEl.scrollIntoViewIfNeeded) {
+            if (sidebarEl?.scrollIntoViewIfNeeded) {
                 // Chrome
                 sidebarEl.scrollIntoViewIfNeeded();
             } else {

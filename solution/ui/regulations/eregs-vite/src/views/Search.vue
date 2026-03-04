@@ -26,7 +26,7 @@ import HeaderSearch from "@/components/header/HeaderSearch.vue";
 import HeaderUserWidget from "@/components/header/HeaderUserWidget.vue";
 import JumpTo from "@/components/JumpTo.vue";
 import PaginationController from "@/components/pagination/PaginationController.vue";
-import PolicyResults from "@/components/subjects/PolicyResults.vue";
+import PolicyResultsContainer from "@/components/subjects/PolicyResultsContainer.vue";
 import SearchContinueResearch from "@/components/SearchContinueResearch.vue";
 import SearchErrorMsg from "@/components/SearchErrorMsg.vue";
 import SearchTextArea from "@/components/SearchTextArea.vue";
@@ -417,7 +417,7 @@ onMounted(() => {
                     />
                 </template>
                 <template v-else>
-                    <PolicyResults
+                    <PolicyResultsContainer
                         :categories="categoriesRef"
                         :results="policyDocList.results"
                         :results-count="policyDocList.count"
@@ -446,7 +446,7 @@ onMounted(() => {
                                 </template>
                             </SignInCTA>
                         </template>
-                    </PolicyResults>
+                    </PolicyResultsContainer>
                     <div class="pagination-expand-row">
                         <div class="pagination-expand-container">
                             <PaginationController

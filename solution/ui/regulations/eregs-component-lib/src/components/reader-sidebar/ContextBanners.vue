@@ -165,7 +165,10 @@ watch(
                 class="category-title"
             >
                 <template #expanded>
-                    <ShowMoreButton button-text="- Show Less" />
+                    <ShowMoreButton
+                        button-text="- Show Less"
+                        :count="filteredBanners[1].length"
+                    />
                 </template>
                 <template #collapsed>
                     <ShowMoreButton

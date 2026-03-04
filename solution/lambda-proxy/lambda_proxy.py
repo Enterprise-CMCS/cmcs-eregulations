@@ -74,9 +74,10 @@ class ApiProxy:
                     "requestContext": {
                         "http": {
                             "method": method,
-                            "path": path,
+                            "path": path.path,
                             "protocol": "HTTP/1.1",
                             "userAgent": headers.get("User-Agent", ""),
+                            "sourceIp": self.client_address[0],
                         },
                     },
                     "isBase64Encoded": False,  # TODO: handle this

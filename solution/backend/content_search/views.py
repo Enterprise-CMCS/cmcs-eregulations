@@ -270,11 +270,15 @@ class ContentSearchMixin:
         if not (enable_semantic or enable_keyword):
             sort = "date ASC" if sort == "date" else "date DESC"
             sql += """
-                SELECT
-                    id,
-                    0.0 AS score
-                FROM content_search_contentindex
-                WHERE id IN (SELECT id FROM indices)
+                SELECT id, score FROM (
+                    SELECT DISTINCT ON (resource_id, reg_text_id)
+                        id,
+                        date,
+                        0.0 AS score
+                    FROM content_search_contentindex
+                    WHERE id IN (SELECT id FROM indices)
+                    ORDER BY resource_id ASC, reg_text_id ASC
+                ) AS queryless_search
             """
 
         # If semantic is enabled, add semantic search CTE
