@@ -54,8 +54,8 @@ def extract_text(modeladmin, request, queryset):
 
     if failures:
         message = format_html((
-                "Failed to request text extraction for the following resource{}: {}."
-                " Please be sure {}, then {} for assistance if needed."
+                "Failed to request text extraction for the following resource{}: {}. Please be sure {}, "
+                f"then {get_support_link('contact support')} for assistance if needed."
             ),
             "s" if len(failures) > 1 else "",
             format_html_join(", ", "{}", ((url,) for url in failure_urls)),
@@ -64,6 +64,5 @@ def extract_text(modeladmin, request, queryset):
                 if len(failures) > 1 else
                 "this item has a valid URL or attached file"
             ),
-            get_support_link("contact support"),
         )
         modeladmin.message_user(request, message, messages.ERROR)
