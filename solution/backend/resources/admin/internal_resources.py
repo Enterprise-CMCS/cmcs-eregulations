@@ -3,7 +3,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
-from django.utils.html import mark_safe
+from django.utils.html import format_html
 
 from common.aws import establish_client
 from resources.models import (
@@ -141,5 +141,5 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
     def download_file(self, obj):
         if obj.id:
             link = reverse("file-download", kwargs={"file_id": obj.uid})
-            return mark_safe(f"<input type=\"button\" onclick=\"location.href='{link}'\" value=\"Download File\" />")
+            return format_html('<input type="button" onclick="location.href=\'{}\'" value="Download File" />', link)
         return "N/A"
