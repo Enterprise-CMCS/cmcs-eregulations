@@ -90,8 +90,8 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])
                 message = (
                     "Failed to request text extraction for {verbose_name} \"<a target=\"_blank\" href=\"{url}\">{obj_str}</a>\". "
-                    f"Please ensure the item has a valid URL or attached file, then {get_support_link('contact support')} "
-                    "for assistance if needed."
+                    "Please ensure the item has a valid URL or attached file, then "
+                    f"{get_support_link('contact support')} for assistance if needed."
                 )
                 level = messages.WARNING
             else:
