@@ -84,6 +84,8 @@
             justify-content: start;
             letter-spacing: 0;
             text-transform: none;
+            font-size: 14px;
+            line-height: 22px;
 
             .subjects-select__label {
                 &--selected {
@@ -179,6 +181,10 @@
                     min-height: 30px;
                     padding-top: 0px;
                     padding-bottom: 0px;
+
+                    input:focus-visible {
+                        outline: none;
+                    }
                 }
 
                 .v-select__selection-text,
@@ -221,9 +227,10 @@
         box-shadow: unset;
         max-width: 300px !important;
 
-        & > .v-list {
+        .v-list {
             margin-top: 8px;
             border: 1px solid $border_color;
+            border-radius: 4px;
             box-shadow: unset;
             overflow-x: hidden;
         }
@@ -232,6 +239,7 @@
     .v-list-item {
         min-height: unset;
         padding: 0;
+        padding-inline: 1rem;
 
         &::after {
             opacity: 0;

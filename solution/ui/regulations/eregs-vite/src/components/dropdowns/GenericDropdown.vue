@@ -32,11 +32,11 @@ defineProps({
         menu-icon="mdi-menu-swap"
         density="compact"
     >
-        <template v-if="itemType" #item="{ props, item }">
+        <template v-if="itemType" #item="{ props, internalItem }">
             <component
                 :is="itemTypes[itemType]"
                 :scoped-props="props"
-                :item="item"
+                :item="internalItem"
             />
         </template>
     </v-select>

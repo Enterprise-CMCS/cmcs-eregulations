@@ -333,6 +333,7 @@
             font-size: var(--font-size-sm);
             line-height: 20px;
             height: 36px;
+            padding: 0 1rem;
 
             @include common-tab-styles;
         }
