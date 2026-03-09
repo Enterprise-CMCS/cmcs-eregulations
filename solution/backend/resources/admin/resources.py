@@ -10,7 +10,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Concat
 from django.urls import reverse
-from django.utils.html import escape, format_html
+from django.utils.html import format_html
 
 from common.admin import CustomAdminMixin
 from common.filters import IndexPopulatedFilter
@@ -83,17 +83,33 @@ class AbstractResourceAdmin(CustomAdminMixin, admin.ModelAdmin):
         fields_changed = any([field_changed(form, field) for field in ["url", "file_type", "extract_url"]])
         if (auto_extract and (not change or fields_changed)) or force_extract:
             _, fail = call_text_extractor_for_resources(request, [obj])
-            url = f"<a target=\"_blank\" href=\"{reverse('edit', args=[obj.pk])}\">{escape(str(obj))}</a>"
+            url = reverse('edit', args=[obj.pk])
+            obj_str = str(obj)
+
             if fail:
                 logger.error("Failed to invoke text extractor for resource with ID %i: %s", obj.pk, fail[0]["reason"])
-                message = f"Failed to request text extraction for {obj._meta.verbose_name} \"{url}\". Please ensure "\
-                          f"the item has a valid URL or attached file, then {get_support_link('contact support')} "\
-                          "for assistance if needed."
+                message = (
+                    "Failed to request text extraction for {verbose_name} \"<a target=\"_blank\" href=\"{url}\">{obj_str}</a>\". "
+                    "Please ensure the item has a valid URL or attached file, then "
+                    f"{get_support_link('contact support')} for assistance if needed."
+                )
                 level = messages.WARNING
             else:
-                message = f"Text extraction requested for {obj._meta.verbose_name} \"{url}\"."
+                message = (
+                    "Text extraction requested for {verbose_name} \"<a target=\"_blank\" href=\"{url}\">{obj_str}</a>\"."
+                )
                 level = messages.SUCCESS
-            self.message_user(request, format_html(message), level=level)
+
+            self.message_user(
+                request,
+                format_html(
+                    message,
+                    verbose_name=obj._meta.verbose_name,
+                    url=url,
+                    obj_str=obj_str,
+                ),
+                level=level,
+            )
 
     # This override allows the grouping post-save hook to work properly.
     # Normally Django saves the model before updating related fields, but this causes aggregates of citations etc to not

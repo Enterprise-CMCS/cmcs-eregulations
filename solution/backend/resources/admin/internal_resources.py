@@ -141,5 +141,5 @@ class InternalFileAdmin(AbstractInternalResourceAdmin):
     def download_file(self, obj):
         if obj.id:
             link = reverse("file-download", kwargs={"file_id": obj.uid})
-            return format_html(f"<input type=\"button\" onclick=\"location.href='{link}'\" value=\"Download File\" />")
+            return format_html('<input type="button" onclick="location.href=\'{}\'" value="Download File" />', link)
         return "N/A"

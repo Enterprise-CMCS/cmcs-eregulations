@@ -5,7 +5,7 @@ import requests
 from django import forms
 from django.contrib import admin, messages
 from django.db.models import Prefetch
-from django.utils.html import format_html
+from django.utils.html import mark_safe
 
 from resources.models import (
     FederalRegisterLink,
@@ -151,10 +151,11 @@ class FederalRegisterLinkAdmin(AbstractPublicResourceAdmin):
                 # This can be due to a bad document_number, a network error, or a JSON parse error due to an invalid response.
                 # We handle all cases in the same way: show a warning to the user, log the error, then finally save the model.
                 logger.warning("Failed to retrieve the raw text URL for Federal Register Link \"%s\": %s", document_number, e)
-                message = "Failed to retrieve the URL used for extracting raw text from the Federal Register. "\
-                          f"Please check the document number and try again, or {get_support_link('contact support')} "\
-                          "for assistance."
-                self.message_user(request, format_html(message), level=messages.WARNING)
+                message = mark_safe(  # nosec # noqa: S308
+                    'Failed to retrieve the URL used for extracting raw text from the Federal Register. '
+                    f'Please check the document number and try again, or {get_support_link("contact support")} for assistance.'
+                )
+                self.message_user(request, message, level=messages.WARNING)
         super().save_model(request, obj, form, change, force_extract=force_extract)
 
     # Override document_id's default help_text to show specific FR link information
