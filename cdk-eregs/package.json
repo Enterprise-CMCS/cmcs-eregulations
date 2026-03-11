@@ -12,14 +12,14 @@
   "devDependencies": {
     "@types/fs-extra": "11.0.4",
     "@types/node": "22.5.4",
-    "aws-cdk": "2.1108.0",
+    "aws-cdk": "2.1110.0",
     "globals": "16.4.0",
     "ts-node": "10.9.2",
     "typescript": "5.6.2"
   },
   "dependencies": {
-    "@aws-sdk/client-ssm": "3.1001.0",
-    "aws-cdk-lib": "2.241.0",
+    "@aws-sdk/client-ssm": "3.1006.0",
+    "aws-cdk-lib": "2.242.0",
     "constructs": "10.5.1",
     "fs-extra": "11.3.1",
     "path": "0.12.7",
