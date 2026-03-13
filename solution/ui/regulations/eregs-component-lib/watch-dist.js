@@ -16,6 +16,7 @@ distWatcher
     })
     .on("change", (path) => {
         log(`File ${path} has been changed`);
+        shell.exec("npm run build:main");
     })
     .on("unlink", (path) => {
         log(`File ${path} has been unlinked`);
