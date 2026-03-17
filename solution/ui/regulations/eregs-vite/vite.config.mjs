@@ -26,7 +26,7 @@ export default defineConfig({
     build: {
         outDir: "../../../static-assets/regulations/vite",
         sourcemap: true,
-        rollupOptions: {
+        rolldownOptions: {
             output: {
                 entryFileNames: `[name].js`,
                 chunkFileNames: `[name].js`,
