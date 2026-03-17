@@ -5,6 +5,7 @@ description = "MCP server on a Lambda for eRegulations"
 readme = "README.md"
 requires-python = ">=3.12.12"
 dependencies = [
+    "beautifulsoup4>=4.14.3",
     "fastmcp>=3.0.2",
     "mangum>=0.21.0",
     "requests>=2.32.5",
