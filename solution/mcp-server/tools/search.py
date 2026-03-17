@@ -76,6 +76,7 @@ def register_search_tools(mcp: FastMCP, call_eregs: callable):
             "page_size": page_size,
             "show_public": show_public,
             "show_regulations": show_regulations,
+            "show_internal": False,  # internal documents are not relevant for this tool
             "sort": sort,
         })
 
