@@ -48,9 +48,9 @@ jobs:
         gofmt-path: './solution/parser/${{ matrix.dir }}'
         gofmt-flags: '-l -d'
 
-    - uses: dominikh/staticcheck-action@v1.4.0
+    - uses: dominikh/staticcheck-action@v1.4.1
       with:
-        version: "2025.1.1"
+        version: "latest"
         working-directory: "./solution/parser/${{ matrix.dir }}"
 
     # Run lint on the code
