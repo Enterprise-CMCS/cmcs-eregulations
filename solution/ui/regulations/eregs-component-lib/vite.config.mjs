@@ -58,7 +58,7 @@ export default defineConfig({
         },
         outDir: currentConfig.outDir,
         sourcemap: true,
-        rollupOptions: {
+        rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
             external: ["vue"],
