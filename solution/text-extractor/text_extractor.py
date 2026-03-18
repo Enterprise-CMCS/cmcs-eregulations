@@ -205,7 +205,7 @@ def handler(event: dict, context: Any) -> dict:
             logger.info("Text chunked into %d chunks.", len(chunks))
 
         # If embeddings are enabled, generate embeddings for the text or chunks
-        embeddings = [None] * len(chunks)  # Default to no embeddings
+        embeddings = [[None] * embedding_dimensions] * len(chunks)  # Default to no embeddings for all chunks
         if text and enable_embeddings:
             client = boto3.client("bedrock-runtime")
             logger.info("Generating embeddings using model '%s' with %d dimensions.", embedding_model, embedding_dimensions)
