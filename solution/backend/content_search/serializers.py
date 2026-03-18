@@ -88,4 +88,4 @@ class ChunkUpdateSerializer(serializers.Serializer):
     file_type = serializers.CharField(required=False, default="")
     error = serializers.CharField(required=False, default="")
     text = serializers.CharField(required=False, default="")
-    embedding = serializers.ListField(child=serializers.FloatField(), required=False, default=list)
+    embedding = serializers.ListField(child=serializers.FloatField(allow_null=True), required=False, default=list)
