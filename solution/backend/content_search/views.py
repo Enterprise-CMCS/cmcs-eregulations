@@ -12,10 +12,12 @@ from django.urls import reverse
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.parsers import FormParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from cmcs_regulations.utils.api_exceptions import BadRequest
 from cmcs_regulations.utils.pagination import ViewSetPagination
+from common.auth import SettingsAuthentication
 from common.aws import establish_client
 from common.constants import QUOTE_TYPES
 from common.exceptions import ServiceUnavailable
@@ -611,6 +613,9 @@ class ContentCountViewSet(ContentSearchMixin, viewsets.ViewSet):
     responses={200: str},
 )
 class ResourceChunkUpdateViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SettingsAuthentication]
+
     @transaction.atomic
     def patch(self, request, *args, **kwargs):
         # Validate the request body
@@ -677,6 +682,9 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
     responses={200: str},
 )
 class RegTextChunkUpdateViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SettingsAuthentication]
+
     @transaction.atomic
     def patch(self, request, *args, **kwargs):
         # Validate the request body
