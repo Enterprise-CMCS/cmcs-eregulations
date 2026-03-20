@@ -7,7 +7,7 @@
     "build:components": "LIB_NAME=components vite build --emptyOutDir",
     "watch-build:components": "LIB_NAME=components vite build --watch --emptyOutDir",
     "build:main": "LIB_NAME=main vite build",
-    "watch-build:main": "LIB_NAME=main vite build --watch emptyOutDir",
+    "watch-build:main": "LIB_NAME=main vite build --watch --emptyOutDir",
     "build": "npm run build:components && npm run build:main"
   },
   "dependencies": {
