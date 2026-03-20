@@ -16,7 +16,7 @@ dependencies = [
     "django-model-utils==5.0.0",
     "django-solo==2.5.1",
     "django-storages==1.14.6",
-    "djangorestframework==3.16.1",
+    "djangorestframework==3.17.0",
     "djangorestframework-simplejwt==5.5.1",
     "drf-spectacular==0.29.0",
     "httpx==0.28.1",
