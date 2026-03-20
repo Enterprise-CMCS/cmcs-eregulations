@@ -91,7 +91,6 @@ class ChunkUpdateSerializer(serializers.Serializer):
     embedding = serializers.ListField(
         child=serializers.FloatField(),
         required=False,
-        default=list,
-        allow_empty=True,
+        default=None,
         allow_null=True,
     )
