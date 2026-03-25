@@ -504,7 +504,7 @@ jobs:
 
       # Get test user credentials from AWS Secret Manager
       - name: Get test user credentials
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@v3
         with:
           secret-ids: |
             CYPRESS_TEST, /eregulations/http/credentials
