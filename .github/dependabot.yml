@@ -81,6 +81,12 @@ updates:
           requests:
             patterns:
               - "requests*"
+          beautifulsoup:
+            patterns:
+              - "beautifulsoup*"
+          boto3:
+            patterns:
+              - "boto3*"
 
     - package-ecosystem: "github-actions"
       directory: "/"
