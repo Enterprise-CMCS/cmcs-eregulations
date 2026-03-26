@@ -67,6 +67,7 @@ updates:
       directories:
         - "/solution/backend"
         - "/solution/text-extractor"
+        - "/solution/mcp-server"
       schedule:
           interval: "daily"
       open-pull-requests-limit: 1
@@ -77,6 +78,9 @@ updates:
           cryptography:
             patterns:
               - "cryptography*"
+          requests:
+            patterns:
+              - "requests*"
 
     - package-ecosystem: "github-actions"
       directory: "/"
