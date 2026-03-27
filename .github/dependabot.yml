@@ -75,12 +75,22 @@ updates:
           - dependency-name: "*"
             update-types: ["version-update:semver-patch"]
       groups:
+          # To figure out what groups are needed here, copy all dependencies from the `pyproject.toml` files into a list in a Python shell,
+          # then run the following one-liner:
+          #   [i for i in list(set([i.split("==")[0] for i in dependencies])) if [j.split("==")[0] for j in dependencies].count(i) > 1]
+          # It will give you a list of all common explicit dependencies, which is a good starting point for grouping.
           cryptography:
             patterns:
               - "cryptography*"
           requests:
             patterns:
               - "requests*"
+          beautifulsoup:
+            patterns:
+              - "beautifulsoup*"
+          boto3:
+            patterns:
+              - "boto3*"
 
     - package-ecosystem: "github-actions"
       directory: "/"
