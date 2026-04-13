@@ -92,7 +92,7 @@ target-version = "py312"
 [dependency-groups]
 dev = [
     "pre-commit>=4.5.1",
-    "pytest>=9.0.2",
+    "pytest>=9.0.3",
     "pytest-cov>=7.0.0",
     "pytest-django>=4.11.1",
     "ruff>=0.14.10",
