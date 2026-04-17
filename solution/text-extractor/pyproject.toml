@@ -13,7 +13,7 @@ dependencies = [
     "moto==5.1.19",
     "openpyxl==3.1.5",
     "pillow==12.2.0",
-    "pytest==9.0.2",
+    "pytest==9.0.3",
     "python-pptx==1.0.2",
     "requests==2.33.0",
     "ruff==0.15.0",
