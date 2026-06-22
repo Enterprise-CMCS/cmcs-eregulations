@@ -58,6 +58,8 @@ export default defineConfig({
         },
         outDir: currentConfig.outDir,
         sourcemap: true,
+        minify: "esbuild",
+        cssMinify: "esbuild",
         rolldownOptions: {
             // make sure to externalize deps that shouldn't be bundled
             // into your library
