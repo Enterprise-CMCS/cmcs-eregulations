@@ -95,6 +95,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy Static Assets
         env:
@@ -147,6 +148,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy ZIP-based Lambdas
         env:
@@ -191,6 +193,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy Text Extractor
         env:
@@ -234,6 +237,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy FR Parser
         env:
@@ -277,6 +281,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy ECFR Parser
         env:
@@ -320,6 +325,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy Parser Launcher
         env:
@@ -363,6 +369,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy MCP Server
         env:
@@ -408,6 +415,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       - name: Deploy Site-Lambda
         env:
@@ -501,6 +509,7 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
           aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
 
       # Get test user credentials from AWS Secret Manager
       - name: Get test user credentials
