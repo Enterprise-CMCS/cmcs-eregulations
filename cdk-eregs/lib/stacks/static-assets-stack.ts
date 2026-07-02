@@ -174,6 +174,8 @@ export class StaticAssetsStack extends cdk.Stack {
                 s3deploy.Source.asset(path.join(__dirname, '../../../solution/static-assets/regulations')),
             ],
             destinationBucket: assetsBucket,
+            memoryLimit: 1769,
+            waitForDistributionInvalidation: false,
         });
 
         // =========================
