@@ -15,7 +15,7 @@
     "lodash": "4.18.1",
     "mitt": "3.0.1",
     "shelljs": "0.10.0",
-    "vue": "3.5.30",
+    "vue": "3.5.39",
     "vuetify": "4.1.2"
   },
   "devDependencies": {
