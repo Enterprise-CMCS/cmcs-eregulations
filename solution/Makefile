@@ -106,9 +106,6 @@ local.regulations: ## Run migrations and restart the regulations-core
 		sleep 5;
 local.spectacular: ## Run swagger locally
 	docker compose exec regulations uv run python manage.py spectacular --file schema.yaml
-tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**/*.go
-	cd tools/ecfr-parser; go build -o build/ecfr-parser .
-
 %.prod: ## Load a Part of Title 42. e.g. make data.prod.435 will load Part 435 into prod
 %.prod: CORE_URL = https://3iok6sq3ui.execute-api.us-east-1.amazonaws.com/prod/v3/
 
@@ -125,12 +122,6 @@ tools/ecfr-parser/build/ecfr-parser: tools/ecfr-parser/*.go tools/ecfr-parser/**
 %.local: CORE_URL = http://localhost:8000/v3/
 %.local: export EREGS_USERNAME=RpSS01rhbx
 %.local: export EREGS_PASSWORD=UkOAsfkItN
-
-data.%:
-	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker-compose.yml -f docker-compose.parser.yml up parser
-
-frdocs.%:
-	EREGS_API_URL_V3=$(CORE_URL) docker compose -f docker-compose.yml -f docker-compose.fr-parser.yml up fr-parser
 
 local.stop: ## Stop the local environment, freeing up resources and ports without destroying data.
 	docker compose stop
