@@ -7,6 +7,8 @@ import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
 import { BackendStack } from '../lib/stacks/api-stack';
+import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
+import { FrParserStack } from '../lib/stacks/fr-parser-stack';
 import { McpServerStack } from '../lib/stacks/mcp-server-stack';
 
 async function main() {
@@ -87,6 +89,28 @@ async function main() {
             subnetIds: [privateSubnetAId, privateSubnetBId],
         }
     }, stageConfig);        
+
+    new EcfrParserStack(app, stageConfig.getResourceName('ecfr-parser'), {
+        env,
+        lambdaConfig: {
+            timeout: 900,
+            memorySize: 1024,
+        },
+        environmentConfig: {
+            logLevel,
+        }
+    }, stageConfig);
+
+    new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
+        env,
+        lambdaConfig: {
+            timeout: 900,
+            memorySize: 1024,
+        },
+        environmentConfig: {
+            logLevel,
+        }
+    }, stageConfig);
 
     await applyGlobalAspects(app, stageConfig);
 
