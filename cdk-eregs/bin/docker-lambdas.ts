@@ -6,10 +6,7 @@ import { StageConfig } from '../config/stage-config';
 import { IamPathAspect } from '../lib/aspects/iam-path';
 import { IamPermissionsBoundaryAspect } from '../lib/aspects/iam-permissions-boundary-aspect';
 import { EphemeralRemovalPolicyAspect } from '../lib/aspects/removal-policy-aspect';
-import { FrParserStack } from '../lib/stacks/fr-parser-stack';
-import { EcfrParserStack } from '../lib/stacks/ecfr-parser-stack';
 import { BackendStack } from '../lib/stacks/api-stack';
-import { ParserLauncherStack } from '../lib/stacks/parser-launcher-stack';
 import { McpServerStack } from '../lib/stacks/mcp-server-stack';
 
 async function main() {
@@ -76,40 +73,6 @@ async function main() {
             subnetIds: [privateSubnetAId, privateSubnetBId],
         }
     }, mcpServerStageConfig);
-
-    new FrParserStack(app, stageConfig.getResourceName('fr-parser'), {
-        env,
-        lambdaConfig: {
-            timeout: 900,
-            memorySize: 1024,
-        },
-        environmentConfig: {
-            logLevel,
-        }
-    }, stageConfig);
-    
-    new EcfrParserStack(app, stageConfig.getResourceName('ecfr-parser'), {
-        env,
-        lambdaConfig: {
-            timeout: 900,
-            memorySize: 1024,
-        },
-        environmentConfig: {
-            logLevel,
-        }
-    }, stageConfig);
-
-    new ParserLauncherStack(app, stageConfig.getResourceName('parser-launcher'), {
-        env,
-        lambdaConfig: {
-            runtime: cdk.aws_lambda.Runtime.PYTHON_3_12,
-            timeout: 900,
-            memorySize: 1024,
-        },
-        environmentConfig: {
-            secretName: "/eregulations/http/credentials",
-        }
-    }, stageConfig);
 
     new BackendStack(app, stageConfig.getResourceName('api'), {
         env,
