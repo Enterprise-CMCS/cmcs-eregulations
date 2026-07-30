@@ -206,6 +206,18 @@ text-extractor.restart:
 text-extractor.test:
 	docker compose exec text-extractor uv run --directory app python -m unittest
 
+parsers.local.build:
+	docker compose build ecfr-worker fr-worker ecfr-launcher fr-launcher
+
+parsers.local.up:
+	docker compose up -d ecfr-worker fr-worker ecfr-launcher fr-launcher
+
+parsers.local.down:
+	docker compose stop ecfr-worker fr-worker ecfr-launcher fr-launcher
+
+parsers.local.logs:
+	docker compose logs -f ecfr-worker fr-worker ecfr-launcher fr-launcher
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration

@@ -9,21 +9,29 @@ import boto3
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-sqs = boto3.client("sqs")
+
+def _is_local_mode() -> bool:
+    return os.environ.get("PARSER_LOCAL_MODE", "false").lower() == "true"
 
 
-def handler(event, _context):
-    queue_url = os.environ["PARSER_QUEUE_URL"]
-    run_time = datetime.now(timezone.utc).isoformat()
-
-    work_units = [
+def _build_work_units(run_time: str) -> list[dict]:
+    return [
         {
-            "parser": "fr",
-            "unit_type": "federal-register-document",
-            "document_number": "placeholder-doc",
-            "scheduled_at": run_time,
+            "config": {
+                "document_number": "placeholder-doc",
+                "credentials": {
+                    "auth_type": "basic",
+                    "username": os.environ.get("EREGS_USERNAME", ""),
+                    "password": os.environ.get("EREGS_PASSWORD", ""),
+                },
+                "scheduled_at": run_time,
+            }
         }
     ]
+
+
+def _send_work_units(queue_url: str, work_units: list[dict]) -> None:
+    sqs = boto3.client("sqs")
 
     for work_unit in work_units:
         sqs.send_message(
@@ -31,7 +39,23 @@ def handler(event, _context):
             MessageBody=json.dumps(work_unit),
         )
 
-    logger.info("FR launcher enqueued %s work unit(s)", len(work_units))
+
+def handler(event, _context):
+    run_time = datetime.now(timezone.utc).isoformat()
+    work_units = _build_work_units(run_time)
+
+    if _is_local_mode():
+        logger.info("FR launcher local mode enabled; skipping SQS send")
+    else:
+        queue_url = os.environ["PARSER_QUEUE_URL"]
+        _send_work_units(queue_url, work_units)
+        logger.info("FR launcher enqueued %s work unit(s)", len(work_units))
+
     logger.info("FR launcher trigger event: %s", json.dumps(event))
 
-    return {"statusCode": 200, "enqueued": len(work_units)}
+    return {
+        "statusCode": 200,
+        "enqueued": len(work_units),
+        "local_mode": _is_local_mode(),
+        "work_units": work_units,
+    }
