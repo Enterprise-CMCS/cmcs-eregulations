@@ -38,6 +38,13 @@ Stream logs:
 make parsers.local.logs
 ```
 
+Invoke schedulers via Make:
+
+```bash
+make parsers.local.invoke.ecfr-launcher
+make parsers.local.invoke.fr-launcher
+```
+
 ## Invoke examples
 
 ### eCFR worker

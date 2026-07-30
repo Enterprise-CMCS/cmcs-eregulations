@@ -218,6 +218,12 @@ parsers.local.down:
 parsers.local.logs:
 	docker compose logs -f ecfr-worker fr-worker ecfr-launcher fr-launcher
 
+parsers.local.invoke.ecfr-launcher:
+	curl -s -X POST http://localhost:8005 -H 'Content-Type: application/json' -d '{}'
+
+parsers.local.invoke.fr-launcher:
+	curl -s -X POST http://localhost:8006 -H 'Content-Type: application/json' -d '{}'
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
