@@ -45,6 +45,12 @@ make parsers.local.invoke.ecfr-launcher
 make parsers.local.invoke.fr-launcher
 ```
 
+Run parser unit tests:
+
+```bash
+make parsers.test
+```
+
 ## Invoke examples
 
 ### eCFR worker

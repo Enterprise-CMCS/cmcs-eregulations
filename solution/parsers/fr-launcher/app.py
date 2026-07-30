@@ -3,7 +3,12 @@ import logging
 import os
 from datetime import datetime, timezone
 
-from common.launcher import build_basic_credentials_from_env, is_local_mode, send_work_units
+from common.launcher import (
+    build_basic_credentials_from_env,
+    build_launcher_response,
+    is_local_mode,
+    send_work_units,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -36,9 +41,4 @@ def handler(event, _context):
 
     logger.info("FR launcher trigger event: %s", json.dumps(event))
 
-    return {
-        "statusCode": 200,
-        "enqueued": len(work_units),
-        "local_mode": local_mode,
-        "work_units": work_units,
-    }
+    return build_launcher_response(work_units, local_mode)

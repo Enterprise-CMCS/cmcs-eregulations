@@ -224,6 +224,9 @@ parsers.local.invoke.ecfr-launcher:
 parsers.local.invoke.fr-launcher:
 	curl -s -X POST http://localhost:8006 -H 'Content-Type: application/json' -d '{}'
 
+parsers.test:
+	PYTHONPATH=./parsers uv run --directory parsers python -m unittest discover -s tests -p 'test_*.py' -v
+
 # Do not change the order of these objects.  In some cases it matters
 resource_objects = resources.abstractcategory resources.category resources.subcategory resources.abstractlocation resources.section resources.subpart resources.federalregisterdocumentgroup resources.resourcesconfiguration resources.abstractresource resources.federalregisterdocument resources.supplementalcontent
 reg_objects = regulations.siteconfiguration regulations.statutelinkconfiguration regulations.statutelinkconverter regulations.regulationlinkconfiguration
