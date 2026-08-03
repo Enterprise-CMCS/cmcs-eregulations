@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from common.auth import resolve_backend_credentials
 from common.config import ConfigParseError
-from common.models import BackendCredentials
+from common.auth import BackendCredentials
 
 
 class CommonAuthTests(unittest.TestCase):

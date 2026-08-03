@@ -1,9 +1,17 @@
 import json
 import os
+from dataclasses import dataclass
 from typing import Any
 
 from common.config import ConfigParseError, parse_credentials
-from common.models import BackendCredentials
+
+
+@dataclass
+class BackendCredentials:
+    auth_type: str
+    username: str | None = None
+    password: str | None = None
+    token: str | None = None
 
 
 def resolve_backend_credentials(raw_credentials: Any = None) -> BackendCredentials:

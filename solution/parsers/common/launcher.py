@@ -17,6 +17,19 @@ def send_work_units(queue_url: str, work_units: list[dict[str, Any]]) -> None:
         )
 
 
+def dispatch_work_units(work_units: list[dict[str, Any]]) -> tuple[bool, int, list[dict[str, str]]]:
+    local_mode = is_local_mode()
+
+    if local_mode:
+        worker_url = os.environ["PARSER_WORKER_URL"]
+        succeeded, failures = send_work_units_via_http(worker_url, work_units)
+        return local_mode, succeeded, failures
+
+    queue_url = os.environ["PARSER_QUEUE_URL"]
+    send_work_units(queue_url, work_units)
+    return local_mode, len(work_units), []
+
+
 def build_launcher_response(
     work_units: list[dict[str, Any]],
     local_mode: bool,

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from common.auth import resolve_backend_credentials
 from common.config import parse_typed_config_from_event, require_positive_int, unwrap_config
-from common.models import BackendCredentials
+from common.auth import BackendCredentials
 
 
 @dataclass

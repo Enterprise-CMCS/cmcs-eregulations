@@ -1,14 +1,11 @@
 import json
 import logging
-import os
 from datetime import datetime, timezone
 
 from common.auth import resolve_backend_credentials
 from common.launcher import (
     build_launcher_response,
-    is_local_mode,
-    send_work_units,
-    send_work_units_via_http,
+    dispatch_work_units,
 )
 
 
@@ -30,25 +27,17 @@ def _build_work_units(run_time: str) -> list[dict]:
 
 def handler(event, _context):
     run_time = datetime.now(timezone.utc).isoformat()
-    work_units = _build_work_units(run_time)
-    credentials = resolve_backend_credentials()
-    local_mode = is_local_mode()
-    failures = []
-    succeeded = 0
+    logger.info("eCFR launcher trigger event: %s", json.dumps(event))
 
+    credentials = resolve_backend_credentials()
     logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
 
+    work_units = _build_work_units(run_time)
+    local_mode, succeeded, failures = dispatch_work_units(work_units)
     if local_mode:
-        worker_url = os.environ["PARSER_WORKER_URL"]
-        succeeded, failures = send_work_units_via_http(worker_url, work_units)
         logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
     else:
-        queue_url = os.environ["PARSER_QUEUE_URL"]
-        send_work_units(queue_url, work_units)
-        succeeded = len(work_units)
         logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
-
-    logger.info("eCFR launcher trigger event: %s", json.dumps(event))
 
     return build_launcher_response(
         work_units=work_units,

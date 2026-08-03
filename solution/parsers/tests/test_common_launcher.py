@@ -8,6 +8,7 @@ from moto import mock_aws
 
 from common.launcher import (
     build_launcher_response,
+    dispatch_work_units,
     is_local_mode,
     send_work_units,
     send_work_units_via_http,
@@ -79,6 +80,48 @@ class CommonLauncherTests(unittest.TestCase):
         self.assertEqual(len(failures), 1)
         self.assertEqual(failures[0]["index"], "0")
         self.assertIn("timed out", failures[0]["reason"])
+
+    @patch("common.launcher.send_work_units_via_http")
+    def test_dispatch_work_units_local_mode(self, mock_send_http):
+        mock_send_http.return_value = (1, [])
+        work_units = [{"config": {"title_number": 42}}]
+
+        with patch.dict(
+            "os.environ",
+            {
+                "PARSER_LOCAL_MODE": "true",
+                "PARSER_WORKER_URL": "http://example.local",
+            },
+            clear=True,
+        ):
+            local_mode, succeeded, failures = dispatch_work_units(work_units)
+
+        self.assertTrue(local_mode)
+        self.assertEqual(succeeded, 1)
+        self.assertEqual(failures, [])
+        mock_send_http.assert_called_once_with("http://example.local", work_units)
+
+    @patch("common.launcher.send_work_units")
+    def test_dispatch_work_units_queue_mode(self, mock_send_queue):
+        work_units = [{"config": {"title_number": 42}}]
+
+        with patch.dict(
+            "os.environ",
+            {
+                "PARSER_LOCAL_MODE": "false",
+                "PARSER_QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123/parser-queue",
+            },
+            clear=True,
+        ):
+            local_mode, succeeded, failures = dispatch_work_units(work_units)
+
+        self.assertFalse(local_mode)
+        self.assertEqual(succeeded, 1)
+        self.assertEqual(failures, [])
+        mock_send_queue.assert_called_once_with(
+            "https://sqs.us-east-1.amazonaws.com/123/parser-queue",
+            work_units,
+        )
 
 
 if __name__ == "__main__":

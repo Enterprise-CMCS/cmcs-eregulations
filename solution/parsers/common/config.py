@@ -1,7 +1,8 @@
 import json
-from typing import Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
-from common.models import BackendCredentials
+if TYPE_CHECKING:
+    from common.auth import BackendCredentials
 
 
 class ConfigParseError(ValueError):
@@ -45,7 +46,9 @@ def require_single_record(records: list[Any]) -> dict[str, Any]:
     return record
 
 
-def parse_credentials(raw_credentials: Any) -> BackendCredentials:
+def parse_credentials(raw_credentials: Any) -> "BackendCredentials":
+    from common.auth import BackendCredentials
+
     if not isinstance(raw_credentials, dict):
         raise ConfigParseError("credentials must be a JSON object")
 
