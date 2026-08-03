@@ -90,8 +90,8 @@ services:
       - 8003:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
-      - EREGS_USERNAME=${EREGS_USERNAME:-}
-      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
     volumes:
       - ./parsers/ecfr-worker:/var/task/app
       - ./parsers/common:/var/task/common
@@ -107,8 +107,8 @@ services:
       - 8004:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
-      - EREGS_USERNAME=${EREGS_USERNAME:-}
-      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
     volumes:
       - ./parsers/fr-worker:/var/task/app
       - ./parsers/common:/var/task/common
@@ -124,8 +124,8 @@ services:
       - 8005:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
-      - EREGS_USERNAME=${EREGS_USERNAME:-}
-      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
       - PARSER_LOCAL_MODE=true
       - PARSER_WORKER_URL=http://ecfr-worker:6000/
     volumes:
@@ -143,8 +143,8 @@ services:
       - 8006:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
-      - EREGS_USERNAME=${EREGS_USERNAME:-}
-      - EREGS_PASSWORD=${EREGS_PASSWORD:-}
+      - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
+      - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
       - PARSER_LOCAL_MODE=true
       - PARSER_WORKER_URL=http://fr-worker:6000/
     volumes:

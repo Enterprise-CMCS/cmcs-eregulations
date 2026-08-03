@@ -19,6 +19,9 @@ def handler(event, _context):
 
     return {
         "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json",
+        },
         "body": json.dumps(
             {
                 "processed": 1,

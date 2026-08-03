@@ -129,3 +129,4 @@ Example response in local mode:
 - In deployed environments, `PARSER_LOCAL_MODE` is unset and launchers use `PARSER_QUEUE_URL` to enqueue work.
 - Workers accept either a single SQS-style record event (`Records[0].body`) or a lambda-proxy HTTP event body.
 - Credentials are resolved in workers (not passed by launchers): first from message payload if valid, then `EREGS_AUTH_SECRET_NAME` (AWS Secrets Manager), then `EREGS_BEARER_TOKEN`, then `EREGS_USERNAME`/`EREGS_PASSWORD`.
+- Local docker-compose provides default parser credentials (`local-dev-user` / `local-dev-pass`) unless you override `EREGS_USERNAME`/`EREGS_PASSWORD` in your shell.
