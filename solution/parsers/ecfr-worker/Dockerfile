@@ -9,7 +9,6 @@ RUN uv pip install --system -r requirements.lock
 
 COPY parsers/ecfr-worker/app.py ./app.py
 COPY parsers/ecfr-worker/config.py ./config.py
-COPY parsers/ecfr-worker/models.py ./models.py
 COPY parsers/common ./common
 
 CMD ["app.handler"]

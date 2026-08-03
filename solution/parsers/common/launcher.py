@@ -7,14 +7,6 @@ def is_local_mode() -> bool:
     return os.environ.get("PARSER_LOCAL_MODE", "false").lower() == "true"
 
 
-def build_basic_credentials_from_env() -> dict[str, str]:
-    return {
-        "auth_type": "basic",
-        "username": os.environ.get("EREGS_USERNAME", ""),
-        "password": os.environ.get("EREGS_PASSWORD", ""),
-    }
-
-
 def send_work_units(queue_url: str, work_units: list[dict[str, Any]]) -> None:
     sqs = _get_sqs_client()
 
@@ -25,16 +17,65 @@ def send_work_units(queue_url: str, work_units: list[dict[str, Any]]) -> None:
         )
 
 
-def build_launcher_response(work_units: list[dict[str, Any]], local_mode: bool) -> dict[str, Any]:
-    return {
-        "statusCode": 200,
+def build_launcher_response(
+    work_units: list[dict[str, Any]],
+    local_mode: bool,
+    succeeded: int,
+    failures: list[dict[str, str]],
+) -> dict[str, Any]:
+    payload = {
         "enqueued": len(work_units),
         "local_mode": local_mode,
+        "succeeded": succeeded,
+        "failed": len(failures),
+        "failures": failures,
         "work_units": work_units,
     }
+
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.dumps(payload),
+    }
+
+
+def send_work_units_via_http(
+    worker_url: str,
+    work_units: list[dict[str, Any]],
+    timeout: int = 60,
+) -> tuple[int, list[dict[str, str]]]:
+    success = 0
+    failures = []
+
+    for index, work_unit in enumerate(work_units):
+        try:
+            resp = _http_post(
+                worker_url,
+                data=json.dumps(work_unit),
+                timeout=timeout,
+            )
+            if resp.status_code != 200 and hasattr(resp, "text") and resp.text:
+                raise RuntimeError(f"POST failed with {resp.status_code}: {resp.text}")
+            resp.raise_for_status()
+            success += 1
+        except Exception as exc:
+            failures.append(
+                {
+                    "index": str(index),
+                    "reason": str(exc),
+                }
+            )
+
+    return success, failures
 
 
 def _get_sqs_client():
     import boto3
 
     return boto3.client("sqs")
+
+
+def _http_post(url: str, data: str, timeout: int):
+    import requests
+
+    return requests.post(url, data=data, timeout=timeout)

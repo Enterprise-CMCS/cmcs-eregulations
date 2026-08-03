@@ -127,8 +127,10 @@ services:
       - EREGS_USERNAME=${EREGS_USERNAME:-}
       - EREGS_PASSWORD=${EREGS_PASSWORD:-}
       - PARSER_LOCAL_MODE=true
+      - PARSER_WORKER_URL=http://ecfr-worker:6000/
     volumes:
       - ./parsers/ecfr-launcher:/var/task/app
+      - ./parsers/common:/var/task/common
     networks:
       - eregs
     extra_hosts:
@@ -144,8 +146,10 @@ services:
       - EREGS_USERNAME=${EREGS_USERNAME:-}
       - EREGS_PASSWORD=${EREGS_PASSWORD:-}
       - PARSER_LOCAL_MODE=true
+      - PARSER_WORKER_URL=http://fr-worker:6000/
     volumes:
       - ./parsers/fr-launcher:/var/task/app
+      - ./parsers/common:/var/task/common
     networks:
       - eregs
     extra_hosts:

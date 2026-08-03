@@ -3,7 +3,9 @@ import unittest
 from common.config import (
     ConfigParseError,
     parse_credentials,
+    parse_payload_from_event,
     parse_message_body,
+    parse_typed_config_from_event,
     require_non_empty_string,
     require_positive_int,
     require_single_record,
@@ -28,6 +30,49 @@ class CommonConfigTests(unittest.TestCase):
     def test_parse_message_body_rejects_non_object_json(self):
         with self.assertRaisesRegex(ConfigParseError, "JSON object"):
             parse_message_body({"body": '["not", "an", "object"]'})
+
+    def test_parse_payload_from_event_for_sqs_shape(self):
+        event = {
+            "Records": [
+                {
+                    "body": '{"config": {"title_number": 42}}',
+                }
+            ]
+        }
+        self.assertEqual(parse_payload_from_event(event), {"config": {"title_number": 42}})
+
+    def test_parse_payload_from_event_for_http_shape(self):
+        event = {
+            "body": '{"config": {"document_number": "2026-12345"}}',
+        }
+        self.assertEqual(parse_payload_from_event(event), {"config": {"document_number": "2026-12345"}})
+
+    def test_parse_payload_from_event_for_http_dict_body(self):
+        event = {
+            "body": {"config": {"document_number": "2026-12345"}},
+        }
+        self.assertEqual(parse_payload_from_event(event), {"config": {"document_number": "2026-12345"}})
+
+    def test_parse_payload_from_event_rejects_invalid_shapes(self):
+        with self.assertRaisesRegex(ConfigParseError, "either 'Records' or 'body'"):
+            parse_payload_from_event({})
+
+        with self.assertRaisesRegex(ConfigParseError, "valid JSON"):
+            parse_payload_from_event({"body": "{invalid"})
+
+    def test_parse_typed_config_from_event(self):
+        event = {
+            "Records": [
+                {
+                    "body": '{"config": {"title_number": 42}}',
+                }
+            ]
+        }
+
+        def _parse(payload):
+            return payload["config"]["title_number"]
+
+        self.assertEqual(parse_typed_config_from_event(event, _parse), 42)
 
     def test_unwrap_config_supports_wrapped_and_direct_payloads(self):
         wrapped = unwrap_config({"config": {"part_number": 400}})

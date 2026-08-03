@@ -1,11 +1,15 @@
-from common.config import (
-    parse_credentials,
-    parse_message_body,
-    require_positive_int,
-    unwrap_config,
-)
+from dataclasses import dataclass
+
+from common.auth import resolve_backend_credentials
+from common.config import parse_typed_config_from_event, require_positive_int, unwrap_config
 from common.models import BackendCredentials
-from models import EcfrPartConfig
+
+
+@dataclass
+class EcfrPartConfig:
+    title_number: int
+    part_number: int
+    credentials: BackendCredentials
 
 
 def parse_config(payload: dict) -> EcfrPartConfig:
@@ -14,18 +18,17 @@ def parse_config(payload: dict) -> EcfrPartConfig:
     return EcfrPartConfig(
         title_number=require_positive_int(config, "title_number"),
         part_number=require_positive_int(config, "part_number"),
-        credentials=parse_credentials(config.get("credentials")),
+        credentials=resolve_backend_credentials(config.get("credentials")),
     )
 
 
-def parse_config_from_record(record: dict) -> EcfrPartConfig:
-    payload = parse_message_body(record)
-    return parse_config(payload)
+def parse_config_from_event(event: dict) -> EcfrPartConfig:
+    return parse_typed_config_from_event(event, parse_config)
 
 
 __all__ = [
     "BackendCredentials",
     "EcfrPartConfig",
     "parse_config",
-    "parse_config_from_record",
+    "parse_config_from_event",
 ]

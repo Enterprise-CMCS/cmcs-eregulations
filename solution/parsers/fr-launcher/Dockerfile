@@ -8,5 +8,6 @@ RUN uv export --frozen --no-dev --format requirements-txt --output-file requirem
 RUN uv pip install --system -r requirements.lock
 
 COPY parsers/fr-launcher/app.py ./app.py
+COPY parsers/common ./common
 
 CMD ["app.handler"]

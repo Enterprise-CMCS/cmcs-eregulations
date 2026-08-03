@@ -1,5 +1,14 @@
-from common.config import parse_credentials, require_non_empty_string, unwrap_config
-from models import FrDocumentConfig
+from dataclasses import dataclass
+
+from common.auth import resolve_backend_credentials
+from common.config import parse_typed_config_from_event, require_non_empty_string, unwrap_config
+from common.models import BackendCredentials
+
+
+@dataclass
+class FrDocumentConfig:
+    document_number: str
+    credentials: BackendCredentials
 
 
 def parse_config(payload: dict) -> FrDocumentConfig:
@@ -7,11 +16,16 @@ def parse_config(payload: dict) -> FrDocumentConfig:
 
     return FrDocumentConfig(
         document_number=require_non_empty_string(config, "document_number"),
-        credentials=parse_credentials(config.get("credentials")),
+        credentials=resolve_backend_credentials(config.get("credentials")),
     )
+
+
+def parse_config_from_event(event: dict) -> FrDocumentConfig:
+    return parse_typed_config_from_event(event, parse_config)
 
 
 __all__ = [
     "FrDocumentConfig",
     "parse_config",
+    "parse_config_from_event",
 ]

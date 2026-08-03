@@ -1,8 +1,7 @@
 import json
 import logging
 
-from common.config import require_single_record
-from config import parse_config_from_record
+from .config import parse_config_from_event
 
 
 logger = logging.getLogger(__name__)
@@ -10,9 +9,7 @@ logger.setLevel(logging.INFO)
 
 
 def handler(event, _context):
-    records = event.get("Records", [])
-    record = require_single_record(records)
-    config = parse_config_from_record(record)
+    config = parse_config_from_event(event)
 
     logger.info(
         "Parsed eCFR work item: title=%s part=%s",

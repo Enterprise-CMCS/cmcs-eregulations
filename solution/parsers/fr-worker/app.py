@@ -1,8 +1,7 @@
 import json
 import logging
 
-from common.config import parse_message_body, require_single_record
-from config import parse_config
+from .config import parse_config_from_event
 
 
 logger = logging.getLogger(__name__)
@@ -10,10 +9,7 @@ logger.setLevel(logging.INFO)
 
 
 def handler(event, _context):
-    records = event.get("Records", [])
-    record = require_single_record(records)
-    payload = parse_message_body(record)
-    config = parse_config(payload)
+    config = parse_config_from_event(event)
 
     logger.info(
         "Parsed FR work item: document_number=%s",

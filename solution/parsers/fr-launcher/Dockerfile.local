@@ -29,5 +29,6 @@ COPY lambda-proxy /proxy
 COPY --from=uv /uv /bin/uv
 
 COPY ./parsers/fr-launcher ${LAMBDA_TASK_ROOT}/app
+COPY ./parsers/common ${LAMBDA_TASK_ROOT}/common
 
 ENTRYPOINT /proxy/startup.sh

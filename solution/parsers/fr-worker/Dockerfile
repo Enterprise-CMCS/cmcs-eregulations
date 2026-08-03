@@ -9,7 +9,6 @@ RUN uv pip install --system -r requirements.lock
 
 COPY parsers/fr-worker/app.py ./app.py
 COPY parsers/fr-worker/config.py ./config.py
-COPY parsers/fr-worker/models.py ./models.py
 COPY parsers/common ./common
 
 CMD ["app.handler"]

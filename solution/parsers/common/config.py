@@ -1,11 +1,14 @@
 import json
-from typing import Any
+from typing import Any, Callable, TypeVar
 
 from common.models import BackendCredentials
 
 
 class ConfigParseError(ValueError):
     pass
+
+
+TConfig = TypeVar("TConfig")
 
 
 def parse_message_body(record: dict[str, Any]) -> dict[str, Any]:
@@ -71,3 +74,40 @@ def require_non_empty_string(data: dict[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ConfigParseError(f"{key} must be a non-empty string")
     return value.strip()
+
+
+def parse_payload_from_event(event: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(event, dict):
+        raise ConfigParseError("Lambda event must be a JSON object")
+
+    records = event.get("Records")
+    if isinstance(records, list):
+        record = require_single_record(records)
+        return parse_message_body(record)
+
+    body = event.get("body")
+    if body is None:
+        raise ConfigParseError("Lambda event must include either 'Records' or 'body'")
+
+    if isinstance(body, str):
+        try:
+            payload = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise ConfigParseError("Lambda event body must contain valid JSON") from exc
+    elif isinstance(body, dict):
+        payload = body
+    else:
+        raise ConfigParseError("Lambda event body must be a JSON object or JSON string")
+
+    if not isinstance(payload, dict):
+        raise ConfigParseError("Lambda event payload must be a JSON object")
+
+    return payload
+
+
+def parse_typed_config_from_event(
+    event: dict[str, Any],
+    parse_config: Callable[[dict[str, Any]], TConfig],
+) -> TConfig:
+    payload = parse_payload_from_event(event)
+    return parse_config(payload)

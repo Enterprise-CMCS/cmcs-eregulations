@@ -19,6 +19,8 @@ make parsers.local.build
 make parsers.local.up
 ```
 
+If parser Dockerfiles or shared `common` code changes, rebuild parser services before invoking launchers.
+
 Proxy endpoints exposed on localhost:
 
 - `ecfr-worker`: `http://localhost:8003`
@@ -89,6 +91,18 @@ curl -s -X POST http://localhost:8005 \
   -d '{}'
 ```
 
+Example response in local mode:
+
+```json
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"enqueued\":1,\"local_mode\":true,\"succeeded\":1,\"failed\":0,\"failures\":[],\"work_units\":[...]}"
+}
+```
+
 ### FR launcher
 
 ```bash
@@ -97,8 +111,21 @@ curl -s -X POST http://localhost:8006 \
   -d '{}'
 ```
 
+Example response in local mode:
+
+```json
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"enqueued\":1,\"local_mode\":true,\"succeeded\":1,\"failed\":0,\"failures\":[],\"work_units\":[...]}"
+}
+```
+
 ## Notes
 
-- Launchers run with `PARSER_LOCAL_MODE=true` in Docker Compose and return payloads without sending to SQS.
+- Launchers run with `PARSER_LOCAL_MODE=true` in Docker Compose and call workers over HTTP (`PARSER_WORKER_URL`) via lambda-proxy.
 - In deployed environments, `PARSER_LOCAL_MODE` is unset and launchers use `PARSER_QUEUE_URL` to enqueue work.
-- Worker payload shape currently expects a single SQS-style record with JSON in `Records[0].body`.
+- Workers accept either a single SQS-style record event (`Records[0].body`) or a lambda-proxy HTTP event body.
+- Credentials are resolved in workers (not passed by launchers): first from message payload if valid, then `EREGS_AUTH_SECRET_NAME` (AWS Secrets Manager), then `EREGS_BEARER_TOKEN`, then `EREGS_USERNAME`/`EREGS_PASSWORD`.
