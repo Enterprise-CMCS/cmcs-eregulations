@@ -98,6 +98,7 @@ async function main() {
         },
         environmentConfig: {
             logLevel,
+            authSecretName: '/eregulations/http/credentials',
         }
     }, stageConfig);
 
@@ -109,6 +110,7 @@ async function main() {
         },
         environmentConfig: {
             logLevel,
+            authSecretName: '/eregulations/http/credentials',
         }
     }, stageConfig);
 

@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import {
     aws_lambda as lambda,
     aws_logs as logs,
+    aws_iam as iam,
     aws_sqs as sqs,
     aws_events as events,
     aws_events_targets as targets,
@@ -17,6 +18,7 @@ interface LambdaConfig {
 
 interface EnvironmentConfig {
     logLevel: string;
+    authSecretName: string;
 }
 
 export interface EcfrParserStackProps extends cdk.StackProps {
@@ -65,6 +67,7 @@ export class EcfrParserStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
             },
         });
 
@@ -78,9 +81,19 @@ export class EcfrParserStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
                 PARSER_QUEUE_URL: queue.queueUrl,
             },
         });
+
+        const secretArn = `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${props.environmentConfig.authSecretName}*`;
+        const secretReadPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['secretsmanager:GetSecretValue'],
+            resources: [secretArn],
+        });
+        worker.addToRolePolicy(secretReadPolicy);
+        launcher.addToRolePolicy(secretReadPolicy);
 
         queue.grantConsumeMessages(worker);
         queue.grantSendMessages(launcher);

@@ -1,20 +1,30 @@
 import json
 import logging
 
+from .config import parse_config_from_event
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
 def handler(event, _context):
-    records = event.get("Records", [])
-    logger.info("FR worker received %s record(s)", len(records))
+    config = parse_config_from_event(event)
 
-    for index, record in enumerate(records, start=1):
-        body = record.get("body", "")
-        logger.info("FR worker record %s body: %s", index, body)
+    logger.info(
+        "Parsed FR work item: document_number=%s",
+        config.document_number,
+    )
 
     return {
         "statusCode": 200,
-        "body": json.dumps({"processed": len(records)}),
+        "headers": {
+            "Content-Type": "application/json",
+        },
+        "body": json.dumps(
+            {
+                "processed": 1,
+                "document_number": config.document_number,
+            }
+        ),
     }

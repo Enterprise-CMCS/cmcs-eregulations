@@ -1,38 +1,47 @@
 import json
 import logging
-import os
 from datetime import datetime, timezone
 
-import boto3
+from common.auth import resolve_backend_credentials
+from common.launcher import (
+    build_launcher_response,
+    dispatch_work_units,
+)
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-sqs = boto3.client("sqs")
 
-
-def handler(event, _context):
-    queue_url = os.environ["PARSER_QUEUE_URL"]
-    run_time = datetime.now(timezone.utc).isoformat()
-
-    work_units = [
+def _build_work_units(run_time: str) -> list[dict]:
+    return [
         {
-            "parser": "ecfr",
-            "unit_type": "title-part",
-            "title": 42,
-            "part": "400",
-            "scheduled_at": run_time,
+            "config": {
+                "title_number": 42,
+                "part_number": 400,
+                "scheduled_at": run_time,
+            }
         }
     ]
 
-    for work_unit in work_units:
-        sqs.send_message(
-            QueueUrl=queue_url,
-            MessageBody=json.dumps(work_unit),
-        )
 
-    logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
+def handler(event, _context):
+    run_time = datetime.now(timezone.utc).isoformat()
     logger.info("eCFR launcher trigger event: %s", json.dumps(event))
 
-    return {"statusCode": 200, "enqueued": len(work_units)}
+    credentials = resolve_backend_credentials()
+    logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
+
+    work_units = _build_work_units(run_time)
+    local_mode, succeeded, failures = dispatch_work_units(work_units)
+    if local_mode:
+        logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
+    else:
+        logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
+
+    return build_launcher_response(
+        work_units=work_units,
+        local_mode=local_mode,
+        succeeded=succeeded,
+        failures=failures,
+    )
