@@ -71,16 +71,11 @@ def latest_issue_dates_by_part(payload: dict[str, Any]) -> dict[str, str]:
 
 
 def _extract_issue_date(item: dict[str, Any]) -> tuple[date, str] | None:
-    raw_issue_date = item.get("issue_date")
-    parsed_issue_date = _parse_date(raw_issue_date)
-    if parsed_issue_date is not None and isinstance(raw_issue_date, str):
-        return parsed_issue_date, raw_issue_date.strip()[:10]
-
-    raw_date = item.get("date")
-    parsed_date = _parse_date(raw_date)
-    if parsed_date is not None and isinstance(raw_date, str):
-        return parsed_date, raw_date.strip()[:10]
-
+    for key in ("issue_date", "date"):
+        raw_value = item.get(key)
+        parsed_value = _parse_date(raw_value)
+        if parsed_value is not None and isinstance(raw_value, str):
+            return parsed_value, raw_value.strip()[:10]
     return None
 
 
