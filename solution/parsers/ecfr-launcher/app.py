@@ -1,28 +1,75 @@
 import json
 import logging
+import os
 from datetime import datetime, timezone
+from typing import Any
 
 from common.auth import resolve_backend_credentials
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
+    is_local_mode,
 )
+
+from eregs_config import TargetPartConfig, expand_target_parts, fetch_parser_config
+from ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def _build_work_units(run_time: str) -> list[dict]:
-    return [
-        {
-            "config": {
-                "title_number": 42,
-                "part_number": 400,
-                "scheduled_at": run_time,
+def _build_work_units(run_time: str, api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+    parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
+    targets = expand_target_parts(parser_config)
+    latest_dates_by_title = _resolve_latest_dates_by_title(targets)
+
+    work_units: list[dict[str, Any]] = []
+    failures: list[dict[str, str]] = []
+    for target in targets:
+        latest_issue_date = latest_dates_by_title.get(target.title_number, {}).get(target.part_number)
+        if latest_issue_date is None:
+            failures.append(
+                {
+                    "title_number": str(target.title_number),
+                    "part_number": str(target.part_number),
+                    "reason": "No latest issue_date available for part",
+                }
+            )
+            continue
+
+        work_units.append(
+            {
+                "config": {
+                    "title_number": target.title_number,
+                    "part_number": target.part_number,
+                    "effective_date": latest_issue_date,
+                    "upload_reg_text": target.upload_reg_text,
+                    "upload_locations": target.upload_locations,
+                    "scheduled_at": run_time,
+                }
             }
-        }
-    ]
+        )
+
+    return work_units, failures
+
+
+def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int, dict[int, str]]:
+    by_title: dict[int, dict[int, str]] = {}
+    title_numbers = sorted({target.title_number for target in targets})
+
+    for title_number in title_numbers:
+        versions_payload = fetch_title_versions(title_number=title_number)
+        latest_by_part = latest_issue_dates_by_part(versions_payload)
+
+        by_part_number: dict[int, str] = {}
+        for part_raw, latest_issue_date in latest_by_part.items():
+            if part_raw.isdigit():
+                by_part_number[int(part_raw)] = latest_issue_date
+
+        by_title[title_number] = by_part_number
+
+    return by_title
 
 
 def handler(event, _context):
@@ -32,12 +79,24 @@ def handler(event, _context):
     credentials = resolve_backend_credentials()
     logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
 
-    work_units = _build_work_units(run_time)
-    local_mode, succeeded, failures = dispatch_work_units(work_units)
+    api_base_url = os.environ["EREGS_API_URL_V3"]
+    work_units, config_failures = _build_work_units(run_time, api_base_url, credentials)
+
+    if work_units:
+        local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)
+    else:
+        local_mode = is_local_mode()
+        succeeded = 0
+        dispatch_failures = []
+
+    failures = config_failures + dispatch_failures
     if local_mode:
         logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
     else:
         logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
+
+    if config_failures:
+        logger.warning("eCFR launcher skipped %s work unit(s) due to missing latest issue_date", len(config_failures))
 
     return build_launcher_response(
         work_units=work_units,
