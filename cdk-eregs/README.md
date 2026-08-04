@@ -12,7 +12,7 @@ This repository contains the AWS CDK (Cloud Development Kit) infrastructure code
 
 ## Project Structure
 - **`bin/`**: Entry points for deploying specific stacks (e.g., `docker-lambdas.ts`, `static-assets.ts`).
-- **`lib/stacks/`**: Contains stack definitions for various independent stacks like the eRegs site, the parsers, the text extractor, etc.
+- **`lib/stacks/`**: Contains stack definitions for various independent stacks like the eRegs site, the text extractor, and support services.
 - **`lib/constructs/`**: Reusable constructs for common patterns like WAF and database setups.
 - **`lib/aspects/`**: Custom CDK aspects for applying global configurations.
 - **`config/`**: Configuration utilities for environment and stage management.
@@ -30,7 +30,7 @@ This repository contains the AWS CDK (Cloud Development Kit) infrastructure code
    npm install
    ```
 2. Bootstrap the environment (if not already done). See the README in the bootstrap directory for details.
-3. Determine your stack name and environment. Set `$ENV` to `dev`, `val`, `prod`, or `eph-1234` for an ephemeral deploy. Set `$STACK` to the name of the stack, e.g. `api`, `parser-launcher`.
+3. Determine your stack name and environment. Set `$ENV` to `dev`, `val`, `prod`, or `eph-1234` for an ephemeral deploy. Set `$STACK` to the name of the stack, e.g. `api`, `text-extractor`.
 4. Calculate the stack's full name:
    ```bash
    STACK_NAME=cms-eregs-$ENV-$STACK
@@ -63,16 +63,7 @@ Creates the Text Extractor service with Lambda and SQS. SQS URL is exported. Ent
 ### 4. `BackendStack`
 Combines API and database resources, including VPC configurations and S3 storage. Includes the regsite Lambda as well as supporting Lambdas: migrate, createsu, createdb, dropdb, and the authorizer function. Entry-point is "docker-lambdas.ts".
 
-### 5. `ParserLauncherStack`
-Schedules and invokes the eCFR and FR parser Lambda functions. Entry-point is "docker-lambdas.ts".
-
-### 6. `EcfrParserStack`
-Deploys the eCFR parser Lambda function. Entry-point is "docker-lambdas.ts".
-
-### 7. `FrParserStack`
-Deploys the Federal Register (FR) parser Lambda function. Entry-point is "docker-lambdas.ts".
-
-### 8. `MaintenanceStack`
+### 5. `MaintenanceStack`
 Deploys the so-called "maintenance API", which consists simply of a Lambda function that the production API Gateway can be quickly switched to to take down the site for maintenance or repairs. Entry-point is "zip-lambdas.ts".
 
 ## Configuration

@@ -1,21 +1,24 @@
 import * as cdk from 'aws-cdk-lib';
 import {
-    aws_iam as iam,
-    aws_logs as logs,
     aws_lambda as lambda,
+    aws_logs as logs,
+    aws_iam as iam,
+    aws_sqs as sqs,
+    aws_events as events,
+    aws_events_targets as targets,
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { StageConfig } from '../../config/stage-config';
 import * as path from 'path';
 
 interface LambdaConfig {
-    /** Memory allocation in MB for the Lambda function */
     memorySize: number;
     timeout: number;
 }
 
 interface EnvironmentConfig {
     logLevel: string;
+    authSecretName: string;
 }
 
 export interface EcfrParserStackProps extends cdk.StackProps {
@@ -27,88 +30,110 @@ export class EcfrParserStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props: EcfrParserStackProps, stageConfig: StageConfig) {
         super(scope, id, props);
 
-        // ================================
-        // LOG GROUP
-        // ================================
-        new logs.LogGroup(this, 'EcfrParserLogGroup', {
-            logGroupName: stageConfig.aws.lambda('ecfr-parser'),
+        const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'));
+
+        const deadLetterQueue = new sqs.Queue(this, 'EcfrParserDeadLetterQueue', {
+            queueName: stageConfig.getResourceName('ecfr-parser-dlq'),
+            retentionPeriod: cdk.Duration.days(14),
+        });
+
+        const queue = new sqs.Queue(this, 'EcfrParserQueue', {
+            queueName: stageConfig.getResourceName('ecfr-parser-queue'),
+            visibilityTimeout: cdk.Duration.seconds(900),
+            retentionPeriod: cdk.Duration.days(14),
+            deadLetterQueue: {
+                queue: deadLetterQueue,
+                maxReceiveCount: 5,
+            },
+        });
+
+        new logs.LogGroup(this, 'EcfrParserWorkerLogGroup', {
+            logGroupName: stageConfig.aws.lambda('ecfr-parser-worker'),
             retention: logs.RetentionDays.INFINITE,
         });
 
-        // ================================
-        // LAMBDA ROLE
-        // ================================
-        const lambdaPolicy = new iam.PolicyDocument({
-            statements: [
-                new iam.PolicyStatement({
-                    effect: iam.Effect.ALLOW,
-                    actions: [
-                        'logs:CreateLogGroup',
-                        'logs:CreateLogStream',
-                        'logs:PutLogEvents'
-                    ],
-                    resources: [`arn:aws:logs:${this.region}:${this.account}:log-group:/aws/lambda/*:*:*`],
-                }),
-            ],
+        new logs.LogGroup(this, 'EcfrParserLauncherLogGroup', {
+            logGroupName: stageConfig.aws.lambda('ecfr-parser-launcher'),
+            retention: logs.RetentionDays.INFINITE,
         });
 
-        const lambdaRole = new iam.Role(this, 'LambdaFunctionRole', {
-            path: stageConfig.iamPath,
-            assumedBy: new iam.ServicePrincipal('lambda.amazonaws.com'),
-            permissionsBoundary: iam.ManagedPolicy.fromManagedPolicyArn(
-                this,
-                'PermissionsBoundary',
-                stageConfig.permissionsBoundaryArn
-            ),
-            managedPolicies: [
-                iam.ManagedPolicy.fromAwsManagedPolicyName('service-role/AWSLambdaBasicExecutionRole'),
-            ],
-            inlinePolicies: {
-                LambdaPolicy: lambdaPolicy,
-            },
-        });
-
-        // ================================
-        // LAMBDA FUNCTION
-        // ================================
-
-        // Get the API Gateway endpoint from stack outputs
-        const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'))
-
-        const lambdaFunction = new lambda.DockerImageFunction(this, 'EcfrParserFunction', {
-            functionName: stageConfig.getResourceName('ecfr-parser'),
-            code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../../solution/parser/'), {
-                file: 'ecfr-parser/Dockerfile',
+        const worker = new lambda.DockerImageFunction(this, 'EcfrParserWorkerFunction', {
+            functionName: stageConfig.getResourceName('ecfr-parser-worker'),
+            code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
+                file: 'parsers/ecfr-worker/Dockerfile',
             }),
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout || 900),
             memorySize: props.lambdaConfig.memorySize,
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
             environment: {
-                PARSER_ON_LAMBDA: 'true',
-                EREGS_API_URL_V3: `${siteEndpoint}v3/`,
-                STAGE_ENV: stageConfig.stageName,
                 LOG_LEVEL: props.environmentConfig.logLevel,
+                EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
             },
-            role: lambdaRole,
         });
 
-        // ================================
-        // CLOUDWATCH EVENT RULE
-        // ================================
-        // DISABLED for now
-        // // Create CloudWatch Event Rule - note different cron expression
-        // const rule = new events.Rule(this, 'EcfrParserSchedule', {
-        //   schedule: events.Schedule.expression('cron(0 0 * * ? *)'),  // Midnight every day
-        //   enabled: true,
-        // });
-        // rule.addTarget(new targets.LambdaFunction(lambdaFunction));
-
-        // ================================
-        // STACK OUTPUTS
-        // ================================
-        new cdk.CfnOutput(this, 'EcfrParserLambdaFunctionQualifiedArn', {
-            value: lambdaFunction.functionArn,
-            description: 'Current Lambda function version',
-            exportName: `sls-${stageConfig.getResourceName('ecfr-parser')}-EcfrParserLambdaFunctionQualifiedArn`,
+        const launcher = new lambda.DockerImageFunction(this, 'EcfrParserLauncherFunction', {
+            functionName: stageConfig.getResourceName('ecfr-parser-launcher'),
+            code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
+                file: 'parsers/ecfr-launcher/Dockerfile',
+            }),
+            memorySize: props.lambdaConfig.memorySize,
+            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            environment: {
+                LOG_LEVEL: props.environmentConfig.logLevel,
+                EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
+                PARSER_QUEUE_URL: queue.queueUrl,
+            },
         });
+
+        const secretArn = `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${props.environmentConfig.authSecretName}*`;
+        const secretReadPolicy = new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ['secretsmanager:GetSecretValue'],
+            resources: [secretArn],
+        });
+        worker.addToRolePolicy(secretReadPolicy);
+        launcher.addToRolePolicy(secretReadPolicy);
+
+        queue.grantConsumeMessages(worker);
+        queue.grantSendMessages(launcher);
+
+        new lambda.EventSourceMapping(this, 'EcfrParserWorkerEventSource', {
+            target: worker,
+            batchSize: 1,
+            eventSourceArn: queue.queueArn,
+            enabled: true,
+        });
+
+        const rule = new events.Rule(this, 'EcfrParserLauncherSchedule', {
+            schedule: events.Schedule.expression('cron(0 0 * * ? *)'),
+            enabled: true,
+        });
+        rule.addTarget(new targets.LambdaFunction(launcher));
+
+        const outputs: Record<string, cdk.CfnOutputProps> = {
+            EcfrParserQueueArn: {
+                value: queue.queueArn,
+                exportName: stageConfig.getResourceName('ecfr-parser-queue-arn'),
+            },
+            EcfrParserQueueUrl: {
+                value: queue.queueUrl,
+                exportName: stageConfig.getResourceName('ecfr-parser-queue-url'),
+            },
+            EcfrParserDlqArn: {
+                value: deadLetterQueue.queueArn,
+                exportName: stageConfig.getResourceName('ecfr-parser-dlq-arn'),
+            },
+            EcfrParserWorkerLambdaArn: {
+                value: worker.functionArn,
+                exportName: stageConfig.getResourceName('ecfr-parser-worker-lambda-arn'),
+            },
+            EcfrParserLauncherLambdaArn: {
+                value: launcher.functionArn,
+                exportName: stageConfig.getResourceName('ecfr-parser-launcher-lambda-arn'),
+            },
+        };
+
+        Object.entries(outputs).forEach(([name, cfg]) => new cdk.CfnOutput(this, name, cfg));
     }
 }

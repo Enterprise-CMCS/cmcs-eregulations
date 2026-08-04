@@ -222,138 +222,6 @@ jobs:
           payload: |
             text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during text extractor deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
-  deploy-fr-parser:
-    needs: [deploy-site]
-    runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          submodules: true
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
-          role-duration-seconds: 7200
-
-      - name: Deploy FR Parser
-        env:
-          STAGE_NAME: ${{ inputs.stage_name }}
-          ENVIRONMENT: ${{ inputs.environment }}
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-          pushd cdk-eregs
-          npm install
-
-          FR_PARSER_STACK="cms-eregs-${STAGE_NAME}-fr-parser"
-
-          npx cdk deploy $FR_PARSER_STACK \
-          -c environment=${ENVIRONMENT} \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
-          popd
-
-      - name: Notify Slack if failure occurs during fr parser deployment
-        if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
-        with:
-          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during FR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
-
-  deploy-ecfr-parser:
-    needs: [deploy-site]
-    runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          submodules: true
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
-          role-duration-seconds: 7200
-
-      - name: Deploy ECFR Parser
-        env:
-          STAGE_NAME: ${{ inputs.stage_name }}
-          ENVIRONMENT: ${{ inputs.environment }}
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-          pushd cdk-eregs
-          npm install
-
-          ECFR_PARSER_STACK="cms-eregs-${STAGE_NAME}-ecfr-parser"
-
-          npx cdk deploy $ECFR_PARSER_STACK \
-          -c environment=${ENVIRONMENT} \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
-          popd
-
-      - name: Notify Slack if failure occurs during ecfr parser deployment
-        if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
-        with:
-          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during eCFR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
-
-  deploy-parser-launcher:
-    needs: [deploy-ecfr-parser, deploy-fr-parser]
-    runs-on: ubuntu-22.04
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          submodules: true
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
-          aws-region: ${{ inputs.aws_default_region }}
-          role-duration-seconds: 7200
-
-      - name: Deploy Parser Launcher
-        env:
-          STAGE_NAME: ${{ inputs.stage_name }}
-          ENVIRONMENT: ${{ inputs.environment }}
-          PR_NUMBER: ${{ inputs.pr_number }}
-        run: |
-          pushd cdk-eregs
-          npm install
-
-          PARSER_LAUNCHER_STACK="cms-eregs-${STAGE_NAME}-parser-launcher"
-
-          npx cdk deploy $PARSER_LAUNCHER_STACK \
-          -c environment=${ENVIRONMENT} \
-          --require-approval never \
-          --exclusively \
-          --app "npx ts-node bin/docker-lambdas.ts"
-          popd
-
-      - name: Notify Slack if failure occurs during deploy-parser-launcher
-        if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
-        with:
-          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during parser launcher deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
-
   deploy-mcp-server:
     needs: [deploy-site]
     runs-on: ubuntu-22.04
@@ -474,6 +342,94 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during site deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
+  deploy-ecfr-parser:
+    needs: [deploy-site]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
+
+      - name: Deploy eCFR Parser
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          pushd cdk-eregs
+          npm install
+
+          ECFR_PARSER_STACK="cms-eregs-${STAGE_NAME}-ecfr-parser"
+
+          npx cdk deploy $ECFR_PARSER_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+      - name: Notify Slack if failure occurs during eCFR parser deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during eCFR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
+
+  deploy-fr-parser:
+    needs: [deploy-site]
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_TO_ASSUME }}
+          aws-region: ${{ inputs.aws_default_region }}
+          role-duration-seconds: 7200
+
+      - name: Deploy FR Parser
+        env:
+          STAGE_NAME: ${{ inputs.stage_name }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          PR_NUMBER: ${{ inputs.pr_number }}
+        run: |
+          pushd cdk-eregs
+          npm install
+
+          FR_PARSER_STACK="cms-eregs-${STAGE_NAME}-fr-parser"
+
+          npx cdk deploy $FR_PARSER_STACK \
+          -c environment=${ENVIRONMENT} \
+          --require-approval never \
+          --exclusively \
+          --app "npx ts-node bin/docker-lambdas.ts"
+          popd
+
+      - name: Notify Slack if failure occurs during FR parser deployment
+        if: ${{ inputs.pr_number == '' && failure() }}
+        uses: slackapi/slack-github-action@v3.0.1
+        with:
+          webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during FR parser deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   add-pr-comment:
     if: ${{ inputs.pr_number != '' }}
