@@ -2,18 +2,10 @@ import json
 import logging
 import os
 
-try:
-    from .ecfr_client import fetch_part_full_xml, fetch_part_structure
-    from .eregs_client import upload_part
-    from .config import parse_config_from_event
-    from .transform import determine_part_depth, extract_sections_and_subparts
-except ImportError as exc:
-    if __package__:
-        raise
-    from ecfr_client import fetch_part_full_xml, fetch_part_structure
-    from eregs_client import upload_part
-    from config import parse_config_from_event
-    from transform import determine_part_depth, extract_sections_and_subparts
+from .ecfr_client import fetch_part_full_xml, fetch_part_structure
+from .eregs_client import upload_part
+from .config import parse_config_from_event
+from .transform import determine_part_depth, extract_sections_and_subparts
 
 
 logger = logging.getLogger(__name__)
@@ -24,7 +16,7 @@ def handler(event, _context):
     config = parse_config_from_event(event)
 
     logger.info(
-        "Parsed eCFR work item: title=%s part=%s effective_date=%s",
+        "Parsing eCFR work item: title=%s part=%s effective_date=%s",
         config.title_number,
         config.part_number,
         config.effective_date,

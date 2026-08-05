@@ -7,7 +7,7 @@ COPY parsers/fr-launcher/uv.lock ./uv.lock
 RUN uv export --frozen --no-dev --format requirements-txt --output-file requirements.lock
 RUN uv pip install --system -r requirements.lock
 
-COPY parsers/fr-launcher/app.py ./app.py
+COPY parsers/fr-launcher ${LAMBDA_TASK_ROOT}/app
 COPY parsers/common ./common
 
-CMD ["app.handler"]
+CMD ["app.app.handler"]
