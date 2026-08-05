@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+import types
 import unittest
 from importlib import util
 from pathlib import Path
@@ -11,25 +13,30 @@ from common.auth import BackendCredentials
 def _load_module():
     worker_dir = Path(__file__).resolve().parent.parent / "ecfr-worker"
     module_path = worker_dir / "app.py"
-    import sys
 
-    sys.path.insert(0, str(worker_dir))
-    spec = util.spec_from_file_location("ecfr_worker_app", module_path)
+    package_name = "ecfr_worker_pkg"
+    package = types.ModuleType(package_name)
+    package.__path__ = [str(worker_dir)]
+    sys.modules[package_name] = package
+
+    spec = util.spec_from_file_location(f"{package_name}.app", module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError("Unable to load ecfr worker app module")
     module = util.module_from_spec(spec)
+    sys.modules[f"{package_name}.app"] = module
     spec.loader.exec_module(module)
     return module
 
 
 _module = _load_module()
 config_spec = util.spec_from_file_location(
-    "ecfr_worker_config",
+    "ecfr_worker_pkg.config",
     Path(__file__).resolve().parent.parent / "ecfr-worker" / "config.py",
 )
 if config_spec is None or config_spec.loader is None:
     raise RuntimeError("Unable to load ecfr worker config module")
 _config_module = util.module_from_spec(config_spec)
+sys.modules["ecfr_worker_pkg.config"] = _config_module
 config_spec.loader.exec_module(_config_module)
 
 
