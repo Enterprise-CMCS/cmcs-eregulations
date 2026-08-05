@@ -74,13 +74,23 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int,
 
 def handler(event, _context):
     run_time = datetime.now(timezone.utc).isoformat()
-    logger.info("eCFR launcher trigger event: %s", json.dumps(event))
+    logger.info(
+        "eCFR launcher trigger received: keys=%s has_records=%s has_body=%s",
+        sorted(event.keys()) if isinstance(event, dict) else "non-dict",
+        isinstance(event, dict) and isinstance(event.get("Records"), list),
+        isinstance(event, dict) and "body" in event,
+    )
 
     credentials = resolve_backend_credentials()
     logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
 
     api_base_url = os.environ["EREGS_API_URL_V3"]
     work_units, config_failures = _build_work_units(run_time, api_base_url, credentials)
+
+    if not work_units and config_failures:
+        raise RuntimeError(
+            f"eCFR launcher could not enqueue any work units; {len(config_failures)} part(s) missing latest issue_date"
+        )
 
     if work_units:
         local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)

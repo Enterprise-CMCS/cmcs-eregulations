@@ -7,7 +7,9 @@ try:
     from .eregs_client import upload_part
     from .config import parse_config_from_event
     from .transform import determine_part_depth, extract_sections_and_subparts
-except ImportError:
+except ImportError as exc:
+    if __package__:
+        raise
     from ecfr_client import fetch_part_full_xml, fetch_part_structure
     from eregs_client import upload_part
     from config import parse_config_from_event
@@ -86,7 +88,7 @@ def handler(event, _context):
                 "part_number": config.part_number,
                 "effective_date": config.effective_date,
                 "uploaded": True,
-                "upload_result": upload_result,
+                "upload_result_keys": sorted(upload_result.keys()),
             }
         ),
     }
