@@ -79,6 +79,13 @@ def require_non_empty_string(data: dict[str, Any], key: str) -> str:
     return value.strip()
 
 
+def require_bool(data: dict[str, Any], key: str) -> bool:
+    value = data.get(key)
+    if not isinstance(value, bool):
+        raise ConfigParseError(f"{key} must be a boolean")
+    return value
+
+
 def parse_payload_from_event(event: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(event, dict):
         raise ConfigParseError("Lambda event must be a JSON object")

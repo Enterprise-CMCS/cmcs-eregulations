@@ -1,5 +1,6 @@
 import json
 import os
+import base64
 from dataclasses import dataclass
 from typing import Any
 
@@ -43,6 +44,22 @@ def resolve_backend_credentials(raw_credentials: Any = None) -> BackendCredentia
         "Backend credentials are not configured; set EREGS_AUTH_SECRET_NAME, "
         "EREGS_BEARER_TOKEN, or EREGS_USERNAME/EREGS_PASSWORD"
     )
+
+
+def build_auth_headers(credentials: BackendCredentials) -> dict[str, str]:
+    if credentials.auth_type == "bearer" and credentials.token:
+        return {
+            "Authorization": f"Bearer {credentials.token}",
+        }
+
+    if credentials.auth_type == "basic" and credentials.username and credentials.password:
+        raw = f"{credentials.username}:{credentials.password}".encode("utf-8")
+        encoded = base64.b64encode(raw).decode("utf-8")
+        return {
+            "Authorization": f"Basic {encoded}",
+        }
+
+    raise ConfigParseError("backend credentials are not valid for authorization headers")
 
 
 def _load_credentials_from_secret(secret_name: str) -> BackendCredentials:

@@ -63,10 +63,22 @@ curl -s -X POST http://localhost:8003 \
   -d '{
     "Records": [
       {
-        "body": "{\"config\": {\"title_number\": 42, \"part_number\": 400, \"credentials\": {\"auth_type\": \"basic\", \"username\": \"dev-user\", \"password\": \"dev-pass\"}}}"
+        "body": "{\"config\": {\"title_number\": 42, \"part_number\": 400, \"effective_date\": \"2025-01-01\", \"upload_reg_text\": true, \"upload_locations\": true, \"credentials\": {\"auth_type\": \"basic\", \"username\": \"dev-user\", \"password\": \"dev-pass\"}}}"
       }
     ]
   }'
+```
+
+Example response:
+
+```json
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"processed\":1,\"title_number\":42,\"part_number\":400,\"effective_date\":\"2025-01-01\",\"uploaded\":true,\"upload_result\":{...}}"
+}
 ```
 
 ### FR worker
@@ -130,3 +142,4 @@ Example response in local mode:
 - Workers accept either a single SQS-style record event (`Records[0].body`) or a lambda-proxy HTTP event body.
 - Credentials are resolved in workers (not passed by launchers): first from message payload if valid, then `EREGS_AUTH_SECRET_NAME` (AWS Secrets Manager), then `EREGS_BEARER_TOKEN`, then `EREGS_USERNAME`/`EREGS_PASSWORD`.
 - Local docker-compose provides default parser credentials (`local-dev-user` / `local-dev-pass`) unless you override `EREGS_USERNAME`/`EREGS_PASSWORD` in your shell.
+- eCFR launcher emits worker config with `effective_date`, `upload_reg_text`, and `upload_locations`; worker fails a message if the part has no latest `issue_date` in eCFR versions data.
