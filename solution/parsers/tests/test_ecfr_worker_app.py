@@ -81,25 +81,22 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "section": "200"}],
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
-        ), patch.object(
-            _module,
-            "upload_part",
-            return_value={"ok": True},
-        ) as mock_upload:
+        ), patch.object(_module, "_write_debug_payload", return_value="/tmp/ecfr-worker-output/title-42_part-400_2025-01-01.json") as mock_write:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
         self.assertEqual(body["processed"], 1)
-        self.assertTrue(body["uploaded"])
+        self.assertFalse(body["uploaded"])
+        self.assertIn("output_path", body)
 
-        upload_payload = mock_upload.call_args.kwargs["payload"]
-        self.assertEqual(upload_payload["name"], "400")
-        self.assertEqual(upload_payload["title"], "42")
-        self.assertEqual(upload_payload["date"], "2025-01-01")
-        self.assertEqual(upload_payload["document"], {"raw_xml": "<xml/>"})
-        self.assertEqual(upload_payload["depth"], 3)
-        self.assertEqual(len(upload_payload["sections"]), 1)
-        self.assertEqual(len(upload_payload["subparts"]), 1)
+        payload = mock_write.call_args.args[0]
+        self.assertEqual(payload["name"], "400")
+        self.assertEqual(payload["title"], "42")
+        self.assertEqual(payload["date"], "2025-01-01")
+        self.assertEqual(payload["document"], {"raw_xml": "<xml/>"})
+        self.assertEqual(payload["depth"], 3)
+        self.assertEqual(len(payload["sections"]), 1)
+        self.assertEqual(len(payload["subparts"]), 1)
 
     def test_handler_skips_full_xml_and_locations_when_flags_disabled(self):
         parsed_config = self._build_parsed_config(upload_reg_text=False, upload_locations=False)
@@ -114,11 +111,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "parse_config_from_event", return_value=parsed_config
         ), patch.object(_module, "fetch_part_structure", return_value=structure), patch.object(
             _module, "determine_part_depth", return_value=3
-        ), patch.object(
-            _module,
-            "upload_part",
-            return_value={"ok": True},
-        ) as mock_upload, patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
+        ), patch.object(_module, "_write_debug_payload", return_value="/tmp/ecfr-worker-output/title-42_part-400_2025-01-01.json") as mock_write, patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
             _module, "extract_sections_and_subparts"
         ) as mock_extract:
             response = _module.handler({"body": "{}"}, None)
@@ -126,10 +119,10 @@ class EcfrWorkerAppTests(unittest.TestCase):
         body = json.loads(response["body"])
         self.assertEqual(body["processed"], 1)
 
-        upload_payload = mock_upload.call_args.kwargs["payload"]
-        self.assertEqual(upload_payload["document"], {})
-        self.assertEqual(upload_payload["sections"], [])
-        self.assertEqual(upload_payload["subparts"], [])
+        payload = mock_write.call_args.args[0]
+        self.assertEqual(payload["document"], {})
+        self.assertEqual(payload["sections"], [])
+        self.assertEqual(payload["subparts"], [])
 
         mock_fetch_xml.assert_not_called()
         mock_extract.assert_not_called()

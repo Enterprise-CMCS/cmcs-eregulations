@@ -7,11 +7,11 @@ optionally full XML, derives location metadata, and uploads the final payload.
 import json
 import logging
 import os
+from pathlib import Path
 
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
-from .eregs_client import upload_part
 from .config import parse_config_from_event
-from .transform import determine_part_depth, extract_sections_and_subparts
+from .transform import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ def handler(event, _context):
         title_number=config.title_number,
         part_number=config.part_number,
     )
+    structure = normalize_structure_for_upload(structure)
     depth = determine_part_depth(structure, config.part_number)
 
     document = {}
@@ -61,19 +62,20 @@ def handler(event, _context):
         "subparts": subparts,
     }
 
-    api_base_url = os.environ["EREGS_API_URL_V3"]
-    upload_result = upload_part(
-        api_base_url=api_base_url,
-        credentials=config.credentials,
-        payload=part_payload,
+    output_path = _write_debug_payload(
+        part_payload,
+        title_number=config.title_number,
+        part_number=config.part_number,
+        effective_date=config.effective_date,
     )
 
     logger.info(
-        "Uploaded eCFR part to eRegs: title=%s part=%s sections=%s subparts=%s",
+        "Wrote eCFR parsed payload: title=%s part=%s sections=%s subparts=%s path=%s",
         config.title_number,
         config.part_number,
         len(sections),
         len(subparts),
+        output_path,
     )
 
     return {
@@ -87,8 +89,20 @@ def handler(event, _context):
                 "title_number": config.title_number,
                 "part_number": config.part_number,
                 "effective_date": config.effective_date,
-                "uploaded": True,
-                "upload_result_keys": sorted(upload_result.keys()),
+                "uploaded": False,
+                "output_path": str(output_path),
             }
         ),
     }
+
+
+def _write_debug_payload(payload: dict, title_number: int, part_number: int, effective_date: str) -> Path:
+    """Persist parsed part payload to disk for local inspection/debugging."""
+
+    output_dir = Path(os.environ.get("PARSER_DEBUG_OUTPUT_DIR", "/tmp/ecfr-worker-output"))
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    safe_date = effective_date.replace("/", "-")
+    output_path = output_dir / f"title-{title_number}_part-{part_number}_{safe_date}.json"
+    output_path.write_text(json.dumps(payload, indent=4), encoding="utf-8")
+    return output_path

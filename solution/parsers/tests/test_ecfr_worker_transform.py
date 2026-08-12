@@ -17,22 +17,67 @@ _module = _load_module()
 
 
 class EcfrWorkerTransformTests(unittest.TestCase):
+    def test_normalize_structure_for_upload_adds_parent_fields(self):
+        raw = {
+            "type": "title",
+            "identifier": "42",
+            "label": "Title &amp; Label",
+            "children": [
+                {
+                    "type": "part",
+                    "identifier": "400",
+                    "descendant_range": "400.1 – 400.9",
+                    "children": [
+                        {
+                            "type": "section",
+                            "identifier": "400.1",
+                            "children": [],
+                        }
+                    ],
+                    "unexpected": "drop-me",
+                }
+            ],
+        }
+
+        normalized = _module.normalize_structure_for_upload(raw)
+
+        self.assertEqual(normalized["identifier"], ["42"])
+        self.assertEqual(normalized["label"], "Title & Label")
+        self.assertEqual(normalized["parent"], [])
+        self.assertEqual(normalized["parent_type"], "")
+
+        part = normalized["children"][0]
+        self.assertEqual(part["identifier"], ["400"])
+        self.assertEqual(part["parent"], ["42"])
+        self.assertEqual(part["parent_type"], "title")
+        self.assertEqual(part["descendant_range"], ["400.1", "400.9"])
+        self.assertNotIn("unexpected", part)
+
+        section = part["children"][0]
+        self.assertEqual(section["identifier"], ["400", "1"])
+        self.assertEqual(section["parent"], ["400"])
+        self.assertEqual(section["parent_type"], "part")
+
+    def test_normalize_structure_for_upload_rejects_non_object(self):
+        with self.assertRaisesRegex(_module.EcfrTransformError, "must be a JSON object"):
+            _module.normalize_structure_for_upload([])
+
     def test_determine_part_depth(self):
         structure = {
             "type": "title",
-            "identifier": "42",
+            "identifier": ["42"],
             "children": [
                 {
                     "type": "chapter",
-                    "identifier": "I",
+                    "identifier": ["I"],
                     "children": [
                         {
                             "type": "subchapter",
-                            "identifier": "A",
+                            "identifier": ["A"],
                             "children": [
                                 {
                                     "type": "part",
-                                    "identifier": "400",
+                                    "identifier": ["400"],
                                     "children": [],
                                 }
                             ],
@@ -47,7 +92,7 @@ class EcfrWorkerTransformTests(unittest.TestCase):
     def test_determine_part_depth_missing_part(self):
         structure = {
             "type": "title",
-            "identifier": "42",
+            "identifier": ["42"],
             "children": [],
         }
 
@@ -57,30 +102,30 @@ class EcfrWorkerTransformTests(unittest.TestCase):
     def test_extract_sections_and_subparts(self):
         structure = {
             "type": "title",
-            "identifier": "42",
+            "identifier": ["42"],
             "children": [
                 {
                     "type": "part",
-                    "identifier": "400",
+                    "identifier": ["400"],
                     "children": [
                         {
                             "type": "section",
-                            "identifier": "400.200",
+                            "identifier": ["400", "200"],
                             "reserved": False,
                         },
                         {
                             "type": "section",
-                            "identifier": "400.201",
+                            "identifier": ["400", "201"],
                             "reserved": True,
                         },
                         {
                             "type": "subpart",
-                            "identifier": "B",
+                            "identifier": ["B"],
                             "reserved": False,
                             "children": [
                                 {
                                     "type": "section",
-                                    "identifier": "400.202",
+                                    "identifier": ["400", "202"],
                                     "reserved": False,
                                 },
                                 {
@@ -88,12 +133,12 @@ class EcfrWorkerTransformTests(unittest.TestCase):
                                     "children": [
                                         {
                                             "type": "section",
-                                            "identifier": "400.203",
+                                            "identifier": ["400", "203"],
                                             "reserved": False,
                                         },
                                         {
                                             "type": "section",
-                                            "identifier": "400.204",
+                                            "identifier": ["400", "204"],
                                             "reserved": True,
                                         },
                                     ],

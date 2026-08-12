@@ -4,6 +4,7 @@ These helpers convert raw eCFR structure payloads into the depth/sections/
 subparts shape expected by the eRegs part upload endpoint.
 """
 
+import html
 from typing import Any
 
 
@@ -11,6 +12,16 @@ class EcfrTransformError(RuntimeError):
     """Raised when required structure nodes cannot be located or parsed."""
 
     pass
+
+
+def normalize_structure_for_upload(structure: dict[str, Any]) -> dict[str, Any]:
+    """Normalize raw eCFR structure to the shape expected by eRegs uploads."""
+
+    if not isinstance(structure, dict):
+        raise EcfrTransformError("eCFR structure payload must be a JSON object")
+
+    normalized = _normalize_node(structure, parent=[], parent_type="")
+    return normalized
 
 
 def determine_part_depth(structure: dict[str, Any], part_number: int) -> int:
@@ -174,7 +185,13 @@ def _identifier_tokens(identifier: Any) -> list[str]:
         value = identifier.strip()
         if not value:
             return []
-        return [piece.strip() for piece in value.split(".") if piece.strip()]
+        tokens: list[str] = []
+        for piece in value.split("."):
+            segment = piece.strip()
+            if not segment:
+                continue
+            tokens.extend(token for token in segment.split(" ") if token)
+        return tokens
 
     if isinstance(identifier, list):
         tokens: list[str] = []
@@ -182,5 +199,68 @@ def _identifier_tokens(identifier: Any) -> list[str]:
             if isinstance(item, str) and item.strip():
                 tokens.append(item.strip())
         return tokens
+
+    return []
+
+
+def _normalize_node(node: dict[str, Any], parent: list[str], parent_type: str) -> dict[str, Any]:
+    """Recursively normalize one structure node and annotate parent metadata."""
+
+    identifier = _identifier_tokens(node.get("identifier"))
+    children_raw = node.get("children")
+    children: list[dict[str, Any]] = []
+    if isinstance(children_raw, list):
+        for child in children_raw:
+            if isinstance(child, dict):
+                children.append(_normalize_node(child, parent=identifier, parent_type=_safe_string(node.get("type"))))
+
+    return {
+        "identifier": identifier,
+        "label": _safe_html_string(node.get("label")),
+        "label_level": _safe_string(node.get("label_level")),
+        "label_description": _safe_string(node.get("label_description")),
+        "reserved": bool(node.get("reserved", False)),
+        "type": _safe_string(node.get("type")),
+        "children": children,
+        "descendant_range": _normalize_descendant_range(node.get("descendant_range")),
+        "parent_type": parent_type,
+        "parent": parent,
+    }
+
+
+def _safe_string(value: Any) -> str:
+    """Return string values as-is; coerce non-strings to empty string."""
+
+    if isinstance(value, str):
+        return value
+    return ""
+
+
+def _safe_html_string(value: Any) -> str:
+    """Return HTML-unescaped string values; coerce non-strings to empty string."""
+
+    if isinstance(value, str):
+        return html.unescape(value)
+    return ""
+
+
+def _normalize_descendant_range(value: Any) -> list[str]:
+    """Normalize descendant_range to a string list across eCFR payload variants."""
+
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+
+    if isinstance(value, str):
+        candidate = value.strip()
+        if not candidate:
+            return []
+
+        if " – " in candidate:
+            return [piece.strip() for piece in candidate.split(" – ") if piece.strip()]
+
+        if " - " in candidate:
+            return [piece.strip() for piece in candidate.split(" - ") if piece.strip()]
+
+        return [candidate]
 
     return []
