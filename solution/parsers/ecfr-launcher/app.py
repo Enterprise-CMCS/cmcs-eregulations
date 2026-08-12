@@ -11,8 +11,8 @@ from common.launcher import (
     is_local_mode,
 )
 
-from eregs_config import TargetPartConfig, expand_target_parts, fetch_parser_config
-from ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
+from .eregs_config import TargetPartConfig, expand_target_parts, fetch_parser_config
+from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
 
 
 logger = logging.getLogger(__name__)
@@ -66,6 +66,18 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int,
         for part_raw, latest_issue_date in latest_by_part.items():
             if part_raw.isdigit():
                 by_part_number[int(part_raw)] = latest_issue_date
+
+        requested_parts = sorted({target.part_number for target in targets if target.title_number == title_number})
+        if requested_parts:
+            available_parts = sorted(by_part_number.keys())
+            missing_parts = [part for part in requested_parts if part not in by_part_number]
+            logger.info(
+                "eCFR versions resolved for title=%s available_parts=%s requested_parts=%s missing_parts=%s",
+                title_number,
+                len(available_parts),
+                len(requested_parts),
+                len(missing_parts),
+            )
 
         by_title[title_number] = by_part_number
 

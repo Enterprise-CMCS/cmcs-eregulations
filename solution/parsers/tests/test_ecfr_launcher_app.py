@@ -1,5 +1,6 @@
 import json
 import sys
+import types
 import unittest
 from importlib import util
 from pathlib import Path
@@ -11,11 +12,17 @@ from common.auth import BackendCredentials
 def _load_module():
     launcher_dir = Path(__file__).resolve().parent.parent / "ecfr-launcher"
     module_path = launcher_dir / "app.py"
-    sys.path.insert(0, str(launcher_dir))
-    spec = util.spec_from_file_location("ecfr_launcher_app", module_path)
+
+    package_name = "ecfr_launcher_pkg"
+    package = types.ModuleType(package_name)
+    package.__path__ = [str(launcher_dir)]
+    sys.modules[package_name] = package
+
+    spec = util.spec_from_file_location(f"{package_name}.app", module_path)
     if spec is None or spec.loader is None:
         raise RuntimeError("Unable to load ecfr launcher app module")
     module = util.module_from_spec(spec)
+    sys.modules[f"{package_name}.app"] = module
     spec.loader.exec_module(module)
     return module
 

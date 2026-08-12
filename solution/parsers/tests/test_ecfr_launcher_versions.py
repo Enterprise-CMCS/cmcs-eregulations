@@ -1,6 +1,9 @@
 import unittest
 from importlib import util
 from pathlib import Path
+from unittest.mock import patch
+
+import requests
 
 
 def _load_module():
@@ -15,6 +18,7 @@ def _load_module():
 
 _ecfr_versions = _load_module()
 EcfrVersionsError = _ecfr_versions.EcfrVersionsError
+fetch_title_versions = _ecfr_versions.fetch_title_versions
 latest_issue_dates_by_part = _ecfr_versions.latest_issue_dates_by_part
 
 
@@ -109,6 +113,73 @@ class EcfrLauncherVersionsTests(unittest.TestCase):
     def test_latest_issue_dates_by_part_requires_content_versions(self):
         with self.assertRaisesRegex(EcfrVersionsError, "content_versions"):
             latest_issue_dates_by_part({})
+
+    def test_latest_issue_dates_by_part_accepts_non_string_part_keys(self):
+        payload = {
+            "content_versions": [
+                {
+                    "part": 400,
+                    "issue_date": "2024-01-01",
+                    "removed": False,
+                },
+                {
+                    "part": ["401"],
+                    "issue_date": "2024-02-01",
+                    "removed": False,
+                },
+                {
+                    "part": 402.0,
+                    "issue_date": "2024-03-01",
+                    "removed": False,
+                },
+            ]
+        }
+
+        self.assertEqual(
+            latest_issue_dates_by_part(payload),
+            {
+                "400": "2024-01-01",
+                "401": "2024-02-01",
+                "402": "2024-03-01",
+            },
+        )
+
+    @patch("requests.get")
+    def test_fetch_title_versions_paginates_and_aggregates(self, mock_get):
+        page1 = unittest.mock.Mock()
+        page1.raise_for_status.return_value = None
+        page1.json.return_value = {
+            "content_versions": [{"part": "400", "issue_date": "2024-01-01", "removed": False}],
+            "meta": {"total_pages": "2"},
+        }
+
+        page2 = unittest.mock.Mock()
+        page2.raise_for_status.return_value = None
+        page2.json.return_value = {
+            "content_versions": [{"part": "401", "issue_date": "2024-01-02", "removed": False}],
+            "meta": {"total_pages": "2"},
+        }
+
+        mock_get.side_effect = [page1, page2]
+
+        payload = fetch_title_versions(42)
+
+        self.assertEqual(len(payload["content_versions"]), 2)
+        self.assertEqual(payload["content_versions"][0]["part"], "400")
+        self.assertEqual(payload["content_versions"][1]["part"], "401")
+        self.assertEqual(mock_get.call_count, 2)
+        self.assertEqual(mock_get.call_args_list[0].kwargs["params"], {"page": "1"})
+        self.assertEqual(mock_get.call_args_list[1].kwargs["params"], {"page": "2"})
+
+    @patch("requests.get")
+    def test_fetch_title_versions_http_error_has_page_context(self, mock_get):
+        response = unittest.mock.Mock(status_code=503)
+        failure = unittest.mock.Mock()
+        failure.raise_for_status.side_effect = requests.HTTPError(response=response)
+        mock_get.return_value = failure
+
+        with self.assertRaisesRegex(EcfrVersionsError, "page 1"):
+            fetch_title_versions(42)
 
 
 if __name__ == "__main__":
