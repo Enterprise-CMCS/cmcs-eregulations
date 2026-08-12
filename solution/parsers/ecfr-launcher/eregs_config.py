@@ -1,3 +1,9 @@
+"""Parser-config retrieval and expansion helpers for the eCFR launcher.
+
+This module adapts backend parser_config entries into normalized part targets
+that can be turned into worker queue messages.
+"""
+
 from dataclasses import dataclass
 from typing import Any
 from urllib.parse import urljoin
@@ -12,11 +18,15 @@ ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
 
 class EregsConfigError(RuntimeError):
+    """Raised for invalid parser-config data or expansion failures."""
+
     pass
 
 
 @dataclass(frozen=True)
 class TargetPartConfig:
+    """Normalized target part entry consumed by the launcher."""
+
     title_number: int
     part_number: int
     upload_reg_text: bool
@@ -28,6 +38,8 @@ def fetch_parser_config(
     credentials: BackendCredentials,
     timeout: int = 60,
 ) -> dict[str, Any]:
+    """Fetch parser configuration from eRegs backend."""
+
     request_url = urljoin(api_base_url, "parser_config")
     try:
         headers = build_auth_headers(credentials)
@@ -57,6 +69,12 @@ def expand_target_parts(
     timeout: int = 60,
     ecfr_base_url: str = ECFR_V1_BASE_URL,
 ) -> list[TargetPartConfig]:
+    """Expand parser_config entries into concrete (title, part) targets.
+
+    Supports both direct part entries and subchapter expansion via eCFR
+    structure/current endpoints.
+    """
+
     raw_parts = parser_config.get("parts")
     if not isinstance(raw_parts, list):
         raise EregsConfigError("parser_config must include a parts array")
@@ -115,6 +133,8 @@ def fetch_subchapter_part_numbers(
     timeout: int = 60,
     base_url: str = ECFR_V1_BASE_URL,
 ) -> list[int]:
+    """Fetch all part numbers under one title/chapter/subchapter."""
+
     endpoint = f"structure/current/title-{title_number}.json"
     request_url = urljoin(base_url, endpoint)
 
@@ -151,6 +171,8 @@ def fetch_subchapter_part_numbers(
 
 
 def _extract_part_numbers(node: Any) -> list[int]:
+    """Walk structure payload and collect unique part identifiers."""
+
     part_numbers: set[int] = set()
 
     def walk(value: Any) -> None:
@@ -175,6 +197,8 @@ def _extract_part_numbers(node: Any) -> list[int]:
 
 
 def _identifier_to_part_number(identifier: Any) -> int | None:
+    """Convert eCFR identifier values to integer part numbers when possible."""
+
     if isinstance(identifier, str):
         candidate = identifier.strip()
         if candidate.isdigit():
@@ -190,6 +214,8 @@ def _identifier_to_part_number(identifier: Any) -> int | None:
 
 
 def _parse_subchapter_value(value: str) -> tuple[str, str]:
+    """Parse parser-config subchapter value in CHAPTER-SUBCHAPTER format."""
+
     pieces = value.split("-", 1)
     if len(pieces) != 2 or not pieces[0].strip() or not pieces[1].strip():
         raise EregsConfigError(f"invalid subchapter value '{value}', expected CHAPTER-SUBCHAPTER")
@@ -197,6 +223,8 @@ def _parse_subchapter_value(value: str) -> tuple[str, str]:
 
 
 def _parse_part_number(value: str) -> int:
+    """Parse parser-config part value as an integer."""
+
     if not value.strip().isdigit():
         raise EregsConfigError(f"invalid part value '{value}', expected numeric part")
     return int(value.strip())

@@ -1,3 +1,9 @@
+"""HTTP client helpers for uploading parsed part payloads to eRegs.
+
+The eCFR worker builds normalized part payloads and delegates outbound upload
+behavior to this module.
+"""
+
 from typing import Any
 from urllib.parse import urljoin
 
@@ -8,6 +14,8 @@ from common.config import ConfigParseError
 
 
 class EregsClientError(RuntimeError):
+    """Raised for failed part upload requests or invalid payloads."""
+
     pass
 
 
@@ -29,6 +37,8 @@ def upload_part(
     payload: dict[str, Any],
     timeout: int = 60,
 ) -> dict[str, Any]:
+    """Upload one parsed part payload to eRegs /v3/part."""
+
     _validate_part_payload(payload)
 
     request_url = urljoin(api_base_url, "part")
@@ -63,6 +73,8 @@ def upload_part(
 
 
 def _validate_part_payload(payload: Any) -> None:
+    """Validate required top-level keys for part upload payloads."""
+
     if not isinstance(payload, dict):
         raise EregsClientError("part upload payload must be a JSON object")
 

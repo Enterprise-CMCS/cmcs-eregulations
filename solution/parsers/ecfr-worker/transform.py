@@ -1,11 +1,21 @@
+"""Structure transformation helpers for eCFR location metadata.
+
+These helpers convert raw eCFR structure payloads into the depth/sections/
+subparts shape expected by the eRegs part upload endpoint.
+"""
+
 from typing import Any
 
 
 class EcfrTransformError(RuntimeError):
+    """Raised when required structure nodes cannot be located or parsed."""
+
     pass
 
 
 def determine_part_depth(structure: dict[str, Any], part_number: int) -> int:
+    """Return nesting depth of the requested part within title structure."""
+
     part_number_str = str(part_number)
     result = _find_part_node(structure, part_number_str)
     if result is None:
@@ -18,6 +28,8 @@ def extract_sections_and_subparts(
     structure: dict[str, Any],
     part_number: int,
 ) -> tuple[list[dict[str, str]], list[dict[str, Any]]]:
+    """Extract non-reserved sections/subparts for one requested part node."""
+
     part_number_str = str(part_number)
     result = _find_part_node(structure, part_number_str)
     if result is None:
@@ -54,6 +66,8 @@ def extract_sections_and_subparts(
 
 
 def _build_subpart(title_str: str, part_str: str, subpart_node: dict[str, Any]) -> dict[str, Any]:
+    """Build normalized subpart payload with nested section entries."""
+
     subpart_id = _first_identifier_token(subpart_node.get("identifier")) or ""
     subpart_sections: list[dict[str, str]] = []
 
@@ -90,6 +104,8 @@ def _build_subpart(title_str: str, part_str: str, subpart_node: dict[str, Any]) 
 
 
 def _build_section(title_str: str, fallback_part_str: str, node: dict[str, Any]) -> dict[str, str] | None:
+    """Build normalized section location payload from structure node."""
+
     part_str, section_str = _parse_section_identifier(node.get("identifier"), fallback_part_str)
     if section_str is None:
         return None
@@ -102,6 +118,8 @@ def _build_section(title_str: str, fallback_part_str: str, node: dict[str, Any])
 
 
 def _find_part_node(node: Any, part_number_str: str, depth: int = 0) -> tuple[dict[str, Any], int] | None:
+    """Depth-first search for a part node and its nesting depth."""
+
     if not isinstance(node, dict):
         return None
 
@@ -123,6 +141,8 @@ def _find_part_node(node: Any, part_number_str: str, depth: int = 0) -> tuple[di
 
 
 def _first_identifier_token(identifier: Any) -> str | None:
+    """Return first identifier token from eCFR identifier values."""
+
     tokens = _identifier_tokens(identifier)
     if not tokens:
         return None
@@ -130,6 +150,8 @@ def _first_identifier_token(identifier: Any) -> str | None:
 
 
 def _parse_section_identifier(identifier: Any, fallback_part_str: str) -> tuple[str, str | None]:
+    """Split eCFR section identifiers into part and section components."""
+
     tokens = _identifier_tokens(identifier)
     if not tokens:
         return fallback_part_str, None
@@ -146,6 +168,8 @@ def _parse_section_identifier(identifier: Any, fallback_part_str: str) -> tuple[
 
 
 def _identifier_tokens(identifier: Any) -> list[str]:
+    """Normalize identifier strings/lists into non-empty token lists."""
+
     if isinstance(identifier, str):
         value = identifier.strip()
         if not value:

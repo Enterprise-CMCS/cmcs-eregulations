@@ -1,3 +1,9 @@
+"""HTTP client helpers for eCFR structure/full-document reads.
+
+These calls are isolated from handler logic to keep orchestration testable and
+to centralize API-specific error handling.
+"""
+
 from typing import Any
 from urllib.parse import urljoin
 
@@ -8,6 +14,8 @@ ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
 
 class EcfrClientError(RuntimeError):
+    """Raised for failed or malformed eCFR API responses."""
+
     pass
 
 
@@ -17,6 +25,8 @@ def fetch_part_structure(
     timeout: int = 60,
     base_url: str = ECFR_V1_BASE_URL,
 ) -> dict[str, Any]:
+    """Fetch current eCFR structure JSON for one title/part."""
+
     endpoint = f"structure/current/title-{title_number}.json"
     request_url = urljoin(base_url, endpoint)
 
@@ -51,6 +61,8 @@ def fetch_part_full_xml(
     timeout: int = 60,
     base_url: str = ECFR_V1_BASE_URL,
 ) -> str:
+    """Fetch full XML for one title/part at a specific effective date."""
+
     endpoint = f"full/{effective_date}/title-{title_number}.xml"
     request_url = urljoin(base_url, endpoint)
 

@@ -1,3 +1,10 @@
+"""eCFR launcher entrypoint for queueing part-level parser work.
+
+This Lambda reads parser_config from eRegs, expands part targets (including
+subchapters), resolves latest per-part effective dates from eCFR, then sends
+work units to SQS (or local worker HTTP in dev mode).
+"""
+
 import json
 import logging
 import os
@@ -20,6 +27,12 @@ logger.setLevel(logging.INFO)
 
 
 def _build_work_units(run_time: str, api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+    """Build worker messages from parser config and latest-date resolution.
+
+    Returns both valid work units and per-part failures for targets that cannot
+    be queued (for example, no resolvable latest date).
+    """
+
     parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
     targets = expand_target_parts(parser_config)
     latest_dates_by_title = _resolve_latest_dates_by_title(targets)
@@ -55,6 +68,12 @@ def _build_work_units(run_time: str, api_base_url: str, credentials) -> tuple[li
 
 
 def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int, dict[int, str]]:
+    """Resolve latest effective date per requested part, grouped by title.
+
+    This uses one title-level versions API call (with pagination) and builds a
+    compact lookup map consumed by _build_work_units.
+    """
+
     by_title: dict[int, dict[int, str]] = {}
     title_numbers = sorted({target.title_number for target in targets})
 
@@ -85,6 +104,8 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int,
 
 
 def handler(event, _context):
+    """Main launcher handler for scheduled/on-demand eCFR work generation."""
+
     run_time = datetime.now(timezone.utc).isoformat()
     logger.info(
         "eCFR launcher trigger received: keys=%s has_records=%s has_body=%s",

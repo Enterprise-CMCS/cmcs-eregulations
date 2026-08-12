@@ -1,3 +1,9 @@
+"""eCFR worker entrypoint for single-part ingestion into eRegs.
+
+Each invocation processes one title/part message, fetches current structure and
+optionally full XML, derives location metadata, and uploads the final payload.
+"""
+
 import json
 import logging
 import os
@@ -13,6 +19,8 @@ logger.setLevel(logging.INFO)
 
 
 def handler(event, _context):
+    """Process one queued eCFR part work unit end-to-end."""
+
     config = parse_config_from_event(event)
 
     logger.info(

@@ -1,3 +1,9 @@
+"""eCFR versions API helpers used by the launcher planning step.
+
+The launcher uses this module to fetch full title versions (all pages) and
+derive the latest effective date per part before queueing worker messages.
+"""
+
 import json
 from datetime import date
 from typing import Any
@@ -10,6 +16,8 @@ ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
 
 class EcfrVersionsError(RuntimeError):
+    """Raised for invalid or failed eCFR versions API responses."""
+
     pass
 
 
@@ -18,6 +26,8 @@ def fetch_title_versions(
     base_url: str = ECFR_V1_BASE_URL,
     timeout: int = 60,
 ) -> dict[str, Any]:
+    """Fetch and merge all versions pages for a single eCFR title."""
+
     endpoint = f"versions/title-{title_number}"
     request_url = urljoin(base_url, endpoint)
     all_content_versions: list[Any] = []
@@ -54,6 +64,8 @@ def _request_versions_page(
     timeout: int,
     page: int,
 ) -> dict[str, Any]:
+    """Fetch a single page of eCFR versions data."""
+
     try:
         response = requests.get(request_url, timeout=timeout, params={"page": str(page)})
         response.raise_for_status()
@@ -75,6 +87,8 @@ def _request_versions_page(
 
 
 def _extract_total_pages(meta: Any) -> int:
+    """Extract total pages from versions response metadata."""
+
     if not isinstance(meta, dict):
         return 1
 
@@ -89,6 +103,8 @@ def _extract_total_pages(meta: Any) -> int:
 
 
 def latest_issue_dates_by_part(payload: dict[str, Any]) -> dict[str, str]:
+    """Build a part->latest-date map from merged versions payload data."""
+
     content_versions = payload.get("content_versions")
     if not isinstance(content_versions, list):
         raise EcfrVersionsError("eCFR versions response must include content_versions array")
@@ -119,6 +135,8 @@ def latest_issue_dates_by_part(payload: dict[str, Any]) -> dict[str, str]:
 
 
 def _normalize_part_key(value: Any) -> str | None:
+    """Normalize part keys from eCFR payload into comparable numeric strings."""
+
     if isinstance(value, int):
         return str(value) if value > 0 else None
 
@@ -140,6 +158,8 @@ def _normalize_part_key(value: Any) -> str | None:
 
 
 def _extract_issue_date(item: dict[str, Any]) -> tuple[date, str] | None:
+    """Extract and parse issue_date, falling back to date when needed."""
+
     for key in ("issue_date", "date"):
         raw_value = item.get(key)
         parsed_value = _parse_date(raw_value)
@@ -149,6 +169,8 @@ def _extract_issue_date(item: dict[str, Any]) -> tuple[date, str] | None:
 
 
 def _parse_date(value: Any) -> date | None:
+    """Parse ISO date-like values and return date objects for comparison."""
+
     if not isinstance(value, str):
         return None
 

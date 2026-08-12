@@ -1,13 +1,23 @@
+"""Shared transport helpers used by parser launcher Lambdas.
+
+Launchers enqueue work to SQS in deployed environments and POST directly to
+workers in local docker/lambda-proxy mode.
+"""
+
 import json
 import os
 from typing import Any
 
 
 def is_local_mode() -> bool:
+    """Return True when launchers should dispatch via local HTTP."""
+
     return os.environ.get("PARSER_LOCAL_MODE", "false").lower() == "true"
 
 
 def send_work_units(queue_url: str, work_units: list[dict[str, Any]]) -> None:
+    """Send work units to SQS as one message per unit."""
+
     sqs = _get_sqs_client()
 
     for work_unit in work_units:
@@ -18,6 +28,8 @@ def send_work_units(queue_url: str, work_units: list[dict[str, Any]]) -> None:
 
 
 def dispatch_work_units(work_units: list[dict[str, Any]]) -> tuple[bool, int, list[dict[str, str]]]:
+    """Dispatch work units using the environment's configured transport mode."""
+
     local_mode = is_local_mode()
 
     if local_mode:
@@ -36,6 +48,8 @@ def build_launcher_response(
     succeeded: int,
     failures: list[dict[str, str]],
 ) -> dict[str, Any]:
+    """Build the standard launcher response envelope for logs/API callers."""
+
     payload = {
         "enqueued": len(work_units),
         "local_mode": local_mode,
@@ -57,6 +71,8 @@ def send_work_units_via_http(
     work_units: list[dict[str, Any]],
     timeout: int = 60,
 ) -> tuple[int, list[dict[str, str]]]:
+    """POST work units to a local worker endpoint and collect failures."""
+
     success = 0
     failures = []
 
@@ -83,12 +99,16 @@ def send_work_units_via_http(
 
 
 def _get_sqs_client():
+    """Create an SQS client."""
+
     import boto3
 
     return boto3.client("sqs")
 
 
 def _http_post(url: str, data: str, timeout: int):
+    """Issue a POST request; isolated for easier testing."""
+
     import requests
 
     return requests.post(url, data=data, timeout=timeout)

@@ -1,3 +1,9 @@
+"""Credential helpers shared by parser launcher/worker Lambdas.
+
+This module centralizes how parser services resolve eRegs auth credentials
+from event payloads, AWS Secrets Manager, and environment variables.
+"""
+
 import json
 import os
 import base64
@@ -9,6 +15,8 @@ from common.config import ConfigParseError, parse_credentials
 
 @dataclass
 class BackendCredentials:
+    """Normalized backend authentication credentials."""
+
     auth_type: str
     username: str | None = None
     password: str | None = None
@@ -16,6 +24,12 @@ class BackendCredentials:
 
 
 def resolve_backend_credentials(raw_credentials: Any = None) -> BackendCredentials:
+    """Resolve credentials for outbound eRegs calls.
+
+    Resolution order is intentionally strict and shared across launchers/workers:
+    message payload -> Secrets Manager -> bearer env var -> basic env vars.
+    """
+
     if isinstance(raw_credentials, dict):
         parsed = _parse_message_credentials(raw_credentials)
         if parsed is not None:
@@ -47,6 +61,8 @@ def resolve_backend_credentials(raw_credentials: Any = None) -> BackendCredentia
 
 
 def build_auth_headers(credentials: BackendCredentials) -> dict[str, str]:
+    """Convert normalized credentials into an HTTP Authorization header."""
+
     if credentials.auth_type == "bearer" and credentials.token:
         return {
             "Authorization": f"Bearer {credentials.token}",
@@ -63,6 +79,8 @@ def build_auth_headers(credentials: BackendCredentials) -> dict[str, str]:
 
 
 def _load_credentials_from_secret(secret_name: str) -> BackendCredentials:
+    """Load and parse credentials JSON from AWS Secrets Manager."""
+
     client = _get_secrets_client()
     response = client.get_secret_value(SecretId=secret_name)
     secret_string = response.get("SecretString")
@@ -78,6 +96,8 @@ def _load_credentials_from_secret(secret_name: str) -> BackendCredentials:
 
 
 def _parse_message_credentials(raw_credentials: dict[str, Any]) -> BackendCredentials | None:
+    """Attempt to parse message credentials; return None if invalid."""
+
     try:
         return parse_credentials(raw_credentials)
     except ConfigParseError:
@@ -85,6 +105,8 @@ def _parse_message_credentials(raw_credentials: dict[str, Any]) -> BackendCreden
 
 
 def _get_secrets_client():
+    """Create a Secrets Manager client."""
+
     import boto3
 
     return boto3.client("secretsmanager")

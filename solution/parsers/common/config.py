@@ -1,3 +1,9 @@
+"""Shared payload parsing utilities for parser Lambdas.
+
+The parser services are invoked through both SQS events and lambda-proxy HTTP
+events in local mode. These helpers normalize both forms into one config shape.
+"""
+
 import json
 from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
@@ -6,6 +12,8 @@ if TYPE_CHECKING:
 
 
 class ConfigParseError(ValueError):
+    """Raised when incoming Lambda payload/config cannot be parsed safely."""
+
     pass
 
 
@@ -13,6 +21,8 @@ TConfig = TypeVar("TConfig")
 
 
 def parse_message_body(record: dict[str, Any]) -> dict[str, Any]:
+    """Parse and validate an SQS record body into a JSON object."""
+
     body = record.get("body")
     if not body or not isinstance(body, str):
         raise ConfigParseError("SQS record body must be a non-empty JSON string")
@@ -29,6 +39,8 @@ def parse_message_body(record: dict[str, Any]) -> dict[str, Any]:
 
 
 def unwrap_config(payload: dict[str, Any]) -> dict[str, Any]:
+    """Return payload['config'] when present, otherwise payload itself."""
+
     config = payload.get("config", payload)
     if not isinstance(config, dict):
         raise ConfigParseError("config must be a JSON object")
@@ -36,6 +48,8 @@ def unwrap_config(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def require_single_record(records: list[Any]) -> dict[str, Any]:
+    """Validate that exactly one SQS record is present."""
+
     if len(records) != 1:
         raise ConfigParseError(f"Expected exactly 1 SQS record, found {len(records)}")
 
@@ -47,6 +61,8 @@ def require_single_record(records: list[Any]) -> dict[str, Any]:
 
 
 def parse_credentials(raw_credentials: Any) -> "BackendCredentials":
+    """Parse credential payload into BackendCredentials."""
+
     from common.auth import BackendCredentials
 
     if not isinstance(raw_credentials, dict):
@@ -66,6 +82,8 @@ def parse_credentials(raw_credentials: Any) -> "BackendCredentials":
 
 
 def require_positive_int(data: dict[str, Any], key: str) -> int:
+    """Require a positive integer value for a config key."""
+
     value = data.get(key)
     if not isinstance(value, int) or value <= 0:
         raise ConfigParseError(f"{key} must be a positive integer")
@@ -73,6 +91,8 @@ def require_positive_int(data: dict[str, Any], key: str) -> int:
 
 
 def require_non_empty_string(data: dict[str, Any], key: str) -> str:
+    """Require a non-empty string value for a config key."""
+
     value = data.get(key)
     if not isinstance(value, str) or not value.strip():
         raise ConfigParseError(f"{key} must be a non-empty string")
@@ -80,6 +100,8 @@ def require_non_empty_string(data: dict[str, Any], key: str) -> str:
 
 
 def require_bool(data: dict[str, Any], key: str) -> bool:
+    """Require a boolean value for a config key."""
+
     value = data.get(key)
     if not isinstance(value, bool):
         raise ConfigParseError(f"{key} must be a boolean")
@@ -87,6 +109,8 @@ def require_bool(data: dict[str, Any], key: str) -> bool:
 
 
 def parse_payload_from_event(event: dict[str, Any]) -> dict[str, Any]:
+    """Normalize SQS or lambda-proxy event wrappers into one payload object."""
+
     if not isinstance(event, dict):
         raise ConfigParseError("Lambda event must be a JSON object")
 
@@ -119,5 +143,7 @@ def parse_typed_config_from_event(
     event: dict[str, Any],
     parse_config: Callable[[dict[str, Any]], TConfig],
 ) -> TConfig:
+    """Normalize event payload and apply a service-specific config parser."""
+
     payload = parse_payload_from_event(event)
     return parse_config(payload)

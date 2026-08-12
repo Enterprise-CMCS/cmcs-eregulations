@@ -1,3 +1,8 @@
+"""Typed event/config parsing for eCFR worker messages.
+
+This module enforces the queue contract produced by the eCFR launcher.
+"""
+
 from dataclasses import dataclass
 
 from common.auth import BackendCredentials, resolve_backend_credentials
@@ -12,6 +17,8 @@ from common.config import (
 
 @dataclass
 class EcfrPartConfig:
+    """Validated config object for one eCFR title/part processing unit."""
+
     title_number: int
     part_number: int
     effective_date: str
@@ -21,6 +28,8 @@ class EcfrPartConfig:
 
 
 def parse_config(payload: dict) -> EcfrPartConfig:
+    """Parse and validate worker config payload into EcfrPartConfig."""
+
     config = unwrap_config(payload)
 
     return EcfrPartConfig(
@@ -34,6 +43,8 @@ def parse_config(payload: dict) -> EcfrPartConfig:
 
 
 def parse_config_from_event(event: dict) -> EcfrPartConfig:
+    """Parse Lambda event (SQS or HTTP) into worker config."""
+
     return parse_typed_config_from_event(event, parse_config)
 
 
