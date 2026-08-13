@@ -10,11 +10,7 @@ from .postprocess import postprocess_part_node
 
 
 def parse_part_xml_to_document(raw_xml: str, *, title_number: int, part_number: int) -> dict[str, Any]:
-    """Parse raw eCFR part XML into eRegs-compatible document JSON.
-
-    This is intentionally a skeleton seam so parse details can be filled in
-    incrementally while the worker integration remains stable.
-    """
+    """Parse raw eCFR part XML into eRegs-compatible document JSON."""
 
     root = _parse_xml_root(raw_xml)
     part = _parse_part_root(root, title_number=title_number, part_number=part_number)
@@ -85,6 +81,8 @@ def _parse_part_children(root: ElementTree.Element) -> list[dict[str, Any]]:
 
     children: list[dict[str, Any]] = []
     for child in root:
+        if child.tag == "HEAD":
+            continue
         if child.tag == "DIV6":
             children.append(_parse_subpart(child))
             continue
