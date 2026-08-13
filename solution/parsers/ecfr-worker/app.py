@@ -12,6 +12,7 @@ from pathlib import Path
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
 from .config import parse_config_from_event
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
+from .xml_parser import parse_part_xml_to_document
 
 
 logger = logging.getLogger(__name__)
@@ -44,7 +45,11 @@ def handler(event, _context):
             part_number=config.part_number,
             effective_date=config.effective_date,
         )
-        document = {"raw_xml": full_xml}
+        document = parse_part_xml_to_document(
+            full_xml,
+            title_number=config.title_number,
+            part_number=config.part_number,
+        )
 
     sections = []
     subparts = []

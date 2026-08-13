@@ -76,6 +76,10 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "fetch_part_full_xml", return_value="<xml/>"
         ), patch.object(
             _module,
+            "parse_part_xml_to_document",
+            return_value={"node_type": "part", "children": []},
+        ), patch.object(
+            _module,
             "extract_sections_and_subparts",
             return_value=(
                 [{"title": "42", "part": "400", "section": "200"}],
@@ -93,7 +97,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertEqual(payload["name"], "400")
         self.assertEqual(payload["title"], "42")
         self.assertEqual(payload["date"], "2025-01-01")
-        self.assertEqual(payload["document"], {"raw_xml": "<xml/>"})
+        self.assertEqual(payload["document"], {"node_type": "part", "children": []})
         self.assertEqual(payload["depth"], 3)
         self.assertEqual(len(payload["sections"]), 1)
         self.assertEqual(len(payload["subparts"]), 1)
