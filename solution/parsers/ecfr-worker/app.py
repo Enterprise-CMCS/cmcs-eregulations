@@ -11,7 +11,7 @@ from pathlib import Path
 
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
 from .config import parse_config_from_event
-from .transform import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
+from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 
 
 logger = logging.getLogger(__name__)

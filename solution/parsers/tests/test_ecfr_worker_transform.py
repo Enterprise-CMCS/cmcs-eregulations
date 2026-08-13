@@ -1,14 +1,28 @@
 import unittest
 from importlib import util
 from pathlib import Path
+import sys
+import types
 
 
 def _load_module():
-    module_path = Path(__file__).resolve().parent.parent / "ecfr-worker" / "transform.py"
-    spec = util.spec_from_file_location("ecfr_worker_transform", module_path)
+    worker_dir = Path(__file__).resolve().parent.parent / "ecfr-worker"
+    module_path = worker_dir / "transforms" / "__init__.py"
+
+    package_name = "ecfr_worker_transform_pkg"
+    package = types.ModuleType(package_name)
+    package.__path__ = [str(worker_dir)]
+    sys.modules[package_name] = package
+
+    spec = util.spec_from_file_location(
+        f"{package_name}.transforms",
+        module_path,
+        submodule_search_locations=[str(worker_dir / "transforms")],
+    )
     if spec is None or spec.loader is None:
         raise RuntimeError("Unable to load ecfr worker transform module")
     module = util.module_from_spec(spec)
+    sys.modules[f"{package_name}.transforms"] = module
     spec.loader.exec_module(module)
     return module
 
