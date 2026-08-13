@@ -142,7 +142,7 @@ def _parse_subject_group(node: ElementTree.Element) -> dict[str, Any]:
             children.append(_parse_section(child))
             continue
         if child.tag == "FTNT":
-            children.append({"node_type": "footnote", "content": _collect_inner_text(child)})
+            children.append({"node_type": "footnote", "content": _collect_inner_xml(child)})
             continue
 
     return {
@@ -193,21 +193,21 @@ def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | None:
     """Parse supported section child tags into normalized node dicts."""
 
     if node.tag == "P":
-        return {"node_type": "paragraph", "text": _collect_inner_text(node)}
+        return {"node_type": "paragraph", "text": _collect_inner_xml(node)}
     if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "flush_paragraph", "text": _collect_inner_text(node)}
+        return {"node_type": "flush_paragraph", "text": _collect_inner_xml(node)}
     if node.tag == "img":
         return {"node_type": "image", "src": (node.attrib.get("src") or "").strip()}
     if node.tag == "EXTRACT":
-        return {"node_type": "extract", "content": _collect_inner_text(node)}
+        return {"node_type": "extract", "content": _collect_inner_xml(node)}
     if node.tag == "CITA":
-        return {"node_type": "citation", "content": _collect_inner_text(node)}
+        return {"node_type": "citation", "content": _collect_inner_xml(node)}
     if node.tag == "SECAUTH":
-        return {"node_type": "section_authority", "content": _collect_inner_text(node)}
+        return {"node_type": "section_authority", "content": _collect_inner_xml(node)}
     if node.tag == "FTNT":
-        return {"node_type": "footnote", "content": _collect_inner_text(node)}
+        return {"node_type": "footnote", "content": _collect_inner_xml(node)}
     if node.tag == "DIV":
-        return {"node_type": "division", "content": _collect_inner_text(node)}
+        return {"node_type": "division", "content": _collect_inner_xml(node)}
     if node.tag == "EFFDNOT":
         return {
             "node_type": "effective_date_note",
@@ -221,19 +221,19 @@ def _parse_appendix_child(node: ElementTree.Element) -> dict[str, Any] | None:
     """Parse supported appendix child tags into normalized node dicts."""
 
     if node.tag == "P":
-        return {"node_type": "paragraph", "text": _collect_inner_text(node)}
+        return {"node_type": "paragraph", "text": _collect_inner_xml(node)}
     if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "flush_paragraph", "text": _collect_inner_text(node)}
+        return {"node_type": "flush_paragraph", "text": _collect_inner_xml(node)}
     if node.tag in {"HD1", "HD2", "HD3"}:
-        return {"node_type": "heading", "level": node.tag, "content": _collect_inner_text(node)}
+        return {"node_type": "heading", "level": node.tag, "content": _collect_inner_xml(node)}
     if node.tag == "DIV":
-        return {"node_type": "division", "content": _collect_inner_text(node)}
+        return {"node_type": "division", "content": _collect_inner_xml(node)}
     if node.tag == "TABLE":
-        return {"node_type": "table", "content": _collect_inner_text(node)}
+        return {"node_type": "table", "content": _collect_inner_xml(node)}
     if node.tag == "FTNT":
-        return {"node_type": "footnote", "content": _collect_inner_text(node)}
+        return {"node_type": "footnote", "content": _collect_inner_xml(node)}
     if node.tag == "CITA":
-        return {"node_type": "citation", "content": _collect_inner_text(node)}
+        return {"node_type": "citation", "content": _collect_inner_xml(node)}
     return None
 
 
@@ -272,3 +272,16 @@ def _collect_inner_text(node: ElementTree.Element) -> str:
     """Collect concatenated inner text for a node."""
 
     return "".join(node.itertext()).strip()
+
+
+def _collect_inner_xml(node: ElementTree.Element) -> str:
+    """Collect inner XML (not flattened text) for rich-content nodes."""
+
+    parts: list[str] = []
+    if node.text:
+        parts.append(node.text)
+
+    for child in list(node):
+        parts.append(ElementTree.tostring(child, encoding="unicode"))
+
+    return "".join(parts).strip()

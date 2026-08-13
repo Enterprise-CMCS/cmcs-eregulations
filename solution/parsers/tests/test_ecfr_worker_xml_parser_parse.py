@@ -103,14 +103,14 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         section_xml = """
 <DIV8 N="400.1" TYPE="SECTION">
   <HEAD>Sec. 400.1</HEAD>
-  <P>(a) Paragraph text.</P>
+  <P>(a) <I>Paragraph</I> text.</P>
   <FP>Flush</FP>
   <img src="/graphics/abc.gif" />
-  <EXTRACT>Extract content</EXTRACT>
-  <CITA>Citation content</CITA>
-  <SECAUTH>Sec auth</SECAUTH>
+  <EXTRACT><HD1>Extract heading</HD1></EXTRACT>
+  <CITA><I>Citation</I> content</CITA>
+  <SECAUTH>Sec <E T="03">auth</E></SECAUTH>
   <FTNT>Footnote</FTNT>
-  <DIV>Division</DIV>
+  <DIV><P>Division paragraph</P></DIV>
   <EFFDNOT><HED>Effective Date Note:</HED><PSPACE>Content</PSPACE></EFFDNOT>
 </DIV8>
 """.strip()
@@ -133,20 +133,25 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
                 "effective_date_note",
             ],
         )
+        self.assertIn("<I>Paragraph</I>", parsed["children"][0]["text"])
+        self.assertIn("<HD1>Extract heading</HD1>", parsed["children"][3]["content"])
+        self.assertIn("<I>Citation</I>", parsed["children"][4]["content"])
+        self.assertIn("<E T=\"03\">auth</E>", parsed["children"][5]["content"])
+        self.assertIn("<P>Division paragraph</P>", parsed["children"][7]["content"])
 
     def test_parse_appendix_child_maps_supported_tags(self):
         appendix_xml = """
 <DIV9 N="Appendix A to Part 400" TYPE="APPENDIX">
   <HEAD>Appendix A</HEAD>
-  <P>Paragraph text.</P>
+  <P>Paragraph <I>text</I>.</P>
   <FP>Flush</FP>
   <HD1>Heading 1</HD1>
   <HD2>Heading 2</HD2>
   <HD3>Heading 3</HD3>
-  <DIV>Division</DIV>
-  <TABLE>Table content</TABLE>
+  <DIV><P>Division</P></DIV>
+  <TABLE><TR><TD>Table content</TD></TR></TABLE>
   <FTNT>Footnote</FTNT>
-  <CITA>Citation</CITA>
+  <CITA><I>Citation</I></CITA>
 </DIV9>
 """.strip()
         root = _module._parse_xml_root(appendix_xml)
@@ -169,6 +174,10 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
                 "citation",
             ],
         )
+        self.assertIn("<I>text</I>", parsed["children"][0]["text"])
+        self.assertIn("<P>Division</P>", parsed["children"][5]["content"])
+        self.assertIn("<TR><TD>Table content</TD></TR>", parsed["children"][6]["content"])
+        self.assertIn("<I>Citation</I>", parsed["children"][8]["content"])
 
 
 if __name__ == "__main__":
