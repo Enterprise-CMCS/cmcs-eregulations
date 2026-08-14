@@ -38,8 +38,8 @@ def postprocess_part_node(part: PartNode) -> PartNode:
     Future implementation should mirror legacy parsexml post-processing steps.
     """
 
-    _apply_paragraph_citations(part)
     _apply_paragraph_markers(part)
+    _apply_paragraph_citations(part)
     _rewrite_embedded_image_sources(part)
     return part
 

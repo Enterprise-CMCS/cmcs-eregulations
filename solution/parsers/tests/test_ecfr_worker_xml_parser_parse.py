@@ -139,6 +139,39 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         self.assertIn("<E T=\"03\">auth</E>", parsed["children"][5]["content"])
         self.assertIn("<P>Division paragraph</P>", parsed["children"][7]["content"])
 
+    def test_parse_section_splits_multi_marker_paragraph_nodes(self):
+        section_xml = """
+<DIV8 N="400.2" TYPE="SECTION">
+  <HEAD>Sec. 400.2</HEAD>
+  <P>(a) <I>Basis, purpose, and definitions.</I> (1) Nested marker text.</P>
+</DIV8>
+""".strip()
+        root = _module._parse_xml_root(section_xml)
+
+        parsed = _module._parse_section(root)
+
+        self.assertEqual(len(parsed["children"]), 2)
+        self.assertEqual(parsed["children"][0]["node_type"], "paragraph")
+        self.assertEqual(parsed["children"][1]["node_type"], "paragraph")
+        self.assertTrue(parsed["children"][0]["text"].lstrip().startswith("(a)"))
+        self.assertIn("<I>Basis, purpose, and definitions.</I>", parsed["children"][0]["text"])
+        self.assertTrue(parsed["children"][1]["text"].lstrip().startswith("(1)"))
+
+    def test_parse_section_does_not_split_when_reserved_follows_next_marker(self):
+        section_xml = """
+<DIV8 N="400.3" TYPE="SECTION">
+  <HEAD>Sec. 400.3</HEAD>
+  <P>(b) Activities and rates. (1) [Reserved]</P>
+</DIV8>
+""".strip()
+        root = _module._parse_xml_root(section_xml)
+
+        parsed = _module._parse_section(root)
+
+        self.assertEqual(len(parsed["children"]), 1)
+        self.assertEqual(parsed["children"][0]["node_type"], "paragraph")
+        self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
+
     def test_parse_appendix_child_maps_supported_tags(self):
         appendix_xml = """
 <DIV9 N="Appendix A to Part 400" TYPE="APPENDIX">

@@ -1,5 +1,6 @@
 """Entry points and parsing stubs for transforming eCFR part XML to document JSON."""
 
+import re
 from typing import Any
 from xml.etree import ElementTree
 
@@ -7,6 +8,10 @@ from .errors import EcfrXmlParseError
 from .models import PartNode
 from .normalize import normalize_part_for_eregs
 from .postprocess import postprocess_part_node
+
+_SPLIT_NEXT_MARKER_RE = re.compile(
+    r"^\([^\)]+\)\s*(?:<I>[^<]+</I>)?(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))"
+)
 
 
 def parse_part_xml_to_document(raw_xml: str, *, title_number: int, part_number: int) -> dict[str, Any]:
@@ -158,7 +163,13 @@ def _parse_section(node: ElementTree.Element) -> dict[str, Any]:
     for child in node:
         if child.tag == "HEAD":
             continue
-        children.append(_parse_section_child(child))
+        parsed = _parse_section_child(child)
+        if parsed is None:
+            continue
+        if isinstance(parsed, list):
+            children.extend(parsed)
+        else:
+            children.append(parsed)
 
     return {
         "node_type": "section",
@@ -187,11 +198,11 @@ def _parse_appendix(node: ElementTree.Element) -> dict[str, Any]:
     }
 
 
-def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | None:
+def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | list[dict[str, Any]] | None:
     """Parse supported section child tags into normalized node dicts."""
 
     if node.tag == "P":
-        return {"node_type": "paragraph", "text": _collect_inner_xml(node)}
+        return _split_paragraph_node(_collect_inner_xml(node))
     if node.tag in {"FP", "FP-1", "FP-2"}:
         return {"node_type": "flush_paragraph", "text": _collect_inner_xml(node)}
     if node.tag == "img":
@@ -213,6 +224,38 @@ def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | None:
             "content": _read_child_text(node, "PSPACE"),
         }
     return None
+
+
+def _split_paragraph_node(content: str) -> list[dict[str, Any]]:
+    """Split multi-marker paragraph content into separate paragraph nodes.
+
+    Legacy eCFR XML can contain multiple paragraph markers in a single <P>
+    element. This helper mirrors the old parser behavior by splitting at the
+    next marker when appropriate.
+    """
+
+    paragraphs: list[dict[str, Any]] = []
+    current = content
+
+    while True:
+        match = _SPLIT_NEXT_MARKER_RE.search(current)
+        if match is None:
+            break
+
+        next_marker_start = match.start(1)
+        if next_marker_start <= 0:
+            break
+
+        if current[next_marker_start:].strip().startswith("[Reserved]"):
+            break
+
+        first = current[:next_marker_start]
+        second = current[next_marker_start:]
+        paragraphs.append({"node_type": "paragraph", "text": first})
+        current = second
+
+    paragraphs.append({"node_type": "paragraph", "text": current})
+    return paragraphs
 
 
 def _parse_appendix_child(node: ElementTree.Element) -> dict[str, Any] | None:

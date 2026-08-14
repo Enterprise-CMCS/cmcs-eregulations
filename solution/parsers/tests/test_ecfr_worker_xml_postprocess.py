@@ -32,6 +32,27 @@ _module = _load_module()
 
 
 class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
+    def test_postprocess_runs_markers_before_citations(self):
+        part_children = [
+            {
+                "node_type": "section",
+                "label": ["433", "11"],
+                "children": [
+                    {"node_type": "paragraph", "text": "(a) alpha"},
+                    {"node_type": "paragraph", "text": "(1) numeric"},
+                ],
+            }
+        ]
+
+        part = types.SimpleNamespace(children=part_children)
+        _module.postprocess_part_node(part)
+
+        section_children = part_children[0]["children"]
+        self.assertEqual(section_children[0]["marker"], ["a"])
+        self.assertEqual(section_children[0]["label"], ["433", "11", "a"])
+        self.assertEqual(section_children[1]["marker"], ["1"])
+        self.assertEqual(section_children[1]["label"], ["433", "11", "a", "1"])
+
     def test_apply_paragraph_markers_extracts_leading_markers(self):
         part = {
             "children": [
