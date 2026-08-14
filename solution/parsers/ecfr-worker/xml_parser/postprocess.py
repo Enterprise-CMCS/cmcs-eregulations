@@ -87,10 +87,15 @@ def _apply_paragraph_markers(part: PartNode) -> None:
 
 
 def _rewrite_embedded_image_sources(part: PartNode) -> None:
-    """Placeholder for image-source rewrite logic (e.g., /graphics -> FR CDN)."""
+    """Rewrite legacy /graphics image sources to FR CDN large PNG URLs."""
 
-    # TODO: Port image-source rewrite behavior from old parsexml implementation.
-    _ = part
+    for image in _iter_image_nodes(part.children):
+        src = image.get("src")
+        if not isinstance(src, str):
+            continue
+        rewritten = _rewrite_graphics_source(src)
+        if rewritten is not None:
+            image["src"] = rewritten
 
 
 def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -110,6 +115,45 @@ def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
     walk(nodes)
     return out
+
+
+def _iter_image_nodes(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collect all image nodes from parsed part descendants."""
+
+    out: list[dict[str, Any]] = []
+
+    def walk(node_list: list[dict[str, Any]]) -> None:
+        for node in node_list:
+            if not isinstance(node, dict):
+                continue
+            if node.get("node_type") == "image":
+                out.append(node)
+            children = node.get("children")
+            if isinstance(children, list):
+                walk(children)
+
+    walk(nodes)
+    return out
+
+
+def _rewrite_graphics_source(src: str) -> str | None:
+    """Convert /graphics image src paths to canonical FR CDN PNG URLs."""
+
+    if not src.startswith("/graphics/"):
+        return None
+
+    filename = src.split("/")[2] if len(src.split("/")) > 2 else ""
+    parts = filename.split(".")
+    if len(parts) < 2:
+        return None
+
+    if len(parts) > 2 and parts[-2].lower() == "eps":
+        name_parts = parts[:-2]
+    else:
+        name_parts = parts[:-1]
+
+    image_name = ".".join(name_parts).upper()
+    return f"https://images.federalregister.gov/{image_name}/large.png"
 
 
 def _extract_marker(text: Any) -> list[str] | None:

@@ -80,6 +80,47 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         # v should reset when previous third token is not iv.
         self.assertEqual(_module._generate_paragraph_citation(["v"], ["a", "2", "iii"]), ["v"])
 
+    def test_rewrite_graphics_source_normal_file(self):
+        rewritten = _module._rewrite_graphics_source("/graphics/ER18OC21.004.gif")
+        self.assertEqual(rewritten, "https://images.federalregister.gov/ER18OC21.004/large.png")
+
+    def test_rewrite_graphics_source_eps_file(self):
+        rewritten = _module._rewrite_graphics_source("/graphics/ER18OC21.004.eps.gif")
+        self.assertEqual(rewritten, "https://images.federalregister.gov/ER18OC21.004/large.png")
+
+    def test_rewrite_graphics_source_invalid_filename(self):
+        self.assertIsNone(_module._rewrite_graphics_source("/graphics/NOEXT"))
+
+    def test_rewrite_embedded_image_sources_updates_nodes_recursively(self):
+        part_children = [
+            {
+                "node_type": "section",
+                "children": [
+                    {"node_type": "image", "src": "/graphics/ER18OC21.004.gif"},
+                    {
+                        "node_type": "division",
+                        "children": [
+                            {"node_type": "image", "src": "/graphics/ER18OC21.004.eps.gif"},
+                            {"node_type": "image", "src": "https://example.com/a.png"},
+                        ],
+                    },
+                ],
+            }
+        ]
+
+        _module._rewrite_embedded_image_sources(types.SimpleNamespace(children=part_children))
+
+        section = part_children[0]
+        self.assertEqual(
+            section["children"][0]["src"],
+            "https://images.federalregister.gov/ER18OC21.004/large.png",
+        )
+        self.assertEqual(
+            section["children"][1]["children"][0]["src"],
+            "https://images.federalregister.gov/ER18OC21.004/large.png",
+        )
+        self.assertEqual(section["children"][1]["children"][1]["src"], "https://example.com/a.png")
+
 
 if __name__ == "__main__":
     unittest.main()
