@@ -159,7 +159,7 @@ def _parse_subject_group(node: ElementTree.Element) -> dict[str, Any]:
     return {
         "node_type": _resolve_div_node_type(node),
         "label": _parse_label_tokens(node.attrib.get("N", "")),
-        "title": _read_child_text(node, "HEAD"),
+        "title": _read_child_inner_xml(node, "HEAD"),
         "children": children,
     }
 
@@ -325,6 +325,15 @@ def _read_child_text(root: ElementTree.Element, tag: str) -> str:
     if child is None:
         return ""
     return _collect_inner_text(child)
+
+
+def _read_child_inner_xml(root: ElementTree.Element, tag: str) -> str:
+    """Read direct child inner XML by tag, defaulting to empty string."""
+
+    child = root.find(tag)
+    if child is None:
+        return ""
+    return _collect_inner_xml(child)
 
 
 def _collect_inner_text(node: ElementTree.Element) -> str:

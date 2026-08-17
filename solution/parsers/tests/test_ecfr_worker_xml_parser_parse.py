@@ -106,6 +106,24 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         self.assertEqual(_module._resolve_div_node_type(with_type), "SECTION")
         self.assertEqual(_module._resolve_div_node_type(without_type), "SECTION")
 
+    def test_parse_subject_group_title_preserves_inner_xml(self):
+        subject_group_xml = """
+<DIV7 N="A" TYPE="SUBJGRP">
+  <HEAD>General <I>Requirements</I></HEAD>
+  <DIV8 N="400.1" TYPE="SECTION">
+    <HEAD>Sec. 400.1</HEAD>
+    <P>(a) Paragraph text.</P>
+  </DIV8>
+</DIV7>
+""".strip()
+        root = _module._parse_xml_root(subject_group_xml)
+
+        parsed = _module._parse_subject_group(root)
+
+        self.assertEqual(parsed["node_type"], "SUBJGRP")
+        self.assertEqual(parsed["title"], "General <I>Requirements</I>")
+        self.assertEqual(parsed["children"][0]["node_type"], "SECTION")
+
     def test_parse_section_child_maps_supported_tags(self):
         section_xml = """
 <DIV8 N="400.1" TYPE="SECTION">
