@@ -13,6 +13,14 @@ _SPLIT_NEXT_MARKER_RE = re.compile(
     r"^\([^\)]+\)\s*(?:<I>[^<]+</I>)?(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))"
 )
 
+_DIV_NODE_TYPE_FALLBACKS: dict[str, str] = {
+    "DIV5": "PART",
+    "DIV6": "SUBPART",
+    "DIV7": "SUBJGRP",
+    "DIV8": "SECTION",
+    "DIV9": "APPENDIX",
+}
+
 
 def parse_part_xml_to_document(raw_xml: str, *, title_number: int, part_number: int) -> dict[str, Any]:
     """Parse raw eCFR part XML into eRegs-compatible document JSON."""
@@ -45,19 +53,19 @@ def _parse_part_root(root: ElementTree.Element, *, title_number: int, part_numbe
     if root.tag != "DIV5":
         raise EcfrXmlParseError(f"expected part root tag DIV5, found {root.tag}")
 
-    node_type = (root.attrib.get("TYPE") or "").strip().upper()
+    node_type = _resolve_div_node_type(root)
     if node_type and node_type != "PART":
         raise EcfrXmlParseError(f"expected part TYPE=PART, found TYPE={node_type}")
 
     part = PartNode(
         title_number=title_number,
         part_number=part_number,
-        node_type="part",
+        node_type=node_type,
         label=_parse_label_tokens(root.attrib.get("N", "")),
         title=_read_child_text(root, "HEAD"),
-        authority=_parse_metadata_node(root, "AUTH", node_type="authority"),
-        source=_parse_metadata_node(root, "SOURCE", node_type="source"),
-        editorial_note=_parse_metadata_node(root, "EDNOTE", node_type="editorial_note"),
+        authority=_parse_metadata_node(root, "AUTH", node_type="Authority"),
+        source=_parse_metadata_node(root, "SOURCE", node_type="Source"),
+        editorial_note=_parse_metadata_node(root, "EDNOTE", node_type="EdNote"),
         children=_parse_part_children(root),
     )
     return part
@@ -127,7 +135,7 @@ def _parse_subpart(node: ElementTree.Element) -> dict[str, Any]:
             continue
 
     return {
-        "node_type": "subpart",
+        "node_type": _resolve_div_node_type(node),
         "label": _parse_label_tokens(node.attrib.get("N", "")),
         "title": _read_child_text(node, "HEAD"),
         "children": children,
@@ -145,11 +153,11 @@ def _parse_subject_group(node: ElementTree.Element) -> dict[str, Any]:
             children.append(_parse_section(child))
             continue
         if child.tag == "FTNT":
-            children.append({"node_type": "footnote", "content": _collect_inner_xml(child)})
+            children.append({"node_type": "FootNote", "content": _collect_inner_xml(child)})
             continue
 
     return {
-        "node_type": "subject_group",
+        "node_type": _resolve_div_node_type(node),
         "label": _parse_label_tokens(node.attrib.get("N", "")),
         "title": _read_child_text(node, "HEAD"),
         "children": children,
@@ -172,7 +180,7 @@ def _parse_section(node: ElementTree.Element) -> dict[str, Any]:
             children.append(parsed)
 
     return {
-        "node_type": "section",
+        "node_type": _resolve_div_node_type(node),
         "label": _parse_label_tokens(node.attrib.get("N", "")),
         "title": _read_child_text(node, "HEAD"),
         "children": [c for c in children if c is not None],
@@ -191,7 +199,7 @@ def _parse_appendix(node: ElementTree.Element) -> dict[str, Any]:
             children.append(parsed)
 
     return {
-        "node_type": "appendix",
+        "node_type": _resolve_div_node_type(node),
         "label": _parse_appendix_label_tokens(node.attrib.get("N", "")),
         "title": _read_child_text(node, "HEAD"),
         "children": children,
@@ -204,22 +212,22 @@ def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | list[dic
     if node.tag == "P":
         return _split_paragraph_node(_collect_inner_xml(node))
     if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "flush_paragraph", "text": _collect_inner_xml(node)}
+        return {"node_type": "FlushParagraph", "text": _collect_inner_xml(node)}
     if node.tag == "img":
-        return {"node_type": "image", "src": (node.attrib.get("src") or "").strip()}
+        return {"node_type": "Image", "src": (node.attrib.get("src") or "").strip()}
     if node.tag == "EXTRACT":
-        return {"node_type": "extract", "content": _collect_inner_xml(node)}
+        return {"node_type": "Extract", "content": _collect_inner_xml(node)}
     if node.tag == "CITA":
-        return {"node_type": "citation", "content": _collect_inner_xml(node)}
+        return {"node_type": "Citation", "content": _collect_inner_xml(node)}
     if node.tag == "SECAUTH":
-        return {"node_type": "section_authority", "content": _collect_inner_xml(node)}
+        return {"node_type": "SectionAuthority", "content": _collect_inner_xml(node)}
     if node.tag == "FTNT":
-        return {"node_type": "footnote", "content": _collect_inner_xml(node)}
+        return {"node_type": "FootNote", "content": _collect_inner_xml(node)}
     if node.tag == "DIV":
-        return {"node_type": "division", "content": _collect_inner_xml(node)}
+        return {"node_type": "Division", "content": _collect_inner_xml(node)}
     if node.tag == "EFFDNOT":
         return {
-            "node_type": "effective_date_note",
+            "node_type": "EffectiveDateNote",
             "header": _read_child_text(node, "HED"),
             "content": _read_child_text(node, "PSPACE"),
         }
@@ -251,10 +259,10 @@ def _split_paragraph_node(content: str) -> list[dict[str, Any]]:
 
         first = current[:next_marker_start]
         second = current[next_marker_start:]
-        paragraphs.append({"node_type": "paragraph", "text": first})
+        paragraphs.append({"node_type": "Paragraph", "text": first})
         current = second
 
-    paragraphs.append({"node_type": "paragraph", "text": current})
+    paragraphs.append({"node_type": "Paragraph", "text": current})
     return paragraphs
 
 
@@ -262,20 +270,30 @@ def _parse_appendix_child(node: ElementTree.Element) -> dict[str, Any] | None:
     """Parse supported appendix child tags into normalized node dicts."""
 
     if node.tag == "P":
-        return {"node_type": "paragraph", "text": _collect_inner_xml(node)}
+        return {"node_type": "Paragraph", "text": _collect_inner_xml(node)}
     if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "flush_paragraph", "text": _collect_inner_xml(node)}
+        return {"node_type": "FlushParagraph", "text": _collect_inner_xml(node)}
     if node.tag in {"HD1", "HD2", "HD3"}:
-        return {"node_type": "heading", "level": node.tag, "content": _collect_inner_xml(node)}
+        heading_type = {"HD1": "Heading", "HD2": "Heading2", "HD3": "Heading3"}[node.tag]
+        return {"node_type": heading_type, "content": _collect_inner_xml(node)}
     if node.tag == "DIV":
-        return {"node_type": "division", "content": _collect_inner_xml(node)}
+        return {"node_type": "Division", "content": _collect_inner_xml(node)}
     if node.tag == "TABLE":
-        return {"node_type": "table", "content": _collect_inner_xml(node)}
+        return {"node_type": "Table", "content": _collect_inner_xml(node)}
     if node.tag == "FTNT":
-        return {"node_type": "footnote", "content": _collect_inner_xml(node)}
+        return {"node_type": "FootNote", "content": _collect_inner_xml(node)}
     if node.tag == "CITA":
-        return {"node_type": "citation", "content": _collect_inner_xml(node)}
+        return {"node_type": "Citation", "content": _collect_inner_xml(node)}
     return None
+
+
+def _resolve_div_node_type(node: ElementTree.Element) -> str:
+    """Resolve DIV node_type from TYPE attribute with legacy fallback."""
+
+    type_value = (node.attrib.get("TYPE") or "").strip().upper()
+    if type_value:
+        return type_value
+    return _DIV_NODE_TYPE_FALLBACKS.get(node.tag, "")
 
 
 def _parse_label_tokens(value: str) -> list[str]:

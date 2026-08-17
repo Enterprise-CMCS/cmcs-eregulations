@@ -54,14 +54,14 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 
         part = _module._parse_part_root(root, title_number=42, part_number=400)
 
-        self.assertEqual(part.node_type, "part")
+        self.assertEqual(part.node_type, "PART")
         self.assertEqual(part.label, ["400"])
         self.assertEqual(part.title, "Part 400 - Test Part")
-        self.assertEqual(part.authority, {"node_type": "authority", "header": "Authority:", "content": "42 U.S.C. 1302."})
-        self.assertEqual(part.source, {"node_type": "source", "header": "Source:", "content": "90 FR 12345."})
+        self.assertEqual(part.authority, {"node_type": "Authority", "header": "Authority:", "content": "42 U.S.C. 1302."})
+        self.assertEqual(part.source, {"node_type": "Source", "header": "Source:", "content": "90 FR 12345."})
         self.assertEqual(
             part.editorial_note,
-            {"node_type": "editorial_note", "header": "Editorial Note:", "content": "Some note."},
+            {"node_type": "EdNote", "header": "Editorial Note:", "content": "Some note."},
         )
 
     def test_parse_part_root_rejects_non_div5(self):
@@ -95,9 +95,16 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         children = _module._parse_part_children(root)
 
         self.assertEqual(len(children), 3)
-        self.assertEqual(children[0]["node_type"], "subpart")
-        self.assertEqual(children[1]["node_type"], "section")
-        self.assertEqual(children[2]["node_type"], "appendix")
+        self.assertEqual(children[0]["node_type"], "SUBPART")
+        self.assertEqual(children[1]["node_type"], "SECTION")
+        self.assertEqual(children[2]["node_type"], "APPENDIX")
+
+    def test_parse_div_node_type_uses_type_attribute_then_fallback(self):
+        with_type = _module._parse_xml_root('<DIV8 TYPE=" section " N="400.1"></DIV8>')
+        without_type = _module._parse_xml_root('<DIV8 N="400.1"></DIV8>')
+
+        self.assertEqual(_module._resolve_div_node_type(with_type), "SECTION")
+        self.assertEqual(_module._resolve_div_node_type(without_type), "SECTION")
 
     def test_parse_section_child_maps_supported_tags(self):
         section_xml = """
@@ -117,20 +124,20 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         root = _module._parse_xml_root(section_xml)
         parsed = _module._parse_section(root)
 
-        self.assertEqual(parsed["node_type"], "section")
+        self.assertEqual(parsed["node_type"], "SECTION")
         child_types = [child["node_type"] for child in parsed["children"]]
         self.assertEqual(
             child_types,
             [
-                "paragraph",
-                "flush_paragraph",
-                "image",
-                "extract",
-                "citation",
-                "section_authority",
-                "footnote",
-                "division",
-                "effective_date_note",
+                "Paragraph",
+                "FlushParagraph",
+                "Image",
+                "Extract",
+                "Citation",
+                "SectionAuthority",
+                "FootNote",
+                "Division",
+                "EffectiveDateNote",
             ],
         )
         self.assertIn("<I>Paragraph</I>", parsed["children"][0]["text"])
@@ -151,8 +158,8 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         parsed = _module._parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 2)
-        self.assertEqual(parsed["children"][0]["node_type"], "paragraph")
-        self.assertEqual(parsed["children"][1]["node_type"], "paragraph")
+        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
+        self.assertEqual(parsed["children"][1]["node_type"], "Paragraph")
         self.assertTrue(parsed["children"][0]["text"].lstrip().startswith("(a)"))
         self.assertIn("<I>Basis, purpose, and definitions.</I>", parsed["children"][0]["text"])
         self.assertTrue(parsed["children"][1]["text"].lstrip().startswith("(1)"))
@@ -169,7 +176,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         parsed = _module._parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 1)
-        self.assertEqual(parsed["children"][0]["node_type"], "paragraph")
+        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
         self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
 
     def test_parse_appendix_child_maps_supported_tags(self):
@@ -190,21 +197,21 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         root = _module._parse_xml_root(appendix_xml)
         parsed = _module._parse_appendix(root)
 
-        self.assertEqual(parsed["node_type"], "appendix")
+        self.assertEqual(parsed["node_type"], "APPENDIX")
         self.assertEqual(parsed["label"], ["Appendix", "A", "to", "Part", "400"])
         child_types = [child["node_type"] for child in parsed["children"]]
         self.assertEqual(
             child_types,
             [
-                "paragraph",
-                "flush_paragraph",
-                "heading",
-                "heading",
-                "heading",
-                "division",
-                "table",
-                "footnote",
-                "citation",
+                "Paragraph",
+                "FlushParagraph",
+                "Heading",
+                "Heading2",
+                "Heading3",
+                "Division",
+                "Table",
+                "FootNote",
+                "Citation",
             ],
         )
         self.assertIn("<I>text</I>", parsed["children"][0]["text"])

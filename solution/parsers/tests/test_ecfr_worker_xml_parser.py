@@ -46,7 +46,7 @@ class EcfrWorkerXmlParserTests(unittest.TestCase):
         document = _module.parse_part_xml_to_document(xml, title_number=42, part_number=400)
 
         self.assertIsInstance(document, dict)
-        self.assertEqual(document.get("node_type"), "part")
+        self.assertEqual(document.get("node_type"), "PART")
         self.assertEqual(document.get("label"), ["400"])
         self.assertIsInstance(document.get("children"), list)
 

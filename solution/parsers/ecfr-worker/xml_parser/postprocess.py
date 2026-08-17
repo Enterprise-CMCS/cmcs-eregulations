@@ -59,7 +59,7 @@ def _apply_paragraph_citations(part: PartNode) -> None:
 
         prev_label: list[str] | None = None
         for child in section.get("children", []):
-            if not isinstance(child, dict) or child.get("node_type") != "paragraph":
+            if not isinstance(child, dict) or child.get("node_type") != "Paragraph":
                 continue
 
             marker = child.get("marker")
@@ -79,7 +79,7 @@ def _apply_paragraph_markers(part: PartNode) -> None:
 
     for section in _iter_sections(part.children):
         for child in section.get("children", []):
-            if not isinstance(child, dict) or child.get("node_type") != "paragraph":
+            if not isinstance(child, dict) or child.get("node_type") != "Paragraph":
                 continue
             marker = _extract_marker(child.get("text", ""))
             if marker:
@@ -107,7 +107,7 @@ def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for node in node_list:
             if not isinstance(node, dict):
                 continue
-            if node.get("node_type") == "section":
+            if node.get("node_type") == "SECTION":
                 out.append(node)
             children = node.get("children")
             if isinstance(children, list):
@@ -126,7 +126,7 @@ def _iter_image_nodes(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for node in node_list:
             if not isinstance(node, dict):
                 continue
-            if node.get("node_type") == "image":
+            if node.get("node_type") == "Image":
                 out.append(node)
             children = node.get("children")
             if isinstance(children, list):

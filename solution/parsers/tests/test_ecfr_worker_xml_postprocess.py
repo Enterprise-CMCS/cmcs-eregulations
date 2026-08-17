@@ -35,11 +35,11 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
     def test_postprocess_runs_markers_before_citations(self):
         part_children = [
             {
-                "node_type": "section",
+                "node_type": "SECTION",
                 "label": ["433", "11"],
                 "children": [
-                    {"node_type": "paragraph", "text": "(a) alpha"},
-                    {"node_type": "paragraph", "text": "(1) numeric"},
+                    {"node_type": "Paragraph", "text": "(a) alpha"},
+                    {"node_type": "Paragraph", "text": "(1) numeric"},
                 ],
             }
         ]
@@ -57,11 +57,11 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         part = {
             "children": [
                 {
-                    "node_type": "section",
+                    "node_type": "SECTION",
                     "label": ["433", "11"],
                     "children": [
-                        {"node_type": "paragraph", "text": "(a) first"},
-                        {"node_type": "paragraph", "text": "(1) second"},
+                        {"node_type": "Paragraph", "text": "(a) first"},
+                        {"node_type": "Paragraph", "text": "(1) second"},
                     ],
                 }
             ]
@@ -76,12 +76,12 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
     def test_apply_paragraph_citations_builds_hierarchy_and_hash_fallback(self):
         part_children = [
             {
-                "node_type": "section",
+                "node_type": "SECTION",
                 "label": ["433", "11"],
                 "children": [
-                    {"node_type": "paragraph", "text": "(a) alpha", "marker": ["a"]},
-                    {"node_type": "paragraph", "text": "(1) numeric", "marker": ["1"]},
-                    {"node_type": "paragraph", "text": "plain paragraph", "marker": []},
+                    {"node_type": "Paragraph", "text": "(a) alpha", "marker": ["a"]},
+                    {"node_type": "Paragraph", "text": "(1) numeric", "marker": ["1"]},
+                    {"node_type": "Paragraph", "text": "plain paragraph", "marker": []},
                 ],
             }
         ]
@@ -115,14 +115,14 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
     def test_rewrite_embedded_image_sources_updates_nodes_recursively(self):
         part_children = [
             {
-                "node_type": "section",
+                "node_type": "SECTION",
                 "children": [
-                    {"node_type": "image", "src": "/graphics/ER18OC21.004.gif"},
+                    {"node_type": "Image", "src": "/graphics/ER18OC21.004.gif"},
                     {
-                        "node_type": "division",
+                        "node_type": "Division",
                         "children": [
-                            {"node_type": "image", "src": "/graphics/ER18OC21.004.eps.gif"},
-                            {"node_type": "image", "src": "https://example.com/a.png"},
+                            {"node_type": "Image", "src": "/graphics/ER18OC21.004.eps.gif"},
+                            {"node_type": "Image", "src": "https://example.com/a.png"},
                         ],
                     },
                 ],
