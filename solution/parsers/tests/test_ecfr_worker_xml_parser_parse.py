@@ -220,6 +220,37 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
         self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
 
+    def test_parse_section_does_not_split_reserved_variant_with_italic_dash(self):
+        section_xml = """
+<DIV8 N="400.4" TYPE="SECTION">
+  <HEAD>Sec. 400.4</HEAD>
+  <P>(b) <I>Activities and rates.</I> - (1) [Reserved]</P>
+</DIV8>
+""".strip()
+        root = _module._parse_xml_root(section_xml)
+
+        parsed = _module._parse_section(root)
+
+        self.assertEqual(len(parsed["children"]), 1)
+        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
+        self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
+
+    def test_parse_section_splits_compact_marker_forms(self):
+        section_xml = """
+<DIV8 N="400.5" TYPE="SECTION">
+  <HEAD>Sec. 400.5</HEAD>
+  <P>(6)(i)(1) Compact marker payload text.</P>
+</DIV8>
+""".strip()
+        root = _module._parse_xml_root(section_xml)
+
+        parsed = _module._parse_section(root)
+
+        self.assertEqual(len(parsed["children"]), 3)
+        self.assertEqual(parsed["children"][0]["text"], "(6)")
+        self.assertEqual(parsed["children"][1]["text"], "(i)")
+        self.assertEqual(parsed["children"][2]["text"], "(1) Compact marker payload text.")
+
     def test_parse_appendix_child_maps_supported_tags(self):
         appendix_xml = """
 <DIV9 N="Appendix A to Part 400" TYPE="APPENDIX">

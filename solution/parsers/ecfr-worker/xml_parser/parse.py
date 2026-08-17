@@ -255,10 +255,11 @@ def _split_paragraph_node(content: str) -> list[dict[str, Any]]:
             break
 
         next_marker_start = match.start(1)
+        next_marker_end = match.end(1)
         if next_marker_start <= 0:
             break
 
-        if current[next_marker_start:].strip().startswith("[Reserved]"):
+        if current[next_marker_end:].strip().startswith("[Reserved]"):
             break
 
         first = current[:next_marker_start]
