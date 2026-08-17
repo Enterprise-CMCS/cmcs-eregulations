@@ -1,25 +1,24 @@
-"""Entry points and parsing stubs for transforming eCFR part XML to document JSON."""
+"""Entry point and compatibility wrappers for eCFR XML parser modules."""
 
-import re
 from typing import Any
 from xml.etree import ElementTree
 
 from .errors import EcfrXmlParseError
+from .labels import parse_appendix_label_tokens, parse_label_tokens, resolve_div_node_type
+from .metadata import parse_metadata_element, parse_metadata_node
 from .models import PartNode
 from .normalize import normalize_part_for_eregs
-from .postprocess import postprocess_part_node
-
-_SPLIT_NEXT_MARKER_RE = re.compile(
-    r"^\([^\)]+\)\s*(?:<I>[^<]+</I>)?(?:[^\w\d]|(?:&[a-zA-Z0-9#]+;))*(\([^\)]+\))"
+from .parse_children import parse_appendix_child, parse_section_child
+from .parse_divisions import (
+    parse_appendix,
+    parse_part_children,
+    parse_section,
+    parse_subject_group,
+    parse_subpart,
 )
-
-_DIV_NODE_TYPE_FALLBACKS: dict[str, str] = {
-    "DIV5": "PART",
-    "DIV6": "SUBPART",
-    "DIV7": "SUBJGRP",
-    "DIV8": "SECTION",
-    "DIV9": "APPENDIX",
-}
+from .postprocess import postprocess_part_node
+from .readers import collect_inner_text, collect_inner_xml, read_child_inner_xml, read_child_text
+from .splitters import split_paragraph_node
 
 
 def parse_part_xml_to_document(raw_xml: str, *, title_number: int, part_number: int) -> dict[str, Any]:
@@ -43,318 +42,44 @@ def _parse_xml_root(raw_xml: str) -> ElementTree.Element:
         raise EcfrXmlParseError(f"unable to parse eCFR XML payload: {exc}") from exc
 
 
-def _parse_part_root(root: ElementTree.Element, *, title_number: int, part_number: int) -> PartNode:
-    """Build a PartNode from the XML root element.
-
-    This maps the top-level DIV5 part payload into the intermediate model and
-    captures root metadata nodes (HEAD/AUTH/SOURCE/EDNOTE) expected by eRegs.
-    """
+def parse_part_root(root: ElementTree.Element, *, title_number: int, part_number: int) -> PartNode:
+    """Build a PartNode from the XML root element."""
 
     if root.tag != "DIV5":
         raise EcfrXmlParseError(f"expected part root tag DIV5, found {root.tag}")
 
-    node_type = _resolve_div_node_type(root)
+    node_type = resolve_div_node_type(root)
     if node_type and node_type != "PART":
         raise EcfrXmlParseError(f"expected part TYPE=PART, found TYPE={node_type}")
 
-    part = PartNode(
+    return PartNode(
         title_number=title_number,
         part_number=part_number,
         node_type=node_type,
-        label=_parse_label_tokens(root.attrib.get("N", "")),
-        title=_read_child_text(root, "HEAD"),
-        authority=_parse_metadata_node(root, "AUTH", node_type="Authority"),
-        source=_parse_metadata_node(root, "SOURCE", node_type="Source"),
-        editorial_note=_parse_metadata_node(root, "EDNOTE", node_type="EdNote"),
-        children=_parse_part_children(root),
+        label=parse_label_tokens(root.attrib.get("N", "")),
+        title=read_child_text(root, "HEAD"),
+        authority=parse_metadata_node(root, "AUTH", node_type="Authority"),
+        source=parse_metadata_node(root, "SOURCE", node_type="Source"),
+        editorial_note=parse_metadata_node(root, "EDNOTE", node_type="EdNote"),
+        children=parse_part_children(root),
     )
-    return part
 
-
-def _parse_metadata_node(root: ElementTree.Element, tag: str, *, node_type: str) -> dict[str, str] | None:
-    """Parse AUTH/SOURCE/EDNOTE style nodes into a normalized dict shape."""
-
-    node = root.find(tag)
-    if node is None:
-        return None
-
-    return _parse_metadata_element(node, node_type=node_type)
-
-
-def _parse_metadata_element(node: ElementTree.Element, *, node_type: str) -> dict[str, str]:
-    """Parse a metadata element node (AUTH/SOURCE/EDNOTE) into dict shape."""
-
-    return {
-        "node_type": node_type,
-        "header": _read_child_text(node, "HED"),
-        "content": _read_child_text(node, "PSPACE"),
-    }
-
-
-def _parse_part_children(root: ElementTree.Element) -> list[dict[str, Any]]:
-    """Parse top-level part children using tag-based dispatch.
-
-    This mirrors the legacy parser's high-level part contract where DIV6 nodes
-    are subparts, DIV8 nodes are sections, and DIV9 nodes are appendices.
-    """
-
-    children: list[dict[str, Any]] = []
-    for child in root:
-        if child.tag == "HEAD":
-            continue
-        if child.tag == "DIV6":
-            children.append(_parse_subpart(child))
-            continue
-        if child.tag == "DIV8":
-            children.append(_parse_section(child))
-            continue
-        if child.tag == "DIV9":
-            children.append(_parse_appendix(child))
-            continue
-
-        # Unknown part-level tags are skipped to match legacy permissive behavior.
-        continue
-
-    return children
-
-
-def _parse_subpart(node: ElementTree.Element) -> dict[str, Any]:
-    """Parse a DIV6 subpart node and its supported children."""
-
-    children: list[dict[str, Any]] = []
-    for child in node:
-        if child.tag == "HEAD":
-            continue
-        if child.tag == "DIV8":
-            children.append(_parse_section(child))
-            continue
-        if child.tag == "DIV7":
-            children.append(_parse_subject_group(child))
-            continue
-        if child.tag == "DIV9":
-            children.append(_parse_appendix(child))
-            continue
-        if child.tag == "SOURCE":
-            children.append(_parse_metadata_element(child, node_type="Source"))
-            continue
-
-    return {
-        "node_type": _resolve_div_node_type(node),
-        "label": _parse_label_tokens(node.attrib.get("N", "")),
-        "title": _read_child_text(node, "HEAD"),
-        "children": children,
-    }
-
-
-def _parse_subject_group(node: ElementTree.Element) -> dict[str, Any]:
-    """Parse a DIV7 subject group with section/footnote children."""
-
-    children: list[dict[str, Any]] = []
-    for child in node:
-        if child.tag == "HEAD":
-            continue
-        if child.tag == "DIV8":
-            children.append(_parse_section(child))
-            continue
-        if child.tag == "FTNT":
-            children.append({"node_type": "FootNote", "content": _collect_inner_xml(child)})
-            continue
-
-    return {
-        "node_type": _resolve_div_node_type(node),
-        "label": _parse_label_tokens(node.attrib.get("N", "")),
-        "title": _read_child_inner_xml(node, "HEAD"),
-        "children": children,
-    }
-
-
-def _parse_section(node: ElementTree.Element) -> dict[str, Any]:
-    """Parse a DIV8 section with supported child content nodes."""
-
-    children: list[dict[str, Any]] = []
-    for child in node:
-        if child.tag == "HEAD":
-            continue
-        parsed = _parse_section_child(child)
-        if parsed is None:
-            continue
-        if isinstance(parsed, list):
-            children.extend(parsed)
-        else:
-            children.append(parsed)
-
-    return {
-        "node_type": _resolve_div_node_type(node),
-        "label": _parse_label_tokens(node.attrib.get("N", "")),
-        "title": _read_child_text(node, "HEAD"),
-        "children": [c for c in children if c is not None],
-    }
-
-
-def _parse_appendix(node: ElementTree.Element) -> dict[str, Any]:
-    """Parse a DIV9 appendix and supported paragraph/heading style children."""
-
-    children: list[dict[str, Any]] = []
-    for child in node:
-        if child.tag == "HEAD":
-            continue
-        parsed = _parse_appendix_child(child)
-        if parsed is not None:
-            children.append(parsed)
-
-    return {
-        "node_type": _resolve_div_node_type(node),
-        "label": _parse_appendix_label_tokens(node.attrib.get("N", "")),
-        "title": _read_child_text(node, "HEAD"),
-        "children": children,
-    }
-
-
-def _parse_section_child(node: ElementTree.Element) -> dict[str, Any] | list[dict[str, Any]] | None:
-    """Parse supported section child tags into normalized node dicts."""
-
-    if node.tag == "P":
-        return _split_paragraph_node(_collect_inner_xml(node))
-    if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "FlushParagraph", "text": _collect_inner_xml(node)}
-    if node.tag == "img":
-        return {"node_type": "Image", "src": (node.attrib.get("src") or "").strip()}
-    if node.tag == "EXTRACT":
-        return {"node_type": "Extract", "content": _collect_inner_xml(node)}
-    if node.tag == "CITA":
-        return {"node_type": "Citation", "content": _collect_inner_xml(node)}
-    if node.tag == "SECAUTH":
-        return {"node_type": "SectionAuthority", "content": _collect_inner_xml(node)}
-    if node.tag == "FTNT":
-        return {"node_type": "FootNote", "content": _collect_inner_xml(node)}
-    if node.tag == "DIV":
-        return {"node_type": "Division", "content": _collect_inner_xml(node)}
-    if node.tag == "EFFDNOT":
-        return {
-            "node_type": "EffectiveDateNote",
-            "header": _read_child_text(node, "HED"),
-            "content": _read_child_text(node, "PSPACE"),
-        }
-    return None
-
-
-def _split_paragraph_node(content: str) -> list[dict[str, Any]]:
-    """Split multi-marker paragraph content into separate paragraph nodes.
-
-    Legacy eCFR XML can contain multiple paragraph markers in a single <P>
-    element. This helper mirrors the old parser behavior by splitting at the
-    next marker when appropriate.
-    """
-
-    paragraphs: list[dict[str, Any]] = []
-    current = content
-
-    while True:
-        match = _SPLIT_NEXT_MARKER_RE.search(current)
-        if match is None:
-            break
-
-        next_marker_start = match.start(1)
-        next_marker_end = match.end(1)
-        if next_marker_start <= 0:
-            break
-
-        if current[next_marker_end:].strip().startswith("[Reserved]"):
-            break
-
-        first = current[:next_marker_start]
-        second = current[next_marker_start:]
-        paragraphs.append({"node_type": "Paragraph", "text": first})
-        current = second
-
-    paragraphs.append({"node_type": "Paragraph", "text": current})
-    return paragraphs
-
-
-def _parse_appendix_child(node: ElementTree.Element) -> dict[str, Any] | None:
-    """Parse supported appendix child tags into normalized node dicts."""
-
-    if node.tag == "P":
-        return {"node_type": "Paragraph", "text": _collect_inner_xml(node)}
-    if node.tag in {"FP", "FP-1", "FP-2"}:
-        return {"node_type": "FlushParagraph", "text": _collect_inner_xml(node)}
-    if node.tag in {"HD1", "HD2", "HD3"}:
-        heading_type = {"HD1": "Heading", "HD2": "Heading2", "HD3": "Heading3"}[node.tag]
-        return {"node_type": heading_type, "content": _collect_inner_xml(node)}
-    if node.tag == "DIV":
-        return {"node_type": "Division", "content": _collect_inner_xml(node)}
-    if node.tag == "TABLE":
-        return {"node_type": "Table", "content": _collect_inner_xml(node)}
-    if node.tag == "FTNT":
-        return {"node_type": "FootNote", "content": _collect_inner_xml(node)}
-    if node.tag == "CITA":
-        return {"node_type": "Citation", "content": _collect_inner_xml(node)}
-    return None
-
-
-def _resolve_div_node_type(node: ElementTree.Element) -> str:
-    """Resolve DIV node_type from TYPE attribute with legacy fallback."""
-
-    type_value = (node.attrib.get("TYPE") or "").strip().upper()
-    if type_value:
-        return type_value
-    return _DIV_NODE_TYPE_FALLBACKS.get(node.tag, "")
-
-
-def _parse_label_tokens(value: str) -> list[str]:
-    """Split legacy N-attribute labels into token arrays."""
-
-    if not value:
-        return []
-    tokens: list[str] = []
-    for section in value.split("-"):
-        for token in section.split("."):
-            token = token.strip()
-            if token:
-                tokens.append(token)
-    return tokens
-
-
-def _parse_appendix_label_tokens(value: str) -> list[str]:
-    """Split appendix-style N labels by whitespace tokens."""
-
-    if not value:
-        return []
-    return [token for token in value.split(" ") if token]
-
-
-def _read_child_text(root: ElementTree.Element, tag: str) -> str:
-    """Read direct child text by tag, defaulting to empty string."""
-
-    child = root.find(tag)
-    if child is None:
-        return ""
-    return _collect_inner_text(child)
-
-
-def _read_child_inner_xml(root: ElementTree.Element, tag: str) -> str:
-    """Read direct child inner XML by tag, defaulting to empty string."""
-
-    child = root.find(tag)
-    if child is None:
-        return ""
-    return _collect_inner_xml(child)
-
-
-def _collect_inner_text(node: ElementTree.Element) -> str:
-    """Collect concatenated inner text for a node."""
-
-    return "".join(node.itertext()).strip()
-
-
-def _collect_inner_xml(node: ElementTree.Element) -> str:
-    """Collect inner XML (not flattened text) for rich-content nodes."""
-
-    parts: list[str] = []
-    if node.text:
-        parts.append(node.text)
-
-    for child in list(node):
-        parts.append(ElementTree.tostring(child, encoding="unicode"))
-
-    return "".join(parts).strip()
+# Compatibility wrappers retained for test-module imports.
+_parse_part_root = parse_part_root
+_parse_metadata_node = parse_metadata_node
+_parse_metadata_element = parse_metadata_element
+_parse_part_children = parse_part_children
+_parse_subpart = parse_subpart
+_parse_subject_group = parse_subject_group
+_parse_section = parse_section
+_parse_appendix = parse_appendix
+_parse_section_child = parse_section_child
+_split_paragraph_node = split_paragraph_node
+_parse_appendix_child = parse_appendix_child
+_resolve_div_node_type = resolve_div_node_type
+_parse_label_tokens = parse_label_tokens
+_parse_appendix_label_tokens = parse_appendix_label_tokens
+_read_child_text = read_child_text
+_read_child_inner_xml = read_child_inner_xml
+_collect_inner_text = collect_inner_text
+_collect_inner_xml = collect_inner_xml
