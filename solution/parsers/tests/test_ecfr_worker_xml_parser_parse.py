@@ -124,6 +124,29 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         self.assertEqual(parsed["title"], "General <I>Requirements</I>")
         self.assertEqual(parsed["children"][0]["node_type"], "SECTION")
 
+    def test_parse_subpart_parses_each_source_child_directly(self):
+        subpart_xml = """
+<DIV6 N="A" TYPE="SUBPART">
+  <HEAD>Subpart A</HEAD>
+  <SOURCE>
+    <HED>Source:</HED>
+    <PSPACE>90 FR 11111.</PSPACE>
+  </SOURCE>
+  <SOURCE>
+    <HED>Source:</HED>
+    <PSPACE>90 FR 22222.</PSPACE>
+  </SOURCE>
+</DIV6>
+""".strip()
+        root = _module._parse_xml_root(subpart_xml)
+
+        parsed = _module._parse_subpart(root)
+        source_children = [child for child in parsed["children"] if child.get("node_type") == "Source"]
+
+        self.assertEqual(len(source_children), 2)
+        self.assertEqual(source_children[0]["content"], "90 FR 11111.")
+        self.assertEqual(source_children[1]["content"], "90 FR 22222.")
+
     def test_parse_section_child_maps_supported_tags(self):
         section_xml = """
 <DIV8 N="400.1" TYPE="SECTION">

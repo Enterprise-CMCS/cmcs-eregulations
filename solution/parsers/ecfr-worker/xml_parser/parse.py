@@ -78,6 +78,12 @@ def _parse_metadata_node(root: ElementTree.Element, tag: str, *, node_type: str)
     if node is None:
         return None
 
+    return _parse_metadata_element(node, node_type=node_type)
+
+
+def _parse_metadata_element(node: ElementTree.Element, *, node_type: str) -> dict[str, str]:
+    """Parse a metadata element node (AUTH/SOURCE/EDNOTE) into dict shape."""
+
     return {
         "node_type": node_type,
         "header": _read_child_text(node, "HED"),
@@ -129,9 +135,7 @@ def _parse_subpart(node: ElementTree.Element) -> dict[str, Any]:
             children.append(_parse_appendix(child))
             continue
         if child.tag == "SOURCE":
-            parsed_source = _parse_metadata_node(node, "SOURCE", node_type="source")
-            if parsed_source is not None:
-                children.append(parsed_source)
+            children.append(_parse_metadata_element(child, node_type="Source"))
             continue
 
     return {
