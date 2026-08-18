@@ -5,10 +5,13 @@ markers/citations so parsed document nodes more closely match eRegs contracts.
 """
 
 import hashlib
+import logging
 import re
 from typing import Any
 
 from .models import PartNode
+
+logger = logging.getLogger(__name__)
 
 _MARKER_RE = re.compile(
     r"^\(([^\)]+)\)(?:(?: ?<I>[^<]+</I>(?: ?-)?)? ?\(([^\)]{1,3})\))?"
@@ -66,12 +69,22 @@ def _apply_paragraph_citations(part: PartNode) -> None:
             if not isinstance(marker, list):
                 marker = []
 
-            local_label = _generate_paragraph_citation(marker, prev_label)
+            local_label, citation_error = _generate_paragraph_citation(marker, prev_label)
             if local_label:
                 child["label"] = [*section_label, *local_label]
-                prev_label = local_label
             else:
                 child["label"] = [*section_label, _paragraph_hash(child.get("text", ""))]
+
+            if citation_error is not None:
+                logger.warning(
+                    "Error generating paragraph citation for prev=%s marker=%s: %s",
+                    prev_label,
+                    marker,
+                    citation_error,
+                )
+                continue
+
+            prev_label = local_label
 
 
 def _apply_paragraph_markers(part: PartNode) -> None:
@@ -190,39 +203,39 @@ def _paragraph_level(label: list[str] | None, marker: list[str] | None) -> int:
     return _match_label_type(marker[-1])
 
 
-def _generate_paragraph_citation(marker: list[str], prev_label: list[str] | None) -> list[str]:
-    """Generate local paragraph citation tokens from marker and predecessor."""
+def _generate_paragraph_citation(marker: list[str], prev_label: list[str] | None) -> tuple[list[str], str | None]:
+    """Generate local paragraph citation tokens with optional ordering error details."""
 
     if not marker:
-        return []
+        return [], None
 
     current_level = _match_label_type(marker[0])
     if current_level == 0:
-        return marker
+        return marker, None
 
     if not prev_label:
-        return []
+        return [], None
 
     prev_level = _paragraph_level(prev_label, None)
 
     if current_level == 2:
         if len(marker) > 1 and _match_label_type(marker[1]) == 1:
-            return marker
+            return marker, None
         if marker[0] == "i" and prev_level != 1:
-            return marker
+            return marker, None
         if marker[0] == "v" and (len(prev_label) < 3 or prev_label[2] != "iv"):
-            return marker
+            return marker, None
 
     if prev_level - current_level < -1:
-        return []
+        return [], "this paragraph and its neighbor are not in the right order"
 
     cut = current_level
     if len(prev_label) < current_level:
         if current_level - 1 != len(prev_label):
-            return []
+            return [], "this paragraph and its neighbor are not in the right order"
         cut -= 1
 
-    return [*prev_label[:cut], *marker]
+    return [*prev_label[:cut], *marker], None
 
 
 def _paragraph_hash(text: Any) -> str:

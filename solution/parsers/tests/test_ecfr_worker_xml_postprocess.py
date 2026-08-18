@@ -3,6 +3,7 @@ from importlib import util
 from pathlib import Path
 import sys
 import types
+from unittest.mock import patch
 
 
 def _load_module():
@@ -96,10 +97,65 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
 
     def test_generate_paragraph_citation_handles_roman_edge_cases(self):
         # i at level 2 with no level-1 predecessor should start fresh.
-        self.assertEqual(_module._generate_paragraph_citation(["i"], ["a", "2", "c"]), ["i"])
+        label, error = _module._generate_paragraph_citation(["i"], ["a", "2", "c"])
+        self.assertEqual(label, ["i"])
+        self.assertIsNone(error)
 
         # v should reset when previous third token is not iv.
-        self.assertEqual(_module._generate_paragraph_citation(["v"], ["a", "2", "iii"]), ["v"])
+        label, error = _module._generate_paragraph_citation(["v"], ["a", "2", "iii"])
+        self.assertEqual(label, ["v"])
+        self.assertIsNone(error)
+
+    def test_generate_paragraph_citation_returns_wrong_order_error(self):
+        label, error = _module._generate_paragraph_citation(["iv"], ["b"])
+        self.assertEqual(label, [])
+        self.assertEqual(error, "this paragraph and its neighbor are not in the right order")
+
+    def test_apply_paragraph_citations_logs_wrong_order_and_keeps_previous_context(self):
+        part_children = [
+            {
+                "node_type": "SECTION",
+                "label": ["433", "11"],
+                "children": [
+                    {"node_type": "Paragraph", "text": "(b) top", "marker": ["b"]},
+                    {"node_type": "Paragraph", "text": "(iv) wrong order", "marker": ["iv"]},
+                    {"node_type": "Paragraph", "text": "(1) follows", "marker": ["1"]},
+                ],
+            }
+        ]
+
+        with self.assertLogs(_module.__name__, level="WARNING") as logs:
+            _module._apply_paragraph_citations(types.SimpleNamespace(children=part_children))
+
+        self.assertIn("Error generating paragraph citation", logs.output[0])
+
+        section_children = part_children[0]["children"]
+        self.assertEqual(section_children[0]["label"], ["433", "11", "b"])
+        self.assertEqual(len(section_children[1]["label"]), 3)
+        self.assertRegex(section_children[1]["label"][2], r"^[0-9a-f]{32}$")
+        self.assertEqual(section_children[2]["label"], ["433", "11", "b", "1"])
+
+    def test_apply_paragraph_citations_no_parent_case_hashes_without_warning(self):
+        part_children = [
+            {
+                "node_type": "SECTION",
+                "label": ["433", "11"],
+                "children": [
+                    {"node_type": "Paragraph", "text": "plain paragraph", "marker": []},
+                    {"node_type": "Paragraph", "text": "(iv) no parent", "marker": ["iv"]},
+                ],
+            }
+        ]
+
+        with patch.object(_module.logger, "warning") as mock_warning:
+            _module._apply_paragraph_citations(types.SimpleNamespace(children=part_children))
+
+        mock_warning.assert_not_called()
+        section_children = part_children[0]["children"]
+        self.assertEqual(len(section_children[0]["label"]), 3)
+        self.assertRegex(section_children[0]["label"][2], r"^[0-9a-f]{32}$")
+        self.assertEqual(len(section_children[1]["label"]), 3)
+        self.assertRegex(section_children[1]["label"][2], r"^[0-9a-f]{32}$")
 
     def test_rewrite_graphics_source_normal_file(self):
         rewritten = _module._rewrite_graphics_source("/graphics/ER18OC21.004.gif")
