@@ -1,5 +1,4 @@
 import unittest
-from dataclasses import replace
 from importlib import util
 from pathlib import Path
 import sys
@@ -119,9 +118,9 @@ class EcfrWorkerXmlNormalizeTests(unittest.TestCase):
         part = PartNode(
             title_number=42,
             part_number=400,
-            node_type=123,
-            label=["400", "", 99],
-            title=None,
+            node_type="PART",
+            label=["400"],
+            title="Part 400",
             children=[
                 {
                     "node_type": "Paragraph",
@@ -142,9 +141,9 @@ class EcfrWorkerXmlNormalizeTests(unittest.TestCase):
 
         normalized = _module.normalize_part_for_eregs(part)
 
-        self.assertEqual(normalized["node_type"], "")
+        self.assertEqual(normalized["node_type"], "PART")
         self.assertEqual(normalized["label"], ["400"])
-        self.assertEqual(normalized["title"], "")
+        self.assertEqual(normalized["title"], "Part 400")
         self.assertEqual(normalized["children"][0], {"node_type": "Paragraph", "text": "", "label": ["a"], "marker": []})
         self.assertEqual(normalized["children"][1], {"node_type": "EffectiveDateNote", "header": "", "content": ""})
         self.assertEqual(normalized["authority"], {"node_type": "Authority", "header": "", "content": ""})

@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from .models import PartNode
+from .models import MetadataNode, PartNode, XmlNode
 
 
 _CONTAINER_NODE_TYPES = {"PART", "SUBPART", "SUBJGRP", "SECTION", "APPENDIX"}
@@ -41,13 +41,13 @@ def _normalize_part(part: PartNode) -> dict[str, Any]:
     return normalized
 
 
-def _normalize_children(children: Any) -> list[dict[str, Any]]:
+def _normalize_children(children: Any) -> list[XmlNode]:
     """Normalize child node arrays, dropping non-dict entries."""
 
     if not isinstance(children, list):
         return []
 
-    out: list[dict[str, Any]] = []
+    out: list[XmlNode] = []
     for child in children:
         if not isinstance(child, dict):
             continue
@@ -55,7 +55,7 @@ def _normalize_children(children: Any) -> list[dict[str, Any]]:
     return out
 
 
-def _normalize_metadata_node(node: Any) -> dict[str, Any] | None:
+def _normalize_metadata_node(node: Any) -> MetadataNode | None:
     """Normalize top-level metadata node fields or return None when absent."""
 
     if not isinstance(node, dict):
@@ -66,7 +66,7 @@ def _normalize_metadata_node(node: Any) -> dict[str, Any] | None:
     return None
 
 
-def _normalize_node(node: dict[str, Any]) -> dict[str, Any]:
+def _normalize_node(node: dict[str, Any]) -> XmlNode:
     """Normalize one parsed node with strict per-type allowlists."""
 
     node_type = _as_string(node.get("node_type"))
