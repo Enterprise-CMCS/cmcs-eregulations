@@ -111,6 +111,96 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         self.assertEqual(label, [])
         self.assertEqual(error, "this paragraph and its neighbor are not in the right order")
 
+    def test_generate_paragraph_citation_legacy_case_matrix(self):
+        cases = [
+            {
+                "name": "test-1-level",
+                "marker": ["a", "1"],
+                "prev": None,
+                "expected": ["a", "1"],
+                "has_error": False,
+            },
+            {
+                "name": "test-2-levels",
+                "marker": ["2"],
+                "prev": ["a", "1"],
+                "expected": ["a", "2"],
+                "has_error": False,
+            },
+            {
+                "name": "test-3-levels",
+                "marker": ["iii"],
+                "prev": ["b", "1", "ii"],
+                "expected": ["b", "1", "iii"],
+                "has_error": False,
+            },
+            {
+                "name": "test-4-levels",
+                "marker": ["B"],
+                "prev": ["e", "3", "iii", "A"],
+                "expected": ["e", "3", "iii", "B"],
+                "has_error": False,
+            },
+            {
+                "name": "test-empty-previous-citation",
+                "marker": ["viii", "1"],
+                "prev": [],
+                "expected": [],
+                "has_error": False,
+            },
+            {
+                "name": "test-zero-length-marker",
+                "marker": [],
+                "prev": None,
+                "expected": [],
+                "has_error": False,
+            },
+            {
+                "name": "test-letter-vs-roman",
+                "marker": ["i", "1"],
+                "prev": ["h", "3"],
+                "expected": ["i", "1"],
+                "has_error": False,
+            },
+            {
+                "name": "test-letter-vs-roman-i",
+                "marker": ["i"],
+                "prev": ["h"],
+                "expected": ["i"],
+                "has_error": False,
+            },
+            {
+                "name": "test-letter-vs-roman-v-1",
+                "marker": ["v"],
+                "prev": ["u"],
+                "expected": ["v"],
+                "has_error": False,
+            },
+            {
+                "name": "test-letter-vs-roman-v-2",
+                "marker": ["v"],
+                "prev": ["u", "v", "w"],
+                "expected": ["v"],
+                "has_error": False,
+            },
+            {
+                "name": "test-wrong-paragraph-order",
+                "marker": ["iv"],
+                "prev": ["b"],
+                "expected": [],
+                "has_error": True,
+            },
+        ]
+
+        for case in cases:
+            with self.subTest(case=case["name"]):
+                label, error = _module._generate_paragraph_citation(case["marker"], case["prev"])
+                self.assertEqual(label, case["expected"])
+                if case["has_error"]:
+                    self.assertEqual(error, "this paragraph and its neighbor are not in the right order")
+                else:
+                    self.assertIsNone(error)
+
     def test_apply_paragraph_citations_logs_wrong_order_and_keeps_previous_context(self):
         part_children = [
             {
