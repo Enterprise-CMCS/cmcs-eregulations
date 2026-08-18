@@ -201,6 +201,58 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
                 else:
                     self.assertIsNone(error)
 
+    def test_extract_marker_legacy_case_matrix(self):
+        cases = [
+            {"input": "(a)", "expected": ["a"]},
+            {"input": "(6)(i)", "expected": ["6", "i"]},
+            {"input": "(6)(i)(1)", "expected": ["6", "i", "1"]},
+            {
+                "input": "(2) <I>One of the following documents that show a U.S. place of birth and was created at least 5 years before the application for Medicaid.</I> (For children under 16 the document must have been created near the time of birth or 5 years before the date of application.) This document must be one of the following and show a U.S. place of birth",
+                "expected": ["2"],
+            },
+            {
+                "input": "(b) <I>Activities and rates.</I> (1) [Reserved]",
+                "expected": ["b", "1"],
+            },
+            {
+                "input": "(b)<I>Activities and rates.</I>(1)(i) [Reserved]",
+                "expected": ["b", "1", "i"],
+            },
+            {
+                "input": "(b)<I>Activities and rates.</I> -(1) [Reserved]",
+                "expected": ["b", "1"],
+            },
+            {
+                "input": "(b) <I>Activities and rates.</I> - (1) [Reserved]",
+                "expected": ["b", "1"],
+            },
+            {
+                "input": "(b) <I>Activities and rates.</I>-(1) [Reserved]",
+                "expected": ["b", "1"],
+            },
+            {
+                "input": "(c) <I>Filing requirements</I> - (1) <I>Authority to file.</I> - (i) A",
+                "expected": ["c", "1", "i"],
+            },
+            {
+                "input": "(3) <I>Publication of national limits.</I> If CMS determines under this paragraph (h)",
+                "expected": ["3"],
+            },
+            {
+                "input": "(<I>1</I>) A copy of the disallowance letter.",
+                "expected": ["<I>1</I>"],
+            },
+            {
+                "input": "(<I>ix</I>) A copy of the disallowance letter.",
+                "expected": ["<I>ix</I>"],
+            },
+            {"input": "nothing", "expected": None},
+        ]
+
+        for case in cases:
+            with self.subTest(text=case["input"]):
+                self.assertEqual(_module._extract_marker(case["input"]), case["expected"])
+
     def test_apply_paragraph_citations_logs_wrong_order_and_keeps_previous_context(self):
         part_children = [
             {
