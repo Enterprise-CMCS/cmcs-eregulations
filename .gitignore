@@ -31,3 +31,6 @@ solution/backend/static/
 # CDK assets
 .cdk.staging/
 cdk.out/
+
+# LLM assistated coding tools
+.cortexkit/
