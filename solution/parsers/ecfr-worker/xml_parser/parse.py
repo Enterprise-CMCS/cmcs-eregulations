@@ -9,7 +9,7 @@ from .metadata import parse_metadata_element, parse_metadata_node
 from .models import PartNode
 from .normalize import normalize_part_for_eregs
 from .parse_children import parse_appendix_child, parse_section_child
-from .parse_divisions import (
+from .parse_divs import (
     parse_appendix,
     parse_part_children,
     parse_section,
