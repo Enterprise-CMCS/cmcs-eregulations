@@ -187,53 +187,61 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         self.assertIn("<E T=\"03\">auth</E>", parsed["children"][5]["content"])
         self.assertIn("<P>Division paragraph</P>", parsed["children"][7]["content"])
 
-    def test_parse_section_splits_multi_marker_paragraph_nodes(self):
-        section_xml = """
+    def test_parse_section_marker_split_behavior(self):
+        cases = [
+            {
+                "name": "splits nested marker paragraph",
+                "xml": """
 <DIV8 N="400.2" TYPE="SECTION">
   <HEAD>Sec. 400.2</HEAD>
   <P>(a) <I>Basis, purpose, and definitions.</I> (1) Nested marker text.</P>
 </DIV8>
-""".strip()
-        root = _module._parse_xml_root(section_xml)
-
-        parsed = _module.parse_section(root)
-
-        self.assertEqual(len(parsed["children"]), 2)
-        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
-        self.assertEqual(parsed["children"][1]["node_type"], "Paragraph")
-        self.assertTrue(parsed["children"][0]["text"].lstrip().startswith("(a)"))
-        self.assertIn("<I>Basis, purpose, and definitions.</I>", parsed["children"][0]["text"])
-        self.assertTrue(parsed["children"][1]["text"].lstrip().startswith("(1)"))
-
-    def test_parse_section_does_not_split_when_reserved_follows_next_marker(self):
-        section_xml = """
+""".strip(),
+                "expected_count": 2,
+                "assertions": lambda children, test: (
+                    test.assertEqual(children[0]["node_type"], "Paragraph"),
+                    test.assertEqual(children[1]["node_type"], "Paragraph"),
+                    test.assertTrue(children[0]["text"].lstrip().startswith("(a)")),
+                    test.assertIn("<I>Basis, purpose, and definitions.</I>", children[0]["text"]),
+                    test.assertTrue(children[1]["text"].lstrip().startswith("(1)")),
+                ),
+            },
+            {
+                "name": "does not split reserved next marker",
+                "xml": """
 <DIV8 N="400.3" TYPE="SECTION">
   <HEAD>Sec. 400.3</HEAD>
   <P>(b) Activities and rates. (1) [Reserved]</P>
 </DIV8>
-""".strip()
-        root = _module._parse_xml_root(section_xml)
-
-        parsed = _module.parse_section(root)
-
-        self.assertEqual(len(parsed["children"]), 1)
-        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
-        self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
-
-    def test_parse_section_does_not_split_reserved_variant_with_italic_dash(self):
-        section_xml = """
+""".strip(),
+                "expected_count": 1,
+                "assertions": lambda children, test: (
+                    test.assertEqual(children[0]["node_type"], "Paragraph"),
+                    test.assertIn("(1) [Reserved]", children[0]["text"]),
+                ),
+            },
+            {
+                "name": "does not split reserved italic dash variant",
+                "xml": """
 <DIV8 N="400.4" TYPE="SECTION">
   <HEAD>Sec. 400.4</HEAD>
   <P>(b) <I>Activities and rates.</I> - (1) [Reserved]</P>
 </DIV8>
-""".strip()
-        root = _module._parse_xml_root(section_xml)
+""".strip(),
+                "expected_count": 1,
+                "assertions": lambda children, test: (
+                    test.assertEqual(children[0]["node_type"], "Paragraph"),
+                    test.assertIn("(1) [Reserved]", children[0]["text"]),
+                ),
+            },
+        ]
 
-        parsed = _module.parse_section(root)
-
-        self.assertEqual(len(parsed["children"]), 1)
-        self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
-        self.assertIn("(1) [Reserved]", parsed["children"][0]["text"])
+        for case in cases:
+            with self.subTest(case=case["name"]):
+                root = _module._parse_xml_root(case["xml"])
+                parsed = _module.parse_section(root)
+                self.assertEqual(len(parsed["children"]), case["expected_count"])
+                case["assertions"](parsed["children"], self)
 
     def test_parse_section_splits_compact_marker_forms(self):
         section_xml = """

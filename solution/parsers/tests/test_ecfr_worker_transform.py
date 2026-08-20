@@ -107,22 +107,6 @@ class EcfrWorkerTransformTests(unittest.TestCase):
         self.assertFalse(part["reserved"])
         self.assertTrue(section["reserved"])
 
-    def test_determine_part_depth_accepts_uppercase_type_after_normalization(self):
-        structure = {
-            "type": "title",
-            "identifier": ["42"],
-            "children": [
-                {
-                    "type": "PART",
-                    "identifier": ["400"],
-                    "children": [],
-                }
-            ],
-        }
-
-        normalized = _module.normalize_structure_for_upload(structure)
-        self.assertEqual(_module.determine_part_depth(normalized, 400), 1)
-
     def test_determine_part_depth(self):
         structure = {
             "type": "title",

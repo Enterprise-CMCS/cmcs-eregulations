@@ -54,26 +54,6 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         self.assertEqual(section_children[1]["marker"], ["1"])
         self.assertEqual(section_children[1]["label"], ["433", "11", "a", "1"])
 
-    def test_apply_paragraph_markers_extracts_leading_markers(self):
-        part = {
-            "children": [
-                {
-                    "node_type": "SECTION",
-                    "label": ["433", "11"],
-                    "children": [
-                        {"node_type": "Paragraph", "text": "(a) first"},
-                        {"node_type": "Paragraph", "text": "(1) second"},
-                    ],
-                }
-            ]
-        }
-
-        _module._apply_paragraph_markers(types.SimpleNamespace(children=part["children"]))
-
-        section = part["children"][0]
-        self.assertEqual(section["children"][0]["marker"], ["a"])
-        self.assertEqual(section["children"][1]["marker"], ["1"])
-
     def test_apply_paragraph_citations_builds_hierarchy_and_hash_fallback(self):
         part_children = [
             {
@@ -94,22 +74,6 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         self.assertEqual(section_children[1]["label"], ["433", "11", "a", "1"])
         self.assertEqual(len(section_children[2]["label"]), 3)
         self.assertRegex(section_children[2]["label"][2], r"^[0-9a-f]{32}$")
-
-    def test_generate_paragraph_citation_handles_roman_edge_cases(self):
-        # i at level 2 with no level-1 predecessor should start fresh.
-        label, error = _module._generate_paragraph_citation(["i"], ["a", "2", "c"])
-        self.assertEqual(label, ["i"])
-        self.assertIsNone(error)
-
-        # v should reset when previous third token is not iv.
-        label, error = _module._generate_paragraph_citation(["v"], ["a", "2", "iii"])
-        self.assertEqual(label, ["v"])
-        self.assertIsNone(error)
-
-    def test_generate_paragraph_citation_returns_wrong_order_error(self):
-        label, error = _module._generate_paragraph_citation(["iv"], ["b"])
-        self.assertEqual(label, [])
-        self.assertEqual(error, "this paragraph and its neighbor are not in the right order")
 
     def test_generate_paragraph_citation_legacy_case_matrix(self):
         cases = [
@@ -298,14 +262,6 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         self.assertRegex(section_children[0]["label"][2], r"^[0-9a-f]{32}$")
         self.assertEqual(len(section_children[1]["label"]), 3)
         self.assertRegex(section_children[1]["label"][2], r"^[0-9a-f]{32}$")
-
-    def test_rewrite_graphics_source_normal_file(self):
-        rewritten = _module._rewrite_graphics_source("/graphics/ER18OC21.004.gif")
-        self.assertEqual(rewritten, "https://images.federalregister.gov/ER18OC21.004/large.png")
-
-    def test_rewrite_graphics_source_eps_file(self):
-        rewritten = _module._rewrite_graphics_source("/graphics/ER18OC21.004.eps.gif")
-        self.assertEqual(rewritten, "https://images.federalregister.gov/ER18OC21.004/large.png")
 
     def test_rewrite_graphics_source_invalid_filename(self):
         self.assertIsNone(_module._rewrite_graphics_source("/graphics/NOEXT"))

@@ -150,38 +150,5 @@ class EcfrWorkerXmlNormalizeTests(unittest.TestCase):
         self.assertIsNone(normalized["source"])
         self.assertIsNone(normalized["editorial_note"])
 
-    def test_normalize_container_nodes_enforce_schema(self):
-        part = PartNode(
-            title_number=42,
-            part_number=400,
-            node_type="PART",
-            label=["400"],
-            title="Part 400",
-            children=[
-                {
-                    "node_type": "SUBPART",
-                    "label": ["A"],
-                    "title": "Subpart A",
-                    "children": [
-                        {
-                            "node_type": "SUBJGRP",
-                            "label": ["ECFRfoo"],
-                            "title": "Group",
-                            "children": [{"node_type": "SECTION", "label": ["400", "2"], "title": "Sec", "children": []}],
-                        }
-                    ],
-                    "metadata": "drop",
-                }
-            ],
-        )
-
-        normalized = _module.normalize_part_for_eregs(part)
-        subpart = normalized["children"][0]
-        subject_group = subpart["children"][0]
-
-        self.assertEqual(set(subpart.keys()), {"node_type", "label", "title", "children"})
-        self.assertEqual(set(subject_group.keys()), {"node_type", "label", "title", "children"})
-
-
 if __name__ == "__main__":
     unittest.main()

@@ -47,21 +47,34 @@ class EcfrWorkerXmlModelsTests(unittest.TestCase):
         self.assertEqual(part.node_type, "PART")
         self.assertEqual(part.label, ["400"])
 
-    def test_part_node_rejects_non_positive_title_number(self):
-        with self.assertRaisesRegex(ValueError, "title_number must be a positive integer"):
-            PartNode(title_number=0, part_number=400)
+    def test_part_node_rejects_invalid_values(self):
+        cases = [
+            {
+                "name": "non-positive title",
+                "kwargs": {"title_number": 0, "part_number": 400},
+                "error": "title_number must be a positive integer",
+            },
+            {
+                "name": "non-positive part",
+                "kwargs": {"title_number": 42, "part_number": -1},
+                "error": "part_number must be a positive integer",
+            },
+            {
+                "name": "invalid node_type",
+                "kwargs": {"title_number": 42, "part_number": 400, "node_type": "SECTION"},
+                "error": 'node_type must be exactly "PART"',
+            },
+            {
+                "name": "non-string label member",
+                "kwargs": {"title_number": 42, "part_number": 400, "label": ["400", 1]},
+                "error": "label must be a list of strings",
+            },
+        ]
 
-    def test_part_node_rejects_non_positive_part_number(self):
-        with self.assertRaisesRegex(ValueError, "part_number must be a positive integer"):
-            PartNode(title_number=42, part_number=-1)
-
-    def test_part_node_rejects_non_part_node_type(self):
-        with self.assertRaisesRegex(ValueError, 'node_type must be exactly "PART"'):
-            PartNode(title_number=42, part_number=400, node_type="SECTION")
-
-    def test_part_node_rejects_non_string_labels(self):
-        with self.assertRaisesRegex(ValueError, "label must be a list of strings"):
-            PartNode(title_number=42, part_number=400, label=["400", 1])
+        for case in cases:
+            with self.subTest(case=case["name"]):
+                with self.assertRaisesRegex(ValueError, case["error"]):
+                    PartNode(**case["kwargs"])
 
 
 if __name__ == "__main__":
