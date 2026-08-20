@@ -7,10 +7,10 @@ optionally full XML, derives location metadata, and uploads the final payload.
 import json
 import logging
 import os
-from pathlib import Path
 
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
 from .config import parse_config_from_event
+from .eregs_client import upload_part
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 from .xml_parser import parse_part_xml_to_document
 
@@ -69,20 +69,18 @@ def handler(event, _context):
         "upload_locations": config.upload_locations,
     }
 
-    output_path = _write_debug_payload(
-        part_payload,
-        title_number=config.title_number,
-        part_number=config.part_number,
-        effective_date=config.effective_date,
+    upload_result = upload_part(
+        api_base_url=os.environ["EREGS_API_URL_V3"],
+        credentials=config.credentials,
+        payload=part_payload,
     )
 
     logger.info(
-        "Wrote eCFR parsed payload: title=%s part=%s sections=%s subparts=%s path=%s",
+        "Uploaded eCFR parsed payload: title=%s part=%s sections=%s subparts=%s",
         config.title_number,
         config.part_number,
         len(sections),
         len(subparts),
-        output_path,
     )
 
     return {
@@ -96,20 +94,8 @@ def handler(event, _context):
                 "title_number": config.title_number,
                 "part_number": config.part_number,
                 "effective_date": config.effective_date,
-                "uploaded": False,
-                "output_path": str(output_path),
+                "uploaded": True,
+                "upload_result_keys": sorted(upload_result.keys()),
             }
         ),
     }
-
-
-def _write_debug_payload(payload: dict, title_number: int, part_number: int, effective_date: str) -> Path:
-    """Persist parsed part payload to disk for local inspection/debugging."""
-
-    output_dir = Path(os.environ.get("PARSER_DEBUG_OUTPUT_DIR", "/tmp/ecfr-worker-output"))
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    safe_date = effective_date.replace("/", "-")
-    output_path = output_dir / f"title-{title_number}_part-{part_number}_{safe_date}.json"
-    output_path.write_text(json.dumps(payload, indent=4), encoding="utf-8")
-    return output_path

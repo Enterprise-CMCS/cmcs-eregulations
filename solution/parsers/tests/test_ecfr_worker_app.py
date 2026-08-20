@@ -85,15 +85,15 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "section": "200"}],
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
-        ), patch.object(_module, "_write_debug_payload", return_value="/tmp/ecfr-worker-output/title-42_part-400_2025-01-01.json") as mock_write:
+        ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}) as mock_upload:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
         self.assertEqual(body["processed"], 1)
-        self.assertFalse(body["uploaded"])
-        self.assertIn("output_path", body)
+        self.assertTrue(body["uploaded"])
+        self.assertEqual(body["upload_result_keys"], ["id", "status"])
 
-        payload = mock_write.call_args.args[0]
+        payload = mock_upload.call_args.kwargs["payload"]
         self.assertEqual(payload["name"], "400")
         self.assertEqual(payload["title"], "42")
         self.assertEqual(payload["date"], "2025-01-01")
@@ -117,15 +117,17 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "parse_config_from_event", return_value=parsed_config
         ), patch.object(_module, "fetch_part_structure", return_value=structure), patch.object(
             _module, "determine_part_depth", return_value=3
-        ), patch.object(_module, "_write_debug_payload", return_value="/tmp/ecfr-worker-output/title-42_part-400_2025-01-01.json") as mock_write, patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
+        ), patch.object(_module, "upload_part", return_value={}) as mock_upload, patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
             _module, "extract_sections_and_subparts"
         ) as mock_extract:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
         self.assertEqual(body["processed"], 1)
+        self.assertTrue(body["uploaded"])
+        self.assertEqual(body["upload_result_keys"], [])
 
-        payload = mock_write.call_args.args[0]
+        payload = mock_upload.call_args.kwargs["payload"]
         self.assertEqual(payload["document"], {})
         self.assertEqual(payload["sections"], [])
         self.assertEqual(payload["subparts"], [])
