@@ -8,7 +8,6 @@ work units to SQS (or local worker HTTP in dev mode).
 import json
 import logging
 import os
-from datetime import datetime, timezone
 from typing import Any
 
 from common.auth import resolve_backend_credentials
@@ -26,7 +25,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def _build_work_units(run_time: str, api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+def _build_work_units(api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
     """Build worker messages from parser config and latest-date resolution.
 
     Returns both valid work units and per-part failures for targets that cannot
@@ -59,7 +58,6 @@ def _build_work_units(run_time: str, api_base_url: str, credentials) -> tuple[li
                     "effective_date": latest_issue_date,
                     "upload_reg_text": target.upload_reg_text,
                     "upload_locations": target.upload_locations,
-                    "scheduled_at": run_time,
                 }
             }
         )
@@ -106,7 +104,6 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int,
 def handler(event, _context):
     """Main launcher handler for scheduled/on-demand eCFR work generation."""
 
-    run_time = datetime.now(timezone.utc).isoformat()
     logger.info(
         "eCFR launcher trigger received: keys=%s has_records=%s has_body=%s",
         sorted(event.keys()) if isinstance(event, dict) else "non-dict",
@@ -118,7 +115,7 @@ def handler(event, _context):
     logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
 
     api_base_url = os.environ["EREGS_API_URL_V3"]
-    work_units, config_failures = _build_work_units(run_time, api_base_url, credentials)
+    work_units, config_failures = _build_work_units(api_base_url, credentials)
 
     if not work_units and config_failures:
         raise RuntimeError(

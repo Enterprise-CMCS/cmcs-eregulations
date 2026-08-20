@@ -32,8 +32,6 @@ _module = _load_module()
 
 class EcfrLauncherAppTests(unittest.TestCase):
     def test_build_work_units_includes_effective_date_and_flags(self):
-        run_time = "2026-01-01T00:00:00+00:00"
-
         targets = [
             _module.TargetPartConfig(
                 title_number=42,
@@ -47,7 +45,6 @@ class EcfrLauncherAppTests(unittest.TestCase):
             _module, "expand_target_parts", return_value=targets
         ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {400: "2025-01-01"}}):
             work_units, failures = _module._build_work_units(
-                run_time=run_time,
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             )
@@ -63,15 +60,12 @@ class EcfrLauncherAppTests(unittest.TestCase):
                         "effective_date": "2025-01-01",
                         "upload_reg_text": True,
                         "upload_locations": False,
-                        "scheduled_at": run_time,
                     }
                 }
             ],
         )
 
     def test_build_work_units_records_missing_latest_date_failure(self):
-        run_time = "2026-01-01T00:00:00+00:00"
-
         targets = [
             _module.TargetPartConfig(
                 title_number=42,
@@ -85,7 +79,6 @@ class EcfrLauncherAppTests(unittest.TestCase):
             _module, "expand_target_parts", return_value=targets
         ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {}}):
             work_units, failures = _module._build_work_units(
-                run_time=run_time,
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             )

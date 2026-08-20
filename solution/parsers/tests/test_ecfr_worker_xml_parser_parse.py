@@ -52,7 +52,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(xml)
 
-        part = _module._parse_part_root(root, title_number=42, part_number=400)
+        part = _module.parse_part_root(root, title_number=42, part_number=400)
 
         self.assertEqual(part.node_type, "PART")
         self.assertEqual(part.label, ["400"])
@@ -67,12 +67,12 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
     def test_parse_part_root_rejects_non_div5(self):
         root = _module._parse_xml_root("<DIV8 TYPE=\"SECTION\" N=\"400.1\"></DIV8>")
         with self.assertRaisesRegex(_module.EcfrXmlParseError, "expected part root tag DIV5"):
-            _module._parse_part_root(root, title_number=42, part_number=400)
+            _module.parse_part_root(root, title_number=42, part_number=400)
 
     def test_parse_part_root_rejects_non_part_type(self):
         root = _module._parse_xml_root("<DIV5 TYPE=\"SECTION\" N=\"400\"></DIV5>")
         with self.assertRaisesRegex(_module.EcfrXmlParseError, "expected part TYPE=PART"):
-            _module._parse_part_root(root, title_number=42, part_number=400)
+            _module.parse_part_root(root, title_number=42, part_number=400)
 
     def test_parse_part_children_dispatches_div6_div8_div9(self):
         xml = """
@@ -92,7 +92,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(xml)
 
-        children = _module._parse_part_children(root)
+        children = _module.parse_part_children(root)
 
         self.assertEqual(len(children), 3)
         self.assertEqual(children[0]["node_type"], "SUBPART")
@@ -103,8 +103,8 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
         with_type = _module._parse_xml_root('<DIV8 TYPE=" section " N="400.1"></DIV8>')
         without_type = _module._parse_xml_root('<DIV8 N="400.1"></DIV8>')
 
-        self.assertEqual(_module._resolve_div_node_type(with_type), "SECTION")
-        self.assertEqual(_module._resolve_div_node_type(without_type), "SECTION")
+        self.assertEqual(_module.resolve_div_node_type(with_type), "SECTION")
+        self.assertEqual(_module.resolve_div_node_type(without_type), "SECTION")
 
     def test_parse_subject_group_title_preserves_inner_xml(self):
         subject_group_xml = """
@@ -118,7 +118,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(subject_group_xml)
 
-        parsed = _module._parse_subject_group(root)
+        parsed = _module.parse_subject_group(root)
 
         self.assertEqual(parsed["node_type"], "SUBJGRP")
         self.assertEqual(parsed["title"], "General <I>Requirements</I>")
@@ -140,7 +140,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(subpart_xml)
 
-        parsed = _module._parse_subpart(root)
+        parsed = _module.parse_subpart(root)
         source_children = [child for child in parsed["children"] if child.get("node_type") == "Source"]
 
         self.assertEqual(len(source_children), 2)
@@ -163,7 +163,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 </DIV8>
 """.strip()
         root = _module._parse_xml_root(section_xml)
-        parsed = _module._parse_section(root)
+        parsed = _module.parse_section(root)
 
         self.assertEqual(parsed["node_type"], "SECTION")
         child_types = [child["node_type"] for child in parsed["children"]]
@@ -196,7 +196,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(section_xml)
 
-        parsed = _module._parse_section(root)
+        parsed = _module.parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 2)
         self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
@@ -214,7 +214,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(section_xml)
 
-        parsed = _module._parse_section(root)
+        parsed = _module.parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 1)
         self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
@@ -229,7 +229,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(section_xml)
 
-        parsed = _module._parse_section(root)
+        parsed = _module.parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 1)
         self.assertEqual(parsed["children"][0]["node_type"], "Paragraph")
@@ -244,7 +244,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 """.strip()
         root = _module._parse_xml_root(section_xml)
 
-        parsed = _module._parse_section(root)
+        parsed = _module.parse_section(root)
 
         self.assertEqual(len(parsed["children"]), 3)
         self.assertEqual(parsed["children"][0]["text"], "(6)")
@@ -267,7 +267,7 @@ class EcfrWorkerXmlParserParseTests(unittest.TestCase):
 </DIV9>
 """.strip()
         root = _module._parse_xml_root(appendix_xml)
-        parsed = _module._parse_appendix(root)
+        parsed = _module.parse_appendix(root)
 
         self.assertEqual(parsed["node_type"], "APPENDIX")
         self.assertEqual(parsed["label"], ["Appendix", "A", "to", "Part", "400"])
