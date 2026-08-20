@@ -101,6 +101,8 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertEqual(payload["depth"], 3)
         self.assertEqual(len(payload["sections"]), 1)
         self.assertEqual(len(payload["subparts"]), 1)
+        self.assertTrue(payload["upload_reg_text"])
+        self.assertTrue(payload["upload_locations"])
 
     def test_handler_skips_full_xml_and_locations_when_flags_disabled(self):
         parsed_config = self._build_parsed_config(upload_reg_text=False, upload_locations=False)
@@ -127,6 +129,8 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertEqual(payload["document"], {})
         self.assertEqual(payload["sections"], [])
         self.assertEqual(payload["subparts"], [])
+        self.assertFalse(payload["upload_reg_text"])
+        self.assertFalse(payload["upload_locations"])
 
         mock_fetch_xml.assert_not_called()
         mock_extract.assert_not_called()

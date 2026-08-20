@@ -65,6 +65,8 @@ def handler(event, _context):
         "depth": depth,
         "sections": sections,
         "subparts": subparts,
+        "upload_reg_text": config.upload_reg_text,
+        "upload_locations": config.upload_locations,
     }
 
     output_path = _write_debug_payload(

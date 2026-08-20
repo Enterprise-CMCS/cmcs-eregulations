@@ -1,4 +1,5 @@
 import unittest
+import json
 from importlib import util
 from pathlib import Path
 import sys
@@ -29,6 +30,7 @@ def _load_module():
 
 
 _module = _load_module()
+_fixtures_dir = Path(__file__).resolve().parent / "fixtures"
 
 
 class EcfrWorkerXmlParserTests(unittest.TestCase):
@@ -36,19 +38,30 @@ class EcfrWorkerXmlParserTests(unittest.TestCase):
         xml = """
 <DIV5 TYPE="PART" N="400">
   <HEAD>Part 400 - Test Part</HEAD>
+  <AUTH>
+    <HED>Authority:</HED>
+    <PSPACE>42 U.S.C. 1302.</PSPACE>
+  </AUTH>
+  <SOURCE>
+    <HED>Source:</HED>
+    <PSPACE>90 FR 12345.</PSPACE>
+  </SOURCE>
+  <EDNOTE>
+    <HED>Editorial Note:</HED>
+    <PSPACE>Some note.</PSPACE>
+  </EDNOTE>
   <DIV8 TYPE="SECTION" N="400.1">
     <HEAD>Sec. 400.1 Test Section</HEAD>
-    <P>Test paragraph text.</P>
+    <P>(a) <I>Test paragraph text.</I> (1) Nested paragraph text.</P>
   </DIV8>
 </DIV5>
 """.strip()
 
         document = _module.parse_part_xml_to_document(xml, title_number=42, part_number=400)
+        expected = json.loads((_fixtures_dir / "ecfr_xml_minimal_expected_document.json").read_text(encoding="utf-8"))
 
         self.assertIsInstance(document, dict)
-        self.assertEqual(document.get("node_type"), "PART")
-        self.assertEqual(document.get("label"), ["400"])
-        self.assertIsInstance(document.get("children"), list)
+        self.assertEqual(document, expected)
 
     def test_parse_part_xml_to_document_rejects_malformed_xml(self):
         with self.assertRaises(_module.EcfrXmlParseError):
