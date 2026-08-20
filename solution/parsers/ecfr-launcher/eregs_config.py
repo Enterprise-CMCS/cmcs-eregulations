@@ -12,6 +12,7 @@ import requests
 
 from common.auth import BackendCredentials, build_auth_headers
 from common.config import ConfigParseError, require_bool, require_non_empty_string, require_positive_int
+from common.http import execute_request, parse_json_response
 
 
 ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
@@ -46,22 +47,20 @@ def fetch_parser_config(
     except ConfigParseError as exc:
         raise EregsConfigError(str(exc)) from exc
 
-    try:
-        response = requests.get(request_url, headers=headers, timeout=timeout)
-        response.raise_for_status()
-        payload = response.json()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EregsConfigError(f"eRegs parser_config request failed ({status_code})") from exc
-    except requests.RequestException as exc:
-        raise EregsConfigError(f"eRegs parser_config request failed: {exc}") from exc
-    except ValueError as exc:
-        raise EregsConfigError("eRegs parser_config response was not valid JSON") from exc
+    response = execute_request(
+        lambda: requests.get(request_url, headers=headers, timeout=timeout),
+        on_http_error=lambda exc: EregsConfigError(
+            f"eRegs parser_config request failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
+        ),
+        on_request_error=lambda exc: EregsConfigError(f"eRegs parser_config request failed: {exc}"),
+    )
 
-    if not isinstance(payload, dict):
-        raise EregsConfigError("eRegs parser_config response must be a JSON object")
-
-    return payload
+    return parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EregsConfigError("eRegs parser_config response was not valid JSON"),
+        on_invalid_shape=lambda: EregsConfigError("eRegs parser_config response must be a JSON object"),
+    )
 
 
 def expand_target_parts(
@@ -138,30 +137,30 @@ def fetch_subchapter_part_numbers(
     endpoint = f"structure/current/title-{title_number}.json"
     request_url = urljoin(base_url, endpoint)
 
-    try:
-        response = requests.get(
+    response = execute_request(
+        lambda: requests.get(
             request_url,
             params={"chapter": chapter, "subchapter": subchapter},
             timeout=timeout,
-        )
-        response.raise_for_status()
-        payload = response.json()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EregsConfigError(
-            f"eCFR subchapter structure request failed ({status_code}) for title {title_number} {chapter}-{subchapter}"
-        ) from exc
-    except requests.RequestException as exc:
-        raise EregsConfigError(
+        ),
+        on_http_error=lambda exc: EregsConfigError(
+            "eCFR subchapter structure request failed "
+            f"({exc.response.status_code if exc.response is not None else 'unknown'}) "
+            f"for title {title_number} {chapter}-{subchapter}"
+        ),
+        on_request_error=lambda exc: EregsConfigError(
             f"eCFR subchapter structure request failed for title {title_number} {chapter}-{subchapter}: {exc}"
-        ) from exc
-    except ValueError as exc:
-        raise EregsConfigError(
-            f"eCFR subchapter structure response was not valid JSON for title {title_number} {chapter}-{subchapter}"
-        ) from exc
+        ),
+    )
 
-    if not isinstance(payload, dict):
-        raise EregsConfigError("eCFR subchapter structure response must be a JSON object")
+    payload = parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EregsConfigError(
+            f"eCFR subchapter structure response was not valid JSON for title {title_number} {chapter}-{subchapter}"
+        ),
+        on_invalid_shape=lambda: EregsConfigError("eCFR subchapter structure response must be a JSON object"),
+    )
 
     part_numbers = _extract_part_numbers(payload)
     if not part_numbers:

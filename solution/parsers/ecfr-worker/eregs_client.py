@@ -11,6 +11,7 @@ import requests
 
 from common.auth import BackendCredentials, build_auth_headers
 from common.config import ConfigParseError
+from common.http import execute_request, parse_json_response
 
 
 class EregsClientError(RuntimeError):
@@ -49,27 +50,23 @@ def upload_part(
 
     headers["Content-Type"] = "application/json"
 
-    try:
-        response = requests.put(request_url, json=payload, headers=headers, timeout=timeout)
-        response.raise_for_status()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EregsClientError(f"eRegs part upload failed ({status_code})") from exc
-    except requests.RequestException as exc:
-        raise EregsClientError(f"eRegs part upload request failed: {exc}") from exc
+    response = execute_request(
+        lambda: requests.put(request_url, json=payload, headers=headers, timeout=timeout),
+        on_http_error=lambda exc: EregsClientError(
+            f"eRegs part upload failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
+        ),
+        on_request_error=lambda exc: EregsClientError(f"eRegs part upload request failed: {exc}"),
+    )
 
     if not response.text.strip():
         return {}
 
-    try:
-        response_payload = response.json()
-    except ValueError as exc:
-        raise EregsClientError("eRegs part upload response was not valid JSON") from exc
-
-    if not isinstance(response_payload, dict):
-        raise EregsClientError("eRegs part upload response must be a JSON object")
-
-    return response_payload
+    return parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EregsClientError("eRegs part upload response was not valid JSON"),
+        on_invalid_shape=lambda: EregsClientError("eRegs part upload response must be a JSON object"),
+    )
 
 
 def _validate_part_payload(payload: Any) -> None:

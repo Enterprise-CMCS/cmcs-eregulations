@@ -4,12 +4,13 @@ The launcher uses this module to fetch full title versions (all pages) and
 derive the latest effective date per part before queueing worker messages.
 """
 
-import json
 from datetime import date
 from typing import Any
 from urllib.parse import urljoin
 
 import requests
+
+from common.http import execute_request, parse_json_response
 
 
 ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
@@ -66,24 +67,27 @@ def _request_versions_page(
 ) -> dict[str, Any]:
     """Fetch a single page of eCFR versions data."""
 
-    try:
-        response = requests.get(request_url, timeout=timeout, params={"page": str(page)})
-        response.raise_for_status()
-        payload = response.json()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EcfrVersionsError(
-            f"eCFR versions request failed ({status_code}) for title {title_number} page {page}"
-        ) from exc
-    except requests.RequestException as exc:
-        raise EcfrVersionsError(f"eCFR versions request failed for title {title_number} page {page}: {exc}") from exc
-    except json.JSONDecodeError as exc:
-        raise EcfrVersionsError(f"eCFR versions response was not valid JSON for title {title_number} page {page}") from exc
+    response = execute_request(
+        lambda: requests.get(request_url, timeout=timeout, params={"page": str(page)}),
+        on_http_error=lambda exc: EcfrVersionsError(
+            f"eCFR versions request failed ({exc.response.status_code if exc.response is not None else 'unknown'}) "
+            f"for title {title_number} page {page}"
+        ),
+        on_request_error=lambda exc: EcfrVersionsError(
+            f"eCFR versions request failed for title {title_number} page {page}: {exc}"
+        ),
+    )
 
-    if not isinstance(payload, dict):
-        raise EcfrVersionsError(f"eCFR versions response must be a JSON object for title {title_number} page {page}")
-
-    return payload
+    return parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EcfrVersionsError(
+            f"eCFR versions response was not valid JSON for title {title_number} page {page}"
+        ),
+        on_invalid_shape=lambda: EcfrVersionsError(
+            f"eCFR versions response must be a JSON object for title {title_number} page {page}"
+        ),
+    )
 
 
 def _extract_total_pages(meta: Any) -> int:

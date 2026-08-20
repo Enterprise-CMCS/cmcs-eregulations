@@ -9,6 +9,8 @@ from urllib.parse import urljoin
 
 import requests
 
+from common.http import execute_request, parse_json_response, require_non_empty_text
+
 
 ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
@@ -30,26 +32,27 @@ def fetch_part_structure(
     endpoint = f"structure/current/title-{title_number}.json"
     request_url = urljoin(base_url, endpoint)
 
-    try:
-        response = requests.get(request_url, params={"part": str(part_number)}, timeout=timeout)
-        response.raise_for_status()
-        payload = response.json()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EcfrClientError(
-            f"eCFR structure request failed ({status_code}) for title {title_number} part {part_number}"
-        ) from exc
-    except requests.RequestException as exc:
-        raise EcfrClientError(f"eCFR structure request failed for title {title_number} part {part_number}: {exc}") from exc
-    except ValueError as exc:
-        raise EcfrClientError(
-            f"eCFR structure response was not valid JSON for title {title_number} part {part_number}"
-        ) from exc
+    response = execute_request(
+        lambda: requests.get(request_url, params={"part": str(part_number)}, timeout=timeout),
+        on_http_error=lambda exc: EcfrClientError(
+            f"eCFR structure request failed ({exc.response.status_code if exc.response is not None else 'unknown'}) "
+            f"for title {title_number} part {part_number}"
+        ),
+        on_request_error=lambda exc: EcfrClientError(
+            f"eCFR structure request failed for title {title_number} part {part_number}: {exc}"
+        ),
+    )
 
-    if not isinstance(payload, dict):
-        raise EcfrClientError(
+    payload = parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EcfrClientError(
+            f"eCFR structure response was not valid JSON for title {title_number} part {part_number}"
+        ),
+        on_invalid_shape=lambda: EcfrClientError(
             f"eCFR structure response must be a JSON object for title {title_number} part {part_number}"
-        )
+        ),
+    )
 
     return payload
 
@@ -66,23 +69,20 @@ def fetch_part_full_xml(
     endpoint = f"full/{effective_date}/title-{title_number}.xml"
     request_url = urljoin(base_url, endpoint)
 
-    try:
-        response = requests.get(request_url, params={"part": str(part_number)}, timeout=timeout)
-        response.raise_for_status()
-    except requests.HTTPError as exc:
-        status_code = exc.response.status_code if exc.response is not None else "unknown"
-        raise EcfrClientError(
-            f"eCFR full XML request failed ({status_code}) for title {title_number} part {part_number} date {effective_date}"
-        ) from exc
-    except requests.RequestException as exc:
-        raise EcfrClientError(
+    response = execute_request(
+        lambda: requests.get(request_url, params={"part": str(part_number)}, timeout=timeout),
+        on_http_error=lambda exc: EcfrClientError(
+            f"eCFR full XML request failed ({exc.response.status_code if exc.response is not None else 'unknown'}) "
+            f"for title {title_number} part {part_number} date {effective_date}"
+        ),
+        on_request_error=lambda exc: EcfrClientError(
             f"eCFR full XML request failed for title {title_number} part {part_number} date {effective_date}: {exc}"
-        ) from exc
+        ),
+    )
 
-    xml_body = response.text
-    if not isinstance(xml_body, str) or not xml_body.strip():
-        raise EcfrClientError(
+    return require_non_empty_text(
+        response,
+        on_empty=lambda: EcfrClientError(
             f"eCFR full XML response was empty for title {title_number} part {part_number} date {effective_date}"
-        )
-
-    return xml_body
+        ),
+    )
