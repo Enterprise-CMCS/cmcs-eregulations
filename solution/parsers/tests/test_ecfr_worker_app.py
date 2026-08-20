@@ -42,22 +42,18 @@ config_spec.loader.exec_module(_config_module)
 
 class EcfrWorkerAppTests(unittest.TestCase):
     def _build_parsed_config(self, *, upload_reg_text: bool, upload_locations: bool):
-        return _config_module.parse_config(
-            {
-                "config": {
-                    "title_number": 42,
-                    "part_number": 400,
-                    "effective_date": "2025-01-01",
-                    "upload_reg_text": upload_reg_text,
-                    "upload_locations": upload_locations,
-                    "credentials": {
-                        "auth_type": "basic",
-                        "username": "u",
-                        "password": "p",
-                    },
+        with patch.dict(os.environ, {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            return _config_module.parse_config(
+                {
+                    "config": {
+                        "title_number": 42,
+                        "part_number": 400,
+                        "effective_date": "2025-01-01",
+                        "upload_reg_text": upload_reg_text,
+                        "upload_locations": upload_locations,
+                    }
                 }
-            }
-        )
+            )
 
     def test_handler_uploads_part_with_flags_enabled(self):
         parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)

@@ -21,20 +21,21 @@ def _normalize_node(node: dict[str, Any], parent: list[str], parent_type: str) -
     """Recursively normalize one structure node and annotate parent metadata."""
 
     identifier = identifier_tokens(node.get("identifier"))
+    node_type = _normalize_type(node.get("type"))
     children_raw = node.get("children")
     children: list[dict[str, Any]] = []
     if isinstance(children_raw, list):
         for child in children_raw:
             if isinstance(child, dict):
-                children.append(_normalize_node(child, parent=identifier, parent_type=_safe_string(node.get("type"))))
+                children.append(_normalize_node(child, parent=identifier, parent_type=node_type))
 
     return {
         "identifier": identifier,
         "label": _safe_html_string(node.get("label")),
         "label_level": _safe_string(node.get("label_level")),
         "label_description": _safe_string(node.get("label_description")),
-        "reserved": bool(node.get("reserved", False)),
-        "type": _safe_string(node.get("type")),
+        "reserved": _normalize_reserved(node.get("reserved", False)),
+        "type": node_type,
         "children": children,
         "descendant_range": _normalize_descendant_range(node.get("descendant_range")),
         "parent_type": parent_type,
@@ -78,3 +79,30 @@ def _normalize_descendant_range(value: Any) -> list[str]:
         return [candidate]
 
     return []
+
+
+def _normalize_type(value: Any) -> str:
+    """Normalize structure node type values to lowercase string tokens."""
+
+    if not isinstance(value, str):
+        return ""
+    return value.strip().lower()
+
+
+def _normalize_reserved(value: Any) -> bool:
+    """Normalize reserved flags from booleans and common string/int forms."""
+
+    if isinstance(value, bool):
+        return value
+
+    if isinstance(value, int):
+        return value != 0
+
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "y"}:
+            return True
+        if normalized in {"false", "0", "no", "n", ""}:
+            return False
+
+    return False

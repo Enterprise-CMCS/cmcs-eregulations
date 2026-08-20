@@ -76,6 +76,53 @@ class EcfrWorkerTransformTests(unittest.TestCase):
         with self.assertRaisesRegex(_module.EcfrTransformError, "must be a JSON object"):
             _module.normalize_structure_for_upload([])
 
+    def test_normalize_structure_for_upload_normalizes_type_case_and_reserved_variants(self):
+        raw = {
+            "type": "Title",
+            "identifier": "42",
+            "children": [
+                {
+                    "type": "PART",
+                    "identifier": "400",
+                    "reserved": "false",
+                    "children": [
+                        {
+                            "type": "SECTION",
+                            "identifier": "400.1",
+                            "reserved": "TRUE",
+                            "children": [],
+                        }
+                    ],
+                }
+            ],
+        }
+
+        normalized = _module.normalize_structure_for_upload(raw)
+        part = normalized["children"][0]
+        section = part["children"][0]
+
+        self.assertEqual(normalized["type"], "title")
+        self.assertEqual(part["type"], "part")
+        self.assertEqual(section["type"], "section")
+        self.assertFalse(part["reserved"])
+        self.assertTrue(section["reserved"])
+
+    def test_determine_part_depth_accepts_uppercase_type_after_normalization(self):
+        structure = {
+            "type": "title",
+            "identifier": ["42"],
+            "children": [
+                {
+                    "type": "PART",
+                    "identifier": ["400"],
+                    "children": [],
+                }
+            ],
+        }
+
+        normalized = _module.normalize_structure_for_upload(structure)
+        self.assertEqual(_module.determine_part_depth(normalized, 400), 1)
+
     def test_determine_part_depth(self):
         structure = {
             "type": "title",

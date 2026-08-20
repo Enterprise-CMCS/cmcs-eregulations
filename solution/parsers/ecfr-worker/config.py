@@ -4,9 +4,11 @@ This module enforces the queue contract produced by the eCFR launcher.
 """
 
 from dataclasses import dataclass
+from datetime import datetime
 
 from common.auth import BackendCredentials, resolve_backend_credentials
 from common.config import (
+    ConfigParseError,
     parse_typed_config_from_event,
     require_bool,
     require_non_empty_string,
@@ -35,10 +37,10 @@ def parse_config(payload: dict) -> EcfrPartConfig:
     return EcfrPartConfig(
         title_number=require_positive_int(config, "title_number"),
         part_number=require_positive_int(config, "part_number"),
-        effective_date=require_non_empty_string(config, "effective_date"),
+        effective_date=_require_effective_date(config),
         upload_reg_text=require_bool(config, "upload_reg_text"),
         upload_locations=require_bool(config, "upload_locations"),
-        credentials=resolve_backend_credentials(config.get("credentials")),
+        credentials=resolve_backend_credentials(),
     )
 
 
@@ -46,6 +48,18 @@ def parse_config_from_event(event: dict) -> EcfrPartConfig:
     """Parse Lambda event (SQS or HTTP) into worker config."""
 
     return parse_typed_config_from_event(event, parse_config)
+
+
+def _require_effective_date(config: dict) -> str:
+    """Validate effective_date as strict YYYY-MM-DD text."""
+
+    value = require_non_empty_string(config, "effective_date")
+    try:
+        datetime.strptime(value, "%Y-%m-%d")
+    except ValueError as exc:
+        raise ConfigParseError("effective_date must be in YYYY-MM-DD format") from exc
+
+    return value
 
 
 __all__ = [

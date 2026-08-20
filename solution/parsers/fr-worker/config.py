@@ -16,7 +16,7 @@ def parse_config(payload: dict) -> FrDocumentConfig:
 
     return FrDocumentConfig(
         document_number=require_non_empty_string(config, "document_number"),
-        credentials=resolve_backend_credentials(config.get("credentials")),
+        credentials=resolve_backend_credentials(),
     )
 
 

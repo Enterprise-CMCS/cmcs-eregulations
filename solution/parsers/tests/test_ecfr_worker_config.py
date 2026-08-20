@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from importlib import util
 from pathlib import Path
 
@@ -29,22 +30,18 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "effective_date": "2025-01-01",
                 "upload_reg_text": True,
                 "upload_locations": False,
-                "credentials": {
-                    "auth_type": "basic",
-                    "username": "queue-user",
-                    "password": "queue-pass",
-                },
             }
         }
 
-        parsed = parse_config(payload)
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            parsed = parse_config(payload)
 
         self.assertEqual(parsed.title_number, 42)
         self.assertEqual(parsed.part_number, 400)
         self.assertEqual(parsed.effective_date, "2025-01-01")
         self.assertTrue(parsed.upload_reg_text)
         self.assertFalse(parsed.upload_locations)
-        self.assertEqual(parsed.credentials, BackendCredentials("basic", "queue-user", "queue-pass", None))
+        self.assertEqual(parsed.credentials, BackendCredentials("basic", "env-user", "env-pass", None))
 
     def test_parse_config_rejects_missing_effective_date(self):
         payload = {
@@ -53,16 +50,12 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "part_number": 400,
                 "upload_reg_text": True,
                 "upload_locations": True,
-                "credentials": {
-                    "auth_type": "basic",
-                    "username": "queue-user",
-                    "password": "queue-pass",
-                },
             }
         }
 
-        with self.assertRaisesRegex(ConfigParseError, "effective_date must be a non-empty string"):
-            parse_config(payload)
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "effective_date must be a non-empty string"):
+                parse_config(payload)
 
     def test_parse_config_rejects_non_boolean_flags(self):
         payload = {
@@ -72,16 +65,27 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "effective_date": "2025-01-01",
                 "upload_reg_text": "yes",
                 "upload_locations": True,
-                "credentials": {
-                    "auth_type": "basic",
-                    "username": "queue-user",
-                    "password": "queue-pass",
-                },
             }
         }
 
-        with self.assertRaisesRegex(ConfigParseError, "upload_reg_text must be a boolean"):
-            parse_config(payload)
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "upload_reg_text must be a boolean"):
+                parse_config(payload)
+
+    def test_parse_config_rejects_invalid_effective_date_format(self):
+        payload = {
+            "config": {
+                "title_number": 42,
+                "part_number": 400,
+                "effective_date": "2025/01/01",
+                "upload_reg_text": True,
+                "upload_locations": True,
+            }
+        }
+
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "effective_date must be in YYYY-MM-DD format"):
+                parse_config(payload)
 
 
 if __name__ == "__main__":
