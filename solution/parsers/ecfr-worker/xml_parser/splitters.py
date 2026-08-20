@@ -1,4 +1,4 @@
-"""Paragraph content splitters for legacy eCFR marker behavior."""
+"""Paragraph content splitters aligned with eCFR marker behavior."""
 
 import re
 

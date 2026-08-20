@@ -12,7 +12,7 @@ _DIV_NODE_TYPE_FALLBACKS: dict[str, str] = {
 
 
 def resolve_div_node_type(node: ElementTree.Element) -> str:
-    """Resolve DIV node_type from TYPE attribute with legacy fallback."""
+    """Resolve DIV node_type from TYPE attribute with fallback."""
 
     type_value = (node.attrib.get("TYPE") or "").strip().upper()
     if type_value:
@@ -21,7 +21,7 @@ def resolve_div_node_type(node: ElementTree.Element) -> str:
 
 
 def parse_label_tokens(value: str) -> list[str]:
-    """Split legacy N-attribute labels into token arrays."""
+    """Split N-attribute labels into token arrays."""
 
     if not value:
         return []

@@ -1,7 +1,7 @@
 """Post-processing hooks for parsed XML node trees.
 
-This module ports key legacy parsexml post-processing behavior for paragraph
-markers/citations so parsed document nodes more closely match eRegs contracts.
+This module ports key Go version parsexml post-processing behavior for
+paragraph markers/citations so parsed document nodes match eRegs contracts.
 """
 
 import hashlib
@@ -38,7 +38,7 @@ _PARAGRAPH_HIERARCHY: list[re.Pattern[str]] = [
 def postprocess_part_node(part: PartNode) -> PartNode:
     """Apply post-processing pipeline to a parsed part model.
 
-    Future implementation should mirror legacy parsexml post-processing steps.
+    The sequence mirrors the Go version parsexml post-processing flow.
     """
 
     _apply_paragraph_markers(part)
@@ -100,7 +100,7 @@ def _apply_paragraph_markers(part: PartNode) -> None:
 
 
 def _rewrite_embedded_image_sources(part: PartNode) -> None:
-    """Rewrite legacy /graphics image sources to FR CDN large PNG URLs."""
+    """Rewrite /graphics image sources to FR CDN large PNG URLs."""
 
     for image in _iter_image_nodes(part.children):
         src = image.get("src")

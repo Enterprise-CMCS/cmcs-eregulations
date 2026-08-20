@@ -75,7 +75,7 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
         self.assertEqual(len(section_children[2]["label"]), 3)
         self.assertRegex(section_children[2]["label"][2], r"^[0-9a-f]{32}$")
 
-    def test_generate_paragraph_citation_legacy_case_matrix(self):
+    def test_generate_paragraph_citation_case_matrix(self):
         cases = [
             {
                 "name": "test-1-level",
@@ -165,7 +165,7 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
                 else:
                     self.assertIsNone(error)
 
-    def test_extract_marker_legacy_case_matrix(self):
+    def test_extract_marker_case_matrix(self):
         cases = [
             {"input": "(a)", "expected": ["a"]},
             {"input": "(6)(i)", "expected": ["6", "i"]},
