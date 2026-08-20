@@ -111,8 +111,11 @@ def _rewrite_embedded_image_sources(part: PartNode) -> None:
             image["src"] = rewritten
 
 
-def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Collect all section nodes from parsed part descendants."""
+def _collect_nodes(
+    nodes: list[dict[str, Any]],
+    predicate: Any,
+) -> list[dict[str, Any]]:
+    """Collect descendant nodes matching a predicate via recursive DFS walk."""
 
     out: list[dict[str, Any]] = []
 
@@ -120,7 +123,7 @@ def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for node in node_list:
             if not isinstance(node, dict):
                 continue
-            if node.get("node_type") == "SECTION":
+            if predicate(node):
                 out.append(node)
             children = node.get("children")
             if isinstance(children, list):
@@ -128,25 +131,18 @@ def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
     walk(nodes)
     return out
+
+
+def _iter_sections(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Collect all section nodes from parsed part descendants."""
+
+    return _collect_nodes(nodes, lambda node: node.get("node_type") == "SECTION")
 
 
 def _iter_image_nodes(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Collect all image nodes from parsed part descendants."""
 
-    out: list[dict[str, Any]] = []
-
-    def walk(node_list: list[dict[str, Any]]) -> None:
-        for node in node_list:
-            if not isinstance(node, dict):
-                continue
-            if node.get("node_type") == "Image":
-                out.append(node)
-            children = node.get("children")
-            if isinstance(children, list):
-                walk(children)
-
-    walk(nodes)
-    return out
+    return _collect_nodes(nodes, lambda node: node.get("node_type") == "Image")
 
 
 def _rewrite_graphics_source(src: str) -> str | None:
