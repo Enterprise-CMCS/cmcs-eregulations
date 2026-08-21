@@ -1,7 +1,7 @@
 """XML parsing pipeline for eCFR part documents.
 
-This package is intentionally skeletal. It defines the integration seam where
-raw eCFR XML is converted into the eRegs `document` payload shape.
+This package converts raw eCFR XML into the normalized eRegs `document`
+payload shape used by part uploads.
 """
 
 from .errors import EcfrXmlParseError

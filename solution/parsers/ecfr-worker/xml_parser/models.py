@@ -1,7 +1,7 @@
 """Intermediate node models for eCFR XML parsing.
 
-These dataclasses intentionally model only top-level parser concepts and serve
-as placeholders for fuller Go-version parity implementation.
+These typed structures define the normalized node contracts used across parsing,
+post-processing, and final document normalization.
 """
 
 from dataclasses import dataclass, field

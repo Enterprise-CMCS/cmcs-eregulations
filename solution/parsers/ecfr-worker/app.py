@@ -16,11 +16,41 @@ from .xml_parser import parse_part_xml_to_document
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+
+_LOG_LEVEL_ENV_VAR = "PARSER_LOG_LEVEL"
+
+
+def _resolve_log_level() -> int:
+    """Resolve parser log level from environment with INFO default."""
+
+    configured = os.getenv(_LOG_LEVEL_ENV_VAR, "INFO").strip().upper()
+    if configured in {"CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"}:
+        return getattr(logging, configured)
+    return logging.INFO
+
+
+def _configure_logging() -> None:
+    """Configure root logging for worker execution."""
+
+    log_level = _resolve_log_level()
+    logging.basicConfig(level=log_level)
+    logger.setLevel(log_level)
+
+
+_configure_logging()
 
 
 def handler(event, _context):
     """Process one queued eCFR part work unit end-to-end."""
+
+    event_keys = sorted(event.keys()) if isinstance(event, dict) else []
+    logger.info(
+        "Starting eCFR worker invocation: keys=%s has_records=%s has_body=%s",
+        event_keys,
+        isinstance(event, dict) and "Records" in event,
+        isinstance(event, dict) and "body" in event,
+    )
+    logger.debug("Resolving work item config from invocation event")
 
     config = parse_config_from_event(event)
 
@@ -30,32 +60,52 @@ def handler(event, _context):
         config.part_number,
         config.effective_date,
     )
+    logger.debug(
+        "Upload flags for work item: upload_reg_text=%s upload_locations=%s",
+        config.upload_reg_text,
+        config.upload_locations,
+    )
+
+    logger.info("Fetching part structure from eCFR API")
 
     structure = fetch_part_structure(
         title_number=config.title_number,
         part_number=config.part_number,
     )
+    logger.debug("Normalizing structure payload for upload")
     structure = normalize_structure_for_upload(structure)
+    logger.debug("Determining part depth from normalized structure")
     depth = determine_part_depth(structure, config.part_number)
+    logger.info("Resolved part depth=%s", depth)
 
     document = {}
     if config.upload_reg_text:
+        logger.info("Fetching full XML for regulation text parsing")
         full_xml = fetch_part_full_xml(
             title_number=config.title_number,
             part_number=config.part_number,
             effective_date=config.effective_date,
         )
+        logger.debug("Parsing full XML into normalized eRegs document")
         document = parse_part_xml_to_document(
             full_xml,
             title_number=config.title_number,
             part_number=config.part_number,
         )
+        logger.debug("Parsed document top-level keys=%s", sorted(document.keys()))
+    else:
+        logger.info("Skipping regulation text parsing (upload_reg_text=false)")
 
     sections = []
     subparts = []
     if config.upload_locations:
+        logger.info("Extracting section and subpart locations from structure")
         sections, subparts = extract_sections_and_subparts(structure, config.part_number)
+        logger.debug("Extracted locations: sections=%s subparts=%s", len(sections), len(subparts))
+    else:
+        logger.info("Skipping location extraction (upload_locations=false)")
 
+    logger.debug("Building part upload payload")
     part_payload = {
         "name": str(config.part_number),
         "title": str(config.title_number),
@@ -69,11 +119,14 @@ def handler(event, _context):
         "upload_locations": config.upload_locations,
     }
 
+    logger.info("Uploading parsed part payload to eRegs")
+
     upload_result = upload_part(
         api_base_url=os.environ["EREGS_API_URL_V3"],
         credentials=config.credentials,
         payload=part_payload,
     )
+    logger.debug("Upload response keys=%s", sorted(upload_result.keys()))
 
     logger.info(
         "Uploaded eCFR parsed payload: title=%s part=%s sections=%s subparts=%s",
