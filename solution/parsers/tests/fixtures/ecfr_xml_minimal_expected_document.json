@@ -1,0 +1,59 @@
+{
+    "node_type": "PART",
+    "label": [
+        "400"
+    ],
+    "title": "Part 400 - Test Part",
+    "children": [
+        {
+            "node_type": "SECTION",
+            "label": [
+                "400",
+                "1"
+            ],
+            "title": "Sec. 400.1 Test Section",
+            "children": [
+                {
+                    "node_type": "Paragraph",
+                    "text": "(a) <I>Test paragraph text.</I> ",
+                    "label": [
+                        "400",
+                        "1",
+                        "a"
+                    ],
+                    "marker": [
+                        "a"
+                    ]
+                },
+                {
+                    "node_type": "Paragraph",
+                    "text": "(1) Nested paragraph text.",
+                    "label": [
+                        "400",
+                        "1",
+                        "a",
+                        "1"
+                    ],
+                    "marker": [
+                        "1"
+                    ]
+                }
+            ]
+        }
+    ],
+    "authority": {
+        "node_type": "Authority",
+        "header": "Authority:",
+        "content": "42 U.S.C. 1302."
+    },
+    "source": {
+        "node_type": "Source",
+        "header": "Source:",
+        "content": "90 FR 12345."
+    },
+    "editorial_note": {
+        "node_type": "EdNote",
+        "header": "Editorial Note:",
+        "content": "Some note."
+    }
+}

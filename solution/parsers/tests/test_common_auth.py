@@ -1,26 +1,29 @@
 import unittest
+import base64
 from unittest.mock import patch
 
-from common.auth import resolve_backend_credentials
+from common.auth import build_auth_headers, resolve_backend_credentials
 from common.config import ConfigParseError
 from common.auth import BackendCredentials
 
 
 class CommonAuthTests(unittest.TestCase):
-    def test_resolve_from_message_credentials(self):
-        creds = resolve_backend_credentials(
-            {
-                "auth_type": "basic",
-                "username": "queue-user",
-                "password": "queue-pass",
-            }
+    def test_build_auth_headers_basic(self):
+        headers = build_auth_headers(
+            BackendCredentials(auth_type="basic", username="queue-user", password="queue-pass")
         )
+        expected = "Basic " + base64.b64encode(b"queue-user:queue-pass").decode("utf-8")
+        self.assertEqual(headers, {"Authorization": expected})
 
-        self.assertEqual(creds.auth_type, "basic")
-        self.assertEqual(creds.username, "queue-user")
-        self.assertEqual(creds.password, "queue-pass")
+    def test_build_auth_headers_bearer(self):
+        headers = build_auth_headers(BackendCredentials(auth_type="bearer", token="secret-token"))
+        self.assertEqual(headers, {"Authorization": "Bearer secret-token"})
 
-    def test_fallback_to_env_when_message_credentials_blank(self):
+    def test_build_auth_headers_invalid(self):
+        with self.assertRaisesRegex(ConfigParseError, "authorization headers"):
+            build_auth_headers(BackendCredentials(auth_type="basic", username="", password=""))
+
+    def test_resolve_from_env_when_credentials_present(self):
         with patch.dict(
             "os.environ",
             {
@@ -29,13 +32,7 @@ class CommonAuthTests(unittest.TestCase):
             },
             clear=True,
         ):
-            creds = resolve_backend_credentials(
-                {
-                    "auth_type": "basic",
-                    "username": "",
-                    "password": "",
-                }
-            )
+            creds = resolve_backend_credentials()
 
         self.assertEqual(creds.auth_type, "basic")
         self.assertEqual(creds.username, "env-user")
@@ -50,7 +47,7 @@ class CommonAuthTests(unittest.TestCase):
             },
             clear=True,
         ):
-            creds = resolve_backend_credentials(None)
+            creds = resolve_backend_credentials()
 
         self.assertEqual(creds.auth_type, "basic")
         self.assertEqual(creds.username, "env-user")
@@ -64,7 +61,7 @@ class CommonAuthTests(unittest.TestCase):
                     username="secret-user",
                     password="secret-pass",
                 )
-                creds = resolve_backend_credentials(None)
+                creds = resolve_backend_credentials()
 
         load_secret.assert_called_once_with("my/secret")
         self.assertEqual(creds.auth_type, "basic")
@@ -74,7 +71,7 @@ class CommonAuthTests(unittest.TestCase):
     def test_raises_when_no_credentials_configured(self):
         with patch.dict("os.environ", {}, clear=True):
             with self.assertRaisesRegex(ConfigParseError, "Backend credentials are not configured"):
-                resolve_backend_credentials(None)
+                resolve_backend_credentials()
 
 
 if __name__ == "__main__":
