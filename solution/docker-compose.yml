@@ -90,6 +90,7 @@ services:
       - 8003:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
+      - ECFR_API_BASE_URL=${ECFR_API_BASE_URL:-https://www.ecfr.gov/api/versioner/v1/}
       - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
       - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
     volumes:
@@ -124,6 +125,7 @@ services:
       - 8005:6000
     environment:
       - EREGS_API_URL_V3=http://host.docker.internal:8000/v3/
+      - ECFR_API_BASE_URL=${ECFR_API_BASE_URL:-https://www.ecfr.gov/api/versioner/v1/}
       - EREGS_USERNAME=${EREGS_USERNAME:-RpSS01rhbx}
       - EREGS_PASSWORD=${EREGS_PASSWORD:-UkOAsfkItN}
       - PARSER_LOCAL_MODE=true

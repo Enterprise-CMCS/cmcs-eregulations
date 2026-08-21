@@ -67,6 +67,7 @@ export class EcfrParserStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                ECFR_API_BASE_URL: 'https://www.ecfr.gov/api/versioner/v1/',
                 EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
             },
         });
@@ -81,6 +82,7 @@ export class EcfrParserStack extends cdk.Stack {
             environment: {
                 LOG_LEVEL: props.environmentConfig.logLevel,
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
+                ECFR_API_BASE_URL: 'https://www.ecfr.gov/api/versioner/v1/',
                 EREGS_AUTH_SECRET_NAME: props.environmentConfig.authSecretName,
                 PARSER_QUEUE_URL: queue.queueUrl,
             },

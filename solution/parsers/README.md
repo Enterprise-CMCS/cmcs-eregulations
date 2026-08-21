@@ -139,6 +139,7 @@ Example response in local mode:
 
 - Launchers run with `PARSER_LOCAL_MODE=true` in Docker Compose and call workers over HTTP (`PARSER_WORKER_URL`) via lambda-proxy.
 - In deployed environments, `PARSER_LOCAL_MODE` is unset and launchers use `PARSER_QUEUE_URL` to enqueue work.
+- eCFR launcher and worker read `ECFR_API_BASE_URL` (default `https://www.ecfr.gov/api/versioner/v1/`) for upstream eCFR requests.
 - Workers accept either a single SQS-style record event (`Records[0].body`) or a lambda-proxy HTTP event body.
 - Credentials are resolved in workers from environment/runtime only: `EREGS_AUTH_SECRET_NAME` (AWS Secrets Manager), then `EREGS_BEARER_TOKEN`, then `EREGS_USERNAME`/`EREGS_PASSWORD`.
 - Local docker-compose provides default parser credentials (`local-dev-user` / `local-dev-pass`) unless you override `EREGS_USERNAME`/`EREGS_PASSWORD` in your shell.

@@ -25,7 +25,17 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def _build_work_units(api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+_ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
+_DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
+
+
+def _resolve_ecfr_api_base_url() -> str:
+    """Resolve eCFR API base URL from environment with production default."""
+
+    return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
+
+
+def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
     """Build worker messages from parser config and latest-date resolution.
 
     Returns both valid work units and per-part failures for targets that cannot
@@ -33,8 +43,8 @@ def _build_work_units(api_base_url: str, credentials) -> tuple[list[dict], list[
     """
 
     parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
-    targets = expand_target_parts(parser_config)
-    latest_dates_by_title = _resolve_latest_dates_by_title(targets)
+    targets = expand_target_parts(parser_config, ecfr_base_url=ecfr_api_base_url)
+    latest_dates_by_title = _resolve_latest_dates_by_title(targets, ecfr_api_base_url)
 
     work_units: list[dict[str, Any]] = []
     failures: list[dict[str, str]] = []
@@ -65,7 +75,7 @@ def _build_work_units(api_base_url: str, credentials) -> tuple[list[dict], list[
     return work_units, failures
 
 
-def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int, dict[int, str]]:
+def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_base_url: str) -> dict[int, dict[int, str]]:
     """Resolve latest effective date per requested part, grouped by title.
 
     This uses one title-level versions API call (with pagination) and builds a
@@ -76,7 +86,7 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig]) -> dict[int,
     title_numbers = sorted({target.title_number for target in targets})
 
     for title_number in title_numbers:
-        versions_payload = fetch_title_versions(title_number=title_number)
+        versions_payload = fetch_title_versions(title_number=title_number, base_url=ecfr_api_base_url)
         latest_by_part = latest_issue_dates_by_part(versions_payload)
 
         by_part_number: dict[int, str] = {}
@@ -115,7 +125,8 @@ def handler(event, _context):
     logger.info("eCFR launcher credentials resolved with auth_type=%s", credentials.auth_type)
 
     api_base_url = os.environ["EREGS_API_URL_V3"]
-    work_units, config_failures = _build_work_units(api_base_url, credentials)
+    ecfr_api_base_url = _resolve_ecfr_api_base_url()
+    work_units, config_failures = _build_work_units(api_base_url, ecfr_api_base_url, credentials)
 
     if not work_units and config_failures:
         raise RuntimeError(

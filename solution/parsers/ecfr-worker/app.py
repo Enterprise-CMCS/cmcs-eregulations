@@ -18,6 +18,8 @@ from .xml_parser import parse_part_xml_to_document
 logger = logging.getLogger(__name__)
 
 _LOG_LEVEL_ENV_VAR = "PARSER_LOG_LEVEL"
+_ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
+_DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
 
 def _resolve_log_level() -> int:
@@ -35,6 +37,12 @@ def _configure_logging() -> None:
     log_level = _resolve_log_level()
     logging.basicConfig(level=log_level)
     logger.setLevel(log_level)
+
+
+def _resolve_ecfr_api_base_url() -> str:
+    """Resolve eCFR API base URL from environment with production default."""
+
+    return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
 
 
 _configure_logging()
@@ -66,11 +74,15 @@ def handler(event, _context):
         config.upload_locations,
     )
 
+    ecfr_api_base_url = _resolve_ecfr_api_base_url()
+    logger.debug("Resolved eCFR API base URL=%s", ecfr_api_base_url)
+
     logger.info("Fetching part structure from eCFR API")
 
     structure = fetch_part_structure(
         title_number=config.title_number,
         part_number=config.part_number,
+        base_url=ecfr_api_base_url,
     )
     logger.debug("Normalizing structure payload for upload")
     structure = normalize_structure_for_upload(structure)
@@ -85,6 +97,7 @@ def handler(event, _context):
             title_number=config.title_number,
             part_number=config.part_number,
             effective_date=config.effective_date,
+            base_url=ecfr_api_base_url,
         )
         logger.debug("Parsing full XML into normalized eRegs document")
         document = parse_part_xml_to_document(

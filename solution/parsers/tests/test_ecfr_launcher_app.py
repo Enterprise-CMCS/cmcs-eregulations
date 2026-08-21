@@ -46,6 +46,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {400: "2025-01-01"}}):
             work_units, failures = _module._build_work_units(
                 api_base_url="https://example.local/v3/",
+                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             )
 
@@ -80,6 +81,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {}}):
             work_units, failures = _module._build_work_units(
                 api_base_url="https://example.local/v3/",
+                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             )
 
@@ -103,7 +105,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
                 {"10": "2025-02-01"},
             ],
         ):
-            resolved = _module._resolve_latest_dates_by_title(targets)
+            resolved = _module._resolve_latest_dates_by_title(targets, "https://ecfr.example/api/versioner/v1/")
 
         self.assertEqual(fetch_versions.call_count, 2)
         called_titles = sorted(call.kwargs["title_number"] for call in fetch_versions.call_args_list)
