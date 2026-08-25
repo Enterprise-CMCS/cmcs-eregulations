@@ -39,16 +39,21 @@ def move_parser_data_from_regcore(apps, schema_editor):
             },
         )
 
-    date = RegcorePart.objects.order_by("-date").first().date
-    latest = RegcoreEcfrParserResult.objects.order_by("-end").filter(errors=0).first()
-    ParsersEcfrParserResult.objects.create(
-        timestamp=latest.end,
-        success=True,
-        log="",
-        title=latest.title,
-        part=0,
-        date=date,
-    )
+    latest_part = RegcorePart.objects.order_by("-date").first()
+    latest = RegcoreEcfrParserResult.objects.filter(errors=0).order_by("-end").first()
+
+    if latest is not None:
+        part_date = latest_part.date if latest_part is not None else latest.end.date()
+        ParsersEcfrParserResult.objects.update_or_create(
+            title=latest.title,
+            part=0,
+            date=part_date,
+            defaults={
+                "timestamp": latest.end,
+                "success": True,
+                "log": "",
+            },
+        )
 
 
 class Migration(migrations.Migration):
