@@ -22,10 +22,10 @@ const handlers = [
     http.get("*/resources/", () => {
         return HttpResponse.json(subpartResources);
     }),
-    http.get("**test/success/ecfr_parser_result/42", () => {
+    http.get("**test/success/parsers/ecfr/results/title/42", () => {
         return HttpResponse.json(titleFourtyTwoSuccess);
     }),
-    http.get("**/test/n/a/ecfr_parser_result/42", () => {
+    http.get("**/test/n/a/parsers/ecfr/results/title/42", () => {
         return HttpResponse.json(noEndCondition);
     }),
     http.get("*/title/42/part/431/history/section/10", () => {

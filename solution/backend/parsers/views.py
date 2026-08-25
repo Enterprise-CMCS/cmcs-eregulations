@@ -7,19 +7,19 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from parsers.models import EcfrParserResult, ParserConfiguration
+from parsers.models import EcfrParserResult, FrParserResult, ParserConfiguration
 from regcore.models import Part
 
 from .serializers import (
+    EcfrParserResultSerializer,
+    FrParserResultSerializer,
     ParserConfigurationSerializer,
-    ParserResultSerializer,
     PartUploadSerializer,
 )
-from .utils import OpenApiPathParameter
 
 
 @extend_schema(
-    tags=["regcore/parser"],
+    tags=["parsers"],
     description="Retrieve configuration for the eCFR and Federal Register parsers.",
 )
 class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
@@ -36,17 +36,46 @@ class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema(
-    tags=["regcore/parser"],
-    description="Retrieve the latest EcfrParserResult or create a new EcfrParserResult object for the title.",
-    parameters=[OpenApiPathParameter("title", "Title the parser was run for, e.g. 42.", int)],
+    tags=["parsers"],
+    description="Create eCFR parser result logs and retrieve most-recent eCFR parser results.",
 )
-class ParserResultViewSet(viewsets.ModelViewSet):
-    serializer_class = ParserResultSerializer
+class EcfrParserResultViewSet(viewsets.ModelViewSet):
+    serializer_class = EcfrParserResultSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def retrieve(self, request, title):
-        parser_result = EcfrParserResult.objects.filter(title=title).order_by("-timestamp").first()
+    def _latest(self, **filters):
+        parser_result = EcfrParserResult.objects.filter(**filters).order_by("-timestamp").first()
+        if parser_result:
+            serializer = self.get_serializer_class()(parser_result)
+            return Response(serializer.data)
+        raise Http404()
+
+    def list(self, request, *args, **kwargs):
+        return self._latest()
+
+    def by_title(self, request, title):
+        return self._latest(title=title)
+
+    def by_title_part(self, request, title, part):
+        return self._latest(title=title, part=part)
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+
+@extend_schema(
+    tags=["parsers"],
+    description="Create FR parser result logs and retrieve most-recent FR parser results.",
+)
+class FrParserResultViewSet(viewsets.ModelViewSet):
+    serializer_class = FrParserResultSerializer
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        parser_result = FrParserResult.objects.order_by("-timestamp").first()
         if parser_result:
             serializer = self.get_serializer_class()(parser_result)
             return Response(serializer.data)
@@ -58,10 +87,10 @@ class ParserResultViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema(
-    tags=["regcore/parser"],
+    tags=["parsers"],
     description="Upload a regulation Part to eRegs. Typically only used by the eCFR parser.",
 )
-class PartUploadViewSet(viewsets.ModelViewSet):
+class EcfrPartUploadViewSet(viewsets.ModelViewSet):
     serializer_class = PartUploadSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -86,7 +115,6 @@ class PartUploadViewSet(viewsets.ModelViewSet):
 
         if apps.is_installed("content_search"):
             from content_search.utils import call_text_extractor_for_reg_text
-
             _, fail = call_text_extractor_for_reg_text(request, [instance])
             if fail:
                 raise RuntimeError("Text extraction job could not be started.")

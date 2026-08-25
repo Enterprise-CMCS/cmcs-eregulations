@@ -41,7 +41,7 @@ def fetch_parser_config(
 ) -> dict[str, Any]:
     """Fetch parser configuration from eRegs backend."""
 
-    request_url = urljoin(api_base_url, "parser_config")
+    request_url = urljoin(api_base_url, "parsers/config")
     try:
         headers = build_auth_headers(credentials)
     except ConfigParseError as exc:

@@ -38,11 +38,11 @@ def upload_part(
     payload: dict[str, Any],
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """Upload one parsed part payload to eRegs /v3/part."""
+    """Upload one parsed part payload to eRegs /v3/parsers/ecfr/parts."""
 
     _validate_part_payload(payload)
 
-    request_url = urljoin(api_base_url, "part")
+    request_url = urljoin(api_base_url, "parsers/ecfr/parts")
     try:
         headers = build_auth_headers(credentials)
     except ConfigParseError as exc:
