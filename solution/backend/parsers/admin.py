@@ -8,6 +8,8 @@ from solo.admin import SingletonModelAdmin
 from regcore.models import Part
 
 from .models import (
+    EcfrParserResult,
+    FrParserResult,
     PartConfiguration,
     ParserConfiguration,
 )
@@ -97,3 +99,30 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
             )
 
         super().save_formset(request, form, formset, change)
+
+
+class _ParserResultAdminBase(admin.ModelAdmin):
+    ordering = ("-timestamp",)
+    date_hierarchy = "timestamp"
+
+    @admin.display(description="log")
+    def log_preview(self, obj):
+        if not obj.log:
+            return ""
+        return f"{obj.log[:120]}..." if len(obj.log) > 120 else obj.log
+
+
+@admin.register(EcfrParserResult)
+class EcfrParserResultAdmin(_ParserResultAdminBase):
+    list_display = ("title", "part", "date", "timestamp", "success", "log_preview")
+    list_filter = ("success", "title", "date")
+    search_fields = ("title", "part", "log")
+    readonly_fields = ("title", "part", "date", "timestamp", "success", "log")
+
+
+@admin.register(FrParserResult)
+class FrParserResultAdmin(_ParserResultAdminBase):
+    list_display = ("document_number", "timestamp", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("document_number", "log")
+    readonly_fields = ("document_number", "timestamp", "success", "log")

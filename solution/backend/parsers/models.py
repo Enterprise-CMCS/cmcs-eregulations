@@ -116,6 +116,8 @@ class EcfrParserResult(AbstractParserResult):
     date = models.DateField()  # this is the date the part was released, not the date the parser ran
 
     class Meta:
+        verbose_name = "eCFR Parser Result"
+        verbose_name_plural = "eCFR Parser Results"
         indexes = [
             models.Index(fields=["title", "part"]),
             models.Index(fields=["title"]),
@@ -126,6 +128,8 @@ class FrParserResult(AbstractParserResult):
     document_number = models.CharField(max_length=255)
 
     class Meta:
+        verbose_name = "Federal Register Parser Result"
+        verbose_name_plural = "Federal Register Parser Results"
         indexes = [
             models.Index(fields=["document_number"]),
         ]
