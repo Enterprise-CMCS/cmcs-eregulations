@@ -11,7 +11,7 @@ from django.views.generic.base import (
     View,
 )
 
-from parsers.models import ECFRParserResult
+from parsers.models import EcfrParserResult
 from regcore.models import Part
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from regulations.views.errors import NotInSubpart
@@ -37,7 +37,7 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         reg_version = context.get("version", datetime.strftime(datetime.now(), "%Y-%m-%d"))
         reg_part = context["part"]
         reg_title = context["title"]
-        reg_title_parser_success_date = ECFRParserResult.objects.filter(errors=0, title=reg_title).order_by("-end").first()
+        reg_title_parser_success_date = EcfrParserResult.objects.filter(success=True, title=reg_title).order_by("-timestamp").first()
 
         query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
 
@@ -68,7 +68,7 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         c = {
             'tree':         tree,
             'title':        reg_title,
-            'title_parser_success_date': reg_title_parser_success_date.end if reg_title_parser_success_date else None,
+            'title_parser_success_date': reg_title_parser_success_date.timestamp if reg_title_parser_success_date else None,
             'reg_part':     reg_part,
             'part_label':   part_label,
             'toc':          toc,

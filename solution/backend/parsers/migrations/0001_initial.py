@@ -35,12 +35,9 @@ class Migration(migrations.Migration):
             name='AbstractParserResult',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start', models.DateTimeField()),
-                ('end', models.DateTimeField()),
-                ('title', models.IntegerField()),
-                ('subchapters', models.TextField(blank=True)),
-                ('parts', models.TextField(blank=True)),
-                ('workers', models.IntegerField()),
+                ('timestamp', models.DateTimeField(auto_now_add=True)),
+                ('success', models.BooleanField()),
+                ('log', models.TextField()),
             ],
         ),
         migrations.CreateModel(
@@ -61,13 +58,27 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='ECFRParserResult',
+            name='EcfrParserResult',
             fields=[
                 ('abstractparserresult_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='parsers.abstractparserresult')),
-                ('totalVersions', models.IntegerField()),
-                ('skippedVersions', models.IntegerField()),
-                ('errors', models.IntegerField()),
+                ('title', models.IntegerField()),
+                ('part', models.IntegerField()),
+                ('date', models.DateField()),
             ],
+            options={
+                'indexes': [models.Index(fields=['title', 'part'], name='parsers_ecf_title_part_idx'), models.Index(fields=['title'], name='parsers_ecf_title_idx')],
+            },
+            bases=('parsers.abstractparserresult',),
+        ),
+        migrations.CreateModel(
+            name='FrParserResult',
+            fields=[
+                ('abstractparserresult_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='parsers.abstractparserresult')),
+                ('document_number', models.CharField(max_length=255)),
+            ],
+            options={
+                'indexes': [models.Index(fields=['document_number'], name='parsers_fr_doc_idx')],
+            },
             bases=('parsers.abstractparserresult',),
         ),
     ]

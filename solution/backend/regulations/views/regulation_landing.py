@@ -4,7 +4,7 @@ from django.http import Http404
 from django.views.generic.base import TemplateView
 from requests import HTTPError
 
-from parsers.models import ECFRParserResult
+from parsers.models import EcfrParserResult
 from regcore.models import Part
 
 
@@ -17,7 +17,7 @@ class RegulationLandingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = self.kwargs.get("title")
-        reg_title_parser_success_date = ECFRParserResult.objects.filter(errors=0, title=title).order_by("-end").first()
+        reg_title_parser_success_date = EcfrParserResult.objects.filter(success=True, title=title).order_by("-timestamp").first()
         reg_part = self.kwargs.get("part")
 
         try:
@@ -38,7 +38,7 @@ class RegulationLandingView(TemplateView):
         c = {
             'toc': toc,
             'title': title,
-            'title_parser_success_date': reg_title_parser_success_date.end if reg_title_parser_success_date else None,
+            'title_parser_success_date': reg_title_parser_success_date.timestamp if reg_title_parser_success_date else None,
             'version': reg_version,
             'version_string': reg_version_string,
             'subchapter': subchapter,

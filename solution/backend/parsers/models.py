@@ -105,15 +105,27 @@ class PartConfiguration(models.Model):
 
 
 class AbstractParserResult(models.Model):
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField()
+    log = models.TextField()
+
+
+class EcfrParserResult(AbstractParserResult):
     title = models.IntegerField()
-    subchapters = models.TextField(blank=True)
-    parts = models.TextField(blank=True)
-    workers = models.IntegerField()
+    part = models.IntegerField()
+    date = models.DateField()  # this is the date the part was released, not the date the parser ran
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["title", "part"]),
+            models.Index(fields=["title"]),
+        ]
 
 
-class ECFRParserResult(AbstractParserResult):
-    totalVersions = models.IntegerField()
-    skippedVersions = models.IntegerField()
-    errors = models.IntegerField()
+class FrParserResult(AbstractParserResult):
+    document_number = models.CharField(max_length=255)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["document_number"]),
+        ]

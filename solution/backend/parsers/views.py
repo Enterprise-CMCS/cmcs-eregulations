@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from parsers.models import ECFRParserResult, ParserConfiguration
+from parsers.models import EcfrParserResult, ParserConfiguration
 from regcore.models import Part
 
 from .serializers import (
@@ -37,7 +37,7 @@ class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
 
 @extend_schema(
     tags=["regcore/parser"],
-    description="Retrieve the latest ECFRParserResult or create a new ECFRParserResult object for the title.",
+    description="Retrieve the latest EcfrParserResult or create a new EcfrParserResult object for the title.",
     parameters=[OpenApiPathParameter("title", "Title the parser was run for, e.g. 42.", int)],
 )
 class ParserResultViewSet(viewsets.ModelViewSet):
@@ -46,7 +46,7 @@ class ParserResultViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def retrieve(self, request, title):
-        parser_result = ECFRParserResult.objects.filter(title=title).order_by("-end").first()
+        parser_result = EcfrParserResult.objects.filter(title=title).order_by("-timestamp").first()
         if parser_result:
             serializer = self.get_serializer_class()(parser_result)
             return Response(serializer.data)

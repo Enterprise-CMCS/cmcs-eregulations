@@ -1,7 +1,7 @@
 from django.apps import apps
 from rest_framework import serializers
 
-from parsers.models import ECFRParserResult
+from parsers.models import EcfrParserResult
 
 
 class PartConfigurationSerializer(serializers.Serializer):
@@ -26,7 +26,7 @@ class ParserConfigurationSerializer(serializers.Serializer):
 
 class ParserResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ECFRParserResult
+        model = EcfrParserResult
         fields = "__all__"
 
 

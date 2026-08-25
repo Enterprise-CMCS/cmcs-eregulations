@@ -5,10 +5,11 @@ def move_parser_data_from_regcore(apps, schema_editor):
     RegcoreParserConfiguration = apps.get_model("regcore", "ParserConfiguration")
     RegcorePartConfiguration = apps.get_model("regcore", "PartConfiguration")
     RegcoreEcfrParserResult = apps.get_model("regcore", "ECFRParserResult")
+    RegcorePart = apps.get_model("regcore", "Part")
 
     ParsersParserConfiguration = apps.get_model("parsers", "ParserConfiguration")
     ParsersPartConfiguration = apps.get_model("parsers", "PartConfiguration")
-    ParsersEcfrParserResult = apps.get_model("parsers", "ECFRParserResult")
+    ParsersEcfrParserResult = apps.get_model("parsers", "EcfrParserResult")
 
     for source in RegcoreParserConfiguration.objects.all().order_by("pk"):
         ParsersParserConfiguration.objects.update_or_create(
@@ -38,21 +39,16 @@ def move_parser_data_from_regcore(apps, schema_editor):
             },
         )
 
-    for source in RegcoreEcfrParserResult.objects.all().order_by("pk"):
-        ParsersEcfrParserResult.objects.update_or_create(
-            pk=source.pk,
-            defaults={
-                "start": source.start,
-                "end": source.end,
-                "title": source.title,
-                "subchapters": source.subchapters,
-                "parts": source.parts,
-                "workers": source.workers,
-                "totalVersions": source.totalVersions,
-                "skippedVersions": source.skippedVersions,
-                "errors": source.errors,
-            },
-        )
+    date = RegcorePart.objects.order_by("-date").first().date
+    latest = RegcoreEcfrParserResult.objects.order_by("-end").filter(errors=0).first()
+    ParsersEcfrParserResult.objects.create(
+        timestamp=latest.end,
+        success=True,
+        log="",
+        title=latest.title,
+        part=0,
+        date=date,
+    )
 
 
 class Migration(migrations.Migration):
