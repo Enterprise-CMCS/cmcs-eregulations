@@ -46,5 +46,3 @@ class Part(models.Model):
         for _ in range(self.depth - 1):
             structure = structure["children"][0]
         return structure["label"]
-
-
