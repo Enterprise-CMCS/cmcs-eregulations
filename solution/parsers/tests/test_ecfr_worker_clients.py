@@ -110,6 +110,48 @@ class EcfrWorkerClientsTests(unittest.TestCase):
                 payload=payload,
             )
 
+    @patch("requests.post")
+    def test_create_ecfr_result_success(self, mock_post):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"id": 1}'
+        response.json.return_value = {"id": 1}
+        mock_post.return_value = response
+
+        result = _eregs_client.create_ecfr_result(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            payload={
+                "success": True,
+                "log": "",
+                "title": 42,
+                "part": 400,
+                "date": "2025-01-01",
+            },
+        )
+
+        self.assertEqual(result, {"id": 1})
+        self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr/results"))
+
+    @patch("requests.post")
+    def test_create_ecfr_result_non_2xx(self, mock_post):
+        response = Mock()
+        response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
+        mock_post.return_value = response
+
+        with self.assertRaisesRegex(_eregs_client.EregsClientError, "result upload failed"):
+            _eregs_client.create_ecfr_result(
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                payload={
+                    "success": False,
+                    "log": "failure",
+                    "title": 42,
+                    "part": 400,
+                    "date": "2025-01-01",
+                },
+            )
+
     def test_upload_part_missing_required_field(self):
         payload = {
             "name": "400",

@@ -81,7 +81,9 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "section": "200"}],
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
-        ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}) as mock_upload:
+        ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}) as mock_upload, patch.object(
+            _module, "create_ecfr_result", return_value={"id": 999}
+        ) as mock_create_result:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
@@ -100,6 +102,13 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertTrue(payload["upload_reg_text"])
         self.assertTrue(payload["upload_locations"])
 
+        result_payload = mock_create_result.call_args.kwargs["payload"]
+        self.assertEqual(result_payload["title"], 42)
+        self.assertEqual(result_payload["part"], 400)
+        self.assertEqual(result_payload["date"], "2025-01-01")
+        self.assertTrue(result_payload["success"])
+        self.assertEqual(result_payload["log"], "")
+
     def test_handler_skips_full_xml_and_locations_when_flags_disabled(self):
         parsed_config = self._build_parsed_config(upload_reg_text=False, upload_locations=False)
 
@@ -113,7 +122,9 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "parse_config_from_event", return_value=parsed_config
         ), patch.object(_module, "fetch_part_structure", return_value=structure), patch.object(
             _module, "determine_part_depth", return_value=3
-        ), patch.object(_module, "upload_part", return_value={}) as mock_upload, patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
+        ), patch.object(_module, "upload_part", return_value={}) as mock_upload, patch.object(
+            _module, "create_ecfr_result", return_value={}
+        ), patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
             _module, "extract_sections_and_subparts"
         ) as mock_extract:
             response = _module.handler({"body": "{}"}, None)
@@ -132,6 +143,26 @@ class EcfrWorkerAppTests(unittest.TestCase):
 
         mock_fetch_xml.assert_not_called()
         mock_extract.assert_not_called()
+
+    def test_handler_posts_failure_result_and_reraises(self):
+        parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)
+
+        with patch.dict(os.environ, {"EREGS_API_URL_V3": "https://example.local/v3/"}, clear=True), patch.object(
+            _module, "parse_config_from_event", return_value=parsed_config
+        ), patch.object(
+            _module, "fetch_part_structure", side_effect=RuntimeError("boom")
+        ), patch.object(
+            _module, "create_ecfr_result", return_value={"id": 1}
+        ) as mock_create_result:
+            with self.assertRaisesRegex(RuntimeError, "boom"):
+                _module.handler({"body": "{}"}, None)
+
+        result_payload = mock_create_result.call_args.kwargs["payload"]
+        self.assertEqual(result_payload["title"], 42)
+        self.assertEqual(result_payload["part"], 400)
+        self.assertEqual(result_payload["date"], "2025-01-01")
+        self.assertFalse(result_payload["success"])
+        self.assertIn("boom", result_payload["log"])
 
 
 if __name__ == "__main__":

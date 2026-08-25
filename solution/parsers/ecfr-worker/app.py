@@ -9,8 +9,8 @@ import logging
 import os
 
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
-from .config import parse_config_from_event
-from .eregs_client import upload_part
+from .config import EcfrPartConfig, parse_config_from_event
+from .eregs_client import create_ecfr_result, upload_part
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 from .xml_parser import parse_part_xml_to_document
 
@@ -48,37 +48,13 @@ def _resolve_ecfr_api_base_url() -> str:
 _configure_logging()
 
 
-def handler(event, _context):
-    """Process one queued eCFR part work unit end-to-end."""
-
-    event_keys = sorted(event.keys()) if isinstance(event, dict) else []
-    logger.info(
-        "Starting eCFR worker invocation: keys=%s has_records=%s has_body=%s",
-        event_keys,
-        isinstance(event, dict) and "Records" in event,
-        isinstance(event, dict) and "body" in event,
-    )
-    logger.debug("Resolving work item config from invocation event")
-
-    config = parse_config_from_event(event)
-
-    logger.info(
-        "Parsing eCFR work item: title=%s part=%s effective_date=%s",
-        config.title_number,
-        config.part_number,
-        config.effective_date,
-    )
-    logger.debug(
-        "Upload flags for work item: upload_reg_text=%s upload_locations=%s",
-        config.upload_reg_text,
-        config.upload_locations,
-    )
+def _process_work_item(config: EcfrPartConfig) -> dict:
+    """Run the eCFR parsing pipeline and return the lambda success response body."""
 
     ecfr_api_base_url = _resolve_ecfr_api_base_url()
     logger.debug("Resolved eCFR API base URL=%s", ecfr_api_base_url)
 
     logger.info("Fetching part structure from eCFR API")
-
     structure = fetch_part_structure(
         title_number=config.title_number,
         part_number=config.part_number,
@@ -133,13 +109,31 @@ def handler(event, _context):
     }
 
     logger.info("Uploading parsed part payload to eRegs")
-
     upload_result = upload_part(
         api_base_url=os.environ["EREGS_API_URL_V3"],
         credentials=config.credentials,
         payload=part_payload,
     )
     logger.debug("Upload response keys=%s", sorted(upload_result.keys()))
+
+    logger.debug(
+        "Uploading eCFR success result: title=%s part=%s date=%s",
+        config.title_number,
+        config.part_number,
+        config.effective_date,
+    )
+    create_ecfr_result(
+        api_base_url=os.environ["EREGS_API_URL_V3"],
+        credentials=config.credentials,
+        payload={
+            "success": True,
+            "log": "",
+            "title": config.title_number,
+            "part": config.part_number,
+            "date": config.effective_date,
+        },
+    )
+    logger.debug("Uploaded eCFR success result")
 
     logger.info(
         "Uploaded eCFR parsed payload: title=%s part=%s sections=%s subparts=%s",
@@ -150,18 +144,77 @@ def handler(event, _context):
     )
 
     return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json",
-        },
-        "body": json.dumps(
-            {
-                "processed": 1,
-                "title_number": config.title_number,
-                "part_number": config.part_number,
-                "effective_date": config.effective_date,
-                "uploaded": True,
-                "upload_result_keys": sorted(upload_result.keys()),
-            }
-        ),
+        "processed": 1,
+        "title_number": config.title_number,
+        "part_number": config.part_number,
+        "effective_date": config.effective_date,
+        "uploaded": True,
+        "upload_result_keys": sorted(upload_result.keys()),
     }
+
+
+def handler(event, _context):
+    """Process one queued eCFR part work unit end-to-end."""
+
+    event_keys = sorted(event.keys()) if isinstance(event, dict) else []
+    logger.info(
+        "Starting eCFR worker invocation: keys=%s has_records=%s has_body=%s",
+        event_keys,
+        isinstance(event, dict) and "Records" in event,
+        isinstance(event, dict) and "body" in event,
+    )
+    logger.debug("Resolving work item config from invocation event")
+
+    config = parse_config_from_event(event)
+
+    logger.info(
+        "Parsing eCFR work item: title=%s part=%s effective_date=%s",
+        config.title_number,
+        config.part_number,
+        config.effective_date,
+    )
+    logger.debug(
+        "Upload flags for work item: upload_reg_text=%s upload_locations=%s",
+        config.upload_reg_text,
+        config.upload_locations,
+    )
+
+    try:
+        body = _process_work_item(config)
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+            },
+            "body": json.dumps(body),
+        }
+    except Exception as exc:
+        logger.error(
+            "eCFR worker failed: title=%s part=%s date=%s error=%s",
+            config.title_number,
+            config.part_number,
+            config.effective_date,
+            exc,
+        )
+        try:
+            logger.debug(
+                "Uploading eCFR failure result: title=%s part=%s date=%s",
+                config.title_number,
+                config.part_number,
+                config.effective_date,
+            )
+            create_ecfr_result(
+                api_base_url=os.environ["EREGS_API_URL_V3"],
+                credentials=config.credentials,
+                payload={
+                    "success": False,
+                    "log": str(exc),
+                    "title": config.title_number,
+                    "part": config.part_number,
+                    "date": config.effective_date,
+                },
+            )
+            logger.debug("Uploaded eCFR failure result")
+        except Exception as log_exc:
+            logger.warning("Failed to record eCFR worker failure result: %s", log_exc)
+        raise
