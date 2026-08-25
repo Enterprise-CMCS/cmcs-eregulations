@@ -37,7 +37,7 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         reg_version = context.get("version", datetime.strftime(datetime.now(), "%Y-%m-%d"))
         reg_part = context["part"]
         reg_title = context["title"]
-        reg_title_parser_success_date = EcfrParserResult.objects.filter(success=True, title=reg_title).order_by("-timestamp").first()
+        title_parser_success_date = EcfrParserResult.objects.filter(success=True, title=reg_title).order_by("-timestamp").first()
 
         query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
 
@@ -68,7 +68,7 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         c = {
             'tree':         tree,
             'title':        reg_title,
-            'title_parser_success_date': reg_title_parser_success_date.timestamp if reg_title_parser_success_date else None,
+            'title_parser_success_date': title_parser_success_date.timestamp if title_parser_success_date else None,
             'reg_part':     reg_part,
             'part_label':   part_label,
             'toc':          toc,

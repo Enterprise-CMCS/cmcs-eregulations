@@ -10,8 +10,8 @@ from regcore.models import Part
 from .models import (
     EcfrParserResult,
     FrParserResult,
-    PartConfiguration,
     ParserConfiguration,
+    PartConfiguration,
 )
 
 
