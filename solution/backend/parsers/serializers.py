@@ -27,7 +27,7 @@ class ParserConfigurationSerializer(serializers.Serializer):
 class ParserResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = ECFRParserResult
-        fields = '__all__'
+        fields = "__all__"
 
 
 class PartSectionCreateSerializer(serializers.Serializer):
@@ -67,7 +67,7 @@ class PartUploadSerializer(serializers.Serializer):
         # create depth stack for front page TOC
         stack = []
         current = instance.structure
-        for i in range(instance.depth + 1):
+        for _ in range(instance.depth + 1):
             structure_copy = current.copy()
             del structure_copy["children"]
             stack.append(structure_copy)

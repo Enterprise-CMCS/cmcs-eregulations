@@ -9,12 +9,12 @@ from rest_framework.response import Response
 from common.auth import SettingsAuthentication
 from parsers.models import ECFRParserResult, ParserConfiguration
 from regcore.models import Part
-from regcore.serializers.parser import (
+
+from .serializers import (
     ParserConfigurationSerializer,
     ParserResultSerializer,
     PartUploadSerializer,
 )
-
 from .utils import OpenApiPathParameter
 
 
@@ -46,9 +46,9 @@ class ParserResultViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def retrieve(self, request, title):
-        parserResult = ECFRParserResult.objects.filter(title=title).order_by("-end").first()
-        if parserResult:
-            serializer = self.get_serializer_class()(parserResult)
+        parser_result = ECFRParserResult.objects.filter(title=title).order_by("-end").first()
+        if parser_result:
+            serializer = self.get_serializer_class()(parser_result)
             return Response(serializer.data)
         raise Http404()
 
@@ -77,15 +77,16 @@ class PartUploadViewSet(viewsets.ModelViewSet):
         }
         part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
         data["id"] = part.pk
-        sc = self.get_serializer(part, data=data)
-        sc.is_valid(raise_exception=True)
-        instance = sc.save()
-        response = sc.validated_data
+        serializer = self.get_serializer(part, data=data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        response = serializer.validated_data
         if not data.get("upload_reg_text", False):
             instance.delete()
 
         if apps.is_installed("content_search"):
             from content_search.utils import call_text_extractor_for_reg_text
+
             _, fail = call_text_extractor_for_reg_text(request, [instance])
             if fail:
                 raise RuntimeError("Text extraction job could not be started.")

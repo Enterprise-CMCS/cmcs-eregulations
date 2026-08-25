@@ -5,10 +5,11 @@ from django.db.models import Q
 from django.forms import TextInput
 from solo.admin import SingletonModelAdmin
 
-from parsers.models import PartConfiguration, ParserConfiguration
+from regcore.models import Part
 
 from .models import (
-    Part,
+    PartConfiguration,
+    ParserConfiguration,
 )
 
 
@@ -16,8 +17,8 @@ class PartConfigurationInline(admin.TabularInline):
     ordering = ("title", "value")
     formfield_overrides = {
         models.TextField: {
-            'widget': TextInput(attrs={
-                'style': 'width: calc(100% - 1em);',
+            "widget": TextInput(attrs={
+                "style": "width: calc(100% - 1em);",
             })
         }
     }
@@ -29,18 +30,21 @@ class PartConfigurationInline(admin.TabularInline):
 class ParserConfigurationAdmin(SingletonModelAdmin):
     inlines = (PartConfigurationInline,)
     fieldsets = (
-        (None, {
-            'fields': (
-                'workers',
-                'loglevel',
-                'upload_supplemental_locations',
-                'log_parse_errors',
-                'skip_reg_versions',
-                'skip_fr_documents',
-            ),
-            'description': "<b>Please note:</b> Changes to the parser configuration "
-                           "will not take effect until the next scheduled parser run!",
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    "workers",
+                    "loglevel",
+                    "upload_supplemental_locations",
+                    "log_parse_errors",
+                    "skip_reg_versions",
+                    "skip_fr_documents",
+                ),
+                "description": "<b>Please note:</b> Changes to the parser configuration "
+                "will not take effect until the next scheduled parser run!",
+            },
+        ),
     )
 
     def save_formset(self, request, form, formset, change):
@@ -54,14 +58,17 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
             elif obj.type == "subchapter":
                 # Find all parts under this subchapter
                 chapter, subchapter = obj.value.split("-")
-                exclude = list(PartConfiguration.objects.filter(title=obj.title, type="part").values_list('value', flat=True))
-                q |= (Q(
-                    title=obj.title,
-                    structure__children__0__type="chapter",
-                    structure__children__0__identifier=[chapter],
-                    structure__children__0__children__0__type="subchapter",
-                    structure__children__0__children__0__identifier=[subchapter],
-                ) & ~Q(name__in=exclude))
+                exclude = list(PartConfiguration.objects.filter(title=obj.title, type="part").values_list("value", flat=True))
+                q |= (
+                    Q(
+                        title=obj.title,
+                        structure__children__0__type="chapter",
+                        structure__children__0__identifier=[chapter],
+                        structure__children__0__children__0__type="subchapter",
+                        structure__children__0__children__0__identifier=[subchapter],
+                    )
+                    & ~Q(name__in=exclude)
+                )
 
         affected_parts = Part.objects.filter(q).distinct()
         if affected_parts.exists():
@@ -69,9 +76,12 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
             search_message = ""
             if apps.is_installed("content_search"):
                 from content_search.models import IndexedRegulationText
+
                 deleted_indices = IndexedRegulationText.objects.filter(part__in=affected_parts).delete()
-                search_message = f", {deleted_indices[1]['content_search.ContentIndex']} search index entries, " + \
-                                 f"and {deleted_indices[1]['content_search.IndexedRegulationText']} search metadata entries"
+                search_message = (
+                    f", {deleted_indices[1]['content_search.ContentIndex']} search index entries, "
+                    f"and {deleted_indices[1]['content_search.IndexedRegulationText']} search metadata entries"
+                )
 
             # Delete affected parts
             part_list = affected_parts.distinct("title", "name").values_list("title", "name")

@@ -4,7 +4,6 @@ from regcore.views import (
     contents,
     history,
     metadata,
-    parser,
     part,
     title,
 )
@@ -13,6 +12,7 @@ urlpatterns = [
     path("v3/", include([
         path("resources/", include('resources.urls')),
         path("content-search/", include('content_search.urls')),
+        path("parsers/", include('parsers.urls')),
         path("toc", title.TOCViewSet.as_view({
             "get": "list",
         })),
@@ -61,15 +61,5 @@ urlpatterns = [
                 "get": "retrieve",
             }),
         ),
-        path("ecfr_parser_result/<title>", parser.ParserResultViewSet.as_view({
-            "get": "retrieve",
-            "post": "create",
-        })),
-        path("part", parser.PartUploadViewSet.as_view({
-            "put": "update",
-        })),
-        path("parser_config", parser.ParserConfigurationViewSet.as_view({
-            "get": "retrieve",
-        })),
     ])),
 ]
