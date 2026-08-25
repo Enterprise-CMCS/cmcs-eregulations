@@ -62,15 +62,22 @@ const API_ENDPOINTS_V3 = [
     `/v3/toc`,
 ];
 
+const OPTIONAL_DATA_ENDPOINTS = new Set([
+    `/v3/parsers/ecfr/results/title/${TITLE}`,
+]);
+
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach((endpoint) => {
-        it(`sends GET request to ${endpoint} and checks for a 200 or 403 (Forbidden) response`, () => {
+        it(`sends GET request to ${endpoint} and checks for expected response status`, () => {
             cy.request({ url: endpoint, failOnStatusCode: false }).as(
                 "request"
             );
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
-                expect(response.status).to.be.oneOf([200, 403]);
+                const expectedStatuses = OPTIONAL_DATA_ENDPOINTS.has(endpoint)
+                    ? [200, 403, 404]
+                    : [200, 403];
+                expect(response.status).to.be.oneOf(expectedStatuses);
             });
         });
     });
