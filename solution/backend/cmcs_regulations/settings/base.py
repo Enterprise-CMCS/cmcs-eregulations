@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'regulations',
     'regcore',
+    'parsers',
     'regcore.search',
     'resources',
     'solo',

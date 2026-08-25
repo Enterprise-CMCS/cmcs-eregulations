@@ -11,7 +11,8 @@ from django.views.generic.base import (
     View,
 )
 
-from regcore.models import ECFRParserResult, Part
+from parsers.models import ECFRParserResult
+from regcore.models import Part
 from regulations.utils import LinkConfigMixin, LinkConversionsMixin
 from regulations.views.errors import NotInSubpart
 from regulations.views.mixins import CitationContextMixin

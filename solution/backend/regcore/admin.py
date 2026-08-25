@@ -5,10 +5,10 @@ from django.db.models import Q
 from django.forms import TextInput
 from solo.admin import SingletonModelAdmin
 
+from parsers.models import PartConfiguration, ParserConfiguration
+
 from .models import (
-    ParserConfiguration,
     Part,
-    PartConfiguration,
 )
 
 

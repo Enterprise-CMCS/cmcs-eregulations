@@ -1,4 +1,4 @@
-from regcore.models import ECFRParserResult
+from parsers.models import ECFRParserResult
 
 
 def regcore_config(request):

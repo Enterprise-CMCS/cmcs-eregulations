@@ -1,7 +1,7 @@
 from django.apps import apps
 from rest_framework import serializers
 
-from regcore.models import ECFRParserResult
+from parsers.models import ECFRParserResult
 
 
 class PartConfigurationSerializer(serializers.Serializer):

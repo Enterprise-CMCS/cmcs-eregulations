@@ -7,7 +7,8 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from regcore.models import ECFRParserResult, ParserConfiguration, Part
+from parsers.models import ECFRParserResult, ParserConfiguration
+from regcore.models import Part
 from regcore.serializers.parser import (
     ParserConfigurationSerializer,
     ParserResultSerializer,

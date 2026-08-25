@@ -4,7 +4,8 @@ from django.http import Http404
 from django.views.generic.base import TemplateView
 from requests import HTTPError
 
-from regcore.models import ECFRParserResult, Part
+from parsers.models import ECFRParserResult
+from regcore.models import Part
 
 
 class RegulationLandingView(TemplateView):
