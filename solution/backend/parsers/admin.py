@@ -105,11 +105,14 @@ class _ParserResultAdminBase(admin.ModelAdmin):
     ordering = ("-timestamp",)
     date_hierarchy = "timestamp"
 
+    def has_add_permission(self, request):
+        return False
+
     @admin.display(description="log")
     def log_preview(self, obj):
         if not obj.log:
             return ""
-        return f"{obj.log[:120]}..." if len(obj.log) > 120 else obj.log
+        return f"{obj.log[:80]}..." if len(obj.log) > 80 else obj.log
 
 
 @admin.register(EcfrParserResult)
