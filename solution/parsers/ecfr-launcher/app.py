@@ -58,6 +58,7 @@ def _build_work_units(
     targets = expand_target_parts(parser_config, ecfr_base_url=ecfr_api_base_url)
     latest_dates_by_title = _resolve_latest_dates_by_title(targets, ecfr_api_base_url)
     skip_parsed_regs = _resolve_skip_parsed_regs(parser_config)
+    upload_supplemental_locations = _resolve_upload_supplemental_locations(parser_config)
     existing_dates_by_title = (
         _resolve_existing_part_dates_by_title(api_base_url, credentials, targets)
         if skip_parsed_regs
@@ -88,6 +89,8 @@ def _build_work_units(
             )
             continue
 
+        upload_locations = target.upload_locations and upload_supplemental_locations
+
         work_units.append(
             {
                 "config": {
@@ -95,7 +98,7 @@ def _build_work_units(
                     "part_number": target.part_number,
                     "effective_date": latest_issue_date,
                     "upload_reg_text": target.upload_reg_text,
-                    "upload_locations": target.upload_locations,
+                    "upload_locations": upload_locations,
                     "log_level": parser_log_level,
                 }
             }
@@ -173,6 +176,15 @@ def _resolve_skip_parsed_regs(parser_config: dict[str, Any]) -> bool:
 
     try:
         return require_bool(parser_config, "skip_parsed_regs")
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
+def _resolve_upload_supplemental_locations(parser_config: dict[str, Any]) -> bool:
+    """Resolve global upload_supplemental_locations override from parser-config."""
+
+    try:
+        return require_bool(parser_config, "upload_supplemental_locations")
     except ConfigParseError as exc:
         raise RuntimeError(str(exc)) from exc
 

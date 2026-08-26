@@ -49,7 +49,11 @@ class EcfrLauncherAppTests(unittest.TestCase):
             return_value={42: {}},
         ):
             work_units, failures = _module._build_work_units(
-                parser_config={"parts": [], "skip_parsed_regs": True},
+                parser_config={
+                    "parts": [],
+                    "skip_parsed_regs": True,
+                    "upload_supplemental_locations": True,
+                },
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
@@ -91,7 +95,11 @@ class EcfrLauncherAppTests(unittest.TestCase):
             return_value={42: {}},
         ):
             work_units, failures = _module._build_work_units(
-                parser_config={"parts": [], "skip_parsed_regs": True},
+                parser_config={
+                    "parts": [],
+                    "skip_parsed_regs": True,
+                    "upload_supplemental_locations": True,
+                },
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
@@ -144,7 +152,12 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "fetch_parser_config",
-            return_value={"parts": [], "loglevel": "info", "skip_parsed_regs": True},
+            return_value={
+                "parts": [],
+                "loglevel": "info",
+                "skip_parsed_regs": True,
+                "upload_supplemental_locations": True,
+            },
         ), patch.object(
             _module,
             "_resolve_parser_log_level",
@@ -210,7 +223,11 @@ class EcfrLauncherAppTests(unittest.TestCase):
             return_value={42: {400: "2025-01-01"}},
         ):
             work_units, failures = _module._build_work_units(
-                parser_config={"parts": [], "skip_parsed_regs": True},
+                parser_config={
+                    "parts": [],
+                    "skip_parsed_regs": True,
+                    "upload_supplemental_locations": True,
+                },
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
@@ -239,7 +256,11 @@ class EcfrLauncherAppTests(unittest.TestCase):
             "_resolve_existing_part_dates_by_title",
         ) as mock_existing:
             work_units, failures = _module._build_work_units(
-                parser_config={"parts": [], "skip_parsed_regs": False},
+                parser_config={
+                    "parts": [],
+                    "skip_parsed_regs": False,
+                    "upload_supplemental_locations": True,
+                },
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
@@ -257,6 +278,49 @@ class EcfrLauncherAppTests(unittest.TestCase):
     def test_resolve_skip_parsed_regs_rejects_invalid_value(self):
         with self.assertRaisesRegex(RuntimeError, "skip_parsed_regs must be a boolean"):
             _module._resolve_skip_parsed_regs({"skip_parsed_regs": "yes"})
+
+    def test_build_work_units_forces_upload_locations_false_when_global_disabled(self):
+        targets = [
+            _module.TargetPartConfig(
+                title_number=42,
+                part_number=400,
+                upload_reg_text=True,
+                upload_locations=True,
+            )
+        ]
+
+        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
+            _module,
+            "_resolve_latest_dates_by_title",
+            return_value={42: {400: "2025-01-01"}},
+        ), patch.object(
+            _module,
+            "_resolve_existing_part_dates_by_title",
+            return_value={42: {}},
+        ):
+            work_units, failures = _module._build_work_units(
+                parser_config={
+                    "parts": [],
+                    "skip_parsed_regs": True,
+                    "upload_supplemental_locations": False,
+                },
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
+                parser_log_level="INFO",
+            )
+
+        self.assertEqual(failures, [])
+        self.assertEqual(len(work_units), 1)
+        self.assertFalse(work_units[0]["config"]["upload_locations"])
+
+    def test_resolve_upload_supplemental_locations_from_parser_config(self):
+        self.assertTrue(_module._resolve_upload_supplemental_locations({"upload_supplemental_locations": True}))
+        self.assertFalse(_module._resolve_upload_supplemental_locations({"upload_supplemental_locations": False}))
+
+    def test_resolve_upload_supplemental_locations_rejects_invalid_value(self):
+        with self.assertRaisesRegex(RuntimeError, "upload_supplemental_locations must be a boolean"):
+            _module._resolve_upload_supplemental_locations({"upload_supplemental_locations": "yes"})
 
 
 if __name__ == "__main__":
