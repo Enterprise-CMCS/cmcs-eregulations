@@ -10,19 +10,12 @@ from urllib.parse import urljoin
 
 import requests
 
-from common.auth import BackendCredentials, build_auth_headers
 from common.config import ConfigParseError, require_bool, require_non_empty_string, require_positive_int
+from common.eregs_config import EregsConfigError, fetch_parser_config
 from common.http import execute_request, parse_json_response
 
 
 ECFR_V1_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
-
-
-class EregsConfigError(RuntimeError):
-    """Raised for invalid parser-config data or expansion failures."""
-
-    pass
-
 
 @dataclass(frozen=True)
 class TargetPartConfig:
@@ -32,35 +25,6 @@ class TargetPartConfig:
     part_number: int
     upload_reg_text: bool
     upload_locations: bool
-
-
-def fetch_parser_config(
-    api_base_url: str,
-    credentials: BackendCredentials,
-    timeout: int = 60,
-) -> dict[str, Any]:
-    """Fetch parser configuration from eRegs backend."""
-
-    request_url = urljoin(api_base_url, "parsers/config")
-    try:
-        headers = build_auth_headers(credentials)
-    except ConfigParseError as exc:
-        raise EregsConfigError(str(exc)) from exc
-
-    response = execute_request(
-        lambda: requests.get(request_url, headers=headers, timeout=timeout),
-        on_http_error=lambda exc: EregsConfigError(
-            f"eRegs parser_config request failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
-        ),
-        on_request_error=lambda exc: EregsConfigError(f"eRegs parser_config request failed: {exc}"),
-    )
-
-    return parse_json_response(
-        response,
-        expected_type=dict,
-        on_invalid_json=lambda _exc: EregsConfigError("eRegs parser_config response was not valid JSON"),
-        on_invalid_shape=lambda: EregsConfigError("eRegs parser_config response must be a JSON object"),
-    )
 
 
 def expand_target_parts(

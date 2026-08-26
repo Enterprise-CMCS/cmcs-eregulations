@@ -11,11 +11,13 @@ import os
 from typing import Any
 
 from common.auth import resolve_backend_credentials
+from common.config import ConfigParseError, require_non_empty_string
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
     is_local_mode,
 )
+from common.logging import resolve_log_level_name
 
 from .eregs_config import TargetPartConfig, expand_target_parts, fetch_parser_config
 from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
@@ -35,14 +37,17 @@ def _resolve_ecfr_api_base_url() -> str:
     return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
 
 
-def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+def _build_work_units(
+    parser_config: dict[str, Any],
+    ecfr_api_base_url: str,
+    parser_log_level: str,
+) -> tuple[list[dict], list[dict[str, str]]]:
     """Build worker messages from parser config and latest-date resolution.
 
     Returns both valid work units and per-part failures for targets that cannot
     be queued (for example, no resolvable latest date).
     """
 
-    parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
     targets = expand_target_parts(parser_config, ecfr_base_url=ecfr_api_base_url)
     latest_dates_by_title = _resolve_latest_dates_by_title(targets, ecfr_api_base_url)
 
@@ -68,6 +73,7 @@ def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) ->
                     "effective_date": latest_issue_date,
                     "upload_reg_text": target.upload_reg_text,
                     "upload_locations": target.upload_locations,
+                    "log_level": parser_log_level,
                 }
             }
         )
@@ -111,6 +117,16 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_bas
     return by_title
 
 
+def _resolve_parser_log_level(parser_config: dict[str, Any]) -> str:
+    """Resolve and validate parser log level from parser-config."""
+
+    try:
+        configured = require_non_empty_string(parser_config, "loglevel")
+        return resolve_log_level_name(configured)
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
 def handler(event, _context):
     """Main launcher handler for scheduled/on-demand eCFR work generation."""
 
@@ -126,7 +142,12 @@ def handler(event, _context):
 
     api_base_url = os.environ["EREGS_API_URL_V3"]
     ecfr_api_base_url = _resolve_ecfr_api_base_url()
-    work_units, config_failures = _build_work_units(api_base_url, ecfr_api_base_url, credentials)
+    parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
+    parser_log_level = _resolve_parser_log_level(parser_config)
+    logger.setLevel(getattr(logging, parser_log_level))
+    logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
+
+    work_units, config_failures = _build_work_units(parser_config, ecfr_api_base_url, parser_log_level)
 
     if not work_units and config_failures:
         raise RuntimeError(

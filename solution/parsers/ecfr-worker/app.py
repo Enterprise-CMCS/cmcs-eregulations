@@ -17,24 +17,16 @@ from .xml_parser import parse_part_xml_to_document
 
 logger = logging.getLogger(__name__)
 
-_LOG_LEVEL_ENV_VAR = "PARSER_LOG_LEVEL"
 _ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
 _DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
-
-def _resolve_log_level() -> int:
-    """Resolve parser log level from environment with INFO default."""
-
-    configured = os.getenv(_LOG_LEVEL_ENV_VAR, "INFO").strip().upper()
-    if configured in {"CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"}:
-        return getattr(logging, configured)
-    return logging.INFO
-
-
-def _configure_logging() -> None:
+def _configure_logging(log_level_name: str | None = None) -> None:
     """Configure root logging for worker execution."""
 
-    log_level = _resolve_log_level()
+    if log_level_name is None:
+        log_level_name = "INFO"
+
+    log_level = getattr(logging, log_level_name, logging.INFO)
     logging.basicConfig(level=log_level)
     logger.setLevel(log_level)
 
@@ -166,6 +158,7 @@ def handler(event, _context):
     logger.debug("Resolving work item config from invocation event")
 
     config = parse_config_from_event(event)
+    _configure_logging(config.log_level)
 
     logger.info(
         "Parsing eCFR work item: title=%s part=%s effective_date=%s",

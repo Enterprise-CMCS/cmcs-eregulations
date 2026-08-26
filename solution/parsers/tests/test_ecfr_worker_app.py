@@ -51,6 +51,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
                         "effective_date": "2025-01-01",
                         "upload_reg_text": upload_reg_text,
                         "upload_locations": upload_locations,
+                        "log_level": "info",
                     }
                 }
             )
