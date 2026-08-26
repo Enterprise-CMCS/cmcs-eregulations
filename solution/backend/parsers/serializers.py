@@ -14,12 +14,9 @@ class PartConfigurationSerializer(serializers.Serializer):
 
 
 class ParserConfigurationSerializer(serializers.Serializer):
-    workers = serializers.IntegerField()
-    retries = serializers.IntegerField()
     loglevel = serializers.CharField()
     upload_supplemental_locations = serializers.BooleanField()
-    log_parse_errors = serializers.BooleanField()
-    skip_reg_versions = serializers.BooleanField()
+    skip_parsed_regs = serializers.BooleanField()
     skip_fr_documents = serializers.BooleanField()
     parts = PartConfigurationSerializer(many=True)
 

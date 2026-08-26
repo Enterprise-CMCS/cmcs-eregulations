@@ -10,6 +10,7 @@ from urllib.parse import urljoin
 
 import requests
 
+from common.auth import BackendCredentials, build_auth_headers
 from common.config import ConfigParseError, require_bool, require_non_empty_string, require_positive_int
 from common.eregs_config import EregsConfigError, fetch_parser_config
 from common.http import execute_request, parse_json_response
@@ -131,6 +132,49 @@ def fetch_subchapter_part_numbers(
         raise EregsConfigError(f"no parts found for title {title_number} subchapter {chapter}-{subchapter}")
 
     return part_numbers
+
+
+def fetch_existing_part_dates_by_title(
+    api_base_url: str,
+    credentials: BackendCredentials,
+    title_number: int,
+    timeout: int = 60,
+) -> dict[int, str]:
+    """Fetch existing eRegs part dates for one title keyed by part number."""
+
+    request_url = urljoin(api_base_url, f"title/{title_number}/parts")
+    try:
+        headers = build_auth_headers(credentials)
+    except ConfigParseError as exc:
+        raise EregsConfigError(str(exc)) from exc
+
+    response = execute_request(
+        lambda: requests.get(request_url, headers=headers, timeout=timeout),
+        on_http_error=lambda exc: EregsConfigError(
+            "eRegs title parts request failed "
+            f"({exc.response.status_code if exc.response is not None else 'unknown'}) for title {title_number}"
+        ),
+        on_request_error=lambda exc: EregsConfigError(f"eRegs title parts request failed for title {title_number}: {exc}"),
+    )
+
+    payload = parse_json_response(
+        response,
+        expected_type=list,
+        on_invalid_json=lambda _exc: EregsConfigError(f"eRegs title parts response was not valid JSON for title {title_number}"),
+        on_invalid_shape=lambda: EregsConfigError("eRegs title parts response must be a JSON array"),
+    )
+
+    part_dates: dict[int, str] = {}
+    for item in payload:
+        if not isinstance(item, dict):
+            continue
+
+        name = item.get("name")
+        date = item.get("date")
+        if isinstance(name, str) and name.strip().isdigit() and isinstance(date, str) and date.strip():
+            part_dates[int(name.strip())] = date.strip()
+
+    return part_dates
 
 
 def _extract_part_numbers(node: Any) -> list[int]:
