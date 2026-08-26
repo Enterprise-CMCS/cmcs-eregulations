@@ -13,26 +13,6 @@ class ParserConfiguration(SingletonModel):
         ("trace", "Trace"),
     ]
 
-    workers = models.IntegerField(
-        default=3,
-        help_text="The number of worker threads used to parse simultaneously.",
-        validators=[
-            MinValueValidator(
-                limit_value=1,
-                message="Number of workers must be at least 1!",
-            )
-        ],
-    )
-    retries = models.IntegerField(
-        default=3,
-        help_text="The number of times to retry parsing before moving on if it fails.",
-        validators=[
-            MinValueValidator(
-                limit_value=0,
-                message="The number of retries must be at least 0!",
-            )
-        ],
-    )
     loglevel = models.CharField(
         max_length=5,
         choices=LOGLEVEL_CHOICES,
@@ -43,13 +23,9 @@ class ParserConfiguration(SingletonModel):
         default=True,
         help_text="Should the eCFR parser process and upload section and subpart names for use in resource management?",
     )
-    log_parse_errors = models.BooleanField(
-        default=False,
-        help_text="Should the eCFR parser log errors encountered while processing the raw XML data from eCFR?",
-    )
-    skip_reg_versions = models.BooleanField(
+    skip_parsed_regs = models.BooleanField(
         default=True,
-        help_text="Should the eCFR parser skip processing versions of regulation parts that have been previously processed?",
+        help_text="Should the eCFR parser skip processing regulation parts that have been previously processed?",
     )
     skip_fr_documents = models.BooleanField(
         default=True,
