@@ -36,11 +36,9 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
             None,
             {
                 "fields": (
-                    "workers",
                     "loglevel",
                     "upload_supplemental_locations",
-                    "log_parse_errors",
-                    "skip_reg_versions",
+                    "skip_parsed_regs",
                     "skip_fr_documents",
                 ),
                 "description": "<b>Please note:</b> Changes to the parser configuration "
