@@ -46,7 +46,7 @@ jobs:
           submodules: true
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -125,7 +125,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during cache invalidation
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -172,7 +172,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during deploy-alternate-sites
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -215,7 +215,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during text extractor deployment
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -259,7 +259,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during MCP server deployment
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -336,7 +336,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during site deployment
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -380,7 +380,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during eCFR parser deployment
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -424,7 +424,7 @@ jobs:
 
       - name: Notify Slack if failure occurs during FR parser deployment
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
@@ -479,7 +479,7 @@ jobs:
 
       # Setup node environment
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 22
 
@@ -494,7 +494,7 @@ jobs:
 
       - name: Notify Slack if failure occurs cypress tests
         if: ${{ inputs.pr_number == '' && failure() }}
-        uses: slackapi/slack-github-action@v3.0.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ secrets.PR_OBSERVER_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
