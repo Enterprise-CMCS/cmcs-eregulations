@@ -40,18 +40,18 @@ def move_parser_data_from_regcore(apps, schema_editor):
         )
 
     latest_part = RegcorePart.objects.order_by("-date").first()
-    latest = RegcoreEcfrParserResult.objects.filter(errors=0).order_by("-end").first()
+    latest_run = RegcoreEcfrParserResult.objects.filter(errors=0).order_by("-end").first()
 
-    if latest is not None:
-        part_date = latest_part.date if latest_part is not None else latest.end.date()
+    if latest_run is not None:
+        part_date = latest_part.date if latest_part is not None else latest_run.end.date()
         ParsersEcfrParserResult.objects.update_or_create(
-            title=latest.title,
+            title=0,
             part=0,
             date=part_date,
             defaults={
-                "timestamp": latest.end,
+                "timestamp": latest_run.end,
                 "success": True,
-                "log": "",
+                "log": "Post-migration: This record was created to preserve the latest successful parser run.",
             },
         )
 
