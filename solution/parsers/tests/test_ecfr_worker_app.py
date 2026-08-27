@@ -84,7 +84,9 @@ class EcfrWorkerAppTests(unittest.TestCase):
             ),
         ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}) as mock_upload, patch.object(
             _module, "create_ecfr_result", return_value={"id": 999}
-        ) as mock_create_result:
+        ) as mock_create_result, patch.object(
+            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
+        ) as mock_increment:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
@@ -110,6 +112,11 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertTrue(result_payload["success"])
         self.assertEqual(result_payload["log"], "")
 
+        self.assertEqual(
+            mock_increment.call_args.kwargs["counter"],
+            "succeeded_count",
+        )
+
     def test_handler_skips_full_xml_and_locations_when_flags_disabled(self):
         parsed_config = self._build_parsed_config(upload_reg_text=False, upload_locations=False)
 
@@ -125,6 +132,8 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "determine_part_depth", return_value=3
         ), patch.object(_module, "upload_part", return_value={}) as mock_upload, patch.object(
             _module, "create_ecfr_result", return_value={}
+        ), patch.object(
+            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
         ), patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
             _module, "extract_sections_and_subparts"
         ) as mock_extract:
@@ -154,7 +163,9 @@ class EcfrWorkerAppTests(unittest.TestCase):
             _module, "fetch_part_structure", side_effect=RuntimeError("boom")
         ), patch.object(
             _module, "create_ecfr_result", return_value={"id": 1}
-        ) as mock_create_result:
+        ) as mock_create_result, patch.object(
+            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
+        ) as mock_increment:
             with self.assertRaisesRegex(RuntimeError, "boom"):
                 _module.handler({"body": "{}"}, None)
 
@@ -164,6 +175,10 @@ class EcfrWorkerAppTests(unittest.TestCase):
         self.assertEqual(result_payload["date"], "2025-01-01")
         self.assertFalse(result_payload["success"])
         self.assertIn("boom", result_payload["log"])
+        self.assertEqual(
+            mock_increment.call_args.kwargs["counter"],
+            "failed_count",
+        )
 
 
 if __name__ == "__main__":

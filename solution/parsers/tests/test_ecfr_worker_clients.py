@@ -152,6 +152,36 @@ class EcfrWorkerClientsTests(unittest.TestCase):
                 },
             )
 
+    @patch("requests.post")
+    def test_increment_latest_ecfr_launcher_counter_success(self, mock_post):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"abstractparserresult_ptr": 5, "succeeded_count": 1}'
+        response.json.return_value = {"abstractparserresult_ptr": 5, "succeeded_count": 1}
+        mock_post.return_value = response
+
+        result = _eregs_client.increment_latest_ecfr_launcher_counter(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            counter="succeeded_count",
+        )
+
+        self.assertEqual(result["succeeded_count"], 1)
+        self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr-launcher/increment"))
+
+    @patch("requests.post")
+    def test_increment_latest_ecfr_launcher_counter_non_2xx(self, mock_post):
+        response = Mock()
+        response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
+        mock_post.return_value = response
+
+        with self.assertRaisesRegex(_eregs_client.EregsClientError, "counter increment failed"):
+            _eregs_client.increment_latest_ecfr_launcher_counter(
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                counter="failed_count",
+            )
+
     def test_upload_part_missing_required_field(self):
         payload = {
             "name": "400",

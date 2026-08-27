@@ -101,6 +101,11 @@ class EcfrParserResult(AbstractParserResult):
 
 
 class EcfrLauncherResult(AbstractParserResult):
+    queued_count = models.PositiveIntegerField(default=0)
+    skipped_count = models.PositiveIntegerField(default=0)
+    succeeded_count = models.PositiveIntegerField(default=0)
+    failed_count = models.PositiveIntegerField(default=0)
+
     class Meta:
         verbose_name = "eCFR Launcher Result"
         verbose_name_plural = "eCFR Launcher Results"

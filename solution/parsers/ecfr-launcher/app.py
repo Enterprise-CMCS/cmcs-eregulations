@@ -25,7 +25,7 @@ from .eregs_config import (
     fetch_existing_part_dates_by_title,
     fetch_parser_config,
 )
-from .eregs_client import create_ecfr_launcher_result
+from .eregs_client import create_ecfr_launcher_result, update_ecfr_launcher_result
 from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
 
 
@@ -210,6 +210,21 @@ def handler(event, _context):
     logger.setLevel(getattr(logging, parser_log_level))
     logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
 
+    launcher_result = create_ecfr_launcher_result(
+        api_base_url=api_base_url,
+        credentials=credentials,
+        payload={
+            "success": True,
+            "log": "",
+            "queued_count": 0,
+            "skipped_count": 0,
+            "succeeded_count": 0,
+            "failed_count": 0,
+        },
+    )
+    if not isinstance(launcher_result, dict):
+        raise RuntimeError("eCFR launcher result create response was not a JSON object")
+
     try:
         work_units, config_failures = _build_work_units(
             parser_config=parser_config,
@@ -240,13 +255,16 @@ def handler(event, _context):
         if config_failures:
             logger.warning("eCFR launcher skipped %s work unit(s) due to missing latest issue_date", len(config_failures))
 
-        logger.debug("Uploading eCFR launcher success result")
-        create_ecfr_launcher_result(
+        logger.debug("Updating eCFR launcher result counts")
+        update_ecfr_launcher_result(
             api_base_url=api_base_url,
             credentials=credentials,
-            payload={"success": True, "log": ""},
+            payload={
+                "queued_count": len(work_units),
+                "skipped_count": len(config_failures),
+            },
         )
-        logger.debug("Uploaded eCFR launcher success result")
+        logger.debug("Updated eCFR launcher result counts")
 
         return build_launcher_response(
             work_units=work_units,
@@ -258,7 +276,7 @@ def handler(event, _context):
         logger.error("eCFR launcher failed: %s", exc)
         try:
             logger.debug("Uploading eCFR launcher failure result")
-            create_ecfr_launcher_result(
+            update_ecfr_launcher_result(
                 api_base_url=api_base_url,
                 credentials=credentials,
                 payload={"success": False, "log": str(exc)},

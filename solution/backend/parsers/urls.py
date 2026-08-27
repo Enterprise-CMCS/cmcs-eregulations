@@ -19,6 +19,10 @@ urlpatterns = [
     path("ecfr/launcher-results", views.EcfrLauncherResultViewSet.as_view({
         "get": "list",
         "post": "create",
+        "patch": "partial_update_latest",
+    })),
+    path("ecfr-launcher/increment", views.EcfrLauncherResultViewSet.as_view({
+        "post": "increment_latest_counter",
     })),
     path("ecfr/parts", views.EcfrPartUploadViewSet.as_view({
         "put": "update",

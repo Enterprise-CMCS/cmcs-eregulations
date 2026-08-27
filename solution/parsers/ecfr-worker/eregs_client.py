@@ -104,6 +104,41 @@ def create_ecfr_result(
     )
 
 
+def increment_latest_ecfr_launcher_counter(
+    api_base_url: str,
+    credentials: BackendCredentials,
+    counter: str,
+    timeout: int = 60,
+) -> dict[str, Any]:
+    """Increment one counter on the most recent eCFR launcher result."""
+
+    request_url = urljoin(api_base_url, "parsers/ecfr-launcher/increment")
+    try:
+        headers = build_auth_headers(credentials)
+    except ConfigParseError as exc:
+        raise EregsClientError(str(exc)) from exc
+
+    headers["Content-Type"] = "application/json"
+
+    response = execute_request(
+        lambda: requests.post(request_url, json={"counter": counter}, headers=headers, timeout=timeout),
+        on_http_error=lambda exc: EregsClientError(
+            f"eRegs launcher counter increment failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
+        ),
+        on_request_error=lambda exc: EregsClientError(f"eRegs launcher counter increment request failed: {exc}"),
+    )
+
+    if not response.text.strip():
+        return {}
+
+    return parse_json_response(
+        response,
+        expected_type=dict,
+        on_invalid_json=lambda _exc: EregsClientError("eRegs launcher counter increment response was not valid JSON"),
+        on_invalid_shape=lambda: EregsClientError("eRegs launcher counter increment response must be a JSON object"),
+    )
+
+
 def _validate_part_payload(payload: Any) -> None:
     """Validate required top-level keys for part upload payloads."""
 

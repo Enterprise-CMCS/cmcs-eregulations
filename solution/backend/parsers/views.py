@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.db import transaction
+from django.db.models import F
 from django.http import Http404, JsonResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
@@ -85,6 +86,32 @@ class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+    @transaction.atomic
+    def partial_update_latest(self, request, *args, **kwargs):
+        latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if latest is None:
+            raise Http404()
+
+        serializer = self.get_serializer(latest, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    @transaction.atomic
+    def increment_latest_counter(self, request, *args, **kwargs):
+        counter = request.data.get("counter")
+        if counter not in {"succeeded_count", "failed_count"}:
+            return JsonResponse({"detail": "counter must be succeeded_count or failed_count"}, status=400)
+
+        latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if latest is None:
+            raise Http404()
+
+        EcfrLauncherResult.objects.filter(pk=latest.pk).update(**{counter: F(counter) + 1})
+        latest.refresh_from_db()
+        serializer = self.get_serializer_class()(latest)
+        return Response(serializer.data)
 
 
 @extend_schema(

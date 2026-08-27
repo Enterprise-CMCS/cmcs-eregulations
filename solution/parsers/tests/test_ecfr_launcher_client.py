@@ -26,8 +26,8 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_create_ecfr_launcher_result_success(self, mock_post):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"id": 1}'
-        response.json.return_value = {"id": 1}
+        response.text = '{"abstractparserresult_ptr": 1}'
+        response.json.return_value = {"abstractparserresult_ptr": 1}
         mock_post.return_value = response
 
         result = _module.create_ecfr_launcher_result(
@@ -36,7 +36,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
             payload={"success": True, "log": ""},
         )
 
-        self.assertEqual(result, {"id": 1})
+        self.assertEqual(result, {"abstractparserresult_ptr": 1})
         self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr/launcher-results"))
 
     @patch("requests.post")
@@ -50,6 +50,36 @@ class EcfrLauncherClientTests(unittest.TestCase):
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 payload={"success": False, "log": "boom"},
+            )
+
+    @patch("requests.patch")
+    def test_update_ecfr_launcher_result_success(self, mock_patch):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"abstractparserresult_ptr": 1, "queued_count": 2}'
+        response.json.return_value = {"abstractparserresult_ptr": 1, "queued_count": 2}
+        mock_patch.return_value = response
+
+        result = _module.update_ecfr_launcher_result(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            payload={"queued_count": 2, "skipped_count": 1},
+        )
+
+        self.assertEqual(result["queued_count"], 2)
+        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/launcher-results"))
+
+    @patch("requests.patch")
+    def test_update_ecfr_launcher_result_non_2xx(self, mock_patch):
+        response = Mock()
+        response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
+        mock_patch.return_value = response
+
+        with self.assertRaisesRegex(_module.EregsClientError, "launcher result update failed"):
+            _module.update_ecfr_launcher_result(
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                payload={"queued_count": 2, "skipped_count": 1},
             )
 
 

@@ -189,8 +189,12 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_launcher_result",
-            return_value={"id": 1},
-        ) as mock_launcher_result:
+            return_value={"abstractparserresult_ptr": 1},
+        ) as mock_launcher_result, patch.object(
+            _module,
+            "update_ecfr_launcher_result",
+            return_value={"abstractparserresult_ptr": 1},
+        ) as mock_update_result:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
@@ -198,7 +202,24 @@ class EcfrLauncherAppTests(unittest.TestCase):
         self.assertEqual(body["succeeded"], 1)
         self.assertEqual(body["failed"], 2)
         self.assertEqual(len(body["failures"]), 2)
-        self.assertEqual(mock_launcher_result.call_args.kwargs["payload"], {"success": True, "log": ""})
+        self.assertEqual(
+            mock_launcher_result.call_args.kwargs["payload"],
+            {
+                "success": True,
+                "log": "",
+                "queued_count": 0,
+                "skipped_count": 0,
+                "succeeded_count": 0,
+                "failed_count": 0,
+            },
+        )
+        self.assertEqual(
+            mock_update_result.call_args.kwargs["payload"],
+            {
+                "queued_count": 1,
+                "skipped_count": 1,
+            },
+        )
 
     def test_handler_posts_launcher_success_result(self):
         with patch.dict(
@@ -232,11 +253,21 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_launcher_result",
-            return_value={"id": 99},
-        ) as mock_create:
+            return_value={"abstractparserresult_ptr": 99},
+        ) as mock_create, patch.object(
+            _module,
+            "update_ecfr_launcher_result",
+            return_value={"abstractparserresult_ptr": 99},
+        ) as mock_update:
             _module.handler({"body": "{}"}, None)
 
-        self.assertEqual(mock_create.call_args.kwargs["payload"], {"success": True, "log": ""})
+        self.assertEqual(
+            mock_update.call_args.kwargs["payload"],
+            {
+                "queued_count": 0,
+                "skipped_count": 0,
+            },
+        )
 
     def test_handler_posts_launcher_failure_result_and_reraises(self):
         with patch.dict(
@@ -270,12 +301,16 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_launcher_result",
-            return_value={"id": 100},
-        ) as mock_create:
+            return_value={"abstractparserresult_ptr": 100},
+        ), patch.object(
+            _module,
+            "update_ecfr_launcher_result",
+            return_value={"abstractparserresult_ptr": 100},
+        ) as mock_update:
             with self.assertRaisesRegex(RuntimeError, "boom"):
                 _module.handler({"body": "{}"}, None)
 
-        self.assertEqual(mock_create.call_args.kwargs["payload"], {"success": False, "log": "boom"})
+        self.assertEqual(mock_update.call_args.kwargs["payload"], {"success": False, "log": "boom"})
 
     def test_resolve_parser_log_level_from_parser_config(self):
         self.assertEqual(_module._resolve_parser_log_level({"loglevel": "warn"}), "WARNING")

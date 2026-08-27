@@ -10,7 +10,7 @@ import os
 
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
 from .config import EcfrPartConfig, parse_config_from_event
-from .eregs_client import create_ecfr_result, upload_part
+from .eregs_client import create_ecfr_result, increment_latest_ecfr_launcher_counter, upload_part
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 from .xml_parser import parse_part_xml_to_document
 
@@ -127,6 +127,14 @@ def _process_work_item(config: EcfrPartConfig) -> dict:
     )
     logger.debug("Uploaded eCFR success result")
 
+    logger.debug("Incrementing latest eCFR launcher success counter")
+    increment_latest_ecfr_launcher_counter(
+        api_base_url=os.environ["EREGS_API_URL_V3"],
+        credentials=config.credentials,
+        counter="succeeded_count",
+    )
+    logger.debug("Incremented latest eCFR launcher success counter")
+
     logger.info(
         "Uploaded eCFR parsed payload: title=%s part=%s sections=%s subparts=%s",
         config.title_number,
@@ -208,6 +216,13 @@ def handler(event, _context):
                 },
             )
             logger.debug("Uploaded eCFR failure result")
+            logger.debug("Incrementing latest eCFR launcher failure counter")
+            increment_latest_ecfr_launcher_counter(
+                api_base_url=os.environ["EREGS_API_URL_V3"],
+                credentials=config.credentials,
+                counter="failed_count",
+            )
+            logger.debug("Incremented latest eCFR launcher failure counter")
         except Exception as log_exc:
             logger.warning("Failed to record eCFR worker failure result: %s", log_exc)
         raise
