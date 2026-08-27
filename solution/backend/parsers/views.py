@@ -7,10 +7,11 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from parsers.models import EcfrParserResult, FrParserResult, ParserConfiguration
+from parsers.models import EcfrLauncherResult, EcfrParserResult, FrParserResult, ParserConfiguration
 from regcore.models import Part
 
 from .serializers import (
+    EcfrLauncherResultSerializer,
     EcfrParserResultSerializer,
     FrParserResultSerializer,
     ParserConfigurationSerializer,
@@ -59,6 +60,27 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
 
     def by_title_part(self, request, title, part):
         return self._latest(title=title, part=part)
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+
+@extend_schema(
+    tags=["parsers"],
+    description="Create eCFR launcher result logs and retrieve most-recent eCFR launcher result.",
+)
+class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
+    serializer_class = EcfrLauncherResultSerializer
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        launcher_result = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if launcher_result:
+            serializer = self.get_serializer_class()(launcher_result)
+            return Response(serializer.data)
+        raise Http404()
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

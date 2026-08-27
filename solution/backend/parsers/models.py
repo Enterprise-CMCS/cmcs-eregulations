@@ -100,6 +100,12 @@ class EcfrParserResult(AbstractParserResult):
         ]
 
 
+class EcfrLauncherResult(AbstractParserResult):
+    class Meta:
+        verbose_name = "eCFR Launcher Result"
+        verbose_name_plural = "eCFR Launcher Results"
+
+
 class FrParserResult(AbstractParserResult):
     document_number = models.CharField(max_length=255)
 

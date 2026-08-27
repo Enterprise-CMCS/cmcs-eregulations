@@ -16,6 +16,10 @@ urlpatterns = [
     path("ecfr/results/title/<int:title>/part/<int:part>", views.EcfrParserResultViewSet.as_view({
         "get": "by_title_part",
     })),
+    path("ecfr/launcher-results", views.EcfrLauncherResultViewSet.as_view({
+        "get": "list",
+        "post": "create",
+    })),
     path("ecfr/parts", views.EcfrPartUploadViewSet.as_view({
         "put": "update",
     })),

@@ -186,7 +186,11 @@ class EcfrLauncherAppTests(unittest.TestCase):
                 1,
                 [{"index": "0", "reason": "simulated dispatch issue"}],
             ),
-        ):
+        ), patch.object(
+            _module,
+            "create_ecfr_launcher_result",
+            return_value={"id": 1},
+        ) as mock_launcher_result:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
@@ -194,6 +198,84 @@ class EcfrLauncherAppTests(unittest.TestCase):
         self.assertEqual(body["succeeded"], 1)
         self.assertEqual(body["failed"], 2)
         self.assertEqual(len(body["failures"]), 2)
+        self.assertEqual(mock_launcher_result.call_args.kwargs["payload"], {"success": True, "log": ""})
+
+    def test_handler_posts_launcher_success_result(self):
+        with patch.dict(
+            "os.environ",
+            {
+                "EREGS_API_URL_V3": "https://example.local/v3/",
+                "PARSER_LOCAL_MODE": "true",
+            },
+            clear=True,
+        ), patch.object(
+            _module,
+            "resolve_backend_credentials",
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
+        ), patch.object(
+            _module,
+            "fetch_parser_config",
+            return_value={
+                "parts": [],
+                "loglevel": "info",
+                "skip_parsed_regs": True,
+                "upload_supplemental_locations": True,
+            },
+        ), patch.object(
+            _module,
+            "_resolve_parser_log_level",
+            return_value="INFO",
+        ), patch.object(
+            _module,
+            "_build_work_units",
+            return_value=([], []),
+        ), patch.object(
+            _module,
+            "create_ecfr_launcher_result",
+            return_value={"id": 99},
+        ) as mock_create:
+            _module.handler({"body": "{}"}, None)
+
+        self.assertEqual(mock_create.call_args.kwargs["payload"], {"success": True, "log": ""})
+
+    def test_handler_posts_launcher_failure_result_and_reraises(self):
+        with patch.dict(
+            "os.environ",
+            {
+                "EREGS_API_URL_V3": "https://example.local/v3/",
+                "PARSER_LOCAL_MODE": "true",
+            },
+            clear=True,
+        ), patch.object(
+            _module,
+            "resolve_backend_credentials",
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
+        ), patch.object(
+            _module,
+            "fetch_parser_config",
+            return_value={
+                "parts": [],
+                "loglevel": "info",
+                "skip_parsed_regs": True,
+                "upload_supplemental_locations": True,
+            },
+        ), patch.object(
+            _module,
+            "_resolve_parser_log_level",
+            return_value="INFO",
+        ), patch.object(
+            _module,
+            "_build_work_units",
+            side_effect=RuntimeError("boom"),
+        ), patch.object(
+            _module,
+            "create_ecfr_launcher_result",
+            return_value={"id": 100},
+        ) as mock_create:
+            with self.assertRaisesRegex(RuntimeError, "boom"):
+                _module.handler({"body": "{}"}, None)
+
+        self.assertEqual(mock_create.call_args.kwargs["payload"], {"success": False, "log": "boom"})
 
     def test_resolve_parser_log_level_from_parser_config(self):
         self.assertEqual(_module._resolve_parser_log_level({"loglevel": "warn"}), "WARNING")

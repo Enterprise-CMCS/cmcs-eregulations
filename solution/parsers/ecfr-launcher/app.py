@@ -25,6 +25,7 @@ from .eregs_config import (
     fetch_existing_part_dates_by_title,
     fetch_parser_config,
 )
+from .eregs_client import create_ecfr_launcher_result
 from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
 
 
@@ -209,38 +210,60 @@ def handler(event, _context):
     logger.setLevel(getattr(logging, parser_log_level))
     logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
 
-    work_units, config_failures = _build_work_units(
-        parser_config=parser_config,
-        api_base_url=api_base_url,
-        credentials=credentials,
-        ecfr_api_base_url=ecfr_api_base_url,
-        parser_log_level=parser_log_level,
-    )
-
-    if not work_units and config_failures:
-        raise RuntimeError(
-            f"eCFR launcher could not enqueue any work units; {len(config_failures)} part(s) missing latest issue_date"
+    try:
+        work_units, config_failures = _build_work_units(
+            parser_config=parser_config,
+            api_base_url=api_base_url,
+            credentials=credentials,
+            ecfr_api_base_url=ecfr_api_base_url,
+            parser_log_level=parser_log_level,
         )
 
-    if work_units:
-        local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)
-    else:
-        local_mode = is_local_mode()
-        succeeded = 0
-        dispatch_failures = []
+        if not work_units and config_failures:
+            raise RuntimeError(
+                f"eCFR launcher could not enqueue any work units; {len(config_failures)} part(s) missing latest issue_date"
+            )
 
-    failures = config_failures + dispatch_failures
-    if local_mode:
-        logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
-    else:
-        logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
+        if work_units:
+            local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)
+        else:
+            local_mode = is_local_mode()
+            succeeded = 0
+            dispatch_failures = []
 
-    if config_failures:
-        logger.warning("eCFR launcher skipped %s work unit(s) due to missing latest issue_date", len(config_failures))
+        failures = config_failures + dispatch_failures
+        if local_mode:
+            logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
+        else:
+            logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
 
-    return build_launcher_response(
-        work_units=work_units,
-        local_mode=local_mode,
-        succeeded=succeeded,
-        failures=failures,
-    )
+        if config_failures:
+            logger.warning("eCFR launcher skipped %s work unit(s) due to missing latest issue_date", len(config_failures))
+
+        logger.debug("Uploading eCFR launcher success result")
+        create_ecfr_launcher_result(
+            api_base_url=api_base_url,
+            credentials=credentials,
+            payload={"success": True, "log": ""},
+        )
+        logger.debug("Uploaded eCFR launcher success result")
+
+        return build_launcher_response(
+            work_units=work_units,
+            local_mode=local_mode,
+            succeeded=succeeded,
+            failures=failures,
+        )
+    except Exception as exc:
+        logger.error("eCFR launcher failed: %s", exc)
+        try:
+            logger.debug("Uploading eCFR launcher failure result")
+            create_ecfr_launcher_result(
+                api_base_url=api_base_url,
+                credentials=credentials,
+                payload={"success": False, "log": str(exc)},
+            )
+            logger.debug("Uploaded eCFR launcher failure result")
+        except Exception as log_exc:
+            logger.warning("Failed to record eCFR launcher failure result: %s", log_exc)
+        raise
