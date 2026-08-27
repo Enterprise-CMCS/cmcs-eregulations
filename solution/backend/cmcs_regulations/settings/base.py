@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'regulations',
     'regcore',
+    'parsers',
     'regcore.search',
     'resources',
     'solo',
@@ -97,7 +98,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'regulations.context_processors.site_config',
     'regulations.context_processors.eua_config',
     'cmcs_regulations.context_processors.api_base',
-    'regcore.context_processors.regcore_config',
+    'parsers.context_processors.parser_data',
 )
 
 ROOT_URLCONF = 'cmcs_regulations.urls'
@@ -159,7 +160,7 @@ TEMPLATES = [
                 'cmcs_regulations.context_processors.api_base',
                 'regulations.context_processors.site_config',
                 'regulations.context_processors.eua_config',
-                'regcore.context_processors.regcore_config',
+                'parsers.context_processors.parser_data',
             ),
         },
         'DIRS': [os.path.join(BASE_DIR, 'templates')],

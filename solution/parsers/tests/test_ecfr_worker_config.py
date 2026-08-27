@@ -30,6 +30,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "effective_date": "2025-01-01",
                 "upload_reg_text": True,
                 "upload_locations": False,
+                "log_level": "info",
             }
         }
 
@@ -41,6 +42,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         self.assertEqual(parsed.effective_date, "2025-01-01")
         self.assertTrue(parsed.upload_reg_text)
         self.assertFalse(parsed.upload_locations)
+        self.assertEqual(parsed.log_level, "INFO")
         self.assertEqual(parsed.credentials, BackendCredentials("basic", "env-user", "env-pass", None))
 
     def test_parse_config_rejects_missing_effective_date(self):
@@ -50,6 +52,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "part_number": 400,
                 "upload_reg_text": True,
                 "upload_locations": True,
+                "log_level": "info",
             }
         }
 
@@ -65,6 +68,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "effective_date": "2025-01-01",
                 "upload_reg_text": "yes",
                 "upload_locations": True,
+                "log_level": "info",
             }
         }
 
@@ -80,11 +84,28 @@ class EcfrWorkerConfigTests(unittest.TestCase):
                 "effective_date": "2025/01/01",
                 "upload_reg_text": True,
                 "upload_locations": True,
+                "log_level": "info",
             }
         }
 
         with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
             with self.assertRaisesRegex(ConfigParseError, "effective_date must be in YYYY-MM-DD format"):
+                parse_config(payload)
+
+    def test_parse_config_rejects_invalid_log_level(self):
+        payload = {
+            "config": {
+                "title_number": 42,
+                "part_number": 400,
+                "effective_date": "2025-01-01",
+                "upload_reg_text": True,
+                "upload_locations": True,
+                "log_level": "verbose",
+            }
+        }
+
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "loglevel must be one of"):
                 parse_config(payload)
 
 

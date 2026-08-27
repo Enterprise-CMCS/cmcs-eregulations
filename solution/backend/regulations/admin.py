@@ -33,6 +33,10 @@ admin.site.logout_template = 'admin/logged_out.html'
 # Custom app list function, allows ordering Django Admin models by "admin_priority", low to high
 def get_app_list(self, request, app_label=None):
     app_dict = self._build_app_dict(request, app_label)
+    custom_sidebar_labels = {
+        "EcfrParserResult": "eCFR Parser Results",
+        "FrParserResult": "Federal Register Parser Results",
+    }
     for app_name in app_dict.keys():
         app = app_dict[app_name]
         model_priority = {
@@ -43,6 +47,10 @@ def get_app_list(self, request, app_label=None):
             )
             for model in app['models']
         }
+        for model in app["models"]:
+            custom_label = custom_sidebar_labels.get(model["object_name"])
+            if custom_label:
+                model["name"] = custom_label
         app['models'].sort(key=lambda x: model_priority[x['object_name']])
     return list(app_dict.values())
 

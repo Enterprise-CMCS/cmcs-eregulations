@@ -221,8 +221,8 @@ function httpApiPost(
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
 const getLastParserSuccessDate = async ({ apiUrl, title = "42" }) => {
-    const result = await httpApiGet(`${apiUrl}ecfr_parser_result/${title}`);
-    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+    const result = await httpApiGet(`${apiUrl}parsers/ecfr/results/title/${title}`);
+    return result.timestamp ? niceDate(result.timestamp.split("T")[0]) : "N/A";
 };
 
 /**

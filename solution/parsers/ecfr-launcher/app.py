@@ -11,13 +11,20 @@ import os
 from typing import Any
 
 from common.auth import resolve_backend_credentials
+from common.config import ConfigParseError, require_bool, require_non_empty_string
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
     is_local_mode,
 )
+from common.logging import resolve_log_level_name
 
-from .eregs_config import TargetPartConfig, expand_target_parts, fetch_parser_config
+from .eregs_config import (
+    TargetPartConfig,
+    expand_target_parts,
+    fetch_existing_part_dates_by_title,
+    fetch_parser_config,
+)
 from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
 
 
@@ -35,16 +42,28 @@ def _resolve_ecfr_api_base_url() -> str:
     return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
 
 
-def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) -> tuple[list[dict], list[dict[str, str]]]:
+def _build_work_units(
+    parser_config: dict[str, Any],
+    api_base_url: str,
+    credentials,
+    ecfr_api_base_url: str,
+    parser_log_level: str,
+) -> tuple[list[dict], list[dict[str, str]]]:
     """Build worker messages from parser config and latest-date resolution.
 
     Returns both valid work units and per-part failures for targets that cannot
     be queued (for example, no resolvable latest date).
     """
 
-    parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
     targets = expand_target_parts(parser_config, ecfr_base_url=ecfr_api_base_url)
     latest_dates_by_title = _resolve_latest_dates_by_title(targets, ecfr_api_base_url)
+    skip_parsed_regs = _resolve_skip_parsed_regs(parser_config)
+    upload_supplemental_locations = _resolve_upload_supplemental_locations(parser_config)
+    existing_dates_by_title = (
+        _resolve_existing_part_dates_by_title(api_base_url, credentials, targets)
+        if skip_parsed_regs
+        else {}
+    )
 
     work_units: list[dict[str, Any]] = []
     failures: list[dict[str, str]] = []
@@ -60,6 +79,18 @@ def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) ->
             )
             continue
 
+        existing_date = existing_dates_by_title.get(target.title_number, {}).get(target.part_number)
+        if existing_date == latest_issue_date:
+            logger.info(
+                "Skipping previously parsed part: title=%s part=%s date=%s",
+                target.title_number,
+                target.part_number,
+                latest_issue_date,
+            )
+            continue
+
+        upload_locations = target.upload_locations and upload_supplemental_locations
+
         work_units.append(
             {
                 "config": {
@@ -67,12 +98,31 @@ def _build_work_units(api_base_url: str, ecfr_api_base_url: str, credentials) ->
                     "part_number": target.part_number,
                     "effective_date": latest_issue_date,
                     "upload_reg_text": target.upload_reg_text,
-                    "upload_locations": target.upload_locations,
+                    "upload_locations": upload_locations,
+                    "log_level": parser_log_level,
                 }
             }
         )
 
     return work_units, failures
+
+
+def _resolve_existing_part_dates_by_title(
+    api_base_url: str,
+    credentials,
+    targets: list[TargetPartConfig],
+) -> dict[int, dict[int, str]]:
+    """Fetch existing eRegs part issue dates for all requested titles."""
+
+    by_title: dict[int, dict[int, str]] = {}
+    title_numbers = sorted({target.title_number for target in targets})
+    for title_number in title_numbers:
+        by_title[title_number] = fetch_existing_part_dates_by_title(
+            api_base_url=api_base_url,
+            credentials=credentials,
+            title_number=title_number,
+        )
+    return by_title
 
 
 def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_base_url: str) -> dict[int, dict[int, str]]:
@@ -111,6 +161,34 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_bas
     return by_title
 
 
+def _resolve_parser_log_level(parser_config: dict[str, Any]) -> str:
+    """Resolve and validate parser log level from parser-config."""
+
+    try:
+        configured = require_non_empty_string(parser_config, "loglevel")
+        return resolve_log_level_name(configured)
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
+def _resolve_skip_parsed_regs(parser_config: dict[str, Any]) -> bool:
+    """Resolve skip_parsed_regs from parser-config."""
+
+    try:
+        return require_bool(parser_config, "skip_parsed_regs")
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
+def _resolve_upload_supplemental_locations(parser_config: dict[str, Any]) -> bool:
+    """Resolve global upload_supplemental_locations override from parser-config."""
+
+    try:
+        return require_bool(parser_config, "upload_supplemental_locations")
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
 def handler(event, _context):
     """Main launcher handler for scheduled/on-demand eCFR work generation."""
 
@@ -126,7 +204,18 @@ def handler(event, _context):
 
     api_base_url = os.environ["EREGS_API_URL_V3"]
     ecfr_api_base_url = _resolve_ecfr_api_base_url()
-    work_units, config_failures = _build_work_units(api_base_url, ecfr_api_base_url, credentials)
+    parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
+    parser_log_level = _resolve_parser_log_level(parser_config)
+    logger.setLevel(getattr(logging, parser_log_level))
+    logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
+
+    work_units, config_failures = _build_work_units(
+        parser_config=parser_config,
+        api_base_url=api_base_url,
+        credentials=credentials,
+        ecfr_api_base_url=ecfr_api_base_url,
+        parser_log_level=parser_log_level,
+    )
 
     if not work_units and config_failures:
         raise RuntimeError(

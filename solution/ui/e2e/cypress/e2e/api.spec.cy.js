@@ -27,8 +27,8 @@ const API_ENDPOINTS_V3 = [
     `/v3/content-search?q=${SEARCH_TERM}`,
     `/v3/content-search/counts?q=${SEARCH_TERM}`,
     `/v3/resources/context-banners?title=${TITLE}&part=${PART}`,
-    `/v3/ecfr_parser_result/${TITLE}`,
-    `/v3/parser_config`,
+    `/v3/parsers/ecfr/results/title/${TITLE}`,
+    `/v3/parsers/config`,
     `/v3/resources/`,
     `/v3/resources/citations`,
     `/v3/resources/citations/sections`,
@@ -62,15 +62,22 @@ const API_ENDPOINTS_V3 = [
     `/v3/toc`,
 ];
 
+const OPTIONAL_DATA_ENDPOINTS = new Set([
+    `/v3/parsers/ecfr/results/title/${TITLE}`,
+]);
+
 describe("API testing", () => {
     API_ENDPOINTS_V3.forEach((endpoint) => {
-        it(`sends GET request to ${endpoint} and checks for a 200 or 403 (Forbidden) response`, () => {
+        it(`sends GET request to ${endpoint} and checks for expected response status`, () => {
             cy.request({ url: endpoint, failOnStatusCode: false }).as(
                 "request"
             );
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
-                expect(response.status).to.be.oneOf([200, 403]);
+                const expectedStatuses = OPTIONAL_DATA_ENDPOINTS.has(endpoint)
+                    ? [200, 403, 404]
+                    : [200, 403];
+                expect(response.status).to.be.oneOf(expectedStatuses);
             });
         });
     });

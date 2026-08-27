@@ -22,6 +22,7 @@ EregsConfigError = _module.EregsConfigError
 TargetPartConfig = _module.TargetPartConfig
 expand_target_parts = _module.expand_target_parts
 fetch_parser_config = _module.fetch_parser_config
+fetch_existing_part_dates_by_title = _module.fetch_existing_part_dates_by_title
 fetch_subchapter_part_numbers = _module.fetch_subchapter_part_numbers
 
 
@@ -38,6 +39,26 @@ class EcfrLauncherConfigTests(unittest.TestCase):
             )
 
         self.assertEqual(payload, {"parts": []})
+        expected_auth = "Basic " + base64.b64encode(b"user:pass").decode("utf-8")
+        self.assertEqual(mock_get.call_args.kwargs["headers"]["Authorization"], expected_auth)
+
+    def test_fetch_existing_part_dates_by_title_uses_basic_auth(self):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = [
+            {"name": "400", "date": "2025-01-01"},
+            {"name": "abc", "date": "2025-01-01"},
+            {"name": "401", "date": ""},
+        ]
+
+        with patch("requests.get", return_value=response) as mock_get:
+            payload = fetch_existing_part_dates_by_title(
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="user", password="pass"),
+                title_number=42,
+            )
+
+        self.assertEqual(payload, {400: "2025-01-01"})
         expected_auth = "Basic " + base64.b64encode(b"user:pass").decode("utf-8")
         self.assertEqual(mock_get.call_args.kwargs["headers"]["Authorization"], expected_auth)
 

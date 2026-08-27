@@ -1,7 +1,7 @@
 from django.apps import apps
 from rest_framework import serializers
 
-from regcore.models import ECFRParserResult
+from parsers.models import EcfrParserResult, FrParserResult
 
 
 class PartConfigurationSerializer(serializers.Serializer):
@@ -14,20 +14,23 @@ class PartConfigurationSerializer(serializers.Serializer):
 
 
 class ParserConfigurationSerializer(serializers.Serializer):
-    workers = serializers.IntegerField()
-    retries = serializers.IntegerField()
     loglevel = serializers.CharField()
     upload_supplemental_locations = serializers.BooleanField()
-    log_parse_errors = serializers.BooleanField()
-    skip_reg_versions = serializers.BooleanField()
+    skip_parsed_regs = serializers.BooleanField()
     skip_fr_documents = serializers.BooleanField()
     parts = PartConfigurationSerializer(many=True)
 
 
-class ParserResultSerializer(serializers.ModelSerializer):
+class EcfrParserResultSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ECFRParserResult
-        fields = '__all__'
+        model = EcfrParserResult
+        fields = "__all__"
+
+
+class FrParserResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FrParserResult
+        fields = "__all__"
 
 
 class PartSectionCreateSerializer(serializers.Serializer):
@@ -67,7 +70,7 @@ class PartUploadSerializer(serializers.Serializer):
         # create depth stack for front page TOC
         stack = []
         current = instance.structure
-        for i in range(instance.depth + 1):
+        for _ in range(instance.depth + 1):
             structure_copy = current.copy()
             del structure_copy["children"]
             stack.append(structure_copy)
