@@ -6,13 +6,12 @@ per-part queued/skipped status rows, then sends queued work units to SQS (or
 local worker HTTP in dev mode).
 """
 
-import json
 import logging
 import os
 from typing import Any
 
-from common.auth import resolve_backend_credentials
 from common.config import ConfigParseError, require_bool, require_non_empty_string
+from common.eregs_client import create_ecfr_result
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -20,15 +19,16 @@ from common.launcher import (
 )
 from common.logging import resolve_log_level_name
 
+from common.auth import resolve_backend_credentials
+
 from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
-from .eregs_client import create_ecfr_launcher_result, create_ecfr_result, update_ecfr_launcher_result
+from .eregs_client import create_ecfr_launcher_result, update_ecfr_launcher_result
 from .eregs_config import (
     TargetPartConfig,
     expand_target_parts,
     fetch_existing_part_dates_by_title,
     fetch_parser_config,
 )
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

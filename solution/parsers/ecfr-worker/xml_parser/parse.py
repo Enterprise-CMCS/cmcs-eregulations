@@ -15,6 +15,16 @@ from .parse_divs import (
     parse_subject_group,
     parse_subpart,
 )
+
+__all__ = [
+    "parse_part_xml_to_document",
+    "parse_part_root",
+    "parse_appendix",
+    "parse_section",
+    "parse_subject_group",
+    "parse_subpart",
+    "parse_part_children",
+]
 from .postprocess import postprocess_part_node
 from .readers import read_child_text
 

@@ -47,7 +47,18 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def _latest(self, **filters):
-        parser_result = EcfrParserResult.objects.filter(**filters).order_by("-timestamp").first()
+        parser_result = (
+            EcfrParserResult.objects.filter(
+                **filters,
+                status__in=[
+                    EcfrParserResult.STATUS_SKIPPED,
+                    EcfrParserResult.STATUS_SUCCEEDED,
+                ],
+                status_updated_at__isnull=False,
+            )
+            .order_by("-status_updated_at", "-timestamp")
+            .first()
+        )
         if parser_result:
             serializer = self.get_serializer_class()(parser_result)
             return Response(serializer.data)

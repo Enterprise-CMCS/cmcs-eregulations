@@ -21,6 +21,14 @@ def _load_module():
 _module = _load_module()
 
 
+_common_path = Path(__file__).resolve().parent.parent / "common" / "eregs_client.py"
+_common_spec = util.spec_from_file_location("ecfr_common_eregs_client", _common_path)
+if _common_spec is None or _common_spec.loader is None:
+    raise RuntimeError("Unable to load common.eregs_client module")
+_cregs = util.module_from_spec(_common_spec)
+_common_spec.loader.exec_module(_cregs)
+
+
 class EcfrLauncherClientTests(unittest.TestCase):
     @patch("requests.post")
     def test_create_ecfr_launcher_result_success(self, mock_post):
@@ -90,7 +98,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         response.json.return_value = {"abstractparserresult_ptr": 9, "status": "queued"}
         mock_post.return_value = response
 
-        result = _module.create_ecfr_result(
+        result = _cregs.create_ecfr_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             payload={"title": 42, "part": 400, "status": "queued", "success": False, "log": ""},
@@ -107,7 +115,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         response.json.return_value = {"abstractparserresult_ptr": 9, "status": "succeeded"}
         mock_patch.return_value = response
 
-        result = _module.update_ecfr_result(
+        result = _cregs.update_ecfr_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             result_id=9,

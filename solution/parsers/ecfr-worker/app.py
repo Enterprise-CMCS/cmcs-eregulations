@@ -8,17 +8,19 @@ import json
 import logging
 import os
 
-from .ecfr_client import fetch_part_full_xml, fetch_part_structure
+from common.eregs_client import update_ecfr_result
+
 from .config import EcfrPartConfig, parse_config_from_event
-from .eregs_client import update_ecfr_result, upload_part
+from .ecfr_client import fetch_part_full_xml, fetch_part_structure
+from .eregs_client import upload_part
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 from .xml_parser import parse_part_xml_to_document
-
 
 logger = logging.getLogger(__name__)
 
 _ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
 _DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
+
 
 def _configure_logging(log_level_name: str | None = None) -> None:
     """Configure root logging for worker execution."""
