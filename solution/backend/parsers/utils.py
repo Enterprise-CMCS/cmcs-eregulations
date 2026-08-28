@@ -14,10 +14,10 @@ def get_ecfr_last_updated(title: int | None = None, part: int | None = None) -> 
     - title + part: title/part scope
     """
 
-    if part is not None and title is None:
+    if part and not title:
         raise ValueError("part requires title")
 
-    if title is not None and part is not None:
+    if title and part:
         latest = (
             EcfrParserResult.objects.filter(
                 title=title,
