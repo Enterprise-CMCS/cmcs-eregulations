@@ -1,7 +1,7 @@
 from django.apps import apps
 from django.db import transaction
-from django.db.models import F
 from django.http import Http404, JsonResponse
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -64,7 +64,60 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        data = request.data.copy()
+        if "status_updated_at" not in data:
+            data["status_updated_at"] = timezone.now().isoformat()
+        if "status" in data and "success" not in data:
+            data["success"] = data["status"] in {
+                EcfrParserResult.STATUS_SKIPPED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            }
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)
+
+    @transaction.atomic
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        parser_result = self.get_object()
+        requested_status = request.data.get("status")
+        if requested_status is None:
+            serializer = self.get_serializer(parser_result, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        allowed_transitions = {
+            EcfrParserResult.STATUS_QUEUED: {
+                EcfrParserResult.STATUS_FAILED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            },
+            EcfrParserResult.STATUS_FAILED: {
+                EcfrParserResult.STATUS_FAILED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            },
+        }
+        current_status = parser_result.status
+        if current_status in {EcfrParserResult.STATUS_SUCCEEDED, EcfrParserResult.STATUS_SKIPPED}:
+            serializer = self.get_serializer(parser_result)
+            return Response(serializer.data)
+
+        if requested_status not in allowed_transitions.get(current_status, set()):
+            serializer = self.get_serializer(parser_result)
+            return Response(serializer.data)
+
+        data = request.data.copy()
+        data["status_updated_at"] = timezone.now().isoformat()
+        if requested_status == EcfrParserResult.STATUS_SUCCEEDED:
+            data["success"] = True
+            data["log"] = ""
+        elif requested_status == EcfrParserResult.STATUS_FAILED:
+            data["success"] = False
+
+        serializer = self.get_serializer(parser_result, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 @extend_schema(
@@ -96,21 +149,6 @@ class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(latest, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
-
-    @transaction.atomic
-    def increment_latest_counter(self, request, *args, **kwargs):
-        counter = request.data.get("counter")
-        if counter not in {"succeeded_count", "failed_count"}:
-            return JsonResponse({"detail": "counter must be succeeded_count or failed_count"}, status=400)
-
-        latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
-        if latest is None:
-            raise Http404()
-
-        EcfrLauncherResult.objects.filter(pk=latest.pk).update(**{counter: F(counter) + 1})
-        latest.refresh_from_db()
-        serializer = self.get_serializer_class()(latest)
         return Response(serializer.data)
 
 

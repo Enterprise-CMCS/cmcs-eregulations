@@ -152,34 +152,36 @@ class EcfrWorkerClientsTests(unittest.TestCase):
                 },
             )
 
-    @patch("requests.post")
-    def test_increment_latest_ecfr_launcher_counter_success(self, mock_post):
+    @patch("requests.patch")
+    def test_update_ecfr_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 5, "succeeded_count": 1}'
-        response.json.return_value = {"abstractparserresult_ptr": 5, "succeeded_count": 1}
-        mock_post.return_value = response
+        response.text = '{"abstractparserresult_ptr": 5, "status": "succeeded"}'
+        response.json.return_value = {"abstractparserresult_ptr": 5, "status": "succeeded"}
+        mock_patch.return_value = response
 
-        result = _eregs_client.increment_latest_ecfr_launcher_counter(
+        result = _eregs_client.update_ecfr_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-            counter="succeeded_count",
+            result_id=5,
+            payload={"status": "succeeded", "log": ""},
         )
 
-        self.assertEqual(result["succeeded_count"], 1)
-        self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr-launcher/increment"))
+        self.assertEqual(result["status"], "succeeded")
+        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/results/5"))
 
-    @patch("requests.post")
-    def test_increment_latest_ecfr_launcher_counter_non_2xx(self, mock_post):
+    @patch("requests.patch")
+    def test_update_ecfr_result_non_2xx(self, mock_patch):
         response = Mock()
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
-        mock_post.return_value = response
+        mock_patch.return_value = response
 
-        with self.assertRaisesRegex(_eregs_client.EregsClientError, "counter increment failed"):
-            _eregs_client.increment_latest_ecfr_launcher_counter(
+        with self.assertRaisesRegex(_eregs_client.EregsClientError, "result update failed"):
+            _eregs_client.update_ecfr_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                counter="failed_count",
+                result_id=5,
+                payload={"status": "failed", "log": "failure"},
             )
 
     def test_upload_part_missing_required_field(self):

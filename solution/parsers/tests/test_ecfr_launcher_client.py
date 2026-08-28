@@ -56,17 +56,17 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_update_ecfr_launcher_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 1, "queued_count": 2}'
-        response.json.return_value = {"abstractparserresult_ptr": 1, "queued_count": 2}
+        response.text = '{"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}'
+        response.json.return_value = {"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}
         mock_patch.return_value = response
 
         result = _module.update_ecfr_launcher_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-            payload={"queued_count": 2, "skipped_count": 1},
+            payload={"success": True, "log": "queued=2 skipped=1"},
         )
 
-        self.assertEqual(result["queued_count"], 2)
+        self.assertEqual(result["log"], "queued=2 skipped=1")
         self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/launcher-results"))
 
     @patch("requests.patch")
@@ -79,8 +79,43 @@ class EcfrLauncherClientTests(unittest.TestCase):
             _module.update_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                payload={"queued_count": 2, "skipped_count": 1},
+                payload={"success": True, "log": "queued=2 skipped=1"},
             )
+
+    @patch("requests.post")
+    def test_create_ecfr_result_success(self, mock_post):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"abstractparserresult_ptr": 9, "status": "queued"}'
+        response.json.return_value = {"abstractparserresult_ptr": 9, "status": "queued"}
+        mock_post.return_value = response
+
+        result = _module.create_ecfr_result(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            payload={"title": 42, "part": 400, "status": "queued", "success": False, "log": ""},
+        )
+
+        self.assertEqual(result["status"], "queued")
+        self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr/results"))
+
+    @patch("requests.patch")
+    def test_update_ecfr_result_success(self, mock_patch):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"abstractparserresult_ptr": 9, "status": "succeeded"}'
+        response.json.return_value = {"abstractparserresult_ptr": 9, "status": "succeeded"}
+        mock_patch.return_value = response
+
+        result = _module.update_ecfr_result(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            result_id=9,
+            payload={"status": "succeeded", "log": ""},
+        )
+
+        self.assertEqual(result["status"], "succeeded")
+        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/results/9"))
 
 
 if __name__ == "__main__":

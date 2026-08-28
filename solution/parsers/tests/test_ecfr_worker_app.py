@@ -7,8 +7,6 @@ from importlib import util
 from pathlib import Path
 from unittest.mock import patch
 
-from common.auth import BackendCredentials
-
 
 def _load_module():
     worker_dir = Path(__file__).resolve().parent.parent / "ecfr-worker"
@@ -46,6 +44,8 @@ class EcfrWorkerAppTests(unittest.TestCase):
             return _config_module.parse_config(
                 {
                     "config": {
+                        "parser_result_id": 7,
+                        "launcher_result_id": 3,
                         "title_number": 42,
                         "part_number": 400,
                         "effective_date": "2025-01-01",
@@ -56,14 +56,10 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 }
             )
 
-    def test_handler_uploads_part_with_flags_enabled(self):
+    def test_handler_updates_result_to_succeeded(self):
         parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)
 
-        structure = {
-            "type": "title",
-            "identifier": "42",
-            "children": [],
-        }
+        structure = {"type": "title", "identifier": "42", "children": []}
 
         with patch.dict(os.environ, {"EREGS_API_URL_V3": "https://example.local/v3/"}, clear=True), patch.object(
             _module, "parse_config_from_event", return_value=parsed_config
@@ -82,79 +78,18 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "section": "200"}],
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
-        ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}) as mock_upload, patch.object(
-            _module, "create_ecfr_result", return_value={"id": 999}
-        ) as mock_create_result, patch.object(
-            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
-        ) as mock_increment:
+        ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}), patch.object(
+            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "succeeded"}
+        ) as mock_update_result:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
         self.assertEqual(body["processed"], 1)
         self.assertTrue(body["uploaded"])
-        self.assertEqual(body["upload_result_keys"], ["id", "status"])
+        self.assertEqual(mock_update_result.call_args.kwargs["result_id"], 7)
+        self.assertEqual(mock_update_result.call_args.kwargs["payload"]["status"], "succeeded")
 
-        payload = mock_upload.call_args.kwargs["payload"]
-        self.assertEqual(payload["name"], "400")
-        self.assertEqual(payload["title"], "42")
-        self.assertEqual(payload["date"], "2025-01-01")
-        self.assertEqual(payload["document"], {"node_type": "part", "children": []})
-        self.assertEqual(payload["depth"], 3)
-        self.assertEqual(len(payload["sections"]), 1)
-        self.assertEqual(len(payload["subparts"]), 1)
-        self.assertTrue(payload["upload_reg_text"])
-        self.assertTrue(payload["upload_locations"])
-
-        result_payload = mock_create_result.call_args.kwargs["payload"]
-        self.assertEqual(result_payload["title"], 42)
-        self.assertEqual(result_payload["part"], 400)
-        self.assertEqual(result_payload["date"], "2025-01-01")
-        self.assertTrue(result_payload["success"])
-        self.assertEqual(result_payload["log"], "")
-
-        self.assertEqual(
-            mock_increment.call_args.kwargs["counter"],
-            "succeeded_count",
-        )
-
-    def test_handler_skips_full_xml_and_locations_when_flags_disabled(self):
-        parsed_config = self._build_parsed_config(upload_reg_text=False, upload_locations=False)
-
-        structure = {
-            "type": "title",
-            "identifier": "42",
-            "children": [],
-        }
-
-        with patch.dict(os.environ, {"EREGS_API_URL_V3": "https://example.local/v3/"}, clear=True), patch.object(
-            _module, "parse_config_from_event", return_value=parsed_config
-        ), patch.object(_module, "fetch_part_structure", return_value=structure), patch.object(
-            _module, "determine_part_depth", return_value=3
-        ), patch.object(_module, "upload_part", return_value={}) as mock_upload, patch.object(
-            _module, "create_ecfr_result", return_value={}
-        ), patch.object(
-            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
-        ), patch.object(_module, "fetch_part_full_xml") as mock_fetch_xml, patch.object(
-            _module, "extract_sections_and_subparts"
-        ) as mock_extract:
-            response = _module.handler({"body": "{}"}, None)
-
-        body = json.loads(response["body"])
-        self.assertEqual(body["processed"], 1)
-        self.assertTrue(body["uploaded"])
-        self.assertEqual(body["upload_result_keys"], [])
-
-        payload = mock_upload.call_args.kwargs["payload"]
-        self.assertEqual(payload["document"], {})
-        self.assertEqual(payload["sections"], [])
-        self.assertEqual(payload["subparts"], [])
-        self.assertFalse(payload["upload_reg_text"])
-        self.assertFalse(payload["upload_locations"])
-
-        mock_fetch_xml.assert_not_called()
-        mock_extract.assert_not_called()
-
-    def test_handler_posts_failure_result_and_reraises(self):
+    def test_handler_updates_result_to_failed_and_reraises(self):
         parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)
 
         with patch.dict(os.environ, {"EREGS_API_URL_V3": "https://example.local/v3/"}, clear=True), patch.object(
@@ -162,23 +97,14 @@ class EcfrWorkerAppTests(unittest.TestCase):
         ), patch.object(
             _module, "fetch_part_structure", side_effect=RuntimeError("boom")
         ), patch.object(
-            _module, "create_ecfr_result", return_value={"id": 1}
-        ) as mock_create_result, patch.object(
-            _module, "increment_latest_ecfr_launcher_counter", return_value={"abstractparserresult_ptr": 1}
-        ) as mock_increment:
+            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "failed"}
+        ) as mock_update_result:
             with self.assertRaisesRegex(RuntimeError, "boom"):
                 _module.handler({"body": "{}"}, None)
 
-        result_payload = mock_create_result.call_args.kwargs["payload"]
-        self.assertEqual(result_payload["title"], 42)
-        self.assertEqual(result_payload["part"], 400)
-        self.assertEqual(result_payload["date"], "2025-01-01")
-        self.assertFalse(result_payload["success"])
-        self.assertIn("boom", result_payload["log"])
-        self.assertEqual(
-            mock_increment.call_args.kwargs["counter"],
-            "failed_count",
-        )
+        self.assertEqual(mock_update_result.call_args.kwargs["result_id"], 7)
+        self.assertEqual(mock_update_result.call_args.kwargs["payload"]["status"], "failed")
+        self.assertIn("boom", mock_update_result.call_args.kwargs["payload"]["log"])
 
 
 if __name__ == "__main__":

@@ -104,15 +104,16 @@ def create_ecfr_result(
     )
 
 
-def increment_latest_ecfr_launcher_counter(
+def update_ecfr_result(
     api_base_url: str,
     credentials: BackendCredentials,
-    counter: str,
+    result_id: int,
+    payload: dict[str, Any],
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """Increment one counter on the most recent eCFR launcher result."""
+    """Update one eCFR parser result entry at /v3/parsers/ecfr/results/<id>."""
 
-    request_url = urljoin(api_base_url, "parsers/ecfr-launcher/increment")
+    request_url = urljoin(api_base_url, f"parsers/ecfr/results/{result_id}")
     try:
         headers = build_auth_headers(credentials)
     except ConfigParseError as exc:
@@ -121,11 +122,11 @@ def increment_latest_ecfr_launcher_counter(
     headers["Content-Type"] = "application/json"
 
     response = execute_request(
-        lambda: requests.post(request_url, json={"counter": counter}, headers=headers, timeout=timeout),
+        lambda: requests.patch(request_url, json=payload, headers=headers, timeout=timeout),
         on_http_error=lambda exc: EregsClientError(
-            f"eRegs launcher counter increment failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
+            f"eRegs eCFR result update failed ({exc.response.status_code if exc.response is not None else 'unknown'})"
         ),
-        on_request_error=lambda exc: EregsClientError(f"eRegs launcher counter increment request failed: {exc}"),
+        on_request_error=lambda exc: EregsClientError(f"eRegs eCFR result update request failed: {exc}"),
     )
 
     if not response.text.strip():
@@ -134,8 +135,8 @@ def increment_latest_ecfr_launcher_counter(
     return parse_json_response(
         response,
         expected_type=dict,
-        on_invalid_json=lambda _exc: EregsClientError("eRegs launcher counter increment response was not valid JSON"),
-        on_invalid_shape=lambda: EregsClientError("eRegs launcher counter increment response must be a JSON object"),
+        on_invalid_json=lambda _exc: EregsClientError("eRegs eCFR result update response was not valid JSON"),
+        on_invalid_shape=lambda: EregsClientError("eRegs eCFR result update response must be a JSON object"),
     )
 
 
