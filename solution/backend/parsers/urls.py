@@ -10,11 +10,19 @@ urlpatterns = [
         "get": "list",
         "post": "create",
     })),
+    path("ecfr/results/<int:pk>", views.EcfrParserResultViewSet.as_view({
+        "patch": "partial_update",
+    })),
     path("ecfr/results/title/<int:title>", views.EcfrParserResultViewSet.as_view({
         "get": "by_title",
     })),
     path("ecfr/results/title/<int:title>/part/<int:part>", views.EcfrParserResultViewSet.as_view({
         "get": "by_title_part",
+    })),
+    path("ecfr/launcher-results", views.EcfrLauncherResultViewSet.as_view({
+        "get": "list",
+        "post": "create",
+        "patch": "partial_update_latest",
     })),
     path("ecfr/parts", views.EcfrPartUploadViewSet.as_view({
         "put": "update",

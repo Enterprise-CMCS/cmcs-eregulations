@@ -8,6 +8,7 @@ from solo.admin import SingletonModelAdmin
 from regcore.models import Part
 
 from .models import (
+    EcfrLauncherResult,
     EcfrParserResult,
     FrParserResult,
     ParserConfiguration,
@@ -115,10 +116,28 @@ class _ParserResultAdminBase(admin.ModelAdmin):
 
 @admin.register(EcfrParserResult)
 class EcfrParserResultAdmin(_ParserResultAdminBase):
-    list_display = ("title", "part", "date", "timestamp", "success", "log_preview")
-    list_filter = ("success", "title", "date")
-    search_fields = ("title", "part", "log")
-    readonly_fields = ("title", "part", "date", "timestamp", "success", "log")
+    list_display = ("title", "part", "date", "status", "status_updated_at", "timestamp", "success", "log_preview")
+    list_filter = ("status", "success", "title", "date")
+    search_fields = ("title", "part", "status", "log")
+    readonly_fields = (
+        "launcher_result",
+        "title",
+        "part",
+        "date",
+        "status",
+        "status_updated_at",
+        "timestamp",
+        "success",
+        "log",
+    )
+
+
+@admin.register(EcfrLauncherResult)
+class EcfrLauncherResultAdmin(_ParserResultAdminBase):
+    list_display = ("timestamp", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("log",)
+    readonly_fields = ("timestamp", "success", "log")
 
 
 @admin.register(FrParserResult)

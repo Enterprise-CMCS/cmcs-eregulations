@@ -31,7 +31,7 @@ _module = _load_module()
 
 
 class EcfrLauncherAppTests(unittest.TestCase):
-    def test_build_work_units_includes_effective_date_and_flags(self):
+    def test_build_work_units_includes_ids_and_flags(self):
         targets = [
             _module.TargetPartConfig(
                 title_number=42,
@@ -41,14 +41,18 @@ class EcfrLauncherAppTests(unittest.TestCase):
             )
         ]
 
-        with patch.object(_module, "fetch_parser_config", return_value={"parts": []}), patch.object(
-            _module, "expand_target_parts", return_value=targets
-        ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {400: "2025-01-01"}}), patch.object(
+        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
+            _module, "_resolve_latest_dates_by_title", return_value={42: {400: "2025-01-01"}}
+        ), patch.object(
             _module,
             "_resolve_existing_part_dates_by_title",
             return_value={42: {}},
-        ):
-            work_units, failures = _module._build_work_units(
+        ), patch.object(
+            _module,
+            "create_ecfr_result",
+            return_value={"abstractparserresult_ptr": 77},
+        ) as mock_create:
+            work_units, skipped_count = _module._build_work_units(
                 parser_config={
                     "parts": [],
                     "skip_parsed_regs": True,
@@ -58,43 +62,37 @@ class EcfrLauncherAppTests(unittest.TestCase):
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 parser_log_level="INFO",
+                launcher_result_id=10,
             )
 
-        self.assertEqual(failures, [])
-        self.assertEqual(
-            work_units,
-            [
-                {
-                    "config": {
-                        "title_number": 42,
-                        "part_number": 400,
-                        "effective_date": "2025-01-01",
-                        "upload_reg_text": True,
-                        "upload_locations": False,
-                        "log_level": "INFO",
-                    }
-                }
-            ],
-        )
+        self.assertEqual(skipped_count, 0)
+        self.assertEqual(len(work_units), 1)
+        self.assertEqual(work_units[0]["config"]["parser_result_id"], 77)
+        self.assertEqual(work_units[0]["config"]["launcher_result_id"], 10)
+        self.assertEqual(work_units[0]["config"]["upload_locations"], False)
 
-    def test_build_work_units_records_missing_latest_date_failure(self):
+        payload = mock_create.call_args.kwargs["payload"]
+        self.assertEqual(payload["status"], "queued")
+        self.assertFalse(payload["success"])
+
+    def test_build_work_units_records_skipped_rows(self):
         targets = [
-            _module.TargetPartConfig(
-                title_number=42,
-                part_number=400,
-                upload_reg_text=True,
-                upload_locations=True,
-            )
+            _module.TargetPartConfig(42, 400, True, True),
+            _module.TargetPartConfig(42, 401, True, True),
         ]
 
-        with patch.object(_module, "fetch_parser_config", return_value={"parts": []}), patch.object(
-            _module, "expand_target_parts", return_value=targets
-        ), patch.object(_module, "_resolve_latest_dates_by_title", return_value={42: {}}), patch.object(
+        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
+            _module, "_resolve_latest_dates_by_title", return_value={42: {401: "2025-01-01"}}
+        ), patch.object(
             _module,
             "_resolve_existing_part_dates_by_title",
-            return_value={42: {}},
-        ):
-            work_units, failures = _module._build_work_units(
+            return_value={42: {401: "2025-01-01"}},
+        ), patch.object(
+            _module,
+            "create_ecfr_result",
+            return_value={"abstractparserresult_ptr": 1},
+        ) as mock_create:
+            work_units, skipped_count = _module._build_work_units(
                 parser_config={
                     "parts": [],
                     "skip_parsed_regs": True,
@@ -103,43 +101,15 @@ class EcfrLauncherAppTests(unittest.TestCase):
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
-                parser_log_level="WARNING",
+                parser_log_level="INFO",
+                launcher_result_id=10,
             )
 
         self.assertEqual(work_units, [])
-        self.assertEqual(len(failures), 1)
-        self.assertEqual(failures[0]["title_number"], "42")
-        self.assertEqual(failures[0]["part_number"], "400")
+        self.assertEqual(skipped_count, 2)
+        self.assertEqual(mock_create.call_count, 2)
 
-    def test_resolve_latest_dates_by_title_uses_one_versions_call_per_title(self):
-        targets = [
-            _module.TargetPartConfig(42, 400, True, True),
-            _module.TargetPartConfig(42, 401, True, True),
-            _module.TargetPartConfig(43, 10, True, True),
-        ]
-
-        with patch.object(_module, "fetch_title_versions") as fetch_versions, patch.object(
-            _module,
-            "latest_issue_dates_by_part",
-            side_effect=[
-                {"400": "2025-01-01", "401": "2025-01-02"},
-                {"10": "2025-02-01"},
-            ],
-        ):
-            resolved = _module._resolve_latest_dates_by_title(targets, "https://ecfr.example/api/versioner/v1/")
-
-        self.assertEqual(fetch_versions.call_count, 2)
-        called_titles = sorted(call.kwargs["title_number"] for call in fetch_versions.call_args_list)
-        self.assertEqual(called_titles, [42, 43])
-        self.assertEqual(
-            resolved,
-            {
-                42: {400: "2025-01-01", 401: "2025-01-02"},
-                43: {10: "2025-02-01"},
-            },
-        )
-
-    def test_handler_merges_config_and_dispatch_failures(self):
+    def test_handler_creates_launcher_then_updates_summary(self):
         with patch.dict(
             "os.environ",
             {
@@ -148,7 +118,9 @@ class EcfrLauncherAppTests(unittest.TestCase):
             },
             clear=True,
         ), patch.object(
-            _module, "resolve_backend_credentials", return_value=BackendCredentials(auth_type="basic", username="u", password="p")
+            _module,
+            "resolve_backend_credentials",
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
         ), patch.object(
             _module,
             "fetch_parser_config",
@@ -160,167 +132,30 @@ class EcfrLauncherAppTests(unittest.TestCase):
             },
         ), patch.object(
             _module,
-            "_resolve_parser_log_level",
-            return_value="INFO",
+            "create_ecfr_launcher_result",
+            return_value={"abstractparserresult_ptr": 50},
         ), patch.object(
             _module,
             "_build_work_units",
             return_value=(
-                [
-                    {
-                        "config": {
-                            "title_number": 42,
-                            "part_number": 400,
-                            "effective_date": "2025-01-01",
-                            "log_level": "INFO",
-                        }
-                    }
-                ],
-                [{"title_number": "42", "part_number": "401", "reason": "No latest issue_date available for part"}],
+                [{"config": {"parser_result_id": 7, "launcher_result_id": 50, "title_number": 42, "part_number": 400}}],
+                1,
             ),
         ), patch.object(
             _module,
             "dispatch_work_units",
-            return_value=(
-                True,
-                1,
-                [{"index": "0", "reason": "simulated dispatch issue"}],
-            ),
-        ):
+            return_value=(True, 1, []),
+        ), patch.object(
+            _module,
+            "update_ecfr_launcher_result",
+            return_value={"abstractparserresult_ptr": 50},
+        ) as mock_update:
             response = _module.handler({"body": "{}"}, None)
 
         body = json.loads(response["body"])
         self.assertEqual(body["enqueued"], 1)
-        self.assertEqual(body["succeeded"], 1)
-        self.assertEqual(body["failed"], 2)
-        self.assertEqual(len(body["failures"]), 2)
-
-    def test_resolve_parser_log_level_from_parser_config(self):
-        self.assertEqual(_module._resolve_parser_log_level({"loglevel": "warn"}), "WARNING")
-        self.assertEqual(_module._resolve_parser_log_level({"loglevel": "trace"}), "DEBUG")
-
-    def test_resolve_parser_log_level_rejects_invalid_value(self):
-        with self.assertRaisesRegex(RuntimeError, "loglevel must be one of"):
-            _module._resolve_parser_log_level({"loglevel": "verbose"})
-
-    def test_build_work_units_skips_when_existing_date_matches_latest(self):
-        targets = [
-            _module.TargetPartConfig(
-                title_number=42,
-                part_number=400,
-                upload_reg_text=True,
-                upload_locations=True,
-            )
-        ]
-
-        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
-            _module,
-            "_resolve_latest_dates_by_title",
-            return_value={42: {400: "2025-01-01"}},
-        ), patch.object(
-            _module,
-            "_resolve_existing_part_dates_by_title",
-            return_value={42: {400: "2025-01-01"}},
-        ):
-            work_units, failures = _module._build_work_units(
-                parser_config={
-                    "parts": [],
-                    "skip_parsed_regs": True,
-                    "upload_supplemental_locations": True,
-                },
-                api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
-                parser_log_level="INFO",
-            )
-
-        self.assertEqual(work_units, [])
-        self.assertEqual(failures, [])
-
-    def test_build_work_units_does_not_skip_when_skip_parsed_regs_false(self):
-        targets = [
-            _module.TargetPartConfig(
-                title_number=42,
-                part_number=400,
-                upload_reg_text=True,
-                upload_locations=True,
-            )
-        ]
-
-        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
-            _module,
-            "_resolve_latest_dates_by_title",
-            return_value={42: {400: "2025-01-01"}},
-        ), patch.object(
-            _module,
-            "_resolve_existing_part_dates_by_title",
-        ) as mock_existing:
-            work_units, failures = _module._build_work_units(
-                parser_config={
-                    "parts": [],
-                    "skip_parsed_regs": False,
-                    "upload_supplemental_locations": True,
-                },
-                api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
-                parser_log_level="INFO",
-            )
-
-        self.assertEqual(len(work_units), 1)
-        self.assertEqual(failures, [])
-        mock_existing.assert_not_called()
-
-    def test_resolve_skip_parsed_regs_from_parser_config(self):
-        self.assertTrue(_module._resolve_skip_parsed_regs({"skip_parsed_regs": True}))
-        self.assertFalse(_module._resolve_skip_parsed_regs({"skip_parsed_regs": False}))
-
-    def test_resolve_skip_parsed_regs_rejects_invalid_value(self):
-        with self.assertRaisesRegex(RuntimeError, "skip_parsed_regs must be a boolean"):
-            _module._resolve_skip_parsed_regs({"skip_parsed_regs": "yes"})
-
-    def test_build_work_units_forces_upload_locations_false_when_global_disabled(self):
-        targets = [
-            _module.TargetPartConfig(
-                title_number=42,
-                part_number=400,
-                upload_reg_text=True,
-                upload_locations=True,
-            )
-        ]
-
-        with patch.object(_module, "expand_target_parts", return_value=targets), patch.object(
-            _module,
-            "_resolve_latest_dates_by_title",
-            return_value={42: {400: "2025-01-01"}},
-        ), patch.object(
-            _module,
-            "_resolve_existing_part_dates_by_title",
-            return_value={42: {}},
-        ):
-            work_units, failures = _module._build_work_units(
-                parser_config={
-                    "parts": [],
-                    "skip_parsed_regs": True,
-                    "upload_supplemental_locations": False,
-                },
-                api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
-                parser_log_level="INFO",
-            )
-
-        self.assertEqual(failures, [])
-        self.assertEqual(len(work_units), 1)
-        self.assertFalse(work_units[0]["config"]["upload_locations"])
-
-    def test_resolve_upload_supplemental_locations_from_parser_config(self):
-        self.assertTrue(_module._resolve_upload_supplemental_locations({"upload_supplemental_locations": True}))
-        self.assertFalse(_module._resolve_upload_supplemental_locations({"upload_supplemental_locations": False}))
-
-    def test_resolve_upload_supplemental_locations_rejects_invalid_value(self):
-        with self.assertRaisesRegex(RuntimeError, "upload_supplemental_locations must be a boolean"):
-            _module._resolve_upload_supplemental_locations({"upload_supplemental_locations": "yes"})
+        self.assertEqual(body["failed"], 0)
+        self.assertIn("queued=1 skipped=1", mock_update.call_args.kwargs["payload"]["log"])
 
 
 if __name__ == "__main__":

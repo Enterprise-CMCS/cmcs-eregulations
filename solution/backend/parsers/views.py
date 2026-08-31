@@ -1,16 +1,18 @@
 from django.apps import apps
 from django.db import transaction
 from django.http import Http404, JsonResponse
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from parsers.models import EcfrParserResult, FrParserResult, ParserConfiguration
+from parsers.models import EcfrLauncherResult, EcfrParserResult, FrParserResult, ParserConfiguration
 from regcore.models import Part
 
 from .serializers import (
+    EcfrLauncherResultSerializer,
     EcfrParserResultSerializer,
     FrParserResultSerializer,
     ParserConfigurationSerializer,
@@ -45,7 +47,18 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def _latest(self, **filters):
-        parser_result = EcfrParserResult.objects.filter(**filters).order_by("-timestamp").first()
+        parser_result = (
+            EcfrParserResult.objects.filter(
+                **filters,
+                status__in=[
+                    EcfrParserResult.STATUS_SKIPPED,
+                    EcfrParserResult.STATUS_SUCCEEDED,
+                ],
+                status_updated_at__isnull=False,
+            )
+            .order_by("-status_updated_at", "-timestamp")
+            .first()
+        )
         if parser_result:
             serializer = self.get_serializer_class()(parser_result)
             return Response(serializer.data)
@@ -62,7 +75,92 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        if "status_updated_at" not in data:
+            data["status_updated_at"] = timezone.now().isoformat()
+        if "status" in data and "success" not in data:
+            data["success"] = data["status"] in {
+                EcfrParserResult.STATUS_SKIPPED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            }
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=201)
+
+    @transaction.atomic
+    def partial_update(self, request, pk=None, *args, **kwargs):
+        parser_result = self.get_object()
+        requested_status = request.data.get("status")
+        if requested_status is None:
+            serializer = self.get_serializer(parser_result, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
+        allowed_transitions = {
+            EcfrParserResult.STATUS_QUEUED: {
+                EcfrParserResult.STATUS_FAILED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            },
+            EcfrParserResult.STATUS_FAILED: {
+                EcfrParserResult.STATUS_FAILED,
+                EcfrParserResult.STATUS_SUCCEEDED,
+            },
+        }
+        current_status = parser_result.status
+        if current_status in {EcfrParserResult.STATUS_SUCCEEDED, EcfrParserResult.STATUS_SKIPPED}:
+            serializer = self.get_serializer(parser_result)
+            return Response(serializer.data)
+
+        if requested_status not in allowed_transitions.get(current_status, set()):
+            serializer = self.get_serializer(parser_result)
+            return Response(serializer.data)
+
+        data = request.data.copy()
+        data["status_updated_at"] = timezone.now().isoformat()
+        if requested_status == EcfrParserResult.STATUS_SUCCEEDED:
+            data["success"] = True
+            data["log"] = ""
+        elif requested_status == EcfrParserResult.STATUS_FAILED:
+            data["success"] = False
+
+        serializer = self.get_serializer(parser_result, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+@extend_schema(
+    tags=["parsers"],
+    description="Create eCFR launcher result logs and retrieve most-recent eCFR launcher result.",
+)
+class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
+    serializer_class = EcfrLauncherResultSerializer
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        launcher_result = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if launcher_result:
+            serializer = self.get_serializer_class()(launcher_result)
+            return Response(serializer.data)
+        raise Http404()
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+    @transaction.atomic
+    def partial_update_latest(self, request, *args, **kwargs):
+        latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if latest is None:
+            raise Http404()
+
+        serializer = self.get_serializer(latest, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
 @extend_schema(

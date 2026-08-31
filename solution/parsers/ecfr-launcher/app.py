@@ -1,17 +1,17 @@
 """eCFR launcher entrypoint for queueing part-level parser work.
 
 This Lambda reads parser_config from eRegs, expands part targets (including
-subchapters), resolves latest per-part effective dates from eCFR, then sends
-work units to SQS (or local worker HTTP in dev mode).
+subchapters), resolves latest per-part effective dates from eCFR, records
+per-part queued/skipped status rows, then sends queued work units to SQS (or
+local worker HTTP in dev mode).
 """
 
-import json
 import logging
 import os
 from typing import Any
 
-from common.auth import resolve_backend_credentials
 from common.config import ConfigParseError, require_bool, require_non_empty_string
+from common.eregs_client import create_ecfr_result
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -19,14 +19,16 @@ from common.launcher import (
 )
 from common.logging import resolve_log_level_name
 
+from common.auth import resolve_backend_credentials
+
+from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
+from .eregs_client import create_ecfr_launcher_result, update_ecfr_launcher_result
 from .eregs_config import (
     TargetPartConfig,
     expand_target_parts,
     fetch_existing_part_dates_by_title,
     fetch_parser_config,
 )
-from .ecfr_versions import fetch_title_versions, latest_issue_dates_by_part
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -48,11 +50,11 @@ def _build_work_units(
     credentials,
     ecfr_api_base_url: str,
     parser_log_level: str,
-) -> tuple[list[dict], list[dict[str, str]]]:
+    launcher_result_id: int,
+) -> tuple[list[dict], int]:
     """Build worker messages from parser config and latest-date resolution.
 
-    Returns both valid work units and per-part failures for targets that cannot
-    be queued (for example, no resolvable latest date).
+    Returns valid work units and total skipped part targets.
     """
 
     targets = expand_target_parts(parser_config, ecfr_base_url=ecfr_api_base_url)
@@ -66,34 +68,73 @@ def _build_work_units(
     )
 
     work_units: list[dict[str, Any]] = []
-    failures: list[dict[str, str]] = []
+    skipped_count = 0
     for target in targets:
         latest_issue_date = latest_dates_by_title.get(target.title_number, {}).get(target.part_number)
         if latest_issue_date is None:
-            failures.append(
-                {
-                    "title_number": str(target.title_number),
-                    "part_number": str(target.part_number),
-                    "reason": "No latest issue_date available for part",
-                }
+            skipped_count += 1
+            create_ecfr_result(
+                api_base_url=api_base_url,
+                credentials=credentials,
+                payload={
+                    "launcher_result": launcher_result_id,
+                    "title": target.title_number,
+                    "part": target.part_number,
+                    "date": None,
+                    "status": "skipped",
+                    "success": True,
+                    "log": "No latest issue_date available for part",
+                },
             )
             continue
 
         existing_date = existing_dates_by_title.get(target.title_number, {}).get(target.part_number)
         if existing_date == latest_issue_date:
+            skipped_count += 1
             logger.info(
                 "Skipping previously parsed part: title=%s part=%s date=%s",
                 target.title_number,
                 target.part_number,
                 latest_issue_date,
             )
+            create_ecfr_result(
+                api_base_url=api_base_url,
+                credentials=credentials,
+                payload={
+                    "launcher_result": launcher_result_id,
+                    "title": target.title_number,
+                    "part": target.part_number,
+                    "date": latest_issue_date,
+                    "status": "skipped",
+                    "success": True,
+                    "log": "Skipped; latest issue_date already processed",
+                },
+            )
             continue
 
         upload_locations = target.upload_locations and upload_supplemental_locations
+        parser_result = create_ecfr_result(
+            api_base_url=api_base_url,
+            credentials=credentials,
+            payload={
+                "launcher_result": launcher_result_id,
+                "title": target.title_number,
+                "part": target.part_number,
+                "date": latest_issue_date,
+                "status": "queued",
+                "success": False,
+                "log": "",
+            },
+        )
+        parser_result_id = parser_result.get("abstractparserresult_ptr")
+        if not isinstance(parser_result_id, int):
+            raise RuntimeError("eCFR parser result create response missing id")
 
         work_units.append(
             {
                 "config": {
+                    "parser_result_id": parser_result_id,
+                    "launcher_result_id": launcher_result_id,
                     "title_number": target.title_number,
                     "part_number": target.part_number,
                     "effective_date": latest_issue_date,
@@ -104,7 +145,7 @@ def _build_work_units(
             }
         )
 
-    return work_units, failures
+    return work_units, skipped_count
 
 
 def _resolve_existing_part_dates_by_title(
@@ -126,11 +167,7 @@ def _resolve_existing_part_dates_by_title(
 
 
 def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_base_url: str) -> dict[int, dict[int, str]]:
-    """Resolve latest effective date per requested part, grouped by title.
-
-    This uses one title-level versions API call (with pagination) and builds a
-    compact lookup map consumed by _build_work_units.
-    """
+    """Resolve latest effective date per requested part, grouped by title."""
 
     by_title: dict[int, dict[int, str]] = {}
     title_numbers = sorted({target.title_number for target in targets})
@@ -209,38 +246,60 @@ def handler(event, _context):
     logger.setLevel(getattr(logging, parser_log_level))
     logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
 
-    work_units, config_failures = _build_work_units(
-        parser_config=parser_config,
+    launcher_result = create_ecfr_launcher_result(
         api_base_url=api_base_url,
         credentials=credentials,
-        ecfr_api_base_url=ecfr_api_base_url,
-        parser_log_level=parser_log_level,
+        payload={"success": True, "log": ""},
     )
+    launcher_result_id = launcher_result.get("abstractparserresult_ptr") if isinstance(launcher_result, dict) else None
+    if not isinstance(launcher_result_id, int):
+        raise RuntimeError("eCFR launcher result create response missing id")
 
-    if not work_units and config_failures:
-        raise RuntimeError(
-            f"eCFR launcher could not enqueue any work units; {len(config_failures)} part(s) missing latest issue_date"
+    try:
+        work_units, skipped_count = _build_work_units(
+            parser_config=parser_config,
+            api_base_url=api_base_url,
+            credentials=credentials,
+            ecfr_api_base_url=ecfr_api_base_url,
+            parser_log_level=parser_log_level,
+            launcher_result_id=launcher_result_id,
         )
 
-    if work_units:
-        local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)
-    else:
-        local_mode = is_local_mode()
-        succeeded = 0
-        dispatch_failures = []
+        if work_units:
+            local_mode, succeeded, dispatch_failures = dispatch_work_units(work_units)
+        else:
+            local_mode = is_local_mode()
+            succeeded = 0
+            dispatch_failures = []
 
-    failures = config_failures + dispatch_failures
-    if local_mode:
-        logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
-    else:
-        logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
+        if local_mode:
+            logger.info("eCFR launcher sent %s/%s work unit(s) to local worker", succeeded, len(work_units))
+        else:
+            logger.info("eCFR launcher enqueued %s work unit(s)", len(work_units))
 
-    if config_failures:
-        logger.warning("eCFR launcher skipped %s work unit(s) due to missing latest issue_date", len(config_failures))
+        update_ecfr_launcher_result(
+            api_base_url=api_base_url,
+            credentials=credentials,
+            payload={
+                "success": True,
+                "log": f"queued={len(work_units)} skipped={skipped_count} dispatch_failed={len(dispatch_failures)}",
+            },
+        )
 
-    return build_launcher_response(
-        work_units=work_units,
-        local_mode=local_mode,
-        succeeded=succeeded,
-        failures=failures,
-    )
+        return build_launcher_response(
+            work_units=work_units,
+            local_mode=local_mode,
+            succeeded=succeeded,
+            failures=dispatch_failures,
+        )
+    except Exception as exc:
+        logger.error("eCFR launcher failed: %s", exc)
+        try:
+            update_ecfr_launcher_result(
+                api_base_url=api_base_url,
+                credentials=credentials,
+                payload={"success": False, "log": str(exc)},
+            )
+        except Exception as log_exc:
+            logger.warning("Failed to record eCFR launcher failure result: %s", log_exc)
+        raise

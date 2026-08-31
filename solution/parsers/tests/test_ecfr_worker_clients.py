@@ -20,6 +20,7 @@ def _load_module(module_name: str, relative_path: str):
 
 _ecfr_client = _load_module("ecfr_worker_ecfr_client", "ecfr_client.py")
 _eregs_client = _load_module("ecfr_worker_eregs_client", "eregs_client.py")
+_cregs = _load_module("ecfr_common_eregs_client", "../common/eregs_client.py")
 
 
 class EcfrWorkerClientsTests(unittest.TestCase):
@@ -118,7 +119,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         response.json.return_value = {"id": 1}
         mock_post.return_value = response
 
-        result = _eregs_client.create_ecfr_result(
+        result = _cregs.create_ecfr_result(
             api_base_url="https://example.local/v3/",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
             payload={
@@ -139,8 +140,8 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_post.return_value = response
 
-        with self.assertRaisesRegex(_eregs_client.EregsClientError, "result upload failed"):
-            _eregs_client.create_ecfr_result(
+        with self.assertRaisesRegex(_cregs.EregsClientError, "result upload failed"):
+            _cregs.create_ecfr_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 payload={
@@ -150,6 +151,38 @@ class EcfrWorkerClientsTests(unittest.TestCase):
                     "part": 400,
                     "date": "2025-01-01",
                 },
+            )
+
+    @patch("requests.patch")
+    def test_update_ecfr_result_success(self, mock_patch):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.text = '{"abstractparserresult_ptr": 5, "status": "succeeded"}'
+        response.json.return_value = {"abstractparserresult_ptr": 5, "status": "succeeded"}
+        mock_patch.return_value = response
+
+        result = _cregs.update_ecfr_result(
+            api_base_url="https://example.local/v3/",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            result_id=5,
+            payload={"status": "succeeded", "log": ""},
+        )
+
+        self.assertEqual(result["status"], "succeeded")
+        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/results/5"))
+
+    @patch("requests.patch")
+    def test_update_ecfr_result_non_2xx(self, mock_patch):
+        response = Mock()
+        response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
+        mock_patch.return_value = response
+
+        with self.assertRaisesRegex(_cregs.EregsClientError, "result update failed"):
+            _cregs.update_ecfr_result(
+                api_base_url="https://example.local/v3/",
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                result_id=5,
+                payload={"status": "failed", "log": "failure"},
             )
 
     def test_upload_part_missing_required_field(self):
