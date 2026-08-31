@@ -90,7 +90,18 @@ curl -s -X POST http://localhost:8004 \
   -H 'Content-Type: application/json' \
   -d '{
     "config": {
-      "document_number": "2026-12345"
+      "document_number": "2026-12345",
+      "title": 42,
+      "part": "400",
+      "description": "A document title",
+      "name": "90 FR 1",
+      "doc_type": "Rule",
+      "url": "https://www.federalregister.gov/d/2026-12345",
+      "date": "2026-01-01",
+      "docket_numbers": ["CMS-0000-F2"],
+      "raw_text_url": "https://www.federalregister.gov/d/2026-12345/raw",
+      "full_text_xml_url": "https://www.federalregister.gov/fullexport.xml",
+      "log_level": "INFO"
     }
   }'
 ```
@@ -139,8 +150,9 @@ Example response in local mode:
 
 - Launchers run with `PARSER_LOCAL_MODE=true` in Docker Compose and call workers over HTTP (`PARSER_WORKER_URL`) via lambda-proxy.
 - In deployed environments, `PARSER_LOCAL_MODE` is unset and launchers use `PARSER_QUEUE_URL` to enqueue work.
-- eCFR launcher and worker read `ECFR_API_BASE_URL` (default `https://www.ecfr.gov/api/versioner/v1/`) for upstream eCFR requests.
+- eCFR launcher and worker read `ECFR_API_BASE_URL` (default `https://www.ecfr.gov/api/versioner/v1/`) for upstream eCFR requests. FR launcher and worker read `FEDERAL_REGISTER_API_BASE_URL` (default `https://www.federalregister.gov`) for upstream Federal Register requests.
 - Workers accept either a single SQS-style record event (`Records[0].body`) or a lambda-proxy HTTP event body.
 - Credentials are resolved in workers from environment/runtime only: `EREGS_AUTH_SECRET_NAME` (AWS Secrets Manager), then `EREGS_BEARER_TOKEN`, then `EREGS_USERNAME`/`EREGS_PASSWORD`.
 - Local docker-compose provides default parser credentials (`local-dev-user` / `local-dev-pass`) unless you override `EREGS_USERNAME`/`EREGS_PASSWORD` in your shell.
 - eCFR launcher emits worker config with `effective_date`, `upload_reg_text`, and `upload_locations`; worker fails a message if the part has no latest `issue_date` in eCFR versions data.
+- FR launcher discovers Federal Register documents per configured title/part and, when `skip_fr_documents` is true, skips docs whose `document_number` already exists in eRegs; each queued work unit carries one document's full metadata. FR worker consumes exactly one document per message, extracts linked CFR sections/ranges from the full-text XML (non-fatal — a doc still uploads when linking fails), PUTs it, and posts a per-document `FrParserResult`.
