@@ -9,6 +9,7 @@ parse result.
 import json
 import logging
 import os
+from dataclasses import asdict
 
 from .config import FrDocumentConfig, parse_config_from_event
 from .eregs_client import create_fr_result, upload_fr_document
@@ -91,8 +92,8 @@ def _process_work_item(config: FrDocumentConfig) -> dict:
         )
 
     logger.info("Uploading Federal Register document to eRegs: document_number=%s", config.document_number)
-    document_payload["sections"] = [s._asdict() for s in link_sections]
-    document_payload["section_ranges"] = [r._asdict() for r in link_ranges]
+    document_payload["sections"] = [asdict(s) for s in link_sections]
+    document_payload["section_ranges"] = [asdict(r) for r in link_ranges]
     upload_result = upload_fr_document(
         api_base_url=os.environ["EREGS_API_URL_V3"],
         credentials=config.credentials,

@@ -3,9 +3,17 @@ import sys
 import unittest
 from importlib import util
 from pathlib import Path
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 from common.auth import BackendCredentials
+
+
+def _load_links_module():
+    mod = util.spec_from_file_location("links", WORKER_DIR.parent / "fr-worker" / "links.py")
+    m = util.module_from_spec(mod)
+    sys.modules["links"] = m
+    mod.loader.exec_module(m)
+    return m
 
 
 def _load_module(module_name, package_name, worker_dir, filename):
@@ -26,6 +34,7 @@ def _load_module(module_name, package_name, worker_dir, filename):
 
 
 WORKER_DIR = Path(__file__).resolve().parent.parent / "fr-worker"
+LINKS = _load_links_module()
 _module = _load_module("app", "fr_worker_pkg", WORKER_DIR, "app.py")
 
 
@@ -60,10 +69,8 @@ class FrWorkerAppTests(unittest.TestCase):
     @patch("os.environ", {"EREGS_API_URL_V3": "https://example.local/"}, create=True)
     def test_handler_success_records_success_result(self):
         config = _config()
-        link_section = Mock()
-        link_section._asdict.return_value = {"title": "42", "part": "400", "section_id": 502}
-        link_range = Mock()
-        link_range._asdict.return_value = {"title": "42", "part": "400", "first_sec": 502, "last_sec": 700}
+        link_section = LINKS.LinkSection(title="42", part="400", section_id=502)
+        link_range = LINKS.LinkSectionRange(title="42", part="400", first_sec=502, last_sec=700)
 
         with (
             patch.object(_module, "parse_config_from_event", return_value=config),
