@@ -83,7 +83,7 @@ class PartConfiguration(models.Model):
 class AbstractParserResult(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     success = models.BooleanField()
-    log = models.TextField()
+    log = models.TextField(blank=True)
 
 
 class EcfrParserResult(AbstractParserResult):
