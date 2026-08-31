@@ -10,6 +10,7 @@ from regcore.models import Part
 from .models import (
     EcfrLauncherResult,
     EcfrParserResult,
+    FrLauncherResult,
     FrParserResult,
     ParserConfiguration,
     PartConfiguration,
@@ -146,3 +147,11 @@ class FrParserResultAdmin(_ParserResultAdminBase):
     list_filter = ("success",)
     search_fields = ("document_number", "log")
     readonly_fields = ("document_number", "timestamp", "success", "log")
+
+
+@admin.register(FrLauncherResult)
+class FrLauncherResultAdmin(_ParserResultAdminBase):
+    list_display = ("timestamp", "queued_count", "skipped_count", "failed_count", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("log",)
+    readonly_fields = ("queued_count", "skipped_count", "failed_count", "timestamp", "success", "log")

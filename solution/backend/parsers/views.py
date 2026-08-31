@@ -8,12 +8,19 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from common.auth import SettingsAuthentication
-from parsers.models import EcfrLauncherResult, EcfrParserResult, FrParserResult, ParserConfiguration
+from parsers.models import (
+    EcfrLauncherResult,
+    EcfrParserResult,
+    FrLauncherResult,
+    FrParserResult,
+    ParserConfiguration,
+)
 from regcore.models import Part
 
 from .serializers import (
     EcfrLauncherResultSerializer,
     EcfrParserResultSerializer,
+    FrLauncherResultSerializer,
     FrParserResultSerializer,
     ParserConfigurationSerializer,
     PartUploadSerializer,
@@ -154,6 +161,38 @@ class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def partial_update_latest(self, request, *args, **kwargs):
         latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
+        if latest is None:
+            raise Http404()
+
+        serializer = self.get_serializer(latest, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+@extend_schema(
+    tags=["parsers"],
+    description="Create Federal Register launcher result logs and retrieve most-recent Federal Register launcher result.",
+)
+class FrLauncherResultViewSet(viewsets.ModelViewSet):
+    serializer_class = FrLauncherResultSerializer
+    authentication_classes = [SettingsAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        launcher_result = FrLauncherResult.objects.order_by("-timestamp").first()
+        if launcher_result:
+            serializer = self.get_serializer_class()(launcher_result)
+            return Response(serializer.data)
+        raise Http404()
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @transaction.atomic
+    def partial_update_latest(self, request, *args, **kwargs):
+        latest = FrLauncherResult.objects.order_by("-timestamp").first()
         if latest is None:
             raise Http404()
 

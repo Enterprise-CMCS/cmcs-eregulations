@@ -36,6 +36,7 @@ def get_app_list(self, request, app_label=None):
     custom_sidebar_labels = {
         "EcfrLauncherResult": "eCFR Launcher Results",
         "EcfrParserResult": "eCFR Parser Results",
+        "FrLauncherResult": "Federal Register Launcher Results",
         "FrParserResult": "Federal Register Parser Results",
     }
     for app_name in app_dict.keys():
