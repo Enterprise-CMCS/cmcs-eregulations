@@ -17,24 +17,12 @@ def get_ecfr_last_updated(title: int | None = None, part: int | None = None) -> 
     if part and not title:
         raise ValueError("part requires title")
 
-    if title and part:
+    if title:
         latest = (
-            EcfrParserResult.objects.filter(
-                title=title,
-                part=part,
-                status__in=[EcfrParserResult.STATUS_SKIPPED, EcfrParserResult.STATUS_SUCCEEDED],
-            )
-            .order_by("-status_updated_at")
-            .first()
-        )
-        return latest.status_updated_at if latest is not None else None
-
-    if title is not None:
-        latest = (
-            EcfrParserResult.objects.filter(
-                title=title,
-                status__in=[EcfrParserResult.STATUS_SKIPPED, EcfrParserResult.STATUS_SUCCEEDED],
-            )
+            EcfrParserResult.objects.filter(**{**{
+                "title": title,
+                "status__in": [EcfrParserResult.STATUS_SKIPPED, EcfrParserResult.STATUS_SUCCEEDED],
+            }}, **({"part": part} if part else {}))
             .order_by("-status_updated_at")
             .first()
         )
@@ -45,10 +33,7 @@ def get_ecfr_last_updated(title: int | None = None, part: int | None = None) -> 
         if not results.exists():
             continue
 
-        if results.filter(status=EcfrParserResult.STATUS_QUEUED).exists():
-            continue
-
-        if results.filter(status=EcfrParserResult.STATUS_FAILED).exists():
+        if results.filter(status__in=[EcfrParserResult.STATUS_QUEUED, EcfrParserResult.STATUS_FAILED]).exists():
             continue
 
         aggregate = results.aggregate(latest=Max("status_updated_at"))
