@@ -45,6 +45,16 @@ class FrWorkerAppTests(unittest.TestCase):
     def test_handler_parses_config_and_returns_api_response(self):
         parsed_config = _config_module.FrDocumentConfig(
             document_number="2026-12345",
+            title=42,
+            part="400",
+            description="A document title",
+            name="90 FR 1",
+            doc_type="Rule",
+            url="https://example/x",
+            date="2026-01-01",
+            docket_numbers=["ABC-1"],
+            raw_text_url="https://example/x.txt",
+            full_text_xml_url="https://example/x.xml",
             log_level="DEBUG",
             credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
         )
