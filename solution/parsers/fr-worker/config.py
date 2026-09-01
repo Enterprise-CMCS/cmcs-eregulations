@@ -4,12 +4,12 @@ This module enforces the queue contract produced by the FR launcher.
 """
 
 from dataclasses import dataclass
-from typing import Any
 
 from common.config import (
     ConfigParseError,
     parse_typed_config_from_event,
     require_non_empty_string,
+    require_non_empty_string_value,
     require_positive_int,
     unwrap_config,
 )
@@ -71,15 +71,7 @@ def _require_string_list(config: dict) -> list[str]:
     value = config.get("docket_numbers")
     if not isinstance(value, list):
         raise ConfigParseError("docket_numbers must be a list")
-    return [require_non_empty_string_str(item) for item in value]
-
-
-def require_non_empty_string_str(value: Any) -> str:
-    """Require a single value to be a non-empty string."""
-
-    if not isinstance(value, str) or not value.strip():
-        raise ConfigParseError("docket_numbers entries must be non-empty strings")
-    return value.strip()
+    return [require_non_empty_string_value(item, "docket_numbers entries must be non-empty strings") for item in value]
 
 
 __all__ = [
