@@ -4,8 +4,9 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
-
+from common import eregs_client as _cregs
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError
 
 
 def _load_module():
@@ -19,14 +20,6 @@ def _load_module():
 
 
 _module = _load_module()
-
-
-_common_path = Path(__file__).resolve().parent.parent / "common" / "eregs_client.py"
-_common_spec = util.spec_from_file_location("ecfr_common_eregs_client", _common_path)
-if _common_spec is None or _common_spec.loader is None:
-    raise RuntimeError("Unable to load common.eregs_client module")
-_cregs = util.module_from_spec(_common_spec)
-_common_spec.loader.exec_module(_cregs)
 
 
 class EcfrLauncherClientTests(unittest.TestCase):
@@ -53,7 +46,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_post.return_value = response
 
-        with self.assertRaisesRegex(_module.EregsClientError, "launcher result upload failed"):
+        with self.assertRaisesRegex(EregsClientError, "launcher result upload failed"):
             _module.create_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
@@ -83,7 +76,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_patch.return_value = response
 
-        with self.assertRaisesRegex(_module.EregsClientError, "launcher result update failed"):
+        with self.assertRaisesRegex(EregsClientError, "launcher result update failed"):
             _module.update_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),

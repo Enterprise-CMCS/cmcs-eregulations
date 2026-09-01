@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
+from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
 
@@ -61,7 +62,7 @@ class FrWorkerClientsTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_put.return_value = response
 
-        with self.assertRaisesRegex(_eregs_client.EregsClientError, "upload failed"):
+        with self.assertRaisesRegex(EregsClientError, "upload failed"):
             _eregs_client.upload_fr_document(
                 api_base_url="https://example.local/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
@@ -71,7 +72,7 @@ class FrWorkerClientsTests(unittest.TestCase):
     def test_upload_fr_document_missing_required_field(self):
         payload = {k: v for k, v in _VALID.items() if k != "document_number"}
 
-        with self.assertRaisesRegex(_eregs_client.EregsClientError, "missing required fields"):
+        with self.assertRaisesRegex(EregsClientError, "missing required fields"):
             _eregs_client.upload_fr_document(
                 api_base_url="https://example.local/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
@@ -101,7 +102,7 @@ class FrWorkerClientsTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_post.return_value = response
 
-        with self.assertRaisesRegex(_eregs_client.EregsClientError, "result upload failed"):
+        with self.assertRaisesRegex(EregsClientError, "result upload failed"):
             _eregs_client.create_fr_result(
                 api_base_url="https://example.local/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),

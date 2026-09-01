@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
+from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
 
@@ -140,7 +141,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_get.return_value = response
 
-        with self.assertRaisesRegex(_eregs.EregsClientError, "document list request failed"):
+        with self.assertRaisesRegex(EregsClientError, "document list request failed"):
             _eregs.fetch_existing_document_numbers(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
@@ -169,7 +170,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_post.return_value = response
 
-        with self.assertRaisesRegex(_eregs.EregsClientError, "launcher result upload failed"):
+        with self.assertRaisesRegex(EregsClientError, "launcher result upload failed"):
             _eregs.create_fr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
@@ -199,7 +200,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
         response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
         mock_patch.return_value = response
 
-        with self.assertRaisesRegex(_eregs.EregsClientError, "launcher result update failed"):
+        with self.assertRaisesRegex(EregsClientError, "launcher result update failed"):
             _eregs.update_fr_launcher_result(
                 api_base_url="https://example.local/v3/",
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
