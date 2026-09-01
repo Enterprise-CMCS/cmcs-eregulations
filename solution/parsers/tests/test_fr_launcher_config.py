@@ -18,7 +18,7 @@ _module = _load_module()
 EregsConfigError = _module.EregsConfigError
 FrTarget = _module.FrTarget
 expand_fr_targets = _module.expand_fr_targets
-fetch_subchapter_part_numbers = _module._fetch_subchapter_part_numbers
+fetch_subchapter_part_numbers = _module.fetch_subchapter_part_numbers
 
 
 class FrLauncherConfigTests(unittest.TestCase):
@@ -70,7 +70,7 @@ class FrLauncherConfigTests(unittest.TestCase):
             [FrTarget(42, 400), FrTarget(42, 402)],
         )
 
-    @patch.object(_module, "_fetch_subchapter_part_numbers", return_value=[400, 401])
+    @patch.object(_module, "fetch_subchapter_part_numbers", return_value=[400, 401])
     def test_expand_fr_targets_subchapter_expansion(self, mock_fetch):
         parser_config = {
             "parts": [
@@ -176,7 +176,7 @@ class FrLauncherConfigTests(unittest.TestCase):
         }
         mock_get.return_value = response
 
-        part_numbers = _module._fetch_subchapter_part_numbers(
+        part_numbers = _module.fetch_subchapter_part_numbers(
             title_number=42,
             chapter="IV",
             subchapter="C",

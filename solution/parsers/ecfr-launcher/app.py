@@ -12,6 +12,7 @@ from typing import Any
 
 from common.config import ConfigParseError, require_bool, require_non_empty_string
 from common.eregs_client import create_ecfr_result
+from common.eregs_config import fetch_parser_config
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -27,7 +28,6 @@ from .eregs_config import (
     TargetPartConfig,
     expand_target_parts,
     fetch_existing_part_dates_by_title,
-    fetch_parser_config,
 )
 
 logger = logging.getLogger(__name__)
