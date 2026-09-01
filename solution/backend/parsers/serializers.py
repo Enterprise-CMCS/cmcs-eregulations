@@ -27,27 +27,35 @@ class ParserConfigurationSerializer(serializers.Serializer):
 
 
 class EcfrParserResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = EcfrParserResult
-        fields = "__all__"
+        exclude = ("abstractparserresult_ptr",)
 
 
 class EcfrLauncherResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = EcfrLauncherResult
-        fields = "__all__"
+        exclude = ("abstractparserresult_ptr",)
 
 
 class FrParserResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = FrParserResult
-        fields = "__all__"
+        exclude = ("abstractparserresult_ptr",)
 
 
 class FrLauncherResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = FrLauncherResult
-        fields = "__all__"
+        exclude = ("abstractparserresult_ptr",)
 
 
 class PartSectionCreateSerializer(serializers.Serializer):

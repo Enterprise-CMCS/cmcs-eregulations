@@ -79,7 +79,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
         ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}), patch.object(
-            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "succeeded"}
+            _module, "update_ecfr_result", return_value={"id": 7, "status": "succeeded"}
         ) as mock_update_result:
             response = _module.handler({"body": "{}"}, None)
 
@@ -97,7 +97,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
         ), patch.object(
             _module, "fetch_part_structure", side_effect=RuntimeError("boom")
         ), patch.object(
-            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "failed"}
+            _module, "update_ecfr_result", return_value={"id": 7, "status": "failed"}
         ) as mock_update_result:
             with self.assertRaisesRegex(RuntimeError, "boom"):
                 _module.handler({"body": "{}"}, None)

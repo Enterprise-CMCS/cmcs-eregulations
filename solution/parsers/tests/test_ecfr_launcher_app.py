@@ -50,7 +50,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_result",
-            return_value={"abstractparserresult_ptr": 77},
+            return_value={"id": 77},
         ) as mock_create:
             work_units, skipped_count = _module._build_work_units(
                 parser_config={
@@ -90,7 +90,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_result",
-            return_value={"abstractparserresult_ptr": 1},
+            return_value={"id": 1},
         ) as mock_create:
             work_units, skipped_count = _module._build_work_units(
                 parser_config={
@@ -133,7 +133,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "create_ecfr_launcher_result",
-            return_value={"abstractparserresult_ptr": 50},
+            return_value={"id": 50},
         ), patch.object(
             _module,
             "_build_work_units",
@@ -148,7 +148,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "update_ecfr_launcher_result",
-            return_value={"abstractparserresult_ptr": 50},
+            return_value={"id": 50},
         ) as mock_update:
             response = _module.handler({"body": "{}"}, None)
 

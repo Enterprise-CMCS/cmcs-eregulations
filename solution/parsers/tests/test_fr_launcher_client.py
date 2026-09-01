@@ -151,8 +151,8 @@ class FrLauncherEregsClientTests(unittest.TestCase):
     def test_create_fr_launcher_result_success(self, mock_post):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 1}'
-        response.json.return_value = {"abstractparserresult_ptr": 1}
+        response.text = '{"id": 1}'
+        response.json.return_value = {"id": 1}
         mock_post.return_value = response
 
         result = _eregs.create_fr_launcher_result(
@@ -161,7 +161,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
             payload={"success": True, "log": ""},
         )
 
-        self.assertEqual(result, {"abstractparserresult_ptr": 1})
+        self.assertEqual(result, {"id": 1})
         self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/fr/launcher-results"))
 
     @patch("requests.post")
@@ -181,8 +181,8 @@ class FrLauncherEregsClientTests(unittest.TestCase):
     def test_update_fr_launcher_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}'
-        response.json.return_value = {"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}
+        response.text = '{"id": 1, "log": "queued=2 skipped=1"}'
+        response.json.return_value = {"id": 1, "log": "queued=2 skipped=1"}
         mock_patch.return_value = response
 
         result = _eregs.update_fr_launcher_result(

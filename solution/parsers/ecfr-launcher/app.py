@@ -126,7 +126,7 @@ def _build_work_units(
                 "log": "",
             },
         )
-        parser_result_id = parser_result.get("abstractparserresult_ptr")
+        parser_result_id = parser_result.get("id")
         if not isinstance(parser_result_id, int):
             raise RuntimeError("eCFR parser result create response missing id")
 
@@ -235,7 +235,7 @@ def handler(event, _context):
         credentials=credentials,
         payload={"success": True, "log": ""},
     )
-    launcher_result_id = launcher_result.get("abstractparserresult_ptr") if isinstance(launcher_result, dict) else None
+    launcher_result_id = launcher_result.get("id") if isinstance(launcher_result, dict) else None
     if not isinstance(launcher_result_id, int):
         raise RuntimeError("eCFR launcher result create response missing id")
 

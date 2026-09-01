@@ -4,9 +4,10 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
+from common.eregs_client import EregsClientError
+
 from common import eregs_client as _cregs
 from common.auth import BackendCredentials
-from common.eregs_client import EregsClientError
 
 
 def _load_module():
@@ -27,8 +28,8 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_create_ecfr_launcher_result_success(self, mock_post):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 1}'
-        response.json.return_value = {"abstractparserresult_ptr": 1}
+        response.text = '{"id": 1}'
+        response.json.return_value = {"id": 1}
         mock_post.return_value = response
 
         result = _module.create_ecfr_launcher_result(
@@ -37,7 +38,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
             payload={"success": True, "log": ""},
         )
 
-        self.assertEqual(result, {"abstractparserresult_ptr": 1})
+        self.assertEqual(result, {"id": 1})
         self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr/launcher-results"))
 
     @patch("requests.post")
@@ -57,8 +58,8 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_update_ecfr_launcher_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}'
-        response.json.return_value = {"abstractparserresult_ptr": 1, "log": "queued=2 skipped=1"}
+        response.text = '{"id": 1, "log": "queued=2 skipped=1"}'
+        response.json.return_value = {"id": 1, "log": "queued=2 skipped=1"}
         mock_patch.return_value = response
 
         result = _module.update_ecfr_launcher_result(
@@ -87,8 +88,8 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_create_ecfr_result_success(self, mock_post):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 9, "status": "queued"}'
-        response.json.return_value = {"abstractparserresult_ptr": 9, "status": "queued"}
+        response.text = '{"id": 9, "status": "queued"}'
+        response.json.return_value = {"id": 9, "status": "queued"}
         mock_post.return_value = response
 
         result = _cregs.create_ecfr_result(
@@ -104,8 +105,8 @@ class EcfrLauncherClientTests(unittest.TestCase):
     def test_update_ecfr_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 9, "status": "succeeded"}'
-        response.json.return_value = {"abstractparserresult_ptr": 9, "status": "succeeded"}
+        response.text = '{"id": 9, "status": "succeeded"}'
+        response.json.return_value = {"id": 9, "status": "succeeded"}
         mock_patch.return_value = response
 
         result = _cregs.update_ecfr_result(

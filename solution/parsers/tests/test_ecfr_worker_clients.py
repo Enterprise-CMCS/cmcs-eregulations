@@ -158,8 +158,8 @@ class EcfrWorkerClientsTests(unittest.TestCase):
     def test_update_ecfr_result_success(self, mock_patch):
         response = Mock()
         response.raise_for_status.return_value = None
-        response.text = '{"abstractparserresult_ptr": 5, "status": "succeeded"}'
-        response.json.return_value = {"abstractparserresult_ptr": 5, "status": "succeeded"}
+        response.text = '{"id": 5, "status": "succeeded"}'
+        response.json.return_value = {"id": 5, "status": "succeeded"}
         mock_patch.return_value = response
 
         result = _cregs.update_ecfr_result(
