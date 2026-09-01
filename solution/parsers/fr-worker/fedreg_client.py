@@ -12,6 +12,7 @@ import re
 import xml.etree.ElementTree as ET
 
 import requests
+from common.fedreg import FedRegClientError
 from common.http import execute_request
 
 logger = logging.getLogger(__name__)
@@ -19,12 +20,6 @@ logger = logging.getLogger(__name__)
 _SECTION_RANGE_RE = re.compile(r"\d+\.\d+-\d+\.\d+")
 _SECTION_RE = re.compile(r"\d+\.\d+")
 _DIGIT_RE = re.compile(r"\d+")
-
-
-class FedRegClientError(RuntimeError):
-    """Raised for failed or malformed Federal Register full-text responses."""
-
-    pass
 
 
 def fetch_full_text_sections(

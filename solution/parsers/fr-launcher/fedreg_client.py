@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import requests
+from common.fedreg import FedRegClientError
 from common.http import execute_request, parse_json_response
 
 FEDERAL_REGISTER_API_BASE_URL = "https://www.federalregister.gov"
@@ -28,12 +29,6 @@ _REQUIRED_FIELDS = [
     "title",
     "raw_text_url",
 ]
-
-
-class FedRegClientError(RuntimeError):
-    """Raised for failed or malformed Federal Register API responses."""
-
-    pass
 
 
 @dataclass(frozen=True)
