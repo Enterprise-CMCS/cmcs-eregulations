@@ -49,12 +49,12 @@ def _doc(document_number, **kwargs):
 
 class FrLauncherAppTests(unittest.TestCase):
     def test_resolve_parser_log_level_from_parser_config(self):
-        self.assertEqual(_module._resolve_parser_log_level({"loglevel": "warn"}), "WARNING")
-        self.assertEqual(_module._resolve_parser_log_level({"loglevel": "trace"}), "DEBUG")
+        self.assertEqual(_module.resolve_parser_log_level({"loglevel": "warn"}), "WARNING")
+        self.assertEqual(_module.resolve_parser_log_level({"loglevel": "trace"}), "DEBUG")
 
     def test_resolve_parser_log_level_rejects_invalid_value(self):
         with self.assertRaisesRegex(RuntimeError, "loglevel must be one of"):
-            _module._resolve_parser_log_level({"loglevel": "verbose"})
+            _module.resolve_parser_log_level({"loglevel": "verbose"})
 
     def test_build_work_units_dispatches_one_work_unit_per_doc(self):
         targets = [_module.FrTarget(title_number=42, part_number=400)]

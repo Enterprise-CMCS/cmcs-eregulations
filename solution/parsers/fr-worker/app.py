@@ -11,6 +11,8 @@ import logging
 import os
 from dataclasses import asdict
 
+from common.logging import configure_runtime_logging
+
 from .config import FrDocumentConfig, parse_config_from_event
 from .eregs_client import create_fr_result, upload_fr_document
 from .fedreg_client import fetch_full_text_sections
@@ -18,19 +20,7 @@ from .links import create_section_ranges, create_sections
 
 logger = logging.getLogger(__name__)
 
-
-def _configure_logging(log_level_name: str | None = None) -> None:
-    """Configure root logging for worker execution."""
-
-    if log_level_name is None:
-        log_level_name = "INFO"
-
-    log_level = getattr(logging, log_level_name, logging.INFO)
-    logging.basicConfig(level=log_level)
-    logger.setLevel(log_level)
-
-
-_configure_logging()
+configure_runtime_logging(None, logger)
 
 
 def _extract_linked_sections(config: FrDocumentConfig) -> tuple[list, list]:
@@ -131,7 +121,7 @@ def handler(event, _context):
     logger.debug("Resolving work item config from invocation event")
 
     config = parse_config_from_event(event)
-    _configure_logging(config.log_level)
+    configure_runtime_logging(config.log_level, logger)
 
     logger.info(
         "Parsing FR work item: document_number=%s title=%s part=%s",

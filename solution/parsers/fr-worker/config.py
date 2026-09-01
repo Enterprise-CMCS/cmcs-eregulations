@@ -13,7 +13,7 @@ from common.config import (
     require_positive_int,
     unwrap_config,
 )
-from common.logging import resolve_log_level_name
+from common.logging import resolve_work_unit_log_level
 
 from common.auth import BackendCredentials, resolve_backend_credentials
 
@@ -54,7 +54,7 @@ def parse_config(payload: dict) -> FrDocumentConfig:
         docket_numbers=_require_string_list(config),
         raw_text_url=require_non_empty_string(config, "raw_text_url"),
         full_text_xml_url=require_non_empty_string(config, "full_text_xml_url"),
-        log_level=_require_log_level(config),
+        log_level=resolve_work_unit_log_level(config),
         credentials=resolve_backend_credentials(),
     )
 
@@ -80,13 +80,6 @@ def require_non_empty_string_str(value: Any) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ConfigParseError("docket_numbers entries must be non-empty strings")
     return value.strip()
-
-
-def _require_log_level(config: dict) -> str:
-    """Validate and normalize log_level for worker runtime logging."""
-
-    value = require_non_empty_string(config, "log_level")
-    return resolve_log_level_name(value)
 
 
 __all__ = [

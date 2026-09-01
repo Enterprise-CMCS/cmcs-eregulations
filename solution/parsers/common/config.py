@@ -108,6 +108,15 @@ def require_bool(data: dict[str, Any], key: str) -> bool:
     return value
 
 
+def require_bool_config(data: dict[str, Any], key: str) -> bool:
+    """Require a boolean parser-config value, raising RuntimeError on failure."""
+
+    try:
+        return require_bool(data, key)
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
+
+
 def parse_payload_from_event(event: dict[str, Any]) -> dict[str, Any]:
     """Normalize SQS or lambda-proxy event wrappers into one payload object."""
 

@@ -10,7 +10,7 @@ import logging
 import os
 from typing import Any
 
-from common.config import ConfigParseError, require_bool, require_non_empty_string
+from common.config import require_bool_config
 from common.eregs_client import create_ecfr_result
 from common.eregs_config import fetch_parser_config
 from common.launcher import (
@@ -18,7 +18,7 @@ from common.launcher import (
     dispatch_work_units,
     is_local_mode,
 )
-from common.logging import resolve_log_level_name
+from common.logging import resolve_parser_log_level
 
 from common.auth import resolve_backend_credentials
 
@@ -198,32 +198,16 @@ def _resolve_latest_dates_by_title(targets: list[TargetPartConfig], ecfr_api_bas
     return by_title
 
 
-def _resolve_parser_log_level(parser_config: dict[str, Any]) -> str:
-    """Resolve and validate parser log level from parser-config."""
-
-    try:
-        configured = require_non_empty_string(parser_config, "loglevel")
-        return resolve_log_level_name(configured)
-    except ConfigParseError as exc:
-        raise RuntimeError(str(exc)) from exc
-
-
 def _resolve_skip_parsed_regs(parser_config: dict[str, Any]) -> bool:
     """Resolve skip_parsed_regs from parser-config."""
 
-    try:
-        return require_bool(parser_config, "skip_parsed_regs")
-    except ConfigParseError as exc:
-        raise RuntimeError(str(exc)) from exc
+    return require_bool_config(parser_config, "skip_parsed_regs")
 
 
 def _resolve_upload_supplemental_locations(parser_config: dict[str, Any]) -> bool:
     """Resolve global upload_supplemental_locations override from parser-config."""
 
-    try:
-        return require_bool(parser_config, "upload_supplemental_locations")
-    except ConfigParseError as exc:
-        raise RuntimeError(str(exc)) from exc
+    return require_bool_config(parser_config, "upload_supplemental_locations")
 
 
 def handler(event, _context):
@@ -242,7 +226,7 @@ def handler(event, _context):
     api_base_url = os.environ["EREGS_API_URL_V3"]
     ecfr_api_base_url = _resolve_ecfr_api_base_url()
     parser_config = fetch_parser_config(api_base_url=api_base_url, credentials=credentials)
-    parser_log_level = _resolve_parser_log_level(parser_config)
+    parser_log_level = resolve_parser_log_level(parser_config)
     logger.setLevel(getattr(logging, parser_log_level))
     logger.info("eCFR launcher parser-config loglevel resolved: %s", parser_log_level)
 

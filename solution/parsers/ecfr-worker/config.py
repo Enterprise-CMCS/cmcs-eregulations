@@ -6,7 +6,6 @@ This module enforces the queue contract produced by the eCFR launcher.
 from dataclasses import dataclass
 from datetime import datetime
 
-from common.auth import BackendCredentials, resolve_backend_credentials
 from common.config import (
     ConfigParseError,
     parse_typed_config_from_event,
@@ -15,7 +14,9 @@ from common.config import (
     require_positive_int,
     unwrap_config,
 )
-from common.logging import resolve_log_level_name
+from common.logging import resolve_work_unit_log_level
+
+from common.auth import BackendCredentials, resolve_backend_credentials
 
 
 @dataclass
@@ -46,7 +47,7 @@ def parse_config(payload: dict) -> EcfrPartConfig:
         effective_date=_require_effective_date(config),
         upload_reg_text=require_bool(config, "upload_reg_text"),
         upload_locations=require_bool(config, "upload_locations"),
-        log_level=_require_log_level(config),
+        log_level=resolve_work_unit_log_level(config),
         credentials=resolve_backend_credentials(),
     )
 
@@ -67,13 +68,6 @@ def _require_effective_date(config: dict) -> str:
         raise ConfigParseError("effective_date must be in YYYY-MM-DD format") from exc
 
     return value
-
-
-def _require_log_level(config: dict) -> str:
-    """Validate and normalize log_level for worker runtime logging."""
-
-    value = require_non_empty_string(config, "log_level")
-    return resolve_log_level_name(value)
 
 
 __all__ = [
