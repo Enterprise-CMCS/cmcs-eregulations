@@ -1,11 +1,8 @@
 import json
 import unittest
-from unittest.mock import Mock
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import boto3
-from moto import mock_aws
-
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -13,6 +10,7 @@ from common.launcher import (
     send_work_units,
     send_work_units_via_http,
 )
+from moto import mock_aws
 
 
 class CommonLauncherTests(unittest.TestCase):
@@ -81,47 +79,46 @@ class CommonLauncherTests(unittest.TestCase):
         self.assertEqual(failures[0]["index"], "0")
         self.assertIn("timed out", failures[0]["reason"])
 
-    @patch("common.launcher.send_work_units_via_http")
-    def test_dispatch_work_units_local_mode(self, mock_send_http):
-        mock_send_http.return_value = (1, [])
-        work_units = [{"config": {"title_number": 42}}]
-
-        with patch.dict(
-            "os.environ",
-            {
-                "PARSER_LOCAL_MODE": "true",
-                "PARSER_WORKER_URL": "http://example.local",
-            },
-            clear=True,
-        ):
-            local_mode, succeeded, failures = dispatch_work_units(work_units)
-
-        self.assertTrue(local_mode)
-        self.assertEqual(succeeded, 1)
-        self.assertEqual(failures, [])
-        mock_send_http.assert_called_once_with("http://example.local", work_units)
-
     @patch("common.launcher.send_work_units")
-    def test_dispatch_work_units_queue_mode(self, mock_send_queue):
+    @patch("common.launcher.send_work_units_via_http")
+    def test_dispatch_work_units_mode_branches(self, mock_send_http, mock_send_queue):
         work_units = [{"config": {"title_number": 42}}]
+        mock_send_http.return_value = (1, [])
 
-        with patch.dict(
-            "os.environ",
-            {
-                "PARSER_LOCAL_MODE": "false",
-                "PARSER_QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123/parser-queue",
-            },
-            clear=True,
-        ):
-            local_mode, succeeded, failures = dispatch_work_units(work_units)
+        cases = [
+            (
+                "local",
+                {
+                    "PARSER_LOCAL_MODE": "true",
+                    "PARSER_WORKER_URL": "http://example.local",
+                },
+                True,
+                mock_send_http,
+                ("http://example.local", work_units),
+            ),
+            (
+                "queue",
+                {
+                    "PARSER_LOCAL_MODE": "false",
+                    "PARSER_QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/123/parser-queue",
+                },
+                False,
+                mock_send_queue,
+                ("https://sqs.us-east-1.amazonaws.com/123/parser-queue", work_units),
+            ),
+        ]
 
-        self.assertFalse(local_mode)
-        self.assertEqual(succeeded, 1)
-        self.assertEqual(failures, [])
-        mock_send_queue.assert_called_once_with(
-            "https://sqs.us-east-1.amazonaws.com/123/parser-queue",
-            work_units,
-        )
+        for case_name, env, expected_local_mode, expected_mock, expected_args in cases:
+            with self.subTest(case=case_name):
+                mock_send_http.reset_mock()
+                mock_send_queue.reset_mock()
+                with patch.dict("os.environ", env, clear=True):
+                    local_mode, succeeded, failures = dispatch_work_units(work_units)
+
+                self.assertEqual(local_mode, expected_local_mode)
+                self.assertEqual(succeeded, 1)
+                self.assertEqual(failures, [])
+                expected_mock.assert_called_once_with(*expected_args)
 
 
 if __name__ == "__main__":

@@ -54,48 +54,51 @@ class FetchFullTextSectionsTests(unittest.TestCase):
             {"438": "42", "440": "42", "457": "42", "460": "42", "41": "45"},
         )
 
-    def test_valid_section_range(self):
-        xml = """
-            <PRORULE>
-                <PREAMB>
-                    <CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
-                    <CFR>45 CFR Parts 41.</CFR>
-                    <CFR>47 CFR Parts 123</CFR>
-                </PREAMB>
+    def test_section_and_range_variants(self):
+        cases = [
+            (
+                "single-range",
+                """
                 <SUPLINF>
                     <SECTION><SECTNO>§\u2009438.502-438.700 </SECTNO><SUBJECT>Definitions.</SUBJECT></SECTION>
                 </SUPLINF>
-            </PRORULE>
-        """
-        with patch.object(_module, "requests") as mock_requests:
-            mock_requests.get.return_value = self._response(xml)
-            sections, ranges, part_map = _module.fetch_full_text_sections("https://example/x.xml", {"42", "45"})
-
-        self.assertEqual(sections, [])
-        self.assertEqual(ranges, ["438.502-438.700"])
-        self.assertEqual(part_map["438"], "42")
-
-    def test_sections_and_range(self):
-        xml = """
-            <PRORULE>
-                <PREAMB>
-                    <CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
-                    <CFR>45 CFR Parts 41.</CFR>
-                    <CFR>47 CFR Parts 123</CFR>
-                </PREAMB>
+                """,
+                [],
+                ["438.502-438.700"],
+            ),
+            (
+                "mixed-sections-and-range",
+                """
                 <SUPLINF>
                     <SECTION><SECTNO>§\u2009438.502 </SECTNO></SECTION>
                     <SECTION><SECTNO>§\u200941.118 </SECTNO></SECTION>
                     <SECTION><SECTNO>§\u2009438.502-438.700 </SECTNO></SECTION>
                 </SUPLINF>
-            </PRORULE>
-        """
-        with patch.object(_module, "requests") as mock_requests:
-            mock_requests.get.return_value = self._response(xml)
-            sections, ranges, _ = _module.fetch_full_text_sections("https://example/x.xml", {"42", "45"})
+                """,
+                ["438.502", "41.118"],
+                ["438.502-438.700"],
+            ),
+        ]
 
-        self.assertEqual(sections, ["438.502", "41.118"])
-        self.assertEqual(ranges, ["438.502-438.700"])
+        for case_name, suplinf_body, expected_sections, expected_ranges in cases:
+            with self.subTest(case=case_name):
+                xml = f"""
+                    <PRORULE>
+                        <PREAMB>
+                            <CFR>42 CFR Parts 438, 440, 457, and 460</CFR>
+                            <CFR>45 CFR Parts 41.</CFR>
+                            <CFR>47 CFR Parts 123</CFR>
+                        </PREAMB>
+                        {suplinf_body}
+                    </PRORULE>
+                """
+                with patch.object(_module, "requests") as mock_requests:
+                    mock_requests.get.return_value = self._response(xml)
+                    sections, ranges, part_map = _module.fetch_full_text_sections("https://example/x.xml", {"42", "45"})
+
+                self.assertEqual(sections, expected_sections)
+                self.assertEqual(ranges, expected_ranges)
+                self.assertEqual(part_map["438"], "42")
 
     def test_bad_xml_raises(self):
         xml = """

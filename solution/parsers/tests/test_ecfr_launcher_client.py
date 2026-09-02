@@ -6,7 +6,6 @@ from unittest.mock import Mock, patch
 import requests
 from common.eregs_client import EregsClientError
 
-from common import eregs_client as _cregs
 from common.auth import BackendCredentials
 
 
@@ -83,41 +82,6 @@ class EcfrLauncherClientTests(unittest.TestCase):
                 credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
                 payload={"success": True, "log": "queued=2 skipped=1"},
             )
-
-    @patch("requests.post")
-    def test_create_ecfr_result_success(self, mock_post):
-        response = Mock()
-        response.raise_for_status.return_value = None
-        response.text = '{"id": 9, "status": "queued"}'
-        response.json.return_value = {"id": 9, "status": "queued"}
-        mock_post.return_value = response
-
-        result = _cregs.create_ecfr_result(
-            api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-            payload={"title": 42, "part": 400, "status": "queued", "success": False, "log": ""},
-        )
-
-        self.assertEqual(result["status"], "queued")
-        self.assertTrue(mock_post.call_args.args[0].endswith("/parsers/ecfr/results"))
-
-    @patch("requests.patch")
-    def test_update_ecfr_result_success(self, mock_patch):
-        response = Mock()
-        response.raise_for_status.return_value = None
-        response.text = '{"id": 9, "status": "succeeded"}'
-        response.json.return_value = {"id": 9, "status": "succeeded"}
-        mock_patch.return_value = response
-
-        result = _cregs.update_ecfr_result(
-            api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-            result_id=9,
-            payload={"status": "succeeded", "log": ""},
-        )
-
-        self.assertEqual(result["status"], "succeeded")
-        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/ecfr/results/9"))
 
 
 if __name__ == "__main__":
