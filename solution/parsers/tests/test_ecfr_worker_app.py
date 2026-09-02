@@ -5,7 +5,10 @@ import types
 import unittest
 from importlib import util
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
+
+from common.auth import BackendCredentials
 
 
 def _load_module():
@@ -27,33 +30,20 @@ def _load_module():
 
 
 _module = _load_module()
-config_spec = util.spec_from_file_location(
-    "ecfr_worker_pkg.config",
-    Path(__file__).resolve().parent.parent / "ecfr-worker" / "config.py",
-)
-if config_spec is None or config_spec.loader is None:
-    raise RuntimeError("Unable to load ecfr worker config module")
-_config_module = util.module_from_spec(config_spec)
-sys.modules["ecfr_worker_pkg.config"] = _config_module
-config_spec.loader.exec_module(_config_module)
 
 
 class EcfrWorkerAppTests(unittest.TestCase):
     def _build_parsed_config(self, *, upload_reg_text: bool, upload_locations: bool):
-        with patch.dict(os.environ, {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
-            return _config_module.parse_config(
-                {
-                    "config": {
-                        "parser_result_id": 7,
-                        "title_number": 42,
-                        "part_number": 400,
-                        "effective_date": "2025-01-01",
-                        "upload_reg_text": upload_reg_text,
-                        "upload_locations": upload_locations,
-                        "log_level": "info",
-                    }
-                }
-            )
+        return SimpleNamespace(
+            parser_result_id=7,
+            title_number=42,
+            part_number=400,
+            effective_date="2025-01-01",
+            upload_reg_text=upload_reg_text,
+            upload_locations=upload_locations,
+            log_level="INFO",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+        )
 
     def test_handler_updates_result_to_succeeded(self):
         parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)
