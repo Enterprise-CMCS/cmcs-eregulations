@@ -36,6 +36,17 @@ class CreateSectionsTests(unittest.TestCase):
         result = _module.create_sections(["no-dot", "438."], {"438": "42"})
         self.assertEqual(result, [])
 
+    def test_invalid_section_number_is_skipped(self):
+        result = _module.create_sections(["438.ABC"], {"438": "42"})
+        self.assertEqual(result, [])
+
+    def test_mixed_valid_and_invalid_section_numbers(self):
+        result = _module.create_sections(["438.ABC", "438.700"], {"438": "42"})
+        self.assertEqual(
+            result,
+            [_module.LinkSection(title="42", part="438", section_id=700)],
+        )
+
 
 class CreateSectionRangesTests(unittest.TestCase):
     def test_valid_range(self):
@@ -57,6 +68,10 @@ class CreateSectionRangesTests(unittest.TestCase):
 
     def test_no_matching_title_skipped(self):
         result = _module.create_section_ranges(["438.502-438.700"], {})
+        self.assertEqual(result, [])
+
+    def test_invalid_range_endpoint_number_is_skipped(self):
+        result = _module.create_section_ranges(["438.ABC-438.700"], {"438": "42"})
         self.assertEqual(result, [])
 
 

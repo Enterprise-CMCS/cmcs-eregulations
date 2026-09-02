@@ -86,6 +86,25 @@ class FrWorkerConfigTests(unittest.TestCase):
             with self.assertRaisesRegex(ConfigParseError, "docket_numbers must be a list"):
                 parse_config(_payload(docket_numbers="ABC-1"))
 
+    def test_parse_config_allows_missing_full_text_xml_url(self):
+        payload = _payload()
+        del payload["config"]["full_text_xml_url"]
+        with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
+            parsed = parse_config(payload)
+
+        self.assertIsNone(parsed.full_text_xml_url)
+
+    def test_parse_config_treats_blank_full_text_xml_url_as_none(self):
+        with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
+            parsed = parse_config(_payload(full_text_xml_url="   "))
+
+        self.assertIsNone(parsed.full_text_xml_url)
+
+    def test_parse_config_rejects_non_string_full_text_xml_url(self):
+        with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "full_text_xml_url must be a string"):
+                parse_config(_payload(full_text_xml_url=123))
+
     def test_parse_config_rejects_missing_required_field(self):
         with patch.dict("os.environ", {"EREGS_USERNAME": "u", "EREGS_PASSWORD": "p"}, clear=True):
             with self.assertRaises(ConfigParseError):

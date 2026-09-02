@@ -32,7 +32,7 @@ class FrDocumentConfig:
     date: str
     docket_numbers: list[str]
     raw_text_url: str
-    full_text_xml_url: str
+    full_text_xml_url: str | None
     log_level: str
     credentials: BackendCredentials
 
@@ -53,7 +53,7 @@ def parse_config(payload: dict) -> FrDocumentConfig:
         date=require_non_empty_string(config, "date"),
         docket_numbers=_require_string_list(config),
         raw_text_url=require_non_empty_string(config, "raw_text_url"),
-        full_text_xml_url=require_non_empty_string(config, "full_text_xml_url"),
+        full_text_xml_url=_optional_non_empty_string(config, "full_text_xml_url"),
         log_level=resolve_work_unit_log_level(config),
         credentials=resolve_backend_credentials(),
     )
@@ -72,6 +72,18 @@ def _require_string_list(config: dict) -> list[str]:
     if not isinstance(value, list):
         raise ConfigParseError("docket_numbers must be a list")
     return [require_non_empty_string_value(item, "docket_numbers entries must be non-empty strings") for item in value]
+
+
+def _optional_non_empty_string(config: dict, key: str) -> str | None:
+    """Return None for missing/blank values, otherwise a trimmed string."""
+
+    value = config.get(key)
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ConfigParseError(f"{key} must be a string when provided")
+    candidate = value.strip()
+    return candidate or None
 
 
 __all__ = [

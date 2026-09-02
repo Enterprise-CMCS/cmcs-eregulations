@@ -51,7 +51,11 @@ def create_sections(sections: list[str], part_map: dict[str, str]) -> list[LinkS
             logger.warning("[links] Section identifier %s has no matching title.", section_token)
             continue
 
-        result.append(LinkSection(title=title, part=part, section_id=_to_int(split[1], section_token)))
+        section_id = _to_int(split[1], section_token)
+        if section_id is None:
+            continue
+
+        result.append(LinkSection(title=title, part=part, section_id=section_id))
     return result
 
 
@@ -85,11 +89,11 @@ def create_section_ranges(ranges: list[str], part_map: dict[str, str]) -> list[L
     return result
 
 
-def _to_int(value: str, token: str) -> int:
-    """Coerce a section token tail to an int, warning and returning 0 on failure."""
+def _to_int(value: str, token: str) -> int | None:
+    """Coerce a section token tail to int, returning None on parse failure."""
 
     try:
         return int(value)
     except ValueError:
         logger.warning("[links] Section identifier %s is invalid.", token)
-        return 0
+        return None
