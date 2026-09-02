@@ -31,7 +31,18 @@ class EcfrParserResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EcfrParserResult
-        exclude = ("abstractparserresult_ptr",)
+        fields = (
+            "id",
+            "timestamp",
+            "success",
+            "log",
+            "launcher_result",
+            "title",
+            "part",
+            "date",
+            "status",
+            "status_updated_at",
+        )
 
 
 class EcfrLauncherResultSerializer(serializers.ModelSerializer):
@@ -39,7 +50,7 @@ class EcfrLauncherResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EcfrLauncherResult
-        exclude = ("abstractparserresult_ptr",)
+        fields = ("id", "timestamp", "success", "log")
 
 
 class FrParserResultSerializer(serializers.ModelSerializer):
@@ -47,7 +58,7 @@ class FrParserResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FrParserResult
-        exclude = ("abstractparserresult_ptr",)
+        fields = ("id", "timestamp", "success", "log", "document_number")
 
 
 class FrLauncherResultSerializer(serializers.ModelSerializer):
@@ -55,7 +66,7 @@ class FrLauncherResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FrLauncherResult
-        exclude = ("abstractparserresult_ptr",)
+        fields = ("id", "timestamp", "success", "log", "queued_count", "skipped_count", "failed_count")
 
 
 class PartSectionCreateSerializer(serializers.Serializer):
