@@ -177,36 +177,6 @@ class FrLauncherEregsClientTests(unittest.TestCase):
                 payload={"success": False, "log": "boom"},
             )
 
-    @patch("requests.patch")
-    def test_update_fr_launcher_result_success(self, mock_patch):
-        response = Mock()
-        response.raise_for_status.return_value = None
-        response.text = '{"id": 1, "log": "queued=2 skipped=1"}'
-        response.json.return_value = {"id": 1, "log": "queued=2 skipped=1"}
-        mock_patch.return_value = response
-
-        result = _eregs.update_fr_launcher_result(
-            api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-            payload={"success": True, "log": "queued=2 skipped=1"},
-        )
-
-        self.assertEqual(result["log"], "queued=2 skipped=1")
-        self.assertTrue(mock_patch.call_args.args[0].endswith("/parsers/fr/launcher-results"))
-
-    @patch("requests.patch")
-    def test_update_fr_launcher_result_non_2xx(self, mock_patch):
-        response = Mock()
-        response.raise_for_status.side_effect = requests.HTTPError(response=Mock(status_code=500))
-        mock_patch.return_value = response
-
-        with self.assertRaisesRegex(EregsClientError, "launcher result update failed"):
-            _eregs.update_fr_launcher_result(
-                api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                payload={"success": True, "log": "queued=2 skipped=1"},
-            )
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -45,7 +45,6 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 {
                     "config": {
                         "parser_result_id": 7,
-                        "launcher_result_id": 3,
                         "title_number": 42,
                         "part_number": 400,
                         "effective_date": "2025-01-01",

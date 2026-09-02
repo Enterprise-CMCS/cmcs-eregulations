@@ -134,7 +134,6 @@ def _build_work_units(
             {
                 "config": {
                     "parser_result_id": parser_result_id,
-                    "launcher_result_id": launcher_result_id,
                     "title_number": target.title_number,
                     "part_number": target.part_number,
                     "effective_date": latest_issue_date,

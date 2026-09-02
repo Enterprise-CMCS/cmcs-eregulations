@@ -98,9 +98,11 @@ def _extract_section(input_text: str) -> tuple[str, str]:
 def _extract_cfr(input_text: str) -> tuple[str, list[str]]:
     """Port of fedreg.extractCFR: return (title, parts) from a CFR reference."""
 
-    split = input_text.split(" ")
-    if len(split) < 1:
+    candidate = input_text.strip()
+    if not candidate:
         raise ValueError("the CFR string is empty")
+
+    split = candidate.split(" ")
 
     title = split[0]
     if not _DIGIT_RE.search(title):

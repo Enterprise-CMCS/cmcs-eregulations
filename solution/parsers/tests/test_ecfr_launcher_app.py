@@ -68,7 +68,6 @@ class EcfrLauncherAppTests(unittest.TestCase):
         self.assertEqual(skipped_count, 0)
         self.assertEqual(len(work_units), 1)
         self.assertEqual(work_units[0]["config"]["parser_result_id"], 77)
-        self.assertEqual(work_units[0]["config"]["launcher_result_id"], 10)
         self.assertEqual(work_units[0]["config"]["upload_locations"], False)
 
         payload = mock_create.call_args.kwargs["payload"]
@@ -138,7 +137,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
             _module,
             "_build_work_units",
             return_value=(
-                [{"config": {"parser_result_id": 7, "launcher_result_id": 50, "title_number": 42, "part_number": 400}}],
+                [{"config": {"parser_result_id": 7, "title_number": 42, "part_number": 400}}],
                 1,
             ),
         ), patch.object(

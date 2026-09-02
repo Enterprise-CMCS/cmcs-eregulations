@@ -24,7 +24,6 @@ class EcfrPartConfig:
     """Validated config object for one eCFR title/part processing unit."""
 
     parser_result_id: int
-    launcher_result_id: int
     title_number: int
     part_number: int
     effective_date: str
@@ -41,7 +40,6 @@ def parse_config(payload: dict) -> EcfrPartConfig:
 
     return EcfrPartConfig(
         parser_result_id=require_positive_int(config, "parser_result_id"),
-        launcher_result_id=require_positive_int(config, "launcher_result_id"),
         title_number=require_positive_int(config, "title_number"),
         part_number=require_positive_int(config, "part_number"),
         effective_date=_require_effective_date(config),

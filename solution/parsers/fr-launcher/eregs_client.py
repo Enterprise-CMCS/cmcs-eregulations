@@ -48,22 +48,3 @@ def create_fr_launcher_result(
         json_body=payload,
         timeout=timeout,
     )
-
-
-def update_fr_launcher_result(
-    api_base_url: str,
-    credentials: BackendCredentials,
-    payload: dict[str, Any],
-    timeout: int = 60,
-) -> dict[str, Any]:
-    """Update the latest Federal Register launcher result at /v3/parsers/fr/launcher-results."""
-
-    return send_json(
-        api_base_url,
-        "patch",
-        "parsers/fr/launcher-results",
-        credentials,
-        "eRegs FR launcher result update",
-        json_body=payload,
-        timeout=timeout,
-    )
