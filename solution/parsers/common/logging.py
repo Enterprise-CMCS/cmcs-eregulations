@@ -23,7 +23,7 @@ def resolve_log_level_name(value: str) -> str:
     resolved = _LOG_LEVEL_MAP.get(normalized)
     if resolved is None:
         raise ConfigParseError(
-            "loglevel must be one of fatal, error, warn, info, debug, trace"
+            "loglevel must be one of fatal, error, warn(ing), info, debug, trace, critical; got: %r" % value
         )
     return resolved
 
