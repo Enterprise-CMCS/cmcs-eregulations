@@ -3,6 +3,7 @@ import sys
 import unittest
 from importlib import util
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 from common.auth import BackendCredentials
@@ -39,30 +40,23 @@ _module = _load_module("app", "fr_worker_pkg", WORKER_DIR, "app.py")
 
 
 def _config(**overrides):
-    base = dict(
-        document_number="2026-12345",
-        title=42,
-        part="400",
-        description="A document title",
-        name="90 FR 1",
-        doc_type="Rule",
-        url="https://example/x",
-        date="2026-01-01",
-        docket_numbers=["ABC-1"],
-        raw_text_url="https://example/x.txt",
-        full_text_xml_url="https://example/x.xml",
-        log_level="DEBUG",
-        credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-    )
+    base = {
+        "document_number": "2026-12345",
+        "title": 42,
+        "part": "400",
+        "description": "A document title",
+        "name": "90 FR 1",
+        "doc_type": "Rule",
+        "url": "https://example/x",
+        "date": "2026-01-01",
+        "docket_numbers": ["ABC-1"],
+        "raw_text_url": "https://example/x.txt",
+        "full_text_xml_url": "https://example/x.xml",
+        "log_level": "DEBUG",
+        "credentials": BackendCredentials(auth_type="basic", username="u", password="p"),
+    }
     base.update({k: v for k, v in overrides.items() if v is not None})
-    spec = util.spec_from_file_location(
-        "fr_worker_pkg.config",
-        WORKER_DIR / "config.py",
-    )
-    cfg_mod = util.module_from_spec(spec)
-    sys.modules["fr_worker_pkg.config"] = cfg_mod
-    spec.loader.exec_module(cfg_mod)
-    return cfg_mod.FrDocumentConfig(**base)
+    return SimpleNamespace(**base)
 
 
 class FrWorkerAppTests(unittest.TestCase):

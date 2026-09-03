@@ -62,13 +62,6 @@ class FrWorkerConfigTests(unittest.TestCase):
         self.assertEqual(parsed.log_level, "WARNING")
         self.assertEqual(parsed.credentials, BackendCredentials("basic", "env-user", "env-pass", None))
 
-    def test_parse_config_requires_document_number_and_log_level(self):
-        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
-            parsed = parse_config(_payload())
-
-        self.assertEqual(parsed.document_number, "2026-12345")
-        self.assertEqual(parsed.log_level, "WARNING")
-
     def test_parse_config_rejects_invalid_log_level(self):
         with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
             with self.assertRaisesRegex(ConfigParseError, "loglevel must be one of"):

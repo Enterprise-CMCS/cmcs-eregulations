@@ -56,7 +56,7 @@ class FrLauncherAppTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "loglevel must be one of"):
             _module.resolve_parser_log_level({"loglevel": "verbose"})
 
-    def test_build_work_units_dispatches_one_work_unit_per_doc(self):
+    def test_build_work_units_skip_disabled_queues_all_docs(self):
         targets = [_module.FrTarget(title_number=42, part_number=400)]
         docs = [_doc("2026-0001"), _doc("2026-0002")]
 
@@ -74,10 +74,9 @@ class FrLauncherAppTests(unittest.TestCase):
                 fr_api_base_url="https://www.federalregister.gov",
             )
 
-        self.assertEqual(len(work_units), 2)
+        self.assertEqual([w["config"]["document_number"] for w in work_units], ["2026-0001", "2026-0002"])
         self.assertEqual(skipped_count, 0)
         cfg = work_units[0]["config"]
-        self.assertEqual(cfg["document_number"], "2026-0001")
         self.assertEqual(cfg["title"], 42)
         self.assertEqual(cfg["part"], "400")
         self.assertEqual(cfg["log_level"], "INFO")
@@ -104,26 +103,6 @@ class FrLauncherAppTests(unittest.TestCase):
 
         self.assertEqual([w["config"]["document_number"] for w in work_units], ["2026-0001", "2026-0003"])
         self.assertEqual(skipped_count, 1)
-
-    def test_build_work_units_processes_all_docs_when_skip_disabled(self):
-        targets = [_module.FrTarget(title_number=42, part_number=400)]
-        docs = [_doc("2026-0001"), _doc("2026-0002")]
-
-        with patch.object(_module, "expand_fr_targets", return_value=targets), patch.object(
-            _module, "_resolve_skip_fr_documents", return_value=False
-        ), patch.object(
-            _module, "fetch_documents", return_value=docs
-        ):
-            work_units, _ = _module._build_work_units(
-                parser_config={},
-                api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
-                parser_log_level="INFO",
-                ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
-                fr_api_base_url="https://www.federalregister.gov",
-            )
-
-        self.assertEqual(len(work_units), 2)
 
     def test_handler_dispatches_and_records_launcher_result(self):
         with patch.dict(

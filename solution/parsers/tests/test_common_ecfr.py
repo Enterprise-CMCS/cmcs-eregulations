@@ -1,7 +1,6 @@
 import unittest
 
 from common.ecfr import (
-    ECFR_V1_BASE_URL,
     extract_part_numbers,
     identifier_to_part_number,
     parse_part_number,
@@ -11,9 +10,6 @@ from common.eregs_config import EregsConfigError
 
 
 class CommonEcfrTests(unittest.TestCase):
-    def test_base_url_default(self):
-        self.assertEqual(ECFR_V1_BASE_URL, "https://www.ecfr.gov/api/versioner/v1/")
-
     def test_extract_part_numbers_collects_unique_sorted(self):
         payload = {
             "type": "chapter",
