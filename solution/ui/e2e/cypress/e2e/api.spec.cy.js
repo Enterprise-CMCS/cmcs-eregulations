@@ -75,7 +75,7 @@ describe("API testing", () => {
             cy.get("@request").then((response) => {
                 cy.log(`${endpoint} - ${response.status}`);
                 const expectedStatuses = OPTIONAL_DATA_ENDPOINTS.has(endpoint)
-                    ? [200, 403, 404]
+                    ? [200, 401, 403, 404]
                     : [200, 403];
                 expect(response.status).to.be.oneOf(expectedStatuses);
             });

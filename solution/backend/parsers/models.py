@@ -83,7 +83,7 @@ class PartConfiguration(models.Model):
 class AbstractParserResult(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     success = models.BooleanField()
-    log = models.TextField()
+    log = models.TextField(blank=True)
 
 
 class EcfrParserResult(AbstractParserResult):
@@ -141,3 +141,13 @@ class FrParserResult(AbstractParserResult):
         indexes = [
             models.Index(fields=["document_number"]),
         ]
+
+
+class FrLauncherResult(AbstractParserResult):
+    queued_count = models.PositiveIntegerField(default=0)
+    skipped_count = models.PositiveIntegerField(default=0)
+    failed_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Federal Register Launcher Result"
+        verbose_name_plural = "Federal Register Launcher Results"

@@ -93,9 +93,14 @@ def require_positive_int(data: dict[str, Any], key: str) -> int:
 def require_non_empty_string(data: dict[str, Any], key: str) -> str:
     """Require a non-empty string value for a config key."""
 
-    value = data.get(key)
+    return require_non_empty_string_value(data.get(key), f"{key} must be a non-empty string")
+
+
+def require_non_empty_string_value(value: Any, error_message: str) -> str:
+    """Require a standalone value to be a non-empty string."""
+
     if not isinstance(value, str) or not value.strip():
-        raise ConfigParseError(f"{key} must be a non-empty string")
+        raise ConfigParseError(error_message)
     return value.strip()
 
 
@@ -106,6 +111,15 @@ def require_bool(data: dict[str, Any], key: str) -> bool:
     if not isinstance(value, bool):
         raise ConfigParseError(f"{key} must be a boolean")
     return value
+
+
+def require_bool_config(data: dict[str, Any], key: str) -> bool:
+    """Require a boolean parser-config value, raising RuntimeError on failure."""
+
+    try:
+        return require_bool(data, key)
+    except ConfigParseError as exc:
+        raise RuntimeError(str(exc)) from exc
 
 
 def parse_payload_from_event(event: dict[str, Any]) -> dict[str, Any]:
