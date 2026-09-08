@@ -5,7 +5,10 @@ import types
 import unittest
 from importlib import util
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
+
+from common.auth import BackendCredentials
 
 
 def _load_module():
@@ -27,34 +30,20 @@ def _load_module():
 
 
 _module = _load_module()
-config_spec = util.spec_from_file_location(
-    "ecfr_worker_pkg.config",
-    Path(__file__).resolve().parent.parent / "ecfr-worker" / "config.py",
-)
-if config_spec is None or config_spec.loader is None:
-    raise RuntimeError("Unable to load ecfr worker config module")
-_config_module = util.module_from_spec(config_spec)
-sys.modules["ecfr_worker_pkg.config"] = _config_module
-config_spec.loader.exec_module(_config_module)
 
 
 class EcfrWorkerAppTests(unittest.TestCase):
     def _build_parsed_config(self, *, upload_reg_text: bool, upload_locations: bool):
-        with patch.dict(os.environ, {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
-            return _config_module.parse_config(
-                {
-                    "config": {
-                        "parser_result_id": 7,
-                        "launcher_result_id": 3,
-                        "title_number": 42,
-                        "part_number": 400,
-                        "effective_date": "2025-01-01",
-                        "upload_reg_text": upload_reg_text,
-                        "upload_locations": upload_locations,
-                        "log_level": "info",
-                    }
-                }
-            )
+        return SimpleNamespace(
+            parser_result_id=7,
+            title_number=42,
+            part_number=400,
+            effective_date="2025-01-01",
+            upload_reg_text=upload_reg_text,
+            upload_locations=upload_locations,
+            log_level="INFO",
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+        )
 
     def test_handler_updates_result_to_succeeded(self):
         parsed_config = self._build_parsed_config(upload_reg_text=True, upload_locations=True)
@@ -79,7 +68,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
                 [{"title": "42", "part": "400", "subpart": "B", "sections": []}],
             ),
         ), patch.object(_module, "upload_part", return_value={"id": 123, "status": "ok"}), patch.object(
-            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "succeeded"}
+            _module, "update_ecfr_result", return_value={"id": 7, "status": "succeeded"}
         ) as mock_update_result:
             response = _module.handler({"body": "{}"}, None)
 
@@ -97,7 +86,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
         ), patch.object(
             _module, "fetch_part_structure", side_effect=RuntimeError("boom")
         ), patch.object(
-            _module, "update_ecfr_result", return_value={"abstractparserresult_ptr": 7, "status": "failed"}
+            _module, "update_ecfr_result", return_value={"id": 7, "status": "failed"}
         ) as mock_update_result:
             with self.assertRaisesRegex(RuntimeError, "boom"):
                 _module.handler({"body": "{}"}, None)

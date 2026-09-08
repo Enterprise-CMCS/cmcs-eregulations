@@ -1,10 +1,10 @@
-import unittest
 import base64
+import unittest
 from unittest.mock import patch
 
-from common.auth import build_auth_headers, resolve_backend_credentials
 from common.config import ConfigParseError
-from common.auth import BackendCredentials
+
+from common.auth import BackendCredentials, build_auth_headers, resolve_backend_credentials
 
 
 class CommonAuthTests(unittest.TestCase):
@@ -24,21 +24,6 @@ class CommonAuthTests(unittest.TestCase):
             build_auth_headers(BackendCredentials(auth_type="basic", username="", password=""))
 
     def test_resolve_from_env_when_credentials_present(self):
-        with patch.dict(
-            "os.environ",
-            {
-                "EREGS_USERNAME": "env-user",
-                "EREGS_PASSWORD": "env-pass",
-            },
-            clear=True,
-        ):
-            creds = resolve_backend_credentials()
-
-        self.assertEqual(creds.auth_type, "basic")
-        self.assertEqual(creds.username, "env-user")
-        self.assertEqual(creds.password, "env-pass")
-
-    def test_resolve_from_env_without_message_credentials(self):
         with patch.dict(
             "os.environ",
             {

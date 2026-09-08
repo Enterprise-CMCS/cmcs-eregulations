@@ -9,6 +9,7 @@ import logging
 import os
 
 from common.eregs_client import update_ecfr_result
+from common.logging import configure_runtime_logging
 
 from .config import EcfrPartConfig, parse_config_from_event
 from .ecfr_client import fetch_part_full_xml, fetch_part_structure
@@ -22,24 +23,13 @@ _ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
 _DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
 
 
-def _configure_logging(log_level_name: str | None = None) -> None:
-    """Configure root logging for worker execution."""
-
-    if log_level_name is None:
-        log_level_name = "INFO"
-
-    log_level = getattr(logging, log_level_name, logging.INFO)
-    logging.basicConfig(level=log_level)
-    logger.setLevel(log_level)
-
-
 def _resolve_ecfr_api_base_url() -> str:
     """Resolve eCFR API base URL from environment with production default."""
 
     return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
 
 
-_configure_logging()
+configure_runtime_logging(None, logger)
 
 
 def _process_work_item(config: EcfrPartConfig) -> dict:
@@ -153,7 +143,7 @@ def handler(event, _context):
     logger.debug("Resolving work item config from invocation event")
 
     config = parse_config_from_event(event)
-    _configure_logging(config.log_level)
+    configure_runtime_logging(config.log_level, logger)
 
     logger.info(
         "Parsing eCFR work item: title=%s part=%s effective_date=%s",

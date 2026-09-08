@@ -3,10 +3,11 @@ import unittest
 from common.config import (
     ConfigParseError,
     parse_credentials,
-    parse_payload_from_event,
     parse_message_body,
+    parse_payload_from_event,
     parse_typed_config_from_event,
     require_non_empty_string,
+    require_non_empty_string_value,
     require_positive_int,
     require_single_record,
     unwrap_config,
@@ -121,6 +122,13 @@ class CommonConfigTests(unittest.TestCase):
         self.assertEqual(require_non_empty_string({"document_number": " 2026-123 "}, "document_number"), "2026-123")
         with self.assertRaisesRegex(ConfigParseError, "non-empty string"):
             require_non_empty_string({"document_number": "   "}, "document_number")
+
+    def test_require_non_empty_string_value(self):
+        self.assertEqual(require_non_empty_string_value(" 2026-123 ", "must be a string"), "2026-123")
+        with self.assertRaisesRegex(ConfigParseError, "must be a string"):
+            require_non_empty_string_value(123, "must be a string")
+        with self.assertRaisesRegex(ConfigParseError, "must be a string"):
+            require_non_empty_string_value("   ", "must be a string")
 
 
 if __name__ == "__main__":

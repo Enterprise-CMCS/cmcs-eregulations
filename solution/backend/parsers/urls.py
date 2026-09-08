@@ -31,4 +31,9 @@ urlpatterns = [
         "get": "list",
         "post": "create",
     })),
+    path("fr/launcher-results", views.FrLauncherResultViewSet.as_view({
+        "get": "list",
+        "post": "create",
+        "patch": "partial_update_latest",
+    })),
 ]

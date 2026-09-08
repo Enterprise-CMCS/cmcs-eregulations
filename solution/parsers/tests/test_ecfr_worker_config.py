@@ -1,10 +1,11 @@
 import unittest
-from unittest.mock import patch
 from importlib import util
 from pathlib import Path
+from unittest.mock import patch
+
+from common.config import ConfigParseError
 
 from common.auth import BackendCredentials
-from common.config import ConfigParseError
 
 
 def _load_module():
@@ -26,7 +27,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         payload = {
             "config": {
                 "parser_result_id": 7,
-                "launcher_result_id": 3,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",
@@ -40,7 +40,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
             parsed = parse_config(payload)
 
         self.assertEqual(parsed.parser_result_id, 7)
-        self.assertEqual(parsed.launcher_result_id, 3)
         self.assertEqual(parsed.title_number, 42)
         self.assertEqual(parsed.part_number, 400)
         self.assertEqual(parsed.effective_date, "2025-01-01")
@@ -53,7 +52,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         payload = {
             "config": {
                 "parser_result_id": 7,
-                "launcher_result_id": 3,
                 "title_number": 42,
                 "part_number": 400,
                 "upload_reg_text": True,
@@ -70,7 +68,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         payload = {
             "config": {
                 "parser_result_id": 7,
-                "launcher_result_id": 3,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",
@@ -88,7 +85,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         payload = {
             "config": {
                 "parser_result_id": 7,
-                "launcher_result_id": 3,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025/01/01",
@@ -106,7 +102,6 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         payload = {
             "config": {
                 "parser_result_id": 7,
-                "launcher_result_id": 3,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",

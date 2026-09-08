@@ -1,7 +1,12 @@
 from django.apps import apps
 from rest_framework import serializers
 
-from parsers.models import EcfrLauncherResult, EcfrParserResult, FrParserResult
+from parsers.models import (
+    EcfrLauncherResult,
+    EcfrParserResult,
+    FrLauncherResult,
+    FrParserResult,
+)
 
 
 class PartConfigurationSerializer(serializers.Serializer):
@@ -22,21 +27,46 @@ class ParserConfigurationSerializer(serializers.Serializer):
 
 
 class EcfrParserResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = EcfrParserResult
-        fields = "__all__"
+        fields = (
+            "id",
+            "timestamp",
+            "success",
+            "log",
+            "launcher_result",
+            "title",
+            "part",
+            "date",
+            "status",
+            "status_updated_at",
+        )
 
 
 class EcfrLauncherResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = EcfrLauncherResult
-        fields = "__all__"
+        fields = ("id", "timestamp", "success", "log")
 
 
 class FrParserResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
     class Meta:
         model = FrParserResult
-        fields = "__all__"
+        fields = ("id", "timestamp", "success", "log", "document_number")
+
+
+class FrLauncherResultSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="pk", read_only=True)
+
+    class Meta:
+        model = FrLauncherResult
+        fields = ("id", "timestamp", "success", "log", "queued_count", "skipped_count", "failed_count")
 
 
 class PartSectionCreateSerializer(serializers.Serializer):
