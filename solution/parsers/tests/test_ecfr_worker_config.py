@@ -1,10 +1,11 @@
 import unittest
-from unittest.mock import patch
 from importlib import util
 from pathlib import Path
+from unittest.mock import patch
+
+from common.config import ConfigParseError
 
 from common.auth import BackendCredentials
-from common.config import ConfigParseError
 
 
 def _load_module():
@@ -25,6 +26,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
     def test_parse_config_requires_effective_date_and_flags(self):
         payload = {
             "config": {
+                "parser_result_id": 7,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",
@@ -37,6 +39,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
         with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
             parsed = parse_config(payload)
 
+        self.assertEqual(parsed.parser_result_id, 7)
         self.assertEqual(parsed.title_number, 42)
         self.assertEqual(parsed.part_number, 400)
         self.assertEqual(parsed.effective_date, "2025-01-01")
@@ -48,6 +51,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
     def test_parse_config_rejects_missing_effective_date(self):
         payload = {
             "config": {
+                "parser_result_id": 7,
                 "title_number": 42,
                 "part_number": 400,
                 "upload_reg_text": True,
@@ -63,6 +67,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
     def test_parse_config_rejects_non_boolean_flags(self):
         payload = {
             "config": {
+                "parser_result_id": 7,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",
@@ -79,6 +84,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
     def test_parse_config_rejects_invalid_effective_date_format(self):
         payload = {
             "config": {
+                "parser_result_id": 7,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025/01/01",
@@ -95,6 +101,7 @@ class EcfrWorkerConfigTests(unittest.TestCase):
     def test_parse_config_rejects_invalid_log_level(self):
         payload = {
             "config": {
+                "parser_result_id": 7,
                 "title_number": 42,
                 "part_number": 400,
                 "effective_date": "2025-01-01",
@@ -106,6 +113,22 @@ class EcfrWorkerConfigTests(unittest.TestCase):
 
         with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
             with self.assertRaisesRegex(ConfigParseError, "loglevel must be one of"):
+                parse_config(payload)
+
+    def test_parse_config_requires_result_ids(self):
+        payload = {
+            "config": {
+                "title_number": 42,
+                "part_number": 400,
+                "effective_date": "2025-01-01",
+                "upload_reg_text": True,
+                "upload_locations": True,
+                "log_level": "info",
+            }
+        }
+
+        with patch.dict("os.environ", {"EREGS_USERNAME": "env-user", "EREGS_PASSWORD": "env-pass"}, clear=True):
+            with self.assertRaisesRegex(ConfigParseError, "parser_result_id must be a positive integer"):
                 parse_config(payload)
 
 

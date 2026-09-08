@@ -4,6 +4,8 @@ from importlib import util
 from pathlib import Path
 from unittest.mock import Mock, patch
 
+from common.eregs_config import fetch_parser_config
+
 from common.auth import BackendCredentials
 
 
@@ -21,7 +23,6 @@ _module = _load_module()
 EregsConfigError = _module.EregsConfigError
 TargetPartConfig = _module.TargetPartConfig
 expand_target_parts = _module.expand_target_parts
-fetch_parser_config = _module.fetch_parser_config
 fetch_existing_part_dates_by_title = _module.fetch_existing_part_dates_by_title
 fetch_subchapter_part_numbers = _module.fetch_subchapter_part_numbers
 

@@ -222,7 +222,8 @@ function httpApiPost(
  */
 const getLastParserSuccessDate = async ({ apiUrl, title = "42" }) => {
     const result = await httpApiGet(`${apiUrl}parsers/ecfr/results/title/${title}`);
-    return result.timestamp ? niceDate(result.timestamp.split("T")[0]) : "N/A";
+    const lastUpdated = result.status_updated_at || result.timestamp;
+    return lastUpdated ? niceDate(lastUpdated.split("T")[0]) : "N/A";
 };
 
 /**

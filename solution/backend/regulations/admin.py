@@ -34,7 +34,9 @@ admin.site.logout_template = 'admin/logged_out.html'
 def get_app_list(self, request, app_label=None):
     app_dict = self._build_app_dict(request, app_label)
     custom_sidebar_labels = {
+        "EcfrLauncherResult": "eCFR Launcher Results",
         "EcfrParserResult": "eCFR Parser Results",
+        "FrLauncherResult": "Federal Register Launcher Results",
         "FrParserResult": "Federal Register Parser Results",
     }
     for app_name in app_dict.keys():

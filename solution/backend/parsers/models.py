@@ -83,13 +83,33 @@ class PartConfiguration(models.Model):
 class AbstractParserResult(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     success = models.BooleanField()
-    log = models.TextField()
+    log = models.TextField(blank=True)
 
 
 class EcfrParserResult(AbstractParserResult):
+    STATUS_QUEUED = "queued"
+    STATUS_SKIPPED = "skipped"
+    STATUS_SUCCEEDED = "succeeded"
+    STATUS_FAILED = "failed"
+    STATUS_CHOICES = [
+        (STATUS_QUEUED, "Queued"),
+        (STATUS_SKIPPED, "Skipped"),
+        (STATUS_SUCCEEDED, "Succeeded"),
+        (STATUS_FAILED, "Failed"),
+    ]
+
+    launcher_result = models.ForeignKey(
+        "EcfrLauncherResult",
+        on_delete=models.CASCADE,
+        related_name="part_results",
+        null=True,
+        blank=True,
+    )
     title = models.IntegerField()
     part = models.IntegerField()
-    date = models.DateField()  # this is the date the part was released, not the date the parser ran
+    date = models.DateField(null=True, blank=True)  # this is the date the part was released, not the date the parser ran
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_SUCCEEDED)
+    status_updated_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         verbose_name = "eCFR Parser Result"
@@ -98,6 +118,18 @@ class EcfrParserResult(AbstractParserResult):
             models.Index(fields=["title", "part"]),
             models.Index(fields=["title"]),
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["launcher_result", "title", "part", "date"],
+                name="unique_ecfr_part_result_per_launcher_run",
+            )
+        ]
+
+
+class EcfrLauncherResult(AbstractParserResult):
+    class Meta:
+        verbose_name = "eCFR Launcher Result"
+        verbose_name_plural = "eCFR Launcher Results"
 
 
 class FrParserResult(AbstractParserResult):
@@ -109,3 +141,13 @@ class FrParserResult(AbstractParserResult):
         indexes = [
             models.Index(fields=["document_number"]),
         ]
+
+
+class FrLauncherResult(AbstractParserResult):
+    queued_count = models.PositiveIntegerField(default=0)
+    skipped_count = models.PositiveIntegerField(default=0)
+    failed_count = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Federal Register Launcher Result"
+        verbose_name_plural = "Federal Register Launcher Results"

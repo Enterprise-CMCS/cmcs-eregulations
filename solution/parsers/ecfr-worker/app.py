@@ -8,27 +8,19 @@ import json
 import logging
 import os
 
-from .ecfr_client import fetch_part_full_xml, fetch_part_structure
+from common.eregs_client import update_ecfr_result
+from common.logging import configure_runtime_logging
+
 from .config import EcfrPartConfig, parse_config_from_event
-from .eregs_client import create_ecfr_result, upload_part
+from .ecfr_client import fetch_part_full_xml, fetch_part_structure
+from .eregs_client import upload_part
 from .transforms import determine_part_depth, extract_sections_and_subparts, normalize_structure_for_upload
 from .xml_parser import parse_part_xml_to_document
-
 
 logger = logging.getLogger(__name__)
 
 _ECFR_API_BASE_URL_ENV_VAR = "ECFR_API_BASE_URL"
 _DEFAULT_ECFR_API_BASE_URL = "https://www.ecfr.gov/api/versioner/v1/"
-
-def _configure_logging(log_level_name: str | None = None) -> None:
-    """Configure root logging for worker execution."""
-
-    if log_level_name is None:
-        log_level_name = "INFO"
-
-    log_level = getattr(logging, log_level_name, logging.INFO)
-    logging.basicConfig(level=log_level)
-    logger.setLevel(log_level)
 
 
 def _resolve_ecfr_api_base_url() -> str:
@@ -37,7 +29,7 @@ def _resolve_ecfr_api_base_url() -> str:
     return os.getenv(_ECFR_API_BASE_URL_ENV_VAR, _DEFAULT_ECFR_API_BASE_URL)
 
 
-_configure_logging()
+configure_runtime_logging(None, logger)
 
 
 def _process_work_item(config: EcfrPartConfig) -> dict:
@@ -108,24 +100,17 @@ def _process_work_item(config: EcfrPartConfig) -> dict:
     )
     logger.debug("Upload response keys=%s", sorted(upload_result.keys()))
 
-    logger.debug(
-        "Uploading eCFR success result: title=%s part=%s date=%s",
-        config.title_number,
-        config.part_number,
-        config.effective_date,
-    )
-    create_ecfr_result(
+    logger.debug("Updating eCFR queued result to succeeded: parser_result_id=%s", config.parser_result_id)
+    update_ecfr_result(
         api_base_url=os.environ["EREGS_API_URL_V3"],
         credentials=config.credentials,
+        result_id=config.parser_result_id,
         payload={
-            "success": True,
+            "status": "succeeded",
             "log": "",
-            "title": config.title_number,
-            "part": config.part_number,
-            "date": config.effective_date,
         },
     )
-    logger.debug("Uploaded eCFR success result")
+    logger.debug("Updated eCFR queued result to succeeded")
 
     logger.info(
         "Uploaded eCFR parsed payload: title=%s part=%s sections=%s subparts=%s",
@@ -158,7 +143,7 @@ def handler(event, _context):
     logger.debug("Resolving work item config from invocation event")
 
     config = parse_config_from_event(event)
-    _configure_logging(config.log_level)
+    configure_runtime_logging(config.log_level, logger)
 
     logger.info(
         "Parsing eCFR work item: title=%s part=%s effective_date=%s",
@@ -191,23 +176,16 @@ def handler(event, _context):
         )
         try:
             logger.debug(
-                "Uploading eCFR failure result: title=%s part=%s date=%s",
-                config.title_number,
-                config.part_number,
-                config.effective_date,
+                "Updating eCFR queued result to failed: parser_result_id=%s",
+                config.parser_result_id,
             )
-            create_ecfr_result(
+            update_ecfr_result(
                 api_base_url=os.environ["EREGS_API_URL_V3"],
                 credentials=config.credentials,
-                payload={
-                    "success": False,
-                    "log": str(exc),
-                    "title": config.title_number,
-                    "part": config.part_number,
-                    "date": config.effective_date,
-                },
+                result_id=config.parser_result_id,
+                payload={"status": "failed", "log": str(exc)},
             )
-            logger.debug("Uploaded eCFR failure result")
+            logger.debug("Updated eCFR queued result to failed")
         except Exception as log_exc:
             logger.warning("Failed to record eCFR worker failure result: %s", log_exc)
         raise

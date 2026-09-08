@@ -1,11 +1,8 @@
-from parsers.models import EcfrParserResult
+from parsers.utils import get_ecfr_last_updated
 
 
 def parser_data(request):
-    try:
-        last_updated = EcfrParserResult.objects.filter(success=True).order_by("-timestamp").first().timestamp
-    except AttributeError:
-        last_updated = None
+    last_updated = get_ecfr_last_updated()
 
     return {
         "parser_last_success": last_updated,
