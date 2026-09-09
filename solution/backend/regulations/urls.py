@@ -38,7 +38,7 @@ urlpatterns = [
     path('obbba/', OBBBAView, name='obbba'),
     path('pl119-21/', PL_119_21View.as_view(), name='pl_119_21'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
-    path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
+    path('<numeric:title>/<numeric:part>/full/', PartReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/<numeric:section>/', SectionReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/<numeric:section>/<str:version>/', SectionReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/<str:version>/',
