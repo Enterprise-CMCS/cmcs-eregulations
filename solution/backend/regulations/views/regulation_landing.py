@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from django.http import Http404
 from django.views.generic.base import TemplateView
-from requests import HTTPError
 
 from parsers.utils import get_ecfr_last_updated
 from regcore.models import Part
@@ -20,11 +19,11 @@ class RegulationLandingView(TemplateView):
         reg_part = self.kwargs.get("part")
 
         try:
-            current = Part.objects.effective(date.today()).get(title=title, name=reg_part)
-        except HTTPError:
+            current = Part.objects.get(title=title, name=reg_part)
+        except Part.DoesNotExist:
             raise Http404
 
-        parts = Part.objects.effective(date.today()).filter(title=title)
+        parts = Part.objects.filter(title=title).order_by("name")
         reg_version = current.date.isoformat()
         reg_version_string = datetime.strftime(current.date, "%b %-d, %Y")
         toc = current.toc

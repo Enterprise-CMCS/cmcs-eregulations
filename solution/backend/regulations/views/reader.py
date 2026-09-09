@@ -34,17 +34,17 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
         context = super().get_context_data(**kwargs)
 
-        reg_version = context.get("version", datetime.strftime(datetime.now(), "%Y-%m-%d"))
         reg_part = context["part"]
         reg_title = context["title"]
         part_parser_success_date = get_ecfr_last_updated(reg_title, reg_part)
 
-        query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
+        query = Part.objects.get(title=reg_title, name=reg_part)
+        latest_version_string = query.date.strftime("%Y-%m-%d")
 
         versions = self.get_versions(reg_title, reg_part)
-        version_info = self.get_version_info(reg_version, reg_title, reg_part)
+        version_info = self.get_version_info(latest_version_string, reg_title, reg_part)
 
-        parts = Part.objects.filter(title=reg_title).effective(reg_version)
+        parts = Part.objects.filter(title=reg_title).order_by("name")
         document = query.document
         toc = query.toc
         subchapter = query.subchapter
@@ -92,22 +92,16 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         return {**context, **c, **version_info}
 
     def get(self, request, *args, **kwargs):
-        if kwargs.get('version') is None:
-            versions = Part.objects.versions(kwargs.get("title"), kwargs.get('part'))
-            if versions is None:
-                raise Http404
-            kwargs['version'] = versions[0]['date']
-            return HttpResponseRedirect(reverse('reader_view', kwargs=kwargs))
         return super().get(request, *args, **kwargs)
 
     def get_view_type(self):
         raise NotImplementedError()
 
     def get_versions(self, title, part):
-        versions = Part.objects.versions(title, part)
-        if versions is None:
+        current_version = Part.objects.filter(title=title, name=part).values("date").first()
+        if current_version is None:
             raise Http404
-        return versions
+        return [current_version]
 
     def get_content(self, context, document, toc):
         raise NotImplementedError()
@@ -188,19 +182,15 @@ class SectionReaderView(View):
         url_kwargs = {
             "title": kwargs.get("title"),
             "part": kwargs.get("part"),
-            "version": kwargs.get("version"),
         }
+        version = kwargs.get("version")
+        if version is not None:
+            url_kwargs["version"] = version
 
         query_string = request.GET.get("q", None)
 
-        if url_kwargs['version'] is None:
-            versions = Part.objects.versions(kwargs.get("title"), url_kwargs['part'])
-            if versions is None:
-                raise Http404
-            url_kwargs['version'] = versions[0]['date']
-
         try:
-            toc = Part.objects.effective(url_kwargs['version']).get(title=kwargs.get("title"), name=url_kwargs['part']).toc
+            toc = Part.objects.get(title=kwargs.get("title"), name=url_kwargs["part"]).toc
 
             subpart = find_subpart(kwargs.get("section"), toc)
             if subpart is not None:
