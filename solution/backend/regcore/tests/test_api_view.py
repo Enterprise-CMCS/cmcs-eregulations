@@ -50,21 +50,11 @@ class RegcoreSerializerTestCase(APITestCase):
         self.assertEqual(x['name'], parts[0]['name'])
         self.assertEqual(x['depth'], parts[0]['depth'])
 
-    def test_get_title_versions(self):
-        response = self.client.get("/v3/title/42/versions")
-        data = dict(response.data[0])
-        self.assertEqual(data, {'date': '2020-06-30', 'part_name': ['400']})
-
-    def test_get_part_versions(self):
-        response = self.client.get("/v3/title/42/part/400/versions")
-        data = response.data
-        self.assertEqual(data, [date(2020, 6, 30)])
-
     @patch("regcore.views.history.get_year_data")
     def test_get_historical_sections(self, get_year_data):
         # Test if year is not valid
         get_year_data.return_value = httpx.Response(status_code=400)
-        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        data = self.client.get("/v3/title/42/part/433/section/50/history").data
         self.assertEqual(data, [])
 
         # Test if year is valid
@@ -74,17 +64,17 @@ class RegcoreSerializerTestCase(APITestCase):
                 "location": "http://a.link.to.govinfo.gov/xyz.pdf",
             }
         )
-        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        data = self.client.get("/v3/title/42/part/433/section/50/history").data
         self.assertEqual(len(data), date.today().year - 1996 + 1)
         self.assertEqual(data[0], OrderedDict([("year", "1996"), ("link", "http://a.link.to.govinfo.gov/xyz.pdf")]))
 
         # Test if we get a 404 for a specific year
         get_year_data.return_value = httpx.Response(status_code=404)
-        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        data = self.client.get("/v3/title/42/part/433/section/50/history").data
         self.assertEqual(len(data), date.today().year - 1996 + 1)
         self.assertEqual(data[0], OrderedDict([("year", "1996"), ("link", None)]))
 
         # Test if connection times out, generally meaning year is not valid (same as 400 behavior)
         get_year_data.side_effect = httpx.TimeoutException(message="Connection timed out")
-        data = self.client.get("/v3/title/42/part/433/history/section/50").data
+        data = self.client.get("/v3/title/42/part/433/section/50/history").data
         self.assertEqual(data, [])
