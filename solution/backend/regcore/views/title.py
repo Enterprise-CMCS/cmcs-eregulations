@@ -1,6 +1,3 @@
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db import models
-from django.db.models.functions import Cast
 from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 
@@ -20,7 +17,7 @@ from .utils import OpenApiPathParameter
                 "Each object in the array is a TOC for a specific Title.",
 )
 class TOCViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+    queryset = Part.objects.order_by("title", "name").values_list("depth_stack", flat=True)
     serializer_class = FrontPageTOCSerializer
 
 
