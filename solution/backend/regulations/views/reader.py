@@ -4,6 +4,7 @@ from django.db.models import Count, Q
 from django.http import (
     Http404,
     HttpResponseRedirect,
+    QueryDict,
 )
 from django.urls import reverse
 from django.views.generic.base import (
@@ -97,9 +98,12 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
             redirect_kwargs = dict(kwargs)
             del redirect_kwargs["version"]
             redirect_url = reverse("reader_view", kwargs=redirect_kwargs)
-            query_string = request.META.get("QUERY_STRING", "")
-            if query_string:
-                redirect_url = f"{redirect_url}?{query_string}"
+            if "highlight" in request.GET:
+                redirect_params = QueryDict(mutable=True)
+                redirect_params.setlist("highlight", request.GET.getlist("highlight"))
+                encoded_params = redirect_params.urlencode()
+                if encoded_params:
+                    redirect_url = f"{redirect_url}?{encoded_params}"
             return HttpResponseRedirect(redirect_url)
         return super().get(request, *args, **kwargs)
 
