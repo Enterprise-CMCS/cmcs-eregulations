@@ -84,7 +84,7 @@ describe("Part View", () => {
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
-        cy.intercept("**/v3/resources/public?&citations=42.431.A**").as(
+        cy.intercept("**/v3/resources/public*citations=42.431.A*").as(
             "resources",
         );
         cy.intercept("**/v3/resources/internal/categories**", {
@@ -176,7 +176,7 @@ describe("Part View", () => {
     });
 
     it("has Show/Hide Subjects button when supplemental content has subjects", () => {
-        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
+        cy.intercept("**/v3/resources/public*citations=42.433.A*", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.viewport("macbook-15");
@@ -234,10 +234,10 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
+        cy.intercept("**/v3/resources/public*citations=42.433.A*", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
-        cy.intercept("**/v3/resources/internal&citations=42.433.A**", {
+        cy.intercept("**/v3/resources/internal*citations=42.433.A*", {
             fixture: "42.433.A.internal.json",
         }).as("internal433A");
 
@@ -335,7 +335,7 @@ describe("Part View", () => {
     });
 
     it("renders FR Doc category correctly in sidebar", () => {
-        cy.intercept("**/v3/resources/public?&citations=42.433.10**", {
+        cy.intercept("**/v3/resources/public*citations=42.433.10*", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
         cy.viewport("macbook-15");
@@ -410,10 +410,10 @@ describe("Part View", () => {
     });
 
     it("loads version history content correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/history/section/8", {
+        cy.intercept("**/v3/title/42/part/433/section/8/history", {
             fixture: "42.433.8.annual-editions.json",
         }).as("history433");
-        cy.intercept("**/v3/title/42/part/433/versions/section/8", {
+        cy.intercept("**/v3/title/42/part/433/section/8/versions", {
             fixture: "42.433.8.version-history.json",
         }).as("history433");
         cy.viewport("macbook-15");
