@@ -92,6 +92,14 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         return {**context, **c, **version_info}
 
     def get(self, request, *args, **kwargs):
+        if kwargs.get("version") is not None:
+            redirect_kwargs = dict(kwargs)
+            del redirect_kwargs["version"]
+            redirect_url = reverse("reader_view", kwargs=redirect_kwargs)
+            query_string = request.META.get("QUERY_STRING", "")
+            if query_string:
+                redirect_url = f"{redirect_url}?{query_string}"
+            return HttpResponseRedirect(redirect_url)
         return super().get(request, *args, **kwargs)
 
     def get_view_type(self):
@@ -183,9 +191,6 @@ class SectionReaderView(View):
             "title": kwargs.get("title"),
             "part": kwargs.get("part"),
         }
-        version = kwargs.get("version")
-        if version is not None:
-            url_kwargs["version"] = version
 
         query_string = request.GET.get("q", None)
 
