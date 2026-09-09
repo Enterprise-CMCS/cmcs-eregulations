@@ -325,17 +325,12 @@ describe("Part View", () => {
         cy.get("#view-button").should("not.exist");
     });
 
-    it("should allow the user to return to the current version if they visit a link to a previous version", () => {
+    it("redirects previous-version URLs to current reader routes", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/Subpart-A/2020-12-31/");
 
-        cy.url().should("include", "2020-12-31");
-        cy.get(".latest-version").should("not.exist");
-        cy.get("#view-button").should("not.exist");
-
-        cy.get(".view-and-compare").should("be.visible");
-        cy.get("#close-link").click({ force: true });
-        cy.get(".view-and-compare").should("not.be.visible");
+        cy.url().should("not.include", "2020-12-31");
+        cy.url().should("include", "/42/433/Subpart-A/");
         cy.get(".latest-version").should("exist");
     });
 

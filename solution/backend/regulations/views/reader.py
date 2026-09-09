@@ -41,9 +41,6 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
         query = Part.objects.get(title=reg_title, name=reg_part)
         latest_version_string = query.date.strftime("%Y-%m-%d")
 
-        versions = self.get_versions(reg_title, reg_part)
-        version_info = self.get_version_info(latest_version_string, reg_title, reg_part)
-
         parts = Part.objects.filter(title=reg_title).order_by("name")
         document = query.document
         toc = query.toc
@@ -74,7 +71,11 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
             'toc':          toc,
             'subchapter':   subchapter,
             'parts':        parts,
-            'versions':     versions,
+            'version': latest_version_string,
+            'formatted_latest_version': datetime.strftime(query.date, "%b %-d, %Y"),
+            'is_latest_version': True,
+            # last updated dates of Jan 1, 2017 are not meaningful
+            'has_meaningful_latest_version_date': query.date > date(2017, 1, 1),
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
@@ -89,7 +90,7 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
         print(f'<<<<<<<<<< GET DATA START {start} - {end} END >>>>>>>>>>>>>>>')
 
-        return {**context, **c, **version_info}
+        return {**context, **c}
 
     def get(self, request, *args, **kwargs):
         if kwargs.get("version") is not None:
@@ -104,12 +105,6 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
     def get_view_type(self):
         raise NotImplementedError()
-
-    def get_versions(self, title, part):
-        current_version = Part.objects.filter(title=title, name=part).values("date").first()
-        if current_version is None:
-            raise Http404
-        return [current_version]
 
     def get_content(self, context, document, toc):
         raise NotImplementedError()
@@ -134,20 +129,6 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
     def get_subparts(self, context, tree):
         return self.get_nodes_by_type(tree, "SUBPART", 0)
-
-    def get_version_info(self, version, title, part):
-        versions = self.get_versions(title, part)
-
-        latest_version = versions[0]['date']
-        latest_version_string = datetime.strftime(latest_version, "%Y-%m-%d")
-
-        return {
-            'version': version,
-            'formatted_latest_version': datetime.strftime(latest_version, "%b %-d, %Y"),
-            'is_latest_version': version == latest_version_string,
-            # last updated dates of Jan 1, 2017 are not meaningful
-            'has_meaningful_latest_version_date': latest_version > date(2017, 1, 1)
-        }
 
 
 class PartReaderView(ReaderView):
