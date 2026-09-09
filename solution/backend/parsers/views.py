@@ -241,7 +241,7 @@ class EcfrPartUploadViewSet(viewsets.ModelViewSet):
             "depth_stack": [],
             "depth": -1,
         }
-        part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], date=data["date"], defaults=defaults)
+        part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], defaults=defaults)
         data["id"] = part.pk
         serializer = self.get_serializer(part, data=data)
         serializer.is_valid(raise_exception=True)
