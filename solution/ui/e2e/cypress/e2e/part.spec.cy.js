@@ -84,13 +84,13 @@ describe("Part View", () => {
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
-        cy.intercept("**/v3/resources/public**").as(
+        cy.intercept("**/v3/resources/public?&citations=42.431.A**").as(
             "resources",
         );
         cy.intercept("**/v3/resources/internal/categories**", {
             fixture: "categories-internal.json",
         }).as("internal-categories");
-        cy.intercept("**/v3/resources/internal**", {
+        cy.intercept("**/v3/resources/internal?citations=42.431.A**", {
             fixture: "42.431.internal.json",
         }).as("internal431");
         cy.viewport("macbook-15");
@@ -109,16 +109,18 @@ describe("Part View", () => {
             );
             cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
-            cy.wait("@internal-categories");
-            cy.wait("@internal431").then(() => {
-                cy.get(`button[data-test=TestCat]`, { timeout: 20000 }).scrollIntoView().click({
+            cy.wait("@resources").then(() => {
+                cy.get(".right-sidebar").scrollTo("bottom");
+                cy.get(`button[data-test=TestCat]`).click({
                     force: true,
                 });
                 cy.wait(250);
-                cy.get(`button[data-test=TestSubCat]`, { timeout: 20000 }).scrollIntoView().click({
+                cy.get(".right-sidebar").scrollTo("bottom");
+                cy.get(`button[data-test=TestSubCat]`).click({
                     force: true,
                 });
                 cy.wait(250);
+                cy.get(".right-sidebar").scrollTo("bottom");
                 cy.get(
                     ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
                 )
@@ -174,15 +176,14 @@ describe("Part View", () => {
     });
 
     it("has Show/Hide Subjects button when supplemental content has subjects", () => {
-        cy.intercept("**/v3/resources/public**", {
+        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.viewport("macbook-15");
         cy.visit("/42/433/Subpart-A");
-        cy.wait("@resources433A");
 
         // Find and expand Subregulatory Guidance category
-        cy.get("button[data-test='Subregulatory Guidance']", { timeout: 20000 })
+        cy.get("button[data-test='Subregulatory Guidance']")
             .scrollIntoView();
         cy.get("button[data-test='Subregulatory Guidance']")
             .click({ force: true });
@@ -233,10 +234,10 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**/v3/resources/public**", {
+        cy.intercept("**/v3/resources/public?&citations=42.433.A**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
-        cy.intercept("**/v3/resources/internal**", {
+        cy.intercept("**/v3/resources/internal&citations=42.433.A**", {
             fixture: "42.433.A.internal.json",
         }).as("internal433A");
 
@@ -247,11 +248,9 @@ describe("Part View", () => {
                 password: TEST_PASSWORD
             });
             cy.visit("/42/433/Subpart-A");
-            cy.wait("@resources433A");
-            cy.wait("@internal433A");
 
             // Find and expand Subregulatory Guidance category
-            cy.get("button[data-test='Subregulatory Guidance']", { timeout: 20000 })
+            cy.get("button[data-test='Subregulatory Guidance']")
                 .scrollIntoView();
             cy.get("button[data-test='Subregulatory Guidance']")
                 .click({ force: true });
@@ -326,28 +325,35 @@ describe("Part View", () => {
         cy.get("#view-button").should("not.exist");
     });
 
-    it("redirects previous-version URLs to current reader routes", () => {
+    it("should allow the user to return to the current version if they visit a link to a previous version", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/Subpart-A/2020-12-31/");
 
-        cy.url().should("not.include", "2020-12-31");
-        cy.url().should("include", "/42/433/Subpart-A/");
+        cy.url().should("include", "2020-12-31");
+        cy.get(".latest-version").should("not.exist");
+        cy.get("#view-button").should("not.exist");
+
+        cy.get(".view-and-compare").should("be.visible");
+        cy.get("#close-link").click({ force: true });
+        cy.get(".view-and-compare").should("not.be.visible");
         cy.get(".latest-version").should("exist");
     });
 
     it("renders FR Doc category correctly in sidebar", () => {
-        cy.intercept("**/v3/resources/public**", {
+        cy.intercept("**/v3/resources/public?&citations=42.433.10**", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
         cy.url().should("include", "#433-10");
-        cy.get(".is-fr-link-btn", { timeout: 20000 }).first().click({ force: true });
-        cy.get(".show-more-button", { timeout: 20000 })
-            .contains("+ Show More (10)")
-            .click({ force: true });
-        cy.get(".show-more-button").contains("- Show Less (10)");
+        cy.wait("@resources43310").then(() => {
+            cy.get(".is-fr-link-btn").click({ force: true });
+            cy.get(".show-more-button")
+                .contains("+ Show More (10)")
+                .click({ force: true });
+            cy.get(".show-more-button").contains("- Show Less (10)");
+        });
     });
 
     it("loads copy tooltip correctly", () => {
@@ -409,12 +415,12 @@ describe("Part View", () => {
     });
 
     it("loads version history content correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/section/8/history*", {
+        cy.intercept("**/v3/title/42/part/433/history/section/8", {
             fixture: "42.433.8.annual-editions.json",
-        }).as("historyAnnual");
-        cy.intercept("**/v3/title/42/part/433/section/8/versions*", {
+        }).as("history433");
+        cy.intercept("**/v3/title/42/part/433/versions/section/8", {
             fixture: "42.433.8.version-history.json",
-        }).as("historyVersions");
+        }).as("history433");
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("Subpart A").click({ force: true });
