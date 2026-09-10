@@ -84,13 +84,13 @@ describe("Part View", () => {
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
-        cy.intercept("**/v3/resources/public*citations=42.431.A*").as(
+        cy.intercept("**/v3/resources/public*citations=42.431.10*").as(
             "resources",
         );
         cy.intercept("**/v3/resources/internal/categories**", {
             fixture: "categories-internal.json",
         }).as("internal-categories");
-        cy.intercept("**/v3/resources/internal?citations=42.431.A**", {
+        cy.intercept("**/v3/resources/internal*citations=42.431.10*", {
             fixture: "42.431.internal.json",
         }).as("internal431");
         cy.viewport("macbook-15");
@@ -176,7 +176,7 @@ describe("Part View", () => {
     });
 
     it("has Show/Hide Subjects button when supplemental content has subjects", () => {
-        cy.intercept("**/v3/resources/public*citations=42.433.A*", {
+        cy.intercept("**/v3/resources/public*citations=42.433*", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.viewport("macbook-15");
@@ -234,10 +234,10 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**/v3/resources/public*citations=42.433.A*", {
+        cy.intercept("**/v3/resources/public*citations=42.433*", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
-        cy.intercept("**/v3/resources/internal*citations=42.433.A*", {
+        cy.intercept("**/v3/resources/internal*citations=42.433*", {
             fixture: "42.433.A.internal.json",
         }).as("internal433A");
 

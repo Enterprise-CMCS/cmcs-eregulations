@@ -413,9 +413,9 @@ const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
     await httpApiGet(
         `${apiUrl}title/${filterParams.title}/part/${
             filterParams.part
-        }/history/${Object.keys(filterParams)[2]}/${
+        }/${Object.keys(filterParams)[2]}/${
             Object.values(filterParams)[2]
-        }`
+        }/history`
     );
 
 /**
@@ -619,7 +619,7 @@ const getContextBanners = async ({
 */
 const getVersionHistory = async ({ apiUrl, title, part, section }) =>
     httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/versions/section/${section}`
+        `${apiUrl}title/${title}/part/${part}/section/${section}/versions`
     );
 
 const throwGenericError = async () =>
