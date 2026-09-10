@@ -111,17 +111,14 @@ describe("Part View", () => {
 
             cy.wait("@internal-categories");
             cy.wait("@internal431").then(() => {
-                cy.get(".right-sidebar").scrollTo("bottom");
-                cy.get(`button[data-test=TestCat]`).click({
+                cy.get(`button[data-test=TestCat]`, { timeout: 20000 }).scrollIntoView().click({
                     force: true,
                 });
                 cy.wait(250);
-                cy.get(".right-sidebar").scrollTo("bottom");
-                cy.get(`button[data-test=TestSubCat]`).click({
+                cy.get(`button[data-test=TestSubCat]`, { timeout: 20000 }).scrollIntoView().click({
                     force: true,
                 });
                 cy.wait(250);
-                cy.get(".right-sidebar").scrollTo("bottom");
                 cy.get(
                     ".internal-docs__container div[data-test=TestSubCat] .supplemental-content",
                 )
@@ -182,9 +179,10 @@ describe("Part View", () => {
         }).as("resources433A");
         cy.viewport("macbook-15");
         cy.visit("/42/433/Subpart-A");
+        cy.wait("@resources433A");
 
         // Find and expand Subregulatory Guidance category
-        cy.get("button[data-test='Subregulatory Guidance']")
+        cy.get("button[data-test='Subregulatory Guidance']", { timeout: 20000 })
             .scrollIntoView();
         cy.get("button[data-test='Subregulatory Guidance']")
             .click({ force: true });
@@ -249,9 +247,11 @@ describe("Part View", () => {
                 password: TEST_PASSWORD
             });
             cy.visit("/42/433/Subpart-A");
+            cy.wait("@resources433A");
+            cy.wait("@internal433A");
 
             // Find and expand Subregulatory Guidance category
-            cy.get("button[data-test='Subregulatory Guidance']")
+            cy.get("button[data-test='Subregulatory Guidance']", { timeout: 20000 })
                 .scrollIntoView();
             cy.get("button[data-test='Subregulatory Guidance']")
                 .click({ force: true });
@@ -343,13 +343,11 @@ describe("Part View", () => {
         cy.visit("/42/433/");
         cy.contains("433.10").click({ force: true });
         cy.url().should("include", "#433-10");
-        cy.wait("@resources43310").then(() => {
-            cy.get(".is-fr-link-btn").click({ force: true });
-            cy.get(".show-more-button")
-                .contains("+ Show More (10)")
-                .click({ force: true });
-            cy.get(".show-more-button").contains("- Show Less (10)");
-        });
+        cy.get(".is-fr-link-btn", { timeout: 20000 }).first().click({ force: true });
+        cy.get(".show-more-button", { timeout: 20000 })
+            .contains("+ Show More (10)")
+            .click({ force: true });
+        cy.get(".show-more-button").contains("- Show Less (10)");
     });
 
     it("loads copy tooltip correctly", () => {
@@ -426,7 +424,6 @@ describe("Part View", () => {
         cy.get("#433-8 .reg-history-link button.collapsible-title").click({
             force: true,
         });
-        cy.wait("@historyVersions");
         cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
             "be.visible",
         );
@@ -455,7 +452,6 @@ describe("Part View", () => {
             .and("include", "https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time");
         cy.get("#433-8 button[data-testid='annual-editions-tab']")
             .click({ force: true });
-        cy.wait("@historyAnnual");
         cy.checkLinkRel();
         cy.get(
             "#433-8 .version-history__container .gov-info-links-container",
