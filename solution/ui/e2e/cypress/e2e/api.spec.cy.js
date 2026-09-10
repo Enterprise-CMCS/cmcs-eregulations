@@ -67,6 +67,8 @@ const API_ENDPOINTS_V3 = [
 const OPTIONAL_DATA_ENDPOINTS = new Set([
     `/v3/parsers/ecfr/results/title/${TITLE}`,
     `/v3/parsers/ecfr/results/title/${TITLE}/part/${PART}`,
+    `/v3/parsers/fr/results`,
+    `/v3/parsers/fr/launcher-results`,
 ]);
 
 describe("API testing", () => {
