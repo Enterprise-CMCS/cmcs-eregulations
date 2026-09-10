@@ -28,7 +28,7 @@ const handlers = [
     http.get("**/test/n/a/parsers/ecfr/results/title/42", () => {
         return HttpResponse.json(noEndCondition);
     }),
-    http.get("*/title/42/part/431/history/section/10", () => {
+    http.get("*/title/42/part/431/section/10/history", () => {
         return HttpResponse.json(history);
     }),
 ];
