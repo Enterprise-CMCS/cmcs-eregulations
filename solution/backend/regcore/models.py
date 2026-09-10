@@ -16,7 +16,7 @@ class Part(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=("title", "name"),
-                name="regcore_part_title_name_uniq",
+                name="regcore_part_title_name_unique",
             ),
         ]
         ordering = ("title", "name")
