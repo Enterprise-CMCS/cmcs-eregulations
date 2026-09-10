@@ -182,7 +182,7 @@ describe("api.js", () => {
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
-                "http://localhost:9000/title/42/part/431/history/section/10",
+                "http://localhost:9000/title/42/part/431/section/10/history",
                 fetchGetBoilerplate
             );
         });
@@ -443,7 +443,7 @@ describe("api.js", () => {
             });
             await flushPromises();
             expect(fetch).toHaveBeenCalledWith(
-                "http://localhost:9000/title/42/part/431/versions/section/10",
+                "http://localhost:9000/title/42/part/431/section/10/versions",
                 fetchGetBoilerplate
             );
         });

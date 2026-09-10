@@ -4,6 +4,7 @@ from django.db.models import Count, Q
 from django.http import (
     Http404,
     HttpResponseRedirect,
+    QueryDict,
 )
 from django.urls import reverse
 from django.views.generic.base import (
@@ -34,17 +35,14 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
         context = super().get_context_data(**kwargs)
 
-        reg_version = context.get("version", datetime.strftime(datetime.now(), "%Y-%m-%d"))
         reg_part = context["part"]
         reg_title = context["title"]
         part_parser_success_date = get_ecfr_last_updated(reg_title, reg_part)
 
-        query = Part.objects.effective(reg_version).get(title=reg_title, name=reg_part)
+        query = Part.objects.get(title=reg_title, name=reg_part)
+        latest_version_string = query.date.strftime("%Y-%m-%d")
 
-        versions = self.get_versions(reg_title, reg_part)
-        version_info = self.get_version_info(reg_version, reg_title, reg_part)
-
-        parts = Part.objects.filter(title=reg_title).effective(reg_version)
+        parts = Part.objects.filter(title=reg_title).order_by("name")
         document = query.document
         toc = query.toc
         subchapter = query.subchapter
@@ -74,7 +72,11 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
             'toc':          toc,
             'subchapter':   subchapter,
             'parts':        parts,
-            'versions':     versions,
+            'version': latest_version_string,
+            'formatted_latest_version': datetime.strftime(query.date, "%b %-d, %Y"),
+            'is_latest_version': True,
+            # last updated dates of Jan 1, 2017 are not meaningful
+            'has_meaningful_latest_version_date': query.date > date(2017, 1, 1),
             'node_list':    node_list,
             'view_type':    self.get_view_type(),
             'categories':   categories,
@@ -89,25 +91,24 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
         print(f'<<<<<<<<<< GET DATA START {start} - {end} END >>>>>>>>>>>>>>>')
 
-        return {**context, **c, **version_info}
+        return {**context, **c}
 
     def get(self, request, *args, **kwargs):
-        if kwargs.get('version') is None:
-            versions = Part.objects.versions(kwargs.get("title"), kwargs.get('part'))
-            if versions is None:
-                raise Http404
-            kwargs['version'] = versions[0]['date']
-            return HttpResponseRedirect(reverse('reader_view', kwargs=kwargs))
+        if kwargs.get("version") is not None:
+            redirect_kwargs = dict(kwargs)
+            del redirect_kwargs["version"]
+            redirect_url = reverse("reader_view", kwargs=redirect_kwargs)
+            if "highlight" in request.GET:
+                redirect_params = QueryDict(mutable=True)
+                redirect_params.setlist("highlight", request.GET.getlist("highlight"))
+                encoded_params = redirect_params.urlencode()
+                if encoded_params:
+                    redirect_url = f"{redirect_url}?{encoded_params}"
+            return HttpResponseRedirect(redirect_url)
         return super().get(request, *args, **kwargs)
 
     def get_view_type(self):
         raise NotImplementedError()
-
-    def get_versions(self, title, part):
-        versions = Part.objects.versions(title, part)
-        if versions is None:
-            raise Http404
-        return versions
 
     def get_content(self, context, document, toc):
         raise NotImplementedError()
@@ -132,20 +133,6 @@ class ReaderView(CitationContextMixin, LinkConfigMixin, LinkConversionsMixin, Te
 
     def get_subparts(self, context, tree):
         return self.get_nodes_by_type(tree, "SUBPART", 0)
-
-    def get_version_info(self, version, title, part):
-        versions = self.get_versions(title, part)
-
-        latest_version = versions[0]['date']
-        latest_version_string = datetime.strftime(latest_version, "%Y-%m-%d")
-
-        return {
-            'version': version,
-            'formatted_latest_version': datetime.strftime(latest_version, "%b %-d, %Y"),
-            'is_latest_version': version == latest_version_string,
-            # last updated dates of Jan 1, 2017 are not meaningful
-            'has_meaningful_latest_version_date': latest_version > date(2017, 1, 1)
-        }
 
 
 class PartReaderView(ReaderView):
@@ -188,19 +175,12 @@ class SectionReaderView(View):
         url_kwargs = {
             "title": kwargs.get("title"),
             "part": kwargs.get("part"),
-            "version": kwargs.get("version"),
         }
 
         query_string = request.GET.get("q", None)
 
-        if url_kwargs['version'] is None:
-            versions = Part.objects.versions(kwargs.get("title"), url_kwargs['part'])
-            if versions is None:
-                raise Http404
-            url_kwargs['version'] = versions[0]['date']
-
         try:
-            toc = Part.objects.effective(url_kwargs['version']).get(title=kwargs.get("title"), name=url_kwargs['part']).toc
+            toc = Part.objects.get(title=kwargs.get("title"), name=url_kwargs["part"]).toc
 
             subpart = find_subpart(kwargs.get("section"), toc)
             if subpart is not None:

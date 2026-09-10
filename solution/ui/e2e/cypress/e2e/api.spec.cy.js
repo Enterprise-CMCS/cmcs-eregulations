@@ -2,7 +2,6 @@ const TITLE = 42;
 const SUBPART = "A";
 const PART = 430;
 const SECTION = 10;
-const VERSION = "latest";
 const SEARCH_TERM = "FMAP";
 const ACT = "Social Security Act";
 const PATTERN = "1903";
@@ -28,6 +27,10 @@ const API_ENDPOINTS_V3 = [
     `/v3/content-search/counts?q=${SEARCH_TERM}`,
     `/v3/resources/context-banners?title=${TITLE}&part=${PART}`,
     `/v3/parsers/ecfr/results/title/${TITLE}`,
+    `/v3/parsers/ecfr/results/title/${TITLE}/part/${PART}`,
+    `/v3/parsers/ecfr/launcher-results`,
+    `/v3/parsers/fr/results`,
+    `/v3/parsers/fr/launcher-results`,
     `/v3/parsers/config`,
     `/v3/resources/`,
     `/v3/resources/citations`,
@@ -40,23 +43,22 @@ const API_ENDPOINTS_V3 = [
     `/v3/resources/public`,
     `/v3/resources/public/categories`,
     `/v3/resources/public/federal_register_links`,
+    `/v3/resources/public/federal_register_links/document_numbers`,
     `/v3/resources/public/links`,
     `/v3/resources/subjects`,
     `/v3/statutes`,
     `/v3/statutes?act=${ACT}`,
     //`${SYNONYMS_ENDPOINT}${SYNONYM}`,  // TODO: see above
-    //`/v3/title/${TITLE}/part/${PART}/history/section/${SECTION}`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/section/${SECTION}`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/sections`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/subpart/${SUBPART}`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/subpart/${SUBPART}/toc`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/subparts`,
-    `/v3/title/${TITLE}/part/${PART}/version/${VERSION}/toc`,
-    `/v3/title/${TITLE}/part/${PART}/versions`,
-    `/v3/title/${TITLE}/part/${PART}/versions/section/${SECTION}`,
+    `/v3/title/${TITLE}/part/${PART}`,
+    `/v3/title/${TITLE}/part/${PART}/section/${SECTION}`,
+    `/v3/title/${TITLE}/part/${PART}/sections`,
+    `/v3/title/${TITLE}/part/${PART}/subpart/${SUBPART}`,
+    `/v3/title/${TITLE}/part/${PART}/subpart/${SUBPART}/toc`,
+    `/v3/title/${TITLE}/part/${PART}/subparts`,
+    `/v3/title/${TITLE}/part/${PART}/toc`,
+    `/v3/title/${TITLE}/part/${PART}/section/${SECTION}/history`,
+    `/v3/title/${TITLE}/part/${PART}/section/${SECTION}/versions`,
     `/v3/title/${TITLE}/parts`,
-    `/v3/title/${TITLE}/versions`,
     `/v3/title/${TITLE}/toc`,
     `/v3/titles`,
     `/v3/toc`,
@@ -64,6 +66,9 @@ const API_ENDPOINTS_V3 = [
 
 const OPTIONAL_DATA_ENDPOINTS = new Set([
     `/v3/parsers/ecfr/results/title/${TITLE}`,
+    `/v3/parsers/ecfr/results/title/${TITLE}/part/${PART}`,
+    `/v3/parsers/fr/results`,
+    `/v3/parsers/fr/launcher-results`,
 ]);
 
 describe("API testing", () => {
