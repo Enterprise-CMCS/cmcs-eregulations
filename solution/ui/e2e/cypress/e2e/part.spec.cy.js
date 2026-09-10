@@ -84,13 +84,13 @@ describe("Part View", () => {
     });
 
     it("has a login confirmation banner and internal documents in the right sidebar of a subpart view when logged in", () => {
-        cy.intercept("**/v3/resources/public*citations=42.431.10*").as(
+        cy.intercept("**/v3/resources/public**").as(
             "resources",
         );
         cy.intercept("**/v3/resources/internal/categories**", {
             fixture: "categories-internal.json",
         }).as("internal-categories");
-        cy.intercept("**/v3/resources/internal*citations=42.431.10*", {
+        cy.intercept("**/v3/resources/internal**", {
             fixture: "42.431.internal.json",
         }).as("internal431");
         cy.viewport("macbook-15");
@@ -109,7 +109,8 @@ describe("Part View", () => {
             );
             cy.get("span[data-testid=loginSidebar]").should("not.exist");
 
-            cy.wait("@resources").then(() => {
+            cy.wait("@internal-categories");
+            cy.wait("@internal431").then(() => {
                 cy.get(".right-sidebar").scrollTo("bottom");
                 cy.get(`button[data-test=TestCat]`).click({
                     force: true,
@@ -176,7 +177,7 @@ describe("Part View", () => {
     });
 
     it("has Show/Hide Subjects button when supplemental content has subjects", () => {
-        cy.intercept("**/v3/resources/public*citations=42.433*", {
+        cy.intercept("**/v3/resources/public**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
         cy.viewport("macbook-15");
@@ -234,10 +235,10 @@ describe("Part View", () => {
     });
 
     it("mixes supplemental content and subcategories in the right sidebar of a subpart view", () => {
-        cy.intercept("**/v3/resources/public*citations=42.433*", {
+        cy.intercept("**/v3/resources/public**", {
             fixture: "42.433.A.resources.json",
         }).as("resources433A");
-        cy.intercept("**/v3/resources/internal*citations=42.433*", {
+        cy.intercept("**/v3/resources/internal**", {
             fixture: "42.433.A.internal.json",
         }).as("internal433A");
 
@@ -335,7 +336,7 @@ describe("Part View", () => {
     });
 
     it("renders FR Doc category correctly in sidebar", () => {
-        cy.intercept("**/v3/resources/public*citations=42.433.10*", {
+        cy.intercept("**/v3/resources/public**", {
             fixture: "42.433.10.resources.json",
         }).as("resources43310");
         cy.viewport("macbook-15");
@@ -410,12 +411,12 @@ describe("Part View", () => {
     });
 
     it("loads version history content correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/section/8/history", {
+        cy.intercept("**/v3/title/42/part/433/section/8/history*", {
             fixture: "42.433.8.annual-editions.json",
-        }).as("history433");
-        cy.intercept("**/v3/title/42/part/433/section/8/versions", {
+        }).as("historyAnnual");
+        cy.intercept("**/v3/title/42/part/433/section/8/versions*", {
             fixture: "42.433.8.version-history.json",
-        }).as("history433");
+        }).as("historyVersions");
         cy.viewport("macbook-15");
         cy.visit("/42/433/");
         cy.contains("Subpart A").click({ force: true });
@@ -425,6 +426,7 @@ describe("Part View", () => {
         cy.get("#433-8 .reg-history-link button.collapsible-title").click({
             force: true,
         });
+        cy.wait("@historyVersions");
         cy.get("#433-8 div.collapse-content[data-test='433.8 section history']").should(
             "be.visible",
         );
@@ -453,6 +455,7 @@ describe("Part View", () => {
             .and("include", "https://www.ecfr.gov/reader-aids/using-ecfr/ecfr-changes-through-time");
         cy.get("#433-8 button[data-testid='annual-editions-tab']")
             .click({ force: true });
+        cy.wait("@historyAnnual");
         cy.checkLinkRel();
         cy.get(
             "#433-8 .version-history__container .gov-info-links-container",
