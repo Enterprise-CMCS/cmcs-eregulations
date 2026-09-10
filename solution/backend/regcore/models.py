@@ -13,7 +13,12 @@ class Part(models.Model):
     depth = models.IntegerField()
 
     class Meta:
-        unique_together = ["title", "name"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=("title", "name"),
+                name="regcore_part_title_name_uniq",
+            ),
+        ]
         ordering = ("title", "name")
 
     @property
