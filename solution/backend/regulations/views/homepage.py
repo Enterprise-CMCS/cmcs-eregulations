@@ -1,5 +1,4 @@
 import logging
-from datetime import date
 
 from django.db.models import Prefetch
 from django.views.generic.base import TemplateView
@@ -20,8 +19,7 @@ class HomepageView(TemplateView):
 
         c = {}
 
-        today = date.today()
-        parts = Part.objects.effective(today)
+        parts = Part.objects.order_by("title", "name")
         resources_config = ResourcesConfiguration.objects.prefetch_related(
             Prefetch("fr_link_category", AbstractCategory.objects.select_subclasses())).first()
         fr_docs_category_name = resources_config.fr_link_category.name if resources_config.fr_link_category else ""
@@ -29,7 +27,7 @@ class HomepageView(TemplateView):
         if not parts:
             return context
 
-        queryset = Part.objects.order_by("title", "name", "-date").distinct("title", "name").values_list("depth_stack", flat=True)
+        queryset = Part.objects.order_by("title", "name").values_list("depth_stack", flat=True)
         full_structure = FrontPageTOCSerializer(queryset, many=True).data
 
         c = {

@@ -1,0 +1,94 @@
+"""Typed event/config parsing for FR worker messages.
+
+This module enforces the queue contract produced by the FR launcher.
+"""
+
+from dataclasses import dataclass
+
+from common.config import (
+    ConfigParseError,
+    parse_typed_config_from_event,
+    require_non_empty_string,
+    require_non_empty_string_value,
+    require_positive_int,
+    unwrap_config,
+)
+from common.logging import resolve_work_unit_log_level
+
+from common.auth import BackendCredentials, resolve_backend_credentials
+
+
+@dataclass
+class FrDocumentConfig:
+    """Validated config object for one Federal Register document."""
+
+    document_number: str
+    title: int
+    part: str
+    description: str
+    name: str
+    doc_type: str
+    url: str
+    date: str
+    docket_numbers: list[str]
+    raw_text_url: str
+    full_text_xml_url: str | None
+    log_level: str
+    credentials: BackendCredentials
+
+
+def parse_config(payload: dict) -> FrDocumentConfig:
+    """Parse and validate worker config payload into FrDocumentConfig."""
+
+    config = unwrap_config(payload)
+
+    return FrDocumentConfig(
+        document_number=require_non_empty_string(config, "document_number"),
+        title=require_positive_int(config, "title"),
+        part=require_non_empty_string(config, "part"),
+        description=require_non_empty_string(config, "description"),
+        name=require_non_empty_string(config, "name"),
+        doc_type=require_non_empty_string(config, "doc_type"),
+        url=require_non_empty_string(config, "url"),
+        date=require_non_empty_string(config, "date"),
+        docket_numbers=_require_string_list(config),
+        raw_text_url=require_non_empty_string(config, "raw_text_url"),
+        full_text_xml_url=_optional_non_empty_string(config, "full_text_xml_url"),
+        log_level=resolve_work_unit_log_level(config),
+        credentials=resolve_backend_credentials(),
+    )
+
+
+def parse_config_from_event(event: dict) -> FrDocumentConfig:
+    """Parse Lambda event (SQS or HTTP) into worker config."""
+
+    return parse_typed_config_from_event(event, parse_config)
+
+
+def _require_string_list(config: dict) -> list[str]:
+    """Require docket_numbers to be a list of non-empty strings."""
+
+    value = config.get("docket_numbers")
+    if not isinstance(value, list):
+        raise ConfigParseError("docket_numbers must be a list")
+    return [require_non_empty_string_value(item, "docket_numbers entries must be non-empty strings") for item in value]
+
+
+def _optional_non_empty_string(config: dict, key: str) -> str | None:
+    """Return None for missing/blank values, otherwise a trimmed string."""
+
+    value = config.get(key)
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise ConfigParseError(f"{key} must be a string when provided")
+    candidate = value.strip()
+    return candidate or None
+
+
+__all__ = [
+    "BackendCredentials",
+    "FrDocumentConfig",
+    "parse_config",
+    "parse_config_from_event",
+]

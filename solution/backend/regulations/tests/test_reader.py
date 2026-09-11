@@ -1,6 +1,7 @@
 
 import pytest
 from django.http import Http404
+from django.test import RequestFactory
 
 from ..views.reader import AppendixReaderView, PartReaderView, SubpartReaderView
 
@@ -97,3 +98,19 @@ def test_appendix_reader_view_get_content_invalid(mock_context_appendix_invalid,
     view = AppendixReaderView()
     with pytest.raises(Http404):
         view.get_content(mock_context_appendix_invalid, mock_document, mock_toc)
+
+
+def test_version_redirect_preserves_only_highlight_query_param():
+    request = RequestFactory().get(
+        "/42/433/full/2020-12-31/?highlight=433-10&foo=bar"
+    )
+    response = PartReaderView().get(request, title=42, part=433, version="2020-12-31")
+    assert response.status_code == 302
+    assert response.url == "/42/433/full/?highlight=433-10"
+
+
+def test_version_redirect_omits_query_string_when_highlight_absent():
+    request = RequestFactory().get("/42/433/full/2020-12-31/?q=test&foo=bar")
+    response = PartReaderView().get(request, title=42, part=433, version="2020-12-31")
+    assert response.status_code == 302
+    assert response.url == "/42/433/full/"

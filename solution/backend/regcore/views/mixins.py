@@ -13,33 +13,27 @@ class MultipleFieldLookupMixin(object):
     def get_object(self):
         queryset = self.get_queryset()
         queryset = self.filter_queryset(queryset)
-        filter = {}
-        latest_field = None
+        filters = {}
         for field, param in self.lookup_fields.items():
             value = self.kwargs.get(param, None)
-            if param == "version" and value == "latest":
-                latest_field = field
-            elif value:
-                filter[field] = value
-        return queryset.filter(**filter).latest(latest_field) if latest_field else get_object_or_404(queryset, **filter)
+            if value is not None:
+                filters[field] = value
+        return get_object_or_404(queryset, **filters)
 
 
-# Inherit from this class to retrieve attributes from a specific version of a part
+# Inherit from this class to retrieve attributes from a specific part
 # You must specify a serializer_class
 # Must also inherit from a Django REST Framework viewset (e.g. "viewsets.ReadOnlyModelViewSet")
 class PartPropertiesMixin(MultipleFieldLookupMixin):
     PARAMETERS = [
         OpenApiPathParameter("title", "Title where Part is contained, e.g. 42.", int),
         OpenApiPathParameter("part", "Part of interest, e.g. 433.", int),
-        OpenApiPathParameter("version", "Version of the Part. Must be in YYYY-MM-DD format (e.g. 2021-01-31), "
-                             "or \"latest\" to retrieve the most recent version.", str),
     ]
 
     queryset = Part.objects.all()
     lookup_fields = {
         "title": "title",
         "name": "part",
-        "date": "version",
     }
 
 

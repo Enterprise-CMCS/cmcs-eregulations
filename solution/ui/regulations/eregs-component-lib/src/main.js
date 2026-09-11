@@ -45,8 +45,6 @@ import {
     VersionHistoryContainer,
     ViewResourcesLink,
 } from "../dist/eregs-components.es";
-
-import { goToVersion } from "./go-to-version";
 import {
     highlightText,
     getCurrentSectionFromHash,
@@ -81,18 +79,8 @@ function onPageShow() {
     const isHighlighted = Boolean(getQueryParam(window.location, "highlight"));
 
     if (hasHash || isHighlighted) {
-        // if version select is open, get its height
-        // and adjust scrollTo position
-        const versionSelectBar = document.getElementsByClassName(
-            "view-and-compare"
-        );
-        const versionSelectHeight = versionSelectBar.length
-            ? versionSelectBar[0].offsetHeight
-            : 0;
-
         const headerHeight = HEADER_HEIGHT;
-
-        const offsetPx = headerHeight - versionSelectHeight;
+        const offsetPx = headerHeight;
 
         const section = elId.substring(1);
 
@@ -172,28 +160,6 @@ function makeStateful(el) {
     });
 }
 
-function viewButtonClose() {
-    const viewButton = document.querySelector("#view-button");
-
-    if (!viewButton) {
-        return;
-    }
-
-    viewButton.addEventListener("click", (event) => {
-        if (event.currentTarget.getAttribute("data-state") === "show") {
-            // focus on select
-            document.querySelector("#view-options").focus();
-
-            event.currentTarget.setAttribute("data-set-state", "close");
-        }
-
-        if (event.currentTarget.getAttribute("data-state") === "close") {
-            const closeLink = document.querySelector("#close-link");
-            closeLink.click();
-        }
-    });
-}
-
 function main() {
     // Must be first, mutates DOM
     highlightText(window.location, "highlight");
@@ -259,9 +225,6 @@ function main() {
     statefulElements.forEach((el) => {
         makeStateful(el);
     });
-
-    viewButtonClose();
-    goToVersion();
 
     window.addEventListener("hashchange", activateTOCLink);
     activateTOCLink();

@@ -6,9 +6,9 @@
     </span>
     {% else %}
     {% if subpart %}
-    <a class="menu-section" href="{% url 'reader_view' title part subpart version %}#{{identifier|join:'-' }}" data-section-id="{{identifier|join:'-' }}" id="nav-{{identifier|join:'-'}}">
+    <a class="menu-section" href="{% url 'reader_view' title=title part=part subpart=subpart %}#{{identifier|join:'-' }}" data-section-id="{{identifier|join:'-' }}" id="nav-{{identifier|join:'-'}}">
     {% else %}
-    <a class="menu-section" href="{% url 'reader_view' title part identifier|join:'-' version %}" data-section-id="{{identifier|join:'-' }}" id="nav-{{identifier|join:'-'}}">
+    <a class="menu-section" href="{% url 'reader_view' title=title part=part appendix=identifier|join:'-' %}" data-section-id="{{identifier|join:'-' }}" id="nav-{{identifier|join:'-'}}">
     {% endif %}
         <div class="flexbox">
             <span class="toc-section-number">{{ label_level }}</span>

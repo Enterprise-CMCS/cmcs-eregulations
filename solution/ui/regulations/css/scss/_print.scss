@@ -84,48 +84,6 @@ $left-right-padding: 40px;
     }
 
     .content {
-        #view-and-compare {
-            position: unset;
-            height: unset;
-            display: block;
-            background: transparent;
-            color: $mid_blue;
-            font-size: calc(var(--font-size-md) * $ratio);
-            font-weight: bold;
-            padding: 0 $left-right-padding;
-
-            &[data-state="hide"] {
-                display: none;
-            }
-
-            .view-container {
-                display: none;
-            }
-
-            .print-view-container {
-                margin: 22px 0;
-                display: block;
-
-                svg {
-                    display: inline-block;
-                    vertical-align: middle;
-                    height: 22px;
-                    width: 18px;
-                    margin-top: -5px;
-                    padding-right: 8px;
-
-                    rect,
-                    line {
-                        stroke: $mid_blue;
-                    }
-
-                    path {
-                        fill: $mid_blue;
-                    }
-                }
-            }
-        }
-
         main.reg-part-homepage.match-middle .reg-part-toc {
             .last-updated {
                 font-size: 11px;

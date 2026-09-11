@@ -9,7 +9,7 @@ export const jumpToRegulationPart = ({ title, part }) => {
     cy.get("#jumpBtn").click({ force: true });
     cy.url().should(
         "eq",
-        Cypress.config().baseUrl + `/${title}/${part}/#${part}`
+        Cypress.config().baseUrl + `/${title}/${part}/full/#${part}`
     );
 };
 
@@ -20,15 +20,18 @@ export const jumpToRegulationPartSection = ({ title, part, section }) => {
     cy.get("#jumpBtn").click({ force: true });
 
     cy.url().then((urlString) => {
-        expect(
-            Cypress.minimatch(
-                urlString,
-                Cypress.config().baseUrl +
-                    `/${title}/${part}/Subpart-A/*/#${part}-${section}`,
-                {
-                    matchBase: false,
-                }
-            )
-        ).to.be.true;
+        const subpartMatch = Cypress.minimatch(
+            urlString,
+            Cypress.config().baseUrl +
+                `/${title}/${part}/Subpart-*/#${part}-${section}`,
+            {
+                matchBase: false,
+            }
+        );
+        const fullPartMatch =
+            urlString ===
+            Cypress.config().baseUrl + `/${title}/${part}/full/#${part}-${section}`;
+
+        expect(subpartMatch || fullPartMatch).to.be.true;
     });
 };
