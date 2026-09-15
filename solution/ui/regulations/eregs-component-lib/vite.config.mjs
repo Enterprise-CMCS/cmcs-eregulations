@@ -31,7 +31,8 @@ if (currentConfig === undefined) {
 // https://vitejs.dev/config/
 export default defineConfig({
     define: {
-        "process.env": { NODE_ENV: "production" },
+        "process.env.NODE_ENV": JSON.stringify("production"),
+        "process.env": {},
     },
     resolve: {
         alias: {
