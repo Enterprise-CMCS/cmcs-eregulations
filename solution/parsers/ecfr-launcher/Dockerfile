@@ -7,8 +7,7 @@ COPY parsers/ecfr-launcher/uv.lock ./uv.lock
 RUN uv export --frozen --no-dev --format requirements-txt --output-file requirements.lock
 RUN uv pip install --system -r requirements.lock
 
-COPY parsers/ecfr-launcher/app.py ./app.py
-COPY parsers/ecfr-launcher/eregs_client.py ./eregs_client.py
+COPY parsers/ecfr-launcher ${LAMBDA_TASK_ROOT}/app
 COPY parsers/common ./common
 
-CMD ["app.handler"]
+CMD ["app.app.handler"]
