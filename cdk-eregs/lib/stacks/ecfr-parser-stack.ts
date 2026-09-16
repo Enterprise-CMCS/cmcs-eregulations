@@ -61,6 +61,7 @@ export class EcfrParserStack extends cdk.Stack {
             functionName: stageConfig.getResourceName('ecfr-parser-worker'),
             code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
                 file: 'parsers/ecfr-worker/Dockerfile',
+                cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
             timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
@@ -76,6 +77,7 @@ export class EcfrParserStack extends cdk.Stack {
             functionName: stageConfig.getResourceName('ecfr-parser-launcher'),
             code: lambda.DockerImageCode.fromImageAsset(path.resolve(__dirname, '../../../solution/'), {
                 file: 'parsers/ecfr-launcher/Dockerfile',
+                cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
             timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
