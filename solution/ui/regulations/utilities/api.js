@@ -260,7 +260,7 @@ const getTOC = async ({ title, apiUrl }) =>
 const getChildTOC = async ({ apiUrl, title, part, subPart }) => {
     const subpartPattern = subPart ? `subpart/${subPart}/` : "";
     return httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/version/latest/${subpartPattern}toc`
+        `${apiUrl}title/${title}/part/${part}/${subpartPattern}toc`
     );
 }
 
