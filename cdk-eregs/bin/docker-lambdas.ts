@@ -16,12 +16,10 @@ async function main() {
     
     // Fetch required infrastructure parameters
     const [
-        logLevel,
         vpcId,
         privateSubnetAId,
         privateSubnetBId,
     ] = await Promise.all([
-        getParameterValue('/eregulations/text_extractor/log_level'),
         getParameterValue('/account_vars/vpc/id'),
         getParameterValue('/account_vars/vpc/subnets/private/1a/id'),
         getParameterValue('/account_vars/vpc/subnets/private/1b/id'),
@@ -71,7 +69,7 @@ async function main() {
         },
         environmentConfig: {
             vpcId,
-            logLevel: logLevel,
+            logLevel: process.env.LOG_LEVEL || 'INFO',
             subnetIds: [privateSubnetAId, privateSubnetBId],
         }
     }, mcpServerStageConfig);
@@ -97,7 +95,6 @@ async function main() {
             memorySize: 1024,
         },
         environmentConfig: {
-            logLevel,
             authSecretName: '/eregulations/http/credentials',
         }
     }, stageConfig);
@@ -109,7 +106,6 @@ async function main() {
             memorySize: 1024,
         },
         environmentConfig: {
-            logLevel,
             authSecretName: '/eregulations/http/credentials',
         }
     }, stageConfig);
