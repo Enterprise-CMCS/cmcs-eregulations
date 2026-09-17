@@ -81,6 +81,30 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
     def by_title_part(self, request, title, part):
         return self._latest(title=title, part=part)
 
+    def processed_dates_by_title(self, request, title):
+        results = (
+            EcfrParserResult.objects.filter(
+                title=title,
+                status__in=[
+                    EcfrParserResult.STATUS_SKIPPED,
+                    EcfrParserResult.STATUS_SUCCEEDED,
+                ],
+                date__isnull=False,
+                status_updated_at__isnull=False,
+            )
+            .order_by("part", "-status_updated_at", "-timestamp")
+            .distinct("part")
+        )
+
+        payload = [
+            {
+                "part": result.part,
+                "date": result.date.isoformat(),
+            }
+            for result in results
+        ]
+        return Response(payload)
+
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         data = request.data.copy()

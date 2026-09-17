@@ -100,9 +100,9 @@ def fetch_existing_part_dates_by_title(
     title_number: int,
     timeout: int = 60,
 ) -> dict[int, str]:
-    """Fetch existing eRegs part dates for one title keyed by part number."""
+    """Fetch latest processed eCFR dates for one title keyed by part number."""
 
-    request_url = urljoin(api_base_url, f"title/{title_number}/parts")
+    request_url = urljoin(api_base_url, f"parsers/ecfr/results/title/{title_number}/processed-dates")
     try:
         headers = build_auth_headers(credentials)
     except ConfigParseError as exc:
@@ -111,17 +111,21 @@ def fetch_existing_part_dates_by_title(
     response = execute_request(
         lambda: requests.get(request_url, headers=headers, timeout=timeout),
         on_http_error=lambda exc: EregsConfigError(
-            "eRegs title parts request failed "
+            "eRegs processed dates request failed "
             f"({exc.response.status_code if exc.response is not None else 'unknown'}) for title {title_number}"
         ),
-        on_request_error=lambda exc: EregsConfigError(f"eRegs title parts request failed for title {title_number}: {exc}"),
+        on_request_error=lambda exc: EregsConfigError(
+            f"eRegs processed dates request failed for title {title_number}: {exc}"
+        ),
     )
 
     payload = parse_json_response(
         response,
         expected_type=list,
-        on_invalid_json=lambda _exc: EregsConfigError(f"eRegs title parts response was not valid JSON for title {title_number}"),
-        on_invalid_shape=lambda: EregsConfigError("eRegs title parts response must be a JSON array"),
+        on_invalid_json=lambda _exc: EregsConfigError(
+            f"eRegs processed dates response was not valid JSON for title {title_number}"
+        ),
+        on_invalid_shape=lambda: EregsConfigError("eRegs processed dates response must be a JSON array"),
     )
 
     part_dates: dict[int, str] = {}
@@ -130,8 +134,12 @@ def fetch_existing_part_dates_by_title(
             continue
 
         name = item.get("name")
+        if name is None:
+            name = item.get("part")
         date = item.get("date")
         if isinstance(name, str) and name.strip().isdigit() and isinstance(date, str) and date.strip():
             part_dates[int(name.strip())] = date.strip()
+        elif isinstance(name, int) and isinstance(date, str) and date.strip():
+            part_dates[name] = date.strip()
 
     return part_dates

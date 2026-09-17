@@ -19,6 +19,9 @@ urlpatterns = [
     path("ecfr/results/title/<int:title>/part/<int:part>", views.EcfrParserResultViewSet.as_view({
         "get": "by_title_part",
     })),
+    path("ecfr/results/title/<int:title>/processed-dates", views.EcfrParserResultViewSet.as_view({
+        "get": "processed_dates_by_title",
+    })),
     path("ecfr/launcher-results", views.EcfrLauncherResultViewSet.as_view({
         "get": "list",
         "post": "create",

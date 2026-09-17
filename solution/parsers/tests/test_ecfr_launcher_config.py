@@ -47,9 +47,9 @@ class EcfrLauncherConfigTests(unittest.TestCase):
         response = Mock()
         response.raise_for_status.return_value = None
         response.json.return_value = [
-            {"name": "400", "date": "2025-01-01"},
-            {"name": "abc", "date": "2025-01-01"},
-            {"name": "401", "date": ""},
+            {"part": 400, "date": "2025-01-01"},
+            {"part": "abc", "date": "2025-01-01"},
+            {"part": 401, "date": ""},
         ]
 
         with patch("requests.get", return_value=response) as mock_get:
@@ -61,6 +61,7 @@ class EcfrLauncherConfigTests(unittest.TestCase):
 
         self.assertEqual(payload, {400: "2025-01-01"})
         expected_auth = "Basic " + base64.b64encode(b"user:pass").decode("utf-8")
+        self.assertTrue(mock_get.call_args.args[0].endswith("/v3/parsers/ecfr/results/title/42/processed-dates"))
         self.assertEqual(mock_get.call_args.kwargs["headers"]["Authorization"], expected_auth)
 
     def test_expand_target_parts_part_passthrough(self):
