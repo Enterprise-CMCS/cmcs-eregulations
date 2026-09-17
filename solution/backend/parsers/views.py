@@ -49,6 +49,7 @@ class ParserConfigurationViewSet(viewsets.ReadOnlyModelViewSet):
     description="Create eCFR parser result logs and retrieve most-recent eCFR parser results.",
 )
 class EcfrParserResultViewSet(viewsets.ModelViewSet):
+    queryset = EcfrParserResult.objects.all()
     serializer_class = EcfrParserResultSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -143,6 +144,7 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
     description="Create eCFR launcher result logs and retrieve most-recent eCFR launcher result.",
 )
 class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
+    queryset = EcfrLauncherResult.objects.all()
     serializer_class = EcfrLauncherResultSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -175,6 +177,7 @@ class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
     description="Create Federal Register launcher result logs and retrieve most-recent Federal Register launcher result.",
 )
 class FrLauncherResultViewSet(viewsets.ModelViewSet):
+    queryset = FrLauncherResult.objects.all()
     serializer_class = FrLauncherResultSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -207,6 +210,7 @@ class FrLauncherResultViewSet(viewsets.ModelViewSet):
     description="Create FR parser result logs and retrieve most-recent FR parser results.",
 )
 class FrParserResultViewSet(viewsets.ModelViewSet):
+    queryset = FrParserResult.objects.all()
     serializer_class = FrParserResultSerializer
     authentication_classes = [SettingsAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -235,17 +239,23 @@ class EcfrPartUploadViewSet(viewsets.ModelViewSet):
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         data = request.data
-        defaults = {
-            "document": {},
-            "structure": {},
-            "depth_stack": [],
-            "depth": -1,
-        }
-        part, _ = Part.objects.get_or_create(title=data["title"], name=data["name"], defaults=defaults)
-        data["id"] = part.pk
-        serializer = self.get_serializer(part, data=data)
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        instance = serializer.save()
+        validated = serializer.validated_data
+
+        part, _ = Part.objects.get_or_create(
+            title=validated["title"],
+            name=validated["name"],
+            defaults={
+                "date": validated["date"],
+                "document": validated["document"],
+                "structure": validated["structure"],
+                "depth": validated["depth"],
+                "depth_stack": [],
+            },
+        )
+
+        instance = serializer.update(part, validated)
         response = serializer.validated_data
         if not data.get("upload_reg_text", False):
             instance.delete()
