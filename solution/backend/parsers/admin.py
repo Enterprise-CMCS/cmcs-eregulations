@@ -54,7 +54,9 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
 
         # Generate a filter to find all affected parts
         q = Q()
+        has_part_config_deletes = False
         for obj in [i for i in formset.deleted_objects if isinstance(i, PartConfiguration)]:
+            has_part_config_deletes = True
             if obj.type == "part":
                 q |= Q(title=obj.title, name=obj.value)  # Direct part match
             elif obj.type == "subchapter":
@@ -71,6 +73,10 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                     )
                     & ~Q(name__in=exclude)
                 )
+
+        if not has_part_config_deletes:
+            super().save_formset(request, form, formset, change)
+            return
 
         affected_parts = Part.objects.filter(q).distinct()
         if affected_parts.exists():
