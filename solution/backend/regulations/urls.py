@@ -28,7 +28,6 @@ from regulations.views.subjects import SubjectsView
 
 register_converter(converters.NumericConverter, 'numeric')
 register_converter(converters.SubpartConverter, 'subpart')
-register_converter(converters.VersionConverter, 'version')
 register_converter(converters.AppendixConverter, 'appendix')
 
 urlpatterns = [
@@ -39,10 +38,10 @@ urlpatterns = [
     path('obbba/', OBBBAView, name='obbba'),
     path('pl119-21/', PL_119_21View.as_view(), name='pl_119_21'),
     path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="regulation_landing_view"),
-    path('<numeric:title>/<numeric:part>/', RegulationLandingView.as_view(), name="reader_view"),
+    path('<numeric:title>/<numeric:part>/full/', PartReaderView.as_view(), name='reader_view'),
     path('<numeric:title>/<numeric:part>/<numeric:section>/', SectionReaderView.as_view(), name='reader_view'),
-    path('<numeric:title>/<numeric:part>/<numeric:section>/<version:version>/', SectionReaderView.as_view(), name='reader_view'),
-    path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/<version:version>/',
+    path('<numeric:title>/<numeric:part>/<numeric:section>/<str:version>/', SectionReaderView.as_view(), name='reader_view'),
+    path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/<str:version>/',
          SubpartReaderView.as_view(),
          name="reader_view"),
     path('<numeric:title>/<numeric:part>/Subpart-<subpart:subpart>/',
@@ -51,10 +50,10 @@ urlpatterns = [
     path('<numeric:title>/<numeric:part>/<appendix:appendix>/',
          AppendixReaderView.as_view(),
          name="reader_view"),
-    path('<numeric:title>/<numeric:part>/<appendix:appendix>/<version:version>/',
+    path('<numeric:title>/<numeric:part>/<appendix:appendix>/<str:version>/',
          AppendixReaderView.as_view(),
          name="reader_view"),
-    path('<numeric:title>/<numeric:part>/<version:version>/', PartReaderView.as_view(), name='reader_view'),
+    path('<numeric:title>/<numeric:part>/<str:version>/', PartReaderView.as_view(), name='reader_view'),
     path('goto/', GoToRedirectView.as_view(), name='goto'),
     path('search/', SearchView.as_view(), name='search'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

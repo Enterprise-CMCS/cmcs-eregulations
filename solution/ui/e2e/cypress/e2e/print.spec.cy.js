@@ -50,15 +50,17 @@ describe("Print Styles", () => {
         cy.viewport("macbook-15");
         cy.visit(previousVersion);
 
+        cy.url().should("not.include", "2020-12-31");
+        cy.url().should("include", "/42/433/Subpart-A/");
         cy.get(".right-sidebar").should("be.visible");
 
-        cy.get(".print-view-container").should("have.css", "display", "none");
-        cy.get(".view-container").should("have.css", "display", "flex");
+        cy.get(".print-view-container").should("not.exist");
 
         cy.setCssMedia("print");
 
-        cy.get(".print-view-container").should("have.css", "display", "block");
-        cy.get(".view-container").should("have.css", "display", "none");
+        cy.get(".left-sidebar").should("have.css", "display", "none");
+        cy.get(".right-sidebar").should("have.css", "display", "none");
+        cy.get("footer .print-footer").should("have.css", "display", "block");
     })
 
     it("has proper print styles for Public Law 119-21 (OBBBA)", () => {

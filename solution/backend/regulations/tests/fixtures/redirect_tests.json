@@ -5,7 +5,7 @@
     },    
     {
         "input": "/reg_redirect/?title=42&part=400",
-        "expected": "/42/400/"
+        "expected": "/42/400/full/"
     },
     {
         "input": "/reg_redirect/?title=42&part=400&section=100",
@@ -33,7 +33,7 @@
     },
     {
         "input": "/reg_redirect/?title=42&part=400&section=200",
-        "expected": "/42/400/2023-08-17/"
+        "expected": "/42/400/full/"
     },
     {
         "input": "/reg_redirect/?title=42&part=400&section=100&paragraph=c",
