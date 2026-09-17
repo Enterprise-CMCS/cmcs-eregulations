@@ -29,6 +29,7 @@ class ParsersApiTestCase(APITestCase):
             date="2025-01-01",
             status=EcfrParserResult.STATUS_SUCCEEDED,
             status_updated_at=now,
+            invalidated_at=now + timedelta(minutes=2),
             success=True,
             log="",
         )
@@ -69,7 +70,38 @@ class ParsersApiTestCase(APITestCase):
         self.assertEqual(
             response.data,
             [
-                {"part": 400, "date": "2025-01-01"},
+                {"part": 400, "date": "2024-12-01"},
                 {"part": 401, "date": "2025-01-02"},
             ],
         )
+
+    def test_latest_ecfr_result_ignores_invalidated_rows(self):
+        launcher = EcfrLauncherResult.objects.create(success=True, log="")
+        now = timezone.now()
+
+        EcfrParserResult.objects.create(
+            launcher_result=launcher,
+            title=42,
+            part=400,
+            date="2025-01-01",
+            status=EcfrParserResult.STATUS_SUCCEEDED,
+            status_updated_at=now,
+            invalidated_at=now + timedelta(minutes=1),
+            success=True,
+            log="stale",
+        )
+        EcfrParserResult.objects.create(
+            launcher_result=launcher,
+            title=42,
+            part=400,
+            date="2024-12-01",
+            status=EcfrParserResult.STATUS_SUCCEEDED,
+            status_updated_at=now - timedelta(days=1),
+            success=True,
+            log="active",
+        )
+
+        response = self.client.get("/v3/parsers/ecfr/results/title/42/part/400")
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data["date"], "2024-12-01")

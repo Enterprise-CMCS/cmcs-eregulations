@@ -42,6 +42,7 @@ class EcfrParserResultSerializer(serializers.ModelSerializer):
             "date",
             "status",
             "status_updated_at",
+            "invalidated_at",
         )
 
 

@@ -3,6 +3,7 @@ from django.contrib import admin, messages
 from django.db import models
 from django.db.models import Q
 from django.forms import TextInput
+from django.utils import timezone
 from solo.admin import SingletonModelAdmin
 
 from regcore.models import Part
@@ -74,12 +75,23 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                     & ~Q(name__in=exclude)
                 )
 
-        if not has_part_config_deletes:
+        if not has_part_config_deletes or not q.children:
             super().save_formset(request, form, formset, change)
             return
 
         affected_parts = Part.objects.filter(q).distinct()
         if affected_parts.exists():
+            part_pairs = list(affected_parts.values_list("title", "name").distinct())
+            result_filter = Q()
+            for title, part in part_pairs:
+                result_filter |= Q(title=title, part=part)
+
+            if result_filter.children:
+                EcfrParserResult.objects.filter(
+                    result_filter,
+                    invalidated_at__isnull=True,
+                ).update(invalidated_at=timezone.now())
+
             # If search app is installed, delete relevant search indices and metadata
             search_message = ""
             if apps.is_installed("content_search"):
@@ -92,8 +104,7 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                 )
 
             # Delete affected parts
-            part_list = affected_parts.distinct("title", "name").values_list("title", "name")
-            part_list = ", ".join([f"{p[0]} CFR {p[1]}" for p in part_list])
+            part_list = ", ".join([f"{p[0]} CFR {p[1]}" for p in part_pairs])
             deleted_parts = affected_parts.delete()
 
             message = f"Deleted {deleted_parts[1]['regcore.Part']} part instances{search_message} for part(s): {part_list}."
@@ -123,8 +134,8 @@ class _ParserResultAdminBase(admin.ModelAdmin):
 
 @admin.register(EcfrParserResult)
 class EcfrParserResultAdmin(_ParserResultAdminBase):
-    list_display = ("title", "part", "date", "status", "status_updated_at", "success", "log_preview")
-    list_filter = ("status", "success", "title", "date")
+    list_display = ("title", "part", "date", "status", "status_updated_at", "invalidated_at", "success", "log_preview")
+    list_filter = ("status", "success", "title", "date", "invalidated_at")
     search_fields = ("title", "part", "status", "log")
     readonly_fields = (
         "launcher_result",
@@ -133,6 +144,7 @@ class EcfrParserResultAdmin(_ParserResultAdminBase):
         "date",
         "status",
         "status_updated_at",
+        "invalidated_at",
         "timestamp",
         "success",
         "log",

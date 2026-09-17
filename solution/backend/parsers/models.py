@@ -113,6 +113,7 @@ class EcfrParserResult(AbstractParserResult):
     date = models.DateField(null=True, blank=True)  # this is the date the part was released, not the date the parser ran
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_SUCCEEDED)
     status_updated_at = models.DateTimeField(null=True, blank=True)
+    invalidated_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"eCFR Parser Result for {self.title} CFR {self.part} at {self.timestamp}"

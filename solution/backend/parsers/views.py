@@ -63,6 +63,7 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
                     EcfrParserResult.STATUS_SUCCEEDED,
                 ],
                 status_updated_at__isnull=False,
+                invalidated_at__isnull=True,
             )
             .order_by("-status_updated_at", "-timestamp")
             .first()
@@ -91,6 +92,7 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
                 ],
                 date__isnull=False,
                 status_updated_at__isnull=False,
+                invalidated_at__isnull=True,
             )
             .order_by("part", "-status_updated_at", "-timestamp")
             .distinct("part")
