@@ -117,7 +117,7 @@ class _ParserResultAdminBase(admin.ModelAdmin):
 
 @admin.register(EcfrParserResult)
 class EcfrParserResultAdmin(_ParserResultAdminBase):
-    list_display = ("title", "part", "date", "status", "status_updated_at", "timestamp", "success", "log_preview")
+    list_display = ("title", "part", "date", "status", "status_updated_at", "success", "log_preview")
     list_filter = ("status", "success", "title", "date")
     search_fields = ("title", "part", "status", "log")
     readonly_fields = (

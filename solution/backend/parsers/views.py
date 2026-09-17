@@ -96,14 +96,10 @@ class EcfrParserResultViewSet(viewsets.ModelViewSet):
             .distinct("part")
         )
 
-        payload = [
-            {
-                "part": result.part,
-                "date": result.date.isoformat(),
-            }
-            for result in results
-        ]
-        return Response(payload)
+        return Response([{
+            "part": result.part,
+            "date": result.date.isoformat(),
+        } for result in results])
 
     @transaction.atomic
     def create(self, request, *args, **kwargs):

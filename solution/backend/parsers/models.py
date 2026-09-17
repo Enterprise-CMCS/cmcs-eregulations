@@ -85,6 +85,9 @@ class AbstractParserResult(models.Model):
     success = models.BooleanField()
     log = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"Parser Result at {self.timestamp}"
+
 
 class EcfrParserResult(AbstractParserResult):
     STATUS_QUEUED = "queued"
@@ -111,6 +114,9 @@ class EcfrParserResult(AbstractParserResult):
     status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_SUCCEEDED)
     status_updated_at = models.DateTimeField(null=True, blank=True)
 
+    def __str__(self):
+        return f"eCFR Parser Result for {self.title} CFR {self.part} at {self.timestamp}"
+
     class Meta:
         verbose_name = "eCFR Parser Result"
         verbose_name_plural = "eCFR Parser Results"
@@ -127,6 +133,9 @@ class EcfrParserResult(AbstractParserResult):
 
 
 class EcfrLauncherResult(AbstractParserResult):
+    def __str__(self):
+        return f"eCFR Launcher Result at {self.timestamp}"
+
     class Meta:
         verbose_name = "eCFR Launcher Result"
         verbose_name_plural = "eCFR Launcher Results"
@@ -134,6 +143,9 @@ class EcfrLauncherResult(AbstractParserResult):
 
 class FrParserResult(AbstractParserResult):
     document_number = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"FR Parser Result for {self.document_number} at {self.timestamp}"
 
     class Meta:
         verbose_name = "Federal Register Parser Result"
@@ -147,6 +159,9 @@ class FrLauncherResult(AbstractParserResult):
     queued_count = models.PositiveIntegerField(default=0)
     skipped_count = models.PositiveIntegerField(default=0)
     failed_count = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"FR Launcher Result at {self.timestamp}"
 
     class Meta:
         verbose_name = "Federal Register Launcher Result"
