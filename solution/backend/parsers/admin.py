@@ -98,16 +98,18 @@ class ParserConfigurationAdmin(SingletonModelAdmin):
                 from content_search.models import IndexedRegulationText
 
                 deleted_indices = IndexedRegulationText.objects.filter(part__in=affected_parts).delete()
+                deleted_by_model = deleted_indices[1]
                 search_message = (
-                    f", {deleted_indices[1]['content_search.ContentIndex']} search index entries, "
-                    f"and {deleted_indices[1]['content_search.IndexedRegulationText']} search metadata entries"
+                    f", {deleted_by_model.get('content_search.ContentIndex', 0)} search index entries, "
+                    f"and {deleted_by_model.get('content_search.IndexedRegulationText', 0)} search metadata entries"
                 )
 
             # Delete affected parts
             part_list = ", ".join([f"{p[0]} CFR {p[1]}" for p in part_pairs])
             deleted_parts = affected_parts.delete()
 
-            message = f"Deleted {deleted_parts[1]['regcore.Part']} part instances{search_message} for part(s): {part_list}."
+            deleted_parts_count = deleted_parts[1].get("regcore.Part", 0)
+            message = f"Deleted {deleted_parts_count} part instances{search_message} for part(s): {part_list}."
 
             self.message_user(
                 request,
