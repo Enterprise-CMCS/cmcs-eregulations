@@ -33,17 +33,18 @@ class ParserConfigurationAdminTests(SimpleTestCase):
         formset = Mock()
         formset.deleted_objects = [PartConfiguration(title=42, type="part", value="433")]
 
+        filtered_parts = Mock()
         affected_parts = Mock()
-        affected_parts.distinct.return_value = affected_parts
         affected_parts.exists.return_value = True
         part_pairs_qs = Mock()
         part_pairs_qs.distinct.return_value = [(42, 433)]
         affected_parts.values_list.return_value = part_pairs_qs
         affected_parts.delete.return_value = (1, {"regcore.Part": 1})
+        filtered_parts.distinct.return_value = affected_parts
 
         with (
             patch("parsers.admin.SingletonModelAdmin.save_formset", autospec=True) as mock_super,
-            patch("parsers.admin.Part.objects.filter", return_value=affected_parts),
+            patch("parsers.admin.Part.objects.filter", return_value=filtered_parts),
             patch("parsers.admin.apps.is_installed", return_value=False),
             patch.object(EcfrParserResult.objects, "filter") as mock_result_filter,
             patch("parsers.admin.timezone.now", return_value="NOW") as mock_now,
@@ -68,20 +69,21 @@ class ParserConfigurationAdminTests(SimpleTestCase):
         formset = Mock()
         formset.deleted_objects = [PartConfiguration(title=42, type="part", value="433")]
 
+        filtered_parts = Mock()
         affected_parts = Mock()
-        affected_parts.distinct.return_value = affected_parts
         affected_parts.exists.return_value = True
         part_pairs_qs = Mock()
         part_pairs_qs.distinct.return_value = [(42, 433)]
         affected_parts.values_list.return_value = part_pairs_qs
         affected_parts.delete.return_value = (1, {"regcore.Part": 1})
+        filtered_parts.distinct.return_value = affected_parts
 
         indexed_qs = Mock()
         indexed_qs.delete.return_value = (1, {"content_search.IndexedRegulationText": 1})
 
         with (
             patch("parsers.admin.SingletonModelAdmin.save_formset", autospec=True) as mock_super,
-            patch("parsers.admin.Part.objects.filter", return_value=affected_parts),
+            patch("parsers.admin.Part.objects.filter", return_value=filtered_parts),
             patch("parsers.admin.apps.is_installed", return_value=True),
             patch.object(EcfrParserResult.objects, "filter") as mock_result_filter,
             patch("content_search.models.IndexedRegulationText.objects.filter", return_value=indexed_qs),
