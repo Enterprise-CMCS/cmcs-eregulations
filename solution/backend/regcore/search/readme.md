@@ -4,7 +4,7 @@ Regulations search uses Django's integration with Postgres search to allow full 
 For our use for full text search we created an index model based off of the Part model and its pieces within it.
 
 ## Model Construction
-The index model that exist outside of the Part model.  The part model is where all the information in text for our regulations exist.  There is a post save hook that whenever a Part is updated or created that adds into the search index.  If a part is removed it is consequentially removed from the Index as well to not preserve old data within search.  If we wanted to search specific versions of parts some additional changes will have to be applied.
+The index model that exist outside of the Part model.  The part model is where all the information in text for our regulations exist.  There is a post save hook that whenever a Part is updated or created that adds into the search index.  If a part is removed it is consequentially removed from the Index as well to not preserve old data within search.
 
 The index then takes seperate pieces of meta data from the part and applies weights to the different fields; A, B, C, or D.  These weights are applied to individual fields and then addded to a computed column in postgres that exist outside of the index model itself in postgres.  Django does not support computed columns on model tables but it can access them through annotation.  This field is cacluated automatically whenever the model is updated.  It truncates words into an easily searchable vector that allows efficiency in searching.
 

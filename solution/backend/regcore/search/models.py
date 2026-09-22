@@ -18,7 +18,7 @@ class SearchIndexQuerySet(models.QuerySet):
     rank_filter = .2
 
     def effective(self, date):
-        return self.filter(part__in=models.Subquery(Part.objects.effective(date.today()).values("id")))
+        return self
 
     def search_configuration(self, query):
 

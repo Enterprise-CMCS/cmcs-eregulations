@@ -325,17 +325,11 @@ describe("Part View", () => {
         cy.get("#view-button").should("not.exist");
     });
 
-    it("should allow the user to return to the current version if they visit a link to a previous version", () => {
+    it("should redirect to the current version if user visits a link to a previous version", () => {
         cy.viewport("macbook-15");
         cy.visit("/42/433/Subpart-A/2020-12-31/");
 
-        cy.url().should("include", "2020-12-31");
-        cy.get(".latest-version").should("not.exist");
-        cy.get("#view-button").should("not.exist");
-
-        cy.get(".view-and-compare").should("be.visible");
-        cy.get("#close-link").click({ force: true });
-        cy.get(".view-and-compare").should("not.be.visible");
+        cy.url().should("not.include", "2020-12-31");
         cy.get(".latest-version").should("exist");
     });
 
@@ -415,10 +409,10 @@ describe("Part View", () => {
     });
 
     it("loads version history content correctly", () => {
-        cy.intercept("**/v3/title/42/part/433/history/section/8", {
+        cy.intercept("**/v3/title/42/part/433/section/8/history", {
             fixture: "42.433.8.annual-editions.json",
         }).as("history433");
-        cy.intercept("**/v3/title/42/part/433/versions/section/8", {
+        cy.intercept("**/v3/title/42/part/433/section/8/versions", {
             fixture: "42.433.8.version-history.json",
         }).as("history433");
         cy.viewport("macbook-15");

@@ -533,7 +533,6 @@ a {
 $header_height: 104px; // Update if header height changes
 $header_height_mobile: 104px;
 
-$view_compare_height: 54px;
 
 a,
 .v-application a {
@@ -584,16 +583,6 @@ select {
 
     @include screen-eds-sm {
         scroll-margin-top: $header_height + 5px;
-    }
-}
-
-.content.go-to-version :target {
-    // Moves content down so it's not covered by the sticky header
-    // or by go-to-version bar
-    scroll-margin-top: $header_height_mobile + $view_compare_height + 37px;
-
-    @include screen-eds-sm {
-        scroll-margin-top: $header_height + $view_compare_height + 37px;
     }
 }
 

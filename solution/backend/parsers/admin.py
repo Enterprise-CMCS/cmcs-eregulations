@@ -1,0 +1,177 @@
+from django.apps import apps
+from django.contrib import admin, messages
+from django.db import models
+from django.db.models import Q
+from django.forms import TextInput
+from django.utils import timezone
+from solo.admin import SingletonModelAdmin
+
+from regcore.models import Part
+
+from .models import (
+    EcfrLauncherResult,
+    EcfrParserResult,
+    FrLauncherResult,
+    FrParserResult,
+    ParserConfiguration,
+    PartConfiguration,
+)
+
+
+class PartConfigurationInline(admin.TabularInline):
+    ordering = ("title", "value")
+    formfield_overrides = {
+        models.TextField: {
+            "widget": TextInput(attrs={
+                "style": "width: calc(100% - 1em);",
+            })
+        }
+    }
+    model = PartConfiguration
+    extra = 0
+
+
+@admin.register(ParserConfiguration)
+class ParserConfigurationAdmin(SingletonModelAdmin):
+    inlines = (PartConfigurationInline,)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "loglevel",
+                    "upload_supplemental_locations",
+                    "skip_parsed_regs",
+                    "skip_fr_documents",
+                ),
+                "description": "<b>Please note:</b> Changes to the parser configuration "
+                "will not take effect until the next scheduled parser run!",
+            },
+        ),
+    )
+
+    def save_formset(self, request, form, formset, change):
+        formset.save(commit=False)
+
+        # Generate a filter to find all affected parts
+        q = Q()
+        has_part_config_deletes = False
+        for obj in [i for i in formset.deleted_objects if isinstance(i, PartConfiguration)]:
+            has_part_config_deletes = True
+            if obj.type == "part":
+                q |= Q(title=obj.title, name=obj.value)  # Direct part match
+            elif obj.type == "subchapter":
+                # Find all parts under this subchapter
+                chapter, subchapter = obj.value.split("-")
+                exclude = list(PartConfiguration.objects.filter(title=obj.title, type="part").values_list("value", flat=True))
+                q |= (
+                    Q(
+                        title=obj.title,
+                        structure__children__0__type="chapter",
+                        structure__children__0__identifier=[chapter],
+                        structure__children__0__children__0__type="subchapter",
+                        structure__children__0__children__0__identifier=[subchapter],
+                    )
+                    & ~Q(name__in=exclude)
+                )
+
+        if not has_part_config_deletes or not q.children:
+            super().save_formset(request, form, formset, change)
+            return
+
+        affected_parts = Part.objects.filter(q).distinct()
+        if affected_parts.exists():
+            part_pairs = list(affected_parts.values_list("title", "name").distinct())
+            result_filter = Q()
+            for title, part in part_pairs:
+                result_filter |= Q(title=title, part=part)
+
+            if result_filter.children:
+                EcfrParserResult.objects.filter(
+                    result_filter,
+                    invalidated_at__isnull=True,
+                ).update(invalidated_at=timezone.now())
+
+            # If search app is installed, delete relevant search indices and metadata
+            search_message = ""
+            if apps.is_installed("content_search"):
+                from content_search.models import IndexedRegulationText
+
+                deleted_indices = IndexedRegulationText.objects.filter(part__in=affected_parts).delete()
+                deleted_by_model = deleted_indices[1]
+                search_message = (
+                    f", {deleted_by_model.get('content_search.ContentIndex', 0)} search index entries, "
+                    f"and {deleted_by_model.get('content_search.IndexedRegulationText', 0)} search metadata entries"
+                )
+
+            # Delete affected parts
+            part_list = ", ".join([f"{p[0]} CFR {p[1]}" for p in part_pairs])
+            deleted_parts = affected_parts.delete()
+
+            deleted_parts_count = deleted_parts[1].get("regcore.Part", 0)
+            message = f"Deleted {deleted_parts_count} part instances{search_message} for part(s): {part_list}."
+
+            self.message_user(
+                request,
+                message,
+                level=messages.INFO,
+            )
+
+        super().save_formset(request, form, formset, change)
+
+
+class _ParserResultAdminBase(admin.ModelAdmin):
+    ordering = ("-timestamp",)
+    date_hierarchy = "timestamp"
+
+    def has_add_permission(self, request):
+        return False
+
+    @admin.display(description="log")
+    def log_preview(self, obj):
+        if not obj.log:
+            return ""
+        return f"{obj.log[:80]}..." if len(obj.log) > 80 else obj.log
+
+
+@admin.register(EcfrParserResult)
+class EcfrParserResultAdmin(_ParserResultAdminBase):
+    list_display = ("title", "part", "date", "status", "status_updated_at", "invalidated_at", "success", "log_preview")
+    list_filter = ("status", "success", "title", "date", "invalidated_at")
+    search_fields = ("title", "part", "status", "log")
+    readonly_fields = (
+        "launcher_result",
+        "title",
+        "part",
+        "date",
+        "status",
+        "status_updated_at",
+        "invalidated_at",
+        "timestamp",
+        "success",
+        "log",
+    )
+
+
+@admin.register(EcfrLauncherResult)
+class EcfrLauncherResultAdmin(_ParserResultAdminBase):
+    list_display = ("timestamp", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("log",)
+    readonly_fields = ("timestamp", "success", "log")
+
+
+@admin.register(FrParserResult)
+class FrParserResultAdmin(_ParserResultAdminBase):
+    list_display = ("document_number", "timestamp", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("document_number", "log")
+    readonly_fields = ("document_number", "timestamp", "success", "log")
+
+
+@admin.register(FrLauncherResult)
+class FrLauncherResultAdmin(_ParserResultAdminBase):
+    list_display = ("timestamp", "queued_count", "skipped_count", "failed_count", "success", "log_preview")
+    list_filter = ("success",)
+    search_fields = ("log",)
+    readonly_fields = ("queued_count", "skipped_count", "failed_count", "timestamp", "success", "log")

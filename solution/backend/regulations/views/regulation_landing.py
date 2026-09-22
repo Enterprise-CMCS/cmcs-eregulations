@@ -2,9 +2,9 @@ from datetime import date, datetime
 
 from django.http import Http404
 from django.views.generic.base import TemplateView
-from requests import HTTPError
 
-from regcore.models import ECFRParserResult, Part
+from parsers.utils import get_ecfr_last_updated
+from regcore.models import Part
 
 
 class RegulationLandingView(TemplateView):
@@ -16,15 +16,14 @@ class RegulationLandingView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         title = self.kwargs.get("title")
-        reg_title_parser_success_date = ECFRParserResult.objects.filter(errors=0, title=title).order_by("-end").first()
         reg_part = self.kwargs.get("part")
 
         try:
-            current = Part.objects.effective(date.today()).get(title=title, name=reg_part)
-        except HTTPError:
+            current = Part.objects.get(title=title, name=reg_part)
+        except Part.DoesNotExist:
             raise Http404
 
-        parts = Part.objects.effective(date.today()).filter(title=title)
+        parts = Part.objects.filter(title=title).order_by("name")
         reg_version = current.date.isoformat()
         reg_version_string = datetime.strftime(current.date, "%b %-d, %Y")
         toc = current.toc
@@ -33,11 +32,12 @@ class RegulationLandingView(TemplateView):
         authority = current.document['authority']
         source = current.document['source']
         editorial_note = current.document['editorial_note']
+        part_parser_success_date = get_ecfr_last_updated(title, reg_part)
 
         c = {
             'toc': toc,
             'title': title,
-            'title_parser_success_date': reg_title_parser_success_date.end if reg_title_parser_success_date else None,
+            'part_parser_success_date': part_parser_success_date,
             'version': reg_version,
             'version_string': reg_version_string,
             'subchapter': subchapter,

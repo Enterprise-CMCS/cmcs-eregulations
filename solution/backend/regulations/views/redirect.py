@@ -30,7 +30,7 @@ class RegulationRedirectView(RedirectView):
         section = self.request.GET.get("section", None)
         paragraph = self.request.GET.get("paragraph", None)
 
-        queryset = Part.objects.filter(title=title, name=part).order_by("name", "-date").distinct("name")
+        queryset = Part.objects.filter(title=title, name=part)
 
         if not queryset:
             if not RegulationLinkConfiguration.get_solo().link_to_ecfr:
@@ -54,7 +54,6 @@ class RegulationRedirectView(RedirectView):
         # Title/part combo exists in eRegs, build reverse params and redirect
 
         document = queryset[0].document
-        date = queryset[0].date
 
         params = {
             "title": title,
@@ -69,7 +68,6 @@ class RegulationRedirectView(RedirectView):
         node = find_node(document["children"], "section", 1, section)
         if not node:
             # No section, link to part level
-            params["version"] = date
             return reverse("reader_view", kwargs=params)
         params["section"] = section
 

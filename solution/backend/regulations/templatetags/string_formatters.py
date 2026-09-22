@@ -67,10 +67,23 @@ def appendix_formatter(title, node_label):
 
 
 @register.filter
-@stringfilter
 def parser_success_date_formatter(success_date):
-    if success_date == "None" or success_date == "":
+    if success_date in (None, "", "None"):
         return "an unknown date"
+
+    if isinstance(success_date, datetime):
+        parsed = success_date
     else:
-        new_date = datetime.strptime(success_date, "%Y-%m-%d %H:%M:%S")
-        return new_date.strftime('%b %-d, %Y')
+        parsed = None
+        value = str(success_date).strip()
+        for date_format in ("%Y-%m-%d %H:%M:%S.%f", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+            try:
+                parsed = datetime.strptime(value, date_format)
+                break
+            except ValueError:
+                continue
+
+        if parsed is None:
+            return "an unknown date"
+
+    return parsed.strftime('%b %-d, %Y')

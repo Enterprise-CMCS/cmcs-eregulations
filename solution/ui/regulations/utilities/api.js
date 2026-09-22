@@ -221,8 +221,9 @@ function httpApiPost(
  * @returns {string} - date in `MMM DD, YYYY` format or "N/A" if no date available
  */
 const getLastParserSuccessDate = async ({ apiUrl, title = "42" }) => {
-    const result = await httpApiGet(`${apiUrl}ecfr_parser_result/${title}`);
-    return result.end ? niceDate(result.end.split("T")[0]) : "N/A";
+    const result = await httpApiGet(`${apiUrl}parsers/ecfr/results/title/${title}`);
+    const lastUpdated = result.status_updated_at || result.timestamp;
+    return lastUpdated ? niceDate(lastUpdated.split("T")[0]) : "N/A";
 };
 
 /**
@@ -259,7 +260,7 @@ const getTOC = async ({ title, apiUrl }) =>
 const getChildTOC = async ({ apiUrl, title, part, subPart }) => {
     const subpartPattern = subPart ? `subpart/${subPart}/` : "";
     return httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/version/latest/${subpartPattern}toc`
+        `${apiUrl}title/${title}/part/${part}/${subpartPattern}toc`
     );
 }
 
@@ -412,9 +413,9 @@ const getGovInfoLinks = async ({ apiUrl, filterParams = {} }) =>
     await httpApiGet(
         `${apiUrl}title/${filterParams.title}/part/${
             filterParams.part
-        }/history/${Object.keys(filterParams)[2]}/${
+        }/${Object.keys(filterParams)[2]}/${
             Object.values(filterParams)[2]
-        }`
+        }/history`
     );
 
 /**
@@ -618,7 +619,7 @@ const getContextBanners = async ({
 */
 const getVersionHistory = async ({ apiUrl, title, part, section }) =>
     httpApiGet(
-        `${apiUrl}title/${title}/part/${part}/versions/section/${section}`
+        `${apiUrl}title/${title}/part/${part}/section/${section}/versions`
     );
 
 const throwGenericError = async () =>

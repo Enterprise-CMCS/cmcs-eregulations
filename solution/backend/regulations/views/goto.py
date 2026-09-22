@@ -18,9 +18,6 @@ class GoToRedirectView(RedirectView):
         if kwargs.get("section") is not None and kwargs.get("section") != "":
             url_kwargs["section"] = kwargs.get("section")
 
-            if kwargs.get(f'{kwargs.get("part")}-version') is not None:
-                url_kwargs["version"] = kwargs.get(f'{kwargs.get("part")}-version')
-
         citation = [url_kwargs["part"]]
         if url_kwargs.get("section"):
             citation.append(url_kwargs["section"])
