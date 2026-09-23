@@ -3,10 +3,6 @@ name: Unit Test Parsers
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    paths:
-      - "solution/parsers/**"
-      - "solution/backend/parsers/**"
-      - "cdk-eregs/lib/stacks/*parser*"
   push:
     branches:
       - main
