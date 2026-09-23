@@ -1,7 +1,7 @@
 """Entry point for eCFR XML parser modules."""
 
 from typing import Any
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 from .errors import EcfrXmlParseError
 from .labels import parse_label_tokens, resolve_div_node_type
@@ -45,7 +45,7 @@ def _parse_xml_root(raw_xml: str) -> ElementTree.Element:
         raise EcfrXmlParseError("eCFR XML payload must be a non-empty string")
 
     try:
-        return ElementTree.fromstring(raw_xml)
+        return ElementTree.fromstring(raw_xml)  # noqa: S314
     except ElementTree.ParseError as exc:
         raise EcfrXmlParseError(f"unable to parse eCFR XML payload: {exc}") from exc
 

@@ -4,9 +4,9 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
-from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError
 
 
 def _load_fedreg_client():
@@ -128,7 +128,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
 
         docs = _eregs.fetch_existing_document_numbers(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
         )
 
         self.assertEqual(docs, ["2026-0001", "2026-0002"])
@@ -144,7 +144,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "document list request failed"):
             _eregs.fetch_existing_document_numbers(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             )
 
     @patch("requests.post")
@@ -157,7 +157,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
 
         result = _eregs.create_fr_launcher_result(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload={"success": True, "log": ""},
         )
 
@@ -173,7 +173,7 @@ class FrLauncherEregsClientTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "launcher result upload failed"):
             _eregs.create_fr_launcher_result(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload={"success": False, "log": "boom"},
             )
 

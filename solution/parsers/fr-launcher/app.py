@@ -11,6 +11,7 @@ import logging
 import os
 from typing import Any
 
+from common.auth import resolve_backend_credentials
 from common.config import require_bool_config
 from common.eregs_config import fetch_parser_config
 from common.launcher import (
@@ -19,8 +20,6 @@ from common.launcher import (
     is_local_mode,
 )
 from common.logging import resolve_parser_log_level
-
-from common.auth import resolve_backend_credentials
 
 from .eregs_client import (
     create_fr_launcher_result,

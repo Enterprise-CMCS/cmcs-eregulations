@@ -3,9 +3,8 @@ from importlib import util
 from pathlib import Path
 from unittest.mock import patch
 
-from common.config import ConfigParseError
-
 from common.auth import BackendCredentials
+from common.config import ConfigParseError
 
 
 def _load_module():

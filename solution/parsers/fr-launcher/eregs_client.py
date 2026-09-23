@@ -6,9 +6,8 @@ deduplication) and writes Federal Register launcher run results.
 
 from typing import Any
 
-from common.eregs_client import send_json
-
 from common.auth import BackendCredentials
+from common.eregs_client import send_json
 
 
 def fetch_existing_document_numbers(

@@ -1,6 +1,6 @@
 """Metadata node parsers for AUTH/SOURCE/EDNOTE elements."""
 
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 from .readers import read_child_text
 

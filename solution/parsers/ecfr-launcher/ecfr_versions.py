@@ -9,6 +9,7 @@ from typing import Any
 from urllib.parse import urljoin
 
 import requests
+
 from common.ecfr import ECFR_V1_BASE_URL
 from common.http import execute_request, parse_json_response
 

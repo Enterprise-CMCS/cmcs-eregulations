@@ -1,8 +1,8 @@
+import sys
+import types
 import unittest
 from importlib import util
 from pathlib import Path
-import sys
-import types
 from unittest.mock import patch
 
 
@@ -171,7 +171,13 @@ class EcfrWorkerXmlPostprocessTests(unittest.TestCase):
             {"input": "(6)(i)", "expected": ["6", "i"]},
             {"input": "(6)(i)(1)", "expected": ["6", "i", "1"]},
             {
-                "input": "(2) <I>One of the following documents that show a U.S. place of birth and was created at least 5 years before the application for Medicaid.</I> (For children under 16 the document must have been created near the time of birth or 5 years before the date of application.) This document must be one of the following and show a U.S. place of birth",
+                "input": (
+                    "(2) <I>One of the following documents that show a U.S. place of birth and was "
+                    "created at least 5 years before the application for Medicaid.</I> "
+                    "(For children under 16 the document must have been created near the time of birth "
+                    "or 5 years before the date of application.) This document must be one of the "
+                    "following and show a U.S. place of birth"
+                ),
                 "expected": ["2"],
             },
             {

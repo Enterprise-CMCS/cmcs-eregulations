@@ -4,9 +4,9 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
-from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError
 
 
 def _load_module(module_name: str, relative_path: str):
@@ -46,7 +46,7 @@ class FrWorkerClientsTests(unittest.TestCase):
 
         result = _eregs_client.upload_fr_document(
             api_base_url="https://example.local/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload=dict(_VALID),
         )
 
@@ -65,7 +65,7 @@ class FrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "upload failed"):
             _eregs_client.upload_fr_document(
                 api_base_url="https://example.local/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload=dict(_VALID),
             )
 
@@ -75,7 +75,7 @@ class FrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "missing required fields"):
             _eregs_client.upload_fr_document(
                 api_base_url="https://example.local/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload=payload,
             )
 
@@ -89,7 +89,7 @@ class FrWorkerClientsTests(unittest.TestCase):
 
         result = _eregs_client.create_fr_result(
             api_base_url="https://example.local/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload={"success": True, "log": "", "document_number": "2025-12345"},
         )
 
@@ -105,7 +105,7 @@ class FrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "result upload failed"):
             _eregs_client.create_fr_result(
                 api_base_url="https://example.local/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload={"success": False, "log": "failure", "document_number": "2025-12345"},
             )
 

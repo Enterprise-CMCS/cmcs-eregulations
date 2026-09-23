@@ -1,7 +1,7 @@
 """Parsers for section and appendix child node content."""
 
 from typing import Any
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 from .readers import collect_inner_xml, read_child_text
 from .splitters import split_paragraph_node

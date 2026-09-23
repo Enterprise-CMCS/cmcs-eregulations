@@ -9,9 +9,10 @@ configured title set.
 
 import logging
 import re
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ET  # noqa: S405
 
 import requests
+
 from common.fedreg import FedRegClientError
 from common.http import execute_request
 
@@ -50,7 +51,7 @@ def fetch_full_text_sections(
     ranges: list[str] = []
 
     try:
-        root = ET.fromstring(response.content)
+        root = ET.fromstring(response.content)  # noqa: S314
     except ET.ParseError as exc:
         raise FedRegClientError("Federal Register full text XML could not be parsed") from exc
 

@@ -4,9 +4,8 @@ from importlib import util
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from common.eregs_config import fetch_parser_config
-
 from common.auth import BackendCredentials
+from common.eregs_config import fetch_parser_config
 
 
 def _load_module():
@@ -36,7 +35,7 @@ class EcfrLauncherConfigTests(unittest.TestCase):
         with patch("requests.get", return_value=response) as mock_get:
             payload = fetch_parser_config(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="user", password="pass"),
+                credentials=BackendCredentials(auth_type="basic", username="user", password="pass"),  # noqa: S106
             )
 
         self.assertEqual(payload, {"parts": []})
@@ -55,7 +54,7 @@ class EcfrLauncherConfigTests(unittest.TestCase):
         with patch("requests.get", return_value=response) as mock_get:
             payload = fetch_existing_part_dates_by_title(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="user", password="pass"),
+                credentials=BackendCredentials(auth_type="basic", username="user", password="pass"),  # noqa: S106
                 title_number=42,
             )
 

@@ -3,6 +3,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 import boto3
+from moto import mock_aws
+
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -10,7 +12,6 @@ from common.launcher import (
     send_work_units,
     send_work_units_via_http,
 )
-from moto import mock_aws
 
 
 class CommonLauncherTests(unittest.TestCase):

@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import requests
+
 from common.fedreg import FedRegClientError
 from common.http import execute_request, parse_json_response
 

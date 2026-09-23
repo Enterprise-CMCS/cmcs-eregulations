@@ -2,21 +2,24 @@ import base64
 import unittest
 from unittest.mock import patch
 
-from common.config import ConfigParseError
-
 from common.auth import BackendCredentials, build_auth_headers, resolve_backend_credentials
+from common.config import ConfigParseError
 
 
 class CommonAuthTests(unittest.TestCase):
     def test_build_auth_headers_basic(self):
         headers = build_auth_headers(
-            BackendCredentials(auth_type="basic", username="queue-user", password="queue-pass")
+            BackendCredentials(
+                auth_type="basic",
+                username="queue-user",
+                password="queue-pass",  # noqa: S106
+            )
         )
         expected = "Basic " + base64.b64encode(b"queue-user:queue-pass").decode("utf-8")
         self.assertEqual(headers, {"Authorization": expected})
 
     def test_build_auth_headers_bearer(self):
-        headers = build_auth_headers(BackendCredentials(auth_type="bearer", token="secret-token"))
+        headers = build_auth_headers(BackendCredentials(auth_type="bearer", token="secret-token"))  # noqa: S106
         self.assertEqual(headers, {"Authorization": "Bearer secret-token"})
 
     def test_build_auth_headers_invalid(self):
@@ -44,7 +47,7 @@ class CommonAuthTests(unittest.TestCase):
                 load_secret.return_value = BackendCredentials(
                     auth_type="basic",
                     username="secret-user",
-                    password="secret-pass",
+                    password="secret-pass",  # noqa: S106
                 )
                 creds = resolve_backend_credentials()
 

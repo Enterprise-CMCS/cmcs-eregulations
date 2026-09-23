@@ -4,7 +4,6 @@ from typing import Any
 
 from .models import MetadataNode, PartNode, XmlNode
 
-
 _CONTAINER_NODE_TYPES = {"PART", "SUBPART", "SUBJGRP", "SECTION", "APPENDIX"}
 _CONTENT_NODE_TYPES = {
     "Extract",

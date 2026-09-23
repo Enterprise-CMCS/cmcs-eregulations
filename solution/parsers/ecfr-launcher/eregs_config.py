@@ -9,6 +9,8 @@ from typing import Any
 from urllib.parse import urljoin
 
 import requests
+
+from common.auth import BackendCredentials, build_auth_headers
 from common.config import ConfigParseError, require_bool, require_non_empty_string, require_positive_int
 from common.ecfr import (
     ECFR_V1_BASE_URL,
@@ -18,8 +20,6 @@ from common.ecfr import (
 )
 from common.eregs_config import EregsConfigError
 from common.http import execute_request, parse_json_response
-
-from common.auth import BackendCredentials, build_auth_headers
 
 
 @dataclass(frozen=True)

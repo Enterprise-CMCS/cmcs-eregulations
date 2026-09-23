@@ -59,7 +59,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
                     "upload_supplemental_locations": True,
                 },
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 parser_log_level="INFO",
                 launcher_result_id=10,
@@ -98,7 +98,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
                     "upload_supplemental_locations": True,
                 },
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 parser_log_level="INFO",
                 launcher_result_id=10,
@@ -119,7 +119,7 @@ class EcfrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "resolve_backend_credentials",
-            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
         ), patch.object(
             _module,
             "fetch_parser_config",

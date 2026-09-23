@@ -4,9 +4,9 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
-from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError
 
 
 def _load_module(module_name: str, relative_path: str):
@@ -79,7 +79,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
 
         result = _eregs_client.upload_part(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload=payload,
         )
 
@@ -108,7 +108,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "upload failed"):
             _eregs_client.upload_part(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload=payload,
             )
 
@@ -122,7 +122,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
 
         result = _cregs.create_ecfr_result(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload={
                 "success": True,
                 "log": "",
@@ -144,7 +144,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "result upload failed"):
             _cregs.create_ecfr_result(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload={
                     "success": False,
                     "log": "failure",
@@ -164,7 +164,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
 
         result = _cregs.update_ecfr_result(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             result_id=5,
             payload={"status": "succeeded", "log": ""},
         )
@@ -181,7 +181,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "result update failed"):
             _cregs.update_ecfr_result(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 result_id=5,
                 payload={"status": "failed", "log": "failure"},
             )
@@ -200,7 +200,7 @@ class EcfrWorkerClientsTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "missing required fields"):
             _eregs_client.upload_part(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload=payload,
             )
 

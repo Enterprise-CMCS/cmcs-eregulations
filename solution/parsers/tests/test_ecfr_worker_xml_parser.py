@@ -1,9 +1,9 @@
-import unittest
 import json
-from importlib import util
-from pathlib import Path
 import sys
 import types
+import unittest
+from importlib import util
+from pathlib import Path
 
 
 def _load_module():

@@ -1,8 +1,8 @@
+import sys
+import types
 import unittest
 from importlib import util
 from pathlib import Path
-import sys
-import types
 
 
 def _load_models_module():
