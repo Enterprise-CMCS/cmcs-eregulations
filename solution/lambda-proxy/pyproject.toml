@@ -1,3 +1,11 @@
+[project]
+name = "lambda-proxy"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "ruff==0.15.0",
+]
+
 [tool.ruff]
 [lint]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.

@@ -9,6 +9,7 @@ dependencies = [
     "fastmcp==4.0.2",
     "mangum==0.21.0",
     "requests==2.33.0",
+    "ruff==0.15.0",
 ]
 
 [tool.ruff]

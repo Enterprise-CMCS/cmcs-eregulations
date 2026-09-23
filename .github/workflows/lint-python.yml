@@ -46,7 +46,7 @@ jobs:
         run: |
           pushd solution/parsers
           uv sync --locked --no-install-project
-          uv run --with ruff ruff check --preview .
+          uv run ruff check --preview .
           popd
 
       # Lint the MCP server Python code
@@ -54,12 +54,13 @@ jobs:
         run: |
           pushd solution/mcp-server
           uv sync --locked --no-install-project
-          uv run --with ruff ruff check --preview .
+          uv run ruff check --preview .
           popd
 
       # Lint the lambda-proxy Python code
       - name: Lint lambda-proxy code
         run: |
           pushd solution/lambda-proxy
-          uv run --with ruff ruff check --preview .
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
           popd
