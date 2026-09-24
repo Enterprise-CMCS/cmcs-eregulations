@@ -79,6 +79,26 @@ Key CDK-specific parameters are stored in AWS Parameter Store, such as:
 ### Secrets Manager
 All credentials are stored in AWS Secrets Manager. The only credentials loaded at deploy-time are for setting up the database. All others are loaded at Lambda runtime.
 
+### Admin Login Access Control
+
+The Django username/password login at `/admin/login/` is disabled by default. Normal EUA/IDM SSO at `/login/` and `/oidc/` is unaffected.
+
+Before deploying, create the following configuration items in AWS:
+
+- SSM String parameter `/eregulations/admin-login-enabled` with value `false`.
+  - Set the value to `true` only during an approved EUA/IDM outage to temporarily restore the Django admin credential-login page.
+  - The site Lambda reads this parameter at runtime, so a deployment is not required to enable or disable emergency access. Changes can take up to 60 seconds to take effect in warm Lambda instances.
+- Secrets Manager secret `/eregulations/admin-login-cypress-token` containing a high-entropy token in this JSON shape:
+  ```json
+  {"token":"<high-entropy-random-token>"}
+  ```
+  - The Cypress deployment job retrieves this secret and sends it only with `/admin/**` test requests, allowing automated credential-login tests while the public route remains disabled.
+  - Do not commit, log, or expose this token outside the authorized CI secret flow.
+
+The deployed site Lambda has permission to read only these named resources. The GitHub deployment role must also be allowed to read `/eregulations/admin-login-cypress-token` for Cypress tests.
+
+For local development, `ADMIN_LOGIN_LOCAL_OVERRIDE` defaults to `true`. Set it to `false` to exercise the disabled behavior without AWS access.
+
 ## Best Practices
 - Use ephemeral environments for testing PRs to avoid impacting shared resources.
 - Regularly update the CDK bootstrap template using the `update_template.py` script in the `bootstrap/` directory.
