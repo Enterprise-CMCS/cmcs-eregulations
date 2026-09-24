@@ -28,10 +28,20 @@ const selectedPart = ref("");
 const selectedTitle = ref("");
 const selectedSection = ref("");
 const namedParts = ref([]);
+let activeTitleRequest = "";
 
 const getParts = async (title) => {
+    activeTitleRequest = title;
+    namedParts.value = [];
+
     const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
+    if (title !== activeTitleRequest) {
+        return;
+    }
     namedParts.value = partsList.map((part) => part.name);
+    if (!namedParts.value.includes(selectedPart.value)) {
+        selectedPart.value = "";
+    }
 };
 
 const getLink = () => {
@@ -45,13 +55,15 @@ const getLink = () => {
 onMounted(async () => {
     titles.value = await getTitles({ apiUrl: props.apiUrl });
 
-    if (props.title !== "") {
-        selectedTitle.value = props.title;
-    } else {
-        selectedTitle.value = titles.value[0];
+    if (selectedTitle.value === "") {
+        if (props.title !== "") {
+            selectedTitle.value = props.title;
+        } else if (titles.value.length > 0) {
+            selectedTitle.value = titles.value[0];
+        }
     }
 
-    if (props.part !== "") {
+    if (props.part !== "" && selectedPart.value === "") {
         selectedPart.value = props.part;
     }
 });
@@ -59,6 +71,7 @@ onMounted(async () => {
 watch(selectedTitle, (title) => {
     if (title === "") {
         selectedPart.value = "";
+        namedParts.value = [];
     } else {
         getParts(title);
     }
@@ -105,7 +118,7 @@ watch(selectedTitle, (title) => {
                 >
                     <option
                         value=""
-                        disable
+                        disabled
                         selected
                     >
                         Part
