@@ -1,7 +1,11 @@
 // login via policy repository page for now
 export const eregsLogin = ({ username, password, landingPage = "/" }) => {
-    cy.visit("/admin");
-    cy.wait(1000);
+    const cypressAdminToken = Cypress.env("ADMIN_LOGIN_TOKEN");
+    cy.visit("/admin/login/", {
+        headers: cypressAdminToken
+            ? { "X-eRegs-Cypress-Admin-Token": cypressAdminToken }
+            : {},
+    });
     cy.get("#id_username").type(username);
     cy.get("#id_password").type(password);
     cy.get("#login-form").submit();

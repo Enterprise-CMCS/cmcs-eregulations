@@ -9,6 +9,8 @@ from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings
 
 _CACHE_TTL_SECONDS = 60
+_CYPRESS_SESSION_GRANT_SECONDS = 300
+_CYPRESS_SESSION_KEY = "cypress_admin_login_grant_expires_at"
 _cache_expires_at = 0.0
 _cached_manual_enabled = False
 _cached_cypress_token = None
@@ -22,12 +24,15 @@ def is_admin_login_enabled(request):
         return _is_enabled_value(local_override)
 
     manual_enabled, cypress_token = _get_cached_access_configuration()
-    request_token = request.headers.get("X-Eregs-Cypress-Admin-Token", "")
-    return manual_enabled or (
-        isinstance(cypress_token, str)
-        and bool(request_token)
-        and secrets.compare_digest(request_token, cypress_token)
-    )
+    return manual_enabled or _has_cypress_session_grant(request) or _has_valid_cypress_token(request, cypress_token)
+
+
+def grant_cypress_admin_login_session(request):
+    """Grant this browser a brief login-form session after a valid Cypress token request."""
+
+    _, cypress_token = _get_cached_access_configuration()
+    if _has_valid_cypress_token(request, cypress_token):
+        request.session[_CYPRESS_SESSION_KEY] = time.time() + _CYPRESS_SESSION_GRANT_SECONDS
 
 
 def _get_cached_access_configuration():
@@ -71,6 +76,16 @@ def _get_cypress_token():
 
 def _is_enabled_value(value):
     return isinstance(value, str) and value.strip().lower() == "true"
+
+
+def _has_cypress_session_grant(request):
+    expires_at = request.session.get(_CYPRESS_SESSION_KEY)
+    return isinstance(expires_at, (int, float)) and expires_at >= time.time()
+
+
+def _has_valid_cypress_token(request, cypress_token):
+    request_token = request.headers.get("X-eRegs-Cypress-Admin-Token", "")
+    return isinstance(cypress_token, str) and bool(request_token) and secrets.compare_digest(request_token, cypress_token)
 
 
 def clear_admin_login_cache():

@@ -77,6 +77,10 @@ class AdminLoginViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="id_username"')
 
+        response = self.client.post("/admin/login/")
+
+        self.assertEqual(response.status_code, 200)
+
     def test_admin_login_rejects_invalid_cypress_token(self):
         response = self.client.get(
             "/admin/login/",
