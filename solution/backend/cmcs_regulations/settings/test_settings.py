@@ -28,6 +28,7 @@ SERVER_PASSWORD = os.environ.get("SERVER_PASSWORD", '')
 # TODO - this should be removed after we merge euasettings.py with base.py in teh future
 
 BASE_URL = os.environ.get("BASE_URL", "")
+ADMIN_LOGIN_LOCAL_OVERRIDE = os.environ.get("ADMIN_LOGIN_LOCAL_OVERRIDE", "true")
 from .euasettings import * # noqa
 
 OIDC_OP_JWKS_ENDPOINT = "/example/jwks/endpoint/"

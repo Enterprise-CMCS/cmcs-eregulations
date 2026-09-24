@@ -474,6 +474,7 @@ jobs:
           secret-ids: |
             CYPRESS_TEST, /eregulations/http/credentials
             CYPRESS_READER, /eregulations/http/reader_credentials
+            /eregulations/admin-login-cypress-token,CYPRESS_ADMIN_LOGIN
           name-transformation: uppercase
           parse-json-secrets: true
 

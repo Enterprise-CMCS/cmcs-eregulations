@@ -124,6 +124,8 @@ const SECRET_NAMES = {
     HTTP_CREDENTIALS: '/eregulations/http/credentials',
 } as const;
 
+const ADMIN_LOGIN_CYPRESS_TOKEN_SECRET = '/eregulations/admin-login-cypress-token';
+
 /**
  * Combined Backend Stack for managing API and Database resources
  * @class BackendStack
@@ -284,6 +286,8 @@ export class BackendStack extends cdk.Stack {
             HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
             DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
             READER_SECRET: SECRET_NAMES.READER_CREDENTIALS,
+            ADMIN_LOGIN_ENABLED_PARAMETER: '/eregulations/admin-login-enabled',
+            ADMIN_LOGIN_CYPRESS_TOKEN_SECRET,
         };
 
         // ================================
@@ -396,6 +400,26 @@ export class BackendStack extends cdk.Stack {
                 }),
             );
         });
+
+        regSiteLambda.addToRolePolicy(
+            new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: ['ssm:GetParameter'],
+                resources: [
+                    `arn:aws:ssm:${this.region}:${this.account}:parameter/eregulations/admin-login-enabled`,
+                ],
+            }),
+        );
+
+        regSiteLambda.addToRolePolicy(
+            new iam.PolicyStatement({
+                effect: iam.Effect.ALLOW,
+                actions: ['secretsmanager:GetSecretValue'],
+                resources: [
+                    `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${ADMIN_LOGIN_CYPRESS_TOKEN_SECRET}*`,
+                ],
+            }),
+        );
 
         // Bedrock permissions for site lambda
         regSiteLambda.addToRolePolicy(
