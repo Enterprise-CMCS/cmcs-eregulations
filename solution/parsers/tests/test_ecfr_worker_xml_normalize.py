@@ -1,8 +1,8 @@
+import sys
+import types
 import unittest
 from importlib import util
 from pathlib import Path
-import sys
-import types
 
 
 def _load_modules():
@@ -149,6 +149,7 @@ class EcfrWorkerXmlNormalizeTests(unittest.TestCase):
         self.assertEqual(normalized["authority"], {"node_type": "Authority", "header": "", "content": ""})
         self.assertIsNone(normalized["source"])
         self.assertIsNone(normalized["editorial_note"])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -42,7 +42,7 @@ class EcfrWorkerAppTests(unittest.TestCase):
             upload_reg_text=upload_reg_text,
             upload_locations=upload_locations,
             log_level="INFO",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
         )
 
     def test_handler_updates_result_to_succeeded(self):

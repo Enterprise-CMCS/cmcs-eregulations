@@ -7,9 +7,8 @@ common.eregs_client.
 
 from typing import Any
 
-from common.eregs_client import EregsClientError, send_json
-
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError, send_json
 
 REQUIRED_PART_FIELDS = (
     "name",

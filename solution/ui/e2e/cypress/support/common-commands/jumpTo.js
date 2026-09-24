@@ -1,12 +1,11 @@
 // Jump To
 export const jumpToRegulationPart = ({ title, part }) => {
-    cy.get("#jumpToTitle")
-        .select(title, { force: true });
-    cy.get("#jumpToTitle")
-        .then(() => {
-            cy.get("#jumpToPart").should("be.visible").select(part);
-        });
-    cy.get("#jumpBtn").click({ force: true });
+    cy.get("#jumpToTitle").select(title);
+    cy.get("#jumpToPart").should("not.be.disabled");
+    cy.get(`#jumpToPart option[value="${part}"]`).should("exist");
+    cy.get("#jumpToPart").select(part);
+    cy.get("#jumpToPart").should("have.value", part);
+    cy.get("#jumpBtn").should("not.be.disabled").click();
     cy.url().should(
         "eq",
         Cypress.config().baseUrl + `/${title}/${part}/full/#${part}`
@@ -15,9 +14,12 @@ export const jumpToRegulationPart = ({ title, part }) => {
 
 export const jumpToRegulationPartSection = ({ title, part, section }) => {
     cy.get("#jumpToTitle").select(title);
-    cy.get("#jumpToPart").should("be.visible").select(part);
+    cy.get("#jumpToPart").should("not.be.disabled");
+    cy.get(`#jumpToPart option[value="${part}"]`).should("exist");
+    cy.get("#jumpToPart").select(part);
+    cy.get("#jumpToPart").should("have.value", part);
     cy.get("#jumpToSection").type(section);
-    cy.get("#jumpBtn").click({ force: true });
+    cy.get("#jumpBtn").should("not.be.disabled").click();
 
     cy.url().then((urlString) => {
         const subpartMatch = Cypress.minimatch(

@@ -8,9 +8,8 @@ EregsClientError and the generic send_json client live in common.eregs_client.
 
 from typing import Any
 
-from common.eregs_client import EregsClientError, send_json
-
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError, send_json
 
 REQUIRED_DOCUMENT_FIELDS = (
     "name",

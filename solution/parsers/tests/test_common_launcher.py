@@ -3,6 +3,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 import boto3
+from moto import mock_aws
+
 from common.launcher import (
     build_launcher_response,
     dispatch_work_units,
@@ -10,7 +12,6 @@ from common.launcher import (
     send_work_units,
     send_work_units_via_http,
 )
-from moto import mock_aws
 
 
 class CommonLauncherTests(unittest.TestCase):
@@ -23,11 +24,12 @@ class CommonLauncherTests(unittest.TestCase):
 
     @mock_aws
     def test_send_work_units(self):
-        sqs = boto3.client("sqs", region_name="us-east-1")
-        queue_url = sqs.create_queue(QueueName="parser-test-queue")["QueueUrl"]
-        work_units = [{"config": {"title_number": 42}}]
+        with patch.dict("os.environ", {"AWS_DEFAULT_REGION": "us-east-1"}, clear=False):
+            sqs = boto3.client("sqs")
+            queue_url = sqs.create_queue(QueueName="parser-test-queue")["QueueUrl"]
+            work_units = [{"config": {"title_number": 42}}]
 
-        send_work_units(queue_url, work_units)
+            send_work_units(queue_url, work_units)
 
         response = sqs.receive_message(QueueUrl=queue_url, MaxNumberOfMessages=1)
         messages = response.get("Messages", [])

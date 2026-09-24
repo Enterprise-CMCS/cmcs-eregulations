@@ -1,7 +1,7 @@
 """Parsers for DIV-based part/subpart/section/appendix structures."""
 
 from typing import Any
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 from .labels import parse_appendix_label_tokens, parse_label_tokens, resolve_div_node_type
 from .metadata import parse_metadata_element

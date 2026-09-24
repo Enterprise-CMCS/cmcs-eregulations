@@ -6,6 +6,7 @@ This module enforces the queue contract produced by the eCFR launcher.
 from dataclasses import dataclass
 from datetime import datetime
 
+from common.auth import BackendCredentials, resolve_backend_credentials
 from common.config import (
     ConfigParseError,
     parse_typed_config_from_event,
@@ -15,8 +16,6 @@ from common.config import (
     unwrap_config,
 )
 from common.logging import resolve_work_unit_log_level
-
-from common.auth import BackendCredentials, resolve_backend_credentials
 
 
 @dataclass

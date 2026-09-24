@@ -4,9 +4,9 @@ This module centralizes how parser services resolve eRegs auth credentials
 from event payloads, AWS Secrets Manager, and environment variables.
 """
 
+import base64
 import json
 import os
-import base64
 from dataclasses import dataclass
 
 from common.config import ConfigParseError, parse_credentials
@@ -48,7 +48,10 @@ def resolve_backend_credentials() -> BackendCredentials:
             }
         )
 
-    raise ConfigParseError("Backend credentials are not configured; set EREGS_AUTH_SECRET_NAME, EREGS_BEARER_TOKEN, or EREGS_USERNAME/EREGS_PASSWORD")
+    raise ConfigParseError(
+        "Backend credentials are not configured; set EREGS_AUTH_SECRET_NAME, "
+        "EREGS_BEARER_TOKEN, or EREGS_USERNAME/EREGS_PASSWORD"
+    )
 
 
 def build_auth_headers(credentials: BackendCredentials) -> dict[str, str]:
@@ -84,6 +87,8 @@ def _load_credentials_from_secret(secret_name: str) -> BackendCredentials:
         raise ConfigParseError("Secrets Manager secret must contain valid JSON") from exc
 
     return parse_credentials(payload)
+
+
 def _get_secrets_client():
     """Create a Secrets Manager client."""
 

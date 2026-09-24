@@ -53,7 +53,7 @@ def _config(**overrides):
         "raw_text_url": "https://example/x.txt",
         "full_text_xml_url": "https://example/x.xml",
         "log_level": "DEBUG",
-        "credentials": BackendCredentials(auth_type="basic", username="u", password="p"),
+        "credentials": BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
     }
     base.update({k: v for k, v in overrides.items() if v is not None})
     return SimpleNamespace(**base)

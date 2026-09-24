@@ -68,7 +68,7 @@ class FrLauncherAppTests(unittest.TestCase):
             work_units, skipped_count = _module._build_work_units(
                 parser_config={},
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 parser_log_level="INFO",
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 fr_api_base_url="https://www.federalregister.gov",
@@ -95,7 +95,7 @@ class FrLauncherAppTests(unittest.TestCase):
             work_units, skipped_count = _module._build_work_units(
                 parser_config={},
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 parser_log_level="INFO",
                 ecfr_api_base_url="https://ecfr.example/api/versioner/v1/",
                 fr_api_base_url="https://www.federalregister.gov",
@@ -115,7 +115,7 @@ class FrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "resolve_backend_credentials",
-            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
         ), patch.object(
             _module,
             "fetch_parser_config",
@@ -158,7 +158,7 @@ class FrLauncherAppTests(unittest.TestCase):
         ), patch.object(
             _module,
             "resolve_backend_credentials",
-            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
         ), patch.object(
             _module,
             "fetch_parser_config",

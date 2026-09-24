@@ -5,7 +5,7 @@ post-processing, and final document normalization.
 """
 
 from dataclasses import dataclass, field
-from typing import Literal, TypedDict, TypeAlias
+from typing import Literal, TypeAlias, TypedDict
 
 
 class ContainerNode(TypedDict):

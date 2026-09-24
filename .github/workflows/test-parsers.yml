@@ -1,0 +1,43 @@
+name: Unit Test Parsers
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  test-parsers:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install parser test dependencies
+        run: |
+          python -m pip install --upgrade pip uv
+          pushd solution/parsers
+          uv sync --locked
+          popd
+
+      - name: Run parser unit tests
+        env:
+          AWS_REGION: us-east-1
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          pushd solution
+          make parsers.test
+          popd

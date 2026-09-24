@@ -1,6 +1,6 @@
 """XML child-reading helpers for eCFR parser nodes."""
 
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 
 def read_child_text(root: ElementTree.Element, tag: str) -> str:

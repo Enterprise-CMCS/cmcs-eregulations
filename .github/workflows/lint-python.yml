@@ -40,3 +40,27 @@ jobs:
           uv sync --locked --no-install-project
           uv run ruff check --preview .
           popd
+
+      # Lint the parser Python code
+      - name: Lint parser code
+        run: |
+          pushd solution/parsers
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
+          popd
+
+      # Lint the MCP server Python code
+      - name: Lint mcp-server code
+        run: |
+          pushd solution/mcp-server
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
+          popd
+
+      # Lint the lambda-proxy Python code
+      - name: Lint lambda-proxy code
+        run: |
+          pushd solution/lambda-proxy
+          uv sync --locked --no-install-project
+          uv run ruff check --preview .
+          popd

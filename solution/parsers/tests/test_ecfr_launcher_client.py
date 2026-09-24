@@ -4,9 +4,9 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import requests
-from common.eregs_client import EregsClientError
 
 from common.auth import BackendCredentials
+from common.eregs_client import EregsClientError
 
 
 def _load_module():
@@ -33,7 +33,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
 
         result = _module.create_ecfr_launcher_result(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload={"success": True, "log": ""},
         )
 
@@ -49,7 +49,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "launcher result upload failed"):
             _module.create_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload={"success": False, "log": "boom"},
             )
 
@@ -63,7 +63,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
 
         result = _module.update_ecfr_launcher_result(
             api_base_url="https://example.local/v3/",
-            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+            credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
             payload={"success": True, "log": "queued=2 skipped=1"},
         )
 
@@ -79,7 +79,7 @@ class EcfrLauncherClientTests(unittest.TestCase):
         with self.assertRaisesRegex(EregsClientError, "launcher result update failed"):
             _module.update_ecfr_launcher_result(
                 api_base_url="https://example.local/v3/",
-                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),
+                credentials=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
                 payload={"success": True, "log": "queued=2 skipped=1"},
             )
 

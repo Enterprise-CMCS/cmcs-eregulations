@@ -239,4 +239,4 @@ def _paragraph_hash(text: Any) -> str:
 
     if not isinstance(text, str):
         text = ""
-    return hashlib.md5(text.encode("utf-8")).hexdigest()
+    return hashlib.md5(text.encode("utf-8")).hexdigest()  # noqa: S324

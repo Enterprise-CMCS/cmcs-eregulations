@@ -1,7 +1,8 @@
 # CMCS eRegulations
 
 [![Deploy](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/deploy.yml)
-[![Parser Tests](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-and-test-parsers.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-and-test-parsers.yml)
+[![Parser Tests](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/test-parsers.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/test-parsers.yml)
+[![Lint Python](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-python.yml/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/lint-python.yml)
 [![CodeQL](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Enterprise-CMCS/cmcs-eregulations/actions/workflows/github-code-scanning/codeql/)
 
 # About

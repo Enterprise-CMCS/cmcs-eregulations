@@ -1,6 +1,6 @@
 """Label and node-type helpers for eCFR XML parsing."""
 
-from xml.etree import ElementTree
+from xml.etree import ElementTree  # noqa: S405
 
 _DIV_NODE_TYPE_FALLBACKS: dict[str, str] = {
     "DIV5": "PART",
