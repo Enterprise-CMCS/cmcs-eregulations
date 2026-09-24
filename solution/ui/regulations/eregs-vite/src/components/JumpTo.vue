@@ -31,6 +31,9 @@ const namedParts = ref([]);
 
 const getParts = async (title) => {
     const partsList = await fetchParts({ title, apiUrl: props.apiUrl });
+    if (selectedTitle.value !== title) {
+        return;
+    }
     namedParts.value = partsList.map((part) => part.name);
 };
 
