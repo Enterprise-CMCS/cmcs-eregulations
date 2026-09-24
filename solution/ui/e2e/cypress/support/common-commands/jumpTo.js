@@ -1,10 +1,8 @@
 // Jump To
 export const jumpToRegulationPart = ({ title, part }) => {
     cy.get("#jumpToTitle").select(title);
-    cy.get("#jumpToPart")
-        .should("not.be.disabled")
-        .find(`option[value="${part}"]`)
-        .should("exist");
+    cy.get("#jumpToPart").should("not.be.disabled");
+    cy.get(`#jumpToPart option[value="${part}"]`).should("exist");
     cy.get("#jumpToPart").select(part).should("have.value", part);
     cy.get("#jumpBtn").should("not.be.disabled").click();
     cy.url().should(
@@ -15,10 +13,8 @@ export const jumpToRegulationPart = ({ title, part }) => {
 
 export const jumpToRegulationPartSection = ({ title, part, section }) => {
     cy.get("#jumpToTitle").select(title);
-    cy.get("#jumpToPart")
-        .should("not.be.disabled")
-        .find(`option[value="${part}"]`)
-        .should("exist");
+    cy.get("#jumpToPart").should("not.be.disabled");
+    cy.get(`#jumpToPart option[value="${part}"]`).should("exist");
     cy.get("#jumpToPart").select(part).should("have.value", part);
     cy.get("#jumpToSection").type(section);
     cy.get("#jumpBtn").should("not.be.disabled").click();
