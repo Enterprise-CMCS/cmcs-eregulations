@@ -1,5 +1,5 @@
 from django.contrib.auth.views import LoginView as DjangoLoginView
-from django.http import HttpResponseNotFound
+from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic.base import TemplateView
@@ -25,6 +25,6 @@ class AdminLoginView(DjangoLoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if not is_admin_login_enabled(request):
-            return HttpResponseNotFound()
+            raise Http404
         grant_cypress_admin_login_session(request)
         return super().dispatch(request, *args, **kwargs)
