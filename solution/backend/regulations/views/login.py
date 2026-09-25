@@ -2,6 +2,7 @@ from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+from django.views.defaults import page_not_found
 from django.views.generic.base import TemplateView
 
 from regulations.admin_login import grant_cypress_admin_login_session, is_admin_login_enabled
@@ -25,6 +26,6 @@ class AdminLoginView(DjangoLoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if not is_admin_login_enabled(request):
-            raise Http404
+            return page_not_found(request, Http404())
         grant_cypress_admin_login_session(request)
         return super().dispatch(request, *args, **kwargs)
