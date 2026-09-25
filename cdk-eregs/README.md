@@ -97,6 +97,13 @@ Before deploying, create the following configuration items in AWS:
 
 The deployed site Lambda has permission to read only these named resources. The GitHub deployment role must also be allowed to read `/eregulations/admin-login-cypress-token` for Cypress tests.
 
+The site Lambda receives these resource names through custom environment variables:
+
+- `ADMIN_LOGIN_ENABLED_PARAMETER` defines which SSM parameter controls public admin-login access.
+- `ADMIN_LOGIN_CYPRESS_TOKEN_SECRET` defines which Secrets Manager secret supplies the Cypress bypass token.
+
+The CDK stack supplies the values shown above by default. If the resource names are customized, update the corresponding CDK values and IAM resource permissions together so the Lambda can read the configured resources.
+
 For local development, `ADMIN_LOGIN_LOCAL_OVERRIDE` defaults to `true`. Set it to `false` to exercise the disabled behavior without AWS access.
 
 ## Best Practices
