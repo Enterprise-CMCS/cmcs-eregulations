@@ -117,6 +117,13 @@ Cypress.Commands.add("clearIndexedDB", async () => {
 
 // Adds basic auth to all requests, except for cy.request calls.
 beforeEach(() => {
+    cy.intercept({ pathname: /\/admin(?:\/|$)/ }, (req) => {
+        const token = Cypress.env("ADMIN_LOGIN_TOKEN");
+        if (token) {
+            req.headers["X-eRegs-Cypress-Admin-Token"] = token;
+        }
+    });
+
     cy.intercept("/**", (req) => {
         const env = Cypress.env("TEST_ENV");
         if (env !== "local" && env !== "prod") {

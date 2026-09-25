@@ -96,4 +96,5 @@ dev = [
     "pytest-cov>=7.0.0",
     "pytest-django>=4.11.1",
     "ruff>=0.14.10",
+    "moto==5.1.19",
 ]

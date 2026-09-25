@@ -15,13 +15,12 @@ Including another URLconf
 """
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views.generic.base import RedirectView, TemplateView
-from rest_framework_simplejwt import views as jwt_views
 
 from regulations.sitemap import PartSitemap
+from regulations.views.login import AdminLoginView
 
 sitemaps = {
     "Parts": PartSitemap,
@@ -31,14 +30,12 @@ urlpatterns = [
     path('', include('regcore.urls')),
     path('', include('regulations.urls')),
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'images/favicon/favicon.ico')),
-    path('admin/login/', auth_views.LoginView.as_view(template_name='admin/login.html'), name='login'),
+    path('admin/login/', AdminLoginView.as_view(), name='login'),
     path('admin/', admin.site.urls, name="admin"),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('__debug__/', include('debug_toolbar.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('oidc/', include('mozilla_django_oidc.urls')),
-    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
 admin.site.site_header = "eRegs"
 admin.site.site_title = 'eRegs Admin Panel'

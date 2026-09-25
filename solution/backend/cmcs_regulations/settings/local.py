@@ -56,6 +56,7 @@ STORAGES = {
 USE_AWS_TOKEN = True
 USE_LOCAL_TEXT_EXTRACTOR = True
 BASE_URL = os.environ.get("BASE_URL", "")
+ADMIN_LOGIN_LOCAL_OVERRIDE = os.environ.get("ADMIN_LOGIN_LOCAL_OVERRIDE", "true")
 
 # EUA settings
 from .euasettings import * # noqa
