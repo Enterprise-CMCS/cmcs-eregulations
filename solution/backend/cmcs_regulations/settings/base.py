@@ -314,3 +314,5 @@ CSP_CONNECT_SRC = [
     "http://*.analytics.google.com",
 ]
 CSP_INCLUDE_NONCE_IN = ["script-src"]
+ADMIN_LOGIN_ENABLED_PARAMETER = os.environ.get("ADMIN_LOGIN_ENABLED_PARAMETER", "")
+ADMIN_LOGIN_CYPRESS_TOKEN_SECRET = os.environ.get("ADMIN_LOGIN_CYPRESS_TOKEN_SECRET", "")

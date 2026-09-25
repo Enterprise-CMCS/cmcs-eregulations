@@ -122,9 +122,12 @@ const SECRET_NAMES = {
     READER_CREDENTIALS: '/eregulations/http/reader_credentials',
     DB_CREDENTIALS: '/eregulations/db/credentials',
     HTTP_CREDENTIALS: '/eregulations/http/credentials',
+    ADMIN_LOGIN_CYPRESS_TOKEN: '/eregulations/admin-login-cypress-token',
 } as const;
 
-const ADMIN_LOGIN_CYPRESS_TOKEN_SECRET = '/eregulations/admin-login-cypress-token';
+const PARAMETER_NAMES = {
+    ADMIN_LOGIN_ENABLED: '/eregulations/admin-login-enabled',
+} as const;
 
 /**
  * Combined Backend Stack for managing API and Database resources
@@ -286,8 +289,8 @@ export class BackendStack extends cdk.Stack {
             HTTP_AUTH_SECRET: SECRET_NAMES.HTTP_CREDENTIALS,
             DJANGO_SECRET: SECRET_NAMES.DJANGO_CREDENTIALS,
             READER_SECRET: SECRET_NAMES.READER_CREDENTIALS,
-            ADMIN_LOGIN_ENABLED_PARAMETER: '/eregulations/admin-login-enabled',
-            ADMIN_LOGIN_CYPRESS_TOKEN_SECRET,
+            ADMIN_LOGIN_ENABLED_PARAMETER: PARAMETER_NAMES.ADMIN_LOGIN_ENABLED,
+            ADMIN_LOGIN_CYPRESS_TOKEN_SECRET: SECRET_NAMES.ADMIN_LOGIN_CYPRESS_TOKEN,
         };
 
         // ================================
@@ -406,7 +409,7 @@ export class BackendStack extends cdk.Stack {
                 effect: iam.Effect.ALLOW,
                 actions: ['ssm:GetParameter'],
                 resources: [
-                    `arn:aws:ssm:${this.region}:${this.account}:parameter/eregulations/admin-login-enabled`,
+                    `arn:aws:ssm:${this.region}:${this.account}:parameter${PARAMETER_NAMES.ADMIN_LOGIN_ENABLED}`,
                 ],
             }),
         );
@@ -416,7 +419,7 @@ export class BackendStack extends cdk.Stack {
                 effect: iam.Effect.ALLOW,
                 actions: ['secretsmanager:GetSecretValue'],
                 resources: [
-                    `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${ADMIN_LOGIN_CYPRESS_TOKEN_SECRET}*`,
+                    `arn:aws:secretsmanager:${this.region}:${this.account}:secret:${SECRET_NAMES.ADMIN_LOGIN_CYPRESS_TOKEN}*`,
                 ],
             }),
         );
