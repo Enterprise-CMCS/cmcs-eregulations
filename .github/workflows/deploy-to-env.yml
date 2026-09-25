@@ -478,15 +478,6 @@ jobs:
           name-transformation: uppercase
           parse-json-secrets: true
 
-      - name: Verify Cypress admin login token is available
-        shell: bash
-        run: |
-          if [[ -z "${CYPRESS_ADMIN_LOGIN_TOKEN:-}" ]]; then
-            echo "::error::CYPRESS_ADMIN_LOGIN_TOKEN was not populated from Secrets Manager"
-            exit 1
-          fi
-          echo "Cypress admin login token is available"
-
       # Setup node environment
       - name: Setup Node
         uses: actions/setup-node@v7
