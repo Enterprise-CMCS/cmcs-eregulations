@@ -25,7 +25,9 @@ In local mode (`PARSER_LOCAL_MODE=true`), launchers call workers over HTTP throu
 
 The diagrams below show the deployed flow. In local mode, the launcher-to-SQS edge is replaced by a POST through lambda-proxy to the worker; the worker pipeline is otherwise the same.
 
-### eCFR launcher
+<details>
+<summary>eCFR launcher flowchart</summary>
+
 
 ```mermaid
 flowchart TD
@@ -57,7 +59,11 @@ flowchart TD
 
 The launcher creates the run record before processing targets. Each target gets its own `EcfrParserResult`: skipped targets are terminal immediately, while queued targets carry the result ID that the worker later updates.
 
-### eCFR worker
+</details>
+
+<details>
+<summary>eCFR worker flowchart</summary>
+
 
 ```mermaid
 flowchart TD
@@ -86,7 +92,11 @@ flowchart TD
 
 The eCFR upload endpoint is also the integration point for saving current regulation data and triggering downstream regulation-text indexing when configured. The parser result row is the per-part status source of truth for last-updated behavior.
 
-### Federal Register launcher
+</details>
+
+<details>
+<summary>Federal Register launcher flowchart</summary>
+
 
 ```mermaid
 flowchart TD
@@ -113,7 +123,11 @@ flowchart TD
 
 The FR launcher records its counts-only launcher result after dispatching work. Unlike eCFR, it does not pre-create one parser-result row per document.
 
-### Federal Register worker
+</details>
+
+<details>
+<summary>Federal Register worker flowchart</summary>
+
 
 ```mermaid
 flowchart TD
@@ -139,6 +153,8 @@ flowchart TD
 ```
 
 FR section-link extraction is intentionally non-fatal: missing XML or an extraction failure still allows the Federal Register document itself to be upserted. A document upload failure remains fatal so SQS can retry it.
+
+</details>
 
 ### eRegs data destinations
 
