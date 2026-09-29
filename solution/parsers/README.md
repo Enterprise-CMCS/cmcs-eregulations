@@ -21,6 +21,152 @@ Pipelines:
 
 In local mode (`PARSER_LOCAL_MODE=true`), launchers call workers over HTTP through lambda-proxy. In deployed mode, launchers send to SQS.
 
+## Parser flowcharts
+
+The diagrams below show the deployed flow. In local mode, the launcher-to-SQS edge is replaced by a POST through lambda-proxy to the worker; the worker pipeline is otherwise the same.
+
+<details>
+<summary>eCFR launcher flowchart</summary>
+
+
+```mermaid
+flowchart TD
+    ecfrSchedule["EventBridge daily schedule<br/>or manual invoke"] --> ecfrLauncher["eCFR launcher"]
+    ecfrLauncher --> ecfrCredentials["Resolve eRegs credentials<br/>from runtime configuration"]
+    ecfrCredentials --> ecfrConfig["GET /v3/parsers/config"]
+    ecfrConfig --> ecfrRun["POST /v3/parsers/ecfr/launcher-results<br/>create launcher-run record"]
+    ecfrRun --> ecfrTargets["Expand configured part and<br/>subchapter targets"]
+    ecfrTargets --> ecfrVersions["GET eCFR versions per title<br/>paginate all response pages"]
+    ecfrVersions --> ecfrSkipSetting{"skip_parsed_regs?"}
+    ecfrSkipSetting -- "yes" --> ecfrProcessed["GET /v3/parsers/ecfr/results/title/{title}/processed-dates"]
+    ecfrSkipSetting -- "no" --> ecfrCompare["Compare each target with<br/>latest eCFR issue_date"]
+    ecfrProcessed --> ecfrCompare
+    ecfrCompare --> ecfrStatus{"Latest date missing<br/>or already processed?"}
+    ecfrStatus -- "yes" --> ecfrSkipped["POST eCFR parser result<br/>status=skipped"]
+    ecfrStatus -- "no" --> ecfrQueued["POST eCFR parser result<br/>status=queued"]
+    ecfrQueued --> ecfrWorkUnit["Build one work unit per part<br/>including parser_result_id"]
+    ecfrSkipped --> ecfrTargetsReady["All target statuses recorded"]
+    ecfrWorkUnit --> ecfrTargetsReady
+    ecfrTargetsReady --> ecfrDispatch
+    ecfrDispatch -- "deployed" --> ecfrQueue["SQS ecfr-parser-queue<br/>one message per queued part"]
+    ecfrDispatch -- "local" --> ecfrWorkerHttp["POST through lambda-proxy<br/>to eCFR worker"]
+    ecfrQueue --> ecfrUpdate["PATCH latest eCFR launcher result<br/>with queued/skipped outcome"]
+    ecfrWorkerHttp --> ecfrUpdate
+    ecfrUpdate --> ecfrResponse["Return launcher response"]
+    ecfrTargets -. "target processing or discovery error" .-> ecfrFailure["Record failed launcher result<br/>and re-raise"]
+    ecfrDispatch -. "dispatch error" .-> ecfrFailure
+```
+
+The launcher creates the run record before processing targets. Each target gets its own `EcfrParserResult`: skipped targets are terminal immediately, while queued targets carry the result ID that the worker later updates.
+
+</details>
+
+<details>
+<summary>eCFR worker flowchart</summary>
+
+
+```mermaid
+flowchart TD
+    ecfrQueue["SQS ecfr-parser-queue<br/>or local lambda-proxy POST"] --> ecfrSingle["Require exactly one work unit"]
+    ecfrSingle --> ecfrParse["Parse and validate part config"]
+    ecfrParse --> ecfrStructure["GET eCFR current structure<br/>for title and part"]
+    ecfrStructure --> ecfrNormalize["Normalize structure<br/>and determine depth"]
+    ecfrNormalize --> ecfrText{"upload_reg_text?"}
+    ecfrText -- "yes" --> ecfrXml["GET eCFR full XML<br/>for effective_date"]
+    ecfrXml --> ecfrXmlParse["Parse XML into normalized<br/>regulation document"]
+    ecfrText -- "no" --> ecfrLocations{"upload_locations?"}
+    ecfrXmlParse --> ecfrLocations
+    ecfrLocations -- "yes" --> ecfrExtract["Extract sections and subparts<br/>from normalized structure"]
+    ecfrLocations -- "no" --> ecfrPayload["Build part upload payload"]
+    ecfrExtract --> ecfrPayload
+    ecfrPayload --> ecfrUpload["PUT /v3/parsers/ecfr/parts<br/>current Part data, text, structure,<br/>and optional locations"]
+    ecfrUpload --> ecfrSuccess["PATCH /v3/parsers/ecfr/results/{id}<br/>status=succeeded"]
+    ecfrSuccess --> ecfrDone["Return success"]
+    ecfrParse -. "parse, upstream, or upload error" .-> ecfrError["PATCH result status=failed"]
+    ecfrStructure -. "error" .-> ecfrError
+    ecfrXml -. "error" .-> ecfrError
+    ecfrUpload -. "error" .-> ecfrError
+    ecfrError --> ecfrRetry["Re-raise error for SQS redelivery"]
+    ecfrRetry --> ecfrDlq["After retry policy: ecfr-parser-dlq"]
+```
+
+The eCFR upload endpoint is also the integration point for saving current regulation data and triggering downstream regulation-text indexing when configured. The parser result row is the per-part status source of truth for last-updated behavior.
+
+</details>
+
+<details>
+<summary>Federal Register launcher flowchart</summary>
+
+
+```mermaid
+flowchart TD
+    frSchedule["EventBridge daily schedule<br/>or manual invoke"] --> frLauncher["FR launcher"]
+    frLauncher --> frCredentials["Resolve eRegs credentials<br/>from runtime configuration"]
+    frCredentials --> frConfig["GET /v3/parsers/config"]
+    frConfig --> frTargets["Expand upload_fr_docs part<br/>and subchapter targets"]
+    frTargets --> frSkipSetting{"skip_fr_documents?"}
+    frSkipSetting -- "yes" --> frExisting["GET /v3/resources/public/<br/>federal_register_links/document_numbers"]
+    frSkipSetting -- "no" --> frDiscover["Discover documents per target"]
+    frExisting --> frDiscover
+    frDiscover --> frApi["Paginate Federal Register API<br/>for each title and part"]
+    frApi --> frDedupe["Remove document_numbers<br/>already stored in eRegs"]
+    frDedupe --> frWorkUnits["Build one work unit per document<br/>after optional dedupe"]
+    frWorkUnits --> frDispatch{"PARSER_LOCAL_MODE?"}
+    frDispatch -- "deployed" --> frQueue["SQS fr-parser-queue<br/>one message per document"]
+    frDispatch -- "local" --> frWorkerHttp["POST through lambda-proxy<br/>to FR worker"]
+    frQueue --> frRun["POST /v3/parsers/fr/launcher-results<br/>counts and run outcome"]
+    frWorkerHttp --> frRun
+    frRun --> frResponse["Return launcher response"]
+    frTargets -. "target processing or discovery error" .-> frFailure["Record failed launcher result<br/>and re-raise"]
+    frDispatch -. "dispatch error" .-> frFailure
+```
+
+The FR launcher records its counts-only launcher result after dispatching work. Unlike eCFR, it does not pre-create one parser-result row per document.
+
+</details>
+
+<details>
+<summary>Federal Register worker flowchart</summary>
+
+
+```mermaid
+flowchart TD
+    frQueue["SQS fr-parser-queue<br/>or local lambda-proxy POST"] --> frSingle["Require exactly one document"]
+    frSingle --> frParse["Parse and validate document config"]
+    frParse --> frXmlAvailable{"full_text_xml_url present?"}
+    frXmlAvailable -- "no" --> frNoLinks["Continue with no section links"]
+    frXmlAvailable -- "yes" --> frFetchXml["GET Federal Register full-text XML"]
+    frFetchXml --> frExtract["Extract SECTNO/CFR references"]
+    frExtract --> frBuildLinks["Build section and section-range<br/>link payloads"]
+    frFetchXml -. "fetch or XML error" .-> frExtractFallback["Log error and continue<br/>without section links"]
+    frExtract -. "extraction error" .-> frExtractFallback
+    frNoLinks --> frUpload
+    frBuildLinks --> frUpload["PUT /v3/resources/public/<br/>federal_register_links<br/>upsert by document_number"]
+    frExtractFallback --> frUpload
+    frUpload --> frResult["POST /v3/parsers/fr/results<br/>success result for document"]
+    frResult --> frDone["Return success"]
+    frParse -. "validation or fatal error" .-> frFailureResult["POST FR parser result<br/>success=false with log"]
+    frUpload -. "upload error" .-> frFailureResult
+    frResult -. "result-post error" .-> frFailureResult
+    frFailureResult --> frRetry["Re-raise error for SQS redelivery"]
+    frRetry --> frDlq["After retry policy: fr-parser-dlq"]
+```
+
+FR section-link extraction is intentionally non-fatal: missing XML or an extraction failure still allows the Federal Register document itself to be upserted. A document upload failure remains fatal so SQS can retry it.
+
+</details>
+
+### eRegs data destinations
+
+| Parser stage | eRegs destination | Purpose |
+| --- | --- | --- |
+| eCFR launcher | `/v3/parsers/ecfr/launcher-results` | Records each launcher invocation and its outcome. |
+| eCFR launcher/worker | `/v3/parsers/ecfr/results` | Records one per-part status row; the worker updates queued rows to succeeded or failed. |
+| eCFR worker | `/v3/parsers/ecfr/parts` | Upserts current Part data, regulation text, structure, depth, sections, and subparts according to upload flags. |
+| FR launcher | `/v3/parsers/fr/launcher-results` | Records document counts and launcher outcome. |
+| FR worker | `/v3/resources/public/federal_register_links` | Upserts Federal Register metadata and extracted section/range links by document number. |
+| FR worker | `/v3/parsers/fr/results` | Records one success or failure result per processed document. |
+
 ### eCFR flow details
 
 - `ecfr-launcher/app.py` is the entry point and orchestration layer.
@@ -46,7 +192,7 @@ In local mode (`PARSER_LOCAL_MODE=true`), launchers call workers over HTTP throu
 - `fr-launcher/`: Federal Register discovery, dedupe, and queueing
 - `fr-worker/`: Federal Register document processing + upload
 - `common/`: shared auth, config, logging, HTTP, queue dispatch
-- `tests/`: parser unit tests (`python -m unittest`)
+- `tests/`: parser unit tests (run with `make parsers.test`)
 
 Shared modules in `common/` are intentionally thin and reusable:
 
@@ -105,7 +251,7 @@ Additional contracts to keep in mind:
 ## Practical debugging tips
 
 - If local launcher runs enqueue `0/N`, check `PARSER_LOCAL_MODE`, `PARSER_WORKER_URL`, and worker logs first.
-- If eCFR launcher skips too much (or nothing), inspect `/v3/parsers/config` and `/v3/title/<title>/parts` responses.
+- If eCFR launcher skips too much (or nothing), inspect `/v3/parsers/config` and `/v3/parsers/ecfr/results/title/<title>/processed-dates` responses.
 - If FR uploads succeed but results fail, check `/v3/parsers/fr/results` validation errors in backend logs.
 
 Quick places to start when debugging code:
