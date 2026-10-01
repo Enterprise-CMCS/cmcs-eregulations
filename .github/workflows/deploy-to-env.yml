@@ -38,7 +38,7 @@ permissions:
 jobs:
   deploy-static-assets:
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -135,7 +135,7 @@ jobs:
 
 
   deploy-alternate-sites:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -180,7 +180,7 @@ jobs:
             text: "<!channel> :warning: Deployment to *${{ inputs.environment }}* failed during alternate sites deployment. Please investigate. <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View workflow run.>"
 
   deploy-text-extractor:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -224,7 +224,7 @@ jobs:
 
   deploy-mcp-server:
     needs: [deploy-site]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -268,7 +268,7 @@ jobs:
 
   deploy-site:
     needs: [deploy-static-assets, deploy-text-extractor]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     outputs:
       api_url: ${{ steps.get-api-url.outputs.api_url }}
@@ -345,7 +345,7 @@ jobs:
 
   deploy-ecfr-parser:
     needs: [deploy-site]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -389,7 +389,7 @@ jobs:
 
   deploy-fr-parser:
     needs: [deploy-site]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -435,7 +435,7 @@ jobs:
     if: ${{ inputs.pr_number != '' }}
     permissions:
       pull-requests: write
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: deploy-site
     steps:
       - name: Create deployment comment
@@ -450,7 +450,7 @@ jobs:
 
   test-cypress:
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: deploy-site
     steps:
       # Checkout the code

@@ -20,7 +20,7 @@ permissions:
 jobs:
   notify-slack:
     name: Notify Slack
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Send message to Slack
         uses: slackapi/slack-github-action@v4.0.0
