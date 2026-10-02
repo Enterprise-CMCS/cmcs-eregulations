@@ -37,11 +37,13 @@ updates:
             patterns:
               - "vitest*"
               - "@vitest*"
+              - "@vitest/*"
           rollup:
             patterns:
               - "rollup"
               - "rollup*"
               - "@rollup*"
+              - "@rollup/*"
           lodash:
             patterns:
               - "lodash*"
