@@ -1,5 +1,5 @@
 import flushPromises from "flush-promises";
-import { render, screen } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 
 import { createVuetify } from "vuetify";
@@ -27,58 +27,58 @@ global.ResizeObserver = require("resize-observer-polyfill");
 
 describe("Statute Table Selector", () => {
     describe("SSA table type", () => {
-        it(`Creates a snapshot of the Statute Selector with default props`, async () => {
-            const wrapper = render(StatuteSelector, {
+        it("Creates a snapshot of the Statute Selector with default props", async () => {
+            const wrapper = mount(StatuteSelector, {
                 global: {
                     plugins: [vuetify],
+                    stubs: { RouterLink: true },
                 },
                 props: {
                     titles: SHAPED_TITLES,
                 },
-                stubs: { RouterLink: true },
             });
 
             await flushPromises();
 
-            const activeLink = screen.getByTestId("ssa-XIX-19");
+            const activeLink = wrapper.get('[data-testid="ssa-XIX-19"]');
             expect(
-                activeLink.classList.contains("v-tab-item--selected")
-            ).toBe(true);
+                activeLink.classes()
+            ).toContain("v-tab-item--selected");
 
-            const inactiveLink = screen.getByTestId("ssa-XXI-21");
+            const inactiveLink = wrapper.get('[data-testid="ssa-XXI-21"]');
             expect(
-                inactiveLink.classList.contains("v-tab-item--selected")
-            ).toBe(false);
+                inactiveLink.classes()
+            ).not.toContain("v-tab-item--selected");
 
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
-        it(`Creates a snapshot of the Statute Selector when act and title props passed in to component`, async () => {
-            const wrapper = render(StatuteSelector, {
+        it("Creates a snapshot of the Statute Selector when act and title props passed in to component", async () => {
+            const wrapper = mount(StatuteSelector, {
                 global: {
                     plugins: [vuetify],
+                    stubs: { RouterLink: true },
                 },
                 props: {
                     selectedAct: "ssa",
                     selectedTitle: "21",
                     titles: SHAPED_TITLES,
                 },
-                stubs: { RouterLink: true },
             });
 
             await flushPromises();
 
-            const activeLink = screen.getByTestId("ssa-XXI-21");
+            const activeLink = wrapper.get('[data-testid="ssa-XXI-21"]');
             expect(
-                activeLink.classList.contains("v-tab-item--selected")
-            ).toBe(true);
+                activeLink.classes()
+            ).toContain("v-tab-item--selected");
 
-            const inactiveLink = screen.getByTestId("ssa-XIX-19");
+            const inactiveLink = wrapper.get('[data-testid="ssa-XIX-19"]');
             expect(
-                inactiveLink.classList.contains("titles-list__link--active")
-            ).toBe(false);
+                inactiveLink.classes()
+            ).not.toContain("titles-list__link--active");
 
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
     });
 });

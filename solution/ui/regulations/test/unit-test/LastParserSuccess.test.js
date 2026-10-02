@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import LastParserSuccessDate from "eregsComponentLib/src/components/LastParserSuccessDate.vue";
 import flushPromises from "flush-promises";
@@ -7,31 +7,29 @@ describe("LastParserSuccessDate", () => {
     beforeEach(() => {});
     afterEach(() => {});
     it("Renders N/A as expected", async () => {
-        render(LastParserSuccessDate, {
+        const wrapper = mount(LastParserSuccessDate, {
             props: {
                 apiUrl: "test/n/a/",
             },
         });
         await flushPromises();
-        const naDate = screen.getByText("N/A");
-        expect(naDate).toBeTruthy();
+        expect(wrapper.text()).toContain("N/A");
     });
     it("Populates some content", async () => {
-        render(LastParserSuccessDate, {
+        const wrapper = mount(LastParserSuccessDate, {
             props: {
                 apiUrl: "test/success/",
             },
         });
         await flushPromises();
-        const successDate = screen.getByText("Jun 28, 2023");
-        expect(successDate).toBeTruthy();
+        expect(wrapper.text()).toContain("Jun 28, 2023");
     });
     it("Creates a snapshot of parserdate", async () => {
-        const wrapper = render(LastParserSuccessDate, {
+        const wrapper = mount(LastParserSuccessDate, {
             props: {
                 apiUrl: "test/snapshot/",
             },
         });
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 });

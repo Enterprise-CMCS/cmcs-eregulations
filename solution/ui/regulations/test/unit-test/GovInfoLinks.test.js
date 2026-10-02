@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import GovInfoLinks from "eregsComponentLib/src/components/GovInfoLinks.vue";
 import flushPromises from "flush-promises";
@@ -7,7 +7,7 @@ describe("Gov Info Links", () => {
     beforeEach(() => {});
     afterEach(() => {});
     it("Populates checks if years populate", async () => {
-        render(GovInfoLinks, {
+        const wrapper = mount(GovInfoLinks, {
             props: {
                 apiUrl: "http://localhost:9000/",
                 title: "42",
@@ -16,15 +16,15 @@ describe("Gov Info Links", () => {
             }
         });
         await flushPromises();
-        const yearLink = screen.getByText("2022");
-        expect(yearLink.href).toStrictEqual(
+        const yearLink = wrapper.findAll("a").find((a) => a.text() === "2022");
+        expect(yearLink.attributes("href")).toStrictEqual(
             "https://www.govinfo.gov/content/pkg/CFR-2022-title42-vol4/pdf/CFR-2022-title42-vol4-sec431-10.pdf"
         );
-        const missingYear = screen.queryByText("189829829");
-        expect(missingYear).toBeFalsy();
+        const missingYear = wrapper.findAll("a").find((a) => a.text() === "189829829");
+        expect(missingYear).toBeUndefined();
     });
     it("Creates a snapshot of GovInfo", async () => {
-        const wrapper = render(GovInfoLinks, {
+        const wrapper = mount(GovInfoLinks, {
             props: {
                 apiUrl: "http://localhost:8000/",
                 title: "42",
@@ -33,6 +33,6 @@ describe("Gov Info Links", () => {
             }
         });
         await flushPromises();
-        expect(wrapper).toMatchSnapshot();
+        expect(wrapper.html()).toMatchSnapshot();
     });
 });
