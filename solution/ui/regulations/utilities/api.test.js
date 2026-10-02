@@ -450,7 +450,7 @@ describe("api.js", () => {
     });
     describe("throwGenericError", () => {
         it("throws an error", async () => {
-            expect(async () => await throwGenericError()).rejects.toThrow(
+            await expect(async () => await throwGenericError()).rejects.toThrow(
                 "Contrived error"
             );
         });
