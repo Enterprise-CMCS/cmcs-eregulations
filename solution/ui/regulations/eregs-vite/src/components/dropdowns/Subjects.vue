@@ -47,12 +47,14 @@ const labelClasses = computed(() => ({
 }));
 
 const menuItemClick = (event) => {
+    const buttonEl = event.target.closest?.(".subjects-li__button");
     const menuItemClicked =
-        event.target.className.includes("subjects-li__button") ||
-        event.target.className.includes("match__container");
+        Boolean(buttonEl) ||
+        Boolean(event.target.closest?.(".match__container"));
 
-    if (event.target.dataset.name) {
-        buttonTitle.value = event.target.dataset.name;
+    const name = buttonEl?.dataset?.name || event.target.dataset?.name;
+    if (name) {
+        buttonTitle.value = name;
     }
 
     if (menuItemClicked) {

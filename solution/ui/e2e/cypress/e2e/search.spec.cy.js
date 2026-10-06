@@ -417,13 +417,16 @@ describe("Search flow", () => {
 
         cy.get("button[data-testid=add-subject-3]").click({ force: true });
 
+        cy.url().should("include", "subjects=3");
+
         cy.get("button[data-testid='subjects-activator']")
             .should("exist")
             .find(".subjects-select__label")
-            .should("have.text", "Access to Services")
-            .click({ force: true });
+            .should("have.text", "Access to Services");
 
-        cy.get("div[data-testid='category-select']").click();
+        cy.get("div[data-testid='category-select']")
+            .should("not.have.class", "v-input--disabled")
+            .click();
         cy.get("div[data-testid='external-0']").click({ force: true });
 
         cy.get("div[data-testid='category-select']")
