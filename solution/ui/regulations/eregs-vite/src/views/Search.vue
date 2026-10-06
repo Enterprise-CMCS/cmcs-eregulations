@@ -346,16 +346,14 @@ onMounted(() => {
                             items-to-fetch="categories"
                             :items-capture-function="setCategories"
                         >
-                            <label aria-label="Categories Dropdown">
-                                <CategoriesDropdown
-                                    :list="slotProps.data"
-                                    :error="slotProps.error"
-                                    :loading="
-                                        slotProps.loading || policyDocList.loading
-                                    "
-                                    parent="search"
-                                />
-                            </label>
+                            <CategoriesDropdown
+                                :list="slotProps.data"
+                                :error="slotProps.error"
+                                :loading="
+                                    slotProps.loading || policyDocList.loading
+                                "
+                                parent="search"
+                            />
                         </FetchItemsContainer>
                     </div>
                 </fieldset>
