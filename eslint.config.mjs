@@ -8,7 +8,16 @@ import tseslint from "typescript-eslint";
 
 export default defineConfig([
     { files: ["**/*.{js,mjs,cjs,ts}"] },
-    { ignores: ["**/cdk.out/*", "**/node_modules/*", "**/dist/*", "**/static-assets/*", "**/coverage/*"] },
+    { ignores: [
+        "**/cdk.out/*",
+        "**/node_modules/*",
+        "**/dist/*",
+        "**/static-assets/*",
+        "**/coverage/*",
+        "**/text-extractor/*",
+        "**/parsers/*",
+        "**/mcp-server/*",
+    ] },
     {
         languageOptions: {
             globals: {
