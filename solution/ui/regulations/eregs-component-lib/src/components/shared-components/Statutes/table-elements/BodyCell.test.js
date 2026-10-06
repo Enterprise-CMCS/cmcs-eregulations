@@ -1,5 +1,5 @@
 import flushPromises from "flush-promises";
-import { render } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 
 import { ssaSchema } from "../schemas/tableSchemas";
@@ -13,21 +13,21 @@ describe("Statute Table Body Cell", () => {
             it(`Creates a snapshot of a body cell for column ${
                 index + 1
             }`, async () => {
-                const wrapper = render(BodyCell, {
+                const wrapper = mount(BodyCell, {
                     props: {
                         cellData: column,
                         statute: statutesFixture[0],
                     },
                 });
                 await flushPromises();
-                expect(wrapper).toMatchSnapshot();
+                expect(wrapper.html()).toMatchSnapshot();
             });
         });
 
         it("displays 'None' in Statute Compilation BodyCell when source_url is null", async () => {
             const statuteCompilationCellSchema = ssaSchema[2];
 
-            const wrapper = render(BodyCell, {
+            const wrapper = mount(BodyCell, {
                 props: {
                     cellData: statuteCompilationCellSchema,
                     statute: statutesFixture[1],
@@ -35,10 +35,10 @@ describe("Statute Table Body Cell", () => {
             });
             await flushPromises();
 
-            const nullCell = wrapper.getByTestId("1302-none").textContent;
+            const nullCell = wrapper.get('[data-testid="1302-none"]').text();
             expect(nullCell).toEqual("None");
 
-            expect(wrapper).toMatchSnapshot();
+            expect(wrapper.html()).toMatchSnapshot();
         });
     });
 });

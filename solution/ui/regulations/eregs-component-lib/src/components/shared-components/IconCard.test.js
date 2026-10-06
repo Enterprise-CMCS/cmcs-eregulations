@@ -1,42 +1,41 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 
 import IconCard from "./IconCard.vue";
 
 describe("IconCard", () => {
     describe("renders the correct icon based on the icon prop", () => {
         it("renders the 'book' icon when iconType is 'book'", () => {
-            const bookWrapper = render(IconCard, {
+            const wrapper = mount(IconCard, {
                 props: {
                     iconType: "book",
                 },
             });
 
-            screen.getByTestId("icon--book");
-            expect(bookWrapper).toMatchSnapshot();
+            expect(wrapper.find('[data-testid="icon--book"]').exists()).toBe(true);
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
         it("renders the 'book' icon when iconType is 'book'", () => {
-            const bookWrapper = render(IconCard, {
+            const wrapper = mount(IconCard, {
                 props: {
                     iconType: "clipboard",
                 },
             });
 
-            screen.getByTestId("icon--clipboard");
-            expect(bookWrapper).toMatchSnapshot();
+            expect(wrapper.find('[data-testid="icon--clipboard"]').exists()).toBe(true);
+            expect(wrapper.html()).toMatchSnapshot();
         });
 
         it("renders the 'book' icon when iconType is 'book'", () => {
-            const bookWrapper = render(IconCard, {
+            const wrapper = mount(IconCard, {
                 props: {
                     iconType: "search",
                 },
             });
 
-            screen.getByTestId("icon--search");
-            expect(bookWrapper).toMatchSnapshot();
+            expect(wrapper.find('[data-testid="icon--search"]').exists()).toBe(true);
+            expect(wrapper.html()).toMatchSnapshot();
         });
     });
-
 });

@@ -1,5 +1,5 @@
 import flushPromises from "flush-promises";
-import { render } from "@testing-library/vue";
+import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
 
 import statuteDatesFixture from "cypress/fixtures/statute-dates.json";
@@ -16,7 +16,7 @@ describe("Statute Table Header Cell", () => {
 
         secondaryCells.forEach((column, index) => {
             it(`Creates a snapshot of header cell for column ${index + 1} without dates`, async () => {
-                const wrapper = render(HeaderCell, {
+                const wrapper = mount(HeaderCell, {
                     props: {
                         cellData: column.header,
                         displayType: "table",
@@ -24,16 +24,16 @@ describe("Statute Table Header Cell", () => {
                 });
                 await flushPromises();
 
-                const dateCell = wrapper.getByTestId(
-                    `${column.header.testId}-subtitle-0`
-                ).textContent;
+                const dateCell = wrapper.get(
+                    `[data-testid="${column.header.testId}-subtitle-0"]`
+                ).text();
                 expect(dateCell.trim()).toEqual("");
 
-                expect(wrapper).toMatchSnapshot();
+                expect(wrapper.html()).toMatchSnapshot();
             });
 
             it(`Creates a snapshot of header cell for column ${index + 1} with dates`, async () => {
-                const wrapper = render(HeaderCell, {
+                const wrapper = mount(HeaderCell, {
                     props: {
                         cellData: column.header,
                         displayType: "table",
@@ -42,12 +42,12 @@ describe("Statute Table Header Cell", () => {
                 });
                 await flushPromises();
 
-                const dateCell = wrapper.getByTestId(
-                    `${column.header.testId}-subtitle-0`
-                ).textContent;
+                const dateCell = wrapper.get(
+                    `[data-testid="${column.header.testId}-subtitle-0"]`
+                ).text();
                 expect(dateCell.trim()).toEqual("effective Aug 2023");
 
-                expect(wrapper).toMatchSnapshot();
+                expect(wrapper.html()).toMatchSnapshot();
             });
         });
     });
