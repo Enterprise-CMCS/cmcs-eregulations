@@ -60,6 +60,7 @@ This repo is a Django + Vue monorepo with multiple Lambda services and CDK deplo
 - Do not hand-edit `cdk-eregs/cdk.out/` or `solution/static-assets/` as source changes.
 - Ephemeral deploy naming is deliberate: workflow passes `environment=dev` with `stage_name=eph-<pr>`; do not simplify without checking cleanup workflows.
 - Cross-stack exports/imports are tightly coupled by name; keep stack/output naming stable unless updating all dependents.
+- When adding, removing, renaming, or materially changing a `.yml`/`.yaml` file under `.github/workflows/`, update the corresponding eRegs entries in the `mac-fc-dso-metrics-configs` repository under `configs/macpro-e-regs/`. Keep workflow names, jobs, and tracked steps synchronized, and remove entries for deleted workflows.
 
 ## Auth Notes (Local vs Deployed)
 - OIDC is enabled in settings; local admin commonly uses Django `ModelBackend` + `createsuperuser`.
