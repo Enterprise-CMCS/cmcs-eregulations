@@ -459,16 +459,14 @@ getDocSubjects();
                                 items-to-fetch="categories"
                                 :items-capture-function="setCategories"
                             >
-                                <label aria-label="Categories Dropdown">
-                                    <CategoriesDropdown
-                                        :list="slotProps.data"
-                                        :error="slotProps.error"
-                                        :loading="
-                                            slotProps.loading ||
-                                                policyDocList.loading
-                                        "
-                                    />
-                                </label>
+                                <CategoriesDropdown
+                                    :list="slotProps.data"
+                                    :error="slotProps.error"
+                                    :loading="
+                                        slotProps.loading ||
+                                            policyDocList.loading
+                                    "
+                                />
                             </FetchItemsContainer>
                         </div>
                         <div class="subject__search--row">
