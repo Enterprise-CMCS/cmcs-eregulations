@@ -1,6 +1,6 @@
 describe("Django admin login access control", () => {
     it("returns 404 when the Cypress token is missing", function () {
-        if (Cypress.env("TEST_ENV") === "local") {
+        if (Cypress.expose("TEST_ENV") === "local") {
             this.skip();
         }
 
@@ -11,7 +11,7 @@ describe("Django admin login access control", () => {
     });
 
     it("returns 404 when the Cypress token is incorrect", function () {
-        if (Cypress.env("TEST_ENV") === "local") {
+        if (Cypress.expose("TEST_ENV") === "local") {
             this.skip();
         }
 
@@ -25,18 +25,20 @@ describe("Django admin login access control", () => {
     });
 
     it("shows the login page when the Cypress token is correct", function () {
-        if (Cypress.env("TEST_ENV") === "local") {
+        if (Cypress.expose("TEST_ENV") === "local") {
             this.skip();
         }
 
-        cy.request({
-            url: "/admin/login/",
-            headers: {
-                "X-eRegs-Cypress-Admin-Token": Cypress.env("ADMIN_LOGIN_TOKEN"),
-            },
-        }).then((response) => {
-            expect(response.status).to.equal(200);
-            expect(response.body).to.include('id="id_username"');
+        cy.env(["ADMIN_LOGIN_TOKEN"]).then(({ ADMIN_LOGIN_TOKEN }) => {
+            cy.request({
+                url: "/admin/login/",
+                headers: {
+                    "X-eRegs-Cypress-Admin-Token": ADMIN_LOGIN_TOKEN,
+                },
+            }).then((response) => {
+                expect(response.status).to.equal(200);
+                expect(response.body).to.include('id="id_username"');
+            });
         });
     });
 });

@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
         ref="button"
         :class="{ visible: visible }"
         :data-test="dataName"
-        :aria-label="visible ? `collapse ${dataName}` : `expand ${dataName}`"
+        :aria-expanded="visible.toString()"
         class="collapsible-title"
         @click="click"
     >
