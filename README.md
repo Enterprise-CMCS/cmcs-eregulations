@@ -131,6 +131,8 @@ To use our Okta identity provider locally, you need to update the OIDC_RP and OI
 
 See [CDK Readme](cdk-eregs/README.md).
 
+When changing GitHub Actions workflows, update the corresponding eRegs DSO metrics configuration in the [`mac-fc-dso-metrics-configs`](https://github.com/Enterprise-CMCS/mac-fc-dso-metrics-configs) repository under `configs/macpro-e-regs/`. Add or update entries for new or changed workflows and remove entries for deleted workflows.
+
 To use our Okta identity provider on an experimental (ephemeral) deployment, see internal authentication developers guide.
 
 # Development tips
