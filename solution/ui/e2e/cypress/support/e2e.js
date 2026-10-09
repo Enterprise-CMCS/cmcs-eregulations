@@ -72,8 +72,9 @@ Cypress.Commands.add(
     },
     (subject, { skipFailures = false } = {}) => {
         cy.injectAxe();
+        const context = subject || { exclude: [["#djDebug"]] };
         cy.checkA11y(
-            subject,
+            context,
             {
                 includedImpacts: ["critical", "serious"],
                 rules: {
