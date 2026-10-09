@@ -57,11 +57,14 @@ Cypress.Commands.add("tocResponsiveChecks", tocResponsiveChecks);
 function printA11yViolations(violations) {
     cy.task(
         "table",
-        violations.map(({ id, impact, description, nodes }) => ({
-            impact,
-            description: `${description} (${id})`,
-            nodes: nodes.length,
-        }))
+        violations.flatMap(({ id, impact, description, nodes }) =>
+            nodes.map((node) => ({
+                id,
+                target: node.target.join(" "),
+                html: node.html.substring(0, 120),
+                failureSummary: node.failureSummary ? node.failureSummary.substring(0, 80) : "",
+            }))
+        )
     );
 }
 

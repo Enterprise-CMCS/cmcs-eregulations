@@ -61,4 +61,19 @@ describe("CollapseButton", () => {
         expect(button.attributes("aria-expanded")).toBe("true");
         expect(button.text()).toBe("Hide Details");
     });
+
+    it("inherits aria-label if provided by caller", () => {
+        const wrapper = mount(CollapseButton, {
+            props: {
+                name: "test-collapse",
+                state: "collapsed",
+            },
+            attrs: {
+                "aria-label": "Custom Accessible Label",
+            },
+        });
+
+        const button = wrapper.find("button");
+        expect(button.attributes("aria-label")).toBe("Custom Accessible Label");
+    });
 });
