@@ -57,11 +57,14 @@ Cypress.Commands.add("tocResponsiveChecks", tocResponsiveChecks);
 function printA11yViolations(violations) {
     cy.task(
         "table",
-        violations.map(({ id, impact, description, nodes }) => ({
-            impact,
-            description: `${description} (${id})`,
-            nodes: nodes.length,
-        }))
+        violations.flatMap(({ id, nodes }) =>
+            nodes.map((node) => ({
+                id,
+                target: node.target.join(" "),
+                html: node.html.substring(0, 120),
+                failureSummary: node.failureSummary ? node.failureSummary.substring(0, 80) : "",
+            }))
+        )
     );
 }
 
@@ -72,8 +75,9 @@ Cypress.Commands.add(
     },
     (subject, { skipFailures = false } = {}) => {
         cy.injectAxe();
+        const context = subject || { exclude: [["#djDebug"]] };
         cy.checkA11y(
-            subject,
+            context,
             {
                 includedImpacts: ["critical", "serious"],
                 rules: {
@@ -117,25 +121,32 @@ Cypress.Commands.add("clearIndexedDB", async () => {
 
 // Adds basic auth to all requests, except for cy.request calls.
 beforeEach(() => {
-    cy.intercept("/**", (req) => {
-        const env = Cypress.env("TEST_ENV");
-        if (env !== "local" && env !== "prod") {
-            const username = Cypress.env("TEST_USERNAME");
-            const password = Cypress.env("TEST_PASSWORD");
-            const token = "Basic " + btoa(username + ":" + password);
-            req.headers["Authorization"] = token;
+    cy.env(["TEST_USERNAME", "TEST_PASSWORD"]).then(
+        ({ TEST_USERNAME, TEST_PASSWORD }) => {
+            cy.intercept("/**", (req) => {
+                const env = Cypress.expose("TEST_ENV");
+                if (env !== "local" && env !== "prod") {
+                    const token = "Basic " + btoa(TEST_USERNAME + ":" + TEST_PASSWORD);
+                    req.headers["Authorization"] = token;
+                }
+            });
         }
-    });
+    );
 });
 
 // Adds basic auth to cy.request calls.
 Cypress.Commands.overwrite("request", (originalRequest, options) => {
-    const env = Cypress.env("TEST_ENV");
+    const env = Cypress.expose("TEST_ENV");
     if (env !== "local" && env !== "prod") {
-        options.auth = {
-            username: Cypress.env("TEST_USERNAME"),
-            password: Cypress.env("TEST_PASSWORD"),
-        };
+        return cy
+            .env(["TEST_USERNAME", "TEST_PASSWORD"])
+            .then(({ TEST_USERNAME, TEST_PASSWORD }) => {
+                options.auth = {
+                    username: TEST_USERNAME,
+                    password: TEST_PASSWORD,
+                };
+                return originalRequest(options);
+            });
     }
     return originalRequest(options);
 });

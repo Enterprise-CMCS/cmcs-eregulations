@@ -3,8 +3,10 @@ const mainContentId = "#main-content";
 describe("Homepage", { scrollBehavior: "center" }, () => {
     beforeEach(() => {
         cy.clearIndexedDB();
-        cy.intercept("/**", (req) => {
-            req.headers["x-automated-test"] = Cypress.env("DEPLOYING");
+        cy.env(["DEPLOYING"]).then(({ DEPLOYING }) => {
+            cy.intercept("/**", (req) => {
+                req.headers["x-automated-test"] = DEPLOYING;
+            });
         });
         cy.intercept("**/v3/resources/public/categories**", {
             fixture: "categories.json",
