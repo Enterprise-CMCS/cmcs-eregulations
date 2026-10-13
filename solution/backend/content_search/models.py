@@ -296,6 +296,7 @@ class IndexedRegulationText(models.Model):
     node_type = models.CharField(max_length=32, blank=True)
     node_id = models.CharField(max_length=32, blank=True)
     node_title = models.TextField(blank=True)
+    retired_at = models.DateTimeField(null=True, blank=True, editable=False, db_index=True)
 
 
 # This model is an all encompassing searchable index allowing different models to share an index.

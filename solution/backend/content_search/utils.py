@@ -1,6 +1,7 @@
 import base64
 import html
 import json
+import logging
 import re
 import unicodedata
 from urllib.parse import urlparse
@@ -8,7 +9,10 @@ from urllib.parse import urlparse
 import requests
 from bs4 import BeautifulSoup
 from django.conf import settings
+from django.db import transaction
+from django.db.models import Q
 from django.urls import reverse
+from django.utils import timezone
 
 from common.aws import establish_client
 from regcore.models import Part
@@ -25,6 +29,7 @@ from .models import (
 
 _LOCAL_TEXT_EXTRACTOR_URL = "http://host.docker.internal:8001/"
 _LOCAL_EREGS_URL = "http://host.docker.internal:8000"
+logger = logging.getLogger(__name__)
 
 
 # Remove control characters from a string
@@ -364,22 +369,35 @@ def index_part_node(part, piece, indices, contents, parent=None, subpart_id="", 
 # parts: a list containing Part instances to process.
 #
 # Returns:
-# Two values; successes by count, and failures by dict: {"id": x, "reason": "y"}.
-# Note that a successful return does not necessarily indicate a successful extraction;
-# Check text-extractor logs to verify extraction.
+# Two values; the number of requests queued and failures detected before commit.
+# Dispatch failures after commit are logged because the upload transaction has
+# already completed.
 def call_text_extractor_for_reg_text(request, parts):
-    # Delete all previously indexed text for the given parts, including previous versions
-    affected_indices = IndexedRegulationText.objects.filter(
-        part__title__in=[i.title for i in parts],
-        part__name__in=[i.name for i in parts],
-    )
-    ContentIndex.objects.filter(reg_text__in=affected_indices).delete()
+    parts = list(parts)
+    part_filters = Q()
+    metadata_filters = Q()
+    for part in parts:
+        part_filters |= Q(title=part.title, name=part.name)
+        metadata_filters |= Q(part__title=part.title, part__name=part.name)
 
-    # Only index the latest version of each part
-    parts = Part.objects.filter(
-        title__in=[i.title for i in parts],
-        name__in=[i.name for i in parts],
-    ).order_by("title", "name", "-date").distinct("title", "name")
+    if not parts:
+        return 0, []
+
+    parts = list(Part.objects.select_for_update().filter(part_filters).order_by("title", "name"))
+    if parts:
+        metadata_queryset = IndexedRegulationText.objects.filter(part_id__in=[part.pk for part in parts])
+    else:
+        metadata_queryset = IndexedRegulationText.objects.filter(metadata_filters)
+
+    # Retire previous extraction generations before creating the new one. Their
+    # metadata remains available for troubleshooting, but cannot accept chunks.
+    affected_indices = list(metadata_queryset.select_for_update())
+    if affected_indices:
+        affected_index_ids = [index.pk for index in affected_indices]
+        ContentIndex.objects.filter(reg_text_id__in=affected_index_ids).delete()
+        IndexedRegulationText.objects.filter(
+            pk__in=[index.pk for index in affected_indices if index.retired_at is None]
+        ).update(retired_at=timezone.now())
 
     # Build the IndexedRegulationText instances and the text contents to be indexed
     indices, contents = [], []
@@ -435,28 +453,43 @@ def call_text_extractor_for_reg_text(request, parts):
         },
     } for index, content in zip(indices, contents)]
 
-    succeed_count = 0
-    failures = []
+    if not requests:
+        return 0, []
 
-    if settings.USE_LOCAL_TEXT_EXTRACTOR:
-        extract_function = _extract_via_http
-        client = None
-    elif settings.TEXT_EXTRACTOR_QUEUE_URL:
-        extract_function = _extract_via_sqs
-        client = establish_client("sqs")
-    elif settings.TEXT_EXTRACTOR_ARN:
-        extract_function = _extract_via_lambda
-        client = establish_client("lambda")
-    else:
-        failures += [{
-            "id": i["id"],
+    if not (
+        settings.USE_LOCAL_TEXT_EXTRACTOR
+        or settings.TEXT_EXTRACTOR_QUEUE_URL
+        or settings.TEXT_EXTRACTOR_ARN
+    ):
+        return 0, [{
+            "id": extraction_request["id"],
             "reason": "The text extractor destination is not configured.",
-        } for i in requests]
-        requests = []
+        } for extraction_request in requests]
 
-    for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
-        success, fail = extract_function(batch, client)
-        succeed_count += success
-        failures += fail
+    def dispatch_extraction():
+        try:
+            if settings.USE_LOCAL_TEXT_EXTRACTOR:
+                extract_function = _extract_via_http
+                client = None
+            elif settings.TEXT_EXTRACTOR_QUEUE_URL:
+                extract_function = _extract_via_sqs
+                client = establish_client("sqs")
+            elif settings.TEXT_EXTRACTOR_ARN:
+                extract_function = _extract_via_lambda
+                client = establish_client("lambda")
+            else:
+                logger.error("The text extractor destination is no longer configured; extraction was not dispatched.")
+                return
 
-    return succeed_count, failures
+            failures = []
+            for batch in [requests[i:i + 10] for i in range(0, len(requests), 10)]:
+                _, fail = extract_function(batch, client)
+                failures += fail
+
+            for failure in failures:
+                logger.error("Regulation text extraction dispatch failed for %s: %s", failure["id"], failure["reason"])
+        except Exception:
+            logger.exception("Regulation text extraction dispatch failed after the upload committed.")
+
+    transaction.on_commit(dispatch_extraction)
+    return len(requests), []
