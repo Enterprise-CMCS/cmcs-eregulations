@@ -772,9 +772,9 @@ describe("Search flow", () => {
         );
 
         cy.get("textarea#main-content")
-            .clear();
+            .clear({ force: true });
         cy.get("textarea#main-content")
-            .type("new search term");
+            .type("new search term", { force: true });
         cy.get('[data-testid="search-form-submit"]').click({
             force: true,
         });
@@ -821,7 +821,10 @@ describe("Search flow", () => {
             `/search?q=${SEARCH_TERM}&sort=-date`,
         );
 
-        cy.get("div[data-testid='category-select']").click();
+        cy.scrollTo("top");
+        cy.get("div[data-testid='category-select']")
+            .should("not.have.class", "v-input--disabled")
+            .click();
         cy.get("div[data-testid='external-0']").click({ force: true });
 
         cy.url().should(
