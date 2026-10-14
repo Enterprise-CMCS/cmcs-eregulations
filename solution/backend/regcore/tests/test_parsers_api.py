@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from parsers.models import EcfrLauncherResult, EcfrParserResult
+from parsers.utils import get_ecfr_last_updated
 
 
 class ParsersApiTestCase(APITestCase):
@@ -105,3 +106,49 @@ class ParsersApiTestCase(APITestCase):
 
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data["date"], "2024-12-01")
+
+    def test_last_updated_scoped_ignores_invalidated_rows(self):
+        launcher = EcfrLauncherResult.objects.create(success=True, log="")
+        now = timezone.now()
+        EcfrParserResult.objects.create(
+            launcher_result=launcher,
+            title=42,
+            part=400,
+            date="2025-01-01",
+            status=EcfrParserResult.STATUS_SUCCEEDED,
+            status_updated_at=now,
+            invalidated_at=now + timedelta(minutes=1),
+            success=True,
+            log="stale",
+        )
+
+        self.assertIsNone(get_ecfr_last_updated(title=42, part=400))
+
+    def test_last_updated_global_ignores_invalidated_launcher_results(self):
+        active_launcher = EcfrLauncherResult.objects.create(success=True, log="")
+        invalidated_launcher = EcfrLauncherResult.objects.create(success=True, log="")
+        now = timezone.now()
+
+        EcfrParserResult.objects.create(
+            launcher_result=active_launcher,
+            title=42,
+            part=400,
+            date="2025-01-01",
+            status=EcfrParserResult.STATUS_SUCCEEDED,
+            status_updated_at=now - timedelta(days=1),
+            success=True,
+            log="active",
+        )
+        EcfrParserResult.objects.create(
+            launcher_result=invalidated_launcher,
+            title=42,
+            part=401,
+            date="2025-01-02",
+            status=EcfrParserResult.STATUS_SUCCEEDED,
+            status_updated_at=now,
+            invalidated_at=now + timedelta(minutes=1),
+            success=True,
+            log="stale",
+        )
+
+        self.assertEqual(get_ecfr_last_updated(), now - timedelta(days=1))
