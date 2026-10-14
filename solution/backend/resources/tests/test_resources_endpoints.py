@@ -1,14 +1,17 @@
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from rest_framework.test import APIClient
 
 from common.test_functions.common_functions import get_paginated_data
 from resources.models import (
     FederalRegisterLink,
     InternalFile,
+    PublicCategory,
     ResourceGroup,
+    ResourcesConfiguration,
     Section,
     Subject,
 )
@@ -126,3 +129,39 @@ class TestResourcesEndpoint(TestCase):
             if i["type"] == "internal_file":
                 internal_file_exists = True
         self.assertEqual(internal_file_exists, True)
+
+
+class FederalRegisterUploadIdempotencyTests(TransactionTestCase):
+    reset_sequences = True
+
+    @patch("resources.views.resources.apps.is_installed", return_value=False)
+    def test_duplicate_federal_register_upload_is_idempotent(self, mock_is_installed):
+        category = PublicCategory.objects.create(name="Federal Register Links")
+        config = ResourcesConfiguration.get_solo()
+        config.fr_link_category = category
+        config.save()
+        client = APIClient()
+        client.force_authenticate(User.objects.create_superuser(username="test_user", password="test"))  # noqa: S106
+        payload = {
+            "sections": [],
+            "section_ranges": [],
+            "url": "https://example.gov/document",
+            "description": "A Federal Register document",
+            "name": "90 FR 1",
+            "docket_numbers": [],
+            "document_number": "2026-12345",
+            "date": "2026-01-01",
+            "approved": True,
+            "doc_type": "Rule",
+            "raw_text_url": "https://example.gov/document.txt",
+        }
+
+        for _ in range(2):
+            response = client.put("/v3/resources/public/federal_register_links", payload, format="json")
+            self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(
+            FederalRegisterLink.objects.filter(document_number="2026-12345").count(),
+            1,
+        )
+        self.assertTrue(mock_is_installed.called)

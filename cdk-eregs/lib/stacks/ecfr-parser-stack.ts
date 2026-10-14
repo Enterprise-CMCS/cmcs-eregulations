@@ -30,6 +30,7 @@ export class EcfrParserStack extends cdk.Stack {
         super(scope, id, props);
 
         const siteEndpoint = cdk.Fn.importValue(stageConfig.getResourceName('api-endpoint'));
+        const workerTimeoutSeconds = props.lambdaConfig.timeout;
 
         const deadLetterQueue = new sqs.Queue(this, 'EcfrParserDeadLetterQueue', {
             queueName: stageConfig.getResourceName('ecfr-parser-dlq'),
@@ -38,7 +39,8 @@ export class EcfrParserStack extends cdk.Stack {
 
         const queue = new sqs.Queue(this, 'EcfrParserQueue', {
             queueName: stageConfig.getResourceName('ecfr-parser-queue'),
-            visibilityTimeout: cdk.Duration.seconds(900),
+            // Leave SQS enough time to avoid redelivery while the worker is running.
+            visibilityTimeout: cdk.Duration.seconds(workerTimeoutSeconds * 6),
             retentionPeriod: cdk.Duration.days(14),
             deadLetterQueue: {
                 queue: deadLetterQueue,
@@ -63,7 +65,7 @@ export class EcfrParserStack extends cdk.Stack {
                 cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            timeout: cdk.Duration.seconds(workerTimeoutSeconds),
             environment: {
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
                 ECFR_API_BASE_URL: 'https://www.ecfr.gov/api/versioner/v1/',
@@ -78,7 +80,7 @@ export class EcfrParserStack extends cdk.Stack {
                 cmd: ['app.app.handler'],
             }),
             memorySize: props.lambdaConfig.memorySize,
-            timeout: cdk.Duration.seconds(props.lambdaConfig.timeout),
+            timeout: cdk.Duration.seconds(workerTimeoutSeconds),
             environment: {
                 EREGS_API_URL_V3: `${siteEndpoint}v3/`,
                 ECFR_API_BASE_URL: 'https://www.ecfr.gov/api/versioner/v1/',
