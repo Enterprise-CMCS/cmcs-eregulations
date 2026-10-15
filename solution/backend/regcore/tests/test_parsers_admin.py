@@ -1,17 +1,19 @@
 from unittest.mock import Mock, patch
 
 from django.contrib.admin.sites import AdminSite
-from django.test import SimpleTestCase
+from django.test import TestCase
 
 from parsers.admin import ParserConfigurationAdmin
 from parsers.models import EcfrParserResult, ParserConfiguration, PartConfiguration
+from regcore.models import Part
 
 
-class ParserConfigurationAdminTests(SimpleTestCase):
+class ParserConfigurationAdminTests(TestCase):
     def test_save_formset_without_part_config_deletes_does_not_delete_parts(self):
         model_admin = ParserConfigurationAdmin(ParserConfiguration, AdminSite())
         formset = Mock()
         formset.deleted_objects = []
+        formset.get_queryset.return_value = []
 
         with (
             patch("parsers.admin.SingletonModelAdmin.save_formset", autospec=True) as mock_super,
@@ -25,13 +27,81 @@ class ParserConfigurationAdminTests(SimpleTestCase):
             )
 
         mock_part_filter.assert_not_called()
-        formset.save.assert_called_once_with(commit=False)
         self.assertEqual(mock_super.call_count, 1)
+
+
+class ParserConfigurationAdminFinalStateTests(TestCase):
+    def test_subchapter_delete_and_direct_part_addition_preserves_part(self):
+        parser_config = ParserConfiguration.objects.first()
+        PartConfiguration.objects.filter(parser_config=parser_config).delete()
+        subchapter = PartConfiguration.objects.create(
+            parser_config=parser_config,
+            title=42,
+            type="subchapter",
+            value="IV-C",
+        )
+        part = Part.objects.create(
+            title=42,
+            name=400,
+            date="2025-01-01",
+            document={},
+            structure={
+                "children": [
+                    {
+                        "type": "chapter",
+                        "identifier": ["IV"],
+                        "children": [
+                            {
+                                "type": "subchapter",
+                                "identifier": ["C"],
+                            }
+                        ],
+                    }
+                ]
+            },
+            depth_stack=[],
+            depth=0,
+        )
+        model_admin = ParserConfigurationAdmin(parser_config, AdminSite())
+        formset = Mock()
+        formset.get_queryset.return_value = PartConfiguration.objects.filter(parser_config=parser_config)
+
+        def save_final_configuration(*args, **kwargs):
+            subchapter.delete()
+            PartConfiguration.objects.create(
+                parser_config=parser_config,
+                title=42,
+                type="part",
+                value="400",
+            )
+
+        with patch(
+            "parsers.admin.SingletonModelAdmin.save_formset",
+            side_effect=save_final_configuration,
+        ), patch.object(ParserConfigurationAdmin, "message_user"):
+            model_admin.save_formset(
+                request=Mock(),
+                form=Mock(instance=parser_config),
+                formset=formset,
+                change=True,
+            )
+
+        self.assertTrue(Part.objects.filter(pk=part.pk).exists())
+        self.assertTrue(
+            PartConfiguration.objects.filter(
+                parser_config=parser_config,
+                title=42,
+                type="part",
+                value="400",
+            ).exists()
+        )
 
     def test_save_formset_with_part_config_delete_invalidates_matching_results(self):
         model_admin = ParserConfigurationAdmin(ParserConfiguration, AdminSite())
         formset = Mock()
         formset.deleted_objects = [PartConfiguration(title=42, type="part", value="433")]
+        formset.get_queryset.return_value = formset.deleted_objects
+        parser_config = Mock(pk=999999)
 
         filtered_parts = Mock()
         affected_parts = Mock()
@@ -49,16 +119,16 @@ class ParserConfigurationAdminTests(SimpleTestCase):
             patch.object(EcfrParserResult.objects, "filter") as mock_result_filter,
             patch("parsers.admin.timezone.now", return_value="NOW") as mock_now,
             patch.object(ParserConfigurationAdmin, "message_user", autospec=True),
+            patch("parsers.admin.PartConfiguration.objects.filter", return_value=[]),
         ):
             mock_result_filter.return_value.update = Mock()
             model_admin.save_formset(
                 request=Mock(),
-                form=Mock(),
+                form=Mock(instance=parser_config),
                 formset=formset,
                 change=True,
             )
 
-        formset.save.assert_called_once_with(commit=False)
         self.assertEqual(mock_super.call_count, 1)
         self.assertEqual(mock_result_filter.call_count, 1)
         mock_now.assert_called_once_with()
@@ -68,6 +138,8 @@ class ParserConfigurationAdminTests(SimpleTestCase):
         model_admin = ParserConfigurationAdmin(ParserConfiguration, AdminSite())
         formset = Mock()
         formset.deleted_objects = [PartConfiguration(title=42, type="part", value="433")]
+        formset.get_queryset.return_value = formset.deleted_objects
+        parser_config = Mock(pk=999999)
 
         filtered_parts = Mock()
         affected_parts = Mock()
@@ -89,12 +161,13 @@ class ParserConfigurationAdminTests(SimpleTestCase):
             patch("content_search.models.IndexedRegulationText.objects.filter", return_value=indexed_qs),
             patch("parsers.admin.timezone.now", return_value="NOW"),
             patch.object(ParserConfigurationAdmin, "message_user", autospec=True),
+            patch("parsers.admin.PartConfiguration.objects.filter", return_value=[]),
         ):
             mock_result_filter.return_value.update = Mock()
 
             model_admin.save_formset(
                 request=Mock(),
-                form=Mock(),
+                form=Mock(instance=parser_config),
                 formset=formset,
                 change=True,
             )
