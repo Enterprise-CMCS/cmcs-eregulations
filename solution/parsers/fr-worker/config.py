@@ -32,6 +32,7 @@ class FrDocumentConfig:
     docket_numbers: list[str]
     raw_text_url: str
     full_text_xml_url: str | None
+    configured_titles: list[int]
     log_level: str
     credentials: BackendCredentials
 
@@ -53,6 +54,7 @@ def parse_config(payload: dict) -> FrDocumentConfig:
         docket_numbers=_require_string_list(config),
         raw_text_url=require_non_empty_string(config, "raw_text_url"),
         full_text_xml_url=_optional_non_empty_string(config, "full_text_xml_url"),
+        configured_titles=_require_positive_int_list(config, "configured_titles"),
         log_level=resolve_work_unit_log_level(config),
         credentials=resolve_backend_credentials(),
     )
@@ -71,6 +73,17 @@ def _require_string_list(config: dict) -> list[str]:
     if not isinstance(value, list):
         raise ConfigParseError("docket_numbers must be a list")
     return [require_non_empty_string_value(item, "docket_numbers entries must be non-empty strings") for item in value]
+
+
+def _require_positive_int_list(config: dict, key: str) -> list[int]:
+    """Require a non-empty list of positive integer values."""
+
+    value = config.get(key)
+    if not isinstance(value, list) or not value:
+        raise ConfigParseError(f"{key} must be a non-empty list")
+    if any(type(item) is not int or item <= 0 for item in value):
+        raise ConfigParseError(f"{key} entries must be positive integers")
+    return value
 
 
 def _optional_non_empty_string(config: dict, key: str) -> str | None:

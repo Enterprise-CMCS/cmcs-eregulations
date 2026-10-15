@@ -52,6 +52,7 @@ def _config(**overrides):
         "docket_numbers": ["ABC-1"],
         "raw_text_url": "https://example/x.txt",
         "full_text_xml_url": "https://example/x.xml",
+        "configured_titles": [42],
         "log_level": "DEBUG",
         "credentials": BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
     }
@@ -117,6 +118,18 @@ class FrWorkerAppTests(unittest.TestCase):
 
         self.assertEqual(mock_upload.call_args.kwargs["payload"]["sections"], [])
         self.assertEqual(mock_upload.call_args.kwargs["payload"]["section_ranges"], [])
+
+    @patch("os.environ", {"EREGS_API_URL_V3": "https://example.local/"}, create=True)
+    def test_extract_sections_uses_all_configured_titles(self):
+        config = _config(configured_titles=[42, 45])
+        with patch.object(
+            _module,
+            "fetch_full_text_sections",
+            return_value=([], [], {}),
+        ) as mock_fetch:
+            _module._extract_linked_sections(config)
+
+        self.assertEqual(mock_fetch.call_args.kwargs["titles"], {"42", "45"})
 
 
 if __name__ == "__main__":
