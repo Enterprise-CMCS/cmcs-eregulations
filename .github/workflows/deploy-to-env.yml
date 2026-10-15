@@ -310,11 +310,48 @@ jobs:
         env:
           STAGE_NAME: ${{ inputs.stage_name }}
         run: |
-          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-createdb /dev/stdout | tee -a aws.log
-          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-migrate /dev/stdout | tee -a aws.log
-          aws lambda invoke --function-name cms-eregs-${STAGE_NAME}-createsu /dev/stdout | tee -a aws.log
-          # Check for invocation errors
-          ! grep -q FunctionError aws.log
+          set -euo pipefail
+
+          invoke_setup_lambda() {
+            local function_name="$1"
+            local metadata_file
+            local payload_file
+            local invoke_status
+
+            metadata_file=$(mktemp)
+            payload_file=$(mktemp)
+
+            echo "Invoking Lambda: ${function_name}"
+            set +e
+            aws lambda invoke \
+              --function-name "${function_name}" \
+              "${payload_file}" >"${metadata_file}" 2>&1
+            invoke_status=$?
+            set -e
+
+            tee -a aws.log <"${metadata_file}"
+            if [ -s "${payload_file}" ]; then
+              tee -a aws.log <"${payload_file}"
+            fi
+
+            if [ "${invoke_status}" -ne 0 ]; then
+              echo "AWS Lambda invocation failed: ${function_name}" >&2
+              rm -f "${metadata_file}" "${payload_file}"
+              return "${invoke_status}"
+            fi
+
+            if grep -q "FunctionError" "${metadata_file}"; then
+              echo "Lambda function failed: ${function_name}" >&2
+              rm -f "${metadata_file}" "${payload_file}"
+              return 1
+            fi
+
+            rm -f "${metadata_file}" "${payload_file}"
+          }
+
+          invoke_setup_lambda "cms-eregs-${STAGE_NAME}-createdb"
+          invoke_setup_lambda "cms-eregs-${STAGE_NAME}-migrate"
+          invoke_setup_lambda "cms-eregs-${STAGE_NAME}-createsu"
 
       - name: Get API URL
         id: get-api-url

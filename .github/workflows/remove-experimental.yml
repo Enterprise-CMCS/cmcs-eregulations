@@ -97,9 +97,46 @@ jobs:
 
           # Delete the database for this ephemeral environment
           echo "Deleting database for PR: ${PR_NUMBER}"
-          aws lambda invoke --function-name cms-eregs-eph-$PR_NUMBER-dropdb /dev/stdout | tee -a aws.log
-          # Check for invocation errors
-          ! grep -q FunctionError aws.log
+          set -euo pipefail
+
+          invoke_setup_lambda() {
+            local function_name="$1"
+            local metadata_file
+            local payload_file
+            local invoke_status
+
+            metadata_file=$(mktemp)
+            payload_file=$(mktemp)
+
+            echo "Invoking Lambda: ${function_name}"
+            set +e
+            aws lambda invoke \
+              --function-name "${function_name}" \
+              "${payload_file}" >"${metadata_file}" 2>&1
+            invoke_status=$?
+            set -e
+
+            tee -a aws.log <"${metadata_file}"
+            if [ -s "${payload_file}" ]; then
+              tee -a aws.log <"${payload_file}"
+            fi
+
+            if [ "${invoke_status}" -ne 0 ]; then
+              echo "AWS Lambda invocation failed: ${function_name}" >&2
+              rm -f "${metadata_file}" "${payload_file}"
+              return "${invoke_status}"
+            fi
+
+            if grep -q "FunctionError" "${metadata_file}"; then
+              echo "Lambda function failed: ${function_name}" >&2
+              rm -f "${metadata_file}" "${payload_file}"
+              return 1
+            fi
+
+            rm -f "${metadata_file}" "${payload_file}"
+          }
+
+          invoke_setup_lambda "cms-eregs-eph-${PR_NUMBER}-dropdb"
 
           # Generate the stack names for this PR
           ECFR_PARSER_STACK="cms-eregs-eph-${PR_NUMBER}-ecfr-parser"
