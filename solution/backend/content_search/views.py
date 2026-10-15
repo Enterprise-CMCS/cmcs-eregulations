@@ -630,6 +630,8 @@ class ResourceChunkUpdateViewSet(viewsets.ViewSet):
 
         # Get data from the request body
         resource_id = data["id"]
+        if int(kwargs["pk"]) != resource_id:
+            raise BadRequest("Resource ID does not match the callback URL.")
         chunk_index = data["chunk_index"]
         total_chunks = data["total_chunks"]
         file_type = data["file_type"]

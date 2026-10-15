@@ -8,9 +8,10 @@ from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 from rest_framework.test import APIClient
 
-from content_search.models import ContentIndex, IndexedRegulationText
+from content_search.models import ContentIndex, IndexedRegulationText, ResourceMetadata
 from content_search.utils import call_text_extractor_for_reg_text
 from regcore.models import Part
+from resources.models import PublicLink
 
 
 class RegTextIndexingTests(TestCase):
@@ -167,3 +168,36 @@ class RegTextIndexingTests(TestCase):
 
         self.assertEqual(response.status_code, 204)
         self.assertFalse(ContentIndex.objects.filter(reg_text=metadata).exists())
+
+    def test_resource_callback_requires_matching_url_and_body_ids(self):
+        resource = PublicLink.objects.create(url="https://example.com/resource", title="Resource")
+        ResourceMetadata.objects.get(resource=resource)
+        client = self._authenticated_client()
+        payload = {
+            "id": resource.pk,
+            "chunk_index": 0,
+            "total_chunks": 1,
+            "text": "resource text",
+            "embedding": None,
+        }
+
+        response = client.patch(
+            f"/v3/content-search/resource/{resource.pk}/chunk",
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(ContentIndex.objects.filter(resource=resource, chunk_index=0).exists())
+
+        other_resource = PublicLink.objects.create(url="https://example.com/other", title="Other")
+        ResourceMetadata.objects.get(resource=other_resource)
+        mismatch_response = client.patch(
+            f"/v3/content-search/resource/{other_resource.pk}/chunk",
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(mismatch_response.status_code, 400)
+        self.assertEqual(ContentIndex.objects.filter(resource=other_resource).count(), 0)
+        self.assertEqual(ContentIndex.objects.filter(resource=resource).count(), 1)
