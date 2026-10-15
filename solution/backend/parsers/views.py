@@ -182,17 +182,6 @@ class EcfrLauncherResultViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
-    @transaction.atomic
-    def partial_update_latest(self, request, *args, **kwargs):
-        latest = EcfrLauncherResult.objects.order_by("-timestamp").first()
-        if latest is None:
-            raise Http404()
-
-        serializer = self.get_serializer(latest, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
 
 @extend_schema(
     tags=["parsers"],

@@ -184,6 +184,25 @@ class ParsersApiTestCase(APITestCase):
         self.assertTrue(result.success)
         self.assertEqual(EcfrParserResult.objects.filter(pk=result.pk).count(), 1)
 
+    def test_ecfr_launcher_result_update_targets_requested_id(self):
+        self._authenticate_parser()
+        older = EcfrLauncherResult.objects.create(success=True, log="older")
+        newer = EcfrLauncherResult.objects.create(success=True, log="newer")
+
+        response = self.client.patch(
+            f"/v3/parsers/ecfr/launcher-results/{older.pk}",
+            {"success": False, "log": "older failed"},
+            format="json",
+        )
+
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        older.refresh_from_db()
+        newer.refresh_from_db()
+        self.assertFalse(older.success)
+        self.assertEqual(older.log, "older failed")
+        self.assertTrue(newer.success)
+        self.assertEqual(newer.log, "newer")
+
     @patch("content_search.utils.call_text_extractor_for_reg_text", return_value=(1, []))
     def test_duplicate_ecfr_part_upload_is_idempotent(self, mock_extract):
         self._authenticate_parser()

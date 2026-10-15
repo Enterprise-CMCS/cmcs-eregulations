@@ -28,15 +28,16 @@ def create_ecfr_launcher_result(
 def update_ecfr_launcher_result(
     api_base_url: str,
     credentials: BackendCredentials,
+    result_id: int,
     payload: dict[str, Any],
     timeout: int = 60,
 ) -> dict[str, Any]:
-    """Update the latest eCFR launcher result entry at /v3/parsers/ecfr/launcher-results."""
+    """Update one eCFR launcher result entry by ID."""
 
     return send_json(
         api_base_url,
         "patch",
-        "parsers/ecfr/launcher-results",
+        f"parsers/ecfr/launcher-results/{result_id}",
         credentials,
         "eRegs eCFR launcher result update",
         json_body=payload,

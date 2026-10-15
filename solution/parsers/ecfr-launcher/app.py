@@ -262,6 +262,7 @@ def handler(event, _context):
         update_ecfr_launcher_result(
             api_base_url=api_base_url,
             credentials=credentials,
+            result_id=launcher_result_id,
             payload={
                 "success": True,
                 "log": f"queued={len(work_units)} skipped={skipped_count} dispatch_failed={len(dispatch_failures)}",
@@ -280,6 +281,7 @@ def handler(event, _context):
             update_ecfr_launcher_result(
                 api_base_url=api_base_url,
                 credentials=credentials,
+                result_id=launcher_result_id,
                 payload={"success": False, "log": str(exc)},
             )
         except Exception as log_exc:

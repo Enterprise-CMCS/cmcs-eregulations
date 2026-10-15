@@ -154,7 +154,39 @@ class EcfrLauncherAppTests(unittest.TestCase):
         body = json.loads(response["body"])
         self.assertEqual(body["enqueued"], 1)
         self.assertEqual(body["failed"], 0)
+        self.assertEqual(mock_update.call_args.kwargs["result_id"], 50)
         self.assertIn("queued=1 skipped=1", mock_update.call_args.kwargs["payload"]["log"])
+
+    def test_handler_updates_created_launcher_result_on_failure(self):
+        with patch.dict(
+            "os.environ",
+            {"EREGS_API_URL_V3": "https://example.local/v3/"},
+            clear=True,
+        ), patch.object(
+            _module,
+            "resolve_backend_credentials",
+            return_value=BackendCredentials(auth_type="basic", username="u", password="p"),  # noqa: S106
+        ), patch.object(
+            _module,
+            "fetch_parser_config",
+            return_value={"parts": [], "loglevel": "info"},
+        ), patch.object(
+            _module,
+            "create_ecfr_launcher_result",
+            return_value={"id": 50},
+        ), patch.object(
+            _module,
+            "_build_work_units",
+            side_effect=RuntimeError("boom"),
+        ), patch.object(
+            _module,
+            "update_ecfr_launcher_result",
+        ) as mock_update:
+            with self.assertRaisesRegex(RuntimeError, "boom"):
+                _module.handler({"body": "{}"}, None)
+
+        self.assertEqual(mock_update.call_args.kwargs["result_id"], 50)
+        self.assertEqual(mock_update.call_args.kwargs["payload"], {"success": False, "log": "boom"})
 
 
 if __name__ == "__main__":
