@@ -7,10 +7,10 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
     }).as("queriedFiles");
     cy.intercept("**/v3/resources/public/categories**", {
         fixture: "categories.json",
-    });
+    }).as("publicCategories");
     cy.intercept("**/v3/resources/internal/categories**", {
         fixture: "categories-internal.json",
-    });
+    }).as("internalCategories");
 
     cy.viewport("macbook-15");
     cy.eregsLogin({
@@ -25,7 +25,7 @@ export const checkPolicyDocs = ({ username, password, landingPage }) => {
         force: true,
     });
 
-    cy.wait("@queriedFiles");
+    cy.wait(["@queriedFiles", "@publicCategories", "@internalCategories"]);
 
     //----- Internal doc
     cy.get('[data-testid="results-item-categories"] .doc-type__label')
