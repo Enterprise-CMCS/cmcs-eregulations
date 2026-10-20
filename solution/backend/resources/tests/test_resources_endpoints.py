@@ -6,6 +6,7 @@ from django.test import TestCase, TransactionTestCase
 from rest_framework.test import APIClient
 
 from common.test_functions.common_functions import get_paginated_data
+from regulations.models import SiteConfiguration
 from resources.models import (
     FederalRegisterLink,
     InternalFile,
@@ -133,6 +134,9 @@ class TestResourcesEndpoint(TestCase):
 
 class FederalRegisterUploadIdempotencyTests(TransactionTestCase):
     reset_sequences = True
+
+    def setUp(self):
+        SiteConfiguration.get_solo()
 
     @patch("resources.views.resources.apps.is_installed", return_value=False)
     def test_duplicate_federal_register_upload_is_idempotent(self, mock_is_installed):
